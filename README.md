@@ -19,5 +19,5 @@ Apache 2.0 - See [LICENSE] for more information.
 
 
 [Developer Guide]: DEVELOPER_GUIDE.md
-[CONSTRIBUTING]: CONTRIBUTING.md
+[CONTRIBUTING]: CONTRIBUTING.md
 [LICENSE]: LICENSE
