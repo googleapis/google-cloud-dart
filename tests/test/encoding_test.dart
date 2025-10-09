@@ -27,7 +27,9 @@ void main() {
   // simple fields
   test('LocalizedMessage', () {
     final expected = LocalizedMessage(locale: 'en-US', message: 'Lorem ipsum.');
-    final actual = LocalizedMessage.fromJson(encodeDecode(expected.toJson()));
+    final actual = LocalizedMessage.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.locale, expected.locale);
     expect(actual.message, expected.message);
@@ -35,9 +37,13 @@ void main() {
 
   // simple fields
   test('HttpHeader', () {
-    final expected =
-        HttpHeader(key: 'Accept-Language', value: 'en-US,en;q=0.5');
-    final actual = HttpHeader.fromJson(encodeDecode(expected.toJson()));
+    final expected = HttpHeader(
+      key: 'Accept-Language',
+      value: 'en-US,en;q=0.5',
+    );
+    final actual = HttpHeader.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.key, expected.key);
     expect(actual.value, expected.value);
@@ -45,19 +51,18 @@ void main() {
 
   // enum
   test('Code', () {
-    final expected = Code.unauthenticated;
-    final actual = Code.fromJson(encodeDecode(expected.toJson()));
+    const expected = Code.unauthenticated;
+    final actual = Code.fromJson(encodeDecode(expected.toJson()) as String);
 
     expect(actual, expected);
   });
 
   // fields and primitive maps
   test('ErrorInfo', () {
-    var expected = ErrorInfo(
-      reason: 'LOREM_IPSUM',
-      domain: 'cheese.com',
+    var expected = ErrorInfo(reason: 'LOREM_IPSUM', domain: 'cheese.com');
+    var actual = ErrorInfo.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
     );
-    var actual = ErrorInfo.fromJson(encodeDecode(expected.toJson()));
 
     expect(actual.reason, expected.reason);
     expect(actual.domain, expected.domain);
@@ -68,7 +73,9 @@ void main() {
       domain: 'cheese.com',
       metadata: {'instanceLimitPerRequest': '100'},
     );
-    actual = ErrorInfo.fromJson(encodeDecode(expected.toJson()));
+    actual = ErrorInfo.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.reason, expected.reason);
     expect(actual.domain, expected.domain);
@@ -79,7 +86,9 @@ void main() {
   // fields using custom encoding
   test('RetryInfo', () {
     final expected = RetryInfo(retryDelay: Duration(seconds: 100, nanos: 1000));
-    final actual = RetryInfo.fromJson(encodeDecode(expected.toJson()));
+    final actual = RetryInfo.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.retryDelay, isNotNull);
     final retry = actual.retryDelay!;
@@ -90,8 +99,12 @@ void main() {
   // primitive lists
   test('DebugInfo', () {
     final expected = DebugInfo(
-        stackEntries: ['one', 'two', 'three'], detail: 'Lorem ipsum.');
-    final actual = DebugInfo.fromJson(encodeDecode(expected.toJson()));
+      stackEntries: ['one', 'two', 'three'],
+      detail: 'Lorem ipsum.',
+    );
+    final actual = DebugInfo.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.stackEntries, hasLength(3));
     expect(actual.stackEntries![0], 'one');
@@ -114,7 +127,9 @@ void main() {
         ),
       ],
     );
-    final actual = QuotaFailure.fromJson(encodeDecode(expected.toJson()));
+    final actual = QuotaFailure.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.violations, hasLength(2));
     expect(
@@ -130,14 +145,18 @@ void main() {
   // Status
   test('Status', () {
     var expected = Status(code: 5, message: 'Not found');
-    var actual = Status.fromJson(encodeDecode(expected.toJson()));
+    var actual = Status.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.code, expected.code);
     expect(actual.message, expected.message);
 
     // For now, we're not testing round-tripping the 'Any' type.
     expected = Status(code: 5, message: 'Not found', details: []);
-    actual = Status.fromJson(encodeDecode(expected.toJson()));
+    actual = Status.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
 
     expect(actual.code, expected.code);
     expect(actual.message, expected.message);
@@ -148,18 +167,24 @@ void main() {
   test('Sentiment', () {
     // ints
     var expected = Sentiment(magnitude: 123, score: 0);
-    var actual = Sentiment.fromJson(encodeDecode(expected.toJson()));
+    var actual = Sentiment.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
     expect(actual.magnitude, 123.0);
     expect(actual.score, 0.0);
 
     // doubles
     expected = Sentiment(magnitude: 1.5, score: 0.5);
-    actual = Sentiment.fromJson(encodeDecode(expected.toJson()));
+    actual = Sentiment.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
     expect(actual.magnitude, 1.5);
     expect(actual.score, 0.5);
 
     // Make sure we handle ints in JSON as doubles.
-    actual = Sentiment.fromJson(jsonDecode('{"magnitude":123,"score":0}'));
+    actual = Sentiment.fromJson(
+      jsonDecode('{"magnitude":123,"score":0}') as Map<String, dynamic>,
+    );
     expect(actual.magnitude, 123);
     expect(actual.score, 0);
   });

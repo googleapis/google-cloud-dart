@@ -20,14 +20,15 @@ import 'package:test/test.dart';
 void main() {
   group("test 'bytes' encoding", () {
     test('rpc.HttpResponse.body', () {
-      final data = '''{
+      const data =
+          '''{
   "status": 200,
   "reason": "OK",
   "headers": [],
   "body": "$base64EncodedText"
 }''';
       final json = jsonDecode(data);
-      final response = HttpResponse.fromJson(json);
+      final response = HttpResponse.fromJson(json as Map<String, dynamic>);
 
       expect(response.status, 200);
       expect(response.reason, 'OK');
@@ -39,7 +40,7 @@ void main() {
       expect(bodyText, expectedText);
 
       // Re-encode HttpResponse and validate.
-      final jsonEncoder = JsonEncoder.withIndent('  ');
+      const jsonEncoder = JsonEncoder.withIndent('  ');
 
       final encodedActual = jsonEncoder.convert(response.toJson());
       final encodedExpected = jsonEncoder.convert(json);
