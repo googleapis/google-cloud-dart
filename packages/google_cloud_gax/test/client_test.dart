@@ -90,6 +90,25 @@ void main() {
       }
     });
 
+    test('http client exception', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async {
+          throw ClientException('network failure');
+        }),
+      );
+
+      await expectLater(
+        () => service.post(sampleUrl),
+        throwsA(
+          isA<ClientException>().having(
+            (e) => e.message,
+            'message',
+            'network failure',
+          ),
+        ),
+      );
+    });
+
     test('500 response, no status, no response body', () async {
       final service = ServiceClient(
         client: MockClient((request) async {
@@ -99,26 +118,52 @@ void main() {
 
       await expectLater(
         () => service.post(sampleUrl),
-        throwsA(isA<ClientException>()),
+        throwsA(
+          isA<ServiceException>().having(
+            (e) => e.responseBody,
+            'responseBody',
+            '',
+          ),
+        ),
       );
     });
 
-    test('400 response, status body', () async {
+    test('400 response with status', () async {
       final status = Status(code: 1, message: "failure", details: []);
-      final statusJson = jsonEncode(status.toJson());
+      final responseBody = jsonEncode({'error': status.toJson()});
       final service = ServiceClient(
         client: MockClient((request) async {
-          return Response('{"error":$statusJson}', 400);
+          return Response(responseBody, 400);
         }),
       );
 
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<Status>()
-              .having((e) => e.code, 'code', 1)
-              .having((e) => e.message, 'message', 'failure')
-              .having((e) => e.details, 'details', []),
+          isA<StatusException>()
+              .having((e) => e.status.code, 'code', 1)
+              .having((e) => e.status.message, 'message', 'failure')
+              .having((e) => e.status.details, 'details', [])
+              .having((e) => e.responseBody, 'responseBody', responseBody),
+        ),
+      );
+    });
+
+    test('400 response, JSON response without status', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async {
+          return Response('"Hello!"', 400);
+        }),
+      );
+
+      await expectLater(
+        () => service.post(sampleUrl),
+        throwsA(
+          isA<ServiceException>().having(
+            (e) => e.responseBody,
+            'responseBody',
+            '"Hello!"',
+          ),
         ),
       );
     });
@@ -195,6 +240,28 @@ void main() {
       }
     });
 
+    test('http client exception', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async {
+          throw ClientException('network failure');
+        }),
+      );
+
+      await expectLater(
+        service.postStreaming(sampleUrl),
+        emitsInOrder([
+          emitsError(
+            isA<ClientException>().having(
+              (e) => e.message,
+              'message',
+              'network failure',
+            ),
+          ),
+          emitsDone,
+        ]),
+      );
+    });
+
     test('500 response, no status, no response body', () async {
       final service = ServiceClient(
         client: MockClient((request) async {
@@ -204,16 +271,25 @@ void main() {
 
       expect(
         service.postStreaming(sampleUrl),
-        emitsError(isA<ClientException>()),
+        emitsInOrder([
+          emitsError(
+            isA<ServiceException>().having(
+              (e) => e.responseBody,
+              'responseBody',
+              '',
+            ),
+          ),
+          emitsDone,
+        ]),
       );
     });
 
-    test('400 response, status body', () async {
+    test('400 response with status', () async {
       final status = Status(code: 1, message: "failure", details: []);
-      final statusJson = jsonEncode(status.toJson());
+      final responseBody = jsonEncode({'error': status.toJson()});
       final service = ServiceClient(
         client: MockClient((request) async {
-          return Response('{"error":$statusJson}', 400);
+          return Response(responseBody, 400);
         }),
       );
 
@@ -221,10 +297,33 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<Status>()
-                .having((e) => e.code, 'code', 1)
-                .having((e) => e.message, 'message', 'failure')
-                .having((e) => e.details, 'details', []),
+            isA<StatusException>()
+                .having((e) => e.status.code, 'code', 1)
+                .having((e) => e.status.message, 'message', 'failure')
+                .having((e) => e.status.details, 'details', [])
+                .having((e) => e.responseBody, 'responseBody', responseBody),
+          ),
+          emitsDone,
+        ]),
+      );
+    });
+
+    test('400 response, JSON response without status', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async {
+          return Response('"Hello!"', 400);
+        }),
+      );
+
+      expect(
+        service.postStreaming(sampleUrl),
+        emitsInOrder([
+          emitsError(
+            isA<ServiceException>().having(
+              (e) => e.responseBody,
+              'responseBody',
+              '"Hello!"',
+            ),
           ),
           emitsDone,
         ]),
