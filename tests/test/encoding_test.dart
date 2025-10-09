@@ -35,8 +35,10 @@ void main() {
 
   // simple fields
   test('HttpHeader', () {
-    final expected =
-        HttpHeader(key: 'Accept-Language', value: 'en-US,en;q=0.5');
+    final expected = HttpHeader(
+      key: 'Accept-Language',
+      value: 'en-US,en;q=0.5',
+    );
     final actual = HttpHeader.fromJson(encodeDecode(expected.toJson()));
 
     expect(actual.key, expected.key);
@@ -53,10 +55,7 @@ void main() {
 
   // fields and primitive maps
   test('ErrorInfo', () {
-    var expected = ErrorInfo(
-      reason: 'LOREM_IPSUM',
-      domain: 'cheese.com',
-    );
+    var expected = ErrorInfo(reason: 'LOREM_IPSUM', domain: 'cheese.com');
     var actual = ErrorInfo.fromJson(encodeDecode(expected.toJson()));
 
     expect(actual.reason, expected.reason);
@@ -90,7 +89,9 @@ void main() {
   // primitive lists
   test('DebugInfo', () {
     final expected = DebugInfo(
-        stackEntries: ['one', 'two', 'three'], detail: 'Lorem ipsum.');
+      stackEntries: ['one', 'two', 'three'],
+      detail: 'Lorem ipsum.',
+    );
     final actual = DebugInfo.fromJson(encodeDecode(expected.toJson()));
 
     expect(actual.stackEntries, hasLength(3));

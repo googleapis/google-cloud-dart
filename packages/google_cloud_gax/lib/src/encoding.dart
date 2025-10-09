@@ -52,13 +52,17 @@ T? decodeEnum<T extends ProtoEnum>(String? value, T Function(String) decoder) {
 
 /// Decode a [ProtoMessage].
 T? decode<T extends ProtoMessage>(
-    Map<String, dynamic>? value, T Function(Map<String, dynamic>) decoder) {
+  Map<String, dynamic>? value,
+  T Function(Map<String, dynamic>) decoder,
+) {
   return value != null ? decoder(value) : null;
 }
 
 /// Decode a [ProtoMessage] which uses a custom JSON encoding.
 T? decodeCustom<T extends ProtoMessage>(
-    Object? value, T Function(Object) decoder) {
+  Object? value,
+  T Function(Object) decoder,
+) {
   return value == null ? null : decoder(value);
 }
 
@@ -74,19 +78,25 @@ List<Uint8List>? decodeListBytes(Object? value) {
 
 /// Decode a list of [ProtoEnum]s.
 List<T>? decodeListEnum<T extends ProtoEnum>(
-    Object? value, T Function(String) decoder) {
+  Object? value,
+  T Function(String) decoder,
+) {
   return (value as List?)?.map((item) => decoder(item)).toList().cast();
 }
 
 /// Decode a list of [Messages]s.
 List<T>? decodeListMessage<T extends ProtoMessage>(
-    Object? value, T Function(Map<String, dynamic>) decoder) {
+  Object? value,
+  T Function(Map<String, dynamic>) decoder,
+) {
   return (value as List?)?.map((item) => decoder(item)).toList().cast();
 }
 
 /// Decode a list of [Messages]s which use custom JSON encodings.
 List<T>? decodeListMessageCustom<T extends ProtoMessage>(
-    Object? value, T Function(Object) decoder) {
+  Object? value,
+  T Function(Object) decoder,
+) {
   return (value as List?)?.map((item) => decoder(item)).toList().cast();
 }
 
@@ -97,7 +107,9 @@ Map<K, V>? decodeMap<K, V>(Object? value) {
 
 /// Decode a map of [ProtoEnum]s.
 Map<K, V>? decodeMapEnum<K, V extends ProtoEnum>(
-    Object? value, V Function(String) decoder) {
+  Object? value,
+  V Function(String) decoder,
+) {
   return (value as Map?)
       ?.map((key, value) => MapEntry(key, decoder(value)))
       .cast();
@@ -112,7 +124,9 @@ Map<K, Uint8List>? decodeMapBytes<K>(Object? value) {
 
 /// Decode a map of [ProtoMessage]s.
 Map<K, V>? decodeMapMessage<K, V extends ProtoMessage>(
-    Object? value, V Function(Map<String, dynamic>) decoder) {
+  Object? value,
+  V Function(Map<String, dynamic>) decoder,
+) {
   return (value as Map?)
       ?.map((key, value) => MapEntry(key, decoder(value)))
       .cast();
@@ -120,7 +134,9 @@ Map<K, V>? decodeMapMessage<K, V extends ProtoMessage>(
 
 /// Decode a map of [ProtoMessage]s which use custom JSON encodings.
 Map<K, V>? decodeMapMessageCustom<K, V extends ProtoMessage>(
-    Object? value, V Function(Object) decoder) {
+  Object? value,
+  V Function(Object) decoder,
+) {
   return (value as Map?)
       ?.map((key, value) => MapEntry(key, decoder(value)))
       .cast();

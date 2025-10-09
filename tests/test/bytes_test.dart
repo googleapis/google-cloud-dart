@@ -20,7 +20,8 @@ import 'package:test/test.dart';
 void main() {
   group("test 'bytes' encoding", () {
     test('rpc.HttpResponse.body', () {
-      final data = '''{
+      final data =
+          '''{
   "status": 200,
   "reason": "OK",
   "headers": [],
