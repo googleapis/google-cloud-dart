@@ -58,7 +58,8 @@ service:cloudfunctions.googleapis.com''');
       message: 'not found',
       details: [
         Any.from(
-            ErrorInfo(reason: 'CREDENTIALS_MISSING', domain: 'googleapis.com')),
+          ErrorInfo(reason: 'CREDENTIALS_MISSING', domain: 'googleapis.com'),
+        ),
       ],
     );
 

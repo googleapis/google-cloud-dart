@@ -67,12 +67,7 @@ class ServiceClient {
   ServiceClient({required this.client});
 
   Future<Map<String, dynamic>> get(Uri url) async {
-    final response = await client.get(
-      url,
-      headers: {
-        _clientKey: _clientName,
-      },
-    );
+    final response = await client.get(url, headers: {_clientKey: _clientName});
     return _processResponse(response);
   }
 
@@ -115,9 +110,7 @@ class ServiceClient {
   Future<Map<String, dynamic>> delete(Uri url) async {
     final response = await client.delete(
       url,
-      headers: {
-        _clientKey: _clientName,
-      },
+      headers: {_clientKey: _clientName},
     );
     return _processResponse(response);
   }
@@ -142,7 +135,8 @@ class ServiceClient {
     } catch (_) {
       // Return a general HTTP exception if we can't parse the Status response.
       throw http.ClientException(
-          '${response.statusCode}: ${response.reasonPhrase}');
+        '${response.statusCode}: ${response.reasonPhrase}',
+      );
     }
 
     throw status;
