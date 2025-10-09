@@ -17,7 +17,8 @@ From the root of the project:
 go run github.com/googleapis/librarian/cmd/sidekick@main refreshall
 ```
 
-> [!NOTE] You will have to [update Sidekick](#updating-sidekick) if you want to merge these changes.
+> [!NOTE]
+> You will have to [update Sidekick](#updating-sidekick) if you want to merge these changes.
 
 ### Regenerating from a locally modified Sidekick
 
