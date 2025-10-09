@@ -29,7 +29,9 @@ void main() {
       blue: 2,
       alpha: FloatValue(value: 0.5),
     );
-    var actual = Color.fromJson(encodeDecode(expected.toJson()));
+    var actual = Color.fromJson(
+      encodeDecode(expected.toJson()) as Map<String, dynamic>,
+    );
     expect(actual.red, expected.red);
     expect(actual.green, expected.green);
     expect(actual.blue, expected.blue);
