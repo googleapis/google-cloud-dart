@@ -41,7 +41,7 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 ///       - selector: google.calendar.Delegate
 ///         oauth:
 ///           canonical_scopes: https://www.googleapis.com/auth/calendar.read
-class Authentication extends ProtoMessage {
+final class Authentication extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Authentication';
 
   /// A list of authentication rules that apply to individual API methods.
@@ -82,7 +82,7 @@ class Authentication extends ProtoMessage {
 ///
 /// If a method doesn't have any auth requirements, request credentials will be
 /// ignored.
-class AuthenticationRule extends ProtoMessage {
+final class AuthenticationRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.AuthenticationRule';
 
   /// Selects the methods to which this rule applies.
@@ -143,7 +143,7 @@ class AuthenticationRule extends ProtoMessage {
 }
 
 /// Specifies a location to extract JWT from an API request.
-class JwtLocation extends ProtoMessage {
+final class JwtLocation extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.JwtLocation';
 
   /// Specifies HTTP header name to extract JWT token.
@@ -202,7 +202,7 @@ class JwtLocation extends ProtoMessage {
 /// Configuration for an authentication provider, including support for
 /// [JSON Web Token
 /// (JWT)](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32).
-class AuthProvider extends ProtoMessage {
+final class AuthProvider extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.AuthProvider';
 
   /// The unique identifier of the auth provider. It will be referred to by
@@ -342,7 +342,7 @@ class AuthProvider extends ProtoMessage {
 /// Please note that even though each of the canonical scopes is enough for a
 /// request to be accepted and passed to the backend, a request can still fail
 /// due to the backend requiring additional scopes or permissions.
-class OauthRequirements extends ProtoMessage {
+final class OauthRequirements extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.OAuthRequirements';
 
   /// The list of publicly documented OAuth scopes that are allowed access. An
@@ -377,7 +377,7 @@ class OauthRequirements extends ProtoMessage {
 /// User-defined authentication requirements, including support for
 /// [JSON Web Token
 /// (JWT)](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32).
-class AuthRequirement extends ProtoMessage {
+final class AuthRequirement extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.AuthRequirement';
 
   /// `id` from authentication provider.
@@ -434,7 +434,7 @@ class AuthRequirement extends ProtoMessage {
 }
 
 /// `Backend` defines the backend configuration for a service.
-class Backend extends ProtoMessage {
+final class Backend extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Backend';
 
   /// A list of API backend rules that apply to individual API methods.
@@ -460,7 +460,7 @@ class Backend extends ProtoMessage {
 }
 
 /// A backend rule provides configuration for an individual API element.
-class BackendRule extends ProtoMessage {
+final class BackendRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.BackendRule';
 
   /// Selects the methods to which this rule applies.
@@ -617,7 +617,7 @@ class BackendRule extends ProtoMessage {
 /// Path Translation is applicable only to HTTP-based backends. Backends which
 /// do not accept requests over HTTP/HTTPS should leave `path_translation`
 /// unspecified.
-class BackendRule_PathTranslation extends ProtoEnum {
+final class BackendRule_PathTranslation extends ProtoEnum {
   static const pathTranslationUnspecified = BackendRule_PathTranslation(
     'PATH_TRANSLATION_UNSPECIFIED',
   );
@@ -713,7 +713,7 @@ class BackendRule_PathTranslation extends ProtoEnum {
 ///       - monitored_resource: library.googleapis.com/billing_branch
 ///         metrics:
 ///         - library.googleapis.com/book/borrowed_count
-class Billing extends ProtoMessage {
+final class Billing extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Billing';
 
   /// Billing configurations for sending metrics to the consumer project.
@@ -747,7 +747,7 @@ class Billing extends ProtoMessage {
 
 /// Configuration of a specific billing destination (Currently only support
 /// bill against consumer project).
-class Billing_BillingDestination extends ProtoMessage {
+final class Billing_BillingDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Billing.BillingDestination';
 
@@ -789,7 +789,7 @@ class Billing_BillingDestination extends ProtoMessage {
 }
 
 /// Required information for every language.
-class CommonLanguageSettings extends ProtoMessage {
+final class CommonLanguageSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.CommonLanguageSettings';
 
   /// Link to automatically generated reference documentation.  Example:
@@ -842,7 +842,7 @@ class CommonLanguageSettings extends ProtoMessage {
 }
 
 /// Details about how and where to publish client libraries.
-class ClientLibrarySettings extends ProtoMessage {
+final class ClientLibrarySettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ClientLibrarySettings';
 
   /// Version of the API to apply these settings to. This is the full protobuf
@@ -942,7 +942,7 @@ class ClientLibrarySettings extends ProtoMessage {
 /// This message configures the settings for publishing [Google Cloud Client
 /// libraries](https://cloud.google.com/apis/docs/cloud-client-libraries)
 /// generated from the service config.
-class Publishing extends ProtoMessage {
+final class Publishing extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Publishing';
 
   /// A list of API method settings, e.g. the behavior for methods that use the
@@ -1068,7 +1068,7 @@ class Publishing extends ProtoMessage {
 }
 
 /// Settings for Java client libraries.
-class JavaSettings extends ProtoMessage {
+final class JavaSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.JavaSettings';
 
   /// The package name to use in Java. Clobbers the java_package option
@@ -1133,7 +1133,7 @@ class JavaSettings extends ProtoMessage {
 }
 
 /// Settings for C++ client libraries.
-class CppSettings extends ProtoMessage {
+final class CppSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.CppSettings';
 
   /// Some settings.
@@ -1157,7 +1157,7 @@ class CppSettings extends ProtoMessage {
 }
 
 /// Settings for Php client libraries.
-class PhpSettings extends ProtoMessage {
+final class PhpSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.PhpSettings';
 
   /// Some settings.
@@ -1181,7 +1181,7 @@ class PhpSettings extends ProtoMessage {
 }
 
 /// Settings for Python client libraries.
-class PythonSettings extends ProtoMessage {
+final class PythonSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.PythonSettings';
 
   /// Some settings.
@@ -1219,7 +1219,7 @@ class PythonSettings extends ProtoMessage {
 /// Experimental features to be included during client library generation.
 /// These fields will be deprecated once the feature graduates and is enabled
 /// by default.
-class PythonSettings_ExperimentalFeatures extends ProtoMessage {
+final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.PythonSettings.ExperimentalFeatures';
 
@@ -1282,7 +1282,7 @@ class PythonSettings_ExperimentalFeatures extends ProtoMessage {
 }
 
 /// Settings for Node client libraries.
-class NodeSettings extends ProtoMessage {
+final class NodeSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.NodeSettings';
 
   /// Some settings.
@@ -1306,7 +1306,7 @@ class NodeSettings extends ProtoMessage {
 }
 
 /// Settings for Dotnet client libraries.
-class DotnetSettings extends ProtoMessage {
+final class DotnetSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.DotnetSettings';
 
   /// Some settings.
@@ -1381,7 +1381,7 @@ class DotnetSettings extends ProtoMessage {
 }
 
 /// Settings for Ruby client libraries.
-class RubySettings extends ProtoMessage {
+final class RubySettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.RubySettings';
 
   /// Some settings.
@@ -1405,7 +1405,7 @@ class RubySettings extends ProtoMessage {
 }
 
 /// Settings for Go client libraries.
-class GoSettings extends ProtoMessage {
+final class GoSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.GoSettings';
 
   /// Some settings.
@@ -1443,7 +1443,7 @@ class GoSettings extends ProtoMessage {
 }
 
 /// Describes the generator configuration for a method.
-class MethodSettings extends ProtoMessage {
+final class MethodSettings extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.MethodSettings';
 
   /// The fully qualified name of the method, for which the options below apply.
@@ -1522,7 +1522,7 @@ class MethodSettings extends ProtoMessage {
 /// All default values below are from those used in the client library
 /// generators (e.g.
 /// [Java](https://github.com/googleapis/gapic-generator-java/blob/04c2faa191a9b5a10b92392fe8482279c4404803/src/main/java/com/google/api/generator/gapic/composer/common/RetrySettingsComposer.java)).
-class MethodSettings_LongRunning extends ProtoMessage {
+final class MethodSettings_LongRunning extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.MethodSettings.LongRunning';
 
@@ -1590,7 +1590,7 @@ class MethodSettings_LongRunning extends ProtoMessage {
 
 /// This message is used to configure the generation of a subset of the RPCs in
 /// a service for client libraries.
-class SelectiveGapicGeneration extends ProtoMessage {
+final class SelectiveGapicGeneration extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.SelectiveGapicGeneration';
 
@@ -1641,7 +1641,7 @@ class SelectiveGapicGeneration extends ProtoMessage {
 /// Includes detailed information about a field that have changed with
 /// applicable advice about potential consequences for the change, such as
 /// backwards-incompatibility.
-class ConfigChange extends ProtoMessage {
+final class ConfigChange extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ConfigChange';
 
   /// Object hierarchy path to the change, with levels separated by a '.'
@@ -1713,7 +1713,7 @@ class ConfigChange extends ProtoMessage {
 
 /// Generated advice about this change, used for providing more
 /// information about how a change will affect the existing service.
-class Advice extends ProtoMessage {
+final class Advice extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Advice';
 
   /// Useful description for why this advice was applied and what actions should
@@ -1756,7 +1756,7 @@ class Advice extends ProtoMessage {
 ///        description: Allows usage of the API without watermarks.
 ///      - name: EXTENDED_TILE_CACHE_PERIOD
 ///        type: INT64
-class ProjectProperties extends ProtoMessage {
+final class ProjectProperties extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ProjectProperties';
 
   /// List of per consumer project-specific properties.
@@ -1789,7 +1789,7 @@ class ProjectProperties extends ProtoMessage {
 ///
 /// These values can be set via API producer console. Only API providers can
 /// define and set these properties.
-class Property extends ProtoMessage {
+final class Property extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Property';
 
   /// The name of the property (a.k.a key).
@@ -1833,7 +1833,7 @@ class Property extends ProtoMessage {
 }
 
 /// Supported data type of the property values
-class Property_PropertyType extends ProtoEnum {
+final class Property_PropertyType extends ProtoEnum {
   /// The type is unspecified, and will result in an error.
   static const unspecified = Property_PropertyType('UNSPECIFIED');
 
@@ -1894,7 +1894,7 @@ class Property_PropertyType extends ProtoEnum {
 ///
 /// You can also specify extension ID instead of fully qualified extension name
 /// here.
-class Context extends ProtoMessage {
+final class Context extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Context';
 
   /// A list of RPC context rules that apply to individual API methods.
@@ -1921,7 +1921,7 @@ class Context extends ProtoMessage {
 
 /// A context rule provides information about the context for an individual API
 /// element.
-class ContextRule extends ProtoMessage {
+final class ContextRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ContextRule';
 
   /// Selects the methods to which this rule applies.
@@ -1990,7 +1990,7 @@ class ContextRule extends ProtoMessage {
 ///
 ///     control:
 ///       environment: servicecontrol.googleapis.com
-class Control extends ProtoMessage {
+final class Control extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Control';
 
   /// The service controller environment to use. If empty, no control plane
@@ -2044,7 +2044,7 @@ class Control extends ProtoMessage {
 /// Although it is not forbidden, it is generally a bad idea to include
 /// non-finite values (infinities or NaNs) in the population of values, as this
 /// will render the `mean` and `sum_of_squared_deviation` fields meaningless.
-class Distribution extends ProtoMessage {
+final class Distribution extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Distribution';
 
   /// The number of values in the population. Must be non-negative. This value
@@ -2150,7 +2150,7 @@ class Distribution extends ProtoMessage {
 }
 
 /// The range of the population values.
-class Distribution_Range extends ProtoMessage {
+final class Distribution_Range extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Distribution.Range';
 
   /// The minimum of the population values.
@@ -2201,7 +2201,7 @@ class Distribution_Range extends ProtoMessage {
 /// of finite values: lower bound of the underflow bucket is -infinity and the
 /// upper bound of the overflow bucket is +infinity. The finite buckets are
 /// so-called because both bounds are finite.
-class Distribution_BucketOptions extends ProtoMessage {
+final class Distribution_BucketOptions extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Distribution.BucketOptions';
 
@@ -2261,7 +2261,7 @@ class Distribution_BucketOptions extends ProtoMessage {
 ///    Upper bound (0 <= i < N-1):     offset + (width * i).
 ///
 ///    Lower bound (1 <= i < N):       offset + (width * (i - 1)).
-class Distribution_BucketOptions_Linear extends ProtoMessage {
+final class Distribution_BucketOptions_Linear extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Distribution.BucketOptions.Linear';
 
@@ -2320,7 +2320,7 @@ class Distribution_BucketOptions_Linear extends ProtoMessage {
 ///    Upper bound (0 <= i < N-1):     scale * (growth_factor ^ i).
 ///
 ///    Lower bound (1 <= i < N):       scale * (growth_factor ^ (i - 1)).
-class Distribution_BucketOptions_Exponential extends ProtoMessage {
+final class Distribution_BucketOptions_Exponential extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Distribution.BucketOptions.Exponential';
 
@@ -2380,7 +2380,7 @@ class Distribution_BucketOptions_Exponential extends ProtoMessage {
 /// The `bounds` field must contain at least one element. If `bounds` has
 /// only one element, then there are no finite buckets, and that single
 /// element is the common boundary of the overflow and underflow buckets.
-class Distribution_BucketOptions_Explicit extends ProtoMessage {
+final class Distribution_BucketOptions_Explicit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Distribution.BucketOptions.Explicit';
 
@@ -2412,7 +2412,7 @@ class Distribution_BucketOptions_Explicit extends ProtoMessage {
 /// particular value added to a Distribution bucket, such as a trace ID that
 /// was active when a value was added. They may contain further information,
 /// such as a example values and timestamps, origin, etc.
-class Distribution_Exemplar extends ProtoMessage {
+final class Distribution_Exemplar extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Distribution.Exemplar';
 
   /// Value of the exemplar point. This value determines to which bucket the
@@ -2517,7 +2517,7 @@ class Distribution_Exemplar extends ProtoMessage {
 /// <pre><code>&#40;== resource_for v1.shelves.books ==&#41;</code></pre>
 /// The directive `suppress_warning` does not directly affect documentation
 /// and is documented together with service config validation.
-class Documentation extends ProtoMessage {
+final class Documentation extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Documentation';
 
   /// A short description of what the service does. The summary must be plain
@@ -2605,7 +2605,7 @@ class Documentation extends ProtoMessage {
 }
 
 /// A documentation rule provides information about individual API elements.
-class DocumentationRule extends ProtoMessage {
+final class DocumentationRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.DocumentationRule';
 
   /// The selector is a comma-separated list of patterns for any element such as
@@ -2664,7 +2664,7 @@ class DocumentationRule extends ProtoMessage {
 
 /// Represents a documentation page. A page can contain subpages to represent
 /// nested documentation set structure.
-class Page extends ProtoMessage {
+final class Page extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Page';
 
   /// The name of the page. It will be used as an identity of the page to
@@ -2742,7 +2742,7 @@ class Page extends ProtoMessage {
 ///       # to decide whether the subsequent cross-origin request is allowed
 ///       # to proceed.
 ///       allow_cors: true
-class Endpoint extends ProtoMessage {
+final class Endpoint extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Endpoint';
 
   /// The canonical name of this endpoint.
@@ -2802,7 +2802,7 @@ class Endpoint extends ProtoMessage {
 }
 
 /// Rich semantic information of an API field beyond basic typing.
-class FieldInfo extends ProtoMessage {
+final class FieldInfo extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.FieldInfo';
 
   /// The standard format of a field value. This does not explicitly configure
@@ -2846,7 +2846,7 @@ class FieldInfo extends ProtoMessage {
 
 /// The standard format of a field value. The supported formats are all backed
 /// by either an RFC defined by the IETF or a Google-defined AIP.
-class FieldInfo_Format extends ProtoEnum {
+final class FieldInfo_Format extends ProtoEnum {
   /// Default, unspecified value.
   static const formatUnspecified = FieldInfo_Format('FORMAT_UNSPECIFIED');
 
@@ -2884,7 +2884,7 @@ class FieldInfo_Format extends ProtoEnum {
 }
 
 /// A reference to a message type, for use in `FieldInfo`.
-class TypeReference extends ProtoMessage {
+final class TypeReference extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.TypeReference';
 
   /// The name of the type that the annotated, generic field may represent.
@@ -2919,7 +2919,7 @@ class TypeReference extends ProtoMessage {
 /// Defines the HTTP configuration for an API service. It contains a list of
 /// `HttpRule`, each specifying the mapping of an RPC method
 /// to one or more HTTP REST API methods.
-class Http extends ProtoMessage {
+final class Http extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Http';
 
   /// A list of HTTP configuration rules that apply to individual API methods.
@@ -3228,7 +3228,7 @@ class Http extends ProtoMessage {
 /// If an API needs to use a JSON array for request or response body, it can map
 /// the request or response body to a repeated field. However, some gRPC
 /// Transcoding implementations may not support this feature.
-class HttpRule extends ProtoMessage {
+final class HttpRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.HttpRule';
 
   /// Selects a method to which this rule applies.
@@ -3345,7 +3345,7 @@ class HttpRule extends ProtoMessage {
 }
 
 /// A custom pattern is used for defining custom HTTP verb.
-class CustomHttpPattern extends ProtoMessage {
+final class CustomHttpPattern extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.CustomHttpPattern';
 
   /// The name of this custom HTTP verb.
@@ -3418,7 +3418,7 @@ class CustomHttpPattern extends ProtoMessage {
 ///
 /// Use of this type only changes how the request and response bodies are
 /// handled, all other features will continue to work unchanged.
-class HttpBody extends ProtoMessage {
+final class HttpBody extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.HttpBody';
 
   /// The HTTP Content-Type header value specifying the content type of the body.
@@ -3462,7 +3462,7 @@ class HttpBody extends ProtoMessage {
 }
 
 /// A description of a label.
-class LabelDescriptor extends ProtoMessage {
+final class LabelDescriptor extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.LabelDescriptor';
 
   /// The label key.
@@ -3509,7 +3509,7 @@ class LabelDescriptor extends ProtoMessage {
 }
 
 /// Value types that can be used as label values.
-class LabelDescriptor_ValueType extends ProtoEnum {
+final class LabelDescriptor_ValueType extends ProtoEnum {
   /// A variable-length string. This is the default.
   static const string = LabelDescriptor_ValueType('STRING');
 
@@ -3536,7 +3536,7 @@ class LabelDescriptor_ValueType extends ProtoEnum {
 ///       labels:
 ///       - key: /customer_id
 ///         description: Identifier of a library customer
-class LogDescriptor extends ProtoMessage {
+final class LogDescriptor extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.LogDescriptor';
 
   /// The name of the log. It must be less than 512 characters long and can
@@ -3620,7 +3620,7 @@ class LogDescriptor extends ProtoMessage {
 ///       - monitored_resource: library.googleapis.com/branch
 ///         logs:
 ///         - activity_history
-class Logging extends ProtoMessage {
+final class Logging extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Logging';
 
   /// Logging configurations for sending logs to the producer project.
@@ -3667,7 +3667,7 @@ class Logging extends ProtoMessage {
 
 /// Configuration of a specific logging destination (the producer project
 /// or the consumer project).
-class Logging_LoggingDestination extends ProtoMessage {
+final class Logging_LoggingDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Logging.LoggingDestination';
 
@@ -3712,7 +3712,7 @@ class Logging_LoggingDestination extends ProtoMessage {
 /// Defines a metric type and its schema. Once a metric descriptor is created,
 /// deleting or altering it stops data collection and makes the metric type's
 /// existing data unusable.
-class MetricDescriptor extends ProtoMessage {
+final class MetricDescriptor extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.MetricDescriptor';
 
   /// The resource name of the metric descriptor.
@@ -3945,7 +3945,7 @@ class MetricDescriptor extends ProtoMessage {
 }
 
 /// Additional annotations that can be used to guide the usage of a metric.
-class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
+final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.MetricDescriptor.MetricDescriptorMetadata';
 
@@ -4016,7 +4016,7 @@ class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
 }
 
 /// The resource hierarchy level of the timeseries data of a metric.
-class MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
+final class MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
     extends ProtoEnum {
   /// Do not use this default value.
   static const timeSeriesResourceHierarchyLevelUnspecified =
@@ -4060,7 +4060,7 @@ class MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
 /// The kind of measurement. It describes how the data is reported.
 /// For information on setting the start time and end time based on
 /// the MetricKind, see `TimeInterval`.
-class MetricDescriptor_MetricKind extends ProtoEnum {
+final class MetricDescriptor_MetricKind extends ProtoEnum {
   /// Do not use this default value.
   static const metricKindUnspecified = MetricDescriptor_MetricKind(
     'METRIC_KIND_UNSPECIFIED',
@@ -4089,7 +4089,7 @@ class MetricDescriptor_MetricKind extends ProtoEnum {
 }
 
 /// The value type of a metric.
-class MetricDescriptor_ValueType extends ProtoEnum {
+final class MetricDescriptor_ValueType extends ProtoEnum {
   /// Do not use this default value.
   static const valueTypeUnspecified = MetricDescriptor_ValueType(
     'VALUE_TYPE_UNSPECIFIED',
@@ -4126,7 +4126,7 @@ class MetricDescriptor_ValueType extends ProtoEnum {
 
 /// A specific metric, identified by specifying values for all of the
 /// labels of a [`MetricDescriptor`][google.api.MetricDescriptor].
-class Metric extends ProtoMessage {
+final class Metric extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Metric';
 
   /// An existing metric type, see
@@ -4169,7 +4169,7 @@ class Metric extends ProtoMessage {
 /// Different APIs can support different monitored resource types. APIs generally
 /// provide a `list` method that returns the monitored resource descriptors used
 /// by the API.
-class MonitoredResourceDescriptor extends ProtoMessage {
+final class MonitoredResourceDescriptor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.MonitoredResourceDescriptor';
 
@@ -4268,7 +4268,7 @@ class MonitoredResourceDescriptor extends ProtoMessage {
 ///       "labels": { "project_id": "my-project",
 ///                   "instance_id": "12345678901234",
 ///                   "zone": "us-central1-a" }}
-class MonitoredResource extends ProtoMessage {
+final class MonitoredResource extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.MonitoredResource';
 
   /// Required. The monitored resource type. This field must match
@@ -4315,7 +4315,7 @@ class MonitoredResource extends ProtoMessage {
 /// instance. There is some other useful auxiliary metadata. Monitoring and
 /// Logging use an ingestion pipeline to extract metadata for cloud resources of
 /// all types, and store the metadata in this message.
-class MonitoredResourceMetadata extends ProtoMessage {
+final class MonitoredResourceMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.MonitoredResourceMetadata';
 
@@ -4408,7 +4408,7 @@ class MonitoredResourceMetadata extends ProtoMessage {
 ///         metrics:
 ///         - library.googleapis.com/book/returned_count
 ///         - library.googleapis.com/book/num_overdue
-class Monitoring extends ProtoMessage {
+final class Monitoring extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Monitoring';
 
   /// Monitoring configurations for sending metrics to the producer project.
@@ -4459,7 +4459,7 @@ class Monitoring extends ProtoMessage {
 
 /// Configuration of a specific monitoring destination (the producer project
 /// or the consumer project).
-class Monitoring_MonitoringDestination extends ProtoMessage {
+final class Monitoring_MonitoringDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.api.Monitoring.MonitoringDestination';
 
@@ -4508,7 +4508,7 @@ class Monitoring_MonitoringDestination extends ProtoMessage {
 /// before a request can be processed. This policy annotation is used to
 /// generate the overall policy that will be used for automatic runtime
 /// policy enforcement and documentation generation.
-class FieldPolicy extends ProtoMessage {
+final class FieldPolicy extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.FieldPolicy';
 
   /// Selects one or more request or response message fields to apply this
@@ -4564,7 +4564,7 @@ class FieldPolicy extends ProtoMessage {
 }
 
 /// Defines policies applying to an RPC method.
-class MethodPolicy extends ProtoMessage {
+final class MethodPolicy extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.MethodPolicy';
 
   /// Selects a method to which these policies should be enforced, for example,
@@ -4658,7 +4658,7 @@ class MethodPolicy extends ProtoMessage {
 ///        display_name: Write requests
 ///        metric_kind: DELTA
 ///        value_type: INT64
-class Quota extends ProtoMessage {
+final class Quota extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Quota';
 
   /// List of QuotaLimit definitions for the service.
@@ -4691,7 +4691,7 @@ class Quota extends ProtoMessage {
 
 /// Bind API methods to metrics. Binding a method to a metric causes that
 /// metric's configured quota behaviors to apply to the method call.
-class MetricRule extends ProtoMessage {
+final class MetricRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.MetricRule';
 
   /// Selects the methods to which this rule applies.
@@ -4735,7 +4735,7 @@ class MetricRule extends ProtoMessage {
 /// `QuotaLimit` defines a specific limit that applies over a specified duration
 /// for a limit type. There can be at most one limit for a duration and limit
 /// type combination defined within a `QuotaGroup`.
-class QuotaLimit extends ProtoMessage {
+final class QuotaLimit extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.QuotaLimit';
 
   /// Name of the quota limit.
@@ -4924,7 +4924,7 @@ class QuotaLimit extends ProtoMessage {
 ///       pattern: "folders/{folder}/logs/{log}"
 ///       pattern: "organizations/{organization}/logs/{log}"
 ///       pattern: "billingAccounts/{billing_account}/logs/{log}"
-class ResourceDescriptor extends ProtoMessage {
+final class ResourceDescriptor extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ResourceDescriptor';
 
   /// The resource type. It must be in the format of
@@ -5056,7 +5056,7 @@ class ResourceDescriptor extends ProtoMessage {
 
 /// A description of the historical or future-looking state of the
 /// resource pattern.
-class ResourceDescriptor_History extends ProtoEnum {
+final class ResourceDescriptor_History extends ProtoEnum {
   /// The "unset" value.
   static const historyUnspecified = ResourceDescriptor_History(
     'HISTORY_UNSPECIFIED',
@@ -5085,7 +5085,7 @@ class ResourceDescriptor_History extends ProtoEnum {
 }
 
 /// A flag representing a specific style that a resource claims to conform to.
-class ResourceDescriptor_Style extends ProtoEnum {
+final class ResourceDescriptor_Style extends ProtoEnum {
   /// The unspecified value. Do not use.
   static const styleUnspecified = ResourceDescriptor_Style('STYLE_UNSPECIFIED');
 
@@ -5112,7 +5112,7 @@ class ResourceDescriptor_Style extends ProtoEnum {
 
 /// Defines a proto annotation that describes a string field that refers to
 /// an API resource.
-class ResourceReference extends ProtoMessage {
+final class ResourceReference extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ResourceReference';
 
   /// The resource type that the annotated field references.
@@ -5533,7 +5533,7 @@ class ResourceReference extends ProtoMessage {
 ///
 ///     x-goog-request-params:
 ///     table_location=instances/instance_bar&routing_id=prof_qux
-class RoutingRule extends ProtoMessage {
+final class RoutingRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.RoutingRule';
 
   /// A collection of Routing Parameter specifications.
@@ -5568,7 +5568,7 @@ class RoutingRule extends ProtoMessage {
 }
 
 /// A projection from an input message to the GRPC or REST header.
-class RoutingParameter extends ProtoMessage {
+final class RoutingParameter extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.RoutingParameter';
 
   /// A request field to extract the header key-value pair from.
@@ -5690,7 +5690,7 @@ class RoutingParameter extends ProtoMessage {
 ///       - selector: "*"
 ///         requirements:
 ///           provider_id: google_calendar_auth
-class Service extends ProtoMessage {
+final class Service extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Service';
 
   /// The service name, which is a DNS-like logical identifier for the
@@ -5917,7 +5917,7 @@ class Service extends ProtoMessage {
 }
 
 /// Source information used to create a Service Config
-class SourceInfo extends ProtoMessage {
+final class SourceInfo extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.SourceInfo';
 
   /// All files used during config generation.
@@ -5946,7 +5946,7 @@ class SourceInfo extends ProtoMessage {
 /// system, not by an individual API. It is typically mapped to an HTTP header
 /// and/or a URL query parameter. This configuration specifies which methods
 /// change the names of the system parameters.
-class SystemParameters extends ProtoMessage {
+final class SystemParameters extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.SystemParameters';
 
   /// Define system parameters.
@@ -5999,7 +5999,7 @@ class SystemParameters extends ProtoMessage {
 
 /// Define a system parameter rule mapping system parameter definitions to
 /// methods.
-class SystemParameterRule extends ProtoMessage {
+final class SystemParameterRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.SystemParameterRule';
 
   /// Selects the methods to which this rule applies. Use '*' to indicate all
@@ -6047,7 +6047,7 @@ class SystemParameterRule extends ProtoMessage {
 /// Define a parameter's name and location. The parameter may be passed as either
 /// an HTTP header or a URL query parameter, and if both are passed the behavior
 /// is implementation-dependent.
-class SystemParameter extends ProtoMessage {
+final class SystemParameter extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.SystemParameter';
 
   /// Define the name of the parameter, such as "api_key" . It is case sensitive.
@@ -6093,7 +6093,7 @@ class SystemParameter extends ProtoMessage {
 }
 
 /// Configuration controlling usage of a service.
-class Usage extends ProtoMessage {
+final class Usage extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Usage';
 
   /// Requirements that must be satisfied before a consumer project can use the
@@ -6178,7 +6178,7 @@ class Usage extends ProtoMessage {
 ///       rules:
 ///       - selector: "google.example.library.v1.LibraryService.CreateBook"
 ///         allow_unregistered_calls: true
-class UsageRule extends ProtoMessage {
+final class UsageRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.UsageRule';
 
   /// Selects the methods to which this rule applies. Use '*' to indicate all
@@ -6257,7 +6257,7 @@ class UsageRule extends ProtoMessage {
 ///
 /// Here, all methods are publicly visible except for the restricted methods
 /// EnhancedSearch and Delegate.
-class Visibility extends ProtoMessage {
+final class Visibility extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Visibility';
 
   /// A list of visibility rules that apply to individual API elements.
@@ -6284,7 +6284,7 @@ class Visibility extends ProtoMessage {
 
 /// A visibility rule provides visibility configuration for an individual API
 /// element.
-class VisibilityRule extends ProtoMessage {
+final class VisibilityRule extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.VisibilityRule';
 
   /// Selects methods, messages, fields, enums, etc. to which this rule applies.
@@ -6339,7 +6339,7 @@ class VisibilityRule extends ProtoMessage {
 
 /// The organization for which the client libraries are being published.
 /// Affects the url where generated docs are published, etc.
-class ClientLibraryOrganization extends ProtoEnum {
+final class ClientLibraryOrganization extends ProtoEnum {
   /// Not useful.
   static const clientLibraryOrganizationUnspecified = ClientLibraryOrganization(
     'CLIENT_LIBRARY_ORGANIZATION_UNSPECIFIED',
@@ -6376,7 +6376,7 @@ class ClientLibraryOrganization extends ProtoEnum {
 }
 
 /// To where should client libraries be published?
-class ClientLibraryDestination extends ProtoEnum {
+final class ClientLibraryDestination extends ProtoEnum {
   /// Client libraries will neither be generated nor published to package
   /// managers.
   static const clientLibraryDestinationUnspecified = ClientLibraryDestination(
@@ -6401,7 +6401,7 @@ class ClientLibraryDestination extends ProtoEnum {
 
 /// Classifies set of possible modifications to an object in the service
 /// configuration.
-class ChangeType extends ProtoEnum {
+final class ChangeType extends ProtoEnum {
   /// No value was provided.
   static const changeTypeUnspecified = ChangeType('CHANGE_TYPE_UNSPECIFIED');
 
@@ -6435,7 +6435,7 @@ class ChangeType extends ProtoEnum {
 /// such as "projects/123". Other metadata keys are specific to each error
 /// reason. For more information, see the definition of the specific error
 /// reason.
-class ErrorReason extends ProtoEnum {
+final class ErrorReason extends ProtoEnum {
   /// Do not use this default value.
   static const errorReasonUnspecified = ErrorReason('ERROR_REASON_UNSPECIFIED');
 
@@ -7057,7 +7057,7 @@ class ErrorReason extends ProtoEnum {
 /// denotes the behavior and may affect how API tooling handles the field.
 ///
 /// Note: This enum **may** receive new values in the future.
-class FieldBehavior extends ProtoEnum {
+final class FieldBehavior extends ProtoEnum {
   /// Conventional default for enums. Do not use this.
   static const fieldBehaviorUnspecified = FieldBehavior(
     'FIELD_BEHAVIOR_UNSPECIFIED',
@@ -7125,7 +7125,7 @@ class FieldBehavior extends ProtoEnum {
 
 /// The launch stage as defined by [Google Cloud Platform
 /// Launch Stages](https://cloud.google.com/terms/launch-stages).
-class LaunchStage extends ProtoEnum {
+final class LaunchStage extends ProtoEnum {
   /// Do not use this default value.
   static const launchStageUnspecified = LaunchStage('LAUNCH_STAGE_UNSPECIFIED');
 

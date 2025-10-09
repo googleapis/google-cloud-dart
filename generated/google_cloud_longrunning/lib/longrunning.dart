@@ -45,7 +45,7 @@ part 'src/longrunning.p.dart';
 /// (such as Pub/Sub API) to receive the response.  Any API service that returns
 /// long-running operations should implement the `Operations` interface so
 /// developers can have a consistent client experience.
-class Operations {
+final class Operations {
   static const String _host = 'longrunning.googleapis.com';
 
   final ServiceClient _client;
@@ -109,7 +109,7 @@ class Operations {
 
 /// The request message for
 /// `Operations.GetOperation`.
-class GetOperationRequest extends ProtoMessage {
+final class GetOperationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.longrunning.GetOperationRequest';
 
@@ -136,7 +136,7 @@ class GetOperationRequest extends ProtoMessage {
 
 /// The request message for
 /// `Operations.ListOperations`.
-class ListOperationsRequest extends ProtoMessage {
+final class ListOperationsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.longrunning.ListOperationsRequest';
 
@@ -192,7 +192,7 @@ class ListOperationsRequest extends ProtoMessage {
 
 /// The response message for
 /// `Operations.ListOperations`.
-class ListOperationsResponse extends ProtoMessage {
+final class ListOperationsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.longrunning.ListOperationsResponse';
 
@@ -231,7 +231,7 @@ class ListOperationsResponse extends ProtoMessage {
 
 /// The request message for
 /// `Operations.CancelOperation`.
-class CancelOperationRequest extends ProtoMessage {
+final class CancelOperationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.longrunning.CancelOperationRequest';
 
@@ -258,7 +258,7 @@ class CancelOperationRequest extends ProtoMessage {
 
 /// The request message for
 /// `Operations.DeleteOperation`.
-class DeleteOperationRequest extends ProtoMessage {
+final class DeleteOperationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.longrunning.DeleteOperationRequest';
 
@@ -285,7 +285,7 @@ class DeleteOperationRequest extends ProtoMessage {
 
 /// The request message for
 /// `Operations.WaitOperation`.
-class WaitOperationRequest extends ProtoMessage {
+final class WaitOperationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.longrunning.WaitOperationRequest';
 
@@ -331,7 +331,7 @@ class WaitOperationRequest extends ProtoMessage {
 ///         metadata_type: "ExportMetadata"
 ///       };
 ///     }
-class OperationInfo extends ProtoMessage {
+final class OperationInfo extends ProtoMessage {
   static const String fullyQualifiedName = 'google.longrunning.OperationInfo';
 
   /// Required. The message name of the primary return type for this
