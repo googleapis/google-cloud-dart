@@ -1,0 +1,94 @@
+# Copyright 2025 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+permissions: read-all
+
+# Run on PRs and pushes to the default branch.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+# We use a specific Dart SDK version here in order to have hermetic,
+# reproducable builds (formatting can change between SDK versions, ...).
+env:
+  DART_VERSION: 3.9.2
+
+name: Dart Checks
+jobs:
+  analyze_and_format:
+    name: Analyze and Format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        with:
+          sdk: ${{ env.DART_VERSION }}
+      - run: dart pub get
+      - name: Analyze
+        run: dart analyze --fatal-infos
+      - name: Format
+        run: dart format --output=none --set-exit-if-changed .
+
+  tests:
+    name: Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        with:
+          sdk: ${{ env.DART_VERSION }}
+      - run: dart pub get
+      - name: "tests"
+        run: dart test
+        working-directory: tests
+      - name: "generated/**_test.dart"
+        run: dart test .
+        working-directory: generated
+      - name: "test package/google_cloud_gax"
+        run: dart test
+        working-directory: packages/google_cloud_gax
+
+  generator:
+    name: Code Generator
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - name: Install protoc
+        run: |
+          set -e
+          curl -fSSL  --retry 3 --retry-all-errors --retry-delay 15 -o /tmp/protoc.zip https://github.com/protocolbuffers/protobuf/releases/download/v28.3/protoc-28.3-linux-x86_64.zip
+          cd /usr/local
+          sudo unzip -x /tmp/protoc.zip
+          protoc --version
+      - name: Install Go
+        uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00
+        with:
+          go-version: 1.25.0
+      - name: Install Dart  # The generator uses "dart format".
+        uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        with:
+          sdk: ${{ env.DART_VERSION }}
+      - run: dart pub get
+
+      # Regenerate and check the existing clients. If there is any difference
+      # between the generated code and the committed code that is an error; all
+      # the inputs should be pinned, including the generator version and the
+      # googleapis SHA.
+      - name: Regenerate existing clients
+        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.1.2-0.20250909195434-33501c0123e9 refreshall -project-root .
+      - name: Generated Diff
+        run: git diff --exit-code
+

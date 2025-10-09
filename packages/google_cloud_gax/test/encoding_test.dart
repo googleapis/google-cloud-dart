@@ -51,25 +51,27 @@ void main() {
 
   test('message', () {
     final actual = decode(
-        Status(code: 200, message: 'OK').toJson() as Map<String, Object?>,
-        Status.fromJson);
+      Status(code: 200, message: 'OK').toJson() as Map<String, Object?>,
+      Status.fromJson,
+    );
     expect(actual!.code, 200);
     expect(actual.message, 'OK');
   });
 
   test('list of enums', () {
-    expect(
-      decodeListEnum(encodeList([Code.notFound]), Code.fromJson),
-      [Code.notFound],
-    );
+    expect(decodeListEnum(encodeList([Code.notFound]), Code.fromJson), [
+      Code.notFound,
+    ]);
   });
 
   test('list of bytes', () {
-    final actual = decodeListBytes(encodeListBytes([
-      Uint8List.fromList([1]),
-      Uint8List.fromList([1, 2]),
-      Uint8List.fromList([1, 2, 3]),
-    ]));
+    final actual = decodeListBytes(
+      encodeListBytes([
+        Uint8List.fromList([1]),
+        Uint8List.fromList([1, 2]),
+        Uint8List.fromList([1, 2, 3]),
+      ]),
+    );
 
     expect(actual, hasLength(3));
 
@@ -79,8 +81,10 @@ void main() {
   });
 
   test('list of messages', () {
-    final actual =
-        decodeListMessage(encodeList([Status(code: 200)]), Status.fromJson);
+    final actual = decodeListMessage(
+      encodeList([Status(code: 200)]),
+      Status.fromJson,
+    );
     expect(actual![0], isA<Status>());
     expect(actual[0].code, 200);
   });
@@ -111,10 +115,7 @@ void main() {
 
   test('map of messages', () {
     final actual = decodeMapMessage(
-      encodeMap({
-        'one': Status(code: 200),
-        'two': Status(code: 301),
-      }),
+      encodeMap({'one': Status(code: 200), 'two': Status(code: 301)}),
       Status.fromJson,
     );
     expect(actual, isA<Map>());
