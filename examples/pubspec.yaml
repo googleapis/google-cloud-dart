@@ -27,5 +27,3 @@ dependencies:
   google_cloud_rpc: any
   googleapis_auth: ^2.0.0
 
-dev_dependencies:
-  lints: ^5.0.0
