@@ -26,7 +26,7 @@ on:
 env:
   DART_VERSION: 3.9.2
 
-name: Dart Analyze & Format
+name: Dart Checks
 jobs:
   analyze_and_format:
     runs-on: ubuntu-latest
