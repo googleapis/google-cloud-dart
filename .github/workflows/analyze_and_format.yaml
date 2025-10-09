@@ -26,6 +26,7 @@ on:
 env:
   DART_VERSION: 3.9.2
 
+name: Dart Analyze & Format
 jobs:
   analyze_and_format:
     name: Dart Analyze & Format
@@ -54,7 +55,7 @@ jobs:
         run: dart test
         working-directory: tests
       - name: "generated/**_test.dart"
-        run: dart test
+        run: dart test .
         working-directory: generated
       - name: "test package/google_cloud_gax"
         run: dart test
