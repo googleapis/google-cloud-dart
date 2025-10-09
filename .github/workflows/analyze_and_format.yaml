@@ -50,9 +50,9 @@ jobs:
         with:
           sdk: ${{ env.DART_VERSION }}
       - run: dart pub get
-      - name: "dart/tests"
+      - name: "tests"
         run: dart test
-        working-directory: dart/tests
+        working-directory: tests
       - name: "generated/**_test.dart"
         run: dart test
         working-directory: generated
