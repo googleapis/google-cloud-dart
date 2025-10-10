@@ -12,4 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-include: package:lints/recommended.yaml
+# Dependabot configuration file. See:
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates
+version: 2
+
+# Have Dependabot send weekly updates for github action references, batching all
+# the action changes together into one PR.
+updates:
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: "chore(deps): "
+    groups:
+      github-actions:
+        patterns:
+          - "*"

@@ -35,7 +35,7 @@ import 'package:http/http.dart' as http;
 ///
 /// A **function** is a resource which describes a function that should be
 /// executed and how it is triggered.
-class FunctionService {
+final class FunctionService {
   static const String _host = 'cloudfunctions.googleapis.com';
 
   final ServiceClient _client;
@@ -270,7 +270,7 @@ class FunctionService {
 
 /// Describes a Cloud Function that contains user computation executed in
 /// response to an event. It encapsulates function and trigger configurations.
-class Function$ extends ProtoMessage {
+final class Function$ extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.functions.v2.Function';
 
   /// A user-defined name of the function. Function names must be unique
@@ -399,7 +399,7 @@ class Function$ extends ProtoMessage {
 }
 
 /// Describes the current state of the function.
-class Function$_State extends ProtoEnum {
+final class Function$_State extends ProtoEnum {
   /// Not specified. Invalid state.
   static const stateUnspecified = Function$_State('STATE_UNSPECIFIED');
 
@@ -428,7 +428,7 @@ class Function$_State extends ProtoEnum {
 }
 
 /// Informational messages about the state of the Cloud Function or Operation.
-class StateMessage extends ProtoMessage {
+final class StateMessage extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.StateMessage';
 
@@ -473,7 +473,7 @@ class StateMessage extends ProtoMessage {
 }
 
 /// Severity of the state message.
-class StateMessage_Severity extends ProtoEnum {
+final class StateMessage_Severity extends ProtoEnum {
   /// Not specified. Invalid severity.
   static const severityUnspecified = StateMessage_Severity(
     'SEVERITY_UNSPECIFIED',
@@ -498,7 +498,7 @@ class StateMessage_Severity extends ProtoEnum {
 }
 
 /// Location of the source in an archive file in Google Cloud Storage.
-class StorageSource extends ProtoMessage {
+final class StorageSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.StorageSource';
 
@@ -561,7 +561,7 @@ class StorageSource extends ProtoMessage {
 }
 
 /// Location of the source in a Google Cloud Source Repository.
-class RepoSource extends ProtoMessage {
+final class RepoSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.RepoSource';
 
@@ -649,7 +649,7 @@ class RepoSource extends ProtoMessage {
 }
 
 /// The location of the function source code.
-class Source extends ProtoMessage {
+final class Source extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.functions.v2.Source';
 
   /// If provided, get the source from this location in Google Cloud Storage.
@@ -693,7 +693,7 @@ class Source extends ProtoMessage {
 
 /// Provenance of the source. Ways to find the original source, or verify that
 /// some source was used for this build.
-class SourceProvenance extends ProtoMessage {
+final class SourceProvenance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.SourceProvenance';
 
@@ -749,7 +749,7 @@ class SourceProvenance extends ProtoMessage {
 
 /// Describes the Build step of the function that builds a container from the
 /// given source.
-class BuildConfig extends ProtoMessage {
+final class BuildConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.BuildConfig';
 
@@ -909,7 +909,7 @@ class BuildConfig extends ProtoMessage {
 }
 
 /// Docker Registry to use for storing function Docker images.
-class BuildConfig_DockerRegistry extends ProtoEnum {
+final class BuildConfig_DockerRegistry extends ProtoEnum {
   /// Unspecified.
   static const dockerRegistryUnspecified = BuildConfig_DockerRegistry(
     'DOCKER_REGISTRY_UNSPECIFIED',
@@ -941,7 +941,7 @@ class BuildConfig_DockerRegistry extends ProtoEnum {
 
 /// Describes the Service being deployed.
 /// Currently Supported : Cloud Run (fully managed).
-class ServiceConfig extends ProtoMessage {
+final class ServiceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.ServiceConfig';
 
@@ -1173,7 +1173,7 @@ class ServiceConfig extends ProtoMessage {
 ///
 /// This controls what traffic is diverted through the VPC Access Connector
 /// resource. By default PRIVATE_RANGES_ONLY will be used.
-class ServiceConfig_VpcConnectorEgressSettings extends ProtoEnum {
+final class ServiceConfig_VpcConnectorEgressSettings extends ProtoEnum {
   /// Unspecified.
   static const vpcConnectorEgressSettingsUnspecified =
       ServiceConfig_VpcConnectorEgressSettings(
@@ -1205,7 +1205,7 @@ class ServiceConfig_VpcConnectorEgressSettings extends ProtoEnum {
 /// This controls what traffic can reach the function.
 ///
 /// If unspecified, ALLOW_ALL will be used.
-class ServiceConfig_IngressSettings extends ProtoEnum {
+final class ServiceConfig_IngressSettings extends ProtoEnum {
   /// Unspecified.
   static const ingressSettingsUnspecified = ServiceConfig_IngressSettings(
     'INGRESS_SETTINGS_UNSPECIFIED',
@@ -1239,7 +1239,7 @@ class ServiceConfig_IngressSettings extends ProtoEnum {
 ///
 /// Security level is only configurable for 1st Gen functions, If unspecified,
 /// SECURE_OPTIONAL will be used. 2nd Gen functions are SECURE_ALWAYS ONLY.
-class ServiceConfig_SecurityLevel extends ProtoEnum {
+final class ServiceConfig_SecurityLevel extends ProtoEnum {
   /// Unspecified.
   static const securityLevelUnspecified = ServiceConfig_SecurityLevel(
     'SECURITY_LEVEL_UNSPECIFIED',
@@ -1267,7 +1267,7 @@ class ServiceConfig_SecurityLevel extends ProtoEnum {
 /// Configuration for a secret environment variable. It has the information
 /// necessary to fetch the secret value from secret manager and expose it as an
 /// environment variable.
-class SecretEnvVar extends ProtoMessage {
+final class SecretEnvVar extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.SecretEnvVar';
 
@@ -1325,7 +1325,7 @@ class SecretEnvVar extends ProtoMessage {
 /// Configuration for a secret volume. It has the information necessary to fetch
 /// the secret value from secret manager and make it available as files mounted
 /// at the requested paths within the application container.
-class SecretVolume extends ProtoMessage {
+final class SecretVolume extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.SecretVolume';
 
@@ -1386,7 +1386,7 @@ class SecretVolume extends ProtoMessage {
 }
 
 /// Configuration for a single version.
-class SecretVolume_SecretVersion extends ProtoMessage {
+final class SecretVolume_SecretVersion extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.SecretVolume.SecretVersion';
 
@@ -1431,7 +1431,7 @@ class SecretVolume_SecretVersion extends ProtoMessage {
 
 /// Describes EventTrigger, used to request events to be sent from another
 /// service.
-class EventTrigger extends ProtoMessage {
+final class EventTrigger extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.EventTrigger';
 
@@ -1555,7 +1555,7 @@ class EventTrigger extends ProtoMessage {
 
 /// Describes the retry policy in case of function's execution failure.
 /// Retried execution is charged as any other execution.
-class EventTrigger_RetryPolicy extends ProtoEnum {
+final class EventTrigger_RetryPolicy extends ProtoEnum {
   /// Not specified.
   static const retryPolicyUnspecified = EventTrigger_RetryPolicy(
     'RETRY_POLICY_UNSPECIFIED',
@@ -1582,7 +1582,7 @@ class EventTrigger_RetryPolicy extends ProtoEnum {
 }
 
 /// Filters events based on exact matches on the CloudEvents attributes.
-class EventFilter extends ProtoMessage {
+final class EventFilter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.EventFilter';
 
@@ -1630,7 +1630,7 @@ class EventFilter extends ProtoMessage {
 }
 
 /// Request for the `GetFunction` method.
-class GetFunctionRequest extends ProtoMessage {
+final class GetFunctionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.GetFunctionRequest';
 
@@ -1668,7 +1668,7 @@ class GetFunctionRequest extends ProtoMessage {
 }
 
 /// Request for the `ListFunctions` method.
-class ListFunctionsRequest extends ProtoMessage {
+final class ListFunctionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.ListFunctionsRequest';
 
@@ -1744,7 +1744,7 @@ class ListFunctionsRequest extends ProtoMessage {
 }
 
 /// Response for the `ListFunctions` method.
-class ListFunctionsResponse extends ProtoMessage {
+final class ListFunctionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.ListFunctionsResponse';
 
@@ -1789,7 +1789,7 @@ class ListFunctionsResponse extends ProtoMessage {
 }
 
 /// Request for the `CreateFunction` method.
-class CreateFunctionRequest extends ProtoMessage {
+final class CreateFunctionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.CreateFunctionRequest';
 
@@ -1841,7 +1841,7 @@ class CreateFunctionRequest extends ProtoMessage {
 }
 
 /// Request for the `UpdateFunction` method.
-class UpdateFunctionRequest extends ProtoMessage {
+final class UpdateFunctionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.UpdateFunctionRequest';
 
@@ -1875,7 +1875,7 @@ class UpdateFunctionRequest extends ProtoMessage {
 }
 
 /// Request for the `DeleteFunction` method.
-class DeleteFunctionRequest extends ProtoMessage {
+final class DeleteFunctionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.DeleteFunctionRequest';
 
@@ -1901,7 +1901,7 @@ class DeleteFunctionRequest extends ProtoMessage {
 }
 
 /// Request of `GenerateSourceUploadUrl` method.
-class GenerateUploadUrlRequest extends ProtoMessage {
+final class GenerateUploadUrlRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.GenerateUploadUrlRequest';
 
@@ -1967,7 +1967,7 @@ class GenerateUploadUrlRequest extends ProtoMessage {
 }
 
 /// Response of `GenerateSourceUploadUrl` method.
-class GenerateUploadUrlResponse extends ProtoMessage {
+final class GenerateUploadUrlResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.GenerateUploadUrlResponse';
 
@@ -2012,7 +2012,7 @@ class GenerateUploadUrlResponse extends ProtoMessage {
 }
 
 /// Request of `GenerateDownloadUrl` method.
-class GenerateDownloadUrlRequest extends ProtoMessage {
+final class GenerateDownloadUrlRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.GenerateDownloadUrlRequest';
 
@@ -2039,7 +2039,7 @@ class GenerateDownloadUrlRequest extends ProtoMessage {
 }
 
 /// Response of `GenerateDownloadUrl` method.
-class GenerateDownloadUrlResponse extends ProtoMessage {
+final class GenerateDownloadUrlResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.GenerateDownloadUrlResponse';
 
@@ -2068,7 +2068,7 @@ class GenerateDownloadUrlResponse extends ProtoMessage {
 }
 
 /// Request for the `ListRuntimes` method.
-class ListRuntimesRequest extends ProtoMessage {
+final class ListRuntimesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.ListRuntimesRequest';
 
@@ -2103,7 +2103,7 @@ class ListRuntimesRequest extends ProtoMessage {
 }
 
 /// Response for the `ListRuntimes` method.
-class ListRuntimesResponse extends ProtoMessage {
+final class ListRuntimesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.ListRuntimesResponse';
 
@@ -2132,7 +2132,7 @@ class ListRuntimesResponse extends ProtoMessage {
 
 /// Describes a runtime and any special information (e.g., deprecation status)
 /// related to it.
-class ListRuntimesResponse_Runtime extends ProtoMessage {
+final class ListRuntimesResponse_Runtime extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.ListRuntimesResponse.Runtime';
 
@@ -2209,7 +2209,7 @@ class ListRuntimesResponse_Runtime extends ProtoMessage {
 }
 
 /// The various stages that a runtime can be in.
-class ListRuntimesResponse_RuntimeStage extends ProtoEnum {
+final class ListRuntimesResponse_RuntimeStage extends ProtoEnum {
   /// Not specified.
   static const runtimeStageUnspecified = ListRuntimesResponse_RuntimeStage(
     'RUNTIME_STAGE_UNSPECIFIED',
@@ -2246,7 +2246,7 @@ class ListRuntimesResponse_RuntimeStage extends ProtoEnum {
 
 /// Security patches are applied automatically to the runtime without requiring
 /// the function to be redeployed.
-class AutomaticUpdatePolicy extends ProtoMessage {
+final class AutomaticUpdatePolicy extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.AutomaticUpdatePolicy';
 
@@ -2266,7 +2266,7 @@ class AutomaticUpdatePolicy extends ProtoMessage {
 }
 
 /// Security patches are only applied when a function is redeployed.
-class OnDeployUpdatePolicy extends ProtoMessage {
+final class OnDeployUpdatePolicy extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.OnDeployUpdatePolicy';
 
@@ -2295,7 +2295,7 @@ class OnDeployUpdatePolicy extends ProtoMessage {
 }
 
 /// Represents the metadata of the long-running operation.
-class OperationMetadata extends ProtoMessage {
+final class OperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.OperationMetadata';
 
@@ -2408,7 +2408,7 @@ class OperationMetadata extends ProtoMessage {
 }
 
 /// Extra GCF specific location information.
-class LocationMetadata extends ProtoMessage {
+final class LocationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.functions.v2.LocationMetadata';
 
@@ -2433,7 +2433,7 @@ class LocationMetadata extends ProtoMessage {
 }
 
 /// Each Stage of the deployment process
-class Stage extends ProtoMessage {
+final class Stage extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.functions.v2.Stage';
 
   /// Name of the Stage. This will be unique for each Stage.
@@ -2503,7 +2503,7 @@ class Stage extends ProtoMessage {
 }
 
 /// Possible names for a Stage
-class Stage_Name extends ProtoEnum {
+final class Stage_Name extends ProtoEnum {
   /// Not specified. Invalid name.
   static const nameUnspecified = Stage_Name('NAME_UNSPECIFIED');
 
@@ -2534,7 +2534,7 @@ class Stage_Name extends ProtoEnum {
 }
 
 /// Possible states for a Stage
-class Stage_State extends ProtoEnum {
+final class Stage_State extends ProtoEnum {
   /// Not specified. Invalid state.
   static const stateUnspecified = Stage_State('STATE_UNSPECIFIED');
 
@@ -2556,7 +2556,7 @@ class Stage_State extends ProtoEnum {
 }
 
 /// The type of the long running operation.
-class OperationType extends ProtoEnum {
+final class OperationType extends ProtoEnum {
   /// Unspecified
   static const operationtypeUnspecified = OperationType(
     'OPERATIONTYPE_UNSPECIFIED',
@@ -2580,7 +2580,7 @@ class OperationType extends ProtoEnum {
 }
 
 /// The environment the function is hosted on.
-class Environment extends ProtoEnum {
+final class Environment extends ProtoEnum {
   /// Unspecified
   static const environmentUnspecified = Environment('ENVIRONMENT_UNSPECIFIED');
 

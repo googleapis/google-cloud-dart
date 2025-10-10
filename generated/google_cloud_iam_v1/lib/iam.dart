@@ -50,7 +50,7 @@ import 'package:http/http.dart' as http;
 /// This is intentionally not a CRUD style API because access control policies
 /// are created and deleted implicitly with the resources to which they are
 /// attached.
-class IAMPolicy {
+final class IAMPolicy {
   static const String _host = 'iam-meta-api.googleapis.com';
 
   final ServiceClient _client;
@@ -99,7 +99,7 @@ class IAMPolicy {
 }
 
 /// Request message for `SetIamPolicy` method.
-class SetIamPolicyRequest extends ProtoMessage {
+final class SetIamPolicyRequest extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.SetIamPolicyRequest';
 
   /// REQUIRED: The resource for which the policy is being specified.
@@ -147,7 +147,7 @@ class SetIamPolicyRequest extends ProtoMessage {
 }
 
 /// Request message for `GetIamPolicy` method.
-class GetIamPolicyRequest extends ProtoMessage {
+final class GetIamPolicyRequest extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.GetIamPolicyRequest';
 
   /// REQUIRED: The resource for which the policy is being requested.
@@ -184,7 +184,7 @@ class GetIamPolicyRequest extends ProtoMessage {
 }
 
 /// Request message for `TestIamPermissions` method.
-class TestIamPermissionsRequest extends ProtoMessage {
+final class TestIamPermissionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.iam.v1.TestIamPermissionsRequest';
 
@@ -224,7 +224,7 @@ class TestIamPermissionsRequest extends ProtoMessage {
 }
 
 /// Response message for `TestIamPermissions` method.
-class TestIamPermissionsResponse extends ProtoMessage {
+final class TestIamPermissionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.iam.v1.TestIamPermissionsResponse';
 
@@ -250,7 +250,7 @@ class TestIamPermissionsResponse extends ProtoMessage {
 }
 
 /// Encapsulates settings provided to GetIamPolicy.
-class GetPolicyOptions extends ProtoMessage {
+final class GetPolicyOptions extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.GetPolicyOptions';
 
   /// Optional. The maximum policy version that will be used to format the
@@ -372,7 +372,7 @@ class GetPolicyOptions extends ProtoMessage {
 ///
 /// For a description of IAM and its features, see the
 /// [IAM documentation](https://cloud.google.com/iam/docs/).
-class Policy extends ProtoMessage {
+final class Policy extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.Policy';
 
   /// Specifies the format of the policy.
@@ -467,7 +467,7 @@ class Policy extends ProtoMessage {
 }
 
 /// Associates `members`, or principals, with a `role`.
-class Binding extends ProtoMessage {
+final class Binding extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.Binding';
 
   /// Role that is assigned to the list of `members`, or principals.
@@ -610,7 +610,7 @@ class Binding extends ProtoMessage {
 /// For sampleservice, this policy enables DATA_READ, DATA_WRITE and ADMIN_READ
 /// logging. It also exempts `jose@example.com` from DATA_READ logging, and
 /// `aliya@example.com` from DATA_WRITE logging.
-class AuditConfig extends ProtoMessage {
+final class AuditConfig extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.AuditConfig';
 
   /// Specifies a service that will be enabled for audit logging.
@@ -668,7 +668,7 @@ class AuditConfig extends ProtoMessage {
 ///
 /// This enables 'DATA_READ' and 'DATA_WRITE' logging, while exempting
 /// jose@example.com from DATA_READ logging.
-class AuditLogConfig extends ProtoMessage {
+final class AuditLogConfig extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.AuditLogConfig';
 
   /// The log type that this config enables.
@@ -707,7 +707,7 @@ class AuditLogConfig extends ProtoMessage {
 
 /// The list of valid permission types for which logging can be configured.
 /// Admin writes are always logged, and are not configurable.
-class AuditLogConfig_LogType extends ProtoEnum {
+final class AuditLogConfig_LogType extends ProtoEnum {
   /// Default case. Should never be this.
   static const logTypeUnspecified = AuditLogConfig_LogType(
     'LOG_TYPE_UNSPECIFIED',
@@ -732,7 +732,7 @@ class AuditLogConfig_LogType extends ProtoEnum {
 }
 
 /// The difference delta between two policies.
-class PolicyDelta extends ProtoMessage {
+final class PolicyDelta extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.PolicyDelta';
 
   /// The delta for Bindings between two policies.
@@ -772,7 +772,7 @@ class PolicyDelta extends ProtoMessage {
 
 /// One delta entry for Binding. Each individual change (only one member in each
 /// entry) to a binding will be a separate entry.
-class BindingDelta extends ProtoMessage {
+final class BindingDelta extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.BindingDelta';
 
   /// The action that was performed on a Binding.
@@ -826,7 +826,7 @@ class BindingDelta extends ProtoMessage {
 }
 
 /// The type of action performed on a Binding in a policy.
-class BindingDelta_Action extends ProtoEnum {
+final class BindingDelta_Action extends ProtoEnum {
   /// Unspecified.
   static const actionUnspecified = BindingDelta_Action('ACTION_UNSPECIFIED');
 
@@ -847,7 +847,7 @@ class BindingDelta_Action extends ProtoEnum {
 
 /// One delta entry for AuditConfig. Each individual change (only one
 /// exempted_member in each entry) to a AuditConfig will be a separate entry.
-class AuditConfigDelta extends ProtoMessage {
+final class AuditConfigDelta extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.AuditConfigDelta';
 
   /// The action that was performed on an audit configuration in a policy.
@@ -909,7 +909,7 @@ class AuditConfigDelta extends ProtoMessage {
 }
 
 /// The type of action performed on an audit configuration in a policy.
-class AuditConfigDelta_Action extends ProtoEnum {
+final class AuditConfigDelta_Action extends ProtoEnum {
   /// Unspecified.
   static const actionUnspecified = AuditConfigDelta_Action(
     'ACTION_UNSPECIFIED',
@@ -932,7 +932,7 @@ class AuditConfigDelta_Action extends ProtoEnum {
 
 /// Output-only policy member strings of a Google Cloud resource's built-in
 /// identity.
-class ResourcePolicyMember extends ProtoMessage {
+final class ResourcePolicyMember extends ProtoMessage {
   static const String fullyQualifiedName = 'google.iam.v1.ResourcePolicyMember';
 
   /// IAM policy binding member referring to a Google Cloud resource by

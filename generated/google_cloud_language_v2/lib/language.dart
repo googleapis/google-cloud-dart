@@ -27,7 +27,7 @@ import 'package:http/http.dart' as http;
 
 /// Provides text analysis operations such as sentiment analysis and entity
 /// recognition.
-class LanguageService {
+final class LanguageService {
   static const String _host = 'language.googleapis.com';
 
   final ServiceClient _client;
@@ -83,7 +83,7 @@ class LanguageService {
 }
 
 /// Represents the input to API methods.
-class Document extends ProtoMessage {
+final class Document extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.Document';
 
   /// Required. If the type is not set or is `TYPE_UNSPECIFIED`,
@@ -145,7 +145,7 @@ class Document extends ProtoMessage {
 }
 
 /// The document types enum.
-class Document_Type extends ProtoEnum {
+final class Document_Type extends ProtoEnum {
   /// The content type is not specified.
   static const typeUnspecified = Document_Type('TYPE_UNSPECIFIED');
 
@@ -164,7 +164,7 @@ class Document_Type extends ProtoEnum {
 }
 
 /// Represents a sentence in the input document.
-class Sentence extends ProtoMessage {
+final class Sentence extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.Sentence';
 
   /// The sentence text.
@@ -199,7 +199,7 @@ class Sentence extends ProtoMessage {
 /// Represents a phrase in the text that is a known entity, such as
 /// a person, an organization, or location. The API associates information, such
 /// as probability and mentions, with entities.
-class Entity extends ProtoMessage {
+final class Entity extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.Entity';
 
   /// The representative name for the entity.
@@ -261,7 +261,7 @@ class Entity extends ProtoMessage {
 /// The type of the entity. The table
 /// below lists the associated fields for entities that have different
 /// metadata.
-class Entity_Type extends ProtoEnum {
+final class Entity_Type extends ProtoEnum {
   /// Unknown
   static const unknown = Entity_Type('UNKNOWN');
 
@@ -345,7 +345,7 @@ class Entity_Type extends ProtoEnum {
 
 /// Represents the feeling associated with the entire text or entities in
 /// the text.
-class Sentiment extends ProtoMessage {
+final class Sentiment extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.Sentiment';
 
   /// A non-negative number in the [0, +inf) range, which represents
@@ -386,7 +386,7 @@ class Sentiment extends ProtoMessage {
 
 /// Represents a mention for an entity in the text. Currently, proper noun
 /// mentions are supported.
-class EntityMention extends ProtoMessage {
+final class EntityMention extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.EntityMention';
 
@@ -441,7 +441,7 @@ class EntityMention extends ProtoMessage {
 }
 
 /// The supported types of mentions.
-class EntityMention_Type extends ProtoEnum {
+final class EntityMention_Type extends ProtoEnum {
   /// Unknown
   static const typeUnknown = EntityMention_Type('TYPE_UNKNOWN');
 
@@ -460,7 +460,7 @@ class EntityMention_Type extends ProtoEnum {
 }
 
 /// Represents a text span in the input document.
-class TextSpan extends ProtoMessage {
+final class TextSpan extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.TextSpan';
 
   /// The content of the text span, which is a substring of the document.
@@ -497,7 +497,7 @@ class TextSpan extends ProtoMessage {
 }
 
 /// Represents a category returned from the text classifier.
-class ClassificationCategory extends ProtoMessage {
+final class ClassificationCategory extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.ClassificationCategory';
 
@@ -545,7 +545,7 @@ class ClassificationCategory extends ProtoMessage {
 }
 
 /// The sentiment analysis request message.
-class AnalyzeSentimentRequest extends ProtoMessage {
+final class AnalyzeSentimentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnalyzeSentimentRequest';
 
@@ -583,7 +583,7 @@ class AnalyzeSentimentRequest extends ProtoMessage {
 }
 
 /// The sentiment analysis response message.
-class AnalyzeSentimentResponse extends ProtoMessage {
+final class AnalyzeSentimentResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnalyzeSentimentResponse';
 
@@ -641,7 +641,7 @@ class AnalyzeSentimentResponse extends ProtoMessage {
 }
 
 /// The entity analysis request message.
-class AnalyzeEntitiesRequest extends ProtoMessage {
+final class AnalyzeEntitiesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnalyzeEntitiesRequest';
 
@@ -679,7 +679,7 @@ class AnalyzeEntitiesRequest extends ProtoMessage {
 }
 
 /// The entity analysis response message.
-class AnalyzeEntitiesResponse extends ProtoMessage {
+final class AnalyzeEntitiesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnalyzeEntitiesResponse';
 
@@ -730,7 +730,7 @@ class AnalyzeEntitiesResponse extends ProtoMessage {
 }
 
 /// The document classification request message.
-class ClassifyTextRequest extends ProtoMessage {
+final class ClassifyTextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.ClassifyTextRequest';
 
@@ -755,7 +755,7 @@ class ClassifyTextRequest extends ProtoMessage {
 }
 
 /// The document classification response message.
-class ClassifyTextResponse extends ProtoMessage {
+final class ClassifyTextResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.ClassifyTextResponse';
 
@@ -809,7 +809,7 @@ class ClassifyTextResponse extends ProtoMessage {
 }
 
 /// The document moderation request message.
-class ModerateTextRequest extends ProtoMessage {
+final class ModerateTextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.ModerateTextRequest';
 
@@ -850,7 +850,7 @@ class ModerateTextRequest extends ProtoMessage {
 }
 
 /// The model version to use for ModerateText.
-class ModerateTextRequest_ModelVersion extends ProtoEnum {
+final class ModerateTextRequest_ModelVersion extends ProtoEnum {
   /// The default model version.
   static const modelVersionUnspecified = ModerateTextRequest_ModelVersion(
     'MODEL_VERSION_UNSPECIFIED',
@@ -880,7 +880,7 @@ class ModerateTextRequest_ModelVersion extends ProtoEnum {
 }
 
 /// The document moderation response message.
-class ModerateTextResponse extends ProtoMessage {
+final class ModerateTextResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.ModerateTextResponse';
 
@@ -936,7 +936,7 @@ class ModerateTextResponse extends ProtoMessage {
 
 /// The request message for the text annotation API, which can perform multiple
 /// analysis types in one call.
-class AnnotateTextRequest extends ProtoMessage {
+final class AnnotateTextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnnotateTextRequest';
 
@@ -980,7 +980,7 @@ class AnnotateTextRequest extends ProtoMessage {
 
 /// All available features.
 /// Setting each one to true will enable that specific analysis for the input.
-class AnnotateTextRequest_Features extends ProtoMessage {
+final class AnnotateTextRequest_Features extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnnotateTextRequest.Features';
 
@@ -1037,7 +1037,7 @@ class AnnotateTextRequest_Features extends ProtoMessage {
 }
 
 /// The text annotations response message.
-class AnnotateTextResponse extends ProtoMessage {
+final class AnnotateTextResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.language.v2.AnnotateTextResponse';
 
@@ -1130,7 +1130,7 @@ class AnnotateTextResponse extends ProtoMessage {
 /// beginning offsets for various outputs, such as tokens and mentions, and
 /// languages that natively use different text encodings may access offsets
 /// differently.
-class EncodingType extends ProtoEnum {
+final class EncodingType extends ProtoEnum {
   /// If `EncodingType` is not specified, encoding-dependent information (such as
   /// `begin_offset`) will be set at `-1`.
   static const none = EncodingType('NONE');
