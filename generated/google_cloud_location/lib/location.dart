@@ -29,7 +29,7 @@ import 'package:http/http.dart' as http;
 /// An abstract interface that provides location-related information for
 /// a service. Service-specific metadata is provided through the
 /// `Location.metadata` field.
-class Locations {
+final class Locations {
   static const String _host = 'cloud.googleapis.com';
 
   final ServiceClient _client;
@@ -64,7 +64,7 @@ class Locations {
 }
 
 /// The request message for `Locations.ListLocations`.
-class ListLocationsRequest extends ProtoMessage {
+final class ListLocationsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.location.ListLocationsRequest';
 
@@ -119,7 +119,7 @@ class ListLocationsRequest extends ProtoMessage {
 }
 
 /// The response message for `Locations.ListLocations`.
-class ListLocationsResponse extends ProtoMessage {
+final class ListLocationsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.location.ListLocationsResponse';
 
@@ -157,7 +157,7 @@ class ListLocationsResponse extends ProtoMessage {
 }
 
 /// The request message for `Locations.GetLocation`.
-class GetLocationRequest extends ProtoMessage {
+final class GetLocationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.location.GetLocationRequest';
 
@@ -183,7 +183,7 @@ class GetLocationRequest extends ProtoMessage {
 }
 
 /// A resource that represents Google Cloud Platform location.
-class Location extends ProtoMessage {
+final class Location extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.location.Location';
 
   /// Resource name for the location, which may vary between implementations.
