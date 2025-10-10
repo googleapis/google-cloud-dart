@@ -34,7 +34,7 @@ import 'package:http/http.dart' as http;
 ///
 /// * `Secret`
 /// * `SecretVersion`
-class SecretManagerService {
+final class SecretManagerService {
   static const String _host = 'secretmanager.googleapis.com';
 
   final ServiceClient _client;
@@ -252,7 +252,7 @@ class SecretManagerService {
 /// A `Secret` is made up of zero or more
 /// `SecretVersions` that represent
 /// the secret data.
-class Secret extends ProtoMessage {
+final class Secret extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Secret';
 
@@ -424,7 +424,7 @@ class Secret extends ProtoMessage {
 }
 
 /// A secret version resource in the Secret Manager API.
-class SecretVersion extends ProtoMessage {
+final class SecretVersion extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.SecretVersion';
 
@@ -551,7 +551,7 @@ class SecretVersion extends ProtoMessage {
 /// The state of a
 /// `SecretVersion`, indicating if
 /// it can be accessed.
-class SecretVersion_State extends ProtoEnum {
+final class SecretVersion_State extends ProtoEnum {
   /// Not specified. This value is unused and invalid.
   static const stateUnspecified = SecretVersion_State('STATE_UNSPECIFIED');
 
@@ -581,7 +581,7 @@ class SecretVersion_State extends ProtoEnum {
 }
 
 /// A policy that defines the replication and encryption configuration of data.
-class Replication extends ProtoMessage {
+final class Replication extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Replication';
 
@@ -620,7 +620,7 @@ class Replication extends ProtoMessage {
 /// A replication policy that replicates the
 /// `Secret` payload without any
 /// restrictions.
-class Replication_Automatic extends ProtoMessage {
+final class Replication_Automatic extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Replication.Automatic';
 
@@ -663,7 +663,7 @@ class Replication_Automatic extends ProtoMessage {
 /// `Secret` payload into the locations
 /// specified in
 /// `Replication.UserManaged.replicas`
-class Replication_UserManaged extends ProtoMessage {
+final class Replication_UserManaged extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Replication.UserManaged';
 
@@ -695,7 +695,7 @@ class Replication_UserManaged extends ProtoMessage {
 
 /// Represents a Replica for this
 /// `Secret`.
-class Replication_UserManaged_Replica extends ProtoMessage {
+final class Replication_UserManaged_Replica extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Replication.UserManaged.Replica';
 
@@ -747,7 +747,7 @@ class Replication_UserManaged_Replica extends ProtoMessage {
 
 /// Configuration for encrypting secret payloads using customer-managed
 /// encryption keys (CMEK).
-class CustomerManagedEncryption extends ProtoMessage {
+final class CustomerManagedEncryption extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.CustomerManagedEncryption';
 
@@ -788,7 +788,7 @@ class CustomerManagedEncryption extends ProtoMessage {
 
 /// The replication status of a
 /// `SecretVersion`.
-class ReplicationStatus extends ProtoMessage {
+final class ReplicationStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ReplicationStatus';
 
@@ -844,7 +844,7 @@ class ReplicationStatus extends ProtoMessage {
 ///
 /// Only populated if the parent `Secret`
 /// has an automatic replication policy.
-class ReplicationStatus_AutomaticStatus extends ProtoMessage {
+final class ReplicationStatus_AutomaticStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ReplicationStatus.AutomaticStatus';
 
@@ -885,7 +885,7 @@ class ReplicationStatus_AutomaticStatus extends ProtoMessage {
 ///
 /// Only populated if the parent `Secret`
 /// has a user-managed replication policy.
-class ReplicationStatus_UserManagedStatus extends ProtoMessage {
+final class ReplicationStatus_UserManagedStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ReplicationStatus.UserManagedStatus';
 
@@ -918,7 +918,8 @@ class ReplicationStatus_UserManagedStatus extends ProtoMessage {
 
 /// Describes the status of a user-managed replica for the
 /// `SecretVersion`.
-class ReplicationStatus_UserManagedStatus_ReplicaStatus extends ProtoMessage {
+final class ReplicationStatus_UserManagedStatus_ReplicaStatus
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ReplicationStatus.UserManagedStatus.ReplicaStatus';
 
@@ -965,7 +966,7 @@ class ReplicationStatus_UserManagedStatus_ReplicaStatus extends ProtoMessage {
 }
 
 /// Describes the status of customer-managed encryption.
-class CustomerManagedEncryptionStatus extends ProtoMessage {
+final class CustomerManagedEncryptionStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.CustomerManagedEncryptionStatus';
 
@@ -1001,7 +1002,7 @@ class CustomerManagedEncryptionStatus extends ProtoMessage {
 
 /// A Pub/Sub topic which Secret Manager will publish to when control plane
 /// events occur on this secret.
-class Topic extends ProtoMessage {
+final class Topic extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Topic';
 
@@ -1035,7 +1036,7 @@ class Topic extends ProtoMessage {
 /// Manager will send a Pub/Sub notification to the topics configured on the
 /// Secret. `Secret.topics` must be
 /// set to configure rotation.
-class Rotation extends ProtoMessage {
+final class Rotation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.Rotation';
 
@@ -1092,7 +1093,7 @@ class Rotation extends ProtoMessage {
 /// A secret payload resource in the Secret Manager API. This contains the
 /// sensitive secret payload that is associated with a
 /// `SecretVersion`.
-class SecretPayload extends ProtoMessage {
+final class SecretPayload extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.SecretPayload';
 
@@ -1146,7 +1147,7 @@ class SecretPayload extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.ListSecrets`.
-class ListSecretsRequest extends ProtoMessage {
+final class ListSecretsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ListSecretsRequest';
 
@@ -1211,7 +1212,7 @@ class ListSecretsRequest extends ProtoMessage {
 
 /// Response message for
 /// `SecretManagerService.ListSecrets`.
-class ListSecretsResponse extends ProtoMessage {
+final class ListSecretsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ListSecretsResponse';
 
@@ -1262,7 +1263,7 @@ class ListSecretsResponse extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.CreateSecret`.
-class CreateSecretRequest extends ProtoMessage {
+final class CreateSecretRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.CreateSecretRequest';
 
@@ -1317,7 +1318,7 @@ class CreateSecretRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.AddSecretVersion`.
-class AddSecretVersionRequest extends ProtoMessage {
+final class AddSecretVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.AddSecretVersionRequest';
 
@@ -1358,7 +1359,7 @@ class AddSecretVersionRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.GetSecret`.
-class GetSecretRequest extends ProtoMessage {
+final class GetSecretRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.GetSecretRequest';
 
@@ -1387,7 +1388,7 @@ class GetSecretRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.ListSecretVersions`.
-class ListSecretVersionsRequest extends ProtoMessage {
+final class ListSecretVersionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ListSecretVersionsRequest';
 
@@ -1453,7 +1454,7 @@ class ListSecretVersionsRequest extends ProtoMessage {
 
 /// Response message for
 /// `SecretManagerService.ListSecretVersions`.
-class ListSecretVersionsResponse extends ProtoMessage {
+final class ListSecretVersionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.ListSecretVersionsResponse';
 
@@ -1508,7 +1509,7 @@ class ListSecretVersionsResponse extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.GetSecretVersion`.
-class GetSecretVersionRequest extends ProtoMessage {
+final class GetSecretVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.GetSecretVersionRequest';
 
@@ -1543,7 +1544,7 @@ class GetSecretVersionRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.UpdateSecret`.
-class UpdateSecretRequest extends ProtoMessage {
+final class UpdateSecretRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.UpdateSecretRequest';
 
@@ -1578,7 +1579,7 @@ class UpdateSecretRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.AccessSecretVersion`.
-class AccessSecretVersionRequest extends ProtoMessage {
+final class AccessSecretVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.AccessSecretVersionRequest';
 
@@ -1613,7 +1614,7 @@ class AccessSecretVersionRequest extends ProtoMessage {
 
 /// Response message for
 /// `SecretManagerService.AccessSecretVersion`.
-class AccessSecretVersionResponse extends ProtoMessage {
+final class AccessSecretVersionResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.AccessSecretVersionResponse';
 
@@ -1653,7 +1654,7 @@ class AccessSecretVersionResponse extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.DeleteSecret`.
-class DeleteSecretRequest extends ProtoMessage {
+final class DeleteSecretRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.DeleteSecretRequest';
 
@@ -1688,7 +1689,7 @@ class DeleteSecretRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.DisableSecretVersion`.
-class DisableSecretVersionRequest extends ProtoMessage {
+final class DisableSecretVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.DisableSecretVersionRequest';
 
@@ -1725,7 +1726,7 @@ class DisableSecretVersionRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.EnableSecretVersion`.
-class EnableSecretVersionRequest extends ProtoMessage {
+final class EnableSecretVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.EnableSecretVersionRequest';
 
@@ -1762,7 +1763,7 @@ class EnableSecretVersionRequest extends ProtoMessage {
 
 /// Request message for
 /// `SecretManagerService.DestroySecretVersion`.
-class DestroySecretVersionRequest extends ProtoMessage {
+final class DestroySecretVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.secretmanager.v1.DestroySecretVersionRequest';
 
