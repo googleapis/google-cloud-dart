@@ -147,7 +147,7 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 ///     };
 ///
 ///     // ...
-class Color extends ProtoMessage {
+final class Color extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Color';
 
   /// The amount of red in the color as a value in the interval [0, 1].
@@ -218,7 +218,7 @@ class Color extends ProtoMessage {
 ///
 /// Related types are `google.type.TimeOfDay` and
 /// `google.protobuf.Timestamp`.
-class Date extends ProtoMessage {
+final class Date extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Date';
 
   /// Year of the date. Must be from 1 to 9999, or 0 to specify a date without
@@ -284,7 +284,7 @@ class Date extends ProtoMessage {
 ///
 /// This type is more flexible than some applications may want. Make sure to
 /// document and validate your application's limitations.
-class DateTime extends ProtoMessage {
+final class DateTime extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.DateTime';
 
   /// Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a
@@ -380,7 +380,7 @@ class DateTime extends ProtoMessage {
 
 /// Represents a time zone from the
 /// [IANA Time Zone Database](https://www.iana.org/time-zones).
-class TimeZone extends ProtoMessage {
+final class TimeZone extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.TimeZone';
 
   /// IANA Time Zone Database time zone, e.g. "America/New_York".
@@ -417,7 +417,7 @@ class TimeZone extends ProtoMessage {
 /// [BigDecimal]:
 /// https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/math/BigDecimal.html
 /// [decimal.Decimal]: https://docs.python.org/3/library/decimal.html
-class Decimal extends ProtoMessage {
+final class Decimal extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Decimal';
 
   /// The decimal value, as a string.
@@ -531,7 +531,7 @@ class Decimal extends ProtoMessage {
 /// The exact variables and functions that may be referenced within an expression
 /// are determined by the service that evaluates it. See the service
 /// documentation for additional information.
-class Expr extends ProtoMessage {
+final class Expr extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Expr';
 
   /// Textual representation of an expression in Common Expression Language
@@ -586,7 +586,7 @@ class Expr extends ProtoMessage {
 }
 
 /// Represents a fraction in terms of a numerator divided by a denominator.
-class Fraction extends ProtoMessage {
+final class Fraction extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Fraction';
 
   /// The numerator in the fraction, e.g. 2 in 2/3.
@@ -629,7 +629,7 @@ class Fraction extends ProtoMessage {
 /// The start must be less than or equal to the end.
 /// When the start equals the end, the interval is empty (matches no time).
 /// When both start and end are unspecified, the interval matches any time.
-class Interval extends ProtoMessage {
+final class Interval extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Interval';
 
   /// Optional. Inclusive start of the interval.
@@ -670,7 +670,7 @@ class Interval extends ProtoMessage {
 /// specified otherwise, this must conform to the
 /// <a href="http://www.unoosa.org/pdf/icg/2012/template/WGS_84.pdf">WGS84
 /// standard</a>. Values must be within normalized ranges.
-class LatLng extends ProtoMessage {
+final class LatLng extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.LatLng';
 
   /// The latitude in degrees. It must be in the range [-90.0, +90.0].
@@ -707,7 +707,7 @@ class LatLng extends ProtoMessage {
 }
 
 /// Localized variant of a text in a particular language.
-class LocalizedText extends ProtoMessage {
+final class LocalizedText extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.LocalizedText';
 
   /// Localized string in the language corresponding to `language_code' below.
@@ -747,7 +747,7 @@ class LocalizedText extends ProtoMessage {
 }
 
 /// Represents an amount of money with its currency type.
-class Money extends ProtoMessage {
+final class Money extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Money';
 
   /// The three-letter currency code defined in ISO 4217.
@@ -822,7 +822,7 @@ class Money extends ProtoMessage {
 ///
 ///  Reference(s):
 ///   - https://github.com/google/libphonenumber
-class PhoneNumber extends ProtoMessage {
+final class PhoneNumber extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.PhoneNumber';
 
   /// The phone number, represented as a leading plus sign ('+'), followed by a
@@ -898,7 +898,7 @@ class PhoneNumber extends ProtoMessage {
 /// dialable, which means the same short code can exist in different regions,
 /// with different usage and pricing, even if those regions share the same
 /// country calling code (e.g. US and CA).
-class PhoneNumber_ShortCode extends ProtoMessage {
+final class PhoneNumber_ShortCode extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.PhoneNumber.ShortCode';
 
   /// Required. The BCP-47 region code of the location where calls to this
@@ -957,7 +957,7 @@ class PhoneNumber_ShortCode extends ProtoMessage {
 ///
 /// For more guidance on how to use this schema, please see:
 /// https://support.google.com/business/answer/6397478
-class PostalAddress extends ProtoMessage {
+final class PostalAddress extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.PostalAddress';
 
   /// The schema revision of the `PostalAddress`. This must be set to 0, which is
@@ -1170,7 +1170,7 @@ class PostalAddress extends ProtoMessage {
 /// it would produce a unique representation. It is thus recommended that `w` be
 /// kept positive, which can be achieved by changing all the signs when `w` is
 /// negative.
-class Quaternion extends ProtoMessage {
+final class Quaternion extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Quaternion';
 
   /// The x component.
@@ -1222,7 +1222,7 @@ class Quaternion extends ProtoMessage {
 /// or are specified elsewhere. An API may choose to allow leap seconds. Related
 /// types are `google.type.Date` and
 /// `google.protobuf.Timestamp`.
-class TimeOfDay extends ProtoMessage {
+final class TimeOfDay extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.TimeOfDay';
 
   /// Hours of day in 24 hour format. Should be from 0 to 23. An API may choose
@@ -1276,7 +1276,7 @@ class TimeOfDay extends ProtoMessage {
 /// A `CalendarPeriod` represents the abstract concept of a time period that has
 /// a canonical start. Grammatically, "the start of the current
 /// `CalendarPeriod`." All calendar times begin at midnight UTC.
-class CalendarPeriod extends ProtoEnum {
+final class CalendarPeriod extends ProtoEnum {
   /// Undefined period, raises an error.
   static const calendarPeriodUnspecified = CalendarPeriod(
     'CALENDAR_PERIOD_UNSPECIFIED',
@@ -1316,7 +1316,7 @@ class CalendarPeriod extends ProtoEnum {
 }
 
 /// Represents a day of the week.
-class DayOfWeek extends ProtoEnum {
+final class DayOfWeek extends ProtoEnum {
   /// The day of the week is unspecified.
   static const dayOfWeekUnspecified = DayOfWeek('DAY_OF_WEEK_UNSPECIFIED');
 
@@ -1350,7 +1350,7 @@ class DayOfWeek extends ProtoEnum {
 }
 
 /// Represents a month in the Gregorian calendar.
-class Month extends ProtoEnum {
+final class Month extends ProtoEnum {
   /// The unspecified month.
   static const monthUnspecified = Month('MONTH_UNSPECIFIED');
 
