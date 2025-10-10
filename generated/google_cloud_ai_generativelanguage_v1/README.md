@@ -6,7 +6,7 @@ The Google Cloud client library for the Generative Language API.
 
 > [!TIP] Flutter applications should use Firebase AI Logic.
 >
-> The Generate Language API is meant for Dart command-line, cloud, and server applications.
+> The Generative Language API is meant for Dart command-line, cloud, and server applications.
 > For mobile and web applications, see instead
 > [Firebase AI Logic](https://firebase.google.com/products/firebase-ai-logic), which provides
 > client-side access to both the Gemini Developer API and Vertex AI.
