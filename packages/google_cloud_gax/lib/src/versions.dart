@@ -20,4 +20,6 @@ export 'web.dart' if (dart.library.io) 'vm.dart' show clientDartVersion;
 // * CHANGELOG.yaml
 // * pubspec.yaml
 // * lib/src/versions.dart
+/// The format is either `major.minor.patch` or the special value `0`, which
+/// indicates that the version is unknown.
 const gaxVersion = '0.1.0';
