@@ -24,7 +24,7 @@ import 'package:test/test.dart';
 
 void main() {
   test('encode into ErrorInfo', () {
-    final data = '''{
+    const data = '''{
   "@type": "type.googleapis.com/google.rpc.ErrorInfo",
   "reason": "CREDENTIALS_MISSING",
   "domain": "googleapis.com",
@@ -34,7 +34,7 @@ void main() {
   }
 }''';
     final json = jsonDecode(data);
-    final any = Any.fromJson(json);
+    final any = Any.fromJson(json as Map<String, dynamic>);
 
     expect(any.typeName, 'google.rpc.ErrorInfo');
     expect(any.isType(ErrorInfo.fullyQualifiedName), true);
@@ -64,7 +64,9 @@ service:cloudfunctions.googleapis.com''');
     );
 
     // Write the status to json, read it back, and validate the info.
-    final status2 = Status.fromJson(jsonDecode(jsonEncode(status.toJson())));
+    final status2 = Status.fromJson(
+      jsonDecode(jsonEncode(status.toJson())) as Map<String, dynamic>,
+    );
     expect(status2.code, 404);
     expect(status2.message, 'not found');
     expect(status2.details, hasLength(1));

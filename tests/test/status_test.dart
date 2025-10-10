@@ -24,7 +24,9 @@ import 'package:test/test.dart';
 
 void main() {
   test('Status.details helpers', () {
-    final status = Status.fromJson(jsonDecode(sampleStatus));
+    final status = Status.fromJson(
+      jsonDecode(sampleStatus) as Map<String, dynamic>,
+    );
     expect(status.code, 429);
     expect(status.message, isNotEmpty);
     expect(status.details, isNotEmpty);

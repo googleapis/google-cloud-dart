@@ -88,7 +88,9 @@ jobs:
       # the inputs should be pinned, including the generator version and the
       # googleapis SHA.
       - name: Regenerate existing clients
-        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.1.2-0.20250909195434-33501c0123e9 refreshall -project-root .
+        # The current head version of sidekick can be generated with:
+        # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
+        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.3.1-0.20251009191102-c1b4570d1b43 refreshall -project-root .
       - name: Generated Diff
         run: git diff --exit-code
 

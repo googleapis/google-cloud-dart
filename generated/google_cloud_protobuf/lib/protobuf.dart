@@ -33,7 +33,7 @@ part 'src/protobuf.p.dart';
 /// sometimes simply referred to as "APIs" in other contexts, such as the name of
 /// this message itself. See https://cloud.google.com/apis/design/glossary for
 /// detailed terminology.
-class Api extends ProtoMessage {
+final class Api extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Api';
 
   /// The fully qualified name of this interface, including package name
@@ -124,7 +124,7 @@ class Api extends ProtoMessage {
 }
 
 /// Method represents a method of an API interface.
-class Method extends ProtoMessage {
+final class Method extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Method';
 
   /// The simple name of this method.
@@ -275,7 +275,7 @@ class Method extends ProtoMessage {
 ///       }
 ///       ...
 ///     }
-class Mixin extends ProtoMessage {
+final class Mixin extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Mixin';
 
   /// The fully qualified name of the interface which is included.
@@ -364,7 +364,7 @@ class Mixin extends ProtoMessage {
 /// encoded in JSON format as "3s", while 3 seconds and 1 nanosecond should
 /// be expressed in JSON format as "3.000000001s", and 3 seconds and 1
 /// microsecond should be expressed in JSON format as "3.000001s".
-class Duration extends ProtoMessage {
+final class Duration extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Duration';
 
   /// Signed seconds of the span of time. Must be from -315,576,000,000
@@ -406,7 +406,7 @@ class Duration extends ProtoMessage {
 ///     service Foo {
 ///       rpc Bar(google.protobuf.Empty) returns (google.protobuf.Empty);
 ///     }
-class Empty extends ProtoMessage {
+final class Empty extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Empty';
 
   Empty() : super(fullyQualifiedName);
@@ -623,7 +623,7 @@ class Empty extends ProtoMessage {
 /// The implementation of any API method which has a FieldMask type field in the
 /// request should verify the included field paths, and return an
 /// `INVALID_ARGUMENT` error if any path is unmappable.
-class FieldMask extends ProtoMessage {
+final class FieldMask extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.FieldMask';
 
   /// The set of field mask paths.
@@ -642,7 +642,7 @@ class FieldMask extends ProtoMessage {
 
 /// `SourceContext` represents information about the source of a
 /// protobuf element, like the file in which it is defined.
-class SourceContext extends ProtoMessage {
+final class SourceContext extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.SourceContext';
 
   /// The path-qualified name of the .proto file that contained the associated
@@ -675,7 +675,7 @@ class SourceContext extends ProtoMessage {
 /// with the proto support for the language.
 ///
 /// The JSON representation for `Struct` is JSON object.
-class Struct extends ProtoMessage {
+final class Struct extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Struct';
 
   /// Unordered map of dynamically typed values.
@@ -695,7 +695,7 @@ class Struct extends ProtoMessage {
 /// `ListValue` is a wrapper around a repeated field of values.
 ///
 /// The JSON representation for `ListValue` is JSON array.
-class ListValue extends ProtoMessage {
+final class ListValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.ListValue';
 
   /// Repeated field of dynamically typed values.
@@ -801,7 +801,7 @@ class ListValue extends ProtoMessage {
 /// the Joda Time's [`ISODateTimeFormat.dateTime()`](
 /// http://joda-time.sourceforge.net/apidocs/org/joda/time/format/ISODateTimeFormat.html#dateTime()
 /// ) to obtain a formatter capable of generating timestamps in this format.
-class Timestamp extends ProtoMessage {
+final class Timestamp extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Timestamp';
 
   /// Represents seconds of UTC time since Unix epoch
@@ -835,7 +835,7 @@ class Timestamp extends ProtoMessage {
 }
 
 /// A protocol buffer message type.
-class Type extends ProtoMessage {
+final class Type extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Type';
 
   /// The fully qualified message name.
@@ -906,7 +906,7 @@ class Type extends ProtoMessage {
 }
 
 /// A single field of a message type.
-class Field extends ProtoMessage {
+final class Field extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Field';
 
   /// The field type.
@@ -1003,7 +1003,7 @@ class Field extends ProtoMessage {
 }
 
 /// Basic field types.
-class Field_Kind extends ProtoEnum {
+final class Field_Kind extends ProtoEnum {
   /// Field type unknown.
   static const typeUnknown = Field_Kind('TYPE_UNKNOWN');
 
@@ -1070,7 +1070,7 @@ class Field_Kind extends ProtoEnum {
 }
 
 /// Whether a field is optional, required, or repeated.
-class Field_Cardinality extends ProtoEnum {
+final class Field_Cardinality extends ProtoEnum {
   /// For fields with unknown cardinality.
   static const cardinalityUnknown = Field_Cardinality('CARDINALITY_UNKNOWN');
 
@@ -1092,7 +1092,7 @@ class Field_Cardinality extends ProtoEnum {
 }
 
 /// Enum type definition.
-class Enum extends ProtoMessage {
+final class Enum extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Enum';
 
   /// Enum type name.
@@ -1157,7 +1157,7 @@ class Enum extends ProtoMessage {
 }
 
 /// Enum value definition.
-class EnumValue extends ProtoMessage {
+final class EnumValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.EnumValue';
 
   /// Enum value name.
@@ -1200,7 +1200,7 @@ class EnumValue extends ProtoMessage {
 
 /// A protocol buffer option, which can be attached to a message, field,
 /// enumeration, etc.
-class Option extends ProtoMessage {
+final class Option extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Option';
 
   /// The option's name. For protobuf built-in options (options defined in
@@ -1242,7 +1242,7 @@ class Option extends ProtoMessage {
 /// Wrapper message for `double`.
 ///
 /// The JSON representation for `DoubleValue` is JSON number.
-class DoubleValue extends ProtoMessage {
+final class DoubleValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.DoubleValue';
 
   /// The double value.
@@ -1265,7 +1265,7 @@ class DoubleValue extends ProtoMessage {
 /// Wrapper message for `float`.
 ///
 /// The JSON representation for `FloatValue` is JSON number.
-class FloatValue extends ProtoMessage {
+final class FloatValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.FloatValue';
 
   /// The float value.
@@ -1288,7 +1288,7 @@ class FloatValue extends ProtoMessage {
 /// Wrapper message for `int64`.
 ///
 /// The JSON representation for `Int64Value` is JSON string.
-class Int64Value extends ProtoMessage {
+final class Int64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Int64Value';
 
   /// The int64 value.
@@ -1311,7 +1311,7 @@ class Int64Value extends ProtoMessage {
 /// Wrapper message for `uint64`.
 ///
 /// The JSON representation for `UInt64Value` is JSON string.
-class Uint64Value extends ProtoMessage {
+final class Uint64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt64Value';
 
   /// The uint64 value.
@@ -1334,7 +1334,7 @@ class Uint64Value extends ProtoMessage {
 /// Wrapper message for `int32`.
 ///
 /// The JSON representation for `Int32Value` is JSON number.
-class Int32Value extends ProtoMessage {
+final class Int32Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Int32Value';
 
   /// The int32 value.
@@ -1357,7 +1357,7 @@ class Int32Value extends ProtoMessage {
 /// Wrapper message for `uint32`.
 ///
 /// The JSON representation for `UInt32Value` is JSON number.
-class Uint32Value extends ProtoMessage {
+final class Uint32Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt32Value';
 
   /// The uint32 value.
@@ -1380,7 +1380,7 @@ class Uint32Value extends ProtoMessage {
 /// Wrapper message for `bool`.
 ///
 /// The JSON representation for `BoolValue` is JSON `true` and `false`.
-class BoolValue extends ProtoMessage {
+final class BoolValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BoolValue';
 
   /// The bool value.
@@ -1403,7 +1403,7 @@ class BoolValue extends ProtoMessage {
 /// Wrapper message for `string`.
 ///
 /// The JSON representation for `StringValue` is JSON string.
-class StringValue extends ProtoMessage {
+final class StringValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.StringValue';
 
   /// The string value.
@@ -1426,7 +1426,7 @@ class StringValue extends ProtoMessage {
 /// Wrapper message for `bytes`.
 ///
 /// The JSON representation for `BytesValue` is JSON string.
-class BytesValue extends ProtoMessage {
+final class BytesValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BytesValue';
 
   /// The bytes value.
@@ -1450,7 +1450,7 @@ class BytesValue extends ProtoMessage {
 /// `Value` type union.
 ///
 /// The JSON representation for `NullValue` is JSON `null`.
-class NullValue extends ProtoEnum {
+final class NullValue extends ProtoEnum {
   /// Null value.
   static const nullValue = NullValue('NULL_VALUE');
 
@@ -1463,7 +1463,7 @@ class NullValue extends ProtoEnum {
 }
 
 /// The syntax in which a protocol buffer element is defined.
-class Syntax extends ProtoEnum {
+final class Syntax extends ProtoEnum {
   /// Syntax `proto2`.
   static const syntaxProto2 = Syntax('SYNTAX_PROTO2');
 
