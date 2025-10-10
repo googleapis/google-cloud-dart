@@ -20,7 +20,8 @@ service-config = 'google/ai/generativelanguage/v1/generativelanguage_v1.yaml'
 copyright-year = '2025'
 readme-after-title-text = '''
 > [!TIP]
-> Flutter applications should use Firebase AI Logic.
+> Flutter applications should use
+> [Firebase AI Logic](https://firebase.google.com/products/firebase-ai-logic).
 >
 > The Generative Language API is meant for Dart command-line, cloud, and server applications.
 > For mobile and web applications, see instead
