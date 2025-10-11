@@ -21,5 +21,5 @@ library;
 /// indicates that the version is unknown.
 const String clientDartVersion = '0';
 
-/// Return the environment variable with the given name.
-String? getEnvironmentVariable(String name) => null;
+/// The environment variable with the given name.
+String? environmentVariable(String name) => null;

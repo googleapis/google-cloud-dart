@@ -19,7 +19,7 @@ import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 export 'src/web.dart'
     if (dart.library.io) 'src/vm.dart'
-    show getEnvironmentVariable;
+    show environmentVariable;
 
 export 'dart:typed_data' show Uint8List;
 
