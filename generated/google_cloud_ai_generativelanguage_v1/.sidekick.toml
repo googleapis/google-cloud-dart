@@ -51,7 +51,7 @@ free in [Google AI Studio](https://aistudio.google.com/app/api-keys)
 Run the terminal command:
 
 ```sh
-dart pub add google_cloud_ai_generativelanguage_v1
+dart pub add google_cloud_ai_generativelanguage_v1beta
 ```
 
 ## Make your first request
@@ -65,7 +65,7 @@ when using the Gemini API libraries. Otherwise you will need to pass your
 API key as an argument when initializing the client.
 
 ```dart
-import 'package:google_cloud_ai_generativelanguage_v1/generativelanguage.dart';
+import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 
 void main() async {
   // Pass your API key here if the GEMINI_API_KEY environment variable is not set.
