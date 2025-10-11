@@ -30,17 +30,285 @@ import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+
+const _apiKeys = ["GOOGLE_API_KEY", "GEMINI_API_KEY"];
+
+/// API for managing cache of content (CachedContent resources) that can be used
+/// in GenerativeService requests. This way generate content requests can benefit
+/// from preprocessing work being done earlier, possibly lowering their
+/// computational cost. It is intended to be used with large contexts.
+final class CacheService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  CacheService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory CacheService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return CacheService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Lists CachedContents.
+  Future<ListCachedContentsResponse> listCachedContents(
+    ListCachedContentsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/cachedContents', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListCachedContentsResponse.fromJson(response);
+  }
+
+  /// Creates CachedContent resource.
+  Future<CachedContent> createCachedContent(
+    CreateCachedContentRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/cachedContents');
+    final response = await _client.post(url, body: request.cachedContent);
+    return CachedContent.fromJson(response);
+  }
+
+  /// Reads CachedContent resource.
+  Future<CachedContent> getCachedContent(
+    GetCachedContentRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return CachedContent.fromJson(response);
+  }
+
+  /// Updates CachedContent resource (only expiration is updatable).
+  Future<CachedContent> updateCachedContent(
+    UpdateCachedContentRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.cachedContent.name}', {
+      if (request.updateMask?.paths != null)
+        'updateMask.paths': request.updateMask?.paths!,
+    });
+    final response = await _client.patch(url, body: request.cachedContent);
+    return CachedContent.fromJson(response);
+  }
+
+  /// Deletes CachedContent resource.
+  Future<void> deleteCachedContent(DeleteCachedContentRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// An API for using Generative Language Models (GLMs) in dialog applications.
+///
+/// Also known as large language models (LLMs), this API provides models that
+/// are trained for multi-turn dialog.
+final class DiscussService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  DiscussService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory DiscussService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return DiscussService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Generates a response from the model given an input `MessagePrompt`.
+  Future<GenerateMessageResponse> generateMessage(
+    GenerateMessageRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:generateMessage');
+    final response = await _client.post(url, body: request);
+    return GenerateMessageResponse.fromJson(response);
+  }
+
+  /// Runs a model's tokenizer on a string and returns the token count.
+  Future<CountMessageTokensResponse> countMessageTokens(
+    CountMessageTokensRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:countMessageTokens');
+    final response = await _client.post(url, body: request);
+    return CountMessageTokensResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// An API for uploading and managing files.
+final class FileService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  FileService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory FileService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return FileService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Creates a `File`.
+  Future<CreateFileResponse> createFile(CreateFileRequest request) async {
+    final url = Uri.https(_host, '/v1beta/files');
+    final response = await _client.post(url, body: request);
+    return CreateFileResponse.fromJson(response);
+  }
+
+  /// Lists the metadata for `File`s owned by the requesting project.
+  Future<ListFilesResponse> listFiles(ListFilesRequest request) async {
+    final url = Uri.https(_host, '/v1beta/files', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListFilesResponse.fromJson(response);
+  }
+
+  /// Gets the metadata for the given `File`.
+  Future<File> getFile(GetFileRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return File.fromJson(response);
+  }
+
+  /// Deletes the `File`.
+  Future<void> deleteFile(DeleteFileRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
 
 /// API for using Large Models that generate multimodal content and have
 /// additional capabilities beyond text generation.
 final class GenerativeService {
-  static const String _host = 'generativelanguage.googleapis.com';
-
+  static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
   GenerativeService({required http.Client client})
     : _client = ServiceClient(client: client);
+
+  factory GenerativeService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return GenerativeService(client: auth.clientViaApiKey(apiKey));
+  }
 
   /// Generates a model response given an input `GenerateContentRequest`.
   /// Refer to the [text generation
@@ -52,9 +320,19 @@ final class GenerativeService {
   Future<GenerateContentResponse> generateContent(
     GenerateContentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.model}:generateContent');
+    final url = Uri.https(_host, '/v1beta/${request.model}:generateContent');
     final response = await _client.post(url, body: request);
     return GenerateContentResponse.fromJson(response);
+  }
+
+  /// Generates a grounded answer from the model given an input
+  /// `GenerateAnswerRequest`.
+  Future<GenerateAnswerResponse> generateAnswer(
+    GenerateAnswerRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:generateAnswer');
+    final response = await _client.post(url, body: request);
+    return GenerateAnswerResponse.fromJson(response);
   }
 
   /// Generates a [streamed
@@ -63,7 +341,10 @@ final class GenerativeService {
   Stream<GenerateContentResponse> streamGenerateContent(
     GenerateContentRequest request,
   ) {
-    final url = Uri.https(_host, '/v1/${request.model}:streamGenerateContent');
+    final url = Uri.https(
+      _host,
+      '/v1beta/${request.model}:streamGenerateContent',
+    );
     return _client
         .postStreaming(url, body: request)
         .map(GenerateContentResponse.fromJson);
@@ -73,7 +354,7 @@ final class GenerativeService {
   /// specified [Gemini Embedding
   /// model](https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding).
   Future<EmbedContentResponse> embedContent(EmbedContentRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.model}:embedContent');
+    final url = Uri.https(_host, '/v1beta/${request.model}:embedContent');
     final response = await _client.post(url, body: request);
     return EmbedContentResponse.fromJson(response);
   }
@@ -84,7 +365,7 @@ final class GenerativeService {
   Future<BatchEmbedContentsResponse> batchEmbedContents(
     BatchEmbedContentsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.model}:batchEmbedContents');
+    final url = Uri.https(_host, '/v1beta/${request.model}:batchEmbedContents');
     final response = await _client.post(url, body: request);
     return BatchEmbedContentsResponse.fromJson(response);
   }
@@ -93,7 +374,7 @@ final class GenerativeService {
   /// Refer to the [tokens guide](https://ai.google.dev/gemini-api/docs/tokens)
   /// to learn more about tokens.
   Future<CountTokensResponse> countTokens(CountTokensRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.model}:countTokens');
+    final url = Uri.https(_host, '/v1beta/${request.model}:countTokens');
     final response = await _client.post(url, body: request);
     return CountTokensResponse.fromJson(response);
   }
@@ -102,7 +383,7 @@ final class GenerativeService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}', {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
       if (request.filter != null) 'filter': request.filter!,
       if (request.pageSize != null) 'pageSize': '${request.pageSize}',
       if (request.pageToken != null) 'pageToken': request.pageToken!,
@@ -119,15 +400,9 @@ final class GenerativeService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
-  }
-
-  /// Provides the `Operations` service functionality in this service.
-  Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}:cancel');
-    await _client.post(url, body: request);
   }
 
   /// Closes the client and cleans up any resources associated with it.
@@ -138,12 +413,22 @@ final class GenerativeService {
 
 /// Provides methods for getting metadata information about Generative Models.
 final class ModelService {
-  static const String _host = 'generativelanguage.googleapis.com';
-
+  static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
   ModelService({required http.Client client})
     : _client = ServiceClient(client: client);
+
+  factory ModelService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return ModelService(client: auth.clientViaApiKey(apiKey));
+  }
 
   /// Gets information about a specific `Model` such as its version number, token
   /// limits,
@@ -152,7 +437,7 @@ final class ModelService {
   /// guide](https://ai.google.dev/gemini-api/docs/models/gemini) for detailed
   /// model information.
   Future<Model> getModel(GetModelRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Model.fromJson(response);
   }
@@ -160,7 +445,7 @@ final class ModelService {
   /// Lists the [`Model`s](https://ai.google.dev/gemini-api/docs/models/gemini)
   /// available through the Gemini API.
   Future<ListModelsResponse> listModels(ListModelsRequest request) async {
-    final url = Uri.https(_host, '/v1/models', {
+    final url = Uri.https(_host, '/v1beta/models', {
       if (request.pageSize != null) 'pageSize': '${request.pageSize}',
       if (request.pageToken != null) 'pageToken': request.pageToken!,
     });
@@ -168,11 +453,73 @@ final class ModelService {
     return ListModelsResponse.fromJson(response);
   }
 
+  /// Gets information about a specific TunedModel.
+  Future<TunedModel> getTunedModel(GetTunedModelRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return TunedModel.fromJson(response);
+  }
+
+  /// Lists created tuned models.
+  Future<ListTunedModelsResponse> listTunedModels(
+    ListTunedModelsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/tunedModels', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter != null) 'filter': request.filter!,
+    });
+    final response = await _client.get(url);
+    return ListTunedModelsResponse.fromJson(response);
+  }
+
+  /// Creates a tuned model.
+  /// Check intermediate tuning progress (if any) through the
+  /// [google.longrunning.Operations] service.
+  ///
+  /// Access status and results through the Operations service.
+  /// Example:
+  ///   GET /v1/tunedModels/az2mb0bpw6i/operations/000-111-222
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<TunedModel, CreateTunedModelMetadata>> createTunedModel(
+    CreateTunedModelRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/tunedModels', {
+      if (request.tunedModelId != null) 'tunedModelId': request.tunedModelId!,
+    });
+    final response = await _client.post(url, body: request.tunedModel);
+    return Operation.fromJson(
+      response,
+      OperationHelper(TunedModel.fromJson, CreateTunedModelMetadata.fromJson),
+    );
+  }
+
+  /// Updates a tuned model.
+  Future<TunedModel> updateTunedModel(UpdateTunedModelRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.tunedModel.name}', {
+      if (request.updateMask?.paths != null)
+        'updateMask.paths': request.updateMask?.paths!,
+    });
+    final response = await _client.patch(url, body: request.tunedModel);
+    return TunedModel.fromJson(response);
+  }
+
+  /// Deletes a tuned model.
+  Future<void> deleteTunedModel(DeleteTunedModelRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
   /// Provides the `Operations` service functionality in this service.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}', {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
       if (request.filter != null) 'filter': request.filter!,
       if (request.pageSize != null) 'pageSize': '${request.pageSize}',
       if (request.pageToken != null) 'pageToken': request.pageToken!,
@@ -189,15 +536,9 @@ final class ModelService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
-  }
-
-  /// Provides the `Operations` service functionality in this service.
-  Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}:cancel');
-    await _client.post(url, body: request);
   }
 
   /// Closes the client and cleans up any resources associated with it.
@@ -206,10 +547,834 @@ final class ModelService {
   void close() => _client.close();
 }
 
+/// Provides methods for managing permissions to PaLM API resources.
+final class PermissionService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  PermissionService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory PermissionService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return PermissionService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Create a permission to a specific resource.
+  Future<Permission> createPermission(CreatePermissionRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.parent}/permissions');
+    final response = await _client.post(url, body: request.permission);
+    return Permission.fromJson(response);
+  }
+
+  /// Gets information about a specific Permission.
+  Future<Permission> getPermission(GetPermissionRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Permission.fromJson(response);
+  }
+
+  /// Lists permissions for the specific resource.
+  Future<ListPermissionsResponse> listPermissions(
+    ListPermissionsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.parent}/permissions', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListPermissionsResponse.fromJson(response);
+  }
+
+  /// Updates the permission.
+  Future<Permission> updatePermission(UpdatePermissionRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.permission.name}', {
+      if (request.updateMask?.paths != null)
+        'updateMask.paths': request.updateMask?.paths!,
+    });
+    final response = await _client.patch(url, body: request.permission);
+    return Permission.fromJson(response);
+  }
+
+  /// Deletes the permission.
+  Future<void> deletePermission(DeletePermissionRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Transfers ownership of the tuned model.
+  /// This is the only way to change ownership of the tuned model.
+  /// The current owner will be downgraded to writer role.
+  Future<TransferOwnershipResponse> transferOwnership(
+    TransferOwnershipRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:transferOwnership');
+    final response = await _client.post(url, body: request);
+    return TransferOwnershipResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// A service for online predictions and explanations.
+final class PredictionService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  PredictionService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory PredictionService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return PredictionService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Performs a prediction request.
+  Future<PredictResponse> predict(PredictRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:predict');
+    final response = await _client.post(url, body: request);
+    return PredictResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// An API for semantic search over a corpus of user uploaded content.
+final class RetrieverService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  RetrieverService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory RetrieverService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return RetrieverService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Creates an empty `Corpus`.
+  Future<Corpus> createCorpus(CreateCorpusRequest request) async {
+    final url = Uri.https(_host, '/v1beta/corpora');
+    final response = await _client.post(url, body: request.corpus);
+    return Corpus.fromJson(response);
+  }
+
+  /// Gets information about a specific `Corpus`.
+  Future<Corpus> getCorpus(GetCorpusRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Corpus.fromJson(response);
+  }
+
+  /// Updates a `Corpus`.
+  Future<Corpus> updateCorpus(UpdateCorpusRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.corpus.name}', {
+      if (request.updateMask?.paths != null)
+        'updateMask.paths': request.updateMask?.paths!,
+    });
+    final response = await _client.patch(url, body: request.corpus);
+    return Corpus.fromJson(response);
+  }
+
+  /// Deletes a `Corpus`.
+  Future<void> deleteCorpus(DeleteCorpusRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}', {
+      if (request.force != null) 'force': '${request.force}',
+    });
+    await _client.delete(url);
+  }
+
+  /// Lists all `Corpora` owned by the user.
+  Future<ListCorporaResponse> listCorpora(ListCorporaRequest request) async {
+    final url = Uri.https(_host, '/v1beta/corpora', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListCorporaResponse.fromJson(response);
+  }
+
+  /// Performs semantic search over a `Corpus`.
+  Future<QueryCorpusResponse> queryCorpus(QueryCorpusRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:query');
+    final response = await _client.post(url, body: request);
+    return QueryCorpusResponse.fromJson(response);
+  }
+
+  /// Creates an empty `Document`.
+  Future<Document> createDocument(CreateDocumentRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.parent}/documents');
+    final response = await _client.post(url, body: request.document);
+    return Document.fromJson(response);
+  }
+
+  /// Gets information about a specific `Document`.
+  Future<Document> getDocument(GetDocumentRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Document.fromJson(response);
+  }
+
+  /// Updates a `Document`.
+  Future<Document> updateDocument(UpdateDocumentRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.document.name}', {
+      if (request.updateMask?.paths != null)
+        'updateMask.paths': request.updateMask?.paths!,
+    });
+    final response = await _client.patch(url, body: request.document);
+    return Document.fromJson(response);
+  }
+
+  /// Deletes a `Document`.
+  Future<void> deleteDocument(DeleteDocumentRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}', {
+      if (request.force != null) 'force': '${request.force}',
+    });
+    await _client.delete(url);
+  }
+
+  /// Lists all `Document`s in a `Corpus`.
+  Future<ListDocumentsResponse> listDocuments(
+    ListDocumentsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.parent}/documents', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListDocumentsResponse.fromJson(response);
+  }
+
+  /// Performs semantic search over a `Document`.
+  Future<QueryDocumentResponse> queryDocument(
+    QueryDocumentRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:query');
+    final response = await _client.post(url, body: request);
+    return QueryDocumentResponse.fromJson(response);
+  }
+
+  /// Creates a `Chunk`.
+  Future<Chunk> createChunk(CreateChunkRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.parent}/chunks');
+    final response = await _client.post(url, body: request.chunk);
+    return Chunk.fromJson(response);
+  }
+
+  /// Batch create `Chunk`s.
+  Future<BatchCreateChunksResponse> batchCreateChunks(
+    BatchCreateChunksRequest request,
+  ) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta/${request.parent}/chunks:batchCreate',
+    );
+    final response = await _client.post(url, body: request);
+    return BatchCreateChunksResponse.fromJson(response);
+  }
+
+  /// Gets information about a specific `Chunk`.
+  Future<Chunk> getChunk(GetChunkRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Chunk.fromJson(response);
+  }
+
+  /// Updates a `Chunk`.
+  Future<Chunk> updateChunk(UpdateChunkRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.chunk.name}', {
+      if (request.updateMask?.paths != null)
+        'updateMask.paths': request.updateMask?.paths!,
+    });
+    final response = await _client.patch(url, body: request.chunk);
+    return Chunk.fromJson(response);
+  }
+
+  /// Batch update `Chunk`s.
+  Future<BatchUpdateChunksResponse> batchUpdateChunks(
+    BatchUpdateChunksRequest request,
+  ) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta/${request.parent}/chunks:batchUpdate',
+    );
+    final response = await _client.post(url, body: request);
+    return BatchUpdateChunksResponse.fromJson(response);
+  }
+
+  /// Deletes a `Chunk`.
+  Future<void> deleteChunk(DeleteChunkRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Batch delete `Chunk`s.
+  Future<void> batchDeleteChunks(BatchDeleteChunksRequest request) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta/${request.parent}/chunks:batchDelete',
+    );
+    await _client.post(url, body: request);
+  }
+
+  /// Lists all `Chunk`s in a `Document`.
+  Future<ListChunksResponse> listChunks(ListChunksRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.parent}/chunks', {
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListChunksResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// API for using Generative Language Models (GLMs) trained to generate text.
+///
+/// Also known as Large Language Models (LLM)s, these generate text given an
+/// input prompt from the user.
+final class TextService {
+  static const _host = 'generativelanguage.googleapis.com';
+  final ServiceClient _client;
+
+  TextService({required http.Client client})
+    : _client = ServiceClient(client: client);
+
+  factory TextService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return TextService(client: auth.clientViaApiKey(apiKey));
+  }
+
+  /// Generates a response from the model given an input message.
+  Future<GenerateTextResponse> generateText(GenerateTextRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:generateText');
+    final response = await _client.post(url, body: request);
+    return GenerateTextResponse.fromJson(response);
+  }
+
+  /// Generates an embedding from the model given an input message.
+  Future<EmbedTextResponse> embedText(EmbedTextRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:embedText');
+    final response = await _client.post(url, body: request);
+    return EmbedTextResponse.fromJson(response);
+  }
+
+  /// Generates multiple embeddings from the model given input text in a
+  /// synchronous call.
+  Future<BatchEmbedTextResponse> batchEmbedText(
+    BatchEmbedTextRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:batchEmbedText');
+    final response = await _client.post(url, body: request);
+    return BatchEmbedTextResponse.fromJson(response);
+  }
+
+  /// Runs a model's tokenizer on a text and returns the token count.
+  Future<CountTextTokensResponse> countTextTokens(
+    CountTextTokensRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:countTextTokens');
+    final response = await _client.post(url, body: request);
+    return CountTextTokensResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
+      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
+      if (request.pageToken != null) 'pageToken': request.pageToken!,
+    });
+    final response = await _client.get(url);
+    return ListOperationsResponse.fromJson(response);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// This method can be used to get the current status of a long-running
+  /// operation.
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final response = await _client.get(url);
+    return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
+}
+
+/// Request to list CachedContents.
+final class ListCachedContentsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListCachedContentsRequest';
+
+  /// Optional. The maximum number of cached contents to return. The service may
+  /// return fewer than this value. If unspecified, some default (under maximum)
+  /// number of items will be returned. The maximum value is 1000; values above
+  /// 1000 will be coerced to 1000.
+  final int? pageSize;
+
+  /// Optional. A page token, received from a previous `ListCachedContents` call.
+  /// Provide this to retrieve the subsequent page.
+  ///
+  /// When paginating, all other parameters provided to `ListCachedContents` must
+  /// match the call that provided the page token.
+  final String? pageToken;
+
+  ListCachedContentsRequest({this.pageSize, this.pageToken})
+    : super(fullyQualifiedName);
+
+  factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) {
+    return ListCachedContentsRequest(
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+    ].join(',');
+    return 'ListCachedContentsRequest($contents)';
+  }
+}
+
+/// Response with CachedContents list.
+final class ListCachedContentsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListCachedContentsResponse';
+
+  /// List of cached contents.
+  final List<CachedContent>? cachedContents;
+
+  /// A token, which can be sent as `page_token` to retrieve the next page.
+  /// If this field is omitted, there are no subsequent pages.
+  final String? nextPageToken;
+
+  ListCachedContentsResponse({this.cachedContents, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) {
+    return ListCachedContentsResponse(
+      cachedContents: decodeListMessage(
+        json['cachedContents'],
+        CachedContent.fromJson,
+      ),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (cachedContents != null) 'cachedContents': encodeList(cachedContents),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListCachedContentsResponse($contents)';
+  }
+}
+
+/// Request to create CachedContent.
+final class CreateCachedContentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateCachedContentRequest';
+
+  /// Required. The cached content to create.
+  final CachedContent cachedContent;
+
+  CreateCachedContentRequest({required this.cachedContent})
+    : super(fullyQualifiedName);
+
+  factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) {
+    return CreateCachedContentRequest(
+      cachedContent: decode(json['cachedContent'], CachedContent.fromJson)!,
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'cachedContent': cachedContent.toJson()};
+  }
+
+  @override
+  String toString() => 'CreateCachedContentRequest()';
+}
+
+/// Request to read CachedContent.
+final class GetCachedContentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetCachedContentRequest';
+
+  /// Required. The resource name referring to the content cache entry.
+  /// Format: `cachedContents/{id}`
+  final String name;
+
+  GetCachedContentRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) {
+    return GetCachedContentRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetCachedContentRequest($contents)';
+  }
+}
+
+/// Request to update CachedContent.
+final class UpdateCachedContentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UpdateCachedContentRequest';
+
+  /// Required. The content cache entry to update
+  final CachedContent cachedContent;
+
+  /// The list of fields to update.
+  final FieldMask? updateMask;
+
+  UpdateCachedContentRequest({required this.cachedContent, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) {
+    return UpdateCachedContentRequest(
+      cachedContent: decode(json['cachedContent'], CachedContent.fromJson)!,
+      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'cachedContent': cachedContent.toJson(),
+      if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'UpdateCachedContentRequest()';
+}
+
+/// Request to delete CachedContent.
+final class DeleteCachedContentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeleteCachedContentRequest';
+
+  /// Required. The resource name referring to the content cache entry
+  /// Format: `cachedContents/{id}`
+  final String name;
+
+  DeleteCachedContentRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) {
+    return DeleteCachedContentRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'DeleteCachedContentRequest($contents)';
+  }
+}
+
+/// Content that has been preprocessed and can be used in subsequent request
+/// to GenerativeService.
+///
+/// Cached content can be only used with model it was created for.
+final class CachedContent extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CachedContent';
+
+  /// Timestamp in UTC of when this resource is considered expired.
+  /// This is *always* provided on output, regardless of what was sent
+  /// on input.
+  final Timestamp? expireTime;
+
+  /// Input only. New TTL for this resource, input only.
+  final Duration? ttl;
+
+  /// Optional. Identifier. The resource name referring to the cached content.
+  /// Format: `cachedContents/{id}`
+  final String? name;
+
+  /// Optional. Immutable. The user-generated meaningful display name of the
+  /// cached content. Maximum 128 Unicode characters.
+  final String? displayName;
+
+  /// Required. Immutable. The name of the `Model` to use for cached content
+  /// Format: `models/{model}`
+  final String? model;
+
+  /// Optional. Input only. Immutable. Developer set system instruction.
+  /// Currently text only.
+  final Content? systemInstruction;
+
+  /// Optional. Input only. Immutable. The content to cache.
+  final List<Content>? contents;
+
+  /// Optional. Input only. Immutable. A list of `Tools` the model may use to
+  /// generate the next response
+  final List<Tool>? tools;
+
+  /// Optional. Input only. Immutable. Tool config. This config is shared for all
+  /// tools.
+  final ToolConfig? toolConfig;
+
+  /// Output only. Creation time of the cache entry.
+  final Timestamp? createTime;
+
+  /// Output only. When the cache entry was last updated in UTC time.
+  final Timestamp? updateTime;
+
+  /// Output only. Metadata on the usage of the cached content.
+  final CachedContent_UsageMetadata? usageMetadata;
+
+  CachedContent({
+    this.expireTime,
+    this.ttl,
+    this.name,
+    this.displayName,
+    this.model,
+    this.systemInstruction,
+    this.contents,
+    this.tools,
+    this.toolConfig,
+    this.createTime,
+    this.updateTime,
+    this.usageMetadata,
+  }) : super(fullyQualifiedName);
+
+  factory CachedContent.fromJson(Map<String, dynamic> json) {
+    return CachedContent(
+      expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
+      ttl: decodeCustom(json['ttl'], Duration.fromJson),
+      name: json['name'],
+      displayName: json['displayName'],
+      model: json['model'],
+      systemInstruction: decode(json['systemInstruction'], Content.fromJson),
+      contents: decodeListMessage(json['contents'], Content.fromJson),
+      tools: decodeListMessage(json['tools'], Tool.fromJson),
+      toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
+      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+      usageMetadata: decode(
+        json['usageMetadata'],
+        CachedContent_UsageMetadata.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (expireTime != null) 'expireTime': expireTime!.toJson(),
+      if (ttl != null) 'ttl': ttl!.toJson(),
+      if (name != null) 'name': name,
+      if (displayName != null) 'displayName': displayName,
+      if (model != null) 'model': model,
+      if (systemInstruction != null)
+        'systemInstruction': systemInstruction!.toJson(),
+      if (contents != null) 'contents': encodeList(contents),
+      if (tools != null) 'tools': encodeList(tools),
+      if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
+      if (createTime != null) 'createTime': createTime!.toJson(),
+      if (updateTime != null) 'updateTime': updateTime!.toJson(),
+      if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (displayName != null) 'displayName=$displayName',
+      if (model != null) 'model=$model',
+    ].join(',');
+    return 'CachedContent($contents)';
+  }
+}
+
+/// Metadata on the usage of the cached content.
+final class CachedContent_UsageMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CachedContent.UsageMetadata';
+
+  /// Total number of tokens that the cached content consumes.
+  final int? totalTokenCount;
+
+  CachedContent_UsageMetadata({this.totalTokenCount})
+    : super(fullyQualifiedName);
+
+  factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) {
+    return CachedContent_UsageMetadata(
+      totalTokenCount: json['totalTokenCount'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (totalTokenCount != null) 'totalTokenCount': totalTokenCount};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
+    ].join(',');
+    return 'UsageMetadata($contents)';
+  }
+}
+
 /// A collection of source attributions for a piece of content.
 final class CitationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.CitationMetadata';
+      'google.ai.generativelanguage.v1beta.CitationMetadata';
 
   /// Citations to sources for a specific response.
   final List<CitationSource>? citationSources;
@@ -240,7 +1405,7 @@ final class CitationMetadata extends ProtoMessage {
 /// A citation to a source for a portion of a specific response.
 final class CitationSource extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.CitationSource';
+      'google.ai.generativelanguage.v1beta.CitationSource';
 
   /// Optional. Start of segment of the response that is attributed to this
   /// source.
@@ -301,7 +1466,7 @@ final class CitationSource extends ProtoMessage {
 /// the message turn.
 final class Content extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.Content';
+      'google.ai.generativelanguage.v1beta.Content';
 
   /// Ordered `Parts` that constitute a single message. Parts may have different
   /// MIME types.
@@ -346,7 +1511,7 @@ final class Content extends ProtoMessage {
 /// of the media if the `inline_data` field is filled with raw bytes.
 final class Part extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.Part';
+      'google.ai.generativelanguage.v1beta.Part';
 
   /// Inline text.
   final String? text;
@@ -354,12 +1519,51 @@ final class Part extends ProtoMessage {
   /// Inline media bytes.
   final Blob? inlineData;
 
-  Part({this.text, this.inlineData}) : super(fullyQualifiedName);
+  /// A predicted `FunctionCall` returned from the model that contains
+  /// a string representing the `FunctionDeclaration.name` with the
+  /// arguments and their values.
+  final FunctionCall? functionCall;
+
+  /// The result output of a `FunctionCall` that contains a string
+  /// representing the `FunctionDeclaration.name` and a structured JSON
+  /// object containing any output from the function is used as context to
+  /// the model.
+  final FunctionResponse? functionResponse;
+
+  /// URI based data.
+  final FileData? fileData;
+
+  /// Code generated by the model that is meant to be executed.
+  final ExecutableCode? executableCode;
+
+  /// Result of executing the `ExecutableCode`.
+  final CodeExecutionResult? codeExecutionResult;
+
+  Part({
+    this.text,
+    this.inlineData,
+    this.functionCall,
+    this.functionResponse,
+    this.fileData,
+    this.executableCode,
+    this.codeExecutionResult,
+  }) : super(fullyQualifiedName);
 
   factory Part.fromJson(Map<String, dynamic> json) {
     return Part(
       text: json['text'],
       inlineData: decode(json['inlineData'], Blob.fromJson),
+      functionCall: decode(json['functionCall'], FunctionCall.fromJson),
+      functionResponse: decode(
+        json['functionResponse'],
+        FunctionResponse.fromJson,
+      ),
+      fileData: decode(json['fileData'], FileData.fromJson),
+      executableCode: decode(json['executableCode'], ExecutableCode.fromJson),
+      codeExecutionResult: decode(
+        json['codeExecutionResult'],
+        CodeExecutionResult.fromJson,
+      ),
     );
   }
 
@@ -368,6 +1572,13 @@ final class Part extends ProtoMessage {
     return {
       if (text != null) 'text': text,
       if (inlineData != null) 'inlineData': inlineData!.toJson(),
+      if (functionCall != null) 'functionCall': functionCall!.toJson(),
+      if (functionResponse != null)
+        'functionResponse': functionResponse!.toJson(),
+      if (fileData != null) 'fileData': fileData!.toJson(),
+      if (executableCode != null) 'executableCode': executableCode!.toJson(),
+      if (codeExecutionResult != null)
+        'codeExecutionResult': codeExecutionResult!.toJson(),
     };
   }
 
@@ -383,7 +1594,7 @@ final class Part extends ProtoMessage {
 /// Text should not be sent as raw bytes, use the 'text' field.
 final class Blob extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.Blob';
+      'google.ai.generativelanguage.v1beta.Blob';
 
   /// The IANA standard MIME type of the source data.
   /// Examples:
@@ -421,15 +1632,1556 @@ final class Blob extends ProtoMessage {
   }
 }
 
+/// URI based data.
+final class FileData extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FileData';
+
+  /// Optional. The IANA standard MIME type of the source data.
+  final String? mimeType;
+
+  /// Required. URI.
+  final String? fileUri;
+
+  FileData({this.mimeType, this.fileUri}) : super(fullyQualifiedName);
+
+  factory FileData.fromJson(Map<String, dynamic> json) {
+    return FileData(mimeType: json['mimeType'], fileUri: json['fileUri']);
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (mimeType != null) 'mimeType': mimeType,
+      if (fileUri != null) 'fileUri': fileUri,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (mimeType != null) 'mimeType=$mimeType',
+      if (fileUri != null) 'fileUri=$fileUri',
+    ].join(',');
+    return 'FileData($contents)';
+  }
+}
+
+/// Code generated by the model that is meant to be executed, and the result
+/// returned to the model.
+///
+/// Only generated when using the `CodeExecution` tool, in which the code will
+/// be automatically executed, and a corresponding `CodeExecutionResult` will
+/// also be generated.
+final class ExecutableCode extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ExecutableCode';
+
+  /// Required. Programming language of the `code`.
+  final ExecutableCode_Language? language;
+
+  /// Required. The code to be executed.
+  final String? code;
+
+  ExecutableCode({this.language, this.code}) : super(fullyQualifiedName);
+
+  factory ExecutableCode.fromJson(Map<String, dynamic> json) {
+    return ExecutableCode(
+      language: decodeEnum(json['language'], ExecutableCode_Language.fromJson),
+      code: json['code'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (language != null) 'language': language!.toJson(),
+      if (code != null) 'code': code,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (language != null) 'language=$language',
+      if (code != null) 'code=$code',
+    ].join(',');
+    return 'ExecutableCode($contents)';
+  }
+}
+
+/// Supported programming languages for the generated code.
+final class ExecutableCode_Language extends ProtoEnum {
+  /// Unspecified language. This value should not be used.
+  static const languageUnspecified = ExecutableCode_Language(
+    'LANGUAGE_UNSPECIFIED',
+  );
+
+  /// Python >= 3.10, with numpy and simpy available.
+  static const python = ExecutableCode_Language('PYTHON');
+
+  const ExecutableCode_Language(super.value);
+
+  factory ExecutableCode_Language.fromJson(String json) =>
+      ExecutableCode_Language(json);
+
+  @override
+  String toString() => 'Language.$value';
+}
+
+/// Result of executing the `ExecutableCode`.
+///
+/// Only generated when using the `CodeExecution`, and always follows a `part`
+/// containing the `ExecutableCode`.
+final class CodeExecutionResult extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CodeExecutionResult';
+
+  /// Required. Outcome of the code execution.
+  final CodeExecutionResult_Outcome? outcome;
+
+  /// Optional. Contains stdout when code execution is successful, stderr or
+  /// other description otherwise.
+  final String? output;
+
+  CodeExecutionResult({this.outcome, this.output}) : super(fullyQualifiedName);
+
+  factory CodeExecutionResult.fromJson(Map<String, dynamic> json) {
+    return CodeExecutionResult(
+      outcome: decodeEnum(
+        json['outcome'],
+        CodeExecutionResult_Outcome.fromJson,
+      ),
+      output: json['output'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (outcome != null) 'outcome': outcome!.toJson(),
+      if (output != null) 'output': output,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (outcome != null) 'outcome=$outcome',
+      if (output != null) 'output=$output',
+    ].join(',');
+    return 'CodeExecutionResult($contents)';
+  }
+}
+
+/// Enumeration of possible outcomes of the code execution.
+final class CodeExecutionResult_Outcome extends ProtoEnum {
+  /// Unspecified status. This value should not be used.
+  static const outcomeUnspecified = CodeExecutionResult_Outcome(
+    'OUTCOME_UNSPECIFIED',
+  );
+
+  /// Code execution completed successfully.
+  static const outcomeOk = CodeExecutionResult_Outcome('OUTCOME_OK');
+
+  /// Code execution finished but with a failure. `stderr` should contain the
+  /// reason.
+  static const outcomeFailed = CodeExecutionResult_Outcome('OUTCOME_FAILED');
+
+  /// Code execution ran for too long, and was cancelled. There may or may not
+  /// be a partial output present.
+  static const outcomeDeadlineExceeded = CodeExecutionResult_Outcome(
+    'OUTCOME_DEADLINE_EXCEEDED',
+  );
+
+  const CodeExecutionResult_Outcome(super.value);
+
+  factory CodeExecutionResult_Outcome.fromJson(String json) =>
+      CodeExecutionResult_Outcome(json);
+
+  @override
+  String toString() => 'Outcome.$value';
+}
+
+/// Tool details that the model may use to generate response.
+///
+/// A `Tool` is a piece of code that enables the system to interact with
+/// external systems to perform an action, or set of actions, outside of
+/// knowledge and scope of the model.
+final class Tool extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Tool';
+
+  /// Optional. A list of `FunctionDeclarations` available to the model that can
+  /// be used for function calling.
+  ///
+  /// The model or system does not execute the function. Instead the defined
+  /// function may be returned as a
+  /// `FunctionCall` with
+  /// arguments to the client side for execution. The model may decide to call a
+  /// subset of these functions by populating
+  /// `FunctionCall` in
+  /// the response. The next conversation turn may contain a
+  /// `FunctionResponse`
+  /// with the `Content.role`
+  /// "function" generation context for the next model turn.
+  final List<FunctionDeclaration>? functionDeclarations;
+
+  /// Optional. Retrieval tool that is powered by Google search.
+  final GoogleSearchRetrieval? googleSearchRetrieval;
+
+  /// Optional. Enables the model to execute code as part of generation.
+  final CodeExecution? codeExecution;
+
+  /// Optional. GoogleSearch tool type.
+  /// Tool to support Google Search in Model. Powered by Google.
+  final Tool_GoogleSearch? googleSearch;
+
+  Tool({
+    this.functionDeclarations,
+    this.googleSearchRetrieval,
+    this.codeExecution,
+    this.googleSearch,
+  }) : super(fullyQualifiedName);
+
+  factory Tool.fromJson(Map<String, dynamic> json) {
+    return Tool(
+      functionDeclarations: decodeListMessage(
+        json['functionDeclarations'],
+        FunctionDeclaration.fromJson,
+      ),
+      googleSearchRetrieval: decode(
+        json['googleSearchRetrieval'],
+        GoogleSearchRetrieval.fromJson,
+      ),
+      codeExecution: decode(json['codeExecution'], CodeExecution.fromJson),
+      googleSearch: decode(json['googleSearch'], Tool_GoogleSearch.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (functionDeclarations != null)
+        'functionDeclarations': encodeList(functionDeclarations),
+      if (googleSearchRetrieval != null)
+        'googleSearchRetrieval': googleSearchRetrieval!.toJson(),
+      if (codeExecution != null) 'codeExecution': codeExecution!.toJson(),
+      if (googleSearch != null) 'googleSearch': googleSearch!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'Tool()';
+}
+
+/// GoogleSearch tool type.
+/// Tool to support Google Search in Model. Powered by Google.
+final class Tool_GoogleSearch extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Tool.GoogleSearch';
+
+  Tool_GoogleSearch() : super(fullyQualifiedName);
+
+  factory Tool_GoogleSearch.fromJson(Map<String, dynamic> json) {
+    return Tool_GoogleSearch();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'GoogleSearch()';
+}
+
+/// Tool to retrieve public web data for grounding, powered by Google.
+final class GoogleSearchRetrieval extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GoogleSearchRetrieval';
+
+  /// Specifies the dynamic retrieval configuration for the given source.
+  final DynamicRetrievalConfig? dynamicRetrievalConfig;
+
+  GoogleSearchRetrieval({this.dynamicRetrievalConfig})
+    : super(fullyQualifiedName);
+
+  factory GoogleSearchRetrieval.fromJson(Map<String, dynamic> json) {
+    return GoogleSearchRetrieval(
+      dynamicRetrievalConfig: decode(
+        json['dynamicRetrievalConfig'],
+        DynamicRetrievalConfig.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (dynamicRetrievalConfig != null)
+        'dynamicRetrievalConfig': dynamicRetrievalConfig!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'GoogleSearchRetrieval()';
+}
+
+/// Describes the options to customize dynamic retrieval.
+final class DynamicRetrievalConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DynamicRetrievalConfig';
+
+  /// The mode of the predictor to be used in dynamic retrieval.
+  final DynamicRetrievalConfig_Mode? mode;
+
+  /// The threshold to be used in dynamic retrieval.
+  /// If not set, a system default value is used.
+  final double? dynamicThreshold;
+
+  DynamicRetrievalConfig({this.mode, this.dynamicThreshold})
+    : super(fullyQualifiedName);
+
+  factory DynamicRetrievalConfig.fromJson(Map<String, dynamic> json) {
+    return DynamicRetrievalConfig(
+      mode: decodeEnum(json['mode'], DynamicRetrievalConfig_Mode.fromJson),
+      dynamicThreshold: decodeDouble(json['dynamicThreshold']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (mode != null) 'mode': mode!.toJson(),
+      if (dynamicThreshold != null)
+        'dynamicThreshold': encodeDouble(dynamicThreshold),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (mode != null) 'mode=$mode',
+      if (dynamicThreshold != null) 'dynamicThreshold=$dynamicThreshold',
+    ].join(',');
+    return 'DynamicRetrievalConfig($contents)';
+  }
+}
+
+/// The mode of the predictor to be used in dynamic retrieval.
+final class DynamicRetrievalConfig_Mode extends ProtoEnum {
+  /// Always trigger retrieval.
+  static const modeUnspecified = DynamicRetrievalConfig_Mode(
+    'MODE_UNSPECIFIED',
+  );
+
+  /// Run retrieval only when system decides it is necessary.
+  static const modeDynamic = DynamicRetrievalConfig_Mode('MODE_DYNAMIC');
+
+  const DynamicRetrievalConfig_Mode(super.value);
+
+  factory DynamicRetrievalConfig_Mode.fromJson(String json) =>
+      DynamicRetrievalConfig_Mode(json);
+
+  @override
+  String toString() => 'Mode.$value';
+}
+
+/// Tool that executes code generated by the model, and automatically returns
+/// the result to the model.
+///
+/// See also `ExecutableCode` and `CodeExecutionResult` which are only generated
+/// when using this tool.
+final class CodeExecution extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CodeExecution';
+
+  CodeExecution() : super(fullyQualifiedName);
+
+  factory CodeExecution.fromJson(Map<String, dynamic> json) {
+    return CodeExecution();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'CodeExecution()';
+}
+
+/// The Tool configuration containing parameters for specifying `Tool` use
+/// in the request.
+final class ToolConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ToolConfig';
+
+  /// Optional. Function calling config.
+  final FunctionCallingConfig? functionCallingConfig;
+
+  ToolConfig({this.functionCallingConfig}) : super(fullyQualifiedName);
+
+  factory ToolConfig.fromJson(Map<String, dynamic> json) {
+    return ToolConfig(
+      functionCallingConfig: decode(
+        json['functionCallingConfig'],
+        FunctionCallingConfig.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (functionCallingConfig != null)
+        'functionCallingConfig': functionCallingConfig!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'ToolConfig()';
+}
+
+/// Configuration for specifying function calling behavior.
+final class FunctionCallingConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FunctionCallingConfig';
+
+  /// Optional. Specifies the mode in which function calling should execute. If
+  /// unspecified, the default value will be set to AUTO.
+  final FunctionCallingConfig_Mode? mode;
+
+  /// Optional. A set of function names that, when provided, limits the functions
+  /// the model will call.
+  ///
+  /// This should only be set when the Mode is ANY. Function names
+  /// should match [FunctionDeclaration.name]. With mode set to ANY, model will
+  /// predict a function call from the set of function names provided.
+  final List<String>? allowedFunctionNames;
+
+  FunctionCallingConfig({this.mode, this.allowedFunctionNames})
+    : super(fullyQualifiedName);
+
+  factory FunctionCallingConfig.fromJson(Map<String, dynamic> json) {
+    return FunctionCallingConfig(
+      mode: decodeEnum(json['mode'], FunctionCallingConfig_Mode.fromJson),
+      allowedFunctionNames: decodeList(json['allowedFunctionNames']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (mode != null) 'mode': mode!.toJson(),
+      if (allowedFunctionNames != null)
+        'allowedFunctionNames': allowedFunctionNames,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (mode != null) 'mode=$mode'].join(',');
+    return 'FunctionCallingConfig($contents)';
+  }
+}
+
+/// Defines the execution behavior for function calling by defining the
+/// execution mode.
+final class FunctionCallingConfig_Mode extends ProtoEnum {
+  /// Unspecified function calling mode. This value should not be used.
+  static const modeUnspecified = FunctionCallingConfig_Mode('MODE_UNSPECIFIED');
+
+  /// Default model behavior, model decides to predict either a function call
+  /// or a natural language response.
+  static const auto = FunctionCallingConfig_Mode('AUTO');
+
+  /// Model is constrained to always predicting a function call only.
+  /// If "allowed_function_names" are set, the predicted function call will be
+  /// limited to any one of "allowed_function_names", else the predicted
+  /// function call will be any one of the provided "function_declarations".
+  static const any = FunctionCallingConfig_Mode('ANY');
+
+  /// Model will not predict any function call. Model behavior is same as when
+  /// not passing any function declarations.
+  static const none = FunctionCallingConfig_Mode('NONE');
+
+  const FunctionCallingConfig_Mode(super.value);
+
+  factory FunctionCallingConfig_Mode.fromJson(String json) =>
+      FunctionCallingConfig_Mode(json);
+
+  @override
+  String toString() => 'Mode.$value';
+}
+
+/// Structured representation of a function declaration as defined by the
+/// [OpenAPI 3.03 specification](https://spec.openapis.org/oas/v3.0.3). Included
+/// in this declaration are the function name and parameters. This
+/// FunctionDeclaration is a representation of a block of code that can be used
+/// as a `Tool` by the model and executed by the client.
+final class FunctionDeclaration extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FunctionDeclaration';
+
+  /// Required. The name of the function.
+  /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
+  /// length of 63.
+  final String? name;
+
+  /// Required. A brief description of the function.
+  final String? description;
+
+  /// Optional. Describes the parameters to this function. Reflects the Open
+  /// API 3.03 Parameter Object string Key: the name of the parameter. Parameter
+  /// names are case sensitive. Schema Value: the Schema defining the type used
+  /// for the parameter.
+  final Schema? parameters;
+
+  /// Optional. Describes the output from this function in JSON Schema format.
+  /// Reflects the Open API 3.03 Response Object. The Schema defines the type
+  /// used for the response value of the function.
+  final Schema? response;
+
+  FunctionDeclaration({
+    this.name,
+    this.description,
+    this.parameters,
+    this.response,
+  }) : super(fullyQualifiedName);
+
+  factory FunctionDeclaration.fromJson(Map<String, dynamic> json) {
+    return FunctionDeclaration(
+      name: json['name'],
+      description: json['description'],
+      parameters: decode(json['parameters'], Schema.fromJson),
+      response: decode(json['response'], Schema.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (name != null) 'name': name,
+      if (description != null) 'description': description,
+      if (parameters != null) 'parameters': parameters!.toJson(),
+      if (response != null) 'response': response!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (description != null) 'description=$description',
+    ].join(',');
+    return 'FunctionDeclaration($contents)';
+  }
+}
+
+/// A predicted `FunctionCall` returned from the model that contains
+/// a string representing the `FunctionDeclaration.name` with the
+/// arguments and their values.
+final class FunctionCall extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FunctionCall';
+
+  /// Optional. The unique id of the function call. If populated, the client to
+  /// execute the `function_call` and return the response with the matching `id`.
+  final String? id;
+
+  /// Required. The name of the function to call.
+  /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
+  /// length of 63.
+  final String? name;
+
+  /// Optional. The function parameters and values in JSON object format.
+  final Struct? args;
+
+  FunctionCall({this.id, this.name, this.args}) : super(fullyQualifiedName);
+
+  factory FunctionCall.fromJson(Map<String, dynamic> json) {
+    return FunctionCall(
+      id: json['id'],
+      name: json['name'],
+      args: decodeCustom(json['args'], Struct.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (args != null) 'args': args!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (id != null) 'id=$id',
+      if (name != null) 'name=$name',
+    ].join(',');
+    return 'FunctionCall($contents)';
+  }
+}
+
+/// The result output from a `FunctionCall` that contains a string
+/// representing the `FunctionDeclaration.name` and a structured JSON
+/// object containing any output from the function is used as context to
+/// the model. This should contain the result of a`FunctionCall` made
+/// based on model prediction.
+final class FunctionResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FunctionResponse';
+
+  /// Optional. The id of the function call this response is for. Populated by
+  /// the client to match the corresponding function call `id`.
+  final String? id;
+
+  /// Required. The name of the function to call.
+  /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
+  /// length of 63.
+  final String? name;
+
+  /// Required. The function response in JSON object format.
+  final Struct? response;
+
+  FunctionResponse({this.id, this.name, this.response})
+    : super(fullyQualifiedName);
+
+  factory FunctionResponse.fromJson(Map<String, dynamic> json) {
+    return FunctionResponse(
+      id: json['id'],
+      name: json['name'],
+      response: decodeCustom(json['response'], Struct.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (id != null) 'id': id,
+      if (name != null) 'name': name,
+      if (response != null) 'response': response!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (id != null) 'id=$id',
+      if (name != null) 'name=$name',
+    ].join(',');
+    return 'FunctionResponse($contents)';
+  }
+}
+
+/// The `Schema` object allows the definition of input and output data types.
+/// These types can be objects, but also primitives and arrays.
+/// Represents a select subset of an [OpenAPI 3.0 schema
+/// object](https://spec.openapis.org/oas/v3.0.3#schema).
+final class Schema extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Schema';
+
+  /// Required. Data type.
+  final Type? type;
+
+  /// Optional. The format of the data. This is used only for primitive
+  /// datatypes. Supported formats:
+  ///  for NUMBER type: float, double
+  ///  for INTEGER type: int32, int64
+  ///  for STRING type: enum
+  final String? format;
+
+  /// Optional. A brief description of the parameter. This could contain examples
+  /// of use. Parameter description may be formatted as Markdown.
+  final String? description;
+
+  /// Optional. Indicates if the value may be null.
+  final bool? nullable;
+
+  /// Optional. Possible values of the element of Type.STRING with enum format.
+  /// For example we can define an Enum Direction as :
+  /// {type:STRING, format:enum, enum:["EAST", NORTH", "SOUTH", "WEST"]}
+  final List<String>? enum$;
+
+  /// Optional. Schema of the elements of Type.ARRAY.
+  final Schema? items;
+
+  /// Optional. Maximum number of the elements for Type.ARRAY.
+  final int? maxItems;
+
+  /// Optional. Minimum number of the elements for Type.ARRAY.
+  final int? minItems;
+
+  /// Optional. Properties of Type.OBJECT.
+  final Map<String, Schema>? properties;
+
+  /// Optional. Required properties of Type.OBJECT.
+  final List<String>? required;
+
+  Schema({
+    this.type,
+    this.format,
+    this.description,
+    this.nullable,
+    this.enum$,
+    this.items,
+    this.maxItems,
+    this.minItems,
+    this.properties,
+    this.required,
+  }) : super(fullyQualifiedName);
+
+  factory Schema.fromJson(Map<String, dynamic> json) {
+    return Schema(
+      type: decodeEnum(json['type'], Type.fromJson),
+      format: json['format'],
+      description: json['description'],
+      nullable: json['nullable'],
+      enum$: decodeList(json['enum']),
+      items: decode(json['items'], Schema.fromJson),
+      maxItems: decodeInt64(json['maxItems']),
+      minItems: decodeInt64(json['minItems']),
+      properties: decodeMapMessage(json['properties'], Schema.fromJson),
+      required: decodeList(json['required']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (type != null) 'type': type!.toJson(),
+      if (format != null) 'format': format,
+      if (description != null) 'description': description,
+      if (nullable != null) 'nullable': nullable,
+      if (enum$ != null) 'enum': enum$,
+      if (items != null) 'items': items!.toJson(),
+      if (maxItems != null) 'maxItems': encodeInt64(maxItems),
+      if (minItems != null) 'minItems': encodeInt64(minItems),
+      if (properties != null) 'properties': encodeMap(properties),
+      if (required != null) 'required': required,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (type != null) 'type=$type',
+      if (format != null) 'format=$format',
+      if (description != null) 'description=$description',
+      if (nullable != null) 'nullable=$nullable',
+      if (maxItems != null) 'maxItems=$maxItems',
+      if (minItems != null) 'minItems=$minItems',
+    ].join(',');
+    return 'Schema($contents)';
+  }
+}
+
+/// Passage included inline with a grounding configuration.
+final class GroundingPassage extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingPassage';
+
+  /// Identifier for the passage for attributing this passage in grounded
+  /// answers.
+  final String? id;
+
+  /// Content of the passage.
+  final Content? content;
+
+  GroundingPassage({this.id, this.content}) : super(fullyQualifiedName);
+
+  factory GroundingPassage.fromJson(Map<String, dynamic> json) {
+    return GroundingPassage(
+      id: json['id'],
+      content: decode(json['content'], Content.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (id != null) 'id': id,
+      if (content != null) 'content': content!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (id != null) 'id=$id'].join(',');
+    return 'GroundingPassage($contents)';
+  }
+}
+
+/// A repeated list of passages.
+final class GroundingPassages extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingPassages';
+
+  /// List of passages.
+  final List<GroundingPassage>? passages;
+
+  GroundingPassages({this.passages}) : super(fullyQualifiedName);
+
+  factory GroundingPassages.fromJson(Map<String, dynamic> json) {
+    return GroundingPassages(
+      passages: decodeListMessage(json['passages'], GroundingPassage.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (passages != null) 'passages': encodeList(passages)};
+  }
+
+  @override
+  String toString() => 'GroundingPassages()';
+}
+
+/// Request to generate a message response from the model.
+final class GenerateMessageRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateMessageRequest';
+
+  /// Required. The name of the model to use.
+  ///
+  /// Format: `name=models/{model}`.
+  final String model;
+
+  /// Required. The structured textual input given to the model as a prompt.
+  ///
+  /// Given a
+  /// prompt, the model will return what it predicts is the next message in the
+  /// discussion.
+  final MessagePrompt? prompt;
+
+  /// Optional. Controls the randomness of the output.
+  ///
+  /// Values can range over `[0.0,1.0]`,
+  /// inclusive. A value closer to `1.0` will produce responses that are more
+  /// varied, while a value closer to `0.0` will typically result in
+  /// less surprising responses from the model.
+  final double? temperature;
+
+  /// Optional. The number of generated response messages to return.
+  ///
+  /// This value must be between
+  /// `[1, 8]`, inclusive. If unset, this will default to `1`.
+  final int? candidateCount;
+
+  /// Optional. The maximum cumulative probability of tokens to consider when
+  /// sampling.
+  ///
+  /// The model uses combined Top-k and nucleus sampling.
+  ///
+  /// Nucleus sampling considers the smallest set of tokens whose probability
+  /// sum is at least `top_p`.
+  final double? topP;
+
+  /// Optional. The maximum number of tokens to consider when sampling.
+  ///
+  /// The model uses combined Top-k and nucleus sampling.
+  ///
+  /// Top-k sampling considers the set of `top_k` most probable tokens.
+  final int? topK;
+
+  GenerateMessageRequest({
+    required this.model,
+    this.prompt,
+    this.temperature,
+    this.candidateCount,
+    this.topP,
+    this.topK,
+  }) : super(fullyQualifiedName);
+
+  factory GenerateMessageRequest.fromJson(Map<String, dynamic> json) {
+    return GenerateMessageRequest(
+      model: json['model'],
+      prompt: decode(json['prompt'], MessagePrompt.fromJson),
+      temperature: decodeDouble(json['temperature']),
+      candidateCount: json['candidateCount'],
+      topP: decodeDouble(json['topP']),
+      topK: json['topK'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'model': model,
+      if (prompt != null) 'prompt': prompt!.toJson(),
+      if (temperature != null) 'temperature': encodeDouble(temperature),
+      if (candidateCount != null) 'candidateCount': candidateCount,
+      if (topP != null) 'topP': encodeDouble(topP),
+      if (topK != null) 'topK': topK,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'model=$model',
+      if (temperature != null) 'temperature=$temperature',
+      if (candidateCount != null) 'candidateCount=$candidateCount',
+      if (topP != null) 'topP=$topP',
+      if (topK != null) 'topK=$topK',
+    ].join(',');
+    return 'GenerateMessageRequest($contents)';
+  }
+}
+
+/// The response from the model.
+///
+/// This includes candidate messages and
+/// conversation history in the form of chronologically-ordered messages.
+final class GenerateMessageResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateMessageResponse';
+
+  /// Candidate response messages from the model.
+  final List<Message>? candidates;
+
+  /// The conversation history used by the model.
+  final List<Message>? messages;
+
+  /// A set of content filtering metadata for the prompt and response
+  /// text.
+  ///
+  /// This indicates which `SafetyCategory`(s) blocked a
+  /// candidate from this response, the lowest `HarmProbability`
+  /// that triggered a block, and the HarmThreshold setting for that category.
+  final List<ContentFilter>? filters;
+
+  GenerateMessageResponse({this.candidates, this.messages, this.filters})
+    : super(fullyQualifiedName);
+
+  factory GenerateMessageResponse.fromJson(Map<String, dynamic> json) {
+    return GenerateMessageResponse(
+      candidates: decodeListMessage(json['candidates'], Message.fromJson),
+      messages: decodeListMessage(json['messages'], Message.fromJson),
+      filters: decodeListMessage(json['filters'], ContentFilter.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (candidates != null) 'candidates': encodeList(candidates),
+      if (messages != null) 'messages': encodeList(messages),
+      if (filters != null) 'filters': encodeList(filters),
+    };
+  }
+
+  @override
+  String toString() => 'GenerateMessageResponse()';
+}
+
+/// The base unit of structured text.
+///
+/// A `Message` includes an `author` and the `content` of
+/// the `Message`.
+///
+/// The `author` is used to tag messages when they are fed to the
+/// model as text.
+final class Message extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Message';
+
+  /// Optional. The author of this Message.
+  ///
+  /// This serves as a key for tagging
+  /// the content of this Message when it is fed to the model as text.
+  ///
+  /// The author can be any alphanumeric string.
+  final String? author;
+
+  /// Required. The text content of the structured `Message`.
+  final String? content;
+
+  /// Output only. Citation information for model-generated `content` in this
+  /// `Message`.
+  ///
+  /// If this `Message` was generated as output from the model, this field may be
+  /// populated with attribution information for any text included in the
+  /// `content`. This field is used only on output.
+  final CitationMetadata? citationMetadata;
+
+  Message({this.author, this.content, this.citationMetadata})
+    : super(fullyQualifiedName);
+
+  factory Message.fromJson(Map<String, dynamic> json) {
+    return Message(
+      author: json['author'],
+      content: json['content'],
+      citationMetadata: decode(
+        json['citationMetadata'],
+        CitationMetadata.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (author != null) 'author': author,
+      if (content != null) 'content': content,
+      if (citationMetadata != null)
+        'citationMetadata': citationMetadata!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (author != null) 'author=$author',
+      if (content != null) 'content=$content',
+    ].join(',');
+    return 'Message($contents)';
+  }
+}
+
+/// All of the structured input text passed to the model as a prompt.
+///
+/// A `MessagePrompt` contains a structured set of fields that provide context
+/// for the conversation, examples of user input/model output message pairs that
+/// prime the model to respond in different ways, and the conversation history
+/// or list of messages representing the alternating turns of the conversation
+/// between the user and the model.
+final class MessagePrompt extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.MessagePrompt';
+
+  /// Optional. Text that should be provided to the model first to ground the
+  /// response.
+  ///
+  /// If not empty, this `context` will be given to the model first before the
+  /// `examples` and `messages`. When using a `context` be sure to provide it
+  /// with every request to maintain continuity.
+  ///
+  /// This field can be a description of your prompt to the model to help provide
+  /// context and guide the responses. Examples: "Translate the phrase from
+  /// English to French." or "Given a statement, classify the sentiment as happy,
+  /// sad or neutral."
+  ///
+  /// Anything included in this field will take precedence over message history
+  /// if the total input size exceeds the model's `input_token_limit` and the
+  /// input request is truncated.
+  final String? context;
+
+  /// Optional. Examples of what the model should generate.
+  ///
+  /// This includes both user input and the response that the model should
+  /// emulate.
+  ///
+  /// These `examples` are treated identically to conversation messages except
+  /// that they take precedence over the history in `messages`:
+  /// If the total input size exceeds the model's `input_token_limit` the input
+  /// will be truncated. Items will be dropped from `messages` before `examples`.
+  final List<Example>? examples;
+
+  /// Required. A snapshot of the recent conversation history sorted
+  /// chronologically.
+  ///
+  /// Turns alternate between two authors.
+  ///
+  /// If the total input size exceeds the model's `input_token_limit` the input
+  /// will be truncated: The oldest items will be dropped from `messages`.
+  final List<Message>? messages;
+
+  MessagePrompt({this.context, this.examples, this.messages})
+    : super(fullyQualifiedName);
+
+  factory MessagePrompt.fromJson(Map<String, dynamic> json) {
+    return MessagePrompt(
+      context: json['context'],
+      examples: decodeListMessage(json['examples'], Example.fromJson),
+      messages: decodeListMessage(json['messages'], Message.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (context != null) 'context': context,
+      if (examples != null) 'examples': encodeList(examples),
+      if (messages != null) 'messages': encodeList(messages),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (context != null) 'context=$context'].join(',');
+    return 'MessagePrompt($contents)';
+  }
+}
+
+/// An input/output example used to instruct the Model.
+///
+/// It demonstrates how the model should respond or format its response.
+final class Example extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Example';
+
+  /// Required. An example of an input `Message` from the user.
+  final Message? input;
+
+  /// Required. An example of what the model should output given the input.
+  final Message? output;
+
+  Example({this.input, this.output}) : super(fullyQualifiedName);
+
+  factory Example.fromJson(Map<String, dynamic> json) {
+    return Example(
+      input: decode(json['input'], Message.fromJson),
+      output: decode(json['output'], Message.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (input != null) 'input': input!.toJson(),
+      if (output != null) 'output': output!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'Example()';
+}
+
+/// Counts the number of tokens in the `prompt` sent to a model.
+///
+/// Models may tokenize text differently, so each model may return a different
+/// `token_count`.
+final class CountMessageTokensRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CountMessageTokensRequest';
+
+  /// Required. The model's resource name. This serves as an ID for the Model to
+  /// use.
+  ///
+  /// This name should match a model name returned by the `ListModels` method.
+  ///
+  /// Format: `models/{model}`
+  final String model;
+
+  /// Required. The prompt, whose token count is to be returned.
+  final MessagePrompt? prompt;
+
+  CountMessageTokensRequest({required this.model, this.prompt})
+    : super(fullyQualifiedName);
+
+  factory CountMessageTokensRequest.fromJson(Map<String, dynamic> json) {
+    return CountMessageTokensRequest(
+      model: json['model'],
+      prompt: decode(json['prompt'], MessagePrompt.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'model': model, if (prompt != null) 'prompt': prompt!.toJson()};
+  }
+
+  @override
+  String toString() {
+    final contents = ['model=$model'].join(',');
+    return 'CountMessageTokensRequest($contents)';
+  }
+}
+
+/// A response from `CountMessageTokens`.
+///
+/// It returns the model's `token_count` for the `prompt`.
+final class CountMessageTokensResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CountMessageTokensResponse';
+
+  /// The number of tokens that the `model` tokenizes the `prompt` into.
+  ///
+  /// Always non-negative.
+  final int? tokenCount;
+
+  CountMessageTokensResponse({this.tokenCount}) : super(fullyQualifiedName);
+
+  factory CountMessageTokensResponse.fromJson(Map<String, dynamic> json) {
+    return CountMessageTokensResponse(tokenCount: json['tokenCount']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (tokenCount != null) 'tokenCount': tokenCount};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (tokenCount != null) 'tokenCount=$tokenCount',
+    ].join(',');
+    return 'CountMessageTokensResponse($contents)';
+  }
+}
+
+/// A file uploaded to the API.
+/// Next ID: 15
+final class File extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.File';
+
+  /// Output only. Metadata for a video.
+  final VideoMetadata? videoMetadata;
+
+  /// Immutable. Identifier. The `File` resource name. The ID (name excluding the
+  /// "files/" prefix) can contain up to 40 characters that are lowercase
+  /// alphanumeric or dashes (-). The ID cannot start or end with a dash. If the
+  /// name is empty on create, a unique name will be generated. Example:
+  /// `files/123-456`
+  final String? name;
+
+  /// Optional. The human-readable display name for the `File`. The display name
+  /// must be no more than 512 characters in length, including spaces. Example:
+  /// "Welcome Image"
+  final String? displayName;
+
+  /// Output only. MIME type of the file.
+  final String? mimeType;
+
+  /// Output only. Size of the file in bytes.
+  final int? sizeBytes;
+
+  /// Output only. The timestamp of when the `File` was created.
+  final Timestamp? createTime;
+
+  /// Output only. The timestamp of when the `File` was last updated.
+  final Timestamp? updateTime;
+
+  /// Output only. The timestamp of when the `File` will be deleted. Only set if
+  /// the `File` is scheduled to expire.
+  final Timestamp? expirationTime;
+
+  /// Output only. SHA-256 hash of the uploaded bytes.
+  final Uint8List? sha256Hash;
+
+  /// Output only. The uri of the `File`.
+  final String? uri;
+
+  /// Output only. Processing state of the File.
+  final File_State? state;
+
+  /// Output only. Error status if File processing failed.
+  final Status? error;
+
+  File({
+    this.videoMetadata,
+    this.name,
+    this.displayName,
+    this.mimeType,
+    this.sizeBytes,
+    this.createTime,
+    this.updateTime,
+    this.expirationTime,
+    this.sha256Hash,
+    this.uri,
+    this.state,
+    this.error,
+  }) : super(fullyQualifiedName);
+
+  factory File.fromJson(Map<String, dynamic> json) {
+    return File(
+      videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
+      name: json['name'],
+      displayName: json['displayName'],
+      mimeType: json['mimeType'],
+      sizeBytes: decodeInt64(json['sizeBytes']),
+      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+      expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
+      sha256Hash: decodeBytes(json['sha256Hash']),
+      uri: json['uri'],
+      state: decodeEnum(json['state'], File_State.fromJson),
+      error: decode(json['error'], Status.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
+      if (name != null) 'name': name,
+      if (displayName != null) 'displayName': displayName,
+      if (mimeType != null) 'mimeType': mimeType,
+      if (sizeBytes != null) 'sizeBytes': encodeInt64(sizeBytes),
+      if (createTime != null) 'createTime': createTime!.toJson(),
+      if (updateTime != null) 'updateTime': updateTime!.toJson(),
+      if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
+      if (sha256Hash != null) 'sha256Hash': encodeBytes(sha256Hash),
+      if (uri != null) 'uri': uri,
+      if (state != null) 'state': state!.toJson(),
+      if (error != null) 'error': error!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (displayName != null) 'displayName=$displayName',
+      if (mimeType != null) 'mimeType=$mimeType',
+      if (sizeBytes != null) 'sizeBytes=$sizeBytes',
+      if (sha256Hash != null) 'sha256Hash=$sha256Hash',
+      if (uri != null) 'uri=$uri',
+      if (state != null) 'state=$state',
+    ].join(',');
+    return 'File($contents)';
+  }
+}
+
+/// States for the lifecycle of a File.
+final class File_State extends ProtoEnum {
+  /// The default value. This value is used if the state is omitted.
+  static const stateUnspecified = File_State('STATE_UNSPECIFIED');
+
+  /// File is being processed and cannot be used for inference yet.
+  static const processing = File_State('PROCESSING');
+
+  /// File is processed and available for inference.
+  static const active = File_State('ACTIVE');
+
+  /// File failed processing.
+  static const failed = File_State('FAILED');
+
+  const File_State(super.value);
+
+  factory File_State.fromJson(String json) => File_State(json);
+
+  @override
+  String toString() => 'State.$value';
+}
+
+/// Metadata for a video `File`.
+final class VideoMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.VideoMetadata';
+
+  /// Duration of the video.
+  final Duration? videoDuration;
+
+  VideoMetadata({this.videoDuration}) : super(fullyQualifiedName);
+
+  factory VideoMetadata.fromJson(Map<String, dynamic> json) {
+    return VideoMetadata(
+      videoDuration: decodeCustom(json['videoDuration'], Duration.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (videoDuration != null) 'videoDuration': videoDuration!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'VideoMetadata()';
+}
+
+/// Request for `CreateFile`.
+final class CreateFileRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateFileRequest';
+
+  /// Optional. Metadata for the file to create.
+  final File? file;
+
+  CreateFileRequest({this.file}) : super(fullyQualifiedName);
+
+  factory CreateFileRequest.fromJson(Map<String, dynamic> json) {
+    return CreateFileRequest(file: decode(json['file'], File.fromJson));
+  }
+
+  @override
+  Object toJson() {
+    return {if (file != null) 'file': file!.toJson()};
+  }
+
+  @override
+  String toString() => 'CreateFileRequest()';
+}
+
+/// Response for `CreateFile`.
+final class CreateFileResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateFileResponse';
+
+  /// Metadata for the created file.
+  final File? file;
+
+  CreateFileResponse({this.file}) : super(fullyQualifiedName);
+
+  factory CreateFileResponse.fromJson(Map<String, dynamic> json) {
+    return CreateFileResponse(file: decode(json['file'], File.fromJson));
+  }
+
+  @override
+  Object toJson() {
+    return {if (file != null) 'file': file!.toJson()};
+  }
+
+  @override
+  String toString() => 'CreateFileResponse()';
+}
+
+/// Request for `ListFiles`.
+final class ListFilesRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListFilesRequest';
+
+  /// Optional. Maximum number of `File`s to return per page.
+  /// If unspecified, defaults to 10. Maximum `page_size` is 100.
+  final int? pageSize;
+
+  /// Optional. A page token from a previous `ListFiles` call.
+  final String? pageToken;
+
+  ListFilesRequest({this.pageSize, this.pageToken}) : super(fullyQualifiedName);
+
+  factory ListFilesRequest.fromJson(Map<String, dynamic> json) {
+    return ListFilesRequest(
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+    ].join(',');
+    return 'ListFilesRequest($contents)';
+  }
+}
+
+/// Response for `ListFiles`.
+final class ListFilesResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListFilesResponse';
+
+  /// The list of `File`s.
+  final List<File>? files;
+
+  /// A token that can be sent as a `page_token` into a subsequent `ListFiles`
+  /// call.
+  final String? nextPageToken;
+
+  ListFilesResponse({this.files, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListFilesResponse.fromJson(Map<String, dynamic> json) {
+    return ListFilesResponse(
+      files: decodeListMessage(json['files'], File.fromJson),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (files != null) 'files': encodeList(files),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListFilesResponse($contents)';
+  }
+}
+
+/// Request for `GetFile`.
+final class GetFileRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetFileRequest';
+
+  /// Required. The name of the `File` to get.
+  /// Example: `files/abc-123`
+  final String name;
+
+  GetFileRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetFileRequest.fromJson(Map<String, dynamic> json) {
+    return GetFileRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetFileRequest($contents)';
+  }
+}
+
+/// Request for `DeleteFile`.
+final class DeleteFileRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeleteFileRequest';
+
+  /// Required. The name of the `File` to delete.
+  /// Example: `files/abc-123`
+  final String name;
+
+  DeleteFileRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeleteFileRequest.fromJson(Map<String, dynamic> json) {
+    return DeleteFileRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'DeleteFileRequest($contents)';
+  }
+}
+
 /// Request to generate a completion from the model.
 final class GenerateContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GenerateContentRequest';
+      'google.ai.generativelanguage.v1beta.GenerateContentRequest';
 
   /// Required. The name of the `Model` to use for generating the completion.
   ///
   /// Format: `models/{model}`.
   final String model;
+
+  /// Optional. Developer set [system
+  /// instruction(s)](https://ai.google.dev/gemini-api/docs/system-instructions).
+  /// Currently, text only.
+  final Content? systemInstruction;
 
   /// Required. The content of the current conversation with the model.
   ///
@@ -438,6 +3190,24 @@ final class GenerateContentRequest extends ProtoMessage {
   /// this is a repeated field that contains the conversation history and the
   /// latest request.
   final List<Content>? contents;
+
+  /// Optional. A list of `Tools` the `Model` may use to generate the next
+  /// response.
+  ///
+  /// A `Tool` is a piece of code that enables the system to interact with
+  /// external systems to perform an action, or set of actions, outside of
+  /// knowledge and scope of the `Model`. Supported `Tool`s are `Function` and
+  /// `code_execution`. Refer to the [Function
+  /// calling](https://ai.google.dev/gemini-api/docs/function-calling) and the
+  /// [Code execution](https://ai.google.dev/gemini-api/docs/code-execution)
+  /// guides to learn more.
+  final List<Tool>? tools;
+
+  /// Optional. Tool configuration for any `Tool` specified in the request. Refer
+  /// to the [Function calling
+  /// guide](https://ai.google.dev/gemini-api/docs/function-calling#function_calling_mode)
+  /// for a usage example.
+  final ToolConfig? toolConfig;
 
   /// Optional. A list of unique `SafetySetting` instances for blocking unsafe
   /// content.
@@ -461,17 +3231,29 @@ final class GenerateContentRequest extends ProtoMessage {
   /// Optional. Configuration options for model generation and outputs.
   final GenerationConfig? generationConfig;
 
+  /// Optional. The name of the content
+  /// [cached](https://ai.google.dev/gemini-api/docs/caching) to use as context
+  /// to serve the prediction. Format: `cachedContents/{cachedContent}`
+  final String? cachedContent;
+
   GenerateContentRequest({
     required this.model,
+    this.systemInstruction,
     this.contents,
+    this.tools,
+    this.toolConfig,
     this.safetySettings,
     this.generationConfig,
+    this.cachedContent,
   }) : super(fullyQualifiedName);
 
   factory GenerateContentRequest.fromJson(Map<String, dynamic> json) {
     return GenerateContentRequest(
       model: json['model'],
+      systemInstruction: decode(json['systemInstruction'], Content.fromJson),
       contents: decodeListMessage(json['contents'], Content.fromJson),
+      tools: decodeListMessage(json['tools'], Tool.fromJson),
+      toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
       safetySettings: decodeListMessage(
         json['safetySettings'],
         SafetySetting.fromJson,
@@ -480,6 +3262,7 @@ final class GenerateContentRequest extends ProtoMessage {
         json['generationConfig'],
         GenerationConfig.fromJson,
       ),
+      cachedContent: json['cachedContent'],
     );
   }
 
@@ -487,25 +3270,115 @@ final class GenerateContentRequest extends ProtoMessage {
   Object toJson() {
     return {
       'model': model,
+      if (systemInstruction != null)
+        'systemInstruction': systemInstruction!.toJson(),
       if (contents != null) 'contents': encodeList(contents),
+      if (tools != null) 'tools': encodeList(tools),
+      if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
       if (safetySettings != null) 'safetySettings': encodeList(safetySettings),
       if (generationConfig != null)
         'generationConfig': generationConfig!.toJson(),
+      if (cachedContent != null) 'cachedContent': cachedContent,
     };
   }
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
+    final contents = [
+      'model=$model',
+      if (cachedContent != null) 'cachedContent=$cachedContent',
+    ].join(',');
     return 'GenerateContentRequest($contents)';
   }
+}
+
+/// The configuration for the prebuilt speaker to use.
+final class PrebuiltVoiceConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PrebuiltVoiceConfig';
+
+  /// The name of the preset voice to use.
+  final String? voiceName;
+
+  PrebuiltVoiceConfig({this.voiceName}) : super(fullyQualifiedName);
+
+  factory PrebuiltVoiceConfig.fromJson(Map<String, dynamic> json) {
+    return PrebuiltVoiceConfig(voiceName: json['voiceName']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (voiceName != null) 'voiceName': voiceName};
+  }
+
+  @override
+  String toString() {
+    final contents = [if (voiceName != null) 'voiceName=$voiceName'].join(',');
+    return 'PrebuiltVoiceConfig($contents)';
+  }
+}
+
+/// The configuration for the voice to use.
+final class VoiceConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.VoiceConfig';
+
+  /// The configuration for the prebuilt voice to use.
+  final PrebuiltVoiceConfig? prebuiltVoiceConfig;
+
+  VoiceConfig({this.prebuiltVoiceConfig}) : super(fullyQualifiedName);
+
+  factory VoiceConfig.fromJson(Map<String, dynamic> json) {
+    return VoiceConfig(
+      prebuiltVoiceConfig: decode(
+        json['prebuiltVoiceConfig'],
+        PrebuiltVoiceConfig.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (prebuiltVoiceConfig != null)
+        'prebuiltVoiceConfig': prebuiltVoiceConfig!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'VoiceConfig()';
+}
+
+/// The speech generation config.
+final class SpeechConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.SpeechConfig';
+
+  /// The configuration for the speaker to use.
+  final VoiceConfig? voiceConfig;
+
+  SpeechConfig({this.voiceConfig}) : super(fullyQualifiedName);
+
+  factory SpeechConfig.fromJson(Map<String, dynamic> json) {
+    return SpeechConfig(
+      voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson()};
+  }
+
+  @override
+  String toString() => 'SpeechConfig()';
 }
 
 /// Configuration options for model generation and outputs. Not all parameters
 /// are configurable for every model.
 final class GenerationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GenerationConfig';
+      'google.ai.generativelanguage.v1beta.GenerationConfig';
 
   /// Optional. Number of generated responses to return.
   ///
@@ -561,6 +3434,27 @@ final class GenerationConfig extends ProtoMessage {
   /// and doesn't allow setting `top_k` on requests.
   final int? topK;
 
+  /// Optional. MIME type of the generated candidate text.
+  /// Supported MIME types are:
+  /// `text/plain`: (default) Text output.
+  /// `application/json`: JSON response in the response candidates.
+  /// `text/x.enum`: ENUM as a string response in the response candidates.
+  /// Refer to the
+  /// [docs](https://ai.google.dev/gemini-api/docs/prompting_with_media#plain_text_formats)
+  /// for a list of all supported text MIME types.
+  final String? responseMimeType;
+
+  /// Optional. Output schema of the generated candidate text. Schemas must be a
+  /// subset of the [OpenAPI schema](https://spec.openapis.org/oas/v3.0.3#schema)
+  /// and can be objects, primitives or arrays.
+  ///
+  /// If set, a compatible `response_mime_type` must also be set.
+  /// Compatible MIME types:
+  /// `application/json`: Schema for JSON response.
+  /// Refer to the [JSON text generation
+  /// guide](https://ai.google.dev/gemini-api/docs/json-mode) for more details.
+  final Schema? responseSchema;
+
   /// Optional. Presence penalty applied to the next token's logprobs if the
   /// token has already been seen in the response.
   ///
@@ -598,7 +3492,7 @@ final class GenerationConfig extends ProtoMessage {
   final bool? responseLogprobs;
 
   /// Optional. Only valid if
-  /// [response_logprobs=True][google.ai.generativelanguage.v1.GenerationConfig.response_logprobs].
+  /// [response_logprobs=True][google.ai.generativelanguage.v1beta.GenerationConfig.response_logprobs].
   /// This sets the number of top logprobs to return at each decoding step in the
   /// `Candidate.logprobs_result`.
   final int? logprobs;
@@ -607,6 +3501,20 @@ final class GenerationConfig extends ProtoMessage {
   /// models.
   final bool? enableEnhancedCivicAnswers;
 
+  /// Optional. The requested modalities of the response. Represents the set of
+  /// modalities that the model can return, and should be expected in the
+  /// response. This is an exact match to the modalities of the response.
+  ///
+  /// A model may have multiple combinations of supported modalities. If the
+  /// requested modalities do not match any of the supported combinations, an
+  /// error will be returned.
+  ///
+  /// An empty list is equivalent to requesting only text.
+  final List<GenerationConfig_Modality>? responseModalities;
+
+  /// Optional. The speech generation config.
+  final SpeechConfig? speechConfig;
+
   GenerationConfig({
     this.candidateCount,
     this.stopSequences,
@@ -614,11 +3522,15 @@ final class GenerationConfig extends ProtoMessage {
     this.temperature,
     this.topP,
     this.topK,
+    this.responseMimeType,
+    this.responseSchema,
     this.presencePenalty,
     this.frequencyPenalty,
     this.responseLogprobs,
     this.logprobs,
     this.enableEnhancedCivicAnswers,
+    this.responseModalities,
+    this.speechConfig,
   }) : super(fullyQualifiedName);
 
   factory GenerationConfig.fromJson(Map<String, dynamic> json) {
@@ -629,11 +3541,18 @@ final class GenerationConfig extends ProtoMessage {
       temperature: decodeDouble(json['temperature']),
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
+      responseMimeType: json['responseMimeType'],
+      responseSchema: decode(json['responseSchema'], Schema.fromJson),
       presencePenalty: decodeDouble(json['presencePenalty']),
       frequencyPenalty: decodeDouble(json['frequencyPenalty']),
       responseLogprobs: json['responseLogprobs'],
       logprobs: json['logprobs'],
       enableEnhancedCivicAnswers: json['enableEnhancedCivicAnswers'],
+      responseModalities: decodeListEnum(
+        json['responseModalities'],
+        GenerationConfig_Modality.fromJson,
+      ),
+      speechConfig: decode(json['speechConfig'], SpeechConfig.fromJson),
     );
   }
 
@@ -646,6 +3565,8 @@ final class GenerationConfig extends ProtoMessage {
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
+      if (responseMimeType != null) 'responseMimeType': responseMimeType,
+      if (responseSchema != null) 'responseSchema': responseSchema!.toJson(),
       if (presencePenalty != null)
         'presencePenalty': encodeDouble(presencePenalty),
       if (frequencyPenalty != null)
@@ -654,6 +3575,9 @@ final class GenerationConfig extends ProtoMessage {
       if (logprobs != null) 'logprobs': logprobs,
       if (enableEnhancedCivicAnswers != null)
         'enableEnhancedCivicAnswers': enableEnhancedCivicAnswers,
+      if (responseModalities != null)
+        'responseModalities': encodeList(responseModalities),
+      if (speechConfig != null) 'speechConfig': speechConfig!.toJson(),
     };
   }
 
@@ -665,6 +3589,7 @@ final class GenerationConfig extends ProtoMessage {
       if (temperature != null) 'temperature=$temperature',
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
+      if (responseMimeType != null) 'responseMimeType=$responseMimeType',
       if (presencePenalty != null) 'presencePenalty=$presencePenalty',
       if (frequencyPenalty != null) 'frequencyPenalty=$frequencyPenalty',
       if (responseLogprobs != null) 'responseLogprobs=$responseLogprobs',
@@ -673,6 +3598,101 @@ final class GenerationConfig extends ProtoMessage {
         'enableEnhancedCivicAnswers=$enableEnhancedCivicAnswers',
     ].join(',');
     return 'GenerationConfig($contents)';
+  }
+}
+
+/// Supported modalities of the response.
+final class GenerationConfig_Modality extends ProtoEnum {
+  /// Default value.
+  static const modalityUnspecified = GenerationConfig_Modality(
+    'MODALITY_UNSPECIFIED',
+  );
+
+  /// Indicates the model should return text.
+  static const text = GenerationConfig_Modality('TEXT');
+
+  /// Indicates the model should return images.
+  static const image = GenerationConfig_Modality('IMAGE');
+
+  /// Indicates the model should return audio.
+  static const audio = GenerationConfig_Modality('AUDIO');
+
+  const GenerationConfig_Modality(super.value);
+
+  factory GenerationConfig_Modality.fromJson(String json) =>
+      GenerationConfig_Modality(json);
+
+  @override
+  String toString() => 'Modality.$value';
+}
+
+/// Configuration for retrieving grounding content from a `Corpus` or
+/// `Document` created using the Semantic Retriever API.
+final class SemanticRetrieverConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.SemanticRetrieverConfig';
+
+  /// Required. Name of the resource for retrieval. Example: `corpora/123` or
+  /// `corpora/123/documents/abc`.
+  final String? source;
+
+  /// Required. Query to use for matching `Chunk`s in the given resource by
+  /// similarity.
+  final Content? query;
+
+  /// Optional. Filters for selecting `Document`s and/or `Chunk`s from the
+  /// resource.
+  final List<MetadataFilter>? metadataFilters;
+
+  /// Optional. Maximum number of relevant `Chunk`s to retrieve.
+  final int? maxChunksCount;
+
+  /// Optional. Minimum relevance score for retrieved relevant `Chunk`s.
+  final double? minimumRelevanceScore;
+
+  SemanticRetrieverConfig({
+    this.source,
+    this.query,
+    this.metadataFilters,
+    this.maxChunksCount,
+    this.minimumRelevanceScore,
+  }) : super(fullyQualifiedName);
+
+  factory SemanticRetrieverConfig.fromJson(Map<String, dynamic> json) {
+    return SemanticRetrieverConfig(
+      source: json['source'],
+      query: decode(json['query'], Content.fromJson),
+      metadataFilters: decodeListMessage(
+        json['metadataFilters'],
+        MetadataFilter.fromJson,
+      ),
+      maxChunksCount: json['maxChunksCount'],
+      minimumRelevanceScore: decodeDouble(json['minimumRelevanceScore']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (source != null) 'source': source,
+      if (query != null) 'query': query!.toJson(),
+      if (metadataFilters != null)
+        'metadataFilters': encodeList(metadataFilters),
+      if (maxChunksCount != null) 'maxChunksCount': maxChunksCount,
+      if (minimumRelevanceScore != null)
+        'minimumRelevanceScore': encodeDouble(minimumRelevanceScore),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (source != null) 'source=$source',
+      if (maxChunksCount != null) 'maxChunksCount=$maxChunksCount',
+      if (minimumRelevanceScore != null)
+        'minimumRelevanceScore=$minimumRelevanceScore',
+    ].join(',');
+    return 'SemanticRetrieverConfig($contents)';
   }
 }
 
@@ -688,7 +3708,7 @@ final class GenerationConfig extends ProtoMessage {
 ///    `safety_ratings`.
 final class GenerateContentResponse extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GenerateContentResponse';
+      'google.ai.generativelanguage.v1beta.GenerateContentResponse';
 
   /// Candidate responses from the model.
   final List<Candidate>? candidates;
@@ -747,7 +3767,7 @@ final class GenerateContentResponse extends ProtoMessage {
 /// `GenerateContentRequest.content`.
 final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GenerateContentResponse.PromptFeedback';
+      'google.ai.generativelanguage.v1beta.GenerateContentResponse.PromptFeedback';
 
   /// Optional. If set, the prompt was blocked and no candidates are returned.
   /// Rephrase the prompt.
@@ -840,12 +3860,15 @@ final class GenerateContentResponse_PromptFeedback_BlockReason
 /// Metadata on the generation request's token usage.
 final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GenerateContentResponse.UsageMetadata';
+      'google.ai.generativelanguage.v1beta.GenerateContentResponse.UsageMetadata';
 
   /// Number of tokens in the prompt. When `cached_content` is set, this is
   /// still the total effective prompt size meaning this includes the number of
   /// tokens in the cached content.
   final int? promptTokenCount;
+
+  /// Number of tokens in the cached part of the prompt (the cached content)
+  final int? cachedContentTokenCount;
 
   /// Total number of tokens across all the generated response candidates.
   final int? candidatesTokenCount;
@@ -856,6 +3879,7 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
 
   GenerateContentResponse_UsageMetadata({
     this.promptTokenCount,
+    this.cachedContentTokenCount,
     this.candidatesTokenCount,
     this.totalTokenCount,
   }) : super(fullyQualifiedName);
@@ -865,6 +3889,7 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   ) {
     return GenerateContentResponse_UsageMetadata(
       promptTokenCount: json['promptTokenCount'],
+      cachedContentTokenCount: json['cachedContentTokenCount'],
       candidatesTokenCount: json['candidatesTokenCount'],
       totalTokenCount: json['totalTokenCount'],
     );
@@ -874,6 +3899,8 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   Object toJson() {
     return {
       if (promptTokenCount != null) 'promptTokenCount': promptTokenCount,
+      if (cachedContentTokenCount != null)
+        'cachedContentTokenCount': cachedContentTokenCount,
       if (candidatesTokenCount != null)
         'candidatesTokenCount': candidatesTokenCount,
       if (totalTokenCount != null) 'totalTokenCount': totalTokenCount,
@@ -884,6 +3911,8 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   String toString() {
     final contents = [
       if (promptTokenCount != null) 'promptTokenCount=$promptTokenCount',
+      if (cachedContentTokenCount != null)
+        'cachedContentTokenCount=$cachedContentTokenCount',
       if (candidatesTokenCount != null)
         'candidatesTokenCount=$candidatesTokenCount',
       if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
@@ -895,7 +3924,7 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
 /// A response candidate generated from the model.
 final class Candidate extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.Candidate';
+      'google.ai.generativelanguage.v1beta.Candidate';
 
   /// Output only. Index of the candidate in the list of response candidates.
   final int? index;
@@ -923,6 +3952,12 @@ final class Candidate extends ProtoMessage {
   /// Output only. Token count for this candidate.
   final int? tokenCount;
 
+  /// Output only. Attribution information for sources that contributed to a
+  /// grounded answer.
+  ///
+  /// This field is populated for `GenerateAnswer` calls.
+  final List<GroundingAttribution>? groundingAttributions;
+
   /// Output only. Grounding metadata for the candidate.
   ///
   /// This field is populated for `GenerateContent` calls.
@@ -941,6 +3976,7 @@ final class Candidate extends ProtoMessage {
     this.safetyRatings,
     this.citationMetadata,
     this.tokenCount,
+    this.groundingAttributions,
     this.groundingMetadata,
     this.avgLogprobs,
     this.logprobsResult,
@@ -963,6 +3999,10 @@ final class Candidate extends ProtoMessage {
         CitationMetadata.fromJson,
       ),
       tokenCount: json['tokenCount'],
+      groundingAttributions: decodeListMessage(
+        json['groundingAttributions'],
+        GroundingAttribution.fromJson,
+      ),
       groundingMetadata: decode(
         json['groundingMetadata'],
         GroundingMetadata.fromJson,
@@ -982,6 +4022,8 @@ final class Candidate extends ProtoMessage {
       if (citationMetadata != null)
         'citationMetadata': citationMetadata!.toJson(),
       if (tokenCount != null) 'tokenCount': tokenCount,
+      if (groundingAttributions != null)
+        'groundingAttributions': encodeList(groundingAttributions),
       if (groundingMetadata != null)
         'groundingMetadata': groundingMetadata!.toJson(),
       if (avgLogprobs != null) 'avgLogprobs': encodeDouble(avgLogprobs),
@@ -1058,7 +4100,7 @@ final class Candidate_FinishReason extends ProtoEnum {
 /// Logprobs Result
 final class LogprobsResult extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.LogprobsResult';
+      'google.ai.generativelanguage.v1beta.LogprobsResult';
 
   /// Length = total number of decoding steps.
   final List<LogprobsResult_TopCandidates>? topCandidates;
@@ -1099,7 +4141,7 @@ final class LogprobsResult extends ProtoMessage {
 /// Candidate for the logprobs token and score.
 final class LogprobsResult_Candidate extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.LogprobsResult.Candidate';
+      'google.ai.generativelanguage.v1beta.LogprobsResult.Candidate';
 
   /// The candidate’s token string value.
   final String? token;
@@ -1145,7 +4187,7 @@ final class LogprobsResult_Candidate extends ProtoMessage {
 /// Candidates with top log probabilities at each decoding step.
 final class LogprobsResult_TopCandidates extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.LogprobsResult.TopCandidates';
+      'google.ai.generativelanguage.v1beta.LogprobsResult.TopCandidates';
 
   /// Sorted by log probability in descending order.
   final List<LogprobsResult_Candidate>? candidates;
@@ -1170,10 +4212,172 @@ final class LogprobsResult_TopCandidates extends ProtoMessage {
   String toString() => 'TopCandidates()';
 }
 
+/// Identifier for the source contributing to this attribution.
+final class AttributionSourceId extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.AttributionSourceId';
+
+  /// Identifier for an inline passage.
+  final AttributionSourceId_GroundingPassageId? groundingPassage;
+
+  /// Identifier for a `Chunk` fetched via Semantic Retriever.
+  final AttributionSourceId_SemanticRetrieverChunk? semanticRetrieverChunk;
+
+  AttributionSourceId({this.groundingPassage, this.semanticRetrieverChunk})
+    : super(fullyQualifiedName);
+
+  factory AttributionSourceId.fromJson(Map<String, dynamic> json) {
+    return AttributionSourceId(
+      groundingPassage: decode(
+        json['groundingPassage'],
+        AttributionSourceId_GroundingPassageId.fromJson,
+      ),
+      semanticRetrieverChunk: decode(
+        json['semanticRetrieverChunk'],
+        AttributionSourceId_SemanticRetrieverChunk.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (groundingPassage != null)
+        'groundingPassage': groundingPassage!.toJson(),
+      if (semanticRetrieverChunk != null)
+        'semanticRetrieverChunk': semanticRetrieverChunk!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'AttributionSourceId()';
+}
+
+/// Identifier for a part within a `GroundingPassage`.
+final class AttributionSourceId_GroundingPassageId extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.AttributionSourceId.GroundingPassageId';
+
+  /// Output only. ID of the passage matching the `GenerateAnswerRequest`'s
+  /// `GroundingPassage.id`.
+  final String? passageId;
+
+  /// Output only. Index of the part within the `GenerateAnswerRequest`'s
+  /// `GroundingPassage.content`.
+  final int? partIndex;
+
+  AttributionSourceId_GroundingPassageId({this.passageId, this.partIndex})
+    : super(fullyQualifiedName);
+
+  factory AttributionSourceId_GroundingPassageId.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return AttributionSourceId_GroundingPassageId(
+      passageId: json['passageId'],
+      partIndex: json['partIndex'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (passageId != null) 'passageId': passageId,
+      if (partIndex != null) 'partIndex': partIndex,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (passageId != null) 'passageId=$passageId',
+      if (partIndex != null) 'partIndex=$partIndex',
+    ].join(',');
+    return 'GroundingPassageId($contents)';
+  }
+}
+
+/// Identifier for a `Chunk` retrieved via Semantic Retriever specified in the
+/// `GenerateAnswerRequest` using `SemanticRetrieverConfig`.
+final class AttributionSourceId_SemanticRetrieverChunk extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.AttributionSourceId.SemanticRetrieverChunk';
+
+  /// Output only. Name of the source matching the request's
+  /// `SemanticRetrieverConfig.source`. Example: `corpora/123` or
+  /// `corpora/123/documents/abc`
+  final String? source;
+
+  /// Output only. Name of the `Chunk` containing the attributed text.
+  /// Example: `corpora/123/documents/abc/chunks/xyz`
+  final String? chunk;
+
+  AttributionSourceId_SemanticRetrieverChunk({this.source, this.chunk})
+    : super(fullyQualifiedName);
+
+  factory AttributionSourceId_SemanticRetrieverChunk.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return AttributionSourceId_SemanticRetrieverChunk(
+      source: json['source'],
+      chunk: json['chunk'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (source != null) 'source': source,
+      if (chunk != null) 'chunk': chunk,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (source != null) 'source=$source',
+      if (chunk != null) 'chunk=$chunk',
+    ].join(',');
+    return 'SemanticRetrieverChunk($contents)';
+  }
+}
+
+/// Attribution for a source that contributed to an answer.
+final class GroundingAttribution extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingAttribution';
+
+  /// Output only. Identifier for the source contributing to this attribution.
+  final AttributionSourceId? sourceId;
+
+  /// Grounding source content that makes up this attribution.
+  final Content? content;
+
+  GroundingAttribution({this.sourceId, this.content})
+    : super(fullyQualifiedName);
+
+  factory GroundingAttribution.fromJson(Map<String, dynamic> json) {
+    return GroundingAttribution(
+      sourceId: decode(json['sourceId'], AttributionSourceId.fromJson),
+      content: decode(json['content'], Content.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (sourceId != null) 'sourceId': sourceId!.toJson(),
+      if (content != null) 'content': content!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'GroundingAttribution()';
+}
+
 /// Metadata related to retrieval in the grounding flow.
 final class RetrievalMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.RetrievalMetadata';
+      'google.ai.generativelanguage.v1beta.RetrievalMetadata';
 
   /// Optional. Score indicating how likely information from google search could
   /// help answer the prompt. The score is in the range [0, 1], where 0 is the
@@ -1216,7 +4420,7 @@ final class RetrievalMetadata extends ProtoMessage {
 /// Metadata returned to client when grounding is enabled.
 final class GroundingMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GroundingMetadata';
+      'google.ai.generativelanguage.v1beta.GroundingMetadata';
 
   /// Optional. Google search entry for the following-up web searches.
   final SearchEntryPoint? searchEntryPoint;
@@ -1285,7 +4489,7 @@ final class GroundingMetadata extends ProtoMessage {
 /// Google search entry point.
 final class SearchEntryPoint extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.SearchEntryPoint';
+      'google.ai.generativelanguage.v1beta.SearchEntryPoint';
 
   /// Optional. Web content snippet that can be embedded in a web page or an app
   /// webview.
@@ -1326,7 +4530,7 @@ final class SearchEntryPoint extends ProtoMessage {
 /// Grounding chunk.
 final class GroundingChunk extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GroundingChunk';
+      'google.ai.generativelanguage.v1beta.GroundingChunk';
 
   /// Grounding chunk from the web.
   final GroundingChunk_Web? web;
@@ -1351,7 +4555,7 @@ final class GroundingChunk extends ProtoMessage {
 /// Chunk from the web.
 final class GroundingChunk_Web extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GroundingChunk.Web';
+      'google.ai.generativelanguage.v1beta.GroundingChunk.Web';
 
   /// URI reference of the chunk.
   final String? uri;
@@ -1383,7 +4587,7 @@ final class GroundingChunk_Web extends ProtoMessage {
 /// Segment of the content.
 final class Segment extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.Segment';
+      'google.ai.generativelanguage.v1beta.Segment';
 
   /// Output only. The index of a Part object within its parent Content object.
   final int? partIndex;
@@ -1436,7 +4640,7 @@ final class Segment extends ProtoMessage {
 /// Grounding support.
 final class GroundingSupport extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GroundingSupport';
+      'google.ai.generativelanguage.v1beta.GroundingSupport';
 
   /// Segment of the content this support belongs to.
   final Segment? segment;
@@ -1480,10 +4684,308 @@ final class GroundingSupport extends ProtoMessage {
   String toString() => 'GroundingSupport()';
 }
 
+/// Request to generate a grounded answer from the `Model`.
+final class GenerateAnswerRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateAnswerRequest';
+
+  /// Passages provided inline with the request.
+  final GroundingPassages? inlinePassages;
+
+  /// Content retrieved from resources created via the Semantic Retriever
+  /// API.
+  final SemanticRetrieverConfig? semanticRetriever;
+
+  /// Required. The name of the `Model` to use for generating the grounded
+  /// response.
+  ///
+  /// Format: `model=models/{model}`.
+  final String model;
+
+  /// Required. The content of the current conversation with the `Model`. For
+  /// single-turn queries, this is a single question to answer. For multi-turn
+  /// queries, this is a repeated field that contains conversation history and
+  /// the last `Content` in the list containing the question.
+  ///
+  /// Note: `GenerateAnswer` only supports queries in English.
+  final List<Content>? contents;
+
+  /// Required. Style in which answers should be returned.
+  final GenerateAnswerRequest_AnswerStyle? answerStyle;
+
+  /// Optional. A list of unique `SafetySetting` instances for blocking unsafe
+  /// content.
+  ///
+  /// This will be enforced on the `GenerateAnswerRequest.contents` and
+  /// `GenerateAnswerResponse.candidate`. There should not be more than one
+  /// setting for each `SafetyCategory` type. The API will block any contents and
+  /// responses that fail to meet the thresholds set by these settings. This list
+  /// overrides the default settings for each `SafetyCategory` specified in the
+  /// safety_settings. If there is no `SafetySetting` for a given
+  /// `SafetyCategory` provided in the list, the API will use the default safety
+  /// setting for that category. Harm categories HARM_CATEGORY_HATE_SPEECH,
+  /// HARM_CATEGORY_SEXUALLY_EXPLICIT, HARM_CATEGORY_DANGEROUS_CONTENT,
+  /// HARM_CATEGORY_HARASSMENT are supported.
+  /// Refer to the
+  /// [guide](https://ai.google.dev/gemini-api/docs/safety-settings)
+  /// for detailed information on available safety settings. Also refer to the
+  /// [Safety guidance](https://ai.google.dev/gemini-api/docs/safety-guidance) to
+  /// learn how to incorporate safety considerations in your AI applications.
+  final List<SafetySetting>? safetySettings;
+
+  /// Optional. Controls the randomness of the output.
+  ///
+  /// Values can range from [0.0,1.0], inclusive. A value closer to 1.0 will
+  /// produce responses that are more varied and creative, while a value closer
+  /// to 0.0 will typically result in more straightforward responses from the
+  /// model. A low temperature (~0.2) is usually recommended for
+  /// Attributed-Question-Answering use cases.
+  final double? temperature;
+
+  GenerateAnswerRequest({
+    this.inlinePassages,
+    this.semanticRetriever,
+    required this.model,
+    this.contents,
+    this.answerStyle,
+    this.safetySettings,
+    this.temperature,
+  }) : super(fullyQualifiedName);
+
+  factory GenerateAnswerRequest.fromJson(Map<String, dynamic> json) {
+    return GenerateAnswerRequest(
+      inlinePassages: decode(
+        json['inlinePassages'],
+        GroundingPassages.fromJson,
+      ),
+      semanticRetriever: decode(
+        json['semanticRetriever'],
+        SemanticRetrieverConfig.fromJson,
+      ),
+      model: json['model'],
+      contents: decodeListMessage(json['contents'], Content.fromJson),
+      answerStyle: decodeEnum(
+        json['answerStyle'],
+        GenerateAnswerRequest_AnswerStyle.fromJson,
+      ),
+      safetySettings: decodeListMessage(
+        json['safetySettings'],
+        SafetySetting.fromJson,
+      ),
+      temperature: decodeDouble(json['temperature']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (inlinePassages != null) 'inlinePassages': inlinePassages!.toJson(),
+      if (semanticRetriever != null)
+        'semanticRetriever': semanticRetriever!.toJson(),
+      'model': model,
+      if (contents != null) 'contents': encodeList(contents),
+      if (answerStyle != null) 'answerStyle': answerStyle!.toJson(),
+      if (safetySettings != null) 'safetySettings': encodeList(safetySettings),
+      if (temperature != null) 'temperature': encodeDouble(temperature),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'model=$model',
+      if (answerStyle != null) 'answerStyle=$answerStyle',
+      if (temperature != null) 'temperature=$temperature',
+    ].join(',');
+    return 'GenerateAnswerRequest($contents)';
+  }
+}
+
+/// Style for grounded answers.
+final class GenerateAnswerRequest_AnswerStyle extends ProtoEnum {
+  /// Unspecified answer style.
+  static const answerStyleUnspecified = GenerateAnswerRequest_AnswerStyle(
+    'ANSWER_STYLE_UNSPECIFIED',
+  );
+
+  /// Succint but abstract style.
+  static const abstractive = GenerateAnswerRequest_AnswerStyle('ABSTRACTIVE');
+
+  /// Very brief and extractive style.
+  static const extractive = GenerateAnswerRequest_AnswerStyle('EXTRACTIVE');
+
+  /// Verbose style including extra details. The response may be formatted as a
+  /// sentence, paragraph, multiple paragraphs, or bullet points, etc.
+  static const verbose = GenerateAnswerRequest_AnswerStyle('VERBOSE');
+
+  const GenerateAnswerRequest_AnswerStyle(super.value);
+
+  factory GenerateAnswerRequest_AnswerStyle.fromJson(String json) =>
+      GenerateAnswerRequest_AnswerStyle(json);
+
+  @override
+  String toString() => 'AnswerStyle.$value';
+}
+
+/// Response from the model for a grounded answer.
+final class GenerateAnswerResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateAnswerResponse';
+
+  /// Candidate answer from the model.
+  ///
+  /// Note: The model *always* attempts to provide a grounded answer, even when
+  /// the answer is unlikely to be answerable from the given passages.
+  /// In that case, a low-quality or ungrounded answer may be provided, along
+  /// with a low `answerable_probability`.
+  final Candidate? answer;
+
+  /// Output only. The model's estimate of the probability that its answer is
+  /// correct and grounded in the input passages.
+  ///
+  /// A low `answerable_probability` indicates that the answer might not be
+  /// grounded in the sources.
+  ///
+  /// When `answerable_probability` is low, you may want to:
+  ///
+  /// * Display a message to the effect of "We couldn’t answer that question" to
+  /// the user.
+  /// * Fall back to a general-purpose LLM that answers the question from world
+  /// knowledge. The threshold and nature of such fallbacks will depend on
+  /// individual use cases. `0.5` is a good starting threshold.
+  final double? answerableProbability;
+
+  /// Output only. Feedback related to the input data used to answer the
+  /// question, as opposed to the model-generated response to the question.
+  ///
+  /// The input data can be one or more of the following:
+  ///
+  /// - Question specified by the last entry in `GenerateAnswerRequest.content`
+  /// - Conversation history specified by the other entries in
+  /// `GenerateAnswerRequest.content`
+  /// - Grounding sources (`GenerateAnswerRequest.semantic_retriever` or
+  /// `GenerateAnswerRequest.inline_passages`)
+  final GenerateAnswerResponse_InputFeedback? inputFeedback;
+
+  GenerateAnswerResponse({
+    this.answer,
+    this.answerableProbability,
+    this.inputFeedback,
+  }) : super(fullyQualifiedName);
+
+  factory GenerateAnswerResponse.fromJson(Map<String, dynamic> json) {
+    return GenerateAnswerResponse(
+      answer: decode(json['answer'], Candidate.fromJson),
+      answerableProbability: decodeDouble(json['answerableProbability']),
+      inputFeedback: decode(
+        json['inputFeedback'],
+        GenerateAnswerResponse_InputFeedback.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (answer != null) 'answer': answer!.toJson(),
+      if (answerableProbability != null)
+        'answerableProbability': encodeDouble(answerableProbability),
+      if (inputFeedback != null) 'inputFeedback': inputFeedback!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (answerableProbability != null)
+        'answerableProbability=$answerableProbability',
+    ].join(',');
+    return 'GenerateAnswerResponse($contents)';
+  }
+}
+
+/// Feedback related to the input data used to answer the question, as opposed
+/// to the model-generated response to the question.
+final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateAnswerResponse.InputFeedback';
+
+  /// Optional. If set, the input was blocked and no candidates are returned.
+  /// Rephrase the input.
+  final GenerateAnswerResponse_InputFeedback_BlockReason? blockReason;
+
+  /// Ratings for safety of the input.
+  /// There is at most one rating per category.
+  final List<SafetyRating>? safetyRatings;
+
+  GenerateAnswerResponse_InputFeedback({this.blockReason, this.safetyRatings})
+    : super(fullyQualifiedName);
+
+  factory GenerateAnswerResponse_InputFeedback.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return GenerateAnswerResponse_InputFeedback(
+      blockReason: decodeEnum(
+        json['blockReason'],
+        GenerateAnswerResponse_InputFeedback_BlockReason.fromJson,
+      ),
+      safetyRatings: decodeListMessage(
+        json['safetyRatings'],
+        SafetyRating.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (blockReason != null) 'blockReason': blockReason!.toJson(),
+      if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (blockReason != null) 'blockReason=$blockReason',
+    ].join(',');
+    return 'InputFeedback($contents)';
+  }
+}
+
+/// Specifies what was the reason why input was blocked.
+final class GenerateAnswerResponse_InputFeedback_BlockReason extends ProtoEnum {
+  /// Default value. This value is unused.
+  static const blockReasonUnspecified =
+      GenerateAnswerResponse_InputFeedback_BlockReason(
+        'BLOCK_REASON_UNSPECIFIED',
+      );
+
+  /// Input was blocked due to safety reasons. Inspect
+  /// `safety_ratings` to understand which safety category blocked it.
+  static const safety = GenerateAnswerResponse_InputFeedback_BlockReason(
+    'SAFETY',
+  );
+
+  /// Input was blocked due to other reasons.
+  static const other = GenerateAnswerResponse_InputFeedback_BlockReason(
+    'OTHER',
+  );
+
+  const GenerateAnswerResponse_InputFeedback_BlockReason(super.value);
+
+  factory GenerateAnswerResponse_InputFeedback_BlockReason.fromJson(
+    String json,
+  ) => GenerateAnswerResponse_InputFeedback_BlockReason(json);
+
+  @override
+  String toString() => 'BlockReason.$value';
+}
+
 /// Request containing the `Content` for the model to embed.
 final class EmbedContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.EmbedContentRequest';
+      'google.ai.generativelanguage.v1beta.EmbedContentRequest';
 
   /// Required. The model's resource name. This serves as an ID for the Model to
   /// use.
@@ -1560,7 +5062,7 @@ final class EmbedContentRequest extends ProtoMessage {
 /// A list of floats representing an embedding.
 final class ContentEmbedding extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.ContentEmbedding';
+      'google.ai.generativelanguage.v1beta.ContentEmbedding';
 
   /// The embedding values.
   final List<double>? values;
@@ -1583,7 +5085,7 @@ final class ContentEmbedding extends ProtoMessage {
 /// The response to an `EmbedContentRequest`.
 final class EmbedContentResponse extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.EmbedContentResponse';
+      'google.ai.generativelanguage.v1beta.EmbedContentResponse';
 
   /// Output only. The embedding generated from the input content.
   final ContentEmbedding? embedding;
@@ -1608,7 +5110,7 @@ final class EmbedContentResponse extends ProtoMessage {
 /// Batch request to get embeddings from the model for a list of prompts.
 final class BatchEmbedContentsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.BatchEmbedContentsRequest';
+      'google.ai.generativelanguage.v1beta.BatchEmbedContentsRequest';
 
   /// Required. The model's resource name. This serves as an ID for the Model to
   /// use.
@@ -1653,7 +5155,7 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
 /// The response to a `BatchEmbedContentsRequest`.
 final class BatchEmbedContentsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.BatchEmbedContentsResponse';
+      'google.ai.generativelanguage.v1beta.BatchEmbedContentsResponse';
 
   /// Output only. The embeddings for each request, in the same order as provided
   /// in the batch request.
@@ -1685,7 +5187,7 @@ final class BatchEmbedContentsResponse extends ProtoMessage {
 /// `token_count`.
 final class CountTokensRequest extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.CountTokensRequest';
+      'google.ai.generativelanguage.v1beta.CountTokensRequest';
 
   /// Required. The model's resource name. This serves as an ID for the Model to
   /// use.
@@ -1748,27 +5250,40 @@ final class CountTokensRequest extends ProtoMessage {
 /// It returns the model's `token_count` for the `prompt`.
 final class CountTokensResponse extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.CountTokensResponse';
+      'google.ai.generativelanguage.v1beta.CountTokensResponse';
 
   /// The number of tokens that the `Model` tokenizes the `prompt` into. Always
   /// non-negative.
   final int? totalTokens;
 
-  CountTokensResponse({this.totalTokens}) : super(fullyQualifiedName);
+  /// Number of tokens in the cached part of the prompt (the cached content).
+  final int? cachedContentTokenCount;
+
+  CountTokensResponse({this.totalTokens, this.cachedContentTokenCount})
+    : super(fullyQualifiedName);
 
   factory CountTokensResponse.fromJson(Map<String, dynamic> json) {
-    return CountTokensResponse(totalTokens: json['totalTokens']);
+    return CountTokensResponse(
+      totalTokens: json['totalTokens'],
+      cachedContentTokenCount: json['cachedContentTokenCount'],
+    );
   }
 
   @override
   Object toJson() {
-    return {if (totalTokens != null) 'totalTokens': totalTokens};
+    return {
+      if (totalTokens != null) 'totalTokens': totalTokens,
+      if (cachedContentTokenCount != null)
+        'cachedContentTokenCount': cachedContentTokenCount,
+    };
   }
 
   @override
   String toString() {
     final contents = [
       if (totalTokens != null) 'totalTokens=$totalTokens',
+      if (cachedContentTokenCount != null)
+        'cachedContentTokenCount=$cachedContentTokenCount',
     ].join(',');
     return 'CountTokensResponse($contents)';
   }
@@ -1777,7 +5292,7 @@ final class CountTokensResponse extends ProtoMessage {
 /// Information about a Generative Language Model.
 final class Model extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.Model';
+      'google.ai.generativelanguage.v1beta.Model';
 
   /// Required. The resource name of the `Model`. Refer to [Model
   /// variants](https://ai.google.dev/gemini-api/docs/models/gemini#model-variations)
@@ -1931,7 +5446,7 @@ final class Model extends ProtoMessage {
 /// Request for getting information about a specific Model.
 final class GetModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.GetModelRequest';
+      'google.ai.generativelanguage.v1beta.GetModelRequest';
 
   /// Required. The resource name of the model.
   ///
@@ -1961,7 +5476,7 @@ final class GetModelRequest extends ProtoMessage {
 /// Request for listing all Models.
 final class ListModelsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.ListModelsRequest';
+      'google.ai.generativelanguage.v1beta.ListModelsRequest';
 
   /// The maximum number of `Models` to return (per page).
   ///
@@ -2010,7 +5525,7 @@ final class ListModelsRequest extends ProtoMessage {
 /// Response from `ListModel` containing a paginated list of Models.
 final class ListModelsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.ListModelsResponse';
+      'google.ai.generativelanguage.v1beta.ListModelsResponse';
 
   /// The returned Models.
   final List<Model>? models;
@@ -2047,6 +5562,2472 @@ final class ListModelsResponse extends ProtoMessage {
   }
 }
 
+/// Request for getting information about a specific Model.
+final class GetTunedModelRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetTunedModelRequest';
+
+  /// Required. The resource name of the model.
+  ///
+  /// Format: `tunedModels/my-model-id`
+  final String name;
+
+  GetTunedModelRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetTunedModelRequest.fromJson(Map<String, dynamic> json) {
+    return GetTunedModelRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetTunedModelRequest($contents)';
+  }
+}
+
+/// Request for listing TunedModels.
+final class ListTunedModelsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListTunedModelsRequest';
+
+  /// Optional. The maximum number of `TunedModels` to return (per page).
+  /// The service may return fewer tuned models.
+  ///
+  /// If unspecified, at most 10 tuned models will be returned.
+  /// This method returns at most 1000 models per page, even if you pass a larger
+  /// page_size.
+  final int? pageSize;
+
+  /// Optional. A page token, received from a previous `ListTunedModels` call.
+  ///
+  /// Provide the `page_token` returned by one request as an argument to the next
+  /// request to retrieve the next page.
+  ///
+  /// When paginating, all other parameters provided to `ListTunedModels`
+  /// must match the call that provided the page token.
+  final String? pageToken;
+
+  /// Optional. A filter is a full text search over the tuned model's description
+  /// and display name. By default, results will not include tuned models shared
+  /// with everyone.
+  ///
+  /// Additional operators:
+  ///   - owner:me
+  ///   - writers:me
+  ///   - readers:me
+  ///   - readers:everyone
+  ///
+  /// Examples:
+  ///   "owner:me" returns all tuned models to which caller has owner role
+  ///   "readers:me" returns all tuned models to which caller has reader role
+  ///   "readers:everyone" returns all tuned models that are shared with everyone
+  final String? filter;
+
+  ListTunedModelsRequest({this.pageSize, this.pageToken, this.filter})
+    : super(fullyQualifiedName);
+
+  factory ListTunedModelsRequest.fromJson(Map<String, dynamic> json) {
+    return ListTunedModelsRequest(
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+      filter: json['filter'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+      if (filter != null) 'filter': filter,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+      if (filter != null) 'filter=$filter',
+    ].join(',');
+    return 'ListTunedModelsRequest($contents)';
+  }
+}
+
+/// Response from `ListTunedModels` containing a paginated list of Models.
+final class ListTunedModelsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListTunedModelsResponse';
+
+  /// The returned Models.
+  final List<TunedModel>? tunedModels;
+
+  /// A token, which can be sent as `page_token` to retrieve the next page.
+  ///
+  /// If this field is omitted, there are no more pages.
+  final String? nextPageToken;
+
+  ListTunedModelsResponse({this.tunedModels, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListTunedModelsResponse.fromJson(Map<String, dynamic> json) {
+    return ListTunedModelsResponse(
+      tunedModels: decodeListMessage(json['tunedModels'], TunedModel.fromJson),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (tunedModels != null) 'tunedModels': encodeList(tunedModels),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListTunedModelsResponse($contents)';
+  }
+}
+
+/// Request to create a TunedModel.
+final class CreateTunedModelRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateTunedModelRequest';
+
+  /// Optional. The unique id for the tuned model if specified.
+  /// This value should be up to 40 characters, the first character must be a
+  /// letter, the last could be a letter or a number. The id must match the
+  /// regular expression: `[a-z]([a-z0-9-]{0,38}[a-z0-9])?`.
+  final String? tunedModelId;
+
+  /// Required. The tuned model to create.
+  final TunedModel tunedModel;
+
+  CreateTunedModelRequest({this.tunedModelId, required this.tunedModel})
+    : super(fullyQualifiedName);
+
+  factory CreateTunedModelRequest.fromJson(Map<String, dynamic> json) {
+    return CreateTunedModelRequest(
+      tunedModelId: json['tunedModelId'],
+      tunedModel: decode(json['tunedModel'], TunedModel.fromJson)!,
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (tunedModelId != null) 'tunedModelId': tunedModelId,
+      'tunedModel': tunedModel.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (tunedModelId != null) 'tunedModelId=$tunedModelId',
+    ].join(',');
+    return 'CreateTunedModelRequest($contents)';
+  }
+}
+
+/// Metadata about the state and progress of creating a tuned model returned from
+/// the long-running operation
+final class CreateTunedModelMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateTunedModelMetadata';
+
+  /// Name of the tuned model associated with the tuning operation.
+  final String? tunedModel;
+
+  /// The total number of tuning steps.
+  final int? totalSteps;
+
+  /// The number of steps completed.
+  final int? completedSteps;
+
+  /// The completed percentage for the tuning operation.
+  final double? completedPercent;
+
+  /// Metrics collected during tuning.
+  final List<TuningSnapshot>? snapshots;
+
+  CreateTunedModelMetadata({
+    this.tunedModel,
+    this.totalSteps,
+    this.completedSteps,
+    this.completedPercent,
+    this.snapshots,
+  }) : super(fullyQualifiedName);
+
+  factory CreateTunedModelMetadata.fromJson(Map<String, dynamic> json) {
+    return CreateTunedModelMetadata(
+      tunedModel: json['tunedModel'],
+      totalSteps: json['totalSteps'],
+      completedSteps: json['completedSteps'],
+      completedPercent: decodeDouble(json['completedPercent']),
+      snapshots: decodeListMessage(json['snapshots'], TuningSnapshot.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (tunedModel != null) 'tunedModel': tunedModel,
+      if (totalSteps != null) 'totalSteps': totalSteps,
+      if (completedSteps != null) 'completedSteps': completedSteps,
+      if (completedPercent != null)
+        'completedPercent': encodeDouble(completedPercent),
+      if (snapshots != null) 'snapshots': encodeList(snapshots),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (tunedModel != null) 'tunedModel=$tunedModel',
+      if (totalSteps != null) 'totalSteps=$totalSteps',
+      if (completedSteps != null) 'completedSteps=$completedSteps',
+      if (completedPercent != null) 'completedPercent=$completedPercent',
+    ].join(',');
+    return 'CreateTunedModelMetadata($contents)';
+  }
+}
+
+/// Request to update a TunedModel.
+final class UpdateTunedModelRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UpdateTunedModelRequest';
+
+  /// Required. The tuned model to update.
+  final TunedModel tunedModel;
+
+  /// Optional. The list of fields to update.
+  final FieldMask? updateMask;
+
+  UpdateTunedModelRequest({required this.tunedModel, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdateTunedModelRequest.fromJson(Map<String, dynamic> json) {
+    return UpdateTunedModelRequest(
+      tunedModel: decode(json['tunedModel'], TunedModel.fromJson)!,
+      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'tunedModel': tunedModel.toJson(),
+      if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'UpdateTunedModelRequest()';
+}
+
+/// Request to delete a TunedModel.
+final class DeleteTunedModelRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeleteTunedModelRequest';
+
+  /// Required. The resource name of the model.
+  /// Format: `tunedModels/my-model-id`
+  final String name;
+
+  DeleteTunedModelRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeleteTunedModelRequest.fromJson(Map<String, dynamic> json) {
+    return DeleteTunedModelRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'DeleteTunedModelRequest($contents)';
+  }
+}
+
+/// Permission resource grants user, group or the rest of the world access to the
+/// PaLM API resource (e.g. a tuned model, corpus).
+///
+/// A role is a collection of permitted operations that allows users to perform
+/// specific actions on PaLM API resources. To make them available to users,
+/// groups, or service accounts, you assign roles. When you assign a role, you
+/// grant permissions that the role contains.
+///
+/// There are three concentric roles. Each role is a superset of the previous
+/// role's permitted operations:
+///
+/// - reader can use the resource (e.g. tuned model, corpus) for inference
+/// - writer has reader's permissions and additionally can edit and share
+/// - owner has writer's permissions and additionally can delete
+final class Permission extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Permission';
+
+  /// Output only. Identifier. The permission name. A unique name will be
+  /// generated on create. Examples:
+  ///     tunedModels/{tuned_model}/permissions/{permission}
+  ///     corpora/{corpus}/permissions/{permission}
+  /// Output only.
+  final String? name;
+
+  /// Optional. Immutable. The type of the grantee.
+  final Permission_GranteeType? granteeType;
+
+  /// Optional. Immutable. The email address of the user of group which this
+  /// permission refers. Field is not set when permission's grantee type is
+  /// EVERYONE.
+  final String? emailAddress;
+
+  /// Required. The role granted by this permission.
+  final Permission_Role? role;
+
+  Permission({this.name, this.granteeType, this.emailAddress, this.role})
+    : super(fullyQualifiedName);
+
+  factory Permission.fromJson(Map<String, dynamic> json) {
+    return Permission(
+      name: json['name'],
+      granteeType: decodeEnum(
+        json['granteeType'],
+        Permission_GranteeType.fromJson,
+      ),
+      emailAddress: json['emailAddress'],
+      role: decodeEnum(json['role'], Permission_Role.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (name != null) 'name': name,
+      if (granteeType != null) 'granteeType': granteeType!.toJson(),
+      if (emailAddress != null) 'emailAddress': emailAddress,
+      if (role != null) 'role': role!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (granteeType != null) 'granteeType=$granteeType',
+      if (emailAddress != null) 'emailAddress=$emailAddress',
+      if (role != null) 'role=$role',
+    ].join(',');
+    return 'Permission($contents)';
+  }
+}
+
+/// Defines types of the grantee of this permission.
+final class Permission_GranteeType extends ProtoEnum {
+  /// The default value. This value is unused.
+  static const granteeTypeUnspecified = Permission_GranteeType(
+    'GRANTEE_TYPE_UNSPECIFIED',
+  );
+
+  /// Represents a user. When set, you must provide email_address for the user.
+  static const user = Permission_GranteeType('USER');
+
+  /// Represents a group. When set, you must provide email_address for the
+  /// group.
+  static const group = Permission_GranteeType('GROUP');
+
+  /// Represents access to everyone. No extra information is required.
+  static const everyone = Permission_GranteeType('EVERYONE');
+
+  const Permission_GranteeType(super.value);
+
+  factory Permission_GranteeType.fromJson(String json) =>
+      Permission_GranteeType(json);
+
+  @override
+  String toString() => 'GranteeType.$value';
+}
+
+/// Defines the role granted by this permission.
+final class Permission_Role extends ProtoEnum {
+  /// The default value. This value is unused.
+  static const roleUnspecified = Permission_Role('ROLE_UNSPECIFIED');
+
+  /// Owner can use, update, share and delete the resource.
+  static const owner = Permission_Role('OWNER');
+
+  /// Writer can use, update and share the resource.
+  static const writer = Permission_Role('WRITER');
+
+  /// Reader can use the resource.
+  static const reader = Permission_Role('READER');
+
+  const Permission_Role(super.value);
+
+  factory Permission_Role.fromJson(String json) => Permission_Role(json);
+
+  @override
+  String toString() => 'Role.$value';
+}
+
+/// Request to create a `Permission`.
+final class CreatePermissionRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreatePermissionRequest';
+
+  /// Required. The parent resource of the `Permission`.
+  /// Formats:
+  ///    `tunedModels/{tuned_model}`
+  ///    `corpora/{corpus}`
+  final String parent;
+
+  /// Required. The permission to create.
+  final Permission permission;
+
+  CreatePermissionRequest({required this.parent, required this.permission})
+    : super(fullyQualifiedName);
+
+  factory CreatePermissionRequest.fromJson(Map<String, dynamic> json) {
+    return CreatePermissionRequest(
+      parent: json['parent'],
+      permission: decode(json['permission'], Permission.fromJson)!,
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'parent': parent, 'permission': permission.toJson()};
+  }
+
+  @override
+  String toString() {
+    final contents = ['parent=$parent'].join(',');
+    return 'CreatePermissionRequest($contents)';
+  }
+}
+
+/// Request for getting information about a specific `Permission`.
+final class GetPermissionRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetPermissionRequest';
+
+  /// Required. The resource name of the permission.
+  ///
+  /// Formats:
+  ///    `tunedModels/{tuned_model}/permissions/{permission}`
+  ///    `corpora/{corpus}/permissions/{permission}`
+  final String name;
+
+  GetPermissionRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetPermissionRequest.fromJson(Map<String, dynamic> json) {
+    return GetPermissionRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetPermissionRequest($contents)';
+  }
+}
+
+/// Request for listing permissions.
+final class ListPermissionsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListPermissionsRequest';
+
+  /// Required. The parent resource of the permissions.
+  /// Formats:
+  ///    `tunedModels/{tuned_model}`
+  ///    `corpora/{corpus}`
+  final String parent;
+
+  /// Optional. The maximum number of `Permission`s to return (per page).
+  /// The service may return fewer permissions.
+  ///
+  /// If unspecified, at most 10 permissions will be returned.
+  /// This method returns at most 1000 permissions per page, even if you pass
+  /// larger page_size.
+  final int? pageSize;
+
+  /// Optional. A page token, received from a previous `ListPermissions` call.
+  ///
+  /// Provide the `page_token` returned by one request as an argument to the
+  /// next request to retrieve the next page.
+  ///
+  /// When paginating, all other parameters provided to `ListPermissions`
+  /// must match the call that provided the page token.
+  final String? pageToken;
+
+  ListPermissionsRequest({required this.parent, this.pageSize, this.pageToken})
+    : super(fullyQualifiedName);
+
+  factory ListPermissionsRequest.fromJson(Map<String, dynamic> json) {
+    return ListPermissionsRequest(
+      parent: json['parent'],
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'parent': parent,
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'parent=$parent',
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+    ].join(',');
+    return 'ListPermissionsRequest($contents)';
+  }
+}
+
+/// Response from `ListPermissions` containing a paginated list of
+/// permissions.
+final class ListPermissionsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListPermissionsResponse';
+
+  /// Returned permissions.
+  final List<Permission>? permissions;
+
+  /// A token, which can be sent as `page_token` to retrieve the next page.
+  ///
+  /// If this field is omitted, there are no more pages.
+  final String? nextPageToken;
+
+  ListPermissionsResponse({this.permissions, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListPermissionsResponse.fromJson(Map<String, dynamic> json) {
+    return ListPermissionsResponse(
+      permissions: decodeListMessage(json['permissions'], Permission.fromJson),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (permissions != null) 'permissions': encodeList(permissions),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListPermissionsResponse($contents)';
+  }
+}
+
+/// Request to update the `Permission`.
+final class UpdatePermissionRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UpdatePermissionRequest';
+
+  /// Required. The permission to update.
+  ///
+  /// The permission's `name` field is used to identify the permission to update.
+  final Permission permission;
+
+  /// Required. The list of fields to update. Accepted ones:
+  ///  - role (`Permission.role` field)
+  final FieldMask? updateMask;
+
+  UpdatePermissionRequest({required this.permission, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdatePermissionRequest.fromJson(Map<String, dynamic> json) {
+    return UpdatePermissionRequest(
+      permission: decode(json['permission'], Permission.fromJson)!,
+      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'permission': permission.toJson(),
+      if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'UpdatePermissionRequest()';
+}
+
+/// Request to delete the `Permission`.
+final class DeletePermissionRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeletePermissionRequest';
+
+  /// Required. The resource name of the permission.
+  /// Formats:
+  ///    `tunedModels/{tuned_model}/permissions/{permission}`
+  ///    `corpora/{corpus}/permissions/{permission}`
+  final String name;
+
+  DeletePermissionRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeletePermissionRequest.fromJson(Map<String, dynamic> json) {
+    return DeletePermissionRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'DeletePermissionRequest($contents)';
+  }
+}
+
+/// Request to transfer the ownership of the tuned model.
+final class TransferOwnershipRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TransferOwnershipRequest';
+
+  /// Required. The resource name of the tuned model to transfer ownership.
+  ///
+  /// Format: `tunedModels/my-model-id`
+  final String name;
+
+  /// Required. The email address of the user to whom the tuned model is being
+  /// transferred to.
+  final String? emailAddress;
+
+  TransferOwnershipRequest({required this.name, this.emailAddress})
+    : super(fullyQualifiedName);
+
+  factory TransferOwnershipRequest.fromJson(Map<String, dynamic> json) {
+    return TransferOwnershipRequest(
+      name: json['name'],
+      emailAddress: json['emailAddress'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'name': name,
+      if (emailAddress != null) 'emailAddress': emailAddress,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'name=$name',
+      if (emailAddress != null) 'emailAddress=$emailAddress',
+    ].join(',');
+    return 'TransferOwnershipRequest($contents)';
+  }
+}
+
+/// Response from `TransferOwnership`.
+final class TransferOwnershipResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TransferOwnershipResponse';
+
+  TransferOwnershipResponse() : super(fullyQualifiedName);
+
+  factory TransferOwnershipResponse.fromJson(Map<String, dynamic> json) {
+    return TransferOwnershipResponse();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'TransferOwnershipResponse()';
+}
+
+/// Request message for
+/// `PredictionService.Predict`.
+final class PredictRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PredictRequest';
+
+  /// Required. The name of the model for prediction.
+  /// Format: `name=models/{model}`.
+  final String model;
+
+  /// Required. The instances that are the input to the prediction call.
+  final List<Value>? instances;
+
+  /// Optional. The parameters that govern the prediction call.
+  final Value? parameters;
+
+  PredictRequest({required this.model, this.instances, this.parameters})
+    : super(fullyQualifiedName);
+
+  factory PredictRequest.fromJson(Map<String, dynamic> json) {
+    return PredictRequest(
+      model: json['model'],
+      instances: decodeListMessageCustom(json['instances'], Value.fromJson),
+      parameters: decodeCustom(json['parameters'], Value.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'model': model,
+      if (instances != null) 'instances': encodeList(instances),
+      if (parameters != null) 'parameters': parameters!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = ['model=$model'].join(',');
+    return 'PredictRequest($contents)';
+  }
+}
+
+/// Response message for [PredictionService.Predict].
+final class PredictResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PredictResponse';
+
+  /// The outputs of the prediction call.
+  final List<Value>? predictions;
+
+  PredictResponse({this.predictions}) : super(fullyQualifiedName);
+
+  factory PredictResponse.fromJson(Map<String, dynamic> json) {
+    return PredictResponse(
+      predictions: decodeListMessageCustom(json['predictions'], Value.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (predictions != null) 'predictions': encodeList(predictions)};
+  }
+
+  @override
+  String toString() => 'PredictResponse()';
+}
+
+/// A `Corpus` is a collection of `Document`s.
+/// A project can create up to 5 corpora.
+final class Corpus extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Corpus';
+
+  /// Immutable. Identifier. The `Corpus` resource name. The ID (name excluding
+  /// the "corpora/" prefix) can contain up to 40 characters that are lowercase
+  /// alphanumeric or dashes
+  /// (-). The ID cannot start or end with a dash. If the name is empty on
+  /// create, a unique name will be derived from `display_name` along with a 12
+  /// character random suffix.
+  /// Example: `corpora/my-awesome-corpora-123a456b789c`
+  final String? name;
+
+  /// Optional. The human-readable display name for the `Corpus`. The display
+  /// name must be no more than 512 characters in length, including spaces.
+  /// Example: "Docs on Semantic Retriever"
+  final String? displayName;
+
+  /// Output only. The Timestamp of when the `Corpus` was created.
+  final Timestamp? createTime;
+
+  /// Output only. The Timestamp of when the `Corpus` was last updated.
+  final Timestamp? updateTime;
+
+  Corpus({this.name, this.displayName, this.createTime, this.updateTime})
+    : super(fullyQualifiedName);
+
+  factory Corpus.fromJson(Map<String, dynamic> json) {
+    return Corpus(
+      name: json['name'],
+      displayName: json['displayName'],
+      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (name != null) 'name': name,
+      if (displayName != null) 'displayName': displayName,
+      if (createTime != null) 'createTime': createTime!.toJson(),
+      if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (displayName != null) 'displayName=$displayName',
+    ].join(',');
+    return 'Corpus($contents)';
+  }
+}
+
+/// A `Document` is a collection of `Chunk`s.
+/// A `Corpus` can have a maximum of 10,000 `Document`s.
+final class Document extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Document';
+
+  /// Immutable. Identifier. The `Document` resource name. The ID (name excluding
+  /// the "corpora/*/documents/" prefix) can contain up to 40 characters that are
+  /// lowercase alphanumeric or dashes (-). The ID cannot start or end with a
+  /// dash. If the name is empty on create, a unique name will be derived from
+  /// `display_name` along with a 12 character random suffix.
+  /// Example: `corpora/{corpus_id}/documents/my-awesome-doc-123a456b789c`
+  final String? name;
+
+  /// Optional. The human-readable display name for the `Document`. The display
+  /// name must be no more than 512 characters in length, including spaces.
+  /// Example: "Semantic Retriever Documentation"
+  final String? displayName;
+
+  /// Optional. User provided custom metadata stored as key-value pairs used for
+  /// querying. A `Document` can have a maximum of 20 `CustomMetadata`.
+  final List<CustomMetadata>? customMetadata;
+
+  /// Output only. The Timestamp of when the `Document` was last updated.
+  final Timestamp? updateTime;
+
+  /// Output only. The Timestamp of when the `Document` was created.
+  final Timestamp? createTime;
+
+  Document({
+    this.name,
+    this.displayName,
+    this.customMetadata,
+    this.updateTime,
+    this.createTime,
+  }) : super(fullyQualifiedName);
+
+  factory Document.fromJson(Map<String, dynamic> json) {
+    return Document(
+      name: json['name'],
+      displayName: json['displayName'],
+      customMetadata: decodeListMessage(
+        json['customMetadata'],
+        CustomMetadata.fromJson,
+      ),
+      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (name != null) 'name': name,
+      if (displayName != null) 'displayName': displayName,
+      if (customMetadata != null) 'customMetadata': encodeList(customMetadata),
+      if (updateTime != null) 'updateTime': updateTime!.toJson(),
+      if (createTime != null) 'createTime': createTime!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (displayName != null) 'displayName=$displayName',
+    ].join(',');
+    return 'Document($contents)';
+  }
+}
+
+/// User provided string values assigned to a single metadata key.
+final class StringList extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.StringList';
+
+  /// The string values of the metadata to store.
+  final List<String>? values;
+
+  StringList({this.values}) : super(fullyQualifiedName);
+
+  factory StringList.fromJson(Map<String, dynamic> json) {
+    return StringList(values: decodeList(json['values']));
+  }
+
+  @override
+  Object toJson() {
+    return {if (values != null) 'values': values};
+  }
+
+  @override
+  String toString() => 'StringList()';
+}
+
+/// User provided metadata stored as key-value pairs.
+final class CustomMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CustomMetadata';
+
+  /// The string value of the metadata to store.
+  final String? stringValue;
+
+  /// The StringList value of the metadata to store.
+  final StringList? stringListValue;
+
+  /// The numeric value of the metadata to store.
+  final double? numericValue;
+
+  /// Required. The key of the metadata to store.
+  final String? key;
+
+  CustomMetadata({
+    this.stringValue,
+    this.stringListValue,
+    this.numericValue,
+    this.key,
+  }) : super(fullyQualifiedName);
+
+  factory CustomMetadata.fromJson(Map<String, dynamic> json) {
+    return CustomMetadata(
+      stringValue: json['stringValue'],
+      stringListValue: decode(json['stringListValue'], StringList.fromJson),
+      numericValue: decodeDouble(json['numericValue']),
+      key: json['key'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (stringValue != null) 'stringValue': stringValue,
+      if (stringListValue != null) 'stringListValue': stringListValue!.toJson(),
+      if (numericValue != null) 'numericValue': encodeDouble(numericValue),
+      if (key != null) 'key': key,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (stringValue != null) 'stringValue=$stringValue',
+      if (numericValue != null) 'numericValue=$numericValue',
+      if (key != null) 'key=$key',
+    ].join(',');
+    return 'CustomMetadata($contents)';
+  }
+}
+
+/// User provided filter to limit retrieval based on `Chunk` or `Document` level
+/// metadata values.
+/// Example (genre = drama OR genre = action):
+///   key = "document.custom_metadata.genre"
+///   conditions = [{string_value = "drama", operation = EQUAL},
+///                 {string_value = "action", operation = EQUAL}]
+final class MetadataFilter extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.MetadataFilter';
+
+  /// Required. The key of the metadata to filter on.
+  final String? key;
+
+  /// Required. The `Condition`s for the given key that will trigger this filter.
+  /// Multiple `Condition`s are joined by logical ORs.
+  final List<Condition>? conditions;
+
+  MetadataFilter({this.key, this.conditions}) : super(fullyQualifiedName);
+
+  factory MetadataFilter.fromJson(Map<String, dynamic> json) {
+    return MetadataFilter(
+      key: json['key'],
+      conditions: decodeListMessage(json['conditions'], Condition.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (key != null) 'key': key,
+      if (conditions != null) 'conditions': encodeList(conditions),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (key != null) 'key=$key'].join(',');
+    return 'MetadataFilter($contents)';
+  }
+}
+
+/// Filter condition applicable to a single key.
+final class Condition extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Condition';
+
+  /// The string value to filter the metadata on.
+  final String? stringValue;
+
+  /// The numeric value to filter the metadata on.
+  final double? numericValue;
+
+  /// Required. Operator applied to the given key-value pair to trigger the
+  /// condition.
+  final Condition_Operator? operation;
+
+  Condition({this.stringValue, this.numericValue, this.operation})
+    : super(fullyQualifiedName);
+
+  factory Condition.fromJson(Map<String, dynamic> json) {
+    return Condition(
+      stringValue: json['stringValue'],
+      numericValue: decodeDouble(json['numericValue']),
+      operation: decodeEnum(json['operation'], Condition_Operator.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (stringValue != null) 'stringValue': stringValue,
+      if (numericValue != null) 'numericValue': encodeDouble(numericValue),
+      if (operation != null) 'operation': operation!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (stringValue != null) 'stringValue=$stringValue',
+      if (numericValue != null) 'numericValue=$numericValue',
+      if (operation != null) 'operation=$operation',
+    ].join(',');
+    return 'Condition($contents)';
+  }
+}
+
+/// Defines the valid operators that can be applied to a key-value pair.
+final class Condition_Operator extends ProtoEnum {
+  /// The default value. This value is unused.
+  static const operatorUnspecified = Condition_Operator('OPERATOR_UNSPECIFIED');
+
+  /// Supported by numeric.
+  static const less = Condition_Operator('LESS');
+
+  /// Supported by numeric.
+  static const lessEqual = Condition_Operator('LESS_EQUAL');
+
+  /// Supported by numeric & string.
+  static const equal = Condition_Operator('EQUAL');
+
+  /// Supported by numeric.
+  static const greaterEqual = Condition_Operator('GREATER_EQUAL');
+
+  /// Supported by numeric.
+  static const greater = Condition_Operator('GREATER');
+
+  /// Supported by numeric & string.
+  static const notEqual = Condition_Operator('NOT_EQUAL');
+
+  /// Supported by string only when `CustomMetadata` value type for the given
+  /// key has a `string_list_value`.
+  static const includes = Condition_Operator('INCLUDES');
+
+  /// Supported by string only when `CustomMetadata` value type for the given
+  /// key has a `string_list_value`.
+  static const excludes = Condition_Operator('EXCLUDES');
+
+  const Condition_Operator(super.value);
+
+  factory Condition_Operator.fromJson(String json) => Condition_Operator(json);
+
+  @override
+  String toString() => 'Operator.$value';
+}
+
+/// A `Chunk` is a subpart of a `Document` that is treated as an independent unit
+/// for the purposes of vector representation and storage.
+/// A `Corpus` can have a maximum of 1 million `Chunk`s.
+final class Chunk extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Chunk';
+
+  /// Immutable. Identifier. The `Chunk` resource name. The ID (name excluding
+  /// the "corpora/*/documents/*/chunks/" prefix) can contain up to 40 characters
+  /// that are lowercase alphanumeric or dashes (-). The ID cannot start or end
+  /// with a dash. If the name is empty on create, a random 12-character unique
+  /// ID will be generated.
+  /// Example: `corpora/{corpus_id}/documents/{document_id}/chunks/123a456b789c`
+  final String? name;
+
+  /// Required. The content for the `Chunk`, such as the text string.
+  /// The maximum number of tokens per chunk is 2043.
+  final ChunkData? data;
+
+  /// Optional. User provided custom metadata stored as key-value pairs.
+  /// The maximum number of `CustomMetadata` per chunk is 20.
+  final List<CustomMetadata>? customMetadata;
+
+  /// Output only. The Timestamp of when the `Chunk` was created.
+  final Timestamp? createTime;
+
+  /// Output only. The Timestamp of when the `Chunk` was last updated.
+  final Timestamp? updateTime;
+
+  /// Output only. Current state of the `Chunk`.
+  final Chunk_State? state;
+
+  Chunk({
+    this.name,
+    this.data,
+    this.customMetadata,
+    this.createTime,
+    this.updateTime,
+    this.state,
+  }) : super(fullyQualifiedName);
+
+  factory Chunk.fromJson(Map<String, dynamic> json) {
+    return Chunk(
+      name: json['name'],
+      data: decode(json['data'], ChunkData.fromJson),
+      customMetadata: decodeListMessage(
+        json['customMetadata'],
+        CustomMetadata.fromJson,
+      ),
+      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+      state: decodeEnum(json['state'], Chunk_State.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (name != null) 'name': name,
+      if (data != null) 'data': data!.toJson(),
+      if (customMetadata != null) 'customMetadata': encodeList(customMetadata),
+      if (createTime != null) 'createTime': createTime!.toJson(),
+      if (updateTime != null) 'updateTime': updateTime!.toJson(),
+      if (state != null) 'state': state!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (name != null) 'name=$name',
+      if (state != null) 'state=$state',
+    ].join(',');
+    return 'Chunk($contents)';
+  }
+}
+
+/// States for the lifecycle of a `Chunk`.
+final class Chunk_State extends ProtoEnum {
+  /// The default value. This value is used if the state is omitted.
+  static const stateUnspecified = Chunk_State('STATE_UNSPECIFIED');
+
+  /// `Chunk` is being processed (embedding and vector storage).
+  static const statePendingProcessing = Chunk_State('STATE_PENDING_PROCESSING');
+
+  /// `Chunk` is processed and available for querying.
+  static const stateActive = Chunk_State('STATE_ACTIVE');
+
+  /// `Chunk` failed processing.
+  static const stateFailed = Chunk_State('STATE_FAILED');
+
+  const Chunk_State(super.value);
+
+  factory Chunk_State.fromJson(String json) => Chunk_State(json);
+
+  @override
+  String toString() => 'State.$value';
+}
+
+/// Extracted data that represents the `Chunk` content.
+final class ChunkData extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ChunkData';
+
+  /// The `Chunk` content as a string.
+  /// The maximum number of tokens per chunk is 2043.
+  final String? stringValue;
+
+  ChunkData({this.stringValue}) : super(fullyQualifiedName);
+
+  factory ChunkData.fromJson(Map<String, dynamic> json) {
+    return ChunkData(stringValue: json['stringValue']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (stringValue != null) 'stringValue': stringValue};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (stringValue != null) 'stringValue=$stringValue',
+    ].join(',');
+    return 'ChunkData($contents)';
+  }
+}
+
+/// Request to create a `Corpus`.
+final class CreateCorpusRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateCorpusRequest';
+
+  /// Required. The `Corpus` to create.
+  final Corpus corpus;
+
+  CreateCorpusRequest({required this.corpus}) : super(fullyQualifiedName);
+
+  factory CreateCorpusRequest.fromJson(Map<String, dynamic> json) {
+    return CreateCorpusRequest(
+      corpus: decode(json['corpus'], Corpus.fromJson)!,
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'corpus': corpus.toJson()};
+  }
+
+  @override
+  String toString() => 'CreateCorpusRequest()';
+}
+
+/// Request for getting information about a specific `Corpus`.
+final class GetCorpusRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetCorpusRequest';
+
+  /// Required. The name of the `Corpus`.
+  /// Example: `corpora/my-corpus-123`
+  final String name;
+
+  GetCorpusRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetCorpusRequest.fromJson(Map<String, dynamic> json) {
+    return GetCorpusRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetCorpusRequest($contents)';
+  }
+}
+
+/// Request to update a `Corpus`.
+final class UpdateCorpusRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UpdateCorpusRequest';
+
+  /// Required. The `Corpus` to update.
+  final Corpus corpus;
+
+  /// Required. The list of fields to update.
+  /// Currently, this only supports updating `display_name`.
+  final FieldMask? updateMask;
+
+  UpdateCorpusRequest({required this.corpus, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdateCorpusRequest.fromJson(Map<String, dynamic> json) {
+    return UpdateCorpusRequest(
+      corpus: decode(json['corpus'], Corpus.fromJson)!,
+      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'corpus': corpus.toJson(),
+      if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'UpdateCorpusRequest()';
+}
+
+/// Request to delete a `Corpus`.
+final class DeleteCorpusRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeleteCorpusRequest';
+
+  /// Required. The resource name of the `Corpus`.
+  /// Example: `corpora/my-corpus-123`
+  final String name;
+
+  /// Optional. If set to true, any `Document`s and objects related to this
+  /// `Corpus` will also be deleted.
+  ///
+  /// If false (the default), a `FAILED_PRECONDITION` error will be returned if
+  /// `Corpus` contains any `Document`s.
+  final bool? force;
+
+  DeleteCorpusRequest({required this.name, this.force})
+    : super(fullyQualifiedName);
+
+  factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) {
+    return DeleteCorpusRequest(name: json['name'], force: json['force']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name, if (force != null) 'force': force};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'name=$name',
+      if (force != null) 'force=$force',
+    ].join(',');
+    return 'DeleteCorpusRequest($contents)';
+  }
+}
+
+/// Request for listing `Corpora`.
+final class ListCorporaRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListCorporaRequest';
+
+  /// Optional. The maximum number of `Corpora` to return (per page).
+  /// The service may return fewer `Corpora`.
+  ///
+  /// If unspecified, at most 10 `Corpora` will be returned.
+  /// The maximum size limit is 20 `Corpora` per page.
+  final int? pageSize;
+
+  /// Optional. A page token, received from a previous `ListCorpora` call.
+  ///
+  /// Provide the `next_page_token` returned in the response as an argument to
+  /// the next request to retrieve the next page.
+  ///
+  /// When paginating, all other parameters provided to `ListCorpora`
+  /// must match the call that provided the page token.
+  final String? pageToken;
+
+  ListCorporaRequest({this.pageSize, this.pageToken})
+    : super(fullyQualifiedName);
+
+  factory ListCorporaRequest.fromJson(Map<String, dynamic> json) {
+    return ListCorporaRequest(
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+    ].join(',');
+    return 'ListCorporaRequest($contents)';
+  }
+}
+
+/// Response from `ListCorpora` containing a paginated list of `Corpora`.
+/// The results are sorted by ascending `corpus.create_time`.
+final class ListCorporaResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListCorporaResponse';
+
+  /// The returned corpora.
+  final List<Corpus>? corpora;
+
+  /// A token, which can be sent as `page_token` to retrieve the next page.
+  /// If this field is omitted, there are no more pages.
+  final String? nextPageToken;
+
+  ListCorporaResponse({this.corpora, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListCorporaResponse.fromJson(Map<String, dynamic> json) {
+    return ListCorporaResponse(
+      corpora: decodeListMessage(json['corpora'], Corpus.fromJson),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (corpora != null) 'corpora': encodeList(corpora),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListCorporaResponse($contents)';
+  }
+}
+
+/// Request for querying a `Corpus`.
+final class QueryCorpusRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.QueryCorpusRequest';
+
+  /// Required. The name of the `Corpus` to query.
+  /// Example: `corpora/my-corpus-123`
+  final String name;
+
+  /// Required. Query string to perform semantic search.
+  final String? query;
+
+  /// Optional. Filter for `Chunk` and `Document` metadata. Each `MetadataFilter`
+  /// object should correspond to a unique key. Multiple `MetadataFilter` objects
+  /// are joined by logical "AND"s.
+  ///
+  /// Example query at document level:
+  /// (year >= 2020 OR year < 2010) AND (genre = drama OR genre = action)
+  ///
+  /// `MetadataFilter` object list:
+  ///  metadata_filters = [
+  ///  {key = "document.custom_metadata.year"
+  ///   conditions = [{int_value = 2020, operation = GREATER_EQUAL},
+  ///                 {int_value = 2010, operation = LESS}]},
+  ///  {key = "document.custom_metadata.year"
+  ///   conditions = [{int_value = 2020, operation = GREATER_EQUAL},
+  ///                 {int_value = 2010, operation = LESS}]},
+  ///  {key = "document.custom_metadata.genre"
+  ///   conditions = [{string_value = "drama", operation = EQUAL},
+  ///                 {string_value = "action", operation = EQUAL}]}]
+  ///
+  /// Example query at chunk level for a numeric range of values:
+  /// (year > 2015 AND year <= 2020)
+  ///
+  /// `MetadataFilter` object list:
+  ///  metadata_filters = [
+  ///  {key = "chunk.custom_metadata.year"
+  ///   conditions = [{int_value = 2015, operation = GREATER}]},
+  ///  {key = "chunk.custom_metadata.year"
+  ///   conditions = [{int_value = 2020, operation = LESS_EQUAL}]}]
+  ///
+  /// Note: "AND"s for the same key are only supported for numeric values. String
+  /// values only support "OR"s for the same key.
+  final List<MetadataFilter>? metadataFilters;
+
+  /// Optional. The maximum number of `Chunk`s to return.
+  /// The service may return fewer `Chunk`s.
+  ///
+  /// If unspecified, at most 10 `Chunk`s will be returned.
+  /// The maximum specified result count is 100.
+  final int? resultsCount;
+
+  QueryCorpusRequest({
+    required this.name,
+    this.query,
+    this.metadataFilters,
+    this.resultsCount,
+  }) : super(fullyQualifiedName);
+
+  factory QueryCorpusRequest.fromJson(Map<String, dynamic> json) {
+    return QueryCorpusRequest(
+      name: json['name'],
+      query: json['query'],
+      metadataFilters: decodeListMessage(
+        json['metadataFilters'],
+        MetadataFilter.fromJson,
+      ),
+      resultsCount: json['resultsCount'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'name': name,
+      if (query != null) 'query': query,
+      if (metadataFilters != null)
+        'metadataFilters': encodeList(metadataFilters),
+      if (resultsCount != null) 'resultsCount': resultsCount,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'name=$name',
+      if (query != null) 'query=$query',
+      if (resultsCount != null) 'resultsCount=$resultsCount',
+    ].join(',');
+    return 'QueryCorpusRequest($contents)';
+  }
+}
+
+/// Response from `QueryCorpus` containing a list of relevant chunks.
+final class QueryCorpusResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.QueryCorpusResponse';
+
+  /// The relevant chunks.
+  final List<RelevantChunk>? relevantChunks;
+
+  QueryCorpusResponse({this.relevantChunks}) : super(fullyQualifiedName);
+
+  factory QueryCorpusResponse.fromJson(Map<String, dynamic> json) {
+    return QueryCorpusResponse(
+      relevantChunks: decodeListMessage(
+        json['relevantChunks'],
+        RelevantChunk.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (relevantChunks != null) 'relevantChunks': encodeList(relevantChunks),
+    };
+  }
+
+  @override
+  String toString() => 'QueryCorpusResponse()';
+}
+
+/// The information for a chunk relevant to a query.
+final class RelevantChunk extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.RelevantChunk';
+
+  /// `Chunk` relevance to the query.
+  final double? chunkRelevanceScore;
+
+  /// `Chunk` associated with the query.
+  final Chunk? chunk;
+
+  RelevantChunk({this.chunkRelevanceScore, this.chunk})
+    : super(fullyQualifiedName);
+
+  factory RelevantChunk.fromJson(Map<String, dynamic> json) {
+    return RelevantChunk(
+      chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']),
+      chunk: decode(json['chunk'], Chunk.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (chunkRelevanceScore != null)
+        'chunkRelevanceScore': encodeDouble(chunkRelevanceScore),
+      if (chunk != null) 'chunk': chunk!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (chunkRelevanceScore != null)
+        'chunkRelevanceScore=$chunkRelevanceScore',
+    ].join(',');
+    return 'RelevantChunk($contents)';
+  }
+}
+
+/// Request to create a `Document`.
+final class CreateDocumentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateDocumentRequest';
+
+  /// Required. The name of the `Corpus` where this `Document` will be created.
+  /// Example: `corpora/my-corpus-123`
+  final String parent;
+
+  /// Required. The `Document` to create.
+  final Document document;
+
+  CreateDocumentRequest({required this.parent, required this.document})
+    : super(fullyQualifiedName);
+
+  factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) {
+    return CreateDocumentRequest(
+      parent: json['parent'],
+      document: decode(json['document'], Document.fromJson)!,
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'parent': parent, 'document': document.toJson()};
+  }
+
+  @override
+  String toString() {
+    final contents = ['parent=$parent'].join(',');
+    return 'CreateDocumentRequest($contents)';
+  }
+}
+
+/// Request for getting information about a specific `Document`.
+final class GetDocumentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetDocumentRequest';
+
+  /// Required. The name of the `Document` to retrieve.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String name;
+
+  GetDocumentRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetDocumentRequest.fromJson(Map<String, dynamic> json) {
+    return GetDocumentRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetDocumentRequest($contents)';
+  }
+}
+
+/// Request to update a `Document`.
+final class UpdateDocumentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UpdateDocumentRequest';
+
+  /// Required. The `Document` to update.
+  final Document document;
+
+  /// Required. The list of fields to update.
+  /// Currently, this only supports updating `display_name` and
+  /// `custom_metadata`.
+  final FieldMask? updateMask;
+
+  UpdateDocumentRequest({required this.document, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdateDocumentRequest.fromJson(Map<String, dynamic> json) {
+    return UpdateDocumentRequest(
+      document: decode(json['document'], Document.fromJson)!,
+      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'document': document.toJson(),
+      if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'UpdateDocumentRequest()';
+}
+
+/// Request to delete a `Document`.
+final class DeleteDocumentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeleteDocumentRequest';
+
+  /// Required. The resource name of the `Document` to delete.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String name;
+
+  /// Optional. If set to true, any `Chunk`s and objects related to this
+  /// `Document` will also be deleted.
+  ///
+  /// If false (the default), a `FAILED_PRECONDITION` error will be returned if
+  /// `Document` contains any `Chunk`s.
+  final bool? force;
+
+  DeleteDocumentRequest({required this.name, this.force})
+    : super(fullyQualifiedName);
+
+  factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) {
+    return DeleteDocumentRequest(name: json['name'], force: json['force']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name, if (force != null) 'force': force};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'name=$name',
+      if (force != null) 'force=$force',
+    ].join(',');
+    return 'DeleteDocumentRequest($contents)';
+  }
+}
+
+/// Request for listing `Document`s.
+final class ListDocumentsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListDocumentsRequest';
+
+  /// Required. The name of the `Corpus` containing `Document`s.
+  /// Example: `corpora/my-corpus-123`
+  final String parent;
+
+  /// Optional. The maximum number of `Document`s to return (per page).
+  /// The service may return fewer `Document`s.
+  ///
+  /// If unspecified, at most 10 `Document`s will be returned.
+  /// The maximum size limit is 20 `Document`s per page.
+  final int? pageSize;
+
+  /// Optional. A page token, received from a previous `ListDocuments` call.
+  ///
+  /// Provide the `next_page_token` returned in the response as an argument to
+  /// the next request to retrieve the next page.
+  ///
+  /// When paginating, all other parameters provided to `ListDocuments`
+  /// must match the call that provided the page token.
+  final String? pageToken;
+
+  ListDocumentsRequest({required this.parent, this.pageSize, this.pageToken})
+    : super(fullyQualifiedName);
+
+  factory ListDocumentsRequest.fromJson(Map<String, dynamic> json) {
+    return ListDocumentsRequest(
+      parent: json['parent'],
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'parent': parent,
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'parent=$parent',
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+    ].join(',');
+    return 'ListDocumentsRequest($contents)';
+  }
+}
+
+/// Response from `ListDocuments` containing a paginated list of `Document`s.
+/// The `Document`s are sorted by ascending `document.create_time`.
+final class ListDocumentsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListDocumentsResponse';
+
+  /// The returned `Document`s.
+  final List<Document>? documents;
+
+  /// A token, which can be sent as `page_token` to retrieve the next page.
+  /// If this field is omitted, there are no more pages.
+  final String? nextPageToken;
+
+  ListDocumentsResponse({this.documents, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListDocumentsResponse.fromJson(Map<String, dynamic> json) {
+    return ListDocumentsResponse(
+      documents: decodeListMessage(json['documents'], Document.fromJson),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (documents != null) 'documents': encodeList(documents),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListDocumentsResponse($contents)';
+  }
+}
+
+/// Request for querying a `Document`.
+final class QueryDocumentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.QueryDocumentRequest';
+
+  /// Required. The name of the `Document` to query.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String name;
+
+  /// Required. Query string to perform semantic search.
+  final String? query;
+
+  /// Optional. The maximum number of `Chunk`s to return.
+  /// The service may return fewer `Chunk`s.
+  ///
+  /// If unspecified, at most 10 `Chunk`s will be returned.
+  /// The maximum specified result count is 100.
+  final int? resultsCount;
+
+  /// Optional. Filter for `Chunk` metadata. Each `MetadataFilter` object should
+  /// correspond to a unique key. Multiple `MetadataFilter` objects are joined by
+  /// logical "AND"s.
+  ///
+  /// Note: `Document`-level filtering is not supported for this request because
+  /// a `Document` name is already specified.
+  ///
+  /// Example query:
+  /// (year >= 2020 OR year < 2010) AND (genre = drama OR genre = action)
+  ///
+  /// `MetadataFilter` object list:
+  ///  metadata_filters = [
+  ///  {key = "chunk.custom_metadata.year"
+  ///   conditions = [{int_value = 2020, operation = GREATER_EQUAL},
+  ///                 {int_value = 2010, operation = LESS}},
+  ///  {key = "chunk.custom_metadata.genre"
+  ///   conditions = [{string_value = "drama", operation = EQUAL},
+  ///                 {string_value = "action", operation = EQUAL}}]
+  ///
+  /// Example query for a numeric range of values:
+  /// (year > 2015 AND year <= 2020)
+  ///
+  /// `MetadataFilter` object list:
+  ///  metadata_filters = [
+  ///  {key = "chunk.custom_metadata.year"
+  ///   conditions = [{int_value = 2015, operation = GREATER}]},
+  ///  {key = "chunk.custom_metadata.year"
+  ///   conditions = [{int_value = 2020, operation = LESS_EQUAL}]}]
+  ///
+  /// Note: "AND"s for the same key are only supported for numeric values. String
+  /// values only support "OR"s for the same key.
+  final List<MetadataFilter>? metadataFilters;
+
+  QueryDocumentRequest({
+    required this.name,
+    this.query,
+    this.resultsCount,
+    this.metadataFilters,
+  }) : super(fullyQualifiedName);
+
+  factory QueryDocumentRequest.fromJson(Map<String, dynamic> json) {
+    return QueryDocumentRequest(
+      name: json['name'],
+      query: json['query'],
+      resultsCount: json['resultsCount'],
+      metadataFilters: decodeListMessage(
+        json['metadataFilters'],
+        MetadataFilter.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'name': name,
+      if (query != null) 'query': query,
+      if (resultsCount != null) 'resultsCount': resultsCount,
+      if (metadataFilters != null)
+        'metadataFilters': encodeList(metadataFilters),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'name=$name',
+      if (query != null) 'query=$query',
+      if (resultsCount != null) 'resultsCount=$resultsCount',
+    ].join(',');
+    return 'QueryDocumentRequest($contents)';
+  }
+}
+
+/// Response from `QueryDocument` containing a list of relevant chunks.
+final class QueryDocumentResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.QueryDocumentResponse';
+
+  /// The returned relevant chunks.
+  final List<RelevantChunk>? relevantChunks;
+
+  QueryDocumentResponse({this.relevantChunks}) : super(fullyQualifiedName);
+
+  factory QueryDocumentResponse.fromJson(Map<String, dynamic> json) {
+    return QueryDocumentResponse(
+      relevantChunks: decodeListMessage(
+        json['relevantChunks'],
+        RelevantChunk.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (relevantChunks != null) 'relevantChunks': encodeList(relevantChunks),
+    };
+  }
+
+  @override
+  String toString() => 'QueryDocumentResponse()';
+}
+
+/// Request to create a `Chunk`.
+final class CreateChunkRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CreateChunkRequest';
+
+  /// Required. The name of the `Document` where this `Chunk` will be created.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String parent;
+
+  /// Required. The `Chunk` to create.
+  final Chunk chunk;
+
+  CreateChunkRequest({required this.parent, required this.chunk})
+    : super(fullyQualifiedName);
+
+  factory CreateChunkRequest.fromJson(Map<String, dynamic> json) {
+    return CreateChunkRequest(
+      parent: json['parent'],
+      chunk: decode(json['chunk'], Chunk.fromJson)!,
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'parent': parent, 'chunk': chunk.toJson()};
+  }
+
+  @override
+  String toString() {
+    final contents = ['parent=$parent'].join(',');
+    return 'CreateChunkRequest($contents)';
+  }
+}
+
+/// Request to batch create `Chunk`s.
+final class BatchCreateChunksRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchCreateChunksRequest';
+
+  /// Optional. The name of the `Document` where this batch of `Chunk`s will be
+  /// created. The parent field in every `CreateChunkRequest` must match this
+  /// value. Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String parent;
+
+  /// Required. The request messages specifying the `Chunk`s to create.
+  /// A maximum of 100 `Chunk`s can be created in a batch.
+  final List<CreateChunkRequest>? requests;
+
+  BatchCreateChunksRequest({required this.parent, this.requests})
+    : super(fullyQualifiedName);
+
+  factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) {
+    return BatchCreateChunksRequest(
+      parent: json['parent'],
+      requests: decodeListMessage(
+        json['requests'],
+        CreateChunkRequest.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'parent': parent,
+      if (requests != null) 'requests': encodeList(requests),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = ['parent=$parent'].join(',');
+    return 'BatchCreateChunksRequest($contents)';
+  }
+}
+
+/// Response from `BatchCreateChunks` containing a list of created `Chunk`s.
+final class BatchCreateChunksResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchCreateChunksResponse';
+
+  /// `Chunk`s created.
+  final List<Chunk>? chunks;
+
+  BatchCreateChunksResponse({this.chunks}) : super(fullyQualifiedName);
+
+  factory BatchCreateChunksResponse.fromJson(Map<String, dynamic> json) {
+    return BatchCreateChunksResponse(
+      chunks: decodeListMessage(json['chunks'], Chunk.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (chunks != null) 'chunks': encodeList(chunks)};
+  }
+
+  @override
+  String toString() => 'BatchCreateChunksResponse()';
+}
+
+/// Request for getting information about a specific `Chunk`.
+final class GetChunkRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GetChunkRequest';
+
+  /// Required. The name of the `Chunk` to retrieve.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc/chunks/some-chunk`
+  final String name;
+
+  GetChunkRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetChunkRequest.fromJson(Map<String, dynamic> json) {
+    return GetChunkRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'GetChunkRequest($contents)';
+  }
+}
+
+/// Request to update a `Chunk`.
+final class UpdateChunkRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UpdateChunkRequest';
+
+  /// Required. The `Chunk` to update.
+  final Chunk chunk;
+
+  /// Required. The list of fields to update.
+  /// Currently, this only supports updating `custom_metadata` and `data`.
+  final FieldMask? updateMask;
+
+  UpdateChunkRequest({required this.chunk, this.updateMask})
+    : super(fullyQualifiedName);
+
+  factory UpdateChunkRequest.fromJson(Map<String, dynamic> json) {
+    return UpdateChunkRequest(
+      chunk: decode(json['chunk'], Chunk.fromJson)!,
+      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'chunk': chunk.toJson(),
+      if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'UpdateChunkRequest()';
+}
+
+/// Request to batch update `Chunk`s.
+final class BatchUpdateChunksRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchUpdateChunksRequest';
+
+  /// Optional. The name of the `Document` containing the `Chunk`s to update.
+  /// The parent field in every `UpdateChunkRequest` must match this value.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String parent;
+
+  /// Required. The request messages specifying the `Chunk`s to update.
+  /// A maximum of 100 `Chunk`s can be updated in a batch.
+  final List<UpdateChunkRequest>? requests;
+
+  BatchUpdateChunksRequest({required this.parent, this.requests})
+    : super(fullyQualifiedName);
+
+  factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) {
+    return BatchUpdateChunksRequest(
+      parent: json['parent'],
+      requests: decodeListMessage(
+        json['requests'],
+        UpdateChunkRequest.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'parent': parent,
+      if (requests != null) 'requests': encodeList(requests),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = ['parent=$parent'].join(',');
+    return 'BatchUpdateChunksRequest($contents)';
+  }
+}
+
+/// Response from `BatchUpdateChunks` containing a list of updated `Chunk`s.
+final class BatchUpdateChunksResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchUpdateChunksResponse';
+
+  /// `Chunk`s updated.
+  final List<Chunk>? chunks;
+
+  BatchUpdateChunksResponse({this.chunks}) : super(fullyQualifiedName);
+
+  factory BatchUpdateChunksResponse.fromJson(Map<String, dynamic> json) {
+    return BatchUpdateChunksResponse(
+      chunks: decodeListMessage(json['chunks'], Chunk.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (chunks != null) 'chunks': encodeList(chunks)};
+  }
+
+  @override
+  String toString() => 'BatchUpdateChunksResponse()';
+}
+
+/// Request to delete a `Chunk`.
+final class DeleteChunkRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DeleteChunkRequest';
+
+  /// Required. The resource name of the `Chunk` to delete.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc/chunks/some-chunk`
+  final String name;
+
+  DeleteChunkRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeleteChunkRequest.fromJson(Map<String, dynamic> json) {
+    return DeleteChunkRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'DeleteChunkRequest($contents)';
+  }
+}
+
+/// Request to batch delete `Chunk`s.
+final class BatchDeleteChunksRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchDeleteChunksRequest';
+
+  /// Optional. The name of the `Document` containing the `Chunk`s to delete.
+  /// The parent field in every `DeleteChunkRequest` must match this value.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String parent;
+
+  /// Required. The request messages specifying the `Chunk`s to delete.
+  final List<DeleteChunkRequest>? requests;
+
+  BatchDeleteChunksRequest({required this.parent, this.requests})
+    : super(fullyQualifiedName);
+
+  factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) {
+    return BatchDeleteChunksRequest(
+      parent: json['parent'],
+      requests: decodeListMessage(
+        json['requests'],
+        DeleteChunkRequest.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'parent': parent,
+      if (requests != null) 'requests': encodeList(requests),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = ['parent=$parent'].join(',');
+    return 'BatchDeleteChunksRequest($contents)';
+  }
+}
+
+/// Request for listing `Chunk`s.
+final class ListChunksRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListChunksRequest';
+
+  /// Required. The name of the `Document` containing `Chunk`s.
+  /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
+  final String parent;
+
+  /// Optional. The maximum number of `Chunk`s to return (per page).
+  /// The service may return fewer `Chunk`s.
+  ///
+  /// If unspecified, at most 10 `Chunk`s will be returned.
+  /// The maximum size limit is 100 `Chunk`s per page.
+  final int? pageSize;
+
+  /// Optional. A page token, received from a previous `ListChunks` call.
+  ///
+  /// Provide the `next_page_token` returned in the response as an argument to
+  /// the next request to retrieve the next page.
+  ///
+  /// When paginating, all other parameters provided to `ListChunks`
+  /// must match the call that provided the page token.
+  final String? pageToken;
+
+  ListChunksRequest({required this.parent, this.pageSize, this.pageToken})
+    : super(fullyQualifiedName);
+
+  factory ListChunksRequest.fromJson(Map<String, dynamic> json) {
+    return ListChunksRequest(
+      parent: json['parent'],
+      pageSize: json['pageSize'],
+      pageToken: json['pageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'parent': parent,
+      if (pageSize != null) 'pageSize': pageSize,
+      if (pageToken != null) 'pageToken': pageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'parent=$parent',
+      if (pageSize != null) 'pageSize=$pageSize',
+      if (pageToken != null) 'pageToken=$pageToken',
+    ].join(',');
+    return 'ListChunksRequest($contents)';
+  }
+}
+
+/// Response from `ListChunks` containing a paginated list of `Chunk`s.
+/// The `Chunk`s are sorted by ascending `chunk.create_time`.
+final class ListChunksResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ListChunksResponse';
+
+  /// The returned `Chunk`s.
+  final List<Chunk>? chunks;
+
+  /// A token, which can be sent as `page_token` to retrieve the next page.
+  /// If this field is omitted, there are no more pages.
+  final String? nextPageToken;
+
+  ListChunksResponse({this.chunks, this.nextPageToken})
+    : super(fullyQualifiedName);
+
+  factory ListChunksResponse.fromJson(Map<String, dynamic> json) {
+    return ListChunksResponse(
+      chunks: decodeListMessage(json['chunks'], Chunk.fromJson),
+      nextPageToken: json['nextPageToken'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (chunks != null) 'chunks': encodeList(chunks),
+      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
+    ].join(',');
+    return 'ListChunksResponse($contents)';
+  }
+}
+
+/// Content filtering metadata associated with processing a single request.
+///
+/// ContentFilter contains a reason and an optional supporting string. The reason
+/// may be unspecified.
+final class ContentFilter extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ContentFilter';
+
+  /// The reason content was blocked during request processing.
+  final ContentFilter_BlockedReason? reason;
+
+  /// A string that describes the filtering behavior in more detail.
+  final String? message;
+
+  ContentFilter({this.reason, this.message}) : super(fullyQualifiedName);
+
+  factory ContentFilter.fromJson(Map<String, dynamic> json) {
+    return ContentFilter(
+      reason: decodeEnum(json['reason'], ContentFilter_BlockedReason.fromJson),
+      message: json['message'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (reason != null) 'reason': reason!.toJson(),
+      if (message != null) 'message': message,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (reason != null) 'reason=$reason',
+      if (message != null) 'message=$message',
+    ].join(',');
+    return 'ContentFilter($contents)';
+  }
+}
+
+/// A list of reasons why content may have been blocked.
+final class ContentFilter_BlockedReason extends ProtoEnum {
+  /// A blocked reason was not specified.
+  static const blockedReasonUnspecified = ContentFilter_BlockedReason(
+    'BLOCKED_REASON_UNSPECIFIED',
+  );
+
+  /// Content was blocked by safety settings.
+  static const safety = ContentFilter_BlockedReason('SAFETY');
+
+  /// Content was blocked, but the reason is uncategorized.
+  static const other = ContentFilter_BlockedReason('OTHER');
+
+  const ContentFilter_BlockedReason(super.value);
+
+  factory ContentFilter_BlockedReason.fromJson(String json) =>
+      ContentFilter_BlockedReason(json);
+
+  @override
+  String toString() => 'BlockedReason.$value';
+}
+
+/// Safety feedback for an entire request.
+///
+/// This field is populated if content in the input and/or response is blocked
+/// due to safety settings. SafetyFeedback may not exist for every HarmCategory.
+/// Each SafetyFeedback will return the safety settings used by the request as
+/// well as the lowest HarmProbability that should be allowed in order to return
+/// a result.
+final class SafetyFeedback extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.SafetyFeedback';
+
+  /// Safety rating evaluated from content.
+  final SafetyRating? rating;
+
+  /// Safety settings applied to the request.
+  final SafetySetting? setting;
+
+  SafetyFeedback({this.rating, this.setting}) : super(fullyQualifiedName);
+
+  factory SafetyFeedback.fromJson(Map<String, dynamic> json) {
+    return SafetyFeedback(
+      rating: decode(json['rating'], SafetyRating.fromJson),
+      setting: decode(json['setting'], SafetySetting.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (rating != null) 'rating': rating!.toJson(),
+      if (setting != null) 'setting': setting!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'SafetyFeedback()';
+}
+
 /// Safety rating for a piece of content.
 ///
 /// The safety rating contains the category of harm and the
@@ -2056,7 +8037,7 @@ final class ListModelsResponse extends ProtoMessage {
 /// here.
 final class SafetyRating extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.SafetyRating';
+      'google.ai.generativelanguage.v1beta.SafetyRating';
 
   /// Required. The category for this rating.
   final HarmCategory? category;
@@ -2138,7 +8119,7 @@ final class SafetyRating_HarmProbability extends ProtoEnum {
 /// content is blocked.
 final class SafetySetting extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1.SafetySetting';
+      'google.ai.generativelanguage.v1beta.SafetySetting';
 
   /// Required. The category for this setting.
   final HarmCategory? category;
@@ -2211,6 +8192,1013 @@ final class SafetySetting_HarmBlockThreshold extends ProtoEnum {
 
   @override
   String toString() => 'HarmBlockThreshold.$value';
+}
+
+/// Request to generate a text completion response from the model.
+final class GenerateTextRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateTextRequest';
+
+  /// Required. The name of the `Model` or `TunedModel` to use for generating the
+  /// completion.
+  /// Examples:
+  ///  models/text-bison-001
+  ///  tunedModels/sentence-translator-u3b7m
+  final String model;
+
+  /// Required. The free-form input text given to the model as a prompt.
+  ///
+  /// Given a prompt, the model will generate a TextCompletion response it
+  /// predicts as the completion of the input text.
+  final TextPrompt? prompt;
+
+  /// Optional. Controls the randomness of the output.
+  /// Note: The default value varies by model, see the `Model.temperature`
+  /// attribute of the `Model` returned the `getModel` function.
+  ///
+  /// Values can range from [0.0,1.0],
+  /// inclusive. A value closer to 1.0 will produce responses that are more
+  /// varied and creative, while a value closer to 0.0 will typically result in
+  /// more straightforward responses from the model.
+  final double? temperature;
+
+  /// Optional. Number of generated responses to return.
+  ///
+  /// This value must be between [1, 8], inclusive. If unset, this will default
+  /// to 1.
+  final int? candidateCount;
+
+  /// Optional. The maximum number of tokens to include in a candidate.
+  ///
+  /// If unset, this will default to output_token_limit specified in the `Model`
+  /// specification.
+  final int? maxOutputTokens;
+
+  /// Optional. The maximum cumulative probability of tokens to consider when
+  /// sampling.
+  ///
+  /// The model uses combined Top-k and nucleus sampling.
+  ///
+  /// Tokens are sorted based on their assigned probabilities so that only the
+  /// most likely tokens are considered. Top-k sampling directly limits the
+  /// maximum number of tokens to consider, while Nucleus sampling limits number
+  /// of tokens based on the cumulative probability.
+  ///
+  /// Note: The default value varies by model, see the `Model.top_p`
+  /// attribute of the `Model` returned the `getModel` function.
+  final double? topP;
+
+  /// Optional. The maximum number of tokens to consider when sampling.
+  ///
+  /// The model uses combined Top-k and nucleus sampling.
+  ///
+  /// Top-k sampling considers the set of `top_k` most probable tokens.
+  /// Defaults to 40.
+  ///
+  /// Note: The default value varies by model, see the `Model.top_k`
+  /// attribute of the `Model` returned the `getModel` function.
+  final int? topK;
+
+  /// Optional. A list of unique `SafetySetting` instances for blocking unsafe
+  /// content.
+  ///
+  /// that will be enforced on the `GenerateTextRequest.prompt` and
+  /// `GenerateTextResponse.candidates`. There should not be more than one
+  /// setting for each `SafetyCategory` type. The API will block any prompts and
+  /// responses that fail to meet the thresholds set by these settings. This list
+  /// overrides the default settings for each `SafetyCategory` specified in the
+  /// safety_settings. If there is no `SafetySetting` for a given
+  /// `SafetyCategory` provided in the list, the API will use the default safety
+  /// setting for that category. Harm categories HARM_CATEGORY_DEROGATORY,
+  /// HARM_CATEGORY_TOXICITY, HARM_CATEGORY_VIOLENCE, HARM_CATEGORY_SEXUAL,
+  /// HARM_CATEGORY_MEDICAL, HARM_CATEGORY_DANGEROUS are supported in text
+  /// service.
+  final List<SafetySetting>? safetySettings;
+
+  /// The set of character sequences (up to 5) that will stop output generation.
+  /// If specified, the API will stop at the first appearance of a stop
+  /// sequence. The stop sequence will not be included as part of the response.
+  final List<String>? stopSequences;
+
+  GenerateTextRequest({
+    required this.model,
+    this.prompt,
+    this.temperature,
+    this.candidateCount,
+    this.maxOutputTokens,
+    this.topP,
+    this.topK,
+    this.safetySettings,
+    this.stopSequences,
+  }) : super(fullyQualifiedName);
+
+  factory GenerateTextRequest.fromJson(Map<String, dynamic> json) {
+    return GenerateTextRequest(
+      model: json['model'],
+      prompt: decode(json['prompt'], TextPrompt.fromJson),
+      temperature: decodeDouble(json['temperature']),
+      candidateCount: json['candidateCount'],
+      maxOutputTokens: json['maxOutputTokens'],
+      topP: decodeDouble(json['topP']),
+      topK: json['topK'],
+      safetySettings: decodeListMessage(
+        json['safetySettings'],
+        SafetySetting.fromJson,
+      ),
+      stopSequences: decodeList(json['stopSequences']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'model': model,
+      if (prompt != null) 'prompt': prompt!.toJson(),
+      if (temperature != null) 'temperature': encodeDouble(temperature),
+      if (candidateCount != null) 'candidateCount': candidateCount,
+      if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
+      if (topP != null) 'topP': encodeDouble(topP),
+      if (topK != null) 'topK': topK,
+      if (safetySettings != null) 'safetySettings': encodeList(safetySettings),
+      if (stopSequences != null) 'stopSequences': stopSequences,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      'model=$model',
+      if (temperature != null) 'temperature=$temperature',
+      if (candidateCount != null) 'candidateCount=$candidateCount',
+      if (maxOutputTokens != null) 'maxOutputTokens=$maxOutputTokens',
+      if (topP != null) 'topP=$topP',
+      if (topK != null) 'topK=$topK',
+    ].join(',');
+    return 'GenerateTextRequest($contents)';
+  }
+}
+
+/// The response from the model, including candidate completions.
+final class GenerateTextResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GenerateTextResponse';
+
+  /// Candidate responses from the model.
+  final List<TextCompletion>? candidates;
+
+  /// A set of content filtering metadata for the prompt and response
+  /// text.
+  ///
+  /// This indicates which `SafetyCategory`(s) blocked a
+  /// candidate from this response, the lowest `HarmProbability`
+  /// that triggered a block, and the HarmThreshold setting for that category.
+  /// This indicates the smallest change to the `SafetySettings` that would be
+  /// necessary to unblock at least 1 response.
+  ///
+  /// The blocking is configured by the `SafetySettings` in the request (or the
+  /// default `SafetySettings` of the API).
+  final List<ContentFilter>? filters;
+
+  /// Returns any safety feedback related to content filtering.
+  final List<SafetyFeedback>? safetyFeedback;
+
+  GenerateTextResponse({this.candidates, this.filters, this.safetyFeedback})
+    : super(fullyQualifiedName);
+
+  factory GenerateTextResponse.fromJson(Map<String, dynamic> json) {
+    return GenerateTextResponse(
+      candidates: decodeListMessage(
+        json['candidates'],
+        TextCompletion.fromJson,
+      ),
+      filters: decodeListMessage(json['filters'], ContentFilter.fromJson),
+      safetyFeedback: decodeListMessage(
+        json['safetyFeedback'],
+        SafetyFeedback.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (candidates != null) 'candidates': encodeList(candidates),
+      if (filters != null) 'filters': encodeList(filters),
+      if (safetyFeedback != null) 'safetyFeedback': encodeList(safetyFeedback),
+    };
+  }
+
+  @override
+  String toString() => 'GenerateTextResponse()';
+}
+
+/// Text given to the model as a prompt.
+///
+/// The Model will use this TextPrompt to Generate a text completion.
+final class TextPrompt extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TextPrompt';
+
+  /// Required. The prompt text.
+  final String? text;
+
+  TextPrompt({this.text}) : super(fullyQualifiedName);
+
+  factory TextPrompt.fromJson(Map<String, dynamic> json) {
+    return TextPrompt(text: json['text']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (text != null) 'text': text};
+  }
+
+  @override
+  String toString() {
+    final contents = [if (text != null) 'text=$text'].join(',');
+    return 'TextPrompt($contents)';
+  }
+}
+
+/// Output text returned from a model.
+final class TextCompletion extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TextCompletion';
+
+  /// Output only. The generated text returned from the model.
+  final String? output;
+
+  /// Ratings for the safety of a response.
+  ///
+  /// There is at most one rating per category.
+  final List<SafetyRating>? safetyRatings;
+
+  /// Output only. Citation information for model-generated `output` in this
+  /// `TextCompletion`.
+  ///
+  /// This field may be populated with attribution information for any text
+  /// included in the `output`.
+  final CitationMetadata? citationMetadata;
+
+  TextCompletion({this.output, this.safetyRatings, this.citationMetadata})
+    : super(fullyQualifiedName);
+
+  factory TextCompletion.fromJson(Map<String, dynamic> json) {
+    return TextCompletion(
+      output: json['output'],
+      safetyRatings: decodeListMessage(
+        json['safetyRatings'],
+        SafetyRating.fromJson,
+      ),
+      citationMetadata: decode(
+        json['citationMetadata'],
+        CitationMetadata.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (output != null) 'output': output,
+      if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
+      if (citationMetadata != null)
+        'citationMetadata': citationMetadata!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (output != null) 'output=$output'].join(',');
+    return 'TextCompletion($contents)';
+  }
+}
+
+/// Request to get a text embedding from the model.
+final class EmbedTextRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.EmbedTextRequest';
+
+  /// Required. The model name to use with the format model=models/{model}.
+  final String model;
+
+  /// Optional. The free-form input text that the model will turn into an
+  /// embedding.
+  final String? text;
+
+  EmbedTextRequest({required this.model, this.text})
+    : super(fullyQualifiedName);
+
+  factory EmbedTextRequest.fromJson(Map<String, dynamic> json) {
+    return EmbedTextRequest(model: json['model'], text: json['text']);
+  }
+
+  @override
+  Object toJson() {
+    return {'model': model, if (text != null) 'text': text};
+  }
+
+  @override
+  String toString() {
+    final contents = ['model=$model', if (text != null) 'text=$text'].join(',');
+    return 'EmbedTextRequest($contents)';
+  }
+}
+
+/// The response to a EmbedTextRequest.
+final class EmbedTextResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.EmbedTextResponse';
+
+  /// Output only. The embedding generated from the input text.
+  final Embedding? embedding;
+
+  EmbedTextResponse({this.embedding}) : super(fullyQualifiedName);
+
+  factory EmbedTextResponse.fromJson(Map<String, dynamic> json) {
+    return EmbedTextResponse(
+      embedding: decode(json['embedding'], Embedding.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (embedding != null) 'embedding': embedding!.toJson()};
+  }
+
+  @override
+  String toString() => 'EmbedTextResponse()';
+}
+
+/// Batch request to get a text embedding from the model.
+final class BatchEmbedTextRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchEmbedTextRequest';
+
+  /// Required. The name of the `Model` to use for generating the embedding.
+  /// Examples:
+  ///  models/embedding-gecko-001
+  final String model;
+
+  /// Optional. The free-form input texts that the model will turn into an
+  /// embedding. The current limit is 100 texts, over which an error will be
+  /// thrown.
+  final List<String>? texts;
+
+  /// Optional. Embed requests for the batch. Only one of `texts` or `requests`
+  /// can be set.
+  final List<EmbedTextRequest>? requests;
+
+  BatchEmbedTextRequest({required this.model, this.texts, this.requests})
+    : super(fullyQualifiedName);
+
+  factory BatchEmbedTextRequest.fromJson(Map<String, dynamic> json) {
+    return BatchEmbedTextRequest(
+      model: json['model'],
+      texts: decodeList(json['texts']),
+      requests: decodeListMessage(json['requests'], EmbedTextRequest.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'model': model,
+      if (texts != null) 'texts': texts,
+      if (requests != null) 'requests': encodeList(requests),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = ['model=$model'].join(',');
+    return 'BatchEmbedTextRequest($contents)';
+  }
+}
+
+/// The response to a EmbedTextRequest.
+final class BatchEmbedTextResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BatchEmbedTextResponse';
+
+  /// Output only. The embeddings generated from the input text.
+  final List<Embedding>? embeddings;
+
+  BatchEmbedTextResponse({this.embeddings}) : super(fullyQualifiedName);
+
+  factory BatchEmbedTextResponse.fromJson(Map<String, dynamic> json) {
+    return BatchEmbedTextResponse(
+      embeddings: decodeListMessage(json['embeddings'], Embedding.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (embeddings != null) 'embeddings': encodeList(embeddings)};
+  }
+
+  @override
+  String toString() => 'BatchEmbedTextResponse()';
+}
+
+/// A list of floats representing the embedding.
+final class Embedding extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Embedding';
+
+  /// The embedding values.
+  final List<double>? value;
+
+  Embedding({this.value}) : super(fullyQualifiedName);
+
+  factory Embedding.fromJson(Map<String, dynamic> json) {
+    return Embedding(value: decodeList(json['value']));
+  }
+
+  @override
+  Object toJson() {
+    return {if (value != null) 'value': value};
+  }
+
+  @override
+  String toString() => 'Embedding()';
+}
+
+/// Counts the number of tokens in the `prompt` sent to a model.
+///
+/// Models may tokenize text differently, so each model may return a different
+/// `token_count`.
+final class CountTextTokensRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CountTextTokensRequest';
+
+  /// Required. The model's resource name. This serves as an ID for the Model to
+  /// use.
+  ///
+  /// This name should match a model name returned by the `ListModels` method.
+  ///
+  /// Format: `models/{model}`
+  final String model;
+
+  /// Required. The free-form input text given to the model as a prompt.
+  final TextPrompt? prompt;
+
+  CountTextTokensRequest({required this.model, this.prompt})
+    : super(fullyQualifiedName);
+
+  factory CountTextTokensRequest.fromJson(Map<String, dynamic> json) {
+    return CountTextTokensRequest(
+      model: json['model'],
+      prompt: decode(json['prompt'], TextPrompt.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {'model': model, if (prompt != null) 'prompt': prompt!.toJson()};
+  }
+
+  @override
+  String toString() {
+    final contents = ['model=$model'].join(',');
+    return 'CountTextTokensRequest($contents)';
+  }
+}
+
+/// A response from `CountTextTokens`.
+///
+/// It returns the model's `token_count` for the `prompt`.
+final class CountTextTokensResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.CountTextTokensResponse';
+
+  /// The number of tokens that the `model` tokenizes the `prompt` into.
+  ///
+  /// Always non-negative.
+  final int? tokenCount;
+
+  CountTextTokensResponse({this.tokenCount}) : super(fullyQualifiedName);
+
+  factory CountTextTokensResponse.fromJson(Map<String, dynamic> json) {
+    return CountTextTokensResponse(tokenCount: json['tokenCount']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (tokenCount != null) 'tokenCount': tokenCount};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (tokenCount != null) 'tokenCount=$tokenCount',
+    ].join(',');
+    return 'CountTextTokensResponse($contents)';
+  }
+}
+
+/// A fine-tuned model created using ModelService.CreateTunedModel.
+final class TunedModel extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TunedModel';
+
+  /// Optional. TunedModel to use as the starting point for training the new
+  /// model.
+  final TunedModelSource? tunedModelSource;
+
+  /// Immutable. The name of the `Model` to tune.
+  /// Example: `models/gemini-1.5-flash-001`
+  final String? baseModel;
+
+  /// Output only. The tuned model name. A unique name will be generated on
+  /// create. Example: `tunedModels/az2mb0bpw6i` If display_name is set on
+  /// create, the id portion of the name will be set by concatenating the words
+  /// of the display_name with hyphens and adding a random portion for
+  /// uniqueness.
+  ///
+  /// Example:
+  ///
+  ///  * display_name = `Sentence Translator`
+  ///  * name = `tunedModels/sentence-translator-u3b7m`
+  final String? name;
+
+  /// Optional. The name to display for this model in user interfaces.
+  /// The display name must be up to 40 characters including spaces.
+  final String? displayName;
+
+  /// Optional. A short description of this model.
+  final String? description;
+
+  /// Optional. Controls the randomness of the output.
+  ///
+  /// Values can range over `[0.0,1.0]`, inclusive. A value closer to `1.0` will
+  /// produce responses that are more varied, while a value closer to `0.0` will
+  /// typically result in less surprising responses from the model.
+  ///
+  /// This value specifies default to be the one used by the base model while
+  /// creating the model.
+  final double? temperature;
+
+  /// Optional. For Nucleus sampling.
+  ///
+  /// Nucleus sampling considers the smallest set of tokens whose probability
+  /// sum is at least `top_p`.
+  ///
+  /// This value specifies default to be the one used by the base model while
+  /// creating the model.
+  final double? topP;
+
+  /// Optional. For Top-k sampling.
+  ///
+  /// Top-k sampling considers the set of `top_k` most probable tokens.
+  /// This value specifies default to be used by the backend while making the
+  /// call to the model.
+  ///
+  /// This value specifies default to be the one used by the base model while
+  /// creating the model.
+  final int? topK;
+
+  /// Output only. The state of the tuned model.
+  final TunedModel_State? state;
+
+  /// Output only. The timestamp when this model was created.
+  final Timestamp? createTime;
+
+  /// Output only. The timestamp when this model was updated.
+  final Timestamp? updateTime;
+
+  /// Required. The tuning task that creates the tuned model.
+  final TuningTask? tuningTask;
+
+  /// Optional. List of project numbers that have read access to the tuned model.
+  final List<int>? readerProjectNumbers;
+
+  TunedModel({
+    this.tunedModelSource,
+    this.baseModel,
+    this.name,
+    this.displayName,
+    this.description,
+    this.temperature,
+    this.topP,
+    this.topK,
+    this.state,
+    this.createTime,
+    this.updateTime,
+    this.tuningTask,
+    this.readerProjectNumbers,
+  }) : super(fullyQualifiedName);
+
+  factory TunedModel.fromJson(Map<String, dynamic> json) {
+    return TunedModel(
+      tunedModelSource: decode(
+        json['tunedModelSource'],
+        TunedModelSource.fromJson,
+      ),
+      baseModel: json['baseModel'],
+      name: json['name'],
+      displayName: json['displayName'],
+      description: json['description'],
+      temperature: decodeDouble(json['temperature']),
+      topP: decodeDouble(json['topP']),
+      topK: json['topK'],
+      state: decodeEnum(json['state'], TunedModel_State.fromJson),
+      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+      tuningTask: decode(json['tuningTask'], TuningTask.fromJson),
+      readerProjectNumbers: decodeList(json['readerProjectNumbers']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (tunedModelSource != null)
+        'tunedModelSource': tunedModelSource!.toJson(),
+      if (baseModel != null) 'baseModel': baseModel,
+      if (name != null) 'name': name,
+      if (displayName != null) 'displayName': displayName,
+      if (description != null) 'description': description,
+      if (temperature != null) 'temperature': encodeDouble(temperature),
+      if (topP != null) 'topP': encodeDouble(topP),
+      if (topK != null) 'topK': topK,
+      if (state != null) 'state': state!.toJson(),
+      if (createTime != null) 'createTime': createTime!.toJson(),
+      if (updateTime != null) 'updateTime': updateTime!.toJson(),
+      if (tuningTask != null) 'tuningTask': tuningTask!.toJson(),
+      if (readerProjectNumbers != null)
+        'readerProjectNumbers': readerProjectNumbers,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (baseModel != null) 'baseModel=$baseModel',
+      if (name != null) 'name=$name',
+      if (displayName != null) 'displayName=$displayName',
+      if (description != null) 'description=$description',
+      if (temperature != null) 'temperature=$temperature',
+      if (topP != null) 'topP=$topP',
+      if (topK != null) 'topK=$topK',
+      if (state != null) 'state=$state',
+    ].join(',');
+    return 'TunedModel($contents)';
+  }
+}
+
+/// The state of the tuned model.
+final class TunedModel_State extends ProtoEnum {
+  /// The default value. This value is unused.
+  static const stateUnspecified = TunedModel_State('STATE_UNSPECIFIED');
+
+  /// The model is being created.
+  static const creating = TunedModel_State('CREATING');
+
+  /// The model is ready to be used.
+  static const active = TunedModel_State('ACTIVE');
+
+  /// The model failed to be created.
+  static const failed = TunedModel_State('FAILED');
+
+  const TunedModel_State(super.value);
+
+  factory TunedModel_State.fromJson(String json) => TunedModel_State(json);
+
+  @override
+  String toString() => 'State.$value';
+}
+
+/// Tuned model as a source for training a new model.
+final class TunedModelSource extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TunedModelSource';
+
+  /// Immutable. The name of the `TunedModel` to use as the starting point for
+  /// training the new model.
+  /// Example: `tunedModels/my-tuned-model`
+  final String? tunedModel;
+
+  /// Output only. The name of the base `Model` this `TunedModel` was tuned from.
+  /// Example: `models/gemini-1.5-flash-001`
+  final String? baseModel;
+
+  TunedModelSource({this.tunedModel, this.baseModel})
+    : super(fullyQualifiedName);
+
+  factory TunedModelSource.fromJson(Map<String, dynamic> json) {
+    return TunedModelSource(
+      tunedModel: json['tunedModel'],
+      baseModel: json['baseModel'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (tunedModel != null) 'tunedModel': tunedModel,
+      if (baseModel != null) 'baseModel': baseModel,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (tunedModel != null) 'tunedModel=$tunedModel',
+      if (baseModel != null) 'baseModel=$baseModel',
+    ].join(',');
+    return 'TunedModelSource($contents)';
+  }
+}
+
+/// Tuning tasks that create tuned models.
+final class TuningTask extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TuningTask';
+
+  /// Output only. The timestamp when tuning this model started.
+  final Timestamp? startTime;
+
+  /// Output only. The timestamp when tuning this model completed.
+  final Timestamp? completeTime;
+
+  /// Output only. Metrics collected during tuning.
+  final List<TuningSnapshot>? snapshots;
+
+  /// Required. Input only. Immutable. The model training data.
+  final Dataset? trainingData;
+
+  /// Immutable. Hyperparameters controlling the tuning process. If not provided,
+  /// default values will be used.
+  final Hyperparameters? hyperparameters;
+
+  TuningTask({
+    this.startTime,
+    this.completeTime,
+    this.snapshots,
+    this.trainingData,
+    this.hyperparameters,
+  }) : super(fullyQualifiedName);
+
+  factory TuningTask.fromJson(Map<String, dynamic> json) {
+    return TuningTask(
+      startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
+      completeTime: decodeCustom(json['completeTime'], Timestamp.fromJson),
+      snapshots: decodeListMessage(json['snapshots'], TuningSnapshot.fromJson),
+      trainingData: decode(json['trainingData'], Dataset.fromJson),
+      hyperparameters: decode(
+        json['hyperparameters'],
+        Hyperparameters.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (startTime != null) 'startTime': startTime!.toJson(),
+      if (completeTime != null) 'completeTime': completeTime!.toJson(),
+      if (snapshots != null) 'snapshots': encodeList(snapshots),
+      if (trainingData != null) 'trainingData': trainingData!.toJson(),
+      if (hyperparameters != null) 'hyperparameters': hyperparameters!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'TuningTask()';
+}
+
+/// Hyperparameters controlling the tuning process. Read more at
+/// https://ai.google.dev/docs/model_tuning_guidance
+final class Hyperparameters extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Hyperparameters';
+
+  /// Optional. Immutable. The learning rate hyperparameter for tuning.
+  /// If not set, a default of 0.001 or 0.0002 will be calculated based on the
+  /// number of training examples.
+  final double? learningRate;
+
+  /// Optional. Immutable. The learning rate multiplier is used to calculate a
+  /// final learning_rate based on the default (recommended) value. Actual
+  /// learning rate := learning_rate_multiplier * default learning rate Default
+  /// learning rate is dependent on base model and dataset size. If not set, a
+  /// default of 1.0 will be used.
+  final double? learningRateMultiplier;
+
+  /// Immutable. The number of training epochs. An epoch is one pass through the
+  /// training data. If not set, a default of 5 will be used.
+  final int? epochCount;
+
+  /// Immutable. The batch size hyperparameter for tuning.
+  /// If not set, a default of 4 or 16 will be used based on the number of
+  /// training examples.
+  final int? batchSize;
+
+  Hyperparameters({
+    this.learningRate,
+    this.learningRateMultiplier,
+    this.epochCount,
+    this.batchSize,
+  }) : super(fullyQualifiedName);
+
+  factory Hyperparameters.fromJson(Map<String, dynamic> json) {
+    return Hyperparameters(
+      learningRate: decodeDouble(json['learningRate']),
+      learningRateMultiplier: decodeDouble(json['learningRateMultiplier']),
+      epochCount: json['epochCount'],
+      batchSize: json['batchSize'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (learningRate != null) 'learningRate': encodeDouble(learningRate),
+      if (learningRateMultiplier != null)
+        'learningRateMultiplier': encodeDouble(learningRateMultiplier),
+      if (epochCount != null) 'epochCount': epochCount,
+      if (batchSize != null) 'batchSize': batchSize,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (learningRate != null) 'learningRate=$learningRate',
+      if (learningRateMultiplier != null)
+        'learningRateMultiplier=$learningRateMultiplier',
+      if (epochCount != null) 'epochCount=$epochCount',
+      if (batchSize != null) 'batchSize=$batchSize',
+    ].join(',');
+    return 'Hyperparameters($contents)';
+  }
+}
+
+/// Dataset for training or validation.
+final class Dataset extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Dataset';
+
+  /// Optional. Inline examples with simple input/output text.
+  final TuningExamples? examples;
+
+  Dataset({this.examples}) : super(fullyQualifiedName);
+
+  factory Dataset.fromJson(Map<String, dynamic> json) {
+    return Dataset(examples: decode(json['examples'], TuningExamples.fromJson));
+  }
+
+  @override
+  Object toJson() {
+    return {if (examples != null) 'examples': examples!.toJson()};
+  }
+
+  @override
+  String toString() => 'Dataset()';
+}
+
+/// A set of tuning examples. Can be training or validation data.
+final class TuningExamples extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TuningExamples';
+
+  /// The examples. Example input can be for text or discuss, but all examples
+  /// in a set must be of the same type.
+  final List<TuningExample>? examples;
+
+  TuningExamples({this.examples}) : super(fullyQualifiedName);
+
+  factory TuningExamples.fromJson(Map<String, dynamic> json) {
+    return TuningExamples(
+      examples: decodeListMessage(json['examples'], TuningExample.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (examples != null) 'examples': encodeList(examples)};
+  }
+
+  @override
+  String toString() => 'TuningExamples()';
+}
+
+/// A single example for tuning.
+final class TuningExample extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TuningExample';
+
+  /// Optional. Text model input.
+  final String? textInput;
+
+  /// Required. The expected model output.
+  final String? output;
+
+  TuningExample({this.textInput, this.output}) : super(fullyQualifiedName);
+
+  factory TuningExample.fromJson(Map<String, dynamic> json) {
+    return TuningExample(textInput: json['textInput'], output: json['output']);
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (textInput != null) 'textInput': textInput,
+      if (output != null) 'output': output,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (textInput != null) 'textInput=$textInput',
+      if (output != null) 'output=$output',
+    ].join(',');
+    return 'TuningExample($contents)';
+  }
+}
+
+/// Record for a single tuning step.
+final class TuningSnapshot extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.TuningSnapshot';
+
+  /// Output only. The tuning step.
+  final int? step;
+
+  /// Output only. The epoch this step was part of.
+  final int? epoch;
+
+  /// Output only. The mean loss of the training examples for this step.
+  final double? meanLoss;
+
+  /// Output only. The timestamp when this metric was computed.
+  final Timestamp? computeTime;
+
+  TuningSnapshot({this.step, this.epoch, this.meanLoss, this.computeTime})
+    : super(fullyQualifiedName);
+
+  factory TuningSnapshot.fromJson(Map<String, dynamic> json) {
+    return TuningSnapshot(
+      step: json['step'],
+      epoch: json['epoch'],
+      meanLoss: decodeDouble(json['meanLoss']),
+      computeTime: decodeCustom(json['computeTime'], Timestamp.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (step != null) 'step': step,
+      if (epoch != null) 'epoch': epoch,
+      if (meanLoss != null) 'meanLoss': encodeDouble(meanLoss),
+      if (computeTime != null) 'computeTime': computeTime!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (step != null) 'step=$step',
+      if (epoch != null) 'epoch=$epoch',
+      if (meanLoss != null) 'meanLoss=$meanLoss',
+    ].join(',');
+    return 'TuningSnapshot($contents)';
+  }
+}
+
+/// Type contains the list of OpenAPI data types as defined by
+/// https://spec.openapis.org/oas/v3.0.3#data-types
+final class Type extends ProtoEnum {
+  /// Not specified, should not be used.
+  static const typeUnspecified = Type('TYPE_UNSPECIFIED');
+
+  /// String type.
+  static const string = Type('STRING');
+
+  /// Number type.
+  static const number = Type('NUMBER');
+
+  /// Integer type.
+  static const integer = Type('INTEGER');
+
+  /// Boolean type.
+  static const boolean = Type('BOOLEAN');
+
+  /// Array type.
+  static const array = Type('ARRAY');
+
+  /// Object type.
+  static const object = Type('OBJECT');
+
+  const Type(super.value);
+
+  factory Type.fromJson(String json) => Type(json);
+
+  @override
+  String toString() => 'Type.$value';
 }
 
 /// Type of task for which the embedding will be used.

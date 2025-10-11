@@ -13,8 +13,8 @@
 # limitations under the License.
 
 [general]
-specification-source = 'google/ai/generativelanguage/v1'
-service-config = 'google/ai/generativelanguage/v1/generativelanguage_v1.yaml'
+specification-source = 'google/ai/generativelanguage/v1beta'
+service-config = 'google/ai/generativelanguage/v1beta/generativelanguage_v1beta.yaml'
 
 [codec]
 copyright-year = '2025'
