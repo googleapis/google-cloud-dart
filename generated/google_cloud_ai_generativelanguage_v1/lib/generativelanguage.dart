@@ -30,32 +30,19 @@ import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-
-const _apiKeys = ["GOOGLE_API_KEY", "GEMINI_API_KEY"];
 
 /// API for managing cache of content (CachedContent resources) that can be used
 /// in GenerativeService requests. This way generate content requests can benefit
 /// from preprocessing work being done earlier, possibly lowering their
 /// computational cost. It is intended to be used with large contexts.
 final class CacheService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   CacheService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory CacheService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return CacheService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Lists CachedContents.
   Future<ListCachedContentsResponse> listCachedContents(
@@ -142,22 +129,12 @@ final class CacheService {
 /// Also known as large language models (LLMs), this API provides models that
 /// are trained for multi-turn dialog.
 final class DiscussService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   DiscussService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory DiscussService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return DiscussService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Generates a response from the model given an input `MessagePrompt`.
   Future<GenerateMessageResponse> generateMessage(
@@ -211,22 +188,12 @@ final class DiscussService {
 
 /// An API for uploading and managing files.
 final class FileService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   FileService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory FileService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return FileService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Creates a `File`.
   Future<CreateFileResponse> createFile(CreateFileRequest request) async {
@@ -293,22 +260,12 @@ final class FileService {
 /// API for using Large Models that generate multimodal content and have
 /// additional capabilities beyond text generation.
 final class GenerativeService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   GenerativeService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory GenerativeService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return GenerativeService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Generates a model response given an input `GenerateContentRequest`.
   /// Refer to the [text generation
@@ -413,22 +370,12 @@ final class GenerativeService {
 
 /// Provides methods for getting metadata information about Generative Models.
 final class ModelService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   ModelService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory ModelService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return ModelService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Gets information about a specific `Model` such as its version number, token
   /// limits,
@@ -549,22 +496,12 @@ final class ModelService {
 
 /// Provides methods for managing permissions to PaLM API resources.
 final class PermissionService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   PermissionService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory PermissionService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return PermissionService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Create a permission to a specific resource.
   Future<Permission> createPermission(CreatePermissionRequest request) async {
@@ -653,22 +590,12 @@ final class PermissionService {
 
 /// A service for online predictions and explanations.
 final class PredictionService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   PredictionService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory PredictionService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return PredictionService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Performs a prediction request.
   Future<PredictResponse> predict(PredictRequest request) async {
@@ -711,22 +638,12 @@ final class PredictionService {
 
 /// An API for semantic search over a corpus of user uploaded content.
 final class RetrieverService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   RetrieverService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory RetrieverService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return RetrieverService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Creates an empty `Corpus`.
   Future<Corpus> createCorpus(CreateCorpusRequest request) async {
@@ -940,22 +857,12 @@ final class RetrieverService {
 /// Also known as Large Language Models (LLM)s, these generate text given an
 /// input prompt from the user.
 final class TextService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const String _host = 'generativelanguage.googleapis.com';
+
   final ServiceClient _client;
 
   TextService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory TextService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return TextService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Generates a response from the model given an input message.
   Future<GenerateTextResponse> generateText(GenerateTextRequest request) async {
