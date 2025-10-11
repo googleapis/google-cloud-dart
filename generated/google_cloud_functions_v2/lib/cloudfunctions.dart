@@ -27,10 +27,7 @@ import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_type/type.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-
-const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// Google Cloud Functions is used to deploy functions that are executed by
 /// Google in response to various events. Data connected with that event is
@@ -39,22 +36,12 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// A **function** is a resource which describes a function that should be
 /// executed and how it is triggered.
 final class FunctionService {
-  static const _host = 'cloudfunctions.googleapis.com';
+  static const String _host = 'cloudfunctions.googleapis.com';
+
   final ServiceClient _client;
 
   FunctionService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory FunctionService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return FunctionService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Returns a function with the given name from the requested project.
   Future<Function$> getFunction(GetFunctionRequest request) async {

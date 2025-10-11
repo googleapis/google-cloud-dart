@@ -23,30 +23,17 @@ library;
 
 import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-
-const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// Provides text analysis operations such as sentiment analysis and entity
 /// recognition.
 final class LanguageService {
-  static const _host = 'language.googleapis.com';
+  static const String _host = 'language.googleapis.com';
+
   final ServiceClient _client;
 
   LanguageService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory LanguageService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return LanguageService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Analyzes the sentiment of the provided text.
   Future<AnalyzeSentimentResponse> analyzeSentiment(

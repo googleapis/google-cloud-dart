@@ -32,12 +32,9 @@ import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
 part 'src/longrunning.p.dart';
-
-const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// Manages long-running operations with an API service.
 ///
@@ -49,22 +46,12 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// long-running operations should implement the `Operations` interface so
 /// developers can have a consistent client experience.
 final class Operations {
-  static const _host = 'longrunning.googleapis.com';
+  static const String _host = 'longrunning.googleapis.com';
+
   final ServiceClient _client;
 
   Operations({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory Operations.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return Operations(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Lists operations that match the specified filter in the request. If the
   /// server doesn't support this method, it returns `UNIMPLEMENTED`.

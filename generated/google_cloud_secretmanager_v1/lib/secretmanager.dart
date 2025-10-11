@@ -25,10 +25,7 @@ import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-
-const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// Secret Manager Service
 ///
@@ -38,22 +35,12 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// * `Secret`
 /// * `SecretVersion`
 final class SecretManagerService {
-  static const _host = 'secretmanager.googleapis.com';
+  static const String _host = 'secretmanager.googleapis.com';
+
   final ServiceClient _client;
 
   SecretManagerService({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory SecretManagerService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return SecretManagerService(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Lists `Secrets`.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {

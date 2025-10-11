@@ -23,10 +23,7 @@ import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_type/type.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-
-const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// API Overview
 ///
@@ -54,22 +51,12 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// are created and deleted implicitly with the resources to which they are
 /// attached.
 final class IAMPolicy {
-  static const _host = 'iam-meta-api.googleapis.com';
+  static const String _host = 'iam-meta-api.googleapis.com';
+
   final ServiceClient _client;
 
   IAMPolicy({required http.Client client})
     : _client = ServiceClient(client: client);
-
-  factory IAMPolicy.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
-      );
-    }
-    return IAMPolicy(client: auth.clientViaApiKey(apiKey));
-  }
 
   /// Sets the access control policy on the specified resource. Replaces any
   /// existing policy.
