@@ -18,6 +18,9 @@ service-config = 'google/ai/generativelanguage/v1/generativelanguage_v1.yaml'
 
 [codec]
 copyright-year = '2025'
+
+api-keys-environment-variables = "GOOGLE_API_KEY,GEMINI_API_KEY"
+
 readme-after-title-text = '''
 > [!TIP]
 > Flutter applications should use

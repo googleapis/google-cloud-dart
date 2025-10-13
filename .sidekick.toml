@@ -29,7 +29,10 @@ protobuf-subdir         = "src"
 # The default version for Dart packages.
 version = "0.1.0"
 
+api-keys-environment-variables = "GOOGLE_API_KEY"
+
 # Default package dependency versions.
+'package:googleapis_auth'  = '^2.0.0'
 'package:google_cloud_gax' = '^0.1.0'
 'package:http'             = '^1.3.0'
 

@@ -20,3 +20,6 @@ library;
 /// The format is either `major.minor.patch` or the special value `0`, which
 /// indicates that the version is unknown.
 const String clientDartVersion = '0';
+
+/// The environment variable with the given name.
+String? environmentVariable(String name) => null;

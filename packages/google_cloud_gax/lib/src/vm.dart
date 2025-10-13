@@ -25,3 +25,6 @@ final clientDartVersion = Platform.version
     .split(RegExp('[^0-9]+'))
     .take(3)
     .join('.');
+
+/// The environment variable with the given name.
+String? environmentVariable(String name) => Platform.environment[name];
