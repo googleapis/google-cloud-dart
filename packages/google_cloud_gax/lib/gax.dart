@@ -14,12 +14,13 @@
 
 import 'dart:convert';
 
-import 'package:google_cloud_gax/src/versions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 export 'src/web.dart'
     if (dart.library.io) 'src/vm.dart'
     show environmentVariable;
+
+import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
 
@@ -141,7 +142,7 @@ class ServiceClient {
 
   Future<Map<String, dynamic>> _makeRequest(
     Uri url,
-    method, [
+    String method, [
     JsonEncodable? requestBody,
   ]) async {
     final request = http.Request(method, url);
