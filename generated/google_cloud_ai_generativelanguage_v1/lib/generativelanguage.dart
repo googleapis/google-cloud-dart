@@ -30,17 +30,30 @@ import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+
+const _apiKeys = ["GOOGLE_API_KEY", "GEMINI_API_KEY"];
 
 /// API for using Large Models that generate multimodal content and have
 /// additional capabilities beyond text generation.
 final class GenerativeService {
-  static const String _host = 'generativelanguage.googleapis.com';
-
+  static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
   GenerativeService({required http.Client client})
     : _client = ServiceClient(client: client);
+
+  factory GenerativeService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return GenerativeService(client: auth.clientViaApiKey(apiKey));
+  }
 
   /// Generates a model response given an input `GenerateContentRequest`.
   /// Refer to the [text generation
@@ -49,6 +62,11 @@ final class GenerativeService {
   /// tuned models. Refer to the [model
   /// guide](https://ai.google.dev/gemini-api/docs/models/gemini) and [tuning
   /// guide](https://ai.google.dev/gemini-api/docs/model-tuning) for details.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<GenerateContentResponse> generateContent(
     GenerateContentRequest request,
   ) async {
@@ -60,6 +78,11 @@ final class GenerativeService {
   /// Generates a [streamed
   /// response](https://ai.google.dev/gemini-api/docs/text-generation?lang=python#generate-a-text-stream)
   /// from the model given an input `GenerateContentRequest`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Stream<GenerateContentResponse> streamGenerateContent(
     GenerateContentRequest request,
   ) {
@@ -72,6 +95,11 @@ final class GenerativeService {
   /// Generates a text embedding vector from the input `Content` using the
   /// specified [Gemini Embedding
   /// model](https://ai.google.dev/gemini-api/docs/models/gemini#text-embedding).
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<EmbedContentResponse> embedContent(EmbedContentRequest request) async {
     final url = Uri.https(_host, '/v1/${request.model}:embedContent');
     final response = await _client.post(url, body: request);
@@ -81,6 +109,11 @@ final class GenerativeService {
   /// Generates multiple embedding vectors from the input `Content` which
   /// consists of a batch of strings represented as `EmbedContentRequest`
   /// objects.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<BatchEmbedContentsResponse> batchEmbedContents(
     BatchEmbedContentsRequest request,
   ) async {
@@ -92,6 +125,11 @@ final class GenerativeService {
   /// Runs a model's tokenizer on input `Content` and returns the token count.
   /// Refer to the [tokens guide](https://ai.google.dev/gemini-api/docs/tokens)
   /// to learn more about tokens.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<CountTokensResponse> countTokens(CountTokensRequest request) async {
     final url = Uri.https(_host, '/v1/${request.model}:countTokens');
     final response = await _client.post(url, body: request);
@@ -99,6 +137,11 @@ final class GenerativeService {
   }
 
   /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -113,6 +156,11 @@ final class GenerativeService {
 
   /// Provides the `Operations` service functionality in this service.
   ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  ///
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
@@ -125,6 +173,11 @@ final class GenerativeService {
   }
 
   /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}:cancel');
     await _client.post(url, body: request);
@@ -138,12 +191,22 @@ final class GenerativeService {
 
 /// Provides methods for getting metadata information about Generative Models.
 final class ModelService {
-  static const String _host = 'generativelanguage.googleapis.com';
-
+  static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
   ModelService({required http.Client client})
     : _client = ServiceClient(client: client);
+
+  factory ModelService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return ModelService(client: auth.clientViaApiKey(apiKey));
+  }
 
   /// Gets information about a specific `Model` such as its version number, token
   /// limits,
@@ -151,6 +214,11 @@ final class ModelService {
   /// and other metadata. Refer to the [Gemini models
   /// guide](https://ai.google.dev/gemini-api/docs/models/gemini) for detailed
   /// model information.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<Model> getModel(GetModelRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -159,6 +227,11 @@ final class ModelService {
 
   /// Lists the [`Model`s](https://ai.google.dev/gemini-api/docs/models/gemini)
   /// available through the Gemini API.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ListModelsResponse> listModels(ListModelsRequest request) async {
     final url = Uri.https(_host, '/v1/models', {
       if (request.pageSize != null) 'pageSize': '${request.pageSize}',
@@ -169,6 +242,11 @@ final class ModelService {
   }
 
   /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -183,6 +261,11 @@ final class ModelService {
 
   /// Provides the `Operations` service functionality in this service.
   ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  ///
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
@@ -195,6 +278,11 @@ final class ModelService {
   }
 
   /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}:cancel');
     await _client.post(url, body: request);
