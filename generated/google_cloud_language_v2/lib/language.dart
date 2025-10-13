@@ -23,19 +23,37 @@ library;
 
 import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+
+const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// Provides text analysis operations such as sentiment analysis and entity
 /// recognition.
 final class LanguageService {
-  static const String _host = 'language.googleapis.com';
-
+  static const _host = 'language.googleapis.com';
   final ServiceClient _client;
 
   LanguageService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  factory LanguageService.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return LanguageService(client: auth.clientViaApiKey(apiKey));
+  }
+
   /// Analyzes the sentiment of the provided text.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<AnalyzeSentimentResponse> analyzeSentiment(
     AnalyzeSentimentRequest request,
   ) async {
@@ -47,6 +65,11 @@ final class LanguageService {
   /// Finds named entities (currently proper names and common nouns) in the text
   /// along with entity types, probability, mentions for each entity, and
   /// other properties.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<AnalyzeEntitiesResponse> analyzeEntities(
     AnalyzeEntitiesRequest request,
   ) async {
@@ -56,6 +79,11 @@ final class LanguageService {
   }
 
   /// Classifies a document into categories.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:classifyText');
     final response = await _client.post(url, body: request);
@@ -63,6 +91,11 @@ final class LanguageService {
   }
 
   /// Moderates a document for harmful and sensitive categories.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:moderateText');
     final response = await _client.post(url, body: request);
@@ -70,6 +103,11 @@ final class LanguageService {
   }
 
   /// A convenience method that provides all features in one call.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:annotateText');
     final response = await _client.post(url, body: request);

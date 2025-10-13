@@ -24,20 +24,38 @@ library;
 import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+
+const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// An abstract interface that provides location-related information for
 /// a service. Service-specific metadata is provided through the
 /// `Location.metadata` field.
 final class Locations {
-  static const String _host = 'cloud.googleapis.com';
-
+  static const _host = 'cloud.googleapis.com';
   final ServiceClient _client;
 
   Locations({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  factory Locations.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return Locations(client: auth.clientViaApiKey(apiKey));
+  }
+
   /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -51,6 +69,11 @@ final class Locations {
   }
 
   /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);

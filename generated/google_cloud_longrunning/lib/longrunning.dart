@@ -32,9 +32,12 @@ import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
 part 'src/longrunning.p.dart';
+
+const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// Manages long-running operations with an API service.
 ///
@@ -46,15 +49,30 @@ part 'src/longrunning.p.dart';
 /// long-running operations should implement the `Operations` interface so
 /// developers can have a consistent client experience.
 final class Operations {
-  static const String _host = 'longrunning.googleapis.com';
-
+  static const _host = 'longrunning.googleapis.com';
   final ServiceClient _client;
 
   Operations({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  factory Operations.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return Operations(client: auth.clientViaApiKey(apiKey));
+  }
+
   /// Lists operations that match the specified filter in the request. If the
   /// server doesn't support this method, it returns `UNIMPLEMENTED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -70,6 +88,11 @@ final class Operations {
   /// Gets the latest state of a long-running operation.  Clients can use this
   /// method to poll the operation result at intervals as recommended by the API
   /// service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<Operation> getOperation(GetOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -80,6 +103,11 @@ final class Operations {
   /// no longer interested in the operation result. It does not cancel the
   /// operation. If the server doesn't support this method, it returns
   /// `google.rpc.Code.UNIMPLEMENTED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     await _client.delete(url);
@@ -96,6 +124,11 @@ final class Operations {
   /// an `Operation.error` value with a
   /// `google.rpc.Status.code` of `1`, corresponding to
   /// `Code.CANCELLED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}:cancel');
     await _client.post(url, body: request);
