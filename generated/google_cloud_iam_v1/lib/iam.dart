@@ -23,7 +23,10 @@ import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_type/type.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+
+const _apiKeys = ["GOOGLE_API_KEY"];
 
 /// API Overview
 ///
@@ -51,17 +54,32 @@ import 'package:http/http.dart' as http;
 /// are created and deleted implicitly with the resources to which they are
 /// attached.
 final class IAMPolicy {
-  static const String _host = 'iam-meta-api.googleapis.com';
-
+  static const _host = 'iam-meta-api.googleapis.com';
   final ServiceClient _client;
 
   IAMPolicy({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  factory IAMPolicy.fromApiKey([String? apiKey]) {
+    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
+    if (apiKey == null) {
+      throw ArgumentError(
+        'apiKey or one of these environment variables must '
+        'be set to an API key: ${_apiKeys.join(", ")}',
+      );
+    }
+    return IAMPolicy(client: auth.clientViaApiKey(apiKey));
+  }
+
   /// Sets the access control policy on the specified resource. Replaces any
   /// existing policy.
   ///
   /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED` errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -71,6 +89,11 @@ final class IAMPolicy {
   /// Gets the access control policy for a resource.
   /// Returns an empty policy if the resource exists and does not have a policy
   /// set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy');
     final response = await _client.post(url, body: request);
@@ -84,6 +107,11 @@ final class IAMPolicy {
   /// Note: This operation is designed to be used for building permission-aware
   /// UIs and command-line tools, not for authorization checking. This operation
   /// may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
