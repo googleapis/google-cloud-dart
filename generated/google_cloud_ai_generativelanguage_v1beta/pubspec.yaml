@@ -16,6 +16,8 @@
 
 name: google_cloud_ai_generativelanguage_v1beta
 description: The Google Cloud client library for the Generative Language API.
+repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_ai_generativelanguage_v1beta
+issue_tracker: https://github.com/googleapis/google-cloud-dart/issues
 version: 0.1.0
 
 environment:

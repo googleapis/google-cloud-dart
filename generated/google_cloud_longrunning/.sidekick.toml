@@ -33,3 +33,4 @@ operations.
 copyright-year = '2025'
 dev-dependencies = "test"
 part-file = "src/longrunning.p.dart"
+repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_longrunning"

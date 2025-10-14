@@ -16,7 +16,7 @@ The Google Cloud client library for the Core Protobuf Types.
 >
 > Your feedback is valuable and will help us evolve this package. For general
 > feedback, suggestions, and comments, please file an issue in the
-> [bug tracker](/issues).
+> [bug tracker](https://github.com/googleapis/google-cloud-dart/issues).
 
 ## What's this?
 
