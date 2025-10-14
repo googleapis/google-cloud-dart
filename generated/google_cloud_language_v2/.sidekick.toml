@@ -18,3 +18,4 @@ service-config = 'google/cloud/language/v2/language_v2.yaml'
 
 [codec]
 copyright-year = '2025'
+repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_language_v2"
