@@ -30,6 +30,7 @@ protobuf-subdir         = "src"
 version = "0.1.0"
 
 api-keys-environment-variables = "GOOGLE_API_KEY"
+issue-tracker-url = "https://github.com/googleapis/google-cloud-dart/issues"
 
 # Default package dependency versions.
 'package:googleapis_auth'  = '^2.0.0'

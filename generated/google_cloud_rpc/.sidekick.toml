@@ -20,3 +20,4 @@ service-config = 'google/rpc/rpc_publish.yaml'
 copyright-year = '2025'
 part-file = "src/rpc.p.dart"
 dev-dependencies = "test"
+repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_rpc"
