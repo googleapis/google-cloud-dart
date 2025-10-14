@@ -76,6 +76,7 @@ import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dar
 
 void main() async {
   // Pass your API key here if the GEMINI_API_KEY environment variable is not set.
+  // See https://ai.google.dev/gemini-api/docs/api-key
   final service = GenerativeService.fromApiKey();
 
   final request = GenerateContentRequest(
@@ -86,11 +87,11 @@ void main() async {
   );
 
   final result = await service.generateContent(request);
-  final textResponse = result.candidates?[0].content?.parts?[0].text;
-  if (textResponse == null) {
+  final parts = result.candidates?[0].content?.parts;
+  if (parts == null) {
     print('<No textual response>');
   } else {
-    print(textResponse);
+    print(parts.map((p) => p.text ?? '').join(''));
   }
 
   service.close();
