@@ -38,13 +38,13 @@ readme-quickstart-text = '''
 This quickstart shows you how to install the package and make your first
 Gemini API request.
 
-## Before you begin
+### Before you begin
 
 You need a Gemini API key. If you don't already have one, you can get it for
 free in [Google AI Studio](https://aistudio.google.com/app/api-keys)
 ([step-by-step instructions](https://ai.google.dev/gemini-api/docs/api-key)).
 
-## Installing the package into your application
+### Installing the package into your application
 
 > [!TIP]
 > You can create a skeleton application by running the terminal command: `dart create myapp`
@@ -55,7 +55,7 @@ Run the terminal command:
 dart pub add google_cloud_ai_generativelanguage_v1beta
 ```
 
-## Make your first request
+### Make your first request
 
 Here is an example that uses the generateContent method to send a request to
 the Gemini API using the Gemini 2.5 Flash model.
