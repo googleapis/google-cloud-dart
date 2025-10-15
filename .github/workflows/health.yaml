@@ -11,8 +11,6 @@ jobs:
   health:
     uses: dart-lang/ecosystem/.github/workflows/health.yaml@a3cf960b1206cedc91e5583d5143f66395440041
     with:
-      sdk: dev
-      channel: dev
-      flutter_packages: "pkgs/cronet_http,pkgs/cupertino_http,pkgs/ok_http"
+      checks: "license,breaking,do-not-submit,leaking"
     permissions:
       pull-requests: write
