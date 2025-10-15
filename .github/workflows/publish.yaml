@@ -1,8 +1,10 @@
 name: Publish
+
 on:
   pull_request:
-    branches: [ main ]
+    branches: [main]
     types: [opened, synchronize, reopened, labeled, unlabeled]
+
 jobs:
   publish:
     uses: dart-lang/ecosystem/.github/workflows/publish.yaml@main
