@@ -1,11 +1,9 @@
 name: Health
 
-# Run on PRs and pushes to the default branch.
 on:
-  push:
-    branches: [main]
   pull_request:
     branches: [main]
+    types: [opened, synchronize, reopened, labeled, unlabeled]
 
 jobs:
   health:
