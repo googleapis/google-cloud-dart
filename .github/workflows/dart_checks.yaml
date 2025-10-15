@@ -61,7 +61,6 @@ jobs:
         run: dart test
         working-directory: packages/google_cloud_gax
 
-
   generator:
     name: Code Generator
     runs-on: ubuntu-latest

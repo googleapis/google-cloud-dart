@@ -1,0 +1,18 @@
+name: Health
+
+# Run on PRs and pushes to the default branch.
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  health:
+    uses: dart-lang/ecosystem/.github/workflows/health.yaml@a3cf960b1206cedc91e5583d5143f66395440041
+    with:
+      sdk: dev
+      channel: dev
+      flutter_packages: "pkgs/cronet_http,pkgs/cupertino_http,pkgs/ok_http"
+    permissions:
+      pull-requests: write
