@@ -7,8 +7,9 @@ on:
 
 jobs:
   health:
-    uses: dart-lang/ecosystem/.github/workflows/health.yaml@a3cf960b1206cedc91e5583d5143f66395440041
+    uses: dart-lang/ecosystem/.github/workflows/health.yaml@main
     with:
       checks: "breaking,coverage,do-not-submit,leaking,license"
+      coverage_web: false
     permissions:
       pull-requests: write
