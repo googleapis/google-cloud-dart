@@ -61,14 +61,6 @@ jobs:
         run: dart test
         working-directory: packages/google_cloud_gax
 
-  health:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: dart-lang/ecosystem/.github/workflows/health.yaml@a3cf960b1206cedc91e5583d5143f66395440041
-        with:
-          sdk: ${{ env.DART_VERSION }}
-    permissions:
-      pull-requests: write
 
   generator:
     name: Code Generator
