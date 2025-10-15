@@ -41,9 +41,25 @@ final class SecretManagerService {
   static const _host = 'secretmanager.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `SecretManagerService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `SecretManagerService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   SecretManagerService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `SecretManagerService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory SecretManagerService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {

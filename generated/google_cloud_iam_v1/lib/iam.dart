@@ -57,9 +57,25 @@ final class IAMPolicy {
   static const _host = 'iam-meta-api.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `IAMPolicy` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `IAMPolicy`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   IAMPolicy({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `IAMPolicy` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory IAMPolicy.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {

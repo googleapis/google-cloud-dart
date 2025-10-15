@@ -42,9 +42,25 @@ final class FunctionService {
   static const _host = 'cloudfunctions.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `FunctionService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `FunctionService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   FunctionService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `FunctionService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FunctionService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {

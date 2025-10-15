@@ -43,9 +43,26 @@ final class CacheService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `CacheService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `CacheService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   CacheService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `CacheService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory CacheService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -180,9 +197,26 @@ final class DiscussService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `DiscussService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `DiscussService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   DiscussService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `DiscussService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory DiscussService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -269,9 +303,26 @@ final class FileService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `FileService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `FileService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   FileService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `FileService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FileService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -381,9 +432,26 @@ final class GenerativeService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `GenerativeService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `GenerativeService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   GenerativeService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `GenerativeService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory GenerativeService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -541,9 +609,26 @@ final class ModelService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `ModelService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `ModelService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   ModelService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `ModelService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ModelService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -722,9 +807,26 @@ final class PermissionService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `PermissionService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `PermissionService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   PermissionService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `PermissionService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PermissionService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -866,9 +968,26 @@ final class PredictionService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `PredictionService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `PredictionService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   PredictionService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `PredictionService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PredictionService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -939,9 +1058,26 @@ final class RetrieverService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `RetrieverService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `RetrieverService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   RetrieverService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `RetrieverService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory RetrieverService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
@@ -1278,9 +1414,26 @@ final class TextService {
   static const _host = 'generativelanguage.googleapis.com';
   final ServiceClient _client;
 
+  /// Creates a `TextService` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by `TextService`. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   TextService({required http.Client client})
     : _client = ServiceClient(client: client);
 
+  /// Creates a `TextService` that does authentication through an API key.
+  ///
+  /// If called without arguments, the API key is taken from these environment
+  /// variables:
+  ///   * `GOOGLE_API_KEY`
+  ///   * `GEMINI_API_KEY`
+  ///
+  /// Throws [ArgumentError] if called without arguments and none of the above
+  /// environment variables are set.
+  ///
+  /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory TextService.fromApiKey([String? apiKey]) {
     apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
     if (apiKey == null) {
