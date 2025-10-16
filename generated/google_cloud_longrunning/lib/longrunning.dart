@@ -96,6 +96,8 @@ final class Operations {
       if (request.filter != null) 'filter': request.filter!,
       if (request.pageSize != null) 'pageSize': '${request.pageSize}',
       if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.returnPartialSuccess != null)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -201,11 +203,24 @@ final class ListOperationsRequest extends ProtoMessage {
   /// The standard list page token.
   final String? pageToken;
 
+  /// When set to `true`, operations that are reachable are returned as normal,
+  /// and those that are unreachable are returned in the
+  /// [ListOperationsResponse.unreachable] field.
+  ///
+  /// This can only be `true` when reading across collections e.g. when `parent`
+  /// is set to `"projects/example/locations/-"`.
+  ///
+  /// This field is not by default supported and will result in an
+  /// `UNIMPLEMENTED` error if set unless explicitly documented otherwise in
+  /// service or product specific documentation.
+  final bool? returnPartialSuccess;
+
   ListOperationsRequest({
     required this.name,
     this.filter,
     this.pageSize,
     this.pageToken,
+    this.returnPartialSuccess,
   }) : super(fullyQualifiedName);
 
   factory ListOperationsRequest.fromJson(Map<String, dynamic> json) {
@@ -214,6 +229,7 @@ final class ListOperationsRequest extends ProtoMessage {
       filter: json['filter'],
       pageSize: json['pageSize'],
       pageToken: json['pageToken'],
+      returnPartialSuccess: json['returnPartialSuccess'],
     );
   }
 
@@ -224,6 +240,8 @@ final class ListOperationsRequest extends ProtoMessage {
       if (filter != null) 'filter': filter,
       if (pageSize != null) 'pageSize': pageSize,
       if (pageToken != null) 'pageToken': pageToken,
+      if (returnPartialSuccess != null)
+        'returnPartialSuccess': returnPartialSuccess,
     };
   }
 
@@ -234,6 +252,8 @@ final class ListOperationsRequest extends ProtoMessage {
       if (filter != null) 'filter=$filter',
       if (pageSize != null) 'pageSize=$pageSize',
       if (pageToken != null) 'pageToken=$pageToken',
+      if (returnPartialSuccess != null)
+        'returnPartialSuccess=$returnPartialSuccess',
     ].join(',');
     return 'ListOperationsRequest($contents)';
   }
@@ -251,13 +271,23 @@ final class ListOperationsResponse extends ProtoMessage {
   /// The standard List next-page token.
   final String? nextPageToken;
 
-  ListOperationsResponse({this.operations, this.nextPageToken})
-    : super(fullyQualifiedName);
+  /// Unordered list. Unreachable resources. Populated when the request sets
+  /// `ListOperationsRequest.return_partial_success` and reads across
+  /// collections e.g. when attempting to list all resources across all supported
+  /// locations.
+  final List<String>? unreachable;
+
+  ListOperationsResponse({
+    this.operations,
+    this.nextPageToken,
+    this.unreachable,
+  }) : super(fullyQualifiedName);
 
   factory ListOperationsResponse.fromJson(Map<String, dynamic> json) {
     return ListOperationsResponse(
       operations: decodeListMessage(json['operations'], Operation.fromJson),
       nextPageToken: json['nextPageToken'],
+      unreachable: decodeList(json['unreachable']),
     );
   }
 
@@ -266,6 +296,7 @@ final class ListOperationsResponse extends ProtoMessage {
     return {
       if (operations != null) 'operations': encodeList(operations),
       if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (unreachable != null) 'unreachable': unreachable,
     };
   }
 
