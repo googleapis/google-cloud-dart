@@ -45,3 +45,15 @@ the version of Sidekick used in the automation:
    
    `GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main`
 2. Modify the Sidekick invocation in [.github/workflows/dart_checks.yaml](.github/workflows/dart_checks.yaml)
+
+### Updating API sources
+
+Configuration for API source descriptions is found in the `[source]`
+section of the root [`.sidekick.toml`](.sidekick.toml).
+
+You can update these sources to their latest versions by running
+(from the root of the project):
+
+```bash
+go run github.com/googleapis/librarian/cmd/sidekick@main update
+```
