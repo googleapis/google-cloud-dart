@@ -30,6 +30,7 @@ import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_type/type.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
@@ -183,6 +184,28 @@ final class CacheService {
     return Operation.fromJson(response, request.operationHelper);
   }
 
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
@@ -292,6 +315,28 @@ final class DiscussService {
     return Operation.fromJson(response, request.operationHelper);
   }
 
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
@@ -384,6 +429,18 @@ final class FileService {
     await _client.delete(url);
   }
 
+  /// Download the `File`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<DownloadFileResponse> downloadFile(DownloadFileRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:download');
+    final response = await _client.get(url);
+    return DownloadFileResponse.fromJson(response);
+  }
+
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -418,6 +475,28 @@ final class FileService {
     final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
   }
 
   /// Closes the client and cleans up any resources associated with it.
@@ -596,6 +675,28 @@ final class GenerativeService {
     final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
   }
 
   /// Closes the client and cleans up any resources associated with it.
@@ -796,6 +897,28 @@ final class ModelService {
     return Operation.fromJson(response, request.operationHelper);
   }
 
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
@@ -957,6 +1080,28 @@ final class PermissionService {
     return Operation.fromJson(response, request.operationHelper);
   }
 
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
@@ -1011,6 +1156,31 @@ final class PredictionService {
     return PredictResponse.fromJson(response);
   }
 
+  /// Same as Predict but returns an LRO.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<PredictLongRunningResponse, PredictLongRunningMetadata>>
+  predictLongRunning(PredictLongRunningRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.model}:predictLongRunning');
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        PredictLongRunningResponse.fromJson,
+        PredictLongRunningMetadata.fromJson,
+      ),
+    );
+  }
+
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -1045,6 +1215,28 @@ final class PredictionService {
     final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
   }
 
   /// Closes the client and cleans up any resources associated with it.
@@ -1400,6 +1592,28 @@ final class RetrieverService {
     return Operation.fromJson(response, request.operationHelper);
   }
 
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
@@ -1532,6 +1746,28 @@ final class TextService {
     final url = Uri.https(_host, '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [StatusException] if the API failed with a
+  /// [Status] message. Throws a [ServiceException] if the API failed for any
+  /// other reason.
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    await _client.post(url);
   }
 
   /// Closes the client and cleans up any resources associated with it.
@@ -1757,7 +1993,7 @@ final class CachedContent extends ProtoMessage {
   /// Input only. New TTL for this resource, input only.
   final Duration? ttl;
 
-  /// Optional. Identifier. The resource name referring to the cached content.
+  /// Output only. Identifier. The resource name referring to the cached content.
   /// Format: `cachedContents/{id}`
   final String? name;
 
@@ -2057,6 +2293,23 @@ final class Part extends ProtoMessage {
   /// Result of executing the `ExecutableCode`.
   final CodeExecutionResult? codeExecutionResult;
 
+  /// Optional. Video metadata. The metadata should only be specified while the
+  /// video data is presented in inline_data or file_data.
+  final VideoMetadata? videoMetadata;
+
+  /// Optional. Indicates if the part is thought from the model.
+  final bool? thought;
+
+  /// Optional. An opaque signature for the thought so it can be reused in
+  /// subsequent requests.
+  final Uint8List? thoughtSignature;
+
+  /// Custom metadata associated with the Part.
+  /// Agents using genai.Part as content representation may need to keep track
+  /// of the additional information. For example it can be name of a file/source
+  /// from which the Part originates or a way to multiplex multiple Part streams.
+  final Struct? partMetadata;
+
   Part({
     this.text,
     this.inlineData,
@@ -2065,6 +2318,10 @@ final class Part extends ProtoMessage {
     this.fileData,
     this.executableCode,
     this.codeExecutionResult,
+    this.videoMetadata,
+    this.thought,
+    this.thoughtSignature,
+    this.partMetadata,
   }) : super(fullyQualifiedName);
 
   factory Part.fromJson(Map<String, dynamic> json) {
@@ -2082,6 +2339,10 @@ final class Part extends ProtoMessage {
         json['codeExecutionResult'],
         CodeExecutionResult.fromJson,
       ),
+      videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
+      thought: json['thought'],
+      thoughtSignature: decodeBytes(json['thoughtSignature']),
+      partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
     );
   }
 
@@ -2097,14 +2358,56 @@ final class Part extends ProtoMessage {
       if (executableCode != null) 'executableCode': executableCode!.toJson(),
       if (codeExecutionResult != null)
         'codeExecutionResult': codeExecutionResult!.toJson(),
+      if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
+      if (thought != null) 'thought': thought,
+      if (thoughtSignature != null)
+        'thoughtSignature': encodeBytes(thoughtSignature),
+      if (partMetadata != null) 'partMetadata': partMetadata!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (text != null) 'text=$text'].join(',');
+    final contents = [
+      if (text != null) 'text=$text',
+      if (thought != null) 'thought=$thought',
+      if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
+    ].join(',');
     return 'Part($contents)';
   }
+}
+
+/// A datatype containing media that is part of a `FunctionResponse` message.
+///
+/// A `FunctionResponsePart` consists of data which has an associated datatype. A
+/// `FunctionResponsePart` can only contain one of the accepted types in
+/// `FunctionResponsePart.data`.
+///
+/// A `FunctionResponsePart` must have a fixed IANA MIME type identifying the
+/// type and subtype of the media if the `inline_data` field is filled with raw
+/// bytes.
+final class FunctionResponsePart extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FunctionResponsePart';
+
+  /// Inline media bytes.
+  final FunctionResponseBlob? inlineData;
+
+  FunctionResponsePart({this.inlineData}) : super(fullyQualifiedName);
+
+  factory FunctionResponsePart.fromJson(Map<String, dynamic> json) {
+    return FunctionResponsePart(
+      inlineData: decode(json['inlineData'], FunctionResponseBlob.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (inlineData != null) 'inlineData': inlineData!.toJson()};
+  }
+
+  @override
+  String toString() => 'FunctionResponsePart()';
 }
 
 /// Raw media bytes.
@@ -2150,6 +2453,53 @@ final class Blob extends ProtoMessage {
   }
 }
 
+/// Raw media bytes for function response.
+///
+/// Text should not be sent as raw bytes, use the 'FunctionResponse.response'
+/// field.
+final class FunctionResponseBlob extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FunctionResponseBlob';
+
+  /// The IANA standard MIME type of the source data.
+  /// Examples:
+  ///   - image/png
+  ///   - image/jpeg
+  /// If an unsupported MIME type is provided, an error will be returned. For a
+  /// complete list of supported types, see [Supported file
+  /// formats](https://ai.google.dev/gemini-api/docs/prompting_with_media#supported_file_formats).
+  final String? mimeType;
+
+  /// Raw bytes for media formats.
+  final Uint8List? data;
+
+  FunctionResponseBlob({this.mimeType, this.data}) : super(fullyQualifiedName);
+
+  factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) {
+    return FunctionResponseBlob(
+      mimeType: json['mimeType'],
+      data: decodeBytes(json['data']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (mimeType != null) 'mimeType': mimeType,
+      if (data != null) 'data': encodeBytes(data),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (mimeType != null) 'mimeType=$mimeType',
+      if (data != null) 'data=$data',
+    ].join(',');
+    return 'FunctionResponseBlob($contents)';
+  }
+}
+
 /// URI based data.
 final class FileData extends ProtoMessage {
   static const String fullyQualifiedName =
@@ -2182,6 +2532,48 @@ final class FileData extends ProtoMessage {
       if (fileUri != null) 'fileUri=$fileUri',
     ].join(',');
     return 'FileData($contents)';
+  }
+}
+
+/// Metadata describes the input video content.
+final class VideoMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.VideoMetadata';
+
+  /// Optional. The start offset of the video.
+  final Duration? startOffset;
+
+  /// Optional. The end offset of the video.
+  final Duration? endOffset;
+
+  /// Optional. The frame rate of the video sent to the model. If not specified,
+  /// the default value will be 1.0. The fps range is (0.0, 24.0].
+  final double? fps;
+
+  VideoMetadata({this.startOffset, this.endOffset, this.fps})
+    : super(fullyQualifiedName);
+
+  factory VideoMetadata.fromJson(Map<String, dynamic> json) {
+    return VideoMetadata(
+      startOffset: decodeCustom(json['startOffset'], Duration.fromJson),
+      endOffset: decodeCustom(json['endOffset'], Duration.fromJson),
+      fps: decodeDouble(json['fps']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (startOffset != null) 'startOffset': startOffset!.toJson(),
+      if (endOffset != null) 'endOffset': endOffset!.toJson(),
+      if (fps != null) 'fps': encodeDouble(fps),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (fps != null) 'fps=$fps'].join(',');
+    return 'VideoMetadata($contents)';
   }
 }
 
@@ -2326,6 +2718,8 @@ final class CodeExecutionResult_Outcome extends ProtoEnum {
 /// A `Tool` is a piece of code that enables the system to interact with
 /// external systems to perform an action, or set of actions, outside of
 /// knowledge and scope of the model.
+///
+/// Next ID: 12
 final class Tool extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.Tool';
@@ -2355,11 +2749,21 @@ final class Tool extends ProtoMessage {
   /// Tool to support Google Search in Model. Powered by Google.
   final Tool_GoogleSearch? googleSearch;
 
+  /// Optional. Tool to support the model interacting directly with the computer.
+  /// If enabled, it automatically populates computer-use specific Function
+  /// Declarations.
+  final Tool_ComputerUse? computerUse;
+
+  /// Optional. Tool to support URL context retrieval.
+  final UrlContext? urlContext;
+
   Tool({
     this.functionDeclarations,
     this.googleSearchRetrieval,
     this.codeExecution,
     this.googleSearch,
+    this.computerUse,
+    this.urlContext,
   }) : super(fullyQualifiedName);
 
   factory Tool.fromJson(Map<String, dynamic> json) {
@@ -2374,6 +2778,8 @@ final class Tool extends ProtoMessage {
       ),
       codeExecution: decode(json['codeExecution'], CodeExecution.fromJson),
       googleSearch: decode(json['googleSearch'], Tool_GoogleSearch.fromJson),
+      computerUse: decode(json['computerUse'], Tool_ComputerUse.fromJson),
+      urlContext: decode(json['urlContext'], UrlContext.fromJson),
     );
   }
 
@@ -2386,6 +2792,8 @@ final class Tool extends ProtoMessage {
         'googleSearchRetrieval': googleSearchRetrieval!.toJson(),
       if (codeExecution != null) 'codeExecution': codeExecution!.toJson(),
       if (googleSearch != null) 'googleSearch': googleSearch!.toJson(),
+      if (computerUse != null) 'computerUse': computerUse!.toJson(),
+      if (urlContext != null) 'urlContext': urlContext!.toJson(),
     };
   }
 
@@ -2399,10 +2807,108 @@ final class Tool_GoogleSearch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.Tool.GoogleSearch';
 
-  Tool_GoogleSearch() : super(fullyQualifiedName);
+  /// Optional. Filter search results to a specific time range.
+  /// If customers set a start time, they must set an end time (and vice
+  /// versa).
+  final Interval? timeRangeFilter;
+
+  Tool_GoogleSearch({this.timeRangeFilter}) : super(fullyQualifiedName);
 
   factory Tool_GoogleSearch.fromJson(Map<String, dynamic> json) {
-    return Tool_GoogleSearch();
+    return Tool_GoogleSearch(
+      timeRangeFilter: decode(json['timeRangeFilter'], Interval.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (timeRangeFilter != null) 'timeRangeFilter': timeRangeFilter!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'GoogleSearch()';
+}
+
+/// Computer Use tool type.
+final class Tool_ComputerUse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Tool.ComputerUse';
+
+  /// Required. The environment being operated.
+  final Tool_ComputerUse_Environment? environment;
+
+  /// Optional. By default, predefined functions are included in the final
+  /// model call. Some of them can be explicitly excluded from being
+  /// automatically included. This can serve two purposes:
+  /// 1. Using a more restricted / different action space.
+  /// 2. Improving the definitions / instructions of predefined functions.
+  final List<String>? excludedPredefinedFunctions;
+
+  Tool_ComputerUse({this.environment, this.excludedPredefinedFunctions})
+    : super(fullyQualifiedName);
+
+  factory Tool_ComputerUse.fromJson(Map<String, dynamic> json) {
+    return Tool_ComputerUse(
+      environment: decodeEnum(
+        json['environment'],
+        Tool_ComputerUse_Environment.fromJson,
+      ),
+      excludedPredefinedFunctions: decodeList(
+        json['excludedPredefinedFunctions'],
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (environment != null) 'environment': environment!.toJson(),
+      if (excludedPredefinedFunctions != null)
+        'excludedPredefinedFunctions': excludedPredefinedFunctions,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (environment != null) 'environment=$environment',
+    ].join(',');
+    return 'ComputerUse($contents)';
+  }
+}
+
+/// Represents the environment being operated, such as a web browser.
+final class Tool_ComputerUse_Environment extends ProtoEnum {
+  /// Defaults to browser.
+  static const environmentUnspecified = Tool_ComputerUse_Environment(
+    'ENVIRONMENT_UNSPECIFIED',
+  );
+
+  /// Operates in a web browser.
+  static const environmentBrowser = Tool_ComputerUse_Environment(
+    'ENVIRONMENT_BROWSER',
+  );
+
+  const Tool_ComputerUse_Environment(super.value);
+
+  factory Tool_ComputerUse_Environment.fromJson(String json) =>
+      Tool_ComputerUse_Environment(json);
+
+  @override
+  String toString() => 'Environment.$value';
+}
+
+/// Tool to support URL context retrieval.
+final class UrlContext extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UrlContext';
+
+  UrlContext() : super(fullyQualifiedName);
+
+  factory UrlContext.fromJson(Map<String, dynamic> json) {
+    return UrlContext();
   }
 
   @override
@@ -2411,7 +2917,7 @@ final class Tool_GoogleSearch extends ProtoMessage {
   }
 
   @override
-  String toString() => 'GoogleSearch()';
+  String toString() => 'UrlContext()';
 }
 
 /// Tool to retrieve public web data for grounding, powered by Google.
@@ -2574,9 +3080,9 @@ final class FunctionCallingConfig extends ProtoMessage {
   /// Optional. A set of function names that, when provided, limits the functions
   /// the model will call.
   ///
-  /// This should only be set when the Mode is ANY. Function names
-  /// should match [FunctionDeclaration.name]. With mode set to ANY, model will
-  /// predict a function call from the set of function names provided.
+  /// This should only be set when the Mode is ANY or VALIDATED. Function names
+  /// should match [FunctionDeclaration.name]. When set, model will
+  /// predict a function call from only allowed function names.
   final List<String>? allowedFunctionNames;
 
   FunctionCallingConfig({this.mode, this.allowedFunctionNames})
@@ -2625,6 +3131,14 @@ final class FunctionCallingConfig_Mode extends ProtoEnum {
   /// not passing any function declarations.
   static const none = FunctionCallingConfig_Mode('NONE');
 
+  /// Model decides to predict either a function call
+  /// or a natural language response, but will validate function calls with
+  /// constrained decoding.
+  /// If "allowed_function_names" are set, the predicted function call will be
+  /// limited to any one of "allowed_function_names", else the predicted
+  /// function call will be any one of the provided "function_declarations".
+  static const validated = FunctionCallingConfig_Mode('VALIDATED');
+
   const FunctionCallingConfig_Mode(super.value);
 
   factory FunctionCallingConfig_Mode.fromJson(String json) =>
@@ -2644,8 +3158,8 @@ final class FunctionDeclaration extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.FunctionDeclaration';
 
   /// Required. The name of the function.
-  /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
-  /// length of 63.
+  /// Must be a-z, A-Z, 0-9, or contain underscores, colons, dots, and dashes,
+  /// with a maximum length of 64.
   final String? name;
 
   /// Required. A brief description of the function.
@@ -2657,16 +3171,49 @@ final class FunctionDeclaration extends ProtoMessage {
   /// for the parameter.
   final Schema? parameters;
 
+  /// Optional. Describes the parameters to the function in JSON Schema format.
+  /// The schema must describe an object where the properties are the parameters
+  /// to the function. For example:
+  ///
+  /// ```
+  /// {
+  ///   "type": "object",
+  ///   "properties": {
+  ///     "name": { "type": "string" },
+  ///     "age": { "type": "integer" }
+  ///   },
+  ///   "additionalProperties": false,
+  ///   "required": ["name", "age"],
+  ///   "propertyOrdering": ["name", "age"]
+  /// }
+  /// ```
+  ///
+  /// This field is mutually exclusive with `parameters`.
+  final Value? parametersJsonSchema;
+
   /// Optional. Describes the output from this function in JSON Schema format.
   /// Reflects the Open API 3.03 Response Object. The Schema defines the type
   /// used for the response value of the function.
   final Schema? response;
 
+  /// Optional. Describes the output from this function in JSON Schema format.
+  /// The value specified by the schema is the response value of the function.
+  ///
+  /// This field is mutually exclusive with `response`.
+  final Value? responseJsonSchema;
+
+  /// Optional. Specifies the function Behavior.
+  /// Currently only supported by the BidiGenerateContent method.
+  final FunctionDeclaration_Behavior? behavior;
+
   FunctionDeclaration({
     this.name,
     this.description,
     this.parameters,
+    this.parametersJsonSchema,
     this.response,
+    this.responseJsonSchema,
+    this.behavior,
   }) : super(fullyQualifiedName);
 
   factory FunctionDeclaration.fromJson(Map<String, dynamic> json) {
@@ -2674,7 +3221,19 @@ final class FunctionDeclaration extends ProtoMessage {
       name: json['name'],
       description: json['description'],
       parameters: decode(json['parameters'], Schema.fromJson),
+      parametersJsonSchema: decodeCustom(
+        json['parametersJsonSchema'],
+        Value.fromJson,
+      ),
       response: decode(json['response'], Schema.fromJson),
+      responseJsonSchema: decodeCustom(
+        json['responseJsonSchema'],
+        Value.fromJson,
+      ),
+      behavior: decodeEnum(
+        json['behavior'],
+        FunctionDeclaration_Behavior.fromJson,
+      ),
     );
   }
 
@@ -2684,7 +3243,12 @@ final class FunctionDeclaration extends ProtoMessage {
       if (name != null) 'name': name,
       if (description != null) 'description': description,
       if (parameters != null) 'parameters': parameters!.toJson(),
+      if (parametersJsonSchema != null)
+        'parametersJsonSchema': parametersJsonSchema!.toJson(),
       if (response != null) 'response': response!.toJson(),
+      if (responseJsonSchema != null)
+        'responseJsonSchema': responseJsonSchema!.toJson(),
+      if (behavior != null) 'behavior': behavior!.toJson(),
     };
   }
 
@@ -2693,9 +3257,34 @@ final class FunctionDeclaration extends ProtoMessage {
     final contents = [
       if (name != null) 'name=$name',
       if (description != null) 'description=$description',
+      if (behavior != null) 'behavior=$behavior',
     ].join(',');
     return 'FunctionDeclaration($contents)';
   }
+}
+
+/// Defines the function behavior. Defaults to `BLOCKING`.
+final class FunctionDeclaration_Behavior extends ProtoEnum {
+  /// This value is unused.
+  static const unspecified = FunctionDeclaration_Behavior('UNSPECIFIED');
+
+  /// If set, the system will wait to receive the function response before
+  /// continuing the conversation.
+  static const blocking = FunctionDeclaration_Behavior('BLOCKING');
+
+  /// If set, the system will not wait to receive the function response.
+  /// Instead, it will attempt to handle function responses as they become
+  /// available while maintaining the conversation between the user and the
+  /// model.
+  static const nonBlocking = FunctionDeclaration_Behavior('NON_BLOCKING');
+
+  const FunctionDeclaration_Behavior(super.value);
+
+  factory FunctionDeclaration_Behavior.fromJson(String json) =>
+      FunctionDeclaration_Behavior(json);
+
+  @override
+  String toString() => 'Behavior.$value';
 }
 
 /// A predicted `FunctionCall` returned from the model that contains
@@ -2711,7 +3300,7 @@ final class FunctionCall extends ProtoMessage {
 
   /// Required. The name of the function to call.
   /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
-  /// length of 63.
+  /// length of 64.
   final String? name;
 
   /// Optional. The function parameters and values in JSON object format.
@@ -2761,20 +3350,55 @@ final class FunctionResponse extends ProtoMessage {
 
   /// Required. The name of the function to call.
   /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
-  /// length of 63.
+  /// length of 64.
   final String? name;
 
   /// Required. The function response in JSON object format.
+  /// Callers can use any keys of their choice that fit the function's syntax
+  /// to return the function output, e.g. "output", "result", etc.
+  /// In particular, if the function call failed to execute, the response can
+  /// have an "error" key to return error details to the model.
   final Struct? response;
 
-  FunctionResponse({this.id, this.name, this.response})
-    : super(fullyQualifiedName);
+  /// Optional. Ordered `Parts` that constitute a function response. Parts may
+  /// have different IANA MIME types.
+  final List<FunctionResponsePart>? parts;
+
+  /// Optional. Signals that function call continues, and more responses will be
+  /// returned, turning the function call into a generator.
+  /// Is only applicable to NON_BLOCKING function calls, is ignored otherwise.
+  /// If set to false, future responses will not be considered.
+  /// It is allowed to return empty `response` with `will_continue=False` to
+  /// signal that the function call is finished. This may still trigger the model
+  /// generation. To avoid triggering the generation and finish the function
+  /// call, additionally set `scheduling` to `SILENT`.
+  final bool? willContinue;
+
+  /// Optional. Specifies how the response should be scheduled in the
+  /// conversation. Only applicable to NON_BLOCKING function calls, is ignored
+  /// otherwise. Defaults to WHEN_IDLE.
+  final FunctionResponse_Scheduling? scheduling;
+
+  FunctionResponse({
+    this.id,
+    this.name,
+    this.response,
+    this.parts,
+    this.willContinue,
+    this.scheduling,
+  }) : super(fullyQualifiedName);
 
   factory FunctionResponse.fromJson(Map<String, dynamic> json) {
     return FunctionResponse(
       id: json['id'],
       name: json['name'],
       response: decodeCustom(json['response'], Struct.fromJson),
+      parts: decodeListMessage(json['parts'], FunctionResponsePart.fromJson),
+      willContinue: json['willContinue'],
+      scheduling: decodeEnum(
+        json['scheduling'],
+        FunctionResponse_Scheduling.fromJson,
+      ),
     );
   }
 
@@ -2784,6 +3408,9 @@ final class FunctionResponse extends ProtoMessage {
       if (id != null) 'id': id,
       if (name != null) 'name': name,
       if (response != null) 'response': response!.toJson(),
+      if (parts != null) 'parts': encodeList(parts),
+      if (willContinue != null) 'willContinue': willContinue,
+      if (scheduling != null) 'scheduling': scheduling!.toJson(),
     };
   }
 
@@ -2792,9 +3419,39 @@ final class FunctionResponse extends ProtoMessage {
     final contents = [
       if (id != null) 'id=$id',
       if (name != null) 'name=$name',
+      if (willContinue != null) 'willContinue=$willContinue',
+      if (scheduling != null) 'scheduling=$scheduling',
     ].join(',');
     return 'FunctionResponse($contents)';
   }
+}
+
+/// Specifies how the response should be scheduled in the conversation.
+final class FunctionResponse_Scheduling extends ProtoEnum {
+  /// This value is unused.
+  static const schedulingUnspecified = FunctionResponse_Scheduling(
+    'SCHEDULING_UNSPECIFIED',
+  );
+
+  /// Only add the result to the conversation context, do not interrupt or
+  /// trigger generation.
+  static const silent = FunctionResponse_Scheduling('SILENT');
+
+  /// Add the result to the conversation context, and prompt to generate output
+  /// without interrupting ongoing generation.
+  static const whenIdle = FunctionResponse_Scheduling('WHEN_IDLE');
+
+  /// Add the result to the conversation context, interrupt ongoing generation
+  /// and prompt to generate output.
+  static const interrupt = FunctionResponse_Scheduling('INTERRUPT');
+
+  const FunctionResponse_Scheduling(super.value);
+
+  factory FunctionResponse_Scheduling.fromJson(String json) =>
+      FunctionResponse_Scheduling(json);
+
+  @override
+  String toString() => 'Scheduling.$value';
 }
 
 /// The `Schema` object allows the definition of input and output data types.
@@ -2808,12 +3465,12 @@ final class Schema extends ProtoMessage {
   /// Required. Data type.
   final Type? type;
 
-  /// Optional. The format of the data. This is used only for primitive
-  /// datatypes. Supported formats:
-  ///  for NUMBER type: float, double
-  ///  for INTEGER type: int32, int64
-  ///  for STRING type: enum
+  /// Optional. The format of the data. Any value is allowed, but most do not
+  /// trigger any special functionality.
   final String? format;
+
+  /// Optional. The title of the schema.
+  final String? title;
 
   /// Optional. A brief description of the parameter. This could contain examples
   /// of use. Parameter description may be formatted as Markdown.
@@ -2842,9 +3499,53 @@ final class Schema extends ProtoMessage {
   /// Optional. Required properties of Type.OBJECT.
   final List<String>? required;
 
+  /// Optional. Minimum number of the properties for Type.OBJECT.
+  final int? minProperties;
+
+  /// Optional. Maximum number of the properties for Type.OBJECT.
+  final int? maxProperties;
+
+  /// Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER
+  /// Minimum value of the Type.INTEGER and Type.NUMBER
+  final double? minimum;
+
+  /// Optional. Maximum value of the Type.INTEGER and Type.NUMBER
+  final double? maximum;
+
+  /// Optional. SCHEMA FIELDS FOR TYPE STRING
+  /// Minimum length of the Type.STRING
+  final int? minLength;
+
+  /// Optional. Maximum length of the Type.STRING
+  final int? maxLength;
+
+  /// Optional. Pattern of the Type.STRING to restrict a string to a regular
+  /// expression.
+  final String? pattern;
+
+  /// Optional. Example of the object. Will only populated when the object is the
+  /// root.
+  final Value? example;
+
+  /// Optional. The value should be validated against any (one or more) of the
+  /// subschemas in the list.
+  final List<Schema>? anyOf;
+
+  /// Optional. The order of the properties.
+  /// Not a standard field in open api spec. Used to determine the order of the
+  /// properties in the response.
+  final List<String>? propertyOrdering;
+
+  /// Optional. Default value of the field. Per JSON Schema, this field is
+  /// intended for documentation generators and doesn't affect validation. Thus
+  /// it's included here and ignored so that developers who send schemas with a
+  /// `default` field don't get unknown-field errors.
+  final Value? default$;
+
   Schema({
     this.type,
     this.format,
+    this.title,
     this.description,
     this.nullable,
     this.enum$,
@@ -2853,12 +3554,24 @@ final class Schema extends ProtoMessage {
     this.minItems,
     this.properties,
     this.required,
+    this.minProperties,
+    this.maxProperties,
+    this.minimum,
+    this.maximum,
+    this.minLength,
+    this.maxLength,
+    this.pattern,
+    this.example,
+    this.anyOf,
+    this.propertyOrdering,
+    this.default$,
   }) : super(fullyQualifiedName);
 
   factory Schema.fromJson(Map<String, dynamic> json) {
     return Schema(
       type: decodeEnum(json['type'], Type.fromJson),
       format: json['format'],
+      title: json['title'],
       description: json['description'],
       nullable: json['nullable'],
       enum$: decodeList(json['enum']),
@@ -2867,6 +3580,17 @@ final class Schema extends ProtoMessage {
       minItems: decodeInt64(json['minItems']),
       properties: decodeMapMessage(json['properties'], Schema.fromJson),
       required: decodeList(json['required']),
+      minProperties: decodeInt64(json['minProperties']),
+      maxProperties: decodeInt64(json['maxProperties']),
+      minimum: decodeDouble(json['minimum']),
+      maximum: decodeDouble(json['maximum']),
+      minLength: decodeInt64(json['minLength']),
+      maxLength: decodeInt64(json['maxLength']),
+      pattern: json['pattern'],
+      example: decodeCustom(json['example'], Value.fromJson),
+      anyOf: decodeListMessage(json['anyOf'], Schema.fromJson),
+      propertyOrdering: decodeList(json['propertyOrdering']),
+      default$: decodeCustom(json['default'], Value.fromJson),
     );
   }
 
@@ -2875,6 +3599,7 @@ final class Schema extends ProtoMessage {
     return {
       if (type != null) 'type': type!.toJson(),
       if (format != null) 'format': format,
+      if (title != null) 'title': title,
       if (description != null) 'description': description,
       if (nullable != null) 'nullable': nullable,
       if (enum$ != null) 'enum': enum$,
@@ -2883,6 +3608,17 @@ final class Schema extends ProtoMessage {
       if (minItems != null) 'minItems': encodeInt64(minItems),
       if (properties != null) 'properties': encodeMap(properties),
       if (required != null) 'required': required,
+      if (minProperties != null) 'minProperties': encodeInt64(minProperties),
+      if (maxProperties != null) 'maxProperties': encodeInt64(maxProperties),
+      if (minimum != null) 'minimum': encodeDouble(minimum),
+      if (maximum != null) 'maximum': encodeDouble(maximum),
+      if (minLength != null) 'minLength': encodeInt64(minLength),
+      if (maxLength != null) 'maxLength': encodeInt64(maxLength),
+      if (pattern != null) 'pattern': pattern,
+      if (example != null) 'example': example!.toJson(),
+      if (anyOf != null) 'anyOf': encodeList(anyOf),
+      if (propertyOrdering != null) 'propertyOrdering': propertyOrdering,
+      if (default$ != null) 'default': default$!.toJson(),
     };
   }
 
@@ -2891,10 +3627,18 @@ final class Schema extends ProtoMessage {
     final contents = [
       if (type != null) 'type=$type',
       if (format != null) 'format=$format',
+      if (title != null) 'title=$title',
       if (description != null) 'description=$description',
       if (nullable != null) 'nullable=$nullable',
       if (maxItems != null) 'maxItems=$maxItems',
       if (minItems != null) 'minItems=$minItems',
+      if (minProperties != null) 'minProperties=$minProperties',
+      if (maxProperties != null) 'maxProperties=$maxProperties',
+      if (minimum != null) 'minimum=$minimum',
+      if (maximum != null) 'maximum=$maximum',
+      if (minLength != null) 'minLength=$minLength',
+      if (maxLength != null) 'maxLength=$maxLength',
+      if (pattern != null) 'pattern=$pattern',
     ].join(',');
     return 'Schema($contents)';
   }
@@ -2959,6 +3703,45 @@ final class GroundingPassages extends ProtoMessage {
 
   @override
   String toString() => 'GroundingPassages()';
+}
+
+/// Represents token counting info for a single modality.
+final class ModalityTokenCount extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ModalityTokenCount';
+
+  /// The modality associated with this token count.
+  final Modality? modality;
+
+  /// Number of tokens.
+  final int? tokenCount;
+
+  ModalityTokenCount({this.modality, this.tokenCount})
+    : super(fullyQualifiedName);
+
+  factory ModalityTokenCount.fromJson(Map<String, dynamic> json) {
+    return ModalityTokenCount(
+      modality: decodeEnum(json['modality'], Modality.fromJson),
+      tokenCount: json['tokenCount'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (modality != null) 'modality': modality!.toJson(),
+      if (tokenCount != null) 'tokenCount': tokenCount,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (modality != null) 'modality=$modality',
+      if (tokenCount != null) 'tokenCount=$tokenCount',
+    ].join(',');
+    return 'ModalityTokenCount($contents)';
+  }
 }
 
 /// Request to generate a message response from the model.
@@ -3352,7 +4135,7 @@ final class File extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.File';
 
   /// Output only. Metadata for a video.
-  final VideoMetadata? videoMetadata;
+  final VideoFileMetadata? videoMetadata;
 
   /// Immutable. Identifier. The `File` resource name. The ID (name excluding the
   /// "files/" prefix) can contain up to 40 characters that are lowercase
@@ -3388,8 +4171,14 @@ final class File extends ProtoMessage {
   /// Output only. The uri of the `File`.
   final String? uri;
 
+  /// Output only. The download uri of the `File`.
+  final String? downloadUri;
+
   /// Output only. Processing state of the File.
   final File_State? state;
+
+  /// Source of the File.
+  final File_Source? source;
 
   /// Output only. Error status if File processing failed.
   final Status? error;
@@ -3405,13 +4194,15 @@ final class File extends ProtoMessage {
     this.expirationTime,
     this.sha256Hash,
     this.uri,
+    this.downloadUri,
     this.state,
+    this.source,
     this.error,
   }) : super(fullyQualifiedName);
 
   factory File.fromJson(Map<String, dynamic> json) {
     return File(
-      videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
+      videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
       name: json['name'],
       displayName: json['displayName'],
       mimeType: json['mimeType'],
@@ -3421,7 +4212,9 @@ final class File extends ProtoMessage {
       expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
       sha256Hash: decodeBytes(json['sha256Hash']),
       uri: json['uri'],
+      downloadUri: json['downloadUri'],
       state: decodeEnum(json['state'], File_State.fromJson),
+      source: decodeEnum(json['source'], File_Source.fromJson),
       error: decode(json['error'], Status.fromJson),
     );
   }
@@ -3439,7 +4232,9 @@ final class File extends ProtoMessage {
       if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
       if (sha256Hash != null) 'sha256Hash': encodeBytes(sha256Hash),
       if (uri != null) 'uri': uri,
+      if (downloadUri != null) 'downloadUri': downloadUri,
       if (state != null) 'state': state!.toJson(),
+      if (source != null) 'source': source!.toJson(),
       if (error != null) 'error': error!.toJson(),
     };
   }
@@ -3453,7 +4248,9 @@ final class File extends ProtoMessage {
       if (sizeBytes != null) 'sizeBytes=$sizeBytes',
       if (sha256Hash != null) 'sha256Hash=$sha256Hash',
       if (uri != null) 'uri=$uri',
+      if (downloadUri != null) 'downloadUri=$downloadUri',
       if (state != null) 'state=$state',
+      if (source != null) 'source=$source',
     ].join(',');
     return 'File($contents)';
   }
@@ -3481,18 +4278,39 @@ final class File_State extends ProtoEnum {
   String toString() => 'State.$value';
 }
 
+final class File_Source extends ProtoEnum {
+  /// Used if source is not specified.
+  static const sourceUnspecified = File_Source('SOURCE_UNSPECIFIED');
+
+  /// Indicates the file is uploaded by the user.
+  static const uploaded = File_Source('UPLOADED');
+
+  /// Indicates the file is generated by Google.
+  static const generated = File_Source('GENERATED');
+
+  /// Indicates the file is a registered, i.e. a Google Cloud Storage file.
+  static const registered = File_Source('REGISTERED');
+
+  const File_Source(super.value);
+
+  factory File_Source.fromJson(String json) => File_Source(json);
+
+  @override
+  String toString() => 'Source.$value';
+}
+
 /// Metadata for a video `File`.
-final class VideoMetadata extends ProtoMessage {
+final class VideoFileMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1beta.VideoMetadata';
+      'google.ai.generativelanguage.v1beta.VideoFileMetadata';
 
   /// Duration of the video.
   final Duration? videoDuration;
 
-  VideoMetadata({this.videoDuration}) : super(fullyQualifiedName);
+  VideoFileMetadata({this.videoDuration}) : super(fullyQualifiedName);
 
-  factory VideoMetadata.fromJson(Map<String, dynamic> json) {
-    return VideoMetadata(
+  factory VideoFileMetadata.fromJson(Map<String, dynamic> json) {
+    return VideoFileMetadata(
       videoDuration: decodeCustom(json['videoDuration'], Duration.fromJson),
     );
   }
@@ -3505,7 +4323,7 @@ final class VideoMetadata extends ProtoMessage {
   }
 
   @override
-  String toString() => 'VideoMetadata()';
+  String toString() => 'VideoFileMetadata()';
 }
 
 /// Request for `CreateFile`.
@@ -3686,7 +4504,55 @@ final class DeleteFileRequest extends ProtoMessage {
   }
 }
 
+/// Request for `DownloadFile`.
+final class DownloadFileRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DownloadFileRequest';
+
+  /// Required. The name of the `File` to download.
+  /// Example: `files/abc-123`
+  final String name;
+
+  DownloadFileRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DownloadFileRequest.fromJson(Map<String, dynamic> json) {
+    return DownloadFileRequest(name: json['name']);
+  }
+
+  @override
+  Object toJson() {
+    return {'name': name};
+  }
+
+  @override
+  String toString() {
+    final contents = ['name=$name'].join(',');
+    return 'DownloadFileRequest($contents)';
+  }
+}
+
+/// Response for `DownloadFile`.
+final class DownloadFileResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.DownloadFileResponse';
+
+  DownloadFileResponse() : super(fullyQualifiedName);
+
+  factory DownloadFileResponse.fromJson(Map<String, dynamic> json) {
+    return DownloadFileResponse();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'DownloadFileResponse()';
+}
+
 /// Request to generate a completion from the model.
+/// NEXT ID: 18
 final class GenerateContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.GenerateContentRequest';
@@ -3867,41 +4733,214 @@ final class VoiceConfig extends ProtoMessage {
   String toString() => 'VoiceConfig()';
 }
 
-/// The speech generation config.
-final class SpeechConfig extends ProtoMessage {
+/// The configuration for a single speaker in a multi speaker setup.
+final class SpeakerVoiceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.ai.generativelanguage.v1beta.SpeechConfig';
+      'google.ai.generativelanguage.v1beta.SpeakerVoiceConfig';
 
-  /// The configuration for the speaker to use.
+  /// Required. The name of the speaker to use. Should be the same as in the
+  /// prompt.
+  final String? speaker;
+
+  /// Required. The configuration for the voice to use.
   final VoiceConfig? voiceConfig;
 
-  SpeechConfig({this.voiceConfig}) : super(fullyQualifiedName);
+  SpeakerVoiceConfig({this.speaker, this.voiceConfig})
+    : super(fullyQualifiedName);
 
-  factory SpeechConfig.fromJson(Map<String, dynamic> json) {
-    return SpeechConfig(
+  factory SpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
+    return SpeakerVoiceConfig(
+      speaker: json['speaker'],
       voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
     );
   }
 
   @override
   Object toJson() {
-    return {if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson()};
+    return {
+      if (speaker != null) 'speaker': speaker,
+      if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
+    };
   }
 
   @override
-  String toString() => 'SpeechConfig()';
+  String toString() {
+    final contents = [if (speaker != null) 'speaker=$speaker'].join(',');
+    return 'SpeakerVoiceConfig($contents)';
+  }
+}
+
+/// The configuration for the multi-speaker setup.
+final class MultiSpeakerVoiceConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.MultiSpeakerVoiceConfig';
+
+  /// Required. All the enabled speaker voices.
+  final List<SpeakerVoiceConfig>? speakerVoiceConfigs;
+
+  MultiSpeakerVoiceConfig({this.speakerVoiceConfigs})
+    : super(fullyQualifiedName);
+
+  factory MultiSpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
+    return MultiSpeakerVoiceConfig(
+      speakerVoiceConfigs: decodeListMessage(
+        json['speakerVoiceConfigs'],
+        SpeakerVoiceConfig.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (speakerVoiceConfigs != null)
+        'speakerVoiceConfigs': encodeList(speakerVoiceConfigs),
+    };
+  }
+
+  @override
+  String toString() => 'MultiSpeakerVoiceConfig()';
+}
+
+/// The speech generation config.
+final class SpeechConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.SpeechConfig';
+
+  /// The configuration in case of single-voice output.
+  final VoiceConfig? voiceConfig;
+
+  /// Optional. The configuration for the multi-speaker setup.
+  /// It is mutually exclusive with the voice_config field.
+  final MultiSpeakerVoiceConfig? multiSpeakerVoiceConfig;
+
+  /// Optional. Language code (in BCP 47 format, e.g. "en-US") for speech
+  /// synthesis.
+  ///
+  /// Valid values are: de-DE, en-AU, en-GB, en-IN, en-US, es-US, fr-FR, hi-IN,
+  /// pt-BR, ar-XA, es-ES, fr-CA, id-ID, it-IT, ja-JP, tr-TR, vi-VN, bn-IN,
+  /// gu-IN, kn-IN, ml-IN, mr-IN, ta-IN, te-IN, nl-NL, ko-KR, cmn-CN, pl-PL,
+  /// ru-RU, and th-TH.
+  final String? languageCode;
+
+  SpeechConfig({
+    this.voiceConfig,
+    this.multiSpeakerVoiceConfig,
+    this.languageCode,
+  }) : super(fullyQualifiedName);
+
+  factory SpeechConfig.fromJson(Map<String, dynamic> json) {
+    return SpeechConfig(
+      voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
+      multiSpeakerVoiceConfig: decode(
+        json['multiSpeakerVoiceConfig'],
+        MultiSpeakerVoiceConfig.fromJson,
+      ),
+      languageCode: json['languageCode'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
+      if (multiSpeakerVoiceConfig != null)
+        'multiSpeakerVoiceConfig': multiSpeakerVoiceConfig!.toJson(),
+      if (languageCode != null) 'languageCode': languageCode,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (languageCode != null) 'languageCode=$languageCode',
+    ].join(',');
+    return 'SpeechConfig($contents)';
+  }
+}
+
+/// Config for thinking features.
+final class ThinkingConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ThinkingConfig';
+
+  /// Indicates whether to include thoughts in the response.
+  /// If true, thoughts are returned only when available.
+  final bool? includeThoughts;
+
+  /// The number of thoughts tokens that the model should generate.
+  final int? thinkingBudget;
+
+  ThinkingConfig({this.includeThoughts, this.thinkingBudget})
+    : super(fullyQualifiedName);
+
+  factory ThinkingConfig.fromJson(Map<String, dynamic> json) {
+    return ThinkingConfig(
+      includeThoughts: json['includeThoughts'],
+      thinkingBudget: json['thinkingBudget'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (includeThoughts != null) 'includeThoughts': includeThoughts,
+      if (thinkingBudget != null) 'thinkingBudget': thinkingBudget,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (includeThoughts != null) 'includeThoughts=$includeThoughts',
+      if (thinkingBudget != null) 'thinkingBudget=$thinkingBudget',
+    ].join(',');
+    return 'ThinkingConfig($contents)';
+  }
+}
+
+/// Config for image generation features.
+final class ImageConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ImageConfig';
+
+  /// Optional. The aspect ratio of the image to generate. Supported aspect
+  /// ratios: 1:1, 2:3, 3:2, 3:4, 4:3, 9:16, 16:9, 21:9.
+  ///
+  /// If not specified, the model will choose a default aspect ratio based on any
+  /// reference images provided.
+  final String? aspectRatio;
+
+  ImageConfig({this.aspectRatio}) : super(fullyQualifiedName);
+
+  factory ImageConfig.fromJson(Map<String, dynamic> json) {
+    return ImageConfig(aspectRatio: json['aspectRatio']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (aspectRatio != null) 'aspectRatio': aspectRatio};
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (aspectRatio != null) 'aspectRatio=$aspectRatio',
+    ].join(',');
+    return 'ImageConfig($contents)';
+  }
 }
 
 /// Configuration options for model generation and outputs. Not all parameters
 /// are configurable for every model.
+/// Next ID: 29
 final class GenerationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.GenerationConfig';
 
-  /// Optional. Number of generated responses to return.
-  ///
-  /// Currently, this value can only be set to 1. If unset, this will default
-  /// to 1.
+  /// Optional. Number of generated responses to return. If unset, this will
+  /// default to 1. Please note that this doesn't work for previous generation
+  /// models (Gemini 1.0 family)
   final int? candidateCount;
 
   /// Optional. The set of character sequences (up to 5) that will stop output
@@ -3952,6 +4991,10 @@ final class GenerationConfig extends ProtoMessage {
   /// and doesn't allow setting `top_k` on requests.
   final int? topK;
 
+  /// Optional. Seed used in decoding. If not set, the request uses a randomly
+  /// generated seed.
+  final int? seed;
+
   /// Optional. MIME type of the generated candidate text.
   /// Supported MIME types are:
   /// `text/plain`: (default) Text output.
@@ -3972,6 +5015,48 @@ final class GenerationConfig extends ProtoMessage {
   /// Refer to the [JSON text generation
   /// guide](https://ai.google.dev/gemini-api/docs/json-mode) for more details.
   final Schema? responseSchema;
+
+  /// Optional. Output schema of the generated response. This is an alternative
+  /// to `response_schema` that accepts [JSON Schema](https://json-schema.org/).
+  ///
+  /// If set, `response_schema` must be omitted, but `response_mime_type` is
+  /// required.
+  ///
+  /// While the full JSON Schema may be sent, not all features are supported.
+  /// Specifically, only the following properties are supported:
+  ///
+  /// - `$id`
+  /// - `$defs`
+  /// - `$ref`
+  /// - `$anchor`
+  /// - `type`
+  /// - `format`
+  /// - `title`
+  /// - `description`
+  /// - `enum` (for strings and numbers)
+  /// - `items`
+  /// - `prefixItems`
+  /// - `minItems`
+  /// - `maxItems`
+  /// - `minimum`
+  /// - `maximum`
+  /// - `anyOf`
+  /// - `oneOf` (interpreted the same as `anyOf`)
+  /// - `properties`
+  /// - `additionalProperties`
+  /// - `required`
+  ///
+  /// The non-standard `propertyOrdering` property may also be set.
+  ///
+  /// Cyclic references are unrolled to a limited degree and, as such, may only
+  /// be used within non-required properties. (Nullable properties are not
+  /// sufficient.) If `$ref` is set on a sub-schema, no other properties, except
+  /// for than those starting as a `$`, may be set.
+  final Value? responseJsonSchema;
+
+  /// Optional. An internal detail. Use `responseJsonSchema` rather than this
+  /// field.
+  final Value? responseJsonSchemaOrdered;
 
   /// Optional. Presence penalty applied to the next token's logprobs if the
   /// token has already been seen in the response.
@@ -3994,7 +5079,7 @@ final class GenerationConfig extends ProtoMessage {
   ///
   /// A positive penalty will discourage the use of tokens that have already
   /// been used, proportional to the number of times the token has been used:
-  /// The more a token is used, the more dificult it is for the model to use
+  /// The more a token is used, the more difficult it is for the model to use
   /// that token again increasing the vocabulary of responses.
   ///
   /// Caution: A _negative_ penalty will encourage the model to reuse tokens
@@ -4013,6 +5098,7 @@ final class GenerationConfig extends ProtoMessage {
   /// [response_logprobs=True][google.ai.generativelanguage.v1beta.GenerationConfig.response_logprobs].
   /// This sets the number of top logprobs to return at each decoding step in the
   /// `Candidate.logprobs_result`.
+  /// The number must be in the range of [0, 20].
   final int? logprobs;
 
   /// Optional. Enables enhanced civic answers. It may not be available for all
@@ -4033,6 +5119,19 @@ final class GenerationConfig extends ProtoMessage {
   /// Optional. The speech generation config.
   final SpeechConfig? speechConfig;
 
+  /// Optional. Config for thinking features.
+  /// An error will be returned if this field is set for models that don't
+  /// support thinking.
+  final ThinkingConfig? thinkingConfig;
+
+  /// Optional. Config for image generation.
+  /// An error will be returned if this field is set for models that don't
+  /// support these config options.
+  final ImageConfig? imageConfig;
+
+  /// Optional. If specified, the media resolution specified will be used.
+  final GenerationConfig_MediaResolution? mediaResolution;
+
   GenerationConfig({
     this.candidateCount,
     this.stopSequences,
@@ -4040,8 +5139,11 @@ final class GenerationConfig extends ProtoMessage {
     this.temperature,
     this.topP,
     this.topK,
+    this.seed,
     this.responseMimeType,
     this.responseSchema,
+    this.responseJsonSchema,
+    this.responseJsonSchemaOrdered,
     this.presencePenalty,
     this.frequencyPenalty,
     this.responseLogprobs,
@@ -4049,6 +5151,9 @@ final class GenerationConfig extends ProtoMessage {
     this.enableEnhancedCivicAnswers,
     this.responseModalities,
     this.speechConfig,
+    this.thinkingConfig,
+    this.imageConfig,
+    this.mediaResolution,
   }) : super(fullyQualifiedName);
 
   factory GenerationConfig.fromJson(Map<String, dynamic> json) {
@@ -4059,8 +5164,17 @@ final class GenerationConfig extends ProtoMessage {
       temperature: decodeDouble(json['temperature']),
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
+      seed: json['seed'],
       responseMimeType: json['responseMimeType'],
       responseSchema: decode(json['responseSchema'], Schema.fromJson),
+      responseJsonSchema: decodeCustom(
+        json['_responseJsonSchema'],
+        Value.fromJson,
+      ),
+      responseJsonSchemaOrdered: decodeCustom(
+        json['responseJsonSchema'],
+        Value.fromJson,
+      ),
       presencePenalty: decodeDouble(json['presencePenalty']),
       frequencyPenalty: decodeDouble(json['frequencyPenalty']),
       responseLogprobs: json['responseLogprobs'],
@@ -4071,6 +5185,12 @@ final class GenerationConfig extends ProtoMessage {
         GenerationConfig_Modality.fromJson,
       ),
       speechConfig: decode(json['speechConfig'], SpeechConfig.fromJson),
+      thinkingConfig: decode(json['thinkingConfig'], ThinkingConfig.fromJson),
+      imageConfig: decode(json['imageConfig'], ImageConfig.fromJson),
+      mediaResolution: decodeEnum(
+        json['mediaResolution'],
+        GenerationConfig_MediaResolution.fromJson,
+      ),
     );
   }
 
@@ -4083,8 +5203,13 @@ final class GenerationConfig extends ProtoMessage {
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
+      if (seed != null) 'seed': seed,
       if (responseMimeType != null) 'responseMimeType': responseMimeType,
       if (responseSchema != null) 'responseSchema': responseSchema!.toJson(),
+      if (responseJsonSchema != null)
+        '_responseJsonSchema': responseJsonSchema!.toJson(),
+      if (responseJsonSchemaOrdered != null)
+        'responseJsonSchema': responseJsonSchemaOrdered!.toJson(),
       if (presencePenalty != null)
         'presencePenalty': encodeDouble(presencePenalty),
       if (frequencyPenalty != null)
@@ -4096,6 +5221,9 @@ final class GenerationConfig extends ProtoMessage {
       if (responseModalities != null)
         'responseModalities': encodeList(responseModalities),
       if (speechConfig != null) 'speechConfig': speechConfig!.toJson(),
+      if (thinkingConfig != null) 'thinkingConfig': thinkingConfig!.toJson(),
+      if (imageConfig != null) 'imageConfig': imageConfig!.toJson(),
+      if (mediaResolution != null) 'mediaResolution': mediaResolution!.toJson(),
     };
   }
 
@@ -4107,6 +5235,7 @@ final class GenerationConfig extends ProtoMessage {
       if (temperature != null) 'temperature=$temperature',
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
+      if (seed != null) 'seed=$seed',
       if (responseMimeType != null) 'responseMimeType=$responseMimeType',
       if (presencePenalty != null) 'presencePenalty=$presencePenalty',
       if (frequencyPenalty != null) 'frequencyPenalty=$frequencyPenalty',
@@ -4114,6 +5243,7 @@ final class GenerationConfig extends ProtoMessage {
       if (logprobs != null) 'logprobs=$logprobs',
       if (enableEnhancedCivicAnswers != null)
         'enableEnhancedCivicAnswers=$enableEnhancedCivicAnswers',
+      if (mediaResolution != null) 'mediaResolution=$mediaResolution',
     ].join(',');
     return 'GenerationConfig($contents)';
   }
@@ -4142,6 +5272,37 @@ final class GenerationConfig_Modality extends ProtoEnum {
 
   @override
   String toString() => 'Modality.$value';
+}
+
+/// Media resolution for the input media.
+final class GenerationConfig_MediaResolution extends ProtoEnum {
+  /// Media resolution has not been set.
+  static const mediaResolutionUnspecified = GenerationConfig_MediaResolution(
+    'MEDIA_RESOLUTION_UNSPECIFIED',
+  );
+
+  /// Media resolution set to low (64 tokens).
+  static const mediaResolutionLow = GenerationConfig_MediaResolution(
+    'MEDIA_RESOLUTION_LOW',
+  );
+
+  /// Media resolution set to medium (256 tokens).
+  static const mediaResolutionMedium = GenerationConfig_MediaResolution(
+    'MEDIA_RESOLUTION_MEDIUM',
+  );
+
+  /// Media resolution set to high (zoomed reframing with 256 tokens).
+  static const mediaResolutionHigh = GenerationConfig_MediaResolution(
+    'MEDIA_RESOLUTION_HIGH',
+  );
+
+  const GenerationConfig_MediaResolution(super.value);
+
+  factory GenerationConfig_MediaResolution.fromJson(String json) =>
+      GenerationConfig_MediaResolution(json);
+
+  @override
+  String toString() => 'MediaResolution.$value';
 }
 
 /// Configuration for retrieving grounding content from a `Corpus` or
@@ -4240,11 +5401,15 @@ final class GenerateContentResponse extends ProtoMessage {
   /// Output only. The model version used to generate the response.
   final String? modelVersion;
 
+  /// Output only. response_id is used to identify each response.
+  final String? responseId;
+
   GenerateContentResponse({
     this.candidates,
     this.promptFeedback,
     this.usageMetadata,
     this.modelVersion,
+    this.responseId,
   }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse.fromJson(Map<String, dynamic> json) {
@@ -4259,6 +5424,7 @@ final class GenerateContentResponse extends ProtoMessage {
         GenerateContentResponse_UsageMetadata.fromJson,
       ),
       modelVersion: json['modelVersion'],
+      responseId: json['responseId'],
     );
   }
 
@@ -4269,6 +5435,7 @@ final class GenerateContentResponse extends ProtoMessage {
       if (promptFeedback != null) 'promptFeedback': promptFeedback!.toJson(),
       if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
       if (modelVersion != null) 'modelVersion': modelVersion,
+      if (responseId != null) 'responseId': responseId,
     };
   }
 
@@ -4276,6 +5443,7 @@ final class GenerateContentResponse extends ProtoMessage {
   String toString() {
     final contents = [
       if (modelVersion != null) 'modelVersion=$modelVersion',
+      if (responseId != null) 'responseId=$responseId',
     ].join(',');
     return 'GenerateContentResponse($contents)';
   }
@@ -4391,15 +5559,41 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   /// Total number of tokens across all the generated response candidates.
   final int? candidatesTokenCount;
 
+  /// Output only. Number of tokens present in tool-use prompt(s).
+  final int? toolUsePromptTokenCount;
+
+  /// Output only. Number of tokens of thoughts for thinking models.
+  final int? thoughtsTokenCount;
+
   /// Total token count for the generation request (prompt + response
   /// candidates).
   final int? totalTokenCount;
+
+  /// Output only. List of modalities that were processed in the request input.
+  final List<ModalityTokenCount>? promptTokensDetails;
+
+  /// Output only. List of modalities of the cached content in the request
+  /// input.
+  final List<ModalityTokenCount>? cacheTokensDetails;
+
+  /// Output only. List of modalities that were returned in the response.
+  final List<ModalityTokenCount>? candidatesTokensDetails;
+
+  /// Output only. List of modalities that were processed for tool-use request
+  /// inputs.
+  final List<ModalityTokenCount>? toolUsePromptTokensDetails;
 
   GenerateContentResponse_UsageMetadata({
     this.promptTokenCount,
     this.cachedContentTokenCount,
     this.candidatesTokenCount,
+    this.toolUsePromptTokenCount,
+    this.thoughtsTokenCount,
     this.totalTokenCount,
+    this.promptTokensDetails,
+    this.cacheTokensDetails,
+    this.candidatesTokensDetails,
+    this.toolUsePromptTokensDetails,
   }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse_UsageMetadata.fromJson(
@@ -4409,7 +5603,25 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
       promptTokenCount: json['promptTokenCount'],
       cachedContentTokenCount: json['cachedContentTokenCount'],
       candidatesTokenCount: json['candidatesTokenCount'],
+      toolUsePromptTokenCount: json['toolUsePromptTokenCount'],
+      thoughtsTokenCount: json['thoughtsTokenCount'],
       totalTokenCount: json['totalTokenCount'],
+      promptTokensDetails: decodeListMessage(
+        json['promptTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      cacheTokensDetails: decodeListMessage(
+        json['cacheTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      candidatesTokensDetails: decodeListMessage(
+        json['candidatesTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      toolUsePromptTokensDetails: decodeListMessage(
+        json['toolUsePromptTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
     );
   }
 
@@ -4421,7 +5633,18 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
         'cachedContentTokenCount': cachedContentTokenCount,
       if (candidatesTokenCount != null)
         'candidatesTokenCount': candidatesTokenCount,
+      if (toolUsePromptTokenCount != null)
+        'toolUsePromptTokenCount': toolUsePromptTokenCount,
+      if (thoughtsTokenCount != null) 'thoughtsTokenCount': thoughtsTokenCount,
       if (totalTokenCount != null) 'totalTokenCount': totalTokenCount,
+      if (promptTokensDetails != null)
+        'promptTokensDetails': encodeList(promptTokensDetails),
+      if (cacheTokensDetails != null)
+        'cacheTokensDetails': encodeList(cacheTokensDetails),
+      if (candidatesTokensDetails != null)
+        'candidatesTokensDetails': encodeList(candidatesTokensDetails),
+      if (toolUsePromptTokensDetails != null)
+        'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
     };
   }
 
@@ -4433,6 +5656,9 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
         'cachedContentTokenCount=$cachedContentTokenCount',
       if (candidatesTokenCount != null)
         'candidatesTokenCount=$candidatesTokenCount',
+      if (toolUsePromptTokenCount != null)
+        'toolUsePromptTokenCount=$toolUsePromptTokenCount',
+      if (thoughtsTokenCount != null) 'thoughtsTokenCount=$thoughtsTokenCount',
       if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
     ].join(',');
     return 'UsageMetadata($contents)';
@@ -4454,6 +5680,10 @@ final class Candidate extends ProtoMessage {
   ///
   /// If empty, the model has not stopped generating tokens.
   final Candidate_FinishReason? finishReason;
+
+  /// Optional. Output only. Details the reason why the model stopped generating
+  /// tokens. This is populated only when `finish_reason` is set.
+  final String? finishMessage;
 
   /// List of ratings for the safety of a response candidate.
   ///
@@ -4487,10 +5717,14 @@ final class Candidate extends ProtoMessage {
   /// Output only. Log-likelihood scores for the response tokens and top tokens
   final LogprobsResult? logprobsResult;
 
+  /// Output only. Metadata related to url context retrieval tool.
+  final UrlContextMetadata? urlContextMetadata;
+
   Candidate({
     this.index,
     this.content,
     this.finishReason,
+    this.finishMessage,
     this.safetyRatings,
     this.citationMetadata,
     this.tokenCount,
@@ -4498,6 +5732,7 @@ final class Candidate extends ProtoMessage {
     this.groundingMetadata,
     this.avgLogprobs,
     this.logprobsResult,
+    this.urlContextMetadata,
   }) : super(fullyQualifiedName);
 
   factory Candidate.fromJson(Map<String, dynamic> json) {
@@ -4508,6 +5743,7 @@ final class Candidate extends ProtoMessage {
         json['finishReason'],
         Candidate_FinishReason.fromJson,
       ),
+      finishMessage: json['finishMessage'],
       safetyRatings: decodeListMessage(
         json['safetyRatings'],
         SafetyRating.fromJson,
@@ -4527,6 +5763,10 @@ final class Candidate extends ProtoMessage {
       ),
       avgLogprobs: decodeDouble(json['avgLogprobs']),
       logprobsResult: decode(json['logprobsResult'], LogprobsResult.fromJson),
+      urlContextMetadata: decode(
+        json['urlContextMetadata'],
+        UrlContextMetadata.fromJson,
+      ),
     );
   }
 
@@ -4536,6 +5776,7 @@ final class Candidate extends ProtoMessage {
       if (index != null) 'index': index,
       if (content != null) 'content': content!.toJson(),
       if (finishReason != null) 'finishReason': finishReason!.toJson(),
+      if (finishMessage != null) 'finishMessage': finishMessage,
       if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
       if (citationMetadata != null)
         'citationMetadata': citationMetadata!.toJson(),
@@ -4546,6 +5787,8 @@ final class Candidate extends ProtoMessage {
         'groundingMetadata': groundingMetadata!.toJson(),
       if (avgLogprobs != null) 'avgLogprobs': encodeDouble(avgLogprobs),
       if (logprobsResult != null) 'logprobsResult': logprobsResult!.toJson(),
+      if (urlContextMetadata != null)
+        'urlContextMetadata': urlContextMetadata!.toJson(),
     };
   }
 
@@ -4554,6 +5797,7 @@ final class Candidate extends ProtoMessage {
     final contents = [
       if (index != null) 'index=$index',
       if (finishReason != null) 'finishReason=$finishReason',
+      if (finishMessage != null) 'finishMessage=$finishMessage',
       if (tokenCount != null) 'tokenCount=$tokenCount',
       if (avgLogprobs != null) 'avgLogprobs=$avgLogprobs',
     ].join(',');
@@ -4606,6 +5850,30 @@ final class Candidate_FinishReason extends ProtoEnum {
   /// violations.
   static const imageSafety = Candidate_FinishReason('IMAGE_SAFETY');
 
+  /// Image generation stopped because generated images has other prohibited
+  /// content.
+  static const imageProhibitedContent = Candidate_FinishReason(
+    'IMAGE_PROHIBITED_CONTENT',
+  );
+
+  /// Image generation stopped because of other miscellaneous issue.
+  static const imageOther = Candidate_FinishReason('IMAGE_OTHER');
+
+  /// The model was expected to generate an image, but none was generated.
+  static const noImage = Candidate_FinishReason('NO_IMAGE');
+
+  /// Image generation stopped due to recitation.
+  static const imageRecitation = Candidate_FinishReason('IMAGE_RECITATION');
+
+  /// Model generated a tool call but no tools were enabled in the request.
+  static const unexpectedToolCall = Candidate_FinishReason(
+    'UNEXPECTED_TOOL_CALL',
+  );
+
+  /// Model called too many tools consecutively, thus the system exited
+  /// execution.
+  static const tooManyToolCalls = Candidate_FinishReason('TOO_MANY_TOOL_CALLS');
+
   const Candidate_FinishReason(super.value);
 
   factory Candidate_FinishReason.fromJson(String json) =>
@@ -4615,10 +5883,117 @@ final class Candidate_FinishReason extends ProtoEnum {
   String toString() => 'FinishReason.$value';
 }
 
+/// Metadata related to url context retrieval tool.
+final class UrlContextMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UrlContextMetadata';
+
+  /// List of url context.
+  final List<UrlMetadata>? urlMetadata;
+
+  UrlContextMetadata({this.urlMetadata}) : super(fullyQualifiedName);
+
+  factory UrlContextMetadata.fromJson(Map<String, dynamic> json) {
+    return UrlContextMetadata(
+      urlMetadata: decodeListMessage(json['urlMetadata'], UrlMetadata.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (urlMetadata != null) 'urlMetadata': encodeList(urlMetadata)};
+  }
+
+  @override
+  String toString() => 'UrlContextMetadata()';
+}
+
+/// Context of the a single url retrieval.
+final class UrlMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UrlMetadata';
+
+  /// Retrieved url by the tool.
+  final String? retrievedUrl;
+
+  /// Status of the url retrieval.
+  final UrlMetadata_UrlRetrievalStatus? urlRetrievalStatus;
+
+  UrlMetadata({this.retrievedUrl, this.urlRetrievalStatus})
+    : super(fullyQualifiedName);
+
+  factory UrlMetadata.fromJson(Map<String, dynamic> json) {
+    return UrlMetadata(
+      retrievedUrl: json['retrievedUrl'],
+      urlRetrievalStatus: decodeEnum(
+        json['urlRetrievalStatus'],
+        UrlMetadata_UrlRetrievalStatus.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (retrievedUrl != null) 'retrievedUrl': retrievedUrl,
+      if (urlRetrievalStatus != null)
+        'urlRetrievalStatus': urlRetrievalStatus!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (retrievedUrl != null) 'retrievedUrl=$retrievedUrl',
+      if (urlRetrievalStatus != null) 'urlRetrievalStatus=$urlRetrievalStatus',
+    ].join(',');
+    return 'UrlMetadata($contents)';
+  }
+}
+
+/// Status of the url retrieval.
+final class UrlMetadata_UrlRetrievalStatus extends ProtoEnum {
+  /// Default value. This value is unused.
+  static const urlRetrievalStatusUnspecified = UrlMetadata_UrlRetrievalStatus(
+    'URL_RETRIEVAL_STATUS_UNSPECIFIED',
+  );
+
+  /// Url retrieval is successful.
+  static const urlRetrievalStatusSuccess = UrlMetadata_UrlRetrievalStatus(
+    'URL_RETRIEVAL_STATUS_SUCCESS',
+  );
+
+  /// Url retrieval is failed due to error.
+  static const urlRetrievalStatusError = UrlMetadata_UrlRetrievalStatus(
+    'URL_RETRIEVAL_STATUS_ERROR',
+  );
+
+  /// Url retrieval is failed because the content is behind paywall.
+  static const urlRetrievalStatusPaywall = UrlMetadata_UrlRetrievalStatus(
+    'URL_RETRIEVAL_STATUS_PAYWALL',
+  );
+
+  /// Url retrieval is failed because the content is unsafe.
+  static const urlRetrievalStatusUnsafe = UrlMetadata_UrlRetrievalStatus(
+    'URL_RETRIEVAL_STATUS_UNSAFE',
+  );
+
+  const UrlMetadata_UrlRetrievalStatus(super.value);
+
+  factory UrlMetadata_UrlRetrievalStatus.fromJson(String json) =>
+      UrlMetadata_UrlRetrievalStatus(json);
+
+  @override
+  String toString() => 'UrlRetrievalStatus.$value';
+}
+
 /// Logprobs Result
 final class LogprobsResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.LogprobsResult';
+
+  /// Sum of log probabilities for all tokens.
+  final double? logProbabilitySum;
 
   /// Length = total number of decoding steps.
   final List<LogprobsResult_TopCandidates>? topCandidates;
@@ -4627,11 +6002,15 @@ final class LogprobsResult extends ProtoMessage {
   /// The chosen candidates may or may not be in top_candidates.
   final List<LogprobsResult_Candidate>? chosenCandidates;
 
-  LogprobsResult({this.topCandidates, this.chosenCandidates})
-    : super(fullyQualifiedName);
+  LogprobsResult({
+    this.logProbabilitySum,
+    this.topCandidates,
+    this.chosenCandidates,
+  }) : super(fullyQualifiedName);
 
   factory LogprobsResult.fromJson(Map<String, dynamic> json) {
     return LogprobsResult(
+      logProbabilitySum: decodeDouble(json['logProbabilitySum']),
       topCandidates: decodeListMessage(
         json['topCandidates'],
         LogprobsResult_TopCandidates.fromJson,
@@ -4646,6 +6025,8 @@ final class LogprobsResult extends ProtoMessage {
   @override
   Object toJson() {
     return {
+      if (logProbabilitySum != null)
+        'logProbabilitySum': encodeDouble(logProbabilitySum),
       if (topCandidates != null) 'topCandidates': encodeList(topCandidates),
       if (chosenCandidates != null)
         'chosenCandidates': encodeList(chosenCandidates),
@@ -4653,7 +6034,12 @@ final class LogprobsResult extends ProtoMessage {
   }
 
   @override
-  String toString() => 'LogprobsResult()';
+  String toString() {
+    final contents = [
+      if (logProbabilitySum != null) 'logProbabilitySum=$logProbabilitySum',
+    ].join(',');
+    return 'LogprobsResult($contents)';
+  }
 }
 
 /// Candidate for the logprobs token and score.
@@ -5326,7 +6712,7 @@ final class GenerateAnswerRequest_AnswerStyle extends ProtoEnum {
     'ANSWER_STYLE_UNSPECIFIED',
   );
 
-  /// Succint but abstract style.
+  /// Succinct but abstract style.
   static const abstractive = GenerateAnswerRequest_AnswerStyle('ABSTRACTIVE');
 
   /// Very brief and extractive style.
@@ -5517,8 +6903,8 @@ final class EmbedContentRequest extends ProtoMessage {
   /// counted.
   final Content? content;
 
-  /// Optional. Optional task type for which the embeddings will be used. Can
-  /// only be set for `models/embedding-001`.
+  /// Optional. Optional task type for which the embeddings will be used. Not
+  /// supported on earlier models (`models/embedding-001`).
   final TaskType? taskType;
 
   /// Optional. An optional title for the text. Only applicable when TaskType is
@@ -5777,13 +7163,31 @@ final class CountTokensResponse extends ProtoMessage {
   /// Number of tokens in the cached part of the prompt (the cached content).
   final int? cachedContentTokenCount;
 
-  CountTokensResponse({this.totalTokens, this.cachedContentTokenCount})
-    : super(fullyQualifiedName);
+  /// Output only. List of modalities that were processed in the request input.
+  final List<ModalityTokenCount>? promptTokensDetails;
+
+  /// Output only. List of modalities that were processed in the cached content.
+  final List<ModalityTokenCount>? cacheTokensDetails;
+
+  CountTokensResponse({
+    this.totalTokens,
+    this.cachedContentTokenCount,
+    this.promptTokensDetails,
+    this.cacheTokensDetails,
+  }) : super(fullyQualifiedName);
 
   factory CountTokensResponse.fromJson(Map<String, dynamic> json) {
     return CountTokensResponse(
       totalTokens: json['totalTokens'],
       cachedContentTokenCount: json['cachedContentTokenCount'],
+      promptTokensDetails: decodeListMessage(
+        json['promptTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      cacheTokensDetails: decodeListMessage(
+        json['cacheTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
     );
   }
 
@@ -5793,6 +7197,10 @@ final class CountTokensResponse extends ProtoMessage {
       if (totalTokens != null) 'totalTokens': totalTokens,
       if (cachedContentTokenCount != null)
         'cachedContentTokenCount': cachedContentTokenCount,
+      if (promptTokensDetails != null)
+        'promptTokensDetails': encodeList(promptTokensDetails),
+      if (cacheTokensDetails != null)
+        'cacheTokensDetails': encodeList(cacheTokensDetails),
     };
   }
 
@@ -5804,6 +7212,1368 @@ final class CountTokensResponse extends ProtoMessage {
         'cachedContentTokenCount=$cachedContentTokenCount',
     ].join(',');
     return 'CountTokensResponse($contents)';
+  }
+}
+
+/// Configures the realtime input behavior in `BidiGenerateContent`.
+final class RealtimeInputConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.RealtimeInputConfig';
+
+  /// Optional. If not set, automatic activity detection is enabled by default.
+  /// If automatic voice detection is disabled, the client must send activity
+  /// signals.
+  final RealtimeInputConfig_AutomaticActivityDetection?
+  automaticActivityDetection;
+
+  /// Optional. Defines what effect activity has.
+  final RealtimeInputConfig_ActivityHandling? activityHandling;
+
+  /// Optional. Defines which input is included in the user's turn.
+  final RealtimeInputConfig_TurnCoverage? turnCoverage;
+
+  RealtimeInputConfig({
+    this.automaticActivityDetection,
+    this.activityHandling,
+    this.turnCoverage,
+  }) : super(fullyQualifiedName);
+
+  factory RealtimeInputConfig.fromJson(Map<String, dynamic> json) {
+    return RealtimeInputConfig(
+      automaticActivityDetection: decode(
+        json['automaticActivityDetection'],
+        RealtimeInputConfig_AutomaticActivityDetection.fromJson,
+      ),
+      activityHandling: decodeEnum(
+        json['activityHandling'],
+        RealtimeInputConfig_ActivityHandling.fromJson,
+      ),
+      turnCoverage: decodeEnum(
+        json['turnCoverage'],
+        RealtimeInputConfig_TurnCoverage.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (automaticActivityDetection != null)
+        'automaticActivityDetection': automaticActivityDetection!.toJson(),
+      if (activityHandling != null)
+        'activityHandling': activityHandling!.toJson(),
+      if (turnCoverage != null) 'turnCoverage': turnCoverage!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (activityHandling != null) 'activityHandling=$activityHandling',
+      if (turnCoverage != null) 'turnCoverage=$turnCoverage',
+    ].join(',');
+    return 'RealtimeInputConfig($contents)';
+  }
+}
+
+/// Configures automatic detection of activity.
+final class RealtimeInputConfig_AutomaticActivityDetection
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.RealtimeInputConfig.AutomaticActivityDetection';
+
+  /// Optional. If enabled (the default), detected voice and text input count
+  /// as activity. If disabled, the client must send activity signals.
+  final bool? disabled;
+
+  /// Optional. Determines how likely speech is to be detected.
+  final RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity?
+  startOfSpeechSensitivity;
+
+  /// Optional. The required duration of detected speech before start-of-speech
+  /// is committed. The lower this value, the more sensitive the
+  /// start-of-speech detection is and shorter speech can be recognized.
+  /// However, this also increases the probability of false positives.
+  final int? prefixPaddingMs;
+
+  /// Optional. Determines how likely detected speech is ended.
+  final RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity?
+  endOfSpeechSensitivity;
+
+  /// Optional. The required duration of detected non-speech (e.g. silence)
+  /// before end-of-speech is committed. The larger this value, the longer
+  /// speech gaps can be without interrupting the user's activity but this will
+  /// increase the model's latency.
+  final int? silenceDurationMs;
+
+  RealtimeInputConfig_AutomaticActivityDetection({
+    this.disabled,
+    this.startOfSpeechSensitivity,
+    this.prefixPaddingMs,
+    this.endOfSpeechSensitivity,
+    this.silenceDurationMs,
+  }) : super(fullyQualifiedName);
+
+  factory RealtimeInputConfig_AutomaticActivityDetection.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return RealtimeInputConfig_AutomaticActivityDetection(
+      disabled: json['disabled'],
+      startOfSpeechSensitivity: decodeEnum(
+        json['startOfSpeechSensitivity'],
+        RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity
+            .fromJson,
+      ),
+      prefixPaddingMs: json['prefixPaddingMs'],
+      endOfSpeechSensitivity: decodeEnum(
+        json['endOfSpeechSensitivity'],
+        RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson,
+      ),
+      silenceDurationMs: json['silenceDurationMs'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (disabled != null) 'disabled': disabled,
+      if (startOfSpeechSensitivity != null)
+        'startOfSpeechSensitivity': startOfSpeechSensitivity!.toJson(),
+      if (prefixPaddingMs != null) 'prefixPaddingMs': prefixPaddingMs,
+      if (endOfSpeechSensitivity != null)
+        'endOfSpeechSensitivity': endOfSpeechSensitivity!.toJson(),
+      if (silenceDurationMs != null) 'silenceDurationMs': silenceDurationMs,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (disabled != null) 'disabled=$disabled',
+      if (startOfSpeechSensitivity != null)
+        'startOfSpeechSensitivity=$startOfSpeechSensitivity',
+      if (prefixPaddingMs != null) 'prefixPaddingMs=$prefixPaddingMs',
+      if (endOfSpeechSensitivity != null)
+        'endOfSpeechSensitivity=$endOfSpeechSensitivity',
+      if (silenceDurationMs != null) 'silenceDurationMs=$silenceDurationMs',
+    ].join(',');
+    return 'AutomaticActivityDetection($contents)';
+  }
+}
+
+/// Determines how start of speech is detected.
+final class RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity
+    extends ProtoEnum {
+  /// The default is START_SENSITIVITY_HIGH.
+  static const startSensitivityUnspecified =
+      RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(
+        'START_SENSITIVITY_UNSPECIFIED',
+      );
+
+  /// Automatic detection will detect the start of speech more often.
+  static const startSensitivityHigh =
+      RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(
+        'START_SENSITIVITY_HIGH',
+      );
+
+  /// Automatic detection will detect the start of speech less often.
+  static const startSensitivityLow =
+      RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(
+        'START_SENSITIVITY_LOW',
+      );
+
+  const RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(
+    super.value,
+  );
+
+  factory RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.fromJson(
+    String json,
+  ) => RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(json);
+
+  @override
+  String toString() => 'StartSensitivity.$value';
+}
+
+/// Determines how end of speech is detected.
+final class RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity
+    extends ProtoEnum {
+  /// The default is END_SENSITIVITY_HIGH.
+  static const endSensitivityUnspecified =
+      RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(
+        'END_SENSITIVITY_UNSPECIFIED',
+      );
+
+  /// Automatic detection ends speech more often.
+  static const endSensitivityHigh =
+      RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(
+        'END_SENSITIVITY_HIGH',
+      );
+
+  /// Automatic detection ends speech less often.
+  static const endSensitivityLow =
+      RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(
+        'END_SENSITIVITY_LOW',
+      );
+
+  const RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(
+    super.value,
+  );
+
+  factory RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson(
+    String json,
+  ) => RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(json);
+
+  @override
+  String toString() => 'EndSensitivity.$value';
+}
+
+/// The different ways of handling user activity.
+final class RealtimeInputConfig_ActivityHandling extends ProtoEnum {
+  /// If unspecified, the default behavior is `START_OF_ACTIVITY_INTERRUPTS`.
+  static const activityHandlingUnspecified =
+      RealtimeInputConfig_ActivityHandling('ACTIVITY_HANDLING_UNSPECIFIED');
+
+  /// If true, start of activity will interrupt the model's response (also
+  /// called "barge in"). The model's current response will be cut-off in the
+  /// moment of the interruption. This is the default behavior.
+  static const startOfActivityInterrupts = RealtimeInputConfig_ActivityHandling(
+    'START_OF_ACTIVITY_INTERRUPTS',
+  );
+
+  /// The model's response will not be interrupted.
+  static const noInterruption = RealtimeInputConfig_ActivityHandling(
+    'NO_INTERRUPTION',
+  );
+
+  const RealtimeInputConfig_ActivityHandling(super.value);
+
+  factory RealtimeInputConfig_ActivityHandling.fromJson(String json) =>
+      RealtimeInputConfig_ActivityHandling(json);
+
+  @override
+  String toString() => 'ActivityHandling.$value';
+}
+
+/// Options about which input is included in the user's turn.
+final class RealtimeInputConfig_TurnCoverage extends ProtoEnum {
+  /// If unspecified, the default behavior is `TURN_INCLUDES_ONLY_ACTIVITY`.
+  static const turnCoverageUnspecified = RealtimeInputConfig_TurnCoverage(
+    'TURN_COVERAGE_UNSPECIFIED',
+  );
+
+  /// The users turn only includes activity since the last turn, excluding
+  /// inactivity (e.g. silence on the audio stream). This is the default
+  /// behavior.
+  static const turnIncludesOnlyActivity = RealtimeInputConfig_TurnCoverage(
+    'TURN_INCLUDES_ONLY_ACTIVITY',
+  );
+
+  /// The users turn includes all realtime input since the last turn, including
+  /// inactivity (e.g. silence on the audio stream).
+  static const turnIncludesAllInput = RealtimeInputConfig_TurnCoverage(
+    'TURN_INCLUDES_ALL_INPUT',
+  );
+
+  const RealtimeInputConfig_TurnCoverage(super.value);
+
+  factory RealtimeInputConfig_TurnCoverage.fromJson(String json) =>
+      RealtimeInputConfig_TurnCoverage(json);
+
+  @override
+  String toString() => 'TurnCoverage.$value';
+}
+
+/// Session resumption configuration.
+///
+/// This message is included in the session configuration as
+/// `BidiGenerateContentSetup.session_resumption`. If configured, the server
+/// will send `SessionResumptionUpdate` messages.
+final class SessionResumptionConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.SessionResumptionConfig';
+
+  /// The handle of a previous session. If not present then a new session is
+  /// created.
+  ///
+  /// Session handles come from `SessionResumptionUpdate.token` values in
+  /// previous connections.
+  final String? handle;
+
+  SessionResumptionConfig({this.handle}) : super(fullyQualifiedName);
+
+  factory SessionResumptionConfig.fromJson(Map<String, dynamic> json) {
+    return SessionResumptionConfig(handle: json['handle']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (handle != null) 'handle': handle};
+  }
+
+  @override
+  String toString() {
+    final contents = [if (handle != null) 'handle=$handle'].join(',');
+    return 'SessionResumptionConfig($contents)';
+  }
+}
+
+/// Enables context window compression — a mechanism for managing the model's
+/// context window so that it does not exceed a given length.
+final class ContextWindowCompressionConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ContextWindowCompressionConfig';
+
+  /// A sliding-window mechanism.
+  final ContextWindowCompressionConfig_SlidingWindow? slidingWindow;
+
+  /// The number of tokens (before running a turn) required to trigger a context
+  /// window compression.
+  ///
+  /// This can be used to balance quality against latency as shorter context
+  /// windows may result in faster model responses. However, any compression
+  /// operation will cause a temporary latency increase, so they should not be
+  /// triggered frequently.
+  ///
+  /// If not set, the default is 80% of the model's context window limit. This
+  /// leaves 20% for the next user request/model response.
+  final int? triggerTokens;
+
+  ContextWindowCompressionConfig({this.slidingWindow, this.triggerTokens})
+    : super(fullyQualifiedName);
+
+  factory ContextWindowCompressionConfig.fromJson(Map<String, dynamic> json) {
+    return ContextWindowCompressionConfig(
+      slidingWindow: decode(
+        json['slidingWindow'],
+        ContextWindowCompressionConfig_SlidingWindow.fromJson,
+      ),
+      triggerTokens: decodeInt64(json['triggerTokens']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (slidingWindow != null) 'slidingWindow': slidingWindow!.toJson(),
+      if (triggerTokens != null) 'triggerTokens': encodeInt64(triggerTokens),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (triggerTokens != null) 'triggerTokens=$triggerTokens',
+    ].join(',');
+    return 'ContextWindowCompressionConfig($contents)';
+  }
+}
+
+/// The SlidingWindow method operates by discarding content at the beginning of
+/// the context window. The resulting context will always begin at the start of
+/// a USER role turn. System instructions and any
+/// `BidiGenerateContentSetup.prefix_turns` will always remain at the beginning
+/// of the result.
+final class ContextWindowCompressionConfig_SlidingWindow extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.ContextWindowCompressionConfig.SlidingWindow';
+
+  /// The target number of tokens to keep. The default value is
+  /// trigger_tokens/2.
+  ///
+  /// Discarding parts of the context window causes a temporary latency
+  /// increase so this value should be calibrated to avoid frequent compression
+  /// operations.
+  final int? targetTokens;
+
+  ContextWindowCompressionConfig_SlidingWindow({this.targetTokens})
+    : super(fullyQualifiedName);
+
+  factory ContextWindowCompressionConfig_SlidingWindow.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return ContextWindowCompressionConfig_SlidingWindow(
+      targetTokens: decodeInt64(json['targetTokens']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (targetTokens != null) 'targetTokens': encodeInt64(targetTokens),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (targetTokens != null) 'targetTokens=$targetTokens',
+    ].join(',');
+    return 'SlidingWindow($contents)';
+  }
+}
+
+/// The audio transcription configuration.
+final class AudioTranscriptionConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.AudioTranscriptionConfig';
+
+  AudioTranscriptionConfig() : super(fullyQualifiedName);
+
+  factory AudioTranscriptionConfig.fromJson(Map<String, dynamic> json) {
+    return AudioTranscriptionConfig();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'AudioTranscriptionConfig()';
+}
+
+/// Message to be sent in the first (and only in the first)
+/// `BidiGenerateContentClientMessage`. Contains configuration that will apply
+/// for the duration of the streaming RPC.
+///
+/// Clients should wait for a `BidiGenerateContentSetupComplete` message before
+/// sending any additional messages.
+final class BidiGenerateContentSetup extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentSetup';
+
+  /// Required. The model's resource name. This serves as an ID for the Model to
+  /// use.
+  ///
+  /// Format: `models/{model}`
+  final String? model;
+
+  /// Optional. Generation config.
+  ///
+  /// The following fields are not supported:
+  ///
+  ///  - `response_logprobs`
+  ///  - `response_mime_type`
+  ///  - `logprobs`
+  ///  - `response_schema`
+  ///  - `response_json_schema`
+  ///  - `stop_sequence`
+  ///  - `routing_config`
+  ///  - `audio_timestamp`
+  final GenerationConfig? generationConfig;
+
+  /// Optional. The user provided system instructions for the model.
+  ///
+  /// Note: Only text should be used in parts and content in each part will be
+  /// in a separate paragraph.
+  final Content? systemInstruction;
+
+  /// Optional. A list of `Tools` the model may use to generate the next
+  /// response.
+  ///
+  /// A `Tool` is a piece of code that enables the system to interact with
+  /// external systems to perform an action, or set of actions, outside of
+  /// knowledge and scope of the model.
+  final List<Tool>? tools;
+
+  /// Optional. Configures the handling of realtime input.
+  final RealtimeInputConfig? realtimeInputConfig;
+
+  /// Optional. Configures session resumption mechanism.
+  ///
+  /// If included, the server will send `SessionResumptionUpdate` messages.
+  final SessionResumptionConfig? sessionResumption;
+
+  /// Optional. Configures a context window compression mechanism.
+  ///
+  /// If included, the server will automatically reduce the size of the context
+  /// when it exceeds the configured length.
+  final ContextWindowCompressionConfig? contextWindowCompression;
+
+  /// Optional. If set, enables transcription of voice input. The transcription
+  /// aligns with the input audio language, if configured.
+  final AudioTranscriptionConfig? inputAudioTranscription;
+
+  /// Optional. If set, enables transcription of the model's audio output. The
+  /// transcription aligns with the language code specified for the output
+  /// audio, if configured.
+  final AudioTranscriptionConfig? outputAudioTranscription;
+
+  BidiGenerateContentSetup({
+    this.model,
+    this.generationConfig,
+    this.systemInstruction,
+    this.tools,
+    this.realtimeInputConfig,
+    this.sessionResumption,
+    this.contextWindowCompression,
+    this.inputAudioTranscription,
+    this.outputAudioTranscription,
+  }) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentSetup.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentSetup(
+      model: json['model'],
+      generationConfig: decode(
+        json['generationConfig'],
+        GenerationConfig.fromJson,
+      ),
+      systemInstruction: decode(json['systemInstruction'], Content.fromJson),
+      tools: decodeListMessage(json['tools'], Tool.fromJson),
+      realtimeInputConfig: decode(
+        json['realtimeInputConfig'],
+        RealtimeInputConfig.fromJson,
+      ),
+      sessionResumption: decode(
+        json['sessionResumption'],
+        SessionResumptionConfig.fromJson,
+      ),
+      contextWindowCompression: decode(
+        json['contextWindowCompression'],
+        ContextWindowCompressionConfig.fromJson,
+      ),
+      inputAudioTranscription: decode(
+        json['inputAudioTranscription'],
+        AudioTranscriptionConfig.fromJson,
+      ),
+      outputAudioTranscription: decode(
+        json['outputAudioTranscription'],
+        AudioTranscriptionConfig.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (model != null) 'model': model,
+      if (generationConfig != null)
+        'generationConfig': generationConfig!.toJson(),
+      if (systemInstruction != null)
+        'systemInstruction': systemInstruction!.toJson(),
+      if (tools != null) 'tools': encodeList(tools),
+      if (realtimeInputConfig != null)
+        'realtimeInputConfig': realtimeInputConfig!.toJson(),
+      if (sessionResumption != null)
+        'sessionResumption': sessionResumption!.toJson(),
+      if (contextWindowCompression != null)
+        'contextWindowCompression': contextWindowCompression!.toJson(),
+      if (inputAudioTranscription != null)
+        'inputAudioTranscription': inputAudioTranscription!.toJson(),
+      if (outputAudioTranscription != null)
+        'outputAudioTranscription': outputAudioTranscription!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [if (model != null) 'model=$model'].join(',');
+    return 'BidiGenerateContentSetup($contents)';
+  }
+}
+
+/// Incremental update of the current conversation delivered from the client.
+/// All of the content here is unconditionally appended to the conversation
+/// history and used as part of the prompt to the model to generate content.
+///
+/// A message here will interrupt any current model generation.
+final class BidiGenerateContentClientContent extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentClientContent';
+
+  /// Optional. The content appended to the current conversation with the model.
+  ///
+  /// For single-turn queries, this is a single instance. For multi-turn
+  /// queries, this is a repeated field that contains conversation history and
+  /// the latest request.
+  final List<Content>? turns;
+
+  /// Optional. If true, indicates that the server content generation should
+  /// start with the currently accumulated prompt. Otherwise, the server awaits
+  /// additional messages before starting generation.
+  final bool? turnComplete;
+
+  BidiGenerateContentClientContent({this.turns, this.turnComplete})
+    : super(fullyQualifiedName);
+
+  factory BidiGenerateContentClientContent.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentClientContent(
+      turns: decodeListMessage(json['turns'], Content.fromJson),
+      turnComplete: json['turnComplete'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (turns != null) 'turns': encodeList(turns),
+      if (turnComplete != null) 'turnComplete': turnComplete,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (turnComplete != null) 'turnComplete=$turnComplete',
+    ].join(',');
+    return 'BidiGenerateContentClientContent($contents)';
+  }
+}
+
+/// User input that is sent in real time.
+///
+/// The different modalities (audio, video and text) are handled as concurrent
+/// streams. The ordering across these streams is not guaranteed.
+///
+/// This is different from
+/// `BidiGenerateContentClientContent`
+/// in a few ways:
+///
+/// * Can be sent continuously without interruption to model generation.
+/// * If there is a need to mix data interleaved across the
+///   `BidiGenerateContentClientContent`
+///   and the
+///   `BidiGenerateContentRealtimeInput`,
+///   the server attempts to optimize for best response, but there are no
+///   guarantees.
+/// * End of turn is not explicitly specified, but is rather derived from user
+///   activity (for example, end of speech).
+/// * Even before the end of turn, the data is processed incrementally
+///   to optimize for a fast start of the response from the model.
+final class BidiGenerateContentRealtimeInput extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentRealtimeInput';
+
+  /// Optional. Inlined bytes data for media input. Multiple `media_chunks` are
+  /// not supported, all but the first will be ignored.
+  ///
+  /// DEPRECATED: Use one of `audio`, `video`, or `text` instead.
+  final List<Blob>? mediaChunks;
+
+  /// Optional. These form the realtime audio input stream.
+  final Blob? audio;
+
+  /// Optional. Indicates that the audio stream has ended, e.g. because the
+  /// microphone was turned off.
+  ///
+  /// This should only be sent when automatic activity detection is enabled
+  /// (which is the default).
+  ///
+  /// The client can reopen the stream by sending an audio message.
+  final bool? audioStreamEnd;
+
+  /// Optional. These form the realtime video input stream.
+  final Blob? video;
+
+  /// Optional. These form the realtime text input stream.
+  final String? text;
+
+  /// Optional. Marks the start of user activity. This can only be sent if
+  /// automatic (i.e. server-side) activity detection is disabled.
+  final BidiGenerateContentRealtimeInput_ActivityStart? activityStart;
+
+  /// Optional. Marks the end of user activity. This can only be sent if
+  /// automatic (i.e. server-side) activity detection is disabled.
+  final BidiGenerateContentRealtimeInput_ActivityEnd? activityEnd;
+
+  BidiGenerateContentRealtimeInput({
+    this.mediaChunks,
+    this.audio,
+    this.audioStreamEnd,
+    this.video,
+    this.text,
+    this.activityStart,
+    this.activityEnd,
+  }) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentRealtimeInput.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentRealtimeInput(
+      mediaChunks: decodeListMessage(json['mediaChunks'], Blob.fromJson),
+      audio: decode(json['audio'], Blob.fromJson),
+      audioStreamEnd: json['audioStreamEnd'],
+      video: decode(json['video'], Blob.fromJson),
+      text: json['text'],
+      activityStart: decode(
+        json['activityStart'],
+        BidiGenerateContentRealtimeInput_ActivityStart.fromJson,
+      ),
+      activityEnd: decode(
+        json['activityEnd'],
+        BidiGenerateContentRealtimeInput_ActivityEnd.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (mediaChunks != null) 'mediaChunks': encodeList(mediaChunks),
+      if (audio != null) 'audio': audio!.toJson(),
+      if (audioStreamEnd != null) 'audioStreamEnd': audioStreamEnd,
+      if (video != null) 'video': video!.toJson(),
+      if (text != null) 'text': text,
+      if (activityStart != null) 'activityStart': activityStart!.toJson(),
+      if (activityEnd != null) 'activityEnd': activityEnd!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (audioStreamEnd != null) 'audioStreamEnd=$audioStreamEnd',
+      if (text != null) 'text=$text',
+    ].join(',');
+    return 'BidiGenerateContentRealtimeInput($contents)';
+  }
+}
+
+/// Marks the start of user activity.
+final class BidiGenerateContentRealtimeInput_ActivityStart
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityStart';
+
+  BidiGenerateContentRealtimeInput_ActivityStart() : super(fullyQualifiedName);
+
+  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return BidiGenerateContentRealtimeInput_ActivityStart();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'ActivityStart()';
+}
+
+/// Marks the end of user activity.
+final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentRealtimeInput.ActivityEnd';
+
+  BidiGenerateContentRealtimeInput_ActivityEnd() : super(fullyQualifiedName);
+
+  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return BidiGenerateContentRealtimeInput_ActivityEnd();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'ActivityEnd()';
+}
+
+/// Client generated response to a `ToolCall` received from the server.
+/// Individual `FunctionResponse` objects are matched to the respective
+/// `FunctionCall` objects by the `id` field.
+///
+/// Note that in the unary and server-streaming GenerateContent APIs function
+/// calling happens by exchanging the `Content` parts, while in the bidi
+/// GenerateContent APIs function calling happens over these dedicated set of
+/// messages.
+final class BidiGenerateContentToolResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentToolResponse';
+
+  /// Optional. The response to the function calls.
+  final List<FunctionResponse>? functionResponses;
+
+  BidiGenerateContentToolResponse({this.functionResponses})
+    : super(fullyQualifiedName);
+
+  factory BidiGenerateContentToolResponse.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentToolResponse(
+      functionResponses: decodeListMessage(
+        json['functionResponses'],
+        FunctionResponse.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (functionResponses != null)
+        'functionResponses': encodeList(functionResponses),
+    };
+  }
+
+  @override
+  String toString() => 'BidiGenerateContentToolResponse()';
+}
+
+/// Messages sent by the client in the BidiGenerateContent call.
+final class BidiGenerateContentClientMessage extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentClientMessage';
+
+  /// Optional. Session configuration sent only in the first client message.
+  final BidiGenerateContentSetup? setup;
+
+  /// Optional. Incremental update of the current conversation delivered from
+  /// the client.
+  final BidiGenerateContentClientContent? clientContent;
+
+  /// Optional. User input that is sent in real time.
+  final BidiGenerateContentRealtimeInput? realtimeInput;
+
+  /// Optional. Response to a `ToolCallMessage` received from the server.
+  final BidiGenerateContentToolResponse? toolResponse;
+
+  BidiGenerateContentClientMessage({
+    this.setup,
+    this.clientContent,
+    this.realtimeInput,
+    this.toolResponse,
+  }) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentClientMessage.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentClientMessage(
+      setup: decode(json['setup'], BidiGenerateContentSetup.fromJson),
+      clientContent: decode(
+        json['clientContent'],
+        BidiGenerateContentClientContent.fromJson,
+      ),
+      realtimeInput: decode(
+        json['realtimeInput'],
+        BidiGenerateContentRealtimeInput.fromJson,
+      ),
+      toolResponse: decode(
+        json['toolResponse'],
+        BidiGenerateContentToolResponse.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (setup != null) 'setup': setup!.toJson(),
+      if (clientContent != null) 'clientContent': clientContent!.toJson(),
+      if (realtimeInput != null) 'realtimeInput': realtimeInput!.toJson(),
+      if (toolResponse != null) 'toolResponse': toolResponse!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'BidiGenerateContentClientMessage()';
+}
+
+/// Sent in response to a `BidiGenerateContentSetup` message from the client.
+final class BidiGenerateContentSetupComplete extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentSetupComplete';
+
+  BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
+
+  factory BidiGenerateContentSetupComplete.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentSetupComplete();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'BidiGenerateContentSetupComplete()';
+}
+
+/// Incremental server update generated by the model in response to client
+/// messages.
+///
+/// Content is generated as quickly as possible, and not in real time. Clients
+/// may choose to buffer and play it out in real time.
+final class BidiGenerateContentServerContent extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentServerContent';
+
+  /// Output only. The content that the model has generated as part of the
+  /// current conversation with the user.
+  final Content? modelTurn;
+
+  /// Output only. If true, indicates that the model is done generating.
+  ///
+  /// When model is interrupted while generating there will be no
+  /// 'generation_complete' message in interrupted turn, it will go through
+  /// 'interrupted > turn_complete'.
+  ///
+  /// When model assumes realtime playback there will be delay between
+  /// generation_complete and turn_complete that is caused by model waiting for
+  /// playback to finish.
+  final bool? generationComplete;
+
+  /// Output only. If true, indicates that the model has completed its turn.
+  /// Generation will only start in response to additional client messages.
+  final bool? turnComplete;
+
+  /// Output only. If true, indicates that a client message has interrupted
+  /// current model generation. If the client is playing out the content in real
+  /// time, this is a good signal to stop and empty the current playback queue.
+  final bool? interrupted;
+
+  /// Output only. Grounding metadata for the generated content.
+  final GroundingMetadata? groundingMetadata;
+
+  /// Output only. Input audio transcription. The transcription is sent
+  /// independently of the other server messages and there is no guaranteed
+  /// ordering.
+  final BidiGenerateContentTranscription? inputTranscription;
+
+  /// Output only. Output audio transcription. These transcriptions are part of
+  /// the Generation output of the server. The last output transcription of this
+  /// turn is sent before either `generation_complete` or `interrupted`, which in
+  /// turn are followed by `turn_complete`. There is no guaranteed exact ordering
+  /// between transcriptions and other `model_turn` output but the server tries
+  /// to send the transcripts close to the corresponding audio output.
+  final BidiGenerateContentTranscription? outputTranscription;
+
+  final UrlContextMetadata? urlContextMetadata;
+
+  /// Output only. If true, indicates that the model is not generating content
+  /// because it is waiting for more input from the user, e.g. because it expects
+  /// the user to continue talking.
+  final bool? waitingForInput;
+
+  BidiGenerateContentServerContent({
+    this.modelTurn,
+    this.generationComplete,
+    this.turnComplete,
+    this.interrupted,
+    this.groundingMetadata,
+    this.inputTranscription,
+    this.outputTranscription,
+    this.urlContextMetadata,
+    this.waitingForInput,
+  }) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentServerContent.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentServerContent(
+      modelTurn: decode(json['modelTurn'], Content.fromJson),
+      generationComplete: json['generationComplete'],
+      turnComplete: json['turnComplete'],
+      interrupted: json['interrupted'],
+      groundingMetadata: decode(
+        json['groundingMetadata'],
+        GroundingMetadata.fromJson,
+      ),
+      inputTranscription: decode(
+        json['inputTranscription'],
+        BidiGenerateContentTranscription.fromJson,
+      ),
+      outputTranscription: decode(
+        json['outputTranscription'],
+        BidiGenerateContentTranscription.fromJson,
+      ),
+      urlContextMetadata: decode(
+        json['urlContextMetadata'],
+        UrlContextMetadata.fromJson,
+      ),
+      waitingForInput: json['waitingForInput'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (modelTurn != null) 'modelTurn': modelTurn!.toJson(),
+      if (generationComplete != null) 'generationComplete': generationComplete,
+      if (turnComplete != null) 'turnComplete': turnComplete,
+      if (interrupted != null) 'interrupted': interrupted,
+      if (groundingMetadata != null)
+        'groundingMetadata': groundingMetadata!.toJson(),
+      if (inputTranscription != null)
+        'inputTranscription': inputTranscription!.toJson(),
+      if (outputTranscription != null)
+        'outputTranscription': outputTranscription!.toJson(),
+      if (urlContextMetadata != null)
+        'urlContextMetadata': urlContextMetadata!.toJson(),
+      if (waitingForInput != null) 'waitingForInput': waitingForInput,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (generationComplete != null) 'generationComplete=$generationComplete',
+      if (turnComplete != null) 'turnComplete=$turnComplete',
+      if (interrupted != null) 'interrupted=$interrupted',
+      if (waitingForInput != null) 'waitingForInput=$waitingForInput',
+    ].join(',');
+    return 'BidiGenerateContentServerContent($contents)';
+  }
+}
+
+/// Request for the client to execute the `function_calls` and return the
+/// responses with the matching `id`s.
+final class BidiGenerateContentToolCall extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentToolCall';
+
+  /// Output only. The function call to be executed.
+  final List<FunctionCall>? functionCalls;
+
+  BidiGenerateContentToolCall({this.functionCalls}) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentToolCall.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentToolCall(
+      functionCalls: decodeListMessage(
+        json['functionCalls'],
+        FunctionCall.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (functionCalls != null) 'functionCalls': encodeList(functionCalls),
+    };
+  }
+
+  @override
+  String toString() => 'BidiGenerateContentToolCall()';
+}
+
+/// Notification for the client that a previously issued `ToolCallMessage`
+/// with the specified `id`s should not have been executed and should be
+/// cancelled. If there were side-effects to those tool calls, clients may
+/// attempt to undo the tool calls. This message occurs only in cases where the
+/// clients interrupt server turns.
+final class BidiGenerateContentToolCallCancellation extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentToolCallCancellation';
+
+  /// Output only. The ids of the tool calls to be cancelled.
+  final List<String>? ids;
+
+  BidiGenerateContentToolCallCancellation({this.ids})
+    : super(fullyQualifiedName);
+
+  factory BidiGenerateContentToolCallCancellation.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return BidiGenerateContentToolCallCancellation(
+      ids: decodeList(json['ids']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {if (ids != null) 'ids': ids};
+  }
+
+  @override
+  String toString() => 'BidiGenerateContentToolCallCancellation()';
+}
+
+/// A notice that the server will soon disconnect.
+final class GoAway extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GoAway';
+
+  /// The remaining time before the connection will be terminated as ABORTED.
+  ///
+  /// This duration will never be less than a model-specific minimum, which will
+  /// be specified together with the rate limits for the model.
+  final Duration? timeLeft;
+
+  GoAway({this.timeLeft}) : super(fullyQualifiedName);
+
+  factory GoAway.fromJson(Map<String, dynamic> json) {
+    return GoAway(timeLeft: decodeCustom(json['timeLeft'], Duration.fromJson));
+  }
+
+  @override
+  Object toJson() {
+    return {if (timeLeft != null) 'timeLeft': timeLeft!.toJson()};
+  }
+
+  @override
+  String toString() => 'GoAway()';
+}
+
+/// Update of the session resumption state.
+///
+/// Only sent if `BidiGenerateContentSetup.session_resumption` was set.
+final class SessionResumptionUpdate extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.SessionResumptionUpdate';
+
+  /// New handle that represents a state that can be resumed. Empty if
+  /// `resumable`=false.
+  final String? newHandle;
+
+  /// True if the current session can be resumed at this point.
+  ///
+  /// Resumption is not possible at some points in the session. For example, when
+  /// the model is executing function calls or generating. Resuming the session
+  /// (using a previous session token) in such a state will result in some data
+  /// loss. In these cases, `new_handle` will be empty and `resumable` will be
+  /// false.
+  final bool? resumable;
+
+  SessionResumptionUpdate({this.newHandle, this.resumable})
+    : super(fullyQualifiedName);
+
+  factory SessionResumptionUpdate.fromJson(Map<String, dynamic> json) {
+    return SessionResumptionUpdate(
+      newHandle: json['newHandle'],
+      resumable: json['resumable'],
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (newHandle != null) 'newHandle': newHandle,
+      if (resumable != null) 'resumable': resumable,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (newHandle != null) 'newHandle=$newHandle',
+      if (resumable != null) 'resumable=$resumable',
+    ].join(',');
+    return 'SessionResumptionUpdate($contents)';
+  }
+}
+
+/// Transcription of audio (input or output).
+final class BidiGenerateContentTranscription extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentTranscription';
+
+  /// Transcription text.
+  final String? text;
+
+  BidiGenerateContentTranscription({this.text}) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentTranscription.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentTranscription(text: json['text']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (text != null) 'text': text};
+  }
+
+  @override
+  String toString() {
+    final contents = [if (text != null) 'text=$text'].join(',');
+    return 'BidiGenerateContentTranscription($contents)';
+  }
+}
+
+/// Response message for the BidiGenerateContent call.
+final class BidiGenerateContentServerMessage extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.BidiGenerateContentServerMessage';
+
+  /// Output only. Sent in response to a `BidiGenerateContentSetup` message
+  /// from the client when setup is complete.
+  final BidiGenerateContentSetupComplete? setupComplete;
+
+  /// Output only. Content generated by the model in response to client
+  /// messages.
+  final BidiGenerateContentServerContent? serverContent;
+
+  /// Output only. Request for the client to execute the `function_calls` and
+  /// return the responses with the matching `id`s.
+  final BidiGenerateContentToolCall? toolCall;
+
+  /// Output only. Notification for the client that a previously issued
+  /// `ToolCallMessage` with the specified `id`s should be cancelled.
+  final BidiGenerateContentToolCallCancellation? toolCallCancellation;
+
+  /// Output only. A notice that the server will soon disconnect.
+  final GoAway? goAway;
+
+  /// Output only. Update of the session resumption state.
+  final SessionResumptionUpdate? sessionResumptionUpdate;
+
+  /// Output only. Usage metadata about the response(s).
+  final UsageMetadata? usageMetadata;
+
+  BidiGenerateContentServerMessage({
+    this.setupComplete,
+    this.serverContent,
+    this.toolCall,
+    this.toolCallCancellation,
+    this.goAway,
+    this.sessionResumptionUpdate,
+    this.usageMetadata,
+  }) : super(fullyQualifiedName);
+
+  factory BidiGenerateContentServerMessage.fromJson(Map<String, dynamic> json) {
+    return BidiGenerateContentServerMessage(
+      setupComplete: decode(
+        json['setupComplete'],
+        BidiGenerateContentSetupComplete.fromJson,
+      ),
+      serverContent: decode(
+        json['serverContent'],
+        BidiGenerateContentServerContent.fromJson,
+      ),
+      toolCall: decode(json['toolCall'], BidiGenerateContentToolCall.fromJson),
+      toolCallCancellation: decode(
+        json['toolCallCancellation'],
+        BidiGenerateContentToolCallCancellation.fromJson,
+      ),
+      goAway: decode(json['goAway'], GoAway.fromJson),
+      sessionResumptionUpdate: decode(
+        json['sessionResumptionUpdate'],
+        SessionResumptionUpdate.fromJson,
+      ),
+      usageMetadata: decode(json['usageMetadata'], UsageMetadata.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (setupComplete != null) 'setupComplete': setupComplete!.toJson(),
+      if (serverContent != null) 'serverContent': serverContent!.toJson(),
+      if (toolCall != null) 'toolCall': toolCall!.toJson(),
+      if (toolCallCancellation != null)
+        'toolCallCancellation': toolCallCancellation!.toJson(),
+      if (goAway != null) 'goAway': goAway!.toJson(),
+      if (sessionResumptionUpdate != null)
+        'sessionResumptionUpdate': sessionResumptionUpdate!.toJson(),
+      if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'BidiGenerateContentServerMessage()';
+}
+
+/// Usage metadata about response(s).
+final class UsageMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.UsageMetadata';
+
+  /// Output only. Number of tokens in the prompt. When `cached_content` is set,
+  /// this is still the total effective prompt size meaning this includes the
+  /// number of tokens in the cached content.
+  final int? promptTokenCount;
+
+  /// Number of tokens in the cached part of the prompt (the cached content)
+  final int? cachedContentTokenCount;
+
+  /// Output only. Total number of tokens across all the generated response
+  /// candidates.
+  final int? responseTokenCount;
+
+  /// Output only. Number of tokens present in tool-use prompt(s).
+  final int? toolUsePromptTokenCount;
+
+  /// Output only. Number of tokens of thoughts for thinking models.
+  final int? thoughtsTokenCount;
+
+  /// Output only. Total token count for the generation request (prompt +
+  /// response candidates).
+  final int? totalTokenCount;
+
+  /// Output only. List of modalities that were processed in the request input.
+  final List<ModalityTokenCount>? promptTokensDetails;
+
+  /// Output only. List of modalities of the cached content in the request input.
+  final List<ModalityTokenCount>? cacheTokensDetails;
+
+  /// Output only. List of modalities that were returned in the response.
+  final List<ModalityTokenCount>? responseTokensDetails;
+
+  /// Output only. List of modalities that were processed for tool-use request
+  /// inputs.
+  final List<ModalityTokenCount>? toolUsePromptTokensDetails;
+
+  UsageMetadata({
+    this.promptTokenCount,
+    this.cachedContentTokenCount,
+    this.responseTokenCount,
+    this.toolUsePromptTokenCount,
+    this.thoughtsTokenCount,
+    this.totalTokenCount,
+    this.promptTokensDetails,
+    this.cacheTokensDetails,
+    this.responseTokensDetails,
+    this.toolUsePromptTokensDetails,
+  }) : super(fullyQualifiedName);
+
+  factory UsageMetadata.fromJson(Map<String, dynamic> json) {
+    return UsageMetadata(
+      promptTokenCount: json['promptTokenCount'],
+      cachedContentTokenCount: json['cachedContentTokenCount'],
+      responseTokenCount: json['responseTokenCount'],
+      toolUsePromptTokenCount: json['toolUsePromptTokenCount'],
+      thoughtsTokenCount: json['thoughtsTokenCount'],
+      totalTokenCount: json['totalTokenCount'],
+      promptTokensDetails: decodeListMessage(
+        json['promptTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      cacheTokensDetails: decodeListMessage(
+        json['cacheTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      responseTokensDetails: decodeListMessage(
+        json['responseTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+      toolUsePromptTokensDetails: decodeListMessage(
+        json['toolUsePromptTokensDetails'],
+        ModalityTokenCount.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (promptTokenCount != null) 'promptTokenCount': promptTokenCount,
+      if (cachedContentTokenCount != null)
+        'cachedContentTokenCount': cachedContentTokenCount,
+      if (responseTokenCount != null) 'responseTokenCount': responseTokenCount,
+      if (toolUsePromptTokenCount != null)
+        'toolUsePromptTokenCount': toolUsePromptTokenCount,
+      if (thoughtsTokenCount != null) 'thoughtsTokenCount': thoughtsTokenCount,
+      if (totalTokenCount != null) 'totalTokenCount': totalTokenCount,
+      if (promptTokensDetails != null)
+        'promptTokensDetails': encodeList(promptTokensDetails),
+      if (cacheTokensDetails != null)
+        'cacheTokensDetails': encodeList(cacheTokensDetails),
+      if (responseTokensDetails != null)
+        'responseTokensDetails': encodeList(responseTokensDetails),
+      if (toolUsePromptTokensDetails != null)
+        'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (promptTokenCount != null) 'promptTokenCount=$promptTokenCount',
+      if (cachedContentTokenCount != null)
+        'cachedContentTokenCount=$cachedContentTokenCount',
+      if (responseTokenCount != null) 'responseTokenCount=$responseTokenCount',
+      if (toolUsePromptTokenCount != null)
+        'toolUsePromptTokenCount=$toolUsePromptTokenCount',
+      if (thoughtsTokenCount != null) 'thoughtsTokenCount=$thoughtsTokenCount',
+      if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
+    ].join(',');
+    return 'UsageMetadata($contents)';
   }
 }
 
@@ -5888,6 +8658,9 @@ final class Model extends ProtoMessage {
   /// allowed as a generation parameter.
   final int? topK;
 
+  /// Whether the model supports thinking.
+  final bool? thinking;
+
   Model({
     this.name,
     this.baseModelId,
@@ -5901,6 +8674,7 @@ final class Model extends ProtoMessage {
     this.maxTemperature,
     this.topP,
     this.topK,
+    this.thinking,
   }) : super(fullyQualifiedName);
 
   factory Model.fromJson(Map<String, dynamic> json) {
@@ -5919,6 +8693,7 @@ final class Model extends ProtoMessage {
       maxTemperature: decodeDouble(json['maxTemperature']),
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
+      thinking: json['thinking'],
     );
   }
 
@@ -5939,6 +8714,7 @@ final class Model extends ProtoMessage {
         'maxTemperature': encodeDouble(maxTemperature),
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
+      if (thinking != null) 'thinking': thinking,
     };
   }
 
@@ -5956,6 +8732,7 @@ final class Model extends ProtoMessage {
       if (maxTemperature != null) 'maxTemperature=$maxTemperature',
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
+      if (thinking != null) 'thinking=$thinking',
     ].join(',');
     return 'Model($contents)';
   }
@@ -6838,6 +9615,51 @@ final class PredictRequest extends ProtoMessage {
   }
 }
 
+/// Request message for [PredictionService.PredictLongRunning].
+final class PredictLongRunningRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PredictLongRunningRequest';
+
+  /// Required. The name of the model for prediction.
+  /// Format: `name=models/{model}`.
+  final String model;
+
+  /// Required. The instances that are the input to the prediction call.
+  final List<Value>? instances;
+
+  /// Optional. The parameters that govern the prediction call.
+  final Value? parameters;
+
+  PredictLongRunningRequest({
+    required this.model,
+    this.instances,
+    this.parameters,
+  }) : super(fullyQualifiedName);
+
+  factory PredictLongRunningRequest.fromJson(Map<String, dynamic> json) {
+    return PredictLongRunningRequest(
+      model: json['model'],
+      instances: decodeListMessageCustom(json['instances'], Value.fromJson),
+      parameters: decodeCustom(json['parameters'], Value.fromJson),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      'model': model,
+      if (instances != null) 'instances': encodeList(instances),
+      if (parameters != null) 'parameters': parameters!.toJson(),
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = ['model=$model'].join(',');
+    return 'PredictLongRunningRequest($contents)';
+  }
+}
+
 /// Response message for [PredictionService.Predict].
 final class PredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
@@ -6861,6 +9683,171 @@ final class PredictResponse extends ProtoMessage {
 
   @override
   String toString() => 'PredictResponse()';
+}
+
+/// Response message for [PredictionService.PredictLongRunning]
+final class PredictLongRunningResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PredictLongRunningResponse';
+
+  /// The response of the video generation prediction.
+  final PredictLongRunningGeneratedVideoResponse? generateVideoResponse;
+
+  PredictLongRunningResponse({this.generateVideoResponse})
+    : super(fullyQualifiedName);
+
+  factory PredictLongRunningResponse.fromJson(Map<String, dynamic> json) {
+    return PredictLongRunningResponse(
+      generateVideoResponse: decode(
+        json['generateVideoResponse'],
+        PredictLongRunningGeneratedVideoResponse.fromJson,
+      ),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (generateVideoResponse != null)
+        'generateVideoResponse': generateVideoResponse!.toJson(),
+    };
+  }
+
+  @override
+  String toString() => 'PredictLongRunningResponse()';
+}
+
+/// Metadata for PredictLongRunning long running operations.
+final class PredictLongRunningMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PredictLongRunningMetadata';
+
+  PredictLongRunningMetadata() : super(fullyQualifiedName);
+
+  factory PredictLongRunningMetadata.fromJson(Map<String, dynamic> json) {
+    return PredictLongRunningMetadata();
+  }
+
+  @override
+  Object toJson() {
+    return {};
+  }
+
+  @override
+  String toString() => 'PredictLongRunningMetadata()';
+}
+
+/// A proto encapsulate various type of media.
+final class Media extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Media';
+
+  /// Video as the only one for now.  This is mimicking Vertex proto.
+  final Video? video;
+
+  Media({this.video}) : super(fullyQualifiedName);
+
+  factory Media.fromJson(Map<String, dynamic> json) {
+    return Media(video: decode(json['video'], Video.fromJson));
+  }
+
+  @override
+  Object toJson() {
+    return {if (video != null) 'video': video!.toJson()};
+  }
+
+  @override
+  String toString() => 'Media()';
+}
+
+/// Representation of a video.
+final class Video extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.Video';
+
+  /// Raw bytes.
+  final Uint8List? video;
+
+  /// Path to another storage.
+  final String? uri;
+
+  Video({this.video, this.uri}) : super(fullyQualifiedName);
+
+  factory Video.fromJson(Map<String, dynamic> json) {
+    return Video(video: decodeBytes(json['video']), uri: json['uri']);
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (video != null) 'video': encodeBytes(video),
+      if (uri != null) 'uri': uri,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (video != null) 'video=$video',
+      if (uri != null) 'uri=$uri',
+    ].join(',');
+    return 'Video($contents)';
+  }
+}
+
+/// Veo response.
+final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.PredictLongRunningGeneratedVideoResponse';
+
+  /// The generated samples.
+  final List<Media>? generatedSamples;
+
+  /// Returns if any videos were filtered due to RAI policies.
+  final int? raiMediaFilteredCount;
+
+  /// Returns rai failure reasons if any.
+  final List<String>? raiMediaFilteredReasons;
+
+  PredictLongRunningGeneratedVideoResponse({
+    this.generatedSamples,
+    this.raiMediaFilteredCount,
+    this.raiMediaFilteredReasons,
+  }) : super(fullyQualifiedName);
+
+  factory PredictLongRunningGeneratedVideoResponse.fromJson(
+    Map<String, dynamic> json,
+  ) {
+    return PredictLongRunningGeneratedVideoResponse(
+      generatedSamples: decodeListMessage(
+        json['generatedSamples'],
+        Media.fromJson,
+      ),
+      raiMediaFilteredCount: json['raiMediaFilteredCount'],
+      raiMediaFilteredReasons: decodeList(json['raiMediaFilteredReasons']),
+    );
+  }
+
+  @override
+  Object toJson() {
+    return {
+      if (generatedSamples != null)
+        'generatedSamples': encodeList(generatedSamples),
+      if (raiMediaFilteredCount != null)
+        'raiMediaFilteredCount': raiMediaFilteredCount,
+      if (raiMediaFilteredReasons != null)
+        'raiMediaFilteredReasons': raiMediaFilteredReasons,
+    };
+  }
+
+  @override
+  String toString() {
+    final contents = [
+      if (raiMediaFilteredCount != null)
+        'raiMediaFilteredCount=$raiMediaFilteredCount',
+    ].join(',');
+    return 'PredictLongRunningGeneratedVideoResponse($contents)';
+  }
 }
 
 /// A `Corpus` is a collection of `Document`s.
@@ -7670,13 +10657,17 @@ final class RelevantChunk extends ProtoMessage {
   /// `Chunk` associated with the query.
   final Chunk? chunk;
 
-  RelevantChunk({this.chunkRelevanceScore, this.chunk})
+  /// `Document` associated with the chunk.
+  final Document? document;
+
+  RelevantChunk({this.chunkRelevanceScore, this.chunk, this.document})
     : super(fullyQualifiedName);
 
   factory RelevantChunk.fromJson(Map<String, dynamic> json) {
     return RelevantChunk(
       chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']),
       chunk: decode(json['chunk'], Chunk.fromJson),
+      document: decode(json['document'], Document.fromJson),
     );
   }
 
@@ -7686,6 +10677,7 @@ final class RelevantChunk extends ProtoMessage {
       if (chunkRelevanceScore != null)
         'chunkRelevanceScore': encodeDouble(chunkRelevanceScore),
       if (chunk != null) 'chunk': chunk!.toJson(),
+      if (document != null) 'document': document!.toJson(),
     };
   }
 
@@ -9711,12 +12703,43 @@ final class Type extends ProtoEnum {
   /// Object type.
   static const object = Type('OBJECT');
 
+  /// Null type.
+  static const null$ = Type('NULL');
+
   const Type(super.value);
 
   factory Type.fromJson(String json) => Type(json);
 
   @override
   String toString() => 'Type.$value';
+}
+
+/// Content Part modality
+final class Modality extends ProtoEnum {
+  /// Unspecified modality.
+  static const modalityUnspecified = Modality('MODALITY_UNSPECIFIED');
+
+  /// Plain text.
+  static const text = Modality('TEXT');
+
+  /// Image.
+  static const image = Modality('IMAGE');
+
+  /// Video.
+  static const video = Modality('VIDEO');
+
+  /// Audio.
+  static const audio = Modality('AUDIO');
+
+  /// Document, e.g. PDF.
+  static const document = Modality('DOCUMENT');
+
+  const Modality(super.value);
+
+  factory Modality.fromJson(String json) => Modality(json);
+
+  @override
+  String toString() => 'Modality.$value';
 }
 
 /// Type of task for which the embedding will be used.
@@ -9744,6 +12767,9 @@ final class TaskType extends ProtoEnum {
 
   /// Specifies that the given text will be used for fact verification.
   static const factVerification = TaskType('FACT_VERIFICATION');
+
+  /// Specifies that the given text will be used for code retrieval.
+  static const codeRetrievalQuery = TaskType('CODE_RETRIEVAL_QUERY');
 
   const TaskType(super.value);
 
@@ -9807,6 +12833,7 @@ final class HarmCategory extends ProtoEnum {
   );
 
   /// **Gemini** - Content that may be used to harm civic integrity.
+  /// DEPRECATED: use enable_enhanced_civic_answers instead.
   static const harmCategoryCivicIntegrity = HarmCategory(
     'HARM_CATEGORY_CIVIC_INTEGRITY',
   );
