@@ -90,7 +90,7 @@ jobs:
       - name: Regenerate existing clients
         # The current head version of sidekick can be generated with:
         # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
-        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.4.1-0.20251014194539-10493ed9a20e refreshall -project-root .
+        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.4.1-0.20251015195217-6a4aeade5318 refreshall -project-root .
       - name: Generated Diff
         run: git diff --exit-code
 
