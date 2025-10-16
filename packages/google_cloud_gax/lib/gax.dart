@@ -158,6 +158,7 @@ class ServiceClient {
     final responseBody = await response.stream.bytesToString();
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
+      print('$method $url ${response.reasonPhrase}');
       _throwException(response.statusCode, response.reasonPhrase, responseBody);
     }
     return responseBody.isEmpty ? {} : jsonDecode(responseBody);
@@ -216,6 +217,7 @@ class ServiceClient {
     String? reasonPhrase,
     String responseBody,
   ) {
+    print('$statusCode, $reasonPhrase, $responseBody');
     final dynamic json;
     try {
       json = jsonDecode(responseBody);
