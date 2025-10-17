@@ -27,7 +27,8 @@ export 'src/web.dart'
 
 const String _clientKey = 'x-goog-api-client';
 
-const String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
+// ignore: prefer_const_declarations
+final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
@@ -59,8 +60,8 @@ abstract class ProtoEnum implements JsonEncodable {
   String toJson() => value;
 
   @override
-  bool operator ==(Object other) => other.runtimeType == runtimeType &&
-        value == (other as ProtoEnum).value;
+  bool operator ==(Object other) =>
+      other.runtimeType == runtimeType && value == (other as ProtoEnum).value;
 
   @override
   int get hashCode => value.hashCode;
@@ -159,7 +160,9 @@ class ServiceClient {
     if (!statusOK) {
       _throwException(response.statusCode, response.reasonPhrase, responseBody);
     }
-    return responseBody.isEmpty ? {} : jsonDecode(responseBody);
+    return responseBody.isEmpty
+        ? {}
+        : jsonDecode(responseBody) as Map<String, dynamic>;
   }
 
   /// Make a request that streams its results using
@@ -190,7 +193,9 @@ class ServiceClient {
       );
     }
 
-    final lines = response.stream.toStringStream().transform(const LineSplitter());
+    final lines = response.stream.toStringStream().transform(
+      const LineSplitter(),
+    );
     await for (final line in lines) {
       // Google APIs only generate "data" events.
       // The SSE specification does not require a space after the colon but
@@ -225,9 +230,12 @@ class ServiceClient {
       );
     }
 
+    // We use `dynamic` and catch `TypeError` to simply JSON decoding.
     final Status status;
     try {
-      status = Status.fromJson(json['error']);
+      // ignore: avoid_dynamic_calls
+      status = Status.fromJson(json['error'] as Map<String, dynamic>);
+      // ignore: avoid_catching_errors
     } on TypeError {
       throw ServiceException(
         'unexpected response format from server',
