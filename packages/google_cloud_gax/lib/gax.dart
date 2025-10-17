@@ -61,7 +61,9 @@ abstract class ProtoEnum implements JsonEncodable {
 
   @override
   bool operator ==(Object other) =>
-      other.runtimeType == runtimeType && value == (other as ProtoEnum).value;
+      other is ProtoEnum &&
+      other.runtimeType == runtimeType &&
+      value == other.value;
 
   @override
   int get hashCode => value.hashCode;
