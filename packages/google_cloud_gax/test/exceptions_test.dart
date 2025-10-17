@@ -19,53 +19,61 @@ import 'package:test/test.dart';
 void main() {
   group('ServiceException', () {
     test('no body', () {
-      final e = ServiceException('test message');
+      final e = ServiceException('test message', statusCode: 404);
 
       expect(e.message, 'test message');
-      expect(e.toString(), 'ServiceException: test message');
+      expect(e.toString(), 'ServiceException: test message, statusCode=404');
     });
     test('with body', () {
       final e = ServiceException(
         'test message',
+        statusCode: 404,
         responseBody: '<response body>',
       );
 
       expect(e.message, 'test message');
+      expect(e.statusCode, 404);
       expect(e.responseBody, '<response body>');
       expect(
         e.toString(),
-        'ServiceException: test message, responseBody="<response body>"',
+        'ServiceException: test message, statusCode=404, '
+        'responseBody="<response body>"',
       );
     });
   });
 
   group('StatusException', () {
     test('no body, no message', () {
-      final e = StatusException.fromStatus(Status(code: 123));
+      final e = StatusException.fromStatus(Status(code: 123), statusCode: 500);
 
       expect(e.message, 'status returned without message');
       expect(e.status.code, 123);
+      expect(e.statusCode, 500);
       expect(e.toString(), 'StatusException: status returned without message');
     });
     test('no body, status message', () {
       final e = StatusException.fromStatus(
         Status(message: 'bad auth', code: 123),
+        statusCode: 500,
       );
 
       expect(e.message, 'bad auth');
       expect(e.status.code, 123);
+      expect(e.statusCode, 500);
       expect(e.toString(), 'StatusException: bad auth');
     });
 
     test('with body, status message', () {
       final e = StatusException.fromStatus(
         Status(message: 'bad auth', code: 123),
+        statusCode: 500,
         responseBody: '<response body>',
       );
 
       expect(e.message, 'bad auth');
       expect(e.responseBody, '<response body>');
       expect(e.status.code, 123);
+      expect(e.statusCode, 500);
       expect(e.toString(), 'StatusException: bad auth');
     });
   });

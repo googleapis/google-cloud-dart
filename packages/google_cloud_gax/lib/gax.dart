@@ -72,17 +72,20 @@ final class ServiceException implements Exception {
   /// A message describing the cause of the exception.
   final String message;
 
+  /// The HTTP status code that the server returned (e.g. 404).
+  final int statusCode;
+
   /// The server response that caused the exception.
   final String? responseBody;
 
-  ServiceException(this.message, {this.responseBody});
+  ServiceException(this.message, {required this.statusCode, this.responseBody});
 
   @override
   String toString() {
     final body = responseBody != null
         ? ', responseBody=${Error.safeToString(responseBody)}'
         : '';
-    return 'ServiceException: $message$body';
+    return 'ServiceException: $message, statusCode=$statusCode$body';
   }
 }
 
@@ -95,8 +98,11 @@ final class StatusException extends ServiceException {
   /// The status message returned by the server.
   final Status status;
 
-  StatusException.fromStatus(this.status, {super.responseBody})
-    : super(status.message ?? 'status returned without message');
+  StatusException.fromStatus(
+    this.status, {
+    required super.statusCode,
+    super.responseBody,
+  }) : super(status.message ?? 'status returned without message');
 
   @override
   String toString() => 'StatusException: $message';
@@ -222,6 +228,7 @@ class ServiceClient {
     } on FormatException {
       throw ServiceException(
         'Invalid JSON response from server',
+        statusCode: statusCode,
         responseBody: responseBody,
       );
     }
@@ -232,11 +239,16 @@ class ServiceClient {
     } on TypeError {
       throw ServiceException(
         'unexpected response format from server',
+        statusCode: statusCode,
         responseBody: responseBody,
       );
     }
 
-    throw StatusException.fromStatus(status, responseBody: responseBody);
+    throw StatusException.fromStatus(
+      status,
+      statusCode: statusCode,
+      responseBody: responseBody,
+    );
   }
 }
 
