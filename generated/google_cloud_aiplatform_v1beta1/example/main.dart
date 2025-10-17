@@ -26,6 +26,11 @@ void main() async {
   // instructions:
   // https://cloud.google.com/vertex-ai/docs/start/client-libraries#before_you_begin
   const projectId = ''; // Enter your projectId here.
+  if (projectId.isEmpty) {
+    print('Please provide a project ID in the `projectId` constant.');
+    return;
+  }
+
   final client = await auth.clientViaApplicationDefaultCredentials(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
   );
