@@ -73,10 +73,10 @@ $ gcloud auth application-default login
 
 > [!NOTE]
 >
-> Models names must be in the form
+> Model names must be in the form
 > `"projects/{projectId}/locations/{location}/publishers/{publisher}/models/{model}"`.
 >
-> For example, if there Google Cloud project id were `"happycat"`, then this would
+> For example, if the Google Cloud project id were `"happycat"`, then this would
 > be a valid model:
 > `"projects/happycat/locations/global/publishers/google/models/gemini-2.5-flash"`.
 
@@ -86,6 +86,11 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 
 void main() async {
   const projectId = ''; // Enter your projectId here.
+  if (projectId.isEmpty) {
+    print('Please provide a project ID in the `projectId` constant.');
+    return;
+  }
+
   final client = await auth.clientViaApplicationDefaultCredentials(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
   );
