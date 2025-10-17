@@ -12,28 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
 import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
-// https://github.com/googleapis/googleapis/blob/979af4bd0c12f882dfeb87e89461aa7ccd1ea4b4/google/cloud/aiplatform/v1/prediction_service.proto#L169
-// https://cloud.google.com/vertex-ai/generative-ai/docs/start/express-mode/vertex-ai-express-mode-api-reference
-// https://github.com/googleapis/python-genai/tree/main
-// https://cloud.google.com/vertex-ai/generative-ai/docs/learn/locations
-
 void main() async {
-  // Connects to the Generative Language API using Application Default
-  // Connections (ADC).
-  //
   // Before running this example, you need to authenticate with gcloud:
   //
-  // ```
-  // $ gcloud auth application-default login \
-  //   --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language.retriever
+  // ```shell
+  // $ gcloud auth application-default login
   // ```
   //
-  // See https://cloud.google.com/docs/authentication/application-default-credentials
+  // For more detailed instructions, complete these "Before you begin"
+  // instructions:
+  // https://cloud.google.com/vertex-ai/docs/start/client-libraries#before_you_begin
+  const projectId = ''; // Enter your projectId here.
   final client = await auth.clientViaApplicationDefaultCredentials(
     scopes: ['https://www.googleapis.com/auth/cloud-platform'],
   );
@@ -41,7 +33,8 @@ void main() async {
 
   final request = GenerateContentRequest(
     model:
-        'projects/skilful-orb-203421/locations/global/publishers/google/models/gemini-2.5-flash',
+        'projects/$projectId/locations/global/'
+        'publishers/google/models/gemini-2.5-flash',
     contents: [
       Content(
         parts: [Part(text: "Explain how AI works in a few words")],
