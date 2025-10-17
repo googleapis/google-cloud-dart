@@ -16,17 +16,18 @@ import 'dart:convert';
 
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
-export 'src/web.dart'
-    if (dart.library.io) 'src/vm.dart'
-    show environmentVariable;
 
 import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
 
+export 'src/web.dart'
+    if (dart.library.io) 'src/vm.dart'
+    show environmentVariable;
+
 const String _clientKey = 'x-goog-api-client';
 
-final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
+const String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
@@ -58,10 +59,8 @@ abstract class ProtoEnum implements JsonEncodable {
   String toJson() => value;
 
   @override
-  bool operator ==(Object other) {
-    return other.runtimeType == runtimeType &&
+  bool operator ==(Object other) => other.runtimeType == runtimeType &&
         value == (other as ProtoEnum).value;
-  }
 
   @override
   int get hashCode => value.hashCode;
@@ -191,7 +190,7 @@ class ServiceClient {
       );
     }
 
-    final lines = response.stream.toStringStream().transform(LineSplitter());
+    final lines = response.stream.toStringStream().transform(const LineSplitter());
     await for (final line in lines) {
       // Google APIs only generate "data" events.
       // The SSE specification does not require a space after the colon but

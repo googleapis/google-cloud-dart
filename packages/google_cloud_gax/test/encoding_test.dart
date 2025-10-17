@@ -45,7 +45,7 @@ void main() {
   });
 
   test('enum', () {
-    final actual = decodeEnum(Code('NOT_FOUND').toJson(), Code.fromJson);
+    final actual = decodeEnum(const Code('NOT_FOUND').toJson(), Code.fromJson);
     expect(actual!.value, 'NOT_FOUND');
   });
 
