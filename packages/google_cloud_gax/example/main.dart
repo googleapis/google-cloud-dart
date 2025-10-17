@@ -32,7 +32,7 @@ void main() async {
   final serviceClient = ServiceClient(client: httpClient);
   final response = await serviceClient.post(
     Uri.https('language.googleapis.com', '/v2/documents:analyzeSentiment'),
-    body: AnalysisRequest("I am very happy! Are you sad?"),
+    body: AnalysisRequest('I am very happy! Are you sad?'),
   );
   print(response);
   serviceClient.close();

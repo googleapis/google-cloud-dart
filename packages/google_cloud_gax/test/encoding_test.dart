@@ -45,7 +45,7 @@ void main() {
   });
 
   test('enum', () {
-    final actual = decodeEnum(Code('NOT_FOUND').toJson(), Code.fromJson);
+    final actual = decodeEnum(const Code('NOT_FOUND').toJson(), Code.fromJson);
     expect(actual!.value, 'NOT_FOUND');
   });
 
@@ -90,7 +90,7 @@ void main() {
   });
 
   test('map of enums', () {
-    final actual = decodeMapEnum(
+    final actual = decodeMapEnum<String, Code>(
       encodeMap({
         'one': Code.aborted,
         'two': Code.alreadyExists,
@@ -98,27 +98,27 @@ void main() {
       }),
       Code.fromJson,
     );
-    expect(actual, isA<Map>());
+    expect(actual, isMap);
     expect(actual!['one'], Code.aborted);
   });
 
   test('map of bytes', () {
-    final actual = decodeMapBytes(
+    final actual = decodeMapBytes<int>(
       encodeMapBytes({
         1: Uint8List.fromList([1, 2]),
         2: Uint8List.fromList([1, 2, 3, 4]),
       }),
     );
-    expect(actual, isA<Map>());
+    expect(actual, isMap);
     expect(stringify(actual![1]!), '1,2');
   });
 
   test('map of messages', () {
-    final actual = decodeMapMessage(
+    final actual = decodeMapMessage<String, Status>(
       encodeMap({'one': Status(code: 200), 'two': Status(code: 301)}),
       Status.fromJson,
     );
-    expect(actual, isA<Map>());
+    expect(actual, isMap);
     expect(actual!['one']!.code, 200);
   });
 
