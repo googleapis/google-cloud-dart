@@ -189,9 +189,7 @@ void main() {
         ('PUT', service.putStreaming),
       ]) {
         test(method, () async {
-          await fn(
-            Uri.parse('http://example.com/'),
-          ).drain<Map<String, dynamic>>();
+          await fn(Uri.parse('http://example.com/')).drain<Object?>();
 
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
@@ -221,7 +219,7 @@ void main() {
           await fn(
             Uri.parse('http://example.com/'),
             body: TestMessage('<test payload>'),
-          ).drain<Map<String, dynamic>>();
+          ).drain<Object?>();
 
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
