@@ -22,7 +22,7 @@ copyright-year = '2025'
 api-keys-environment-variables = "GOOGLE_API_KEY"
 repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_aiplatform_v1beta1"
 
-# aiplatform defines `Value`, which protoful also defines.
+# aiplatform defines `Value`, which protobuf also defines.
 'prefix:google.protobuf' = 'protobuf'
 
 readme-after-title-text = '''
