@@ -213,12 +213,12 @@ extension DurationExtension on Duration {
   void _validate() {
     // For durations of one second or more, a non-zero value for the `nanos`
     // field must be of the same sign as the `seconds` field.
-    if ((seconds! < 0 && nanos! > 0) || (seconds! > 0 && nanos! < 0)) {
+    if ((seconds < 0 && nanos > 0) || (seconds > 0 && nanos < 0)) {
       throw ArgumentError('seconds and nanos must have the same sign');
     }
 
     // Nanos must be from -999,999,999 to +999,999,999 inclusive.
-    if (nanos! < -999_999_999 || nanos! > 999_999_999) {
+    if (nanos < -999_999_999 || nanos > 999_999_999) {
       throw ArgumentError('nanos out of range');
     }
   }
@@ -234,10 +234,10 @@ class _DurationHelper {
     if (duration.nanos == 0) {
       return '${duration.seconds}s';
     } else {
-      final rhs = duration.nanos!.abs().toString().padLeft(9, '0');
+      final rhs = duration.nanos.abs().toString().padLeft(9, '0');
 
       var result = duration.seconds == 0
-          ? '${duration.nanos! < 0 ? '-' : ''}0.$rhs'
+          ? '${duration.nanos < 0 ? '-' : ''}0.$rhs'
           : '${duration.seconds}.$rhs';
       while (result.endsWith('0')) {
         result = result.substring(0, result.length - 1);
@@ -278,7 +278,7 @@ class _DurationHelper {
 class _FieldMaskHelper {
   /// Encode the field mask as a single comma-separated string.
   static String encode(FieldMask fieldMask) {
-    return fieldMask.paths?.join(',') ?? '';
+    return fieldMask.paths.join(',');
   }
 
   /// Decode the field mask from a single comma-separated string.
@@ -296,10 +296,10 @@ extension TimestampExtension on Timestamp {
   static const int maxSeconds = 253402300799;
 
   void _validate() {
-    if (seconds! < minSeconds || seconds! > maxSeconds) {
+    if (seconds < minSeconds || seconds > maxSeconds) {
       throw ArgumentError('seconds out of range');
     }
-    if (nanos! < 0 || nanos! >= 1_000_000_000) {
+    if (nanos < 0 || nanos >= 1_000_000_000) {
       throw ArgumentError('nanos out of range');
     }
   }
@@ -320,10 +320,10 @@ class _TimestampHelper {
 
   /// Encode the timestamp in RFC3339/UTC format.
   static String encode(Timestamp timestamp) {
-    final nanos = timestamp.nanos!;
+    final nanos = timestamp.nanos;
 
     // 0:0 is 1970-01-01T00:00:00Z.
-    final dateTime = DateTime.utc(1970, 1, 1, 0, 0, timestamp.seconds!, 0, 0);
+    final dateTime = DateTime.utc(1970, 1, 1, 0, 0, timestamp.seconds, 0, 0);
 
     String two(int value) => value.toString().padLeft(2, '0');
 
@@ -413,7 +413,7 @@ class _Uint64ValueHelper {
 
 class _Int32ValueHelper {
   static int encode(Int32Value value) {
-    return value.value!;
+    return value.value;
   }
 
   static Int32Value decode(Object value) {
@@ -423,7 +423,7 @@ class _Int32ValueHelper {
 
 class _Uint32ValueHelper {
   static int encode(Uint32Value value) {
-    return value.value!;
+    return value.value;
   }
 
   static Uint32Value decode(Object value) {
@@ -433,7 +433,7 @@ class _Uint32ValueHelper {
 
 class _BoolValueHelper {
   static bool encode(BoolValue value) {
-    return value.value!;
+    return value.value;
   }
 
   static BoolValue decode(Object value) {
@@ -443,7 +443,7 @@ class _BoolValueHelper {
 
 class _StringValueHelper {
   static String encode(StringValue value) {
-    return value.value!;
+    return value.value;
   }
 
   static StringValue decode(Object value) {
@@ -453,17 +453,17 @@ class _StringValueHelper {
 
 class _BytesValueHelper {
   static String encode(BytesValue value) {
-    return encodeBytes(value.value!)!;
+    return encodeBytes(value.value)!;
   }
 
   static BytesValue decode(Object value) {
-    return BytesValue(value: decodeBytes(value as String));
+    return BytesValue(value: decodeBytes(value as String)!);
   }
 }
 
 class _StructHelper {
   static Map<String, Object?> encode(Struct value) {
-    return value.fields!.map((key, value) => MapEntry(key, value.toJson()));
+    return value.fields.map((key, value) => MapEntry(key, value.toJson()));
   }
 
   static Struct decode(Object value) {
@@ -476,7 +476,7 @@ class _StructHelper {
 
 class _ListValueHelper {
   static List encode(ListValue value) {
-    return value.values!.map((v) => v.toJson()).toList();
+    return value.values.map((v) => v.toJson()).toList();
   }
 
   static ListValue decode(Object value) {
