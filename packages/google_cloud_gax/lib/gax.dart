@@ -102,9 +102,16 @@ final class StatusException extends ServiceException {
   String toString() => 'StatusException: $message';
 }
 
+/// A low-level mechanism to communicate with Google APIs.
 class ServiceClient {
   final http.Client client;
 
+  /// Creates a `ServiceClient` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by the API being accessed. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   ServiceClient({required this.client});
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
