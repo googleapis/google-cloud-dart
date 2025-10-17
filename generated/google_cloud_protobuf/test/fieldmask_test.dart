@@ -33,19 +33,19 @@ void main() {
 
   test('decode empty', () {
     final fieldMask = FieldMask.fromJson('');
-    final actual = fieldMask.paths!.join('|');
+    final actual = fieldMask.paths.join('|');
     expect(actual, '');
   });
 
   test('decode single', () {
     final fieldMask = FieldMask.fromJson('one');
-    final actual = fieldMask.paths!.join('|');
+    final actual = fieldMask.paths.join('|');
     expect(actual, 'one');
   });
 
   test('decode multiple', () {
     final fieldMask = FieldMask.fromJson('one,two');
-    final actual = fieldMask.paths!.join('|');
+    final actual = fieldMask.paths.join('|');
     expect(actual, 'one|two');
   });
 }

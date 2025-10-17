@@ -178,3 +178,27 @@ Map? encodeMap<T>(Map<T, JsonEncodable>? value) {
 Map? encodeMapBytes<T>(Map<T, Uint8List>? value) {
   return value?.map((key, value) => MapEntry(key, base64Encode(value)));
 }
+
+extension BoolExtension on bool {
+  bool get isNotDefault => this != false;
+}
+
+extension IntExtension on int {
+  bool get isNotDefault => this != 0;
+}
+
+extension DoubleExtension on double {
+  bool get isNotDefault => this != 0;
+}
+
+extension StringExtension on String {
+  bool get isNotDefault => isNotEmpty;
+}
+
+extension ListExtension on List {
+  bool get isNotDefault => isNotEmpty;
+}
+
+extension MapExtension on Map {
+  bool get isNotDefault => isNotEmpty;
+}

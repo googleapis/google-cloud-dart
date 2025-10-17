@@ -19,19 +19,22 @@ void main() async {
   // See https://ai.google.dev/gemini-api/docs/api-key
   final service = GenerativeService.fromApiKey();
 
+  final prompt = 'Explain how AI works in a few words.';
+
   final request = GenerateContentRequest(
     model: 'models/gemini-2.5-flash',
     contents: [
-      Content(parts: [Part(text: "Explain how AI works in a few words")]),
+      Content(parts: [Part(text: prompt)]),
     ],
   );
 
+  print('=> $prompt');
   final result = await service.generateContent(request);
-  final parts = result.candidates?[0].content?.parts;
+  final parts = result.candidates[0].content?.parts;
   if (parts == null) {
     print('<No textual response>');
   } else {
-    print(parts.map((p) => p.text ?? '').join(''));
+    print('<= ' + parts.map((p) => p.text).join(''));
   }
 
   service.close();

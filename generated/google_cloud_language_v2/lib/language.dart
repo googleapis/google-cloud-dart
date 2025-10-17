@@ -32,6 +32,7 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// recognition.
 final class LanguageService {
   static const _host = 'language.googleapis.com';
+
   final ServiceClient _client;
 
   /// Creates a `LanguageService` using [client] for transport.
@@ -142,17 +143,17 @@ final class Document extends ProtoMessage {
 
   /// Required. If the type is not set or is `TYPE_UNSPECIFIED`,
   /// returns an `INVALID_ARGUMENT` error.
-  final Document_Type? type;
+  final Document_Type type;
 
   /// The content of the input in string format.
   /// Cloud audit logging exempt since it is based on user data.
-  final String? content;
+  final String content;
 
   /// The Google Cloud Storage URI where the file content is located.
   /// This URI must be of the form: gs://bucket_name/object_name. For more
   /// details, see https://cloud.google.com/storage/docs/reference-uris.
   /// NOTE: Cloud Storage object versioning is not supported.
-  final String? gcsContentUri;
+  final String gcsContentUri;
 
   /// Optional. The language of the document (if not specified, the language is
   /// automatically detected). Both ISO and BCP-47 language codes are
@@ -162,37 +163,43 @@ final class Document extends ProtoMessage {
   /// currently supported languages for each API method. If the language (either
   /// specified by the caller or automatically detected) is not supported by the
   /// called API method, an `INVALID_ARGUMENT` error is returned.
-  final String? languageCode;
+  final String languageCode;
 
-  Document({this.type, this.content, this.gcsContentUri, this.languageCode})
-    : super(fullyQualifiedName);
+  Document({
+    this.type = Document_Type.$default,
+    this.content = '',
+    this.gcsContentUri = '',
+    this.languageCode = '',
+  }) : super(fullyQualifiedName);
 
   factory Document.fromJson(Map<String, dynamic> json) {
     return Document(
-      type: decodeEnum(json['type'], Document_Type.fromJson),
-      content: json['content'],
-      gcsContentUri: json['gcsContentUri'],
-      languageCode: json['languageCode'],
+      type:
+          decodeEnum(json['type'], Document_Type.fromJson) ??
+          Document_Type.$default,
+      content: json['content'] ?? '',
+      gcsContentUri: json['gcsContentUri'] ?? '',
+      languageCode: json['languageCode'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (type != null) 'type': type!.toJson(),
-      if (content != null) 'content': content,
-      if (gcsContentUri != null) 'gcsContentUri': gcsContentUri,
-      if (languageCode != null) 'languageCode': languageCode,
+      if (type.isNotDefault) 'type': type.toJson(),
+      if (content.isNotDefault) 'content': content,
+      if (gcsContentUri.isNotDefault) 'gcsContentUri': gcsContentUri,
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (type != null) 'type=$type',
-      if (content != null) 'content=$content',
-      if (gcsContentUri != null) 'gcsContentUri=$gcsContentUri',
-      if (languageCode != null) 'languageCode=$languageCode',
+      'type=$type',
+      'content=$content',
+      'gcsContentUri=$gcsContentUri',
+      'languageCode=$languageCode',
     ].join(',');
     return 'Document($contents)';
   }
@@ -209,9 +216,14 @@ final class Document_Type extends ProtoEnum {
   /// HTML
   static const html = Document_Type('HTML');
 
+  /// The default value for [Document_Type].
+  static const $default = typeUnspecified;
+
   const Document_Type(super.value);
 
   factory Document_Type.fromJson(String json) => Document_Type(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Type.$value';
@@ -257,20 +269,20 @@ final class Entity extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.Entity';
 
   /// The representative name for the entity.
-  final String? name;
+  final String name;
 
   /// The entity type.
-  final Entity_Type? type;
+  final Entity_Type type;
 
   /// Metadata associated with the entity.
   ///
   /// For the metadata
   /// associated with other entity types, see the Type table below.
-  final Map<String, String>? metadata;
+  final Map<String, String> metadata;
 
   /// The mentions of this entity in the input document. The API currently
   /// supports proper noun mentions.
-  final List<EntityMention>? mentions;
+  final List<EntityMention> mentions;
 
   /// For calls to `AnalyzeEntitySentiment` or if
   /// `AnnotateTextRequest.Features.extract_entity_sentiment`
@@ -278,15 +290,23 @@ final class Entity extends ProtoMessage {
   /// for this entity in the provided document.
   final Sentiment? sentiment;
 
-  Entity({this.name, this.type, this.metadata, this.mentions, this.sentiment})
-    : super(fullyQualifiedName);
+  Entity({
+    this.name = '',
+    this.type = Entity_Type.$default,
+    this.metadata = const {},
+    this.mentions = const [],
+    this.sentiment,
+  }) : super(fullyQualifiedName);
 
   factory Entity.fromJson(Map<String, dynamic> json) {
     return Entity(
-      name: json['name'],
-      type: decodeEnum(json['type'], Entity_Type.fromJson),
-      metadata: decodeMap(json['metadata']),
-      mentions: decodeListMessage(json['mentions'], EntityMention.fromJson),
+      name: json['name'] ?? '',
+      type:
+          decodeEnum(json['type'], Entity_Type.fromJson) ??
+          Entity_Type.$default,
+      metadata: decodeMap(json['metadata']) ?? {},
+      mentions:
+          decodeListMessage(json['mentions'], EntityMention.fromJson) ?? [],
       sentiment: decode(json['sentiment'], Sentiment.fromJson),
     );
   }
@@ -294,20 +314,17 @@ final class Entity extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (type != null) 'type': type!.toJson(),
-      if (metadata != null) 'metadata': metadata,
-      if (mentions != null) 'mentions': encodeList(mentions),
+      if (name.isNotDefault) 'name': name,
+      if (type.isNotDefault) 'type': type.toJson(),
+      if (metadata.isNotDefault) 'metadata': metadata,
+      if (mentions.isNotDefault) 'mentions': encodeList(mentions),
       if (sentiment != null) 'sentiment': sentiment!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (type != null) 'type=$type',
-    ].join(',');
+    final contents = ['name=$name', 'type=$type'].join(',');
     return 'Entity($contents)';
   }
 }
@@ -389,9 +406,14 @@ final class Entity_Type extends ProtoEnum {
   /// The metadata identifies the `value` and `currency`.
   static const price = Entity_Type('PRICE');
 
+  /// The default value for [Entity_Type].
+  static const $default = unknown;
+
   const Entity_Type(super.value);
 
   factory Entity_Type.fromJson(String json) => Entity_Type(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Type.$value';
@@ -405,35 +427,32 @@ final class Sentiment extends ProtoMessage {
   /// A non-negative number in the [0, +inf) range, which represents
   /// the absolute magnitude of sentiment regardless of score (positive or
   /// negative).
-  final double? magnitude;
+  final double magnitude;
 
   /// Sentiment score between -1.0 (negative sentiment) and 1.0
   /// (positive sentiment).
-  final double? score;
+  final double score;
 
-  Sentiment({this.magnitude, this.score}) : super(fullyQualifiedName);
+  Sentiment({this.magnitude = 0, this.score = 0}) : super(fullyQualifiedName);
 
   factory Sentiment.fromJson(Map<String, dynamic> json) {
     return Sentiment(
-      magnitude: decodeDouble(json['magnitude']),
-      score: decodeDouble(json['score']),
+      magnitude: decodeDouble(json['magnitude']) ?? 0,
+      score: decodeDouble(json['score']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (magnitude != null) 'magnitude': encodeDouble(magnitude),
-      if (score != null) 'score': encodeDouble(score),
+      if (magnitude.isNotDefault) 'magnitude': encodeDouble(magnitude),
+      if (score.isNotDefault) 'score': encodeDouble(score),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (magnitude != null) 'magnitude=$magnitude',
-      if (score != null) 'score=$score',
-    ].join(',');
+    final contents = ['magnitude=$magnitude', 'score=$score'].join(',');
     return 'Sentiment($contents)';
   }
 }
@@ -448,7 +467,7 @@ final class EntityMention extends ProtoMessage {
   final TextSpan? text;
 
   /// The type of the entity mention.
-  final EntityMention_Type? type;
+  final EntityMention_Type type;
 
   /// For calls to `AnalyzeEntitySentiment` or if
   /// `AnnotateTextRequest.Features.extract_entity_sentiment`
@@ -460,17 +479,23 @@ final class EntityMention extends ProtoMessage {
   ///
   /// The score shows the probability of the entity mention being the entity
   /// type. The score is in (0, 1] range.
-  final double? probability;
+  final double probability;
 
-  EntityMention({this.text, this.type, this.sentiment, this.probability})
-    : super(fullyQualifiedName);
+  EntityMention({
+    this.text,
+    this.type = EntityMention_Type.$default,
+    this.sentiment,
+    this.probability = 0,
+  }) : super(fullyQualifiedName);
 
   factory EntityMention.fromJson(Map<String, dynamic> json) {
     return EntityMention(
       text: decode(json['text'], TextSpan.fromJson),
-      type: decodeEnum(json['type'], EntityMention_Type.fromJson),
+      type:
+          decodeEnum(json['type'], EntityMention_Type.fromJson) ??
+          EntityMention_Type.$default,
       sentiment: decode(json['sentiment'], Sentiment.fromJson),
-      probability: decodeDouble(json['probability']),
+      probability: decodeDouble(json['probability']) ?? 0,
     );
   }
 
@@ -478,18 +503,15 @@ final class EntityMention extends ProtoMessage {
   Object toJson() {
     return {
       if (text != null) 'text': text!.toJson(),
-      if (type != null) 'type': type!.toJson(),
+      if (type.isNotDefault) 'type': type.toJson(),
       if (sentiment != null) 'sentiment': sentiment!.toJson(),
-      if (probability != null) 'probability': encodeDouble(probability),
+      if (probability.isNotDefault) 'probability': encodeDouble(probability),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (type != null) 'type=$type',
-      if (probability != null) 'probability=$probability',
-    ].join(',');
+    final contents = ['type=$type', 'probability=$probability'].join(',');
     return 'EntityMention($contents)';
   }
 }
@@ -505,9 +527,14 @@ final class EntityMention_Type extends ProtoEnum {
   /// Common noun (or noun compound)
   static const common = EntityMention_Type('COMMON');
 
+  /// The default value for [EntityMention_Type].
+  static const $default = typeUnknown;
+
   const EntityMention_Type(super.value);
 
   factory EntityMention_Type.fromJson(String json) => EntityMention_Type(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Type.$value';
@@ -518,34 +545,35 @@ final class TextSpan extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.language.v2.TextSpan';
 
   /// The content of the text span, which is a substring of the document.
-  final String? content;
+  final String content;
 
   /// The API calculates the beginning offset of the content in the original
   /// document according to the
   /// `EncodingType` specified in the API
   /// request.
-  final int? beginOffset;
+  final int beginOffset;
 
-  TextSpan({this.content, this.beginOffset}) : super(fullyQualifiedName);
+  TextSpan({this.content = '', this.beginOffset = 0})
+    : super(fullyQualifiedName);
 
   factory TextSpan.fromJson(Map<String, dynamic> json) {
-    return TextSpan(content: json['content'], beginOffset: json['beginOffset']);
+    return TextSpan(
+      content: json['content'] ?? '',
+      beginOffset: json['beginOffset'] ?? 0,
+    );
   }
 
   @override
   Object toJson() {
     return {
-      if (content != null) 'content': content,
-      if (beginOffset != null) 'beginOffset': beginOffset,
+      if (content.isNotDefault) 'content': content,
+      if (beginOffset.isNotDefault) 'beginOffset': beginOffset,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (content != null) 'content=$content',
-      if (beginOffset != null) 'beginOffset=$beginOffset',
-    ].join(',');
+    final contents = ['content=$content', 'beginOffset=$beginOffset'].join(',');
     return 'TextSpan($contents)';
   }
 }
@@ -556,43 +584,46 @@ final class ClassificationCategory extends ProtoMessage {
       'google.cloud.language.v2.ClassificationCategory';
 
   /// The name of the category representing the document.
-  final String? name;
+  final String name;
 
   /// The classifier's confidence of the category. Number represents how certain
   /// the classifier is that this category represents the given text.
-  final double? confidence;
+  final double confidence;
 
   /// Optional. The classifier's severity of the category. This is only present
   /// when the ModerateTextRequest.ModelVersion is set to MODEL_VERSION_2, and
   /// the corresponding category has a severity score.
-  final double? severity;
+  final double severity;
 
-  ClassificationCategory({this.name, this.confidence, this.severity})
-    : super(fullyQualifiedName);
+  ClassificationCategory({
+    this.name = '',
+    this.confidence = 0,
+    this.severity = 0,
+  }) : super(fullyQualifiedName);
 
   factory ClassificationCategory.fromJson(Map<String, dynamic> json) {
     return ClassificationCategory(
-      name: json['name'],
-      confidence: decodeDouble(json['confidence']),
-      severity: decodeDouble(json['severity']),
+      name: json['name'] ?? '',
+      confidence: decodeDouble(json['confidence']) ?? 0,
+      severity: decodeDouble(json['severity']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (confidence != null) 'confidence': encodeDouble(confidence),
-      if (severity != null) 'severity': encodeDouble(severity),
+      if (name.isNotDefault) 'name': name,
+      if (confidence.isNotDefault) 'confidence': encodeDouble(confidence),
+      if (severity.isNotDefault) 'severity': encodeDouble(severity),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (confidence != null) 'confidence=$confidence',
-      if (severity != null) 'severity=$severity',
+      'name=$name',
+      'confidence=$confidence',
+      'severity=$severity',
     ].join(',');
     return 'ClassificationCategory($contents)';
   }
@@ -607,15 +638,19 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
   final Document? document;
 
   /// The encoding type used by the API to calculate sentence offsets.
-  final EncodingType? encodingType;
+  final EncodingType encodingType;
 
-  AnalyzeSentimentRequest({this.document, this.encodingType})
-    : super(fullyQualifiedName);
+  AnalyzeSentimentRequest({
+    this.document,
+    this.encodingType = EncodingType.$default,
+  }) : super(fullyQualifiedName);
 
   factory AnalyzeSentimentRequest.fromJson(Map<String, dynamic> json) {
     return AnalyzeSentimentRequest(
       document: decode(json['document'], Document.fromJson),
-      encodingType: decodeEnum(json['encodingType'], EncodingType.fromJson),
+      encodingType:
+          decodeEnum(json['encodingType'], EncodingType.fromJson) ??
+          EncodingType.$default,
     );
   }
 
@@ -623,15 +658,13 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (document != null) 'document': document!.toJson(),
-      if (encodingType != null) 'encodingType': encodingType!.toJson(),
+      if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (encodingType != null) 'encodingType=$encodingType',
-    ].join(',');
+    final contents = ['encodingType=$encodingType'].join(',');
     return 'AnalyzeSentimentRequest($contents)';
   }
 }
@@ -647,29 +680,29 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
   /// The language of the text, which will be the same as the language specified
   /// in the request or, if not specified, the automatically-detected language.
   /// See `Document.language` field for more details.
-  final String? languageCode;
+  final String languageCode;
 
   /// The sentiment for all the sentences in the document.
-  final List<Sentence>? sentences;
+  final List<Sentence> sentences;
 
   /// Whether the language is officially supported. The API may still return a
   /// response when the language is not supported, but it is on a best effort
   /// basis.
-  final bool? languageSupported;
+  final bool languageSupported;
 
   AnalyzeSentimentResponse({
     this.documentSentiment,
-    this.languageCode,
-    this.sentences,
-    this.languageSupported,
+    this.languageCode = '',
+    this.sentences = const [],
+    this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
   factory AnalyzeSentimentResponse.fromJson(Map<String, dynamic> json) {
     return AnalyzeSentimentResponse(
       documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
-      languageCode: json['languageCode'],
-      sentences: decodeListMessage(json['sentences'], Sentence.fromJson),
-      languageSupported: json['languageSupported'],
+      languageCode: json['languageCode'] ?? '',
+      sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
+      languageSupported: json['languageSupported'] ?? false,
     );
   }
 
@@ -678,17 +711,18 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
     return {
       if (documentSentiment != null)
         'documentSentiment': documentSentiment!.toJson(),
-      if (languageCode != null) 'languageCode': languageCode,
-      if (sentences != null) 'sentences': encodeList(sentences),
-      if (languageSupported != null) 'languageSupported': languageSupported,
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
+      if (sentences.isNotDefault) 'sentences': encodeList(sentences),
+      if (languageSupported.isNotDefault)
+        'languageSupported': languageSupported,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (languageCode != null) 'languageCode=$languageCode',
-      if (languageSupported != null) 'languageSupported=$languageSupported',
+      'languageCode=$languageCode',
+      'languageSupported=$languageSupported',
     ].join(',');
     return 'AnalyzeSentimentResponse($contents)';
   }
@@ -703,15 +737,19 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
   final Document? document;
 
   /// The encoding type used by the API to calculate offsets.
-  final EncodingType? encodingType;
+  final EncodingType encodingType;
 
-  AnalyzeEntitiesRequest({this.document, this.encodingType})
-    : super(fullyQualifiedName);
+  AnalyzeEntitiesRequest({
+    this.document,
+    this.encodingType = EncodingType.$default,
+  }) : super(fullyQualifiedName);
 
   factory AnalyzeEntitiesRequest.fromJson(Map<String, dynamic> json) {
     return AnalyzeEntitiesRequest(
       document: decode(json['document'], Document.fromJson),
-      encodingType: decodeEnum(json['encodingType'], EncodingType.fromJson),
+      encodingType:
+          decodeEnum(json['encodingType'], EncodingType.fromJson) ??
+          EncodingType.$default,
     );
   }
 
@@ -719,15 +757,13 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (document != null) 'document': document!.toJson(),
-      if (encodingType != null) 'encodingType': encodingType!.toJson(),
+      if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (encodingType != null) 'encodingType=$encodingType',
-    ].join(',');
+    final contents = ['encodingType=$encodingType'].join(',');
     return 'AnalyzeEntitiesRequest($contents)';
   }
 }
@@ -738,46 +774,47 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
       'google.cloud.language.v2.AnalyzeEntitiesResponse';
 
   /// The recognized entities in the input document.
-  final List<Entity>? entities;
+  final List<Entity> entities;
 
   /// The language of the text, which will be the same as the language specified
   /// in the request or, if not specified, the automatically-detected language.
   /// See `Document.language` field for more details.
-  final String? languageCode;
+  final String languageCode;
 
   /// Whether the language is officially supported. The API may still return a
   /// response when the language is not supported, but it is on a best effort
   /// basis.
-  final bool? languageSupported;
+  final bool languageSupported;
 
   AnalyzeEntitiesResponse({
-    this.entities,
-    this.languageCode,
-    this.languageSupported,
+    this.entities = const [],
+    this.languageCode = '',
+    this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
   factory AnalyzeEntitiesResponse.fromJson(Map<String, dynamic> json) {
     return AnalyzeEntitiesResponse(
-      entities: decodeListMessage(json['entities'], Entity.fromJson),
-      languageCode: json['languageCode'],
-      languageSupported: json['languageSupported'],
+      entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
+      languageCode: json['languageCode'] ?? '',
+      languageSupported: json['languageSupported'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (entities != null) 'entities': encodeList(entities),
-      if (languageCode != null) 'languageCode': languageCode,
-      if (languageSupported != null) 'languageSupported': languageSupported,
+      if (entities.isNotDefault) 'entities': encodeList(entities),
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
+      if (languageSupported.isNotDefault)
+        'languageSupported': languageSupported,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (languageCode != null) 'languageCode=$languageCode',
-      if (languageSupported != null) 'languageSupported=$languageSupported',
+      'languageCode=$languageCode',
+      'languageSupported=$languageSupported',
     ].join(',');
     return 'AnalyzeEntitiesResponse($contents)';
   }
@@ -814,49 +851,52 @@ final class ClassifyTextResponse extends ProtoMessage {
       'google.cloud.language.v2.ClassifyTextResponse';
 
   /// Categories representing the input document.
-  final List<ClassificationCategory>? categories;
+  final List<ClassificationCategory> categories;
 
   /// The language of the text, which will be the same as the language specified
   /// in the request or, if not specified, the automatically-detected language.
   /// See `Document.language` field for more details.
-  final String? languageCode;
+  final String languageCode;
 
   /// Whether the language is officially supported. The API may still return a
   /// response when the language is not supported, but it is on a best effort
   /// basis.
-  final bool? languageSupported;
+  final bool languageSupported;
 
   ClassifyTextResponse({
-    this.categories,
-    this.languageCode,
-    this.languageSupported,
+    this.categories = const [],
+    this.languageCode = '',
+    this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
   factory ClassifyTextResponse.fromJson(Map<String, dynamic> json) {
     return ClassifyTextResponse(
-      categories: decodeListMessage(
-        json['categories'],
-        ClassificationCategory.fromJson,
-      ),
-      languageCode: json['languageCode'],
-      languageSupported: json['languageSupported'],
+      categories:
+          decodeListMessage(
+            json['categories'],
+            ClassificationCategory.fromJson,
+          ) ??
+          [],
+      languageCode: json['languageCode'] ?? '',
+      languageSupported: json['languageSupported'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (categories != null) 'categories': encodeList(categories),
-      if (languageCode != null) 'languageCode': languageCode,
-      if (languageSupported != null) 'languageSupported': languageSupported,
+      if (categories.isNotDefault) 'categories': encodeList(categories),
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
+      if (languageSupported.isNotDefault)
+        'languageSupported': languageSupported,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (languageCode != null) 'languageCode=$languageCode',
-      if (languageSupported != null) 'languageSupported=$languageSupported',
+      'languageCode=$languageCode',
+      'languageSupported=$languageSupported',
     ].join(',');
     return 'ClassifyTextResponse($contents)';
   }
@@ -871,18 +911,22 @@ final class ModerateTextRequest extends ProtoMessage {
   final Document? document;
 
   /// Optional. The model version to use for ModerateText.
-  final ModerateTextRequest_ModelVersion? modelVersion;
+  final ModerateTextRequest_ModelVersion modelVersion;
 
-  ModerateTextRequest({this.document, this.modelVersion})
-    : super(fullyQualifiedName);
+  ModerateTextRequest({
+    this.document,
+    this.modelVersion = ModerateTextRequest_ModelVersion.$default,
+  }) : super(fullyQualifiedName);
 
   factory ModerateTextRequest.fromJson(Map<String, dynamic> json) {
     return ModerateTextRequest(
       document: decode(json['document'], Document.fromJson),
-      modelVersion: decodeEnum(
-        json['modelVersion'],
-        ModerateTextRequest_ModelVersion.fromJson,
-      ),
+      modelVersion:
+          decodeEnum(
+            json['modelVersion'],
+            ModerateTextRequest_ModelVersion.fromJson,
+          ) ??
+          ModerateTextRequest_ModelVersion.$default,
     );
   }
 
@@ -890,15 +934,13 @@ final class ModerateTextRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (document != null) 'document': document!.toJson(),
-      if (modelVersion != null) 'modelVersion': modelVersion!.toJson(),
+      if (modelVersion.isNotDefault) 'modelVersion': modelVersion.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (modelVersion != null) 'modelVersion=$modelVersion',
-    ].join(',');
+    final contents = ['modelVersion=$modelVersion'].join(',');
     return 'ModerateTextRequest($contents)';
   }
 }
@@ -924,10 +966,15 @@ final class ModerateTextRequest_ModelVersion extends ProtoEnum {
     'MODEL_VERSION_2',
   );
 
+  /// The default value for [ModerateTextRequest_ModelVersion].
+  static const $default = modelVersionUnspecified;
+
   const ModerateTextRequest_ModelVersion(super.value);
 
   factory ModerateTextRequest_ModelVersion.fromJson(String json) =>
       ModerateTextRequest_ModelVersion(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ModelVersion.$value';
@@ -939,50 +986,53 @@ final class ModerateTextResponse extends ProtoMessage {
       'google.cloud.language.v2.ModerateTextResponse';
 
   /// Harmful and sensitive categories representing the input document.
-  final List<ClassificationCategory>? moderationCategories;
+  final List<ClassificationCategory> moderationCategories;
 
   /// The language of the text, which will be the same as the language specified
   /// in the request or, if not specified, the automatically-detected language.
   /// See `Document.language` field for more details.
-  final String? languageCode;
+  final String languageCode;
 
   /// Whether the language is officially supported. The API may still return a
   /// response when the language is not supported, but it is on a best effort
   /// basis.
-  final bool? languageSupported;
+  final bool languageSupported;
 
   ModerateTextResponse({
-    this.moderationCategories,
-    this.languageCode,
-    this.languageSupported,
+    this.moderationCategories = const [],
+    this.languageCode = '',
+    this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
   factory ModerateTextResponse.fromJson(Map<String, dynamic> json) {
     return ModerateTextResponse(
-      moderationCategories: decodeListMessage(
-        json['moderationCategories'],
-        ClassificationCategory.fromJson,
-      ),
-      languageCode: json['languageCode'],
-      languageSupported: json['languageSupported'],
+      moderationCategories:
+          decodeListMessage(
+            json['moderationCategories'],
+            ClassificationCategory.fromJson,
+          ) ??
+          [],
+      languageCode: json['languageCode'] ?? '',
+      languageSupported: json['languageSupported'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (moderationCategories != null)
+      if (moderationCategories.isNotDefault)
         'moderationCategories': encodeList(moderationCategories),
-      if (languageCode != null) 'languageCode': languageCode,
-      if (languageSupported != null) 'languageSupported': languageSupported,
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
+      if (languageSupported.isNotDefault)
+        'languageSupported': languageSupported,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (languageCode != null) 'languageCode=$languageCode',
-      if (languageSupported != null) 'languageSupported=$languageSupported',
+      'languageCode=$languageCode',
+      'languageSupported=$languageSupported',
     ].join(',');
     return 'ModerateTextResponse($contents)';
   }
@@ -1001,16 +1051,21 @@ final class AnnotateTextRequest extends ProtoMessage {
   final AnnotateTextRequest_Features? features;
 
   /// The encoding type used by the API to calculate offsets.
-  final EncodingType? encodingType;
+  final EncodingType encodingType;
 
-  AnnotateTextRequest({this.document, this.features, this.encodingType})
-    : super(fullyQualifiedName);
+  AnnotateTextRequest({
+    this.document,
+    this.features,
+    this.encodingType = EncodingType.$default,
+  }) : super(fullyQualifiedName);
 
   factory AnnotateTextRequest.fromJson(Map<String, dynamic> json) {
     return AnnotateTextRequest(
       document: decode(json['document'], Document.fromJson),
       features: decode(json['features'], AnnotateTextRequest_Features.fromJson),
-      encodingType: decodeEnum(json['encodingType'], EncodingType.fromJson),
+      encodingType:
+          decodeEnum(json['encodingType'], EncodingType.fromJson) ??
+          EncodingType.$default,
     );
   }
 
@@ -1019,15 +1074,13 @@ final class AnnotateTextRequest extends ProtoMessage {
     return {
       if (document != null) 'document': document!.toJson(),
       if (features != null) 'features': features!.toJson(),
-      if (encodingType != null) 'encodingType': encodingType!.toJson(),
+      if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (encodingType != null) 'encodingType=$encodingType',
-    ].join(',');
+    final contents = ['encodingType=$encodingType'].join(',');
     return 'AnnotateTextRequest($contents)';
   }
 }
@@ -1039,52 +1092,51 @@ final class AnnotateTextRequest_Features extends ProtoMessage {
       'google.cloud.language.v2.AnnotateTextRequest.Features';
 
   /// Optional. Extract entities.
-  final bool? extractEntities;
+  final bool extractEntities;
 
   /// Optional. Extract document-level sentiment.
-  final bool? extractDocumentSentiment;
+  final bool extractDocumentSentiment;
 
   /// Optional. Classify the full document into categories.
-  final bool? classifyText;
+  final bool classifyText;
 
   /// Optional. Moderate the document for harmful and sensitive categories.
-  final bool? moderateText;
+  final bool moderateText;
 
   AnnotateTextRequest_Features({
-    this.extractEntities,
-    this.extractDocumentSentiment,
-    this.classifyText,
-    this.moderateText,
+    this.extractEntities = false,
+    this.extractDocumentSentiment = false,
+    this.classifyText = false,
+    this.moderateText = false,
   }) : super(fullyQualifiedName);
 
   factory AnnotateTextRequest_Features.fromJson(Map<String, dynamic> json) {
     return AnnotateTextRequest_Features(
-      extractEntities: json['extractEntities'],
-      extractDocumentSentiment: json['extractDocumentSentiment'],
-      classifyText: json['classifyText'],
-      moderateText: json['moderateText'],
+      extractEntities: json['extractEntities'] ?? false,
+      extractDocumentSentiment: json['extractDocumentSentiment'] ?? false,
+      classifyText: json['classifyText'] ?? false,
+      moderateText: json['moderateText'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (extractEntities != null) 'extractEntities': extractEntities,
-      if (extractDocumentSentiment != null)
+      if (extractEntities.isNotDefault) 'extractEntities': extractEntities,
+      if (extractDocumentSentiment.isNotDefault)
         'extractDocumentSentiment': extractDocumentSentiment,
-      if (classifyText != null) 'classifyText': classifyText,
-      if (moderateText != null) 'moderateText': moderateText,
+      if (classifyText.isNotDefault) 'classifyText': classifyText,
+      if (moderateText.isNotDefault) 'moderateText': moderateText,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (extractEntities != null) 'extractEntities=$extractEntities',
-      if (extractDocumentSentiment != null)
-        'extractDocumentSentiment=$extractDocumentSentiment',
-      if (classifyText != null) 'classifyText=$classifyText',
-      if (moderateText != null) 'moderateText=$moderateText',
+      'extractEntities=$extractEntities',
+      'extractDocumentSentiment=$extractDocumentSentiment',
+      'classifyText=$classifyText',
+      'moderateText=$moderateText',
     ].join(',');
     return 'Features($contents)';
   }
@@ -1097,14 +1149,14 @@ final class AnnotateTextResponse extends ProtoMessage {
 
   /// Sentences in the input document. Populated if the user enables
   /// `AnnotateTextRequest.Features.extract_document_sentiment`.
-  final List<Sentence>? sentences;
+  final List<Sentence> sentences;
 
   /// Entities, along with their semantic information, in the input document.
   /// Populated if the user enables
   /// `AnnotateTextRequest.Features.extract_entities`
   /// or
   /// `AnnotateTextRequest.Features.extract_entity_sentiment`.
-  final List<Entity>? entities;
+  final List<Entity> entities;
 
   /// The overall sentiment for the document. Populated if the user enables
   /// `AnnotateTextRequest.Features.extract_document_sentiment`.
@@ -1113,67 +1165,72 @@ final class AnnotateTextResponse extends ProtoMessage {
   /// The language of the text, which will be the same as the language specified
   /// in the request or, if not specified, the automatically-detected language.
   /// See `Document.language` field for more details.
-  final String? languageCode;
+  final String languageCode;
 
   /// Categories identified in the input document.
-  final List<ClassificationCategory>? categories;
+  final List<ClassificationCategory> categories;
 
   /// Harmful and sensitive categories identified in the input document.
-  final List<ClassificationCategory>? moderationCategories;
+  final List<ClassificationCategory> moderationCategories;
 
   /// Whether the language is officially supported by all requested features.
   /// The API may still return a response when the language is not supported, but
   /// it is on a best effort basis.
-  final bool? languageSupported;
+  final bool languageSupported;
 
   AnnotateTextResponse({
-    this.sentences,
-    this.entities,
+    this.sentences = const [],
+    this.entities = const [],
     this.documentSentiment,
-    this.languageCode,
-    this.categories,
-    this.moderationCategories,
-    this.languageSupported,
+    this.languageCode = '',
+    this.categories = const [],
+    this.moderationCategories = const [],
+    this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
   factory AnnotateTextResponse.fromJson(Map<String, dynamic> json) {
     return AnnotateTextResponse(
-      sentences: decodeListMessage(json['sentences'], Sentence.fromJson),
-      entities: decodeListMessage(json['entities'], Entity.fromJson),
+      sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
+      entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
       documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
-      languageCode: json['languageCode'],
-      categories: decodeListMessage(
-        json['categories'],
-        ClassificationCategory.fromJson,
-      ),
-      moderationCategories: decodeListMessage(
-        json['moderationCategories'],
-        ClassificationCategory.fromJson,
-      ),
-      languageSupported: json['languageSupported'],
+      languageCode: json['languageCode'] ?? '',
+      categories:
+          decodeListMessage(
+            json['categories'],
+            ClassificationCategory.fromJson,
+          ) ??
+          [],
+      moderationCategories:
+          decodeListMessage(
+            json['moderationCategories'],
+            ClassificationCategory.fromJson,
+          ) ??
+          [],
+      languageSupported: json['languageSupported'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (sentences != null) 'sentences': encodeList(sentences),
-      if (entities != null) 'entities': encodeList(entities),
+      if (sentences.isNotDefault) 'sentences': encodeList(sentences),
+      if (entities.isNotDefault) 'entities': encodeList(entities),
       if (documentSentiment != null)
         'documentSentiment': documentSentiment!.toJson(),
-      if (languageCode != null) 'languageCode': languageCode,
-      if (categories != null) 'categories': encodeList(categories),
-      if (moderationCategories != null)
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
+      if (categories.isNotDefault) 'categories': encodeList(categories),
+      if (moderationCategories.isNotDefault)
         'moderationCategories': encodeList(moderationCategories),
-      if (languageSupported != null) 'languageSupported': languageSupported,
+      if (languageSupported.isNotDefault)
+        'languageSupported': languageSupported,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (languageCode != null) 'languageCode=$languageCode',
-      if (languageSupported != null) 'languageSupported=$languageSupported',
+      'languageCode=$languageCode',
+      'languageSupported=$languageSupported',
     ].join(',');
     return 'AnnotateTextResponse($contents)';
   }
@@ -1204,9 +1261,14 @@ final class EncodingType extends ProtoEnum {
   /// that uses this encoding natively.
   static const utf32 = EncodingType('UTF32');
 
+  /// The default value for [EncodingType].
+  static const $default = none;
+
   const EncodingType(super.value);
 
   factory EncodingType.fromJson(String json) => EncodingType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'EncodingType.$value';
