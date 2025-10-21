@@ -14,15 +14,15 @@
 
 import 'dart:convert';
 
-import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
-export 'src/web.dart'
-    if (dart.library.io) 'src/vm.dart'
-    show environmentVariable;
-
+import 'src/proto.dart';
 import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
+export 'src/proto.dart';
+export 'src/web.dart'
+    if (dart.library.io) 'src/vm.dart'
+    show environmentVariable;
 
 const String _clientKey = 'x-goog-api-client';
 
@@ -30,42 +30,6 @@ final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
-
-/// An abstract class that can return a JSON representation of itself.
-///
-/// Classes that implement [JsonEncodable] will often have a `fromJson()`
-/// constructor.
-abstract class JsonEncodable {
-  Object? toJson();
-}
-
-/// The abstract common superclass of all messages.
-abstract class ProtoMessage implements JsonEncodable {
-  /// The fully qualified name of this message, i.e., `google.protobuf.Duration`
-  /// or `google.rpc.ErrorInfo`.
-  final String qualifiedName;
-
-  ProtoMessage(this.qualifiedName);
-}
-
-/// The abstract common superclass of all enum values.
-abstract class ProtoEnum implements JsonEncodable {
-  final String value;
-
-  const ProtoEnum(this.value);
-
-  @override
-  String toJson() => value;
-
-  @override
-  bool operator ==(Object other) {
-    return other.runtimeType == runtimeType &&
-        value == (other as ProtoEnum).value;
-  }
-
-  @override
-  int get hashCode => value.hashCode;
-}
 
 /// Exception thrown when calling an API through [ServiceClient] fails.
 final class ServiceException implements Exception {

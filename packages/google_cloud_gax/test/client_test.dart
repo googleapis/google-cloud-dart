@@ -15,7 +15,6 @@
 import 'dart:convert';
 
 import 'package:google_cloud_gax/gax.dart';
-import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
