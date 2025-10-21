@@ -466,6 +466,16 @@ final class Secret extends ProtoMessage {
   /// `SecretVersions`.
   final CustomerManagedEncryption? customerManagedEncryption;
 
+  /// Optional. Input only. Immutable. Mapping of Tag keys/values directly bound
+  /// to this resource. For example:
+  ///   "123/environment": "production",
+  ///   "123/costCenter": "marketing"
+  ///
+  /// Tags are used to organize and group resources.
+  ///
+  /// Tags can be used to control policy evaluation for the resource.
+  final Map<String, String>? tags;
+
   Secret({
     this.name,
     this.replication,
@@ -480,6 +490,7 @@ final class Secret extends ProtoMessage {
     this.annotations,
     this.versionDestroyTtl,
     this.customerManagedEncryption,
+    this.tags,
   }) : super(fullyQualifiedName);
 
   factory Secret.fromJson(Map<String, dynamic> json) {
@@ -503,6 +514,7 @@ final class Secret extends ProtoMessage {
         json['customerManagedEncryption'],
         CustomerManagedEncryption.fromJson,
       ),
+      tags: decodeMap(json['tags']),
     );
   }
 
@@ -524,6 +536,7 @@ final class Secret extends ProtoMessage {
         'versionDestroyTtl': versionDestroyTtl!.toJson(),
       if (customerManagedEncryption != null)
         'customerManagedEncryption': customerManagedEncryption!.toJson(),
+      if (tags != null) 'tags': tags,
     };
   }
 
