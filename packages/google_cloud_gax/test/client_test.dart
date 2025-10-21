@@ -24,9 +24,7 @@ class TestMessage extends JsonEncodable {
   final String message;
   TestMessage(this.message);
   @override
-  Object? toJson() {
-    return message;
-  }
+  Object? toJson() => message;
 }
 
 final sampleUrl = Uri.https('example.org', '/path');
@@ -111,9 +109,7 @@ void main() {
 
     test('500 response, no status, no response body', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('', 500);
-        }),
+        client: MockClient((request) async => Response('', 500)),
       );
 
       await expectLater(
@@ -129,12 +125,10 @@ void main() {
     });
 
     test('400 response with status', () async {
-      final status = Status(code: 1, message: "failure", details: []);
+      final status = Status(code: 1, message: 'failure', details: []);
       final responseBody = jsonEncode({'error': status.toJson()});
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response(responseBody, 400);
-        }),
+        client: MockClient((request) async => Response(responseBody, 400)),
       );
 
       await expectLater(
@@ -143,7 +137,7 @@ void main() {
           isA<StatusException>()
               .having((e) => e.status.code, 'code', 1)
               .having((e) => e.status.message, 'message', 'failure')
-              .having((e) => e.status.details, 'details', [])
+              .having((e) => e.status.details, 'details', isEmpty)
               .having((e) => e.responseBody, 'responseBody', responseBody),
         ),
       );
@@ -151,9 +145,7 @@ void main() {
 
     test('400 response, JSON response without status', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('"Hello!"', 400);
-        }),
+        client: MockClient((request) async => Response('"Hello!"', 400)),
       );
 
       await expectLater(
@@ -170,12 +162,12 @@ void main() {
 
     test('200 response, json response', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('{"fruit":"apple"}', 200);
-        }),
+        client: MockClient(
+          (request) async => Response('{"fruit":"apple"}', 200),
+        ),
       );
 
-      expect(await service.post(sampleUrl), {"fruit": "apple"});
+      expect(await service.post(sampleUrl), {'fruit': 'apple'});
     });
   });
 
@@ -197,7 +189,7 @@ void main() {
         ('PUT', service.putStreaming),
       ]) {
         test(method, () async {
-          await fn(Uri.parse('http://example.com/')).drain();
+          await fn(Uri.parse('http://example.com/')).drain<Object?>();
 
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
@@ -227,7 +219,7 @@ void main() {
           await fn(
             Uri.parse('http://example.com/'),
             body: TestMessage('<test payload>'),
-          ).drain();
+          ).drain<Object?>();
 
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
@@ -264,9 +256,7 @@ void main() {
 
     test('500 response, no status, no response body', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('', 500);
-        }),
+        client: MockClient((request) async => Response('', 500)),
       );
 
       expect(
@@ -285,12 +275,10 @@ void main() {
     });
 
     test('400 response with status', () async {
-      final status = Status(code: 1, message: "failure", details: []);
+      final status = Status(code: 1, message: 'failure', details: []);
       final responseBody = jsonEncode({'error': status.toJson()});
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response(responseBody, 400);
-        }),
+        client: MockClient((request) async => Response(responseBody, 400)),
       );
 
       expect(
@@ -300,7 +288,7 @@ void main() {
             isA<StatusException>()
                 .having((e) => e.status.code, 'code', 1)
                 .having((e) => e.status.message, 'message', 'failure')
-                .having((e) => e.status.details, 'details', [])
+                .having((e) => e.status.details, 'details', isEmpty)
                 .having((e) => e.responseBody, 'responseBody', responseBody),
           ),
           emitsDone,
@@ -310,9 +298,7 @@ void main() {
 
     test('400 response, JSON response without status', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('"Hello!"', 400);
-        }),
+        client: MockClient((request) async => Response('"Hello!"', 400)),
       );
 
       expect(
@@ -332,9 +318,7 @@ void main() {
 
     test('200 response, empty response', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('', 200);
-        }),
+        client: MockClient((request) async => Response('', 200)),
       );
 
       expect(service.postStreaming(sampleUrl), emitsDone);
@@ -342,9 +326,9 @@ void main() {
 
     test('200 response, single data response', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response('data: {"fruit":"apple"}', 200);
-        }),
+        client: MockClient(
+          (request) async => Response('data: {"fruit":"apple"}', 200),
+        ),
       );
 
       expect(
@@ -358,12 +342,12 @@ void main() {
 
     test('200 response, two data response', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response(
+        client: MockClient(
+          (request) async => Response(
             'data: {"fruit":"apple"}\ndata: {"fruit":"banana"}',
             200,
-          );
-        }),
+          ),
+        ),
       );
 
       expect(
@@ -378,12 +362,12 @@ void main() {
 
     test('200 response, non-data lines response', () async {
       final service = ServiceClient(
-        client: MockClient((request) async {
-          return Response(
+        client: MockClient(
+          (request) async => Response(
             'data: {"fruit":"apple"}\nevent: ?\n\n\ndata: {"fruit":"banana"}',
             200,
-          );
-        }),
+          ),
+        ),
       );
 
       expect(

@@ -23,9 +23,8 @@ import 'dart:convert';
 import '../gax.dart';
 
 /// Decode an `int64` value.
-int? decodeInt64(Object? value) {
-  return value is String ? int.parse(value) : value as int?;
-}
+int? decodeInt64(Object? value) =>
+    value is String ? int.parse(value) : value as int?;
 
 /// Decode a `double` value.
 double? decodeDouble(Object? value) {
@@ -33,7 +32,9 @@ double? decodeDouble(Object? value) {
     if (value == 'NaN' || value == 'Infinity' || value == '-Infinity') {
       return double.parse(value);
     } else {
-      throw FormatException('String value is not NaN, Infinity, or -Infinity');
+      throw const FormatException(
+        'String value is not NaN, Infinity, or -Infinity',
+      );
     }
   } else {
     return (value as num?)?.toDouble();
@@ -41,106 +42,84 @@ double? decodeDouble(Object? value) {
 }
 
 /// Decode a `bytes` value.
-Uint8List? decodeBytes(String? value) {
-  return value == null ? null : base64Decode(value);
-}
+Uint8List? decodeBytes(String? value) =>
+    value == null ? null : base64Decode(value);
 
 /// Decode an [ProtoEnum].
-T? decodeEnum<T extends ProtoEnum>(String? value, T Function(String) decoder) {
-  return value == null ? null : decoder(value);
-}
+T? decodeEnum<T extends ProtoEnum>(String? value, T Function(String) decoder) =>
+    value == null ? null : decoder(value);
 
 /// Decode a [ProtoMessage].
 T? decode<T extends ProtoMessage>(
   Map<String, dynamic>? value,
   T Function(Map<String, dynamic>) decoder,
-) {
-  return value != null ? decoder(value) : null;
-}
+) => value != null ? decoder(value) : null;
 
 /// Decode a [ProtoMessage] which uses a custom JSON encoding.
 T? decodeCustom<T extends ProtoMessage>(
   Object? value,
   T Function(Object) decoder,
-) {
-  return value == null ? null : decoder(value);
-}
+) => value == null ? null : decoder(value);
 
 /// Decode a list of primitives types.
-List<T>? decodeList<T>(Object? value) {
-  return (value as List?)?.cast();
-}
+List<T>? decodeList<T>(Object? value) => (value as List?)?.cast();
 
 /// Decode a list of `bytes`.
-List<Uint8List>? decodeListBytes(Object? value) {
-  return (value as List?)?.map((item) => base64Decode(item)).toList().cast();
-}
+List<Uint8List>? decodeListBytes(Object? value) =>
+    (value as List?)?.cast<String>().map(base64Decode).toList();
 
 /// Decode a list of [ProtoEnum]s.
 List<T>? decodeListEnum<T extends ProtoEnum>(
   Object? value,
   T Function(String) decoder,
-) {
-  return (value as List?)?.map((item) => decoder(item)).toList().cast();
-}
+) => (value as List?)?.map((item) => decoder(item as String)).toList();
 
-/// Decode a list of [Messages]s.
+/// Decode a list of [ProtoMessage]s.
 List<T>? decodeListMessage<T extends ProtoMessage>(
   Object? value,
   T Function(Map<String, dynamic>) decoder,
-) {
-  return (value as List?)?.map((item) => decoder(item)).toList().cast();
-}
+) => (value as List?)
+    ?.cast<Map<String, dynamic>>()
+    .map((item) => decoder(item))
+    .toList();
 
-/// Decode a list of [Messages]s which use custom JSON encodings.
+/// Decode a list of [ProtoMessage]s which use custom JSON encodings.
 List<T>? decodeListMessageCustom<T extends ProtoMessage>(
   Object? value,
   T Function(Object) decoder,
-) {
-  return (value as List?)?.map((item) => decoder(item)).toList().cast();
-}
+) => (value as List?)?.map((item) => decoder(item as Object)).toList();
 
 /// Decode a map of primitives types.
-Map<K, V>? decodeMap<K, V>(Object? value) {
-  return (value as Map?)?.cast();
-}
+Map<K, V>? decodeMap<K, V>(Object? value) => (value as Map?)?.cast();
 
 /// Decode a map of [ProtoEnum]s.
 Map<K, V>? decodeMapEnum<K, V extends ProtoEnum>(
   Object? value,
   V Function(String) decoder,
-) {
-  return (value as Map?)
-      ?.map((key, value) => MapEntry(key, decoder(value)))
-      .cast();
-}
+) => (value as Map?)
+    ?.map((key, value) => MapEntry(key, decoder(value as String)))
+    .cast();
 
 /// Decode a map of `bytes`.
-Map<K, Uint8List>? decodeMapBytes<K>(Object? value) {
-  return (value as Map?)
-      ?.map((key, value) => MapEntry(key, base64Decode(value)))
-      .cast();
-}
+Map<K, Uint8List>? decodeMapBytes<K>(Object? value) => (value as Map?)
+    ?.map((key, value) => MapEntry(key, base64Decode(value as String)))
+    .cast();
 
 /// Decode a map of [ProtoMessage]s.
 Map<K, V>? decodeMapMessage<K, V extends ProtoMessage>(
   Object? value,
   V Function(Map<String, dynamic>) decoder,
-) {
-  return (value as Map?)
-      ?.map((key, value) => MapEntry(key, decoder(value)))
-      .cast();
-}
+) => (value as Map?)
+    ?.map((key, value) => MapEntry(key, decoder(value as Map<String, dynamic>)))
+    .cast();
 
 /// Decode a map of [ProtoMessage]s which use custom JSON encodings.
 Map<K, V>? decodeMapMessageCustom<K, V extends ProtoMessage>(
   Object? value,
   V Function(Object) decoder,
-) {
-  return (value as Map?)
-      ?.map((key, value) => MapEntry(key, decoder(value)))
-      .cast();
-}
+) => (value as Map?)
+    ?.map((key, value) => MapEntry(key, decoder(value as Object)))
+    .cast();
 
 /// Encode an `int64` value into JSON.
 String? encodeInt64(int? value) => value == null ? null : '$value';
@@ -155,26 +134,21 @@ Object? encodeDouble(double? value) {
 }
 
 /// Encode a `bytes` value into JSON.
-String? encodeBytes(Uint8List? value) {
-  return value == null ? null : base64Encode(value);
-}
+String? encodeBytes(Uint8List? value) =>
+    value == null ? null : base64Encode(value);
 
 /// Encode a list of [JsonEncodable] values into JSON.
-List? encodeList(List<JsonEncodable>? value) {
-  return value?.map((item) => item.toJson()).toList();
-}
+List<Object?>? encodeList(List<JsonEncodable>? value) =>
+    value?.map((item) => item.toJson()).toList();
 
 /// Encode a list of `bytes` into JSON.
-List? encodeListBytes(List<Uint8List>? value) {
-  return value?.map((item) => base64Encode(item)).toList();
-}
+List<Object?>? encodeListBytes(List<Uint8List>? value) =>
+    value?.map(base64Encode).toList();
 
 /// Encode a map of [JsonEncodable] values into JSON.
-Map? encodeMap<T>(Map<T, JsonEncodable>? value) {
-  return value?.map((key, value) => MapEntry(key, value.toJson()));
-}
+Map<T, Object?>? encodeMap<T>(Map<T, JsonEncodable>? value) =>
+    value?.map((key, value) => MapEntry(key, value.toJson()));
 
 /// Encode a list of `bytes` values into JSON.
-Map? encodeMapBytes<T>(Map<T, Uint8List>? value) {
-  return value?.map((key, value) => MapEntry(key, base64Encode(value)));
-}
+Map<T, String>? encodeMapBytes<T>(Map<T, Uint8List>? value) =>
+    value?.map((key, value) => MapEntry(key, base64Encode(value)));
