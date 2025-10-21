@@ -93,11 +93,15 @@ final class ServiceException implements Exception {
 final class StatusException extends ServiceException {
   /// The JSON that defines the Status failure.
   ///
-  /// The JSON can be converted into a `Status` object with:
+  /// To get the details associated with the Status failure, create a
+  /// `Status` object with `Status.fromJson`. For example:
   ///
   /// ```dart
+  /// ...
   /// on StatusException catch (e) {
   ///   final status = Status.fromJson(e.statusJson);
+  ///   for (final detail in error.detailsAsMessages) {
+  ///     print('  detail: $detail');
   /// }
   /// ```
   final Map<String, dynamic> statusJson;

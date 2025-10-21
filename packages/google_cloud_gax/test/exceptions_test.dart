@@ -22,6 +22,7 @@ void main() {
       final e = ServiceException('test message');
 
       expect(e.message, 'test message');
+      expect(e.responseBody, isNull);
       expect(e.toString(), 'ServiceException: test message');
     });
     test('with body', () {
@@ -42,6 +43,7 @@ void main() {
   group('StatusException', () {
     test('no body, no message', () {
       final status = Status(code: 123);
+
       final e = StatusException.fromStatusJson(
         status.toJson() as Map<String, dynamic>,
       );
@@ -49,27 +51,34 @@ void main() {
       expect(e.message, 'status returned without message');
       expect(e.code, 123);
       expect(e.statusJson, status.toJson());
+      expect(e.responseBody, isNull);
       expect(e.toString(), 'StatusException: status returned without message');
     });
     test('no body, status message', () {
+      final status = Status(message: 'bad auth', code: 123);
+
       final e = StatusException.fromStatusJson(
-        Status(message: 'bad auth', code: 123).toJson() as Map<String, dynamic>,
+        status.toJson() as Map<String, dynamic>,
       );
 
       expect(e.message, 'bad auth');
       expect(e.code, 123);
       expect(e.statusJson, Status(message: 'bad auth', code: 123).toJson());
+      expect(e.responseBody, isNull);
       expect(e.toString(), 'StatusException: bad auth');
     });
 
     test('with body, status message', () {
+      final status = Status(message: 'bad auth', code: 123);
+
       final e = StatusException.fromStatusJson(
-        Status(message: 'bad auth', code: 123).toJson() as Map<String, dynamic>,
+        status.toJson() as Map<String, dynamic>,
         responseBody: '<response body>',
       );
 
       expect(e.message, 'bad auth');
       expect(e.code, 123);
+      expect(e.statusJson, status.toJson());
       expect(e.responseBody, '<response body>');
       expect(e.toString(), 'StatusException: bad auth');
     });
