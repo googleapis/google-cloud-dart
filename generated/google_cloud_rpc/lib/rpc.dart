@@ -23,6 +23,8 @@ import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 
+export 'package:google_cloud_gax/gax.dart' show Status;
+
 part 'src/rpc.p.dart';
 
 /// Describes the cause of the error with structured details.

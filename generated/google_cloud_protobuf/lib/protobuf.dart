@@ -22,6 +22,8 @@ library;
 import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_gax/src/encoding.dart';
 
+export 'package:google_cloud_gax/gax.dart' show Any;
+
 part 'src/protobuf.p.dart';
 
 /// Api is a light-weight descriptor for an API Interface.

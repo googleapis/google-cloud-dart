@@ -17,11 +17,14 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'src/proto.dart';
+import 'src/status.dart';
 import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
 
+export 'src/any.dart';
 export 'src/proto.dart';
+export 'src/status.dart';
 export 'src/web.dart'
     if (dart.library.io) 'src/vm.dart'
     show environmentVariable;
