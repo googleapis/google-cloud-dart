@@ -26,7 +26,7 @@ import 'package:google_cloud_type/type.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
-const _apiKeys = ["GOOGLE_API_KEY"];
+const _apiKeys = ['GOOGLE_API_KEY'];
 
 /// API Overview
 ///
@@ -55,13 +55,13 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// attached.
 final class IAMPolicy {
   static const _host = 'iam-meta-api.googleapis.com';
+
   final ServiceClient _client;
 
   /// Creates a `IAMPolicy` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
-  /// authentication is required by `IAMPolicy`. You can do that
-  /// using
+  /// authentication is required by `IAMPolicy`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   IAMPolicy({required http.Client client})
     : _client = ServiceClient(client: client);
@@ -70,7 +70,8 @@ final class IAMPolicy {
   ///
   /// If called without arguments, the API key is taken from these environment
   /// variables:
-  ///   * `GOOGLE_API_KEY`
+  ///
+  /// - `GOOGLE_API_KEY`
   ///
   /// Throws [ArgumentError] if called without arguments and none of the above
   /// environment variables are set.
@@ -81,7 +82,7 @@ final class IAMPolicy {
     if (apiKey == null) {
       throw ArgumentError(
         'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
+        'be set to an API key: ${_apiKeys.join(', ')}',
       );
     }
     return IAMPolicy(client: auth.clientViaApiKey(apiKey));
@@ -94,8 +95,7 @@ final class IAMPolicy {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -108,8 +108,7 @@ final class IAMPolicy {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy');
     final response = await _client.post(url, body: request);
@@ -126,8 +125,7 @@ final class IAMPolicy {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
