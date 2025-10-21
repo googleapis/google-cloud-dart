@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'package:google_cloud_gax/gax.dart';
-import 'package:google_cloud_rpc/rpc.dart';
 import 'package:test/test.dart';
 
 void main() {
