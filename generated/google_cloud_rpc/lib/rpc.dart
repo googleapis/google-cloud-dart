@@ -20,9 +20,10 @@
 library;
 
 import 'package:google_cloud_gax/gax.dart';
-export 'package:google_cloud_gax/gax.dart' show Status;
 import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
+
+export 'package:google_cloud_gax/gax.dart' show Status;
 
 part 'src/rpc.p.dart';
 
