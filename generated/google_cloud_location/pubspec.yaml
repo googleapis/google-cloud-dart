@@ -16,9 +16,9 @@
 
 name: google_cloud_location
 description: The Google Cloud client library for the Cloud Metadata API.
+version: 0.1.0
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location
 issue_tracker: https://github.com/googleapis/google-cloud-dart/issues
-version: 0.1.0
 
 environment:
   sdk: ^3.9.0
