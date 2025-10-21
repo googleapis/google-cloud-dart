@@ -16,16 +16,18 @@ import 'dart:convert';
 
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
-export 'src/web.dart'
-    if (dart.library.io) 'src/vm.dart'
-    show environmentVariable;
 
 import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
 
+export 'src/web.dart'
+    if (dart.library.io) 'src/vm.dart'
+    show environmentVariable;
+
 const String _clientKey = 'x-goog-api-client';
 
+// ignore: prefer_const_declarations
 final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 
 const String _contentTypeKey = 'content-type';
@@ -58,10 +60,10 @@ abstract class ProtoEnum implements JsonEncodable {
   String toJson() => value;
 
   @override
-  bool operator ==(Object other) {
-    return other.runtimeType == runtimeType &&
-        value == (other as ProtoEnum).value;
-  }
+  bool operator ==(Object other) =>
+      other is ProtoEnum &&
+      other.runtimeType == runtimeType &&
+      value == other.value;
 
   @override
   int get hashCode => value.hashCode;
@@ -72,17 +74,20 @@ final class ServiceException implements Exception {
   /// A message describing the cause of the exception.
   final String message;
 
+  /// The HTTP status code that the server returned (e.g. 404).
+  final int statusCode;
+
   /// The server response that caused the exception.
   final String? responseBody;
 
-  ServiceException(this.message, {this.responseBody});
+  ServiceException(this.message, {required this.statusCode, this.responseBody});
 
   @override
   String toString() {
     final body = responseBody != null
         ? ', responseBody=${Error.safeToString(responseBody)}'
         : '';
-    return 'ServiceException: $message$body';
+    return 'ServiceException: $message, statusCode=$statusCode$body';
   }
 }
 
@@ -95,16 +100,26 @@ final class StatusException extends ServiceException {
   /// The status message returned by the server.
   final Status status;
 
-  StatusException.fromStatus(this.status, {super.responseBody})
-    : super(status.message ?? 'status returned without message');
+  StatusException.fromStatus(
+    this.status, {
+    required super.statusCode,
+    super.responseBody,
+  }) : super(status.message ?? 'status returned without message');
 
   @override
   String toString() => 'StatusException: $message';
 }
 
+/// A low-level mechanism to communicate with Google APIs.
 class ServiceClient {
   final http.Client client;
 
+  /// Creates a `ServiceClient` using [client] for transport.
+  ///
+  /// The provided [http.Client] must be configured to provide whatever
+  /// authentication is required by the API being accessed. You can do that
+  /// using
+  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   ServiceClient({required this.client});
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
@@ -160,7 +175,9 @@ class ServiceClient {
     if (!statusOK) {
       _throwException(response.statusCode, response.reasonPhrase, responseBody);
     }
-    return responseBody.isEmpty ? {} : jsonDecode(responseBody);
+    return responseBody.isEmpty
+        ? {}
+        : jsonDecode(responseBody) as Map<String, dynamic>;
   }
 
   /// Make a request that streams its results using
@@ -191,7 +208,9 @@ class ServiceClient {
       );
     }
 
-    final lines = response.stream.toStringStream().transform(LineSplitter());
+    final lines = response.stream.toStringStream().transform(
+      const LineSplitter(),
+    );
     await for (final line in lines) {
       // Google APIs only generate "data" events.
       // The SSE specification does not require a space after the colon but
@@ -222,21 +241,30 @@ class ServiceClient {
     } on FormatException {
       throw ServiceException(
         'Invalid JSON response from server',
+        statusCode: statusCode,
         responseBody: responseBody,
       );
     }
 
+    // We use `dynamic` and catch `TypeError` to simply JSON decoding.
     final Status status;
     try {
-      status = Status.fromJson(json['error']);
+      // ignore: avoid_dynamic_calls
+      status = Status.fromJson(json['error'] as Map<String, dynamic>);
+      // ignore: avoid_catching_errors
     } on TypeError {
       throw ServiceException(
         'unexpected response format from server',
+        statusCode: statusCode,
         responseBody: responseBody,
       );
     }
 
-    throw StatusException.fromStatus(status, responseBody: responseBody);
+    throw StatusException.fromStatus(
+      status,
+      statusCode: statusCode,
+      responseBody: responseBody,
+    );
   }
 }
 

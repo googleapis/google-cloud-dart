@@ -37,7 +37,7 @@ import 'package:http/http.dart' as http;
 
 part 'src/longrunning.p.dart';
 
-const _apiKeys = ["GOOGLE_API_KEY"];
+const _apiKeys = ['GOOGLE_API_KEY'];
 
 /// Manages long-running operations with an API service.
 ///
@@ -50,13 +50,13 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// developers can have a consistent client experience.
 final class Operations {
   static const _host = 'longrunning.googleapis.com';
+
   final ServiceClient _client;
 
   /// Creates a `Operations` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
-  /// authentication is required by `Operations`. You can do that
-  /// using
+  /// authentication is required by `Operations`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   Operations({required http.Client client})
     : _client = ServiceClient(client: client);
@@ -65,7 +65,8 @@ final class Operations {
   ///
   /// If called without arguments, the API key is taken from these environment
   /// variables:
-  ///   * `GOOGLE_API_KEY`
+  ///
+  /// - `GOOGLE_API_KEY`
   ///
   /// Throws [ArgumentError] if called without arguments and none of the above
   /// environment variables are set.
@@ -76,7 +77,7 @@ final class Operations {
     if (apiKey == null) {
       throw ArgumentError(
         'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
+        'be set to an API key: ${_apiKeys.join(', ')}',
       );
     }
     return Operations(client: auth.clientViaApiKey(apiKey));
@@ -87,8 +88,7 @@ final class Operations {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -109,8 +109,7 @@ final class Operations {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> getOperation(GetOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -124,8 +123,7 @@ final class Operations {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     await _client.delete(url);
@@ -145,8 +143,7 @@ final class Operations {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}:cancel');
     await _client.post(url, body: request);
