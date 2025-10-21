@@ -85,14 +85,22 @@ final class ServiceException implements Exception {
   }
 }
 
-/// Exception thrown when an API method fails with a [Status] indicating an
+/// Exception thrown when an API method fails with a Status indicating an
 /// error.
 ///
 /// You can find out more about this error model and how to work with it in the
 /// [API Design Guide](https://cloud.google.com/apis/design/errors).
 final class StatusException extends ServiceException {
-  /// The status message returned by the server.
+  /// The JSON that defines the Status failure.
+  ///
+  /// The JSON can be converted into a `Status` object with:
+  ///
+  /// ```dart
+  /// Status.fromJson(e.statusJson)
+  /// ```
   final Map<String, dynamic> statusJson;
+
+  /// The status code returned by the server.
   final int? code;
 
   StatusException.fromStatusJson(this.statusJson, {super.responseBody})
