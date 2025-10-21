@@ -96,7 +96,9 @@ final class StatusException extends ServiceException {
   /// The JSON can be converted into a `Status` object with:
   ///
   /// ```dart
-  /// Status.fromJson(e.statusJson)
+  /// on StatusException catch (e) {
+  ///   final status = Status.fromJson(e.statusJson);
+  /// }
   /// ```
   final Map<String, dynamic> statusJson;
 
