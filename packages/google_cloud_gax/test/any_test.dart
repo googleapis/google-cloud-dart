@@ -21,8 +21,7 @@ void main() {
   test('pack into and from Duration', () {
     final duration = Duration(seconds: 10, nanos: 100);
 
-    final any = Any(json: {});
-    any.packInto(duration);
+    final any = Any(json: {})..packInto(duration);
     expect(any.typeName, 'google.protobuf.Duration');
 
     final actual = any.unpackFrom(Duration.fromJson);
@@ -56,7 +55,7 @@ void main() {
   });
 
   test('from JSON', () {
-    final data = '''{
+    const data = '''{
   "@type": "type.googleapis.com/google.rpc.ErrorInfo",
   "reason": "CREDENTIALS_MISSING",
   "domain": "googleapis.com",
@@ -65,18 +64,18 @@ void main() {
     "service": "cloudfunctions.googleapis.com"
   }
 }''';
-    final json = jsonDecode(data);
+    final json = jsonDecode(data) as Map<String, dynamic>;
     final any = Any.fromJson(json);
 
     expect(any.typeName, 'google.rpc.ErrorInfo');
   });
 
   test('bad type prefix', () {
-    final data = '''{
+    const data = '''{
   "@type": "www.cheese.com/google.rpc.ErrorInfo",
   "foo": "bar"
 }''';
-    final json = jsonDecode(data);
+    final json = jsonDecode(data) as Map<String, dynamic>;
     final any = Any.fromJson(json);
 
     expect(any.typeName, equals('www.cheese.com/google.rpc.ErrorInfo'));

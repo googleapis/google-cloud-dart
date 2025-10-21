@@ -46,22 +46,18 @@ final class Status extends ProtoMessage {
 
   Status({this.code, this.message, this.details}) : super(fullyQualifiedName);
 
-  factory Status.fromJson(Map<String, dynamic> json) {
-    return Status(
-      code: json['code'],
-      message: json['message'],
-      details: decodeListMessage(json['details'], Any.fromJson),
-    );
-  }
+  factory Status.fromJson(Map<String, dynamic> json) => Status(
+    code: json['code'] as int?,
+    message: json['message'] as String?,
+    details: decodeListMessage(json['details'], Any.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (code != null) 'code': code,
-      if (message != null) 'message': message,
-      if (details != null) 'details': encodeList(details),
-    };
-  }
+  Object toJson() => {
+    if (code != null) 'code': code,
+    if (message != null) 'message': message,
+    if (details != null) 'details': encodeList(details),
+  };
 
   @override
   String toString() {

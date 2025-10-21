@@ -54,14 +54,12 @@ class Any extends ProtoMessage {
     packInto(message);
   }
 
-  factory Any.fromJson(Map<String, dynamic> json) {
-    return Any(json: json);
-  }
+  factory Any.fromJson(Map<String, dynamic> json) => Any(json: json);
 
   /// '@type' will be something like
   /// `type.googleapis.com/google.protobuf.Duration`, or
   /// `type.googleapis.com/google.rpc.ErrorInfo`.
-  String get _type => json['@type'];
+  String get _type => json['@type'] as String;
 
   /// Return the fully qualified name of the contained type.
   ///
@@ -120,7 +118,7 @@ class Any extends ProtoMessage {
     if (_customEncodedTypes.contains(qualifiedName)) {
       json['value'] = encoded;
     } else {
-      for (final key in (encoded as Map).keys) {
+      for (final key in (encoded as Map<String, dynamic>).keys) {
         json[key] = encoded[key];
       }
     }
