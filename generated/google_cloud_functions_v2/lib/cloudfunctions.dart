@@ -30,7 +30,7 @@ import 'package:google_cloud_type/type.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
-const _apiKeys = ["GOOGLE_API_KEY"];
+const _apiKeys = ['GOOGLE_API_KEY'];
 
 /// Google Cloud Functions is used to deploy functions that are executed by
 /// Google in response to various events. Data connected with that event is
@@ -40,13 +40,13 @@ const _apiKeys = ["GOOGLE_API_KEY"];
 /// executed and how it is triggered.
 final class FunctionService {
   static const _host = 'cloudfunctions.googleapis.com';
+
   final ServiceClient _client;
 
   /// Creates a `FunctionService` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
-  /// authentication is required by `FunctionService`. You can do that
-  /// using
+  /// authentication is required by `FunctionService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   FunctionService({required http.Client client})
     : _client = ServiceClient(client: client);
@@ -55,7 +55,8 @@ final class FunctionService {
   ///
   /// If called without arguments, the API key is taken from these environment
   /// variables:
-  ///   * `GOOGLE_API_KEY`
+  ///
+  /// - `GOOGLE_API_KEY`
   ///
   /// Throws [ArgumentError] if called without arguments and none of the above
   /// environment variables are set.
@@ -66,7 +67,7 @@ final class FunctionService {
     if (apiKey == null) {
       throw ArgumentError(
         'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
+        'be set to an API key: ${_apiKeys.join(', ')}',
       );
     }
     return FunctionService(client: auth.clientViaApiKey(apiKey));
@@ -76,8 +77,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Function$> getFunction(GetFunctionRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
       if (request.revision != null) 'revision': request.revision!,
@@ -90,8 +90,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListFunctionsResponse> listFunctions(
     ListFunctionsRequest request,
   ) async {
@@ -111,8 +110,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -136,8 +134,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -164,8 +161,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -209,8 +205,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<GenerateUploadUrlResponse> generateUploadUrl(
     GenerateUploadUrlRequest request,
   ) async {
@@ -230,8 +225,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<GenerateDownloadUrlResponse> generateDownloadUrl(
     GenerateDownloadUrlRequest request,
   ) async {
@@ -244,8 +238,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/runtimes', {
       if (request.filter != null) 'filter': request.filter!,
@@ -258,8 +251,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -280,8 +272,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v2/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -293,8 +284,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v2/${request.resource}:getIamPolicy', {
       if (request.options?.requestedPolicyVersion != null)
@@ -315,8 +305,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -329,8 +318,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -347,8 +335,7 @@ final class FunctionService {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
