@@ -27,20 +27,20 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
-const _apiKeys = ["GOOGLE_API_KEY"];
+const _apiKeys = ['GOOGLE_API_KEY'];
 
 /// An abstract interface that provides location-related information for
 /// a service. Service-specific metadata is provided through the
 /// `Location.metadata` field.
 final class Locations {
   static const _host = 'cloud.googleapis.com';
+
   final ServiceClient _client;
 
   /// Creates a `Locations` using [client] for transport.
   ///
   /// The provided [http.Client] must be configured to provide whatever
-  /// authentication is required by `Locations`. You can do that
-  /// using
+  /// authentication is required by `Locations`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
   Locations({required http.Client client})
     : _client = ServiceClient(client: client);
@@ -49,7 +49,8 @@ final class Locations {
   ///
   /// If called without arguments, the API key is taken from these environment
   /// variables:
-  ///   * `GOOGLE_API_KEY`
+  ///
+  /// - `GOOGLE_API_KEY`
   ///
   /// Throws [ArgumentError] if called without arguments and none of the above
   /// environment variables are set.
@@ -60,7 +61,7 @@ final class Locations {
     if (apiKey == null) {
       throw ArgumentError(
         'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(", ")}',
+        'be set to an API key: ${_apiKeys.join(', ')}',
       );
     }
     return Locations(client: auth.clientViaApiKey(apiKey));
@@ -70,8 +71,7 @@ final class Locations {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -88,8 +88,7 @@ final class Locations {
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] if the API failed for any
-  /// other reason.
+  /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
