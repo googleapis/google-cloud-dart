@@ -141,9 +141,9 @@ void main() {
         () => service.post(sampleUrl),
         throwsA(
           isA<StatusException>()
-              .having((e) => e.status.code, 'code', 1)
-              .having((e) => e.status.message, 'message', 'failure')
-              .having((e) => e.status.details, 'details', [])
+              .having((e) => e.code, 'code', 1)
+              .having((e) => e.message, 'message', 'failure')
+              .having((e) => e.statusJson, 'statusJson', status.toJson())
               .having((e) => e.responseBody, 'responseBody', responseBody),
         ),
       );
@@ -298,9 +298,9 @@ void main() {
         emitsInOrder([
           emitsError(
             isA<StatusException>()
-                .having((e) => e.status.code, 'code', 1)
-                .having((e) => e.status.message, 'message', 'failure')
-                .having((e) => e.status.details, 'details', [])
+                .having((e) => e.code, 'code', 1)
+                .having((e) => e.message, 'message', 'failure')
+                .having((e) => e.statusJson, 'details', status.toJson())
                 .having((e) => e.responseBody, 'responseBody', responseBody),
           ),
           emitsDone,

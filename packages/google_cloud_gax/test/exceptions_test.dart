@@ -41,31 +41,36 @@ void main() {
 
   group('StatusException', () {
     test('no body, no message', () {
-      final e = StatusException.fromStatus(Status(code: 123));
+      final status = Status(code: 123);
+      final e = StatusException.fromStatusJson(
+        status.toJson() as Map<String, dynamic>,
+      );
 
       expect(e.message, 'status returned without message');
-      expect(e.status.code, 123);
+      expect(e.code, 123);
+      expect(e.statusJson, status.toJson());
       expect(e.toString(), 'StatusException: status returned without message');
     });
     test('no body, status message', () {
-      final e = StatusException.fromStatus(
-        Status(message: 'bad auth', code: 123),
+      final e = StatusException.fromStatusJson(
+        Status(message: 'bad auth', code: 123).toJson() as Map<String, dynamic>,
       );
 
       expect(e.message, 'bad auth');
-      expect(e.status.code, 123);
+      expect(e.code, 123);
+      expect(e.statusJson, Status(message: 'bad auth', code: 123).toJson());
       expect(e.toString(), 'StatusException: bad auth');
     });
 
     test('with body, status message', () {
-      final e = StatusException.fromStatus(
-        Status(message: 'bad auth', code: 123),
+      final e = StatusException.fromStatusJson(
+        Status(message: 'bad auth', code: 123).toJson() as Map<String, dynamic>,
         responseBody: '<response body>',
       );
 
       expect(e.message, 'bad auth');
+      expect(e.code, 123);
       expect(e.responseBody, '<response body>');
-      expect(e.status.code, 123);
       expect(e.toString(), 'StatusException: bad auth');
     });
   });

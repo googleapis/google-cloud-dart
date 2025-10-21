@@ -14,7 +14,6 @@
 
 import 'dart:convert';
 
-import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 export 'src/web.dart'
     if (dart.library.io) 'src/vm.dart'
@@ -93,10 +92,12 @@ final class ServiceException implements Exception {
 /// [API Design Guide](https://cloud.google.com/apis/design/errors).
 final class StatusException extends ServiceException {
   /// The status message returned by the server.
-  final Status status;
+  final Map<String, dynamic> statusJson;
+  final int? code;
 
-  StatusException.fromStatus(this.status, {super.responseBody})
-    : super(status.message ?? 'status returned without message');
+  StatusException.fromStatusJson(this.statusJson, {super.responseBody})
+    : code = statusJson['code'],
+      super(statusJson['message'] ?? 'status returned without message');
 
   @override
   String toString() => 'StatusException: $message';
@@ -226,17 +227,17 @@ class ServiceClient {
       );
     }
 
-    final Status status;
     try {
-      status = Status.fromJson(json['error']);
+      throw StatusException.fromStatusJson(
+        json['error'],
+        responseBody: responseBody,
+      );
     } on TypeError {
       throw ServiceException(
         'unexpected response format from server',
         responseBody: responseBody,
       );
     }
-
-    throw StatusException.fromStatus(status, responseBody: responseBody);
   }
 }
 
