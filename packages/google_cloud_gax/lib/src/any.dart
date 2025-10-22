@@ -14,12 +14,12 @@
 
 import 'proto.dart';
 
-/// `Any` contains an arbitrary serialized message along with a URL that
-/// describes the type of the serialized message.
 // This class logically belongs in `package:google_cloud_protobuf` but is here
 // because it is used by the `Status` class and we don't want to have circular
 // dependencies between `package:google_cloud_gax` and
 // `package:google_cloud_protobuf`.
+/// `Any` contains an arbitrary serialized message along with a URL that
+/// describes the type of the serialized message.
 class Any extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Any';
 

@@ -16,6 +16,10 @@ import 'any.dart';
 import 'encoding.dart';
 import 'proto.dart';
 
+// This class logically belongs in `package:google_cloud_rpc` but is here
+// because it is used by the error handling in `ServiceClient` and we don't want
+// to have circular dependencies between `package:google_cloud_gax` and
+// `package:google_cloud_rpc`.
 /// The `Status` type defines a logical error model that is suitable for
 /// different programming environments, including REST APIs and RPC APIs. It is
 /// used by [gRPC](https://github.com/grpc). Each `Status` message contains
@@ -23,10 +27,6 @@ import 'proto.dart';
 ///
 /// You can find out more about this error model and how to work with it in the
 /// [API Design Guide](https://cloud.google.com/apis/design/errors).
-// This class logically belongs in `package:google_cloud_rpc` but is here
-// because it is used by the error handling in `ServiceClient` and we don't want
-// to have circular dependencies between `package:google_cloud_gax` and
-// `package:google_cloud_rpc`.
 final class Status extends ProtoMessage {
   static const String fullyQualifiedName = 'google.rpc.Status';
 
