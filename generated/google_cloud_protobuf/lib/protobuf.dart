@@ -19,9 +19,10 @@
 /// Core Protobuf types used by most services.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
-import 'package:google_cloud_gax/src/encoding.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
+part 'src/encoding.p.dart';
 part 'src/protobuf.p.dart';
 
 /// Api is a light-weight descriptor for an API Interface.

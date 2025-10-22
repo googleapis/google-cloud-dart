@@ -16,11 +16,7 @@
 ///
 /// See https://protobuf.dev/programming-guides/json/ for docs on the JSON
 /// encoding of many of these types.
-library;
-
-import 'dart:convert';
-
-import '../gax.dart';
+part of '../protobuf.dart';
 
 /// Decode an `int64` value.
 int? decodeInt64(Object? value) =>
