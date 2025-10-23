@@ -82,7 +82,7 @@ jobs:
         with:
           sdk: ${{ env.DART_VERSION }}
       - name: Setup Graphviz
-        uses: ts-graphviz/setup-graphviz@ve270a5644de745094f27105b3ccbb9eea1758769
+        uses: ts-graphviz/setup-graphviz@e270a5644de745094f27105b3ccbb9eea1758769
       - run: dart pub get
       # Regenerate and check the existing clients. If there is any difference
       # between the generated code and the committed code that is an error; all
