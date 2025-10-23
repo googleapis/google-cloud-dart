@@ -14,6 +14,42 @@
 
 part of '../protobuf.dart';
 
+/// An abstract class that can return a JSON representation of itself.
+///
+/// Classes that implement [JsonEncodable] will often have a `fromJson()`
+/// constructor.
+abstract class JsonEncodable {
+  Object? toJson();
+}
+
+/// The abstract common superclass of all messages.
+abstract class ProtoMessage implements JsonEncodable {
+  /// The fully qualified name of this message, i.e., `google.protobuf.Duration`
+  /// or `google.rpc.ErrorInfo`.
+  final String qualifiedName;
+
+  ProtoMessage(this.qualifiedName);
+}
+
+/// The abstract common superclass of all enum values.
+abstract class ProtoEnum implements JsonEncodable {
+  final String value;
+
+  const ProtoEnum(this.value);
+
+  @override
+  String toJson() => value;
+
+  @override
+  bool operator ==(Object other) =>
+      other is ProtoEnum &&
+      other.runtimeType == runtimeType &&
+      value == other.value;
+
+  @override
+  int get hashCode => value.hashCode;
+}
+
 /// `Any` contains an arbitrary serialized message along with a URL that
 /// describes the type of the serialized message.
 class Any extends ProtoMessage {

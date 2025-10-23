@@ -12,11 +12,44 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:typed_data';
-
-import 'package:google_cloud_gax/src/encoding.dart';
-import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:test/test.dart';
+
+final class TestEnum extends ProtoEnum {
+  static const one = TestEnum('ONE');
+  static const two = TestEnum('TWO');
+
+  const TestEnum(super.value);
+
+  factory TestEnum.fromJson(String json) => TestEnum(json);
+
+  @override
+  String toString() => 'TestEnum.$value';
+}
+
+final class TestMessage extends ProtoMessage {
+  static const String fullyQualifiedName = 'testMessage';
+
+  final String? message;
+
+  TestMessage({this.message}) : super(fullyQualifiedName);
+
+  factory TestMessage.fromJson(Map<String, dynamic> json) {
+    return TestMessage(message: json['message']);
+  }
+
+  @override
+  Object toJson() {
+    return {if (message != null) 'message': message};
+  }
+
+  @override
+  String toString() {
+    final contents = [if (message != null) 'message=$message'].join(',');
+    return 'TestMessage($contents)';
+  }
+}
 
 void main() {
   test('int64', () {
@@ -45,22 +78,27 @@ void main() {
   });
 
   test('enum', () {
-    final actual = decodeEnum(const Code('NOT_FOUND').toJson(), Code.fromJson);
-    expect(actual!.value, 'NOT_FOUND');
+    final actual = decodeEnum(
+      const TestEnum('ONE').toJson(),
+      TestEnum.fromJson,
+    );
+    expect(actual, TestEnum.one);
   });
 
   test('message', () {
     final actual = decode(
-      Status(code: 200, message: 'OK').toJson() as Map<String, Object?>,
-      Status.fromJson,
+      TestMessage(message: 'Hello World').toJson() as Map<String, Object?>,
+      TestMessage.fromJson,
     );
-    expect(actual!.code, 200);
-    expect(actual.message, 'OK');
+    expect(
+      actual,
+      isA<TestMessage>().having((o) => o.message, 'message', 'Hello World'),
+    );
   });
 
   test('list of enums', () {
-    expect(decodeListEnum(encodeList([Code.notFound]), Code.fromJson), [
-      Code.notFound,
+    expect(decodeListEnum(encodeList([TestEnum.one]), TestEnum.fromJson), [
+      TestEnum.one,
     ]);
   });
 
@@ -82,24 +120,31 @@ void main() {
 
   test('list of messages', () {
     final actual = decodeListMessage(
-      encodeList([Status(code: 200)]),
-      Status.fromJson,
+      encodeList([TestMessage(message: 'Hello World')]),
+      TestMessage.fromJson,
     );
-    expect(actual![0], isA<Status>());
-    expect(actual[0].code, 200);
+    expect(actual!, hasLength(1));
+    expect(
+      actual[0],
+      isA<TestMessage>().having((o) => o.message, 'message', 'Hello World'),
+    );
   });
 
   test('map of enums', () {
-    final actual = decodeMapEnum<String, Code>(
+    final actual = decodeMapEnum<String, TestEnum>(
       encodeMap({
-        'one': Code.aborted,
-        'two': Code.alreadyExists,
-        'three': Code.notFound,
+        'one': TestEnum.one,
+        'two': TestEnum.two,
+        'three': TestEnum.one,
       }),
-      Code.fromJson,
+      TestEnum.fromJson,
     );
+
     expect(actual, isMap);
-    expect(actual!['one'], Code.aborted);
+    expect(actual, hasLength(3));
+    expect(actual, containsPair('one', TestEnum.one));
+    expect(actual, containsPair('two', TestEnum.two));
+    expect(actual, containsPair('three', TestEnum.one));
   });
 
   test('map of bytes', () {
@@ -114,12 +159,29 @@ void main() {
   });
 
   test('map of messages', () {
-    final actual = decodeMapMessage<String, Status>(
-      encodeMap({'one': Status(code: 200), 'two': Status(code: 301)}),
-      Status.fromJson,
+    final actual = decodeMapMessage<String, TestMessage>(
+      encodeMap({
+        'one': TestMessage(message: 'Hello'),
+        'two': TestMessage(message: 'World'),
+      }),
+      TestMessage.fromJson,
     );
     expect(actual, isMap);
-    expect(actual!['one']!.code, 200);
+    expect(actual, hasLength(2));
+    expect(
+      actual,
+      containsPair(
+        'one',
+        isA<TestMessage>().having((o) => o.message, 'message', 'Hello'),
+      ),
+    );
+    expect(
+      actual,
+      containsPair(
+        'two',
+        isA<TestMessage>().having((o) => o.message, 'message', 'World'),
+      ),
+    );
   });
 
   group('bytes', () {

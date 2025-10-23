@@ -19,9 +19,8 @@
 /// Lets you define and config your API service.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
-import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_protobuf/src/encoding.dart';
 
 /// `Authentication` defines the authentication configuration for API methods
 /// provided by an API service.
