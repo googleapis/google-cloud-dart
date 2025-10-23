@@ -96,7 +96,7 @@ jobs:
         run: dart run tool/deps_diagram.dart
       - name: Generated Diff
         run: git diff --exit-code
-      - name: "Upload artifact"
+      - name: Upload dependency graph
         if: failure()
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
