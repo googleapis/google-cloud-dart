@@ -81,8 +81,9 @@ jobs:
         uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
         with:
           sdk: ${{ env.DART_VERSION }}
+      - name: Setup Graphviz
+        uses: ts-graphviz/setup-graphviz@ve270a5644de745094f27105b3ccbb9eea1758769
       - run: dart pub get
-
       # Regenerate and check the existing clients. If there is any difference
       # between the generated code and the committed code that is an error; all
       # the inputs should be pinned, including the generator version and the

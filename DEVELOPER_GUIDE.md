@@ -9,7 +9,7 @@
 
 The dependency graph for the current set of packages:
 
-![alt text](deps.png)
+![Dependency Graph](deps.png)
 
 ## Developing
 
