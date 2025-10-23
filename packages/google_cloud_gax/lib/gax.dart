@@ -34,10 +34,6 @@ final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
 
-/// An abstract class that can return a JSON representation of itself.
-///
-/// Classes that implement [JsonEncodable] will often have a `fromJson()`
-/// constructor.
 /// Exception thrown when calling an API through [ServiceClient] fails.
 final class ServiceException implements Exception {
   /// A message describing the cause of the exception.

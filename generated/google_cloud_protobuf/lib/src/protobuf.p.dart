@@ -14,6 +14,10 @@
 
 part of '../protobuf.dart';
 
+/// An abstract class that can return a JSON representation of itself.
+///
+/// Classes that implement [JsonEncodable] will often have a `fromJson()`
+/// constructor.
 abstract class JsonEncodable {
   Object? toJson();
 }
