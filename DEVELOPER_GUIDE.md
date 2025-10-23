@@ -7,6 +7,10 @@
 - `packages/`: hand-written API and support packages
 - `tests/`: unit and integration tests for the generated cloud APIs
 
+The dependency graph for the current set of packages:
+
+![alt text](deps.png)
+
 ## Developing
 
 ### Regenerating the Dart packages

@@ -62,7 +62,7 @@ jobs:
         working-directory: packages/google_cloud_gax
 
   generator:
-    name: Code Generator
+    name: Generator (code and diagram)
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -91,5 +91,7 @@ jobs:
         # The current head version of sidekick can be generated with:
         # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
         run: go run github.com/googleapis/librarian/cmd/sidekick@v0.5.1-0.20251023195721-e607ea63417e refreshall -project-root .
+      - name: Regenerate dependency graph
+        run: dart run tool/graph.dart
       - name: Generated Diff
         run: git diff --exit-code
