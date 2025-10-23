@@ -19,9 +19,8 @@
 /// Defines common types for Google APIs.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
-import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_protobuf/src/encoding.dart';
 
 /// Represents a color in the RGBA color space. This representation is designed
 /// for simplicity of conversion to/from color representations in various

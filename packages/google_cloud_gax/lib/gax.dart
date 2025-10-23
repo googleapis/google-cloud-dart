@@ -14,7 +14,7 @@
 
 import 'dart:convert';
 
-import 'package:google_cloud_protobuf/';
+import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 

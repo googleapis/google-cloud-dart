@@ -19,9 +19,8 @@
 /// Additional metadata for operations.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
-import 'package:google_cloud_gax/src/encoding.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_protobuf/src/encoding.dart';
 
 /// Represents the metadata of the long-running operation.
 final class OperationMetadata extends ProtoMessage {

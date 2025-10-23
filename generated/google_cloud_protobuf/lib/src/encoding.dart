@@ -12,11 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+library;
+
+import 'dart:convert';
+import 'dart:typed_data';
+export 'dart:typed_data' show Uint8List;
+
+import 'package:google_cloud_protobuf/protobuf.dart';
+
 /// Utility methods for JSON encoding and decoding from [ProtoMessage] objects.
 ///
 /// See https://protobuf.dev/programming-guides/json/ for docs on the JSON
 /// encoding of many of these types.
-part of '../protobuf.dart';
 
 /// Decode an `int64` value.
 int? decodeInt64(Object? value) =>

@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:google_cloud_gax/gax.dart';
+import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:googleapis_auth/auth_io.dart';
 
 class AnalysisRequest implements JsonEncodable {

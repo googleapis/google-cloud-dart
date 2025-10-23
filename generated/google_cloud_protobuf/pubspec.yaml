@@ -25,9 +25,6 @@ environment:
 
 resolution: workspace
 
-dependencies:
-  google_cloud_gax: ^0.1.0
-
 dev_dependencies:
   test: any
   lints: any
