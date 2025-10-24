@@ -90,11 +90,7 @@ void main() {
       expect(struct!.fields, hasLength(3));
 
       final actual = struct.toJson();
-      expect(actual, isA<Map>());
-      expect(actual, hasLength(3));
-      expect((actual as Map)['foo'], 'one');
-      expect(actual['bar'], 3.14);
-      expect(actual['baz'], isNull);
+      expect(actual, {'foo': 'one', 'bar': 3.14, 'baz': null});
     });
 
     test('listValue', () {
@@ -105,9 +101,7 @@ void main() {
       expect(list!.values, hasLength(6));
 
       final actual = list.toJson();
-      expect(actual, isA<List>());
-      expect(actual, hasLength(6));
-      expect((actual as List).join(','), 'foo,3.0,false,true,3.14,null');
+      expect(actual, ['foo', 3.0, false, true, 3.14, null]);
     });
   });
 }
