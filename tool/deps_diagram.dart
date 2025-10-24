@@ -37,7 +37,7 @@ class Package implements Comparable<Package> {
   final String name;
   final Set<Package> deps = {};
 
-  static Package maybeAdd(String packageName) => Package.nameToPackage
+  static Package putIfAbsent(String packageName) => Package.nameToPackage
       .putIfAbsent(packageName, () => Package(packageName));
 
   Package(this.name);
@@ -60,11 +60,11 @@ void main() {
   for (final packageMap in packageMaps) {
     final packageName = packageMap['name'] as String;
     if (packageName.startsWith('google_cloud')) {
-      final package = Package.maybeAdd(packageName);
+      final package = Package.putIfAbsent(packageName);
       final dependencies = (packageMap['directDependencies'] as List)
           .cast<String>();
       for (final dependencyName in dependencies) {
-        final dependency = Package.maybeAdd(dependencyName);
+        final dependency = Package.putIfAbsent(dependencyName);
         package.deps.add(dependency);
         connections.writeln('"$packageName" -> "$dependencyName";');
       }
