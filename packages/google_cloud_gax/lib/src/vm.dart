@@ -32,8 +32,10 @@ final clientDartVersion = Platform.version
 /// A [http.Client] authenticated using an API key.
 ///
 /// If `apiKey` is not `null` then that API key is used. If `apiKey` is `null`,
-/// then the first set environment variables in `envKey`
+/// then the first set environment variables in `envKeys`
 /// (e.g. `['GOOGLE_API_KEY', 'GEMINI_API_KEY']`) is used.
+///
+/// On the web, `apiKey` must be provided and `envKeys` is ignored.
 ///
 /// Throws [ArgumentError] `apiKey` is `null` and no API key is found in the
 /// given environment variables.
