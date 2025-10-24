@@ -2182,7 +2182,7 @@ final class Part extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.Part';
 
   /// Inline text.
-  final String text;
+  final String? text;
 
   /// Inline media bytes.
   final Blob? inlineData;
@@ -2225,7 +2225,7 @@ final class Part extends ProtoMessage {
   final Struct? partMetadata;
 
   Part({
-    this.text = '',
+    this.text,
     this.inlineData,
     this.functionCall,
     this.functionResponse,
@@ -2240,7 +2240,7 @@ final class Part extends ProtoMessage {
 
   factory Part.fromJson(Map<String, dynamic> json) {
     return Part(
-      text: json['text'] ?? '',
+      text: json['text'],
       inlineData: decode(json['inlineData'], Blob.fromJson),
       functionCall: decode(json['functionCall'], FunctionCall.fromJson),
       functionResponse: decode(
@@ -2263,7 +2263,7 @@ final class Part extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (text.isNotDefault) 'text': text,
+      if (text != null) 'text': text,
       if (inlineData != null) 'inlineData': inlineData!.toJson(),
       if (functionCall != null) 'functionCall': functionCall!.toJson(),
       if (functionResponse != null)
@@ -2283,7 +2283,7 @@ final class Part extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'text=$text',
+      if (text != null) 'text=$text',
       'thought=$thought',
       if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
     ].join(',');
@@ -9859,25 +9859,28 @@ final class Video extends ProtoMessage {
   final Uint8List? video;
 
   /// Path to another storage.
-  final String uri;
+  final String? uri;
 
-  Video({this.video, this.uri = ''}) : super(fullyQualifiedName);
+  Video({this.video, this.uri}) : super(fullyQualifiedName);
 
   factory Video.fromJson(Map<String, dynamic> json) {
-    return Video(video: decodeBytes(json['video']), uri: json['uri'] ?? '');
+    return Video(video: decodeBytes(json['video']), uri: json['uri']);
   }
 
   @override
   Object toJson() {
     return {
       if (video != null) 'video': encodeBytes(video),
-      if (uri.isNotDefault) 'uri': uri,
+      if (uri != null) 'uri': uri,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (video != null) 'video=$video', 'uri=$uri'].join(',');
+    final contents = [
+      if (video != null) 'video=$video',
+      if (uri != null) 'uri=$uri',
+    ].join(',');
     return 'Video($contents)';
   }
 }
@@ -10089,29 +10092,29 @@ final class CustomMetadata extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CustomMetadata';
 
   /// The string value of the metadata to store.
-  final String stringValue;
+  final String? stringValue;
 
   /// The StringList value of the metadata to store.
   final StringList? stringListValue;
 
   /// The numeric value of the metadata to store.
-  final double numericValue;
+  final double? numericValue;
 
   /// Required. The key of the metadata to store.
   final String key;
 
   CustomMetadata({
-    this.stringValue = '',
+    this.stringValue,
     this.stringListValue,
-    this.numericValue = 0,
+    this.numericValue,
     this.key = '',
   }) : super(fullyQualifiedName);
 
   factory CustomMetadata.fromJson(Map<String, dynamic> json) {
     return CustomMetadata(
-      stringValue: json['stringValue'] ?? '',
+      stringValue: json['stringValue'],
       stringListValue: decode(json['stringListValue'], StringList.fromJson),
-      numericValue: decodeDouble(json['numericValue']) ?? 0,
+      numericValue: decodeDouble(json['numericValue']),
       key: json['key'] ?? '',
     );
   }
@@ -10119,9 +10122,9 @@ final class CustomMetadata extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (stringValue.isNotDefault) 'stringValue': stringValue,
+      if (stringValue != null) 'stringValue': stringValue,
       if (stringListValue != null) 'stringListValue': stringListValue!.toJson(),
-      if (numericValue.isNotDefault) 'numericValue': encodeDouble(numericValue),
+      if (numericValue != null) 'numericValue': encodeDouble(numericValue),
       if (key.isNotDefault) 'key': key,
     };
   }
@@ -10129,8 +10132,8 @@ final class CustomMetadata extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'stringValue=$stringValue',
-      'numericValue=$numericValue',
+      if (stringValue != null) 'stringValue=$stringValue',
+      if (numericValue != null) 'numericValue=$numericValue',
       'key=$key',
     ].join(',');
     return 'CustomMetadata($contents)';
@@ -10186,25 +10189,25 @@ final class Condition extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.Condition';
 
   /// The string value to filter the metadata on.
-  final String stringValue;
+  final String? stringValue;
 
   /// The numeric value to filter the metadata on.
-  final double numericValue;
+  final double? numericValue;
 
   /// Required. Operator applied to the given key-value pair to trigger the
   /// condition.
   final Condition_Operator operation;
 
   Condition({
-    this.stringValue = '',
-    this.numericValue = 0,
+    this.stringValue,
+    this.numericValue,
     this.operation = Condition_Operator.$default,
   }) : super(fullyQualifiedName);
 
   factory Condition.fromJson(Map<String, dynamic> json) {
     return Condition(
-      stringValue: json['stringValue'] ?? '',
-      numericValue: decodeDouble(json['numericValue']) ?? 0,
+      stringValue: json['stringValue'],
+      numericValue: decodeDouble(json['numericValue']),
       operation:
           decodeEnum(json['operation'], Condition_Operator.fromJson) ??
           Condition_Operator.$default,
@@ -10214,8 +10217,8 @@ final class Condition extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (stringValue.isNotDefault) 'stringValue': stringValue,
-      if (numericValue.isNotDefault) 'numericValue': encodeDouble(numericValue),
+      if (stringValue != null) 'stringValue': stringValue,
+      if (numericValue != null) 'numericValue': encodeDouble(numericValue),
       if (operation.isNotDefault) 'operation': operation.toJson(),
     };
   }
@@ -10223,8 +10226,8 @@ final class Condition extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'stringValue=$stringValue',
-      'numericValue=$numericValue',
+      if (stringValue != null) 'stringValue=$stringValue',
+      if (numericValue != null) 'numericValue=$numericValue',
       'operation=$operation',
     ].join(',');
     return 'Condition($contents)';
@@ -10385,22 +10388,24 @@ final class ChunkData extends ProtoMessage {
 
   /// The `Chunk` content as a string.
   /// The maximum number of tokens per chunk is 2043.
-  final String stringValue;
+  final String? stringValue;
 
-  ChunkData({this.stringValue = ''}) : super(fullyQualifiedName);
+  ChunkData({this.stringValue}) : super(fullyQualifiedName);
 
   factory ChunkData.fromJson(Map<String, dynamic> json) {
-    return ChunkData(stringValue: json['stringValue'] ?? '');
+    return ChunkData(stringValue: json['stringValue']);
   }
 
   @override
   Object toJson() {
-    return {if (stringValue.isNotDefault) 'stringValue': stringValue};
+    return {if (stringValue != null) 'stringValue': stringValue};
   }
 
   @override
   String toString() {
-    final contents = ['stringValue=$stringValue'].join(',');
+    final contents = [
+      if (stringValue != null) 'stringValue=$stringValue',
+    ].join(',');
     return 'ChunkData($contents)';
   }
 }
@@ -12359,7 +12364,7 @@ final class TunedModel extends ProtoMessage {
 
   /// Immutable. The name of the `Model` to tune.
   /// Example: `models/gemini-1.5-flash-001`
-  final String baseModel;
+  final String? baseModel;
 
   /// Output only. The tuned model name. A unique name will be generated on
   /// create. Example: `tunedModels/az2mb0bpw6i` If display_name is set on
@@ -12426,7 +12431,7 @@ final class TunedModel extends ProtoMessage {
 
   TunedModel({
     this.tunedModelSource,
-    this.baseModel = '',
+    this.baseModel,
     this.name = '',
     this.displayName = '',
     this.description = '',
@@ -12446,7 +12451,7 @@ final class TunedModel extends ProtoMessage {
         json['tunedModelSource'],
         TunedModelSource.fromJson,
       ),
-      baseModel: json['baseModel'] ?? '',
+      baseModel: json['baseModel'],
       name: json['name'] ?? '',
       displayName: json['displayName'] ?? '',
       description: json['description'] ?? '',
@@ -12468,7 +12473,7 @@ final class TunedModel extends ProtoMessage {
     return {
       if (tunedModelSource != null)
         'tunedModelSource': tunedModelSource!.toJson(),
-      if (baseModel.isNotDefault) 'baseModel': baseModel,
+      if (baseModel != null) 'baseModel': baseModel,
       if (name.isNotDefault) 'name': name,
       if (displayName.isNotDefault) 'displayName': displayName,
       if (description.isNotDefault) 'description': description,
@@ -12487,7 +12492,7 @@ final class TunedModel extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'baseModel=$baseModel',
+      if (baseModel != null) 'baseModel=$baseModel',
       'name=$name',
       'displayName=$displayName',
       'description=$description',
@@ -12636,14 +12641,14 @@ final class Hyperparameters extends ProtoMessage {
   /// Optional. Immutable. The learning rate hyperparameter for tuning.
   /// If not set, a default of 0.001 or 0.0002 will be calculated based on the
   /// number of training examples.
-  final double learningRate;
+  final double? learningRate;
 
   /// Optional. Immutable. The learning rate multiplier is used to calculate a
   /// final learning_rate based on the default (recommended) value. Actual
   /// learning rate := learning_rate_multiplier * default learning rate Default
   /// learning rate is dependent on base model and dataset size. If not set, a
   /// default of 1.0 will be used.
-  final double learningRateMultiplier;
+  final double? learningRateMultiplier;
 
   /// Immutable. The number of training epochs. An epoch is one pass through the
   /// training data. If not set, a default of 5 will be used.
@@ -12655,16 +12660,16 @@ final class Hyperparameters extends ProtoMessage {
   final int? batchSize;
 
   Hyperparameters({
-    this.learningRate = 0,
-    this.learningRateMultiplier = 0,
+    this.learningRate,
+    this.learningRateMultiplier,
     this.epochCount,
     this.batchSize,
   }) : super(fullyQualifiedName);
 
   factory Hyperparameters.fromJson(Map<String, dynamic> json) {
     return Hyperparameters(
-      learningRate: decodeDouble(json['learningRate']) ?? 0,
-      learningRateMultiplier: decodeDouble(json['learningRateMultiplier']) ?? 0,
+      learningRate: decodeDouble(json['learningRate']),
+      learningRateMultiplier: decodeDouble(json['learningRateMultiplier']),
       epochCount: json['epochCount'],
       batchSize: json['batchSize'],
     );
@@ -12673,8 +12678,8 @@ final class Hyperparameters extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (learningRate.isNotDefault) 'learningRate': encodeDouble(learningRate),
-      if (learningRateMultiplier.isNotDefault)
+      if (learningRate != null) 'learningRate': encodeDouble(learningRate),
+      if (learningRateMultiplier != null)
         'learningRateMultiplier': encodeDouble(learningRateMultiplier),
       if (epochCount != null) 'epochCount': epochCount,
       if (batchSize != null) 'batchSize': batchSize,
@@ -12684,8 +12689,9 @@ final class Hyperparameters extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'learningRate=$learningRate',
-      'learningRateMultiplier=$learningRateMultiplier',
+      if (learningRate != null) 'learningRate=$learningRate',
+      if (learningRateMultiplier != null)
+        'learningRateMultiplier=$learningRateMultiplier',
       if (epochCount != null) 'epochCount=$epochCount',
       if (batchSize != null) 'batchSize=$batchSize',
     ].join(',');
@@ -12749,17 +12755,16 @@ final class TuningExample extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.TuningExample';
 
   /// Optional. Text model input.
-  final String textInput;
+  final String? textInput;
 
   /// Required. The expected model output.
   final String output;
 
-  TuningExample({this.textInput = '', this.output = ''})
-    : super(fullyQualifiedName);
+  TuningExample({this.textInput, this.output = ''}) : super(fullyQualifiedName);
 
   factory TuningExample.fromJson(Map<String, dynamic> json) {
     return TuningExample(
-      textInput: json['textInput'] ?? '',
+      textInput: json['textInput'],
       output: json['output'] ?? '',
     );
   }
@@ -12767,14 +12772,17 @@ final class TuningExample extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (textInput.isNotDefault) 'textInput': textInput,
+      if (textInput != null) 'textInput': textInput,
       if (output.isNotDefault) 'output': output,
     };
   }
 
   @override
   String toString() {
-    final contents = ['textInput=$textInput', 'output=$output'].join(',');
+    final contents = [
+      if (textInput != null) 'textInput=$textInput',
+      'output=$output',
+    ].join(',');
     return 'TuningExample($contents)';
   }
 }

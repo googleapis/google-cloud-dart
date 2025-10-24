@@ -147,13 +147,13 @@ final class JwtLocation extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.JwtLocation';
 
   /// Specifies HTTP header name to extract JWT token.
-  final String header;
+  final String? header;
 
   /// Specifies URL query parameter name to extract JWT token.
-  final String query;
+  final String? query;
 
   /// Specifies cookie name to extract JWT token.
-  final String cookie;
+  final String? cookie;
 
   /// The value prefix. The value format is "value_prefix{token}"
   /// Only applies to "in" header type. Must be empty for "in" query type.
@@ -165,18 +165,14 @@ final class JwtLocation extends ProtoMessage {
   /// value_prefix="Bearer " with a space at the end.
   final String valuePrefix;
 
-  JwtLocation({
-    this.header = '',
-    this.query = '',
-    this.cookie = '',
-    this.valuePrefix = '',
-  }) : super(fullyQualifiedName);
+  JwtLocation({this.header, this.query, this.cookie, this.valuePrefix = ''})
+    : super(fullyQualifiedName);
 
   factory JwtLocation.fromJson(Map<String, dynamic> json) {
     return JwtLocation(
-      header: json['header'] ?? '',
-      query: json['query'] ?? '',
-      cookie: json['cookie'] ?? '',
+      header: json['header'],
+      query: json['query'],
+      cookie: json['cookie'],
       valuePrefix: json['valuePrefix'] ?? '',
     );
   }
@@ -184,9 +180,9 @@ final class JwtLocation extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (header.isNotDefault) 'header': header,
-      if (query.isNotDefault) 'query': query,
-      if (cookie.isNotDefault) 'cookie': cookie,
+      if (header != null) 'header': header,
+      if (query != null) 'query': query,
+      if (cookie != null) 'cookie': cookie,
       if (valuePrefix.isNotDefault) 'valuePrefix': valuePrefix,
     };
   }
@@ -194,9 +190,9 @@ final class JwtLocation extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'header=$header',
-      'query=$query',
-      'cookie=$cookie',
+      if (header != null) 'header=$header',
+      if (query != null) 'query=$query',
+      if (cookie != null) 'cookie=$cookie',
       'valuePrefix=$valuePrefix',
     ].join(',');
     return 'JwtLocation($contents)';
@@ -509,13 +505,13 @@ final class BackendRule extends ProtoMessage {
   /// The JWT audience is used when generating a JWT ID token for the backend.
   /// This ID token will be added in the HTTP "authorization" header, and sent
   /// to the backend.
-  final String jwtAudience;
+  final String? jwtAudience;
 
   /// When disable_auth is true, a JWT ID token won't be generated and the
   /// original "Authorization" HTTP header will be preserved. If the header is
   /// used to carry the original token and is expected by the backend, this
   /// field must be set to true to preserve the header.
-  final bool disableAuth;
+  final bool? disableAuth;
 
   /// The protocol used for sending a request to the backend.
   /// The supported values are "http/1.1" and "h2".
@@ -550,8 +546,8 @@ final class BackendRule extends ProtoMessage {
     this.minDeadline = 0,
     this.operationDeadline = 0,
     this.pathTranslation = BackendRule_PathTranslation.$default,
-    this.jwtAudience = '',
-    this.disableAuth = false,
+    this.jwtAudience,
+    this.disableAuth,
     this.protocol = '',
     this.overridesByRequestProtocol = const {},
   }) : super(fullyQualifiedName);
@@ -569,8 +565,8 @@ final class BackendRule extends ProtoMessage {
             BackendRule_PathTranslation.fromJson,
           ) ??
           BackendRule_PathTranslation.$default,
-      jwtAudience: json['jwtAudience'] ?? '',
-      disableAuth: json['disableAuth'] ?? false,
+      jwtAudience: json['jwtAudience'],
+      disableAuth: json['disableAuth'],
       protocol: json['protocol'] ?? '',
       overridesByRequestProtocol:
           decodeMapMessage(
@@ -592,8 +588,8 @@ final class BackendRule extends ProtoMessage {
         'operationDeadline': encodeDouble(operationDeadline),
       if (pathTranslation.isNotDefault)
         'pathTranslation': pathTranslation.toJson(),
-      if (jwtAudience.isNotDefault) 'jwtAudience': jwtAudience,
-      if (disableAuth.isNotDefault) 'disableAuth': disableAuth,
+      if (jwtAudience != null) 'jwtAudience': jwtAudience,
+      if (disableAuth != null) 'disableAuth': disableAuth,
       if (protocol.isNotDefault) 'protocol': protocol,
       if (overridesByRequestProtocol.isNotDefault)
         'overridesByRequestProtocol': encodeMap(overridesByRequestProtocol),
@@ -609,8 +605,8 @@ final class BackendRule extends ProtoMessage {
       'minDeadline=$minDeadline',
       'operationDeadline=$operationDeadline',
       'pathTranslation=$pathTranslation',
-      'jwtAudience=$jwtAudience',
-      'disableAuth=$disableAuth',
+      if (jwtAudience != null) 'jwtAudience=$jwtAudience',
+      if (disableAuth != null) 'disableAuth=$disableAuth',
       'protocol=$protocol',
     ].join(',');
     return 'BackendRule($contents)';
@@ -3286,19 +3282,19 @@ final class HttpRule extends ProtoMessage {
 
   /// Maps to HTTP GET. Used for listing and getting information about
   /// resources.
-  final String get;
+  final String? get;
 
   /// Maps to HTTP PUT. Used for replacing a resource.
-  final String put;
+  final String? put;
 
   /// Maps to HTTP POST. Used for creating a resource or performing an action.
-  final String post;
+  final String? post;
 
   /// Maps to HTTP DELETE. Used for deleting a resource.
-  final String delete;
+  final String? delete;
 
   /// Maps to HTTP PATCH. Used for updating a resource.
-  final String patch;
+  final String? patch;
 
   /// The custom pattern is used for specifying an HTTP method that is not
   /// included in the `pattern` field, such as HEAD, or "*" to leave the
@@ -3329,11 +3325,11 @@ final class HttpRule extends ProtoMessage {
 
   HttpRule({
     this.selector = '',
-    this.get = '',
-    this.put = '',
-    this.post = '',
-    this.delete = '',
-    this.patch = '',
+    this.get,
+    this.put,
+    this.post,
+    this.delete,
+    this.patch,
     this.custom,
     this.body = '',
     this.responseBody = '',
@@ -3343,11 +3339,11 @@ final class HttpRule extends ProtoMessage {
   factory HttpRule.fromJson(Map<String, dynamic> json) {
     return HttpRule(
       selector: json['selector'] ?? '',
-      get: json['get'] ?? '',
-      put: json['put'] ?? '',
-      post: json['post'] ?? '',
-      delete: json['delete'] ?? '',
-      patch: json['patch'] ?? '',
+      get: json['get'],
+      put: json['put'],
+      post: json['post'],
+      delete: json['delete'],
+      patch: json['patch'],
       custom: decode(json['custom'], CustomHttpPattern.fromJson),
       body: json['body'] ?? '',
       responseBody: json['responseBody'] ?? '',
@@ -3361,11 +3357,11 @@ final class HttpRule extends ProtoMessage {
   Object toJson() {
     return {
       if (selector.isNotDefault) 'selector': selector,
-      if (get.isNotDefault) 'get': get,
-      if (put.isNotDefault) 'put': put,
-      if (post.isNotDefault) 'post': post,
-      if (delete.isNotDefault) 'delete': delete,
-      if (patch.isNotDefault) 'patch': patch,
+      if (get != null) 'get': get,
+      if (put != null) 'put': put,
+      if (post != null) 'post': post,
+      if (delete != null) 'delete': delete,
+      if (patch != null) 'patch': patch,
       if (custom != null) 'custom': custom!.toJson(),
       if (body.isNotDefault) 'body': body,
       if (responseBody.isNotDefault) 'responseBody': responseBody,
@@ -3378,11 +3374,11 @@ final class HttpRule extends ProtoMessage {
   String toString() {
     final contents = [
       'selector=$selector',
-      'get=$get',
-      'put=$put',
-      'post=$post',
-      'delete=$delete',
-      'patch=$patch',
+      if (get != null) 'get=$get',
+      if (put != null) 'put=$put',
+      if (post != null) 'post=$post',
+      if (delete != null) 'delete=$delete',
+      if (patch != null) 'patch=$patch',
       'body=$body',
       'responseBody=$responseBody',
     ].join(',');

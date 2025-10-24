@@ -372,8 +372,8 @@ final class DatasetService {
       _host,
       '/v1beta1/${request.dataset}:searchDataItems',
       {
-        if (request.orderByDataItem.isNotDefault)
-          'orderByDataItem': request.orderByDataItem,
+        if (request.orderByDataItem != null)
+          'orderByDataItem': request.orderByDataItem!,
         if (request.orderByAnnotation!.savedQuery.isNotDefault)
           'orderByAnnotation.savedQuery': request.orderByAnnotation!.savedQuery,
         if (request.orderByAnnotation!.orderBy.isNotDefault)
@@ -8788,7 +8788,7 @@ final class ModelGardenService {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
       if (request.languageCode.isNotDefault)
         'languageCode': request.languageCode,
-      if (request.view.isNotDefault) 'view': request.view!.value,
+      if (request.view.isNotDefault) 'view': request.view.value,
       if (request.isHuggingFaceModel.isNotDefault)
         'isHuggingFaceModel': '${request.isHuggingFaceModel}',
       if (request.huggingFaceToken.isNotDefault)
@@ -8815,7 +8815,7 @@ final class ModelGardenService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.view.isNotDefault) 'view': request.view!.value,
+      if (request.view.isNotDefault) 'view': request.view.value,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
       if (request.languageCode.isNotDefault)
         'languageCode': request.languageCode,
@@ -10465,7 +10465,7 @@ final class NotebookService {
     GetNotebookExecutionJobRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
-      if (request.view.isNotDefault) 'view': request.view!.value,
+      if (request.view.isNotDefault) 'view': request.view.value,
     });
     final response = await _client.get(url);
     return NotebookExecutionJob.fromJson(response);
@@ -10485,7 +10485,7 @@ final class NotebookService {
           if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
           if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
           if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-          if (request.view.isNotDefault) 'view': request.view!.value,
+          if (request.view.isNotDefault) 'view': request.view.value,
         });
     final response = await _client.get(url);
     return ListNotebookExecutionJobsResponse.fromJson(response);
@@ -16145,12 +16145,12 @@ final class BatchPredictionJob_OutputInfo extends protobuf.ProtoMessage {
 
   /// Output only. The full path of the Cloud Storage directory created, into
   /// which the prediction output is written.
-  final String gcsOutputDirectory;
+  final String? gcsOutputDirectory;
 
   /// Output only. The path of the BigQuery dataset created, in
   /// `bq://projectId.bqDatasetId`
   /// format, into which the prediction output is written.
-  final String bigqueryOutputDataset;
+  final String? bigqueryOutputDataset;
 
   /// Output only. The name of the BigQuery table created, in
   /// `predictions_<timestamp>`
@@ -16159,15 +16159,15 @@ final class BatchPredictionJob_OutputInfo extends protobuf.ProtoMessage {
   final String bigqueryOutputTable;
 
   BatchPredictionJob_OutputInfo({
-    this.gcsOutputDirectory = '',
-    this.bigqueryOutputDataset = '',
+    this.gcsOutputDirectory,
+    this.bigqueryOutputDataset,
     this.bigqueryOutputTable = '',
   }) : super(fullyQualifiedName);
 
   factory BatchPredictionJob_OutputInfo.fromJson(Map<String, dynamic> json) {
     return BatchPredictionJob_OutputInfo(
-      gcsOutputDirectory: json['gcsOutputDirectory'] ?? '',
-      bigqueryOutputDataset: json['bigqueryOutputDataset'] ?? '',
+      gcsOutputDirectory: json['gcsOutputDirectory'],
+      bigqueryOutputDataset: json['bigqueryOutputDataset'],
       bigqueryOutputTable: json['bigqueryOutputTable'] ?? '',
     );
   }
@@ -16175,9 +16175,8 @@ final class BatchPredictionJob_OutputInfo extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (gcsOutputDirectory.isNotDefault)
-        'gcsOutputDirectory': gcsOutputDirectory,
-      if (bigqueryOutputDataset.isNotDefault)
+      if (gcsOutputDirectory != null) 'gcsOutputDirectory': gcsOutputDirectory,
+      if (bigqueryOutputDataset != null)
         'bigqueryOutputDataset': bigqueryOutputDataset,
       if (bigqueryOutputTable.isNotDefault)
         'bigqueryOutputTable': bigqueryOutputTable,
@@ -16187,8 +16186,9 @@ final class BatchPredictionJob_OutputInfo extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'gcsOutputDirectory=$gcsOutputDirectory',
-      'bigqueryOutputDataset=$bigqueryOutputDataset',
+      if (gcsOutputDirectory != null) 'gcsOutputDirectory=$gcsOutputDirectory',
+      if (bigqueryOutputDataset != null)
+        'bigqueryOutputDataset=$bigqueryOutputDataset',
       'bigqueryOutputTable=$bigqueryOutputTable',
     ].join(',');
     return 'OutputInfo($contents)';
@@ -16508,7 +16508,7 @@ final class Part extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.Part';
 
   /// Optional. Text part (can be code).
-  final String text;
+  final String? text;
 
   /// Optional. Inlined bytes data.
   final Blob? inlineData;
@@ -16545,7 +16545,7 @@ final class Part extends protobuf.ProtoMessage {
   final Uint8List? thoughtSignature;
 
   Part({
-    this.text = '',
+    this.text,
     this.inlineData,
     this.fileData,
     this.functionCall,
@@ -16559,7 +16559,7 @@ final class Part extends protobuf.ProtoMessage {
 
   factory Part.fromJson(Map<String, dynamic> json) {
     return Part(
-      text: json['text'] ?? '',
+      text: json['text'],
       inlineData: decode(json['inlineData'], Blob.fromJson),
       fileData: decode(json['fileData'], FileData.fromJson),
       functionCall: decode(json['functionCall'], FunctionCall.fromJson),
@@ -16581,7 +16581,7 @@ final class Part extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (text.isNotDefault) 'text': text,
+      if (text != null) 'text': text,
       if (inlineData != null) 'inlineData': inlineData!.toJson(),
       if (fileData != null) 'fileData': fileData!.toJson(),
       if (functionCall != null) 'functionCall': functionCall!.toJson(),
@@ -16600,7 +16600,7 @@ final class Part extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'text=$text',
+      if (text != null) 'text=$text',
       'thought=$thought',
       if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
     ].join(',');
@@ -20003,10 +20003,10 @@ final class ActiveLearningConfig extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.ActiveLearningConfig';
 
   /// Max number of human labeled DataItems.
-  final int maxDataItemCount;
+  final int? maxDataItemCount;
 
   /// Max percent of total DataItems for human labeling.
-  final int maxDataItemPercentage;
+  final int? maxDataItemPercentage;
 
   /// Active learning data sampling config. For every active learning labeling
   /// iteration, it will select a batch of data based on the sampling strategy.
@@ -20018,16 +20018,16 @@ final class ActiveLearningConfig extends protobuf.ProtoMessage {
   final TrainingConfig? trainingConfig;
 
   ActiveLearningConfig({
-    this.maxDataItemCount = 0,
-    this.maxDataItemPercentage = 0,
+    this.maxDataItemCount,
+    this.maxDataItemPercentage,
     this.sampleConfig,
     this.trainingConfig,
   }) : super(fullyQualifiedName);
 
   factory ActiveLearningConfig.fromJson(Map<String, dynamic> json) {
     return ActiveLearningConfig(
-      maxDataItemCount: decodeInt64(json['maxDataItemCount']) ?? 0,
-      maxDataItemPercentage: json['maxDataItemPercentage'] ?? 0,
+      maxDataItemCount: decodeInt64(json['maxDataItemCount']),
+      maxDataItemPercentage: json['maxDataItemPercentage'],
       sampleConfig: decode(json['sampleConfig'], SampleConfig.fromJson),
       trainingConfig: decode(json['trainingConfig'], TrainingConfig.fromJson),
     );
@@ -20036,9 +20036,9 @@ final class ActiveLearningConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (maxDataItemCount.isNotDefault)
+      if (maxDataItemCount != null)
         'maxDataItemCount': encodeInt64(maxDataItemCount),
-      if (maxDataItemPercentage.isNotDefault)
+      if (maxDataItemPercentage != null)
         'maxDataItemPercentage': maxDataItemPercentage,
       if (sampleConfig != null) 'sampleConfig': sampleConfig!.toJson(),
       if (trainingConfig != null) 'trainingConfig': trainingConfig!.toJson(),
@@ -20048,8 +20048,9 @@ final class ActiveLearningConfig extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'maxDataItemCount=$maxDataItemCount',
-      'maxDataItemPercentage=$maxDataItemPercentage',
+      if (maxDataItemCount != null) 'maxDataItemCount=$maxDataItemCount',
+      if (maxDataItemPercentage != null)
+        'maxDataItemPercentage=$maxDataItemPercentage',
     ].join(',');
     return 'ActiveLearningConfig($contents)';
   }
@@ -20062,27 +20063,26 @@ final class SampleConfig extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.SampleConfig';
 
   /// The percentage of data needed to be labeled in the first batch.
-  final int initialBatchSamplePercentage;
+  final int? initialBatchSamplePercentage;
 
   /// The percentage of data needed to be labeled in each following batch
   /// (except the first batch).
-  final int followingBatchSamplePercentage;
+  final int? followingBatchSamplePercentage;
 
   /// Field to choose sampling strategy. Sampling strategy will decide which data
   /// should be selected for human labeling in every batch.
   final SampleConfig_SampleStrategy sampleStrategy;
 
   SampleConfig({
-    this.initialBatchSamplePercentage = 0,
-    this.followingBatchSamplePercentage = 0,
+    this.initialBatchSamplePercentage,
+    this.followingBatchSamplePercentage,
     this.sampleStrategy = SampleConfig_SampleStrategy.$default,
   }) : super(fullyQualifiedName);
 
   factory SampleConfig.fromJson(Map<String, dynamic> json) {
     return SampleConfig(
-      initialBatchSamplePercentage: json['initialBatchSamplePercentage'] ?? 0,
-      followingBatchSamplePercentage:
-          json['followingBatchSamplePercentage'] ?? 0,
+      initialBatchSamplePercentage: json['initialBatchSamplePercentage'],
+      followingBatchSamplePercentage: json['followingBatchSamplePercentage'],
       sampleStrategy:
           decodeEnum(
             json['sampleStrategy'],
@@ -20095,9 +20095,9 @@ final class SampleConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (initialBatchSamplePercentage.isNotDefault)
+      if (initialBatchSamplePercentage != null)
         'initialBatchSamplePercentage': initialBatchSamplePercentage,
-      if (followingBatchSamplePercentage.isNotDefault)
+      if (followingBatchSamplePercentage != null)
         'followingBatchSamplePercentage': followingBatchSamplePercentage,
       if (sampleStrategy.isNotDefault)
         'sampleStrategy': sampleStrategy.toJson(),
@@ -20107,8 +20107,10 @@ final class SampleConfig extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'initialBatchSamplePercentage=$initialBatchSamplePercentage',
-      'followingBatchSamplePercentage=$followingBatchSamplePercentage',
+      if (initialBatchSamplePercentage != null)
+        'initialBatchSamplePercentage=$initialBatchSamplePercentage',
+      if (followingBatchSamplePercentage != null)
+        'followingBatchSamplePercentage=$followingBatchSamplePercentage',
       'sampleStrategy=$sampleStrategy',
     ].join(',');
     return 'SampleConfig($contents)';
@@ -21526,7 +21528,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
 
   /// A comma-separated list of data item fields to order by, sorted in
   /// ascending order. Use "desc" after a field name for descending.
-  final String orderByDataItem;
+  final String? orderByDataItem;
 
   /// Expression that allows ranking results based on annotation's property.
   final SearchDataItemsRequest_OrderByAnnotation? orderByAnnotation;
@@ -21601,7 +21603,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   SearchDataItemsRequest({
-    this.orderByDataItem = '',
+    this.orderByDataItem,
     this.orderByAnnotation,
     this.dataset = '',
     this.savedQuery = '',
@@ -21618,7 +21620,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
 
   factory SearchDataItemsRequest.fromJson(Map<String, dynamic> json) {
     return SearchDataItemsRequest(
-      orderByDataItem: json['orderByDataItem'] ?? '',
+      orderByDataItem: json['orderByDataItem'],
       orderByAnnotation: decode(
         json['orderByAnnotation'],
         SearchDataItemsRequest_OrderByAnnotation.fromJson,
@@ -21640,7 +21642,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (orderByDataItem.isNotDefault) 'orderByDataItem': orderByDataItem,
+      if (orderByDataItem != null) 'orderByDataItem': orderByDataItem,
       if (orderByAnnotation != null)
         'orderByAnnotation': orderByAnnotation!.toJson(),
       if (dataset.isNotDefault) 'dataset': dataset,
@@ -21662,7 +21664,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'orderByDataItem=$orderByDataItem',
+      if (orderByDataItem != null) 'orderByDataItem=$orderByDataItem',
       'dataset=$dataset',
       'savedQuery=$savedQuery',
       'dataLabelingJob=$dataLabelingJob',
@@ -22689,11 +22691,11 @@ final class GeminiRequestReadConfig extends protobuf.ProtoMessage {
 
   /// Optional. Column name in the dataset table that contains already fully
   /// assembled Gemini requests.
-  final String assembledRequestColumnName;
+  final String? assembledRequestColumnName;
 
   GeminiRequestReadConfig({
     this.templateConfig,
-    this.assembledRequestColumnName = '',
+    this.assembledRequestColumnName,
   }) : super(fullyQualifiedName);
 
   factory GeminiRequestReadConfig.fromJson(Map<String, dynamic> json) {
@@ -22702,7 +22704,7 @@ final class GeminiRequestReadConfig extends protobuf.ProtoMessage {
         json['templateConfig'],
         GeminiTemplateConfig.fromJson,
       ),
-      assembledRequestColumnName: json['assembledRequestColumnName'] ?? '',
+      assembledRequestColumnName: json['assembledRequestColumnName'],
     );
   }
 
@@ -22710,7 +22712,7 @@ final class GeminiRequestReadConfig extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (templateConfig != null) 'templateConfig': templateConfig!.toJson(),
-      if (assembledRequestColumnName.isNotDefault)
+      if (assembledRequestColumnName != null)
         'assembledRequestColumnName': assembledRequestColumnName,
     };
   }
@@ -22718,7 +22720,8 @@ final class GeminiRequestReadConfig extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'assembledRequestColumnName=$assembledRequestColumnName',
+      if (assembledRequestColumnName != null)
+        'assembledRequestColumnName=$assembledRequestColumnName',
     ].join(',');
     return 'GeminiRequestReadConfig($contents)';
   }
@@ -24018,7 +24021,7 @@ final class DeployedModel extends protobuf.ProtoMessage {
   /// The resource name of the shared DeploymentResourcePool to deploy on.
   /// Format:
   /// `projects/{project}/locations/{location}/deploymentResourcePools/{deployment_resource_pool}`
-  final String sharedResources;
+  final String? sharedResources;
 
   /// Immutable. The ID of the DeployedModel. If not provided upon deployment,
   /// Vertex AI will generate a value for this ID.
@@ -24135,7 +24138,7 @@ final class DeployedModel extends protobuf.ProtoMessage {
   DeployedModel({
     this.dedicatedResources,
     this.automaticResources,
-    this.sharedResources = '',
+    this.sharedResources,
     this.id = '',
     this.model = '',
     this.modelVersionId = '',
@@ -24166,7 +24169,7 @@ final class DeployedModel extends protobuf.ProtoMessage {
         json['automaticResources'],
         AutomaticResources.fromJson,
       ),
-      sharedResources: json['sharedResources'] ?? '',
+      sharedResources: json['sharedResources'],
       id: json['id'] ?? '',
       model: json['model'] ?? '',
       modelVersionId: json['modelVersionId'] ?? '',
@@ -24207,7 +24210,7 @@ final class DeployedModel extends protobuf.ProtoMessage {
         'dedicatedResources': dedicatedResources!.toJson(),
       if (automaticResources != null)
         'automaticResources': automaticResources!.toJson(),
-      if (sharedResources.isNotDefault) 'sharedResources': sharedResources,
+      if (sharedResources != null) 'sharedResources': sharedResources,
       if (id.isNotDefault) 'id': id,
       if (model.isNotDefault) 'model': model,
       if (modelVersionId.isNotDefault) 'modelVersionId': modelVersionId,
@@ -24239,7 +24242,7 @@ final class DeployedModel extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'sharedResources=$sharedResources',
+      if (sharedResources != null) 'sharedResources=$sharedResources',
       'id=$id',
       'model=$model',
       'modelVersionId=$modelVersionId',
@@ -24547,18 +24550,18 @@ final class RolloutOptions extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.RolloutOptions';
 
   /// Absolute count of replicas allowed to be unavailable.
-  final int maxUnavailableReplicas;
+  final int? maxUnavailableReplicas;
 
   /// Percentage of replicas allowed to be unavailable.
   /// For autoscaling deployments, this refers to the target replica count.
-  final int maxUnavailablePercentage;
+  final int? maxUnavailablePercentage;
 
   /// Absolute count of allowed additional replicas.
-  final int maxSurgeReplicas;
+  final int? maxSurgeReplicas;
 
   /// Percentage of allowed additional replicas.
   /// For autoscaling deployments, this refers to the target replica count.
-  final int maxSurgePercentage;
+  final int? maxSurgePercentage;
 
   /// ID of the DeployedModel that this deployment should replace.
   final String previousDeployedModel;
@@ -24569,20 +24572,20 @@ final class RolloutOptions extends protobuf.ProtoMessage {
   final int revisionNumber;
 
   RolloutOptions({
-    this.maxUnavailableReplicas = 0,
-    this.maxUnavailablePercentage = 0,
-    this.maxSurgeReplicas = 0,
-    this.maxSurgePercentage = 0,
+    this.maxUnavailableReplicas,
+    this.maxUnavailablePercentage,
+    this.maxSurgeReplicas,
+    this.maxSurgePercentage,
     this.previousDeployedModel = '',
     this.revisionNumber = 0,
   }) : super(fullyQualifiedName);
 
   factory RolloutOptions.fromJson(Map<String, dynamic> json) {
     return RolloutOptions(
-      maxUnavailableReplicas: json['maxUnavailableReplicas'] ?? 0,
-      maxUnavailablePercentage: json['maxUnavailablePercentage'] ?? 0,
-      maxSurgeReplicas: json['maxSurgeReplicas'] ?? 0,
-      maxSurgePercentage: json['maxSurgePercentage'] ?? 0,
+      maxUnavailableReplicas: json['maxUnavailableReplicas'],
+      maxUnavailablePercentage: json['maxUnavailablePercentage'],
+      maxSurgeReplicas: json['maxSurgeReplicas'],
+      maxSurgePercentage: json['maxSurgePercentage'],
       previousDeployedModel: json['previousDeployedModel'] ?? '',
       revisionNumber: json['revisionNumber'] ?? 0,
     );
@@ -24591,13 +24594,12 @@ final class RolloutOptions extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (maxUnavailableReplicas.isNotDefault)
+      if (maxUnavailableReplicas != null)
         'maxUnavailableReplicas': maxUnavailableReplicas,
-      if (maxUnavailablePercentage.isNotDefault)
+      if (maxUnavailablePercentage != null)
         'maxUnavailablePercentage': maxUnavailablePercentage,
-      if (maxSurgeReplicas.isNotDefault) 'maxSurgeReplicas': maxSurgeReplicas,
-      if (maxSurgePercentage.isNotDefault)
-        'maxSurgePercentage': maxSurgePercentage,
+      if (maxSurgeReplicas != null) 'maxSurgeReplicas': maxSurgeReplicas,
+      if (maxSurgePercentage != null) 'maxSurgePercentage': maxSurgePercentage,
       if (previousDeployedModel.isNotDefault)
         'previousDeployedModel': previousDeployedModel,
       if (revisionNumber.isNotDefault) 'revisionNumber': revisionNumber,
@@ -24607,10 +24609,12 @@ final class RolloutOptions extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'maxUnavailableReplicas=$maxUnavailableReplicas',
-      'maxUnavailablePercentage=$maxUnavailablePercentage',
-      'maxSurgeReplicas=$maxSurgeReplicas',
-      'maxSurgePercentage=$maxSurgePercentage',
+      if (maxUnavailableReplicas != null)
+        'maxUnavailableReplicas=$maxUnavailableReplicas',
+      if (maxUnavailablePercentage != null)
+        'maxUnavailablePercentage=$maxUnavailablePercentage',
+      if (maxSurgeReplicas != null) 'maxSurgeReplicas=$maxSurgeReplicas',
+      if (maxSurgePercentage != null) 'maxSurgePercentage=$maxSurgePercentage',
       'previousDeployedModel=$previousDeployedModel',
       'revisionNumber=$revisionNumber',
     ].join(',');
@@ -26360,25 +26364,26 @@ final class OutputInfo extends protobuf.ProtoMessage {
 
   /// Output only. The full path of the Cloud Storage directory created, into
   /// which the evaluation results and aggregation results are written.
-  final String gcsOutputDirectory;
+  final String? gcsOutputDirectory;
 
-  OutputInfo({this.gcsOutputDirectory = ''}) : super(fullyQualifiedName);
+  OutputInfo({this.gcsOutputDirectory}) : super(fullyQualifiedName);
 
   factory OutputInfo.fromJson(Map<String, dynamic> json) {
-    return OutputInfo(gcsOutputDirectory: json['gcsOutputDirectory'] ?? '');
+    return OutputInfo(gcsOutputDirectory: json['gcsOutputDirectory']);
   }
 
   @override
   Object toJson() {
     return {
-      if (gcsOutputDirectory.isNotDefault)
-        'gcsOutputDirectory': gcsOutputDirectory,
+      if (gcsOutputDirectory != null) 'gcsOutputDirectory': gcsOutputDirectory,
     };
   }
 
   @override
   String toString() {
-    final contents = ['gcsOutputDirectory=$gcsOutputDirectory'].join(',');
+    final contents = [
+      if (gcsOutputDirectory != null) 'gcsOutputDirectory=$gcsOutputDirectory',
+    ].join(',');
     return 'OutputInfo($contents)';
   }
 }
@@ -30419,19 +30424,19 @@ final class PointwiseMetricInstance extends protobuf.ProtoMessage {
   /// Instance specified as a json string. String key-value pairs are expected
   /// in the json_instance to render
   /// PointwiseMetricSpec.instance_prompt_template.
-  final String jsonInstance;
+  final String? jsonInstance;
 
   /// Key-value contents for the mutlimodality input, including text, image,
   /// video, audio, and pdf, etc. The key is placeholder in metric prompt
   /// template, and the value is the multimodal content.
   final ContentMap? contentMapInstance;
 
-  PointwiseMetricInstance({this.jsonInstance = '', this.contentMapInstance})
+  PointwiseMetricInstance({this.jsonInstance, this.contentMapInstance})
     : super(fullyQualifiedName);
 
   factory PointwiseMetricInstance.fromJson(Map<String, dynamic> json) {
     return PointwiseMetricInstance(
-      jsonInstance: json['jsonInstance'] ?? '',
+      jsonInstance: json['jsonInstance'],
       contentMapInstance: decode(
         json['contentMapInstance'],
         ContentMap.fromJson,
@@ -30442,7 +30447,7 @@ final class PointwiseMetricInstance extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (jsonInstance.isNotDefault) 'jsonInstance': jsonInstance,
+      if (jsonInstance != null) 'jsonInstance': jsonInstance,
       if (contentMapInstance != null)
         'contentMapInstance': contentMapInstance!.toJson(),
     };
@@ -30450,7 +30455,9 @@ final class PointwiseMetricInstance extends protobuf.ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['jsonInstance=$jsonInstance'].join(',');
+    final contents = [
+      if (jsonInstance != null) 'jsonInstance=$jsonInstance',
+    ].join(',');
     return 'PointwiseMetricInstance($contents)';
   }
 }
@@ -30520,27 +30527,24 @@ final class CustomOutputFormatConfig extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.CustomOutputFormatConfig';
 
   /// Optional. Whether to return raw output.
-  final bool returnRawOutput;
+  final bool? returnRawOutput;
 
-  CustomOutputFormatConfig({this.returnRawOutput = false})
-    : super(fullyQualifiedName);
+  CustomOutputFormatConfig({this.returnRawOutput}) : super(fullyQualifiedName);
 
   factory CustomOutputFormatConfig.fromJson(Map<String, dynamic> json) {
-    return CustomOutputFormatConfig(
-      returnRawOutput: json['returnRawOutput'] ?? false,
-    );
+    return CustomOutputFormatConfig(returnRawOutput: json['returnRawOutput']);
   }
 
   @override
   Object toJson() {
-    return {
-      if (returnRawOutput.isNotDefault) 'returnRawOutput': returnRawOutput,
-    };
+    return {if (returnRawOutput != null) 'returnRawOutput': returnRawOutput};
   }
 
   @override
   String toString() {
-    final contents = ['returnRawOutput=$returnRawOutput'].join(',');
+    final contents = [
+      if (returnRawOutput != null) 'returnRawOutput=$returnRawOutput',
+    ].join(',');
     return 'CustomOutputFormatConfig($contents)';
   }
 }
@@ -30679,19 +30683,19 @@ final class PairwiseMetricInstance extends protobuf.ProtoMessage {
   /// Instance specified as a json string. String key-value pairs are expected
   /// in the json_instance to render
   /// PairwiseMetricSpec.instance_prompt_template.
-  final String jsonInstance;
+  final String? jsonInstance;
 
   /// Key-value contents for the mutlimodality input, including text, image,
   /// video, audio, and pdf, etc. The key is placeholder in metric prompt
   /// template, and the value is the multimodal content.
   final ContentMap? contentMapInstance;
 
-  PairwiseMetricInstance({this.jsonInstance = '', this.contentMapInstance})
+  PairwiseMetricInstance({this.jsonInstance, this.contentMapInstance})
     : super(fullyQualifiedName);
 
   factory PairwiseMetricInstance.fromJson(Map<String, dynamic> json) {
     return PairwiseMetricInstance(
-      jsonInstance: json['jsonInstance'] ?? '',
+      jsonInstance: json['jsonInstance'],
       contentMapInstance: decode(
         json['contentMapInstance'],
         ContentMap.fromJson,
@@ -30702,7 +30706,7 @@ final class PairwiseMetricInstance extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (jsonInstance.isNotDefault) 'jsonInstance': jsonInstance,
+      if (jsonInstance != null) 'jsonInstance': jsonInstance,
       if (contentMapInstance != null)
         'contentMapInstance': contentMapInstance!.toJson(),
     };
@@ -30710,7 +30714,9 @@ final class PairwiseMetricInstance extends protobuf.ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['jsonInstance=$jsonInstance'].join(',');
+    final contents = [
+      if (jsonInstance != null) 'jsonInstance=$jsonInstance',
+    ].join(',');
     return 'PairwiseMetricInstance($contents)';
   }
 }
@@ -31902,27 +31908,29 @@ final class RubricBasedInstructionFollowingInstance
   /// Required. Instance specified as a json string. String key-value pairs are
   /// expected in the json_instance to render RubricBasedInstructionFollowing
   /// prompt templates.
-  final String jsonInstance;
+  final String? jsonInstance;
 
-  RubricBasedInstructionFollowingInstance({this.jsonInstance = ''})
+  RubricBasedInstructionFollowingInstance({this.jsonInstance})
     : super(fullyQualifiedName);
 
   factory RubricBasedInstructionFollowingInstance.fromJson(
     Map<String, dynamic> json,
   ) {
     return RubricBasedInstructionFollowingInstance(
-      jsonInstance: json['jsonInstance'] ?? '',
+      jsonInstance: json['jsonInstance'],
     );
   }
 
   @override
   Object toJson() {
-    return {if (jsonInstance.isNotDefault) 'jsonInstance': jsonInstance};
+    return {if (jsonInstance != null) 'jsonInstance': jsonInstance};
   }
 
   @override
   String toString() {
-    final contents = ['jsonInstance=$jsonInstance'].join(',');
+    final contents = [
+      if (jsonInstance != null) 'jsonInstance=$jsonInstance',
+    ].join(',');
     return 'RubricBasedInstructionFollowingInstance($contents)';
   }
 }
@@ -33590,7 +33598,7 @@ final class StoredContentsExampleParameters extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.StoredContentsExampleParameters';
 
   /// The exact search key to use for retrieval.
-  final String searchKey;
+  final String? searchKey;
 
   /// The chat history to use to generate the search key for retrieval.
   final StoredContentsExampleParameters_ContentSearchKey? contentSearchKey;
@@ -33599,14 +33607,14 @@ final class StoredContentsExampleParameters extends protobuf.ProtoMessage {
   final ExamplesArrayFilter? functionNames;
 
   StoredContentsExampleParameters({
-    this.searchKey = '',
+    this.searchKey,
     this.contentSearchKey,
     this.functionNames,
   }) : super(fullyQualifiedName);
 
   factory StoredContentsExampleParameters.fromJson(Map<String, dynamic> json) {
     return StoredContentsExampleParameters(
-      searchKey: json['searchKey'] ?? '',
+      searchKey: json['searchKey'],
       contentSearchKey: decode(
         json['contentSearchKey'],
         StoredContentsExampleParameters_ContentSearchKey.fromJson,
@@ -33621,7 +33629,7 @@ final class StoredContentsExampleParameters extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (searchKey.isNotDefault) 'searchKey': searchKey,
+      if (searchKey != null) 'searchKey': searchKey,
       if (contentSearchKey != null)
         'contentSearchKey': contentSearchKey!.toJson(),
       if (functionNames != null) 'functionNames': functionNames!.toJson(),
@@ -33630,7 +33638,7 @@ final class StoredContentsExampleParameters extends protobuf.ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['searchKey=$searchKey'].join(',');
+    final contents = [if (searchKey != null) 'searchKey=$searchKey'].join(',');
     return 'StoredContentsExampleParameters($contents)';
   }
 }
@@ -35404,7 +35412,7 @@ final class SmoothGradConfig extends protobuf.ProtoMessage {
   /// If the distribution is different per feature, set
   /// `feature_noise_sigma`
   /// instead for each feature.
-  final double noiseSigma;
+  final double? noiseSigma;
 
   /// This is similar to
   /// `noise_sigma`,
@@ -35423,14 +35431,14 @@ final class SmoothGradConfig extends protobuf.ProtoMessage {
   final int noisySampleCount;
 
   SmoothGradConfig({
-    this.noiseSigma = 0,
+    this.noiseSigma,
     this.featureNoiseSigma,
     this.noisySampleCount = 0,
   }) : super(fullyQualifiedName);
 
   factory SmoothGradConfig.fromJson(Map<String, dynamic> json) {
     return SmoothGradConfig(
-      noiseSigma: decodeDouble(json['noiseSigma']) ?? 0,
+      noiseSigma: decodeDouble(json['noiseSigma']),
       featureNoiseSigma: decode(
         json['featureNoiseSigma'],
         FeatureNoiseSigma.fromJson,
@@ -35442,7 +35450,7 @@ final class SmoothGradConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (noiseSigma.isNotDefault) 'noiseSigma': encodeDouble(noiseSigma),
+      if (noiseSigma != null) 'noiseSigma': encodeDouble(noiseSigma),
       if (featureNoiseSigma != null)
         'featureNoiseSigma': featureNoiseSigma!.toJson(),
       if (noisySampleCount.isNotDefault) 'noisySampleCount': noisySampleCount,
@@ -35452,7 +35460,7 @@ final class SmoothGradConfig extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'noiseSigma=$noiseSigma',
+      if (noiseSigma != null) 'noiseSigma=$noiseSigma',
       'noisySampleCount=$noisySampleCount',
     ].join(',');
     return 'SmoothGradConfig($contents)';
@@ -36852,7 +36860,7 @@ final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
   /// outputs, so that it can be located by
   /// `Attribution.output_index`
   /// for a specific output.
-  final String displayNameMappingKey;
+  final String? displayNameMappingKey;
 
   /// Name of the output tensor. Required and is only applicable to Vertex
   /// AI provided images for Tensorflow.
@@ -36860,7 +36868,7 @@ final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
 
   ExplanationMetadata_OutputMetadata({
     this.indexDisplayNameMapping,
-    this.displayNameMappingKey = '',
+    this.displayNameMappingKey,
     this.outputTensorName = '',
   }) : super(fullyQualifiedName);
 
@@ -36872,7 +36880,7 @@ final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
         json['indexDisplayNameMapping'],
         protobuf.Value.fromJson,
       ),
-      displayNameMappingKey: json['displayNameMappingKey'] ?? '',
+      displayNameMappingKey: json['displayNameMappingKey'],
       outputTensorName: json['outputTensorName'] ?? '',
     );
   }
@@ -36882,7 +36890,7 @@ final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
     return {
       if (indexDisplayNameMapping != null)
         'indexDisplayNameMapping': indexDisplayNameMapping!.toJson(),
-      if (displayNameMappingKey.isNotDefault)
+      if (displayNameMappingKey != null)
         'displayNameMappingKey': displayNameMappingKey,
       if (outputTensorName.isNotDefault) 'outputTensorName': outputTensorName,
     };
@@ -36891,7 +36899,8 @@ final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'displayNameMappingKey=$displayNameMappingKey',
+      if (displayNameMappingKey != null)
+        'displayNameMappingKey=$displayNameMappingKey',
       'outputTensorName=$outputTensorName',
     ].join(',');
     return 'OutputMetadata($contents)';
@@ -37081,34 +37090,34 @@ final class ExtensionManifest_ApiSpec extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.ExtensionManifest.ApiSpec';
 
   /// The API spec in Open API standard and YAML format.
-  final String openApiYaml;
+  final String? openApiYaml;
 
   /// Cloud Storage URI pointing to the OpenAPI spec.
-  final String openApiGcsUri;
+  final String? openApiGcsUri;
 
-  ExtensionManifest_ApiSpec({this.openApiYaml = '', this.openApiGcsUri = ''})
+  ExtensionManifest_ApiSpec({this.openApiYaml, this.openApiGcsUri})
     : super(fullyQualifiedName);
 
   factory ExtensionManifest_ApiSpec.fromJson(Map<String, dynamic> json) {
     return ExtensionManifest_ApiSpec(
-      openApiYaml: json['openApiYaml'] ?? '',
-      openApiGcsUri: json['openApiGcsUri'] ?? '',
+      openApiYaml: json['openApiYaml'],
+      openApiGcsUri: json['openApiGcsUri'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (openApiYaml.isNotDefault) 'openApiYaml': openApiYaml,
-      if (openApiGcsUri.isNotDefault) 'openApiGcsUri': openApiGcsUri,
+      if (openApiYaml != null) 'openApiYaml': openApiYaml,
+      if (openApiGcsUri != null) 'openApiGcsUri': openApiGcsUri,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'openApiYaml=$openApiYaml',
-      'openApiGcsUri=$openApiGcsUri',
+      if (openApiYaml != null) 'openApiYaml=$openApiYaml',
+      if (openApiGcsUri != null) 'openApiGcsUri=$openApiGcsUri',
     ].join(',');
     return 'ApiSpec($contents)';
   }
@@ -37384,7 +37393,7 @@ final class AuthConfig_OauthConfig extends protobuf.ProtoMessage {
   /// Access token for extension endpoint.
   /// Only used to propagate token from
   /// [[ExecuteExtensionRequest.runtime_auth_config]] at request time.
-  final String accessToken;
+  final String? accessToken;
 
   /// The service account used to generate access tokens for executing the
   /// Extension.
@@ -37394,31 +37403,31 @@ final class AuthConfig_OauthConfig extends protobuf.ProtoMessage {
   /// to Vertex AI Extension Service Agent
   /// (https://cloud.google.com/vertex-ai/docs/general/access-control#service-agents)
   /// on the provided service account.
-  final String serviceAccount;
+  final String? serviceAccount;
 
-  AuthConfig_OauthConfig({this.accessToken = '', this.serviceAccount = ''})
+  AuthConfig_OauthConfig({this.accessToken, this.serviceAccount})
     : super(fullyQualifiedName);
 
   factory AuthConfig_OauthConfig.fromJson(Map<String, dynamic> json) {
     return AuthConfig_OauthConfig(
-      accessToken: json['accessToken'] ?? '',
-      serviceAccount: json['serviceAccount'] ?? '',
+      accessToken: json['accessToken'],
+      serviceAccount: json['serviceAccount'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (accessToken.isNotDefault) 'accessToken': accessToken,
-      if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
+      if (accessToken != null) 'accessToken': accessToken,
+      if (serviceAccount != null) 'serviceAccount': serviceAccount,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'accessToken=$accessToken',
-      'serviceAccount=$serviceAccount',
+      if (accessToken != null) 'accessToken=$accessToken',
+      if (serviceAccount != null) 'serviceAccount=$serviceAccount',
     ].join(',');
     return 'OauthConfig($contents)';
   }
@@ -37432,7 +37441,7 @@ final class AuthConfig_OidcConfig extends protobuf.ProtoMessage {
   /// OpenID Connect formatted ID token for extension endpoint.
   /// Only used to propagate token from
   /// [[ExecuteExtensionRequest.runtime_auth_config]] at request time.
-  final String idToken;
+  final String? idToken;
 
   /// The service account used to generate an OpenID Connect
   /// (OIDC)-compatible JWT token signed by the Google OIDC Provider
@@ -37446,31 +37455,31 @@ final class AuthConfig_OidcConfig extends protobuf.ProtoMessage {
   /// `iam.serviceAccounts.getOpenIdToken` permission to Vertex AI Extension
   /// Service Agent
   /// (https://cloud.google.com/vertex-ai/docs/general/access-control#service-agents).
-  final String serviceAccount;
+  final String? serviceAccount;
 
-  AuthConfig_OidcConfig({this.idToken = '', this.serviceAccount = ''})
+  AuthConfig_OidcConfig({this.idToken, this.serviceAccount})
     : super(fullyQualifiedName);
 
   factory AuthConfig_OidcConfig.fromJson(Map<String, dynamic> json) {
     return AuthConfig_OidcConfig(
-      idToken: json['idToken'] ?? '',
-      serviceAccount: json['serviceAccount'] ?? '',
+      idToken: json['idToken'],
+      serviceAccount: json['serviceAccount'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (idToken.isNotDefault) 'idToken': idToken,
-      if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
+      if (idToken != null) 'idToken': idToken,
+      if (serviceAccount != null) 'serviceAccount': serviceAccount,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'idToken=$idToken',
-      'serviceAccount=$serviceAccount',
+      if (idToken != null) 'idToken=$idToken',
+      if (serviceAccount != null) 'serviceAccount=$serviceAccount',
     ].join(',');
     return 'OidcConfig($contents)';
   }
@@ -40875,18 +40884,17 @@ final class FeatureViewDataKey extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.FeatureViewDataKey';
 
   /// String key to use for lookup.
-  final String key;
+  final String? key;
 
   /// The actual Entity ID will be composed from this struct. This should match
   /// with the way ID is defined in the FeatureView spec.
   final FeatureViewDataKey_CompositeKey? compositeKey;
 
-  FeatureViewDataKey({this.key = '', this.compositeKey})
-    : super(fullyQualifiedName);
+  FeatureViewDataKey({this.key, this.compositeKey}) : super(fullyQualifiedName);
 
   factory FeatureViewDataKey.fromJson(Map<String, dynamic> json) {
     return FeatureViewDataKey(
-      key: json['key'] ?? '',
+      key: json['key'],
       compositeKey: decode(
         json['compositeKey'],
         FeatureViewDataKey_CompositeKey.fromJson,
@@ -40897,14 +40905,14 @@ final class FeatureViewDataKey extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (key.isNotDefault) 'key': key,
+      if (key != null) 'key': key,
       if (compositeKey != null) 'compositeKey': compositeKey!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = ['key=$key'].join(',');
+    final contents = [if (key != null) 'key=$key'].join(',');
     return 'FeatureViewDataKey($contents)';
   }
 }
@@ -40945,7 +40953,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
 
   /// Simple ID. The whole string will be used as is to identify Entity to
   /// fetch feature values for.
-  final String id;
+  final String? id;
 
   /// Required. FeatureView resource format
   /// `projects/{project}/locations/{location}/featureOnlineStores/{featureOnlineStore}/featureViews/{featureView}`
@@ -40965,7 +40973,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
   final FetchFeatureValuesRequest_Format format;
 
   FetchFeatureValuesRequest({
-    this.id = '',
+    this.id,
     this.featureView = '',
     this.dataKey,
     this.dataFormat = FeatureViewDataFormat.$default,
@@ -40974,7 +40982,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
 
   factory FetchFeatureValuesRequest.fromJson(Map<String, dynamic> json) {
     return FetchFeatureValuesRequest(
-      id: json['id'] ?? '',
+      id: json['id'],
       featureView: json['featureView'] ?? '',
       dataKey: decode(json['dataKey'], FeatureViewDataKey.fromJson),
       dataFormat:
@@ -40992,7 +41000,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (id.isNotDefault) 'id': id,
+      if (id != null) 'id': id,
       if (featureView.isNotDefault) 'featureView': featureView,
       if (dataKey != null) 'dataKey': dataKey!.toJson(),
       if (dataFormat.isNotDefault) 'dataFormat': dataFormat.toJson(),
@@ -41003,7 +41011,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'id=$id',
+      if (id != null) 'id=$id',
       'featureView=$featureView',
       'dataFormat=$dataFormat',
       'format=$format',
@@ -41289,7 +41297,7 @@ final class NearestNeighborQuery extends protobuf.ProtoMessage {
   /// Optional. The entity id whose similar entities should be searched for.
   /// If embedding is set, search will use embedding instead of
   /// entity_id.
-  final String entityId;
+  final String? entityId;
 
   /// Optional. The embedding vector that be used for similar search.
   final NearestNeighborQuery_Embedding? embedding;
@@ -41314,7 +41322,7 @@ final class NearestNeighborQuery extends protobuf.ProtoMessage {
   final NearestNeighborQuery_Parameters? parameters;
 
   NearestNeighborQuery({
-    this.entityId = '',
+    this.entityId,
     this.embedding,
     this.neighborCount = 0,
     this.stringFilters = const [],
@@ -41325,7 +41333,7 @@ final class NearestNeighborQuery extends protobuf.ProtoMessage {
 
   factory NearestNeighborQuery.fromJson(Map<String, dynamic> json) {
     return NearestNeighborQuery(
-      entityId: json['entityId'] ?? '',
+      entityId: json['entityId'],
       embedding: decode(
         json['embedding'],
         NearestNeighborQuery_Embedding.fromJson,
@@ -41355,7 +41363,7 @@ final class NearestNeighborQuery extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (entityId.isNotDefault) 'entityId': entityId,
+      if (entityId != null) 'entityId': entityId,
       if (embedding != null) 'embedding': embedding!.toJson(),
       if (neighborCount.isNotDefault) 'neighborCount': neighborCount,
       if (stringFilters.isNotDefault)
@@ -41371,7 +41379,7 @@ final class NearestNeighborQuery extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'entityId=$entityId',
+      if (entityId != null) 'entityId=$entityId',
       'neighborCount=$neighborCount',
       'perCrowdingAttributeNeighborCount=$perCrowdingAttributeNeighborCount',
     ].join(',');
@@ -41471,13 +41479,13 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.NearestNeighborQuery.NumericFilter';
 
   /// int value type.
-  final int valueInt;
+  final int? valueInt;
 
   /// float value type.
-  final double valueFloat;
+  final double? valueFloat;
 
   /// double value type.
-  final double valueDouble;
+  final double? valueDouble;
 
   /// Required. Column name in BigQuery that used as filters.
   final String name;
@@ -41487,9 +41495,9 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
   final NearestNeighborQuery_NumericFilter_Operator? op;
 
   NearestNeighborQuery_NumericFilter({
-    this.valueInt = 0,
-    this.valueFloat = 0,
-    this.valueDouble = 0,
+    this.valueInt,
+    this.valueFloat,
+    this.valueDouble,
     this.name = '',
     this.op,
   }) : super(fullyQualifiedName);
@@ -41498,9 +41506,9 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
     Map<String, dynamic> json,
   ) {
     return NearestNeighborQuery_NumericFilter(
-      valueInt: decodeInt64(json['valueInt']) ?? 0,
-      valueFloat: decodeDouble(json['valueFloat']) ?? 0,
-      valueDouble: decodeDouble(json['valueDouble']) ?? 0,
+      valueInt: decodeInt64(json['valueInt']),
+      valueFloat: decodeDouble(json['valueFloat']),
+      valueDouble: decodeDouble(json['valueDouble']),
       name: json['name'] ?? '',
       op: decodeEnum(
         json['op'],
@@ -41512,9 +41520,9 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (valueInt.isNotDefault) 'valueInt': encodeInt64(valueInt),
-      if (valueFloat.isNotDefault) 'valueFloat': encodeDouble(valueFloat),
-      if (valueDouble.isNotDefault) 'valueDouble': encodeDouble(valueDouble),
+      if (valueInt != null) 'valueInt': encodeInt64(valueInt),
+      if (valueFloat != null) 'valueFloat': encodeDouble(valueFloat),
+      if (valueDouble != null) 'valueDouble': encodeDouble(valueDouble),
       if (name.isNotDefault) 'name': name,
       if (op != null) 'op': op!.toJson(),
     };
@@ -41523,9 +41531,9 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'valueInt=$valueInt',
-      'valueFloat=$valueFloat',
-      'valueDouble=$valueDouble',
+      if (valueInt != null) 'valueInt=$valueInt',
+      if (valueFloat != null) 'valueFloat=$valueFloat',
+      if (valueDouble != null) 'valueDouble=$valueDouble',
       'name=$name',
       if (op != null) 'op=$op',
     ].join(',');
@@ -44874,27 +44882,27 @@ final class FeaturestoreMonitoringConfig_ThresholdConfig
   /// Jensen–Shannon divergence. Each feature must have a non-zero threshold
   /// if they need to be monitored. Otherwise no alert will be triggered for
   /// that feature.
-  final double value;
+  final double? value;
 
-  FeaturestoreMonitoringConfig_ThresholdConfig({this.value = 0})
+  FeaturestoreMonitoringConfig_ThresholdConfig({this.value})
     : super(fullyQualifiedName);
 
   factory FeaturestoreMonitoringConfig_ThresholdConfig.fromJson(
     Map<String, dynamic> json,
   ) {
     return FeaturestoreMonitoringConfig_ThresholdConfig(
-      value: decodeDouble(json['value']) ?? 0,
+      value: decodeDouble(json['value']),
     );
   }
 
   @override
   Object toJson() {
-    return {if (value.isNotDefault) 'value': encodeDouble(value)};
+    return {if (value != null) 'value': encodeDouble(value)};
   }
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
+    final contents = [if (value != null) 'value=$value'].join(',');
     return 'ThresholdConfig($contents)';
   }
 }
@@ -45336,16 +45344,16 @@ final class FeatureValue extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.FeatureValue';
 
   /// Bool type feature value.
-  final bool boolValue;
+  final bool? boolValue;
 
   /// Double type feature value.
-  final double doubleValue;
+  final double? doubleValue;
 
   /// Int64 feature value.
-  final int int64Value;
+  final int? int64Value;
 
   /// String feature value.
-  final String stringValue;
+  final String? stringValue;
 
   /// A list of bool type feature value.
   final BoolArray? boolArrayValue;
@@ -45369,10 +45377,10 @@ final class FeatureValue extends protobuf.ProtoMessage {
   final FeatureValue_Metadata? metadata;
 
   FeatureValue({
-    this.boolValue = false,
-    this.doubleValue = 0,
-    this.int64Value = 0,
-    this.stringValue = '',
+    this.boolValue,
+    this.doubleValue,
+    this.int64Value,
+    this.stringValue,
     this.boolArrayValue,
     this.doubleArrayValue,
     this.int64ArrayValue,
@@ -45384,10 +45392,10 @@ final class FeatureValue extends protobuf.ProtoMessage {
 
   factory FeatureValue.fromJson(Map<String, dynamic> json) {
     return FeatureValue(
-      boolValue: json['boolValue'] ?? false,
-      doubleValue: decodeDouble(json['doubleValue']) ?? 0,
-      int64Value: decodeInt64(json['int64Value']) ?? 0,
-      stringValue: json['stringValue'] ?? '',
+      boolValue: json['boolValue'],
+      doubleValue: decodeDouble(json['doubleValue']),
+      int64Value: decodeInt64(json['int64Value']),
+      stringValue: json['stringValue'],
       boolArrayValue: decode(json['boolArrayValue'], BoolArray.fromJson),
       doubleArrayValue: decode(json['doubleArrayValue'], DoubleArray.fromJson),
       int64ArrayValue: decode(json['int64ArrayValue'], Int64Array.fromJson),
@@ -45401,10 +45409,10 @@ final class FeatureValue extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (boolValue.isNotDefault) 'boolValue': boolValue,
-      if (doubleValue.isNotDefault) 'doubleValue': encodeDouble(doubleValue),
-      if (int64Value.isNotDefault) 'int64Value': encodeInt64(int64Value),
-      if (stringValue.isNotDefault) 'stringValue': stringValue,
+      if (boolValue != null) 'boolValue': boolValue,
+      if (doubleValue != null) 'doubleValue': encodeDouble(doubleValue),
+      if (int64Value != null) 'int64Value': encodeInt64(int64Value),
+      if (stringValue != null) 'stringValue': stringValue,
       if (boolArrayValue != null) 'boolArrayValue': boolArrayValue!.toJson(),
       if (doubleArrayValue != null)
         'doubleArrayValue': doubleArrayValue!.toJson(),
@@ -45420,10 +45428,10 @@ final class FeatureValue extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'boolValue=$boolValue',
-      'doubleValue=$doubleValue',
-      'int64Value=$int64Value',
-      'stringValue=$stringValue',
+      if (boolValue != null) 'boolValue=$boolValue',
+      if (doubleValue != null) 'doubleValue=$doubleValue',
+      if (int64Value != null) 'int64Value=$int64Value',
+      if (stringValue != null) 'stringValue=$stringValue',
       if (bytesValue != null) 'bytesValue=$bytesValue',
     ].join(',');
     return 'FeatureValue($contents)';
@@ -45886,7 +45894,7 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
 
   /// Source column that holds the Feature timestamp for all Feature
   /// values in each entity.
-  final String featureTimeField;
+  final String? featureTimeField;
 
   /// Single Feature timestamp for all entities being imported. The
   /// timestamp must not have higher than millisecond precision.
@@ -45926,7 +45934,7 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
     this.avroSource,
     this.bigquerySource,
     this.csvSource,
-    this.featureTimeField = '',
+    this.featureTimeField,
     this.featureTime,
     this.entityType = '',
     this.entityIdField = '',
@@ -45941,7 +45949,7 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
       avroSource: decode(json['avroSource'], AvroSource.fromJson),
       bigquerySource: decode(json['bigquerySource'], BigQuerySource.fromJson),
       csvSource: decode(json['csvSource'], CsvSource.fromJson),
-      featureTimeField: json['featureTimeField'] ?? '',
+      featureTimeField: json['featureTimeField'],
       featureTime: decodeCustom(
         json['featureTime'],
         protobuf.Timestamp.fromJson,
@@ -45966,7 +45974,7 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
       if (avroSource != null) 'avroSource': avroSource!.toJson(),
       if (bigquerySource != null) 'bigquerySource': bigquerySource!.toJson(),
       if (csvSource != null) 'csvSource': csvSource!.toJson(),
-      if (featureTimeField.isNotDefault) 'featureTimeField': featureTimeField,
+      if (featureTimeField != null) 'featureTimeField': featureTimeField,
       if (featureTime != null) 'featureTime': featureTime!.toJson(),
       if (entityType.isNotDefault) 'entityType': entityType,
       if (entityIdField.isNotDefault) 'entityIdField': entityIdField,
@@ -45982,7 +45990,7 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'featureTimeField=$featureTimeField',
+      if (featureTimeField != null) 'featureTimeField=$featureTimeField',
       'entityType=$entityType',
       'entityIdField=$entityIdField',
       'disableOnlineServing=$disableOnlineServing',
@@ -49349,13 +49357,13 @@ final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.IndexDatapoint.NumericRestriction';
 
   /// Represents 64 bit integer.
-  final int valueInt;
+  final int? valueInt;
 
   /// Represents 32 bit float.
-  final double valueFloat;
+  final double? valueFloat;
 
   /// Represents 64 bit float.
-  final double valueDouble;
+  final double? valueDouble;
 
   /// The namespace of this restriction. e.g.: cost.
   final String namespace;
@@ -49365,9 +49373,9 @@ final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
   final IndexDatapoint_NumericRestriction_Operator op;
 
   IndexDatapoint_NumericRestriction({
-    this.valueInt = 0,
-    this.valueFloat = 0,
-    this.valueDouble = 0,
+    this.valueInt,
+    this.valueFloat,
+    this.valueDouble,
     this.namespace = '',
     this.op = IndexDatapoint_NumericRestriction_Operator.$default,
   }) : super(fullyQualifiedName);
@@ -49376,9 +49384,9 @@ final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
     Map<String, dynamic> json,
   ) {
     return IndexDatapoint_NumericRestriction(
-      valueInt: decodeInt64(json['valueInt']) ?? 0,
-      valueFloat: decodeDouble(json['valueFloat']) ?? 0,
-      valueDouble: decodeDouble(json['valueDouble']) ?? 0,
+      valueInt: decodeInt64(json['valueInt']),
+      valueFloat: decodeDouble(json['valueFloat']),
+      valueDouble: decodeDouble(json['valueDouble']),
       namespace: json['namespace'] ?? '',
       op:
           decodeEnum(
@@ -49392,9 +49400,9 @@ final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (valueInt.isNotDefault) 'valueInt': encodeInt64(valueInt),
-      if (valueFloat.isNotDefault) 'valueFloat': encodeDouble(valueFloat),
-      if (valueDouble.isNotDefault) 'valueDouble': encodeDouble(valueDouble),
+      if (valueInt != null) 'valueInt': encodeInt64(valueInt),
+      if (valueFloat != null) 'valueFloat': encodeDouble(valueFloat),
+      if (valueDouble != null) 'valueDouble': encodeDouble(valueDouble),
       if (namespace.isNotDefault) 'namespace': namespace,
       if (op.isNotDefault) 'op': op.toJson(),
     };
@@ -49403,9 +49411,9 @@ final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'valueInt=$valueInt',
-      'valueFloat=$valueFloat',
-      'valueDouble=$valueDouble',
+      if (valueInt != null) 'valueInt=$valueInt',
+      if (valueFloat != null) 'valueFloat=$valueFloat',
+      if (valueDouble != null) 'valueDouble=$valueDouble',
       'namespace=$namespace',
       'op=$op',
     ].join(',');
@@ -52576,16 +52584,16 @@ final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.SharePointSources.SharePointSource';
 
   /// The path of the SharePoint folder to download from.
-  final String sharepointFolderPath;
+  final String? sharepointFolderPath;
 
   /// The ID of the SharePoint folder to download from.
-  final String sharepointFolderId;
+  final String? sharepointFolderId;
 
   /// The name of the drive to download from.
-  final String driveName;
+  final String? driveName;
 
   /// The ID of the drive to download from.
-  final String driveId;
+  final String? driveId;
 
   /// The Application ID for the app registered in Microsoft Azure Portal.
   /// The application must also be configured with MS Graph permissions
@@ -52606,10 +52614,10 @@ final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
   final String fileId;
 
   SharePointSources_SharePointSource({
-    this.sharepointFolderPath = '',
-    this.sharepointFolderId = '',
-    this.driveName = '',
-    this.driveId = '',
+    this.sharepointFolderPath,
+    this.sharepointFolderId,
+    this.driveName,
+    this.driveId,
     this.clientId = '',
     this.clientSecret,
     this.tenantId = '',
@@ -52621,10 +52629,10 @@ final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
     Map<String, dynamic> json,
   ) {
     return SharePointSources_SharePointSource(
-      sharepointFolderPath: json['sharepointFolderPath'] ?? '',
-      sharepointFolderId: json['sharepointFolderId'] ?? '',
-      driveName: json['driveName'] ?? '',
-      driveId: json['driveId'] ?? '',
+      sharepointFolderPath: json['sharepointFolderPath'],
+      sharepointFolderId: json['sharepointFolderId'],
+      driveName: json['driveName'],
+      driveId: json['driveId'],
       clientId: json['clientId'] ?? '',
       clientSecret: decode(json['clientSecret'], ApiAuth_ApiKeyConfig.fromJson),
       tenantId: json['tenantId'] ?? '',
@@ -52636,12 +52644,11 @@ final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (sharepointFolderPath.isNotDefault)
+      if (sharepointFolderPath != null)
         'sharepointFolderPath': sharepointFolderPath,
-      if (sharepointFolderId.isNotDefault)
-        'sharepointFolderId': sharepointFolderId,
-      if (driveName.isNotDefault) 'driveName': driveName,
-      if (driveId.isNotDefault) 'driveId': driveId,
+      if (sharepointFolderId != null) 'sharepointFolderId': sharepointFolderId,
+      if (driveName != null) 'driveName': driveName,
+      if (driveId != null) 'driveId': driveId,
       if (clientId.isNotDefault) 'clientId': clientId,
       if (clientSecret != null) 'clientSecret': clientSecret!.toJson(),
       if (tenantId.isNotDefault) 'tenantId': tenantId,
@@ -52654,10 +52661,11 @@ final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'sharepointFolderPath=$sharepointFolderPath',
-      'sharepointFolderId=$sharepointFolderId',
-      'driveName=$driveName',
-      'driveId=$driveId',
+      if (sharepointFolderPath != null)
+        'sharepointFolderPath=$sharepointFolderPath',
+      if (sharepointFolderId != null) 'sharepointFolderId=$sharepointFolderId',
+      if (driveName != null) 'driveName=$driveName',
+      if (driveId != null) 'driveId=$driveId',
       'clientId=$clientId',
       'tenantId=$tenantId',
       'sharepointSiteName=$sharepointSiteName',
@@ -60590,25 +60598,22 @@ final class MigrateResourceResponse extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.MigrateResourceResponse';
 
   /// Migrated Dataset's resource name.
-  final String dataset;
+  final String? dataset;
 
   /// Migrated Model's resource name.
-  final String model;
+  final String? model;
 
   /// Before migration, the identifier in ml.googleapis.com,
   /// automl.googleapis.com or datalabeling.googleapis.com.
   final MigratableResource? migratableResource;
 
-  MigrateResourceResponse({
-    this.dataset = '',
-    this.model = '',
-    this.migratableResource,
-  }) : super(fullyQualifiedName);
+  MigrateResourceResponse({this.dataset, this.model, this.migratableResource})
+    : super(fullyQualifiedName);
 
   factory MigrateResourceResponse.fromJson(Map<String, dynamic> json) {
     return MigrateResourceResponse(
-      dataset: json['dataset'] ?? '',
-      model: json['model'] ?? '',
+      dataset: json['dataset'],
+      model: json['model'],
       migratableResource: decode(
         json['migratableResource'],
         MigratableResource.fromJson,
@@ -60619,8 +60624,8 @@ final class MigrateResourceResponse extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (dataset.isNotDefault) 'dataset': dataset,
-      if (model.isNotDefault) 'model': model,
+      if (dataset != null) 'dataset': dataset,
+      if (model != null) 'model': model,
       if (migratableResource != null)
         'migratableResource': migratableResource!.toJson(),
     };
@@ -60628,7 +60633,10 @@ final class MigrateResourceResponse extends protobuf.ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['dataset=$dataset', 'model=$model'].join(',');
+    final contents = [
+      if (dataset != null) 'dataset=$dataset',
+      if (model != null) 'model=$model',
+    ].join(',');
     return 'MigrateResourceResponse($contents)';
   }
 }
@@ -60693,10 +60701,10 @@ final class BatchMigrateResourcesOperationMetadata_PartialResult
   final Status? error;
 
   /// Migrated model resource name.
-  final String model;
+  final String? model;
 
   /// Migrated dataset resource name.
-  final String dataset;
+  final String? dataset;
 
   /// It's the same as the value in
   /// `MigrateResourceRequest.migrate_resource_requests`.
@@ -60704,8 +60712,8 @@ final class BatchMigrateResourcesOperationMetadata_PartialResult
 
   BatchMigrateResourcesOperationMetadata_PartialResult({
     this.error,
-    this.model = '',
-    this.dataset = '',
+    this.model,
+    this.dataset,
     this.request,
   }) : super(fullyQualifiedName);
 
@@ -60714,8 +60722,8 @@ final class BatchMigrateResourcesOperationMetadata_PartialResult
   ) {
     return BatchMigrateResourcesOperationMetadata_PartialResult(
       error: decode(json['error'], Status.fromJson),
-      model: json['model'] ?? '',
-      dataset: json['dataset'] ?? '',
+      model: json['model'],
+      dataset: json['dataset'],
       request: decode(json['request'], MigrateResourceRequest.fromJson),
     );
   }
@@ -60724,15 +60732,18 @@ final class BatchMigrateResourcesOperationMetadata_PartialResult
   Object toJson() {
     return {
       if (error != null) 'error': error!.toJson(),
-      if (model.isNotDefault) 'model': model,
-      if (dataset.isNotDefault) 'dataset': dataset,
+      if (model != null) 'model': model,
+      if (dataset != null) 'dataset': dataset,
       if (request != null) 'request': request!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = ['model=$model', 'dataset=$dataset'].join(',');
+    final contents = [
+      if (model != null) 'model=$model',
+      if (dataset != null) 'dataset=$dataset',
+    ].join(',');
     return 'PartialResult($contents)';
   }
 }
@@ -63721,38 +63732,38 @@ final class ModelEvaluationSlice_Slice_SliceSpec_Value
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice.Slice.SliceSpec.Value';
 
   /// String type.
-  final String stringValue;
+  final String? stringValue;
 
   /// Float type.
-  final double floatValue;
+  final double? floatValue;
 
   ModelEvaluationSlice_Slice_SliceSpec_Value({
-    this.stringValue = '',
-    this.floatValue = 0,
+    this.stringValue,
+    this.floatValue,
   }) : super(fullyQualifiedName);
 
   factory ModelEvaluationSlice_Slice_SliceSpec_Value.fromJson(
     Map<String, dynamic> json,
   ) {
     return ModelEvaluationSlice_Slice_SliceSpec_Value(
-      stringValue: json['stringValue'] ?? '',
-      floatValue: decodeDouble(json['floatValue']) ?? 0,
+      stringValue: json['stringValue'],
+      floatValue: decodeDouble(json['floatValue']),
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (stringValue.isNotDefault) 'stringValue': stringValue,
-      if (floatValue.isNotDefault) 'floatValue': encodeDouble(floatValue),
+      if (stringValue != null) 'stringValue': stringValue,
+      if (floatValue != null) 'floatValue': encodeDouble(floatValue),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'stringValue=$stringValue',
-      'floatValue=$floatValue',
+      if (stringValue != null) 'stringValue=$stringValue',
+      if (floatValue != null) 'floatValue=$floatValue',
     ].join(',');
     return 'Value($contents)';
   }
@@ -63987,11 +63998,11 @@ final class DeployRequest extends protobuf.ProtoMessage {
   /// Format:
   /// `publishers/{publisher}/models/{publisher_model}@{version_id}`, or
   /// `publishers/hf-{hugging-face-author}/models/{hugging-face-model-name}@001`.
-  final String publisherModelName;
+  final String? publisherModelName;
 
   /// The Hugging Face model to deploy.
   /// Format: Hugging Face model ID like `google/gemma-2-2b-it`.
-  final String huggingFaceModelId;
+  final String? huggingFaceModelId;
 
   /// The custom model to deploy from a Google Cloud Storage URI.
   final DeployRequest_CustomModel? customModel;
@@ -64013,8 +64024,8 @@ final class DeployRequest extends protobuf.ProtoMessage {
   final DeployRequest_DeployConfig? deployConfig;
 
   DeployRequest({
-    this.publisherModelName = '',
-    this.huggingFaceModelId = '',
+    this.publisherModelName,
+    this.huggingFaceModelId,
     this.customModel,
     this.destination = '',
     this.modelConfig,
@@ -64024,8 +64035,8 @@ final class DeployRequest extends protobuf.ProtoMessage {
 
   factory DeployRequest.fromJson(Map<String, dynamic> json) {
     return DeployRequest(
-      publisherModelName: json['publisherModelName'] ?? '',
-      huggingFaceModelId: json['huggingFaceModelId'] ?? '',
+      publisherModelName: json['publisherModelName'],
+      huggingFaceModelId: json['huggingFaceModelId'],
       customModel: decode(
         json['customModel'],
         DeployRequest_CustomModel.fromJson,
@@ -64049,10 +64060,8 @@ final class DeployRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (publisherModelName.isNotDefault)
-        'publisherModelName': publisherModelName,
-      if (huggingFaceModelId.isNotDefault)
-        'huggingFaceModelId': huggingFaceModelId,
+      if (publisherModelName != null) 'publisherModelName': publisherModelName,
+      if (huggingFaceModelId != null) 'huggingFaceModelId': huggingFaceModelId,
       if (customModel != null) 'customModel': customModel!.toJson(),
       if (destination.isNotDefault) 'destination': destination,
       if (modelConfig != null) 'modelConfig': modelConfig!.toJson(),
@@ -64064,8 +64073,8 @@ final class DeployRequest extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'publisherModelName=$publisherModelName',
-      'huggingFaceModelId=$huggingFaceModelId',
+      if (publisherModelName != null) 'publisherModelName=$publisherModelName',
+      if (huggingFaceModelId != null) 'huggingFaceModelId=$huggingFaceModelId',
       'destination=$destination',
     ].join(',');
     return 'DeployRequest($contents)';
@@ -64080,22 +64089,22 @@ final class DeployRequest_CustomModel extends protobuf.ProtoMessage {
 
   /// Immutable. The Google Cloud Storage URI of the custom model, storing
   /// weights and config files (which can be used to infer the base model).
-  final String gcsUri;
+  final String? gcsUri;
 
-  DeployRequest_CustomModel({this.gcsUri = ''}) : super(fullyQualifiedName);
+  DeployRequest_CustomModel({this.gcsUri}) : super(fullyQualifiedName);
 
   factory DeployRequest_CustomModel.fromJson(Map<String, dynamic> json) {
-    return DeployRequest_CustomModel(gcsUri: json['gcsUri'] ?? '');
+    return DeployRequest_CustomModel(gcsUri: json['gcsUri']);
   }
 
   @override
   Object toJson() {
-    return {if (gcsUri.isNotDefault) 'gcsUri': gcsUri};
+    return {if (gcsUri != null) 'gcsUri': gcsUri};
   }
 
   @override
   String toString() {
-    final contents = ['gcsUri=$gcsUri'].join(',');
+    final contents = [if (gcsUri != null) 'gcsUri=$gcsUri'].join(',');
     return 'CustomModel($contents)';
   }
 }
@@ -65477,7 +65486,7 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig.TrainingDataset';
 
   /// The resource name of the Dataset used to train this Model.
-  final String dataset;
+  final String? dataset;
 
   /// The Google Cloud Storage uri of the unmanaged Dataset used to train
   /// this Model.
@@ -65510,7 +65519,7 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
   final SamplingStrategy? loggingSamplingStrategy;
 
   ModelMonitoringObjectiveConfig_TrainingDataset({
-    this.dataset = '',
+    this.dataset,
     this.gcsSource,
     this.bigquerySource,
     this.dataFormat = '',
@@ -65522,7 +65531,7 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
     Map<String, dynamic> json,
   ) {
     return ModelMonitoringObjectiveConfig_TrainingDataset(
-      dataset: json['dataset'] ?? '',
+      dataset: json['dataset'],
       gcsSource: decode(json['gcsSource'], GcsSource.fromJson),
       bigquerySource: decode(json['bigquerySource'], BigQuerySource.fromJson),
       dataFormat: json['dataFormat'] ?? '',
@@ -65537,7 +65546,7 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
   @override
   Object toJson() {
     return {
-      if (dataset.isNotDefault) 'dataset': dataset,
+      if (dataset != null) 'dataset': dataset,
       if (gcsSource != null) 'gcsSource': gcsSource!.toJson(),
       if (bigquerySource != null) 'bigquerySource': bigquerySource!.toJson(),
       if (dataFormat.isNotDefault) 'dataFormat': dataFormat,
@@ -65550,7 +65559,7 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
   @override
   String toString() {
     final contents = [
-      'dataset=$dataset',
+      if (dataset != null) 'dataset=$dataset',
       'dataFormat=$dataFormat',
       'targetField=$targetField',
     ].join(',');
@@ -65942,22 +65951,22 @@ final class ThresholdConfig extends protobuf.ProtoMessage {
   ///      Jensen–Shannon divergence.
   /// Each feature must have a non-zero threshold if they need to be monitored.
   /// Otherwise no alert will be triggered for that feature.
-  final double value;
+  final double? value;
 
-  ThresholdConfig({this.value = 0}) : super(fullyQualifiedName);
+  ThresholdConfig({this.value}) : super(fullyQualifiedName);
 
   factory ThresholdConfig.fromJson(Map<String, dynamic> json) {
-    return ThresholdConfig(value: decodeDouble(json['value']) ?? 0);
+    return ThresholdConfig(value: decodeDouble(json['value']));
   }
 
   @override
   Object toJson() {
-    return {if (value.isNotDefault) 'value': encodeDouble(value)};
+    return {if (value != null) 'value': encodeDouble(value)};
   }
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
+    final contents = [if (value != null) 'value=$value'].join(',');
     return 'ThresholdConfig($contents)';
   }
 }
@@ -66034,25 +66043,24 @@ final class ModelMonitoringAlertCondition extends protobuf.ProtoMessage {
 
   /// A condition that compares a stats value against a threshold. Alert will
   /// be triggered if value above the threshold.
-  final double threshold;
+  final double? threshold;
 
-  ModelMonitoringAlertCondition({this.threshold = 0})
-    : super(fullyQualifiedName);
+  ModelMonitoringAlertCondition({this.threshold}) : super(fullyQualifiedName);
 
   factory ModelMonitoringAlertCondition.fromJson(Map<String, dynamic> json) {
     return ModelMonitoringAlertCondition(
-      threshold: decodeDouble(json['threshold']) ?? 0,
+      threshold: decodeDouble(json['threshold']),
     );
   }
 
   @override
   Object toJson() {
-    return {if (threshold.isNotDefault) 'threshold': encodeDouble(threshold)};
+    return {if (threshold != null) 'threshold': encodeDouble(threshold)};
   }
 
   @override
   String toString() {
-    final contents = ['threshold=$threshold'].join(',');
+    final contents = [if (threshold != null) 'threshold=$threshold'].join(',');
     return 'ModelMonitoringAlertCondition($contents)';
   }
 }
@@ -67726,7 +67734,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.ModelMonitoringDataset';
 
   /// Resource name of the Vertex AI managed dataset.
-  final String vertexDataset;
+  final String? vertexDataset;
 
   /// Google Cloud Storage data source.
   final ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource?
@@ -67740,7 +67748,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset
   final String timestampField;
 
   ModelMonitoringInput_ModelMonitoringDataset({
-    this.vertexDataset = '',
+    this.vertexDataset,
     this.gcsSource,
     this.bigquerySource,
     this.timestampField = '',
@@ -67750,7 +67758,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset
     Map<String, dynamic> json,
   ) {
     return ModelMonitoringInput_ModelMonitoringDataset(
-      vertexDataset: json['vertexDataset'] ?? '',
+      vertexDataset: json['vertexDataset'],
       gcsSource: decode(
         json['gcsSource'],
         ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource
@@ -67768,7 +67776,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset
   @override
   Object toJson() {
     return {
-      if (vertexDataset.isNotDefault) 'vertexDataset': vertexDataset,
+      if (vertexDataset != null) 'vertexDataset': vertexDataset,
       if (gcsSource != null) 'gcsSource': gcsSource!.toJson(),
       if (bigquerySource != null) 'bigquerySource': bigquerySource!.toJson(),
       if (timestampField.isNotDefault) 'timestampField': timestampField,
@@ -67778,7 +67786,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset
   @override
   String toString() {
     final contents = [
-      'vertexDataset=$vertexDataset',
+      if (vertexDataset != null) 'vertexDataset=$vertexDataset',
       'timestampField=$timestampField',
     ].join(',');
     return 'ModelMonitoringDataset($contents)';
@@ -67896,36 +67904,39 @@ final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringBigQueryS
   ///
   /// *  BigQuery path. For example:
   /// `bq://projectId.bqDatasetId.bqTableId`.
-  final String tableUri;
+  final String? tableUri;
 
   /// Standard SQL to be used instead of the `table_uri`.
-  final String query;
+  final String? query;
 
   ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringBigQuerySource({
-    this.tableUri = '',
-    this.query = '',
+    this.tableUri,
+    this.query,
   }) : super(fullyQualifiedName);
 
   factory ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringBigQuerySource.fromJson(
     Map<String, dynamic> json,
   ) {
     return ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringBigQuerySource(
-      tableUri: json['tableUri'] ?? '',
-      query: json['query'] ?? '',
+      tableUri: json['tableUri'],
+      query: json['query'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (tableUri.isNotDefault) 'tableUri': tableUri,
-      if (query.isNotDefault) 'query': query,
+      if (tableUri != null) 'tableUri': tableUri,
+      if (query != null) 'query': query,
     };
   }
 
   @override
   String toString() {
-    final contents = ['tableUri=$tableUri', 'query=$query'].join(',');
+    final contents = [
+      if (tableUri != null) 'tableUri=$tableUri',
+      if (query != null) 'query=$query',
+    ].join(',');
     return 'ModelMonitoringBigQuerySource($contents)';
   }
 }
@@ -68294,14 +68305,14 @@ final class ModelMonitoringStatsDataPoint_TypedValue
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStatsDataPoint.TypedValue';
 
   /// Double.
-  final double doubleValue;
+  final double? doubleValue;
 
   /// Distribution.
   final ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue?
   distributionValue;
 
   ModelMonitoringStatsDataPoint_TypedValue({
-    this.doubleValue = 0,
+    this.doubleValue,
     this.distributionValue,
   }) : super(fullyQualifiedName);
 
@@ -68309,7 +68320,7 @@ final class ModelMonitoringStatsDataPoint_TypedValue
     Map<String, dynamic> json,
   ) {
     return ModelMonitoringStatsDataPoint_TypedValue(
-      doubleValue: decodeDouble(json['doubleValue']) ?? 0,
+      doubleValue: decodeDouble(json['doubleValue']),
       distributionValue: decode(
         json['distributionValue'],
         ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue.fromJson,
@@ -68320,7 +68331,7 @@ final class ModelMonitoringStatsDataPoint_TypedValue
   @override
   Object toJson() {
     return {
-      if (doubleValue.isNotDefault) 'doubleValue': encodeDouble(doubleValue),
+      if (doubleValue != null) 'doubleValue': encodeDouble(doubleValue),
       if (distributionValue != null)
         'distributionValue': distributionValue!.toJson(),
     };
@@ -68328,7 +68339,9 @@ final class ModelMonitoringStatsDataPoint_TypedValue
 
   @override
   String toString() {
-    final contents = ['doubleValue=$doubleValue'].join(',');
+    final contents = [
+      if (doubleValue != null) 'doubleValue=$doubleValue',
+    ].join(',');
     return 'TypedValue($contents)';
   }
 }
@@ -69635,12 +69648,12 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
   ///
   /// This value may be up to 63 characters, and valid characters are
   /// `[a-z0-9_-]`. The first character cannot be a number or hyphen.
-  final String modelId;
+  final String? modelId;
 
   /// Optional. Specify this field to copy source_model into this existing
   /// Model as a new version. Format:
   /// `projects/{project}/locations/{location}/models/{model}`
-  final String parentModel;
+  final String? parentModel;
 
   /// Required. The resource name of the Location into which to copy the Model.
   /// Format: `projects/{project}/locations/{location}`
@@ -69656,8 +69669,8 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
   final EncryptionSpec? encryptionSpec;
 
   CopyModelRequest({
-    this.modelId = '',
-    this.parentModel = '',
+    this.modelId,
+    this.parentModel,
     this.parent = '',
     this.sourceModel = '',
     this.encryptionSpec,
@@ -69665,8 +69678,8 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
 
   factory CopyModelRequest.fromJson(Map<String, dynamic> json) {
     return CopyModelRequest(
-      modelId: json['modelId'] ?? '',
-      parentModel: json['parentModel'] ?? '',
+      modelId: json['modelId'],
+      parentModel: json['parentModel'],
       parent: json['parent'] ?? '',
       sourceModel: json['sourceModel'] ?? '',
       encryptionSpec: decode(json['encryptionSpec'], EncryptionSpec.fromJson),
@@ -69676,8 +69689,8 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (modelId.isNotDefault) 'modelId': modelId,
-      if (parentModel.isNotDefault) 'parentModel': parentModel,
+      if (modelId != null) 'modelId': modelId,
+      if (parentModel != null) 'parentModel': parentModel,
       if (parent.isNotDefault) 'parent': parent,
       if (sourceModel.isNotDefault) 'sourceModel': sourceModel,
       if (encryptionSpec != null) 'encryptionSpec': encryptionSpec!.toJson(),
@@ -69687,8 +69700,8 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'modelId=$modelId',
-      'parentModel=$parentModel',
+      if (modelId != null) 'modelId=$modelId',
+      if (parentModel != null) 'parentModel=$parentModel',
       'parent=$parent',
       'sourceModel=$sourceModel',
     ].join(',');
@@ -71382,20 +71395,20 @@ final class NotebookExecutionJob extends protobuf.ProtoMessage {
   final NotebookExecutionJob_DirectNotebookSource? directNotebookSource;
 
   /// The NotebookRuntimeTemplate to source compute configuration from.
-  final String notebookRuntimeTemplateResourceName;
+  final String? notebookRuntimeTemplateResourceName;
 
   /// The custom compute configuration for an execution job.
   final NotebookExecutionJob_CustomEnvironmentSpec? customEnvironmentSpec;
 
   /// The Cloud Storage location to upload the result to. Format:
   /// `gs://bucket-name`
-  final String gcsOutputUri;
+  final String? gcsOutputUri;
 
   /// The user email to run the execution as. Only supported by Colab runtimes.
-  final String executionUser;
+  final String? executionUser;
 
   /// The service account to run the execution as.
-  final String serviceAccount;
+  final String? serviceAccount;
 
   /// The Workbench runtime configuration to use for the notebook execution.
   final NotebookExecutionJob_WorkbenchRuntime? workbenchRuntime;
@@ -71455,11 +71468,11 @@ final class NotebookExecutionJob extends protobuf.ProtoMessage {
     this.dataformRepositorySource,
     this.gcsNotebookSource,
     this.directNotebookSource,
-    this.notebookRuntimeTemplateResourceName = '',
+    this.notebookRuntimeTemplateResourceName,
     this.customEnvironmentSpec,
-    this.gcsOutputUri = '',
-    this.executionUser = '',
-    this.serviceAccount = '',
+    this.gcsOutputUri,
+    this.executionUser,
+    this.serviceAccount,
     this.workbenchRuntime,
     this.name = '',
     this.displayName = '',
@@ -71489,14 +71502,14 @@ final class NotebookExecutionJob extends protobuf.ProtoMessage {
         NotebookExecutionJob_DirectNotebookSource.fromJson,
       ),
       notebookRuntimeTemplateResourceName:
-          json['notebookRuntimeTemplateResourceName'] ?? '',
+          json['notebookRuntimeTemplateResourceName'],
       customEnvironmentSpec: decode(
         json['customEnvironmentSpec'],
         NotebookExecutionJob_CustomEnvironmentSpec.fromJson,
       ),
-      gcsOutputUri: json['gcsOutputUri'] ?? '',
-      executionUser: json['executionUser'] ?? '',
-      serviceAccount: json['serviceAccount'] ?? '',
+      gcsOutputUri: json['gcsOutputUri'],
+      executionUser: json['executionUser'],
+      serviceAccount: json['serviceAccount'],
       workbenchRuntime: decode(
         json['workbenchRuntime'],
         NotebookExecutionJob_WorkbenchRuntime.fromJson,
@@ -71528,14 +71541,14 @@ final class NotebookExecutionJob extends protobuf.ProtoMessage {
         'gcsNotebookSource': gcsNotebookSource!.toJson(),
       if (directNotebookSource != null)
         'directNotebookSource': directNotebookSource!.toJson(),
-      if (notebookRuntimeTemplateResourceName.isNotDefault)
+      if (notebookRuntimeTemplateResourceName != null)
         'notebookRuntimeTemplateResourceName':
             notebookRuntimeTemplateResourceName,
       if (customEnvironmentSpec != null)
         'customEnvironmentSpec': customEnvironmentSpec!.toJson(),
-      if (gcsOutputUri.isNotDefault) 'gcsOutputUri': gcsOutputUri,
-      if (executionUser.isNotDefault) 'executionUser': executionUser,
-      if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
+      if (gcsOutputUri != null) 'gcsOutputUri': gcsOutputUri,
+      if (executionUser != null) 'executionUser': executionUser,
+      if (serviceAccount != null) 'serviceAccount': serviceAccount,
       if (workbenchRuntime != null)
         'workbenchRuntime': workbenchRuntime!.toJson(),
       if (name.isNotDefault) 'name': name,
@@ -71557,10 +71570,11 @@ final class NotebookExecutionJob extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'notebookRuntimeTemplateResourceName=$notebookRuntimeTemplateResourceName',
-      'gcsOutputUri=$gcsOutputUri',
-      'executionUser=$executionUser',
-      'serviceAccount=$serviceAccount',
+      if (notebookRuntimeTemplateResourceName != null)
+        'notebookRuntimeTemplateResourceName=$notebookRuntimeTemplateResourceName',
+      if (gcsOutputUri != null) 'gcsOutputUri=$gcsOutputUri',
+      if (executionUser != null) 'executionUser=$executionUser',
+      if (serviceAccount != null) 'serviceAccount=$serviceAccount',
       'name=$name',
       'displayName=$displayName',
       'scheduleResourceName=$scheduleResourceName',
@@ -75628,27 +75642,29 @@ final class PipelineJob_RuntimeConfig_InputArtifact
   /// `projects/{project}/locations/{location}/metadataStores/default/artifacts/{artifact_id}`.
   /// The artifact must stay within the same project, location and default
   /// metadatastore as the pipeline.
-  final String artifactId;
+  final String? artifactId;
 
-  PipelineJob_RuntimeConfig_InputArtifact({this.artifactId = ''})
+  PipelineJob_RuntimeConfig_InputArtifact({this.artifactId})
     : super(fullyQualifiedName);
 
   factory PipelineJob_RuntimeConfig_InputArtifact.fromJson(
     Map<String, dynamic> json,
   ) {
     return PipelineJob_RuntimeConfig_InputArtifact(
-      artifactId: json['artifactId'] ?? '',
+      artifactId: json['artifactId'],
     );
   }
 
   @override
   Object toJson() {
-    return {if (artifactId.isNotDefault) 'artifactId': artifactId};
+    return {if (artifactId != null) 'artifactId': artifactId};
   }
 
   @override
   String toString() {
-    final contents = ['artifactId=$artifactId'].join(',');
+    final contents = [
+      if (artifactId != null) 'artifactId=$artifactId',
+    ].join(',');
     return 'InputArtifact($contents)';
   }
 }
@@ -79029,50 +79045,50 @@ final class PublisherModel_ResourceReference extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.PublisherModel.ResourceReference';
 
   /// The URI of the resource.
-  final String uri;
+  final String? uri;
 
   /// The resource name of the Google Cloud resource.
-  final String resourceName;
+  final String? resourceName;
 
   /// Use case (CUJ) of the resource.
-  final String useCase;
+  final String? useCase;
 
   /// Description of the resource.
-  final String description;
+  final String? description;
 
   PublisherModel_ResourceReference({
-    this.uri = '',
-    this.resourceName = '',
-    this.useCase = '',
-    this.description = '',
+    this.uri,
+    this.resourceName,
+    this.useCase,
+    this.description,
   }) : super(fullyQualifiedName);
 
   factory PublisherModel_ResourceReference.fromJson(Map<String, dynamic> json) {
     return PublisherModel_ResourceReference(
-      uri: json['uri'] ?? '',
-      resourceName: json['resourceName'] ?? '',
-      useCase: json['useCase'] ?? '',
-      description: json['description'] ?? '',
+      uri: json['uri'],
+      resourceName: json['resourceName'],
+      useCase: json['useCase'],
+      description: json['description'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (uri.isNotDefault) 'uri': uri,
-      if (resourceName.isNotDefault) 'resourceName': resourceName,
-      if (useCase.isNotDefault) 'useCase': useCase,
-      if (description.isNotDefault) 'description': description,
+      if (uri != null) 'uri': uri,
+      if (resourceName != null) 'resourceName': resourceName,
+      if (useCase != null) 'useCase': useCase,
+      if (description != null) 'description': description,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'uri=$uri',
-      'resourceName=$resourceName',
-      'useCase=$useCase',
-      'description=$description',
+      if (uri != null) 'uri=$uri',
+      if (resourceName != null) 'resourceName=$resourceName',
+      if (useCase != null) 'useCase=$useCase',
+      if (description != null) 'description=$description',
     ].join(',');
     return 'ResourceReference($contents)';
   }
@@ -79564,7 +79580,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
   /// The resource name of the shared DeploymentResourcePool to deploy on.
   /// Format:
   /// `projects/{project}/locations/{location}/deploymentResourcePools/{deployment_resource_pool}`
-  final String sharedResources;
+  final String? sharedResources;
 
   /// Optional. Default model display name.
   final String modelDisplayName;
@@ -79598,7 +79614,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
   PublisherModel_CallToAction_Deploy({
     this.dedicatedResources,
     this.automaticResources,
-    this.sharedResources = '',
+    this.sharedResources,
     this.modelDisplayName = '',
     this.largeModelReference,
     this.containerSpec,
@@ -79621,7 +79637,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
         json['automaticResources'],
         AutomaticResources.fromJson,
       ),
-      sharedResources: json['sharedResources'] ?? '',
+      sharedResources: json['sharedResources'],
       modelDisplayName: json['modelDisplayName'] ?? '',
       largeModelReference: decode(
         json['largeModelReference'],
@@ -79646,7 +79662,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
         'dedicatedResources': dedicatedResources!.toJson(),
       if (automaticResources != null)
         'automaticResources': automaticResources!.toJson(),
-      if (sharedResources.isNotDefault) 'sharedResources': sharedResources,
+      if (sharedResources != null) 'sharedResources': sharedResources,
       if (modelDisplayName.isNotDefault) 'modelDisplayName': modelDisplayName,
       if (largeModelReference != null)
         'largeModelReference': largeModelReference!.toJson(),
@@ -79663,7 +79679,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'sharedResources=$sharedResources',
+      if (sharedResources != null) 'sharedResources=$sharedResources',
       'modelDisplayName=$modelDisplayName',
       'artifactUri=$artifactUri',
       if (deployTaskName != null) 'deployTaskName=$deployTaskName',
@@ -81299,7 +81315,7 @@ final class Schedule extends protobuf.ProtoMessage {
   /// The ${IANA_TIME_ZONE} may only be a valid string from IANA time zone
   /// database. For example, "CRON_TZ=America/New_York 1 * * * *", or
   /// "TZ=America/New_York 1 * * * *".
-  final String cron;
+  final String? cron;
 
   /// Request for
   /// `PipelineService.CreatePipelineJob`.
@@ -81390,7 +81406,7 @@ final class Schedule extends protobuf.ProtoMessage {
   final Schedule_RunResponse? lastScheduledRunResponse;
 
   Schedule({
-    this.cron = '',
+    this.cron,
     this.createPipelineJobRequest,
     this.createModelMonitoringJobRequest,
     this.createNotebookExecutionJobRequest,
@@ -81414,7 +81430,7 @@ final class Schedule extends protobuf.ProtoMessage {
 
   factory Schedule.fromJson(Map<String, dynamic> json) {
     return Schedule(
-      cron: json['cron'] ?? '',
+      cron: json['cron'],
       createPipelineJobRequest: decode(
         json['createPipelineJobRequest'],
         CreatePipelineJobRequest.fromJson,
@@ -81463,7 +81479,7 @@ final class Schedule extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (cron.isNotDefault) 'cron': cron,
+      if (cron != null) 'cron': cron,
       if (createPipelineJobRequest != null)
         'createPipelineJobRequest': createPipelineJobRequest!.toJson(),
       if (createModelMonitoringJobRequest != null)
@@ -81497,7 +81513,7 @@ final class Schedule extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'cron=$cron',
+      if (cron != null) 'cron=$cron',
       'name=$name',
       'displayName=$displayName',
       'maxRunCount=$maxRunCount',
@@ -88525,7 +88541,7 @@ final class ToolUseExample extends protobuf.ProtoMessage {
   final ToolUseExample_ExtensionOperation? extensionOperation;
 
   /// Function name to call.
-  final String functionName;
+  final String? functionName;
 
   /// Required. The display name for example.
   final String displayName;
@@ -88544,7 +88560,7 @@ final class ToolUseExample extends protobuf.ProtoMessage {
 
   ToolUseExample({
     this.extensionOperation,
-    this.functionName = '',
+    this.functionName,
     this.displayName = '',
     this.query = '',
     this.requestParams,
@@ -88558,7 +88574,7 @@ final class ToolUseExample extends protobuf.ProtoMessage {
         json['extensionOperation'],
         ToolUseExample_ExtensionOperation.fromJson,
       ),
-      functionName: json['functionName'] ?? '',
+      functionName: json['functionName'],
       displayName: json['displayName'] ?? '',
       query: json['query'] ?? '',
       requestParams: decodeCustom(
@@ -88578,7 +88594,7 @@ final class ToolUseExample extends protobuf.ProtoMessage {
     return {
       if (extensionOperation != null)
         'extensionOperation': extensionOperation!.toJson(),
-      if (functionName.isNotDefault) 'functionName': functionName,
+      if (functionName != null) 'functionName': functionName,
       if (displayName.isNotDefault) 'displayName': displayName,
       if (query.isNotDefault) 'query': query,
       if (requestParams != null) 'requestParams': requestParams!.toJson(),
@@ -88590,7 +88606,7 @@ final class ToolUseExample extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'functionName=$functionName',
+      if (functionName != null) 'functionName=$functionName',
       'displayName=$displayName',
       'query=$query',
       'responseSummary=$responseSummary',
@@ -89710,27 +89726,27 @@ final class RagRetrievalConfig_Filter extends protobuf.ProtoMessage {
 
   /// Optional. Only returns contexts with vector distance smaller than the
   /// threshold.
-  final double vectorDistanceThreshold;
+  final double? vectorDistanceThreshold;
 
   /// Optional. Only returns contexts with vector similarity larger than the
   /// threshold.
-  final double vectorSimilarityThreshold;
+  final double? vectorSimilarityThreshold;
 
   /// Optional. String for metadata filtering.
   final String metadataFilter;
 
   RagRetrievalConfig_Filter({
-    this.vectorDistanceThreshold = 0,
-    this.vectorSimilarityThreshold = 0,
+    this.vectorDistanceThreshold,
+    this.vectorSimilarityThreshold,
     this.metadataFilter = '',
   }) : super(fullyQualifiedName);
 
   factory RagRetrievalConfig_Filter.fromJson(Map<String, dynamic> json) {
     return RagRetrievalConfig_Filter(
-      vectorDistanceThreshold:
-          decodeDouble(json['vectorDistanceThreshold']) ?? 0,
-      vectorSimilarityThreshold:
-          decodeDouble(json['vectorSimilarityThreshold']) ?? 0,
+      vectorDistanceThreshold: decodeDouble(json['vectorDistanceThreshold']),
+      vectorSimilarityThreshold: decodeDouble(
+        json['vectorSimilarityThreshold'],
+      ),
       metadataFilter: json['metadataFilter'] ?? '',
     );
   }
@@ -89738,9 +89754,9 @@ final class RagRetrievalConfig_Filter extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (vectorDistanceThreshold.isNotDefault)
+      if (vectorDistanceThreshold != null)
         'vectorDistanceThreshold': encodeDouble(vectorDistanceThreshold),
-      if (vectorSimilarityThreshold.isNotDefault)
+      if (vectorSimilarityThreshold != null)
         'vectorSimilarityThreshold': encodeDouble(vectorSimilarityThreshold),
       if (metadataFilter.isNotDefault) 'metadataFilter': metadataFilter,
     };
@@ -89749,8 +89765,10 @@ final class RagRetrievalConfig_Filter extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'vectorDistanceThreshold=$vectorDistanceThreshold',
-      'vectorSimilarityThreshold=$vectorSimilarityThreshold',
+      if (vectorDistanceThreshold != null)
+        'vectorDistanceThreshold=$vectorDistanceThreshold',
+      if (vectorSimilarityThreshold != null)
+        'vectorSimilarityThreshold=$vectorSimilarityThreshold',
       'metadataFilter=$metadataFilter',
     ].join(',');
     return 'Filter($contents)';
@@ -90594,7 +90612,7 @@ final class TuningJob extends protobuf.ProtoMessage {
 
   /// The base model that is being tuned. See [Supported
   /// models](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/tuning#supported_models).
-  final String baseModel;
+  final String? baseModel;
 
   /// The pre-tuned model for continuous tuning.
   final PreTunedModel? preTunedModel;
@@ -90710,7 +90728,7 @@ final class TuningJob extends protobuf.ProtoMessage {
   final List<EvaluateDatasetRun> evaluateDatasetRuns;
 
   TuningJob({
-    this.baseModel = '',
+    this.baseModel,
     this.preTunedModel,
     this.supervisedTuningSpec,
     this.distillationSpec,
@@ -90739,7 +90757,7 @@ final class TuningJob extends protobuf.ProtoMessage {
 
   factory TuningJob.fromJson(Map<String, dynamic> json) {
     return TuningJob(
-      baseModel: json['baseModel'] ?? '',
+      baseModel: json['baseModel'],
       preTunedModel: decode(json['preTunedModel'], PreTunedModel.fromJson),
       supervisedTuningSpec: decode(
         json['supervisedTuningSpec'],
@@ -90787,7 +90805,7 @@ final class TuningJob extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (baseModel.isNotDefault) 'baseModel': baseModel,
+      if (baseModel != null) 'baseModel': baseModel,
       if (preTunedModel != null) 'preTunedModel': preTunedModel!.toJson(),
       if (supervisedTuningSpec != null)
         'supervisedTuningSpec': supervisedTuningSpec!.toJson(),
@@ -90823,7 +90841,7 @@ final class TuningJob extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'baseModel=$baseModel',
+      if (baseModel != null) 'baseModel=$baseModel',
       'name=$name',
       'tunedModelDisplayName=$tunedModelDisplayName',
       'description=$description',
@@ -91741,11 +91759,11 @@ final class DistillationSpec extends protobuf.ProtoMessage {
 
   /// The base teacher model that is being distilled. See [Supported
   /// models](https://cloud.google.com/vertex-ai/generative-ai/docs/model-reference/tuning#supported_models).
-  final String baseTeacherModel;
+  final String? baseTeacherModel;
 
   /// The resource name of the Tuned teacher model. Format:
   /// `projects/{project}/locations/{location}/models/{model}`.
-  final String tunedTeacherModelSource;
+  final String? tunedTeacherModelSource;
 
   /// Required. Cloud Storage path to file containing training dataset for
   /// tuning. The dataset must be formatted as a JSONL file.
@@ -91767,8 +91785,8 @@ final class DistillationSpec extends protobuf.ProtoMessage {
   final String pipelineRootDirectory;
 
   DistillationSpec({
-    this.baseTeacherModel = '',
-    this.tunedTeacherModelSource = '',
+    this.baseTeacherModel,
+    this.tunedTeacherModelSource,
     this.trainingDatasetUri = '',
     this.validationDatasetUri,
     this.hyperParameters,
@@ -91778,8 +91796,8 @@ final class DistillationSpec extends protobuf.ProtoMessage {
 
   factory DistillationSpec.fromJson(Map<String, dynamic> json) {
     return DistillationSpec(
-      baseTeacherModel: json['baseTeacherModel'] ?? '',
-      tunedTeacherModelSource: json['tunedTeacherModelSource'] ?? '',
+      baseTeacherModel: json['baseTeacherModel'],
+      tunedTeacherModelSource: json['tunedTeacherModelSource'],
       trainingDatasetUri: json['trainingDatasetUri'] ?? '',
       validationDatasetUri: json['validationDatasetUri'],
       hyperParameters: decode(
@@ -91794,8 +91812,8 @@ final class DistillationSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (baseTeacherModel.isNotDefault) 'baseTeacherModel': baseTeacherModel,
-      if (tunedTeacherModelSource.isNotDefault)
+      if (baseTeacherModel != null) 'baseTeacherModel': baseTeacherModel,
+      if (tunedTeacherModelSource != null)
         'tunedTeacherModelSource': tunedTeacherModelSource,
       if (trainingDatasetUri.isNotDefault)
         'trainingDatasetUri': trainingDatasetUri,
@@ -91811,8 +91829,9 @@ final class DistillationSpec extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'baseTeacherModel=$baseTeacherModel',
-      'tunedTeacherModelSource=$tunedTeacherModelSource',
+      if (baseTeacherModel != null) 'baseTeacherModel=$baseTeacherModel',
+      if (tunedTeacherModelSource != null)
+        'tunedTeacherModelSource=$tunedTeacherModelSource',
       'trainingDatasetUri=$trainingDatasetUri',
       if (validationDatasetUri != null)
         'validationDatasetUri=$validationDatasetUri',
@@ -91943,45 +91962,42 @@ final class TunedModelRef extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.TunedModelRef';
 
   /// Support migration from model registry.
-  final String tunedModel;
+  final String? tunedModel;
 
   /// Support migration from tuning job list page, from gemini-1.0-pro-002
   /// to 1.5 and above.
-  final String tuningJob;
+  final String? tuningJob;
 
   /// Support migration from tuning job list page, from bison model to gemini
   /// model.
-  final String pipelineJob;
+  final String? pipelineJob;
 
-  TunedModelRef({
-    this.tunedModel = '',
-    this.tuningJob = '',
-    this.pipelineJob = '',
-  }) : super(fullyQualifiedName);
+  TunedModelRef({this.tunedModel, this.tuningJob, this.pipelineJob})
+    : super(fullyQualifiedName);
 
   factory TunedModelRef.fromJson(Map<String, dynamic> json) {
     return TunedModelRef(
-      tunedModel: json['tunedModel'] ?? '',
-      tuningJob: json['tuningJob'] ?? '',
-      pipelineJob: json['pipelineJob'] ?? '',
+      tunedModel: json['tunedModel'],
+      tuningJob: json['tuningJob'],
+      pipelineJob: json['pipelineJob'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
-      if (tuningJob.isNotDefault) 'tuningJob': tuningJob,
-      if (pipelineJob.isNotDefault) 'pipelineJob': pipelineJob,
+      if (tunedModel != null) 'tunedModel': tunedModel,
+      if (tuningJob != null) 'tuningJob': tuningJob,
+      if (pipelineJob != null) 'pipelineJob': pipelineJob,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'tunedModel=$tunedModel',
-      'tuningJob=$tuningJob',
-      'pipelineJob=$pipelineJob',
+      if (tunedModel != null) 'tunedModel=$tunedModel',
+      if (tuningJob != null) 'tuningJob=$tuningJob',
+      if (pipelineJob != null) 'pipelineJob=$pipelineJob',
     ].join(',');
     return 'TunedModelRef($contents)';
   }
@@ -92617,34 +92633,34 @@ final class ArtifactTypeSchema extends protobuf.ProtoMessage {
   ///  - `acme.CustomModel`
   /// When this field is set, the type must be pre-registered in the MLMD
   /// store.
-  final String schemaTitle;
+  final String? schemaTitle;
 
   /// Points to a YAML file stored on Cloud Storage describing the
   /// format.
   /// Deprecated. Use `PipelineArtifactTypeSchema.schema_title` or
   /// `PipelineArtifactTypeSchema.instance_schema` instead.
-  final String schemaUri;
+  final String? schemaUri;
 
   /// Contains a raw YAML string, describing the format of
   /// the properties of the type.
-  final String instanceSchema;
+  final String? instanceSchema;
 
   /// The schema version of the artifact. If the value is not set, it defaults
   /// to the latest version in the system.
   final String schemaVersion;
 
   ArtifactTypeSchema({
-    this.schemaTitle = '',
-    this.schemaUri = '',
-    this.instanceSchema = '',
+    this.schemaTitle,
+    this.schemaUri,
+    this.instanceSchema,
     this.schemaVersion = '',
   }) : super(fullyQualifiedName);
 
   factory ArtifactTypeSchema.fromJson(Map<String, dynamic> json) {
     return ArtifactTypeSchema(
-      schemaTitle: json['schemaTitle'] ?? '',
-      schemaUri: json['schemaUri'] ?? '',
-      instanceSchema: json['instanceSchema'] ?? '',
+      schemaTitle: json['schemaTitle'],
+      schemaUri: json['schemaUri'],
+      instanceSchema: json['instanceSchema'],
       schemaVersion: json['schemaVersion'] ?? '',
     );
   }
@@ -92652,9 +92668,9 @@ final class ArtifactTypeSchema extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (schemaTitle.isNotDefault) 'schemaTitle': schemaTitle,
-      if (schemaUri.isNotDefault) 'schemaUri': schemaUri,
-      if (instanceSchema.isNotDefault) 'instanceSchema': instanceSchema,
+      if (schemaTitle != null) 'schemaTitle': schemaTitle,
+      if (schemaUri != null) 'schemaUri': schemaUri,
+      if (instanceSchema != null) 'instanceSchema': instanceSchema,
       if (schemaVersion.isNotDefault) 'schemaVersion': schemaVersion,
     };
   }
@@ -92662,9 +92678,9 @@ final class ArtifactTypeSchema extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'schemaTitle=$schemaTitle',
-      'schemaUri=$schemaUri',
-      'instanceSchema=$instanceSchema',
+      if (schemaTitle != null) 'schemaTitle=$schemaTitle',
+      if (schemaUri != null) 'schemaUri=$schemaUri',
+      if (instanceSchema != null) 'instanceSchema=$instanceSchema',
       'schemaVersion=$schemaVersion',
     ].join(',');
     return 'ArtifactTypeSchema($contents)';
@@ -92801,28 +92817,25 @@ final class UserActionReference extends protobuf.ProtoMessage {
   /// Resource name of the long running operation.
   /// Format:
   /// `projects/{project}/locations/{location}/operations/{operation}`
-  final String operation;
+  final String? operation;
 
   /// For API calls that start a LabelingJob.
   /// Resource name of the LabelingJob.
   /// Format:
   /// `projects/{project}/locations/{location}/dataLabelingJobs/{data_labeling_job}`
-  final String dataLabelingJob;
+  final String? dataLabelingJob;
 
   /// The method name of the API RPC call. For example,
   /// "/google.cloud.aiplatform.{apiVersion}.DatasetService.CreateDataset"
   final String method;
 
-  UserActionReference({
-    this.operation = '',
-    this.dataLabelingJob = '',
-    this.method = '',
-  }) : super(fullyQualifiedName);
+  UserActionReference({this.operation, this.dataLabelingJob, this.method = ''})
+    : super(fullyQualifiedName);
 
   factory UserActionReference.fromJson(Map<String, dynamic> json) {
     return UserActionReference(
-      operation: json['operation'] ?? '',
-      dataLabelingJob: json['dataLabelingJob'] ?? '',
+      operation: json['operation'],
+      dataLabelingJob: json['dataLabelingJob'],
       method: json['method'] ?? '',
     );
   }
@@ -92830,8 +92843,8 @@ final class UserActionReference extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (operation.isNotDefault) 'operation': operation,
-      if (dataLabelingJob.isNotDefault) 'dataLabelingJob': dataLabelingJob,
+      if (operation != null) 'operation': operation,
+      if (dataLabelingJob != null) 'dataLabelingJob': dataLabelingJob,
       if (method.isNotDefault) 'method': method,
     };
   }
@@ -92839,8 +92852,8 @@ final class UserActionReference extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'operation=$operation',
-      'dataLabelingJob=$dataLabelingJob',
+      if (operation != null) 'operation=$operation',
+      if (dataLabelingJob != null) 'dataLabelingJob=$dataLabelingJob',
       'method=$method',
     ].join(',');
     return 'UserActionReference($contents)';
@@ -92853,40 +92866,40 @@ final class Value extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.Value';
 
   /// An integer value.
-  final int intValue;
+  final int? intValue;
 
   /// A double value.
-  final double doubleValue;
+  final double? doubleValue;
 
   /// A string value.
-  final String stringValue;
+  final String? stringValue;
 
-  Value({this.intValue = 0, this.doubleValue = 0, this.stringValue = ''})
+  Value({this.intValue, this.doubleValue, this.stringValue})
     : super(fullyQualifiedName);
 
   factory Value.fromJson(Map<String, dynamic> json) {
     return Value(
-      intValue: decodeInt64(json['intValue']) ?? 0,
-      doubleValue: decodeDouble(json['doubleValue']) ?? 0,
-      stringValue: json['stringValue'] ?? '',
+      intValue: decodeInt64(json['intValue']),
+      doubleValue: decodeDouble(json['doubleValue']),
+      stringValue: json['stringValue'],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (intValue.isNotDefault) 'intValue': encodeInt64(intValue),
-      if (doubleValue.isNotDefault) 'doubleValue': encodeDouble(doubleValue),
-      if (stringValue.isNotDefault) 'stringValue': stringValue,
+      if (intValue != null) 'intValue': encodeInt64(intValue),
+      if (doubleValue != null) 'doubleValue': encodeDouble(doubleValue),
+      if (stringValue != null) 'stringValue': stringValue,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      'intValue=$intValue',
-      'doubleValue=$doubleValue',
-      'stringValue=$stringValue',
+      if (intValue != null) 'intValue=$intValue',
+      if (doubleValue != null) 'doubleValue=$doubleValue',
+      if (stringValue != null) 'stringValue=$stringValue',
     ].join(',');
     return 'Value($contents)';
   }
@@ -94491,7 +94504,7 @@ final class RagFileMetadataConfig extends protobuf.ProtoMessage {
   final GoogleDriveSource? googleDriveMetadataSchemaSource;
 
   /// Inline metadata schema source. Must be a JSON string.
-  final String inlineMetadataSchemaSource;
+  final String? inlineMetadataSchemaSource;
 
   /// Google Cloud Storage location. Supports importing individual files as
   /// well as entire Google Cloud Storage directories. Sample formats:
@@ -94508,15 +94521,15 @@ final class RagFileMetadataConfig extends protobuf.ProtoMessage {
   final GoogleDriveSource? googleDriveMetadataSource;
 
   /// Inline metadata source. Must be a JSON string.
-  final String inlineMetadataSource;
+  final String? inlineMetadataSource;
 
   RagFileMetadataConfig({
     this.gcsMetadataSchemaSource,
     this.googleDriveMetadataSchemaSource,
-    this.inlineMetadataSchemaSource = '',
+    this.inlineMetadataSchemaSource,
     this.gcsMetadataSource,
     this.googleDriveMetadataSource,
-    this.inlineMetadataSource = '',
+    this.inlineMetadataSource,
   }) : super(fullyQualifiedName);
 
   factory RagFileMetadataConfig.fromJson(Map<String, dynamic> json) {
@@ -94529,13 +94542,13 @@ final class RagFileMetadataConfig extends protobuf.ProtoMessage {
         json['googleDriveMetadataSchemaSource'],
         GoogleDriveSource.fromJson,
       ),
-      inlineMetadataSchemaSource: json['inlineMetadataSchemaSource'] ?? '',
+      inlineMetadataSchemaSource: json['inlineMetadataSchemaSource'],
       gcsMetadataSource: decode(json['gcsMetadataSource'], GcsSource.fromJson),
       googleDriveMetadataSource: decode(
         json['googleDriveMetadataSource'],
         GoogleDriveSource.fromJson,
       ),
-      inlineMetadataSource: json['inlineMetadataSource'] ?? '',
+      inlineMetadataSource: json['inlineMetadataSource'],
     );
   }
 
@@ -94547,13 +94560,13 @@ final class RagFileMetadataConfig extends protobuf.ProtoMessage {
       if (googleDriveMetadataSchemaSource != null)
         'googleDriveMetadataSchemaSource': googleDriveMetadataSchemaSource!
             .toJson(),
-      if (inlineMetadataSchemaSource.isNotDefault)
+      if (inlineMetadataSchemaSource != null)
         'inlineMetadataSchemaSource': inlineMetadataSchemaSource,
       if (gcsMetadataSource != null)
         'gcsMetadataSource': gcsMetadataSource!.toJson(),
       if (googleDriveMetadataSource != null)
         'googleDriveMetadataSource': googleDriveMetadataSource!.toJson(),
-      if (inlineMetadataSource.isNotDefault)
+      if (inlineMetadataSource != null)
         'inlineMetadataSource': inlineMetadataSource,
     };
   }
@@ -94561,8 +94574,10 @@ final class RagFileMetadataConfig extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'inlineMetadataSchemaSource=$inlineMetadataSchemaSource',
-      'inlineMetadataSource=$inlineMetadataSource',
+      if (inlineMetadataSchemaSource != null)
+        'inlineMetadataSchemaSource=$inlineMetadataSchemaSource',
+      if (inlineMetadataSource != null)
+        'inlineMetadataSource=$inlineMetadataSource',
     ].join(',');
     return 'RagFileMetadataConfig($contents)';
   }
@@ -95372,10 +95387,10 @@ final class ImportRagFilesResponse extends protobuf.ProtoMessage {
 
   /// The Google Cloud Storage path into which the partial failures were
   /// written.
-  final String partialFailuresGcsPath;
+  final String? partialFailuresGcsPath;
 
   /// The BigQuery table into which the partial failures were written.
-  final String partialFailuresBigqueryTable;
+  final String? partialFailuresBigqueryTable;
 
   /// The number of RagFiles that had been imported into the RagCorpus.
   final int importedRagFilesCount;
@@ -95387,8 +95402,8 @@ final class ImportRagFilesResponse extends protobuf.ProtoMessage {
   final int skippedRagFilesCount;
 
   ImportRagFilesResponse({
-    this.partialFailuresGcsPath = '',
-    this.partialFailuresBigqueryTable = '',
+    this.partialFailuresGcsPath,
+    this.partialFailuresBigqueryTable,
     this.importedRagFilesCount = 0,
     this.failedRagFilesCount = 0,
     this.skippedRagFilesCount = 0,
@@ -95396,8 +95411,8 @@ final class ImportRagFilesResponse extends protobuf.ProtoMessage {
 
   factory ImportRagFilesResponse.fromJson(Map<String, dynamic> json) {
     return ImportRagFilesResponse(
-      partialFailuresGcsPath: json['partialFailuresGcsPath'] ?? '',
-      partialFailuresBigqueryTable: json['partialFailuresBigqueryTable'] ?? '',
+      partialFailuresGcsPath: json['partialFailuresGcsPath'],
+      partialFailuresBigqueryTable: json['partialFailuresBigqueryTable'],
       importedRagFilesCount: decodeInt64(json['importedRagFilesCount']) ?? 0,
       failedRagFilesCount: decodeInt64(json['failedRagFilesCount']) ?? 0,
       skippedRagFilesCount: decodeInt64(json['skippedRagFilesCount']) ?? 0,
@@ -95407,9 +95422,9 @@ final class ImportRagFilesResponse extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (partialFailuresGcsPath.isNotDefault)
+      if (partialFailuresGcsPath != null)
         'partialFailuresGcsPath': partialFailuresGcsPath,
-      if (partialFailuresBigqueryTable.isNotDefault)
+      if (partialFailuresBigqueryTable != null)
         'partialFailuresBigqueryTable': partialFailuresBigqueryTable,
       if (importedRagFilesCount.isNotDefault)
         'importedRagFilesCount': encodeInt64(importedRagFilesCount),
@@ -95423,8 +95438,10 @@ final class ImportRagFilesResponse extends protobuf.ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'partialFailuresGcsPath=$partialFailuresGcsPath',
-      'partialFailuresBigqueryTable=$partialFailuresBigqueryTable',
+      if (partialFailuresGcsPath != null)
+        'partialFailuresGcsPath=$partialFailuresGcsPath',
+      if (partialFailuresBigqueryTable != null)
+        'partialFailuresBigqueryTable=$partialFailuresBigqueryTable',
       'importedRagFilesCount=$importedRagFilesCount',
       'failedRagFilesCount=$failedRagFilesCount',
       'skippedRagFilesCount=$skippedRagFilesCount',
@@ -95857,7 +95874,7 @@ final class RagQuery extends protobuf.ProtoMessage {
       'google.cloud.aiplatform.v1beta1.RagQuery';
 
   /// Optional. The query in text format to get relevant contexts.
-  final String text;
+  final String? text;
 
   /// Optional. The number of contexts to retrieve.
   final int similarityTopK;
@@ -95869,7 +95886,7 @@ final class RagQuery extends protobuf.ProtoMessage {
   final RagRetrievalConfig? ragRetrievalConfig;
 
   RagQuery({
-    this.text = '',
+    this.text,
     this.similarityTopK = 0,
     this.ranking,
     this.ragRetrievalConfig,
@@ -95877,7 +95894,7 @@ final class RagQuery extends protobuf.ProtoMessage {
 
   factory RagQuery.fromJson(Map<String, dynamic> json) {
     return RagQuery(
-      text: json['text'] ?? '',
+      text: json['text'],
       similarityTopK: json['similarityTopK'] ?? 0,
       ranking: decode(json['ranking'], RagQuery_Ranking.fromJson),
       ragRetrievalConfig: decode(
@@ -95890,7 +95907,7 @@ final class RagQuery extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (text.isNotDefault) 'text': text,
+      if (text != null) 'text': text,
       if (similarityTopK.isNotDefault) 'similarityTopK': similarityTopK,
       if (ranking != null) 'ranking': ranking!.toJson(),
       if (ragRetrievalConfig != null)
@@ -95900,7 +95917,10 @@ final class RagQuery extends protobuf.ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['text=$text', 'similarityTopK=$similarityTopK'].join(',');
+    final contents = [
+      if (text != null) 'text=$text',
+      'similarityTopK=$similarityTopK',
+    ].join(',');
     return 'RagQuery($contents)';
   }
 }

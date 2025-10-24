@@ -836,7 +836,7 @@ final class PhoneNumber extends ProtoMessage {
   ///  - https://www.itu.int/rec/T-REC-E.164-201011-I
   ///  - https://en.wikipedia.org/wiki/E.164.
   ///  - https://en.wikipedia.org/wiki/List_of_country_calling_codes
-  final String e164Number;
+  final String? e164Number;
 
   /// A short code.
   ///
@@ -855,12 +855,12 @@ final class PhoneNumber extends ProtoMessage {
   /// future.
   final String extension;
 
-  PhoneNumber({this.e164Number = '', this.shortCode, this.extension = ''})
+  PhoneNumber({this.e164Number, this.shortCode, this.extension = ''})
     : super(fullyQualifiedName);
 
   factory PhoneNumber.fromJson(Map<String, dynamic> json) {
     return PhoneNumber(
-      e164Number: json['e164Number'] ?? '',
+      e164Number: json['e164Number'],
       shortCode: decode(json['shortCode'], PhoneNumber_ShortCode.fromJson),
       extension: json['extension'] ?? '',
     );
@@ -869,7 +869,7 @@ final class PhoneNumber extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (e164Number.isNotDefault) 'e164Number': e164Number,
+      if (e164Number != null) 'e164Number': e164Number,
       if (shortCode != null) 'shortCode': shortCode!.toJson(),
       if (extension.isNotDefault) 'extension': extension,
     };
@@ -878,7 +878,7 @@ final class PhoneNumber extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'e164Number=$e164Number',
+      if (e164Number != null) 'e164Number=$e164Number',
       'extension=$extension',
     ].join(',');
     return 'PhoneNumber($contents)';

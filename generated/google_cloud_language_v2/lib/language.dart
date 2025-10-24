@@ -143,13 +143,13 @@ final class Document extends ProtoMessage {
 
   /// The content of the input in string format.
   /// Cloud audit logging exempt since it is based on user data.
-  final String content;
+  final String? content;
 
   /// The Google Cloud Storage URI where the file content is located.
   /// This URI must be of the form: gs://bucket_name/object_name. For more
   /// details, see https://cloud.google.com/storage/docs/reference-uris.
   /// NOTE: Cloud Storage object versioning is not supported.
-  final String gcsContentUri;
+  final String? gcsContentUri;
 
   /// Optional. The language of the document (if not specified, the language is
   /// automatically detected). Both ISO and BCP-47 language codes are
@@ -163,8 +163,8 @@ final class Document extends ProtoMessage {
 
   Document({
     this.type = Document_Type.$default,
-    this.content = '',
-    this.gcsContentUri = '',
+    this.content,
+    this.gcsContentUri,
     this.languageCode = '',
   }) : super(fullyQualifiedName);
 
@@ -173,8 +173,8 @@ final class Document extends ProtoMessage {
       type:
           decodeEnum(json['type'], Document_Type.fromJson) ??
           Document_Type.$default,
-      content: json['content'] ?? '',
-      gcsContentUri: json['gcsContentUri'] ?? '',
+      content: json['content'],
+      gcsContentUri: json['gcsContentUri'],
       languageCode: json['languageCode'] ?? '',
     );
   }
@@ -183,8 +183,8 @@ final class Document extends ProtoMessage {
   Object toJson() {
     return {
       if (type.isNotDefault) 'type': type.toJson(),
-      if (content.isNotDefault) 'content': content,
-      if (gcsContentUri.isNotDefault) 'gcsContentUri': gcsContentUri,
+      if (content != null) 'content': content,
+      if (gcsContentUri != null) 'gcsContentUri': gcsContentUri,
       if (languageCode.isNotDefault) 'languageCode': languageCode,
     };
   }
@@ -193,8 +193,8 @@ final class Document extends ProtoMessage {
   String toString() {
     final contents = [
       'type=$type',
-      'content=$content',
-      'gcsContentUri=$gcsContentUri',
+      if (content != null) 'content=$content',
+      if (gcsContentUri != null) 'gcsContentUri=$gcsContentUri',
       'languageCode=$languageCode',
     ].join(',');
     return 'Document($contents)';

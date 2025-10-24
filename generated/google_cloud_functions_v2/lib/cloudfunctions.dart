@@ -673,16 +673,16 @@ final class RepoSource extends ProtoMessage {
   ///
   /// The syntax of the regular expressions accepted is the syntax accepted by
   /// RE2 and described at https://github.com/google/re2/wiki/Syntax
-  final String branchName;
+  final String? branchName;
 
   /// Regex matching tags to build.
   ///
   /// The syntax of the regular expressions accepted is the syntax accepted by
   /// RE2 and described at https://github.com/google/re2/wiki/Syntax
-  final String tagName;
+  final String? tagName;
 
   /// Explicit commit SHA to build.
-  final String commitSha;
+  final String? commitSha;
 
   /// ID of the project that owns the Cloud Source Repository. If omitted, the
   /// project ID requesting the build is assumed.
@@ -703,9 +703,9 @@ final class RepoSource extends ProtoMessage {
   final bool invertRegex;
 
   RepoSource({
-    this.branchName = '',
-    this.tagName = '',
-    this.commitSha = '',
+    this.branchName,
+    this.tagName,
+    this.commitSha,
     this.projectId = '',
     this.repoName = '',
     this.dir = '',
@@ -714,9 +714,9 @@ final class RepoSource extends ProtoMessage {
 
   factory RepoSource.fromJson(Map<String, dynamic> json) {
     return RepoSource(
-      branchName: json['branchName'] ?? '',
-      tagName: json['tagName'] ?? '',
-      commitSha: json['commitSha'] ?? '',
+      branchName: json['branchName'],
+      tagName: json['tagName'],
+      commitSha: json['commitSha'],
       projectId: json['projectId'] ?? '',
       repoName: json['repoName'] ?? '',
       dir: json['dir'] ?? '',
@@ -727,9 +727,9 @@ final class RepoSource extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (branchName.isNotDefault) 'branchName': branchName,
-      if (tagName.isNotDefault) 'tagName': tagName,
-      if (commitSha.isNotDefault) 'commitSha': commitSha,
+      if (branchName != null) 'branchName': branchName,
+      if (tagName != null) 'tagName': tagName,
+      if (commitSha != null) 'commitSha': commitSha,
       if (projectId.isNotDefault) 'projectId': projectId,
       if (repoName.isNotDefault) 'repoName': repoName,
       if (dir.isNotDefault) 'dir': dir,
@@ -740,9 +740,9 @@ final class RepoSource extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      'branchName=$branchName',
-      'tagName=$tagName',
-      'commitSha=$commitSha',
+      if (branchName != null) 'branchName=$branchName',
+      if (tagName != null) 'tagName=$tagName',
+      if (commitSha != null) 'commitSha=$commitSha',
       'projectId=$projectId',
       'repoName=$repoName',
       'dir=$dir',
@@ -766,16 +766,16 @@ final class Source extends ProtoMessage {
   /// If provided, get the source from GitHub repository. This option is valid
   /// only for GCF 1st Gen function.
   /// Example: https://github.com/<user>/<repo>/blob/<commit>/<path-to-code>
-  final String gitUri;
+  final String? gitUri;
 
-  Source({this.storageSource, this.repoSource, this.gitUri = ''})
+  Source({this.storageSource, this.repoSource, this.gitUri})
     : super(fullyQualifiedName);
 
   factory Source.fromJson(Map<String, dynamic> json) {
     return Source(
       storageSource: decode(json['storageSource'], StorageSource.fromJson),
       repoSource: decode(json['repoSource'], RepoSource.fromJson),
-      gitUri: json['gitUri'] ?? '',
+      gitUri: json['gitUri'],
     );
   }
 
@@ -784,13 +784,13 @@ final class Source extends ProtoMessage {
     return {
       if (storageSource != null) 'storageSource': storageSource!.toJson(),
       if (repoSource != null) 'repoSource': repoSource!.toJson(),
-      if (gitUri.isNotDefault) 'gitUri': gitUri,
+      if (gitUri != null) 'gitUri': gitUri,
     };
   }
 
   @override
   String toString() {
-    final contents = ['gitUri=$gitUri'].join(',');
+    final contents = [if (gitUri != null) 'gitUri=$gitUri'].join(',');
     return 'Source($contents)';
   }
 }
