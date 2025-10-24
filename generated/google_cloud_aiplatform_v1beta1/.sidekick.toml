@@ -20,6 +20,7 @@ service-config = 'google/cloud/aiplatform/v1beta1/aiplatform_v1beta1.yaml'
 copyright-year = '2025'
 
 api-keys-environment-variables = "GOOGLE_API_KEY"
+dev-dependencies = "googleapis_auth"
 repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_aiplatform_v1beta1"
 
 # aiplatform defines `Value`, which protobuf also defines.
