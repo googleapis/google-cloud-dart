@@ -69,7 +69,7 @@ final class StatusException extends ServiceException {
     this.status, {
     required super.statusCode,
     super.responseBody,
-  }) : super(status.message ?? 'status returned without message');
+  }) : super(status.message);
 
   @override
   String toString() => 'StatusException: $message';

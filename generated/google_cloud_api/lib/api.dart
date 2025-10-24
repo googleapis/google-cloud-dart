@@ -46,25 +46,28 @@ final class Authentication extends ProtoMessage {
   /// A list of authentication rules that apply to individual API methods.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<AuthenticationRule>? rules;
+  final List<AuthenticationRule> rules;
 
   /// Defines a set of authentication providers that a service supports.
-  final List<AuthProvider>? providers;
+  final List<AuthProvider> providers;
 
-  Authentication({this.rules, this.providers}) : super(fullyQualifiedName);
+  Authentication({this.rules = const [], this.providers = const []})
+    : super(fullyQualifiedName);
 
   factory Authentication.fromJson(Map<String, dynamic> json) {
     return Authentication(
-      rules: decodeListMessage(json['rules'], AuthenticationRule.fromJson),
-      providers: decodeListMessage(json['providers'], AuthProvider.fromJson),
+      rules:
+          decodeListMessage(json['rules'], AuthenticationRule.fromJson) ?? [],
+      providers:
+          decodeListMessage(json['providers'], AuthProvider.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (rules != null) 'rules': encodeList(rules),
-      if (providers != null) 'providers': encodeList(providers),
+      if (rules.isNotDefault) 'rules': encodeList(rules),
+      if (providers.isNotDefault) 'providers': encodeList(providers),
     };
   }
 
@@ -88,54 +91,52 @@ final class AuthenticationRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// The requirements for OAuth credentials.
   final OauthRequirements? oauth;
 
   /// If true, the service accepts API keys without any other credential.
   /// This flag only applies to HTTP and gRPC requests.
-  final bool? allowWithoutCredential;
+  final bool allowWithoutCredential;
 
   /// Requirements for additional authentication providers.
-  final List<AuthRequirement>? requirements;
+  final List<AuthRequirement> requirements;
 
   AuthenticationRule({
-    this.selector,
+    this.selector = '',
     this.oauth,
-    this.allowWithoutCredential,
-    this.requirements,
+    this.allowWithoutCredential = false,
+    this.requirements = const [],
   }) : super(fullyQualifiedName);
 
   factory AuthenticationRule.fromJson(Map<String, dynamic> json) {
     return AuthenticationRule(
-      selector: json['selector'],
+      selector: json['selector'] ?? '',
       oauth: decode(json['oauth'], OauthRequirements.fromJson),
-      allowWithoutCredential: json['allowWithoutCredential'],
-      requirements: decodeListMessage(
-        json['requirements'],
-        AuthRequirement.fromJson,
-      ),
+      allowWithoutCredential: json['allowWithoutCredential'] ?? false,
+      requirements:
+          decodeListMessage(json['requirements'], AuthRequirement.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
+      if (selector.isNotDefault) 'selector': selector,
       if (oauth != null) 'oauth': oauth!.toJson(),
-      if (allowWithoutCredential != null)
+      if (allowWithoutCredential.isNotDefault)
         'allowWithoutCredential': allowWithoutCredential,
-      if (requirements != null) 'requirements': encodeList(requirements),
+      if (requirements.isNotDefault) 'requirements': encodeList(requirements),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (allowWithoutCredential != null)
-        'allowWithoutCredential=$allowWithoutCredential',
+      'selector=$selector',
+      'allowWithoutCredential=$allowWithoutCredential',
     ].join(',');
     return 'AuthenticationRule($contents)';
   }
@@ -146,13 +147,13 @@ final class JwtLocation extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.JwtLocation';
 
   /// Specifies HTTP header name to extract JWT token.
-  final String? header;
+  final String header;
 
   /// Specifies URL query parameter name to extract JWT token.
-  final String? query;
+  final String query;
 
   /// Specifies cookie name to extract JWT token.
-  final String? cookie;
+  final String cookie;
 
   /// The value prefix. The value format is "value_prefix{token}"
   /// Only applies to "in" header type. Must be empty for "in" query type.
@@ -162,37 +163,41 @@ final class JwtLocation extends ProtoMessage {
   ///
   /// For example, for "Authorization: Bearer {JWT}",
   /// value_prefix="Bearer " with a space at the end.
-  final String? valuePrefix;
+  final String valuePrefix;
 
-  JwtLocation({this.header, this.query, this.cookie, this.valuePrefix})
-    : super(fullyQualifiedName);
+  JwtLocation({
+    this.header = '',
+    this.query = '',
+    this.cookie = '',
+    this.valuePrefix = '',
+  }) : super(fullyQualifiedName);
 
   factory JwtLocation.fromJson(Map<String, dynamic> json) {
     return JwtLocation(
-      header: json['header'],
-      query: json['query'],
-      cookie: json['cookie'],
-      valuePrefix: json['valuePrefix'],
+      header: json['header'] ?? '',
+      query: json['query'] ?? '',
+      cookie: json['cookie'] ?? '',
+      valuePrefix: json['valuePrefix'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (header != null) 'header': header,
-      if (query != null) 'query': query,
-      if (cookie != null) 'cookie': cookie,
-      if (valuePrefix != null) 'valuePrefix': valuePrefix,
+      if (header.isNotDefault) 'header': header,
+      if (query.isNotDefault) 'query': query,
+      if (cookie.isNotDefault) 'cookie': cookie,
+      if (valuePrefix.isNotDefault) 'valuePrefix': valuePrefix,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (header != null) 'header=$header',
-      if (query != null) 'query=$query',
-      if (cookie != null) 'cookie=$cookie',
-      if (valuePrefix != null) 'valuePrefix=$valuePrefix',
+      'header=$header',
+      'query=$query',
+      'cookie=$cookie',
+      'valuePrefix=$valuePrefix',
     ].join(',');
     return 'JwtLocation($contents)';
   }
@@ -208,7 +213,7 @@ final class AuthProvider extends ProtoMessage {
   /// `AuthRequirement.provider_id`.
   ///
   /// Example: "bookstore_auth".
-  final String? id;
+  final String id;
 
   /// Identifies the principal that issued the JWT. See
   /// https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1.1
@@ -216,7 +221,7 @@ final class AuthProvider extends ProtoMessage {
   ///
   /// Example: https://securetoken.google.com
   /// Example: 1234567-compute@developer.gserviceaccount.com
-  final String? issuer;
+  final String issuer;
 
   /// URL of the provider's public key set to validate signature of the JWT. See
   /// [OpenID
@@ -230,7 +235,7 @@ final class AuthProvider extends ProtoMessage {
   ///  service account).
   ///
   /// Example: https://www.googleapis.com/oauth2/v1/certs
-  final String? jwksUri;
+  final String jwksUri;
 
   /// The list of JWT
   /// [audiences](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32#section-4.1.3).
@@ -249,11 +254,11 @@ final class AuthProvider extends ProtoMessage {
   ///
   ///     audiences: bookstore_android.apps.googleusercontent.com,
   ///                bookstore_web.apps.googleusercontent.com
-  final String? audiences;
+  final String audiences;
 
   /// Redirect URL if JWT token is required but not present or is expired.
   /// Implement authorizationUrl of securityDefinitions in OpenAPI spec.
-  final String? authorizationUrl;
+  final String authorizationUrl;
 
   /// Defines the locations to extract the JWT.  For now it is only used by the
   /// Cloud Endpoints to store the OpenAPI extension [x-google-jwt-locations]
@@ -273,51 +278,49 @@ final class AuthProvider extends ProtoMessage {
   ///      value_prefix: "Bearer "
   ///    - header: x-goog-iap-jwt-assertion
   ///    - query: access_token
-  final List<JwtLocation>? jwtLocations;
+  final List<JwtLocation> jwtLocations;
 
   AuthProvider({
-    this.id,
-    this.issuer,
-    this.jwksUri,
-    this.audiences,
-    this.authorizationUrl,
-    this.jwtLocations,
+    this.id = '',
+    this.issuer = '',
+    this.jwksUri = '',
+    this.audiences = '',
+    this.authorizationUrl = '',
+    this.jwtLocations = const [],
   }) : super(fullyQualifiedName);
 
   factory AuthProvider.fromJson(Map<String, dynamic> json) {
     return AuthProvider(
-      id: json['id'],
-      issuer: json['issuer'],
-      jwksUri: json['jwksUri'],
-      audiences: json['audiences'],
-      authorizationUrl: json['authorizationUrl'],
-      jwtLocations: decodeListMessage(
-        json['jwtLocations'],
-        JwtLocation.fromJson,
-      ),
+      id: json['id'] ?? '',
+      issuer: json['issuer'] ?? '',
+      jwksUri: json['jwksUri'] ?? '',
+      audiences: json['audiences'] ?? '',
+      authorizationUrl: json['authorizationUrl'] ?? '',
+      jwtLocations:
+          decodeListMessage(json['jwtLocations'], JwtLocation.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (id != null) 'id': id,
-      if (issuer != null) 'issuer': issuer,
-      if (jwksUri != null) 'jwksUri': jwksUri,
-      if (audiences != null) 'audiences': audiences,
-      if (authorizationUrl != null) 'authorizationUrl': authorizationUrl,
-      if (jwtLocations != null) 'jwtLocations': encodeList(jwtLocations),
+      if (id.isNotDefault) 'id': id,
+      if (issuer.isNotDefault) 'issuer': issuer,
+      if (jwksUri.isNotDefault) 'jwksUri': jwksUri,
+      if (audiences.isNotDefault) 'audiences': audiences,
+      if (authorizationUrl.isNotDefault) 'authorizationUrl': authorizationUrl,
+      if (jwtLocations.isNotDefault) 'jwtLocations': encodeList(jwtLocations),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (id != null) 'id=$id',
-      if (issuer != null) 'issuer=$issuer',
-      if (jwksUri != null) 'jwksUri=$jwksUri',
-      if (audiences != null) 'audiences=$audiences',
-      if (authorizationUrl != null) 'authorizationUrl=$authorizationUrl',
+      'id=$id',
+      'issuer=$issuer',
+      'jwksUri=$jwksUri',
+      'audiences=$audiences',
+      'authorizationUrl=$authorizationUrl',
     ].join(',');
     return 'AuthProvider($contents)';
   }
@@ -351,24 +354,24 @@ final class OauthRequirements extends ProtoMessage {
   ///
   ///      canonical_scopes: https://www.googleapis.com/auth/calendar,
   ///                        https://www.googleapis.com/auth/calendar.read
-  final String? canonicalScopes;
+  final String canonicalScopes;
 
-  OauthRequirements({this.canonicalScopes}) : super(fullyQualifiedName);
+  OauthRequirements({this.canonicalScopes = ''}) : super(fullyQualifiedName);
 
   factory OauthRequirements.fromJson(Map<String, dynamic> json) {
-    return OauthRequirements(canonicalScopes: json['canonicalScopes']);
+    return OauthRequirements(canonicalScopes: json['canonicalScopes'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (canonicalScopes != null) 'canonicalScopes': canonicalScopes};
+    return {
+      if (canonicalScopes.isNotDefault) 'canonicalScopes': canonicalScopes,
+    };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (canonicalScopes != null) 'canonicalScopes=$canonicalScopes',
-    ].join(',');
+    final contents = ['canonicalScopes=$canonicalScopes'].join(',');
     return 'OAuthRequirements($contents)';
   }
 }
@@ -384,7 +387,7 @@ final class AuthRequirement extends ProtoMessage {
   /// Example:
   ///
   ///     provider_id: bookstore_auth
-  final String? providerId;
+  final String providerId;
 
   /// NOTE: This will be deprecated soon, once AuthProvider.audiences is
   /// implemented and accepted in all the runtime components.
@@ -402,31 +405,31 @@ final class AuthRequirement extends ProtoMessage {
   ///
   ///     audiences: bookstore_android.apps.googleusercontent.com,
   ///                bookstore_web.apps.googleusercontent.com
-  final String? audiences;
+  final String audiences;
 
-  AuthRequirement({this.providerId, this.audiences})
+  AuthRequirement({this.providerId = '', this.audiences = ''})
     : super(fullyQualifiedName);
 
   factory AuthRequirement.fromJson(Map<String, dynamic> json) {
     return AuthRequirement(
-      providerId: json['providerId'],
-      audiences: json['audiences'],
+      providerId: json['providerId'] ?? '',
+      audiences: json['audiences'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (providerId != null) 'providerId': providerId,
-      if (audiences != null) 'audiences': audiences,
+      if (providerId.isNotDefault) 'providerId': providerId,
+      if (audiences.isNotDefault) 'audiences': audiences,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (providerId != null) 'providerId=$providerId',
-      if (audiences != null) 'audiences=$audiences',
+      'providerId=$providerId',
+      'audiences=$audiences',
     ].join(',');
     return 'AuthRequirement($contents)';
   }
@@ -439,19 +442,19 @@ final class Backend extends ProtoMessage {
   /// A list of API backend rules that apply to individual API methods.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<BackendRule>? rules;
+  final List<BackendRule> rules;
 
-  Backend({this.rules}) : super(fullyQualifiedName);
+  Backend({this.rules = const []}) : super(fullyQualifiedName);
 
   factory Backend.fromJson(Map<String, dynamic> json) {
     return Backend(
-      rules: decodeListMessage(json['rules'], BackendRule.fromJson),
+      rules: decodeListMessage(json['rules'], BackendRule.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (rules != null) 'rules': encodeList(rules)};
+    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
   }
 
   @override
@@ -466,7 +469,7 @@ final class BackendRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// The address of the API backend.
   ///
@@ -488,31 +491,31 @@ final class BackendRule extends ProtoMessage {
   ///
   /// For HTTP backends, use `protocol`
   /// to specify the protocol version.
-  final String? address;
+  final String address;
 
   /// The number of seconds to wait for a response from a request. The default
   /// varies based on the request protocol and deployment environment.
-  final double? deadline;
+  final double deadline;
 
   /// Deprecated, do not use.
-  final double? minDeadline;
+  final double minDeadline;
 
   /// The number of seconds to wait for the completion of a long running
   /// operation. The default is no deadline.
-  final double? operationDeadline;
+  final double operationDeadline;
 
-  final BackendRule_PathTranslation? pathTranslation;
+  final BackendRule_PathTranslation pathTranslation;
 
   /// The JWT audience is used when generating a JWT ID token for the backend.
   /// This ID token will be added in the HTTP "authorization" header, and sent
   /// to the backend.
-  final String? jwtAudience;
+  final String jwtAudience;
 
   /// When disable_auth is true, a JWT ID token won't be generated and the
   /// original "Authorization" HTTP header will be preserved. If the header is
   /// used to carry the original token and is expected by the backend, this
   /// field must be set to true to preserve the header.
-  final bool? disableAuth;
+  final bool disableAuth;
 
   /// The protocol used for sending a request to the backend.
   /// The supported values are "http/1.1" and "h2".
@@ -535,59 +538,64 @@ final class BackendRule extends ProtoMessage {
   /// See
   /// https://www.iana.org/assignments/tls-extensiontype-values/tls-extensiontype-values.xhtml#alpn-protocol-ids
   /// for more details on the supported values.
-  final String? protocol;
+  final String protocol;
 
   /// The map between request protocol and the backend address.
-  final Map<String, BackendRule>? overridesByRequestProtocol;
+  final Map<String, BackendRule> overridesByRequestProtocol;
 
   BackendRule({
-    this.selector,
-    this.address,
-    this.deadline,
-    this.minDeadline,
-    this.operationDeadline,
-    this.pathTranslation,
-    this.jwtAudience,
-    this.disableAuth,
-    this.protocol,
-    this.overridesByRequestProtocol,
+    this.selector = '',
+    this.address = '',
+    this.deadline = 0,
+    this.minDeadline = 0,
+    this.operationDeadline = 0,
+    this.pathTranslation = BackendRule_PathTranslation.$default,
+    this.jwtAudience = '',
+    this.disableAuth = false,
+    this.protocol = '',
+    this.overridesByRequestProtocol = const {},
   }) : super(fullyQualifiedName);
 
   factory BackendRule.fromJson(Map<String, dynamic> json) {
     return BackendRule(
-      selector: json['selector'],
-      address: json['address'],
-      deadline: decodeDouble(json['deadline']),
-      minDeadline: decodeDouble(json['minDeadline']),
-      operationDeadline: decodeDouble(json['operationDeadline']),
-      pathTranslation: decodeEnum(
-        json['pathTranslation'],
-        BackendRule_PathTranslation.fromJson,
-      ),
-      jwtAudience: json['jwtAudience'],
-      disableAuth: json['disableAuth'],
-      protocol: json['protocol'],
-      overridesByRequestProtocol: decodeMapMessage(
-        json['overridesByRequestProtocol'],
-        BackendRule.fromJson,
-      ),
+      selector: json['selector'] ?? '',
+      address: json['address'] ?? '',
+      deadline: decodeDouble(json['deadline']) ?? 0,
+      minDeadline: decodeDouble(json['minDeadline']) ?? 0,
+      operationDeadline: decodeDouble(json['operationDeadline']) ?? 0,
+      pathTranslation:
+          decodeEnum(
+            json['pathTranslation'],
+            BackendRule_PathTranslation.fromJson,
+          ) ??
+          BackendRule_PathTranslation.$default,
+      jwtAudience: json['jwtAudience'] ?? '',
+      disableAuth: json['disableAuth'] ?? false,
+      protocol: json['protocol'] ?? '',
+      overridesByRequestProtocol:
+          decodeMapMessage(
+            json['overridesByRequestProtocol'],
+            BackendRule.fromJson,
+          ) ??
+          {},
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (address != null) 'address': address,
-      if (deadline != null) 'deadline': encodeDouble(deadline),
-      if (minDeadline != null) 'minDeadline': encodeDouble(minDeadline),
-      if (operationDeadline != null)
+      if (selector.isNotDefault) 'selector': selector,
+      if (address.isNotDefault) 'address': address,
+      if (deadline.isNotDefault) 'deadline': encodeDouble(deadline),
+      if (minDeadline.isNotDefault) 'minDeadline': encodeDouble(minDeadline),
+      if (operationDeadline.isNotDefault)
         'operationDeadline': encodeDouble(operationDeadline),
-      if (pathTranslation != null) 'pathTranslation': pathTranslation!.toJson(),
-      if (jwtAudience != null) 'jwtAudience': jwtAudience,
-      if (disableAuth != null) 'disableAuth': disableAuth,
-      if (protocol != null) 'protocol': protocol,
-      if (overridesByRequestProtocol != null)
+      if (pathTranslation.isNotDefault)
+        'pathTranslation': pathTranslation.toJson(),
+      if (jwtAudience.isNotDefault) 'jwtAudience': jwtAudience,
+      if (disableAuth.isNotDefault) 'disableAuth': disableAuth,
+      if (protocol.isNotDefault) 'protocol': protocol,
+      if (overridesByRequestProtocol.isNotDefault)
         'overridesByRequestProtocol': encodeMap(overridesByRequestProtocol),
     };
   }
@@ -595,15 +603,15 @@ final class BackendRule extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (address != null) 'address=$address',
-      if (deadline != null) 'deadline=$deadline',
-      if (minDeadline != null) 'minDeadline=$minDeadline',
-      if (operationDeadline != null) 'operationDeadline=$operationDeadline',
-      if (pathTranslation != null) 'pathTranslation=$pathTranslation',
-      if (jwtAudience != null) 'jwtAudience=$jwtAudience',
-      if (disableAuth != null) 'disableAuth=$disableAuth',
-      if (protocol != null) 'protocol=$protocol',
+      'selector=$selector',
+      'address=$address',
+      'deadline=$deadline',
+      'minDeadline=$minDeadline',
+      'operationDeadline=$operationDeadline',
+      'pathTranslation=$pathTranslation',
+      'jwtAudience=$jwtAudience',
+      'disableAuth=$disableAuth',
+      'protocol=$protocol',
     ].join(',');
     return 'BackendRule($contents)';
   }
@@ -671,10 +679,15 @@ final class BackendRule_PathTranslation extends ProtoEnum {
     'APPEND_PATH_TO_ADDRESS',
   );
 
+  /// The default value for [BackendRule_PathTranslation].
+  static const $default = pathTranslationUnspecified;
+
   const BackendRule_PathTranslation(super.value);
 
   factory BackendRule_PathTranslation.fromJson(String json) =>
       BackendRule_PathTranslation(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'PathTranslation.$value';
@@ -719,23 +732,25 @@ final class Billing extends ProtoMessage {
   /// There can be multiple consumer destinations per service, each one must have
   /// a different monitored resource type. A metric can be used in at most
   /// one consumer destination.
-  final List<Billing_BillingDestination>? consumerDestinations;
+  final List<Billing_BillingDestination> consumerDestinations;
 
-  Billing({this.consumerDestinations}) : super(fullyQualifiedName);
+  Billing({this.consumerDestinations = const []}) : super(fullyQualifiedName);
 
   factory Billing.fromJson(Map<String, dynamic> json) {
     return Billing(
-      consumerDestinations: decodeListMessage(
-        json['consumerDestinations'],
-        Billing_BillingDestination.fromJson,
-      ),
+      consumerDestinations:
+          decodeListMessage(
+            json['consumerDestinations'],
+            Billing_BillingDestination.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (consumerDestinations != null)
+      if (consumerDestinations.isNotDefault)
         'consumerDestinations': encodeList(consumerDestinations),
     };
   }
@@ -753,36 +768,37 @@ final class Billing_BillingDestination extends ProtoMessage {
   /// The monitored resource type. The type must be defined in
   /// `Service.monitored_resources`
   /// section.
-  final String? monitoredResource;
+  final String monitoredResource;
 
   /// Names of the metrics to report to this billing destination.
   /// Each name must be defined in
   /// `Service.metrics` section.
-  final List<String>? metrics;
+  final List<String> metrics;
 
-  Billing_BillingDestination({this.monitoredResource, this.metrics})
-    : super(fullyQualifiedName);
+  Billing_BillingDestination({
+    this.monitoredResource = '',
+    this.metrics = const [],
+  }) : super(fullyQualifiedName);
 
   factory Billing_BillingDestination.fromJson(Map<String, dynamic> json) {
     return Billing_BillingDestination(
-      monitoredResource: json['monitoredResource'],
-      metrics: decodeList(json['metrics']),
+      monitoredResource: json['monitoredResource'] ?? '',
+      metrics: decodeList(json['metrics']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (monitoredResource != null) 'monitoredResource': monitoredResource,
-      if (metrics != null) 'metrics': metrics,
+      if (monitoredResource.isNotDefault)
+        'monitoredResource': monitoredResource,
+      if (metrics.isNotDefault) 'metrics': metrics,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (monitoredResource != null) 'monitoredResource=$monitoredResource',
-    ].join(',');
+    final contents = ['monitoredResource=$monitoredResource'].join(',');
     return 'BillingDestination($contents)';
   }
 }
@@ -793,27 +809,29 @@ final class CommonLanguageSettings extends ProtoMessage {
 
   /// Link to automatically generated reference documentation.  Example:
   /// https://cloud.google.com/nodejs/docs/reference/asset/latest
-  final String? referenceDocsUri;
+  final String referenceDocsUri;
 
   /// The destination where API teams want this client library to be published.
-  final List<ClientLibraryDestination>? destinations;
+  final List<ClientLibraryDestination> destinations;
 
   /// Configuration for which RPCs should be generated in the GAPIC client.
   final SelectiveGapicGeneration? selectiveGapicGeneration;
 
   CommonLanguageSettings({
-    this.referenceDocsUri,
-    this.destinations,
+    this.referenceDocsUri = '',
+    this.destinations = const [],
     this.selectiveGapicGeneration,
   }) : super(fullyQualifiedName);
 
   factory CommonLanguageSettings.fromJson(Map<String, dynamic> json) {
     return CommonLanguageSettings(
-      referenceDocsUri: json['referenceDocsUri'],
-      destinations: decodeListEnum(
-        json['destinations'],
-        ClientLibraryDestination.fromJson,
-      ),
+      referenceDocsUri: json['referenceDocsUri'] ?? '',
+      destinations:
+          decodeListEnum(
+            json['destinations'],
+            ClientLibraryDestination.fromJson,
+          ) ??
+          [],
       selectiveGapicGeneration: decode(
         json['selectiveGapicGeneration'],
         SelectiveGapicGeneration.fromJson,
@@ -824,8 +842,8 @@ final class CommonLanguageSettings extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (referenceDocsUri != null) 'referenceDocsUri': referenceDocsUri,
-      if (destinations != null) 'destinations': encodeList(destinations),
+      if (referenceDocsUri.isNotDefault) 'referenceDocsUri': referenceDocsUri,
+      if (destinations.isNotDefault) 'destinations': encodeList(destinations),
       if (selectiveGapicGeneration != null)
         'selectiveGapicGeneration': selectiveGapicGeneration!.toJson(),
     };
@@ -833,9 +851,7 @@ final class CommonLanguageSettings extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (referenceDocsUri != null) 'referenceDocsUri=$referenceDocsUri',
-    ].join(',');
+    final contents = ['referenceDocsUri=$referenceDocsUri'].join(',');
     return 'CommonLanguageSettings($contents)';
   }
 }
@@ -847,14 +863,14 @@ final class ClientLibrarySettings extends ProtoMessage {
   /// Version of the API to apply these settings to. This is the full protobuf
   /// package for the API, ending in the version element.
   /// Examples: "google.cloud.speech.v1" and "google.spanner.admin.database.v1".
-  final String? version;
+  final String version;
 
   /// Launch stage of this version of the API.
-  final LaunchStage? launchStage;
+  final LaunchStage launchStage;
 
   /// When using transport=rest, the client request will encode enums as
   /// numbers rather than strings.
-  final bool? restNumericEnums;
+  final bool restNumericEnums;
 
   /// Settings for legacy Java features, supported in the Service YAML.
   final JavaSettings? javaSettings;
@@ -881,9 +897,9 @@ final class ClientLibrarySettings extends ProtoMessage {
   final GoSettings? goSettings;
 
   ClientLibrarySettings({
-    this.version,
-    this.launchStage,
-    this.restNumericEnums,
+    this.version = '',
+    this.launchStage = LaunchStage.$default,
+    this.restNumericEnums = false,
     this.javaSettings,
     this.cppSettings,
     this.phpSettings,
@@ -896,9 +912,11 @@ final class ClientLibrarySettings extends ProtoMessage {
 
   factory ClientLibrarySettings.fromJson(Map<String, dynamic> json) {
     return ClientLibrarySettings(
-      version: json['version'],
-      launchStage: decodeEnum(json['launchStage'], LaunchStage.fromJson),
-      restNumericEnums: json['restNumericEnums'],
+      version: json['version'] ?? '',
+      launchStage:
+          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+          LaunchStage.$default,
+      restNumericEnums: json['restNumericEnums'] ?? false,
       javaSettings: decode(json['javaSettings'], JavaSettings.fromJson),
       cppSettings: decode(json['cppSettings'], CppSettings.fromJson),
       phpSettings: decode(json['phpSettings'], PhpSettings.fromJson),
@@ -913,9 +931,9 @@ final class ClientLibrarySettings extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (version != null) 'version': version,
-      if (launchStage != null) 'launchStage': launchStage!.toJson(),
-      if (restNumericEnums != null) 'restNumericEnums': restNumericEnums,
+      if (version.isNotDefault) 'version': version,
+      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
+      if (restNumericEnums.isNotDefault) 'restNumericEnums': restNumericEnums,
       if (javaSettings != null) 'javaSettings': javaSettings!.toJson(),
       if (cppSettings != null) 'cppSettings': cppSettings!.toJson(),
       if (phpSettings != null) 'phpSettings': phpSettings!.toJson(),
@@ -930,9 +948,9 @@ final class ClientLibrarySettings extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (version != null) 'version=$version',
-      if (launchStage != null) 'launchStage=$launchStage',
-      if (restNumericEnums != null) 'restNumericEnums=$restNumericEnums',
+      'version=$version',
+      'launchStage=$launchStage',
+      'restNumericEnums=$restNumericEnums',
     ].join(',');
     return 'ClientLibrarySettings($contents)';
   }
@@ -946,104 +964,110 @@ final class Publishing extends ProtoMessage {
 
   /// A list of API method settings, e.g. the behavior for methods that use the
   /// long-running operation pattern.
-  final List<MethodSettings>? methodSettings;
+  final List<MethodSettings> methodSettings;
 
   /// Link to a *public* URI where users can report issues.  Example:
   /// https://issuetracker.google.com/issues/new?component=190865&template=1161103
-  final String? newIssueUri;
+  final String newIssueUri;
 
   /// Link to product home page.  Example:
   /// https://cloud.google.com/asset-inventory/docs/overview
-  final String? documentationUri;
+  final String documentationUri;
 
   /// Used as a tracking tag when collecting data about the APIs developer
   /// relations artifacts like docs, packages delivered to package managers,
   /// etc.  Example: "speech".
-  final String? apiShortName;
+  final String apiShortName;
 
   /// GitHub label to apply to issues and pull requests opened for this API.
-  final String? githubLabel;
+  final String githubLabel;
 
   /// GitHub teams to be added to CODEOWNERS in the directory in GitHub
   /// containing source code for the client libraries for this API.
-  final List<String>? codeownerGithubTeams;
+  final List<String> codeownerGithubTeams;
 
   /// A prefix used in sample code when demarking regions to be included in
   /// documentation.
-  final String? docTagPrefix;
+  final String docTagPrefix;
 
   /// For whom the client library is being published.
-  final ClientLibraryOrganization? organization;
+  final ClientLibraryOrganization organization;
 
   /// Client library settings.  If the same version string appears multiple
   /// times in this list, then the last one wins.  Settings from earlier
   /// settings with the same version string are discarded.
-  final List<ClientLibrarySettings>? librarySettings;
+  final List<ClientLibrarySettings> librarySettings;
 
   /// Optional link to proto reference documentation.  Example:
   /// https://cloud.google.com/pubsub/lite/docs/reference/rpc
-  final String? protoReferenceDocumentationUri;
+  final String protoReferenceDocumentationUri;
 
   /// Optional link to REST reference documentation.  Example:
   /// https://cloud.google.com/pubsub/lite/docs/reference/rest
-  final String? restReferenceDocumentationUri;
+  final String restReferenceDocumentationUri;
 
   Publishing({
-    this.methodSettings,
-    this.newIssueUri,
-    this.documentationUri,
-    this.apiShortName,
-    this.githubLabel,
-    this.codeownerGithubTeams,
-    this.docTagPrefix,
-    this.organization,
-    this.librarySettings,
-    this.protoReferenceDocumentationUri,
-    this.restReferenceDocumentationUri,
+    this.methodSettings = const [],
+    this.newIssueUri = '',
+    this.documentationUri = '',
+    this.apiShortName = '',
+    this.githubLabel = '',
+    this.codeownerGithubTeams = const [],
+    this.docTagPrefix = '',
+    this.organization = ClientLibraryOrganization.$default,
+    this.librarySettings = const [],
+    this.protoReferenceDocumentationUri = '',
+    this.restReferenceDocumentationUri = '',
   }) : super(fullyQualifiedName);
 
   factory Publishing.fromJson(Map<String, dynamic> json) {
     return Publishing(
-      methodSettings: decodeListMessage(
-        json['methodSettings'],
-        MethodSettings.fromJson,
-      ),
-      newIssueUri: json['newIssueUri'],
-      documentationUri: json['documentationUri'],
-      apiShortName: json['apiShortName'],
-      githubLabel: json['githubLabel'],
-      codeownerGithubTeams: decodeList(json['codeownerGithubTeams']),
-      docTagPrefix: json['docTagPrefix'],
-      organization: decodeEnum(
-        json['organization'],
-        ClientLibraryOrganization.fromJson,
-      ),
-      librarySettings: decodeListMessage(
-        json['librarySettings'],
-        ClientLibrarySettings.fromJson,
-      ),
-      protoReferenceDocumentationUri: json['protoReferenceDocumentationUri'],
-      restReferenceDocumentationUri: json['restReferenceDocumentationUri'],
+      methodSettings:
+          decodeListMessage(json['methodSettings'], MethodSettings.fromJson) ??
+          [],
+      newIssueUri: json['newIssueUri'] ?? '',
+      documentationUri: json['documentationUri'] ?? '',
+      apiShortName: json['apiShortName'] ?? '',
+      githubLabel: json['githubLabel'] ?? '',
+      codeownerGithubTeams: decodeList(json['codeownerGithubTeams']) ?? [],
+      docTagPrefix: json['docTagPrefix'] ?? '',
+      organization:
+          decodeEnum(
+            json['organization'],
+            ClientLibraryOrganization.fromJson,
+          ) ??
+          ClientLibraryOrganization.$default,
+      librarySettings:
+          decodeListMessage(
+            json['librarySettings'],
+            ClientLibrarySettings.fromJson,
+          ) ??
+          [],
+      protoReferenceDocumentationUri:
+          json['protoReferenceDocumentationUri'] ?? '',
+      restReferenceDocumentationUri:
+          json['restReferenceDocumentationUri'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (methodSettings != null) 'methodSettings': encodeList(methodSettings),
-      if (newIssueUri != null) 'newIssueUri': newIssueUri,
-      if (documentationUri != null) 'documentationUri': documentationUri,
-      if (apiShortName != null) 'apiShortName': apiShortName,
-      if (githubLabel != null) 'githubLabel': githubLabel,
-      if (codeownerGithubTeams != null)
+      if (methodSettings.isNotDefault)
+        'methodSettings': encodeList(methodSettings),
+      if (newIssueUri.isNotDefault) 'newIssueUri': newIssueUri,
+      if (documentationUri.isNotDefault) 'documentationUri': documentationUri,
+      if (apiShortName.isNotDefault) 'apiShortName': apiShortName,
+      if (githubLabel.isNotDefault) 'githubLabel': githubLabel,
+      if (codeownerGithubTeams.isNotDefault)
         'codeownerGithubTeams': codeownerGithubTeams,
-      if (docTagPrefix != null) 'docTagPrefix': docTagPrefix,
-      if (organization != null) 'organization': organization!.toJson(),
-      if (librarySettings != null)
+      if (docTagPrefix.isNotDefault) 'docTagPrefix': docTagPrefix,
+      if (organization.isNotDefault) 'organization': organization.toJson(),
+      if (librarySettings.isNotDefault)
         'librarySettings': encodeList(librarySettings),
-      if (protoReferenceDocumentationUri != null)
+      if (protoReferenceDocumentationUri.isNotDefault)
         'protoReferenceDocumentationUri': protoReferenceDocumentationUri,
-      if (restReferenceDocumentationUri != null)
+      if (restReferenceDocumentationUri.isNotDefault)
         'restReferenceDocumentationUri': restReferenceDocumentationUri,
     };
   }
@@ -1051,16 +1075,14 @@ final class Publishing extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (newIssueUri != null) 'newIssueUri=$newIssueUri',
-      if (documentationUri != null) 'documentationUri=$documentationUri',
-      if (apiShortName != null) 'apiShortName=$apiShortName',
-      if (githubLabel != null) 'githubLabel=$githubLabel',
-      if (docTagPrefix != null) 'docTagPrefix=$docTagPrefix',
-      if (organization != null) 'organization=$organization',
-      if (protoReferenceDocumentationUri != null)
-        'protoReferenceDocumentationUri=$protoReferenceDocumentationUri',
-      if (restReferenceDocumentationUri != null)
-        'restReferenceDocumentationUri=$restReferenceDocumentationUri',
+      'newIssueUri=$newIssueUri',
+      'documentationUri=$documentationUri',
+      'apiShortName=$apiShortName',
+      'githubLabel=$githubLabel',
+      'docTagPrefix=$docTagPrefix',
+      'organization=$organization',
+      'protoReferenceDocumentationUri=$protoReferenceDocumentationUri',
+      'restReferenceDocumentationUri=$restReferenceDocumentationUri',
     ].join(',');
     return 'Publishing($contents)';
   }
@@ -1081,7 +1103,7 @@ final class JavaSettings extends ProtoMessage {
   ///  publishing:
   ///    java_settings:
   ///      library_package: com.google.cloud.pubsub.v1
-  final String? libraryPackage;
+  final String libraryPackage;
 
   /// Configure the Java class name to use instead of the service's for its
   /// corresponding generated GAPIC client. Keys are fully-qualified
@@ -1097,18 +1119,21 @@ final class JavaSettings extends ProtoMessage {
   ///      service_class_names:
   ///        - google.pubsub.v1.Publisher: TopicAdmin
   ///        - google.pubsub.v1.Subscriber: SubscriptionAdmin
-  final Map<String, String>? serviceClassNames;
+  final Map<String, String> serviceClassNames;
 
   /// Some settings.
   final CommonLanguageSettings? common;
 
-  JavaSettings({this.libraryPackage, this.serviceClassNames, this.common})
-    : super(fullyQualifiedName);
+  JavaSettings({
+    this.libraryPackage = '',
+    this.serviceClassNames = const {},
+    this.common,
+  }) : super(fullyQualifiedName);
 
   factory JavaSettings.fromJson(Map<String, dynamic> json) {
     return JavaSettings(
-      libraryPackage: json['libraryPackage'],
-      serviceClassNames: decodeMap(json['serviceClassNames']),
+      libraryPackage: json['libraryPackage'] ?? '',
+      serviceClassNames: decodeMap(json['serviceClassNames']) ?? {},
       common: decode(json['common'], CommonLanguageSettings.fromJson),
     );
   }
@@ -1116,17 +1141,16 @@ final class JavaSettings extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (libraryPackage != null) 'libraryPackage': libraryPackage,
-      if (serviceClassNames != null) 'serviceClassNames': serviceClassNames,
+      if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
+      if (serviceClassNames.isNotDefault)
+        'serviceClassNames': serviceClassNames,
       if (common != null) 'common': common!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (libraryPackage != null) 'libraryPackage=$libraryPackage',
-    ].join(',');
+    final contents = ['libraryPackage=$libraryPackage'].join(',');
     return 'JavaSettings($contents)';
   }
 }
@@ -1226,43 +1250,45 @@ final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
   /// enabled. By default, asynchronous REST clients will not be generated.
   /// This feature will be enabled by default 1 month after launching the
   /// feature in preview packages.
-  final bool? restAsyncIoEnabled;
+  final bool restAsyncIoEnabled;
 
   /// Enables generation of protobuf code using new types that are more
   /// Pythonic which are included in `protobuf>=5.29.x`. This feature will be
   /// enabled by default 1 month after launching the feature in preview
   /// packages.
-  final bool? protobufPythonicTypesEnabled;
+  final bool protobufPythonicTypesEnabled;
 
   /// Disables generation of an unversioned Python package for this client
   /// library. This means that the module names will need to be versioned in
   /// import statements. For example `import google.cloud.library_v2` instead
   /// of `import google.cloud.library`.
-  final bool? unversionedPackageDisabled;
+  final bool unversionedPackageDisabled;
 
   PythonSettings_ExperimentalFeatures({
-    this.restAsyncIoEnabled,
-    this.protobufPythonicTypesEnabled,
-    this.unversionedPackageDisabled,
+    this.restAsyncIoEnabled = false,
+    this.protobufPythonicTypesEnabled = false,
+    this.unversionedPackageDisabled = false,
   }) : super(fullyQualifiedName);
 
   factory PythonSettings_ExperimentalFeatures.fromJson(
     Map<String, dynamic> json,
   ) {
     return PythonSettings_ExperimentalFeatures(
-      restAsyncIoEnabled: json['restAsyncIoEnabled'],
-      protobufPythonicTypesEnabled: json['protobufPythonicTypesEnabled'],
-      unversionedPackageDisabled: json['unversionedPackageDisabled'],
+      restAsyncIoEnabled: json['restAsyncIoEnabled'] ?? false,
+      protobufPythonicTypesEnabled:
+          json['protobufPythonicTypesEnabled'] ?? false,
+      unversionedPackageDisabled: json['unversionedPackageDisabled'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (restAsyncIoEnabled != null) 'restAsyncIoEnabled': restAsyncIoEnabled,
-      if (protobufPythonicTypesEnabled != null)
+      if (restAsyncIoEnabled.isNotDefault)
+        'restAsyncIoEnabled': restAsyncIoEnabled,
+      if (protobufPythonicTypesEnabled.isNotDefault)
         'protobufPythonicTypesEnabled': protobufPythonicTypesEnabled,
-      if (unversionedPackageDisabled != null)
+      if (unversionedPackageDisabled.isNotDefault)
         'unversionedPackageDisabled': unversionedPackageDisabled,
     };
   }
@@ -1270,11 +1296,9 @@ final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (restAsyncIoEnabled != null) 'restAsyncIoEnabled=$restAsyncIoEnabled',
-      if (protobufPythonicTypesEnabled != null)
-        'protobufPythonicTypesEnabled=$protobufPythonicTypesEnabled',
-      if (unversionedPackageDisabled != null)
-        'unversionedPackageDisabled=$unversionedPackageDisabled',
+      'restAsyncIoEnabled=$restAsyncIoEnabled',
+      'protobufPythonicTypesEnabled=$protobufPythonicTypesEnabled',
+      'unversionedPackageDisabled=$unversionedPackageDisabled',
     ].join(',');
     return 'ExperimentalFeatures($contents)';
   }
@@ -1316,48 +1340,48 @@ final class DotnetSettings extends ProtoMessage {
   /// would cause a naming conflict. (Neither name is
   /// fully-qualified.)
   /// Example: Subscriber to SubscriberServiceApi.
-  final Map<String, String>? renamedServices;
+  final Map<String, String> renamedServices;
 
   /// Map from full resource types to the effective short name
   /// for the resource. This is used when otherwise resource
   /// named from different services would cause naming collisions.
   /// Example entry:
   /// "datalabeling.googleapis.com/Dataset": "DataLabelingDataset"
-  final Map<String, String>? renamedResources;
+  final Map<String, String> renamedResources;
 
   /// List of full resource types to ignore during generation.
   /// This is typically used for API-specific Location resources,
   /// which should be handled by the generator as if they were actually
   /// the common Location resources.
   /// Example entry: "documentai.googleapis.com/Location"
-  final List<String>? ignoredResources;
+  final List<String> ignoredResources;
 
   /// Namespaces which must be aliased in snippets due to
   /// a known (but non-generator-predictable) naming collision
-  final List<String>? forcedNamespaceAliases;
+  final List<String> forcedNamespaceAliases;
 
   /// Method signatures (in the form "service.method(signature)")
   /// which are provided separately, so shouldn't be generated.
   /// Snippets *calling* these methods are still generated, however.
-  final List<String>? handwrittenSignatures;
+  final List<String> handwrittenSignatures;
 
   DotnetSettings({
     this.common,
-    this.renamedServices,
-    this.renamedResources,
-    this.ignoredResources,
-    this.forcedNamespaceAliases,
-    this.handwrittenSignatures,
+    this.renamedServices = const {},
+    this.renamedResources = const {},
+    this.ignoredResources = const [],
+    this.forcedNamespaceAliases = const [],
+    this.handwrittenSignatures = const [],
   }) : super(fullyQualifiedName);
 
   factory DotnetSettings.fromJson(Map<String, dynamic> json) {
     return DotnetSettings(
       common: decode(json['common'], CommonLanguageSettings.fromJson),
-      renamedServices: decodeMap(json['renamedServices']),
-      renamedResources: decodeMap(json['renamedResources']),
-      ignoredResources: decodeList(json['ignoredResources']),
-      forcedNamespaceAliases: decodeList(json['forcedNamespaceAliases']),
-      handwrittenSignatures: decodeList(json['handwrittenSignatures']),
+      renamedServices: decodeMap(json['renamedServices']) ?? {},
+      renamedResources: decodeMap(json['renamedResources']) ?? {},
+      ignoredResources: decodeList(json['ignoredResources']) ?? [],
+      forcedNamespaceAliases: decodeList(json['forcedNamespaceAliases']) ?? [],
+      handwrittenSignatures: decodeList(json['handwrittenSignatures']) ?? [],
     );
   }
 
@@ -1365,12 +1389,12 @@ final class DotnetSettings extends ProtoMessage {
   Object toJson() {
     return {
       if (common != null) 'common': common!.toJson(),
-      if (renamedServices != null) 'renamedServices': renamedServices,
-      if (renamedResources != null) 'renamedResources': renamedResources,
-      if (ignoredResources != null) 'ignoredResources': ignoredResources,
-      if (forcedNamespaceAliases != null)
+      if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
+      if (renamedResources.isNotDefault) 'renamedResources': renamedResources,
+      if (ignoredResources.isNotDefault) 'ignoredResources': ignoredResources,
+      if (forcedNamespaceAliases.isNotDefault)
         'forcedNamespaceAliases': forcedNamespaceAliases,
-      if (handwrittenSignatures != null)
+      if (handwrittenSignatures.isNotDefault)
         'handwrittenSignatures': handwrittenSignatures,
     };
   }
@@ -1418,14 +1442,15 @@ final class GoSettings extends ProtoMessage {
   ///   go_settings:
   ///     renamed_services:
   ///       Publisher: TopicAdmin
-  final Map<String, String>? renamedServices;
+  final Map<String, String> renamedServices;
 
-  GoSettings({this.common, this.renamedServices}) : super(fullyQualifiedName);
+  GoSettings({this.common, this.renamedServices = const {}})
+    : super(fullyQualifiedName);
 
   factory GoSettings.fromJson(Map<String, dynamic> json) {
     return GoSettings(
       common: decode(json['common'], CommonLanguageSettings.fromJson),
-      renamedServices: decodeMap(json['renamedServices']),
+      renamedServices: decodeMap(json['renamedServices']) ?? {},
     );
   }
 
@@ -1433,7 +1458,7 @@ final class GoSettings extends ProtoMessage {
   Object toJson() {
     return {
       if (common != null) 'common': common!.toJson(),
-      if (renamedServices != null) 'renamedServices': renamedServices,
+      if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
     };
   }
 
@@ -1454,7 +1479,7 @@ final class MethodSettings extends ProtoMessage {
   ///      method_settings:
   ///      - selector: google.storage.control.v2.StorageControl.CreateFolder
   ///        # method settings for CreateFolder...
-  final String? selector;
+  final String selector;
 
   /// Describes settings to use for long-running operations when generating
   /// API methods for RPCs. Complements RPCs that use the annotations in
@@ -1483,35 +1508,38 @@ final class MethodSettings extends ProtoMessage {
   ///      - selector: google.example.v1.ExampleService.CreateExample
   ///        auto_populated_fields:
   ///        - request_id
-  final List<String>? autoPopulatedFields;
+  final List<String> autoPopulatedFields;
 
-  MethodSettings({this.selector, this.longRunning, this.autoPopulatedFields})
-    : super(fullyQualifiedName);
+  MethodSettings({
+    this.selector = '',
+    this.longRunning,
+    this.autoPopulatedFields = const [],
+  }) : super(fullyQualifiedName);
 
   factory MethodSettings.fromJson(Map<String, dynamic> json) {
     return MethodSettings(
-      selector: json['selector'],
+      selector: json['selector'] ?? '',
       longRunning: decode(
         json['longRunning'],
         MethodSettings_LongRunning.fromJson,
       ),
-      autoPopulatedFields: decodeList(json['autoPopulatedFields']),
+      autoPopulatedFields: decodeList(json['autoPopulatedFields']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
+      if (selector.isNotDefault) 'selector': selector,
       if (longRunning != null) 'longRunning': longRunning!.toJson(),
-      if (autoPopulatedFields != null)
+      if (autoPopulatedFields.isNotDefault)
         'autoPopulatedFields': autoPopulatedFields,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (selector != null) 'selector=$selector'].join(',');
+    final contents = ['selector=$selector'].join(',');
     return 'MethodSettings($contents)';
   }
 }
@@ -1532,7 +1560,7 @@ final class MethodSettings_LongRunning extends ProtoMessage {
   /// Multiplier to gradually increase delay between subsequent polls until it
   /// reaches max_poll_delay.
   /// Default value: 1.5.
-  final double? pollDelayMultiplier;
+  final double pollDelayMultiplier;
 
   /// Maximum time between two subsequent poll requests.
   /// Default value: 45 seconds.
@@ -1544,7 +1572,7 @@ final class MethodSettings_LongRunning extends ProtoMessage {
 
   MethodSettings_LongRunning({
     this.initialPollDelay,
-    this.pollDelayMultiplier,
+    this.pollDelayMultiplier = 0,
     this.maxPollDelay,
     this.totalPollTimeout,
   }) : super(fullyQualifiedName);
@@ -1555,7 +1583,7 @@ final class MethodSettings_LongRunning extends ProtoMessage {
         json['initialPollDelay'],
         Duration.fromJson,
       ),
-      pollDelayMultiplier: decodeDouble(json['pollDelayMultiplier']),
+      pollDelayMultiplier: decodeDouble(json['pollDelayMultiplier']) ?? 0,
       maxPollDelay: decodeCustom(json['maxPollDelay'], Duration.fromJson),
       totalPollTimeout: decodeCustom(
         json['totalPollTimeout'],
@@ -1569,7 +1597,7 @@ final class MethodSettings_LongRunning extends ProtoMessage {
     return {
       if (initialPollDelay != null)
         'initialPollDelay': initialPollDelay!.toJson(),
-      if (pollDelayMultiplier != null)
+      if (pollDelayMultiplier.isNotDefault)
         'pollDelayMultiplier': encodeDouble(pollDelayMultiplier),
       if (maxPollDelay != null) 'maxPollDelay': maxPollDelay!.toJson(),
       if (totalPollTimeout != null)
@@ -1579,10 +1607,7 @@ final class MethodSettings_LongRunning extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (pollDelayMultiplier != null)
-        'pollDelayMultiplier=$pollDelayMultiplier',
-    ].join(',');
+    final contents = ['pollDelayMultiplier=$pollDelayMultiplier'].join(',');
     return 'LongRunning($contents)';
   }
 }
@@ -1595,7 +1620,7 @@ final class SelectiveGapicGeneration extends ProtoMessage {
 
   /// An allowlist of the fully qualified names of RPCs that should be included
   /// on public client surfaces.
-  final List<String>? methods;
+  final List<String> methods;
 
   /// Setting this to true indicates to the client generators that methods
   /// that would be excluded from the generation should instead be generated
@@ -1603,23 +1628,25 @@ final class SelectiveGapicGeneration extends ProtoMessage {
   /// end users. How this is expressed is up to individual language
   /// implementations to decide. Some examples may be: added annotations,
   /// obfuscated identifiers, or other language idiomatic patterns.
-  final bool? generateOmittedAsInternal;
+  final bool generateOmittedAsInternal;
 
-  SelectiveGapicGeneration({this.methods, this.generateOmittedAsInternal})
-    : super(fullyQualifiedName);
+  SelectiveGapicGeneration({
+    this.methods = const [],
+    this.generateOmittedAsInternal = false,
+  }) : super(fullyQualifiedName);
 
   factory SelectiveGapicGeneration.fromJson(Map<String, dynamic> json) {
     return SelectiveGapicGeneration(
-      methods: decodeList(json['methods']),
-      generateOmittedAsInternal: json['generateOmittedAsInternal'],
+      methods: decodeList(json['methods']) ?? [],
+      generateOmittedAsInternal: json['generateOmittedAsInternal'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (methods != null) 'methods': methods,
-      if (generateOmittedAsInternal != null)
+      if (methods.isNotDefault) 'methods': methods,
+      if (generateOmittedAsInternal.isNotDefault)
         'generateOmittedAsInternal': generateOmittedAsInternal,
     };
   }
@@ -1627,8 +1654,7 @@ final class SelectiveGapicGeneration extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (generateOmittedAsInternal != null)
-        'generateOmittedAsInternal=$generateOmittedAsInternal',
+      'generateOmittedAsInternal=$generateOmittedAsInternal',
     ].join(',');
     return 'SelectiveGapicGeneration($contents)';
   }
@@ -1652,59 +1678,61 @@ final class ConfigChange extends ProtoMessage {
   /// - visibility.rules[selector=="google.LibraryService.ListBooks"].restriction
   /// - quota.metric_rules[selector=="google"].metric_costs[key=="reads"].value
   /// - logging.producer_destinations[0]
-  final String? element;
+  final String element;
 
   /// Value of the changed object in the old Service configuration,
   /// in JSON format. This field will not be populated if ChangeType == ADDED.
-  final String? oldValue;
+  final String oldValue;
 
   /// Value of the changed object in the new Service configuration,
   /// in JSON format. This field will not be populated if ChangeType == REMOVED.
-  final String? newValue;
+  final String newValue;
 
   /// The type for this change, either ADDED, REMOVED, or MODIFIED.
-  final ChangeType? changeType;
+  final ChangeType changeType;
 
   /// Collection of advice provided for this change, useful for determining the
   /// possible impact of this change.
-  final List<Advice>? advices;
+  final List<Advice> advices;
 
   ConfigChange({
-    this.element,
-    this.oldValue,
-    this.newValue,
-    this.changeType,
-    this.advices,
+    this.element = '',
+    this.oldValue = '',
+    this.newValue = '',
+    this.changeType = ChangeType.$default,
+    this.advices = const [],
   }) : super(fullyQualifiedName);
 
   factory ConfigChange.fromJson(Map<String, dynamic> json) {
     return ConfigChange(
-      element: json['element'],
-      oldValue: json['oldValue'],
-      newValue: json['newValue'],
-      changeType: decodeEnum(json['changeType'], ChangeType.fromJson),
-      advices: decodeListMessage(json['advices'], Advice.fromJson),
+      element: json['element'] ?? '',
+      oldValue: json['oldValue'] ?? '',
+      newValue: json['newValue'] ?? '',
+      changeType:
+          decodeEnum(json['changeType'], ChangeType.fromJson) ??
+          ChangeType.$default,
+      advices: decodeListMessage(json['advices'], Advice.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (element != null) 'element': element,
-      if (oldValue != null) 'oldValue': oldValue,
-      if (newValue != null) 'newValue': newValue,
-      if (changeType != null) 'changeType': changeType!.toJson(),
-      if (advices != null) 'advices': encodeList(advices),
+      if (element.isNotDefault) 'element': element,
+      if (oldValue.isNotDefault) 'oldValue': oldValue,
+      if (newValue.isNotDefault) 'newValue': newValue,
+      if (changeType.isNotDefault) 'changeType': changeType.toJson(),
+      if (advices.isNotDefault) 'advices': encodeList(advices),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (element != null) 'element=$element',
-      if (oldValue != null) 'oldValue=$oldValue',
-      if (newValue != null) 'newValue=$newValue',
-      if (changeType != null) 'changeType=$changeType',
+      'element=$element',
+      'oldValue=$oldValue',
+      'newValue=$newValue',
+      'changeType=$changeType',
     ].join(',');
     return 'ConfigChange($contents)';
   }
@@ -1717,24 +1745,22 @@ final class Advice extends ProtoMessage {
 
   /// Useful description for why this advice was applied and what actions should
   /// be taken to mitigate any implied risks.
-  final String? description;
+  final String description;
 
-  Advice({this.description}) : super(fullyQualifiedName);
+  Advice({this.description = ''}) : super(fullyQualifiedName);
 
   factory Advice.fromJson(Map<String, dynamic> json) {
-    return Advice(description: json['description']);
+    return Advice(description: json['description'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (description != null) 'description': description};
+    return {if (description.isNotDefault) 'description': description};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (description != null) 'description=$description',
-    ].join(',');
+    final contents = ['description=$description'].join(',');
     return 'Advice($contents)';
   }
 }
@@ -1759,19 +1785,20 @@ final class ProjectProperties extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.ProjectProperties';
 
   /// List of per consumer project-specific properties.
-  final List<Property>? properties;
+  final List<Property> properties;
 
-  ProjectProperties({this.properties}) : super(fullyQualifiedName);
+  ProjectProperties({this.properties = const []}) : super(fullyQualifiedName);
 
   factory ProjectProperties.fromJson(Map<String, dynamic> json) {
     return ProjectProperties(
-      properties: decodeListMessage(json['properties'], Property.fromJson),
+      properties:
+          decodeListMessage(json['properties'], Property.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (properties != null) 'properties': encodeList(properties)};
+    return {if (properties.isNotDefault) 'properties': encodeList(properties)};
   }
 
   @override
@@ -1792,40 +1819,45 @@ final class Property extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Property';
 
   /// The name of the property (a.k.a key).
-  final String? name;
+  final String name;
 
   /// The type of this property.
-  final Property_PropertyType? type;
+  final Property_PropertyType type;
 
   /// The description of the property
-  final String? description;
+  final String description;
 
-  Property({this.name, this.type, this.description})
-    : super(fullyQualifiedName);
+  Property({
+    this.name = '',
+    this.type = Property_PropertyType.$default,
+    this.description = '',
+  }) : super(fullyQualifiedName);
 
   factory Property.fromJson(Map<String, dynamic> json) {
     return Property(
-      name: json['name'],
-      type: decodeEnum(json['type'], Property_PropertyType.fromJson),
-      description: json['description'],
+      name: json['name'] ?? '',
+      type:
+          decodeEnum(json['type'], Property_PropertyType.fromJson) ??
+          Property_PropertyType.$default,
+      description: json['description'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (type != null) 'type': type!.toJson(),
-      if (description != null) 'description': description,
+      if (name.isNotDefault) 'name': name,
+      if (type.isNotDefault) 'type': type.toJson(),
+      if (description.isNotDefault) 'description': description,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (type != null) 'type=$type',
-      if (description != null) 'description=$description',
+      'name=$name',
+      'type=$type',
+      'description=$description',
     ].join(',');
     return 'Property($contents)';
   }
@@ -1840,18 +1872,23 @@ final class Property_PropertyType extends ProtoEnum {
   static const int64 = Property_PropertyType('INT64');
 
   /// The type is `bool`.
-  static const bool = Property_PropertyType('BOOL');
+  static const bool$ = Property_PropertyType('BOOL');
 
   /// The type is `string`.
   static const string = Property_PropertyType('STRING');
 
   /// The type is 'double'.
-  static const double = Property_PropertyType('DOUBLE');
+  static const double$ = Property_PropertyType('DOUBLE');
+
+  /// The default value for [Property_PropertyType].
+  static const $default = unspecified;
 
   const Property_PropertyType(super.value);
 
   factory Property_PropertyType.fromJson(String json) =>
       Property_PropertyType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'PropertyType.$value';
@@ -1899,19 +1936,19 @@ final class Context extends ProtoMessage {
   /// A list of RPC context rules that apply to individual API methods.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<ContextRule>? rules;
+  final List<ContextRule> rules;
 
-  Context({this.rules}) : super(fullyQualifiedName);
+  Context({this.rules = const []}) : super(fullyQualifiedName);
 
   factory Context.fromJson(Map<String, dynamic> json) {
     return Context(
-      rules: decodeListMessage(json['rules'], ContextRule.fromJson),
+      rules: decodeListMessage(json['rules'], ContextRule.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (rules != null) 'rules': encodeList(rules)};
+    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
   }
 
   @override
@@ -1927,58 +1964,60 @@ final class ContextRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// A list of full type names of requested contexts, only the requested context
   /// will be made available to the backend.
-  final List<String>? requested;
+  final List<String> requested;
 
   /// A list of full type names of provided contexts. It is used to support
   /// propagating HTTP headers and ETags from the response extension.
-  final List<String>? provided;
+  final List<String> provided;
 
   /// A list of full type names or extension IDs of extensions allowed in grpc
   /// side channel from client to backend.
-  final List<String>? allowedRequestExtensions;
+  final List<String> allowedRequestExtensions;
 
   /// A list of full type names or extension IDs of extensions allowed in grpc
   /// side channel from backend to client.
-  final List<String>? allowedResponseExtensions;
+  final List<String> allowedResponseExtensions;
 
   ContextRule({
-    this.selector,
-    this.requested,
-    this.provided,
-    this.allowedRequestExtensions,
-    this.allowedResponseExtensions,
+    this.selector = '',
+    this.requested = const [],
+    this.provided = const [],
+    this.allowedRequestExtensions = const [],
+    this.allowedResponseExtensions = const [],
   }) : super(fullyQualifiedName);
 
   factory ContextRule.fromJson(Map<String, dynamic> json) {
     return ContextRule(
-      selector: json['selector'],
-      requested: decodeList(json['requested']),
-      provided: decodeList(json['provided']),
-      allowedRequestExtensions: decodeList(json['allowedRequestExtensions']),
-      allowedResponseExtensions: decodeList(json['allowedResponseExtensions']),
+      selector: json['selector'] ?? '',
+      requested: decodeList(json['requested']) ?? [],
+      provided: decodeList(json['provided']) ?? [],
+      allowedRequestExtensions:
+          decodeList(json['allowedRequestExtensions']) ?? [],
+      allowedResponseExtensions:
+          decodeList(json['allowedResponseExtensions']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (requested != null) 'requested': requested,
-      if (provided != null) 'provided': provided,
-      if (allowedRequestExtensions != null)
+      if (selector.isNotDefault) 'selector': selector,
+      if (requested.isNotDefault) 'requested': requested,
+      if (provided.isNotDefault) 'provided': provided,
+      if (allowedRequestExtensions.isNotDefault)
         'allowedRequestExtensions': allowedRequestExtensions,
-      if (allowedResponseExtensions != null)
+      if (allowedResponseExtensions.isNotDefault)
         'allowedResponseExtensions': allowedResponseExtensions,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (selector != null) 'selector=$selector'].join(',');
+    final contents = ['selector=$selector'].join(',');
     return 'ContextRule($contents)';
   }
 }
@@ -1995,36 +2034,35 @@ final class Control extends ProtoMessage {
   /// The service controller environment to use. If empty, no control plane
   /// feature (like quota and billing) will be enabled. The recommended value for
   /// most services is servicecontrol.googleapis.com
-  final String? environment;
+  final String environment;
 
   /// Defines policies applying to the API methods of the service.
-  final List<MethodPolicy>? methodPolicies;
+  final List<MethodPolicy> methodPolicies;
 
-  Control({this.environment, this.methodPolicies}) : super(fullyQualifiedName);
+  Control({this.environment = '', this.methodPolicies = const []})
+    : super(fullyQualifiedName);
 
   factory Control.fromJson(Map<String, dynamic> json) {
     return Control(
-      environment: json['environment'],
-      methodPolicies: decodeListMessage(
-        json['methodPolicies'],
-        MethodPolicy.fromJson,
-      ),
+      environment: json['environment'] ?? '',
+      methodPolicies:
+          decodeListMessage(json['methodPolicies'], MethodPolicy.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (environment != null) 'environment': environment,
-      if (methodPolicies != null) 'methodPolicies': encodeList(methodPolicies),
+      if (environment.isNotDefault) 'environment': environment,
+      if (methodPolicies.isNotDefault)
+        'methodPolicies': encodeList(methodPolicies),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (environment != null) 'environment=$environment',
-    ].join(',');
+    final contents = ['environment=$environment'].join(',');
     return 'Control($contents)';
   }
 }
@@ -2049,11 +2087,11 @@ final class Distribution extends ProtoMessage {
   /// The number of values in the population. Must be non-negative. This value
   /// must equal the sum of the values in `bucket_counts` if a histogram is
   /// provided.
-  final int? count;
+  final int count;
 
   /// The arithmetic mean of the values in the population. If `count` is zero
   /// then this field must be zero.
-  final double? mean;
+  final double mean;
 
   /// The sum of squared deviations from the mean of the values in the
   /// population. For values x_i this is:
@@ -2064,7 +2102,7 @@ final class Distribution extends ProtoMessage {
   /// describes Welford's method for accumulating this sum in one pass.
   ///
   /// If `count` is zero then this field must be zero.
-  final double? sumOfSquaredDeviation;
+  final double sumOfSquaredDeviation;
 
   /// If specified, contains the range of the population values. The field
   /// must not be present if the `count` is zero.
@@ -2089,60 +2127,61 @@ final class Distribution extends ProtoMessage {
   /// count for the underflow bucket (number 0). The next N-2 values are the
   /// counts for the finite buckets (number 1 through N-2). The N'th value in
   /// `bucket_counts` is the count for the overflow bucket (number N-1).
-  final List<int>? bucketCounts;
+  final List<int> bucketCounts;
 
   /// Must be in increasing order of `value` field.
-  final List<Distribution_Exemplar>? exemplars;
+  final List<Distribution_Exemplar> exemplars;
 
   Distribution({
-    this.count,
-    this.mean,
-    this.sumOfSquaredDeviation,
+    this.count = 0,
+    this.mean = 0,
+    this.sumOfSquaredDeviation = 0,
     this.range,
     this.bucketOptions,
-    this.bucketCounts,
-    this.exemplars,
+    this.bucketCounts = const [],
+    this.exemplars = const [],
   }) : super(fullyQualifiedName);
 
   factory Distribution.fromJson(Map<String, dynamic> json) {
     return Distribution(
-      count: decodeInt64(json['count']),
-      mean: decodeDouble(json['mean']),
-      sumOfSquaredDeviation: decodeDouble(json['sumOfSquaredDeviation']),
+      count: decodeInt64(json['count']) ?? 0,
+      mean: decodeDouble(json['mean']) ?? 0,
+      sumOfSquaredDeviation: decodeDouble(json['sumOfSquaredDeviation']) ?? 0,
       range: decode(json['range'], Distribution_Range.fromJson),
       bucketOptions: decode(
         json['bucketOptions'],
         Distribution_BucketOptions.fromJson,
       ),
-      bucketCounts: decodeList(json['bucketCounts']),
-      exemplars: decodeListMessage(
-        json['exemplars'],
-        Distribution_Exemplar.fromJson,
-      ),
+      bucketCounts: decodeList(json['bucketCounts']) ?? [],
+      exemplars:
+          decodeListMessage(
+            json['exemplars'],
+            Distribution_Exemplar.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (count != null) 'count': encodeInt64(count),
-      if (mean != null) 'mean': encodeDouble(mean),
-      if (sumOfSquaredDeviation != null)
+      if (count.isNotDefault) 'count': encodeInt64(count),
+      if (mean.isNotDefault) 'mean': encodeDouble(mean),
+      if (sumOfSquaredDeviation.isNotDefault)
         'sumOfSquaredDeviation': encodeDouble(sumOfSquaredDeviation),
       if (range != null) 'range': range!.toJson(),
       if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
-      if (bucketCounts != null) 'bucketCounts': bucketCounts,
-      if (exemplars != null) 'exemplars': encodeList(exemplars),
+      if (bucketCounts.isNotDefault) 'bucketCounts': bucketCounts,
+      if (exemplars.isNotDefault) 'exemplars': encodeList(exemplars),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (count != null) 'count=$count',
-      if (mean != null) 'mean=$mean',
-      if (sumOfSquaredDeviation != null)
-        'sumOfSquaredDeviation=$sumOfSquaredDeviation',
+      'count=$count',
+      'mean=$mean',
+      'sumOfSquaredDeviation=$sumOfSquaredDeviation',
     ].join(',');
     return 'Distribution($contents)';
   }
@@ -2153,34 +2192,31 @@ final class Distribution_Range extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Distribution.Range';
 
   /// The minimum of the population values.
-  final double? min;
+  final double min;
 
   /// The maximum of the population values.
-  final double? max;
+  final double max;
 
-  Distribution_Range({this.min, this.max}) : super(fullyQualifiedName);
+  Distribution_Range({this.min = 0, this.max = 0}) : super(fullyQualifiedName);
 
   factory Distribution_Range.fromJson(Map<String, dynamic> json) {
     return Distribution_Range(
-      min: decodeDouble(json['min']),
-      max: decodeDouble(json['max']),
+      min: decodeDouble(json['min']) ?? 0,
+      max: decodeDouble(json['max']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (min != null) 'min': encodeDouble(min),
-      if (max != null) 'max': encodeDouble(max),
+      if (min.isNotDefault) 'min': encodeDouble(min),
+      if (max.isNotDefault) 'max': encodeDouble(max),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (min != null) 'min=$min',
-      if (max != null) 'max=$max',
-    ].join(',');
+    final contents = ['min=$min', 'max=$max'].join(',');
     return 'Range($contents)';
   }
 }
@@ -2265,45 +2301,45 @@ final class Distribution_BucketOptions_Linear extends ProtoMessage {
       'google.api.Distribution.BucketOptions.Linear';
 
   /// Must be greater than 0.
-  final int? numFiniteBuckets;
+  final int numFiniteBuckets;
 
   /// Must be greater than 0.
-  final double? width;
+  final double width;
 
   /// Lower bound of the first bucket.
-  final double? offset;
+  final double offset;
 
   Distribution_BucketOptions_Linear({
-    this.numFiniteBuckets,
-    this.width,
-    this.offset,
+    this.numFiniteBuckets = 0,
+    this.width = 0,
+    this.offset = 0,
   }) : super(fullyQualifiedName);
 
   factory Distribution_BucketOptions_Linear.fromJson(
     Map<String, dynamic> json,
   ) {
     return Distribution_BucketOptions_Linear(
-      numFiniteBuckets: json['numFiniteBuckets'],
-      width: decodeDouble(json['width']),
-      offset: decodeDouble(json['offset']),
+      numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
+      width: decodeDouble(json['width']) ?? 0,
+      offset: decodeDouble(json['offset']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (numFiniteBuckets != null) 'numFiniteBuckets': numFiniteBuckets,
-      if (width != null) 'width': encodeDouble(width),
-      if (offset != null) 'offset': encodeDouble(offset),
+      if (numFiniteBuckets.isNotDefault) 'numFiniteBuckets': numFiniteBuckets,
+      if (width.isNotDefault) 'width': encodeDouble(width),
+      if (offset.isNotDefault) 'offset': encodeDouble(offset),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (numFiniteBuckets != null) 'numFiniteBuckets=$numFiniteBuckets',
-      if (width != null) 'width=$width',
-      if (offset != null) 'offset=$offset',
+      'numFiniteBuckets=$numFiniteBuckets',
+      'width=$width',
+      'offset=$offset',
     ].join(',');
     return 'Linear($contents)';
   }
@@ -2324,45 +2360,45 @@ final class Distribution_BucketOptions_Exponential extends ProtoMessage {
       'google.api.Distribution.BucketOptions.Exponential';
 
   /// Must be greater than 0.
-  final int? numFiniteBuckets;
+  final int numFiniteBuckets;
 
   /// Must be greater than 1.
-  final double? growthFactor;
+  final double growthFactor;
 
   /// Must be greater than 0.
-  final double? scale;
+  final double scale;
 
   Distribution_BucketOptions_Exponential({
-    this.numFiniteBuckets,
-    this.growthFactor,
-    this.scale,
+    this.numFiniteBuckets = 0,
+    this.growthFactor = 0,
+    this.scale = 0,
   }) : super(fullyQualifiedName);
 
   factory Distribution_BucketOptions_Exponential.fromJson(
     Map<String, dynamic> json,
   ) {
     return Distribution_BucketOptions_Exponential(
-      numFiniteBuckets: json['numFiniteBuckets'],
-      growthFactor: decodeDouble(json['growthFactor']),
-      scale: decodeDouble(json['scale']),
+      numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
+      growthFactor: decodeDouble(json['growthFactor']) ?? 0,
+      scale: decodeDouble(json['scale']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (numFiniteBuckets != null) 'numFiniteBuckets': numFiniteBuckets,
-      if (growthFactor != null) 'growthFactor': encodeDouble(growthFactor),
-      if (scale != null) 'scale': encodeDouble(scale),
+      if (numFiniteBuckets.isNotDefault) 'numFiniteBuckets': numFiniteBuckets,
+      if (growthFactor.isNotDefault) 'growthFactor': encodeDouble(growthFactor),
+      if (scale.isNotDefault) 'scale': encodeDouble(scale),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (numFiniteBuckets != null) 'numFiniteBuckets=$numFiniteBuckets',
-      if (growthFactor != null) 'growthFactor=$growthFactor',
-      if (scale != null) 'scale=$scale',
+      'numFiniteBuckets=$numFiniteBuckets',
+      'growthFactor=$growthFactor',
+      'scale=$scale',
     ].join(',');
     return 'Exponential($contents)';
   }
@@ -2384,22 +2420,22 @@ final class Distribution_BucketOptions_Explicit extends ProtoMessage {
       'google.api.Distribution.BucketOptions.Explicit';
 
   /// The values must be monotonically increasing.
-  final List<double>? bounds;
+  final List<double> bounds;
 
-  Distribution_BucketOptions_Explicit({this.bounds})
+  Distribution_BucketOptions_Explicit({this.bounds = const []})
     : super(fullyQualifiedName);
 
   factory Distribution_BucketOptions_Explicit.fromJson(
     Map<String, dynamic> json,
   ) {
     return Distribution_BucketOptions_Explicit(
-      bounds: decodeList(json['bounds']),
+      bounds: decodeList(json['bounds']) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (bounds != null) 'bounds': bounds};
+    return {if (bounds.isNotDefault) 'bounds': bounds};
   }
 
   @override
@@ -2416,7 +2452,7 @@ final class Distribution_Exemplar extends ProtoMessage {
 
   /// Value of the exemplar point. This value determines to which bucket the
   /// exemplar belongs.
-  final double? value;
+  final double value;
 
   /// The observation (sampling) time of the above value.
   final Timestamp? timestamp;
@@ -2432,31 +2468,34 @@ final class Distribution_Exemplar extends ProtoMessage {
   ///
   /// There may be only a single attachment of any given message type in a
   /// single exemplar, and this is enforced by the system.
-  final List<Any>? attachments;
+  final List<Any> attachments;
 
-  Distribution_Exemplar({this.value, this.timestamp, this.attachments})
-    : super(fullyQualifiedName);
+  Distribution_Exemplar({
+    this.value = 0,
+    this.timestamp,
+    this.attachments = const [],
+  }) : super(fullyQualifiedName);
 
   factory Distribution_Exemplar.fromJson(Map<String, dynamic> json) {
     return Distribution_Exemplar(
-      value: decodeDouble(json['value']),
+      value: decodeDouble(json['value']) ?? 0,
       timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
-      attachments: decodeListMessage(json['attachments'], Any.fromJson),
+      attachments: decodeListMessage(json['attachments'], Any.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (value != null) 'value': encodeDouble(value),
+      if (value.isNotDefault) 'value': encodeDouble(value),
       if (timestamp != null) 'timestamp': timestamp!.toJson(),
-      if (attachments != null) 'attachments': encodeList(attachments),
+      if (attachments.isNotDefault) 'attachments': encodeList(attachments),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'Exemplar($contents)';
   }
 }
@@ -2523,24 +2562,24 @@ final class Documentation extends ProtoMessage {
   /// text. It becomes the overview of the service displayed in Google Cloud
   /// Console.
   /// NOTE: This field is equivalent to the standard field `description`.
-  final String? summary;
+  final String summary;
 
   /// The top level pages for the documentation set.
-  final List<Page>? pages;
+  final List<Page> pages;
 
   /// A list of documentation rules that apply to individual API elements.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<DocumentationRule>? rules;
+  final List<DocumentationRule> rules;
 
   /// The URL to the root of documentation.
-  final String? documentationRootUrl;
+  final String documentationRootUrl;
 
   /// Specifies the service root url if the default one (the service name
   /// from the yaml file) is not suitable. This can be seen in any fully
   /// specified service urls as well as sections that show a base that other
   /// urls are relative to.
-  final String? serviceRootUrl;
+  final String serviceRootUrl;
 
   /// Declares a single overview page. For example:
   /// <pre><code>documentation:
@@ -2555,49 +2594,48 @@ final class Documentation extends ProtoMessage {
   ///     content: &#40;== include overview.md ==&#41;
   /// </code></pre>
   /// Note: you cannot specify both `overview` field and `pages` field.
-  final String? overview;
+  final String overview;
 
   Documentation({
-    this.summary,
-    this.pages,
-    this.rules,
-    this.documentationRootUrl,
-    this.serviceRootUrl,
-    this.overview,
+    this.summary = '',
+    this.pages = const [],
+    this.rules = const [],
+    this.documentationRootUrl = '',
+    this.serviceRootUrl = '',
+    this.overview = '',
   }) : super(fullyQualifiedName);
 
   factory Documentation.fromJson(Map<String, dynamic> json) {
     return Documentation(
-      summary: json['summary'],
-      pages: decodeListMessage(json['pages'], Page.fromJson),
-      rules: decodeListMessage(json['rules'], DocumentationRule.fromJson),
-      documentationRootUrl: json['documentationRootUrl'],
-      serviceRootUrl: json['serviceRootUrl'],
-      overview: json['overview'],
+      summary: json['summary'] ?? '',
+      pages: decodeListMessage(json['pages'], Page.fromJson) ?? [],
+      rules: decodeListMessage(json['rules'], DocumentationRule.fromJson) ?? [],
+      documentationRootUrl: json['documentationRootUrl'] ?? '',
+      serviceRootUrl: json['serviceRootUrl'] ?? '',
+      overview: json['overview'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (summary != null) 'summary': summary,
-      if (pages != null) 'pages': encodeList(pages),
-      if (rules != null) 'rules': encodeList(rules),
-      if (documentationRootUrl != null)
+      if (summary.isNotDefault) 'summary': summary,
+      if (pages.isNotDefault) 'pages': encodeList(pages),
+      if (rules.isNotDefault) 'rules': encodeList(rules),
+      if (documentationRootUrl.isNotDefault)
         'documentationRootUrl': documentationRootUrl,
-      if (serviceRootUrl != null) 'serviceRootUrl': serviceRootUrl,
-      if (overview != null) 'overview': overview,
+      if (serviceRootUrl.isNotDefault) 'serviceRootUrl': serviceRootUrl,
+      if (overview.isNotDefault) 'overview': overview,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (summary != null) 'summary=$summary',
-      if (documentationRootUrl != null)
-        'documentationRootUrl=$documentationRootUrl',
-      if (serviceRootUrl != null) 'serviceRootUrl=$serviceRootUrl',
-      if (overview != null) 'overview=$overview',
+      'summary=$summary',
+      'documentationRootUrl=$documentationRootUrl',
+      'serviceRootUrl=$serviceRootUrl',
+      'overview=$overview',
     ].join(',');
     return 'Documentation($contents)';
   }
@@ -2614,37 +2652,37 @@ final class DocumentationRule extends ProtoMessage {
   /// i.e. "foo.*" is ok, but not "foo.b*" or "foo.*.bar". A wildcard will match
   /// one or more components. To specify a default for all applicable elements,
   /// the whole pattern "*" is used.
-  final String? selector;
+  final String selector;
 
   /// Description of the selected proto element (e.g. a message, a method, a
   /// 'service' definition, or a field). Defaults to leading & trailing comments
   /// taken from the proto source definition of the proto element.
-  final String? description;
+  final String description;
 
   /// Deprecation description of the selected element(s). It can be provided if
   /// an element is marked as `deprecated`.
-  final String? deprecationDescription;
+  final String deprecationDescription;
 
   DocumentationRule({
-    this.selector,
-    this.description,
-    this.deprecationDescription,
+    this.selector = '',
+    this.description = '',
+    this.deprecationDescription = '',
   }) : super(fullyQualifiedName);
 
   factory DocumentationRule.fromJson(Map<String, dynamic> json) {
     return DocumentationRule(
-      selector: json['selector'],
-      description: json['description'],
-      deprecationDescription: json['deprecationDescription'],
+      selector: json['selector'] ?? '',
+      description: json['description'] ?? '',
+      deprecationDescription: json['deprecationDescription'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (description != null) 'description': description,
-      if (deprecationDescription != null)
+      if (selector.isNotDefault) 'selector': selector,
+      if (description.isNotDefault) 'description': description,
+      if (deprecationDescription.isNotDefault)
         'deprecationDescription': deprecationDescription,
     };
   }
@@ -2652,10 +2690,9 @@ final class DocumentationRule extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (description != null) 'description=$description',
-      if (deprecationDescription != null)
-        'deprecationDescription=$deprecationDescription',
+      'selector=$selector',
+      'description=$description',
+      'deprecationDescription=$deprecationDescription',
     ].join(',');
     return 'DocumentationRule($contents)';
   }
@@ -2680,42 +2717,40 @@ final class Page extends ProtoMessage {
   /// </code></pre>
   /// You can reference `Java` page using Markdown reference link syntax:
   /// ``Java``.
-  final String? name;
+  final String name;
 
   /// The Markdown content of the page. You can use ```(== include {path}
   /// ==)``` to include content from a Markdown file. The content can be used
   /// to produce the documentation page such as HTML format page.
-  final String? content;
+  final String content;
 
   /// Subpages of this page. The order of subpages specified here will be
   /// honored in the generated docset.
-  final List<Page>? subpages;
+  final List<Page> subpages;
 
-  Page({this.name, this.content, this.subpages}) : super(fullyQualifiedName);
+  Page({this.name = '', this.content = '', this.subpages = const []})
+    : super(fullyQualifiedName);
 
   factory Page.fromJson(Map<String, dynamic> json) {
     return Page(
-      name: json['name'],
-      content: json['content'],
-      subpages: decodeListMessage(json['subpages'], Page.fromJson),
+      name: json['name'] ?? '',
+      content: json['content'] ?? '',
+      subpages: decodeListMessage(json['subpages'], Page.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (content != null) 'content': content,
-      if (subpages != null) 'subpages': encodeList(subpages),
+      if (name.isNotDefault) 'name': name,
+      if (content.isNotDefault) 'content': content,
+      if (subpages.isNotDefault) 'subpages': encodeList(subpages),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (content != null) 'content=$content',
-    ].join(',');
+    final contents = ['name=$name', 'content=$content'].join(',');
     return 'Page($contents)';
   }
 }
@@ -2745,19 +2780,19 @@ final class Endpoint extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Endpoint';
 
   /// The canonical name of this endpoint.
-  final String? name;
+  final String name;
 
   /// Aliases for this endpoint, these will be served by the same UrlMap as the
   /// parent endpoint, and will be provisioned in the GCP stack for the Regional
   /// Endpoints.
-  final List<String>? aliases;
+  final List<String> aliases;
 
   /// The specification of an Internet routable address of API frontend that will
   /// handle requests to this [API
   /// Endpoint](https://cloud.google.com/apis/design/glossary). It should be
   /// either a valid IPv4 address or a fully-qualified domain name. For example,
   /// "8.8.8.8" or "myservice.appspot.com".
-  final String? target;
+  final String target;
 
   /// Allowing
   /// [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing), aka
@@ -2765,36 +2800,40 @@ final class Endpoint extends ProtoMessage {
   /// receive and respond to HTTP OPTIONS requests. The response will be used by
   /// the browser to determine whether the subsequent cross-origin request is
   /// allowed to proceed.
-  final bool? allowCors;
+  final bool allowCors;
 
-  Endpoint({this.name, this.aliases, this.target, this.allowCors})
-    : super(fullyQualifiedName);
+  Endpoint({
+    this.name = '',
+    this.aliases = const [],
+    this.target = '',
+    this.allowCors = false,
+  }) : super(fullyQualifiedName);
 
   factory Endpoint.fromJson(Map<String, dynamic> json) {
     return Endpoint(
-      name: json['name'],
-      aliases: decodeList(json['aliases']),
-      target: json['target'],
-      allowCors: json['allowCors'],
+      name: json['name'] ?? '',
+      aliases: decodeList(json['aliases']) ?? [],
+      target: json['target'] ?? '',
+      allowCors: json['allowCors'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (aliases != null) 'aliases': aliases,
-      if (target != null) 'target': target,
-      if (allowCors != null) 'allowCors': allowCors,
+      if (name.isNotDefault) 'name': name,
+      if (aliases.isNotDefault) 'aliases': aliases,
+      if (target.isNotDefault) 'target': target,
+      if (allowCors.isNotDefault) 'allowCors': allowCors,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (target != null) 'target=$target',
-      if (allowCors != null) 'allowCors=$allowCors',
+      'name=$name',
+      'target=$target',
+      'allowCors=$allowCors',
     ].join(',');
     return 'Endpoint($contents)';
   }
@@ -2807,38 +2846,42 @@ final class FieldInfo extends ProtoMessage {
   /// The standard format of a field value. This does not explicitly configure
   /// any API consumer, just documents the API's format for the field it is
   /// applied to.
-  final FieldInfo_Format? format;
+  final FieldInfo_Format format;
 
   /// The type(s) that the annotated, generic field may represent.
   ///
   /// Currently, this must only be used on fields of type `google.protobuf.Any`.
   /// Supporting other generic types may be considered in the future.
-  final List<TypeReference>? referencedTypes;
+  final List<TypeReference> referencedTypes;
 
-  FieldInfo({this.format, this.referencedTypes}) : super(fullyQualifiedName);
+  FieldInfo({
+    this.format = FieldInfo_Format.$default,
+    this.referencedTypes = const [],
+  }) : super(fullyQualifiedName);
 
   factory FieldInfo.fromJson(Map<String, dynamic> json) {
     return FieldInfo(
-      format: decodeEnum(json['format'], FieldInfo_Format.fromJson),
-      referencedTypes: decodeListMessage(
-        json['referencedTypes'],
-        TypeReference.fromJson,
-      ),
+      format:
+          decodeEnum(json['format'], FieldInfo_Format.fromJson) ??
+          FieldInfo_Format.$default,
+      referencedTypes:
+          decodeListMessage(json['referencedTypes'], TypeReference.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (format != null) 'format': format!.toJson(),
-      if (referencedTypes != null)
+      if (format.isNotDefault) 'format': format.toJson(),
+      if (referencedTypes.isNotDefault)
         'referencedTypes': encodeList(referencedTypes),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (format != null) 'format=$format'].join(',');
+    final contents = ['format=$format'].join(',');
     return 'FieldInfo($contents)';
   }
 }
@@ -2874,9 +2917,14 @@ final class FieldInfo_Format extends ProtoEnum {
   /// allowed normalizations of each.
   static const ipv4OrIpv6 = FieldInfo_Format('IPV4_OR_IPV6');
 
+  /// The default value for [FieldInfo_Format].
+  static const $default = formatUnspecified;
+
   const FieldInfo_Format(super.value);
 
   factory FieldInfo_Format.fromJson(String json) => FieldInfo_Format(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Format.$value';
@@ -2895,22 +2943,22 @@ final class TypeReference extends ProtoMessage {
   /// user input), use the wildcard `"*"` to denote this behavior.
   ///
   /// See [AIP-202](https://google.aip.dev/202#type-references) for more details.
-  final String? typeName;
+  final String typeName;
 
-  TypeReference({this.typeName}) : super(fullyQualifiedName);
+  TypeReference({this.typeName = ''}) : super(fullyQualifiedName);
 
   factory TypeReference.fromJson(Map<String, dynamic> json) {
-    return TypeReference(typeName: json['typeName']);
+    return TypeReference(typeName: json['typeName'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (typeName != null) 'typeName': typeName};
+    return {if (typeName.isNotDefault) 'typeName': typeName};
   }
 
   @override
   String toString() {
-    final contents = [if (typeName != null) 'typeName=$typeName'].join(',');
+    final contents = ['typeName=$typeName'].join(',');
     return 'TypeReference($contents)';
   }
 }
@@ -2924,7 +2972,7 @@ final class Http extends ProtoMessage {
   /// A list of HTTP configuration rules that apply to individual API methods.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<HttpRule>? rules;
+  final List<HttpRule> rules;
 
   /// When set to true, URL path parameters will be fully URI-decoded except in
   /// cases of single segment matches in reserved expansion, where "%2F" will be
@@ -2932,23 +2980,24 @@ final class Http extends ProtoMessage {
   ///
   /// The default behavior is to not decode RFC 6570 reserved characters in multi
   /// segment matches.
-  final bool? fullyDecodeReservedExpansion;
+  final bool fullyDecodeReservedExpansion;
 
-  Http({this.rules, this.fullyDecodeReservedExpansion})
+  Http({this.rules = const [], this.fullyDecodeReservedExpansion = false})
     : super(fullyQualifiedName);
 
   factory Http.fromJson(Map<String, dynamic> json) {
     return Http(
-      rules: decodeListMessage(json['rules'], HttpRule.fromJson),
-      fullyDecodeReservedExpansion: json['fullyDecodeReservedExpansion'],
+      rules: decodeListMessage(json['rules'], HttpRule.fromJson) ?? [],
+      fullyDecodeReservedExpansion:
+          json['fullyDecodeReservedExpansion'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (rules != null) 'rules': encodeList(rules),
-      if (fullyDecodeReservedExpansion != null)
+      if (rules.isNotDefault) 'rules': encodeList(rules),
+      if (fullyDecodeReservedExpansion.isNotDefault)
         'fullyDecodeReservedExpansion': fullyDecodeReservedExpansion,
     };
   }
@@ -2956,8 +3005,7 @@ final class Http extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (fullyDecodeReservedExpansion != null)
-        'fullyDecodeReservedExpansion=$fullyDecodeReservedExpansion',
+      'fullyDecodeReservedExpansion=$fullyDecodeReservedExpansion',
     ].join(',');
     return 'Http($contents)';
   }
@@ -3234,23 +3282,23 @@ final class HttpRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// Maps to HTTP GET. Used for listing and getting information about
   /// resources.
-  final String? get;
+  final String get;
 
   /// Maps to HTTP PUT. Used for replacing a resource.
-  final String? put;
+  final String put;
 
   /// Maps to HTTP POST. Used for creating a resource or performing an action.
-  final String? post;
+  final String post;
 
   /// Maps to HTTP DELETE. Used for deleting a resource.
-  final String? delete;
+  final String delete;
 
   /// Maps to HTTP PATCH. Used for updating a resource.
-  final String? patch;
+  final String patch;
 
   /// The custom pattern is used for specifying an HTTP method that is not
   /// included in the `pattern` field, such as HEAD, or "*" to leave the
@@ -3264,7 +3312,7 @@ final class HttpRule extends ProtoMessage {
   ///
   /// NOTE: the referred field must be present at the top-level of the request
   /// message type.
-  final String? body;
+  final String body;
 
   /// Optional. The name of the response field whose value is mapped to the HTTP
   /// response body. When omitted, the entire response message will be used
@@ -3272,57 +3320,56 @@ final class HttpRule extends ProtoMessage {
   ///
   /// NOTE: The referred field must be present at the top-level of the response
   /// message type.
-  final String? responseBody;
+  final String responseBody;
 
   /// Additional HTTP bindings for the selector. Nested bindings must
   /// not contain an `additional_bindings` field themselves (that is,
   /// the nesting may only be one level deep).
-  final List<HttpRule>? additionalBindings;
+  final List<HttpRule> additionalBindings;
 
   HttpRule({
-    this.selector,
-    this.get,
-    this.put,
-    this.post,
-    this.delete,
-    this.patch,
+    this.selector = '',
+    this.get = '',
+    this.put = '',
+    this.post = '',
+    this.delete = '',
+    this.patch = '',
     this.custom,
-    this.body,
-    this.responseBody,
-    this.additionalBindings,
+    this.body = '',
+    this.responseBody = '',
+    this.additionalBindings = const [],
   }) : super(fullyQualifiedName);
 
   factory HttpRule.fromJson(Map<String, dynamic> json) {
     return HttpRule(
-      selector: json['selector'],
-      get: json['get'],
-      put: json['put'],
-      post: json['post'],
-      delete: json['delete'],
-      patch: json['patch'],
+      selector: json['selector'] ?? '',
+      get: json['get'] ?? '',
+      put: json['put'] ?? '',
+      post: json['post'] ?? '',
+      delete: json['delete'] ?? '',
+      patch: json['patch'] ?? '',
       custom: decode(json['custom'], CustomHttpPattern.fromJson),
-      body: json['body'],
-      responseBody: json['responseBody'],
-      additionalBindings: decodeListMessage(
-        json['additionalBindings'],
-        HttpRule.fromJson,
-      ),
+      body: json['body'] ?? '',
+      responseBody: json['responseBody'] ?? '',
+      additionalBindings:
+          decodeListMessage(json['additionalBindings'], HttpRule.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (get != null) 'get': get,
-      if (put != null) 'put': put,
-      if (post != null) 'post': post,
-      if (delete != null) 'delete': delete,
-      if (patch != null) 'patch': patch,
+      if (selector.isNotDefault) 'selector': selector,
+      if (get.isNotDefault) 'get': get,
+      if (put.isNotDefault) 'put': put,
+      if (post.isNotDefault) 'post': post,
+      if (delete.isNotDefault) 'delete': delete,
+      if (patch.isNotDefault) 'patch': patch,
       if (custom != null) 'custom': custom!.toJson(),
-      if (body != null) 'body': body,
-      if (responseBody != null) 'responseBody': responseBody,
-      if (additionalBindings != null)
+      if (body.isNotDefault) 'body': body,
+      if (responseBody.isNotDefault) 'responseBody': responseBody,
+      if (additionalBindings.isNotDefault)
         'additionalBindings': encodeList(additionalBindings),
     };
   }
@@ -3330,14 +3377,14 @@ final class HttpRule extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (get != null) 'get=$get',
-      if (put != null) 'put=$put',
-      if (post != null) 'post=$post',
-      if (delete != null) 'delete=$delete',
-      if (patch != null) 'patch=$patch',
-      if (body != null) 'body=$body',
-      if (responseBody != null) 'responseBody=$responseBody',
+      'selector=$selector',
+      'get=$get',
+      'put=$put',
+      'post=$post',
+      'delete=$delete',
+      'patch=$patch',
+      'body=$body',
+      'responseBody=$responseBody',
     ].join(',');
     return 'HttpRule($contents)';
   }
@@ -3348,28 +3395,32 @@ final class CustomHttpPattern extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.CustomHttpPattern';
 
   /// The name of this custom HTTP verb.
-  final String? kind;
+  final String kind;
 
   /// The path matched by this custom verb.
-  final String? path;
+  final String path;
 
-  CustomHttpPattern({this.kind, this.path}) : super(fullyQualifiedName);
+  CustomHttpPattern({this.kind = '', this.path = ''})
+    : super(fullyQualifiedName);
 
   factory CustomHttpPattern.fromJson(Map<String, dynamic> json) {
-    return CustomHttpPattern(kind: json['kind'], path: json['path']);
+    return CustomHttpPattern(
+      kind: json['kind'] ?? '',
+      path: json['path'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {if (kind != null) 'kind': kind, if (path != null) 'path': path};
+    return {
+      if (kind.isNotDefault) 'kind': kind,
+      if (path.isNotDefault) 'path': path,
+    };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (kind != null) 'kind=$kind',
-      if (path != null) 'path=$path',
-    ].join(',');
+    final contents = ['kind=$kind', 'path=$path'].join(',');
     return 'CustomHttpPattern($contents)';
   }
 }
@@ -3421,39 +3472,39 @@ final class HttpBody extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.HttpBody';
 
   /// The HTTP Content-Type header value specifying the content type of the body.
-  final String? contentType;
+  final String contentType;
 
   /// The HTTP request/response body as raw binary.
   final Uint8List? data;
 
   /// Application specific response metadata. Must be set in the first response
   /// for streaming APIs.
-  final List<Any>? extensions;
+  final List<Any> extensions;
 
-  HttpBody({this.contentType, this.data, this.extensions})
+  HttpBody({this.contentType = '', this.data, this.extensions = const []})
     : super(fullyQualifiedName);
 
   factory HttpBody.fromJson(Map<String, dynamic> json) {
     return HttpBody(
-      contentType: json['contentType'],
+      contentType: json['contentType'] ?? '',
       data: decodeBytes(json['data']),
-      extensions: decodeListMessage(json['extensions'], Any.fromJson),
+      extensions: decodeListMessage(json['extensions'], Any.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (contentType != null) 'contentType': contentType,
+      if (contentType.isNotDefault) 'contentType': contentType,
       if (data != null) 'data': encodeBytes(data),
-      if (extensions != null) 'extensions': encodeList(extensions),
+      if (extensions.isNotDefault) 'extensions': encodeList(extensions),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (contentType != null) 'contentType=$contentType',
+      'contentType=$contentType',
       if (data != null) 'data=$data',
     ].join(',');
     return 'HttpBody($contents)';
@@ -3465,43 +3516,45 @@ final class LabelDescriptor extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.LabelDescriptor';
 
   /// The label key.
-  final String? key;
+  final String key;
 
   /// The type of data that can be assigned to the label.
-  final LabelDescriptor_ValueType? valueType;
+  final LabelDescriptor_ValueType valueType;
 
   /// A human-readable description for the label.
-  final String? description;
+  final String description;
 
-  LabelDescriptor({this.key, this.valueType, this.description})
-    : super(fullyQualifiedName);
+  LabelDescriptor({
+    this.key = '',
+    this.valueType = LabelDescriptor_ValueType.$default,
+    this.description = '',
+  }) : super(fullyQualifiedName);
 
   factory LabelDescriptor.fromJson(Map<String, dynamic> json) {
     return LabelDescriptor(
-      key: json['key'],
-      valueType: decodeEnum(
-        json['valueType'],
-        LabelDescriptor_ValueType.fromJson,
-      ),
-      description: json['description'],
+      key: json['key'] ?? '',
+      valueType:
+          decodeEnum(json['valueType'], LabelDescriptor_ValueType.fromJson) ??
+          LabelDescriptor_ValueType.$default,
+      description: json['description'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (key != null) 'key': key,
-      if (valueType != null) 'valueType': valueType!.toJson(),
-      if (description != null) 'description': description,
+      if (key.isNotDefault) 'key': key,
+      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
+      if (description.isNotDefault) 'description': description,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (key != null) 'key=$key',
-      if (valueType != null) 'valueType=$valueType',
-      if (description != null) 'description=$description',
+      'key=$key',
+      'valueType=$valueType',
+      'description=$description',
     ].join(',');
     return 'LabelDescriptor($contents)';
   }
@@ -3513,15 +3566,20 @@ final class LabelDescriptor_ValueType extends ProtoEnum {
   static const string = LabelDescriptor_ValueType('STRING');
 
   /// Boolean; true or false.
-  static const bool = LabelDescriptor_ValueType('BOOL');
+  static const bool$ = LabelDescriptor_ValueType('BOOL');
 
   /// A 64-bit signed integer.
   static const int64 = LabelDescriptor_ValueType('INT64');
+
+  /// The default value for [LabelDescriptor_ValueType].
+  static const $default = string;
 
   const LabelDescriptor_ValueType(super.value);
 
   factory LabelDescriptor_ValueType.fromJson(String json) =>
       LabelDescriptor_ValueType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ValueType.$value';
@@ -3542,49 +3600,53 @@ final class LogDescriptor extends ProtoMessage {
   /// include the following characters: upper- and lower-case alphanumeric
   /// characters [A-Za-z0-9], and punctuation characters including
   /// slash, underscore, hyphen, period [/_-.].
-  final String? name;
+  final String name;
 
   /// The set of labels that are available to describe a specific log entry.
   /// Runtime requests that contain labels not specified here are
   /// considered invalid.
-  final List<LabelDescriptor>? labels;
+  final List<LabelDescriptor> labels;
 
   /// A human-readable description of this log. This information appears in
   /// the documentation and can contain details.
-  final String? description;
+  final String description;
 
   /// The human-readable name for this log. This information appears on
   /// the user interface and should be concise.
-  final String? displayName;
+  final String displayName;
 
-  LogDescriptor({this.name, this.labels, this.description, this.displayName})
-    : super(fullyQualifiedName);
+  LogDescriptor({
+    this.name = '',
+    this.labels = const [],
+    this.description = '',
+    this.displayName = '',
+  }) : super(fullyQualifiedName);
 
   factory LogDescriptor.fromJson(Map<String, dynamic> json) {
     return LogDescriptor(
-      name: json['name'],
-      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson),
-      description: json['description'],
-      displayName: json['displayName'],
+      name: json['name'] ?? '',
+      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
+      description: json['description'] ?? '',
+      displayName: json['displayName'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (labels != null) 'labels': encodeList(labels),
-      if (description != null) 'description': description,
-      if (displayName != null) 'displayName': displayName,
+      if (name.isNotDefault) 'name': name,
+      if (labels.isNotDefault) 'labels': encodeList(labels),
+      if (description.isNotDefault) 'description': description,
+      if (displayName.isNotDefault) 'displayName': displayName,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (description != null) 'description=$description',
-      if (displayName != null) 'displayName=$displayName',
+      'name=$name',
+      'description=$description',
+      'displayName=$displayName',
     ].join(',');
     return 'LogDescriptor($contents)';
   }
@@ -3626,36 +3688,42 @@ final class Logging extends ProtoMessage {
   /// There can be multiple producer destinations, each one must have a
   /// different monitored resource type. A log can be used in at most
   /// one producer destination.
-  final List<Logging_LoggingDestination>? producerDestinations;
+  final List<Logging_LoggingDestination> producerDestinations;
 
   /// Logging configurations for sending logs to the consumer project.
   /// There can be multiple consumer destinations, each one must have a
   /// different monitored resource type. A log can be used in at most
   /// one consumer destination.
-  final List<Logging_LoggingDestination>? consumerDestinations;
+  final List<Logging_LoggingDestination> consumerDestinations;
 
-  Logging({this.producerDestinations, this.consumerDestinations})
-    : super(fullyQualifiedName);
+  Logging({
+    this.producerDestinations = const [],
+    this.consumerDestinations = const [],
+  }) : super(fullyQualifiedName);
 
   factory Logging.fromJson(Map<String, dynamic> json) {
     return Logging(
-      producerDestinations: decodeListMessage(
-        json['producerDestinations'],
-        Logging_LoggingDestination.fromJson,
-      ),
-      consumerDestinations: decodeListMessage(
-        json['consumerDestinations'],
-        Logging_LoggingDestination.fromJson,
-      ),
+      producerDestinations:
+          decodeListMessage(
+            json['producerDestinations'],
+            Logging_LoggingDestination.fromJson,
+          ) ??
+          [],
+      consumerDestinations:
+          decodeListMessage(
+            json['consumerDestinations'],
+            Logging_LoggingDestination.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (producerDestinations != null)
+      if (producerDestinations.isNotDefault)
         'producerDestinations': encodeList(producerDestinations),
-      if (consumerDestinations != null)
+      if (consumerDestinations.isNotDefault)
         'consumerDestinations': encodeList(consumerDestinations),
     };
   }
@@ -3673,37 +3741,38 @@ final class Logging_LoggingDestination extends ProtoMessage {
   /// The monitored resource type. The type must be defined in the
   /// `Service.monitored_resources`
   /// section.
-  final String? monitoredResource;
+  final String monitoredResource;
 
   /// Names of the logs to be sent to this destination. Each name must
   /// be defined in the `Service.logs` section. If the
   /// log name is not a domain scoped name, it will be automatically prefixed
   /// with the service name followed by "/".
-  final List<String>? logs;
+  final List<String> logs;
 
-  Logging_LoggingDestination({this.monitoredResource, this.logs})
-    : super(fullyQualifiedName);
+  Logging_LoggingDestination({
+    this.monitoredResource = '',
+    this.logs = const [],
+  }) : super(fullyQualifiedName);
 
   factory Logging_LoggingDestination.fromJson(Map<String, dynamic> json) {
     return Logging_LoggingDestination(
-      monitoredResource: json['monitoredResource'],
-      logs: decodeList(json['logs']),
+      monitoredResource: json['monitoredResource'] ?? '',
+      logs: decodeList(json['logs']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (monitoredResource != null) 'monitoredResource': monitoredResource,
-      if (logs != null) 'logs': logs,
+      if (monitoredResource.isNotDefault)
+        'monitoredResource': monitoredResource,
+      if (logs.isNotDefault) 'logs': logs,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (monitoredResource != null) 'monitoredResource=$monitoredResource',
-    ].join(',');
+    final contents = ['monitoredResource=$monitoredResource'].join(',');
     return 'LoggingDestination($contents)';
   }
 }
@@ -3715,7 +3784,7 @@ final class MetricDescriptor extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.MetricDescriptor';
 
   /// The resource name of the metric descriptor.
-  final String? name;
+  final String name;
 
   /// The metric type, including its DNS name prefix. The type is not
   /// URL-encoded. All user-defined metric types have the DNS name
@@ -3725,7 +3794,7 @@ final class MetricDescriptor extends ProtoMessage {
   ///     "custom.googleapis.com/invoice/paid/amount"
   ///     "external.googleapis.com/prometheus/up"
   ///     "appengine.googleapis.com/http/server/response_latencies"
-  final String? type;
+  final String type;
 
   /// The set of labels that can be used to describe a specific
   /// instance of this metric type. For example, the
@@ -3733,15 +3802,15 @@ final class MetricDescriptor extends ProtoMessage {
   /// type has a label for the HTTP response code, `response_code`, so
   /// you can look at latencies for successful responses or just
   /// for responses that failed.
-  final List<LabelDescriptor>? labels;
+  final List<LabelDescriptor> labels;
 
   /// Whether the metric records instantaneous values, changes to a value, etc.
   /// Some combinations of `metric_kind` and `value_type` might not be supported.
-  final MetricDescriptor_MetricKind? metricKind;
+  final MetricDescriptor_MetricKind metricKind;
 
   /// Whether the measurement is an integer, a floating-point number, etc.
   /// Some combinations of `metric_kind` and `value_type` might not be supported.
-  final MetricDescriptor_ValueType? valueType;
+  final MetricDescriptor_ValueType valueType;
 
   /// The units in which the metric value is reported. It is only applicable
   /// if the `value_type` is `INT64`, `DOUBLE`, or `DISTRIBUTION`. The `unit`
@@ -3845,22 +3914,22 @@ final class MetricDescriptor extends ProtoMessage {
   /// * `10^2.%` indicates a metric contains a ratio, typically in the range
   ///    0..1, that will be multiplied by 100 and displayed as a percentage
   ///    (so a metric value `0.03` means "3 percent").
-  final String? unit;
+  final String unit;
 
   /// A detailed description of the metric, which can be used in documentation.
-  final String? description;
+  final String description;
 
   /// A concise name for the metric, which can be displayed in user interfaces.
   /// Use sentence case without an ending period, for example "Request count".
   /// This field is optional but it is recommended to be set for any metrics
   /// associated with user-visible concepts, such as Quota.
-  final String? displayName;
+  final String displayName;
 
   /// Optional. Metadata which can be used to guide usage of the metric.
   final MetricDescriptor_MetricDescriptorMetadata? metadata;
 
   /// Optional. The launch stage of the metric definition.
-  final LaunchStage? launchStage;
+  final LaunchStage launchStage;
 
   /// Read-only. If present, then a [time
   /// series][google.monitoring.v3.TimeSeries], which is identified partially by
@@ -3868,61 +3937,64 @@ final class MetricDescriptor extends ProtoMessage {
   /// `MonitoredResourceDescriptor`, that
   /// is associated with this metric type can only be associated with one of the
   /// monitored resource types listed here.
-  final List<String>? monitoredResourceTypes;
+  final List<String> monitoredResourceTypes;
 
   MetricDescriptor({
-    this.name,
-    this.type,
-    this.labels,
-    this.metricKind,
-    this.valueType,
-    this.unit,
-    this.description,
-    this.displayName,
+    this.name = '',
+    this.type = '',
+    this.labels = const [],
+    this.metricKind = MetricDescriptor_MetricKind.$default,
+    this.valueType = MetricDescriptor_ValueType.$default,
+    this.unit = '',
+    this.description = '',
+    this.displayName = '',
     this.metadata,
-    this.launchStage,
-    this.monitoredResourceTypes,
+    this.launchStage = LaunchStage.$default,
+    this.monitoredResourceTypes = const [],
   }) : super(fullyQualifiedName);
 
   factory MetricDescriptor.fromJson(Map<String, dynamic> json) {
     return MetricDescriptor(
-      name: json['name'],
-      type: json['type'],
-      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson),
-      metricKind: decodeEnum(
-        json['metricKind'],
-        MetricDescriptor_MetricKind.fromJson,
-      ),
-      valueType: decodeEnum(
-        json['valueType'],
-        MetricDescriptor_ValueType.fromJson,
-      ),
-      unit: json['unit'],
-      description: json['description'],
-      displayName: json['displayName'],
+      name: json['name'] ?? '',
+      type: json['type'] ?? '',
+      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
+      metricKind:
+          decodeEnum(
+            json['metricKind'],
+            MetricDescriptor_MetricKind.fromJson,
+          ) ??
+          MetricDescriptor_MetricKind.$default,
+      valueType:
+          decodeEnum(json['valueType'], MetricDescriptor_ValueType.fromJson) ??
+          MetricDescriptor_ValueType.$default,
+      unit: json['unit'] ?? '',
+      description: json['description'] ?? '',
+      displayName: json['displayName'] ?? '',
       metadata: decode(
         json['metadata'],
         MetricDescriptor_MetricDescriptorMetadata.fromJson,
       ),
-      launchStage: decodeEnum(json['launchStage'], LaunchStage.fromJson),
-      monitoredResourceTypes: decodeList(json['monitoredResourceTypes']),
+      launchStage:
+          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+          LaunchStage.$default,
+      monitoredResourceTypes: decodeList(json['monitoredResourceTypes']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (type != null) 'type': type,
-      if (labels != null) 'labels': encodeList(labels),
-      if (metricKind != null) 'metricKind': metricKind!.toJson(),
-      if (valueType != null) 'valueType': valueType!.toJson(),
-      if (unit != null) 'unit': unit,
-      if (description != null) 'description': description,
-      if (displayName != null) 'displayName': displayName,
+      if (name.isNotDefault) 'name': name,
+      if (type.isNotDefault) 'type': type,
+      if (labels.isNotDefault) 'labels': encodeList(labels),
+      if (metricKind.isNotDefault) 'metricKind': metricKind.toJson(),
+      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
+      if (unit.isNotDefault) 'unit': unit,
+      if (description.isNotDefault) 'description': description,
+      if (displayName.isNotDefault) 'displayName': displayName,
       if (metadata != null) 'metadata': metadata!.toJson(),
-      if (launchStage != null) 'launchStage': launchStage!.toJson(),
-      if (monitoredResourceTypes != null)
+      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
+      if (monitoredResourceTypes.isNotDefault)
         'monitoredResourceTypes': monitoredResourceTypes,
     };
   }
@@ -3930,14 +4002,14 @@ final class MetricDescriptor extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (type != null) 'type=$type',
-      if (metricKind != null) 'metricKind=$metricKind',
-      if (valueType != null) 'valueType=$valueType',
-      if (unit != null) 'unit=$unit',
-      if (description != null) 'description=$description',
-      if (displayName != null) 'displayName=$displayName',
-      if (launchStage != null) 'launchStage=$launchStage',
+      'name=$name',
+      'type=$type',
+      'metricKind=$metricKind',
+      'valueType=$valueType',
+      'unit=$unit',
+      'description=$description',
+      'displayName=$displayName',
+      'launchStage=$launchStage',
     ].join(',');
     return 'MetricDescriptor($contents)';
   }
@@ -3951,7 +4023,7 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
   /// Deprecated. Must use the
   /// `MetricDescriptor.launch_stage`
   /// instead.
-  final LaunchStage? launchStage;
+  final LaunchStage launchStage;
 
   /// The sampling period of metric data points. For metrics which are written
   /// periodically, consecutive data points are stored at this time interval,
@@ -3967,38 +4039,42 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
   /// The scope of the timeseries data of the metric.
   final List<
     MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
-  >?
+  >
   timeSeriesResourceHierarchyLevel;
 
   MetricDescriptor_MetricDescriptorMetadata({
-    this.launchStage,
+    this.launchStage = LaunchStage.$default,
     this.samplePeriod,
     this.ingestDelay,
-    this.timeSeriesResourceHierarchyLevel,
+    this.timeSeriesResourceHierarchyLevel = const [],
   }) : super(fullyQualifiedName);
 
   factory MetricDescriptor_MetricDescriptorMetadata.fromJson(
     Map<String, dynamic> json,
   ) {
     return MetricDescriptor_MetricDescriptorMetadata(
-      launchStage: decodeEnum(json['launchStage'], LaunchStage.fromJson),
+      launchStage:
+          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+          LaunchStage.$default,
       samplePeriod: decodeCustom(json['samplePeriod'], Duration.fromJson),
       ingestDelay: decodeCustom(json['ingestDelay'], Duration.fromJson),
-      timeSeriesResourceHierarchyLevel: decodeListEnum(
-        json['timeSeriesResourceHierarchyLevel'],
-        MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
-            .fromJson,
-      ),
+      timeSeriesResourceHierarchyLevel:
+          decodeListEnum(
+            json['timeSeriesResourceHierarchyLevel'],
+            MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
+                .fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (launchStage != null) 'launchStage': launchStage!.toJson(),
+      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
       if (samplePeriod != null) 'samplePeriod': samplePeriod!.toJson(),
       if (ingestDelay != null) 'ingestDelay': ingestDelay!.toJson(),
-      if (timeSeriesResourceHierarchyLevel != null)
+      if (timeSeriesResourceHierarchyLevel.isNotDefault)
         'timeSeriesResourceHierarchyLevel': encodeList(
           timeSeriesResourceHierarchyLevel,
         ),
@@ -4007,9 +4083,7 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (launchStage != null) 'launchStage=$launchStage',
-    ].join(',');
+    final contents = ['launchStage=$launchStage'].join(',');
     return 'MetricDescriptorMetadata($contents)';
   }
 }
@@ -4041,6 +4115,9 @@ final class MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarch
         'FOLDER',
       );
 
+  /// The default value for [MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel].
+  static const $default = timeSeriesResourceHierarchyLevelUnspecified;
+
   const MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel(
     super.value,
   );
@@ -4051,6 +4128,8 @@ final class MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarch
       MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel(
         json,
       );
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'TimeSeriesResourceHierarchyLevel.$value';
@@ -4078,10 +4157,15 @@ final class MetricDescriptor_MetricKind extends ProtoEnum {
   /// points.
   static const cumulative = MetricDescriptor_MetricKind('CUMULATIVE');
 
+  /// The default value for [MetricDescriptor_MetricKind].
+  static const $default = metricKindUnspecified;
+
   const MetricDescriptor_MetricKind(super.value);
 
   factory MetricDescriptor_MetricKind.fromJson(String json) =>
       MetricDescriptor_MetricKind(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'MetricKind.$value';
@@ -4096,13 +4180,13 @@ final class MetricDescriptor_ValueType extends ProtoEnum {
 
   /// The value is a boolean.
   /// This value type can be used only if the metric kind is `GAUGE`.
-  static const bool = MetricDescriptor_ValueType('BOOL');
+  static const bool$ = MetricDescriptor_ValueType('BOOL');
 
   /// The value is a signed 64-bit integer.
   static const int64 = MetricDescriptor_ValueType('INT64');
 
   /// The value is a double precision floating point number.
-  static const double = MetricDescriptor_ValueType('DOUBLE');
+  static const double$ = MetricDescriptor_ValueType('DOUBLE');
 
   /// The value is a text string.
   /// This value type can be used only if the metric kind is `GAUGE`.
@@ -4114,10 +4198,15 @@ final class MetricDescriptor_ValueType extends ProtoEnum {
   /// The value is money.
   static const money = MetricDescriptor_ValueType('MONEY');
 
+  /// The default value for [MetricDescriptor_ValueType].
+  static const $default = valueTypeUnspecified;
+
   const MetricDescriptor_ValueType(super.value);
 
   factory MetricDescriptor_ValueType.fromJson(String json) =>
       MetricDescriptor_ValueType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ValueType.$value';
@@ -4131,29 +4220,32 @@ final class Metric extends ProtoMessage {
   /// An existing metric type, see
   /// `google.api.MetricDescriptor`. For example,
   /// `custom.googleapis.com/invoice/paid/amount`.
-  final String? type;
+  final String type;
 
   /// The set of label values that uniquely identify this metric. All
   /// labels listed in the `MetricDescriptor` must be assigned values.
-  final Map<String, String>? labels;
+  final Map<String, String> labels;
 
-  Metric({this.type, this.labels}) : super(fullyQualifiedName);
+  Metric({this.type = '', this.labels = const {}}) : super(fullyQualifiedName);
 
   factory Metric.fromJson(Map<String, dynamic> json) {
-    return Metric(type: json['type'], labels: decodeMap(json['labels']));
+    return Metric(
+      type: json['type'] ?? '',
+      labels: decodeMap(json['labels']) ?? {},
+    );
   }
 
   @override
   Object toJson() {
     return {
-      if (type != null) 'type': type,
-      if (labels != null) 'labels': labels,
+      if (type.isNotDefault) 'type': type,
+      if (labels.isNotDefault) 'labels': labels,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (type != null) 'type=$type'].join(',');
+    final contents = ['type=$type'].join(',');
     return 'Metric($contents)';
   }
 }
@@ -4178,7 +4270,7 @@ final class MonitoredResourceDescriptor extends ProtoMessage {
   /// {project_id} is a project ID that provides API-specific context for
   /// accessing the type.  APIs that do not use project information can use the
   /// resource name format `"monitoredResourceDescriptors/{type}"`.
-  final String? name;
+  final String name;
 
   /// Required. The monitored resource type. For example, the type
   /// `"cloudsql_database"` represents databases in Google Cloud SQL.
@@ -4186,66 +4278,68 @@ final class MonitoredResourceDescriptor extends ProtoMessage {
   ///  types](https://cloud.google.com/monitoring/api/resources)
   /// and [Logging resource
   /// types](https://cloud.google.com/logging/docs/api/v2/resource-list).
-  final String? type;
+  final String type;
 
   /// Optional. A concise name for the monitored resource type that might be
   /// displayed in user interfaces. It should be a Title Cased Noun Phrase,
   /// without any article or other determiners. For example,
   /// `"Google Cloud SQL Database"`.
-  final String? displayName;
+  final String displayName;
 
   /// Optional. A detailed description of the monitored resource type that might
   /// be used in documentation.
-  final String? description;
+  final String description;
 
   /// Required. A set of labels used to describe instances of this monitored
   /// resource type. For example, an individual Google Cloud SQL database is
   /// identified by values for the labels `"database_id"` and `"zone"`.
-  final List<LabelDescriptor>? labels;
+  final List<LabelDescriptor> labels;
 
   /// Optional. The launch stage of the monitored resource definition.
-  final LaunchStage? launchStage;
+  final LaunchStage launchStage;
 
   MonitoredResourceDescriptor({
-    this.name,
-    this.type,
-    this.displayName,
-    this.description,
-    this.labels,
-    this.launchStage,
+    this.name = '',
+    this.type = '',
+    this.displayName = '',
+    this.description = '',
+    this.labels = const [],
+    this.launchStage = LaunchStage.$default,
   }) : super(fullyQualifiedName);
 
   factory MonitoredResourceDescriptor.fromJson(Map<String, dynamic> json) {
     return MonitoredResourceDescriptor(
-      name: json['name'],
-      type: json['type'],
-      displayName: json['displayName'],
-      description: json['description'],
-      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson),
-      launchStage: decodeEnum(json['launchStage'], LaunchStage.fromJson),
+      name: json['name'] ?? '',
+      type: json['type'] ?? '',
+      displayName: json['displayName'] ?? '',
+      description: json['description'] ?? '',
+      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
+      launchStage:
+          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+          LaunchStage.$default,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (type != null) 'type': type,
-      if (displayName != null) 'displayName': displayName,
-      if (description != null) 'description': description,
-      if (labels != null) 'labels': encodeList(labels),
-      if (launchStage != null) 'launchStage': launchStage!.toJson(),
+      if (name.isNotDefault) 'name': name,
+      if (type.isNotDefault) 'type': type,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (description.isNotDefault) 'description': description,
+      if (labels.isNotDefault) 'labels': encodeList(labels),
+      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (type != null) 'type=$type',
-      if (displayName != null) 'displayName=$displayName',
-      if (description != null) 'description=$description',
-      if (launchStage != null) 'launchStage=$launchStage',
+      'name=$name',
+      'type=$type',
+      'displayName=$displayName',
+      'description=$description',
+      'launchStage=$launchStage',
     ].join(',');
     return 'MonitoredResourceDescriptor($contents)';
   }
@@ -4277,33 +4371,34 @@ final class MonitoredResource extends ProtoMessage {
   /// `gce_instance`. Some descriptors include the service name in the type; for
   /// example, the type of a Datastream stream is
   /// `datastream.googleapis.com/Stream`.
-  final String? type;
+  final String type;
 
   /// Required. Values for all of the labels listed in the associated monitored
   /// resource descriptor. For example, Compute Engine VM instances use the
   /// labels `"project_id"`, `"instance_id"`, and `"zone"`.
-  final Map<String, String>? labels;
+  final Map<String, String> labels;
 
-  MonitoredResource({this.type, this.labels}) : super(fullyQualifiedName);
+  MonitoredResource({this.type = '', this.labels = const {}})
+    : super(fullyQualifiedName);
 
   factory MonitoredResource.fromJson(Map<String, dynamic> json) {
     return MonitoredResource(
-      type: json['type'],
-      labels: decodeMap(json['labels']),
+      type: json['type'] ?? '',
+      labels: decodeMap(json['labels']) ?? {},
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (type != null) 'type': type,
-      if (labels != null) 'labels': labels,
+      if (type.isNotDefault) 'type': type,
+      if (labels.isNotDefault) 'labels': labels,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (type != null) 'type=$type'].join(',');
+    final contents = ['type=$type'].join(',');
     return 'MonitoredResource($contents)';
   }
 }
@@ -4331,15 +4426,15 @@ final class MonitoredResourceMetadata extends ProtoMessage {
   final Struct? systemLabels;
 
   /// Output only. A map of user-defined metadata labels.
-  final Map<String, String>? userLabels;
+  final Map<String, String> userLabels;
 
-  MonitoredResourceMetadata({this.systemLabels, this.userLabels})
+  MonitoredResourceMetadata({this.systemLabels, this.userLabels = const {}})
     : super(fullyQualifiedName);
 
   factory MonitoredResourceMetadata.fromJson(Map<String, dynamic> json) {
     return MonitoredResourceMetadata(
       systemLabels: decodeCustom(json['systemLabels'], Struct.fromJson),
-      userLabels: decodeMap(json['userLabels']),
+      userLabels: decodeMap(json['userLabels']) ?? {},
     );
   }
 
@@ -4347,7 +4442,7 @@ final class MonitoredResourceMetadata extends ProtoMessage {
   Object toJson() {
     return {
       if (systemLabels != null) 'systemLabels': systemLabels!.toJson(),
-      if (userLabels != null) 'userLabels': userLabels,
+      if (userLabels.isNotDefault) 'userLabels': userLabels,
     };
   }
 
@@ -4416,7 +4511,7 @@ final class Monitoring extends ProtoMessage {
   /// needed for different sets of metrics associated with that monitored
   /// resource type. A monitored resource and metric pair may only be used once
   /// in the Monitoring configuration.
-  final List<Monitoring_MonitoringDestination>? producerDestinations;
+  final List<Monitoring_MonitoringDestination> producerDestinations;
 
   /// Monitoring configurations for sending metrics to the consumer project.
   /// There can be multiple consumer destinations. A monitored resource type may
@@ -4424,30 +4519,36 @@ final class Monitoring extends ProtoMessage {
   /// needed for different sets of metrics associated with that monitored
   /// resource type. A monitored resource and metric pair may only be used once
   /// in the Monitoring configuration.
-  final List<Monitoring_MonitoringDestination>? consumerDestinations;
+  final List<Monitoring_MonitoringDestination> consumerDestinations;
 
-  Monitoring({this.producerDestinations, this.consumerDestinations})
-    : super(fullyQualifiedName);
+  Monitoring({
+    this.producerDestinations = const [],
+    this.consumerDestinations = const [],
+  }) : super(fullyQualifiedName);
 
   factory Monitoring.fromJson(Map<String, dynamic> json) {
     return Monitoring(
-      producerDestinations: decodeListMessage(
-        json['producerDestinations'],
-        Monitoring_MonitoringDestination.fromJson,
-      ),
-      consumerDestinations: decodeListMessage(
-        json['consumerDestinations'],
-        Monitoring_MonitoringDestination.fromJson,
-      ),
+      producerDestinations:
+          decodeListMessage(
+            json['producerDestinations'],
+            Monitoring_MonitoringDestination.fromJson,
+          ) ??
+          [],
+      consumerDestinations:
+          decodeListMessage(
+            json['consumerDestinations'],
+            Monitoring_MonitoringDestination.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (producerDestinations != null)
+      if (producerDestinations.isNotDefault)
         'producerDestinations': encodeList(producerDestinations),
-      if (consumerDestinations != null)
+      if (consumerDestinations.isNotDefault)
         'consumerDestinations': encodeList(consumerDestinations),
     };
   }
@@ -4465,36 +4566,37 @@ final class Monitoring_MonitoringDestination extends ProtoMessage {
   /// The monitored resource type. The type must be defined in
   /// `Service.monitored_resources`
   /// section.
-  final String? monitoredResource;
+  final String monitoredResource;
 
   /// Types of the metrics to report to this monitoring destination.
   /// Each type must be defined in
   /// `Service.metrics` section.
-  final List<String>? metrics;
+  final List<String> metrics;
 
-  Monitoring_MonitoringDestination({this.monitoredResource, this.metrics})
-    : super(fullyQualifiedName);
+  Monitoring_MonitoringDestination({
+    this.monitoredResource = '',
+    this.metrics = const [],
+  }) : super(fullyQualifiedName);
 
   factory Monitoring_MonitoringDestination.fromJson(Map<String, dynamic> json) {
     return Monitoring_MonitoringDestination(
-      monitoredResource: json['monitoredResource'],
-      metrics: decodeList(json['metrics']),
+      monitoredResource: json['monitoredResource'] ?? '',
+      metrics: decodeList(json['metrics']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (monitoredResource != null) 'monitoredResource': monitoredResource,
-      if (metrics != null) 'metrics': metrics,
+      if (monitoredResource.isNotDefault)
+        'monitoredResource': monitoredResource,
+      if (metrics.isNotDefault) 'metrics': metrics,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (monitoredResource != null) 'monitoredResource=$monitoredResource',
-    ].join(',');
+    final contents = ['monitoredResource=$monitoredResource'].join(',');
     return 'MonitoringDestination($contents)';
   }
 }
@@ -4520,43 +4622,47 @@ final class FieldPolicy extends ProtoMessage {
   /// When a `FieldPolicy` is used in service config, the selector must be a
   /// comma-separated string with valid request or response field paths,
   /// such as "foo.bar" or "foo.bar,foo.baz".
-  final String? selector;
+  final String selector;
 
   /// Specifies the required permission(s) for the resource referred to by the
   /// field. It requires the field contains a valid resource reference, and
   /// the request must pass the permission checks to proceed. For example,
   /// "resourcemanager.projects.get".
-  final String? resourcePermission;
+  final String resourcePermission;
 
   /// Specifies the resource type for the resource referred to by the field.
-  final String? resourceType;
+  final String resourceType;
 
-  FieldPolicy({this.selector, this.resourcePermission, this.resourceType})
-    : super(fullyQualifiedName);
+  FieldPolicy({
+    this.selector = '',
+    this.resourcePermission = '',
+    this.resourceType = '',
+  }) : super(fullyQualifiedName);
 
   factory FieldPolicy.fromJson(Map<String, dynamic> json) {
     return FieldPolicy(
-      selector: json['selector'],
-      resourcePermission: json['resourcePermission'],
-      resourceType: json['resourceType'],
+      selector: json['selector'] ?? '',
+      resourcePermission: json['resourcePermission'] ?? '',
+      resourceType: json['resourceType'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (resourcePermission != null) 'resourcePermission': resourcePermission,
-      if (resourceType != null) 'resourceType': resourceType,
+      if (selector.isNotDefault) 'selector': selector,
+      if (resourcePermission.isNotDefault)
+        'resourcePermission': resourcePermission,
+      if (resourceType.isNotDefault) 'resourceType': resourceType,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (resourcePermission != null) 'resourcePermission=$resourcePermission',
-      if (resourceType != null) 'resourceType=$resourceType',
+      'selector=$selector',
+      'resourcePermission=$resourcePermission',
+      'resourceType=$resourceType',
     ].join(',');
     return 'FieldPolicy($contents)';
   }
@@ -4574,36 +4680,35 @@ final class MethodPolicy extends ProtoMessage {
   ///
   /// NOTE: This field must not be set in the proto annotation. It will be
   /// automatically filled by the service config compiler .
-  final String? selector;
+  final String selector;
 
   /// Policies that are applicable to the request message.
-  final List<FieldPolicy>? requestPolicies;
+  final List<FieldPolicy> requestPolicies;
 
-  MethodPolicy({this.selector, this.requestPolicies})
+  MethodPolicy({this.selector = '', this.requestPolicies = const []})
     : super(fullyQualifiedName);
 
   factory MethodPolicy.fromJson(Map<String, dynamic> json) {
     return MethodPolicy(
-      selector: json['selector'],
-      requestPolicies: decodeListMessage(
-        json['requestPolicies'],
-        FieldPolicy.fromJson,
-      ),
+      selector: json['selector'] ?? '',
+      requestPolicies:
+          decodeListMessage(json['requestPolicies'], FieldPolicy.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (requestPolicies != null)
+      if (selector.isNotDefault) 'selector': selector,
+      if (requestPolicies.isNotDefault)
         'requestPolicies': encodeList(requestPolicies),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (selector != null) 'selector=$selector'].join(',');
+    final contents = ['selector=$selector'].join(',');
     return 'MethodPolicy($contents)';
   }
 }
@@ -4661,26 +4766,28 @@ final class Quota extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.Quota';
 
   /// List of QuotaLimit definitions for the service.
-  final List<QuotaLimit>? limits;
+  final List<QuotaLimit> limits;
 
   /// List of MetricRule definitions, each one mapping a selected method to one
   /// or more metrics.
-  final List<MetricRule>? metricRules;
+  final List<MetricRule> metricRules;
 
-  Quota({this.limits, this.metricRules}) : super(fullyQualifiedName);
+  Quota({this.limits = const [], this.metricRules = const []})
+    : super(fullyQualifiedName);
 
   factory Quota.fromJson(Map<String, dynamic> json) {
     return Quota(
-      limits: decodeListMessage(json['limits'], QuotaLimit.fromJson),
-      metricRules: decodeListMessage(json['metricRules'], MetricRule.fromJson),
+      limits: decodeListMessage(json['limits'], QuotaLimit.fromJson) ?? [],
+      metricRules:
+          decodeListMessage(json['metricRules'], MetricRule.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (limits != null) 'limits': encodeList(limits),
-      if (metricRules != null) 'metricRules': encodeList(metricRules),
+      if (limits.isNotDefault) 'limits': encodeList(limits),
+      if (metricRules.isNotDefault) 'metricRules': encodeList(metricRules),
     };
   }
 
@@ -4697,7 +4804,7 @@ final class MetricRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// Metrics to update when the selected methods are called, and the associated
   /// cost applied to each metric.
@@ -4705,28 +4812,29 @@ final class MetricRule extends ProtoMessage {
   /// The key of the map is the metric name, and the values are the amount
   /// increased for the metric against which the quota limits are defined.
   /// The value must not be negative.
-  final Map<String, int>? metricCosts;
+  final Map<String, int> metricCosts;
 
-  MetricRule({this.selector, this.metricCosts}) : super(fullyQualifiedName);
+  MetricRule({this.selector = '', this.metricCosts = const {}})
+    : super(fullyQualifiedName);
 
   factory MetricRule.fromJson(Map<String, dynamic> json) {
     return MetricRule(
-      selector: json['selector'],
-      metricCosts: decodeMap(json['metricCosts']),
+      selector: json['selector'] ?? '',
+      metricCosts: decodeMap(json['metricCosts']) ?? {},
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (metricCosts != null) 'metricCosts': metricCosts,
+      if (selector.isNotDefault) 'selector': selector,
+      if (metricCosts.isNotDefault) 'metricCosts': metricCosts,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (selector != null) 'selector=$selector'].join(',');
+    final contents = ['selector=$selector'].join(',');
     return 'MetricRule($contents)';
   }
 }
@@ -4743,12 +4851,12 @@ final class QuotaLimit extends ProtoMessage {
   /// name can only include alphanumeric characters as well as '-'.
   ///
   /// The maximum length of the limit name is 64 characters.
-  final String? name;
+  final String name;
 
   /// Optional. User-visible, extended description for this quota limit.
   /// Should be used only when more context is needed to understand this limit
   /// than provided by the limit's display name (see: `display_name`).
-  final String? description;
+  final String description;
 
   /// Default number of tokens that can be consumed during the specified
   /// duration. This is the number of tokens assigned when a client
@@ -4760,7 +4868,7 @@ final class QuotaLimit extends ProtoMessage {
   /// negative values are allowed.
   ///
   /// Used by group-based quotas only.
-  final int? defaultLimit;
+  final int defaultLimit;
 
   /// Maximum number of tokens that can be consumed during the specified
   /// duration. Client application developers can override the default limit up
@@ -4771,7 +4879,7 @@ final class QuotaLimit extends ProtoMessage {
   /// indicating unlimited maximum quota.
   ///
   /// Used by group-based quotas only.
-  final int? maxLimit;
+  final int maxLimit;
 
   /// Free tier value displayed in the Developers Console for this limit.
   /// The free tier is the number of tokens that will be subtracted from the
@@ -4781,17 +4889,17 @@ final class QuotaLimit extends ProtoMessage {
   /// defaults to 0, indicating that there is no free tier for this service.
   ///
   /// Used by group-based quotas only.
-  final int? freeTier;
+  final int freeTier;
 
   /// Duration of this limit in textual notation. Must be "100s" or "1d".
   ///
   /// Used by group-based quotas only.
-  final String? duration;
+  final String duration;
 
   /// The name of the metric this quota limit applies to. The quota limits with
   /// the same metric will be checked together during runtime. The metric must be
   /// defined within the service config.
-  final String? metric;
+  final String metric;
 
   /// Specify the unit of the quota limit. It uses the same syntax as
   /// `MetricDescriptor.unit`. The supported
@@ -4802,75 +4910,75 @@ final class QuotaLimit extends ProtoMessage {
   ///
   /// Note: the order of unit components is insignificant.
   /// The "1" at the beginning is required to follow the metric unit syntax.
-  final String? unit;
+  final String unit;
 
   /// Tiered limit values. You must specify this as a key:value pair, with an
   /// integer value that is the maximum number of requests allowed for the
   /// specified unit. Currently only STANDARD is supported.
-  final Map<String, int>? values;
+  final Map<String, int> values;
 
   /// User-visible display name for this limit.
   /// Optional. If not set, the UI will provide a default display name based on
   /// the quota configuration. This field can be used to override the default
   /// display name generated from the configuration.
-  final String? displayName;
+  final String displayName;
 
   QuotaLimit({
-    this.name,
-    this.description,
-    this.defaultLimit,
-    this.maxLimit,
-    this.freeTier,
-    this.duration,
-    this.metric,
-    this.unit,
-    this.values,
-    this.displayName,
+    this.name = '',
+    this.description = '',
+    this.defaultLimit = 0,
+    this.maxLimit = 0,
+    this.freeTier = 0,
+    this.duration = '',
+    this.metric = '',
+    this.unit = '',
+    this.values = const {},
+    this.displayName = '',
   }) : super(fullyQualifiedName);
 
   factory QuotaLimit.fromJson(Map<String, dynamic> json) {
     return QuotaLimit(
-      name: json['name'],
-      description: json['description'],
-      defaultLimit: decodeInt64(json['defaultLimit']),
-      maxLimit: decodeInt64(json['maxLimit']),
-      freeTier: decodeInt64(json['freeTier']),
-      duration: json['duration'],
-      metric: json['metric'],
-      unit: json['unit'],
-      values: decodeMap(json['values']),
-      displayName: json['displayName'],
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      defaultLimit: decodeInt64(json['defaultLimit']) ?? 0,
+      maxLimit: decodeInt64(json['maxLimit']) ?? 0,
+      freeTier: decodeInt64(json['freeTier']) ?? 0,
+      duration: json['duration'] ?? '',
+      metric: json['metric'] ?? '',
+      unit: json['unit'] ?? '',
+      values: decodeMap(json['values']) ?? {},
+      displayName: json['displayName'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (description != null) 'description': description,
-      if (defaultLimit != null) 'defaultLimit': encodeInt64(defaultLimit),
-      if (maxLimit != null) 'maxLimit': encodeInt64(maxLimit),
-      if (freeTier != null) 'freeTier': encodeInt64(freeTier),
-      if (duration != null) 'duration': duration,
-      if (metric != null) 'metric': metric,
-      if (unit != null) 'unit': unit,
-      if (values != null) 'values': values,
-      if (displayName != null) 'displayName': displayName,
+      if (name.isNotDefault) 'name': name,
+      if (description.isNotDefault) 'description': description,
+      if (defaultLimit.isNotDefault) 'defaultLimit': encodeInt64(defaultLimit),
+      if (maxLimit.isNotDefault) 'maxLimit': encodeInt64(maxLimit),
+      if (freeTier.isNotDefault) 'freeTier': encodeInt64(freeTier),
+      if (duration.isNotDefault) 'duration': duration,
+      if (metric.isNotDefault) 'metric': metric,
+      if (unit.isNotDefault) 'unit': unit,
+      if (values.isNotDefault) 'values': values,
+      if (displayName.isNotDefault) 'displayName': displayName,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (description != null) 'description=$description',
-      if (defaultLimit != null) 'defaultLimit=$defaultLimit',
-      if (maxLimit != null) 'maxLimit=$maxLimit',
-      if (freeTier != null) 'freeTier=$freeTier',
-      if (duration != null) 'duration=$duration',
-      if (metric != null) 'metric=$metric',
-      if (unit != null) 'unit=$unit',
-      if (displayName != null) 'displayName=$displayName',
+      'name=$name',
+      'description=$description',
+      'defaultLimit=$defaultLimit',
+      'maxLimit=$maxLimit',
+      'freeTier=$freeTier',
+      'duration=$duration',
+      'metric=$metric',
+      'unit=$unit',
+      'displayName=$displayName',
     ].join(',');
     return 'QuotaLimit($contents)';
   }
@@ -4936,7 +5044,7 @@ final class ResourceDescriptor extends ProtoMessage {
   /// /[A-Za-z][a-zA-Z0-9]+/. It should start with an upper case character and
   /// should use PascalCase (UpperCamelCase). The maximum number of
   /// characters allowed for the `resource_type_kind` is 100.
-  final String? type;
+  final String type;
 
   /// Optional. The relative resource name pattern associated with this resource
   /// type. The DNS prefix of the full resource name shouldn't be specified here.
@@ -4957,11 +5065,11 @@ final class ResourceDescriptor extends ProtoMessage {
   /// hierarchy. It is expected that, if multiple patterns are provided,
   /// the same component name (e.g. "project") refers to IDs of the same
   /// type of resource.
-  final List<String>? pattern;
+  final List<String> pattern;
 
   /// Optional. The field on the resource that designates the resource name
   /// field. If omitted, this is assumed to be "name".
-  final String? nameField;
+  final String nameField;
 
   /// Optional. The historical or future-looking state of the resource pattern.
   ///
@@ -4978,7 +5086,7 @@ final class ResourceDescriptor extends ProtoMessage {
   ///         history: ORIGINALLY_SINGLE_PATTERN
   ///       };
   ///     }
-  final ResourceDescriptor_History? history;
+  final ResourceDescriptor_History history;
 
   /// The plural name used in the resource name and permission names, such as
   /// 'projects' for the resource name of 'projects/{project}' and the permission
@@ -4993,61 +5101,65 @@ final class ResourceDescriptor extends ProtoMessage {
   ///
   /// Note: The plural form is required even for singleton resources. See
   /// https://aip.dev/156
-  final String? plural;
+  final String plural;
 
   /// The same concept of the `singular` field in k8s CRD spec
   /// https://kubernetes.io/docs/tasks/access-kubernetes-api/custom-resources/custom-resource-definitions/
   /// Such as "project" for the `resourcemanager.googleapis.com/Project` type.
-  final String? singular;
+  final String singular;
 
   /// Style flag(s) for this resource.
   /// These indicate that a resource is expected to conform to a given
   /// style. See the specific style flags for additional information.
-  final List<ResourceDescriptor_Style>? style;
+  final List<ResourceDescriptor_Style> style;
 
   ResourceDescriptor({
-    this.type,
-    this.pattern,
-    this.nameField,
-    this.history,
-    this.plural,
-    this.singular,
-    this.style,
+    this.type = '',
+    this.pattern = const [],
+    this.nameField = '',
+    this.history = ResourceDescriptor_History.$default,
+    this.plural = '',
+    this.singular = '',
+    this.style = const [],
   }) : super(fullyQualifiedName);
 
   factory ResourceDescriptor.fromJson(Map<String, dynamic> json) {
     return ResourceDescriptor(
-      type: json['type'],
-      pattern: decodeList(json['pattern']),
-      nameField: json['nameField'],
-      history: decodeEnum(json['history'], ResourceDescriptor_History.fromJson),
-      plural: json['plural'],
-      singular: json['singular'],
-      style: decodeListEnum(json['style'], ResourceDescriptor_Style.fromJson),
+      type: json['type'] ?? '',
+      pattern: decodeList(json['pattern']) ?? [],
+      nameField: json['nameField'] ?? '',
+      history:
+          decodeEnum(json['history'], ResourceDescriptor_History.fromJson) ??
+          ResourceDescriptor_History.$default,
+      plural: json['plural'] ?? '',
+      singular: json['singular'] ?? '',
+      style:
+          decodeListEnum(json['style'], ResourceDescriptor_Style.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (type != null) 'type': type,
-      if (pattern != null) 'pattern': pattern,
-      if (nameField != null) 'nameField': nameField,
-      if (history != null) 'history': history!.toJson(),
-      if (plural != null) 'plural': plural,
-      if (singular != null) 'singular': singular,
-      if (style != null) 'style': encodeList(style),
+      if (type.isNotDefault) 'type': type,
+      if (pattern.isNotDefault) 'pattern': pattern,
+      if (nameField.isNotDefault) 'nameField': nameField,
+      if (history.isNotDefault) 'history': history.toJson(),
+      if (plural.isNotDefault) 'plural': plural,
+      if (singular.isNotDefault) 'singular': singular,
+      if (style.isNotDefault) 'style': encodeList(style),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (type != null) 'type=$type',
-      if (nameField != null) 'nameField=$nameField',
-      if (history != null) 'history=$history',
-      if (plural != null) 'plural=$plural',
-      if (singular != null) 'singular=$singular',
+      'type=$type',
+      'nameField=$nameField',
+      'history=$history',
+      'plural=$plural',
+      'singular=$singular',
     ].join(',');
     return 'ResourceDescriptor($contents)';
   }
@@ -5074,10 +5186,15 @@ final class ResourceDescriptor_History extends ProtoEnum {
     'FUTURE_MULTI_PATTERN',
   );
 
+  /// The default value for [ResourceDescriptor_History].
+  static const $default = historyUnspecified;
+
   const ResourceDescriptor_History(super.value);
 
   factory ResourceDescriptor_History.fromJson(String json) =>
       ResourceDescriptor_History(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'History.$value';
@@ -5100,10 +5217,15 @@ final class ResourceDescriptor_Style extends ProtoEnum {
     'DECLARATIVE_FRIENDLY',
   );
 
+  /// The default value for [ResourceDescriptor_Style].
+  static const $default = styleUnspecified;
+
   const ResourceDescriptor_Style(super.value);
 
   factory ResourceDescriptor_Style.fromJson(String json) =>
       ResourceDescriptor_Style(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Style.$value';
@@ -5134,7 +5256,7 @@ final class ResourceReference extends ProtoMessage {
   ///         type: "*"
   ///       }];
   ///     }
-  final String? type;
+  final String type;
 
   /// The resource type of a child collection that the annotated field
   /// references. This is useful for annotating the `parent` field that
@@ -5147,28 +5269,29 @@ final class ResourceReference extends ProtoMessage {
   ///         child_type: "logging.googleapis.com/LogEntry"
   ///       };
   ///     }
-  final String? childType;
+  final String childType;
 
-  ResourceReference({this.type, this.childType}) : super(fullyQualifiedName);
+  ResourceReference({this.type = '', this.childType = ''})
+    : super(fullyQualifiedName);
 
   factory ResourceReference.fromJson(Map<String, dynamic> json) {
-    return ResourceReference(type: json['type'], childType: json['childType']);
+    return ResourceReference(
+      type: json['type'] ?? '',
+      childType: json['childType'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
     return {
-      if (type != null) 'type': type,
-      if (childType != null) 'childType': childType,
+      if (type.isNotDefault) 'type': type,
+      if (childType.isNotDefault) 'childType': childType,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (type != null) 'type=$type',
-      if (childType != null) 'childType=$childType',
-    ].join(',');
+    final contents = ['type=$type', 'childType=$childType'].join(',');
     return 'ResourceReference($contents)';
   }
 }
@@ -5541,23 +5664,25 @@ final class RoutingRule extends ProtoMessage {
   /// `path_template` is not provided), "last one wins" rule
   /// determines which Parameter gets used.
   /// See the examples for more details.
-  final List<RoutingParameter>? routingParameters;
+  final List<RoutingParameter> routingParameters;
 
-  RoutingRule({this.routingParameters}) : super(fullyQualifiedName);
+  RoutingRule({this.routingParameters = const []}) : super(fullyQualifiedName);
 
   factory RoutingRule.fromJson(Map<String, dynamic> json) {
     return RoutingRule(
-      routingParameters: decodeListMessage(
-        json['routingParameters'],
-        RoutingParameter.fromJson,
-      ),
+      routingParameters:
+          decodeListMessage(
+            json['routingParameters'],
+            RoutingParameter.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (routingParameters != null)
+      if (routingParameters.isNotDefault)
         'routingParameters': encodeList(routingParameters),
     };
   }
@@ -5571,7 +5696,7 @@ final class RoutingParameter extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.RoutingParameter';
 
   /// A request field to extract the header key-value pair from.
-  final String? field;
+  final String field;
 
   /// A pattern matching the key-value field. Optional.
   /// If not specified, the whole field specified in the `field` field will be
@@ -5627,31 +5752,29 @@ final class RoutingParameter extends ProtoMessage {
   ///     }
   ///
   /// See Example 1 for more details.
-  final String? pathTemplate;
+  final String pathTemplate;
 
-  RoutingParameter({this.field, this.pathTemplate}) : super(fullyQualifiedName);
+  RoutingParameter({this.field = '', this.pathTemplate = ''})
+    : super(fullyQualifiedName);
 
   factory RoutingParameter.fromJson(Map<String, dynamic> json) {
     return RoutingParameter(
-      field: json['field'],
-      pathTemplate: json['pathTemplate'],
+      field: json['field'] ?? '',
+      pathTemplate: json['pathTemplate'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (field != null) 'field': field,
-      if (pathTemplate != null) 'pathTemplate': pathTemplate,
+      if (field.isNotDefault) 'field': field,
+      if (pathTemplate.isNotDefault) 'pathTemplate': pathTemplate,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (field != null) 'field=$field',
-      if (pathTemplate != null) 'pathTemplate=$pathTemplate',
-    ].join(',');
+    final contents = ['field=$field', 'pathTemplate=$pathTemplate'].join(',');
     return 'RoutingParameter($contents)';
   }
 }
@@ -5696,27 +5819,27 @@ final class Service extends ProtoMessage {
   /// service, such as `calendar.googleapis.com`. The service name
   /// typically goes through DNS verification to make sure the owner
   /// of the service also owns the DNS name.
-  final String? name;
+  final String name;
 
   /// The product title for this service, it is the name displayed in Google
   /// Cloud Console.
-  final String? title;
+  final String title;
 
   /// The Google project that owns this service.
-  final String? producerProjectId;
+  final String producerProjectId;
 
   /// A unique ID for a specific instance of this message, typically assigned
   /// by the client for tracking purpose. Must be no longer than 63 characters
   /// and only lower case letters, digits, '.', '_' and '-' are allowed. If
   /// empty, the server may choose to generate one instead.
-  final String? id;
+  final String id;
 
   /// A list of API interfaces exported by this service. Only the `name` field
   /// of the `google.protobuf.Api` needs to be provided by
   /// the configuration author, as the remaining fields will be derived from the
   /// IDL during the normalization process. It is an error to specify an API
   /// interface here which cannot be resolved against the associated IDL files.
-  final List<Api>? apis;
+  final List<Api> apis;
 
   /// A list of all proto message types included in this API service.
   /// Types referenced directly or indirectly by the `apis` are automatically
@@ -5726,7 +5849,7 @@ final class Service extends ProtoMessage {
   ///
   ///     types:
   ///     - name: google.protobuf.Int32
-  final List<Type>? types;
+  final List<Type> types;
 
   /// A list of all enum types included in this API service.  Enums referenced
   /// directly or indirectly by the `apis` are automatically included.  Enums
@@ -5735,7 +5858,7 @@ final class Service extends ProtoMessage {
   ///
   ///     enums:
   ///     - name: google.someapi.v1.SomeEnum
-  final List<Enum>? enums;
+  final List<Enum> enums;
 
   /// Additional API documentation.
   final Documentation? documentation;
@@ -5761,21 +5884,21 @@ final class Service extends ProtoMessage {
   /// Configuration for network endpoints.  If this is empty, then an endpoint
   /// with the same name as the service is automatically generated to service all
   /// defined APIs.
-  final List<Endpoint>? endpoints;
+  final List<Endpoint> endpoints;
 
   /// Configuration for the service control plane.
   final Control? control;
 
   /// Defines the logs used by this service.
-  final List<LogDescriptor>? logs;
+  final List<LogDescriptor> logs;
 
   /// Defines the metrics used by this service.
-  final List<MetricDescriptor>? metrics;
+  final List<MetricDescriptor> metrics;
 
   /// Defines the monitored resources used by this service. This is required
   /// by the `Service.monitoring` and
   /// `Service.logging` configurations.
-  final List<MonitoredResourceDescriptor>? monitoredResources;
+  final List<MonitoredResourceDescriptor> monitoredResources;
 
   /// Billing configuration.
   final Billing? billing;
@@ -5804,13 +5927,13 @@ final class Service extends ProtoMessage {
   final Uint32Value? configVersion;
 
   Service({
-    this.name,
-    this.title,
-    this.producerProjectId,
-    this.id,
-    this.apis,
-    this.types,
-    this.enums,
+    this.name = '',
+    this.title = '',
+    this.producerProjectId = '',
+    this.id = '',
+    this.apis = const [],
+    this.types = const [],
+    this.enums = const [],
     this.documentation,
     this.backend,
     this.http,
@@ -5818,11 +5941,11 @@ final class Service extends ProtoMessage {
     this.authentication,
     this.context,
     this.usage,
-    this.endpoints,
+    this.endpoints = const [],
     this.control,
-    this.logs,
-    this.metrics,
-    this.monitoredResources,
+    this.logs = const [],
+    this.metrics = const [],
+    this.monitoredResources = const [],
     this.billing,
     this.logging,
     this.monitoring,
@@ -5834,13 +5957,13 @@ final class Service extends ProtoMessage {
 
   factory Service.fromJson(Map<String, dynamic> json) {
     return Service(
-      name: json['name'],
-      title: json['title'],
-      producerProjectId: json['producerProjectId'],
-      id: json['id'],
-      apis: decodeListMessage(json['apis'], Api.fromJson),
-      types: decodeListMessage(json['types'], Type.fromJson),
-      enums: decodeListMessage(json['enums'], Enum.fromJson),
+      name: json['name'] ?? '',
+      title: json['title'] ?? '',
+      producerProjectId: json['producerProjectId'] ?? '',
+      id: json['id'] ?? '',
+      apis: decodeListMessage(json['apis'], Api.fromJson) ?? [],
+      types: decodeListMessage(json['types'], Type.fromJson) ?? [],
+      enums: decodeListMessage(json['enums'], Enum.fromJson) ?? [],
       documentation: decode(json['documentation'], Documentation.fromJson),
       backend: decode(json['backend'], Backend.fromJson),
       http: decode(json['http'], Http.fromJson),
@@ -5848,14 +5971,17 @@ final class Service extends ProtoMessage {
       authentication: decode(json['authentication'], Authentication.fromJson),
       context: decode(json['context'], Context.fromJson),
       usage: decode(json['usage'], Usage.fromJson),
-      endpoints: decodeListMessage(json['endpoints'], Endpoint.fromJson),
+      endpoints: decodeListMessage(json['endpoints'], Endpoint.fromJson) ?? [],
       control: decode(json['control'], Control.fromJson),
-      logs: decodeListMessage(json['logs'], LogDescriptor.fromJson),
-      metrics: decodeListMessage(json['metrics'], MetricDescriptor.fromJson),
-      monitoredResources: decodeListMessage(
-        json['monitoredResources'],
-        MonitoredResourceDescriptor.fromJson,
-      ),
+      logs: decodeListMessage(json['logs'], LogDescriptor.fromJson) ?? [],
+      metrics:
+          decodeListMessage(json['metrics'], MetricDescriptor.fromJson) ?? [],
+      monitoredResources:
+          decodeListMessage(
+            json['monitoredResources'],
+            MonitoredResourceDescriptor.fromJson,
+          ) ??
+          [],
       billing: decode(json['billing'], Billing.fromJson),
       logging: decode(json['logging'], Logging.fromJson),
       monitoring: decode(json['monitoring'], Monitoring.fromJson),
@@ -5872,13 +5998,14 @@ final class Service extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (title != null) 'title': title,
-      if (producerProjectId != null) 'producerProjectId': producerProjectId,
-      if (id != null) 'id': id,
-      if (apis != null) 'apis': encodeList(apis),
-      if (types != null) 'types': encodeList(types),
-      if (enums != null) 'enums': encodeList(enums),
+      if (name.isNotDefault) 'name': name,
+      if (title.isNotDefault) 'title': title,
+      if (producerProjectId.isNotDefault)
+        'producerProjectId': producerProjectId,
+      if (id.isNotDefault) 'id': id,
+      if (apis.isNotDefault) 'apis': encodeList(apis),
+      if (types.isNotDefault) 'types': encodeList(types),
+      if (enums.isNotDefault) 'enums': encodeList(enums),
       if (documentation != null) 'documentation': documentation!.toJson(),
       if (backend != null) 'backend': backend!.toJson(),
       if (http != null) 'http': http!.toJson(),
@@ -5886,11 +6013,11 @@ final class Service extends ProtoMessage {
       if (authentication != null) 'authentication': authentication!.toJson(),
       if (context != null) 'context': context!.toJson(),
       if (usage != null) 'usage': usage!.toJson(),
-      if (endpoints != null) 'endpoints': encodeList(endpoints),
+      if (endpoints.isNotDefault) 'endpoints': encodeList(endpoints),
       if (control != null) 'control': control!.toJson(),
-      if (logs != null) 'logs': encodeList(logs),
-      if (metrics != null) 'metrics': encodeList(metrics),
-      if (monitoredResources != null)
+      if (logs.isNotDefault) 'logs': encodeList(logs),
+      if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+      if (monitoredResources.isNotDefault)
         'monitoredResources': encodeList(monitoredResources),
       if (billing != null) 'billing': billing!.toJson(),
       if (logging != null) 'logging': logging!.toJson(),
@@ -5906,10 +6033,10 @@ final class Service extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (title != null) 'title=$title',
-      if (producerProjectId != null) 'producerProjectId=$producerProjectId',
-      if (id != null) 'id=$id',
+      'name=$name',
+      'title=$title',
+      'producerProjectId=$producerProjectId',
+      'id=$id',
     ].join(',');
     return 'Service($contents)';
   }
@@ -5920,19 +6047,21 @@ final class SourceInfo extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.SourceInfo';
 
   /// All files used during config generation.
-  final List<Any>? sourceFiles;
+  final List<Any> sourceFiles;
 
-  SourceInfo({this.sourceFiles}) : super(fullyQualifiedName);
+  SourceInfo({this.sourceFiles = const []}) : super(fullyQualifiedName);
 
   factory SourceInfo.fromJson(Map<String, dynamic> json) {
     return SourceInfo(
-      sourceFiles: decodeListMessage(json['sourceFiles'], Any.fromJson),
+      sourceFiles: decodeListMessage(json['sourceFiles'], Any.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (sourceFiles != null) 'sourceFiles': encodeList(sourceFiles)};
+    return {
+      if (sourceFiles.isNotDefault) 'sourceFiles': encodeList(sourceFiles),
+    };
   }
 
   @override
@@ -5977,19 +6106,20 @@ final class SystemParameters extends ProtoMessage {
   ///               http_header: Api-Key2
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<SystemParameterRule>? rules;
+  final List<SystemParameterRule> rules;
 
-  SystemParameters({this.rules}) : super(fullyQualifiedName);
+  SystemParameters({this.rules = const []}) : super(fullyQualifiedName);
 
   factory SystemParameters.fromJson(Map<String, dynamic> json) {
     return SystemParameters(
-      rules: decodeListMessage(json['rules'], SystemParameterRule.fromJson),
+      rules:
+          decodeListMessage(json['rules'], SystemParameterRule.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (rules != null) 'rules': encodeList(rules)};
+    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
   }
 
   @override
@@ -6006,39 +6136,37 @@ final class SystemParameterRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// Define parameters. Multiple names may be defined for a parameter.
   /// For a given method call, only one of them should be used. If multiple
   /// names are used the behavior is implementation-dependent.
   /// If none of the specified names are present the behavior is
   /// parameter-dependent.
-  final List<SystemParameter>? parameters;
+  final List<SystemParameter> parameters;
 
-  SystemParameterRule({this.selector, this.parameters})
+  SystemParameterRule({this.selector = '', this.parameters = const []})
     : super(fullyQualifiedName);
 
   factory SystemParameterRule.fromJson(Map<String, dynamic> json) {
     return SystemParameterRule(
-      selector: json['selector'],
-      parameters: decodeListMessage(
-        json['parameters'],
-        SystemParameter.fromJson,
-      ),
+      selector: json['selector'] ?? '',
+      parameters:
+          decodeListMessage(json['parameters'], SystemParameter.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (parameters != null) 'parameters': encodeList(parameters),
+      if (selector.isNotDefault) 'selector': selector,
+      if (parameters.isNotDefault) 'parameters': encodeList(parameters),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (selector != null) 'selector=$selector'].join(',');
+    final contents = ['selector=$selector'].join(',');
     return 'SystemParameterRule($contents)';
   }
 }
@@ -6050,42 +6178,46 @@ final class SystemParameter extends ProtoMessage {
   static const String fullyQualifiedName = 'google.api.SystemParameter';
 
   /// Define the name of the parameter, such as "api_key" . It is case sensitive.
-  final String? name;
+  final String name;
 
   /// Define the HTTP header name to use for the parameter. It is case
   /// insensitive.
-  final String? httpHeader;
+  final String httpHeader;
 
   /// Define the URL query parameter name to use for the parameter. It is case
   /// sensitive.
-  final String? urlQueryParameter;
+  final String urlQueryParameter;
 
-  SystemParameter({this.name, this.httpHeader, this.urlQueryParameter})
-    : super(fullyQualifiedName);
+  SystemParameter({
+    this.name = '',
+    this.httpHeader = '',
+    this.urlQueryParameter = '',
+  }) : super(fullyQualifiedName);
 
   factory SystemParameter.fromJson(Map<String, dynamic> json) {
     return SystemParameter(
-      name: json['name'],
-      httpHeader: json['httpHeader'],
-      urlQueryParameter: json['urlQueryParameter'],
+      name: json['name'] ?? '',
+      httpHeader: json['httpHeader'] ?? '',
+      urlQueryParameter: json['urlQueryParameter'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (httpHeader != null) 'httpHeader': httpHeader,
-      if (urlQueryParameter != null) 'urlQueryParameter': urlQueryParameter,
+      if (name.isNotDefault) 'name': name,
+      if (httpHeader.isNotDefault) 'httpHeader': httpHeader,
+      if (urlQueryParameter.isNotDefault)
+        'urlQueryParameter': urlQueryParameter,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (httpHeader != null) 'httpHeader=$httpHeader',
-      if (urlQueryParameter != null) 'urlQueryParameter=$urlQueryParameter',
+      'name=$name',
+      'httpHeader=$httpHeader',
+      'urlQueryParameter=$urlQueryParameter',
     ].join(',');
     return 'SystemParameter($contents)';
   }
@@ -6104,12 +6236,12 @@ final class Usage extends ProtoMessage {
   /// Other Google APIs should include
   /// "serviceusage.googleapis.com/tos/universal". Additional ToS can be
   /// included based on the business needs.
-  final List<String>? requirements;
+  final List<String> requirements;
 
   /// A list of usage rules that apply to individual API methods.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<UsageRule>? rules;
+  final List<UsageRule> rules;
 
   /// The full resource name of a channel used for sending notifications to the
   /// service producer.
@@ -6119,25 +6251,28 @@ final class Usage extends ProtoMessage {
   /// channel. To use Google Cloud Pub/Sub as the channel, this must be the name
   /// of a Cloud Pub/Sub topic that uses the Cloud Pub/Sub topic name format
   /// documented in https://cloud.google.com/pubsub/docs/overview.
-  final String? producerNotificationChannel;
+  final String producerNotificationChannel;
 
-  Usage({this.requirements, this.rules, this.producerNotificationChannel})
-    : super(fullyQualifiedName);
+  Usage({
+    this.requirements = const [],
+    this.rules = const [],
+    this.producerNotificationChannel = '',
+  }) : super(fullyQualifiedName);
 
   factory Usage.fromJson(Map<String, dynamic> json) {
     return Usage(
-      requirements: decodeList(json['requirements']),
-      rules: decodeListMessage(json['rules'], UsageRule.fromJson),
-      producerNotificationChannel: json['producerNotificationChannel'],
+      requirements: decodeList(json['requirements']) ?? [],
+      rules: decodeListMessage(json['rules'], UsageRule.fromJson) ?? [],
+      producerNotificationChannel: json['producerNotificationChannel'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (requirements != null) 'requirements': requirements,
-      if (rules != null) 'rules': encodeList(rules),
-      if (producerNotificationChannel != null)
+      if (requirements.isNotDefault) 'requirements': requirements,
+      if (rules.isNotDefault) 'rules': encodeList(rules),
+      if (producerNotificationChannel.isNotDefault)
         'producerNotificationChannel': producerNotificationChannel,
     };
   }
@@ -6145,8 +6280,7 @@ final class Usage extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (producerNotificationChannel != null)
-        'producerNotificationChannel=$producerNotificationChannel',
+      'producerNotificationChannel=$producerNotificationChannel',
     ].join(',');
     return 'Usage($contents)';
   }
@@ -6185,49 +6319,49 @@ final class UsageRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// If true, the selected method allows unregistered calls, e.g. calls
   /// that don't identify any user or application.
-  final bool? allowUnregisteredCalls;
+  final bool allowUnregisteredCalls;
 
   /// If true, the selected method should skip service control and the control
   /// plane features, such as quota and billing, will not be available.
   /// This flag is used by Google Cloud Endpoints to bypass checks for internal
   /// methods, such as service health check methods.
-  final bool? skipServiceControl;
+  final bool skipServiceControl;
 
   UsageRule({
-    this.selector,
-    this.allowUnregisteredCalls,
-    this.skipServiceControl,
+    this.selector = '',
+    this.allowUnregisteredCalls = false,
+    this.skipServiceControl = false,
   }) : super(fullyQualifiedName);
 
   factory UsageRule.fromJson(Map<String, dynamic> json) {
     return UsageRule(
-      selector: json['selector'],
-      allowUnregisteredCalls: json['allowUnregisteredCalls'],
-      skipServiceControl: json['skipServiceControl'],
+      selector: json['selector'] ?? '',
+      allowUnregisteredCalls: json['allowUnregisteredCalls'] ?? false,
+      skipServiceControl: json['skipServiceControl'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (allowUnregisteredCalls != null)
+      if (selector.isNotDefault) 'selector': selector,
+      if (allowUnregisteredCalls.isNotDefault)
         'allowUnregisteredCalls': allowUnregisteredCalls,
-      if (skipServiceControl != null) 'skipServiceControl': skipServiceControl,
+      if (skipServiceControl.isNotDefault)
+        'skipServiceControl': skipServiceControl,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (allowUnregisteredCalls != null)
-        'allowUnregisteredCalls=$allowUnregisteredCalls',
-      if (skipServiceControl != null) 'skipServiceControl=$skipServiceControl',
+      'selector=$selector',
+      'allowUnregisteredCalls=$allowUnregisteredCalls',
+      'skipServiceControl=$skipServiceControl',
     ].join(',');
     return 'UsageRule($contents)';
   }
@@ -6262,19 +6396,19 @@ final class Visibility extends ProtoMessage {
   /// A list of visibility rules that apply to individual API elements.
   ///
   /// **NOTE:** All service configuration rules follow "last one wins" order.
-  final List<VisibilityRule>? rules;
+  final List<VisibilityRule> rules;
 
-  Visibility({this.rules}) : super(fullyQualifiedName);
+  Visibility({this.rules = const []}) : super(fullyQualifiedName);
 
   factory Visibility.fromJson(Map<String, dynamic> json) {
     return Visibility(
-      rules: decodeListMessage(json['rules'], VisibilityRule.fromJson),
+      rules: decodeListMessage(json['rules'], VisibilityRule.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (rules != null) 'rules': encodeList(rules)};
+    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
   }
 
   @override
@@ -6290,7 +6424,7 @@ final class VisibilityRule extends ProtoMessage {
   ///
   /// Refer to `selector` for syntax
   /// details.
-  final String? selector;
+  final String selector;
 
   /// A comma-separated list of visibility labels that apply to the `selector`.
   /// Any of the listed labels can be used to grant the visibility.
@@ -6307,30 +6441,31 @@ final class VisibilityRule extends ProtoMessage {
   ///
   /// Removing INTERNAL from this restriction will break clients that rely on
   /// this method and only had access to it through INTERNAL.
-  final String? restriction;
+  final String restriction;
 
-  VisibilityRule({this.selector, this.restriction}) : super(fullyQualifiedName);
+  VisibilityRule({this.selector = '', this.restriction = ''})
+    : super(fullyQualifiedName);
 
   factory VisibilityRule.fromJson(Map<String, dynamic> json) {
     return VisibilityRule(
-      selector: json['selector'],
-      restriction: json['restriction'],
+      selector: json['selector'] ?? '',
+      restriction: json['restriction'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (selector != null) 'selector': selector,
-      if (restriction != null) 'restriction': restriction,
+      if (selector.isNotDefault) 'selector': selector,
+      if (restriction.isNotDefault) 'restriction': restriction,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (selector != null) 'selector=$selector',
-      if (restriction != null) 'restriction=$restriction',
+      'selector=$selector',
+      'restriction=$restriction',
     ].join(',');
     return 'VisibilityRule($contents)';
   }
@@ -6365,10 +6500,15 @@ final class ClientLibraryOrganization extends ProtoEnum {
   /// Generative AI - https://developers.generativeai.google
   static const generativeAi = ClientLibraryOrganization('GENERATIVE_AI');
 
+  /// The default value for [ClientLibraryOrganization].
+  static const $default = clientLibraryOrganizationUnspecified;
+
   const ClientLibraryOrganization(super.value);
 
   factory ClientLibraryOrganization.fromJson(String json) =>
       ClientLibraryOrganization(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ClientLibraryOrganization.$value';
@@ -6389,10 +6529,15 @@ final class ClientLibraryDestination extends ProtoEnum {
   /// Publish the library to package managers like nuget.org and npmjs.com.
   static const packageManager = ClientLibraryDestination('PACKAGE_MANAGER');
 
+  /// The default value for [ClientLibraryDestination].
+  static const $default = clientLibraryDestinationUnspecified;
+
   const ClientLibraryDestination(super.value);
 
   factory ClientLibraryDestination.fromJson(String json) =>
       ClientLibraryDestination(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ClientLibraryDestination.$value';
@@ -6416,9 +6561,14 @@ final class ChangeType extends ProtoEnum {
   /// is different.
   static const modified = ChangeType('MODIFIED');
 
+  /// The default value for [ChangeType].
+  static const $default = changeTypeUnspecified;
+
   const ChangeType(super.value);
 
   factory ChangeType.fromJson(String json) => ChangeType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ChangeType.$value';
@@ -7042,9 +7192,14 @@ final class ErrorReason extends ProtoEnum {
   /// }
   static const overloadedCredentials = ErrorReason('OVERLOADED_CREDENTIALS');
 
+  /// The default value for [ErrorReason].
+  static const $default = errorReasonUnspecified;
+
   const ErrorReason(super.value);
 
   factory ErrorReason.fromJson(String json) => ErrorReason(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ErrorReason.$value';
@@ -7114,9 +7269,14 @@ final class FieldBehavior extends ProtoEnum {
   /// of method-specific annotations, only `IDENTIFIER` is required.
   static const identifier = FieldBehavior('IDENTIFIER');
 
+  /// The default value for [FieldBehavior].
+  static const $default = fieldBehaviorUnspecified;
+
   const FieldBehavior(super.value);
 
   factory FieldBehavior.fromJson(String json) => FieldBehavior(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'FieldBehavior.$value';
@@ -7170,9 +7330,14 @@ final class LaunchStage extends ProtoEnum {
   /// Policy](https://cloud.google.com/terms/deprecation) documentation.
   static const deprecated = LaunchStage('DEPRECATED');
 
+  /// The default value for [LaunchStage].
+  static const $default = launchStageUnspecified;
+
   const LaunchStage(super.value);
 
   factory LaunchStage.fromJson(String json) => LaunchStage(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'LaunchStage.$value';
