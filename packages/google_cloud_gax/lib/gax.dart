@@ -24,7 +24,7 @@ export 'dart:typed_data' show Uint8List;
 
 export 'src/web.dart'
     if (dart.library.io) 'src/vm.dart'
-    show environmentVariable;
+    show httpClientFromApiKey;
 
 const String _clientKey = 'x-goog-api-client';
 
