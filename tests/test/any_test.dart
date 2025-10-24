@@ -44,7 +44,7 @@ void main() {
     expect(errorInfo.reason, 'CREDENTIALS_MISSING');
     expect(errorInfo.domain, 'googleapis.com');
 
-    final metadata = errorInfo.metadata!.entries
+    final metadata = errorInfo.metadata.entries
         .map((entry) => '${entry.key}:${entry.value}')
         .join('\n');
     expect(metadata, '''
@@ -71,7 +71,7 @@ service:cloudfunctions.googleapis.com''');
     expect(status2.message, 'not found');
     expect(status2.details, hasLength(1));
 
-    final any = status2.details![0];
+    final any = status2.details[0];
     expect(any.isType(ErrorInfo.fullyQualifiedName), true);
     final actual = any.unpackFrom(ErrorInfo.fromJson);
     expect(actual.reason, 'CREDENTIALS_MISSING');

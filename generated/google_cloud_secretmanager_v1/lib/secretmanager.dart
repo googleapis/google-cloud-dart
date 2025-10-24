@@ -79,9 +79,9 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
-      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter.isNotDefault) 'filter': request.filter,
     });
     final response = await _client.get(url);
     return ListSecretsResponse.fromJson(response);
@@ -95,7 +95,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> createSecret(CreateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.secretId != null) 'secretId': request.secretId!,
+      if (request.secretId.isNotDefault) 'secretId': request.secretId,
     });
     final response = await _client.post(url, body: request.secret);
     return Secret.fromJson(response);
@@ -134,9 +134,9 @@ final class SecretManagerService {
   /// the API service. Throws a [StatusException] if the API failed with a
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.secret.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1/${request.secret!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.secret);
     return Secret.fromJson(response);
@@ -149,7 +149,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteSecret(DeleteSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.etag != null) 'etag': request.etag!,
+      if (request.etag.isNotDefault) 'etag': request.etag,
     });
     await _client.delete(url);
   }
@@ -164,9 +164,9 @@ final class SecretManagerService {
     ListSecretVersionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.parent}/versions', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
-      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter.isNotDefault) 'filter': request.filter,
     });
     final response = await _client.get(url);
     return ListSecretVersionsResponse.fromJson(response);
@@ -283,9 +283,9 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion != null)
+      if (request.options!.requestedPolicyVersion.isNotDefault)
         'options.requestedPolicyVersion':
-            '${request.options?.requestedPolicyVersion}',
+            '${request.options!.requestedPolicyVersion}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -319,9 +319,9 @@ final class SecretManagerService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.name}/locations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -357,7 +357,7 @@ final class Secret extends ProtoMessage {
   /// Output only. The resource name of the
   /// `Secret` in the format
   /// `projects/*/secrets/*`.
-  final String? name;
+  final String name;
 
   /// Optional. Immutable. The replication policy of the secret data attached to
   /// the `Secret`.
@@ -380,11 +380,11 @@ final class Secret extends ProtoMessage {
   /// regular expression: `[\p{Ll}\p{Lo}\p{N}_-]{0,63}`
   ///
   /// No more than 64 labels can be assigned to a given resource.
-  final Map<String, String>? labels;
+  final Map<String, String> labels;
 
   /// Optional. A list of up to 10 Pub/Sub topics to which messages are published
   /// when control plane operations are called on the secret or its versions.
-  final List<Topic>? topics;
+  final List<Topic> topics;
 
   /// Optional. Timestamp in UTC when the
   /// `Secret` is scheduled to expire.
@@ -397,7 +397,7 @@ final class Secret extends ProtoMessage {
 
   /// Optional. Etag of the currently stored
   /// `Secret`.
-  final String? etag;
+  final String etag;
 
   /// Optional. Rotation policy attached to the
   /// `Secret`. May be excluded if there is
@@ -415,7 +415,7 @@ final class Secret extends ProtoMessage {
   /// Version-Alias pairs will be viewable via GetSecret and modifiable via
   /// UpdateSecret. Access by alias is only be supported on
   /// GetSecretVersion and AccessSecretVersion.
-  final Map<String, int>? versionAliases;
+  final Map<String, int> versionAliases;
 
   /// Optional. Custom metadata about the secret.
   ///
@@ -429,7 +429,7 @@ final class Secret extends ProtoMessage {
   /// alphanumerics in between these symbols.
   ///
   /// The total size of annotation keys and values must be less than 16KiB.
-  final Map<String, String>? annotations;
+  final Map<String, String> annotations;
 
   /// Optional. Secret Version TTL after destruction request
   ///
@@ -458,38 +458,38 @@ final class Secret extends ProtoMessage {
   /// Tags are used to organize and group resources.
   ///
   /// Tags can be used to control policy evaluation for the resource.
-  final Map<String, String>? tags;
+  final Map<String, String> tags;
 
   Secret({
-    this.name,
+    this.name = '',
     this.replication,
     this.createTime,
-    this.labels,
-    this.topics,
+    this.labels = const {},
+    this.topics = const [],
     this.expireTime,
     this.ttl,
-    this.etag,
+    this.etag = '',
     this.rotation,
-    this.versionAliases,
-    this.annotations,
+    this.versionAliases = const {},
+    this.annotations = const {},
     this.versionDestroyTtl,
     this.customerManagedEncryption,
-    this.tags,
+    this.tags = const {},
   }) : super(fullyQualifiedName);
 
   factory Secret.fromJson(Map<String, dynamic> json) {
     return Secret(
-      name: json['name'],
+      name: json['name'] ?? '',
       replication: decode(json['replication'], Replication.fromJson),
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      labels: decodeMap(json['labels']),
-      topics: decodeListMessage(json['topics'], Topic.fromJson),
+      labels: decodeMap(json['labels']) ?? {},
+      topics: decodeListMessage(json['topics'], Topic.fromJson) ?? [],
       expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
       ttl: decodeCustom(json['ttl'], Duration.fromJson),
-      etag: json['etag'],
+      etag: json['etag'] ?? '',
       rotation: decode(json['rotation'], Rotation.fromJson),
-      versionAliases: decodeMap(json['versionAliases']),
-      annotations: decodeMap(json['annotations']),
+      versionAliases: decodeMap(json['versionAliases']) ?? {},
+      annotations: decodeMap(json['annotations']) ?? {},
       versionDestroyTtl: decodeCustom(
         json['versionDestroyTtl'],
         Duration.fromJson,
@@ -498,38 +498,35 @@ final class Secret extends ProtoMessage {
         json['customerManagedEncryption'],
         CustomerManagedEncryption.fromJson,
       ),
-      tags: decodeMap(json['tags']),
+      tags: decodeMap(json['tags']) ?? {},
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
+      if (name.isNotDefault) 'name': name,
       if (replication != null) 'replication': replication!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
-      if (labels != null) 'labels': labels,
-      if (topics != null) 'topics': encodeList(topics),
+      if (labels.isNotDefault) 'labels': labels,
+      if (topics.isNotDefault) 'topics': encodeList(topics),
       if (expireTime != null) 'expireTime': expireTime!.toJson(),
       if (ttl != null) 'ttl': ttl!.toJson(),
-      if (etag != null) 'etag': etag,
+      if (etag.isNotDefault) 'etag': etag,
       if (rotation != null) 'rotation': rotation!.toJson(),
-      if (versionAliases != null) 'versionAliases': versionAliases,
-      if (annotations != null) 'annotations': annotations,
+      if (versionAliases.isNotDefault) 'versionAliases': versionAliases,
+      if (annotations.isNotDefault) 'annotations': annotations,
       if (versionDestroyTtl != null)
         'versionDestroyTtl': versionDestroyTtl!.toJson(),
       if (customerManagedEncryption != null)
         'customerManagedEncryption': customerManagedEncryption!.toJson(),
-      if (tags != null) 'tags': tags,
+      if (tags.isNotDefault) 'tags': tags,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (etag != null) 'etag=$etag',
-    ].join(',');
+    final contents = ['name=$name', 'etag=$etag'].join(',');
     return 'Secret($contents)';
   }
 }
@@ -546,7 +543,7 @@ final class SecretVersion extends ProtoMessage {
   /// `SecretVersion` IDs in a
   /// `Secret` start at 1 and are
   /// incremented for each subsequent version of the secret.
-  final String? name;
+  final String name;
 
   /// Output only. The time at which the
   /// `SecretVersion` was created.
@@ -561,7 +558,7 @@ final class SecretVersion extends ProtoMessage {
 
   /// Output only. The current state of the
   /// `SecretVersion`.
-  final SecretVersion_State? state;
+  final SecretVersion_State state;
 
   /// The replication status of the
   /// `SecretVersion`.
@@ -569,7 +566,7 @@ final class SecretVersion extends ProtoMessage {
 
   /// Output only. Etag of the currently stored
   /// `SecretVersion`.
-  final String? etag;
+  final String etag;
 
   /// Output only. True if payload checksum specified in
   /// `SecretPayload` object has
@@ -577,7 +574,7 @@ final class SecretVersion extends ProtoMessage {
   /// `SecretManagerService`
   /// on
   /// `SecretManagerService.AddSecretVersion`.
-  final bool? clientSpecifiedPayloadChecksum;
+  final bool clientSpecifiedPayloadChecksum;
 
   /// Optional. Output only. Scheduled destroy time for secret version.
   /// This is a part of the Delayed secret version destroy feature. For a
@@ -593,29 +590,32 @@ final class SecretVersion extends ProtoMessage {
   final CustomerManagedEncryptionStatus? customerManagedEncryption;
 
   SecretVersion({
-    this.name,
+    this.name = '',
     this.createTime,
     this.destroyTime,
-    this.state,
+    this.state = SecretVersion_State.$default,
     this.replicationStatus,
-    this.etag,
-    this.clientSpecifiedPayloadChecksum,
+    this.etag = '',
+    this.clientSpecifiedPayloadChecksum = false,
     this.scheduledDestroyTime,
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
   factory SecretVersion.fromJson(Map<String, dynamic> json) {
     return SecretVersion(
-      name: json['name'],
+      name: json['name'] ?? '',
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       destroyTime: decodeCustom(json['destroyTime'], Timestamp.fromJson),
-      state: decodeEnum(json['state'], SecretVersion_State.fromJson),
+      state:
+          decodeEnum(json['state'], SecretVersion_State.fromJson) ??
+          SecretVersion_State.$default,
       replicationStatus: decode(
         json['replicationStatus'],
         ReplicationStatus.fromJson,
       ),
-      etag: json['etag'],
-      clientSpecifiedPayloadChecksum: json['clientSpecifiedPayloadChecksum'],
+      etag: json['etag'] ?? '',
+      clientSpecifiedPayloadChecksum:
+          json['clientSpecifiedPayloadChecksum'] ?? false,
       scheduledDestroyTime: decodeCustom(
         json['scheduledDestroyTime'],
         Timestamp.fromJson,
@@ -630,14 +630,14 @@ final class SecretVersion extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
+      if (name.isNotDefault) 'name': name,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (destroyTime != null) 'destroyTime': destroyTime!.toJson(),
-      if (state != null) 'state': state!.toJson(),
+      if (state.isNotDefault) 'state': state.toJson(),
       if (replicationStatus != null)
         'replicationStatus': replicationStatus!.toJson(),
-      if (etag != null) 'etag': etag,
-      if (clientSpecifiedPayloadChecksum != null)
+      if (etag.isNotDefault) 'etag': etag,
+      if (clientSpecifiedPayloadChecksum.isNotDefault)
         'clientSpecifiedPayloadChecksum': clientSpecifiedPayloadChecksum,
       if (scheduledDestroyTime != null)
         'scheduledDestroyTime': scheduledDestroyTime!.toJson(),
@@ -649,11 +649,10 @@ final class SecretVersion extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (state != null) 'state=$state',
-      if (etag != null) 'etag=$etag',
-      if (clientSpecifiedPayloadChecksum != null)
-        'clientSpecifiedPayloadChecksum=$clientSpecifiedPayloadChecksum',
+      'name=$name',
+      'state=$state',
+      'etag=$etag',
+      'clientSpecifiedPayloadChecksum=$clientSpecifiedPayloadChecksum',
     ].join(',');
     return 'SecretVersion($contents)';
   }
@@ -682,10 +681,15 @@ final class SecretVersion_State extends ProtoEnum {
   /// leave this state once entered.
   static const destroyed = SecretVersion_State('DESTROYED');
 
+  /// The default value for [SecretVersion_State].
+  static const $default = stateUnspecified;
+
   const SecretVersion_State(super.value);
 
   factory SecretVersion_State.fromJson(String json) =>
       SecretVersion_State(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'State.$value';
@@ -782,22 +786,25 @@ final class Replication_UserManaged extends ProtoMessage {
   /// `Secret`.
   ///
   /// Cannot be empty.
-  final List<Replication_UserManaged_Replica>? replicas;
+  final List<Replication_UserManaged_Replica> replicas;
 
-  Replication_UserManaged({this.replicas}) : super(fullyQualifiedName);
+  Replication_UserManaged({this.replicas = const []})
+    : super(fullyQualifiedName);
 
   factory Replication_UserManaged.fromJson(Map<String, dynamic> json) {
     return Replication_UserManaged(
-      replicas: decodeListMessage(
-        json['replicas'],
-        Replication_UserManaged_Replica.fromJson,
-      ),
+      replicas:
+          decodeListMessage(
+            json['replicas'],
+            Replication_UserManaged_Replica.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (replicas != null) 'replicas': encodeList(replicas)};
+    return {if (replicas.isNotDefault) 'replicas': encodeList(replicas)};
   }
 
   @override
@@ -812,7 +819,7 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
 
   /// The canonical IDs of the location to replicate data.
   /// For example: `"us-east1"`.
-  final String? location;
+  final String location;
 
   /// Optional. The customer-managed encryption configuration of the
   /// [User-Managed Replica][Replication.UserManaged.Replica]. If no
@@ -826,13 +833,13 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
   final CustomerManagedEncryption? customerManagedEncryption;
 
   Replication_UserManaged_Replica({
-    this.location,
+    this.location = '',
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
   factory Replication_UserManaged_Replica.fromJson(Map<String, dynamic> json) {
     return Replication_UserManaged_Replica(
-      location: json['location'],
+      location: json['location'] ?? '',
       customerManagedEncryption: decode(
         json['customerManagedEncryption'],
         CustomerManagedEncryption.fromJson,
@@ -843,7 +850,7 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (location != null) 'location': location,
+      if (location.isNotDefault) 'location': location,
       if (customerManagedEncryption != null)
         'customerManagedEncryption': customerManagedEncryption!.toJson(),
     };
@@ -851,7 +858,7 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (location != null) 'location=$location'].join(',');
+    final contents = ['location=$location'].join(',');
     return 'Replica($contents)';
   }
 }
@@ -875,24 +882,22 @@ final class CustomerManagedEncryption extends ProtoMessage {
   /// replication policy type, Cloud KMS CryptoKeys must reside in `global`.
   ///
   /// The expected format is `projects/*/locations/*/keyRings/*/cryptoKeys/*`.
-  final String? kmsKeyName;
+  final String kmsKeyName;
 
-  CustomerManagedEncryption({this.kmsKeyName}) : super(fullyQualifiedName);
+  CustomerManagedEncryption({this.kmsKeyName = ''}) : super(fullyQualifiedName);
 
   factory CustomerManagedEncryption.fromJson(Map<String, dynamic> json) {
-    return CustomerManagedEncryption(kmsKeyName: json['kmsKeyName']);
+    return CustomerManagedEncryption(kmsKeyName: json['kmsKeyName'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (kmsKeyName != null) 'kmsKeyName': kmsKeyName};
+    return {if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (kmsKeyName != null) 'kmsKeyName=$kmsKeyName',
-    ].join(',');
+    final contents = ['kmsKeyName=$kmsKeyName'].join(',');
     return 'CustomerManagedEncryption($contents)';
   }
 }
@@ -1002,25 +1007,27 @@ final class ReplicationStatus_UserManagedStatus extends ProtoMessage {
 
   /// Output only. The list of replica statuses for the
   /// `SecretVersion`.
-  final List<ReplicationStatus_UserManagedStatus_ReplicaStatus>? replicas;
+  final List<ReplicationStatus_UserManagedStatus_ReplicaStatus> replicas;
 
-  ReplicationStatus_UserManagedStatus({this.replicas})
+  ReplicationStatus_UserManagedStatus({this.replicas = const []})
     : super(fullyQualifiedName);
 
   factory ReplicationStatus_UserManagedStatus.fromJson(
     Map<String, dynamic> json,
   ) {
     return ReplicationStatus_UserManagedStatus(
-      replicas: decodeListMessage(
-        json['replicas'],
-        ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson,
-      ),
+      replicas:
+          decodeListMessage(
+            json['replicas'],
+            ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (replicas != null) 'replicas': encodeList(replicas)};
+    return {if (replicas.isNotDefault) 'replicas': encodeList(replicas)};
   }
 
   @override
@@ -1036,7 +1043,7 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
 
   /// Output only. The canonical ID of the replica location.
   /// For example: `"us-east1"`.
-  final String? location;
+  final String location;
 
   /// Output only. The customer-managed encryption status of the
   /// `SecretVersion`. Only
@@ -1044,7 +1051,7 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
   final CustomerManagedEncryptionStatus? customerManagedEncryption;
 
   ReplicationStatus_UserManagedStatus_ReplicaStatus({
-    this.location,
+    this.location = '',
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
@@ -1052,7 +1059,7 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
     Map<String, dynamic> json,
   ) {
     return ReplicationStatus_UserManagedStatus_ReplicaStatus(
-      location: json['location'],
+      location: json['location'] ?? '',
       customerManagedEncryption: decode(
         json['customerManagedEncryption'],
         CustomerManagedEncryptionStatus.fromJson,
@@ -1063,7 +1070,7 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
   @override
   Object toJson() {
     return {
-      if (location != null) 'location': location,
+      if (location.isNotDefault) 'location': location,
       if (customerManagedEncryption != null)
         'customerManagedEncryption': customerManagedEncryption!.toJson(),
     };
@@ -1071,7 +1078,7 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
 
   @override
   String toString() {
-    final contents = [if (location != null) 'location=$location'].join(',');
+    final contents = ['location=$location'].join(',');
     return 'ReplicaStatus($contents)';
   }
 }
@@ -1084,29 +1091,28 @@ final class CustomerManagedEncryptionStatus extends ProtoMessage {
   /// Required. The resource name of the Cloud KMS CryptoKeyVersion used to
   /// encrypt the secret payload, in the following format:
   /// `projects/*/locations/*/keyRings/*/cryptoKeys/*/versions/*`.
-  final String? kmsKeyVersionName;
+  final String kmsKeyVersionName;
 
-  CustomerManagedEncryptionStatus({this.kmsKeyVersionName})
+  CustomerManagedEncryptionStatus({this.kmsKeyVersionName = ''})
     : super(fullyQualifiedName);
 
   factory CustomerManagedEncryptionStatus.fromJson(Map<String, dynamic> json) {
     return CustomerManagedEncryptionStatus(
-      kmsKeyVersionName: json['kmsKeyVersionName'],
+      kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (kmsKeyVersionName != null) 'kmsKeyVersionName': kmsKeyVersionName,
+      if (kmsKeyVersionName.isNotDefault)
+        'kmsKeyVersionName': kmsKeyVersionName,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (kmsKeyVersionName != null) 'kmsKeyVersionName=$kmsKeyVersionName',
-    ].join(',');
+    final contents = ['kmsKeyVersionName=$kmsKeyVersionName'].join(',');
     return 'CustomerManagedEncryptionStatus($contents)';
   }
 }
@@ -1122,22 +1128,22 @@ final class Topic extends ProtoMessage {
   /// succeed, the Secret Manager service agent must have the
   /// `pubsub.topic.publish` permission on the topic. The Pub/Sub Publisher role
   /// (`roles/pubsub.publisher`) includes this permission.
-  final String? name;
+  final String name;
 
-  Topic({this.name}) : super(fullyQualifiedName);
+  Topic({this.name = ''}) : super(fullyQualifiedName);
 
   factory Topic.fromJson(Map<String, dynamic> json) {
-    return Topic(name: json['name']);
+    return Topic(name: json['name'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (name != null) 'name': name};
+    return {if (name.isNotDefault) 'name': name};
   }
 
   @override
   String toString() {
-    final contents = [if (name != null) 'name=$name'].join(',');
+    final contents = ['name=$name'].join(',');
     return 'Topic($contents)';
   }
 }
@@ -1270,42 +1276,42 @@ final class ListSecretsRequest extends ProtoMessage {
   /// Optional. The maximum number of results to be returned in a single page. If
   /// set to 0, the server decides the number of results to return. If the
   /// number is greater than 25000, it is capped at 25000.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. Pagination token, returned earlier via
   /// `ListSecretsResponse.next_page_token`.
-  final String? pageToken;
+  final String pageToken;
 
   /// Optional. Filter string, adhering to the rules in
   /// [List-operation
   /// filtering](https://cloud.google.com/secret-manager/docs/filtering). List
   /// only secrets matching the filter. If filter is empty, all secrets are
   /// listed.
-  final String? filter;
+  final String filter;
 
   ListSecretsRequest({
-    required this.parent,
-    this.pageSize,
-    this.pageToken,
-    this.filter,
+    this.parent = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
   }) : super(fullyQualifiedName);
 
   factory ListSecretsRequest.fromJson(Map<String, dynamic> json) {
     return ListSecretsRequest(
-      parent: json['parent'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
-      filter: json['filter'],
+      parent: json['parent'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
+      filter: json['filter'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      'parent': parent,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
-      if (filter != null) 'filter': filter,
+      if (parent.isNotDefault) 'parent': parent,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
+      if (filter.isNotDefault) 'filter': filter,
     };
   }
 
@@ -1313,9 +1319,9 @@ final class ListSecretsRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-      if (filter != null) 'filter=$filter',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+      'filter=$filter',
     ].join(',');
     return 'ListSecretsRequest($contents)';
   }
@@ -1329,44 +1335,47 @@ final class ListSecretsResponse extends ProtoMessage {
 
   /// The list of `Secrets` sorted in
   /// reverse by create_time (newest first).
-  final List<Secret>? secrets;
+  final List<Secret> secrets;
 
   /// A token to retrieve the next page of results. Pass this value in
   /// `ListSecretsRequest.page_token`
   /// to retrieve the next page.
-  final String? nextPageToken;
+  final String nextPageToken;
 
   /// The total number of `Secrets` but 0
   /// when the
   /// `ListSecretsRequest.filter`
   /// field is set.
-  final int? totalSize;
+  final int totalSize;
 
-  ListSecretsResponse({this.secrets, this.nextPageToken, this.totalSize})
-    : super(fullyQualifiedName);
+  ListSecretsResponse({
+    this.secrets = const [],
+    this.nextPageToken = '',
+    this.totalSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListSecretsResponse.fromJson(Map<String, dynamic> json) {
     return ListSecretsResponse(
-      secrets: decodeListMessage(json['secrets'], Secret.fromJson),
-      nextPageToken: json['nextPageToken'],
-      totalSize: json['totalSize'],
+      secrets: decodeListMessage(json['secrets'], Secret.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
+      totalSize: json['totalSize'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (secrets != null) 'secrets': encodeList(secrets),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
-      if (totalSize != null) 'totalSize': totalSize,
+      if (secrets.isNotDefault) 'secrets': encodeList(secrets),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+      if (totalSize.isNotDefault) 'totalSize': totalSize,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-      if (totalSize != null) 'totalSize=$totalSize',
+      'nextPageToken=$nextPageToken',
+      'totalSize=$totalSize',
     ].join(',');
     return 'ListSecretsResponse($contents)';
   }
@@ -1388,41 +1397,35 @@ final class CreateSecretRequest extends ProtoMessage {
   /// A secret ID is a string with a maximum length of 255 characters and can
   /// contain uppercase and lowercase letters, numerals, and the hyphen (`-`) and
   /// underscore (`_`) characters.
-  final String? secretId;
+  final String secretId;
 
   /// Required. A `Secret` with initial
   /// field values.
-  final Secret secret;
+  final Secret? secret;
 
-  CreateSecretRequest({
-    required this.parent,
-    this.secretId,
-    required this.secret,
-  }) : super(fullyQualifiedName);
+  CreateSecretRequest({this.parent = '', this.secretId = '', this.secret})
+    : super(fullyQualifiedName);
 
   factory CreateSecretRequest.fromJson(Map<String, dynamic> json) {
     return CreateSecretRequest(
-      parent: json['parent'],
-      secretId: json['secretId'],
-      secret: decode(json['secret'], Secret.fromJson)!,
+      parent: json['parent'] ?? '',
+      secretId: json['secretId'] ?? '',
+      secret: decode(json['secret'], Secret.fromJson),
     );
   }
 
   @override
   Object toJson() {
     return {
-      'parent': parent,
-      if (secretId != null) 'secretId': secretId,
-      'secret': secret.toJson(),
+      if (parent.isNotDefault) 'parent': parent,
+      if (secretId.isNotDefault) 'secretId': secretId,
+      if (secret != null) 'secret': secret!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      'parent=$parent',
-      if (secretId != null) 'secretId=$secretId',
-    ].join(',');
+    final contents = ['parent=$parent', 'secretId=$secretId'].join(',');
     return 'CreateSecretRequest($contents)';
   }
 }
@@ -1443,12 +1446,12 @@ final class AddSecretVersionRequest extends ProtoMessage {
   /// `SecretVersion`.
   final SecretPayload? payload;
 
-  AddSecretVersionRequest({required this.parent, this.payload})
+  AddSecretVersionRequest({this.parent = '', this.payload})
     : super(fullyQualifiedName);
 
   factory AddSecretVersionRequest.fromJson(Map<String, dynamic> json) {
     return AddSecretVersionRequest(
-      parent: json['parent'],
+      parent: json['parent'] ?? '',
       payload: decode(json['payload'], SecretPayload.fromJson),
     );
   }
@@ -1456,7 +1459,7 @@ final class AddSecretVersionRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'parent': parent,
+      if (parent.isNotDefault) 'parent': parent,
       if (payload != null) 'payload': payload!.toJson(),
     };
   }
@@ -1479,15 +1482,15 @@ final class GetSecretRequest extends ProtoMessage {
   /// `projects/*/secrets/*` or `projects/*/locations/*/secrets/*`.
   final String name;
 
-  GetSecretRequest({required this.name}) : super(fullyQualifiedName);
+  GetSecretRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory GetSecretRequest.fromJson(Map<String, dynamic> json) {
-    return GetSecretRequest(name: json['name']);
+    return GetSecretRequest(name: json['name'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {'name': name};
+    return {if (name.isNotDefault) 'name': name};
   }
 
   @override
@@ -1512,42 +1515,42 @@ final class ListSecretVersionsRequest extends ProtoMessage {
   /// Optional. The maximum number of results to be returned in a single page. If
   /// set to 0, the server decides the number of results to return. If the
   /// number is greater than 25000, it is capped at 25000.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. Pagination token, returned earlier via
   /// ListSecretVersionsResponse.next_page_token][].
-  final String? pageToken;
+  final String pageToken;
 
   /// Optional. Filter string, adhering to the rules in
   /// [List-operation
   /// filtering](https://cloud.google.com/secret-manager/docs/filtering). List
   /// only secret versions matching the filter. If filter is empty, all secret
   /// versions are listed.
-  final String? filter;
+  final String filter;
 
   ListSecretVersionsRequest({
-    required this.parent,
-    this.pageSize,
-    this.pageToken,
-    this.filter,
+    this.parent = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
   }) : super(fullyQualifiedName);
 
   factory ListSecretVersionsRequest.fromJson(Map<String, dynamic> json) {
     return ListSecretVersionsRequest(
-      parent: json['parent'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
-      filter: json['filter'],
+      parent: json['parent'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
+      filter: json['filter'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      'parent': parent,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
-      if (filter != null) 'filter': filter,
+      if (parent.isNotDefault) 'parent': parent,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
+      if (filter.isNotDefault) 'filter': filter,
     };
   }
 
@@ -1555,9 +1558,9 @@ final class ListSecretVersionsRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-      if (filter != null) 'filter=$filter',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+      'filter=$filter',
     ].join(',');
     return 'ListSecretVersionsRequest($contents)';
   }
@@ -1571,48 +1574,49 @@ final class ListSecretVersionsResponse extends ProtoMessage {
 
   /// The list of `SecretVersions`
   /// sorted in reverse by create_time (newest first).
-  final List<SecretVersion>? versions;
+  final List<SecretVersion> versions;
 
   /// A token to retrieve the next page of results. Pass this value in
   /// `ListSecretVersionsRequest.page_token`
   /// to retrieve the next page.
-  final String? nextPageToken;
+  final String nextPageToken;
 
   /// The total number of
   /// `SecretVersions` but 0 when
   /// the
   /// `ListSecretsRequest.filter`
   /// field is set.
-  final int? totalSize;
+  final int totalSize;
 
   ListSecretVersionsResponse({
-    this.versions,
-    this.nextPageToken,
-    this.totalSize,
+    this.versions = const [],
+    this.nextPageToken = '',
+    this.totalSize = 0,
   }) : super(fullyQualifiedName);
 
   factory ListSecretVersionsResponse.fromJson(Map<String, dynamic> json) {
     return ListSecretVersionsResponse(
-      versions: decodeListMessage(json['versions'], SecretVersion.fromJson),
-      nextPageToken: json['nextPageToken'],
-      totalSize: json['totalSize'],
+      versions:
+          decodeListMessage(json['versions'], SecretVersion.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
+      totalSize: json['totalSize'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (versions != null) 'versions': encodeList(versions),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
-      if (totalSize != null) 'totalSize': totalSize,
+      if (versions.isNotDefault) 'versions': encodeList(versions),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+      if (totalSize.isNotDefault) 'totalSize': totalSize,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-      if (totalSize != null) 'totalSize=$totalSize',
+      'nextPageToken=$nextPageToken',
+      'totalSize=$totalSize',
     ].join(',');
     return 'ListSecretVersionsResponse($contents)';
   }
@@ -1635,15 +1639,15 @@ final class GetSecretVersionRequest extends ProtoMessage {
   /// `SecretVersion`.
   final String name;
 
-  GetSecretVersionRequest({required this.name}) : super(fullyQualifiedName);
+  GetSecretVersionRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory GetSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return GetSecretVersionRequest(name: json['name']);
+    return GetSecretVersionRequest(name: json['name'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {'name': name};
+    return {if (name.isNotDefault) 'name': name};
   }
 
   @override
@@ -1661,17 +1665,17 @@ final class UpdateSecretRequest extends ProtoMessage {
 
   /// Required. `Secret` with updated field
   /// values.
-  final Secret secret;
+  final Secret? secret;
 
   /// Required. Specifies the fields to be updated.
   final FieldMask? updateMask;
 
-  UpdateSecretRequest({required this.secret, this.updateMask})
+  UpdateSecretRequest({this.secret, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateSecretRequest.fromJson(Map<String, dynamic> json) {
     return UpdateSecretRequest(
-      secret: decode(json['secret'], Secret.fromJson)!,
+      secret: decode(json['secret'], Secret.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -1679,7 +1683,7 @@ final class UpdateSecretRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'secret': secret.toJson(),
+      if (secret != null) 'secret': secret!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -1705,15 +1709,15 @@ final class AccessSecretVersionRequest extends ProtoMessage {
   /// `SecretVersion`.
   final String name;
 
-  AccessSecretVersionRequest({required this.name}) : super(fullyQualifiedName);
+  AccessSecretVersionRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory AccessSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return AccessSecretVersionRequest(name: json['name']);
+    return AccessSecretVersionRequest(name: json['name'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {'name': name};
+    return {if (name.isNotDefault) 'name': name};
   }
 
   @override
@@ -1733,17 +1737,17 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   /// `SecretVersion` in the format
   /// `projects/*/secrets/*/versions/*` or
   /// `projects/*/locations/*/secrets/*/versions/*`.
-  final String? name;
+  final String name;
 
   /// Secret payload
   final SecretPayload? payload;
 
-  AccessSecretVersionResponse({this.name, this.payload})
+  AccessSecretVersionResponse({this.name = '', this.payload})
     : super(fullyQualifiedName);
 
   factory AccessSecretVersionResponse.fromJson(Map<String, dynamic> json) {
     return AccessSecretVersionResponse(
-      name: json['name'],
+      name: json['name'] ?? '',
       payload: decode(json['payload'], SecretPayload.fromJson),
     );
   }
@@ -1751,14 +1755,14 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
+      if (name.isNotDefault) 'name': name,
       if (payload != null) 'payload': payload!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (name != null) 'name=$name'].join(',');
+    final contents = ['name=$name'].join(',');
     return 'AccessSecretVersionResponse($contents)';
   }
 }
@@ -1777,23 +1781,29 @@ final class DeleteSecretRequest extends ProtoMessage {
   /// Optional. Etag of the `Secret`. The
   /// request succeeds if it matches the etag of the currently stored secret
   /// object. If the etag is omitted, the request succeeds.
-  final String? etag;
+  final String etag;
 
-  DeleteSecretRequest({required this.name, this.etag})
+  DeleteSecretRequest({this.name = '', this.etag = ''})
     : super(fullyQualifiedName);
 
   factory DeleteSecretRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteSecretRequest(name: json['name'], etag: json['etag']);
+    return DeleteSecretRequest(
+      name: json['name'] ?? '',
+      etag: json['etag'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (etag != null) 'etag': etag};
+    return {
+      if (name.isNotDefault) 'name': name,
+      if (etag.isNotDefault) 'etag': etag,
+    };
   }
 
   @override
   String toString() {
-    final contents = ['name=$name', if (etag != null) 'etag=$etag'].join(',');
+    final contents = ['name=$name', 'etag=$etag'].join(',');
     return 'DeleteSecretRequest($contents)';
   }
 }
@@ -1814,23 +1824,29 @@ final class DisableSecretVersionRequest extends ProtoMessage {
   /// `SecretVersion`. The request
   /// succeeds if it matches the etag of the currently stored secret version
   /// object. If the etag is omitted, the request succeeds.
-  final String? etag;
+  final String etag;
 
-  DisableSecretVersionRequest({required this.name, this.etag})
+  DisableSecretVersionRequest({this.name = '', this.etag = ''})
     : super(fullyQualifiedName);
 
   factory DisableSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return DisableSecretVersionRequest(name: json['name'], etag: json['etag']);
+    return DisableSecretVersionRequest(
+      name: json['name'] ?? '',
+      etag: json['etag'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (etag != null) 'etag': etag};
+    return {
+      if (name.isNotDefault) 'name': name,
+      if (etag.isNotDefault) 'etag': etag,
+    };
   }
 
   @override
   String toString() {
-    final contents = ['name=$name', if (etag != null) 'etag=$etag'].join(',');
+    final contents = ['name=$name', 'etag=$etag'].join(',');
     return 'DisableSecretVersionRequest($contents)';
   }
 }
@@ -1851,23 +1867,29 @@ final class EnableSecretVersionRequest extends ProtoMessage {
   /// `SecretVersion`. The request
   /// succeeds if it matches the etag of the currently stored secret version
   /// object. If the etag is omitted, the request succeeds.
-  final String? etag;
+  final String etag;
 
-  EnableSecretVersionRequest({required this.name, this.etag})
+  EnableSecretVersionRequest({this.name = '', this.etag = ''})
     : super(fullyQualifiedName);
 
   factory EnableSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return EnableSecretVersionRequest(name: json['name'], etag: json['etag']);
+    return EnableSecretVersionRequest(
+      name: json['name'] ?? '',
+      etag: json['etag'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (etag != null) 'etag': etag};
+    return {
+      if (name.isNotDefault) 'name': name,
+      if (etag.isNotDefault) 'etag': etag,
+    };
   }
 
   @override
   String toString() {
-    final contents = ['name=$name', if (etag != null) 'etag=$etag'].join(',');
+    final contents = ['name=$name', 'etag=$etag'].join(',');
     return 'EnableSecretVersionRequest($contents)';
   }
 }
@@ -1888,23 +1910,29 @@ final class DestroySecretVersionRequest extends ProtoMessage {
   /// `SecretVersion`. The request
   /// succeeds if it matches the etag of the currently stored secret version
   /// object. If the etag is omitted, the request succeeds.
-  final String? etag;
+  final String etag;
 
-  DestroySecretVersionRequest({required this.name, this.etag})
+  DestroySecretVersionRequest({this.name = '', this.etag = ''})
     : super(fullyQualifiedName);
 
   factory DestroySecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return DestroySecretVersionRequest(name: json['name'], etag: json['etag']);
+    return DestroySecretVersionRequest(
+      name: json['name'] ?? '',
+      etag: json['etag'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (etag != null) 'etag': etag};
+    return {
+      if (name.isNotDefault) 'name': name,
+      if (etag.isNotDefault) 'etag': etag,
+    };
   }
 
   @override
   String toString() {
-    final contents = ['name=$name', if (etag != null) 'etag=$etag'].join(',');
+    final contents = ['name=$name', 'etag=$etag'].join(',');
     return 'DestroySecretVersionRequest($contents)';
   }
 }

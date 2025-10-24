@@ -32,8 +32,8 @@ void main() {
 
     final struct = Struct.fromJson(jsonDecode(data));
     expect(struct.fields, hasLength(3));
-    expect(struct.fields!['billing_details'], isA<Value>());
-    final billingDetails = struct.fields!['billing_details']!;
+    expect(struct.fields['billing_details'], isA<Value>());
+    final billingDetails = struct.fields['billing_details']!;
     expect(billingDetails.structValue, isNotNull);
 
     expect(struct.toJson(), isA<Map>());
@@ -48,9 +48,9 @@ void main() {
 
     final list = ListValue.fromJson(jsonDecode(data));
     expect(list.values, hasLength(2));
-    expect(list.values![0].structValue, isNotNull);
-    expect(list.values![1].structValue, isNotNull);
-    final childStruct = list.values![0].structValue!;
+    expect(list.values[0].structValue, isNotNull);
+    expect(list.values[1].structValue, isNotNull);
+    final childStruct = list.values[0].structValue!;
     expect(childStruct.fields, hasLength(2));
 
     expect(list.toJson(), isA<List>());

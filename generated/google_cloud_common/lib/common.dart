@@ -34,42 +34,42 @@ final class OperationMetadata extends ProtoMessage {
   final Timestamp? endTime;
 
   /// Output only. Server-defined resource path for the target of the operation.
-  final String? target;
+  final String target;
 
   /// Output only. Name of the verb executed by the operation.
-  final String? verb;
+  final String verb;
 
   /// Output only. Human-readable status of the operation, if any.
-  final String? statusDetail;
+  final String statusDetail;
 
   /// Output only. Identifies whether the user has requested cancellation
   /// of the operation. Operations that have successfully been cancelled
   /// have `Operation.error` value with a `google.rpc.Status.code` of 1,
   /// corresponding to `Code.CANCELLED`.
-  final bool? cancelRequested;
+  final bool cancelRequested;
 
   /// Output only. API version used to start the operation.
-  final String? apiVersion;
+  final String apiVersion;
 
   OperationMetadata({
     this.createTime,
     this.endTime,
-    this.target,
-    this.verb,
-    this.statusDetail,
-    this.cancelRequested,
-    this.apiVersion,
+    this.target = '',
+    this.verb = '',
+    this.statusDetail = '',
+    this.cancelRequested = false,
+    this.apiVersion = '',
   }) : super(fullyQualifiedName);
 
   factory OperationMetadata.fromJson(Map<String, dynamic> json) {
     return OperationMetadata(
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      target: json['target'],
-      verb: json['verb'],
-      statusDetail: json['statusDetail'],
-      cancelRequested: json['cancelRequested'],
-      apiVersion: json['apiVersion'],
+      target: json['target'] ?? '',
+      verb: json['verb'] ?? '',
+      statusDetail: json['statusDetail'] ?? '',
+      cancelRequested: json['cancelRequested'] ?? false,
+      apiVersion: json['apiVersion'] ?? '',
     );
   }
 
@@ -78,22 +78,22 @@ final class OperationMetadata extends ProtoMessage {
     return {
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (endTime != null) 'endTime': endTime!.toJson(),
-      if (target != null) 'target': target,
-      if (verb != null) 'verb': verb,
-      if (statusDetail != null) 'statusDetail': statusDetail,
-      if (cancelRequested != null) 'cancelRequested': cancelRequested,
-      if (apiVersion != null) 'apiVersion': apiVersion,
+      if (target.isNotDefault) 'target': target,
+      if (verb.isNotDefault) 'verb': verb,
+      if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
+      if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
+      if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (target != null) 'target=$target',
-      if (verb != null) 'verb=$verb',
-      if (statusDetail != null) 'statusDetail=$statusDetail',
-      if (cancelRequested != null) 'cancelRequested=$cancelRequested',
-      if (apiVersion != null) 'apiVersion=$apiVersion',
+      'target=$target',
+      'verb=$verb',
+      'statusDetail=$statusDetail',
+      'cancelRequested=$cancelRequested',
+      'apiVersion=$apiVersion',
     ].join(',');
     return 'OperationMetadata($contents)';
   }

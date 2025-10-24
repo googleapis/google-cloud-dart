@@ -52,7 +52,7 @@ void main() {
     final actual = any.unpackFrom(FieldMask.fromJson);
 
     expect(actual.paths, isNotEmpty);
-    expect(actual.paths!.join('|'), 'foo|bar');
+    expect(actual.paths.join('|'), 'foo|bar');
   });
 
   test('from JSON', () {

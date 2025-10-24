@@ -150,13 +150,13 @@ final class Color extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Color';
 
   /// The amount of red in the color as a value in the interval [0, 1].
-  final double? red;
+  final double red;
 
   /// The amount of green in the color as a value in the interval [0, 1].
-  final double? green;
+  final double green;
 
   /// The amount of blue in the color as a value in the interval [0, 1].
-  final double? blue;
+  final double blue;
 
   /// The fraction of this color that should be applied to the pixel. That is,
   /// the final pixel color is defined by the equation:
@@ -171,14 +171,14 @@ final class Color extends ProtoMessage {
   /// (as if the alpha value had been explicitly given a value of 1.0).
   final FloatValue? alpha;
 
-  Color({this.red, this.green, this.blue, this.alpha})
+  Color({this.red = 0, this.green = 0, this.blue = 0, this.alpha})
     : super(fullyQualifiedName);
 
   factory Color.fromJson(Map<String, dynamic> json) {
     return Color(
-      red: decodeDouble(json['red']),
-      green: decodeDouble(json['green']),
-      blue: decodeDouble(json['blue']),
+      red: decodeDouble(json['red']) ?? 0,
+      green: decodeDouble(json['green']) ?? 0,
+      blue: decodeDouble(json['blue']) ?? 0,
       alpha: decodeCustom(json['alpha'], FloatValue.fromJson),
     );
   }
@@ -186,20 +186,16 @@ final class Color extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (red != null) 'red': encodeDouble(red),
-      if (green != null) 'green': encodeDouble(green),
-      if (blue != null) 'blue': encodeDouble(blue),
+      if (red.isNotDefault) 'red': encodeDouble(red),
+      if (green.isNotDefault) 'green': encodeDouble(green),
+      if (blue.isNotDefault) 'blue': encodeDouble(blue),
       if (alpha != null) 'alpha': alpha!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (red != null) 'red=$red',
-      if (green != null) 'green=$green',
-      if (blue != null) 'blue=$blue',
-    ].join(',');
+    final contents = ['red=$red', 'green=$green', 'blue=$blue'].join(',');
     return 'Color($contents)';
   }
 }
@@ -222,39 +218,40 @@ final class Date extends ProtoMessage {
 
   /// Year of the date. Must be from 1 to 9999, or 0 to specify a date without
   /// a year.
-  final int? year;
+  final int year;
 
   /// Month of a year. Must be from 1 to 12, or 0 to specify a year without a
   /// month and day.
-  final int? month;
+  final int month;
 
   /// Day of a month. Must be from 1 to 31 and valid for the year and month, or 0
   /// to specify a year by itself or a year and month where the day isn't
   /// significant.
-  final int? day;
+  final int day;
 
-  Date({this.year, this.month, this.day}) : super(fullyQualifiedName);
+  Date({this.year = 0, this.month = 0, this.day = 0})
+    : super(fullyQualifiedName);
 
   factory Date.fromJson(Map<String, dynamic> json) {
-    return Date(year: json['year'], month: json['month'], day: json['day']);
+    return Date(
+      year: json['year'] ?? 0,
+      month: json['month'] ?? 0,
+      day: json['day'] ?? 0,
+    );
   }
 
   @override
   Object toJson() {
     return {
-      if (year != null) 'year': year,
-      if (month != null) 'month': month,
-      if (day != null) 'day': day,
+      if (year.isNotDefault) 'year': year,
+      if (month.isNotDefault) 'month': month,
+      if (day.isNotDefault) 'day': day,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (year != null) 'year=$year',
-      if (month != null) 'month=$month',
-      if (day != null) 'day=$day',
-    ].join(',');
+    final contents = ['year=$year', 'month=$month', 'day=$day'].join(',');
     return 'Date($contents)';
   }
 }
@@ -288,30 +285,30 @@ final class DateTime extends ProtoMessage {
 
   /// Optional. Year of date. Must be from 1 to 9999, or 0 if specifying a
   /// datetime without a year.
-  final int? year;
+  final int year;
 
   /// Required. Month of year. Must be from 1 to 12.
-  final int? month;
+  final int month;
 
   /// Required. Day of month. Must be from 1 to 31 and valid for the year and
   /// month.
-  final int? day;
+  final int day;
 
   /// Required. Hours of day in 24 hour format. Should be from 0 to 23. An API
   /// may choose to allow the value "24:00:00" for scenarios like business
   /// closing time.
-  final int? hours;
+  final int hours;
 
   /// Required. Minutes of hour of day. Must be from 0 to 59.
-  final int? minutes;
+  final int minutes;
 
   /// Required. Seconds of minutes of the time. Must normally be from 0 to 59. An
   /// API may allow the value 60 if it allows leap-seconds.
-  final int? seconds;
+  final int seconds;
 
   /// Required. Fractions of seconds in nanoseconds. Must be from 0 to
   /// 999,999,999.
-  final int? nanos;
+  final int nanos;
 
   /// UTC offset. Must be whole seconds, between -18 hours and +18 hours.
   /// For example, a UTC offset of -4:00 would be represented as
@@ -322,26 +319,26 @@ final class DateTime extends ProtoMessage {
   final TimeZone? timeZone;
 
   DateTime({
-    this.year,
-    this.month,
-    this.day,
-    this.hours,
-    this.minutes,
-    this.seconds,
-    this.nanos,
+    this.year = 0,
+    this.month = 0,
+    this.day = 0,
+    this.hours = 0,
+    this.minutes = 0,
+    this.seconds = 0,
+    this.nanos = 0,
     this.utcOffset,
     this.timeZone,
   }) : super(fullyQualifiedName);
 
   factory DateTime.fromJson(Map<String, dynamic> json) {
     return DateTime(
-      year: json['year'],
-      month: json['month'],
-      day: json['day'],
-      hours: json['hours'],
-      minutes: json['minutes'],
-      seconds: json['seconds'],
-      nanos: json['nanos'],
+      year: json['year'] ?? 0,
+      month: json['month'] ?? 0,
+      day: json['day'] ?? 0,
+      hours: json['hours'] ?? 0,
+      minutes: json['minutes'] ?? 0,
+      seconds: json['seconds'] ?? 0,
+      nanos: json['nanos'] ?? 0,
       utcOffset: decodeCustom(json['utcOffset'], Duration.fromJson),
       timeZone: decode(json['timeZone'], TimeZone.fromJson),
     );
@@ -350,13 +347,13 @@ final class DateTime extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (year != null) 'year': year,
-      if (month != null) 'month': month,
-      if (day != null) 'day': day,
-      if (hours != null) 'hours': hours,
-      if (minutes != null) 'minutes': minutes,
-      if (seconds != null) 'seconds': seconds,
-      if (nanos != null) 'nanos': nanos,
+      if (year.isNotDefault) 'year': year,
+      if (month.isNotDefault) 'month': month,
+      if (day.isNotDefault) 'day': day,
+      if (hours.isNotDefault) 'hours': hours,
+      if (minutes.isNotDefault) 'minutes': minutes,
+      if (seconds.isNotDefault) 'seconds': seconds,
+      if (nanos.isNotDefault) 'nanos': nanos,
       if (utcOffset != null) 'utcOffset': utcOffset!.toJson(),
       if (timeZone != null) 'timeZone': timeZone!.toJson(),
     };
@@ -365,13 +362,13 @@ final class DateTime extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (year != null) 'year=$year',
-      if (month != null) 'month=$month',
-      if (day != null) 'day=$day',
-      if (hours != null) 'hours=$hours',
-      if (minutes != null) 'minutes=$minutes',
-      if (seconds != null) 'seconds=$seconds',
-      if (nanos != null) 'nanos=$nanos',
+      'year=$year',
+      'month=$month',
+      'day=$day',
+      'hours=$hours',
+      'minutes=$minutes',
+      'seconds=$seconds',
+      'nanos=$nanos',
     ].join(',');
     return 'DateTime($contents)';
   }
@@ -383,28 +380,28 @@ final class TimeZone extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.TimeZone';
 
   /// IANA Time Zone Database time zone, e.g. "America/New_York".
-  final String? id;
+  final String id;
 
   /// Optional. IANA Time Zone Database version number, e.g. "2019a".
-  final String? version;
+  final String version;
 
-  TimeZone({this.id, this.version}) : super(fullyQualifiedName);
+  TimeZone({this.id = '', this.version = ''}) : super(fullyQualifiedName);
 
   factory TimeZone.fromJson(Map<String, dynamic> json) {
-    return TimeZone(id: json['id'], version: json['version']);
+    return TimeZone(id: json['id'] ?? '', version: json['version'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (id != null) 'id': id, if (version != null) 'version': version};
+    return {
+      if (id.isNotDefault) 'id': id,
+      if (version.isNotDefault) 'version': version,
+    };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (id != null) 'id=$id',
-      if (version != null) 'version=$version',
-    ].join(',');
+    final contents = ['id=$id', 'version=$version'].join(',');
     return 'TimeZone($contents)';
   }
 }
@@ -479,22 +476,22 @@ final class Decimal extends ProtoMessage {
   ///
   /// Services **should** error with `400 Bad Request` (`INVALID_ARGUMENT` in
   /// gRPC) if the service receives a value outside of the supported range.
-  final String? value;
+  final String value;
 
-  Decimal({this.value}) : super(fullyQualifiedName);
+  Decimal({this.value = ''}) : super(fullyQualifiedName);
 
   factory Decimal.fromJson(Map<String, dynamic> json) {
-    return Decimal(value: json['value']);
+    return Decimal(value: json['value'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (value != null) 'value': value};
+    return {if (value.isNotDefault) 'value': value};
   }
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'Decimal($contents)';
   }
 }
@@ -535,50 +532,54 @@ final class Expr extends ProtoMessage {
 
   /// Textual representation of an expression in Common Expression Language
   /// syntax.
-  final String? expression;
+  final String expression;
 
   /// Optional. Title for the expression, i.e. a short string describing
   /// its purpose. This can be used e.g. in UIs which allow to enter the
   /// expression.
-  final String? title;
+  final String title;
 
   /// Optional. Description of the expression. This is a longer text which
   /// describes the expression, e.g. when hovered over it in a UI.
-  final String? description;
+  final String description;
 
   /// Optional. String indicating the location of the expression for error
   /// reporting, e.g. a file name and a position in the file.
-  final String? location;
+  final String location;
 
-  Expr({this.expression, this.title, this.description, this.location})
-    : super(fullyQualifiedName);
+  Expr({
+    this.expression = '',
+    this.title = '',
+    this.description = '',
+    this.location = '',
+  }) : super(fullyQualifiedName);
 
   factory Expr.fromJson(Map<String, dynamic> json) {
     return Expr(
-      expression: json['expression'],
-      title: json['title'],
-      description: json['description'],
-      location: json['location'],
+      expression: json['expression'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      location: json['location'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (expression != null) 'expression': expression,
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (location != null) 'location': location,
+      if (expression.isNotDefault) 'expression': expression,
+      if (title.isNotDefault) 'title': title,
+      if (description.isNotDefault) 'description': description,
+      if (location.isNotDefault) 'location': location,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (expression != null) 'expression=$expression',
-      if (title != null) 'title=$title',
-      if (description != null) 'description=$description',
-      if (location != null) 'location=$location',
+      'expression=$expression',
+      'title=$title',
+      'description=$description',
+      'location=$location',
     ].join(',');
     return 'Expr($contents)';
   }
@@ -589,34 +590,35 @@ final class Fraction extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Fraction';
 
   /// The numerator in the fraction, e.g. 2 in 2/3.
-  final int? numerator;
+  final int numerator;
 
   /// The value by which the numerator is divided, e.g. 3 in 2/3. Must be
   /// positive.
-  final int? denominator;
+  final int denominator;
 
-  Fraction({this.numerator, this.denominator}) : super(fullyQualifiedName);
+  Fraction({this.numerator = 0, this.denominator = 0})
+    : super(fullyQualifiedName);
 
   factory Fraction.fromJson(Map<String, dynamic> json) {
     return Fraction(
-      numerator: decodeInt64(json['numerator']),
-      denominator: decodeInt64(json['denominator']),
+      numerator: decodeInt64(json['numerator']) ?? 0,
+      denominator: decodeInt64(json['denominator']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (numerator != null) 'numerator': encodeInt64(numerator),
-      if (denominator != null) 'denominator': encodeInt64(denominator),
+      if (numerator.isNotDefault) 'numerator': encodeInt64(numerator),
+      if (denominator.isNotDefault) 'denominator': encodeInt64(denominator),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (numerator != null) 'numerator=$numerator',
-      if (denominator != null) 'denominator=$denominator',
+      'numerator=$numerator',
+      'denominator=$denominator',
     ].join(',');
     return 'Fraction($contents)';
   }
@@ -673,34 +675,31 @@ final class LatLng extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.LatLng';
 
   /// The latitude in degrees. It must be in the range [-90.0, +90.0].
-  final double? latitude;
+  final double latitude;
 
   /// The longitude in degrees. It must be in the range [-180.0, +180.0].
-  final double? longitude;
+  final double longitude;
 
-  LatLng({this.latitude, this.longitude}) : super(fullyQualifiedName);
+  LatLng({this.latitude = 0, this.longitude = 0}) : super(fullyQualifiedName);
 
   factory LatLng.fromJson(Map<String, dynamic> json) {
     return LatLng(
-      latitude: decodeDouble(json['latitude']),
-      longitude: decodeDouble(json['longitude']),
+      latitude: decodeDouble(json['latitude']) ?? 0,
+      longitude: decodeDouble(json['longitude']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (latitude != null) 'latitude': encodeDouble(latitude),
-      if (longitude != null) 'longitude': encodeDouble(longitude),
+      if (latitude.isNotDefault) 'latitude': encodeDouble(latitude),
+      if (longitude.isNotDefault) 'longitude': encodeDouble(longitude),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (latitude != null) 'latitude=$latitude',
-      if (longitude != null) 'longitude=$longitude',
-    ].join(',');
+    final contents = ['latitude=$latitude', 'longitude=$longitude'].join(',');
     return 'LatLng($contents)';
   }
 }
@@ -710,37 +709,35 @@ final class LocalizedText extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.LocalizedText';
 
   /// Localized string in the language corresponding to `language_code' below.
-  final String? text;
+  final String text;
 
   /// The text's BCP-47 language code, such as "en-US" or "sr-Latn".
   ///
   /// For more information, see
   /// http://www.unicode.org/reports/tr35/#Unicode_locale_identifier.
-  final String? languageCode;
+  final String languageCode;
 
-  LocalizedText({this.text, this.languageCode}) : super(fullyQualifiedName);
+  LocalizedText({this.text = '', this.languageCode = ''})
+    : super(fullyQualifiedName);
 
   factory LocalizedText.fromJson(Map<String, dynamic> json) {
     return LocalizedText(
-      text: json['text'],
-      languageCode: json['languageCode'],
+      text: json['text'] ?? '',
+      languageCode: json['languageCode'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (text != null) 'text': text,
-      if (languageCode != null) 'languageCode': languageCode,
+      if (text.isNotDefault) 'text': text,
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (text != null) 'text=$text',
-      if (languageCode != null) 'languageCode=$languageCode',
-    ].join(',');
+    final contents = ['text=$text', 'languageCode=$languageCode'].join(',');
     return 'LocalizedText($contents)';
   }
 }
@@ -750,11 +747,11 @@ final class Money extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Money';
 
   /// The three-letter currency code defined in ISO 4217.
-  final String? currencyCode;
+  final String currencyCode;
 
   /// The whole units of the amount.
   /// For example if `currencyCode` is `"USD"`, then 1 unit is one US dollar.
-  final int? units;
+  final int units;
 
   /// Number of nano (10^-9) units of the amount.
   /// The value must be between -999,999,999 and +999,999,999 inclusive.
@@ -762,34 +759,34 @@ final class Money extends ProtoMessage {
   /// If `units` is zero, `nanos` can be positive, zero, or negative.
   /// If `units` is negative, `nanos` must be negative or zero.
   /// For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.
-  final int? nanos;
+  final int nanos;
 
-  Money({this.currencyCode, this.units, this.nanos})
+  Money({this.currencyCode = '', this.units = 0, this.nanos = 0})
     : super(fullyQualifiedName);
 
   factory Money.fromJson(Map<String, dynamic> json) {
     return Money(
-      currencyCode: json['currencyCode'],
-      units: decodeInt64(json['units']),
-      nanos: json['nanos'],
+      currencyCode: json['currencyCode'] ?? '',
+      units: decodeInt64(json['units']) ?? 0,
+      nanos: json['nanos'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (currencyCode != null) 'currencyCode': currencyCode,
-      if (units != null) 'units': encodeInt64(units),
-      if (nanos != null) 'nanos': nanos,
+      if (currencyCode.isNotDefault) 'currencyCode': currencyCode,
+      if (units.isNotDefault) 'units': encodeInt64(units),
+      if (nanos.isNotDefault) 'nanos': nanos,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (currencyCode != null) 'currencyCode=$currencyCode',
-      if (units != null) 'units=$units',
-      if (nanos != null) 'nanos=$nanos',
+      'currencyCode=$currencyCode',
+      'units=$units',
+      'nanos=$nanos',
     ].join(',');
     return 'Money($contents)';
   }
@@ -856,16 +853,16 @@ final class PhoneNumber extends ProtoMessage {
   /// field is normally only set in conjunction with an E.164 number. It is held
   /// separately from the E.164 number to allow for short code extensions in the
   /// future.
-  final String? extension;
+  final String extension;
 
-  PhoneNumber({this.e164Number, this.shortCode, this.extension})
+  PhoneNumber({this.e164Number, this.shortCode, this.extension = ''})
     : super(fullyQualifiedName);
 
   factory PhoneNumber.fromJson(Map<String, dynamic> json) {
     return PhoneNumber(
       e164Number: json['e164Number'],
       shortCode: decode(json['shortCode'], PhoneNumber_ShortCode.fromJson),
-      extension: json['extension'],
+      extension: json['extension'] ?? '',
     );
   }
 
@@ -874,7 +871,7 @@ final class PhoneNumber extends ProtoMessage {
     return {
       if (e164Number != null) 'e164Number': e164Number,
       if (shortCode != null) 'shortCode': shortCode!.toJson(),
-      if (extension != null) 'extension': extension,
+      if (extension.isNotDefault) 'extension': extension,
     };
   }
 
@@ -882,7 +879,7 @@ final class PhoneNumber extends ProtoMessage {
   String toString() {
     final contents = [
       if (e164Number != null) 'e164Number=$e164Number',
-      if (extension != null) 'extension=$extension',
+      'extension=$extension',
     ].join(',');
     return 'PhoneNumber($contents)';
   }
@@ -905,36 +902,33 @@ final class PhoneNumber_ShortCode extends ProtoMessage {
   ///
   /// Reference(s):
   ///  - http://www.unicode.org/reports/tr35/#unicode_region_subtag
-  final String? regionCode;
+  final String regionCode;
 
   /// Required. The short code digits, without a leading plus ('+') or country
   /// calling code, e.g. "611".
-  final String? number;
+  final String number;
 
-  PhoneNumber_ShortCode({this.regionCode, this.number})
+  PhoneNumber_ShortCode({this.regionCode = '', this.number = ''})
     : super(fullyQualifiedName);
 
   factory PhoneNumber_ShortCode.fromJson(Map<String, dynamic> json) {
     return PhoneNumber_ShortCode(
-      regionCode: json['regionCode'],
-      number: json['number'],
+      regionCode: json['regionCode'] ?? '',
+      number: json['number'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (regionCode != null) 'regionCode': regionCode,
-      if (number != null) 'number': number,
+      if (regionCode.isNotDefault) 'regionCode': regionCode,
+      if (number.isNotDefault) 'number': number,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (regionCode != null) 'regionCode=$regionCode',
-      if (number != null) 'number=$number',
-    ].join(',');
+    final contents = ['regionCode=$regionCode', 'number=$number'].join(',');
     return 'ShortCode($contents)';
   }
 }
@@ -963,14 +957,14 @@ final class PostalAddress extends ProtoMessage {
   /// the latest revision.
   ///
   /// All new revisions **must** be backward compatible with old revisions.
-  final int? revision;
+  final int revision;
 
   /// Required. CLDR region code of the country/region of the address. This
   /// is never inferred and it is up to the user to ensure the value is
   /// correct. See http://cldr.unicode.org/ and
   /// http://www.unicode.org/cldr/charts/30/supplemental/territory_information.html
   /// for details. Example: "CH" for Switzerland.
-  final String? regionCode;
+  final String regionCode;
 
   /// Optional. BCP-47 language code of the contents of this address (if
   /// known). This is often the UI language of the input form or is expected
@@ -984,20 +978,20 @@ final class PostalAddress extends ProtoMessage {
   /// possibly incorrect default).
   ///
   /// Examples: "zh-Hant", "ja", "ja-Latn", "en".
-  final String? languageCode;
+  final String languageCode;
 
   /// Optional. Postal code of the address. Not all countries use or require
   /// postal codes to be present, but where they are used, they may trigger
   /// additional validation with other parts of the address (e.g. state/zip
   /// validation in the U.S.A.).
-  final String? postalCode;
+  final String postalCode;
 
   /// Optional. Additional, country-specific, sorting code. This is not used
   /// in most regions. Where it is used, the value is either a string like
   /// "CEDEX", optionally followed by a number (e.g. "CEDEX 7"), or just a number
   /// alone, representing the "sector code" (Jamaica), "delivery area indicator"
   /// (Malawi) or "post office indicator" (e.g. Côte d'Ivoire).
-  final String? sortingCode;
+  final String sortingCode;
 
   /// Optional. Highest administrative subdivision which is used for postal
   /// addresses of a country or region.
@@ -1006,17 +1000,17 @@ final class PostalAddress extends ProtoMessage {
   /// community (e.g. "Barcelona" and not "Catalonia").
   /// Many countries don't use an administrative area in postal addresses. E.g.
   /// in Switzerland this should be left unpopulated.
-  final String? administrativeArea;
+  final String administrativeArea;
 
   /// Optional. Generally refers to the city/town portion of the address.
   /// Examples: US city, IT comune, UK post town.
   /// In regions of the world where localities are not well defined or do not fit
   /// into this structure well, leave locality empty and use address_lines.
-  final String? locality;
+  final String locality;
 
   /// Optional. Sublocality of the address.
   /// For example, this can be neighborhoods, boroughs, districts.
-  final String? sublocality;
+  final String sublocality;
 
   /// Unstructured address lines describing the lower levels of an address.
   ///
@@ -1040,75 +1034,76 @@ final class PostalAddress extends ProtoMessage {
   /// then geocoding is the recommended way to handle completely unstructured
   /// addresses (as opposed to guessing which parts of the address should be
   /// localities or administrative areas).
-  final List<String>? addressLines;
+  final List<String> addressLines;
 
   /// Optional. The recipient at the address.
   /// This field may, under certain circumstances, contain multiline information.
   /// For example, it might contain "care of" information.
-  final List<String>? recipients;
+  final List<String> recipients;
 
   /// Optional. The name of the organization at the address.
-  final String? organization;
+  final String organization;
 
   PostalAddress({
-    this.revision,
-    this.regionCode,
-    this.languageCode,
-    this.postalCode,
-    this.sortingCode,
-    this.administrativeArea,
-    this.locality,
-    this.sublocality,
-    this.addressLines,
-    this.recipients,
-    this.organization,
+    this.revision = 0,
+    this.regionCode = '',
+    this.languageCode = '',
+    this.postalCode = '',
+    this.sortingCode = '',
+    this.administrativeArea = '',
+    this.locality = '',
+    this.sublocality = '',
+    this.addressLines = const [],
+    this.recipients = const [],
+    this.organization = '',
   }) : super(fullyQualifiedName);
 
   factory PostalAddress.fromJson(Map<String, dynamic> json) {
     return PostalAddress(
-      revision: json['revision'],
-      regionCode: json['regionCode'],
-      languageCode: json['languageCode'],
-      postalCode: json['postalCode'],
-      sortingCode: json['sortingCode'],
-      administrativeArea: json['administrativeArea'],
-      locality: json['locality'],
-      sublocality: json['sublocality'],
-      addressLines: decodeList(json['addressLines']),
-      recipients: decodeList(json['recipients']),
-      organization: json['organization'],
+      revision: json['revision'] ?? 0,
+      regionCode: json['regionCode'] ?? '',
+      languageCode: json['languageCode'] ?? '',
+      postalCode: json['postalCode'] ?? '',
+      sortingCode: json['sortingCode'] ?? '',
+      administrativeArea: json['administrativeArea'] ?? '',
+      locality: json['locality'] ?? '',
+      sublocality: json['sublocality'] ?? '',
+      addressLines: decodeList(json['addressLines']) ?? [],
+      recipients: decodeList(json['recipients']) ?? [],
+      organization: json['organization'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (revision != null) 'revision': revision,
-      if (regionCode != null) 'regionCode': regionCode,
-      if (languageCode != null) 'languageCode': languageCode,
-      if (postalCode != null) 'postalCode': postalCode,
-      if (sortingCode != null) 'sortingCode': sortingCode,
-      if (administrativeArea != null) 'administrativeArea': administrativeArea,
-      if (locality != null) 'locality': locality,
-      if (sublocality != null) 'sublocality': sublocality,
-      if (addressLines != null) 'addressLines': addressLines,
-      if (recipients != null) 'recipients': recipients,
-      if (organization != null) 'organization': organization,
+      if (revision.isNotDefault) 'revision': revision,
+      if (regionCode.isNotDefault) 'regionCode': regionCode,
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
+      if (postalCode.isNotDefault) 'postalCode': postalCode,
+      if (sortingCode.isNotDefault) 'sortingCode': sortingCode,
+      if (administrativeArea.isNotDefault)
+        'administrativeArea': administrativeArea,
+      if (locality.isNotDefault) 'locality': locality,
+      if (sublocality.isNotDefault) 'sublocality': sublocality,
+      if (addressLines.isNotDefault) 'addressLines': addressLines,
+      if (recipients.isNotDefault) 'recipients': recipients,
+      if (organization.isNotDefault) 'organization': organization,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (revision != null) 'revision=$revision',
-      if (regionCode != null) 'regionCode=$regionCode',
-      if (languageCode != null) 'languageCode=$languageCode',
-      if (postalCode != null) 'postalCode=$postalCode',
-      if (sortingCode != null) 'sortingCode=$sortingCode',
-      if (administrativeArea != null) 'administrativeArea=$administrativeArea',
-      if (locality != null) 'locality=$locality',
-      if (sublocality != null) 'sublocality=$sublocality',
-      if (organization != null) 'organization=$organization',
+      'revision=$revision',
+      'regionCode=$regionCode',
+      'languageCode=$languageCode',
+      'postalCode=$postalCode',
+      'sortingCode=$sortingCode',
+      'administrativeArea=$administrativeArea',
+      'locality=$locality',
+      'sublocality=$sublocality',
+      'organization=$organization',
     ].join(',');
     return 'PostalAddress($contents)';
   }
@@ -1173,46 +1168,42 @@ final class Quaternion extends ProtoMessage {
   static const String fullyQualifiedName = 'google.type.Quaternion';
 
   /// The x component.
-  final double? x;
+  final double x;
 
   /// The y component.
-  final double? y;
+  final double y;
 
   /// The z component.
-  final double? z;
+  final double z;
 
   /// The scalar component.
-  final double? w;
+  final double w;
 
-  Quaternion({this.x, this.y, this.z, this.w}) : super(fullyQualifiedName);
+  Quaternion({this.x = 0, this.y = 0, this.z = 0, this.w = 0})
+    : super(fullyQualifiedName);
 
   factory Quaternion.fromJson(Map<String, dynamic> json) {
     return Quaternion(
-      x: decodeDouble(json['x']),
-      y: decodeDouble(json['y']),
-      z: decodeDouble(json['z']),
-      w: decodeDouble(json['w']),
+      x: decodeDouble(json['x']) ?? 0,
+      y: decodeDouble(json['y']) ?? 0,
+      z: decodeDouble(json['z']) ?? 0,
+      w: decodeDouble(json['w']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (x != null) 'x': encodeDouble(x),
-      if (y != null) 'y': encodeDouble(y),
-      if (z != null) 'z': encodeDouble(z),
-      if (w != null) 'w': encodeDouble(w),
+      if (x.isNotDefault) 'x': encodeDouble(x),
+      if (y.isNotDefault) 'y': encodeDouble(y),
+      if (z.isNotDefault) 'z': encodeDouble(z),
+      if (w.isNotDefault) 'w': encodeDouble(w),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (x != null) 'x=$x',
-      if (y != null) 'y=$y',
-      if (z != null) 'z=$z',
-      if (w != null) 'w=$w',
-    ].join(',');
+    final contents = ['x=$x', 'y=$y', 'z=$z', 'w=$w'].join(',');
     return 'Quaternion($contents)';
   }
 }
@@ -1226,47 +1217,51 @@ final class TimeOfDay extends ProtoMessage {
 
   /// Hours of day in 24 hour format. Should be from 0 to 23. An API may choose
   /// to allow the value "24:00:00" for scenarios like business closing time.
-  final int? hours;
+  final int hours;
 
   /// Minutes of hour of day. Must be from 0 to 59.
-  final int? minutes;
+  final int minutes;
 
   /// Seconds of minutes of the time. Must normally be from 0 to 59. An API may
   /// allow the value 60 if it allows leap-seconds.
-  final int? seconds;
+  final int seconds;
 
   /// Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.
-  final int? nanos;
+  final int nanos;
 
-  TimeOfDay({this.hours, this.minutes, this.seconds, this.nanos})
-    : super(fullyQualifiedName);
+  TimeOfDay({
+    this.hours = 0,
+    this.minutes = 0,
+    this.seconds = 0,
+    this.nanos = 0,
+  }) : super(fullyQualifiedName);
 
   factory TimeOfDay.fromJson(Map<String, dynamic> json) {
     return TimeOfDay(
-      hours: json['hours'],
-      minutes: json['minutes'],
-      seconds: json['seconds'],
-      nanos: json['nanos'],
+      hours: json['hours'] ?? 0,
+      minutes: json['minutes'] ?? 0,
+      seconds: json['seconds'] ?? 0,
+      nanos: json['nanos'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (hours != null) 'hours': hours,
-      if (minutes != null) 'minutes': minutes,
-      if (seconds != null) 'seconds': seconds,
-      if (nanos != null) 'nanos': nanos,
+      if (hours.isNotDefault) 'hours': hours,
+      if (minutes.isNotDefault) 'minutes': minutes,
+      if (seconds.isNotDefault) 'seconds': seconds,
+      if (nanos.isNotDefault) 'nanos': nanos,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (hours != null) 'hours=$hours',
-      if (minutes != null) 'minutes=$minutes',
-      if (seconds != null) 'seconds=$seconds',
-      if (nanos != null) 'nanos=$nanos',
+      'hours=$hours',
+      'minutes=$minutes',
+      'seconds=$seconds',
+      'nanos=$nanos',
     ].join(',');
     return 'TimeOfDay($contents)';
   }
@@ -1306,9 +1301,14 @@ final class CalendarPeriod extends ProtoEnum {
   /// A year.
   static const year = CalendarPeriod('YEAR');
 
+  /// The default value for [CalendarPeriod].
+  static const $default = calendarPeriodUnspecified;
+
   const CalendarPeriod(super.value);
 
   factory CalendarPeriod.fromJson(String json) => CalendarPeriod(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'CalendarPeriod.$value';
@@ -1340,9 +1340,14 @@ final class DayOfWeek extends ProtoEnum {
   /// Sunday
   static const sunday = DayOfWeek('SUNDAY');
 
+  /// The default value for [DayOfWeek].
+  static const $default = dayOfWeekUnspecified;
+
   const DayOfWeek(super.value);
 
   factory DayOfWeek.fromJson(String json) => DayOfWeek(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'DayOfWeek.$value';
@@ -1389,9 +1394,14 @@ final class Month extends ProtoEnum {
   /// The month of December.
   static const december = Month('DECEMBER');
 
+  /// The default value for [Month].
+  static const $default = monthUnspecified;
+
   const Month(super.value);
 
   factory Month.fromJson(String json) => Month(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Month.$value';

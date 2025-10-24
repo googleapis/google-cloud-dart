@@ -37,9 +37,7 @@ extension StatusExtension on Status {
   ///
   /// All error responses are expected to include an [ErrorInfo] object.
   ErrorInfo? get errorInfo {
-    if (details == null) return null;
-
-    for (final any in details!) {
+    for (final any in details) {
       if (any.typeName == ErrorInfo.fullyQualifiedName) {
         return any.unpackFrom(ErrorInfo.fromJson);
       }
@@ -51,9 +49,7 @@ extension StatusExtension on Status {
   /// A utility method to return any [LocalizedMessage] instance from the
   /// [details] list.
   LocalizedMessage? get localizedMessage {
-    if (details == null) return null;
-
-    for (final any in details!) {
+    for (final any in details) {
       if (any.typeName == LocalizedMessage.fullyQualifiedName) {
         return any.unpackFrom(LocalizedMessage.fromJson);
       }
@@ -84,7 +80,7 @@ extension StatusExtension on Status {
   /// For more information see https://google.aip.dev/193 and
   /// https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto.
   List<ProtoMessage> get detailsAsMessages {
-    return (details ?? []).map((any) {
+    return details.map((any) {
       final decoder = _decoders[any.typeName];
       return decoder == null ? any : any.unpackFrom(decoder);
     }).toList();

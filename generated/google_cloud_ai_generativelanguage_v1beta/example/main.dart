@@ -27,11 +27,11 @@ void main() async {
   );
 
   final result = await service.generateContent(request);
-  final parts = result.candidates?[0].content?.parts;
+  final parts = result.candidates.first.content?.parts;
   if (parts == null) {
     print('<No textual response>');
   } else {
-    print(parts.map((p) => p.text ?? '').join(''));
+    print(parts.map((p) => p.text).join(''));
   }
 
   service.close();
