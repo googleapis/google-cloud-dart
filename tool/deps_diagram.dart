@@ -27,37 +27,83 @@ digraph "" {
   graph [style=rounded fontname="Arial Black" fontsize=13 penwidth=2.6];
   node [shape=rect style="filled,rounded" fontname=Arial fontsize=15 fillcolor=Lavender penwidth=1.3];
   edge [penwidth=1.3];
-  {{EDGES}}
+{{HEADERS}}
+{{EDGES}}
 }
 ''';
+
+class Package implements Comparable<Package> {
+  static Map<String, Package> nameToPackage = {};
+  final String name;
+  final Set<Package> deps = {};
+
+  static Package maybeAdd(String packageName) => Package.nameToPackage
+      .putIfAbsent(packageName, () => Package(packageName));
+
+  Package(this.name);
+
+  @override
+  String toString() => name;
+
+  @override
+  int compareTo(Package other) => name.compareTo(other.name);
+}
 
 void main() {
   final results = Process.runSync('dart', ['pub', 'deps', '--json']);
 
   final json = jsonDecode(results.stdout as String) as Map<String, dynamic>;
-  final packages = (json['packages'] as List).cast<Map<String, dynamic>>();
+  final packageMaps = (json['packages'] as List).cast<Map<String, dynamic>>();
   final connections = StringBuffer();
+  final headers = StringBuffer();
 
-  for (final package in packages) {
-    final packageName = package['name'] as String;
+  for (final packageMap in packageMaps) {
+    final packageName = packageMap['name'] as String;
     if (packageName.startsWith('google_cloud')) {
-      final dependencies = (package['directDependencies'] as List)
+      final package = Package.maybeAdd(packageName);
+      final dependencies = (packageMap['directDependencies'] as List)
           .cast<String>();
-      for (final dependency in dependencies) {
-        if (!dependency.startsWith('google_cloud')) {
-          connections.writeln('"$dependency" [fillcolor="grey"]');
-        }
-
-        connections.writeln('"$packageName" -> "$dependency";');
+      for (final dependencyName in dependencies) {
+        final dependency = Package.maybeAdd(dependencyName);
+        package.deps.add(dependency);
+        connections.writeln('"$packageName" -> "$dependencyName";');
       }
     }
   }
 
+  // Color all foreign packages grey.
+  for (final package in Package.nameToPackage.values) {
+    if (!package.name.startsWith('google_cloud')) {
+      headers.writeln('"${package.name}" [fillcolor="grey"]');
+    }
+  }
+
+  // Put all of the packages with common dependencies on the same level of the
+  // graph.
+  final remaining = Set<Package>.from(Package.nameToPackage.values);
+  final visited = <Package>{};
+  while (remaining.isNotEmpty) {
+    final rank = <Package>[];
+    for (final p in remaining) {
+      if (visited.containsAll(p.deps)) {
+        rank.add(p);
+      }
+    }
+    headers.writeln(
+      '{ rank = same; ${[for (final p in rank) '"${p.name}"'].join(" ")}}',
+    );
+    visited.addAll(rank);
+    remaining.removeAll(rank);
+  }
+
   final tmpDir = Directory.systemTemp.createTempSync('deps');
   final path = '${tmpDir.path}/deps.dot';
+  print(path);
 
   File(path).writeAsStringSync(
-    dotTemplate.replaceFirst('{{EDGES}}', connections.toString()),
+    dotTemplate
+        .replaceFirst('{{HEADERS}}', headers.toString())
+        .replaceFirst('{{EDGES}}', connections.toString()),
   );
 
   Process.runSync('dot', ['-Tpng', path, '-o', 'deps.png']);
