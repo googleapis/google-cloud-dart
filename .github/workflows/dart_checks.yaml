@@ -65,7 +65,7 @@ jobs:
         working-directory: packages/google_cloud_gax
 
   generator:
-    name: Code Generator
+    name: Generators
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
@@ -84,8 +84,9 @@ jobs:
         uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
         with:
           sdk: ${{ env.DART_VERSION }}
+      - name: Setup Graphviz
+        run: sudo apt-get install graphviz
       - run: dart pub get
-
       # Regenerate and check the existing clients. If there is any difference
       # between the generated code and the committed code that is an error; all
       # the inputs should be pinned, including the generator version and the
@@ -94,5 +95,14 @@ jobs:
         # The current head version of sidekick can be generated with:
         # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
         run: go run github.com/googleapis/librarian/cmd/sidekick@v0.5.1-0.20251028230334-0950c1e33936 refreshall -project-root .
+      - name: Regenerate dependency graph
+        run: dart run tool/deps_diagram.dart
       - name: Generated Diff
         run: git diff --exit-code
+      - name: Upload dependency graph
+        if: failure()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: Dependency graph
+          path: deps.png
+          retention-days: 1
