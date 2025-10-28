@@ -33,11 +33,11 @@ digraph "" {
 ''';
 
 class Package implements Comparable<Package> {
-  static Map<String, Package> nameToPackage = {};
+  static Map<String, Package> namesToPackages = {};
   final String name;
   final Set<Package> deps = {};
 
-  static Package putIfAbsent(String packageName) => Package.nameToPackage
+  static Package putIfAbsent(String packageName) => Package.namesToPackages
       .putIfAbsent(packageName, () => Package(packageName));
 
   Package(this.name);
@@ -72,7 +72,7 @@ void main() {
   }
 
   // Color all foreign packages grey.
-  for (final package in Package.nameToPackage.values) {
+  for (final package in Package.namesToPackages.values) {
     if (!package.name.startsWith('google_cloud')) {
       headers.writeln('"${package.name}" [fillcolor="grey"]');
     }
@@ -80,7 +80,7 @@ void main() {
 
   // Put all of the packages with common dependencies on the same level of the
   // graph.
-  final remaining = Set<Package>.from(Package.nameToPackage.values);
+  final remaining = Set<Package>.from(Package.namesToPackages.values);
   final visited = <Package>{};
   while (remaining.isNotEmpty) {
     final rank = <Package>[];
