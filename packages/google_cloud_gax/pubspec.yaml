@@ -18,7 +18,7 @@ description: Common code for the Google Cloud client library packages.
 # * CHANGELOG.yaml
 # * pubspec.yaml
 # * lib/src/versions.dart
-version: 0.1.0
+version: 0.1.2
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/packages/google_cloud_gax
 
 environment:
