@@ -36,12 +36,13 @@ const String _typeJson = 'application/json';
 
 /// Exception thrown when a method is called without correct configuration.
 final class ConfigurationException implements Exception {
-  final String _message;
+  /// A message describing the cause of the exception.
+  final String message;
 
-  ConfigurationException(this._message);
+  ConfigurationException(this.message);
 
   @override
-  String toString() => 'ConfigurationException: $_message';
+  String toString() => 'ConfigurationException: $message';
 }
 
 /// Exception thrown when calling an API through [ServiceClient] fails.
