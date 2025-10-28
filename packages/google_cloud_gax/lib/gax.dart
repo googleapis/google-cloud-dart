@@ -34,6 +34,16 @@ final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
 
+/// Exception thrown when a method is called without correct configuration.
+final class ConfigurationException implements Exception {
+  final String _message;
+
+  ConfigurationException(this._message);
+
+  @override
+  String toString() => 'ConfigurationException: $_message';
+}
+
 /// Exception thrown when calling an API through [ServiceClient] fails.
 final class ServiceException implements Exception {
   /// A message describing the cause of the exception.

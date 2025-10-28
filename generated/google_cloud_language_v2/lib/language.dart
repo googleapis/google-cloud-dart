@@ -50,8 +50,9 @@ final class LanguageService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory LanguageService.fromApiKey([String? apiKey]) {

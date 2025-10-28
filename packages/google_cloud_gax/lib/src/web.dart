@@ -18,6 +18,8 @@ library;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth;
 import 'package:http/http.dart' as http;
 
+import '../gax.dart';
+
 /// The Dart version to use in "x-goog-api-client" headers.
 ///
 /// The format is either `major.minor.patch` or the special value `0`, which
@@ -32,11 +34,11 @@ const String clientDartVersion = '0';
 ///
 /// On the web, `apiKey` must be provided and `envKeys` is ignored.
 ///
-/// Throws [ArgumentError] `apiKey` is `null` and no API key is found in the
-/// given environment variables.
+/// Throws [ConfigurationException] `apiKey` is `null` and no API key is found
+/// in the given environment variables.
 http.Client httpClientFromApiKey(String? apiKey, List<String> envKeys) {
   if (apiKey == null) {
-    throw ArgumentError('apiKey must be set to an API key');
+    throw ConfigurationException('apiKey must be set to an API key');
   }
   return auth.clientViaApiKey(apiKey);
 }

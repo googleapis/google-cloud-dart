@@ -60,8 +60,9 @@ final class CacheService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory CacheService.fromApiKey([String? apiKey]) {
@@ -221,8 +222,9 @@ final class DiscussService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory DiscussService.fromApiKey([String? apiKey]) {
@@ -337,8 +339,9 @@ final class FileService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FileService.fromApiKey([String? apiKey]) {
@@ -485,8 +488,9 @@ final class GenerativeService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory GenerativeService.fromApiKey([String? apiKey]) {
@@ -668,8 +672,9 @@ final class ModelService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ModelService.fromApiKey([String? apiKey]) {
@@ -871,8 +876,9 @@ final class PermissionService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PermissionService.fromApiKey([String? apiKey]) {
@@ -1038,8 +1044,9 @@ final class PredictionService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PredictionService.fromApiKey([String? apiKey]) {
@@ -1163,8 +1170,9 @@ final class RetrieverService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory RetrieverService.fromApiKey([String? apiKey]) {
@@ -1511,8 +1519,9 @@ final class TextService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory TextService.fromApiKey([String? apiKey]) {

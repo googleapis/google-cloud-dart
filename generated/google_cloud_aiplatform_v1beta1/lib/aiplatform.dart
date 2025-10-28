@@ -54,8 +54,9 @@ final class DatasetService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory DatasetService.fromApiKey([String? apiKey]) {
@@ -696,8 +697,9 @@ final class DeploymentResourcePoolService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory DeploymentResourcePoolService.fromApiKey([String? apiKey]) {
@@ -1028,8 +1030,9 @@ final class EndpointService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory EndpointService.fromApiKey([String? apiKey]) {
@@ -1457,8 +1460,9 @@ final class EvaluationService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory EvaluationService.fromApiKey([String? apiKey]) {
@@ -1682,8 +1686,9 @@ final class ExampleStoreService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ExampleStoreService.fromApiKey([String? apiKey]) {
@@ -2031,8 +2036,9 @@ final class ExtensionExecutionService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ExtensionExecutionService.fromApiKey([String? apiKey]) {
@@ -2241,8 +2247,9 @@ final class ExtensionRegistryService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ExtensionRegistryService.fromApiKey([String? apiKey]) {
@@ -2521,8 +2528,9 @@ final class FeatureOnlineStoreAdminService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FeatureOnlineStoreAdminService.fromApiKey([String? apiKey]) {
@@ -2979,8 +2987,9 @@ final class FeatureOnlineStoreService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FeatureOnlineStoreService.fromApiKey([String? apiKey]) {
@@ -3215,8 +3224,9 @@ final class FeatureRegistryService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FeatureRegistryService.fromApiKey([String? apiKey]) {
@@ -3839,8 +3849,9 @@ final class FeaturestoreOnlineServingService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FeaturestoreOnlineServingService.fromApiKey([String? apiKey]) {
@@ -4080,8 +4091,9 @@ final class FeaturestoreService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FeaturestoreService.fromApiKey([String? apiKey]) {
@@ -4805,8 +4817,9 @@ final class GenAiCacheService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory GenAiCacheService.fromApiKey([String? apiKey]) {
@@ -5056,8 +5069,9 @@ final class GenAiTuningService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory GenAiTuningService.fromApiKey([String? apiKey]) {
@@ -5328,8 +5342,9 @@ final class IndexEndpointService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory IndexEndpointService.fromApiKey([String? apiKey]) {
@@ -5692,8 +5707,9 @@ final class IndexService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory IndexService.fromApiKey([String? apiKey]) {
@@ -6025,8 +6041,9 @@ final class JobService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory JobService.fromApiKey([String? apiKey]) {
@@ -6870,8 +6887,9 @@ final class LlmUtilityService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory LlmUtilityService.fromApiKey([String? apiKey]) {
@@ -7066,8 +7084,9 @@ final class MatchService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory MatchService.fromApiKey([String? apiKey]) {
@@ -7281,8 +7300,9 @@ final class MemoryBankService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory MemoryBankService.fromApiKey([String? apiKey]) {
@@ -7604,8 +7624,9 @@ final class MetadataService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory MetadataService.fromApiKey([String? apiKey]) {
@@ -8375,8 +8396,9 @@ final class MigrationService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory MigrationService.fromApiKey([String? apiKey]) {
@@ -8608,8 +8630,9 @@ final class ModelGardenService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ModelGardenService.fromApiKey([String? apiKey]) {
@@ -8957,8 +8980,9 @@ final class ModelMonitoringService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ModelMonitoringService.fromApiKey([String? apiKey]) {
@@ -9363,8 +9387,9 @@ final class ModelService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ModelService.fromApiKey([String? apiKey]) {
@@ -9937,8 +9962,9 @@ final class NotebookService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory NotebookService.fromApiKey([String? apiKey]) {
@@ -10505,8 +10531,9 @@ final class PersistentResourceService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PersistentResourceService.fromApiKey([String? apiKey]) {
@@ -10831,8 +10858,9 @@ final class PipelineService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PipelineService.fromApiKey([String? apiKey]) {
@@ -11273,8 +11301,9 @@ final class PredictionService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PredictionService.fromApiKey([String? apiKey]) {
@@ -11626,8 +11655,9 @@ final class ReasoningEngineExecutionService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ReasoningEngineExecutionService.fromApiKey([String? apiKey]) {
@@ -11835,8 +11865,9 @@ final class ReasoningEngineService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ReasoningEngineService.fromApiKey([String? apiKey]) {
@@ -12128,8 +12159,9 @@ final class ScheduleService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ScheduleService.fromApiKey([String? apiKey]) {
@@ -12425,8 +12457,9 @@ final class SessionService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory SessionService.fromApiKey([String? apiKey]) {
@@ -12732,8 +12765,9 @@ final class SpecialistPoolService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory SpecialistPoolService.fromApiKey([String? apiKey]) {
@@ -13024,8 +13058,9 @@ final class TensorboardService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory TensorboardService.fromApiKey([String? apiKey]) {
@@ -13763,8 +13798,9 @@ final class VertexRagDataService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory VertexRagDataService.fromApiKey([String? apiKey]) {
@@ -14173,8 +14209,9 @@ final class VertexRagService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory VertexRagService.fromApiKey([String? apiKey]) {
@@ -14404,8 +14441,9 @@ final class VizierService {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory VizierService.fromApiKey([String? apiKey]) {
