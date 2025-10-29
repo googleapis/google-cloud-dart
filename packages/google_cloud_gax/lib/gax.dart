@@ -24,7 +24,7 @@ export 'dart:typed_data' show Uint8List;
 
 export 'src/web.dart'
     if (dart.library.io) 'src/vm.dart'
-    show environmentVariable;
+    show httpClientFromApiKey;
 
 const String _clientKey = 'x-goog-api-client';
 
@@ -33,6 +33,17 @@ final String _clientName = 'gl-dart/$clientDartVersion gax/$gaxVersion';
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
+
+/// Exception thrown when a method is called without correct configuration.
+final class ConfigurationException implements Exception {
+  /// A message describing the cause of the exception.
+  final String message;
+
+  ConfigurationException(this.message);
+
+  @override
+  String toString() => 'ConfigurationException: $message';
+}
 
 /// Exception thrown when calling an API through [ServiceClient] fails.
 final class ServiceException implements Exception {

@@ -29,6 +29,7 @@ class TestMessage extends JsonEncodable {
 }
 
 final sampleUrl = Uri.https('example.org', '/path');
+const apiHeaderPattern = r'gl-dart/(3\.\d+\.\d+)|0 gax/0.1.0';
 
 void main() {
   group('non-streaming', () {
@@ -54,7 +55,7 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, sampleUrl);
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(r'gl-dart/3\.\d+\.\d+ gax/0.1.0'),
+            'x-goog-api-client': matches(apiHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
@@ -82,7 +83,7 @@ void main() {
           expect(actualRequest.url, sampleUrl);
           expect(actualRequest.headers, {
             'content-type': 'application/json',
-            'x-goog-api-client': matches(r'gl-dart/3\.\d+\.\d+ gax/0.1.0'),
+            'x-goog-api-client': matches(apiHeaderPattern),
           });
           expect(actualRequest.body, '"<test payload>"');
         });
@@ -195,7 +196,7 @@ void main() {
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
           expect(actualRequest.headers, {
-            'x-goog-api-client': matches(r'gl-dart/3\.\d+\.\d+ gax/0.1.0'),
+            'x-goog-api-client': matches(apiHeaderPattern),
           });
           expect(actualRequest.body, isEmpty);
         });
@@ -226,7 +227,7 @@ void main() {
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
           expect(actualRequest.headers, {
             'content-type': 'application/json',
-            'x-goog-api-client': matches(r'gl-dart/3\.\d+\.\d+ gax/0.1.0'),
+            'x-goog-api-client': matches(apiHeaderPattern),
           });
           expect(actualRequest.body, '"<test payload>"');
         });

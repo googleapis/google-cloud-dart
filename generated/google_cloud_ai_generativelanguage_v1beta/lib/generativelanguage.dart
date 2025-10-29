@@ -31,7 +31,6 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_type/type.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
 const _apiKeys = ['GOOGLE_API_KEY', 'GEMINI_API_KEY'];
@@ -61,19 +60,13 @@ final class CacheService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory CacheService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return CacheService(client: auth.clientViaApiKey(apiKey));
+    return CacheService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Lists CachedContents.
@@ -229,19 +222,13 @@ final class DiscussService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory DiscussService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return DiscussService(client: auth.clientViaApiKey(apiKey));
+    return DiscussService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Generates a response from the model given an input `MessagePrompt`.
@@ -352,19 +339,13 @@ final class FileService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory FileService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return FileService(client: auth.clientViaApiKey(apiKey));
+    return FileService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Creates a `File`.
@@ -507,19 +488,13 @@ final class GenerativeService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory GenerativeService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return GenerativeService(client: auth.clientViaApiKey(apiKey));
+    return GenerativeService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Generates a model response given an input `GenerateContentRequest`.
@@ -697,19 +672,13 @@ final class ModelService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory ModelService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return ModelService(client: auth.clientViaApiKey(apiKey));
+    return ModelService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Gets information about a specific `Model` such as its version number, token
@@ -907,19 +876,13 @@ final class PermissionService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PermissionService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return PermissionService(client: auth.clientViaApiKey(apiKey));
+    return PermissionService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Create a permission to a specific resource.
@@ -1081,19 +1044,13 @@ final class PredictionService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory PredictionService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return PredictionService(client: auth.clientViaApiKey(apiKey));
+    return PredictionService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Performs a prediction request.
@@ -1213,19 +1170,13 @@ final class RetrieverService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory RetrieverService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return RetrieverService(client: auth.clientViaApiKey(apiKey));
+    return RetrieverService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Creates an empty `Corpus`.
@@ -1568,19 +1519,13 @@ final class TextService {
   /// - `GOOGLE_API_KEY`
   /// - `GEMINI_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory TextService.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return TextService(client: auth.clientViaApiKey(apiKey));
+    return TextService(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Generates a response from the model given an input message.

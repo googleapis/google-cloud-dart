@@ -24,7 +24,6 @@ library;
 import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
 const _apiKeys = ['GOOGLE_API_KEY'];
@@ -52,19 +51,13 @@ final class Locations {
   ///
   /// - `GOOGLE_API_KEY`
   ///
-  /// Throws [ArgumentError] if called without arguments and none of the above
-  /// environment variables are set.
+  /// Throws [ConfigurationException] if called without arguments and none of
+  /// the above environment variables are set. On the web,
+  /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
   factory Locations.fromApiKey([String? apiKey]) {
-    apiKey ??= _apiKeys.map(environmentVariable).nonNulls.firstOrNull;
-    if (apiKey == null) {
-      throw ArgumentError(
-        'apiKey or one of these environment variables must '
-        'be set to an API key: ${_apiKeys.join(', ')}',
-      );
-    }
-    return Locations(client: auth.clientViaApiKey(apiKey));
+    return Locations(client: httpClientFromApiKey(apiKey, _apiKeys));
   }
 
   /// Lists information about the supported locations for this service.
