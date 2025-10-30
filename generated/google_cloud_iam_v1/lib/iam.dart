@@ -154,8 +154,11 @@ final class SetIamPolicyRequest extends ProtoMessage {
   /// `paths: "bindings, etag"`
   final FieldMask? updateMask;
 
-  SetIamPolicyRequest({this.resource = '', this.policy, this.updateMask})
-    : super(fullyQualifiedName);
+  SetIamPolicyRequest({
+    required this.resource,
+    required this.policy,
+    this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory SetIamPolicyRequest.fromJson(Map<String, dynamic> json) {
     return SetIamPolicyRequest(
@@ -193,7 +196,7 @@ final class GetIamPolicyRequest extends ProtoMessage {
   /// `GetIamPolicy`.
   final GetPolicyOptions? options;
 
-  GetIamPolicyRequest({this.resource = '', this.options})
+  GetIamPolicyRequest({required this.resource, this.options})
     : super(fullyQualifiedName);
 
   factory GetIamPolicyRequest.fromJson(Map<String, dynamic> json) {
@@ -233,7 +236,7 @@ final class TestIamPermissionsRequest extends ProtoMessage {
   /// [IAM Overview](https://cloud.google.com/iam/docs/overview#permissions).
   final List<String> permissions;
 
-  TestIamPermissionsRequest({this.resource = '', this.permissions = const []})
+  TestIamPermissionsRequest({required this.resource, required this.permissions})
     : super(fullyQualifiedName);
 
   factory TestIamPermissionsRequest.fromJson(Map<String, dynamic> json) {

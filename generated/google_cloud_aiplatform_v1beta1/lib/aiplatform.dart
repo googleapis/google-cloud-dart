@@ -14908,8 +14908,8 @@ final class Annotation extends protobuf.ProtoMessage {
 
   Annotation({
     this.name = '',
-    this.payloadSchemaUri = '',
-    this.payload,
+    required this.payloadSchemaUri,
+    required this.payload,
     this.createTime,
     this.updateTime,
     this.etag = '',
@@ -14984,7 +14984,7 @@ final class AnnotationSpec extends protobuf.ProtoMessage {
 
   AnnotationSpec({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.createTime,
     this.updateTime,
     this.etag = '',
@@ -15056,7 +15056,7 @@ final class ApiAuth_ApiKeyConfig extends protobuf.ProtoMessage {
   /// e.g. projects/{project}/secrets/{secret}/versions/{version}
   final String apiKeySecretVersion;
 
-  ApiAuth_ApiKeyConfig({this.apiKeySecretVersion = ''})
+  ApiAuth_ApiKeyConfig({required this.apiKeySecretVersion})
     : super(fullyQualifiedName);
 
   factory ApiAuth_ApiKeyConfig.fromJson(Map<String, dynamic> json) {
@@ -15454,14 +15454,14 @@ final class BatchPredictionJob extends protobuf.ProtoMessage {
 
   BatchPredictionJob({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.model = '',
     this.modelVersionId = '',
     this.unmanagedContainerModel,
-    this.inputConfig,
+    required this.inputConfig,
     this.instanceConfig,
     this.modelParameters,
-    this.outputConfig,
+    required this.outputConfig,
     this.dedicatedResources,
     this.serviceAccount = '',
     this.manualBatchTuningParameters,
@@ -15665,7 +15665,7 @@ final class BatchPredictionJob_InputConfig extends protobuf.ProtoMessage {
   BatchPredictionJob_InputConfig({
     this.gcsSource,
     this.bigquerySource,
-    this.instancesFormat = '',
+    required this.instancesFormat,
   }) : super(fullyQualifiedName);
 
   factory BatchPredictionJob_InputConfig.fromJson(Map<String, dynamic> json) {
@@ -15895,7 +15895,7 @@ final class BatchPredictionJob_OutputConfig extends protobuf.ProtoMessage {
   BatchPredictionJob_OutputConfig({
     this.gcsDestination,
     this.bigqueryDestination,
-    this.predictionsFormat = '',
+    required this.predictionsFormat,
   }) : super(fullyQualifiedName);
 
   factory BatchPredictionJob_OutputConfig.fromJson(Map<String, dynamic> json) {
@@ -16263,7 +16263,7 @@ final class Content extends protobuf.ProtoMessage {
   /// different IANA MIME types.
   final List<Part> parts;
 
-  Content({this.role = '', this.parts = const []}) : super(fullyQualifiedName);
+  Content({this.role = '', required this.parts}) : super(fullyQualifiedName);
 
   factory Content.fromJson(Map<String, dynamic> json) {
     return Content(
@@ -16413,7 +16413,8 @@ final class Blob extends protobuf.ProtoMessage {
   /// Required. Raw bytes.
   final Uint8List? data;
 
-  Blob({this.mimeType = '', this.data}) : super(fullyQualifiedName);
+  Blob({required this.mimeType, required this.data})
+    : super(fullyQualifiedName);
 
   factory Blob.fromJson(Map<String, dynamic> json) {
     return Blob(
@@ -16451,7 +16452,8 @@ final class FileData extends protobuf.ProtoMessage {
   /// Required. URI.
   final String fileUri;
 
-  FileData({this.mimeType = '', this.fileUri = ''}) : super(fullyQualifiedName);
+  FileData({required this.mimeType, required this.fileUri})
+    : super(fullyQualifiedName);
 
   factory FileData.fromJson(Map<String, dynamic> json) {
     return FileData(
@@ -17087,10 +17089,8 @@ final class GenerationConfig_ModelConfig extends protobuf.ProtoMessage {
   final GenerationConfig_ModelConfig_FeatureSelectionPreference
   featureSelectionPreference;
 
-  GenerationConfig_ModelConfig({
-    this.featureSelectionPreference =
-        GenerationConfig_ModelConfig_FeatureSelectionPreference.$default,
-  }) : super(fullyQualifiedName);
+  GenerationConfig_ModelConfig({required this.featureSelectionPreference})
+    : super(fullyQualifiedName);
 
   factory GenerationConfig_ModelConfig.fromJson(Map<String, dynamic> json) {
     return GenerationConfig_ModelConfig(
@@ -17242,8 +17242,8 @@ final class SafetySetting extends protobuf.ProtoMessage {
   final SafetySetting_HarmBlockMethod method;
 
   SafetySetting({
-    this.category = HarmCategory.$default,
-    this.threshold = SafetySetting_HarmBlockThreshold.$default,
+    required this.category,
+    required this.threshold,
     this.method = SafetySetting_HarmBlockMethod.$default,
   }) : super(fullyQualifiedName);
 
@@ -18907,8 +18907,8 @@ final class CustomJob extends protobuf.ProtoMessage {
 
   CustomJob({
     this.name = '',
-    this.displayName = '',
-    this.jobSpec,
+    required this.displayName,
+    required this.jobSpec,
     this.state = JobState.$default,
     this.createTime,
     this.startTime,
@@ -19118,7 +19118,7 @@ final class CustomJobSpec extends protobuf.ProtoMessage {
 
   CustomJobSpec({
     this.persistentResourceId = '',
-    this.workerPoolSpecs = const [],
+    required this.workerPoolSpecs,
     this.scheduling,
     this.serviceAccount = '',
     this.network = '',
@@ -19293,7 +19293,7 @@ final class ContainerSpec extends protobuf.ProtoMessage {
   final List<EnvVar> env;
 
   ContainerSpec({
-    this.imageUri = '',
+    required this.imageUri,
     this.command = const [],
     this.args = const [],
     this.env = const [],
@@ -19354,9 +19354,9 @@ final class PythonPackageSpec extends protobuf.ProtoMessage {
   final List<EnvVar> env;
 
   PythonPackageSpec({
-    this.executorImageUri = '',
-    this.packageUris = const [],
-    this.pythonModule = '',
+    required this.executorImageUri,
+    required this.packageUris,
+    required this.pythonModule,
     this.args = const [],
     this.env = const [],
   }) : super(fullyQualifiedName);
@@ -19555,7 +19555,7 @@ final class DataItem extends protobuf.ProtoMessage {
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    this.payload,
+    required this.payload,
     this.etag = '',
     this.satisfiesPzs = false,
     this.satisfiesPzi = false,
@@ -19701,13 +19701,13 @@ final class DataLabelingJob extends protobuf.ProtoMessage {
 
   DataLabelingJob({
     this.name = '',
-    this.displayName = '',
-    this.datasets = const [],
+    required this.displayName,
+    required this.datasets,
     this.annotationLabels = const {},
-    this.labelerCount = 0,
-    this.instructionUri = '',
-    this.inputsSchemaUri = '',
-    this.inputs,
+    required this.labelerCount,
+    required this.instructionUri,
+    required this.inputsSchemaUri,
+    required this.inputs,
     this.state = JobState.$default,
     this.labelingProgress = 0,
     this.currentSpend,
@@ -20059,10 +20059,10 @@ final class Dataset extends protobuf.ProtoMessage {
 
   Dataset({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
-    this.metadataSchemaUri = '',
-    this.metadata,
+    required this.metadataSchemaUri,
+    required this.metadata,
     this.dataItemCount = 0,
     this.createTime,
     this.updateTime,
@@ -20187,7 +20187,7 @@ final class ImportDataConfig extends protobuf.ProtoMessage {
     this.gcsSource,
     this.dataItemLabels = const {},
     this.annotationLabels = const {},
-    this.importSchemaUri = '',
+    required this.importSchemaUri,
   }) : super(fullyQualifiedName);
 
   factory ImportDataConfig.fromJson(Map<String, dynamic> json) {
@@ -20344,7 +20344,7 @@ final class CreateDatasetRequest extends protobuf.ProtoMessage {
   /// Required. The Dataset to create.
   final Dataset? dataset;
 
-  CreateDatasetRequest({this.parent = '', this.dataset})
+  CreateDatasetRequest({required this.parent, required this.dataset})
     : super(fullyQualifiedName);
 
   factory CreateDatasetRequest.fromJson(Map<String, dynamic> json) {
@@ -20413,7 +20413,7 @@ final class GetDatasetRequest extends protobuf.ProtoMessage {
   /// Mask specifying which fields to read.
   final protobuf.FieldMask? readMask;
 
-  GetDatasetRequest({this.name = '', this.readMask})
+  GetDatasetRequest({required this.name, this.readMask})
     : super(fullyQualifiedName);
 
   factory GetDatasetRequest.fromJson(Map<String, dynamic> json) {
@@ -20456,7 +20456,7 @@ final class UpdateDatasetRequest extends protobuf.ProtoMessage {
   ///   * `labels`
   final protobuf.FieldMask? updateMask;
 
-  UpdateDatasetRequest({this.dataset, this.updateMask})
+  UpdateDatasetRequest({required this.dataset, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateDatasetRequest.fromJson(Map<String, dynamic> json) {
@@ -20494,8 +20494,10 @@ final class UpdateDatasetVersionRequest extends protobuf.ProtoMessage {
   ///   * `display_name`
   final protobuf.FieldMask? updateMask;
 
-  UpdateDatasetVersionRequest({this.datasetVersion, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdateDatasetVersionRequest({
+    required this.datasetVersion,
+    required this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdateDatasetVersionRequest.fromJson(Map<String, dynamic> json) {
     return UpdateDatasetVersionRequest(
@@ -20561,7 +20563,7 @@ final class ListDatasetsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListDatasetsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -20653,7 +20655,7 @@ final class DeleteDatasetRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/datasets/{dataset}`
   final String name;
 
-  DeleteDatasetRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteDatasetRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteDatasetRequest.fromJson(Map<String, dynamic> json) {
     return DeleteDatasetRequest(name: json['name'] ?? '');
@@ -20686,7 +20688,7 @@ final class ImportDataRequest extends protobuf.ProtoMessage {
   /// will be imported in one batch.
   final List<ImportDataConfig> importConfigs;
 
-  ImportDataRequest({this.name = '', this.importConfigs = const []})
+  ImportDataRequest({required this.name, required this.importConfigs})
     : super(fullyQualifiedName);
 
   factory ImportDataRequest.fromJson(Map<String, dynamic> json) {
@@ -20781,7 +20783,7 @@ final class ExportDataRequest extends protobuf.ProtoMessage {
   /// Required. The desired output location.
   final ExportDataConfig? exportConfig;
 
-  ExportDataRequest({this.name = '', this.exportConfig})
+  ExportDataRequest({required this.name, required this.exportConfig})
     : super(fullyQualifiedName);
 
   factory ExportDataRequest.fromJson(Map<String, dynamic> json) {
@@ -20896,8 +20898,10 @@ final class CreateDatasetVersionRequest extends protobuf.ProtoMessage {
   /// to specify the EncryptionSpecType here.
   final DatasetVersion? datasetVersion;
 
-  CreateDatasetVersionRequest({this.parent = '', this.datasetVersion})
-    : super(fullyQualifiedName);
+  CreateDatasetVersionRequest({
+    required this.parent,
+    required this.datasetVersion,
+  }) : super(fullyQualifiedName);
 
   factory CreateDatasetVersionRequest.fromJson(Map<String, dynamic> json) {
     return CreateDatasetVersionRequest(
@@ -20967,7 +20971,7 @@ final class DeleteDatasetVersionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/datasets/{dataset}/datasetVersions/{dataset_version}`
   final String name;
 
-  DeleteDatasetVersionRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteDatasetVersionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteDatasetVersionRequest.fromJson(Map<String, dynamic> json) {
     return DeleteDatasetVersionRequest(name: json['name'] ?? '');
@@ -20999,7 +21003,7 @@ final class GetDatasetVersionRequest extends protobuf.ProtoMessage {
   /// Mask specifying which fields to read.
   final protobuf.FieldMask? readMask;
 
-  GetDatasetVersionRequest({this.name = '', this.readMask})
+  GetDatasetVersionRequest({required this.name, this.readMask})
     : super(fullyQualifiedName);
 
   factory GetDatasetVersionRequest.fromJson(Map<String, dynamic> json) {
@@ -21052,7 +21056,7 @@ final class ListDatasetVersionsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListDatasetVersionsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -21149,7 +21153,8 @@ final class RestoreDatasetVersionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/datasets/{dataset}/datasetVersions/{dataset_version}`
   final String name;
 
-  RestoreDatasetVersionRequest({this.name = ''}) : super(fullyQualifiedName);
+  RestoreDatasetVersionRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory RestoreDatasetVersionRequest.fromJson(Map<String, dynamic> json) {
     return RestoreDatasetVersionRequest(name: json['name'] ?? '');
@@ -21230,7 +21235,7 @@ final class ListDataItemsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListDataItemsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -21396,7 +21401,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
   SearchDataItemsRequest({
     this.orderByDataItem,
     this.orderByAnnotation,
-    this.dataset = '',
+    required this.dataset,
     this.savedQuery = '',
     this.dataLabelingJob = '',
     this.dataItemFilter = '',
@@ -21486,7 +21491,7 @@ final class SearchDataItemsRequest_OrderByAnnotation
   final String orderBy;
 
   SearchDataItemsRequest_OrderByAnnotation({
-    this.savedQuery = '',
+    required this.savedQuery,
     this.orderBy = '',
   }) : super(fullyQualifiedName);
 
@@ -21641,7 +21646,7 @@ final class ListSavedQueriesRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListSavedQueriesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -21736,7 +21741,7 @@ final class DeleteSavedQueryRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/datasets/{dataset}/savedQueries/{saved_query}`
   final String name;
 
-  DeleteSavedQueryRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteSavedQueryRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteSavedQueryRequest.fromJson(Map<String, dynamic> json) {
     return DeleteSavedQueryRequest(name: json['name'] ?? '');
@@ -21768,7 +21773,7 @@ final class GetAnnotationSpecRequest extends protobuf.ProtoMessage {
   /// Mask specifying which fields to read.
   final protobuf.FieldMask? readMask;
 
-  GetAnnotationSpecRequest({this.name = '', this.readMask})
+  GetAnnotationSpecRequest({required this.name, this.readMask})
     : super(fullyQualifiedName);
 
   factory GetAnnotationSpecRequest.fromJson(Map<String, dynamic> json) {
@@ -21821,7 +21826,7 @@ final class ListAnnotationsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListAnnotationsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -21942,7 +21947,7 @@ final class AssessDataRequest extends protobuf.ProtoMessage {
     this.tuningResourceUsageAssessmentConfig,
     this.batchPredictionValidationAssessmentConfig,
     this.batchPredictionResourceUsageAssessmentConfig,
-    this.name = '',
+    required this.name,
     this.geminiRequestReadConfig,
   }) : super(fullyQualifiedName);
 
@@ -22014,10 +22019,8 @@ final class AssessDataRequest_TuningValidationAssessmentConfig
   datasetUsage;
 
   AssessDataRequest_TuningValidationAssessmentConfig({
-    this.modelName = '',
-    this.datasetUsage =
-        AssessDataRequest_TuningValidationAssessmentConfig_DatasetUsage
-            .$default,
+    required this.modelName,
+    required this.datasetUsage,
   }) : super(fullyQualifiedName);
 
   factory AssessDataRequest_TuningValidationAssessmentConfig.fromJson(
@@ -22101,8 +22104,9 @@ final class AssessDataRequest_TuningResourceUsageAssessmentConfig
   /// Required. The name of the model used for tuning.
   final String modelName;
 
-  AssessDataRequest_TuningResourceUsageAssessmentConfig({this.modelName = ''})
-    : super(fullyQualifiedName);
+  AssessDataRequest_TuningResourceUsageAssessmentConfig({
+    required this.modelName,
+  }) : super(fullyQualifiedName);
 
   factory AssessDataRequest_TuningResourceUsageAssessmentConfig.fromJson(
     Map<String, dynamic> json,
@@ -22134,7 +22138,7 @@ final class AssessDataRequest_BatchPredictionValidationAssessmentConfig
   final String modelName;
 
   AssessDataRequest_BatchPredictionValidationAssessmentConfig({
-    this.modelName = '',
+    required this.modelName,
   }) : super(fullyQualifiedName);
 
   factory AssessDataRequest_BatchPredictionValidationAssessmentConfig.fromJson(
@@ -22167,7 +22171,7 @@ final class AssessDataRequest_BatchPredictionResourceUsageAssessmentConfig
   final String modelName;
 
   AssessDataRequest_BatchPredictionResourceUsageAssessmentConfig({
-    this.modelName = '',
+    required this.modelName,
   }) : super(fullyQualifiedName);
 
   factory AssessDataRequest_BatchPredictionResourceUsageAssessmentConfig.fromJson(
@@ -22450,8 +22454,10 @@ final class GeminiTemplateConfig extends protobuf.ProtoMessage {
   /// Required. Map of template parameters to the columns in the dataset table.
   final Map<String, String> fieldMapping;
 
-  GeminiTemplateConfig({this.geminiExample, this.fieldMapping = const {}})
-    : super(fullyQualifiedName);
+  GeminiTemplateConfig({
+    required this.geminiExample,
+    required this.fieldMapping,
+  }) : super(fullyQualifiedName);
 
   factory GeminiTemplateConfig.fromJson(Map<String, dynamic> json) {
     return GeminiTemplateConfig(
@@ -22582,7 +22588,7 @@ final class GeminiExample extends protobuf.ProtoMessage {
 
   GeminiExample({
     this.model = '',
-    this.contents = const [],
+    required this.contents,
     this.systemInstruction,
     this.cachedContent = '',
     this.tools = const [],
@@ -22651,7 +22657,7 @@ final class AssembleDataRequest extends protobuf.ProtoMessage {
   /// Optional. The read config for the dataset.
   final GeminiRequestReadConfig? geminiRequestReadConfig;
 
-  AssembleDataRequest({this.name = '', this.geminiRequestReadConfig})
+  AssembleDataRequest({required this.name, this.geminiRequestReadConfig})
     : super(fullyQualifiedName);
 
   factory AssembleDataRequest.fromJson(Map<String, dynamic> json) {
@@ -22792,7 +22798,7 @@ final class DatasetVersion extends protobuf.ProtoMessage {
     this.etag = '',
     this.bigQueryDatasetName = '',
     this.displayName = '',
-    this.metadata,
+    required this.metadata,
     this.modelReference = '',
     this.satisfiesPzs = false,
     this.satisfiesPzi = false,
@@ -22981,7 +22987,7 @@ final class DeploymentResourcePool extends protobuf.ProtoMessage {
 
   DeploymentResourcePool({
     this.name = '',
-    this.dedicatedResources,
+    required this.dedicatedResources,
     this.encryptionSpec,
     this.serviceAccount = '',
     this.disableContainerLogging = false,
@@ -23056,9 +23062,9 @@ final class CreateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
   final String deploymentResourcePoolId;
 
   CreateDeploymentResourcePoolRequest({
-    this.parent = '',
-    this.deploymentResourcePool,
-    this.deploymentResourcePoolId = '',
+    required this.parent,
+    required this.deploymentResourcePool,
+    required this.deploymentResourcePoolId,
   }) : super(fullyQualifiedName);
 
   factory CreateDeploymentResourcePoolRequest.fromJson(
@@ -23139,7 +23145,7 @@ final class GetDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/deploymentResourcePools/{deployment_resource_pool}`
   final String name;
 
-  GetDeploymentResourcePoolRequest({this.name = ''})
+  GetDeploymentResourcePoolRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory GetDeploymentResourcePoolRequest.fromJson(Map<String, dynamic> json) {
@@ -23180,7 +23186,7 @@ final class ListDeploymentResourcePoolsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListDeploymentResourcePoolsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -23279,8 +23285,8 @@ final class UpdateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? updateMask;
 
   UpdateDeploymentResourcePoolRequest({
-    this.deploymentResourcePool,
-    this.updateMask,
+    required this.deploymentResourcePool,
+    required this.updateMask,
   }) : super(fullyQualifiedName);
 
   factory UpdateDeploymentResourcePoolRequest.fromJson(
@@ -23352,7 +23358,7 @@ final class DeleteDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/deploymentResourcePools/{deployment_resource_pool}`
   final String name;
 
-  DeleteDeploymentResourcePoolRequest({this.name = ''})
+  DeleteDeploymentResourcePoolRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteDeploymentResourcePoolRequest.fromJson(
@@ -23396,7 +23402,7 @@ final class QueryDeployedModelsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   QueryDeployedModelsRequest({
-    this.deploymentResourcePool = '',
+    required this.deploymentResourcePool,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -23517,7 +23523,7 @@ final class EncryptionSpec extends protobuf.ProtoMessage {
   /// created.
   final String kmsKeyName;
 
-  EncryptionSpec({this.kmsKeyName = ''}) : super(fullyQualifiedName);
+  EncryptionSpec({required this.kmsKeyName}) : super(fullyQualifiedName);
 
   factory EncryptionSpec.fromJson(Map<String, dynamic> json) {
     return EncryptionSpec(kmsKeyName: json['kmsKeyName'] ?? '');
@@ -23673,7 +23679,7 @@ final class Endpoint extends protobuf.ProtoMessage {
 
   Endpoint({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.deployedModels = const [],
     this.trafficSplit = const {},
@@ -24538,7 +24544,7 @@ final class SpeculativeDecodingSpec_DraftModelSpeculation
   /// Required. The resource name of the draft model.
   final String draftModel;
 
-  SpeculativeDecodingSpec_DraftModelSpeculation({this.draftModel = ''})
+  SpeculativeDecodingSpec_DraftModelSpeculation({required this.draftModel})
     : super(fullyQualifiedName);
 
   factory SpeculativeDecodingSpec_DraftModelSpeculation.fromJson(
@@ -24627,8 +24633,11 @@ final class CreateEndpointRequest extends protobuf.ProtoMessage {
   /// fallback for fields that are not included in either the URI or the body.
   final String endpointId;
 
-  CreateEndpointRequest({this.parent = '', this.endpoint, this.endpointId = ''})
-    : super(fullyQualifiedName);
+  CreateEndpointRequest({
+    required this.parent,
+    required this.endpoint,
+    this.endpointId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateEndpointRequest.fromJson(Map<String, dynamic> json) {
     return CreateEndpointRequest(
@@ -24711,7 +24720,7 @@ final class GetEndpointRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/endpoints/{endpoint}`
   final String name;
 
-  GetEndpointRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetEndpointRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetEndpointRequest.fromJson(Map<String, dynamic> json) {
     return GetEndpointRequest(name: json['name'] ?? '');
@@ -24775,7 +24784,7 @@ final class ListEndpointsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListEndpointsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -24868,7 +24877,7 @@ final class UpdateEndpointRequest extends protobuf.ProtoMessage {
   /// `google.protobuf.FieldMask`.
   final protobuf.FieldMask? updateMask;
 
-  UpdateEndpointRequest({this.endpoint, this.updateMask})
+  UpdateEndpointRequest({required this.endpoint, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateEndpointRequest.fromJson(Map<String, dynamic> json) {
@@ -24901,7 +24910,8 @@ final class UpdateEndpointLongRunningRequest extends protobuf.ProtoMessage {
   /// other fields' update will be blocked.
   final Endpoint? endpoint;
 
-  UpdateEndpointLongRunningRequest({this.endpoint}) : super(fullyQualifiedName);
+  UpdateEndpointLongRunningRequest({required this.endpoint})
+    : super(fullyQualifiedName);
 
   factory UpdateEndpointLongRunningRequest.fromJson(Map<String, dynamic> json) {
     return UpdateEndpointLongRunningRequest(
@@ -24961,7 +24971,7 @@ final class DeleteEndpointRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/endpoints/{endpoint}`
   final String name;
 
-  DeleteEndpointRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteEndpointRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteEndpointRequest.fromJson(Map<String, dynamic> json) {
     return DeleteEndpointRequest(name: json['name'] ?? '');
@@ -25013,8 +25023,8 @@ final class DeployModelRequest extends protobuf.ProtoMessage {
   final Map<String, int> trafficSplit;
 
   DeployModelRequest({
-    this.endpoint = '',
-    this.deployedModel,
+    required this.endpoint,
+    required this.deployedModel,
     this.trafficSplit = const {},
   }) : super(fullyQualifiedName);
 
@@ -25139,8 +25149,8 @@ final class UndeployModelRequest extends protobuf.ProtoMessage {
   final Map<String, int> trafficSplit;
 
   UndeployModelRequest({
-    this.endpoint = '',
-    this.deployedModelId = '',
+    required this.endpoint,
+    required this.deployedModelId,
     this.trafficSplit = const {},
   }) : super(fullyQualifiedName);
 
@@ -25205,8 +25215,10 @@ final class SetPublisherModelConfigRequest extends protobuf.ProtoMessage {
   /// Required. The publisher model config.
   final PublisherModelConfig? publisherModelConfig;
 
-  SetPublisherModelConfigRequest({this.name = '', this.publisherModelConfig})
-    : super(fullyQualifiedName);
+  SetPublisherModelConfigRequest({
+    required this.name,
+    required this.publisherModelConfig,
+  }) : super(fullyQualifiedName);
 
   factory SetPublisherModelConfigRequest.fromJson(Map<String, dynamic> json) {
     return SetPublisherModelConfigRequest(
@@ -25279,7 +25291,7 @@ final class FetchPublisherModelConfigRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/publishers/{publisher}/models/{model}`.
   final String name;
 
-  FetchPublisherModelConfigRequest({this.name = ''})
+  FetchPublisherModelConfigRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory FetchPublisherModelConfigRequest.fromJson(Map<String, dynamic> json) {
@@ -25362,9 +25374,9 @@ final class MutateDeployedModelRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? updateMask;
 
   MutateDeployedModelRequest({
-    this.endpoint = '',
-    this.deployedModel,
-    this.updateMask,
+    required this.endpoint,
+    required this.deployedModel,
+    required this.updateMask,
   }) : super(fullyQualifiedName);
 
   factory MutateDeployedModelRequest.fromJson(Map<String, dynamic> json) {
@@ -25601,7 +25613,7 @@ final class EnvVar extends protobuf.ProtoMessage {
   /// exists or not.
   final String value;
 
-  EnvVar({this.name = '', this.value = ''}) : super(fullyQualifiedName);
+  EnvVar({required this.name, required this.value}) : super(fullyQualifiedName);
 
   factory EnvVar.fromJson(Map<String, dynamic> json) {
     return EnvVar(name: json['name'] ?? '', value: json['value'] ?? '');
@@ -25637,7 +25649,8 @@ final class SecretRef extends protobuf.ProtoMessage {
   /// version, or a version alias.
   final String version;
 
-  SecretRef({this.secret = '', this.version = ''}) : super(fullyQualifiedName);
+  SecretRef({required this.secret, this.version = ''})
+    : super(fullyQualifiedName);
 
   factory SecretRef.fromJson(Map<String, dynamic> json) {
     return SecretRef(
@@ -25674,7 +25687,8 @@ final class SecretEnvVar extends protobuf.ProtoMessage {
   /// will provide the value for this environment variable.
   final SecretRef? secretRef;
 
-  SecretEnvVar({this.name = '', this.secretRef}) : super(fullyQualifiedName);
+  SecretEnvVar({required this.name, required this.secretRef})
+    : super(fullyQualifiedName);
 
   factory SecretEnvVar.fromJson(Map<String, dynamic> json) {
     return SecretEnvVar(
@@ -26329,10 +26343,10 @@ final class EvaluateDatasetRequest extends protobuf.ProtoMessage {
   final AutoraterConfig? autoraterConfig;
 
   EvaluateDatasetRequest({
-    this.location = '',
-    this.dataset,
-    this.metrics = const [],
-    this.outputConfig,
+    required this.location,
+    required this.dataset,
+    required this.metrics,
+    required this.outputConfig,
     this.autoraterConfig,
   }) : super(fullyQualifiedName);
 
@@ -26767,7 +26781,7 @@ final class EvaluateInstancesRequest extends protobuf.ProtoMessage {
     this.trajectoryRecallInput,
     this.trajectorySingleToolUseInput,
     this.rubricBasedInstructionFollowingInput,
-    this.location = '',
+    required this.location,
     this.autoraterConfig,
   }) : super(fullyQualifiedName);
 
@@ -27317,7 +27331,7 @@ final class ExactMatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated exact match instances.
   final List<ExactMatchInstance> instances;
 
-  ExactMatchInput({this.metricSpec, this.instances = const []})
+  ExactMatchInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory ExactMatchInput.fromJson(Map<String, dynamic> json) {
@@ -27352,7 +27366,7 @@ final class ExactMatchInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  ExactMatchInstance({this.prediction, this.reference})
+  ExactMatchInstance({required this.prediction, required this.reference})
     : super(fullyQualifiedName);
 
   factory ExactMatchInstance.fromJson(Map<String, dynamic> json) {
@@ -27472,7 +27486,7 @@ final class BleuInput extends protobuf.ProtoMessage {
   /// Required. Repeated bleu instances.
   final List<BleuInstance> instances;
 
-  BleuInput({this.metricSpec, this.instances = const []})
+  BleuInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory BleuInput.fromJson(Map<String, dynamic> json) {
@@ -27506,7 +27520,8 @@ final class BleuInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  BleuInstance({this.prediction, this.reference}) : super(fullyQualifiedName);
+  BleuInstance({required this.prediction, required this.reference})
+    : super(fullyQualifiedName);
 
   factory BleuInstance.fromJson(Map<String, dynamic> json) {
     return BleuInstance(
@@ -27633,7 +27648,7 @@ final class RougeInput extends protobuf.ProtoMessage {
   /// Required. Repeated rouge instances.
   final List<RougeInstance> instances;
 
-  RougeInput({this.metricSpec, this.instances = const []})
+  RougeInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory RougeInput.fromJson(Map<String, dynamic> json) {
@@ -27667,7 +27682,8 @@ final class RougeInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  RougeInstance({this.prediction, this.reference}) : super(fullyQualifiedName);
+  RougeInstance({required this.prediction, required this.reference})
+    : super(fullyQualifiedName);
 
   factory RougeInstance.fromJson(Map<String, dynamic> json) {
     return RougeInstance(
@@ -27813,7 +27829,8 @@ final class CoherenceInput extends protobuf.ProtoMessage {
   /// Required. Coherence instance.
   final CoherenceInstance? instance;
 
-  CoherenceInput({this.metricSpec, this.instance}) : super(fullyQualifiedName);
+  CoherenceInput({required this.metricSpec, required this.instance})
+    : super(fullyQualifiedName);
 
   factory CoherenceInput.fromJson(Map<String, dynamic> json) {
     return CoherenceInput(
@@ -27842,7 +27859,7 @@ final class CoherenceInstance extends protobuf.ProtoMessage {
   /// Required. Output of the evaluated model.
   final String? prediction;
 
-  CoherenceInstance({this.prediction}) : super(fullyQualifiedName);
+  CoherenceInstance({required this.prediction}) : super(fullyQualifiedName);
 
   factory CoherenceInstance.fromJson(Map<String, dynamic> json) {
     return CoherenceInstance(prediction: json['prediction']);
@@ -27944,7 +27961,8 @@ final class FluencyInput extends protobuf.ProtoMessage {
   /// Required. Fluency instance.
   final FluencyInstance? instance;
 
-  FluencyInput({this.metricSpec, this.instance}) : super(fullyQualifiedName);
+  FluencyInput({required this.metricSpec, required this.instance})
+    : super(fullyQualifiedName);
 
   factory FluencyInput.fromJson(Map<String, dynamic> json) {
     return FluencyInput(
@@ -27973,7 +27991,7 @@ final class FluencyInstance extends protobuf.ProtoMessage {
   /// Required. Output of the evaluated model.
   final String? prediction;
 
-  FluencyInstance({this.prediction}) : super(fullyQualifiedName);
+  FluencyInstance({required this.prediction}) : super(fullyQualifiedName);
 
   factory FluencyInstance.fromJson(Map<String, dynamic> json) {
     return FluencyInstance(prediction: json['prediction']);
@@ -28075,7 +28093,8 @@ final class SafetyInput extends protobuf.ProtoMessage {
   /// Required. Safety instance.
   final SafetyInstance? instance;
 
-  SafetyInput({this.metricSpec, this.instance}) : super(fullyQualifiedName);
+  SafetyInput({required this.metricSpec, required this.instance})
+    : super(fullyQualifiedName);
 
   factory SafetyInput.fromJson(Map<String, dynamic> json) {
     return SafetyInput(
@@ -28104,7 +28123,7 @@ final class SafetyInstance extends protobuf.ProtoMessage {
   /// Required. Output of the evaluated model.
   final String? prediction;
 
-  SafetyInstance({this.prediction}) : super(fullyQualifiedName);
+  SafetyInstance({required this.prediction}) : super(fullyQualifiedName);
 
   factory SafetyInstance.fromJson(Map<String, dynamic> json) {
     return SafetyInstance(prediction: json['prediction']);
@@ -28206,7 +28225,7 @@ final class GroundednessInput extends protobuf.ProtoMessage {
   /// Required. Groundedness instance.
   final GroundednessInstance? instance;
 
-  GroundednessInput({this.metricSpec, this.instance})
+  GroundednessInput({required this.metricSpec, required this.instance})
     : super(fullyQualifiedName);
 
   factory GroundednessInput.fromJson(Map<String, dynamic> json) {
@@ -28240,7 +28259,7 @@ final class GroundednessInstance extends protobuf.ProtoMessage {
   /// against the prediction.
   final String? context;
 
-  GroundednessInstance({this.prediction, this.context})
+  GroundednessInstance({required this.prediction, required this.context})
     : super(fullyQualifiedName);
 
   factory GroundednessInstance.fromJson(Map<String, dynamic> json) {
@@ -28350,7 +28369,7 @@ final class FulfillmentInput extends protobuf.ProtoMessage {
   /// Required. Fulfillment instance.
   final FulfillmentInstance? instance;
 
-  FulfillmentInput({this.metricSpec, this.instance})
+  FulfillmentInput({required this.metricSpec, required this.instance})
     : super(fullyQualifiedName);
 
   factory FulfillmentInput.fromJson(Map<String, dynamic> json) {
@@ -28383,7 +28402,7 @@ final class FulfillmentInstance extends protobuf.ProtoMessage {
   /// Required. Inference instruction prompt to compare prediction with.
   final String? instruction;
 
-  FulfillmentInstance({this.prediction, this.instruction})
+  FulfillmentInstance({required this.prediction, required this.instruction})
     : super(fullyQualifiedName);
 
   factory FulfillmentInstance.fromJson(Map<String, dynamic> json) {
@@ -28493,7 +28512,7 @@ final class SummarizationQualityInput extends protobuf.ProtoMessage {
   /// Required. Summarization quality instance.
   final SummarizationQualityInstance? instance;
 
-  SummarizationQualityInput({this.metricSpec, this.instance})
+  SummarizationQualityInput({required this.metricSpec, required this.instance})
     : super(fullyQualifiedName);
 
   factory SummarizationQualityInput.fromJson(Map<String, dynamic> json) {
@@ -28533,10 +28552,10 @@ final class SummarizationQualityInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   SummarizationQualityInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
-    this.context,
-    this.instruction,
+    required this.context,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory SummarizationQualityInstance.fromJson(Map<String, dynamic> json) {
@@ -28669,8 +28688,10 @@ final class PairwiseSummarizationQualityInput extends protobuf.ProtoMessage {
   /// Required. Pairwise summarization quality instance.
   final PairwiseSummarizationQualityInstance? instance;
 
-  PairwiseSummarizationQualityInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  PairwiseSummarizationQualityInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory PairwiseSummarizationQualityInput.fromJson(
     Map<String, dynamic> json,
@@ -28720,11 +28741,11 @@ final class PairwiseSummarizationQualityInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   PairwiseSummarizationQualityInstance({
-    this.prediction,
-    this.baselinePrediction,
+    required this.prediction,
+    required this.baselinePrediction,
     this.reference,
-    this.context,
-    this.instruction,
+    required this.context,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory PairwiseSummarizationQualityInstance.fromJson(
@@ -28869,8 +28890,10 @@ final class SummarizationHelpfulnessInput extends protobuf.ProtoMessage {
   /// Required. Summarization helpfulness instance.
   final SummarizationHelpfulnessInstance? instance;
 
-  SummarizationHelpfulnessInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  SummarizationHelpfulnessInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory SummarizationHelpfulnessInput.fromJson(Map<String, dynamic> json) {
     return SummarizationHelpfulnessInput(
@@ -28915,9 +28938,9 @@ final class SummarizationHelpfulnessInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   SummarizationHelpfulnessInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
-    this.context,
+    required this.context,
     this.instruction,
   }) : super(fullyQualifiedName);
 
@@ -29051,8 +29074,10 @@ final class SummarizationVerbosityInput extends protobuf.ProtoMessage {
   /// Required. Summarization verbosity instance.
   final SummarizationVerbosityInstance? instance;
 
-  SummarizationVerbosityInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  SummarizationVerbosityInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory SummarizationVerbosityInput.fromJson(Map<String, dynamic> json) {
     return SummarizationVerbosityInput(
@@ -29097,9 +29122,9 @@ final class SummarizationVerbosityInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   SummarizationVerbosityInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
-    this.context,
+    required this.context,
     this.instruction,
   }) : super(fullyQualifiedName);
 
@@ -29233,8 +29258,10 @@ final class QuestionAnsweringQualityInput extends protobuf.ProtoMessage {
   /// Required. Question answering quality instance.
   final QuestionAnsweringQualityInstance? instance;
 
-  QuestionAnsweringQualityInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  QuestionAnsweringQualityInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringQualityInput.fromJson(Map<String, dynamic> json) {
     return QuestionAnsweringQualityInput(
@@ -29279,10 +29306,10 @@ final class QuestionAnsweringQualityInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   QuestionAnsweringQualityInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
-    this.context,
-    this.instruction,
+    required this.context,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringQualityInstance.fromJson(Map<String, dynamic> json) {
@@ -29416,8 +29443,10 @@ final class PairwiseQuestionAnsweringQualityInput
   /// Required. Pairwise question answering quality instance.
   final PairwiseQuestionAnsweringQualityInstance? instance;
 
-  PairwiseQuestionAnsweringQualityInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  PairwiseQuestionAnsweringQualityInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory PairwiseQuestionAnsweringQualityInput.fromJson(
     Map<String, dynamic> json,
@@ -29468,11 +29497,11 @@ final class PairwiseQuestionAnsweringQualityInstance
   final String? instruction;
 
   PairwiseQuestionAnsweringQualityInstance({
-    this.prediction,
-    this.baselinePrediction,
+    required this.prediction,
+    required this.baselinePrediction,
     this.reference,
-    this.context,
-    this.instruction,
+    required this.context,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory PairwiseQuestionAnsweringQualityInstance.fromJson(
@@ -29620,8 +29649,10 @@ final class QuestionAnsweringRelevanceInput extends protobuf.ProtoMessage {
   /// Required. Question answering relevance instance.
   final QuestionAnsweringRelevanceInstance? instance;
 
-  QuestionAnsweringRelevanceInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  QuestionAnsweringRelevanceInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringRelevanceInput.fromJson(Map<String, dynamic> json) {
     return QuestionAnsweringRelevanceInput(
@@ -29666,10 +29697,10 @@ final class QuestionAnsweringRelevanceInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   QuestionAnsweringRelevanceInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
     this.context,
-    this.instruction,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringRelevanceInstance.fromJson(
@@ -29804,8 +29835,10 @@ final class QuestionAnsweringHelpfulnessInput extends protobuf.ProtoMessage {
   /// Required. Question answering helpfulness instance.
   final QuestionAnsweringHelpfulnessInstance? instance;
 
-  QuestionAnsweringHelpfulnessInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  QuestionAnsweringHelpfulnessInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringHelpfulnessInput.fromJson(
     Map<String, dynamic> json,
@@ -29852,10 +29885,10 @@ final class QuestionAnsweringHelpfulnessInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   QuestionAnsweringHelpfulnessInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
     this.context,
-    this.instruction,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringHelpfulnessInstance.fromJson(
@@ -29994,8 +30027,10 @@ final class QuestionAnsweringCorrectnessInput extends protobuf.ProtoMessage {
   /// Required. Question answering correctness instance.
   final QuestionAnsweringCorrectnessInstance? instance;
 
-  QuestionAnsweringCorrectnessInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  QuestionAnsweringCorrectnessInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringCorrectnessInput.fromJson(
     Map<String, dynamic> json,
@@ -30042,10 +30077,10 @@ final class QuestionAnsweringCorrectnessInstance extends protobuf.ProtoMessage {
   final String? instruction;
 
   QuestionAnsweringCorrectnessInstance({
-    this.prediction,
+    required this.prediction,
     this.reference,
     this.context,
-    this.instruction,
+    required this.instruction,
   }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringCorrectnessInstance.fromJson(
@@ -30184,7 +30219,7 @@ final class PointwiseMetricInput extends protobuf.ProtoMessage {
   /// Required. Pointwise metric instance.
   final PointwiseMetricInstance? instance;
 
-  PointwiseMetricInput({this.metricSpec, this.instance})
+  PointwiseMetricInput({required this.metricSpec, required this.instance})
     : super(fullyQualifiedName);
 
   factory PointwiseMetricInput.fromJson(Map<String, dynamic> json) {
@@ -30274,7 +30309,7 @@ final class PointwiseMetricSpec extends protobuf.ProtoMessage {
   final CustomOutputFormatConfig? customOutputFormatConfig;
 
   PointwiseMetricSpec({
-    this.metricPromptTemplate,
+    required this.metricPromptTemplate,
     this.systemInstruction,
     this.customOutputFormatConfig,
   }) : super(fullyQualifiedName);
@@ -30443,7 +30478,7 @@ final class PairwiseMetricInput extends protobuf.ProtoMessage {
   /// Required. Pairwise metric instance.
   final PairwiseMetricInstance? instance;
 
-  PairwiseMetricInput({this.metricSpec, this.instance})
+  PairwiseMetricInput({required this.metricSpec, required this.instance})
     : super(fullyQualifiedName);
 
   factory PairwiseMetricInput.fromJson(Map<String, dynamic> json) {
@@ -30537,7 +30572,7 @@ final class PairwiseMetricSpec extends protobuf.ProtoMessage {
   final CustomOutputFormatConfig? customOutputFormatConfig;
 
   PairwiseMetricSpec({
-    this.metricPromptTemplate,
+    required this.metricPromptTemplate,
     this.candidateResponseFieldName = '',
     this.baselineResponseFieldName = '',
     this.systemInstruction,
@@ -30646,7 +30681,7 @@ final class ToolCallValidInput extends protobuf.ProtoMessage {
   /// Required. Repeated tool call valid instances.
   final List<ToolCallValidInstance> instances;
 
-  ToolCallValidInput({this.metricSpec, this.instances = const []})
+  ToolCallValidInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory ToolCallValidInput.fromJson(Map<String, dynamic> json) {
@@ -30704,7 +30739,7 @@ final class ToolCallValidInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  ToolCallValidInstance({this.prediction, this.reference})
+  ToolCallValidInstance({required this.prediction, required this.reference})
     : super(fullyQualifiedName);
 
   factory ToolCallValidInstance.fromJson(Map<String, dynamic> json) {
@@ -30803,7 +30838,7 @@ final class ToolNameMatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated tool name match instances.
   final List<ToolNameMatchInstance> instances;
 
-  ToolNameMatchInput({this.metricSpec, this.instances = const []})
+  ToolNameMatchInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory ToolNameMatchInput.fromJson(Map<String, dynamic> json) {
@@ -30861,7 +30896,7 @@ final class ToolNameMatchInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  ToolNameMatchInstance({this.prediction, this.reference})
+  ToolNameMatchInstance({required this.prediction, required this.reference})
     : super(fullyQualifiedName);
 
   factory ToolNameMatchInstance.fromJson(Map<String, dynamic> json) {
@@ -30960,8 +30995,10 @@ final class ToolParameterKeyMatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated tool parameter key match instances.
   final List<ToolParameterKeyMatchInstance> instances;
 
-  ToolParameterKeyMatchInput({this.metricSpec, this.instances = const []})
-    : super(fullyQualifiedName);
+  ToolParameterKeyMatchInput({
+    required this.metricSpec,
+    required this.instances,
+  }) : super(fullyQualifiedName);
 
   factory ToolParameterKeyMatchInput.fromJson(Map<String, dynamic> json) {
     return ToolParameterKeyMatchInput(
@@ -31021,8 +31058,10 @@ final class ToolParameterKeyMatchInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  ToolParameterKeyMatchInstance({this.prediction, this.reference})
-    : super(fullyQualifiedName);
+  ToolParameterKeyMatchInstance({
+    required this.prediction,
+    required this.reference,
+  }) : super(fullyQualifiedName);
 
   factory ToolParameterKeyMatchInstance.fromJson(Map<String, dynamic> json) {
     return ToolParameterKeyMatchInstance(
@@ -31124,7 +31163,7 @@ final class ToolParameterKvmatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated tool parameter key value match instances.
   final List<ToolParameterKvmatchInstance> instances;
 
-  ToolParameterKvmatchInput({this.metricSpec, this.instances = const []})
+  ToolParameterKvmatchInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory ToolParameterKvmatchInput.fromJson(Map<String, dynamic> json) {
@@ -31194,8 +31233,10 @@ final class ToolParameterKvmatchInstance extends protobuf.ProtoMessage {
   /// Required. Ground truth used to compare against the prediction.
   final String? reference;
 
-  ToolParameterKvmatchInstance({this.prediction, this.reference})
-    : super(fullyQualifiedName);
+  ToolParameterKvmatchInstance({
+    required this.prediction,
+    required this.reference,
+  }) : super(fullyQualifiedName);
 
   factory ToolParameterKvmatchInstance.fromJson(Map<String, dynamic> json) {
     return ToolParameterKvmatchInstance(
@@ -31296,7 +31337,8 @@ final class CometInput extends protobuf.ProtoMessage {
   /// Required. Comet instance.
   final CometInstance? instance;
 
-  CometInput({this.metricSpec, this.instance}) : super(fullyQualifiedName);
+  CometInput({required this.metricSpec, required this.instance})
+    : super(fullyQualifiedName);
 
   factory CometInput.fromJson(Map<String, dynamic> json) {
     return CometInput(
@@ -31332,8 +31374,11 @@ final class CometSpec extends protobuf.ProtoMessage {
   /// reference.
   final String targetLanguage;
 
-  CometSpec({this.version, this.sourceLanguage = '', this.targetLanguage = ''})
-    : super(fullyQualifiedName);
+  CometSpec({
+    required this.version,
+    this.sourceLanguage = '',
+    this.targetLanguage = '',
+  }) : super(fullyQualifiedName);
 
   factory CometSpec.fromJson(Map<String, dynamic> json) {
     return CometSpec(
@@ -31403,7 +31448,7 @@ final class CometInstance extends protobuf.ProtoMessage {
   /// Optional. Source text in original language.
   final String? source;
 
-  CometInstance({this.prediction, this.reference, this.source})
+  CometInstance({required this.prediction, this.reference, this.source})
     : super(fullyQualifiedName);
 
   factory CometInstance.fromJson(Map<String, dynamic> json) {
@@ -31472,7 +31517,8 @@ final class MetricxInput extends protobuf.ProtoMessage {
   /// Required. Metricx instance.
   final MetricxInstance? instance;
 
-  MetricxInput({this.metricSpec, this.instance}) : super(fullyQualifiedName);
+  MetricxInput({required this.metricSpec, required this.instance})
+    : super(fullyQualifiedName);
 
   factory MetricxInput.fromJson(Map<String, dynamic> json) {
     return MetricxInput(
@@ -31509,7 +31555,7 @@ final class MetricxSpec extends protobuf.ProtoMessage {
   final String targetLanguage;
 
   MetricxSpec({
-    this.version,
+    required this.version,
     this.sourceLanguage = '',
     this.targetLanguage = '',
   }) : super(fullyQualifiedName);
@@ -31590,7 +31636,7 @@ final class MetricxInstance extends protobuf.ProtoMessage {
   /// Optional. Source text in original language.
   final String? source;
 
-  MetricxInstance({this.prediction, this.reference, this.source})
+  MetricxInstance({required this.prediction, this.reference, this.source})
     : super(fullyQualifiedName);
 
   factory MetricxInstance.fromJson(Map<String, dynamic> json) {
@@ -31659,8 +31705,10 @@ final class RubricBasedInstructionFollowingInput extends protobuf.ProtoMessage {
   /// Required. Instance for RubricBasedInstructionFollowing metric.
   final RubricBasedInstructionFollowingInstance? instance;
 
-  RubricBasedInstructionFollowingInput({this.metricSpec, this.instance})
-    : super(fullyQualifiedName);
+  RubricBasedInstructionFollowingInput({
+    required this.metricSpec,
+    required this.instance,
+  }) : super(fullyQualifiedName);
 
   factory RubricBasedInstructionFollowingInput.fromJson(
     Map<String, dynamic> json,
@@ -31701,7 +31749,7 @@ final class RubricBasedInstructionFollowingInstance
   /// prompt templates.
   final String? jsonInstance;
 
-  RubricBasedInstructionFollowingInstance({this.jsonInstance})
+  RubricBasedInstructionFollowingInstance({required this.jsonInstance})
     : super(fullyQualifiedName);
 
   factory RubricBasedInstructionFollowingInstance.fromJson(
@@ -31844,7 +31892,7 @@ final class TrajectoryExactMatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated TrajectoryExactMatch instance.
   final List<TrajectoryExactMatchInstance> instances;
 
-  TrajectoryExactMatchInput({this.metricSpec, this.instances = const []})
+  TrajectoryExactMatchInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory TrajectoryExactMatchInput.fromJson(Map<String, dynamic> json) {
@@ -31904,8 +31952,8 @@ final class TrajectoryExactMatchInstance extends protobuf.ProtoMessage {
   final Trajectory? referenceTrajectory;
 
   TrajectoryExactMatchInstance({
-    this.predictedTrajectory,
-    this.referenceTrajectory,
+    required this.predictedTrajectory,
+    required this.referenceTrajectory,
   }) : super(fullyQualifiedName);
 
   factory TrajectoryExactMatchInstance.fromJson(Map<String, dynamic> json) {
@@ -32009,8 +32057,10 @@ final class TrajectoryInOrderMatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated TrajectoryInOrderMatch instance.
   final List<TrajectoryInOrderMatchInstance> instances;
 
-  TrajectoryInOrderMatchInput({this.metricSpec, this.instances = const []})
-    : super(fullyQualifiedName);
+  TrajectoryInOrderMatchInput({
+    required this.metricSpec,
+    required this.instances,
+  }) : super(fullyQualifiedName);
 
   factory TrajectoryInOrderMatchInput.fromJson(Map<String, dynamic> json) {
     return TrajectoryInOrderMatchInput(
@@ -32073,8 +32123,8 @@ final class TrajectoryInOrderMatchInstance extends protobuf.ProtoMessage {
   final Trajectory? referenceTrajectory;
 
   TrajectoryInOrderMatchInstance({
-    this.predictedTrajectory,
-    this.referenceTrajectory,
+    required this.predictedTrajectory,
+    required this.referenceTrajectory,
   }) : super(fullyQualifiedName);
 
   factory TrajectoryInOrderMatchInstance.fromJson(Map<String, dynamic> json) {
@@ -32183,8 +32233,10 @@ final class TrajectoryAnyOrderMatchInput extends protobuf.ProtoMessage {
   /// Required. Repeated TrajectoryAnyOrderMatch instance.
   final List<TrajectoryAnyOrderMatchInstance> instances;
 
-  TrajectoryAnyOrderMatchInput({this.metricSpec, this.instances = const []})
-    : super(fullyQualifiedName);
+  TrajectoryAnyOrderMatchInput({
+    required this.metricSpec,
+    required this.instances,
+  }) : super(fullyQualifiedName);
 
   factory TrajectoryAnyOrderMatchInput.fromJson(Map<String, dynamic> json) {
     return TrajectoryAnyOrderMatchInput(
@@ -32247,8 +32299,8 @@ final class TrajectoryAnyOrderMatchInstance extends protobuf.ProtoMessage {
   final Trajectory? referenceTrajectory;
 
   TrajectoryAnyOrderMatchInstance({
-    this.predictedTrajectory,
-    this.referenceTrajectory,
+    required this.predictedTrajectory,
+    required this.referenceTrajectory,
   }) : super(fullyQualifiedName);
 
   factory TrajectoryAnyOrderMatchInstance.fromJson(Map<String, dynamic> json) {
@@ -32357,7 +32409,7 @@ final class TrajectoryPrecisionInput extends protobuf.ProtoMessage {
   /// Required. Repeated TrajectoryPrecision instance.
   final List<TrajectoryPrecisionInstance> instances;
 
-  TrajectoryPrecisionInput({this.metricSpec, this.instances = const []})
+  TrajectoryPrecisionInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory TrajectoryPrecisionInput.fromJson(Map<String, dynamic> json) {
@@ -32417,8 +32469,8 @@ final class TrajectoryPrecisionInstance extends protobuf.ProtoMessage {
   final Trajectory? referenceTrajectory;
 
   TrajectoryPrecisionInstance({
-    this.predictedTrajectory,
-    this.referenceTrajectory,
+    required this.predictedTrajectory,
+    required this.referenceTrajectory,
   }) : super(fullyQualifiedName);
 
   factory TrajectoryPrecisionInstance.fromJson(Map<String, dynamic> json) {
@@ -32521,7 +32573,7 @@ final class TrajectoryRecallInput extends protobuf.ProtoMessage {
   /// Required. Repeated TrajectoryRecall instance.
   final List<TrajectoryRecallInstance> instances;
 
-  TrajectoryRecallInput({this.metricSpec, this.instances = const []})
+  TrajectoryRecallInput({required this.metricSpec, required this.instances})
     : super(fullyQualifiedName);
 
   factory TrajectoryRecallInput.fromJson(Map<String, dynamic> json) {
@@ -32580,8 +32632,10 @@ final class TrajectoryRecallInstance extends protobuf.ProtoMessage {
   /// Required. Spec for reference tool call trajectory.
   final Trajectory? referenceTrajectory;
 
-  TrajectoryRecallInstance({this.predictedTrajectory, this.referenceTrajectory})
-    : super(fullyQualifiedName);
+  TrajectoryRecallInstance({
+    required this.predictedTrajectory,
+    required this.referenceTrajectory,
+  }) : super(fullyQualifiedName);
 
   factory TrajectoryRecallInstance.fromJson(Map<String, dynamic> json) {
     return TrajectoryRecallInstance(
@@ -32683,8 +32737,10 @@ final class TrajectorySingleToolUseInput extends protobuf.ProtoMessage {
   /// Required. Repeated TrajectorySingleToolUse instance.
   final List<TrajectorySingleToolUseInstance> instances;
 
-  TrajectorySingleToolUseInput({this.metricSpec, this.instances = const []})
-    : super(fullyQualifiedName);
+  TrajectorySingleToolUseInput({
+    required this.metricSpec,
+    required this.instances,
+  }) : super(fullyQualifiedName);
 
   factory TrajectorySingleToolUseInput.fromJson(Map<String, dynamic> json) {
     return TrajectorySingleToolUseInput(
@@ -32722,7 +32778,8 @@ final class TrajectorySingleToolUseSpec extends protobuf.ProtoMessage {
   /// Required. Spec for tool name to be checked for in the predicted trajectory.
   final String? toolName;
 
-  TrajectorySingleToolUseSpec({this.toolName}) : super(fullyQualifiedName);
+  TrajectorySingleToolUseSpec({required this.toolName})
+    : super(fullyQualifiedName);
 
   factory TrajectorySingleToolUseSpec.fromJson(Map<String, dynamic> json) {
     return TrajectorySingleToolUseSpec(toolName: json['toolName']);
@@ -32748,7 +32805,7 @@ final class TrajectorySingleToolUseInstance extends protobuf.ProtoMessage {
   /// Required. Spec for predicted tool call trajectory.
   final Trajectory? predictedTrajectory;
 
-  TrajectorySingleToolUseInstance({this.predictedTrajectory})
+  TrajectorySingleToolUseInstance({required this.predictedTrajectory})
     : super(fullyQualifiedName);
 
   factory TrajectorySingleToolUseInstance.fromJson(Map<String, dynamic> json) {
@@ -32848,7 +32905,7 @@ final class Trajectory extends protobuf.ProtoMessage {
   /// Required. Tool calls in the trajectory.
   final List<ToolCall> toolCalls;
 
-  Trajectory({this.toolCalls = const []}) : super(fullyQualifiedName);
+  Trajectory({required this.toolCalls}) : super(fullyQualifiedName);
 
   factory Trajectory.fromJson(Map<String, dynamic> json) {
     return Trajectory(
@@ -32876,7 +32933,8 @@ final class ToolCall extends protobuf.ProtoMessage {
   /// Optional. Spec for tool input
   final String? toolInput;
 
-  ToolCall({this.toolName, this.toolInput}) : super(fullyQualifiedName);
+  ToolCall({required this.toolName, this.toolInput})
+    : super(fullyQualifiedName);
 
   factory ToolCall.fromJson(Map<String, dynamic> json) {
     return ToolCall(toolName: json['toolName'], toolInput: json['toolInput']);
@@ -32983,10 +33041,10 @@ final class Event extends protobuf.ProtoMessage {
   final Map<String, String> labels;
 
   Event({
-    this.artifact = '',
+    required this.artifact,
     this.execution = '',
     this.eventTime,
-    this.type = Event_Type.$default,
+    required this.type,
     this.labels = const {},
   }) : super(fullyQualifiedName);
 
@@ -33061,7 +33119,7 @@ final class ContentsExample extends protobuf.ProtoMessage {
   /// steps of the expected output.
   final List<ContentsExample_ExpectedContent> expectedContents;
 
-  ContentsExample({this.contents = const [], this.expectedContents = const []})
+  ContentsExample({required this.contents, required this.expectedContents})
     : super(fullyQualifiedName);
 
   factory ContentsExample.fromJson(Map<String, dynamic> json) {
@@ -33097,7 +33155,8 @@ final class ContentsExample_ExpectedContent extends protobuf.ProtoMessage {
   /// Required. A single step's content.
   final Content? content;
 
-  ContentsExample_ExpectedContent({this.content}) : super(fullyQualifiedName);
+  ContentsExample_ExpectedContent({required this.content})
+    : super(fullyQualifiedName);
 
   factory ContentsExample_ExpectedContent.fromJson(Map<String, dynamic> json) {
     return ContentsExample_ExpectedContent(
@@ -33138,7 +33197,7 @@ final class StoredContentsExample extends protobuf.ProtoMessage {
 
   StoredContentsExample({
     this.searchKey = '',
-    this.contentsExample,
+    required this.contentsExample,
     this.searchKeyGenerationMethod,
   }) : super(fullyQualifiedName);
 
@@ -33258,11 +33317,11 @@ final class ExampleStore extends protobuf.ProtoMessage {
 
   ExampleStore({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.createTime,
     this.updateTime,
-    this.exampleStoreConfig,
+    required this.exampleStoreConfig,
   }) : super(fullyQualifiedName);
 
   factory ExampleStore.fromJson(Map<String, dynamic> json) {
@@ -33317,7 +33376,7 @@ final class ExampleStoreConfig extends protobuf.ProtoMessage {
   /// * "text-multilingual-embedding-002"
   final String vertexEmbeddingModel;
 
-  ExampleStoreConfig({this.vertexEmbeddingModel = ''})
+  ExampleStoreConfig({required this.vertexEmbeddingModel})
     : super(fullyQualifiedName);
 
   factory ExampleStoreConfig.fromJson(Map<String, dynamic> json) {
@@ -33448,8 +33507,8 @@ final class StoredContentsExampleParameters_ContentSearchKey
   searchKeyGenerationMethod;
 
   StoredContentsExampleParameters_ContentSearchKey({
-    this.contents = const [],
-    this.searchKeyGenerationMethod,
+    required this.contents,
+    required this.searchKeyGenerationMethod,
   }) : super(fullyQualifiedName);
 
   factory StoredContentsExampleParameters_ContentSearchKey.fromJson(
@@ -33489,10 +33548,8 @@ final class ExamplesArrayFilter extends protobuf.ProtoMessage {
   /// Required. The operator logic to use for filtering.
   final ExamplesArrayFilter_ArrayOperator arrayOperator;
 
-  ExamplesArrayFilter({
-    this.values = const [],
-    this.arrayOperator = ExamplesArrayFilter_ArrayOperator.$default,
-  }) : super(fullyQualifiedName);
+  ExamplesArrayFilter({required this.values, required this.arrayOperator})
+    : super(fullyQualifiedName);
 
   factory ExamplesArrayFilter.fromJson(Map<String, dynamic> json) {
     return ExamplesArrayFilter(
@@ -33563,7 +33620,7 @@ final class CreateExampleStoreRequest extends protobuf.ProtoMessage {
   /// Required. The Example Store to be created.
   final ExampleStore? exampleStore;
 
-  CreateExampleStoreRequest({this.parent = '', this.exampleStore})
+  CreateExampleStoreRequest({required this.parent, required this.exampleStore})
     : super(fullyQualifiedName);
 
   factory CreateExampleStoreRequest.fromJson(Map<String, dynamic> json) {
@@ -33634,7 +33691,7 @@ final class GetExampleStoreRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/exampleStores/{example_store}`
   final String name;
 
-  GetExampleStoreRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetExampleStoreRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetExampleStoreRequest.fromJson(Map<String, dynamic> json) {
     return GetExampleStoreRequest(name: json['name'] ?? '');
@@ -33668,7 +33725,7 @@ final class UpdateExampleStoreRequest extends protobuf.ProtoMessage {
   ///    * `description`
   final protobuf.FieldMask? updateMask;
 
-  UpdateExampleStoreRequest({this.exampleStore, this.updateMask})
+  UpdateExampleStoreRequest({required this.exampleStore, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateExampleStoreRequest.fromJson(Map<String, dynamic> json) {
@@ -33736,7 +33793,7 @@ final class DeleteExampleStoreRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/exampleStores/{example_store}`
   final String name;
 
-  DeleteExampleStoreRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteExampleStoreRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteExampleStoreRequest.fromJson(Map<String, dynamic> json) {
     return DeleteExampleStoreRequest(name: json['name'] ?? '');
@@ -33811,7 +33868,7 @@ final class ListExampleStoresRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListExampleStoresRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -33972,8 +34029,8 @@ final class UpsertExamplesRequest extends protobuf.ProtoMessage {
   final bool overwrite;
 
   UpsertExamplesRequest({
-    this.exampleStore = '',
-    this.examples = const [],
+    required this.exampleStore,
+    required this.examples,
     this.overwrite = false,
   }) : super(fullyQualifiedName);
 
@@ -34093,7 +34150,7 @@ final class RemoveExamplesRequest extends protobuf.ProtoMessage {
 
   RemoveExamplesRequest({
     this.storedContentsExampleFilter,
-    this.exampleStore = '',
+    required this.exampleStore,
     this.exampleIds = const [],
   }) : super(fullyQualifiedName);
 
@@ -34171,7 +34228,7 @@ final class SearchExamplesRequest extends protobuf.ProtoMessage {
 
   SearchExamplesRequest({
     this.storedContentsExampleParameters,
-    this.exampleStore = '',
+    required this.exampleStore,
     this.topK = 0,
   }) : super(fullyQualifiedName);
 
@@ -34308,7 +34365,7 @@ final class FetchExamplesRequest extends protobuf.ProtoMessage {
 
   FetchExamplesRequest({
     this.storedContentsExampleFilter,
-    this.exampleStore = '',
+    required this.exampleStore,
     this.pageSize = 0,
     this.pageToken = '',
     this.exampleIds = const [],
@@ -34884,7 +34941,8 @@ final class ExplanationSpec extends protobuf.ProtoMessage {
   /// Optional. Metadata describing the Model's input and output for explanation.
   final ExplanationMetadata? metadata;
 
-  ExplanationSpec({this.parameters, this.metadata}) : super(fullyQualifiedName);
+  ExplanationSpec({required this.parameters, this.metadata})
+    : super(fullyQualifiedName);
 
   factory ExplanationSpec.fromJson(Map<String, dynamic> json) {
     return ExplanationSpec(
@@ -35023,7 +35081,8 @@ final class SampledShapleyAttribution extends protobuf.ProtoMessage {
   /// Valid range of its value is [1, 50], inclusively.
   final int pathCount;
 
-  SampledShapleyAttribution({this.pathCount = 0}) : super(fullyQualifiedName);
+  SampledShapleyAttribution({required this.pathCount})
+    : super(fullyQualifiedName);
 
   factory SampledShapleyAttribution.fromJson(Map<String, dynamic> json) {
     return SampledShapleyAttribution(pathCount: json['pathCount'] ?? 0);
@@ -35072,7 +35131,7 @@ final class IntegratedGradientsAttribution extends protobuf.ProtoMessage {
   final BlurBaselineConfig? blurBaselineConfig;
 
   IntegratedGradientsAttribution({
-    this.stepCount = 0,
+    required this.stepCount,
     this.smoothGradConfig,
     this.blurBaselineConfig,
   }) : super(fullyQualifiedName);
@@ -35143,7 +35202,7 @@ final class XraiAttribution extends protobuf.ProtoMessage {
   final BlurBaselineConfig? blurBaselineConfig;
 
   XraiAttribution({
-    this.stepCount = 0,
+    required this.stepCount,
     this.smoothGradConfig,
     this.blurBaselineConfig,
   }) : super(fullyQualifiedName);
@@ -35670,7 +35729,7 @@ final class ExplanationMetadataOverride extends protobuf.ProtoMessage {
   /// is not overridden.
   final Map<String, ExplanationMetadataOverride_InputMetadataOverride> inputs;
 
-  ExplanationMetadataOverride({this.inputs = const {}})
+  ExplanationMetadataOverride({required this.inputs})
     : super(fullyQualifiedName);
 
   factory ExplanationMetadataOverride.fromJson(Map<String, dynamic> json) {
@@ -35928,8 +35987,8 @@ final class ExplanationMetadata extends protobuf.ProtoMessage {
   final String latentSpaceSource;
 
   ExplanationMetadata({
-    this.inputs = const {},
-    this.outputs = const {},
+    required this.inputs,
+    required this.outputs,
     this.featureAttributionsSchemaUri = '',
     this.latentSpaceSource = '',
   }) : super(fullyQualifiedName);
@@ -36751,12 +36810,12 @@ final class Extension extends protobuf.ProtoMessage {
 
   Extension({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.createTime,
     this.updateTime,
     this.etag = '',
-    this.manifest,
+    required this.manifest,
     this.extensionOperations = const [],
     this.runtimeConfig,
     this.toolUseExamples = const [],
@@ -36843,10 +36902,10 @@ final class ExtensionManifest extends protobuf.ProtoMessage {
   final AuthConfig? authConfig;
 
   ExtensionManifest({
-    this.name = '',
-    this.description = '',
-    this.apiSpec,
-    this.authConfig,
+    required this.name,
+    required this.description,
+    required this.apiSpec,
+    required this.authConfig,
   }) : super(fullyQualifiedName);
 
   factory ExtensionManifest.fromJson(Map<String, dynamic> json) {
@@ -37057,9 +37116,9 @@ final class AuthConfig_ApiKeyConfig extends protobuf.ProtoMessage {
   final HttpElementLocation httpElementLocation;
 
   AuthConfig_ApiKeyConfig({
-    this.name = '',
-    this.apiKeySecret = '',
-    this.httpElementLocation = HttpElementLocation.$default,
+    required this.name,
+    required this.apiKeySecret,
+    required this.httpElementLocation,
   }) : super(fullyQualifiedName);
 
   factory AuthConfig_ApiKeyConfig.fromJson(Map<String, dynamic> json) {
@@ -37111,7 +37170,7 @@ final class AuthConfig_HttpBasicAuthConfig extends protobuf.ProtoMessage {
   /// on the specified resource.
   final String credentialSecret;
 
-  AuthConfig_HttpBasicAuthConfig({this.credentialSecret = ''})
+  AuthConfig_HttpBasicAuthConfig({required this.credentialSecret})
     : super(fullyQualifiedName);
 
   factory AuthConfig_HttpBasicAuthConfig.fromJson(Map<String, dynamic> json) {
@@ -37453,7 +37512,7 @@ final class ExtensionPrivateServiceConnectConfig extends protobuf.ProtoMessage {
   /// `servicedirectory.pscAuthorizedService` roles on the resource.
   final String serviceDirectory;
 
-  ExtensionPrivateServiceConnectConfig({this.serviceDirectory = ''})
+  ExtensionPrivateServiceConnectConfig({required this.serviceDirectory})
     : super(fullyQualifiedName);
 
   factory ExtensionPrivateServiceConnectConfig.fromJson(
@@ -37510,8 +37569,8 @@ final class ExecuteExtensionRequest extends protobuf.ProtoMessage {
   final AuthConfig? runtimeAuthConfig;
 
   ExecuteExtensionRequest({
-    this.name = '',
-    this.operationId = '',
+    required this.name,
+    required this.operationId,
     this.operationParams,
     this.runtimeAuthConfig,
   }) : super(fullyQualifiedName);
@@ -37592,7 +37651,7 @@ final class QueryExtensionRequest extends protobuf.ProtoMessage {
   /// request.
   final List<Content> contents;
 
-  QueryExtensionRequest({this.name = '', this.contents = const []})
+  QueryExtensionRequest({required this.name, required this.contents})
     : super(fullyQualifiedName);
 
   factory QueryExtensionRequest.fromJson(Map<String, dynamic> json) {
@@ -37669,7 +37728,7 @@ final class ImportExtensionRequest extends protobuf.ProtoMessage {
   /// Required. The Extension to import.
   final Extension? extension;
 
-  ImportExtensionRequest({this.parent = '', this.extension})
+  ImportExtensionRequest({required this.parent, required this.extension})
     : super(fullyQualifiedName);
 
   factory ImportExtensionRequest.fromJson(Map<String, dynamic> json) {
@@ -37738,7 +37797,7 @@ final class GetExtensionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/extensions/{extension}`
   final String name;
 
-  GetExtensionRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetExtensionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetExtensionRequest.fromJson(Map<String, dynamic> json) {
     return GetExtensionRequest(name: json['name'] ?? '');
@@ -37775,7 +37834,7 @@ final class UpdateExtensionRequest extends protobuf.ProtoMessage {
   ///    * `manifest.description`
   final protobuf.FieldMask? updateMask;
 
-  UpdateExtensionRequest({this.extension, this.updateMask})
+  UpdateExtensionRequest({required this.extension, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateExtensionRequest.fromJson(Map<String, dynamic> json) {
@@ -37832,7 +37891,7 @@ final class ListExtensionsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListExtensionsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -37925,7 +37984,7 @@ final class DeleteExtensionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/extensions/{extension}`
   final String name;
 
-  DeleteExtensionRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteExtensionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteExtensionRequest.fromJson(Map<String, dynamic> json) {
     return DeleteExtensionRequest(name: json['name'] ?? '');
@@ -38433,7 +38492,7 @@ final class FeatureGroup_BigQuery extends protobuf.ProtoMessage {
   final bool dense;
 
   FeatureGroup_BigQuery({
-    this.bigQuerySource,
+    required this.bigQuerySource,
     this.entityIdColumns = const [],
     this.staticDataSource = false,
     this.timeSeries,
@@ -38590,8 +38649,8 @@ final class FeatureMonitor extends protobuf.ProtoMessage {
     this.etag = '',
     this.labels = const {},
     this.description = '',
-    this.scheduleConfig,
-    this.featureSelectionConfig,
+    required this.scheduleConfig,
+    required this.featureSelectionConfig,
   }) : super(fullyQualifiedName);
 
   factory FeatureMonitor.fromJson(Map<String, dynamic> json) {
@@ -38717,7 +38776,7 @@ final class FeatureSelectionConfig_FeatureConfig extends protobuf.ProtoMessage {
   final double driftThreshold;
 
   FeatureSelectionConfig_FeatureConfig({
-    this.featureId = '',
+    required this.featureId,
     this.driftThreshold = 0,
   }) : super(fullyQualifiedName);
 
@@ -39364,7 +39423,7 @@ final class FeatureOnlineStore_Bigtable extends protobuf.ProtoMessage {
   final FeatureOnlineStore_Bigtable_BigtableMetadata? bigtableMetadata;
 
   FeatureOnlineStore_Bigtable({
-    this.autoScaling,
+    required this.autoScaling,
     this.enableDirectBigtableAccess = false,
     this.bigtableMetadata,
   }) : super(fullyQualifiedName);
@@ -39425,8 +39484,8 @@ final class FeatureOnlineStore_Bigtable_AutoScaling
   final int cpuUtilizationTarget;
 
   FeatureOnlineStore_Bigtable_AutoScaling({
-    this.minNodeCount = 0,
-    this.maxNodeCount = 0,
+    required this.minNodeCount,
+    required this.maxNodeCount,
     this.cpuUtilizationTarget = 0,
   }) : super(fullyQualifiedName);
 
@@ -39688,9 +39747,9 @@ final class CreateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
   final String featureOnlineStoreId;
 
   CreateFeatureOnlineStoreRequest({
-    this.parent = '',
-    this.featureOnlineStore,
-    this.featureOnlineStoreId = '',
+    required this.parent,
+    required this.featureOnlineStore,
+    required this.featureOnlineStoreId,
   }) : super(fullyQualifiedName);
 
   factory CreateFeatureOnlineStoreRequest.fromJson(Map<String, dynamic> json) {
@@ -39734,7 +39793,8 @@ final class GetFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
   /// Required. The name of the FeatureOnlineStore resource.
   final String name;
 
-  GetFeatureOnlineStoreRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeatureOnlineStoreRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetFeatureOnlineStoreRequest.fromJson(Map<String, dynamic> json) {
     return GetFeatureOnlineStoreRequest(name: json['name'] ?? '');
@@ -39806,7 +39866,7 @@ final class ListFeatureOnlineStoresRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListFeatureOnlineStoresRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -39923,8 +39983,10 @@ final class UpdateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
   ///   * `bigtable.enable_multi_region_replica`
   final protobuf.FieldMask? updateMask;
 
-  UpdateFeatureOnlineStoreRequest({this.featureOnlineStore, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdateFeatureOnlineStoreRequest({
+    required this.featureOnlineStore,
+    this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdateFeatureOnlineStoreRequest.fromJson(Map<String, dynamic> json) {
     return UpdateFeatureOnlineStoreRequest(
@@ -39965,7 +40027,7 @@ final class DeleteFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
   /// FeatureOnlineStore has no FeatureViews.)
   final bool force;
 
-  DeleteFeatureOnlineStoreRequest({this.name = '', this.force = false})
+  DeleteFeatureOnlineStoreRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteFeatureOnlineStoreRequest.fromJson(Map<String, dynamic> json) {
@@ -40020,9 +40082,9 @@ final class CreateFeatureViewRequest extends protobuf.ProtoMessage {
   final bool runSyncImmediately;
 
   CreateFeatureViewRequest({
-    this.parent = '',
-    this.featureView,
-    this.featureViewId = '',
+    required this.parent,
+    required this.featureView,
+    required this.featureViewId,
     this.runSyncImmediately = false,
   }) : super(fullyQualifiedName);
 
@@ -40068,7 +40130,7 @@ final class GetFeatureViewRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{feature_online_store}/featureViews/{feature_view}`
   final String name;
 
-  GetFeatureViewRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeatureViewRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFeatureViewRequest.fromJson(Map<String, dynamic> json) {
     return GetFeatureViewRequest(name: json['name'] ?? '');
@@ -40143,7 +40205,7 @@ final class ListFeatureViewsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListFeatureViewsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -40259,7 +40321,7 @@ final class UpdateFeatureViewRequest extends protobuf.ProtoMessage {
   ///   * `sync_config.cron`
   final protobuf.FieldMask? updateMask;
 
-  UpdateFeatureViewRequest({this.featureView, this.updateMask})
+  UpdateFeatureViewRequest({required this.featureView, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateFeatureViewRequest.fromJson(Map<String, dynamic> json) {
@@ -40291,7 +40353,7 @@ final class DeleteFeatureViewRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{feature_online_store}/featureViews/{feature_view}`
   final String name;
 
-  DeleteFeatureViewRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteFeatureViewRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFeatureViewRequest.fromJson(Map<String, dynamic> json) {
     return DeleteFeatureViewRequest(name: json['name'] ?? '');
@@ -40453,7 +40515,8 @@ final class SyncFeatureViewRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{feature_online_store}/featureViews/{feature_view}`
   final String featureView;
 
-  SyncFeatureViewRequest({this.featureView = ''}) : super(fullyQualifiedName);
+  SyncFeatureViewRequest({required this.featureView})
+    : super(fullyQualifiedName);
 
   factory SyncFeatureViewRequest.fromJson(Map<String, dynamic> json) {
     return SyncFeatureViewRequest(featureView: json['featureView'] ?? '');
@@ -40515,7 +40578,7 @@ final class GetFeatureViewSyncRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{feature_online_store}/featureViews/{feature_view}/featureViewSyncs/{feature_view_sync}`
   final String name;
 
-  GetFeatureViewSyncRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeatureViewSyncRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFeatureViewSyncRequest.fromJson(Map<String, dynamic> json) {
     return GetFeatureViewSyncRequest(name: json['name'] ?? '');
@@ -40580,7 +40643,7 @@ final class ListFeatureViewSyncsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListFeatureViewSyncsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -40765,7 +40828,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
 
   FetchFeatureValuesRequest({
     this.id,
-    this.featureView = '',
+    required this.featureView,
     this.dataKey,
     this.dataFormat = FeatureViewDataFormat.$default,
     this.format = FetchFeatureValuesRequest_Format.$default,
@@ -40982,7 +41045,7 @@ final class StreamingFetchFeatureValuesRequest extends protobuf.ProtoMessage {
   final FeatureViewDataFormat dataFormat;
 
   StreamingFetchFeatureValuesRequest({
-    this.featureView = '',
+    required this.featureView,
     this.dataKeys = const [],
     this.dataFormat = FeatureViewDataFormat.$default,
   }) : super(fullyQualifiedName);
@@ -41226,7 +41289,7 @@ final class NearestNeighborQuery_StringFilter extends protobuf.ProtoMessage {
   final List<String> denyTokens;
 
   NearestNeighborQuery_StringFilter({
-    this.name = '',
+    required this.name,
     this.allowTokens = const [],
     this.denyTokens = const [],
   }) : super(fullyQualifiedName);
@@ -41289,7 +41352,7 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
     this.valueInt,
     this.valueFloat,
     this.valueDouble,
-    this.name = '',
+    required this.name,
     this.op,
   }) : super(fullyQualifiedName);
 
@@ -41448,8 +41511,8 @@ final class SearchNearestEntitiesRequest extends protobuf.ProtoMessage {
   final bool returnFullEntity;
 
   SearchNearestEntitiesRequest({
-    this.featureView = '',
-    this.query,
+    required this.featureView,
+    required this.query,
     this.returnFullEntity = false,
   }) : super(fullyQualifiedName);
 
@@ -41609,7 +41672,7 @@ final class FeatureViewDirectWriteRequest extends protobuf.ProtoMessage {
 
   FeatureViewDirectWriteRequest({
     this.featureView = '',
-    this.dataKeyAndFeatureValues = const [],
+    required this.dataKeyAndFeatureValues,
   }) : super(fullyQualifiedName);
 
   factory FeatureViewDirectWriteRequest.fromJson(Map<String, dynamic> json) {
@@ -41968,9 +42031,9 @@ final class CreateFeatureGroupRequest extends protobuf.ProtoMessage {
   final String featureGroupId;
 
   CreateFeatureGroupRequest({
-    this.parent = '',
-    this.featureGroup,
-    this.featureGroupId = '',
+    required this.parent,
+    required this.featureGroup,
+    required this.featureGroupId,
   }) : super(fullyQualifiedName);
 
   factory CreateFeatureGroupRequest.fromJson(Map<String, dynamic> json) {
@@ -42009,7 +42072,7 @@ final class GetFeatureGroupRequest extends protobuf.ProtoMessage {
   /// Required. The name of the FeatureGroup resource.
   final String name;
 
-  GetFeatureGroupRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeatureGroupRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFeatureGroupRequest.fromJson(Map<String, dynamic> json) {
     return GetFeatureGroupRequest(name: json['name'] ?? '');
@@ -42081,7 +42144,7 @@ final class ListFeatureGroupsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListFeatureGroupsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -42193,7 +42256,7 @@ final class UpdateFeatureGroupRequest extends protobuf.ProtoMessage {
   ///   * `big_query.entity_id_columns`
   final protobuf.FieldMask? updateMask;
 
-  UpdateFeatureGroupRequest({this.featureGroup, this.updateMask})
+  UpdateFeatureGroupRequest({required this.featureGroup, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateFeatureGroupRequest.fromJson(Map<String, dynamic> json) {
@@ -42231,7 +42294,7 @@ final class DeleteFeatureGroupRequest extends protobuf.ProtoMessage {
   /// FeatureGroup has no Features.)
   final bool force;
 
-  DeleteFeatureGroupRequest({this.name = '', this.force = false})
+  DeleteFeatureGroupRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteFeatureGroupRequest.fromJson(Map<String, dynamic> json) {
@@ -42280,9 +42343,9 @@ final class CreateFeatureMonitorRequest extends protobuf.ProtoMessage {
   final String featureMonitorId;
 
   CreateFeatureMonitorRequest({
-    this.parent = '',
-    this.featureMonitor,
-    this.featureMonitorId = '',
+    required this.parent,
+    required this.featureMonitor,
+    required this.featureMonitorId,
   }) : super(fullyQualifiedName);
 
   factory CreateFeatureMonitorRequest.fromJson(Map<String, dynamic> json) {
@@ -42321,7 +42384,7 @@ final class GetFeatureMonitorRequest extends protobuf.ProtoMessage {
   /// Required. The name of the FeatureMonitor resource.
   final String name;
 
-  GetFeatureMonitorRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeatureMonitorRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFeatureMonitorRequest.fromJson(Map<String, dynamic> json) {
     return GetFeatureMonitorRequest(name: json['name'] ?? '');
@@ -42392,7 +42455,7 @@ final class ListFeatureMonitorsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListFeatureMonitorsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -42457,7 +42520,7 @@ final class UpdateFeatureMonitorRequest extends protobuf.ProtoMessage {
   ///   * `labels`
   final protobuf.FieldMask? updateMask;
 
-  UpdateFeatureMonitorRequest({this.featureMonitor, this.updateMask})
+  UpdateFeatureMonitorRequest({required this.featureMonitor, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateFeatureMonitorRequest.fromJson(Map<String, dynamic> json) {
@@ -42490,7 +42553,7 @@ final class DeleteFeatureMonitorRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureGroups/{feature_group}/featureMonitors/{feature_monitor}`
   final String name;
 
-  DeleteFeatureMonitorRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteFeatureMonitorRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFeatureMonitorRequest.fromJson(Map<String, dynamic> json) {
     return DeleteFeatureMonitorRequest(name: json['name'] ?? '');
@@ -42770,8 +42833,8 @@ final class CreateFeatureMonitorJobRequest extends protobuf.ProtoMessage {
   final int featureMonitorJobId;
 
   CreateFeatureMonitorJobRequest({
-    this.parent = '',
-    this.featureMonitorJob,
+    required this.parent,
+    required this.featureMonitorJob,
     this.featureMonitorJobId = 0,
   }) : super(fullyQualifiedName);
 
@@ -42818,7 +42881,7 @@ final class GetFeatureMonitorJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureGroups/{feature_group}/featureMonitors/{feature_monitor}/featureMonitorJobs/{feature_monitor_job}`
   final String name;
 
-  GetFeatureMonitorJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeatureMonitorJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFeatureMonitorJobRequest.fromJson(Map<String, dynamic> json) {
     return GetFeatureMonitorJobRequest(name: json['name'] ?? '');
@@ -42881,7 +42944,7 @@ final class ListFeatureMonitorJobsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListFeatureMonitorJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -42983,7 +43046,7 @@ final class IdMatcher extends protobuf.ProtoMessage {
   ///  those IDs in the target EntityType.
   final List<String> ids;
 
-  IdMatcher({this.ids = const []}) : super(fullyQualifiedName);
+  IdMatcher({required this.ids}) : super(fullyQualifiedName);
 
   factory IdMatcher.fromJson(Map<String, dynamic> json) {
     return IdMatcher(ids: decodeList(json['ids']) ?? []);
@@ -43006,7 +43069,7 @@ final class FeatureSelector extends protobuf.ProtoMessage {
   /// Required. Matches Features based on ID.
   final IdMatcher? idMatcher;
 
-  FeatureSelector({this.idMatcher}) : super(fullyQualifiedName);
+  FeatureSelector({required this.idMatcher}) : super(fullyQualifiedName);
 
   factory FeatureSelector.fromJson(Map<String, dynamic> json) {
     return FeatureSelector(
@@ -43230,7 +43293,7 @@ final class FeatureView_BigQuerySource extends protobuf.ProtoMessage {
   /// Required. Columns to construct entity_id / row keys.
   final List<String> entityIdColumns;
 
-  FeatureView_BigQuerySource({this.uri = '', this.entityIdColumns = const []})
+  FeatureView_BigQuerySource({required this.uri, required this.entityIdColumns})
     : super(fullyQualifiedName);
 
   factory FeatureView_BigQuerySource.fromJson(Map<String, dynamic> json) {
@@ -43715,7 +43778,7 @@ final class FeatureView_FeatureRegistrySource extends protobuf.ProtoMessage {
   final int? projectNumber;
 
   FeatureView_FeatureRegistrySource({
-    this.featureGroups = const [],
+    required this.featureGroups,
     this.projectNumber,
   }) : super(fullyQualifiedName);
 
@@ -43765,8 +43828,8 @@ final class FeatureView_FeatureRegistrySource_FeatureGroup
   final List<String> featureIds;
 
   FeatureView_FeatureRegistrySource_FeatureGroup({
-    this.featureGroupId = '',
-    this.featureIds = const [],
+    required this.featureGroupId,
+    required this.featureIds,
   }) : super(fullyQualifiedName);
 
   factory FeatureView_FeatureRegistrySource_FeatureGroup.fromJson(
@@ -43814,7 +43877,7 @@ final class FeatureView_VertexRagSource extends protobuf.ProtoMessage {
   /// Optional. The RAG corpus id corresponding to this FeatureView.
   final int ragCorpusId;
 
-  FeatureView_VertexRagSource({this.uri = '', this.ragCorpusId = 0})
+  FeatureView_VertexRagSource({required this.uri, this.ragCorpusId = 0})
     : super(fullyQualifiedName);
 
   factory FeatureView_VertexRagSource.fromJson(Map<String, dynamic> json) {
@@ -44270,7 +44333,7 @@ final class Featurestore_OnlineServingConfig_Scaling
   final int cpuUtilizationTarget;
 
   Featurestore_OnlineServingConfig_Scaling({
-    this.minNodeCount = 0,
+    required this.minNodeCount,
     this.maxNodeCount = 0,
     this.cpuUtilizationTarget = 0,
   }) : super(fullyQualifiedName);
@@ -44716,7 +44779,7 @@ final class WriteFeatureValuesRequest extends protobuf.ProtoMessage {
   /// written across all `payloads`.
   final List<WriteFeatureValuesPayload> payloads;
 
-  WriteFeatureValuesRequest({this.entityType = '', this.payloads = const []})
+  WriteFeatureValuesRequest({required this.entityType, required this.payloads})
     : super(fullyQualifiedName);
 
   factory WriteFeatureValuesRequest.fromJson(Map<String, dynamic> json) {
@@ -44760,8 +44823,10 @@ final class WriteFeatureValuesPayload extends protobuf.ProtoMessage {
   /// years (1825 days) and no later than one year (366 days) in the future.
   final Map<String, FeatureValue> featureValues;
 
-  WriteFeatureValuesPayload({this.entityId = '', this.featureValues = const {}})
-    : super(fullyQualifiedName);
+  WriteFeatureValuesPayload({
+    required this.entityId,
+    required this.featureValues,
+  }) : super(fullyQualifiedName);
 
   factory WriteFeatureValuesPayload.fromJson(Map<String, dynamic> json) {
     return WriteFeatureValuesPayload(
@@ -44829,9 +44894,9 @@ final class ReadFeatureValuesRequest extends protobuf.ProtoMessage {
   final FeatureSelector? featureSelector;
 
   ReadFeatureValuesRequest({
-    this.entityType = '',
-    this.entityId = '',
-    this.featureSelector,
+    required this.entityType,
+    required this.entityId,
+    required this.featureSelector,
   }) : super(fullyQualifiedName);
 
   factory ReadFeatureValuesRequest.fromJson(Map<String, dynamic> json) {
@@ -45095,9 +45160,9 @@ final class StreamingReadFeatureValuesRequest extends protobuf.ProtoMessage {
   final FeatureSelector? featureSelector;
 
   StreamingReadFeatureValuesRequest({
-    this.entityType = '',
-    this.entityIds = const [],
-    this.featureSelector,
+    required this.entityType,
+    required this.entityIds,
+    required this.featureSelector,
   }) : super(fullyQualifiedName);
 
   factory StreamingReadFeatureValuesRequest.fromJson(
@@ -45374,9 +45439,9 @@ final class CreateFeaturestoreRequest extends protobuf.ProtoMessage {
   final String featurestoreId;
 
   CreateFeaturestoreRequest({
-    this.parent = '',
-    this.featurestore,
-    this.featurestoreId = '',
+    required this.parent,
+    required this.featurestore,
+    required this.featurestoreId,
   }) : super(fullyQualifiedName);
 
   factory CreateFeaturestoreRequest.fromJson(Map<String, dynamic> json) {
@@ -45415,7 +45480,7 @@ final class GetFeaturestoreRequest extends protobuf.ProtoMessage {
   /// Required. The name of the Featurestore resource.
   final String name;
 
-  GetFeaturestoreRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFeaturestoreRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFeaturestoreRequest.fromJson(Map<String, dynamic> json) {
     return GetFeaturestoreRequest(name: json['name'] ?? '');
@@ -45493,7 +45558,7 @@ final class ListFeaturestoresRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListFeaturestoresRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -45608,7 +45673,7 @@ final class UpdateFeaturestoreRequest extends protobuf.ProtoMessage {
   ///   * `online_storage_ttl_days`
   final protobuf.FieldMask? updateMask;
 
-  UpdateFeaturestoreRequest({this.featurestore, this.updateMask})
+  UpdateFeaturestoreRequest({required this.featurestore, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateFeaturestoreRequest.fromJson(Map<String, dynamic> json) {
@@ -45646,7 +45711,7 @@ final class DeleteFeaturestoreRequest extends protobuf.ProtoMessage {
   /// has no EntityTypes.)
   final bool force;
 
-  DeleteFeaturestoreRequest({this.name = '', this.force = false})
+  DeleteFeaturestoreRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteFeaturestoreRequest.fromJson(Map<String, dynamic> json) {
@@ -45727,9 +45792,9 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
     this.csvSource,
     this.featureTimeField,
     this.featureTime,
-    this.entityType = '',
+    required this.entityType,
     this.entityIdField = '',
-    this.featureSpecs = const [],
+    required this.featureSpecs,
     this.disableOnlineServing = false,
     this.workerCount = 0,
     this.disableIngestionAnalysis = false,
@@ -45806,8 +45871,10 @@ final class ImportFeatureValuesRequest_FeatureSpec
   /// with the same name as the Feature ID.
   final String sourceField;
 
-  ImportFeatureValuesRequest_FeatureSpec({this.id = '', this.sourceField = ''})
-    : super(fullyQualifiedName);
+  ImportFeatureValuesRequest_FeatureSpec({
+    required this.id,
+    this.sourceField = '',
+  }) : super(fullyQualifiedName);
 
   factory ImportFeatureValuesRequest_FeatureSpec.fromJson(
     Map<String, dynamic> json,
@@ -45966,10 +46033,10 @@ final class BatchReadFeatureValuesRequest extends protobuf.ProtoMessage {
   BatchReadFeatureValuesRequest({
     this.csvReadInstances,
     this.bigqueryReadInstances,
-    this.featurestore = '',
-    this.destination,
+    required this.featurestore,
+    required this.destination,
     this.passThroughFields = const [],
-    this.entityTypeSpecs = const [],
+    required this.entityTypeSpecs,
     this.startTime,
   }) : super(fullyQualifiedName);
 
@@ -46036,7 +46103,7 @@ final class BatchReadFeatureValuesRequest_PassThroughField
   /// `Feature.name`.
   final String fieldName;
 
-  BatchReadFeatureValuesRequest_PassThroughField({this.fieldName = ''})
+  BatchReadFeatureValuesRequest_PassThroughField({required this.fieldName})
     : super(fullyQualifiedName);
 
   factory BatchReadFeatureValuesRequest_PassThroughField.fromJson(
@@ -46080,8 +46147,8 @@ final class BatchReadFeatureValuesRequest_EntityTypeSpec
   final List<DestinationFeatureSetting> settings;
 
   BatchReadFeatureValuesRequest_EntityTypeSpec({
-    this.entityTypeId = '',
-    this.featureSelector,
+    required this.entityTypeId,
+    required this.featureSelector,
     this.settings = const [],
   }) : super(fullyQualifiedName);
 
@@ -46150,9 +46217,9 @@ final class ExportFeatureValuesRequest extends protobuf.ProtoMessage {
   ExportFeatureValuesRequest({
     this.snapshotExport,
     this.fullExport,
-    this.entityType = '',
-    this.destination,
-    this.featureSelector,
+    required this.entityType,
+    required this.destination,
+    required this.featureSelector,
     this.settings = const [],
   }) : super(fullyQualifiedName);
 
@@ -46299,8 +46366,10 @@ final class DestinationFeatureSetting extends protobuf.ProtoMessage {
   /// Feature ID is used.
   final String destinationField;
 
-  DestinationFeatureSetting({this.featureId = '', this.destinationField = ''})
-    : super(fullyQualifiedName);
+  DestinationFeatureSetting({
+    required this.featureId,
+    this.destinationField = '',
+  }) : super(fullyQualifiedName);
 
   factory DestinationFeatureSetting.fromJson(Map<String, dynamic> json) {
     return DestinationFeatureSetting(
@@ -46457,9 +46526,9 @@ final class CreateEntityTypeRequest extends protobuf.ProtoMessage {
   final String entityTypeId;
 
   CreateEntityTypeRequest({
-    this.parent = '',
+    required this.parent,
     this.entityType,
-    this.entityTypeId = '',
+    required this.entityTypeId,
   }) : super(fullyQualifiedName);
 
   factory CreateEntityTypeRequest.fromJson(Map<String, dynamic> json) {
@@ -46497,7 +46566,7 @@ final class GetEntityTypeRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featurestores/{featurestore}/entityTypes/{entity_type}`
   final String name;
 
-  GetEntityTypeRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetEntityTypeRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetEntityTypeRequest.fromJson(Map<String, dynamic> json) {
     return GetEntityTypeRequest(name: json['name'] ?? '');
@@ -46575,7 +46644,7 @@ final class ListEntityTypesRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListEntityTypesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -46695,7 +46764,7 @@ final class UpdateEntityTypeRequest extends protobuf.ProtoMessage {
   ///   * `offline_storage_ttl_days`
   final protobuf.FieldMask? updateMask;
 
-  UpdateEntityTypeRequest({this.entityType, this.updateMask})
+  UpdateEntityTypeRequest({required this.entityType, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateEntityTypeRequest.fromJson(Map<String, dynamic> json) {
@@ -46731,7 +46800,7 @@ final class DeleteEntityTypeRequest extends protobuf.ProtoMessage {
   /// (Otherwise, the request will only work if the EntityType has no Features.)
   final bool force;
 
-  DeleteEntityTypeRequest({this.name = '', this.force = false})
+  DeleteEntityTypeRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteEntityTypeRequest.fromJson(Map<String, dynamic> json) {
@@ -46783,8 +46852,11 @@ final class CreateFeatureRequest extends protobuf.ProtoMessage {
   /// The value must be unique within an EntityType/FeatureGroup.
   final String featureId;
 
-  CreateFeatureRequest({this.parent = '', this.feature, this.featureId = ''})
-    : super(fullyQualifiedName);
+  CreateFeatureRequest({
+    required this.parent,
+    required this.feature,
+    required this.featureId,
+  }) : super(fullyQualifiedName);
 
   factory CreateFeatureRequest.fromJson(Map<String, dynamic> json) {
     return CreateFeatureRequest(
@@ -46831,7 +46903,7 @@ final class BatchCreateFeaturesRequest extends protobuf.ProtoMessage {
   /// value in this request message.
   final List<CreateFeatureRequest> requests;
 
-  BatchCreateFeaturesRequest({this.parent = '', this.requests = const []})
+  BatchCreateFeaturesRequest({required this.parent, required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchCreateFeaturesRequest.fromJson(Map<String, dynamic> json) {
@@ -46905,7 +46977,7 @@ final class GetFeatureRequest extends protobuf.ProtoMessage {
   /// on this spec.
   final FeatureStatsAndAnomalySpec? featureStatsAndAnomalySpec;
 
-  GetFeatureRequest({this.name = '', this.featureStatsAndAnomalySpec})
+  GetFeatureRequest({required this.name, this.featureStatsAndAnomalySpec})
     : super(fullyQualifiedName);
 
   factory GetFeatureRequest.fromJson(Map<String, dynamic> json) {
@@ -47013,7 +47085,7 @@ final class ListFeaturesRequest extends protobuf.ProtoMessage {
   final int latestStatsCount;
 
   ListFeaturesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -47192,7 +47264,7 @@ final class SearchFeaturesRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   SearchFeaturesRequest({
-    this.location = '',
+    required this.location,
     this.query = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -47308,7 +47380,7 @@ final class UpdateFeatureRequest extends protobuf.ProtoMessage {
   ///   * `point_of_contact` (Not supported for FeaturestoreService FeatureStore)
   final protobuf.FieldMask? updateMask;
 
-  UpdateFeatureRequest({this.feature, this.updateMask})
+  UpdateFeatureRequest({required this.feature, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateFeatureRequest.fromJson(Map<String, dynamic> json) {
@@ -47344,7 +47416,7 @@ final class DeleteFeatureRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/featureGroups/{feature_group}/features/{feature}`
   final String name;
 
-  DeleteFeatureRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteFeatureRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFeatureRequest.fromJson(Map<String, dynamic> json) {
     return DeleteFeatureRequest(name: json['name'] ?? '');
@@ -47740,7 +47812,7 @@ final class DeleteFeatureValuesRequest extends protobuf.ProtoMessage {
   DeleteFeatureValuesRequest({
     this.selectEntity,
     this.selectTimeRangeAndFeature,
-    this.entityType = '',
+    required this.entityType,
   }) : super(fullyQualifiedName);
 
   factory DeleteFeatureValuesRequest.fromJson(Map<String, dynamic> json) {
@@ -47786,7 +47858,7 @@ final class DeleteFeatureValuesRequest_SelectEntity
   /// deleted from the EntityType.
   final EntityIdSelector? entityIdSelector;
 
-  DeleteFeatureValuesRequest_SelectEntity({this.entityIdSelector})
+  DeleteFeatureValuesRequest_SelectEntity({required this.entityIdSelector})
     : super(fullyQualifiedName);
 
   factory DeleteFeatureValuesRequest_SelectEntity.fromJson(
@@ -47837,8 +47909,8 @@ final class DeleteFeatureValuesRequest_SelectTimeRangeAndFeature
   final bool skipOnlineStorageDelete;
 
   DeleteFeatureValuesRequest_SelectTimeRangeAndFeature({
-    this.timeRange,
-    this.featureSelector,
+    required this.timeRange,
+    required this.featureSelector,
     this.skipOnlineStorageDelete = false,
   }) : super(fullyQualifiedName);
 
@@ -48090,8 +48162,10 @@ final class CreateCachedContentRequest extends protobuf.ProtoMessage {
   /// Required. The cached content to create
   final CachedContent? cachedContent;
 
-  CreateCachedContentRequest({this.parent = '', this.cachedContent})
-    : super(fullyQualifiedName);
+  CreateCachedContentRequest({
+    required this.parent,
+    required this.cachedContent,
+  }) : super(fullyQualifiedName);
 
   factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return CreateCachedContentRequest(
@@ -48124,7 +48198,7 @@ final class GetCachedContentRequest extends protobuf.ProtoMessage {
   /// Required. The resource name referring to the cached content
   final String name;
 
-  GetCachedContentRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return GetCachedContentRequest(name: json['name'] ?? '');
@@ -48155,8 +48229,10 @@ final class UpdateCachedContentRequest extends protobuf.ProtoMessage {
   /// Required. The list of fields to update.
   final protobuf.FieldMask? updateMask;
 
-  UpdateCachedContentRequest({this.cachedContent, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdateCachedContentRequest({
+    required this.cachedContent,
+    required this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return UpdateCachedContentRequest(
@@ -48186,7 +48262,7 @@ final class DeleteCachedContentRequest extends protobuf.ProtoMessage {
   /// Required. The resource name referring to the cached content
   final String name;
 
-  DeleteCachedContentRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return DeleteCachedContentRequest(name: json['name'] ?? '');
@@ -48226,7 +48302,7 @@ final class ListCachedContentsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListCachedContentsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -48314,7 +48390,7 @@ final class CreateTuningJobRequest extends protobuf.ProtoMessage {
   /// Required. The TuningJob to create.
   final TuningJob? tuningJob;
 
-  CreateTuningJobRequest({this.parent = '', this.tuningJob})
+  CreateTuningJobRequest({required this.parent, required this.tuningJob})
     : super(fullyQualifiedName);
 
   factory CreateTuningJobRequest.fromJson(Map<String, dynamic> json) {
@@ -48349,7 +48425,7 @@ final class GetTuningJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tuningJobs/{tuning_job}`
   final String name;
 
-  GetTuningJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTuningJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTuningJobRequest.fromJson(Map<String, dynamic> json) {
     return GetTuningJobRequest(name: json['name'] ?? '');
@@ -48389,7 +48465,7 @@ final class ListTuningJobsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListTuningJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -48477,7 +48553,7 @@ final class CancelTuningJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tuningJobs/{tuning_job}`
   final String name;
 
-  CancelTuningJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelTuningJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory CancelTuningJobRequest.fromJson(Map<String, dynamic> json) {
     return CancelTuningJobRequest(name: json['name'] ?? '');
@@ -48521,8 +48597,8 @@ final class RebaseTunedModelRequest extends protobuf.ProtoMessage {
   final bool deployToSameEndpoint;
 
   RebaseTunedModelRequest({
-    this.parent = '',
-    this.tunedModelRef,
+    required this.parent,
+    required this.tunedModelRef,
     this.tuningJob,
     this.artifactDestination,
     this.deployToSameEndpoint = false,
@@ -48681,12 +48757,12 @@ final class HyperparameterTuningJob extends protobuf.ProtoMessage {
 
   HyperparameterTuningJob({
     this.name = '',
-    this.displayName = '',
-    this.studySpec,
-    this.maxTrialCount = 0,
-    this.parallelTrialCount = 0,
+    required this.displayName,
+    required this.studySpec,
+    required this.maxTrialCount,
+    required this.parallelTrialCount,
     this.maxFailedTrialCount = 0,
-    this.trialJobSpec,
+    required this.trialJobSpec,
     this.trials = const [],
     this.state = JobState.$default,
     this.createTime,
@@ -48847,7 +48923,7 @@ final class Index extends protobuf.ProtoMessage {
 
   Index({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.metadataSchemaUri = '',
     this.metadata,
@@ -48997,8 +49073,8 @@ final class IndexDatapoint extends protobuf.ProtoMessage {
   final protobuf.Struct? embeddingMetadata;
 
   IndexDatapoint({
-    this.datapointId = '',
-    this.featureVector = const [],
+    required this.datapointId,
+    required this.featureVector,
     this.sparseEmbedding,
     this.restricts = const [],
     this.numericRestricts = const [],
@@ -49073,8 +49149,8 @@ final class IndexDatapoint_SparseEmbedding extends protobuf.ProtoMessage {
   final List<int> dimensions;
 
   IndexDatapoint_SparseEmbedding({
-    this.values = const [],
-    this.dimensions = const [],
+    required this.values,
+    required this.dimensions,
   }) : super(fullyQualifiedName);
 
   factory IndexDatapoint_SparseEmbedding.fromJson(Map<String, dynamic> json) {
@@ -49447,7 +49523,7 @@ final class IndexEndpoint extends protobuf.ProtoMessage {
 
   IndexEndpoint({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.deployedIndexes = const [],
     this.etag = '',
@@ -49670,8 +49746,8 @@ final class DeployedIndex extends protobuf.ProtoMessage {
   final List<PscautomationConfig> pscAutomationConfigs;
 
   DeployedIndex({
-    this.id = '',
-    this.index = '',
+    required this.id,
+    required this.index,
     this.displayName = '',
     this.createTime,
     this.privateEndpoints,
@@ -49913,8 +49989,10 @@ final class CreateIndexEndpointRequest extends protobuf.ProtoMessage {
   /// Required. The IndexEndpoint to create.
   final IndexEndpoint? indexEndpoint;
 
-  CreateIndexEndpointRequest({this.parent = '', this.indexEndpoint})
-    : super(fullyQualifiedName);
+  CreateIndexEndpointRequest({
+    required this.parent,
+    required this.indexEndpoint,
+  }) : super(fullyQualifiedName);
 
   factory CreateIndexEndpointRequest.fromJson(Map<String, dynamic> json) {
     return CreateIndexEndpointRequest(
@@ -49983,7 +50061,7 @@ final class GetIndexEndpointRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/indexEndpoints/{index_endpoint}`
   final String name;
 
-  GetIndexEndpointRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetIndexEndpointRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetIndexEndpointRequest.fromJson(Map<String, dynamic> json) {
     return GetIndexEndpointRequest(name: json['name'] ?? '');
@@ -50046,7 +50124,7 @@ final class ListIndexEndpointsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListIndexEndpointsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -50144,8 +50222,10 @@ final class UpdateIndexEndpointRequest extends protobuf.ProtoMessage {
   /// `google.protobuf.FieldMask`.
   final protobuf.FieldMask? updateMask;
 
-  UpdateIndexEndpointRequest({this.indexEndpoint, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdateIndexEndpointRequest({
+    required this.indexEndpoint,
+    required this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdateIndexEndpointRequest.fromJson(Map<String, dynamic> json) {
     return UpdateIndexEndpointRequest(
@@ -50177,7 +50257,7 @@ final class DeleteIndexEndpointRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/indexEndpoints/{index_endpoint}`
   final String name;
 
-  DeleteIndexEndpointRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteIndexEndpointRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteIndexEndpointRequest.fromJson(Map<String, dynamic> json) {
     return DeleteIndexEndpointRequest(name: json['name'] ?? '');
@@ -50209,7 +50289,7 @@ final class DeployIndexRequest extends protobuf.ProtoMessage {
   /// Required. The DeployedIndex to be created within the IndexEndpoint.
   final DeployedIndex? deployedIndex;
 
-  DeployIndexRequest({this.indexEndpoint = '', this.deployedIndex})
+  DeployIndexRequest({required this.indexEndpoint, required this.deployedIndex})
     : super(fullyQualifiedName);
 
   factory DeployIndexRequest.fromJson(Map<String, dynamic> json) {
@@ -50319,8 +50399,10 @@ final class UndeployIndexRequest extends protobuf.ProtoMessage {
   /// IndexEndpoint.
   final String deployedIndexId;
 
-  UndeployIndexRequest({this.indexEndpoint = '', this.deployedIndexId = ''})
-    : super(fullyQualifiedName);
+  UndeployIndexRequest({
+    required this.indexEndpoint,
+    required this.deployedIndexId,
+  }) : super(fullyQualifiedName);
 
   factory UndeployIndexRequest.fromJson(Map<String, dynamic> json) {
     return UndeployIndexRequest(
@@ -50416,8 +50498,10 @@ final class MutateDeployedIndexRequest extends protobuf.ProtoMessage {
   /// and `DeployedIndex`
   final DeployedIndex? deployedIndex;
 
-  MutateDeployedIndexRequest({this.indexEndpoint = '', this.deployedIndex})
-    : super(fullyQualifiedName);
+  MutateDeployedIndexRequest({
+    required this.indexEndpoint,
+    required this.deployedIndex,
+  }) : super(fullyQualifiedName);
 
   factory MutateDeployedIndexRequest.fromJson(Map<String, dynamic> json) {
     return MutateDeployedIndexRequest(
@@ -50526,7 +50610,7 @@ final class CreateIndexRequest extends protobuf.ProtoMessage {
   /// Required. The Index to create.
   final Index? index;
 
-  CreateIndexRequest({this.parent = '', this.index})
+  CreateIndexRequest({required this.parent, required this.index})
     : super(fullyQualifiedName);
 
   factory CreateIndexRequest.fromJson(Map<String, dynamic> json) {
@@ -50607,7 +50691,7 @@ final class GetIndexRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/indexes/{index}`
   final String name;
 
-  GetIndexRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetIndexRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetIndexRequest.fromJson(Map<String, dynamic> json) {
     return GetIndexRequest(name: json['name'] ?? '');
@@ -50653,7 +50737,7 @@ final class ListIndexesRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListIndexesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -50747,7 +50831,8 @@ final class UpdateIndexRequest extends protobuf.ProtoMessage {
   /// `google.protobuf.FieldMask`.
   final protobuf.FieldMask? updateMask;
 
-  UpdateIndexRequest({this.index, this.updateMask}) : super(fullyQualifiedName);
+  UpdateIndexRequest({required this.index, this.updateMask})
+    : super(fullyQualifiedName);
 
   factory UpdateIndexRequest.fromJson(Map<String, dynamic> json) {
     return UpdateIndexRequest(
@@ -50832,9 +50917,9 @@ final class ImportIndexRequest extends protobuf.ProtoMessage {
   final ImportIndexRequest_ConnectorConfig? config;
 
   ImportIndexRequest({
-    this.name = '',
+    required this.name,
     this.isCompleteOverwrite = false,
-    this.config,
+    required this.config,
   }) : super(fullyQualifiedName);
 
   factory ImportIndexRequest.fromJson(Map<String, dynamic> json) {
@@ -50930,8 +51015,8 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
   final List<String> metadataColumns;
 
   ImportIndexRequest_ConnectorConfig_DatapointFieldMapping({
-    this.idColumn = '',
-    this.embeddingColumn = '',
+    required this.idColumn,
+    required this.embeddingColumn,
     this.restricts = const [],
     this.numericRestricts = const [],
     this.metadataColumns = const [],
@@ -50999,7 +51084,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict
   final List<String> denyColumn;
 
   ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict({
-    this.namespace = '',
+    required this.namespace,
     this.allowColumn = const [],
     this.denyColumn = const [],
   }) : super(fullyQualifiedName);
@@ -51048,11 +51133,9 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRest
   valueType;
 
   ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict({
-    this.namespace = '',
+    required this.namespace,
     this.valueColumn = '',
-    this.valueType =
-        ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict_ValueType
-            .$default,
+    required this.valueType,
   }) : super(fullyQualifiedName);
 
   factory ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict.fromJson(
@@ -51154,8 +51237,8 @@ final class ImportIndexRequest_ConnectorConfig_BigQuerySourceConfig
   datapointFieldMapping;
 
   ImportIndexRequest_ConnectorConfig_BigQuerySourceConfig({
-    this.tablePath = '',
-    this.datapointFieldMapping,
+    required this.tablePath,
+    required this.datapointFieldMapping,
   }) : super(fullyQualifiedName);
 
   factory ImportIndexRequest_ConnectorConfig_BigQuerySourceConfig.fromJson(
@@ -51229,7 +51312,7 @@ final class DeleteIndexRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/indexes/{index}`
   final String name;
 
-  DeleteIndexRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteIndexRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteIndexRequest.fromJson(Map<String, dynamic> json) {
     return DeleteIndexRequest(name: json['name'] ?? '');
@@ -51271,7 +51354,7 @@ final class UpsertDatapointsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? updateMask;
 
   UpsertDatapointsRequest({
-    this.index = '',
+    required this.index,
     this.datapoints = const [],
     this.updateMask,
   }) : super(fullyQualifiedName);
@@ -51336,7 +51419,7 @@ final class RemoveDatapointsRequest extends protobuf.ProtoMessage {
   /// A list of datapoint ids to be deleted.
   final List<String> datapointIds;
 
-  RemoveDatapointsRequest({this.index = '', this.datapointIds = const []})
+  RemoveDatapointsRequest({required this.index, this.datapointIds = const []})
     : super(fullyQualifiedName);
 
   factory RemoveDatapointsRequest.fromJson(Map<String, dynamic> json) {
@@ -51745,7 +51828,7 @@ final class AvroSource extends protobuf.ProtoMessage {
   /// Required. Google Cloud Storage location.
   final GcsSource? gcsSource;
 
-  AvroSource({this.gcsSource}) : super(fullyQualifiedName);
+  AvroSource({required this.gcsSource}) : super(fullyQualifiedName);
 
   factory AvroSource.fromJson(Map<String, dynamic> json) {
     return AvroSource(gcsSource: decode(json['gcsSource'], GcsSource.fromJson));
@@ -51768,7 +51851,7 @@ final class CsvSource extends protobuf.ProtoMessage {
   /// Required. Google Cloud Storage location.
   final GcsSource? gcsSource;
 
-  CsvSource({this.gcsSource}) : super(fullyQualifiedName);
+  CsvSource({required this.gcsSource}) : super(fullyQualifiedName);
 
   factory CsvSource.fromJson(Map<String, dynamic> json) {
     return CsvSource(gcsSource: decode(json['gcsSource'], GcsSource.fromJson));
@@ -51793,7 +51876,7 @@ final class GcsSource extends protobuf.ProtoMessage {
   /// https://cloud.google.com/storage/docs/wildcards.
   final List<String> uris;
 
-  GcsSource({this.uris = const []}) : super(fullyQualifiedName);
+  GcsSource({required this.uris}) : super(fullyQualifiedName);
 
   factory GcsSource.fromJson(Map<String, dynamic> json) {
     return GcsSource(uris: decodeList(json['uris']) ?? []);
@@ -51819,7 +51902,7 @@ final class GcsDestination extends protobuf.ProtoMessage {
   /// doesn't exist.
   final String outputUriPrefix;
 
-  GcsDestination({this.outputUriPrefix = ''}) : super(fullyQualifiedName);
+  GcsDestination({required this.outputUriPrefix}) : super(fullyQualifiedName);
 
   factory GcsDestination.fromJson(Map<String, dynamic> json) {
     return GcsDestination(outputUriPrefix: json['outputUriPrefix'] ?? '');
@@ -51850,7 +51933,7 @@ final class BigQuerySource extends protobuf.ProtoMessage {
   /// *  BigQuery path. For example: `bq://projectId.bqDatasetId.bqTableId`.
   final String inputUri;
 
-  BigQuerySource({this.inputUri = ''}) : super(fullyQualifiedName);
+  BigQuerySource({required this.inputUri}) : super(fullyQualifiedName);
 
   factory BigQuerySource.fromJson(Map<String, dynamic> json) {
     return BigQuerySource(inputUri: json['inputUri'] ?? '');
@@ -51886,7 +51969,7 @@ final class BigQueryDestination extends protobuf.ProtoMessage {
   /// `bq://projectId.bqDatasetId.bqTableId`.
   final String outputUri;
 
-  BigQueryDestination({this.outputUri = ''}) : super(fullyQualifiedName);
+  BigQueryDestination({required this.outputUri}) : super(fullyQualifiedName);
 
   factory BigQueryDestination.fromJson(Map<String, dynamic> json) {
     return BigQueryDestination(outputUri: json['outputUri'] ?? '');
@@ -51912,7 +51995,7 @@ final class CsvDestination extends protobuf.ProtoMessage {
   /// Required. Google Cloud Storage location.
   final GcsDestination? gcsDestination;
 
-  CsvDestination({this.gcsDestination}) : super(fullyQualifiedName);
+  CsvDestination({required this.gcsDestination}) : super(fullyQualifiedName);
 
   factory CsvDestination.fromJson(Map<String, dynamic> json) {
     return CsvDestination(
@@ -51939,7 +52022,8 @@ final class TfrecordDestination extends protobuf.ProtoMessage {
   /// Required. Google Cloud Storage location.
   final GcsDestination? gcsDestination;
 
-  TfrecordDestination({this.gcsDestination}) : super(fullyQualifiedName);
+  TfrecordDestination({required this.gcsDestination})
+    : super(fullyQualifiedName);
 
   factory TfrecordDestination.fromJson(Map<String, dynamic> json) {
     return TfrecordDestination(
@@ -51976,7 +52060,7 @@ final class ContainerRegistryDestination extends protobuf.ProtoMessage {
   /// If a tag is not specified, "latest" will be used as the default tag.
   final String outputUri;
 
-  ContainerRegistryDestination({this.outputUri = ''})
+  ContainerRegistryDestination({required this.outputUri})
     : super(fullyQualifiedName);
 
   factory ContainerRegistryDestination.fromJson(Map<String, dynamic> json) {
@@ -52003,7 +52087,7 @@ final class GoogleDriveSource extends protobuf.ProtoMessage {
   /// Required. Google Drive resource IDs.
   final List<GoogleDriveSource_ResourceId> resourceIds;
 
-  GoogleDriveSource({this.resourceIds = const []}) : super(fullyQualifiedName);
+  GoogleDriveSource({required this.resourceIds}) : super(fullyQualifiedName);
 
   factory GoogleDriveSource.fromJson(Map<String, dynamic> json) {
     return GoogleDriveSource(
@@ -52039,8 +52123,8 @@ final class GoogleDriveSource_ResourceId extends protobuf.ProtoMessage {
   final String resourceId;
 
   GoogleDriveSource_ResourceId({
-    this.resourceType = GoogleDriveSource_ResourceId_ResourceType.$default,
-    this.resourceId = '',
+    required this.resourceType,
+    required this.resourceId,
   }) : super(fullyQualifiedName);
 
   factory GoogleDriveSource_ResourceId.fromJson(Map<String, dynamic> json) {
@@ -52132,7 +52216,7 @@ final class SlackSource extends protobuf.ProtoMessage {
   /// Required. The Slack channels.
   final List<SlackSource_SlackChannels> channels;
 
-  SlackSource({this.channels = const []}) : super(fullyQualifiedName);
+  SlackSource({required this.channels}) : super(fullyQualifiedName);
 
   factory SlackSource.fromJson(Map<String, dynamic> json) {
     return SlackSource(
@@ -52168,8 +52252,10 @@ final class SlackSource_SlackChannels extends protobuf.ProtoMessage {
   /// See: https://api.slack.com/tutorials/tracks/getting-a-token.
   final ApiAuth_ApiKeyConfig? apiKeyConfig;
 
-  SlackSource_SlackChannels({this.channels = const [], this.apiKeyConfig})
-    : super(fullyQualifiedName);
+  SlackSource_SlackChannels({
+    required this.channels,
+    required this.apiKeyConfig,
+  }) : super(fullyQualifiedName);
 
   factory SlackSource_SlackChannels.fromJson(Map<String, dynamic> json) {
     return SlackSource_SlackChannels(
@@ -52211,7 +52297,7 @@ final class SlackSource_SlackChannels_SlackChannel
   final protobuf.Timestamp? endTime;
 
   SlackSource_SlackChannels_SlackChannel({
-    this.channelId = '',
+    required this.channelId,
     this.startTime,
     this.endTime,
   }) : super(fullyQualifiedName);
@@ -52250,7 +52336,7 @@ final class JiraSource extends protobuf.ProtoMessage {
   /// Required. The Jira queries.
   final List<JiraSource_JiraQueries> jiraQueries;
 
-  JiraSource({this.jiraQueries = const []}) : super(fullyQualifiedName);
+  JiraSource({required this.jiraQueries}) : super(fullyQualifiedName);
 
   factory JiraSource.fromJson(Map<String, dynamic> json) {
     return JiraSource(
@@ -52302,9 +52388,9 @@ final class JiraSource_JiraQueries extends protobuf.ProtoMessage {
   JiraSource_JiraQueries({
     this.projects = const [],
     this.customQueries = const [],
-    this.email = '',
-    this.serverUri = '',
-    this.apiKeyConfig,
+    required this.email,
+    required this.serverUri,
+    required this.apiKeyConfig,
   }) : super(fullyQualifiedName);
 
   factory JiraSource_JiraQueries.fromJson(Map<String, dynamic> json) {
@@ -52479,7 +52565,7 @@ final class CreateCustomJobRequest extends protobuf.ProtoMessage {
   /// Required. The CustomJob to create.
   final CustomJob? customJob;
 
-  CreateCustomJobRequest({this.parent = '', this.customJob})
+  CreateCustomJobRequest({required this.parent, required this.customJob})
     : super(fullyQualifiedName);
 
   factory CreateCustomJobRequest.fromJson(Map<String, dynamic> json) {
@@ -52515,7 +52601,7 @@ final class GetCustomJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/customJobs/{custom_job}`
   final String name;
 
-  GetCustomJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetCustomJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetCustomJobRequest.fromJson(Map<String, dynamic> json) {
     return GetCustomJobRequest(name: json['name'] ?? '');
@@ -52580,7 +52666,7 @@ final class ListCustomJobsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListCustomJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -52672,7 +52758,7 @@ final class DeleteCustomJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/customJobs/{custom_job}`
   final String name;
 
-  DeleteCustomJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteCustomJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteCustomJobRequest.fromJson(Map<String, dynamic> json) {
     return DeleteCustomJobRequest(name: json['name'] ?? '');
@@ -52701,7 +52787,7 @@ final class CancelCustomJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/customJobs/{custom_job}`
   final String name;
 
-  CancelCustomJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelCustomJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory CancelCustomJobRequest.fromJson(Map<String, dynamic> json) {
     return CancelCustomJobRequest(name: json['name'] ?? '');
@@ -52732,8 +52818,10 @@ final class CreateDataLabelingJobRequest extends protobuf.ProtoMessage {
   /// Required. The DataLabelingJob to create.
   final DataLabelingJob? dataLabelingJob;
 
-  CreateDataLabelingJobRequest({this.parent = '', this.dataLabelingJob})
-    : super(fullyQualifiedName);
+  CreateDataLabelingJobRequest({
+    required this.parent,
+    required this.dataLabelingJob,
+  }) : super(fullyQualifiedName);
 
   factory CreateDataLabelingJobRequest.fromJson(Map<String, dynamic> json) {
     return CreateDataLabelingJobRequest(
@@ -52771,7 +52859,7 @@ final class GetDataLabelingJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/dataLabelingJobs/{data_labeling_job}`
   final String name;
 
-  GetDataLabelingJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetDataLabelingJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetDataLabelingJobRequest.fromJson(Map<String, dynamic> json) {
     return GetDataLabelingJobRequest(name: json['name'] ?? '');
@@ -52839,7 +52927,7 @@ final class ListDataLabelingJobsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListDataLabelingJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -52940,7 +53028,8 @@ final class DeleteDataLabelingJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/dataLabelingJobs/{data_labeling_job}`
   final String name;
 
-  DeleteDataLabelingJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteDataLabelingJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory DeleteDataLabelingJobRequest.fromJson(Map<String, dynamic> json) {
     return DeleteDataLabelingJobRequest(name: json['name'] ?? '');
@@ -52969,7 +53058,8 @@ final class CancelDataLabelingJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/dataLabelingJobs/{data_labeling_job}`
   final String name;
 
-  CancelDataLabelingJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelDataLabelingJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory CancelDataLabelingJobRequest.fromJson(Map<String, dynamic> json) {
     return CancelDataLabelingJobRequest(name: json['name'] ?? '');
@@ -53002,8 +53092,8 @@ final class CreateHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
   final HyperparameterTuningJob? hyperparameterTuningJob;
 
   CreateHyperparameterTuningJobRequest({
-    this.parent = '',
-    this.hyperparameterTuningJob,
+    required this.parent,
+    required this.hyperparameterTuningJob,
   }) : super(fullyQualifiedName);
 
   factory CreateHyperparameterTuningJobRequest.fromJson(
@@ -53045,7 +53135,7 @@ final class GetHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/hyperparameterTuningJobs/{hyperparameter_tuning_job}`
   final String name;
 
-  GetHyperparameterTuningJobRequest({this.name = ''})
+  GetHyperparameterTuningJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory GetHyperparameterTuningJobRequest.fromJson(
@@ -53114,7 +53204,7 @@ final class ListHyperparameterTuningJobsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListHyperparameterTuningJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -53219,7 +53309,7 @@ final class DeleteHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/hyperparameterTuningJobs/{hyperparameter_tuning_job}`
   final String name;
 
-  DeleteHyperparameterTuningJobRequest({this.name = ''})
+  DeleteHyperparameterTuningJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteHyperparameterTuningJobRequest.fromJson(
@@ -53251,7 +53341,7 @@ final class CancelHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/hyperparameterTuningJobs/{hyperparameter_tuning_job}`
   final String name;
 
-  CancelHyperparameterTuningJobRequest({this.name = ''})
+  CancelHyperparameterTuningJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory CancelHyperparameterTuningJobRequest.fromJson(
@@ -53285,7 +53375,7 @@ final class CreateNasJobRequest extends protobuf.ProtoMessage {
   /// Required. The NasJob to create.
   final NasJob? nasJob;
 
-  CreateNasJobRequest({this.parent = '', this.nasJob})
+  CreateNasJobRequest({required this.parent, required this.nasJob})
     : super(fullyQualifiedName);
 
   factory CreateNasJobRequest.fromJson(Map<String, dynamic> json) {
@@ -53321,7 +53411,7 @@ final class GetNasJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/nasJobs/{nas_job}`
   final String name;
 
-  GetNasJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetNasJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetNasJobRequest.fromJson(Map<String, dynamic> json) {
     return GetNasJobRequest(name: json['name'] ?? '');
@@ -53386,7 +53476,7 @@ final class ListNasJobsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListNasJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -53479,7 +53569,7 @@ final class DeleteNasJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/nasJobs/{nas_job}`
   final String name;
 
-  DeleteNasJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteNasJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteNasJobRequest.fromJson(Map<String, dynamic> json) {
     return DeleteNasJobRequest(name: json['name'] ?? '');
@@ -53508,7 +53598,7 @@ final class CancelNasJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/nasJobs/{nas_job}`
   final String name;
 
-  CancelNasJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelNasJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory CancelNasJobRequest.fromJson(Map<String, dynamic> json) {
     return CancelNasJobRequest(name: json['name'] ?? '');
@@ -53537,7 +53627,7 @@ final class GetNasTrialDetailRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/nasJobs/{nas_job}/nasTrialDetails/{nas_trial_detail}`
   final String name;
 
-  GetNasTrialDetailRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetNasTrialDetailRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetNasTrialDetailRequest.fromJson(Map<String, dynamic> json) {
     return GetNasTrialDetailRequest(name: json['name'] ?? '');
@@ -53578,7 +53668,7 @@ final class ListNasTrialDetailsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListNasTrialDetailsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -53669,8 +53759,10 @@ final class CreateBatchPredictionJobRequest extends protobuf.ProtoMessage {
   /// Required. The BatchPredictionJob to create.
   final BatchPredictionJob? batchPredictionJob;
 
-  CreateBatchPredictionJobRequest({this.parent = '', this.batchPredictionJob})
-    : super(fullyQualifiedName);
+  CreateBatchPredictionJobRequest({
+    required this.parent,
+    required this.batchPredictionJob,
+  }) : super(fullyQualifiedName);
 
   factory CreateBatchPredictionJobRequest.fromJson(Map<String, dynamic> json) {
     return CreateBatchPredictionJobRequest(
@@ -53709,7 +53801,8 @@ final class GetBatchPredictionJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/batchPredictionJobs/{batch_prediction_job}`
   final String name;
 
-  GetBatchPredictionJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetBatchPredictionJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetBatchPredictionJobRequest.fromJson(Map<String, dynamic> json) {
     return GetBatchPredictionJobRequest(name: json['name'] ?? '');
@@ -53775,7 +53868,7 @@ final class ListBatchPredictionJobsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListBatchPredictionJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -53874,7 +53967,8 @@ final class DeleteBatchPredictionJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/batchPredictionJobs/{batch_prediction_job}`
   final String name;
 
-  DeleteBatchPredictionJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteBatchPredictionJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory DeleteBatchPredictionJobRequest.fromJson(Map<String, dynamic> json) {
     return DeleteBatchPredictionJobRequest(name: json['name'] ?? '');
@@ -53903,7 +53997,8 @@ final class CancelBatchPredictionJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/batchPredictionJobs/{batch_prediction_job}`
   final String name;
 
-  CancelBatchPredictionJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelBatchPredictionJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory CancelBatchPredictionJobRequest.fromJson(Map<String, dynamic> json) {
     return CancelBatchPredictionJobRequest(name: json['name'] ?? '');
@@ -53936,8 +54031,8 @@ final class CreateModelDeploymentMonitoringJobRequest
   final ModelDeploymentMonitoringJob? modelDeploymentMonitoringJob;
 
   CreateModelDeploymentMonitoringJobRequest({
-    this.parent = '',
-    this.modelDeploymentMonitoringJob,
+    required this.parent,
+    required this.modelDeploymentMonitoringJob,
   }) : super(fullyQualifiedName);
 
   factory CreateModelDeploymentMonitoringJobRequest.fromJson(
@@ -54013,10 +54108,10 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest
   final protobuf.Timestamp? endTime;
 
   SearchModelDeploymentMonitoringStatsAnomaliesRequest({
-    this.modelDeploymentMonitoringJob = '',
-    this.deployedModelId = '',
+    required this.modelDeploymentMonitoringJob,
+    required this.deployedModelId,
     this.featureDisplayName = '',
-    this.objectives = const [],
+    required this.objectives,
     this.pageSize = 0,
     this.pageToken = '',
     this.startTime,
@@ -54192,7 +54287,7 @@ final class GetModelDeploymentMonitoringJobRequest
   /// `projects/{project}/locations/{location}/modelDeploymentMonitoringJobs/{model_deployment_monitoring_job}`
   final String name;
 
-  GetModelDeploymentMonitoringJobRequest({this.name = ''})
+  GetModelDeploymentMonitoringJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory GetModelDeploymentMonitoringJobRequest.fromJson(
@@ -54256,7 +54351,7 @@ final class ListModelDeploymentMonitoringJobsRequest
   final protobuf.FieldMask? readMask;
 
   ListModelDeploymentMonitoringJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -54389,8 +54484,8 @@ final class UpdateModelDeploymentMonitoringJobRequest
   final protobuf.FieldMask? updateMask;
 
   UpdateModelDeploymentMonitoringJobRequest({
-    this.modelDeploymentMonitoringJob,
-    this.updateMask,
+    required this.modelDeploymentMonitoringJob,
+    required this.updateMask,
   }) : super(fullyQualifiedName);
 
   factory UpdateModelDeploymentMonitoringJobRequest.fromJson(
@@ -54430,7 +54525,7 @@ final class DeleteModelDeploymentMonitoringJobRequest
   /// `projects/{project}/locations/{location}/modelDeploymentMonitoringJobs/{model_deployment_monitoring_job}`
   final String name;
 
-  DeleteModelDeploymentMonitoringJobRequest({this.name = ''})
+  DeleteModelDeploymentMonitoringJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteModelDeploymentMonitoringJobRequest.fromJson(
@@ -54463,7 +54558,7 @@ final class PauseModelDeploymentMonitoringJobRequest
   /// `projects/{project}/locations/{location}/modelDeploymentMonitoringJobs/{model_deployment_monitoring_job}`
   final String name;
 
-  PauseModelDeploymentMonitoringJobRequest({this.name = ''})
+  PauseModelDeploymentMonitoringJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory PauseModelDeploymentMonitoringJobRequest.fromJson(
@@ -54496,7 +54591,7 @@ final class ResumeModelDeploymentMonitoringJobRequest
   /// `projects/{project}/locations/{location}/modelDeploymentMonitoringJobs/{model_deployment_monitoring_job}`
   final String name;
 
-  ResumeModelDeploymentMonitoringJobRequest({this.name = ''})
+  ResumeModelDeploymentMonitoringJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory ResumeModelDeploymentMonitoringJobRequest.fromJson(
@@ -54618,7 +54713,7 @@ final class ComputeTokensRequest extends protobuf.ProtoMessage {
   final List<Content> contents;
 
   ComputeTokensRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.instances = const [],
     this.model = '',
     this.contents = const [],
@@ -54927,8 +55022,8 @@ final class DedicatedResources extends protobuf.ProtoMessage {
   final DedicatedResources_ScaleToZeroSpec? scaleToZeroSpec;
 
   DedicatedResources({
-    this.machineSpec,
-    this.minReplicaCount = 0,
+    required this.machineSpec,
+    required this.minReplicaCount,
     this.maxReplicaCount = 0,
     this.requiredReplicaCount = 0,
     this.initialReplicaCount = 0,
@@ -55121,7 +55216,7 @@ final class BatchDedicatedResources extends protobuf.ProtoMessage {
   final bool spot;
 
   BatchDedicatedResources({
-    this.machineSpec,
+    required this.machineSpec,
     this.startingReplicaCount = 0,
     this.maxReplicaCount = 0,
     this.flexStart,
@@ -55293,7 +55388,7 @@ final class NfsMount extends protobuf.ProtoMessage {
   /// under /mnt/nfs/<mount_point>
   final String mountPoint;
 
-  NfsMount({this.server = '', this.path = '', this.mountPoint = ''})
+  NfsMount({required this.server, required this.path, required this.mountPoint})
     : super(fullyQualifiedName);
 
   factory NfsMount.fromJson(Map<String, dynamic> json) {
@@ -55352,7 +55447,7 @@ final class AutoscalingMetricSpec extends protobuf.ProtoMessage {
   final Map<String, String> monitoredResourceLabels;
 
   AutoscalingMetricSpec({
-    this.metricName = '',
+    required this.metricName,
     this.target = 0,
     this.monitoredResourceLabels = const {},
   }) : super(fullyQualifiedName);
@@ -55515,7 +55610,7 @@ final class FindNeighborsRequest extends protobuf.ProtoMessage {
   final bool returnFullDatapoint;
 
   FindNeighborsRequest({
-    this.indexEndpoint = '',
+    required this.indexEndpoint,
     this.deployedIndexId = '',
     this.queries = const [],
     this.returnFullDatapoint = false,
@@ -55597,7 +55692,7 @@ final class FindNeighborsRequest_Query extends protobuf.ProtoMessage {
 
   FindNeighborsRequest_Query({
     this.rrf,
-    this.datapoint,
+    required this.datapoint,
     this.neighborCount = 0,
     this.perCrowdingAttributeNeighborCount = 0,
     this.approximateNeighborCount = 0,
@@ -55656,7 +55751,8 @@ final class FindNeighborsRequest_Query_Rrf extends protobuf.ProtoMessage {
   /// sparse and if the alpha is 1, we only return dense.
   final double alpha;
 
-  FindNeighborsRequest_Query_Rrf({this.alpha = 0}) : super(fullyQualifiedName);
+  FindNeighborsRequest_Query_Rrf({required this.alpha})
+    : super(fullyQualifiedName);
 
   factory FindNeighborsRequest_Query_Rrf.fromJson(Map<String, dynamic> json) {
     return FindNeighborsRequest_Query_Rrf(
@@ -55826,7 +55922,7 @@ final class ReadIndexDatapointsRequest extends protobuf.ProtoMessage {
   final List<String> ids;
 
   ReadIndexDatapointsRequest({
-    this.indexEndpoint = '',
+    required this.indexEndpoint,
     this.deployedIndexId = '',
     this.ids = const [],
   }) : super(fullyQualifiedName);
@@ -55933,8 +56029,8 @@ final class Memory extends protobuf.ProtoMessage {
     this.description = '',
     this.createTime,
     this.updateTime,
-    this.fact = '',
-    this.scope = const {},
+    required this.fact,
+    required this.scope,
   }) : super(fullyQualifiedName);
 
   factory Memory.fromJson(Map<String, dynamic> json) {
@@ -55992,7 +56088,7 @@ final class CreateMemoryRequest extends protobuf.ProtoMessage {
   /// Required. The Memory to be created.
   final Memory? memory;
 
-  CreateMemoryRequest({this.parent = '', this.memory})
+  CreateMemoryRequest({required this.parent, required this.memory})
     : super(fullyQualifiedName);
 
   factory CreateMemoryRequest.fromJson(Map<String, dynamic> json) {
@@ -56061,7 +56157,7 @@ final class GetMemoryRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/memories/{memory}`
   final String name;
 
-  GetMemoryRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetMemoryRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetMemoryRequest.fromJson(Map<String, dynamic> json) {
     return GetMemoryRequest(name: json['name'] ?? '');
@@ -56096,7 +56192,7 @@ final class UpdateMemoryRequest extends protobuf.ProtoMessage {
   ///    * `fact`
   final protobuf.FieldMask? updateMask;
 
-  UpdateMemoryRequest({this.memory, this.updateMask})
+  UpdateMemoryRequest({required this.memory, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateMemoryRequest.fromJson(Map<String, dynamic> json) {
@@ -56176,7 +56272,7 @@ final class ListMemoriesRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListMemoriesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -56264,7 +56360,7 @@ final class DeleteMemoryRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/memories/{memory}`
   final String name;
 
-  DeleteMemoryRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteMemoryRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteMemoryRequest.fromJson(Map<String, dynamic> json) {
     return DeleteMemoryRequest(name: json['name'] ?? '');
@@ -56356,7 +56452,7 @@ final class GenerateMemoriesRequest extends protobuf.ProtoMessage {
     this.vertexSessionSource,
     this.directContentsSource,
     this.directMemoriesSource,
-    this.parent = '',
+    required this.parent,
     this.disableConsolidation = false,
     this.scope = const {},
   }) : super(fullyQualifiedName);
@@ -56430,7 +56526,7 @@ final class GenerateMemoriesRequest_VertexSessionSource
   final protobuf.Timestamp? endTime;
 
   GenerateMemoriesRequest_VertexSessionSource({
-    this.session = '',
+    required this.session,
     this.startTime,
     this.endTime,
   }) : super(fullyQualifiedName);
@@ -56471,7 +56567,7 @@ final class GenerateMemoriesRequest_DirectContentsSource
   /// from.
   final List<GenerateMemoriesRequest_DirectContentsSource_Event> events;
 
-  GenerateMemoriesRequest_DirectContentsSource({this.events = const []})
+  GenerateMemoriesRequest_DirectContentsSource({required this.events})
     : super(fullyQualifiedName);
 
   factory GenerateMemoriesRequest_DirectContentsSource.fromJson(
@@ -56505,7 +56601,7 @@ final class GenerateMemoriesRequest_DirectContentsSource_Event
   /// Required. A single piece of content from which to generate memories.
   final Content? content;
 
-  GenerateMemoriesRequest_DirectContentsSource_Event({this.content})
+  GenerateMemoriesRequest_DirectContentsSource_Event({required this.content})
     : super(fullyQualifiedName);
 
   factory GenerateMemoriesRequest_DirectContentsSource_Event.fromJson(
@@ -56537,7 +56633,7 @@ final class GenerateMemoriesRequest_DirectMemoriesSource
   final List<GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory>
   directMemories;
 
-  GenerateMemoriesRequest_DirectMemoriesSource({this.directMemories = const []})
+  GenerateMemoriesRequest_DirectMemoriesSource({required this.directMemories})
     : super(fullyQualifiedName);
 
   factory GenerateMemoriesRequest_DirectMemoriesSource.fromJson(
@@ -56574,8 +56670,9 @@ final class GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory
   /// Required. The fact to consolidate with existing memories.
   final String fact;
 
-  GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory({this.fact = ''})
-    : super(fullyQualifiedName);
+  GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory({
+    required this.fact,
+  }) : super(fullyQualifiedName);
 
   factory GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory.fromJson(
     Map<String, dynamic> json,
@@ -56777,8 +56874,8 @@ final class RetrieveMemoriesRequest extends protobuf.ProtoMessage {
   RetrieveMemoriesRequest({
     this.similaritySearchParams,
     this.simpleRetrievalParams,
-    this.parent = '',
-    this.scope = const {},
+    required this.parent,
+    required this.scope,
   }) : super(fullyQualifiedName);
 
   factory RetrieveMemoriesRequest.fromJson(Map<String, dynamic> json) {
@@ -56834,7 +56931,7 @@ final class RetrieveMemoriesRequest_SimilaritySearchParams
   final int topK;
 
   RetrieveMemoriesRequest_SimilaritySearchParams({
-    this.searchQuery = '',
+    required this.searchQuery,
     this.topK = 0,
   }) : super(fullyQualifiedName);
 
@@ -57030,7 +57127,7 @@ final class MetadataSchema extends protobuf.ProtoMessage {
   MetadataSchema({
     this.name = '',
     this.schemaVersion = '',
-    this.schema = '',
+    required this.schema,
     this.schemaType = MetadataSchema_MetadataSchemaType.$default,
     this.createTime,
     this.description = '',
@@ -57135,8 +57232,8 @@ final class CreateMetadataStoreRequest extends protobuf.ProtoMessage {
   final String metadataStoreId;
 
   CreateMetadataStoreRequest({
-    this.parent = '',
-    this.metadataStore,
+    required this.parent,
+    required this.metadataStore,
     this.metadataStoreId = '',
   }) : super(fullyQualifiedName);
 
@@ -57212,7 +57309,7 @@ final class GetMetadataStoreRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/metadataStores/{metadatastore}`
   final String name;
 
-  GetMetadataStoreRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetMetadataStoreRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetMetadataStoreRequest.fromJson(Map<String, dynamic> json) {
     return GetMetadataStoreRequest(name: json['name'] ?? '');
@@ -57256,7 +57353,7 @@ final class ListMetadataStoresRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListMetadataStoresRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -57348,7 +57445,7 @@ final class DeleteMetadataStoreRequest extends protobuf.ProtoMessage {
   /// Deprecated: Field is no longer supported.
   final bool force;
 
-  DeleteMetadataStoreRequest({this.name = '', this.force = false})
+  DeleteMetadataStoreRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteMetadataStoreRequest.fromJson(Map<String, dynamic> json) {
@@ -57431,8 +57528,11 @@ final class CreateArtifactRequest extends protobuf.ProtoMessage {
   /// caller can't view the preexisting Artifact.)
   final String artifactId;
 
-  CreateArtifactRequest({this.parent = '', this.artifact, this.artifactId = ''})
-    : super(fullyQualifiedName);
+  CreateArtifactRequest({
+    required this.parent,
+    required this.artifact,
+    this.artifactId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateArtifactRequest.fromJson(Map<String, dynamic> json) {
     return CreateArtifactRequest(
@@ -57469,7 +57569,7 @@ final class GetArtifactRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/metadataStores/{metadatastore}/artifacts/{artifact}`
   final String name;
 
-  GetArtifactRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetArtifactRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetArtifactRequest.fromJson(Map<String, dynamic> json) {
     return GetArtifactRequest(name: json['name'] ?? '');
@@ -57553,7 +57653,7 @@ final class ListArtifactsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListArtifactsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -57656,7 +57756,7 @@ final class UpdateArtifactRequest extends protobuf.ProtoMessage {
   final bool allowMissing;
 
   UpdateArtifactRequest({
-    this.artifact,
+    required this.artifact,
     this.updateMask,
     this.allowMissing = false,
   }) : super(fullyQualifiedName);
@@ -57701,7 +57801,7 @@ final class DeleteArtifactRequest extends protobuf.ProtoMessage {
   /// request will fail with a FAILED_PRECONDITION.
   final String etag;
 
-  DeleteArtifactRequest({this.name = '', this.etag = ''})
+  DeleteArtifactRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
   factory DeleteArtifactRequest.fromJson(Map<String, dynamic> json) {
@@ -57747,8 +57847,8 @@ final class PurgeArtifactsRequest extends protobuf.ProtoMessage {
   final bool force;
 
   PurgeArtifactsRequest({
-    this.parent = '',
-    this.filter = '',
+    required this.parent,
+    required this.filter,
     this.force = false,
   }) : super(fullyQualifiedName);
 
@@ -57874,8 +57974,11 @@ final class CreateContextRequest extends protobuf.ProtoMessage {
   /// caller can't view the preexisting Context.)
   final String contextId;
 
-  CreateContextRequest({this.parent = '', this.context, this.contextId = ''})
-    : super(fullyQualifiedName);
+  CreateContextRequest({
+    required this.parent,
+    required this.context,
+    this.contextId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateContextRequest.fromJson(Map<String, dynamic> json) {
     return CreateContextRequest(
@@ -57912,7 +58015,7 @@ final class GetContextRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/metadataStores/{metadatastore}/contexts/{context}`
   final String name;
 
-  GetContextRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetContextRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetContextRequest.fromJson(Map<String, dynamic> json) {
     return GetContextRequest(name: json['name'] ?? '');
@@ -58000,7 +58103,7 @@ final class ListContextsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListContextsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -58102,7 +58205,7 @@ final class UpdateContextRequest extends protobuf.ProtoMessage {
   final bool allowMissing;
 
   UpdateContextRequest({
-    this.context,
+    required this.context,
     this.updateMask,
     this.allowMissing = false,
   }) : super(fullyQualifiedName);
@@ -58151,7 +58254,7 @@ final class DeleteContextRequest extends protobuf.ProtoMessage {
   /// request will fail with a FAILED_PRECONDITION.
   final String etag;
 
-  DeleteContextRequest({this.name = '', this.force = false, this.etag = ''})
+  DeleteContextRequest({required this.name, this.force = false, this.etag = ''})
     : super(fullyQualifiedName);
 
   factory DeleteContextRequest.fromJson(Map<String, dynamic> json) {
@@ -58198,8 +58301,11 @@ final class PurgeContextsRequest extends protobuf.ProtoMessage {
   /// Context names that would be deleted.
   final bool force;
 
-  PurgeContextsRequest({this.parent = '', this.filter = '', this.force = false})
-    : super(fullyQualifiedName);
+  PurgeContextsRequest({
+    required this.parent,
+    required this.filter,
+    this.force = false,
+  }) : super(fullyQualifiedName);
 
   factory PurgeContextsRequest.fromJson(Map<String, dynamic> json) {
     return PurgeContextsRequest(
@@ -58326,7 +58432,7 @@ final class AddContextArtifactsAndExecutionsRequest
   final List<String> executions;
 
   AddContextArtifactsAndExecutionsRequest({
-    this.context = '',
+    required this.context,
     this.artifacts = const [],
     this.executions = const [],
   }) : super(fullyQualifiedName);
@@ -58396,8 +58502,10 @@ final class AddContextChildrenRequest extends protobuf.ProtoMessage {
   /// The resource names of the child Contexts.
   final List<String> childContexts;
 
-  AddContextChildrenRequest({this.context = '', this.childContexts = const []})
-    : super(fullyQualifiedName);
+  AddContextChildrenRequest({
+    required this.context,
+    this.childContexts = const [],
+  }) : super(fullyQualifiedName);
 
   factory AddContextChildrenRequest.fromJson(Map<String, dynamic> json) {
     return AddContextChildrenRequest(
@@ -58458,7 +58566,7 @@ final class RemoveContextChildrenRequest extends protobuf.ProtoMessage {
   final List<String> childContexts;
 
   RemoveContextChildrenRequest({
-    this.context = '',
+    required this.context,
     this.childContexts = const [],
   }) : super(fullyQualifiedName);
 
@@ -58521,7 +58629,7 @@ final class QueryContextLineageSubgraphRequest extends protobuf.ProtoMessage {
   /// for the Context exceeds 1000.
   final String context;
 
-  QueryContextLineageSubgraphRequest({this.context = ''})
+  QueryContextLineageSubgraphRequest({required this.context})
     : super(fullyQualifiedName);
 
   factory QueryContextLineageSubgraphRequest.fromJson(
@@ -58568,8 +58676,8 @@ final class CreateExecutionRequest extends protobuf.ProtoMessage {
   final String executionId;
 
   CreateExecutionRequest({
-    this.parent = '',
-    this.execution,
+    required this.parent,
+    required this.execution,
     this.executionId = '',
   }) : super(fullyQualifiedName);
 
@@ -58608,7 +58716,7 @@ final class GetExecutionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/metadataStores/{metadatastore}/executions/{execution}`
   final String name;
 
-  GetExecutionRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetExecutionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetExecutionRequest.fromJson(Map<String, dynamic> json) {
     return GetExecutionRequest(name: json['name'] ?? '');
@@ -58692,7 +58800,7 @@ final class ListExecutionsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListExecutionsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -58796,7 +58904,7 @@ final class UpdateExecutionRequest extends protobuf.ProtoMessage {
   final bool allowMissing;
 
   UpdateExecutionRequest({
-    this.execution,
+    required this.execution,
     this.updateMask,
     this.allowMissing = false,
   }) : super(fullyQualifiedName);
@@ -58841,7 +58949,7 @@ final class DeleteExecutionRequest extends protobuf.ProtoMessage {
   /// request will fail with a FAILED_PRECONDITION.
   final String etag;
 
-  DeleteExecutionRequest({this.name = '', this.etag = ''})
+  DeleteExecutionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
   factory DeleteExecutionRequest.fromJson(Map<String, dynamic> json) {
@@ -58887,8 +58995,8 @@ final class PurgeExecutionsRequest extends protobuf.ProtoMessage {
   final bool force;
 
   PurgeExecutionsRequest({
-    this.parent = '',
-    this.filter = '',
+    required this.parent,
+    required this.filter,
     this.force = false,
   }) : super(fullyQualifiedName);
 
@@ -59007,7 +59115,7 @@ final class AddExecutionEventsRequest extends protobuf.ProtoMessage {
   /// The Events to create and add.
   final List<Event> events;
 
-  AddExecutionEventsRequest({this.execution = '', this.events = const []})
+  AddExecutionEventsRequest({required this.execution, this.events = const []})
     : super(fullyQualifiedName);
 
   factory AddExecutionEventsRequest.fromJson(Map<String, dynamic> json) {
@@ -59065,7 +59173,7 @@ final class QueryExecutionInputsAndOutputsRequest
   /// `projects/{project}/locations/{location}/metadataStores/{metadatastore}/executions/{execution}`
   final String execution;
 
-  QueryExecutionInputsAndOutputsRequest({this.execution = ''})
+  QueryExecutionInputsAndOutputsRequest({required this.execution})
     : super(fullyQualifiedName);
 
   factory QueryExecutionInputsAndOutputsRequest.fromJson(
@@ -59113,8 +59221,8 @@ final class CreateMetadataSchemaRequest extends protobuf.ProtoMessage {
   final String metadataSchemaId;
 
   CreateMetadataSchemaRequest({
-    this.parent = '',
-    this.metadataSchema,
+    required this.parent,
+    required this.metadataSchema,
     this.metadataSchemaId = '',
   }) : super(fullyQualifiedName);
 
@@ -59156,7 +59264,7 @@ final class GetMetadataSchemaRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/metadataStores/{metadatastore}/metadataSchemas/{metadataschema}`
   final String name;
 
-  GetMetadataSchemaRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetMetadataSchemaRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetMetadataSchemaRequest.fromJson(Map<String, dynamic> json) {
     return GetMetadataSchemaRequest(name: json['name'] ?? '');
@@ -59203,7 +59311,7 @@ final class ListMetadataSchemasRequest extends protobuf.ProtoMessage {
   final String filter;
 
   ListMetadataSchemasRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -59335,7 +59443,7 @@ final class QueryArtifactLineageSubgraphRequest extends protobuf.ProtoMessage {
   final String filter;
 
   QueryArtifactLineageSubgraphRequest({
-    this.artifact = '',
+    required this.artifact,
     this.maxHops = 0,
     this.filter = '',
   }) : super(fullyQualifiedName);
@@ -59875,7 +59983,7 @@ final class SearchMigratableResourcesRequest extends protobuf.ProtoMessage {
   final String filter;
 
   SearchMigratableResourcesRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -59978,8 +60086,8 @@ final class BatchMigrateResourcesRequest extends protobuf.ProtoMessage {
   final List<MigrateResourceRequest> migrateResourceRequests;
 
   BatchMigrateResourcesRequest({
-    this.parent = '',
-    this.migrateResourceRequests = const [],
+    required this.parent,
+    required this.migrateResourceRequests,
   }) : super(fullyQualifiedName);
 
   factory BatchMigrateResourcesRequest.fromJson(Map<String, dynamic> json) {
@@ -60110,9 +60218,9 @@ final class MigrateResourceRequest_MigrateMlEngineModelVersionConfig
   final String modelDisplayName;
 
   MigrateResourceRequest_MigrateMlEngineModelVersionConfig({
-    this.endpoint = '',
-    this.modelVersion = '',
-    this.modelDisplayName = '',
+    required this.endpoint,
+    required this.modelVersion,
+    required this.modelDisplayName,
   }) : super(fullyQualifiedName);
 
   factory MigrateResourceRequest_MigrateMlEngineModelVersionConfig.fromJson(
@@ -60161,7 +60269,7 @@ final class MigrateResourceRequest_MigrateAutomlModelConfig
   final String modelDisplayName;
 
   MigrateResourceRequest_MigrateAutomlModelConfig({
-    this.model = '',
+    required this.model,
     this.modelDisplayName = '',
   }) : super(fullyQualifiedName);
 
@@ -60209,8 +60317,8 @@ final class MigrateResourceRequest_MigrateAutomlDatasetConfig
   final String datasetDisplayName;
 
   MigrateResourceRequest_MigrateAutomlDatasetConfig({
-    this.dataset = '',
-    this.datasetDisplayName = '',
+    required this.dataset,
+    required this.datasetDisplayName,
   }) : super(fullyQualifiedName);
 
   factory MigrateResourceRequest_MigrateAutomlDatasetConfig.fromJson(
@@ -60266,7 +60374,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig
   migrateDataLabelingAnnotatedDatasetConfigs;
 
   MigrateResourceRequest_MigrateDataLabelingDatasetConfig({
-    this.dataset = '',
+    required this.dataset,
     this.datasetDisplayName = '',
     this.migrateDataLabelingAnnotatedDatasetConfigs = const [],
   }) : super(fullyQualifiedName);
@@ -60323,7 +60431,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig_MigrateDataL
   final String annotatedDataset;
 
   MigrateResourceRequest_MigrateDataLabelingDatasetConfig_MigrateDataLabelingAnnotatedDatasetConfig({
-    this.annotatedDataset = '',
+    required this.annotatedDataset,
   }) : super(fullyQualifiedName);
 
   factory MigrateResourceRequest_MigrateDataLabelingDatasetConfig_MigrateDataLabelingAnnotatedDatasetConfig.fromJson(
@@ -60832,7 +60940,7 @@ final class Model extends protobuf.ProtoMessage {
     this.versionAliases = const [],
     this.versionCreateTime,
     this.versionUpdateTime,
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.versionDescription = '',
     this.defaultCheckpointId = '',
@@ -61226,7 +61334,7 @@ final class LargeModelReference extends protobuf.ProtoMessage {
   /// "chat-bison@001", "text-bison@005", etc.
   final String name;
 
-  LargeModelReference({this.name = ''}) : super(fullyQualifiedName);
+  LargeModelReference({required this.name}) : super(fullyQualifiedName);
 
   factory LargeModelReference.fromJson(Map<String, dynamic> json) {
     return LargeModelReference(name: json['name'] ?? '');
@@ -61260,7 +61368,7 @@ final class ModelGardenSource extends protobuf.ProtoMessage {
   final bool skipHfModelCache;
 
   ModelGardenSource({
-    this.publicModelName = '',
+    required this.publicModelName,
     this.versionId = '',
     this.skipHfModelCache = false,
   }) : super(fullyQualifiedName);
@@ -61302,7 +61410,7 @@ final class GenieSource extends protobuf.ProtoMessage {
   /// Required. The public base model URI.
   final String baseModelUri;
 
-  GenieSource({this.baseModelUri = ''}) : super(fullyQualifiedName);
+  GenieSource({required this.baseModelUri}) : super(fullyQualifiedName);
 
   factory GenieSource.fromJson(Map<String, dynamic> json) {
     return GenieSource(baseModelUri: json['baseModelUri'] ?? '');
@@ -61673,7 +61781,7 @@ final class ModelContainerSpec extends protobuf.ProtoMessage {
   final Probe? livenessProbe;
 
   ModelContainerSpec({
-    this.imageUri = '',
+    required this.imageUri,
     this.command = const [],
     this.args = const [],
     this.env = const [],
@@ -62363,15 +62471,15 @@ final class ModelDeploymentMonitoringJob extends protobuf.ProtoMessage {
 
   ModelDeploymentMonitoringJob({
     this.name = '',
-    this.displayName = '',
-    this.endpoint = '',
+    required this.displayName,
+    required this.endpoint,
     this.state = JobState.$default,
     this.scheduleState =
         ModelDeploymentMonitoringJob_MonitoringScheduleState.$default,
     this.latestMonitoringPipelineMetadata,
-    this.modelDeploymentMonitoringObjectiveConfigs = const [],
-    this.modelDeploymentMonitoringScheduleConfig,
-    this.loggingSamplingStrategy,
+    required this.modelDeploymentMonitoringObjectiveConfigs,
+    required this.modelDeploymentMonitoringScheduleConfig,
+    required this.loggingSamplingStrategy,
     this.modelMonitoringAlertConfig,
     this.predictInstanceSchemaUri = '',
     this.samplePredictInstance,
@@ -62809,7 +62917,7 @@ final class ModelDeploymentMonitoringScheduleConfig
   final protobuf.Duration? monitorWindow;
 
   ModelDeploymentMonitoringScheduleConfig({
-    this.monitorInterval,
+    required this.monitorInterval,
     this.monitorWindow,
   }) : super(fullyQualifiedName);
 
@@ -63590,7 +63698,7 @@ final class GetPublisherModelRequest extends protobuf.ProtoMessage {
   final bool includeEquivalentModelGardenModelDeploymentConfigs;
 
   GetPublisherModelRequest({
-    this.name = '',
+    required this.name,
     this.languageCode = '',
     this.view = PublisherModelView.$default,
     this.isHuggingFaceModel = false,
@@ -63681,7 +63789,7 @@ final class ListPublisherModelsRequest extends protobuf.ProtoMessage {
   final bool listAllVersions;
 
   ListPublisherModelsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -63818,7 +63926,7 @@ final class DeployRequest extends protobuf.ProtoMessage {
     this.publisherModelName,
     this.huggingFaceModelId,
     this.customModel,
-    this.destination = '',
+    required this.destination,
     this.modelConfig,
     this.endpointConfig,
     this.deployConfig,
@@ -64176,8 +64284,8 @@ final class DeployPublisherModelRequest extends protobuf.ProtoMessage {
   final bool acceptEula;
 
   DeployPublisherModelRequest({
-    this.model = '',
-    this.destination = '',
+    required this.model,
+    required this.destination,
     this.endpointDisplayName = '',
     this.dedicatedResources,
     this.modelDisplayName = '',
@@ -64570,9 +64678,9 @@ final class ExportPublisherModelRequest extends protobuf.ProtoMessage {
   final String parent;
 
   ExportPublisherModelRequest({
-    this.name = '',
-    this.destination,
-    this.parent = '',
+    required this.name,
+    required this.destination,
+    required this.parent,
   }) : super(fullyQualifiedName);
 
   factory ExportPublisherModelRequest.fromJson(Map<String, dynamic> json) {
@@ -64617,8 +64725,8 @@ final class CheckPublisherModelEulaAcceptanceRequest
   final String publisherModel;
 
   CheckPublisherModelEulaAcceptanceRequest({
-    this.parent = '',
-    this.publisherModel = '',
+    required this.parent,
+    required this.publisherModel,
   }) : super(fullyQualifiedName);
 
   factory CheckPublisherModelEulaAcceptanceRequest.fromJson(
@@ -64664,8 +64772,10 @@ final class AcceptPublisherModelEulaRequest extends protobuf.ProtoMessage {
   /// `publishers/hf-{hugging-face-author}/models/{hugging-face-model-name}`
   final String publisherModel;
 
-  AcceptPublisherModelEulaRequest({this.parent = '', this.publisherModel = ''})
-    : super(fullyQualifiedName);
+  AcceptPublisherModelEulaRequest({
+    required this.parent,
+    required this.publisherModel,
+  }) : super(fullyQualifiedName);
 
   factory AcceptPublisherModelEulaRequest.fromJson(Map<String, dynamic> json) {
     return AcceptPublisherModelEulaRequest(
@@ -66270,8 +66380,8 @@ final class CreateModelMonitorRequest extends protobuf.ProtoMessage {
   final String modelMonitorId;
 
   CreateModelMonitorRequest({
-    this.parent = '',
-    this.modelMonitor,
+    required this.parent,
+    required this.modelMonitor,
     this.modelMonitorId = '',
   }) : super(fullyQualifiedName);
 
@@ -66349,8 +66459,10 @@ final class UpdateModelMonitorRequest extends protobuf.ProtoMessage {
   /// Required. Mask specifying which fields to update.
   final protobuf.FieldMask? updateMask;
 
-  UpdateModelMonitorRequest({this.modelMonitor, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdateModelMonitorRequest({
+    required this.modelMonitor,
+    required this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdateModelMonitorRequest.fromJson(Map<String, dynamic> json) {
     return UpdateModelMonitorRequest(
@@ -66416,7 +66528,7 @@ final class GetModelMonitorRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/modelMonitors/{model_monitor}`
   final String name;
 
-  GetModelMonitorRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetModelMonitorRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetModelMonitorRequest.fromJson(Map<String, dynamic> json) {
     return GetModelMonitorRequest(name: json['name'] ?? '');
@@ -66458,7 +66570,7 @@ final class ListModelMonitorsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListModelMonitorsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -66556,7 +66668,7 @@ final class DeleteModelMonitorRequest extends protobuf.ProtoMessage {
   /// Optional. Force delete the model monitor with schedules.
   final bool force;
 
-  DeleteModelMonitorRequest({this.name = '', this.force = false})
+  DeleteModelMonitorRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteModelMonitorRequest.fromJson(Map<String, dynamic> json) {
@@ -66603,8 +66715,8 @@ final class CreateModelMonitoringJobRequest extends protobuf.ProtoMessage {
   final String modelMonitoringJobId;
 
   CreateModelMonitoringJobRequest({
-    this.parent = '',
-    this.modelMonitoringJob,
+    required this.parent,
+    required this.modelMonitoringJob,
     this.modelMonitoringJobId = '',
   }) : super(fullyQualifiedName);
 
@@ -66651,7 +66763,8 @@ final class GetModelMonitoringJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/modelMonitors/{model_monitor}/modelMonitoringJobs/{model_monitoring_job}`
   final String name;
 
-  GetModelMonitoringJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetModelMonitoringJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetModelMonitoringJobRequest.fromJson(Map<String, dynamic> json) {
     return GetModelMonitoringJobRequest(name: json['name'] ?? '');
@@ -66694,7 +66807,7 @@ final class ListModelMonitoringJobsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListModelMonitoringJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -66791,7 +66904,8 @@ final class DeleteModelMonitoringJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/modelMonitors/{model_monitor}/modelMonitoringJobs/{model_monitoring_job}`
   final String name;
 
-  DeleteModelMonitoringJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteModelMonitoringJobRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory DeleteModelMonitoringJobRequest.fromJson(Map<String, dynamic> json) {
     return DeleteModelMonitoringJobRequest(name: json['name'] ?? '');
@@ -66835,7 +66949,7 @@ final class SearchModelMonitoringStatsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   SearchModelMonitoringStatsRequest({
-    this.modelMonitor = '',
+    required this.modelMonitor,
     this.statsFilter,
     this.timeInterval,
     this.pageSize = 0,
@@ -66964,7 +67078,7 @@ final class SearchModelMonitoringAlertsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   SearchModelMonitoringAlertsRequest({
-    this.modelMonitor = '',
+    required this.modelMonitor,
     this.modelMonitoringJob = '',
     this.alertTimeInterval,
     this.statsName = '',
@@ -68379,10 +68493,10 @@ final class UploadModelRequest extends protobuf.ProtoMessage {
   final String serviceAccount;
 
   UploadModelRequest({
-    this.parent = '',
+    required this.parent,
     this.parentModel = '',
     this.modelId = '',
-    this.model,
+    required this.model,
     this.serviceAccount = '',
   }) : super(fullyQualifiedName);
 
@@ -68514,7 +68628,7 @@ final class GetModelRequest extends protobuf.ProtoMessage {
   /// exactly one default version.
   final String name;
 
-  GetModelRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetModelRequest.fromJson(Map<String, dynamic> json) {
     return GetModelRequest(name: json['name'] ?? '');
@@ -68578,7 +68692,7 @@ final class ListModelsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListModelsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -68705,7 +68819,7 @@ final class ListModelVersionsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListModelVersionsRequest({
-    this.name = '',
+    required this.name,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -68818,7 +68932,7 @@ final class ListModelVersionCheckpointsRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListModelVersionCheckpointsRequest({
-    this.name = '',
+    required this.name,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -68982,7 +69096,8 @@ final class UpdateModelRequest extends protobuf.ProtoMessage {
   /// `google.protobuf.FieldMask`.
   final protobuf.FieldMask? updateMask;
 
-  UpdateModelRequest({this.model, this.updateMask}) : super(fullyQualifiedName);
+  UpdateModelRequest({required this.model, required this.updateMask})
+    : super(fullyQualifiedName);
 
   factory UpdateModelRequest.fromJson(Map<String, dynamic> json) {
     return UpdateModelRequest(
@@ -69016,7 +69131,7 @@ final class UpdateExplanationDatasetRequest extends protobuf.ProtoMessage {
   /// The example config containing the location of the dataset.
   final Examples? examples;
 
-  UpdateExplanationDatasetRequest({this.model = '', this.examples})
+  UpdateExplanationDatasetRequest({required this.model, this.examples})
     : super(fullyQualifiedName);
 
   factory UpdateExplanationDatasetRequest.fromJson(Map<String, dynamic> json) {
@@ -69086,7 +69201,7 @@ final class DeleteModelRequest extends protobuf.ProtoMessage {
   /// Format: `projects/{project}/locations/{location}/models/{model}`
   final String name;
 
-  DeleteModelRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteModelRequest.fromJson(Map<String, dynamic> json) {
     return DeleteModelRequest(name: json['name'] ?? '');
@@ -69116,7 +69231,7 @@ final class DeleteModelVersionRequest extends protobuf.ProtoMessage {
   /// Example: `projects/{project}/locations/{location}/models/{model}@1234`
   final String name;
 
-  DeleteModelVersionRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteModelVersionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteModelVersionRequest.fromJson(Map<String, dynamic> json) {
     return DeleteModelVersionRequest(name: json['name'] ?? '');
@@ -69160,7 +69275,7 @@ final class MergeVersionAliasesRequest extends protobuf.ProtoMessage {
   /// cancelled out.
   final List<String> versionAliases;
 
-  MergeVersionAliasesRequest({this.name = '', this.versionAliases = const []})
+  MergeVersionAliasesRequest({required this.name, required this.versionAliases})
     : super(fullyQualifiedName);
 
   factory MergeVersionAliasesRequest.fromJson(Map<String, dynamic> json) {
@@ -69199,7 +69314,7 @@ final class ExportModelRequest extends protobuf.ProtoMessage {
   /// Required. The desired output location and configuration.
   final ExportModelRequest_OutputConfig? outputConfig;
 
-  ExportModelRequest({this.name = '', this.outputConfig})
+  ExportModelRequest({required this.name, required this.outputConfig})
     : super(fullyQualifiedName);
 
   factory ExportModelRequest.fromJson(Map<String, dynamic> json) {
@@ -69462,8 +69577,8 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
   CopyModelRequest({
     this.modelId,
     this.parentModel,
-    this.parent = '',
-    this.sourceModel = '',
+    required this.parent,
+    required this.sourceModel,
     this.encryptionSpec,
   }) : super(fullyQualifiedName);
 
@@ -69588,8 +69703,10 @@ final class ImportModelEvaluationRequest extends protobuf.ProtoMessage {
   /// Required. Model evaluation resource to be imported.
   final ModelEvaluation? modelEvaluation;
 
-  ImportModelEvaluationRequest({this.parent = '', this.modelEvaluation})
-    : super(fullyQualifiedName);
+  ImportModelEvaluationRequest({
+    required this.parent,
+    required this.modelEvaluation,
+  }) : super(fullyQualifiedName);
 
   factory ImportModelEvaluationRequest.fromJson(Map<String, dynamic> json) {
     return ImportModelEvaluationRequest(
@@ -69632,8 +69749,8 @@ final class BatchImportModelEvaluationSlicesRequest
   final List<ModelEvaluationSlice> modelEvaluationSlices;
 
   BatchImportModelEvaluationSlicesRequest({
-    this.parent = '',
-    this.modelEvaluationSlices = const [],
+    required this.parent,
+    required this.modelEvaluationSlices,
   }) : super(fullyQualifiedName);
 
   factory BatchImportModelEvaluationSlicesRequest.fromJson(
@@ -69718,8 +69835,8 @@ final class BatchImportEvaluatedAnnotationsRequest
   final List<EvaluatedAnnotation> evaluatedAnnotations;
 
   BatchImportEvaluatedAnnotationsRequest({
-    this.parent = '',
-    this.evaluatedAnnotations = const [],
+    required this.parent,
+    required this.evaluatedAnnotations,
   }) : super(fullyQualifiedName);
 
   factory BatchImportEvaluatedAnnotationsRequest.fromJson(
@@ -69803,7 +69920,7 @@ final class GetModelEvaluationRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}`
   final String name;
 
-  GetModelEvaluationRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetModelEvaluationRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetModelEvaluationRequest.fromJson(Map<String, dynamic> json) {
     return GetModelEvaluationRequest(name: json['name'] ?? '');
@@ -69849,7 +69966,7 @@ final class ListModelEvaluationsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListModelEvaluationsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -69948,7 +70065,8 @@ final class GetModelEvaluationSliceRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/models/{model}/evaluations/{evaluation}/slices/{slice}`
   final String name;
 
-  GetModelEvaluationSliceRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetModelEvaluationSliceRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetModelEvaluationSliceRequest.fromJson(Map<String, dynamic> json) {
     return GetModelEvaluationSliceRequest(name: json['name'] ?? '');
@@ -69997,7 +70115,7 @@ final class ListModelEvaluationSlicesRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListModelEvaluationSlicesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -70113,8 +70231,8 @@ final class RecommendSpecRequest extends protobuf.ProtoMessage {
   final bool checkUserQuota;
 
   RecommendSpecRequest({
-    this.parent = '',
-    this.gcsUri = '',
+    required this.parent,
+    required this.gcsUri,
     this.checkMachineAvailability = false,
     this.checkUserQuota = false,
   }) : super(fullyQualifiedName);
@@ -70409,8 +70527,8 @@ final class NasJob extends protobuf.ProtoMessage {
 
   NasJob({
     this.name = '',
-    this.displayName = '',
-    this.nasJobSpec,
+    required this.displayName,
+    required this.nasJobSpec,
     this.nasJobOutput,
     this.state = JobState.$default,
     this.createTime,
@@ -70617,7 +70735,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec extends protobuf.ProtoMessage {
     this.multiTrialAlgorithm =
         NasJobSpec_MultiTrialAlgorithmSpec_MultiTrialAlgorithm.$default,
     this.metric,
-    this.searchTrialSpec,
+    required this.searchTrialSpec,
     this.trainTrialSpec,
   }) : super(fullyQualifiedName);
 
@@ -70677,8 +70795,8 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec
   final NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec_GoalType goal;
 
   NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec({
-    this.metricId = '',
-    this.goal = NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec_GoalType.$default,
+    required this.metricId,
+    required this.goal,
   }) : super(fullyQualifiedName);
 
   factory NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec.fromJson(
@@ -70767,9 +70885,9 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec
   final int maxFailedTrialCount;
 
   NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec({
-    this.searchTrialJobSpec,
-    this.maxTrialCount = 0,
-    this.maxParallelTrialCount = 0,
+    required this.searchTrialJobSpec,
+    required this.maxTrialCount,
+    required this.maxParallelTrialCount,
     this.maxFailedTrialCount = 0,
   }) : super(fullyQualifiedName);
 
@@ -70831,9 +70949,9 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_TrainTrialSpec
   final int frequency;
 
   NasJobSpec_MultiTrialAlgorithmSpec_TrainTrialSpec({
-    this.trainTrialJobSpec,
-    this.maxParallelTrialCount = 0,
-    this.frequency = 0,
+    required this.trainTrialJobSpec,
+    required this.maxParallelTrialCount,
+    required this.frequency,
   }) : super(fullyQualifiedName);
 
   factory NasJobSpec_MultiTrialAlgorithmSpec_TrainTrialSpec.fromJson(
@@ -71584,7 +71702,7 @@ final class NotebookIdleShutdownConfig extends protobuf.ProtoMessage {
   final bool idleShutdownDisabled;
 
   NotebookIdleShutdownConfig({
-    this.idleTimeout,
+    required this.idleTimeout,
     this.idleShutdownDisabled = false,
   }) : super(fullyQualifiedName);
 
@@ -71714,7 +71832,7 @@ final class NotebookRuntimeTemplate extends protobuf.ProtoMessage {
 
   NotebookRuntimeTemplate({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.isDefault = false,
     this.machineSpec,
@@ -71946,13 +72064,13 @@ final class NotebookRuntime extends protobuf.ProtoMessage {
 
   NotebookRuntime({
     this.name = '',
-    this.runtimeUser = '',
+    required this.runtimeUser,
     this.notebookRuntimeTemplateRef,
     this.proxyUri = '',
     this.createTime,
     this.updateTime,
     this.healthState = NotebookRuntime_HealthState.$default,
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.serviceAccount = '',
     this.runtimeState = NotebookRuntime_RuntimeState.$default,
@@ -72221,8 +72339,8 @@ final class CreateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
   final String notebookRuntimeTemplateId;
 
   CreateNotebookRuntimeTemplateRequest({
-    this.parent = '',
-    this.notebookRuntimeTemplate,
+    required this.parent,
+    required this.notebookRuntimeTemplate,
     this.notebookRuntimeTemplateId = '',
   }) : super(fullyQualifiedName);
 
@@ -72306,7 +72424,7 @@ final class GetNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/notebookRuntimeTemplates/{notebook_runtime_template}`
   final String name;
 
-  GetNotebookRuntimeTemplateRequest({this.name = ''})
+  GetNotebookRuntimeTemplateRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory GetNotebookRuntimeTemplateRequest.fromJson(
@@ -72390,7 +72508,7 @@ final class ListNotebookRuntimeTemplatesRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListNotebookRuntimeTemplatesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -72497,7 +72615,7 @@ final class DeleteNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/notebookRuntimeTemplates/{notebook_runtime_template}`
   final String name;
 
-  DeleteNotebookRuntimeTemplateRequest({this.name = ''})
+  DeleteNotebookRuntimeTemplateRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteNotebookRuntimeTemplateRequest.fromJson(
@@ -72536,8 +72654,8 @@ final class UpdateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? updateMask;
 
   UpdateNotebookRuntimeTemplateRequest({
-    this.notebookRuntimeTemplate,
-    this.updateMask,
+    required this.notebookRuntimeTemplate,
+    required this.updateMask,
   }) : super(fullyQualifiedName);
 
   factory UpdateNotebookRuntimeTemplateRequest.fromJson(
@@ -72587,9 +72705,9 @@ final class AssignNotebookRuntimeRequest extends protobuf.ProtoMessage {
   final String notebookRuntimeId;
 
   AssignNotebookRuntimeRequest({
-    this.parent = '',
-    this.notebookRuntimeTemplate = '',
-    this.notebookRuntime,
+    required this.parent,
+    required this.notebookRuntimeTemplate,
+    required this.notebookRuntime,
     this.notebookRuntimeId = '',
   }) : super(fullyQualifiedName);
 
@@ -72686,7 +72804,7 @@ final class GetNotebookRuntimeRequest extends protobuf.ProtoMessage {
   /// NotebookRuntime in spanner.
   final String name;
 
-  GetNotebookRuntimeRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetNotebookRuntimeRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetNotebookRuntimeRequest.fromJson(Map<String, dynamic> json) {
     return GetNotebookRuntimeRequest(name: json['name'] ?? '');
@@ -72781,7 +72899,7 @@ final class ListNotebookRuntimesRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListNotebookRuntimesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -72885,7 +73003,8 @@ final class DeleteNotebookRuntimeRequest extends protobuf.ProtoMessage {
   /// NotebookRuntime in spanner.
   final String name;
 
-  DeleteNotebookRuntimeRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteNotebookRuntimeRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory DeleteNotebookRuntimeRequest.fromJson(Map<String, dynamic> json) {
     return DeleteNotebookRuntimeRequest(name: json['name'] ?? '');
@@ -72915,7 +73034,8 @@ final class UpgradeNotebookRuntimeRequest extends protobuf.ProtoMessage {
   /// NotebookRuntime in spanner.
   final String name;
 
-  UpgradeNotebookRuntimeRequest({this.name = ''}) : super(fullyQualifiedName);
+  UpgradeNotebookRuntimeRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory UpgradeNotebookRuntimeRequest.fromJson(Map<String, dynamic> json) {
     return UpgradeNotebookRuntimeRequest(name: json['name'] ?? '');
@@ -73012,7 +73132,7 @@ final class StartNotebookRuntimeRequest extends protobuf.ProtoMessage {
   /// NotebookRuntime in spanner.
   final String name;
 
-  StartNotebookRuntimeRequest({this.name = ''}) : super(fullyQualifiedName);
+  StartNotebookRuntimeRequest({required this.name}) : super(fullyQualifiedName);
 
   factory StartNotebookRuntimeRequest.fromJson(Map<String, dynamic> json) {
     return StartNotebookRuntimeRequest(name: json['name'] ?? '');
@@ -73109,7 +73229,7 @@ final class StopNotebookRuntimeRequest extends protobuf.ProtoMessage {
   /// NotebookRuntime in spanner.
   final String name;
 
-  StopNotebookRuntimeRequest({this.name = ''}) : super(fullyQualifiedName);
+  StopNotebookRuntimeRequest({required this.name}) : super(fullyQualifiedName);
 
   factory StopNotebookRuntimeRequest.fromJson(Map<String, dynamic> json) {
     return StopNotebookRuntimeRequest(name: json['name'] ?? '');
@@ -73198,8 +73318,8 @@ final class CreateNotebookExecutionJobRequest extends protobuf.ProtoMessage {
   final String notebookExecutionJobId;
 
   CreateNotebookExecutionJobRequest({
-    this.parent = '',
-    this.notebookExecutionJob,
+    required this.parent,
+    required this.notebookExecutionJob,
     this.notebookExecutionJobId = '',
   }) : super(fullyQualifiedName);
 
@@ -73295,7 +73415,7 @@ final class GetNotebookExecutionJobRequest extends protobuf.ProtoMessage {
   final NotebookExecutionJobView view;
 
   GetNotebookExecutionJobRequest({
-    this.name = '',
+    required this.name,
     this.view = NotebookExecutionJobView.$default,
   }) : super(fullyQualifiedName);
 
@@ -73372,7 +73492,7 @@ final class ListNotebookExecutionJobsRequest extends protobuf.ProtoMessage {
   final NotebookExecutionJobView view;
 
   ListNotebookExecutionJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -73476,7 +73596,7 @@ final class DeleteNotebookExecutionJobRequest extends protobuf.ProtoMessage {
   /// Required. The name of the NotebookExecutionJob resource to be deleted.
   final String name;
 
-  DeleteNotebookExecutionJobRequest({this.name = ''})
+  DeleteNotebookExecutionJobRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteNotebookExecutionJobRequest.fromJson(
@@ -74086,7 +74206,7 @@ final class PersistentResource extends protobuf.ProtoMessage {
   PersistentResource({
     this.name = '',
     this.displayName = '',
-    this.resourcePools = const [],
+    required this.resourcePools,
     this.state = PersistentResource_State.$default,
     this.error,
     this.createTime,
@@ -74247,7 +74367,7 @@ final class ResourcePool extends protobuf.ProtoMessage {
 
   ResourcePool({
     this.id = '',
-    this.machineSpec,
+    required this.machineSpec,
     this.replicaCount,
     this.diskSpec,
     this.usedReplicaCount = 0,
@@ -74544,7 +74664,7 @@ final class ServiceAccountSpec extends protobuf.ProtoMessage {
   final String serviceAccount;
 
   ServiceAccountSpec({
-    this.enableCustomServiceAccount = false,
+    required this.enableCustomServiceAccount,
     this.serviceAccount = '',
   }) : super(fullyQualifiedName);
 
@@ -74647,9 +74767,9 @@ final class CreatePersistentResourceRequest extends protobuf.ProtoMessage {
   final String persistentResourceId;
 
   CreatePersistentResourceRequest({
-    this.parent = '',
-    this.persistentResource,
-    this.persistentResourceId = '',
+    required this.parent,
+    required this.persistentResource,
+    required this.persistentResourceId,
   }) : super(fullyQualifiedName);
 
   factory CreatePersistentResourceRequest.fromJson(Map<String, dynamic> json) {
@@ -74827,7 +74947,8 @@ final class GetPersistentResourceRequest extends protobuf.ProtoMessage {
   /// `projects/{project_id_or_number}/locations/{location_id}/persistentResources/{persistent_resource_id}`
   final String name;
 
-  GetPersistentResourceRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetPersistentResourceRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetPersistentResourceRequest.fromJson(Map<String, dynamic> json) {
     return GetPersistentResourceRequest(name: json['name'] ?? '');
@@ -74864,7 +74985,7 @@ final class ListPersistentResourcesRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListPersistentResourcesRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -74955,7 +75076,8 @@ final class DeletePersistentResourceRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/persistentResources/{persistent_resource}`
   final String name;
 
-  DeletePersistentResourceRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeletePersistentResourceRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory DeletePersistentResourceRequest.fromJson(Map<String, dynamic> json) {
     return DeletePersistentResourceRequest(name: json['name'] ?? '');
@@ -74989,8 +75111,10 @@ final class UpdatePersistentResourceRequest extends protobuf.ProtoMessage {
   /// the update method.
   final protobuf.FieldMask? updateMask;
 
-  UpdatePersistentResourceRequest({this.persistentResource, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdatePersistentResourceRequest({
+    required this.persistentResource,
+    required this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdatePersistentResourceRequest.fromJson(Map<String, dynamic> json) {
     return UpdatePersistentResourceRequest(
@@ -75026,7 +75150,8 @@ final class RebootPersistentResourceRequest extends protobuf.ProtoMessage {
   /// `projects/{project_id_or_number}/locations/{location_id}/persistentResources/{persistent_resource_id}`
   final String name;
 
-  RebootPersistentResourceRequest({this.name = ''}) : super(fullyQualifiedName);
+  RebootPersistentResourceRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory RebootPersistentResourceRequest.fromJson(Map<String, dynamic> json) {
     return RebootPersistentResourceRequest(name: json['name'] ?? '');
@@ -75364,7 +75489,7 @@ final class PipelineJob_RuntimeConfig extends protobuf.ProtoMessage {
 
   PipelineJob_RuntimeConfig({
     this.parameters = const {},
-    this.gcsOutputDirectory = '',
+    required this.gcsOutputDirectory,
     this.parameterValues = const {},
     this.failurePolicy = PipelineFailurePolicy.$default,
     this.inputArtifacts = const {},
@@ -76311,8 +76436,10 @@ final class CreateTrainingPipelineRequest extends protobuf.ProtoMessage {
   /// Required. The TrainingPipeline to create.
   final TrainingPipeline? trainingPipeline;
 
-  CreateTrainingPipelineRequest({this.parent = '', this.trainingPipeline})
-    : super(fullyQualifiedName);
+  CreateTrainingPipelineRequest({
+    required this.parent,
+    required this.trainingPipeline,
+  }) : super(fullyQualifiedName);
 
   factory CreateTrainingPipelineRequest.fromJson(Map<String, dynamic> json) {
     return CreateTrainingPipelineRequest(
@@ -76351,7 +76478,7 @@ final class GetTrainingPipelineRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/trainingPipelines/{training_pipeline}`
   final String name;
 
-  GetTrainingPipelineRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTrainingPipelineRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTrainingPipelineRequest.fromJson(Map<String, dynamic> json) {
     return GetTrainingPipelineRequest(name: json['name'] ?? '');
@@ -76416,7 +76543,7 @@ final class ListTrainingPipelinesRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListTrainingPipelinesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -76515,7 +76642,8 @@ final class DeleteTrainingPipelineRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/trainingPipelines/{training_pipeline}`
   final String name;
 
-  DeleteTrainingPipelineRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteTrainingPipelineRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory DeleteTrainingPipelineRequest.fromJson(Map<String, dynamic> json) {
     return DeleteTrainingPipelineRequest(name: json['name'] ?? '');
@@ -76544,7 +76672,8 @@ final class CancelTrainingPipelineRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/trainingPipelines/{training_pipeline}`
   final String name;
 
-  CancelTrainingPipelineRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelTrainingPipelineRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory CancelTrainingPipelineRequest.fromJson(Map<String, dynamic> json) {
     return CancelTrainingPipelineRequest(name: json['name'] ?? '');
@@ -76584,8 +76713,8 @@ final class CreatePipelineJobRequest extends protobuf.ProtoMessage {
   final String pipelineJobId;
 
   CreatePipelineJobRequest({
-    this.parent = '',
-    this.pipelineJob,
+    required this.parent,
+    required this.pipelineJob,
     this.pipelineJobId = '',
   }) : super(fullyQualifiedName);
 
@@ -76627,7 +76756,7 @@ final class GetPipelineJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/pipelineJobs/{pipeline_job}`
   final String name;
 
-  GetPipelineJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetPipelineJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetPipelineJobRequest.fromJson(Map<String, dynamic> json) {
     return GetPipelineJobRequest(name: json['name'] ?? '');
@@ -76721,7 +76850,7 @@ final class ListPipelineJobsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListPipelineJobsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -76819,7 +76948,7 @@ final class DeletePipelineJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/pipelineJobs/{pipeline_job}`
   final String name;
 
-  DeletePipelineJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeletePipelineJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeletePipelineJobRequest.fromJson(Map<String, dynamic> json) {
     return DeletePipelineJobRequest(name: json['name'] ?? '');
@@ -76853,7 +76982,7 @@ final class BatchDeletePipelineJobsRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/pipelineJobs/{pipelineJob}`
   final List<String> names;
 
-  BatchDeletePipelineJobsRequest({this.parent = '', this.names = const []})
+  BatchDeletePipelineJobsRequest({required this.parent, required this.names})
     : super(fullyQualifiedName);
 
   factory BatchDeletePipelineJobsRequest.fromJson(Map<String, dynamic> json) {
@@ -76919,7 +77048,7 @@ final class CancelPipelineJobRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/pipelineJobs/{pipeline_job}`
   final String name;
 
-  CancelPipelineJobRequest({this.name = ''}) : super(fullyQualifiedName);
+  CancelPipelineJobRequest({required this.name}) : super(fullyQualifiedName);
 
   factory CancelPipelineJobRequest.fromJson(Map<String, dynamic> json) {
     return CancelPipelineJobRequest(name: json['name'] ?? '');
@@ -76953,7 +77082,7 @@ final class BatchCancelPipelineJobsRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/pipelineJobs/{pipelineJob}`
   final List<String> names;
 
-  BatchCancelPipelineJobsRequest({this.parent = '', this.names = const []})
+  BatchCancelPipelineJobsRequest({required this.parent, required this.names})
     : super(fullyQualifiedName);
 
   factory BatchCancelPipelineJobsRequest.fromJson(Map<String, dynamic> json) {
@@ -77043,8 +77172,8 @@ final class PredictRequest extends protobuf.ProtoMessage {
   final Map<String, String> labels;
 
   PredictRequest({
-    this.endpoint = '',
-    this.instances = const [],
+    required this.endpoint,
+    required this.instances,
     this.parameters,
     this.labels = const {},
   }) : super(fullyQualifiedName);
@@ -77188,7 +77317,7 @@ final class RawPredictRequest extends protobuf.ProtoMessage {
   /// `RawPredict` method.
   final HttpBody? httpBody;
 
-  RawPredictRequest({this.endpoint = '', this.httpBody})
+  RawPredictRequest({required this.endpoint, this.httpBody})
     : super(fullyQualifiedName);
 
   factory RawPredictRequest.fromJson(Map<String, dynamic> json) {
@@ -77227,7 +77356,7 @@ final class StreamRawPredictRequest extends protobuf.ProtoMessage {
   /// The prediction input. Supports HTTP headers and arbitrary data payload.
   final HttpBody? httpBody;
 
-  StreamRawPredictRequest({this.endpoint = '', this.httpBody})
+  StreamRawPredictRequest({required this.endpoint, this.httpBody})
     : super(fullyQualifiedName);
 
   factory StreamRawPredictRequest.fromJson(Map<String, dynamic> json) {
@@ -77270,7 +77399,7 @@ final class DirectPredictRequest extends protobuf.ProtoMessage {
   final Tensor? parameters;
 
   DirectPredictRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.inputs = const [],
     this.parameters,
   }) : super(fullyQualifiedName);
@@ -77357,7 +77486,7 @@ final class DirectRawPredictRequest extends protobuf.ProtoMessage {
   final Uint8List? input;
 
   DirectRawPredictRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.methodName = '',
     this.input,
   }) : super(fullyQualifiedName);
@@ -77440,7 +77569,7 @@ final class StreamDirectPredictRequest extends protobuf.ProtoMessage {
   final Tensor? parameters;
 
   StreamDirectPredictRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.inputs = const [],
     this.parameters,
   }) : super(fullyQualifiedName);
@@ -77538,7 +77667,7 @@ final class StreamDirectRawPredictRequest extends protobuf.ProtoMessage {
   final Uint8List? input;
 
   StreamDirectRawPredictRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.methodName = '',
     this.input,
   }) : super(fullyQualifiedName);
@@ -77621,7 +77750,7 @@ final class StreamingPredictRequest extends protobuf.ProtoMessage {
   final Tensor? parameters;
 
   StreamingPredictRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.inputs = const [],
     this.parameters,
   }) : super(fullyQualifiedName);
@@ -77719,7 +77848,7 @@ final class StreamingRawPredictRequest extends protobuf.ProtoMessage {
   final Uint8List? input;
 
   StreamingRawPredictRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.methodName = '',
     this.input,
   }) : super(fullyQualifiedName);
@@ -77834,8 +77963,8 @@ final class ExplainRequest extends protobuf.ProtoMessage {
   final String deployedModelId;
 
   ExplainRequest({
-    this.endpoint = '',
-    this.instances = const [],
+    required this.endpoint,
+    required this.instances,
     this.parameters,
     this.explanationSpecOverride,
     this.concurrentExplanationSpecOverride = const {},
@@ -78039,7 +78168,7 @@ final class CountTokensRequest extends protobuf.ProtoMessage {
   final GenerationConfig? generationConfig;
 
   CountTokensRequest({
-    this.endpoint = '',
+    required this.endpoint,
     this.model = '',
     this.instances = const [],
     this.contents = const [],
@@ -78210,8 +78339,8 @@ final class GenerateContentRequest extends protobuf.ProtoMessage {
   final GenerationConfig? generationConfig;
 
   GenerateContentRequest({
-    this.model = '',
-    this.contents = const [],
+    required this.model,
+    required this.contents,
     this.systemInstruction,
     this.cachedContent = '',
     this.tools = const [],
@@ -78578,7 +78707,7 @@ final class ChatCompletionsRequest extends protobuf.ProtoMessage {
   /// payload.
   final HttpBody? httpBody;
 
-  ChatCompletionsRequest({this.endpoint = '', this.httpBody})
+  ChatCompletionsRequest({required this.endpoint, this.httpBody})
     : super(fullyQualifiedName);
 
   factory ChatCompletionsRequest.fromJson(Map<String, dynamic> json) {
@@ -78751,7 +78880,7 @@ final class PublisherModel extends protobuf.ProtoMessage {
   PublisherModel({
     this.name = '',
     this.versionId = '',
-    this.openSourceCategory = PublisherModel_OpenSourceCategory.$default,
+    required this.openSourceCategory,
     this.parent,
     this.supportedActions,
     this.frameworks = const [],
@@ -78897,7 +79026,7 @@ final class PublisherModel_Parent extends protobuf.ProtoMessage {
   /// Optional. The Google Cloud resource name or the URI reference.
   final PublisherModel_ResourceReference? reference;
 
-  PublisherModel_Parent({this.displayName = '', this.reference})
+  PublisherModel_Parent({required this.displayName, this.reference})
     : super(fullyQualifiedName);
 
   factory PublisherModel_Parent.fromJson(Map<String, dynamic> json) {
@@ -78937,7 +79066,7 @@ final class PublisherModel_Documentation extends protobuf.ProtoMessage {
   /// Required. Content of this piece of document (in Markdown format).
   final String content;
 
-  PublisherModel_Documentation({this.title = '', this.content = ''})
+  PublisherModel_Documentation({required this.title, required this.content})
     : super(fullyQualifiedName);
 
   factory PublisherModel_Documentation.fromJson(Map<String, dynamic> json) {
@@ -79148,8 +79277,8 @@ final class PublisherModel_CallToAction_RegionalResourceReferences
   final String? resourceDescription;
 
   PublisherModel_CallToAction_RegionalResourceReferences({
-    this.references = const {},
-    this.title = '',
+    required this.references,
+    required this.title,
     this.resourceTitle,
     this.resourceUseCase,
     this.resourceDescription,
@@ -79210,8 +79339,8 @@ final class PublisherModel_CallToAction_ViewRestApi
   final String title;
 
   PublisherModel_CallToAction_ViewRestApi({
-    this.documentations = const [],
-    this.title = '',
+    required this.documentations,
+    required this.title,
   }) : super(fullyQualifiedName);
 
   factory PublisherModel_CallToAction_ViewRestApi.fromJson(
@@ -79253,7 +79382,7 @@ final class PublisherModel_CallToAction_OpenNotebooks
   /// Required. Regional resource references to notebooks.
   final List<PublisherModel_CallToAction_RegionalResourceReferences> notebooks;
 
-  PublisherModel_CallToAction_OpenNotebooks({this.notebooks = const []})
+  PublisherModel_CallToAction_OpenNotebooks({required this.notebooks})
     : super(fullyQualifiedName);
 
   factory PublisherModel_CallToAction_OpenNotebooks.fromJson(
@@ -79289,7 +79418,7 @@ final class PublisherModel_CallToAction_OpenFineTuningPipelines
   fineTuningPipelines;
 
   PublisherModel_CallToAction_OpenFineTuningPipelines({
-    this.fineTuningPipelines = const [],
+    required this.fineTuningPipelines,
   }) : super(fullyQualifiedName);
 
   factory PublisherModel_CallToAction_OpenFineTuningPipelines.fromJson(
@@ -79412,7 +79541,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
     this.artifactUri = '',
     this.deployTaskName,
     this.deployMetadata,
-    this.title = '',
+    required this.title,
     this.publicArtifactUri = '',
   }) : super(fullyQualifiedName);
 
@@ -79975,7 +80104,7 @@ final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
   /// (.tar.gz) file.
   final Uint8List? sourceArchive;
 
-  ReasoningEngineSpec_SourceCodeSpec_InlineSource({this.sourceArchive})
+  ReasoningEngineSpec_SourceCodeSpec_InlineSource({required this.sourceArchive})
     : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec_SourceCodeSpec_InlineSource.fromJson(
@@ -80114,7 +80243,7 @@ final class ReasoningEngine extends protobuf.ProtoMessage {
 
   ReasoningEngine({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.spec,
     this.createTime,
@@ -80384,7 +80513,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_GenerationConfig
   final String model;
 
   ReasoningEngineContextSpec_MemoryBankConfig_GenerationConfig({
-    this.model = '',
+    required this.model,
   }) : super(fullyQualifiedName);
 
   factory ReasoningEngineContextSpec_MemoryBankConfig_GenerationConfig.fromJson(
@@ -80419,7 +80548,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_SimilaritySearchConfig
   final String embeddingModel;
 
   ReasoningEngineContextSpec_MemoryBankConfig_SimilaritySearchConfig({
-    this.embeddingModel = '',
+    required this.embeddingModel,
   }) : super(fullyQualifiedName);
 
   factory ReasoningEngineContextSpec_MemoryBankConfig_SimilaritySearchConfig.fromJson(
@@ -80461,7 +80590,7 @@ final class QueryReasoningEngineRequest extends protobuf.ProtoMessage {
   final String classMethod;
 
   QueryReasoningEngineRequest({
-    this.name = '',
+    required this.name,
     this.input,
     this.classMethod = '',
   }) : super(fullyQualifiedName);
@@ -80534,7 +80663,7 @@ final class StreamQueryReasoningEngineRequest extends protobuf.ProtoMessage {
   final String classMethod;
 
   StreamQueryReasoningEngineRequest({
-    this.name = '',
+    required this.name,
     this.input,
     this.classMethod = '',
   }) : super(fullyQualifiedName);
@@ -80578,8 +80707,10 @@ final class CreateReasoningEngineRequest extends protobuf.ProtoMessage {
   /// Required. The ReasoningEngine to create.
   final ReasoningEngine? reasoningEngine;
 
-  CreateReasoningEngineRequest({this.parent = '', this.reasoningEngine})
-    : super(fullyQualifiedName);
+  CreateReasoningEngineRequest({
+    required this.parent,
+    required this.reasoningEngine,
+  }) : super(fullyQualifiedName);
 
   factory CreateReasoningEngineRequest.fromJson(Map<String, dynamic> json) {
     return CreateReasoningEngineRequest(
@@ -80653,7 +80784,7 @@ final class GetReasoningEngineRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}`
   final String name;
 
-  GetReasoningEngineRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetReasoningEngineRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetReasoningEngineRequest.fromJson(Map<String, dynamic> json) {
     return GetReasoningEngineRequest(name: json['name'] ?? '');
@@ -80683,7 +80814,7 @@ final class UpdateReasoningEngineRequest extends protobuf.ProtoMessage {
   /// Optional. Mask specifying which fields to update.
   final protobuf.FieldMask? updateMask;
 
-  UpdateReasoningEngineRequest({this.reasoningEngine, this.updateMask})
+  UpdateReasoningEngineRequest({required this.reasoningEngine, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateReasoningEngineRequest.fromJson(Map<String, dynamic> json) {
@@ -80765,7 +80896,7 @@ final class ListReasoningEnginesRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListReasoningEnginesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -80866,7 +80997,7 @@ final class DeleteReasoningEngineRequest extends protobuf.ProtoMessage {
   /// error when the reasoning engine has undeleted child resources.
   final bool force;
 
-  DeleteReasoningEngineRequest({this.name = '', this.force = false})
+  DeleteReasoningEngineRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteReasoningEngineRequest.fromJson(Map<String, dynamic> json) {
@@ -80912,7 +81043,7 @@ final class ReservationAffinity extends protobuf.ProtoMessage {
   final List<String> values;
 
   ReservationAffinity({
-    this.reservationAffinityType = ReservationAffinity_Type.$default,
+    required this.reservationAffinityType,
     this.key = '',
     this.values = const [],
   }) : super(fullyQualifiedName);
@@ -81035,12 +81166,12 @@ final class SavedQuery extends protobuf.ProtoMessage {
 
   SavedQuery({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.metadata,
     this.createTime,
     this.updateTime,
     this.annotationFilter = '',
-    this.problemType = '',
+    required this.problemType,
     this.annotationSpecCount = 0,
     this.etag = '',
     this.supportAutomlTraining = false,
@@ -81202,7 +81333,7 @@ final class Schedule extends protobuf.ProtoMessage {
     this.createModelMonitoringJobRequest,
     this.createNotebookExecutionJobRequest,
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.startTime,
     this.endTime,
     this.maxRunCount = 0,
@@ -81213,7 +81344,7 @@ final class Schedule extends protobuf.ProtoMessage {
     this.nextRunTime,
     this.lastPauseTime,
     this.lastResumeTime,
-    this.maxConcurrentRunCount = 0,
+    required this.maxConcurrentRunCount,
     this.allowQueueing = false,
     this.catchUp = false,
     this.lastScheduledRunResponse,
@@ -81402,7 +81533,7 @@ final class CreateScheduleRequest extends protobuf.ProtoMessage {
   /// Required. The Schedule to create.
   final Schedule? schedule;
 
-  CreateScheduleRequest({this.parent = '', this.schedule})
+  CreateScheduleRequest({required this.parent, required this.schedule})
     : super(fullyQualifiedName);
 
   factory CreateScheduleRequest.fromJson(Map<String, dynamic> json) {
@@ -81438,7 +81569,7 @@ final class GetScheduleRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/schedules/{schedule}`
   final String name;
 
-  GetScheduleRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetScheduleRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetScheduleRequest.fromJson(Map<String, dynamic> json) {
     return GetScheduleRequest(name: json['name'] ?? '');
@@ -81530,7 +81661,7 @@ final class ListSchedulesRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListSchedulesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -81622,7 +81753,7 @@ final class DeleteScheduleRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/schedules/{schedule}`
   final String name;
 
-  DeleteScheduleRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteScheduleRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteScheduleRequest.fromJson(Map<String, dynamic> json) {
     return DeleteScheduleRequest(name: json['name'] ?? '');
@@ -81651,7 +81782,7 @@ final class PauseScheduleRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/schedules/{schedule}`
   final String name;
 
-  PauseScheduleRequest({this.name = ''}) : super(fullyQualifiedName);
+  PauseScheduleRequest({required this.name}) : super(fullyQualifiedName);
 
   factory PauseScheduleRequest.fromJson(Map<String, dynamic> json) {
     return PauseScheduleRequest(name: json['name'] ?? '');
@@ -81687,7 +81818,7 @@ final class ResumeScheduleRequest extends protobuf.ProtoMessage {
   /// field. Default to false.
   final bool catchUp;
 
-  ResumeScheduleRequest({this.name = '', this.catchUp = false})
+  ResumeScheduleRequest({required this.name, this.catchUp = false})
     : super(fullyQualifiedName);
 
   factory ResumeScheduleRequest.fromJson(Map<String, dynamic> json) {
@@ -81730,7 +81861,7 @@ final class UpdateScheduleRequest extends protobuf.ProtoMessage {
   /// `google.protobuf.FieldMask`.
   final protobuf.FieldMask? updateMask;
 
-  UpdateScheduleRequest({this.schedule, this.updateMask})
+  UpdateScheduleRequest({required this.schedule, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateScheduleRequest.fromJson(Map<String, dynamic> json) {
@@ -81780,8 +81911,8 @@ final class PscautomationConfig extends protobuf.ProtoMessage {
   final String errorMessage;
 
   PscautomationConfig({
-    this.projectId = '',
-    this.network = '',
+    required this.projectId,
+    required this.network,
     this.ipAddress = '',
     this.forwardingRule = '',
     this.state = PscautomationState.$default,
@@ -81855,7 +81986,7 @@ final class PrivateServiceConnectConfig extends protobuf.ProtoMessage {
   final String serviceAttachment;
 
   PrivateServiceConnectConfig({
-    this.enablePrivateServiceConnect = false,
+    required this.enablePrivateServiceConnect,
     this.projectAllowlist = const [],
     this.pscAutomationConfigs = const [],
     this.enableSecurePrivateServiceConnect = false,
@@ -82031,9 +82162,9 @@ final class DnsPeeringConfig extends protobuf.ProtoMessage {
   final String targetNetwork;
 
   DnsPeeringConfig({
-    this.domain = '',
-    this.targetProject = '',
-    this.targetNetwork = '',
+    required this.domain,
+    required this.targetProject,
+    required this.targetNetwork,
   }) : super(fullyQualifiedName);
 
   factory DnsPeeringConfig.fromJson(Map<String, dynamic> json) {
@@ -82105,7 +82236,7 @@ final class Session extends protobuf.ProtoMessage {
     this.updateTime,
     this.displayName = '',
     this.sessionState,
-    this.userId = '',
+    required this.userId,
   }) : super(fullyQualifiedName);
 
   factory Session.fromJson(Map<String, dynamic> json) {
@@ -82185,11 +82316,11 @@ final class SessionEvent extends protobuf.ProtoMessage {
 
   SessionEvent({
     this.name = '',
-    this.author = '',
+    required this.author,
     this.content,
-    this.invocationId = '',
+    required this.invocationId,
     this.actions,
-    this.timestamp,
+    required this.timestamp,
     this.errorCode = '',
     this.errorMessage = '',
     this.eventMetadata,
@@ -82425,7 +82556,7 @@ final class CreateSessionRequest extends protobuf.ProtoMessage {
   /// Required. The session to create.
   final Session? session;
 
-  CreateSessionRequest({this.parent = '', this.session})
+  CreateSessionRequest({required this.parent, required this.session})
     : super(fullyQualifiedName);
 
   factory CreateSessionRequest.fromJson(Map<String, dynamic> json) {
@@ -82494,7 +82625,7 @@ final class GetSessionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/sessions/{session}`
   final String name;
 
-  GetSessionRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetSessionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetSessionRequest.fromJson(Map<String, dynamic> json) {
     return GetSessionRequest(name: json['name'] ?? '');
@@ -82551,7 +82682,7 @@ final class ListSessionsRequest extends protobuf.ProtoMessage {
   final String orderBy;
 
   ListSessionsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -82647,7 +82778,7 @@ final class UpdateSessionRequest extends protobuf.ProtoMessage {
   /// mask is not present, all fields will be updated.
   final protobuf.FieldMask? updateMask;
 
-  UpdateSessionRequest({this.session, this.updateMask})
+  UpdateSessionRequest({required this.session, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateSessionRequest.fromJson(Map<String, dynamic> json) {
@@ -82680,7 +82811,7 @@ final class DeleteSessionRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/reasoningEngines/{reasoning_engine}/sessions/{session}`
   final String name;
 
-  DeleteSessionRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteSessionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteSessionRequest.fromJson(Map<String, dynamic> json) {
     return DeleteSessionRequest(name: json['name'] ?? '');
@@ -82730,7 +82861,7 @@ final class ListEventsRequest extends protobuf.ProtoMessage {
   final String filter;
 
   ListEventsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -82824,7 +82955,8 @@ final class AppendEventRequest extends protobuf.ProtoMessage {
   /// Required. The event to append to the session.
   final SessionEvent? event;
 
-  AppendEventRequest({this.name = '', this.event}) : super(fullyQualifiedName);
+  AppendEventRequest({required this.name, required this.event})
+    : super(fullyQualifiedName);
 
   factory AppendEventRequest.fromJson(Map<String, dynamic> json) {
     return AppendEventRequest(
@@ -82901,8 +83033,8 @@ final class SpecialistPool extends protobuf.ProtoMessage {
   final List<String> specialistWorkerEmails;
 
   SpecialistPool({
-    this.name = '',
-    this.displayName = '',
+    required this.name,
+    required this.displayName,
     this.specialistManagersCount = 0,
     this.specialistManagerEmails = const [],
     this.pendingDataLabelingJobs = const [],
@@ -82962,8 +83094,10 @@ final class CreateSpecialistPoolRequest extends protobuf.ProtoMessage {
   /// Required. The SpecialistPool to create.
   final SpecialistPool? specialistPool;
 
-  CreateSpecialistPoolRequest({this.parent = '', this.specialistPool})
-    : super(fullyQualifiedName);
+  CreateSpecialistPoolRequest({
+    required this.parent,
+    required this.specialistPool,
+  }) : super(fullyQualifiedName);
 
   factory CreateSpecialistPoolRequest.fromJson(Map<String, dynamic> json) {
     return CreateSpecialistPoolRequest(
@@ -83033,7 +83167,7 @@ final class GetSpecialistPoolRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/specialistPools/{specialist_pool}`.
   final String name;
 
-  GetSpecialistPoolRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetSpecialistPoolRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetSpecialistPoolRequest.fromJson(Map<String, dynamic> json) {
     return GetSpecialistPoolRequest(name: json['name'] ?? '');
@@ -83076,7 +83210,7 @@ final class ListSpecialistPoolsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListSpecialistPoolsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.readMask,
@@ -83169,7 +83303,7 @@ final class DeleteSpecialistPoolRequest extends protobuf.ProtoMessage {
   /// no specialist managers.)
   final bool force;
 
-  DeleteSpecialistPoolRequest({this.name = '', this.force = false})
+  DeleteSpecialistPoolRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteSpecialistPoolRequest.fromJson(Map<String, dynamic> json) {
@@ -83206,8 +83340,10 @@ final class UpdateSpecialistPoolRequest extends protobuf.ProtoMessage {
   /// Required. The update mask applies to the resource.
   final protobuf.FieldMask? updateMask;
 
-  UpdateSpecialistPoolRequest({this.specialistPool, this.updateMask})
-    : super(fullyQualifiedName);
+  UpdateSpecialistPoolRequest({
+    required this.specialistPool,
+    required this.updateMask,
+  }) : super(fullyQualifiedName);
 
   factory UpdateSpecialistPoolRequest.fromJson(Map<String, dynamic> json) {
     return UpdateSpecialistPoolRequest(
@@ -83302,8 +83438,8 @@ final class Study extends protobuf.ProtoMessage {
 
   Study({
     this.name = '',
-    this.displayName = '',
-    this.studySpec,
+    required this.displayName,
+    required this.studySpec,
     this.state = Study_State.$default,
     this.createTime,
     this.inactiveReason = '',
@@ -83719,8 +83855,8 @@ final class StudySpec extends protobuf.ProtoMessage {
     this.medianAutomatedStoppingSpec,
     this.convexStopConfig,
     this.convexAutomatedStoppingSpec,
-    this.metrics = const [],
-    this.parameters = const [],
+    required this.metrics,
+    required this.parameters,
     this.algorithm = StudySpec_Algorithm.$default,
     this.observationNoise = StudySpec_ObservationNoise.$default,
     this.measurementSelectionType = StudySpec_MeasurementSelectionType.$default,
@@ -83834,8 +83970,8 @@ final class StudySpec_MetricSpec extends protobuf.ProtoMessage {
   final StudySpec_MetricSpec_SafetyMetricConfig? safetyConfig;
 
   StudySpec_MetricSpec({
-    this.metricId = '',
-    this.goal = StudySpec_MetricSpec_GoalType.$default,
+    required this.metricId,
+    required this.goal,
     this.safetyConfig,
   }) : super(fullyQualifiedName);
 
@@ -83990,7 +84126,7 @@ final class StudySpec_ParameterSpec extends protobuf.ProtoMessage {
     this.integerValueSpec,
     this.categoricalValueSpec,
     this.discreteValueSpec,
-    this.parameterId = '',
+    required this.parameterId,
     this.scaleType = StudySpec_ParameterSpec_ScaleType.$default,
     this.conditionalParameterSpecs = const [],
   }) : super(fullyQualifiedName);
@@ -84077,8 +84213,8 @@ final class StudySpec_ParameterSpec_DoubleValueSpec
   final double? defaultValue;
 
   StudySpec_ParameterSpec_DoubleValueSpec({
-    this.minValue = 0,
-    this.maxValue = 0,
+    required this.minValue,
+    required this.maxValue,
     this.defaultValue,
   }) : super(fullyQualifiedName);
 
@@ -84133,8 +84269,8 @@ final class StudySpec_ParameterSpec_IntegerValueSpec
   final int? defaultValue;
 
   StudySpec_ParameterSpec_IntegerValueSpec({
-    this.minValue = 0,
-    this.maxValue = 0,
+    required this.minValue,
+    required this.maxValue,
     this.defaultValue,
   }) : super(fullyQualifiedName);
 
@@ -84186,7 +84322,7 @@ final class StudySpec_ParameterSpec_CategoricalValueSpec
   final String? defaultValue;
 
   StudySpec_ParameterSpec_CategoricalValueSpec({
-    this.values = const [],
+    required this.values,
     this.defaultValue,
   }) : super(fullyQualifiedName);
 
@@ -84238,7 +84374,7 @@ final class StudySpec_ParameterSpec_DiscreteValueSpec
   final double? defaultValue;
 
   StudySpec_ParameterSpec_DiscreteValueSpec({
-    this.values = const [],
+    required this.values,
     this.defaultValue,
   }) : super(fullyQualifiedName);
 
@@ -84296,7 +84432,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec
     this.parentDiscreteValues,
     this.parentIntValues,
     this.parentCategoricalValues,
-    this.parameterSpec,
+    required this.parameterSpec,
   }) : super(fullyQualifiedName);
 
   factory StudySpec_ParameterSpec_ConditionalParameterSpec.fromJson(
@@ -84354,7 +84490,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondit
   final List<double> values;
 
   StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondition({
-    this.values = const [],
+    required this.values,
   }) : super(fullyQualifiedName);
 
   factory StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondition.fromJson(
@@ -84385,7 +84521,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition
   final List<int> values;
 
   StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition({
-    this.values = const [],
+    required this.values,
   }) : super(fullyQualifiedName);
 
   factory StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition.fromJson(
@@ -84417,7 +84553,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCon
   final List<String> values;
 
   StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCondition({
-    this.values = const [],
+    required this.values,
   }) : super(fullyQualifiedName);
 
   factory StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCondition.fromJson(
@@ -85191,7 +85327,7 @@ final class Tensorboard extends protobuf.ProtoMessage {
 
   Tensorboard({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.encryptionSpec,
     this.blobStoragePathPrefix = '',
@@ -85277,9 +85413,9 @@ final class TimeSeriesData extends protobuf.ProtoMessage {
   final List<TimeSeriesDataPoint> values;
 
   TimeSeriesData({
-    this.tensorboardTimeSeriesId = '',
-    this.valueType = TensorboardTimeSeries_ValueType.$default,
-    this.values = const [],
+    required this.tensorboardTimeSeriesId,
+    required this.valueType,
+    required this.values,
   }) : super(fullyQualifiedName);
 
   factory TimeSeriesData.fromJson(Map<String, dynamic> json) {
@@ -85411,7 +85547,7 @@ final class TensorboardTensor extends protobuf.ProtoMessage {
   /// `value`.
   final int versionNumber;
 
-  TensorboardTensor({this.value, this.versionNumber = 0})
+  TensorboardTensor({required this.value, this.versionNumber = 0})
     : super(fullyQualifiedName);
 
   factory TensorboardTensor.fromJson(Map<String, dynamic> json) {
@@ -85654,7 +85790,7 @@ final class TensorboardRun extends protobuf.ProtoMessage {
 
   TensorboardRun({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.createTime,
     this.updateTime,
@@ -85712,7 +85848,7 @@ final class CreateTensorboardRequest extends protobuf.ProtoMessage {
   /// Required. The Tensorboard to create.
   final Tensorboard? tensorboard;
 
-  CreateTensorboardRequest({this.parent = '', this.tensorboard})
+  CreateTensorboardRequest({required this.parent, required this.tensorboard})
     : super(fullyQualifiedName);
 
   factory CreateTensorboardRequest.fromJson(Map<String, dynamic> json) {
@@ -85748,7 +85884,7 @@ final class GetTensorboardRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}`
   final String name;
 
-  GetTensorboardRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTensorboardRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTensorboardRequest.fromJson(Map<String, dynamic> json) {
     return GetTensorboardRequest(name: json['name'] ?? '');
@@ -85802,7 +85938,7 @@ final class ListTensorboardsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListTensorboardsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -85908,8 +86044,10 @@ final class UpdateTensorboardRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}`
   final Tensorboard? tensorboard;
 
-  UpdateTensorboardRequest({this.updateMask, this.tensorboard})
-    : super(fullyQualifiedName);
+  UpdateTensorboardRequest({
+    required this.updateMask,
+    required this.tensorboard,
+  }) : super(fullyQualifiedName);
 
   factory UpdateTensorboardRequest.fromJson(Map<String, dynamic> json) {
     return UpdateTensorboardRequest(
@@ -85941,7 +86079,7 @@ final class DeleteTensorboardRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}`
   final String name;
 
-  DeleteTensorboardRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteTensorboardRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteTensorboardRequest.fromJson(Map<String, dynamic> json) {
     return DeleteTensorboardRequest(name: json['name'] ?? '');
@@ -85970,7 +86108,7 @@ final class ReadTensorboardUsageRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}`
   final String tensorboard;
 
-  ReadTensorboardUsageRequest({this.tensorboard = ''})
+  ReadTensorboardUsageRequest({required this.tensorboard})
     : super(fullyQualifiedName);
 
   factory ReadTensorboardUsageRequest.fromJson(Map<String, dynamic> json) {
@@ -86115,7 +86253,7 @@ final class ReadTensorboardSizeRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}`
   final String tensorboard;
 
-  ReadTensorboardSizeRequest({this.tensorboard = ''})
+  ReadTensorboardSizeRequest({required this.tensorboard})
     : super(fullyQualifiedName);
 
   factory ReadTensorboardSizeRequest.fromJson(Map<String, dynamic> json) {
@@ -86189,9 +86327,9 @@ final class CreateTensorboardExperimentRequest extends protobuf.ProtoMessage {
   final String tensorboardExperimentId;
 
   CreateTensorboardExperimentRequest({
-    this.parent = '',
+    required this.parent,
     this.tensorboardExperiment,
-    this.tensorboardExperimentId = '',
+    required this.tensorboardExperimentId,
   }) : super(fullyQualifiedName);
 
   factory CreateTensorboardExperimentRequest.fromJson(
@@ -86239,7 +86377,8 @@ final class GetTensorboardExperimentRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}`
   final String name;
 
-  GetTensorboardExperimentRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTensorboardExperimentRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetTensorboardExperimentRequest.fromJson(Map<String, dynamic> json) {
     return GetTensorboardExperimentRequest(name: json['name'] ?? '');
@@ -86293,7 +86432,7 @@ final class ListTensorboardExperimentsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListTensorboardExperimentsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -86409,8 +86548,8 @@ final class UpdateTensorboardExperimentRequest extends protobuf.ProtoMessage {
   final TensorboardExperiment? tensorboardExperiment;
 
   UpdateTensorboardExperimentRequest({
-    this.updateMask,
-    this.tensorboardExperiment,
+    required this.updateMask,
+    required this.tensorboardExperiment,
   }) : super(fullyQualifiedName);
 
   factory UpdateTensorboardExperimentRequest.fromJson(
@@ -86449,7 +86588,7 @@ final class DeleteTensorboardExperimentRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}`
   final String name;
 
-  DeleteTensorboardExperimentRequest({this.name = ''})
+  DeleteTensorboardExperimentRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteTensorboardExperimentRequest.fromJson(
@@ -86488,8 +86627,8 @@ final class BatchCreateTensorboardRunsRequest extends protobuf.ProtoMessage {
   final List<CreateTensorboardRunRequest> requests;
 
   BatchCreateTensorboardRunsRequest({
-    this.parent = '',
-    this.requests = const [],
+    required this.parent,
+    required this.requests,
   }) : super(fullyQualifiedName);
 
   factory BatchCreateTensorboardRunsRequest.fromJson(
@@ -86577,9 +86716,9 @@ final class CreateTensorboardRunRequest extends protobuf.ProtoMessage {
   final String tensorboardRunId;
 
   CreateTensorboardRunRequest({
-    this.parent = '',
-    this.tensorboardRun,
-    this.tensorboardRunId = '',
+    required this.parent,
+    required this.tensorboardRun,
+    required this.tensorboardRunId,
   }) : super(fullyQualifiedName);
 
   factory CreateTensorboardRunRequest.fromJson(Map<String, dynamic> json) {
@@ -86620,7 +86759,7 @@ final class GetTensorboardRunRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}/runs/{run}`
   final String name;
 
-  GetTensorboardRunRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTensorboardRunRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTensorboardRunRequest.fromJson(Map<String, dynamic> json) {
     return GetTensorboardRunRequest(name: json['name'] ?? '');
@@ -86653,7 +86792,7 @@ final class ReadTensorboardBlobDataRequest extends protobuf.ProtoMessage {
   final List<String> blobIds;
 
   ReadTensorboardBlobDataRequest({
-    this.timeSeries = '',
+    required this.timeSeries,
     this.blobIds = const [],
   }) : super(fullyQualifiedName);
 
@@ -86742,7 +86881,7 @@ final class ListTensorboardRunsRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListTensorboardRunsRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -86850,8 +86989,10 @@ final class UpdateTensorboardRunRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}/runs/{run}`
   final TensorboardRun? tensorboardRun;
 
-  UpdateTensorboardRunRequest({this.updateMask, this.tensorboardRun})
-    : super(fullyQualifiedName);
+  UpdateTensorboardRunRequest({
+    required this.updateMask,
+    required this.tensorboardRun,
+  }) : super(fullyQualifiedName);
 
   factory UpdateTensorboardRunRequest.fromJson(Map<String, dynamic> json) {
     return UpdateTensorboardRunRequest(
@@ -86883,7 +87024,7 @@ final class DeleteTensorboardRunRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}/runs/{run}`
   final String name;
 
-  DeleteTensorboardRunRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteTensorboardRunRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteTensorboardRunRequest.fromJson(Map<String, dynamic> json) {
     return DeleteTensorboardRunRequest(name: json['name'] ?? '');
@@ -86922,8 +87063,8 @@ final class BatchCreateTensorboardTimeSeriesRequest
   final List<CreateTensorboardTimeSeriesRequest> requests;
 
   BatchCreateTensorboardTimeSeriesRequest({
-    this.parent = '',
-    this.requests = const [],
+    required this.parent,
+    required this.requests,
   }) : super(fullyQualifiedName);
 
   factory BatchCreateTensorboardTimeSeriesRequest.fromJson(
@@ -87016,9 +87157,9 @@ final class CreateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   final TensorboardTimeSeries? tensorboardTimeSeries;
 
   CreateTensorboardTimeSeriesRequest({
-    this.parent = '',
+    required this.parent,
     this.tensorboardTimeSeriesId = '',
-    this.tensorboardTimeSeries,
+    required this.tensorboardTimeSeries,
   }) : super(fullyQualifiedName);
 
   factory CreateTensorboardTimeSeriesRequest.fromJson(
@@ -87066,7 +87207,8 @@ final class GetTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}/runs/{run}/timeSeries/{time_series}`
   final String name;
 
-  GetTensorboardTimeSeriesRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTensorboardTimeSeriesRequest({required this.name})
+    : super(fullyQualifiedName);
 
   factory GetTensorboardTimeSeriesRequest.fromJson(Map<String, dynamic> json) {
     return GetTensorboardTimeSeriesRequest(name: json['name'] ?? '');
@@ -87120,7 +87262,7 @@ final class ListTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   final protobuf.FieldMask? readMask;
 
   ListTensorboardTimeSeriesRequest({
-    this.parent = '',
+    required this.parent,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -87235,8 +87377,8 @@ final class UpdateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   final TensorboardTimeSeries? tensorboardTimeSeries;
 
   UpdateTensorboardTimeSeriesRequest({
-    this.updateMask,
-    this.tensorboardTimeSeries,
+    required this.updateMask,
+    required this.tensorboardTimeSeries,
   }) : super(fullyQualifiedName);
 
   factory UpdateTensorboardTimeSeriesRequest.fromJson(
@@ -87275,7 +87417,7 @@ final class DeleteTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/tensorboards/{tensorboard}/experiments/{experiment}/runs/{run}/timeSeries/{time_series}`
   final String name;
 
-  DeleteTensorboardTimeSeriesRequest({this.name = ''})
+  DeleteTensorboardTimeSeriesRequest({required this.name})
     : super(fullyQualifiedName);
 
   factory DeleteTensorboardTimeSeriesRequest.fromJson(
@@ -87317,8 +87459,8 @@ final class BatchReadTensorboardTimeSeriesDataRequest
   final List<String> timeSeries;
 
   BatchReadTensorboardTimeSeriesDataRequest({
-    this.tensorboard = '',
-    this.timeSeries = const [],
+    required this.tensorboard,
+    required this.timeSeries,
   }) : super(fullyQualifiedName);
 
   factory BatchReadTensorboardTimeSeriesDataRequest.fromJson(
@@ -87401,7 +87543,7 @@ final class ReadTensorboardTimeSeriesDataRequest extends protobuf.ProtoMessage {
   final String filter;
 
   ReadTensorboardTimeSeriesDataRequest({
-    this.tensorboardTimeSeries = '',
+    required this.tensorboardTimeSeries,
     this.maxDataPoints = 0,
     this.filter = '',
   }) : super(fullyQualifiedName);
@@ -87485,8 +87627,8 @@ final class WriteTensorboardExperimentDataRequest
   final List<WriteTensorboardRunDataRequest> writeRunDataRequests;
 
   WriteTensorboardExperimentDataRequest({
-    this.tensorboardExperiment = '',
-    this.writeRunDataRequests = const [],
+    required this.tensorboardExperiment,
+    required this.writeRunDataRequests,
   }) : super(fullyQualifiedName);
 
   factory WriteTensorboardExperimentDataRequest.fromJson(
@@ -87563,8 +87705,8 @@ final class WriteTensorboardRunDataRequest extends protobuf.ProtoMessage {
   final List<TimeSeriesData> timeSeriesData;
 
   WriteTensorboardRunDataRequest({
-    this.tensorboardRun = '',
-    this.timeSeriesData = const [],
+    required this.tensorboardRun,
+    required this.timeSeriesData,
   }) : super(fullyQualifiedName);
 
   factory WriteTensorboardRunDataRequest.fromJson(Map<String, dynamic> json) {
@@ -87648,7 +87790,7 @@ final class ExportTensorboardTimeSeriesDataRequest
   final String orderBy;
 
   ExportTensorboardTimeSeriesDataRequest({
-    this.tensorboardTimeSeries = '',
+    required this.tensorboardTimeSeries,
     this.filter = '',
     this.pageSize = 0,
     this.pageToken = '',
@@ -87851,9 +87993,9 @@ final class TensorboardTimeSeries extends protobuf.ProtoMessage {
 
   TensorboardTimeSeries({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
-    this.valueType = TensorboardTimeSeries_ValueType.$default,
+    required this.valueType,
     this.createTime,
     this.updateTime,
     this.etag = '',
@@ -88197,8 +88339,7 @@ final class Tool_ComputerUse extends protobuf.ProtoMessage {
   /// Required. The environment being operated.
   final Tool_ComputerUse_Environment environment;
 
-  Tool_ComputerUse({this.environment = Tool_ComputerUse_Environment.$default})
-    : super(fullyQualifiedName);
+  Tool_ComputerUse({required this.environment}) : super(fullyQualifiedName);
 
   factory Tool_ComputerUse.fromJson(Map<String, dynamic> json) {
     return Tool_ComputerUse(
@@ -88352,8 +88493,8 @@ final class ToolUseExample extends protobuf.ProtoMessage {
   ToolUseExample({
     this.extensionOperation,
     this.functionName,
-    this.displayName = '',
-    this.query = '',
+    required this.displayName,
+    required this.query,
     this.requestParams,
     this.responseParams,
     this.responseSummary = '',
@@ -88419,7 +88560,7 @@ final class ToolUseExample_ExtensionOperation extends protobuf.ProtoMessage {
 
   ToolUseExample_ExtensionOperation({
     this.extension = '',
-    this.operationId = '',
+    required this.operationId,
   }) : super(fullyQualifiedName);
 
   factory ToolUseExample_ExtensionOperation.fromJson(
@@ -88516,7 +88657,7 @@ final class FunctionDeclaration extends protobuf.ProtoMessage {
   final protobuf.Value? responseJsonSchema;
 
   FunctionDeclaration({
-    this.name = '',
+    required this.name,
     this.description = '',
     this.parameters,
     this.parametersJsonSchema,
@@ -88581,7 +88722,7 @@ final class FunctionCall extends protobuf.ProtoMessage {
   /// format. See [FunctionDeclaration.parameters] for parameter details.
   final protobuf.Struct? args;
 
-  FunctionCall({this.id = '', this.name = '', this.args})
+  FunctionCall({this.id = '', required this.name, this.args})
     : super(fullyQualifiedName);
 
   factory FunctionCall.fromJson(Map<String, dynamic> json) {
@@ -88630,7 +88771,7 @@ final class FunctionResponse extends protobuf.ProtoMessage {
   /// then whole "response" is treated as function output.
   final protobuf.Struct? response;
 
-  FunctionResponse({this.id = '', this.name = '', this.response})
+  FunctionResponse({this.id = '', required this.name, required this.response})
     : super(fullyQualifiedName);
 
   factory FunctionResponse.fromJson(Map<String, dynamic> json) {
@@ -88672,10 +88813,8 @@ final class ExecutableCode extends protobuf.ProtoMessage {
   /// Required. The code to be executed.
   final String code;
 
-  ExecutableCode({
-    this.language = ExecutableCode_Language.$default,
-    this.code = '',
-  }) : super(fullyQualifiedName);
+  ExecutableCode({required this.language, required this.code})
+    : super(fullyQualifiedName);
 
   factory ExecutableCode.fromJson(Map<String, dynamic> json) {
     return ExecutableCode(
@@ -88739,10 +88878,8 @@ final class CodeExecutionResult extends protobuf.ProtoMessage {
   /// other description otherwise.
   final String output;
 
-  CodeExecutionResult({
-    this.outcome = CodeExecutionResult_Outcome.$default,
-    this.output = '',
-  }) : super(fullyQualifiedName);
+  CodeExecutionResult({required this.outcome, this.output = ''})
+    : super(fullyQualifiedName);
 
   factory CodeExecutionResult.fromJson(Map<String, dynamic> json) {
     return CodeExecutionResult(
@@ -89789,10 +89926,10 @@ final class TrainingPipeline extends protobuf.ProtoMessage {
 
   TrainingPipeline({
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.inputDataConfig,
-    this.trainingTaskDefinition = '',
-    this.trainingTaskInputs,
+    required this.trainingTaskDefinition,
+    required this.trainingTaskInputs,
     this.trainingTaskMetadata,
     this.modelToUpload,
     this.modelId = '',
@@ -90028,7 +90165,7 @@ final class InputDataConfig extends protobuf.ProtoMessage {
     this.stratifiedSplit,
     this.gcsDestination,
     this.bigqueryDestination,
-    this.datasetId = '',
+    required this.datasetId,
     this.annotationsFilter = '',
     this.annotationSchemaUri = '',
     this.savedQueryId = '',
@@ -90190,9 +90327,9 @@ final class FilterSplit extends protobuf.ProtoMessage {
   final String testFilter;
 
   FilterSplit({
-    this.trainingFilter = '',
-    this.validationFilter = '',
-    this.testFilter = '',
+    required this.trainingFilter,
+    required this.validationFilter,
+    required this.testFilter,
   }) : super(fullyQualifiedName);
 
   factory FilterSplit.fromJson(Map<String, dynamic> json) {
@@ -90239,7 +90376,7 @@ final class PredefinedSplit extends protobuf.ProtoMessage {
   /// pipeline.
   final String key;
 
-  PredefinedSplit({this.key = ''}) : super(fullyQualifiedName);
+  PredefinedSplit({required this.key}) : super(fullyQualifiedName);
 
   factory PredefinedSplit.fromJson(Map<String, dynamic> json) {
     return PredefinedSplit(key: json['key'] ?? '');
@@ -90286,7 +90423,7 @@ final class TimestampSplit extends protobuf.ProtoMessage {
     this.trainingFraction = 0,
     this.validationFraction = 0,
     this.testFraction = 0,
-    this.key = '',
+    required this.key,
   }) : super(fullyQualifiedName);
 
   factory TimestampSplit.fromJson(Map<String, dynamic> json) {
@@ -90360,7 +90497,7 @@ final class StratifiedSplit extends protobuf.ProtoMessage {
     this.trainingFraction = 0,
     this.validationFraction = 0,
     this.testFraction = 0,
-    this.key = '',
+    required this.key,
   }) : super(fullyQualifiedName);
 
   factory StratifiedSplit.fromJson(Map<String, dynamic> json) {
@@ -91454,7 +91591,7 @@ final class SupervisedTuningSpec extends protobuf.ProtoMessage {
   final SupervisedTuningSpec_TuningMode tuningMode;
 
   SupervisedTuningSpec({
-    this.trainingDatasetUri = '',
+    required this.trainingDatasetUri,
     this.validationDatasetUri = '',
     this.hyperParameters,
     this.exportLastCheckpointOnly = false,
@@ -91578,11 +91715,11 @@ final class DistillationSpec extends protobuf.ProtoMessage {
   DistillationSpec({
     this.baseTeacherModel,
     this.tunedTeacherModelSource,
-    this.trainingDatasetUri = '',
+    required this.trainingDatasetUri,
     this.validationDatasetUri,
     this.hyperParameters,
     this.studentModel = '',
-    this.pipelineRootDirectory = '',
+    required this.pipelineRootDirectory,
   }) : super(fullyQualifiedName);
 
   factory DistillationSpec.fromJson(Map<String, dynamic> json) {
@@ -91707,7 +91844,7 @@ final class PartnerModelTuningSpec extends protobuf.ProtoMessage {
   final Map<String, protobuf.Value> hyperParameters;
 
   PartnerModelTuningSpec({
-    this.trainingDatasetUri = '',
+    required this.trainingDatasetUri,
     this.validationDatasetUri = '',
     this.hyperParameters = const {},
   }) : super(fullyQualifiedName);
@@ -91895,7 +92032,7 @@ final class VeoTuningSpec extends protobuf.ProtoMessage {
   final VeoHyperParameters? hyperParameters;
 
   VeoTuningSpec({
-    this.trainingDatasetUri = '',
+    required this.trainingDatasetUri,
     this.validationDatasetUri = '',
     this.hyperParameters,
   }) : super(fullyQualifiedName);
@@ -91947,8 +92084,8 @@ final class EvaluationConfig extends protobuf.ProtoMessage {
   final AutoraterConfig? autoraterConfig;
 
   EvaluationConfig({
-    this.metrics = const [],
-    this.outputConfig,
+    required this.metrics,
+    required this.outputConfig,
     this.autoraterConfig,
   }) : super(fullyQualifiedName);
 
@@ -92768,7 +92905,7 @@ final class RagEmbeddingModelConfig_VertexPredictionEndpoint
   final String modelVersionId;
 
   RagEmbeddingModelConfig_VertexPredictionEndpoint({
-    this.endpoint = '',
+    required this.endpoint,
     this.model = '',
     this.modelVersionId = '',
   }) : super(fullyQualifiedName);
@@ -92908,7 +93045,7 @@ final class RagEmbeddingModelConfig_HybridSearchConfig
 
   RagEmbeddingModelConfig_HybridSearchConfig({
     this.sparseEmbeddingConfig,
-    this.denseEmbeddingModelPredictionEndpoint,
+    required this.denseEmbeddingModelPredictionEndpoint,
   }) : super(fullyQualifiedName);
 
   factory RagEmbeddingModelConfig_HybridSearchConfig.fromJson(
@@ -93498,7 +93635,7 @@ final class RagCorpus extends protobuf.ProtoMessage {
     this.vectorDbConfig,
     this.vertexAiSearchConfig,
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.ragEmbeddingModelConfig,
     this.ragVectorDbConfig,
@@ -93736,7 +93873,7 @@ final class RagFile extends protobuf.ProtoMessage {
     this.jiraSource,
     this.sharePointSources,
     this.name = '',
-    this.displayName = '',
+    required this.displayName,
     this.description = '',
     this.sizeBytes = 0,
     this.ragFileType = RagFile_RagFileType.$default,
@@ -94849,7 +94986,7 @@ final class CreateRagCorpusRequest extends protobuf.ProtoMessage {
   /// Required. The RagCorpus to create.
   final RagCorpus? ragCorpus;
 
-  CreateRagCorpusRequest({this.parent = '', this.ragCorpus})
+  CreateRagCorpusRequest({required this.parent, required this.ragCorpus})
     : super(fullyQualifiedName);
 
   factory CreateRagCorpusRequest.fromJson(Map<String, dynamic> json) {
@@ -94885,7 +95022,7 @@ final class GetRagCorpusRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}`
   final String name;
 
-  GetRagCorpusRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetRagCorpusRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetRagCorpusRequest.fromJson(Map<String, dynamic> json) {
     return GetRagCorpusRequest(name: json['name'] ?? '');
@@ -94925,7 +95062,7 @@ final class ListRagCorporaRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListRagCorporaRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -95015,7 +95152,7 @@ final class DeleteRagCorpusRequest extends protobuf.ProtoMessage {
   /// RagFiles.
   final bool force;
 
-  DeleteRagCorpusRequest({this.name = '', this.force = false})
+  DeleteRagCorpusRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteRagCorpusRequest.fromJson(Map<String, dynamic> json) {
@@ -95059,9 +95196,9 @@ final class UploadRagFileRequest extends protobuf.ProtoMessage {
   final UploadRagFileConfig? uploadRagFileConfig;
 
   UploadRagFileRequest({
-    this.parent = '',
-    this.ragFile,
-    this.uploadRagFileConfig,
+    required this.parent,
+    required this.ragFile,
+    required this.uploadRagFileConfig,
   }) : super(fullyQualifiedName);
 
   factory UploadRagFileRequest.fromJson(Map<String, dynamic> json) {
@@ -95141,8 +95278,10 @@ final class ImportRagFilesRequest extends protobuf.ProtoMessage {
   /// `VertexRagDataService.ImportRagFiles`.
   final ImportRagFilesConfig? importRagFilesConfig;
 
-  ImportRagFilesRequest({this.parent = '', this.importRagFilesConfig})
-    : super(fullyQualifiedName);
+  ImportRagFilesRequest({
+    required this.parent,
+    required this.importRagFilesConfig,
+  }) : super(fullyQualifiedName);
 
   factory ImportRagFilesRequest.fromJson(Map<String, dynamic> json) {
     return ImportRagFilesRequest(
@@ -95252,7 +95391,7 @@ final class GetRagFileRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}`
   final String name;
 
-  GetRagFileRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetRagFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetRagFileRequest.fromJson(Map<String, dynamic> json) {
     return GetRagFileRequest(name: json['name'] ?? '');
@@ -95293,7 +95432,7 @@ final class ListRagFilesRequest extends protobuf.ProtoMessage {
   final String pageToken;
 
   ListRagFilesRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -95381,7 +95520,7 @@ final class DeleteRagFileRequest extends protobuf.ProtoMessage {
   /// during the deletion will be ignored. The default value is false.
   final bool forceDelete;
 
-  DeleteRagFileRequest({this.name = '', this.forceDelete = false})
+  DeleteRagFileRequest({required this.name, this.forceDelete = false})
     : super(fullyQualifiedName);
 
   factory DeleteRagFileRequest.fromJson(Map<String, dynamic> json) {
@@ -95449,7 +95588,7 @@ final class GetRagEngineConfigRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/ragEngineConfig`
   final String name;
 
-  GetRagEngineConfigRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetRagEngineConfigRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetRagEngineConfigRequest.fromJson(Map<String, dynamic> json) {
     return GetRagEngineConfigRequest(name: json['name'] ?? '');
@@ -95476,7 +95615,7 @@ final class UpdateRagCorpusRequest extends protobuf.ProtoMessage {
   /// Required. The RagCorpus which replaces the resource on the server.
   final RagCorpus? ragCorpus;
 
-  UpdateRagCorpusRequest({this.ragCorpus}) : super(fullyQualifiedName);
+  UpdateRagCorpusRequest({required this.ragCorpus}) : super(fullyQualifiedName);
 
   factory UpdateRagCorpusRequest.fromJson(Map<String, dynamic> json) {
     return UpdateRagCorpusRequest(
@@ -95601,7 +95740,7 @@ final class UpdateRagEngineConfigRequest extends protobuf.ProtoMessage {
   /// increase request latencies until the operation is fully complete.
   final RagEngineConfig? ragEngineConfig;
 
-  UpdateRagEngineConfigRequest({this.ragEngineConfig})
+  UpdateRagEngineConfigRequest({required this.ragEngineConfig})
     : super(fullyQualifiedName);
 
   factory UpdateRagEngineConfigRequest.fromJson(Map<String, dynamic> json) {
@@ -95763,8 +95902,11 @@ final class RetrieveContextsRequest extends protobuf.ProtoMessage {
   /// Required. Single RAG retrieve query.
   final RagQuery? query;
 
-  RetrieveContextsRequest({this.vertexRagStore, this.parent = '', this.query})
-    : super(fullyQualifiedName);
+  RetrieveContextsRequest({
+    this.vertexRagStore,
+    required this.parent,
+    required this.query,
+  }) : super(fullyQualifiedName);
 
   factory RetrieveContextsRequest.fromJson(Map<String, dynamic> json) {
     return RetrieveContextsRequest(
@@ -96061,7 +96203,7 @@ final class AugmentPromptRequest extends protobuf.ProtoMessage {
 
   AugmentPromptRequest({
     this.vertexRagStore,
-    this.parent = '',
+    required this.parent,
     this.contents = const [],
     this.model,
   }) : super(fullyQualifiedName);
@@ -96190,7 +96332,7 @@ final class CorroborateContentRequest extends protobuf.ProtoMessage {
   final CorroborateContentRequest_Parameters? parameters;
 
   CorroborateContentRequest({
-    this.parent = '',
+    required this.parent,
     this.content,
     this.facts = const [],
     this.parameters,
@@ -96448,7 +96590,7 @@ final class GetStudyRequest extends protobuf.ProtoMessage {
   /// Format: `projects/{project}/locations/{location}/studies/{study}`
   final String name;
 
-  GetStudyRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetStudyRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetStudyRequest.fromJson(Map<String, dynamic> json) {
     return GetStudyRequest(name: json['name'] ?? '');
@@ -96479,7 +96621,7 @@ final class CreateStudyRequest extends protobuf.ProtoMessage {
   /// Required. The Study configuration used to create the Study.
   final Study? study;
 
-  CreateStudyRequest({this.parent = '', this.study})
+  CreateStudyRequest({required this.parent, required this.study})
     : super(fullyQualifiedName);
 
   factory CreateStudyRequest.fromJson(Map<String, dynamic> json) {
@@ -96522,8 +96664,11 @@ final class ListStudiesRequest extends protobuf.ProtoMessage {
   /// If unspecified, service will pick an appropriate default.
   final int pageSize;
 
-  ListStudiesRequest({this.parent = '', this.pageToken = '', this.pageSize = 0})
-    : super(fullyQualifiedName);
+  ListStudiesRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListStudiesRequest.fromJson(Map<String, dynamic> json) {
     return ListStudiesRequest(
@@ -96602,7 +96747,7 @@ final class DeleteStudyRequest extends protobuf.ProtoMessage {
   /// Format: `projects/{project}/locations/{location}/studies/{study}`
   final String name;
 
-  DeleteStudyRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteStudyRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteStudyRequest.fromJson(Map<String, dynamic> json) {
     return DeleteStudyRequest(name: json['name'] ?? '');
@@ -96633,7 +96778,7 @@ final class LookupStudyRequest extends protobuf.ProtoMessage {
   /// Required. The user-defined display name of the Study
   final String displayName;
 
-  LookupStudyRequest({this.parent = '', this.displayName = ''})
+  LookupStudyRequest({required this.parent, required this.displayName})
     : super(fullyQualifiedName);
 
   factory LookupStudyRequest.fromJson(Map<String, dynamic> json) {
@@ -96717,9 +96862,9 @@ final class SuggestTrialsRequest extends protobuf.ProtoMessage {
   final List<TrialContext> contexts;
 
   SuggestTrialsRequest({
-    this.parent = '',
-    this.suggestionCount = 0,
-    this.clientId = '',
+    required this.parent,
+    required this.suggestionCount,
+    required this.clientId,
     this.contexts = const [],
   }) : super(fullyQualifiedName);
 
@@ -96863,7 +97008,7 @@ final class CreateTrialRequest extends protobuf.ProtoMessage {
   /// Required. The Trial to create.
   final Trial? trial;
 
-  CreateTrialRequest({this.parent = '', this.trial})
+  CreateTrialRequest({required this.parent, required this.trial})
     : super(fullyQualifiedName);
 
   factory CreateTrialRequest.fromJson(Map<String, dynamic> json) {
@@ -96899,7 +97044,7 @@ final class GetTrialRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
   final String name;
 
-  GetTrialRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTrialRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTrialRequest.fromJson(Map<String, dynamic> json) {
     return GetTrialRequest(name: json['name'] ?? '');
@@ -96935,8 +97080,11 @@ final class ListTrialsRequest extends protobuf.ProtoMessage {
   /// If unspecified, the service will pick an appropriate default.
   final int pageSize;
 
-  ListTrialsRequest({this.parent = '', this.pageToken = '', this.pageSize = 0})
-    : super(fullyQualifiedName);
+  ListTrialsRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListTrialsRequest.fromJson(Map<String, dynamic> json) {
     return ListTrialsRequest(
@@ -97019,8 +97167,10 @@ final class AddTrialMeasurementRequest extends protobuf.ProtoMessage {
   /// Required. The measurement to be added to a Trial.
   final Measurement? measurement;
 
-  AddTrialMeasurementRequest({this.trialName = '', this.measurement})
-    : super(fullyQualifiedName);
+  AddTrialMeasurementRequest({
+    required this.trialName,
+    required this.measurement,
+  }) : super(fullyQualifiedName);
 
   factory AddTrialMeasurementRequest.fromJson(Map<String, dynamic> json) {
     return AddTrialMeasurementRequest(
@@ -97069,7 +97219,7 @@ final class CompleteTrialRequest extends protobuf.ProtoMessage {
   final String infeasibleReason;
 
   CompleteTrialRequest({
-    this.name = '',
+    required this.name,
     this.finalMeasurement,
     this.trialInfeasible = false,
     this.infeasibleReason = '',
@@ -97117,7 +97267,7 @@ final class DeleteTrialRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
   final String name;
 
-  DeleteTrialRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteTrialRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteTrialRequest.fromJson(Map<String, dynamic> json) {
     return DeleteTrialRequest(name: json['name'] ?? '');
@@ -97146,7 +97296,7 @@ final class CheckTrialEarlyStoppingStateRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
   final String trialName;
 
-  CheckTrialEarlyStoppingStateRequest({this.trialName = ''})
+  CheckTrialEarlyStoppingStateRequest({required this.trialName})
     : super(fullyQualifiedName);
 
   factory CheckTrialEarlyStoppingStateRequest.fromJson(
@@ -97264,7 +97414,7 @@ final class StopTrialRequest extends protobuf.ProtoMessage {
   /// `projects/{project}/locations/{location}/studies/{study}/trials/{trial}`
   final String name;
 
-  StopTrialRequest({this.name = ''}) : super(fullyQualifiedName);
+  StopTrialRequest({required this.name}) : super(fullyQualifiedName);
 
   factory StopTrialRequest.fromJson(Map<String, dynamic> json) {
     return StopTrialRequest(name: json['name'] ?? '');
@@ -97291,7 +97441,7 @@ final class ListOptimalTrialsRequest extends protobuf.ProtoMessage {
   /// Required. The name of the Study that the optimal Trial belongs to.
   final String parent;
 
-  ListOptimalTrialsRequest({this.parent = ''}) : super(fullyQualifiedName);
+  ListOptimalTrialsRequest({required this.parent}) : super(fullyQualifiedName);
 
   factory ListOptimalTrialsRequest.fromJson(Map<String, dynamic> json) {
     return ListOptimalTrialsRequest(parent: json['parent'] ?? '');

@@ -630,7 +630,7 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
   final EncodingType encodingType;
 
   AnalyzeSentimentRequest({
-    this.document,
+    required this.document,
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
@@ -729,7 +729,7 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
   final EncodingType encodingType;
 
   AnalyzeEntitiesRequest({
-    this.document,
+    required this.document,
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
@@ -817,7 +817,7 @@ final class ClassifyTextRequest extends ProtoMessage {
   /// Required. Input document.
   final Document? document;
 
-  ClassifyTextRequest({this.document}) : super(fullyQualifiedName);
+  ClassifyTextRequest({required this.document}) : super(fullyQualifiedName);
 
   factory ClassifyTextRequest.fromJson(Map<String, dynamic> json) {
     return ClassifyTextRequest(
@@ -903,7 +903,7 @@ final class ModerateTextRequest extends ProtoMessage {
   final ModerateTextRequest_ModelVersion modelVersion;
 
   ModerateTextRequest({
-    this.document,
+    required this.document,
     this.modelVersion = ModerateTextRequest_ModelVersion.$default,
   }) : super(fullyQualifiedName);
 
@@ -1043,8 +1043,8 @@ final class AnnotateTextRequest extends ProtoMessage {
   final EncodingType encodingType;
 
   AnnotateTextRequest({
-    this.document,
-    this.features,
+    required this.document,
+    required this.features,
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 

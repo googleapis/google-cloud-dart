@@ -1622,7 +1622,7 @@ final class EventTrigger extends ProtoMessage {
   EventTrigger({
     this.trigger = '',
     this.triggerRegion = '',
-    this.eventType = '',
+    required this.eventType,
     this.eventFilters = const [],
     this.pubsubTopic = '',
     this.serviceAccountEmail = '',
@@ -1730,8 +1730,11 @@ final class EventFilter extends ProtoMessage {
   /// `match-path-pattern`.
   final String operator;
 
-  EventFilter({this.attribute = '', this.value = '', this.operator = ''})
-    : super(fullyQualifiedName);
+  EventFilter({
+    required this.attribute,
+    required this.value,
+    this.operator = '',
+  }) : super(fullyQualifiedName);
 
   factory EventFilter.fromJson(Map<String, dynamic> json) {
     return EventFilter(
@@ -1777,7 +1780,7 @@ final class GetFunctionRequest extends ProtoMessage {
   /// function.
   final String revision;
 
-  GetFunctionRequest({this.name = '', this.revision = ''})
+  GetFunctionRequest({required this.name, this.revision = ''})
     : super(fullyQualifiedName);
 
   factory GetFunctionRequest.fromJson(Map<String, dynamic> json) {
@@ -1837,7 +1840,7 @@ final class ListFunctionsRequest extends ProtoMessage {
   final String orderBy;
 
   ListFunctionsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
@@ -1943,8 +1946,11 @@ final class CreateFunctionRequest extends ProtoMessage {
   /// are /[a-z][0-9]-/.
   final String functionId;
 
-  CreateFunctionRequest({this.parent = '', this.function, this.functionId = ''})
-    : super(fullyQualifiedName);
+  CreateFunctionRequest({
+    required this.parent,
+    required this.function,
+    this.functionId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateFunctionRequest.fromJson(Map<String, dynamic> json) {
     return CreateFunctionRequest(
@@ -1982,7 +1988,7 @@ final class UpdateFunctionRequest extends ProtoMessage {
   /// If no field mask is provided, all fields will be updated.
   final FieldMask? updateMask;
 
-  UpdateFunctionRequest({this.function, this.updateMask})
+  UpdateFunctionRequest({required this.function, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateFunctionRequest.fromJson(Map<String, dynamic> json) {
@@ -2012,7 +2018,7 @@ final class DeleteFunctionRequest extends ProtoMessage {
   /// Required. The name of the function which should be deleted.
   final String name;
 
-  DeleteFunctionRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteFunctionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFunctionRequest.fromJson(Map<String, dynamic> json) {
     return DeleteFunctionRequest(name: json['name'] ?? '');
@@ -2063,7 +2069,7 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
   final Environment environment;
 
   GenerateUploadUrlRequest({
-    this.parent = '',
+    required this.parent,
     this.kmsKeyName = '',
     this.environment = Environment.$default,
   }) : super(fullyQualifiedName);
@@ -2152,7 +2158,7 @@ final class GenerateDownloadUrlRequest extends ProtoMessage {
   /// signed URL should be generated.
   final String name;
 
-  GenerateDownloadUrlRequest({this.name = ''}) : super(fullyQualifiedName);
+  GenerateDownloadUrlRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GenerateDownloadUrlRequest.fromJson(Map<String, dynamic> json) {
     return GenerateDownloadUrlRequest(name: json['name'] ?? '');
@@ -2211,7 +2217,7 @@ final class ListRuntimesRequest extends ProtoMessage {
   /// following the syntax outlined in https://google.aip.dev/160.
   final String filter;
 
-  ListRuntimesRequest({this.parent = '', this.filter = ''})
+  ListRuntimesRequest({required this.parent, this.filter = ''})
     : super(fullyQualifiedName);
 
   factory ListRuntimesRequest.fromJson(Map<String, dynamic> json) {

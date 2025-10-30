@@ -1730,7 +1730,8 @@ final class CreateCachedContentRequest extends ProtoMessage {
   /// Required. The cached content to create.
   final CachedContent? cachedContent;
 
-  CreateCachedContentRequest({this.cachedContent}) : super(fullyQualifiedName);
+  CreateCachedContentRequest({required this.cachedContent})
+    : super(fullyQualifiedName);
 
   factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return CreateCachedContentRequest(
@@ -1758,7 +1759,7 @@ final class GetCachedContentRequest extends ProtoMessage {
   /// Format: `cachedContents/{id}`
   final String name;
 
-  GetCachedContentRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return GetCachedContentRequest(name: json['name'] ?? '');
@@ -1787,7 +1788,7 @@ final class UpdateCachedContentRequest extends ProtoMessage {
   /// The list of fields to update.
   final FieldMask? updateMask;
 
-  UpdateCachedContentRequest({this.cachedContent, this.updateMask})
+  UpdateCachedContentRequest({required this.cachedContent, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) {
@@ -1818,7 +1819,7 @@ final class DeleteCachedContentRequest extends ProtoMessage {
   /// Format: `cachedContents/{id}`
   final String name;
 
-  DeleteCachedContentRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return DeleteCachedContentRequest(name: json['name'] ?? '');
@@ -1893,7 +1894,7 @@ final class CachedContent extends ProtoMessage {
     this.ttl,
     this.name,
     this.displayName,
-    this.model,
+    required this.model,
     this.systemInstruction,
     this.contents = const [],
     this.tools = const [],
@@ -2374,7 +2375,8 @@ final class FileData extends ProtoMessage {
   /// Required. URI.
   final String fileUri;
 
-  FileData({this.mimeType = '', this.fileUri = ''}) : super(fullyQualifiedName);
+  FileData({this.mimeType = '', required this.fileUri})
+    : super(fullyQualifiedName);
 
   factory FileData.fromJson(Map<String, dynamic> json) {
     return FileData(
@@ -2456,10 +2458,8 @@ final class ExecutableCode extends ProtoMessage {
   /// Required. The code to be executed.
   final String code;
 
-  ExecutableCode({
-    this.language = ExecutableCode_Language.$default,
-    this.code = '',
-  }) : super(fullyQualifiedName);
+  ExecutableCode({required this.language, required this.code})
+    : super(fullyQualifiedName);
 
   factory ExecutableCode.fromJson(Map<String, dynamic> json) {
     return ExecutableCode(
@@ -2524,10 +2524,8 @@ final class CodeExecutionResult extends ProtoMessage {
   /// other description otherwise.
   final String output;
 
-  CodeExecutionResult({
-    this.outcome = CodeExecutionResult_Outcome.$default,
-    this.output = '',
-  }) : super(fullyQualifiedName);
+  CodeExecutionResult({required this.outcome, this.output = ''})
+    : super(fullyQualifiedName);
 
   factory CodeExecutionResult.fromJson(Map<String, dynamic> json) {
     return CodeExecutionResult(
@@ -2723,7 +2721,7 @@ final class Tool_ComputerUse extends ProtoMessage {
   final List<String> excludedPredefinedFunctions;
 
   Tool_ComputerUse({
-    this.environment = Tool_ComputerUse_Environment.$default,
+    required this.environment,
     this.excludedPredefinedFunctions = const [],
   }) : super(fullyQualifiedName);
 
@@ -3107,8 +3105,8 @@ final class FunctionDeclaration extends ProtoMessage {
   final FunctionDeclaration_Behavior behavior;
 
   FunctionDeclaration({
-    this.name = '',
-    this.description = '',
+    required this.name,
+    required this.description,
     this.parameters,
     this.parametersJsonSchema,
     this.response,
@@ -3210,7 +3208,7 @@ final class FunctionCall extends ProtoMessage {
   /// Optional. The function parameters and values in JSON object format.
   final Struct? args;
 
-  FunctionCall({this.id = '', this.name = '', this.args})
+  FunctionCall({this.id = '', required this.name, this.args})
     : super(fullyQualifiedName);
 
   factory FunctionCall.fromJson(Map<String, dynamic> json) {
@@ -3283,8 +3281,8 @@ final class FunctionResponse extends ProtoMessage {
 
   FunctionResponse({
     this.id = '',
-    this.name = '',
-    this.response,
+    required this.name,
+    required this.response,
     this.parts = const [],
     this.willContinue = false,
     this.scheduling,
@@ -3451,7 +3449,7 @@ final class Schema extends ProtoMessage {
   final Value? default$;
 
   Schema({
-    this.type = Type.$default,
+    required this.type,
     this.format = '',
     this.title = '',
     this.description = '',
@@ -3701,8 +3699,8 @@ final class GenerateMessageRequest extends ProtoMessage {
   final int? topK;
 
   GenerateMessageRequest({
-    this.model = '',
-    this.prompt,
+    required this.model,
+    required this.prompt,
     this.temperature,
     this.candidateCount,
     this.topP,
@@ -3824,7 +3822,7 @@ final class Message extends ProtoMessage {
   /// `content`. This field is used only on output.
   final CitationMetadata? citationMetadata;
 
-  Message({this.author = '', this.content = '', this.citationMetadata})
+  Message({this.author = '', required this.content, this.citationMetadata})
     : super(fullyQualifiedName);
 
   factory Message.fromJson(Map<String, dynamic> json) {
@@ -3906,7 +3904,7 @@ final class MessagePrompt extends ProtoMessage {
   MessagePrompt({
     this.context = '',
     this.examples = const [],
-    this.messages = const [],
+    required this.messages,
   }) : super(fullyQualifiedName);
 
   factory MessagePrompt.fromJson(Map<String, dynamic> json) {
@@ -3946,7 +3944,8 @@ final class Example extends ProtoMessage {
   /// Required. An example of what the model should output given the input.
   final Message? output;
 
-  Example({this.input, this.output}) : super(fullyQualifiedName);
+  Example({required this.input, required this.output})
+    : super(fullyQualifiedName);
 
   factory Example.fromJson(Map<String, dynamic> json) {
     return Example(
@@ -3986,7 +3985,7 @@ final class CountMessageTokensRequest extends ProtoMessage {
   /// Required. The prompt, whose token count is to be returned.
   final MessagePrompt? prompt;
 
-  CountMessageTokensRequest({this.model = '', this.prompt})
+  CountMessageTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
   factory CountMessageTokensRequest.fromJson(Map<String, dynamic> json) {
@@ -4381,7 +4380,7 @@ final class GetFileRequest extends ProtoMessage {
   /// Example: `files/abc-123`
   final String name;
 
-  GetFileRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFileRequest.fromJson(Map<String, dynamic> json) {
     return GetFileRequest(name: json['name'] ?? '');
@@ -4408,7 +4407,7 @@ final class DeleteFileRequest extends ProtoMessage {
   /// Example: `files/abc-123`
   final String name;
 
-  DeleteFileRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFileRequest.fromJson(Map<String, dynamic> json) {
     return DeleteFileRequest(name: json['name'] ?? '');
@@ -4435,7 +4434,7 @@ final class DownloadFileRequest extends ProtoMessage {
   /// Example: `files/abc-123`
   final String name;
 
-  DownloadFileRequest({this.name = ''}) : super(fullyQualifiedName);
+  DownloadFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DownloadFileRequest.fromJson(Map<String, dynamic> json) {
     return DownloadFileRequest(name: json['name'] ?? '');
@@ -4543,9 +4542,9 @@ final class GenerateContentRequest extends ProtoMessage {
   final String? cachedContent;
 
   GenerateContentRequest({
-    this.model = '',
+    required this.model,
     this.systemInstruction,
-    this.contents = const [],
+    required this.contents,
     this.tools = const [],
     this.toolConfig,
     this.safetySettings = const [],
@@ -4667,7 +4666,7 @@ final class SpeakerVoiceConfig extends ProtoMessage {
   /// Required. The configuration for the voice to use.
   final VoiceConfig? voiceConfig;
 
-  SpeakerVoiceConfig({this.speaker = '', this.voiceConfig})
+  SpeakerVoiceConfig({required this.speaker, required this.voiceConfig})
     : super(fullyQualifiedName);
 
   factory SpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
@@ -4700,7 +4699,7 @@ final class MultiSpeakerVoiceConfig extends ProtoMessage {
   /// Required. All the enabled speaker voices.
   final List<SpeakerVoiceConfig> speakerVoiceConfigs;
 
-  MultiSpeakerVoiceConfig({this.speakerVoiceConfigs = const []})
+  MultiSpeakerVoiceConfig({required this.speakerVoiceConfigs})
     : super(fullyQualifiedName);
 
   factory MultiSpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
@@ -5264,8 +5263,8 @@ final class SemanticRetrieverConfig extends ProtoMessage {
   final double? minimumRelevanceScore;
 
   SemanticRetrieverConfig({
-    this.source = '',
-    this.query,
+    required this.source,
+    required this.query,
     this.metadataFilters = const [],
     this.maxChunksCount,
     this.minimumRelevanceScore,
@@ -6622,9 +6621,9 @@ final class GenerateAnswerRequest extends ProtoMessage {
   GenerateAnswerRequest({
     this.inlinePassages,
     this.semanticRetriever,
-    this.model = '',
-    this.contents = const [],
-    this.answerStyle = GenerateAnswerRequest_AnswerStyle.$default,
+    required this.model,
+    required this.contents,
+    required this.answerStyle,
     this.safetySettings = const [],
     this.temperature,
   }) : super(fullyQualifiedName);
@@ -6907,8 +6906,8 @@ final class EmbedContentRequest extends ProtoMessage {
   final int? outputDimensionality;
 
   EmbedContentRequest({
-    this.model = '',
-    this.content,
+    required this.model,
+    required this.content,
     this.taskType,
     this.title,
     this.outputDimensionality,
@@ -7014,7 +7013,7 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
   /// must match the model specified `BatchEmbedContentsRequest.model`.
   final List<EmbedContentRequest> requests;
 
-  BatchEmbedContentsRequest({this.model = '', this.requests = const []})
+  BatchEmbedContentsRequest({required this.model, required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchEmbedContentsRequest.fromJson(Map<String, dynamic> json) {
@@ -7101,7 +7100,7 @@ final class CountTokensRequest extends ProtoMessage {
   final GenerateContentRequest? generateContentRequest;
 
   CountTokensRequest({
-    this.model = '',
+    required this.model,
     this.contents = const [],
     this.generateContentRequest,
   }) : super(fullyQualifiedName);
@@ -7708,7 +7707,7 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   final AudioTranscriptionConfig? outputAudioTranscription;
 
   BidiGenerateContentSetup({
-    this.model = '',
+    required this.model,
     this.generationConfig,
     this.systemInstruction,
     this.tools = const [],
@@ -8679,9 +8678,9 @@ final class Model extends ProtoMessage {
   final bool thinking;
 
   Model({
-    this.name = '',
-    this.baseModelId = '',
-    this.version = '',
+    required this.name,
+    required this.baseModelId,
+    required this.version,
     this.displayName = '',
     this.description = '',
     this.inputTokenLimit = 0,
@@ -8766,7 +8765,7 @@ final class GetModelRequest extends ProtoMessage {
   /// Format: `models/{model}`
   final String name;
 
-  GetModelRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetModelRequest.fromJson(Map<String, dynamic> json) {
     return GetModelRequest(name: json['name'] ?? '');
@@ -8878,7 +8877,7 @@ final class GetTunedModelRequest extends ProtoMessage {
   /// Format: `tunedModels/my-model-id`
   final String name;
 
-  GetTunedModelRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTunedModelRequest.fromJson(Map<String, dynamic> json) {
     return GetTunedModelRequest(name: json['name'] ?? '');
@@ -9023,7 +9022,7 @@ final class CreateTunedModelRequest extends ProtoMessage {
   /// Required. The tuned model to create.
   final TunedModel? tunedModel;
 
-  CreateTunedModelRequest({this.tunedModelId, this.tunedModel})
+  CreateTunedModelRequest({this.tunedModelId, required this.tunedModel})
     : super(fullyQualifiedName);
 
   factory CreateTunedModelRequest.fromJson(Map<String, dynamic> json) {
@@ -9125,7 +9124,7 @@ final class UpdateTunedModelRequest extends ProtoMessage {
   /// Optional. The list of fields to update.
   final FieldMask? updateMask;
 
-  UpdateTunedModelRequest({this.tunedModel, this.updateMask})
+  UpdateTunedModelRequest({required this.tunedModel, this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateTunedModelRequest.fromJson(Map<String, dynamic> json) {
@@ -9156,7 +9155,7 @@ final class DeleteTunedModelRequest extends ProtoMessage {
   /// Format: `tunedModels/my-model-id`
   final String name;
 
-  DeleteTunedModelRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteTunedModelRequest.fromJson(Map<String, dynamic> json) {
     return DeleteTunedModelRequest(name: json['name'] ?? '');
@@ -9210,8 +9209,12 @@ final class Permission extends ProtoMessage {
   /// Required. The role granted by this permission.
   final Permission_Role? role;
 
-  Permission({this.name = '', this.granteeType, this.emailAddress, this.role})
-    : super(fullyQualifiedName);
+  Permission({
+    this.name = '',
+    this.granteeType,
+    this.emailAddress,
+    required this.role,
+  }) : super(fullyQualifiedName);
 
   factory Permission.fromJson(Map<String, dynamic> json) {
     return Permission(
@@ -9319,7 +9322,7 @@ final class CreatePermissionRequest extends ProtoMessage {
   /// Required. The permission to create.
   final Permission? permission;
 
-  CreatePermissionRequest({this.parent = '', this.permission})
+  CreatePermissionRequest({required this.parent, required this.permission})
     : super(fullyQualifiedName);
 
   factory CreatePermissionRequest.fromJson(Map<String, dynamic> json) {
@@ -9356,7 +9359,7 @@ final class GetPermissionRequest extends ProtoMessage {
   ///    `corpora/{corpus}/permissions/{permission}`
   final String name;
 
-  GetPermissionRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetPermissionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetPermissionRequest.fromJson(Map<String, dynamic> json) {
     return GetPermissionRequest(name: json['name'] ?? '');
@@ -9403,7 +9406,7 @@ final class ListPermissionsRequest extends ProtoMessage {
   final String pageToken;
 
   ListPermissionsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -9492,7 +9495,7 @@ final class UpdatePermissionRequest extends ProtoMessage {
   ///  - role (`Permission.role` field)
   final FieldMask? updateMask;
 
-  UpdatePermissionRequest({this.permission, this.updateMask})
+  UpdatePermissionRequest({required this.permission, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdatePermissionRequest.fromJson(Map<String, dynamic> json) {
@@ -9525,7 +9528,7 @@ final class DeletePermissionRequest extends ProtoMessage {
   ///    `corpora/{corpus}/permissions/{permission}`
   final String name;
 
-  DeletePermissionRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeletePermissionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeletePermissionRequest.fromJson(Map<String, dynamic> json) {
     return DeletePermissionRequest(name: json['name'] ?? '');
@@ -9557,7 +9560,7 @@ final class TransferOwnershipRequest extends ProtoMessage {
   /// transferred to.
   final String emailAddress;
 
-  TransferOwnershipRequest({this.name = '', this.emailAddress = ''})
+  TransferOwnershipRequest({required this.name, required this.emailAddress})
     : super(fullyQualifiedName);
 
   factory TransferOwnershipRequest.fromJson(Map<String, dynamic> json) {
@@ -9618,8 +9621,11 @@ final class PredictRequest extends ProtoMessage {
   /// Optional. The parameters that govern the prediction call.
   final Value? parameters;
 
-  PredictRequest({this.model = '', this.instances = const [], this.parameters})
-    : super(fullyQualifiedName);
+  PredictRequest({
+    required this.model,
+    required this.instances,
+    this.parameters,
+  }) : super(fullyQualifiedName);
 
   factory PredictRequest.fromJson(Map<String, dynamic> json) {
     return PredictRequest(
@@ -9662,8 +9668,8 @@ final class PredictLongRunningRequest extends ProtoMessage {
   final Value? parameters;
 
   PredictLongRunningRequest({
-    this.model = '',
-    this.instances = const [],
+    required this.model,
+    required this.instances,
     this.parameters,
   }) : super(fullyQualifiedName);
 
@@ -10052,7 +10058,7 @@ final class CustomMetadata extends ProtoMessage {
     this.stringValue,
     this.stringListValue,
     this.numericValue,
-    this.key = '',
+    required this.key,
   }) : super(fullyQualifiedName);
 
   factory CustomMetadata.fromJson(Map<String, dynamic> json) {
@@ -10102,7 +10108,7 @@ final class MetadataFilter extends ProtoMessage {
   /// Multiple `Condition`s are joined by logical ORs.
   final List<Condition> conditions;
 
-  MetadataFilter({this.key = '', this.conditions = const []})
+  MetadataFilter({required this.key, required this.conditions})
     : super(fullyQualifiedName);
 
   factory MetadataFilter.fromJson(Map<String, dynamic> json) {
@@ -10143,11 +10149,8 @@ final class Condition extends ProtoMessage {
   /// condition.
   final Condition_Operator operation;
 
-  Condition({
-    this.stringValue,
-    this.numericValue,
-    this.operation = Condition_Operator.$default,
-  }) : super(fullyQualifiedName);
+  Condition({this.stringValue, this.numericValue, required this.operation})
+    : super(fullyQualifiedName);
 
   factory Condition.fromJson(Map<String, dynamic> json) {
     return Condition(
@@ -10257,7 +10260,7 @@ final class Chunk extends ProtoMessage {
 
   Chunk({
     this.name = '',
-    this.data,
+    required this.data,
     this.customMetadata = const [],
     this.createTime,
     this.updateTime,
@@ -10363,7 +10366,7 @@ final class CreateCorpusRequest extends ProtoMessage {
   /// Required. The `Corpus` to create.
   final Corpus? corpus;
 
-  CreateCorpusRequest({this.corpus}) : super(fullyQualifiedName);
+  CreateCorpusRequest({required this.corpus}) : super(fullyQualifiedName);
 
   factory CreateCorpusRequest.fromJson(Map<String, dynamic> json) {
     return CreateCorpusRequest(corpus: decode(json['corpus'], Corpus.fromJson));
@@ -10387,7 +10390,7 @@ final class GetCorpusRequest extends ProtoMessage {
   /// Example: `corpora/my-corpus-123`
   final String name;
 
-  GetCorpusRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetCorpusRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetCorpusRequest.fromJson(Map<String, dynamic> json) {
     return GetCorpusRequest(name: json['name'] ?? '');
@@ -10417,7 +10420,7 @@ final class UpdateCorpusRequest extends ProtoMessage {
   /// Currently, this only supports updating `display_name`.
   final FieldMask? updateMask;
 
-  UpdateCorpusRequest({this.corpus, this.updateMask})
+  UpdateCorpusRequest({required this.corpus, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateCorpusRequest.fromJson(Map<String, dynamic> json) {
@@ -10455,7 +10458,7 @@ final class DeleteCorpusRequest extends ProtoMessage {
   /// `Corpus` contains any `Document`s.
   final bool force;
 
-  DeleteCorpusRequest({this.name = '', this.force = false})
+  DeleteCorpusRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) {
@@ -10617,8 +10620,8 @@ final class QueryCorpusRequest extends ProtoMessage {
   final int resultsCount;
 
   QueryCorpusRequest({
-    this.name = '',
-    this.query = '',
+    required this.name,
+    required this.query,
     this.metadataFilters = const [],
     this.resultsCount = 0,
   }) : super(fullyQualifiedName);
@@ -10741,7 +10744,7 @@ final class CreateDocumentRequest extends ProtoMessage {
   /// Required. The `Document` to create.
   final Document? document;
 
-  CreateDocumentRequest({this.parent = '', this.document})
+  CreateDocumentRequest({required this.parent, required this.document})
     : super(fullyQualifiedName);
 
   factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) {
@@ -10775,7 +10778,7 @@ final class GetDocumentRequest extends ProtoMessage {
   /// Example: `corpora/my-corpus-123/documents/the-doc-abc`
   final String name;
 
-  GetDocumentRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetDocumentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetDocumentRequest.fromJson(Map<String, dynamic> json) {
     return GetDocumentRequest(name: json['name'] ?? '');
@@ -10806,7 +10809,7 @@ final class UpdateDocumentRequest extends ProtoMessage {
   /// `custom_metadata`.
   final FieldMask? updateMask;
 
-  UpdateDocumentRequest({this.document, this.updateMask})
+  UpdateDocumentRequest({required this.document, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateDocumentRequest.fromJson(Map<String, dynamic> json) {
@@ -10844,7 +10847,7 @@ final class DeleteDocumentRequest extends ProtoMessage {
   /// `Document` contains any `Chunk`s.
   final bool force;
 
-  DeleteDocumentRequest({this.name = '', this.force = false})
+  DeleteDocumentRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) {
@@ -10895,7 +10898,7 @@ final class ListDocumentsRequest extends ProtoMessage {
   final String pageToken;
 
   ListDocumentsRequest({
-    this.parent = '',
+    required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
   }) : super(fullyQualifiedName);
@@ -11019,8 +11022,8 @@ final class QueryDocumentRequest extends ProtoMessage {
   final List<MetadataFilter> metadataFilters;
 
   QueryDocumentRequest({
-    this.name = '',
-    this.query = '',
+    required this.name,
+    required this.query,
     this.resultsCount = 0,
     this.metadataFilters = const [],
   }) : super(fullyQualifiedName);
@@ -11101,7 +11104,7 @@ final class CreateChunkRequest extends ProtoMessage {
   /// Required. The `Chunk` to create.
   final Chunk? chunk;
 
-  CreateChunkRequest({this.parent = '', this.chunk})
+  CreateChunkRequest({required this.parent, required this.chunk})
     : super(fullyQualifiedName);
 
   factory CreateChunkRequest.fromJson(Map<String, dynamic> json) {
@@ -11140,7 +11143,7 @@ final class BatchCreateChunksRequest extends ProtoMessage {
   /// A maximum of 100 `Chunk`s can be created in a batch.
   final List<CreateChunkRequest> requests;
 
-  BatchCreateChunksRequest({this.parent = '', this.requests = const []})
+  BatchCreateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) {
@@ -11202,7 +11205,7 @@ final class GetChunkRequest extends ProtoMessage {
   /// Example: `corpora/my-corpus-123/documents/the-doc-abc/chunks/some-chunk`
   final String name;
 
-  GetChunkRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetChunkRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetChunkRequest.fromJson(Map<String, dynamic> json) {
     return GetChunkRequest(name: json['name'] ?? '');
@@ -11232,7 +11235,8 @@ final class UpdateChunkRequest extends ProtoMessage {
   /// Currently, this only supports updating `custom_metadata` and `data`.
   final FieldMask? updateMask;
 
-  UpdateChunkRequest({this.chunk, this.updateMask}) : super(fullyQualifiedName);
+  UpdateChunkRequest({required this.chunk, required this.updateMask})
+    : super(fullyQualifiedName);
 
   factory UpdateChunkRequest.fromJson(Map<String, dynamic> json) {
     return UpdateChunkRequest(
@@ -11267,7 +11271,7 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
   /// A maximum of 100 `Chunk`s can be updated in a batch.
   final List<UpdateChunkRequest> requests;
 
-  BatchUpdateChunksRequest({this.parent = '', this.requests = const []})
+  BatchUpdateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) {
@@ -11329,7 +11333,7 @@ final class DeleteChunkRequest extends ProtoMessage {
   /// Example: `corpora/my-corpus-123/documents/the-doc-abc/chunks/some-chunk`
   final String name;
 
-  DeleteChunkRequest({this.name = ''}) : super(fullyQualifiedName);
+  DeleteChunkRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteChunkRequest.fromJson(Map<String, dynamic> json) {
     return DeleteChunkRequest(name: json['name'] ?? '');
@@ -11360,7 +11364,7 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
   /// Required. The request messages specifying the `Chunk`s to delete.
   final List<DeleteChunkRequest> requests;
 
-  BatchDeleteChunksRequest({this.parent = '', this.requests = const []})
+  BatchDeleteChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) {
@@ -11412,8 +11416,11 @@ final class ListChunksRequest extends ProtoMessage {
   /// must match the call that provided the page token.
   final String pageToken;
 
-  ListChunksRequest({this.parent = '', this.pageSize = 0, this.pageToken = ''})
-    : super(fullyQualifiedName);
+  ListChunksRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListChunksRequest.fromJson(Map<String, dynamic> json) {
     return ListChunksRequest(
@@ -11613,8 +11620,8 @@ final class SafetyRating extends ProtoMessage {
   final bool blocked;
 
   SafetyRating({
-    this.category = HarmCategory.$default,
-    this.probability = SafetyRating_HarmProbability.$default,
+    required this.category,
+    required this.probability,
     this.blocked = false,
   }) : super(fullyQualifiedName);
 
@@ -11703,10 +11710,8 @@ final class SafetySetting extends ProtoMessage {
   /// Required. Controls the probability threshold at which harm is blocked.
   final SafetySetting_HarmBlockThreshold threshold;
 
-  SafetySetting({
-    this.category = HarmCategory.$default,
-    this.threshold = SafetySetting_HarmBlockThreshold.$default,
-  }) : super(fullyQualifiedName);
+  SafetySetting({required this.category, required this.threshold})
+    : super(fullyQualifiedName);
 
   factory SafetySetting.fromJson(Map<String, dynamic> json) {
     return SafetySetting(
@@ -11866,8 +11871,8 @@ final class GenerateTextRequest extends ProtoMessage {
   final List<String> stopSequences;
 
   GenerateTextRequest({
-    this.model = '',
-    this.prompt,
+    required this.model,
+    required this.prompt,
     this.temperature,
     this.candidateCount,
     this.maxOutputTokens,
@@ -11988,7 +11993,7 @@ final class TextPrompt extends ProtoMessage {
   /// Required. The prompt text.
   final String text;
 
-  TextPrompt({this.text = ''}) : super(fullyQualifiedName);
+  TextPrompt({required this.text}) : super(fullyQualifiedName);
 
   factory TextPrompt.fromJson(Map<String, dynamic> json) {
     return TextPrompt(text: json['text'] ?? '');
@@ -12074,7 +12079,7 @@ final class EmbedTextRequest extends ProtoMessage {
   /// embedding.
   final String text;
 
-  EmbedTextRequest({this.model = '', this.text = ''})
+  EmbedTextRequest({required this.model, this.text = ''})
     : super(fullyQualifiedName);
 
   factory EmbedTextRequest.fromJson(Map<String, dynamic> json) {
@@ -12144,7 +12149,7 @@ final class BatchEmbedTextRequest extends ProtoMessage {
   final List<EmbedTextRequest> requests;
 
   BatchEmbedTextRequest({
-    this.model = '',
+    required this.model,
     this.texts = const [],
     this.requests = const [],
   }) : super(fullyQualifiedName);
@@ -12243,7 +12248,7 @@ final class CountTextTokensRequest extends ProtoMessage {
   /// Required. The free-form input text given to the model as a prompt.
   final TextPrompt? prompt;
 
-  CountTextTokensRequest({this.model = '', this.prompt})
+  CountTextTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
   factory CountTextTokensRequest.fromJson(Map<String, dynamic> json) {
@@ -12386,7 +12391,7 @@ final class TunedModel extends ProtoMessage {
     this.state = TunedModel_State.$default,
     this.createTime,
     this.updateTime,
-    this.tuningTask,
+    required this.tuningTask,
     this.readerProjectNumbers = const [],
   }) : super(fullyQualifiedName);
 
@@ -12544,7 +12549,7 @@ final class TuningTask extends ProtoMessage {
     this.startTime,
     this.completeTime,
     this.snapshots = const [],
-    this.trainingData,
+    required this.trainingData,
     this.hyperparameters,
   }) : super(fullyQualifiedName);
 
@@ -12705,7 +12710,8 @@ final class TuningExample extends ProtoMessage {
   /// Required. The expected model output.
   final String output;
 
-  TuningExample({this.textInput, this.output = ''}) : super(fullyQualifiedName);
+  TuningExample({this.textInput, required this.output})
+    : super(fullyQualifiedName);
 
   factory TuningExample.fromJson(Map<String, dynamic> json) {
     return TuningExample(
