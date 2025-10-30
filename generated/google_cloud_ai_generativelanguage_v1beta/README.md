@@ -96,7 +96,7 @@ void main() async {
   if (parts == null) {
     print('<No textual response>');
   } else {
-    print(parts.map((p) => p.text ?? '').join(''));
+    print(parts.map((p) => p.text!).join(''));
   }
 
   service.close();

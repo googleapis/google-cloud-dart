@@ -66,7 +66,7 @@ void main() {
 
     expect(actual.reason, expected.reason);
     expect(actual.domain, expected.domain);
-    expect(actual.metadata, isNull);
+    expect(actual.metadata, isEmpty);
 
     expected = ErrorInfo(
       reason: 'LOREM_IPSUM',
