@@ -18,11 +18,13 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:http/http.dart' as http;
 
-import 'versions.dart';
+import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
 
-export 'web.dart' if (dart.library.io) 'vm.dart' show httpClientFromApiKey;
+export 'src/web.dart'
+    if (dart.library.io) 'src/vm.dart'
+    show httpClientFromApiKey;
 
 const String _clientKey = 'x-goog-api-client';
 

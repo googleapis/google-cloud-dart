@@ -12,4 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-export 'package:google_cloud_rpc/src/service_client.dart';
+export 'package:google_cloud_rpc/service_client.dart';

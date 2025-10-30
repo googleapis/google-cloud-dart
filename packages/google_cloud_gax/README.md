@@ -29,33 +29,3 @@ packages.
 > It should rarely be used by application developers.  
 
 This library allows you to send JSON messages over an HTTP connection.
-
-For example:
-
-```dart
-import 'package:google_cloud_gax/gax.dart';
-import 'package:googleapis_auth/auth_io.dart';
-
-class AnalysisRequest implements JsonEncodable {
-  final String text;
-
-  AnalysisRequest(this.text);
-
-  @override
-  Object? toJson() => {
-    'document': {'type': 'PLAIN_TEXT', 'content': text},
-  };
-}
-
-void main() async {
-  final httpClient = clientViaApiKey('<enter your API key here>');
-
-  final serviceClient = ServiceClient(client: httpClient);
-  final response = await serviceClient.post(
-    Uri.https('language.googleapis.com', '/v2/documents:analyzeSentiment'),
-    body: AnalysisRequest("I am very happy! Are you sad?"),
-  );
-  print(response);
-  serviceClient.close();
-}
-```

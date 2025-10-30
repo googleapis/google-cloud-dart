@@ -16,7 +16,7 @@ import 'dart:convert';
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/rpc.dart';
-import 'package:google_cloud_rpc/src/service_client.dart';
+import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart';
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -29,7 +29,7 @@ class TestMessage extends JsonEncodable {
 }
 
 final sampleUrl = Uri.https('example.org', '/path');
-const apiHeaderPattern = r'gl-dart/(3\.\d+\.\d+)|0 gax/0.1.0';
+const apiHeaderPattern = r'gl-dart/(3\.\d+\.\d+)|0 gax/0.2.0';
 
 void main() {
   group('non-streaming', () {

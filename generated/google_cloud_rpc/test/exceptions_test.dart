@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'package:google_cloud_rpc/rpc.dart';
-import 'package:google_cloud_rpc/src/service_client.dart';
+import 'package:google_cloud_rpc/service_client.dart';
 import 'package:test/test.dart';
 
 void main() {
