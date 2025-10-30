@@ -171,7 +171,7 @@ final class SetIamPolicyRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (resource.isNotDefault) 'resource': resource,
+      'resource': resource,
       if (policy != null) 'policy': policy!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
@@ -209,7 +209,7 @@ final class GetIamPolicyRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (resource.isNotDefault) 'resource': resource,
+      'resource': resource,
       if (options != null) 'options': options!.toJson(),
     };
   }
@@ -248,10 +248,7 @@ final class TestIamPermissionsRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (resource.isNotDefault) 'resource': resource,
-      if (permissions.isNotDefault) 'permissions': permissions,
-    };
+    return {'resource': resource, 'permissions': permissions};
   }
 
   @override

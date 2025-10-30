@@ -796,7 +796,7 @@ final class Replication_UserManaged extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (replicas.isNotDefault) 'replicas': encodeList(replicas)};
+    return {'replicas': encodeList(replicas)};
   }
 
   @override
@@ -885,7 +885,7 @@ final class CustomerManagedEncryption extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName};
+    return {'kmsKeyName': kmsKeyName};
   }
 
   @override
@@ -1097,10 +1097,7 @@ final class CustomerManagedEncryptionStatus extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (kmsKeyVersionName.isNotDefault)
-        'kmsKeyVersionName': kmsKeyVersionName,
-    };
+    return {'kmsKeyVersionName': kmsKeyVersionName};
   }
 
   @override
@@ -1301,7 +1298,7 @@ final class ListSecretsRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -1413,8 +1410,8 @@ final class CreateSecretRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (secretId.isNotDefault) 'secretId': secretId,
+      'parent': parent,
+      'secretId': secretId,
       if (secret != null) 'secret': secret!.toJson(),
     };
   }
@@ -1455,7 +1452,7 @@ final class AddSecretVersionRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (payload != null) 'payload': payload!.toJson(),
     };
   }
@@ -1486,7 +1483,7 @@ final class GetSecretRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -1543,7 +1540,7 @@ final class ListSecretVersionsRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -1643,7 +1640,7 @@ final class GetSecretVersionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -1713,7 +1710,7 @@ final class AccessSecretVersionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -1791,10 +1788,7 @@ final class DeleteSecretRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (etag.isNotDefault) 'etag': etag,
-    };
+    return {'name': name, if (etag.isNotDefault) 'etag': etag};
   }
 
   @override
@@ -1834,10 +1828,7 @@ final class DisableSecretVersionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (etag.isNotDefault) 'etag': etag,
-    };
+    return {'name': name, if (etag.isNotDefault) 'etag': etag};
   }
 
   @override
@@ -1877,10 +1868,7 @@ final class EnableSecretVersionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (etag.isNotDefault) 'etag': etag,
-    };
+    return {'name': name, if (etag.isNotDefault) 'etag': etag};
   }
 
   @override
@@ -1920,10 +1908,7 @@ final class DestroySecretVersionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (etag.isNotDefault) 'etag': etag,
-    };
+    return {'name': name, if (etag.isNotDefault) 'etag': etag};
   }
 
   @override

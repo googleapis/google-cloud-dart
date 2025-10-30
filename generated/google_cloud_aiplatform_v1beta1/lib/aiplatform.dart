@@ -14937,7 +14937,7 @@ final class Annotation extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (payloadSchemaUri.isNotDefault) 'payloadSchemaUri': payloadSchemaUri,
+      'payloadSchemaUri': payloadSchemaUri,
       if (payload != null) 'payload': payload!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
@@ -15004,7 +15004,7 @@ final class AnnotationSpec extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (etag.isNotDefault) 'etag': etag,
@@ -15067,10 +15067,7 @@ final class ApiAuth_ApiKeyConfig extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (apiKeySecretVersion.isNotDefault)
-        'apiKeySecretVersion': apiKeySecretVersion,
-    };
+    return {'apiKeySecretVersion': apiKeySecretVersion};
   }
 
   @override
@@ -15573,7 +15570,7 @@ final class BatchPredictionJob extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (model.isNotDefault) 'model': model,
       if (modelVersionId.isNotDefault) 'modelVersionId': modelVersionId,
       if (unmanagedContainerModel != null)
@@ -15681,7 +15678,7 @@ final class BatchPredictionJob_InputConfig extends protobuf.ProtoMessage {
     return {
       if (gcsSource != null) 'gcsSource': gcsSource!.toJson(),
       if (bigquerySource != null) 'bigquerySource': bigquerySource!.toJson(),
-      if (instancesFormat.isNotDefault) 'instancesFormat': instancesFormat,
+      'instancesFormat': instancesFormat,
     };
   }
 
@@ -15915,8 +15912,7 @@ final class BatchPredictionJob_OutputConfig extends protobuf.ProtoMessage {
       if (gcsDestination != null) 'gcsDestination': gcsDestination!.toJson(),
       if (bigqueryDestination != null)
         'bigqueryDestination': bigqueryDestination!.toJson(),
-      if (predictionsFormat.isNotDefault)
-        'predictionsFormat': predictionsFormat,
+      'predictionsFormat': predictionsFormat,
     };
   }
 
@@ -16274,10 +16270,7 @@ final class Content extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (role.isNotDefault) 'role': role,
-      if (parts.isNotDefault) 'parts': encodeList(parts),
-    };
+    return {if (role.isNotDefault) 'role': role, 'parts': encodeList(parts)};
   }
 
   @override
@@ -16425,10 +16418,7 @@ final class Blob extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (mimeType.isNotDefault) 'mimeType': mimeType,
-      if (data != null) 'data': encodeBytes(data),
-    };
+    return {'mimeType': mimeType, if (data != null) 'data': encodeBytes(data)};
   }
 
   @override
@@ -16464,10 +16454,7 @@ final class FileData extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (mimeType.isNotDefault) 'mimeType': mimeType,
-      if (fileUri.isNotDefault) 'fileUri': fileUri,
-    };
+    return {'mimeType': mimeType, 'fileUri': fileUri};
   }
 
   @override
@@ -17105,10 +17092,7 @@ final class GenerationConfig_ModelConfig extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (featureSelectionPreference.isNotDefault)
-        'featureSelectionPreference': featureSelectionPreference.toJson(),
-    };
+    return {'featureSelectionPreference': featureSelectionPreference.toJson()};
   }
 
   @override
@@ -17267,8 +17251,8 @@ final class SafetySetting extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (category.isNotDefault) 'category': category.toJson(),
-      if (threshold.isNotDefault) 'threshold': threshold.toJson(),
+      'category': category.toJson(),
+      'threshold': threshold.toJson(),
       if (method.isNotDefault) 'method': method.toJson(),
     };
   }
@@ -18945,7 +18929,7 @@ final class CustomJob extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (jobSpec != null) 'jobSpec': jobSpec!.toJson(),
       if (state.isNotDefault) 'state': state.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
@@ -19167,8 +19151,7 @@ final class CustomJobSpec extends protobuf.ProtoMessage {
     return {
       if (persistentResourceId.isNotDefault)
         'persistentResourceId': persistentResourceId,
-      if (workerPoolSpecs.isNotDefault)
-        'workerPoolSpecs': encodeList(workerPoolSpecs),
+      'workerPoolSpecs': encodeList(workerPoolSpecs),
       if (scheduling != null) 'scheduling': scheduling!.toJson(),
       if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
       if (network.isNotDefault) 'network': network,
@@ -19311,7 +19294,7 @@ final class ContainerSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (imageUri.isNotDefault) 'imageUri': imageUri,
+      'imageUri': imageUri,
       if (command.isNotDefault) 'command': command,
       if (args.isNotDefault) 'args': args,
       if (env.isNotDefault) 'env': encodeList(env),
@@ -19374,9 +19357,9 @@ final class PythonPackageSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (executorImageUri.isNotDefault) 'executorImageUri': executorImageUri,
-      if (packageUris.isNotDefault) 'packageUris': packageUris,
-      if (pythonModule.isNotDefault) 'pythonModule': pythonModule,
+      'executorImageUri': executorImageUri,
+      'packageUris': packageUris,
+      'pythonModule': pythonModule,
       if (args.isNotDefault) 'args': args,
       if (env.isNotDefault) 'env': encodeList(env),
     };
@@ -19750,12 +19733,12 @@ final class DataLabelingJob extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (datasets.isNotDefault) 'datasets': datasets,
+      'displayName': displayName,
+      'datasets': datasets,
       if (annotationLabels.isNotDefault) 'annotationLabels': annotationLabels,
-      if (labelerCount.isNotDefault) 'labelerCount': labelerCount,
-      if (instructionUri.isNotDefault) 'instructionUri': instructionUri,
-      if (inputsSchemaUri.isNotDefault) 'inputsSchemaUri': inputsSchemaUri,
+      'labelerCount': labelerCount,
+      'instructionUri': instructionUri,
+      'inputsSchemaUri': inputsSchemaUri,
       if (inputs != null) 'inputs': inputs!.toJson(),
       if (state.isNotDefault) 'state': state.toJson(),
       if (labelingProgress.isNotDefault) 'labelingProgress': labelingProgress,
@@ -20102,10 +20085,9 @@ final class Dataset extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
-      if (metadataSchemaUri.isNotDefault)
-        'metadataSchemaUri': metadataSchemaUri,
+      'metadataSchemaUri': metadataSchemaUri,
       if (metadata != null) 'metadata': metadata!.toJson(),
       if (dataItemCount.isNotDefault)
         'dataItemCount': encodeInt64(dataItemCount),
@@ -20205,7 +20187,7 @@ final class ImportDataConfig extends protobuf.ProtoMessage {
       if (gcsSource != null) 'gcsSource': gcsSource!.toJson(),
       if (dataItemLabels.isNotDefault) 'dataItemLabels': dataItemLabels,
       if (annotationLabels.isNotDefault) 'annotationLabels': annotationLabels,
-      if (importSchemaUri.isNotDefault) 'importSchemaUri': importSchemaUri,
+      'importSchemaUri': importSchemaUri,
     };
   }
 
@@ -20357,7 +20339,7 @@ final class CreateDatasetRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (dataset != null) 'dataset': dataset!.toJson(),
     };
   }
@@ -20425,10 +20407,7 @@ final class GetDatasetRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (readMask != null) 'readMask': readMask!.toJson(),
-    };
+    return {'name': name, if (readMask != null) 'readMask': readMask!.toJson()};
   }
 
   @override
@@ -20585,7 +20564,7 @@ final class ListDatasetsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -20663,7 +20642,7 @@ final class DeleteDatasetRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -20702,11 +20681,7 @@ final class ImportDataRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (importConfigs.isNotDefault)
-        'importConfigs': encodeList(importConfigs),
-    };
+    return {'name': name, 'importConfigs': encodeList(importConfigs)};
   }
 
   @override
@@ -20796,7 +20771,7 @@ final class ExportDataRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (exportConfig != null) 'exportConfig': exportConfig!.toJson(),
     };
   }
@@ -20913,7 +20888,7 @@ final class CreateDatasetVersionRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (datasetVersion != null) 'datasetVersion': datasetVersion!.toJson(),
     };
   }
@@ -20979,7 +20954,7 @@ final class DeleteDatasetVersionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -21015,10 +20990,7 @@ final class GetDatasetVersionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (readMask != null) 'readMask': readMask!.toJson(),
-    };
+    return {'name': name, if (readMask != null) 'readMask': readMask!.toJson()};
   }
 
   @override
@@ -21078,7 +21050,7 @@ final class ListDatasetVersionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -21162,7 +21134,7 @@ final class RestoreDatasetVersionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -21257,7 +21229,7 @@ final class ListDataItemsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -21441,7 +21413,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
       if (orderByDataItem != null) 'orderByDataItem': orderByDataItem,
       if (orderByAnnotation != null)
         'orderByAnnotation': orderByAnnotation!.toJson(),
-      if (dataset.isNotDefault) 'dataset': dataset,
+      'dataset': dataset,
       if (savedQuery.isNotDefault) 'savedQuery': savedQuery,
       if (dataLabelingJob.isNotDefault) 'dataLabelingJob': dataLabelingJob,
       if (dataItemFilter.isNotDefault) 'dataItemFilter': dataItemFilter,
@@ -21507,7 +21479,7 @@ final class SearchDataItemsRequest_OrderByAnnotation
   @override
   Object toJson() {
     return {
-      if (savedQuery.isNotDefault) 'savedQuery': savedQuery,
+      'savedQuery': savedQuery,
       if (orderBy.isNotDefault) 'orderBy': orderBy,
     };
   }
@@ -21668,7 +21640,7 @@ final class ListSavedQueriesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -21749,7 +21721,7 @@ final class DeleteSavedQueryRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -21785,10 +21757,7 @@ final class GetAnnotationSpecRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (readMask != null) 'readMask': readMask!.toJson(),
-    };
+    return {'name': name, if (readMask != null) 'readMask': readMask!.toJson()};
   }
 
   @override
@@ -21848,7 +21817,7 @@ final class ListAnnotationsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -21992,7 +21961,7 @@ final class AssessDataRequest extends protobuf.ProtoMessage {
       if (batchPredictionResourceUsageAssessmentConfig != null)
         'batchPredictionResourceUsageAssessmentConfig':
             batchPredictionResourceUsageAssessmentConfig!.toJson(),
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (geminiRequestReadConfig != null)
         'geminiRequestReadConfig': geminiRequestReadConfig!.toJson(),
     };
@@ -22041,10 +22010,7 @@ final class AssessDataRequest_TuningValidationAssessmentConfig
 
   @override
   Object toJson() {
-    return {
-      if (modelName.isNotDefault) 'modelName': modelName,
-      if (datasetUsage.isNotDefault) 'datasetUsage': datasetUsage.toJson(),
-    };
+    return {'modelName': modelName, 'datasetUsage': datasetUsage.toJson()};
   }
 
   @override
@@ -22118,7 +22084,7 @@ final class AssessDataRequest_TuningResourceUsageAssessmentConfig
 
   @override
   Object toJson() {
-    return {if (modelName.isNotDefault) 'modelName': modelName};
+    return {'modelName': modelName};
   }
 
   @override
@@ -22151,7 +22117,7 @@ final class AssessDataRequest_BatchPredictionValidationAssessmentConfig
 
   @override
   Object toJson() {
-    return {if (modelName.isNotDefault) 'modelName': modelName};
+    return {'modelName': modelName};
   }
 
   @override
@@ -22184,7 +22150,7 @@ final class AssessDataRequest_BatchPredictionResourceUsageAssessmentConfig
 
   @override
   Object toJson() {
-    return {if (modelName.isNotDefault) 'modelName': modelName};
+    return {'modelName': modelName};
   }
 
   @override
@@ -22470,7 +22436,7 @@ final class GeminiTemplateConfig extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (geminiExample != null) 'geminiExample': geminiExample!.toJson(),
-      if (fieldMapping.isNotDefault) 'fieldMapping': fieldMapping,
+      'fieldMapping': fieldMapping,
     };
   }
 
@@ -22621,7 +22587,7 @@ final class GeminiExample extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (model.isNotDefault) 'model': model,
-      if (contents.isNotDefault) 'contents': encodeList(contents),
+      'contents': encodeList(contents),
       if (systemInstruction != null)
         'systemInstruction': systemInstruction!.toJson(),
       if (cachedContent.isNotDefault) 'cachedContent': cachedContent,
@@ -22673,7 +22639,7 @@ final class AssembleDataRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (geminiRequestReadConfig != null)
         'geminiRequestReadConfig': geminiRequestReadConfig!.toJson(),
     };
@@ -23083,11 +23049,10 @@ final class CreateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (deploymentResourcePool != null)
         'deploymentResourcePool': deploymentResourcePool!.toJson(),
-      if (deploymentResourcePoolId.isNotDefault)
-        'deploymentResourcePoolId': deploymentResourcePoolId,
+      'deploymentResourcePoolId': deploymentResourcePoolId,
     };
   }
 
@@ -23154,7 +23119,7 @@ final class GetDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -23204,7 +23169,7 @@ final class ListDeploymentResourcePoolsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -23369,7 +23334,7 @@ final class DeleteDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -23418,8 +23383,7 @@ final class QueryDeployedModelsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (deploymentResourcePool.isNotDefault)
-        'deploymentResourcePool': deploymentResourcePool,
+      'deploymentResourcePool': deploymentResourcePool,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -23531,7 +23495,7 @@ final class EncryptionSpec extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName};
+    return {'kmsKeyName': kmsKeyName};
   }
 
   @override
@@ -23747,7 +23711,7 @@ final class Endpoint extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (deployedModels.isNotDefault)
         'deployedModels': encodeList(deployedModels),
@@ -24557,7 +24521,7 @@ final class SpeculativeDecodingSpec_DraftModelSpeculation
 
   @override
   Object toJson() {
-    return {if (draftModel.isNotDefault) 'draftModel': draftModel};
+    return {'draftModel': draftModel};
   }
 
   @override
@@ -24650,7 +24614,7 @@ final class CreateEndpointRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (endpoint != null) 'endpoint': endpoint!.toJson(),
       if (endpointId.isNotDefault) 'endpointId': endpointId,
     };
@@ -24728,7 +24692,7 @@ final class GetEndpointRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -24804,7 +24768,7 @@ final class ListEndpointsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -24979,7 +24943,7 @@ final class DeleteEndpointRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -25039,7 +25003,7 @@ final class DeployModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (deployedModel != null) 'deployedModel': deployedModel!.toJson(),
       if (trafficSplit.isNotDefault) 'trafficSplit': trafficSplit,
     };
@@ -25165,8 +25129,8 @@ final class UndeployModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
-      if (deployedModelId.isNotDefault) 'deployedModelId': deployedModelId,
+      'endpoint': endpoint,
+      'deployedModelId': deployedModelId,
       if (trafficSplit.isNotDefault) 'trafficSplit': trafficSplit,
     };
   }
@@ -25233,7 +25197,7 @@ final class SetPublisherModelConfigRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (publisherModelConfig != null)
         'publisherModelConfig': publisherModelConfig!.toJson(),
     };
@@ -25300,7 +25264,7 @@ final class FetchPublisherModelConfigRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -25390,7 +25354,7 @@ final class MutateDeployedModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (deployedModel != null) 'deployedModel': deployedModel!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
@@ -25621,10 +25585,7 @@ final class EnvVar extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (value.isNotDefault) 'value': value,
-    };
+    return {'name': name, 'value': value};
   }
 
   @override
@@ -25661,10 +25622,7 @@ final class SecretRef extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (secret.isNotDefault) 'secret': secret,
-      if (version.isNotDefault) 'version': version,
-    };
+    return {'secret': secret, if (version.isNotDefault) 'version': version};
   }
 
   @override
@@ -25700,7 +25658,7 @@ final class SecretEnvVar extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (secretRef != null) 'secretRef': secretRef!.toJson(),
     };
   }
@@ -26366,9 +26324,9 @@ final class EvaluateDatasetRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (location.isNotDefault) 'location': location,
+      'location': location,
       if (dataset != null) 'dataset': dataset!.toJson(),
-      if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+      'metrics': encodeList(metrics),
       if (outputConfig != null) 'outputConfig': outputConfig!.toJson(),
       if (autoraterConfig != null) 'autoraterConfig': autoraterConfig!.toJson(),
     };
@@ -26969,7 +26927,7 @@ final class EvaluateInstancesRequest extends protobuf.ProtoMessage {
       if (rubricBasedInstructionFollowingInput != null)
         'rubricBasedInstructionFollowingInput':
             rubricBasedInstructionFollowingInput!.toJson(),
-      if (location.isNotDefault) 'location': location,
+      'location': location,
       if (autoraterConfig != null) 'autoraterConfig': autoraterConfig!.toJson(),
     };
   }
@@ -27347,7 +27305,7 @@ final class ExactMatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -27501,7 +27459,7 @@ final class BleuInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -27663,7 +27621,7 @@ final class RougeInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -30700,7 +30658,7 @@ final class ToolCallValidInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -30857,7 +30815,7 @@ final class ToolNameMatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -31019,7 +30977,7 @@ final class ToolParameterKeyMatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -31182,7 +31140,7 @@ final class ToolParameterKvmatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -31911,7 +31869,7 @@ final class TrajectoryExactMatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -32081,7 +32039,7 @@ final class TrajectoryInOrderMatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -32257,7 +32215,7 @@ final class TrajectoryAnyOrderMatchInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -32428,7 +32386,7 @@ final class TrajectoryPrecisionInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -32592,7 +32550,7 @@ final class TrajectoryRecallInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -32761,7 +32719,7 @@ final class TrajectorySingleToolUseInput extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (metricSpec != null) 'metricSpec': metricSpec!.toJson(),
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
     };
   }
 
@@ -32915,7 +32873,7 @@ final class Trajectory extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (toolCalls.isNotDefault) 'toolCalls': encodeList(toolCalls)};
+    return {'toolCalls': encodeList(toolCalls)};
   }
 
   @override
@@ -33062,10 +33020,10 @@ final class Event extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (artifact.isNotDefault) 'artifact': artifact,
+      'artifact': artifact,
       if (execution.isNotDefault) 'execution': execution,
       if (eventTime != null) 'eventTime': eventTime!.toJson(),
-      if (type.isNotDefault) 'type': type.toJson(),
+      'type': type.toJson(),
       if (labels.isNotDefault) 'labels': labels,
     };
   }
@@ -33137,9 +33095,8 @@ final class ContentsExample extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (contents.isNotDefault) 'contents': encodeList(contents),
-      if (expectedContents.isNotDefault)
-        'expectedContents': encodeList(expectedContents),
+      'contents': encodeList(contents),
+      'expectedContents': encodeList(expectedContents),
     };
   }
 
@@ -33342,7 +33299,7 @@ final class ExampleStore extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
@@ -33387,10 +33344,7 @@ final class ExampleStoreConfig extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (vertexEmbeddingModel.isNotDefault)
-        'vertexEmbeddingModel': vertexEmbeddingModel,
-    };
+    return {'vertexEmbeddingModel': vertexEmbeddingModel};
   }
 
   @override
@@ -33526,7 +33480,7 @@ final class StoredContentsExampleParameters_ContentSearchKey
   @override
   Object toJson() {
     return {
-      if (contents.isNotDefault) 'contents': encodeList(contents),
+      'contents': encodeList(contents),
       if (searchKeyGenerationMethod != null)
         'searchKeyGenerationMethod': searchKeyGenerationMethod!.toJson(),
     };
@@ -33565,10 +33519,7 @@ final class ExamplesArrayFilter extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (values.isNotDefault) 'values': values,
-      if (arrayOperator.isNotDefault) 'arrayOperator': arrayOperator.toJson(),
-    };
+    return {'values': values, 'arrayOperator': arrayOperator.toJson()};
   }
 
   @override
@@ -33633,7 +33584,7 @@ final class CreateExampleStoreRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (exampleStore != null) 'exampleStore': exampleStore!.toJson(),
     };
   }
@@ -33699,7 +33650,7 @@ final class GetExampleStoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -33801,7 +33752,7 @@ final class DeleteExampleStoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -33886,7 +33837,7 @@ final class ListExampleStoresRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -34045,8 +33996,8 @@ final class UpsertExamplesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (exampleStore.isNotDefault) 'exampleStore': exampleStore,
-      if (examples.isNotDefault) 'examples': encodeList(examples),
+      'exampleStore': exampleStore,
+      'examples': encodeList(examples),
       if (overwrite.isNotDefault) 'overwrite': overwrite,
     };
   }
@@ -34170,7 +34121,7 @@ final class RemoveExamplesRequest extends protobuf.ProtoMessage {
     return {
       if (storedContentsExampleFilter != null)
         'storedContentsExampleFilter': storedContentsExampleFilter!.toJson(),
-      if (exampleStore.isNotDefault) 'exampleStore': exampleStore,
+      'exampleStore': exampleStore,
       if (exampleIds.isNotDefault) 'exampleIds': exampleIds,
     };
   }
@@ -34249,7 +34200,7 @@ final class SearchExamplesRequest extends protobuf.ProtoMessage {
       if (storedContentsExampleParameters != null)
         'storedContentsExampleParameters': storedContentsExampleParameters!
             .toJson(),
-      if (exampleStore.isNotDefault) 'exampleStore': exampleStore,
+      'exampleStore': exampleStore,
       if (topK.isNotDefault) 'topK': encodeInt64(topK),
     };
   }
@@ -34389,7 +34340,7 @@ final class FetchExamplesRequest extends protobuf.ProtoMessage {
     return {
       if (storedContentsExampleFilter != null)
         'storedContentsExampleFilter': storedContentsExampleFilter!.toJson(),
-      if (exampleStore.isNotDefault) 'exampleStore': exampleStore,
+      'exampleStore': exampleStore,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (exampleIds.isNotDefault) 'exampleIds': exampleIds,
@@ -35090,7 +35041,7 @@ final class SampledShapleyAttribution extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (pathCount.isNotDefault) 'pathCount': pathCount};
+    return {'pathCount': pathCount};
   }
 
   @override
@@ -35153,7 +35104,7 @@ final class IntegratedGradientsAttribution extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (stepCount.isNotDefault) 'stepCount': stepCount,
+      'stepCount': stepCount,
       if (smoothGradConfig != null)
         'smoothGradConfig': smoothGradConfig!.toJson(),
       if (blurBaselineConfig != null)
@@ -35224,7 +35175,7 @@ final class XraiAttribution extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (stepCount.isNotDefault) 'stepCount': stepCount,
+      'stepCount': stepCount,
       if (smoothGradConfig != null)
         'smoothGradConfig': smoothGradConfig!.toJson(),
       if (blurBaselineConfig != null)
@@ -35745,7 +35696,7 @@ final class ExplanationMetadataOverride extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (inputs.isNotDefault) 'inputs': encodeMap(inputs)};
+    return {'inputs': encodeMap(inputs)};
   }
 
   @override
@@ -36015,8 +35966,8 @@ final class ExplanationMetadata extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (inputs.isNotDefault) 'inputs': encodeMap(inputs),
-      if (outputs.isNotDefault) 'outputs': encodeMap(outputs),
+      'inputs': encodeMap(inputs),
+      'outputs': encodeMap(outputs),
       if (featureAttributionsSchemaUri.isNotDefault)
         'featureAttributionsSchemaUri': featureAttributionsSchemaUri,
       if (latentSpaceSource.isNotDefault)
@@ -36852,7 +36803,7 @@ final class Extension extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
@@ -36920,8 +36871,8 @@ final class ExtensionManifest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
+      'name': name,
+      'description': description,
       if (apiSpec != null) 'apiSpec': apiSpec!.toJson(),
       if (authConfig != null) 'authConfig': authConfig!.toJson(),
     };
@@ -37137,10 +37088,9 @@ final class AuthConfig_ApiKeyConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (apiKeySecret.isNotDefault) 'apiKeySecret': apiKeySecret,
-      if (httpElementLocation.isNotDefault)
-        'httpElementLocation': httpElementLocation.toJson(),
+      'name': name,
+      'apiKeySecret': apiKeySecret,
+      'httpElementLocation': httpElementLocation.toJson(),
     };
   }
 
@@ -37181,9 +37131,7 @@ final class AuthConfig_HttpBasicAuthConfig extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (credentialSecret.isNotDefault) 'credentialSecret': credentialSecret,
-    };
+    return {'credentialSecret': credentialSecret};
   }
 
   @override
@@ -37525,9 +37473,7 @@ final class ExtensionPrivateServiceConnectConfig extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (serviceDirectory.isNotDefault) 'serviceDirectory': serviceDirectory,
-    };
+    return {'serviceDirectory': serviceDirectory};
   }
 
   @override
@@ -37590,8 +37536,8 @@ final class ExecuteExtensionRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (operationId.isNotDefault) 'operationId': operationId,
+      'name': name,
+      'operationId': operationId,
       if (operationParams != null) 'operationParams': operationParams!.toJson(),
       if (runtimeAuthConfig != null)
         'runtimeAuthConfig': runtimeAuthConfig!.toJson(),
@@ -37663,10 +37609,7 @@ final class QueryExtensionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (contents.isNotDefault) 'contents': encodeList(contents),
-    };
+    return {'name': name, 'contents': encodeList(contents)};
   }
 
   @override
@@ -37741,7 +37684,7 @@ final class ImportExtensionRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (extension != null) 'extension': extension!.toJson(),
     };
   }
@@ -37805,7 +37748,7 @@ final class GetExtensionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -37911,7 +37854,7 @@ final class ListExtensionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -37992,7 +37935,7 @@ final class DeleteExtensionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -38792,7 +38735,7 @@ final class FeatureSelectionConfig_FeatureConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (featureId.isNotDefault) 'featureId': featureId,
+      'featureId': featureId,
       if (driftThreshold.isNotDefault)
         'driftThreshold': encodeDouble(driftThreshold),
     };
@@ -39502,8 +39445,8 @@ final class FeatureOnlineStore_Bigtable_AutoScaling
   @override
   Object toJson() {
     return {
-      if (minNodeCount.isNotDefault) 'minNodeCount': minNodeCount,
-      if (maxNodeCount.isNotDefault) 'maxNodeCount': maxNodeCount,
+      'minNodeCount': minNodeCount,
+      'maxNodeCount': maxNodeCount,
       if (cpuUtilizationTarget.isNotDefault)
         'cpuUtilizationTarget': cpuUtilizationTarget,
     };
@@ -39766,11 +39709,10 @@ final class CreateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (featureOnlineStore != null)
         'featureOnlineStore': featureOnlineStore!.toJson(),
-      if (featureOnlineStoreId.isNotDefault)
-        'featureOnlineStoreId': featureOnlineStoreId,
+      'featureOnlineStoreId': featureOnlineStoreId,
     };
   }
 
@@ -39802,7 +39744,7 @@ final class GetFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -39886,7 +39828,7 @@ final class ListFeatureOnlineStoresRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -40039,10 +39981,7 @@ final class DeleteFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -40100,9 +40039,9 @@ final class CreateFeatureViewRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (featureView != null) 'featureView': featureView!.toJson(),
-      if (featureViewId.isNotDefault) 'featureViewId': featureViewId,
+      'featureViewId': featureViewId,
       if (runSyncImmediately.isNotDefault)
         'runSyncImmediately': runSyncImmediately,
     };
@@ -40138,7 +40077,7 @@ final class GetFeatureViewRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -40225,7 +40164,7 @@ final class ListFeatureViewsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -40361,7 +40300,7 @@ final class DeleteFeatureViewRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -40524,7 +40463,7 @@ final class SyncFeatureViewRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (featureView.isNotDefault) 'featureView': featureView};
+    return {'featureView': featureView};
   }
 
   @override
@@ -40586,7 +40525,7 @@ final class GetFeatureViewSyncRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -40663,7 +40602,7 @@ final class ListFeatureViewSyncsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -40855,7 +40794,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (id != null) 'id': id,
-      if (featureView.isNotDefault) 'featureView': featureView,
+      'featureView': featureView,
       if (dataKey != null) 'dataKey': dataKey!.toJson(),
       if (dataFormat.isNotDefault) 'dataFormat': dataFormat.toJson(),
       if (format.isNotDefault) 'format': format.toJson(),
@@ -41067,7 +41006,7 @@ final class StreamingFetchFeatureValuesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (featureView.isNotDefault) 'featureView': featureView,
+      'featureView': featureView,
       if (dataKeys.isNotDefault) 'dataKeys': encodeList(dataKeys),
       if (dataFormat.isNotDefault) 'dataFormat': dataFormat.toJson(),
     };
@@ -41307,7 +41246,7 @@ final class NearestNeighborQuery_StringFilter extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (allowTokens.isNotDefault) 'allowTokens': allowTokens,
       if (denyTokens.isNotDefault) 'denyTokens': denyTokens,
     };
@@ -41377,7 +41316,7 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
       if (valueInt != null) 'valueInt': encodeInt64(valueInt),
       if (valueFloat != null) 'valueFloat': encodeDouble(valueFloat),
       if (valueDouble != null) 'valueDouble': encodeDouble(valueDouble),
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (op != null) 'op': op!.toJson(),
     };
   }
@@ -41527,7 +41466,7 @@ final class SearchNearestEntitiesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (featureView.isNotDefault) 'featureView': featureView,
+      'featureView': featureView,
       if (query != null) 'query': query!.toJson(),
       if (returnFullEntity.isNotDefault) 'returnFullEntity': returnFullEntity,
     };
@@ -41691,8 +41630,7 @@ final class FeatureViewDirectWriteRequest extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (featureView.isNotDefault) 'featureView': featureView,
-      if (dataKeyAndFeatureValues.isNotDefault)
-        'dataKeyAndFeatureValues': encodeList(dataKeyAndFeatureValues),
+      'dataKeyAndFeatureValues': encodeList(dataKeyAndFeatureValues),
     };
   }
 
@@ -42047,9 +41985,9 @@ final class CreateFeatureGroupRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (featureGroup != null) 'featureGroup': featureGroup!.toJson(),
-      if (featureGroupId.isNotDefault) 'featureGroupId': featureGroupId,
+      'featureGroupId': featureGroupId,
     };
   }
 
@@ -42080,7 +42018,7 @@ final class GetFeatureGroupRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -42164,7 +42102,7 @@ final class ListFeatureGroupsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -42306,10 +42244,7 @@ final class DeleteFeatureGroupRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -42359,9 +42294,9 @@ final class CreateFeatureMonitorRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (featureMonitor != null) 'featureMonitor': featureMonitor!.toJson(),
-      if (featureMonitorId.isNotDefault) 'featureMonitorId': featureMonitorId,
+      'featureMonitorId': featureMonitorId,
     };
   }
 
@@ -42392,7 +42327,7 @@ final class GetFeatureMonitorRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -42475,7 +42410,7 @@ final class ListFeatureMonitorsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -42561,7 +42496,7 @@ final class DeleteFeatureMonitorRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -42852,7 +42787,7 @@ final class CreateFeatureMonitorJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (featureMonitorJob != null)
         'featureMonitorJob': featureMonitorJob!.toJson(),
       if (featureMonitorJobId.isNotDefault)
@@ -42889,7 +42824,7 @@ final class GetFeatureMonitorJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -42964,7 +42899,7 @@ final class ListFeatureMonitorJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -43054,7 +42989,7 @@ final class IdMatcher extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (ids.isNotDefault) 'ids': ids};
+    return {'ids': ids};
   }
 
   @override
@@ -43305,10 +43240,7 @@ final class FeatureView_BigQuerySource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (uri.isNotDefault) 'uri': uri,
-      if (entityIdColumns.isNotDefault) 'entityIdColumns': entityIdColumns,
-    };
+    return {'uri': uri, 'entityIdColumns': entityIdColumns};
   }
 
   @override
@@ -43799,8 +43731,7 @@ final class FeatureView_FeatureRegistrySource extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (featureGroups.isNotDefault)
-        'featureGroups': encodeList(featureGroups),
+      'featureGroups': encodeList(featureGroups),
       if (projectNumber != null) 'projectNumber': encodeInt64(projectNumber),
     };
   }
@@ -43843,10 +43774,7 @@ final class FeatureView_FeatureRegistrySource_FeatureGroup
 
   @override
   Object toJson() {
-    return {
-      if (featureGroupId.isNotDefault) 'featureGroupId': featureGroupId,
-      if (featureIds.isNotDefault) 'featureIds': featureIds,
-    };
+    return {'featureGroupId': featureGroupId, 'featureIds': featureIds};
   }
 
   @override
@@ -43890,7 +43818,7 @@ final class FeatureView_VertexRagSource extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (uri.isNotDefault) 'uri': uri,
+      'uri': uri,
       if (ragCorpusId.isNotDefault) 'ragCorpusId': encodeInt64(ragCorpusId),
     };
   }
@@ -44351,7 +44279,7 @@ final class Featurestore_OnlineServingConfig_Scaling
   @override
   Object toJson() {
     return {
-      if (minNodeCount.isNotDefault) 'minNodeCount': minNodeCount,
+      'minNodeCount': minNodeCount,
       if (maxNodeCount.isNotDefault) 'maxNodeCount': maxNodeCount,
       if (cpuUtilizationTarget.isNotDefault)
         'cpuUtilizationTarget': cpuUtilizationTarget,
@@ -44796,10 +44724,7 @@ final class WriteFeatureValuesRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (entityType.isNotDefault) 'entityType': entityType,
-      if (payloads.isNotDefault) 'payloads': encodeList(payloads),
-    };
+    return {'entityType': entityType, 'payloads': encodeList(payloads)};
   }
 
   @override
@@ -44838,10 +44763,7 @@ final class WriteFeatureValuesPayload extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (entityId.isNotDefault) 'entityId': entityId,
-      if (featureValues.isNotDefault) 'featureValues': encodeMap(featureValues),
-    };
+    return {'entityId': entityId, 'featureValues': encodeMap(featureValues)};
   }
 
   @override
@@ -44913,8 +44835,8 @@ final class ReadFeatureValuesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (entityType.isNotDefault) 'entityType': entityType,
-      if (entityId.isNotDefault) 'entityId': entityId,
+      'entityType': entityType,
+      'entityId': entityId,
       if (featureSelector != null) 'featureSelector': featureSelector!.toJson(),
     };
   }
@@ -45181,8 +45103,8 @@ final class StreamingReadFeatureValuesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (entityType.isNotDefault) 'entityType': entityType,
-      if (entityIds.isNotDefault) 'entityIds': entityIds,
+      'entityType': entityType,
+      'entityIds': entityIds,
       if (featureSelector != null) 'featureSelector': featureSelector!.toJson(),
     };
   }
@@ -45455,9 +45377,9 @@ final class CreateFeaturestoreRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (featurestore != null) 'featurestore': featurestore!.toJson(),
-      if (featurestoreId.isNotDefault) 'featurestoreId': featurestoreId,
+      'featurestoreId': featurestoreId,
     };
   }
 
@@ -45488,7 +45410,7 @@ final class GetFeaturestoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -45580,7 +45502,7 @@ final class ListFeaturestoresRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -45723,10 +45645,7 @@ final class DeleteFeaturestoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -45832,9 +45751,9 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
       if (csvSource != null) 'csvSource': csvSource!.toJson(),
       if (featureTimeField != null) 'featureTimeField': featureTimeField,
       if (featureTime != null) 'featureTime': featureTime!.toJson(),
-      if (entityType.isNotDefault) 'entityType': entityType,
+      'entityType': entityType,
       if (entityIdField.isNotDefault) 'entityIdField': entityIdField,
-      if (featureSpecs.isNotDefault) 'featureSpecs': encodeList(featureSpecs),
+      'featureSpecs': encodeList(featureSpecs),
       if (disableOnlineServing.isNotDefault)
         'disableOnlineServing': disableOnlineServing,
       if (workerCount.isNotDefault) 'workerCount': workerCount,
@@ -45887,10 +45806,7 @@ final class ImportFeatureValuesRequest_FeatureSpec
 
   @override
   Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      if (sourceField.isNotDefault) 'sourceField': sourceField,
-    };
+    return {'id': id, if (sourceField.isNotDefault) 'sourceField': sourceField};
   }
 
   @override
@@ -46075,12 +45991,11 @@ final class BatchReadFeatureValuesRequest extends protobuf.ProtoMessage {
         'csvReadInstances': csvReadInstances!.toJson(),
       if (bigqueryReadInstances != null)
         'bigqueryReadInstances': bigqueryReadInstances!.toJson(),
-      if (featurestore.isNotDefault) 'featurestore': featurestore,
+      'featurestore': featurestore,
       if (destination != null) 'destination': destination!.toJson(),
       if (passThroughFields.isNotDefault)
         'passThroughFields': encodeList(passThroughFields),
-      if (entityTypeSpecs.isNotDefault)
-        'entityTypeSpecs': encodeList(entityTypeSpecs),
+      'entityTypeSpecs': encodeList(entityTypeSpecs),
       if (startTime != null) 'startTime': startTime!.toJson(),
     };
   }
@@ -46116,7 +46031,7 @@ final class BatchReadFeatureValuesRequest_PassThroughField
 
   @override
   Object toJson() {
-    return {if (fieldName.isNotDefault) 'fieldName': fieldName};
+    return {'fieldName': fieldName};
   }
 
   @override
@@ -46173,7 +46088,7 @@ final class BatchReadFeatureValuesRequest_EntityTypeSpec
   @override
   Object toJson() {
     return {
-      if (entityTypeId.isNotDefault) 'entityTypeId': entityTypeId,
+      'entityTypeId': entityTypeId,
       if (featureSelector != null) 'featureSelector': featureSelector!.toJson(),
       if (settings.isNotDefault) 'settings': encodeList(settings),
     };
@@ -46256,7 +46171,7 @@ final class ExportFeatureValuesRequest extends protobuf.ProtoMessage {
     return {
       if (snapshotExport != null) 'snapshotExport': snapshotExport!.toJson(),
       if (fullExport != null) 'fullExport': fullExport!.toJson(),
-      if (entityType.isNotDefault) 'entityType': entityType,
+      'entityType': entityType,
       if (destination != null) 'destination': destination!.toJson(),
       if (featureSelector != null) 'featureSelector': featureSelector!.toJson(),
       if (settings.isNotDefault) 'settings': encodeList(settings),
@@ -46381,7 +46296,7 @@ final class DestinationFeatureSetting extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (featureId.isNotDefault) 'featureId': featureId,
+      'featureId': featureId,
       if (destinationField.isNotDefault) 'destinationField': destinationField,
     };
   }
@@ -46542,9 +46457,9 @@ final class CreateEntityTypeRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (entityType != null) 'entityType': entityType!.toJson(),
-      if (entityTypeId.isNotDefault) 'entityTypeId': entityTypeId,
+      'entityTypeId': entityTypeId,
     };
   }
 
@@ -46574,7 +46489,7 @@ final class GetEntityTypeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -46666,7 +46581,7 @@ final class ListEntityTypesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -46812,10 +46727,7 @@ final class DeleteEntityTypeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -46869,9 +46781,9 @@ final class CreateFeatureRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (feature != null) 'feature': feature!.toJson(),
-      if (featureId.isNotDefault) 'featureId': featureId,
+      'featureId': featureId,
     };
   }
 
@@ -46917,10 +46829,7 @@ final class BatchCreateFeaturesRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
-    };
+    return {'parent': parent, 'requests': encodeList(requests)};
   }
 
   @override
@@ -46993,7 +46902,7 @@ final class GetFeatureRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (featureStatsAndAnomalySpec != null)
         'featureStatsAndAnomalySpec': featureStatsAndAnomalySpec!.toJson(),
     };
@@ -47109,7 +47018,7 @@ final class ListFeaturesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -47282,7 +47191,7 @@ final class SearchFeaturesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (location.isNotDefault) 'location': location,
+      'location': location,
       if (query.isNotDefault) 'query': query,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -47424,7 +47333,7 @@ final class DeleteFeatureRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -47835,7 +47744,7 @@ final class DeleteFeatureValuesRequest extends protobuf.ProtoMessage {
       if (selectEntity != null) 'selectEntity': selectEntity!.toJson(),
       if (selectTimeRangeAndFeature != null)
         'selectTimeRangeAndFeature': selectTimeRangeAndFeature!.toJson(),
-      if (entityType.isNotDefault) 'entityType': entityType,
+      'entityType': entityType,
     };
   }
 
@@ -48177,7 +48086,7 @@ final class CreateCachedContentRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
     };
   }
@@ -48206,7 +48115,7 @@ final class GetCachedContentRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -48270,7 +48179,7 @@ final class DeleteCachedContentRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -48318,7 +48227,7 @@ final class ListCachedContentsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -48403,7 +48312,7 @@ final class CreateTuningJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (tuningJob != null) 'tuningJob': tuningJob!.toJson(),
     };
   }
@@ -48433,7 +48342,7 @@ final class GetTuningJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -48483,7 +48392,7 @@ final class ListTuningJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -48561,7 +48470,7 @@ final class CancelTuningJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -48620,7 +48529,7 @@ final class RebaseTunedModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (tunedModelRef != null) 'tunedModelRef': tunedModelRef!.toJson(),
       if (tuningJob != null) 'tuningJob': tuningJob!.toJson(),
       if (artifactDestination != null)
@@ -48803,11 +48712,10 @@ final class HyperparameterTuningJob extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (studySpec != null) 'studySpec': studySpec!.toJson(),
-      if (maxTrialCount.isNotDefault) 'maxTrialCount': maxTrialCount,
-      if (parallelTrialCount.isNotDefault)
-        'parallelTrialCount': parallelTrialCount,
+      'maxTrialCount': maxTrialCount,
+      'parallelTrialCount': parallelTrialCount,
       if (maxFailedTrialCount.isNotDefault)
         'maxFailedTrialCount': maxFailedTrialCount,
       if (trialJobSpec != null) 'trialJobSpec': trialJobSpec!.toJson(),
@@ -48973,7 +48881,7 @@ final class Index extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (metadataSchemaUri.isNotDefault)
         'metadataSchemaUri': metadataSchemaUri,
@@ -49116,8 +49024,8 @@ final class IndexDatapoint extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (datapointId.isNotDefault) 'datapointId': datapointId,
-      if (featureVector.isNotDefault) 'featureVector': featureVector,
+      'datapointId': datapointId,
+      'featureVector': featureVector,
       if (sparseEmbedding != null) 'sparseEmbedding': sparseEmbedding!.toJson(),
       if (restricts.isNotDefault) 'restricts': encodeList(restricts),
       if (numericRestricts.isNotDefault)
@@ -49162,10 +49070,7 @@ final class IndexDatapoint_SparseEmbedding extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (values.isNotDefault) 'values': values,
-      if (dimensions.isNotDefault) 'dimensions': dimensions,
-    };
+    return {'values': values, 'dimensions': dimensions};
   }
 
   @override
@@ -49570,7 +49475,7 @@ final class IndexEndpoint extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (deployedIndexes.isNotDefault)
         'deployedIndexes': encodeList(deployedIndexes),
@@ -49805,8 +49710,8 @@ final class DeployedIndex extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (id.isNotDefault) 'id': id,
-      if (index.isNotDefault) 'index': index,
+      'id': id,
+      'index': index,
       if (displayName.isNotDefault) 'displayName': displayName,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (privateEndpoints != null)
@@ -50004,7 +49909,7 @@ final class CreateIndexEndpointRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (indexEndpoint != null) 'indexEndpoint': indexEndpoint!.toJson(),
     };
   }
@@ -50069,7 +49974,7 @@ final class GetIndexEndpointRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -50144,7 +50049,7 @@ final class ListIndexEndpointsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -50265,7 +50170,7 @@ final class DeleteIndexEndpointRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -50302,7 +50207,7 @@ final class DeployIndexRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (indexEndpoint.isNotDefault) 'indexEndpoint': indexEndpoint,
+      'indexEndpoint': indexEndpoint,
       if (deployedIndex != null) 'deployedIndex': deployedIndex!.toJson(),
     };
   }
@@ -50413,10 +50318,7 @@ final class UndeployIndexRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (indexEndpoint.isNotDefault) 'indexEndpoint': indexEndpoint,
-      if (deployedIndexId.isNotDefault) 'deployedIndexId': deployedIndexId,
-    };
+    return {'indexEndpoint': indexEndpoint, 'deployedIndexId': deployedIndexId};
   }
 
   @override
@@ -50513,7 +50415,7 @@ final class MutateDeployedIndexRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (indexEndpoint.isNotDefault) 'indexEndpoint': indexEndpoint,
+      'indexEndpoint': indexEndpoint,
       if (deployedIndex != null) 'deployedIndex': deployedIndex!.toJson(),
     };
   }
@@ -50622,10 +50524,7 @@ final class CreateIndexRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (index != null) 'index': index!.toJson(),
-    };
+    return {'parent': parent, if (index != null) 'index': index!.toJson()};
   }
 
   @override
@@ -50699,7 +50598,7 @@ final class GetIndexRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -50757,7 +50656,7 @@ final class ListIndexesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -50936,7 +50835,7 @@ final class ImportIndexRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (isCompleteOverwrite.isNotDefault)
         'isCompleteOverwrite': isCompleteOverwrite,
       if (config != null) 'config': config!.toJson(),
@@ -51049,8 +50948,8 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
   @override
   Object toJson() {
     return {
-      if (idColumn.isNotDefault) 'idColumn': idColumn,
-      if (embeddingColumn.isNotDefault) 'embeddingColumn': embeddingColumn,
+      'idColumn': idColumn,
+      'embeddingColumn': embeddingColumn,
       if (restricts.isNotDefault) 'restricts': encodeList(restricts),
       if (numericRestricts.isNotDefault)
         'numericRestricts': encodeList(numericRestricts),
@@ -51102,7 +51001,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict
   @override
   Object toJson() {
     return {
-      if (namespace.isNotDefault) 'namespace': namespace,
+      'namespace': namespace,
       if (allowColumn.isNotDefault) 'allowColumn': allowColumn,
       if (denyColumn.isNotDefault) 'denyColumn': denyColumn,
     };
@@ -51158,9 +51057,9 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRest
   @override
   Object toJson() {
     return {
-      if (namespace.isNotDefault) 'namespace': namespace,
+      'namespace': namespace,
       if (valueColumn.isNotDefault) 'valueColumn': valueColumn,
-      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
+      'valueType': valueType.toJson(),
     };
   }
 
@@ -51256,7 +51155,7 @@ final class ImportIndexRequest_ConnectorConfig_BigQuerySourceConfig
   @override
   Object toJson() {
     return {
-      if (tablePath.isNotDefault) 'tablePath': tablePath,
+      'tablePath': tablePath,
       if (datapointFieldMapping != null)
         'datapointFieldMapping': datapointFieldMapping!.toJson(),
     };
@@ -51320,7 +51219,7 @@ final class DeleteIndexRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -51371,7 +51270,7 @@ final class UpsertDatapointsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (index.isNotDefault) 'index': index,
+      'index': index,
       if (datapoints.isNotDefault) 'datapoints': encodeList(datapoints),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
@@ -51432,7 +51331,7 @@ final class RemoveDatapointsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (index.isNotDefault) 'index': index,
+      'index': index,
       if (datapointIds.isNotDefault) 'datapointIds': datapointIds,
     };
   }
@@ -51884,7 +51783,7 @@ final class GcsSource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (uris.isNotDefault) 'uris': uris};
+    return {'uris': uris};
   }
 
   @override
@@ -51910,9 +51809,7 @@ final class GcsDestination extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (outputUriPrefix.isNotDefault) 'outputUriPrefix': outputUriPrefix,
-    };
+    return {'outputUriPrefix': outputUriPrefix};
   }
 
   @override
@@ -51941,7 +51838,7 @@ final class BigQuerySource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (inputUri.isNotDefault) 'inputUri': inputUri};
+    return {'inputUri': inputUri};
   }
 
   @override
@@ -51977,7 +51874,7 @@ final class BigQueryDestination extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (outputUri.isNotDefault) 'outputUri': outputUri};
+    return {'outputUri': outputUri};
   }
 
   @override
@@ -52069,7 +51966,7 @@ final class ContainerRegistryDestination extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (outputUri.isNotDefault) 'outputUri': outputUri};
+    return {'outputUri': outputUri};
   }
 
   @override
@@ -52102,9 +51999,7 @@ final class GoogleDriveSource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (resourceIds.isNotDefault) 'resourceIds': encodeList(resourceIds),
-    };
+    return {'resourceIds': encodeList(resourceIds)};
   }
 
   @override
@@ -52141,10 +52036,7 @@ final class GoogleDriveSource_ResourceId extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (resourceType.isNotDefault) 'resourceType': resourceType.toJson(),
-      if (resourceId.isNotDefault) 'resourceId': resourceId,
-    };
+    return {'resourceType': resourceType.toJson(), 'resourceId': resourceId};
   }
 
   @override
@@ -52231,7 +52123,7 @@ final class SlackSource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (channels.isNotDefault) 'channels': encodeList(channels)};
+    return {'channels': encodeList(channels)};
   }
 
   @override
@@ -52272,7 +52164,7 @@ final class SlackSource_SlackChannels extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (channels.isNotDefault) 'channels': encodeList(channels),
+      'channels': encodeList(channels),
       if (apiKeyConfig != null) 'apiKeyConfig': apiKeyConfig!.toJson(),
     };
   }
@@ -52315,7 +52207,7 @@ final class SlackSource_SlackChannels_SlackChannel
   @override
   Object toJson() {
     return {
-      if (channelId.isNotDefault) 'channelId': channelId,
+      'channelId': channelId,
       if (startTime != null) 'startTime': startTime!.toJson(),
       if (endTime != null) 'endTime': endTime!.toJson(),
     };
@@ -52351,9 +52243,7 @@ final class JiraSource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (jiraQueries.isNotDefault) 'jiraQueries': encodeList(jiraQueries),
-    };
+    return {'jiraQueries': encodeList(jiraQueries)};
   }
 
   @override
@@ -52408,8 +52298,8 @@ final class JiraSource_JiraQueries extends protobuf.ProtoMessage {
     return {
       if (projects.isNotDefault) 'projects': projects,
       if (customQueries.isNotDefault) 'customQueries': customQueries,
-      if (email.isNotDefault) 'email': email,
-      if (serverUri.isNotDefault) 'serverUri': serverUri,
+      'email': email,
+      'serverUri': serverUri,
       if (apiKeyConfig != null) 'apiKeyConfig': apiKeyConfig!.toJson(),
     };
   }
@@ -52578,7 +52468,7 @@ final class CreateCustomJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (customJob != null) 'customJob': customJob!.toJson(),
     };
   }
@@ -52609,7 +52499,7 @@ final class GetCustomJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -52686,7 +52576,7 @@ final class ListCustomJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -52766,7 +52656,7 @@ final class DeleteCustomJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -52795,7 +52685,7 @@ final class CancelCustomJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -52836,7 +52726,7 @@ final class CreateDataLabelingJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (dataLabelingJob != null) 'dataLabelingJob': dataLabelingJob!.toJson(),
     };
   }
@@ -52867,7 +52757,7 @@ final class GetDataLabelingJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -52949,7 +52839,7 @@ final class ListDataLabelingJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -53037,7 +52927,7 @@ final class DeleteDataLabelingJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53067,7 +52957,7 @@ final class CancelDataLabelingJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53111,7 +53001,7 @@ final class CreateHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (hyperparameterTuningJob != null)
         'hyperparameterTuningJob': hyperparameterTuningJob!.toJson(),
     };
@@ -53146,7 +53036,7 @@ final class GetHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53226,7 +53116,7 @@ final class ListHyperparameterTuningJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -53320,7 +53210,7 @@ final class DeleteHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53352,7 +53242,7 @@ final class CancelHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53387,10 +53277,7 @@ final class CreateNasJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (nasJob != null) 'nasJob': nasJob!.toJson(),
-    };
+    return {'parent': parent, if (nasJob != null) 'nasJob': nasJob!.toJson()};
   }
 
   @override
@@ -53419,7 +53306,7 @@ final class GetNasJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53496,7 +53383,7 @@ final class ListNasJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -53577,7 +53464,7 @@ final class DeleteNasJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53606,7 +53493,7 @@ final class CancelNasJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53635,7 +53522,7 @@ final class GetNasTrialDetailRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53684,7 +53571,7 @@ final class ListNasTrialDetailsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -53777,7 +53664,7 @@ final class CreateBatchPredictionJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (batchPredictionJob != null)
         'batchPredictionJob': batchPredictionJob!.toJson(),
     };
@@ -53810,7 +53697,7 @@ final class GetBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -53888,7 +53775,7 @@ final class ListBatchPredictionJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -53976,7 +53863,7 @@ final class DeleteBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -54006,7 +53893,7 @@ final class CancelBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -54050,7 +53937,7 @@ final class CreateModelDeploymentMonitoringJobRequest
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (modelDeploymentMonitoringJob != null)
         'modelDeploymentMonitoringJob': modelDeploymentMonitoringJob!.toJson(),
     };
@@ -54142,12 +54029,11 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest
   @override
   Object toJson() {
     return {
-      if (modelDeploymentMonitoringJob.isNotDefault)
-        'modelDeploymentMonitoringJob': modelDeploymentMonitoringJob,
-      if (deployedModelId.isNotDefault) 'deployedModelId': deployedModelId,
+      'modelDeploymentMonitoringJob': modelDeploymentMonitoringJob,
+      'deployedModelId': deployedModelId,
       if (featureDisplayName.isNotDefault)
         'featureDisplayName': featureDisplayName,
-      if (objectives.isNotDefault) 'objectives': encodeList(objectives),
+      'objectives': encodeList(objectives),
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (startTime != null) 'startTime': startTime!.toJson(),
@@ -54298,7 +54184,7 @@ final class GetModelDeploymentMonitoringJobRequest
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -54373,7 +54259,7 @@ final class ListModelDeploymentMonitoringJobsRequest
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -54536,7 +54422,7 @@ final class DeleteModelDeploymentMonitoringJobRequest
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -54569,7 +54455,7 @@ final class PauseModelDeploymentMonitoringJobRequest
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -54602,7 +54488,7 @@ final class ResumeModelDeploymentMonitoringJobRequest
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -54733,7 +54619,7 @@ final class ComputeTokensRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (instances.isNotDefault) 'instances': encodeList(instances),
       if (model.isNotDefault) 'model': model,
       if (contents.isNotDefault) 'contents': encodeList(contents),
@@ -55059,7 +54945,7 @@ final class DedicatedResources extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (machineSpec != null) 'machineSpec': machineSpec!.toJson(),
-      if (minReplicaCount.isNotDefault) 'minReplicaCount': minReplicaCount,
+      'minReplicaCount': minReplicaCount,
       if (maxReplicaCount.isNotDefault) 'maxReplicaCount': maxReplicaCount,
       if (requiredReplicaCount.isNotDefault)
         'requiredReplicaCount': requiredReplicaCount,
@@ -55401,11 +55287,7 @@ final class NfsMount extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (server.isNotDefault) 'server': server,
-      if (path.isNotDefault) 'path': path,
-      if (mountPoint.isNotDefault) 'mountPoint': mountPoint,
-    };
+    return {'server': server, 'path': path, 'mountPoint': mountPoint};
   }
 
   @override
@@ -55463,7 +55345,7 @@ final class AutoscalingMetricSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (metricName.isNotDefault) 'metricName': metricName,
+      'metricName': metricName,
       if (target.isNotDefault) 'target': target,
       if (monitoredResourceLabels.isNotDefault)
         'monitoredResourceLabels': monitoredResourceLabels,
@@ -55633,7 +55515,7 @@ final class FindNeighborsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (indexEndpoint.isNotDefault) 'indexEndpoint': indexEndpoint,
+      'indexEndpoint': indexEndpoint,
       if (deployedIndexId.isNotDefault) 'deployedIndexId': deployedIndexId,
       if (queries.isNotDefault) 'queries': encodeList(queries),
       if (returnFullDatapoint.isNotDefault)
@@ -55762,7 +55644,7 @@ final class FindNeighborsRequest_Query_Rrf extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (alpha.isNotDefault) 'alpha': encodeDouble(alpha)};
+    return {'alpha': encodeDouble(alpha)};
   }
 
   @override
@@ -55938,7 +55820,7 @@ final class ReadIndexDatapointsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (indexEndpoint.isNotDefault) 'indexEndpoint': indexEndpoint,
+      'indexEndpoint': indexEndpoint,
       if (deployedIndexId.isNotDefault) 'deployedIndexId': deployedIndexId,
       if (ids.isNotDefault) 'ids': ids,
     };
@@ -56057,8 +55939,8 @@ final class Memory extends protobuf.ProtoMessage {
       if (description.isNotDefault) 'description': description,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (fact.isNotDefault) 'fact': fact,
-      if (scope.isNotDefault) 'scope': scope,
+      'fact': fact,
+      'scope': scope,
     };
   }
 
@@ -56100,10 +55982,7 @@ final class CreateMemoryRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (memory != null) 'memory': memory!.toJson(),
-    };
+    return {'parent': parent, if (memory != null) 'memory': memory!.toJson()};
   }
 
   @override
@@ -56165,7 +56044,7 @@ final class GetMemoryRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -56290,7 +56169,7 @@ final class ListMemoriesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -56368,7 +56247,7 @@ final class DeleteMemoryRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -56486,7 +56365,7 @@ final class GenerateMemoriesRequest extends protobuf.ProtoMessage {
         'directContentsSource': directContentsSource!.toJson(),
       if (directMemoriesSource != null)
         'directMemoriesSource': directMemoriesSource!.toJson(),
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (disableConsolidation.isNotDefault)
         'disableConsolidation': disableConsolidation,
       if (scope.isNotDefault) 'scope': scope,
@@ -56544,7 +56423,7 @@ final class GenerateMemoriesRequest_VertexSessionSource
   @override
   Object toJson() {
     return {
-      if (session.isNotDefault) 'session': session,
+      'session': session,
       if (startTime != null) 'startTime': startTime!.toJson(),
       if (endTime != null) 'endTime': endTime!.toJson(),
     };
@@ -56585,7 +56464,7 @@ final class GenerateMemoriesRequest_DirectContentsSource
 
   @override
   Object toJson() {
-    return {if (events.isNotDefault) 'events': encodeList(events)};
+    return {'events': encodeList(events)};
   }
 
   @override
@@ -56651,10 +56530,7 @@ final class GenerateMemoriesRequest_DirectMemoriesSource
 
   @override
   Object toJson() {
-    return {
-      if (directMemories.isNotDefault)
-        'directMemories': encodeList(directMemories),
-    };
+    return {'directMemories': encodeList(directMemories)};
   }
 
   @override
@@ -56684,7 +56560,7 @@ final class GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory
 
   @override
   Object toJson() {
-    return {if (fact.isNotDefault) 'fact': fact};
+    return {'fact': fact};
   }
 
   @override
@@ -56900,8 +56776,8 @@ final class RetrieveMemoriesRequest extends protobuf.ProtoMessage {
         'similaritySearchParams': similaritySearchParams!.toJson(),
       if (simpleRetrievalParams != null)
         'simpleRetrievalParams': simpleRetrievalParams!.toJson(),
-      if (parent.isNotDefault) 'parent': parent,
-      if (scope.isNotDefault) 'scope': scope,
+      'parent': parent,
+      'scope': scope,
     };
   }
 
@@ -56946,10 +56822,7 @@ final class RetrieveMemoriesRequest_SimilaritySearchParams
 
   @override
   Object toJson() {
-    return {
-      if (searchQuery.isNotDefault) 'searchQuery': searchQuery,
-      if (topK.isNotDefault) 'topK': topK,
-    };
+    return {'searchQuery': searchQuery, if (topK.isNotDefault) 'topK': topK};
   }
 
   @override
@@ -57154,7 +57027,7 @@ final class MetadataSchema extends protobuf.ProtoMessage {
     return {
       if (name.isNotDefault) 'name': name,
       if (schemaVersion.isNotDefault) 'schemaVersion': schemaVersion,
-      if (schema.isNotDefault) 'schema': schema,
+      'schema': schema,
       if (schemaType.isNotDefault) 'schemaType': schemaType.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (description.isNotDefault) 'description': description,
@@ -57248,7 +57121,7 @@ final class CreateMetadataStoreRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (metadataStore != null) 'metadataStore': metadataStore!.toJson(),
       if (metadataStoreId.isNotDefault) 'metadataStoreId': metadataStoreId,
     };
@@ -57317,7 +57190,7 @@ final class GetMetadataStoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -57369,7 +57242,7 @@ final class ListMetadataStoresRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -57457,10 +57330,7 @@ final class DeleteMetadataStoreRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -57545,7 +57415,7 @@ final class CreateArtifactRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (artifact != null) 'artifact': artifact!.toJson(),
       if (artifactId.isNotDefault) 'artifactId': artifactId,
     };
@@ -57577,7 +57447,7 @@ final class GetArtifactRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -57673,7 +57543,7 @@ final class ListArtifactsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -57813,10 +57683,7 @@ final class DeleteArtifactRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (etag.isNotDefault) 'etag': etag,
-    };
+    return {'name': name, if (etag.isNotDefault) 'etag': etag};
   }
 
   @override
@@ -57863,8 +57730,8 @@ final class PurgeArtifactsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (filter.isNotDefault) 'filter': filter,
+      'parent': parent,
+      'filter': filter,
       if (force.isNotDefault) 'force': force,
     };
   }
@@ -57991,7 +57858,7 @@ final class CreateContextRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (context != null) 'context': context!.toJson(),
       if (contextId.isNotDefault) 'contextId': contextId,
     };
@@ -58023,7 +57890,7 @@ final class GetContextRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -58123,7 +57990,7 @@ final class ListContextsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -58268,7 +58135,7 @@ final class DeleteContextRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (force.isNotDefault) 'force': force,
       if (etag.isNotDefault) 'etag': etag,
     };
@@ -58318,8 +58185,8 @@ final class PurgeContextsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (filter.isNotDefault) 'filter': filter,
+      'parent': parent,
+      'filter': filter,
       if (force.isNotDefault) 'force': force,
     };
   }
@@ -58450,7 +58317,7 @@ final class AddContextArtifactsAndExecutionsRequest
   @override
   Object toJson() {
     return {
-      if (context.isNotDefault) 'context': context,
+      'context': context,
       if (artifacts.isNotDefault) 'artifacts': artifacts,
       if (executions.isNotDefault) 'executions': executions,
     };
@@ -58517,7 +58384,7 @@ final class AddContextChildrenRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (context.isNotDefault) 'context': context,
+      'context': context,
       if (childContexts.isNotDefault) 'childContexts': childContexts,
     };
   }
@@ -58580,7 +58447,7 @@ final class RemoveContextChildrenRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (context.isNotDefault) 'context': context,
+      'context': context,
       if (childContexts.isNotDefault) 'childContexts': childContexts,
     };
   }
@@ -58640,7 +58507,7 @@ final class QueryContextLineageSubgraphRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (context.isNotDefault) 'context': context};
+    return {'context': context};
   }
 
   @override
@@ -58692,7 +58559,7 @@ final class CreateExecutionRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (execution != null) 'execution': execution!.toJson(),
       if (executionId.isNotDefault) 'executionId': executionId,
     };
@@ -58724,7 +58591,7 @@ final class GetExecutionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -58820,7 +58687,7 @@ final class ListExecutionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -58961,10 +58828,7 @@ final class DeleteExecutionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (etag.isNotDefault) 'etag': etag,
-    };
+    return {'name': name, if (etag.isNotDefault) 'etag': etag};
   }
 
   @override
@@ -59011,8 +58875,8 @@ final class PurgeExecutionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (filter.isNotDefault) 'filter': filter,
+      'parent': parent,
+      'filter': filter,
       if (force.isNotDefault) 'force': force,
     };
   }
@@ -59128,7 +58992,7 @@ final class AddExecutionEventsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (execution.isNotDefault) 'execution': execution,
+      'execution': execution,
       if (events.isNotDefault) 'events': encodeList(events),
     };
   }
@@ -59186,7 +59050,7 @@ final class QueryExecutionInputsAndOutputsRequest
 
   @override
   Object toJson() {
-    return {if (execution.isNotDefault) 'execution': execution};
+    return {'execution': execution};
   }
 
   @override
@@ -59237,7 +59101,7 @@ final class CreateMetadataSchemaRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (metadataSchema != null) 'metadataSchema': metadataSchema!.toJson(),
       if (metadataSchemaId.isNotDefault) 'metadataSchemaId': metadataSchemaId,
     };
@@ -59272,7 +59136,7 @@ final class GetMetadataSchemaRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -59329,7 +59193,7 @@ final class ListMetadataSchemasRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -59461,7 +59325,7 @@ final class QueryArtifactLineageSubgraphRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (artifact.isNotDefault) 'artifact': artifact,
+      'artifact': artifact,
       if (maxHops.isNotDefault) 'maxHops': maxHops,
       if (filter.isNotDefault) 'filter': filter,
     };
@@ -60001,7 +59865,7 @@ final class SearchMigratableResourcesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -60105,9 +59969,8 @@ final class BatchMigrateResourcesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (migrateResourceRequests.isNotDefault)
-        'migrateResourceRequests': encodeList(migrateResourceRequests),
+      'parent': parent,
+      'migrateResourceRequests': encodeList(migrateResourceRequests),
     };
   }
 
@@ -60236,9 +60099,9 @@ final class MigrateResourceRequest_MigrateMlEngineModelVersionConfig
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
-      if (modelVersion.isNotDefault) 'modelVersion': modelVersion,
-      if (modelDisplayName.isNotDefault) 'modelDisplayName': modelDisplayName,
+      'endpoint': endpoint,
+      'modelVersion': modelVersion,
+      'modelDisplayName': modelDisplayName,
     };
   }
 
@@ -60285,7 +60148,7 @@ final class MigrateResourceRequest_MigrateAutomlModelConfig
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (modelDisplayName.isNotDefault) 'modelDisplayName': modelDisplayName,
     };
   }
@@ -60332,11 +60195,7 @@ final class MigrateResourceRequest_MigrateAutomlDatasetConfig
 
   @override
   Object toJson() {
-    return {
-      if (dataset.isNotDefault) 'dataset': dataset,
-      if (datasetDisplayName.isNotDefault)
-        'datasetDisplayName': datasetDisplayName,
-    };
+    return {'dataset': dataset, 'datasetDisplayName': datasetDisplayName};
   }
 
   @override
@@ -60398,7 +60257,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig
   @override
   Object toJson() {
     return {
-      if (dataset.isNotDefault) 'dataset': dataset,
+      'dataset': dataset,
       if (datasetDisplayName.isNotDefault)
         'datasetDisplayName': datasetDisplayName,
       if (migrateDataLabelingAnnotatedDatasetConfigs.isNotDefault)
@@ -60444,9 +60303,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig_MigrateDataL
 
   @override
   Object toJson() {
-    return {
-      if (annotatedDataset.isNotDefault) 'annotatedDataset': annotatedDataset,
-    };
+    return {'annotatedDataset': annotatedDataset};
   }
 
   @override
@@ -61057,7 +60914,7 @@ final class Model extends protobuf.ProtoMessage {
         'versionCreateTime': versionCreateTime!.toJson(),
       if (versionUpdateTime != null)
         'versionUpdateTime': versionUpdateTime!.toJson(),
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (versionDescription.isNotDefault)
         'versionDescription': versionDescription,
@@ -61342,7 +61199,7 @@ final class LargeModelReference extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -61384,7 +61241,7 @@ final class ModelGardenSource extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (publicModelName.isNotDefault) 'publicModelName': publicModelName,
+      'publicModelName': publicModelName,
       if (versionId.isNotDefault) 'versionId': versionId,
       if (skipHfModelCache.isNotDefault) 'skipHfModelCache': skipHfModelCache,
     };
@@ -61418,7 +61275,7 @@ final class GenieSource extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (baseModelUri.isNotDefault) 'baseModelUri': baseModelUri};
+    return {'baseModelUri': baseModelUri};
   }
 
   @override
@@ -61822,7 +61679,7 @@ final class ModelContainerSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (imageUri.isNotDefault) 'imageUri': imageUri,
+      'imageUri': imageUri,
       if (command.isNotDefault) 'command': command,
       if (args.isNotDefault) 'args': args,
       if (env.isNotDefault) 'env': encodeList(env),
@@ -62569,17 +62426,16 @@ final class ModelDeploymentMonitoringJob extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'displayName': displayName,
+      'endpoint': endpoint,
       if (state.isNotDefault) 'state': state.toJson(),
       if (scheduleState.isNotDefault) 'scheduleState': scheduleState.toJson(),
       if (latestMonitoringPipelineMetadata != null)
         'latestMonitoringPipelineMetadata': latestMonitoringPipelineMetadata!
             .toJson(),
-      if (modelDeploymentMonitoringObjectiveConfigs.isNotDefault)
-        'modelDeploymentMonitoringObjectiveConfigs': encodeList(
-          modelDeploymentMonitoringObjectiveConfigs,
-        ),
+      'modelDeploymentMonitoringObjectiveConfigs': encodeList(
+        modelDeploymentMonitoringObjectiveConfigs,
+      ),
       if (modelDeploymentMonitoringScheduleConfig != null)
         'modelDeploymentMonitoringScheduleConfig':
             modelDeploymentMonitoringScheduleConfig!.toJson(),
@@ -63723,7 +63579,7 @@ final class GetPublisherModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (languageCode.isNotDefault) 'languageCode': languageCode,
       if (view.isNotDefault) 'view': view.toJson(),
       if (isHuggingFaceModel.isNotDefault)
@@ -63817,7 +63673,7 @@ final class ListPublisherModelsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -63962,7 +63818,7 @@ final class DeployRequest extends protobuf.ProtoMessage {
       if (publisherModelName != null) 'publisherModelName': publisherModelName,
       if (huggingFaceModelId != null) 'huggingFaceModelId': huggingFaceModelId,
       if (customModel != null) 'customModel': customModel!.toJson(),
-      if (destination.isNotDefault) 'destination': destination,
+      'destination': destination,
       if (modelConfig != null) 'modelConfig': modelConfig!.toJson(),
       if (endpointConfig != null) 'endpointConfig': endpointConfig!.toJson(),
       if (deployConfig != null) 'deployConfig': deployConfig!.toJson(),
@@ -64311,8 +64167,8 @@ final class DeployPublisherModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
-      if (destination.isNotDefault) 'destination': destination,
+      'model': model,
+      'destination': destination,
       if (endpointDisplayName.isNotDefault)
         'endpointDisplayName': endpointDisplayName,
       if (dedicatedResources != null)
@@ -64694,9 +64550,9 @@ final class ExportPublisherModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (destination != null) 'destination': destination!.toJson(),
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
     };
   }
 
@@ -64740,10 +64596,7 @@ final class CheckPublisherModelEulaAcceptanceRequest
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (publisherModel.isNotDefault) 'publisherModel': publisherModel,
-    };
+    return {'parent': parent, 'publisherModel': publisherModel};
   }
 
   @override
@@ -64786,10 +64639,7 @@ final class AcceptPublisherModelEulaRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (publisherModel.isNotDefault) 'publisherModel': publisherModel,
-    };
+    return {'parent': parent, 'publisherModel': publisherModel};
   }
 
   @override
@@ -66396,7 +66246,7 @@ final class CreateModelMonitorRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (modelMonitor != null) 'modelMonitor': modelMonitor!.toJson(),
       if (modelMonitorId.isNotDefault) 'modelMonitorId': modelMonitorId,
     };
@@ -66536,7 +66386,7 @@ final class GetModelMonitorRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -66590,7 +66440,7 @@ final class ListModelMonitorsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -66680,10 +66530,7 @@ final class DeleteModelMonitorRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -66734,7 +66581,7 @@ final class CreateModelMonitoringJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (modelMonitoringJob != null)
         'modelMonitoringJob': modelMonitoringJob!.toJson(),
       if (modelMonitoringJobId.isNotDefault)
@@ -66772,7 +66619,7 @@ final class GetModelMonitoringJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -66827,7 +66674,7 @@ final class ListModelMonitoringJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -66913,7 +66760,7 @@ final class DeleteModelMonitoringJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -66974,7 +66821,7 @@ final class SearchModelMonitoringStatsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (modelMonitor.isNotDefault) 'modelMonitor': modelMonitor,
+      'modelMonitor': modelMonitor,
       if (statsFilter != null) 'statsFilter': statsFilter!.toJson(),
       if (timeInterval != null) 'timeInterval': timeInterval!.toJson(),
       if (pageSize.isNotDefault) 'pageSize': pageSize,
@@ -67104,7 +66951,7 @@ final class SearchModelMonitoringAlertsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (modelMonitor.isNotDefault) 'modelMonitor': modelMonitor,
+      'modelMonitor': modelMonitor,
       if (modelMonitoringJob.isNotDefault)
         'modelMonitoringJob': modelMonitoringJob,
       if (alertTimeInterval != null)
@@ -68513,7 +68360,7 @@ final class UploadModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (parentModel.isNotDefault) 'parentModel': parentModel,
       if (modelId.isNotDefault) 'modelId': modelId,
       if (model != null) 'model': model!.toJson(),
@@ -68636,7 +68483,7 @@ final class GetModelRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -68712,7 +68559,7 @@ final class ListModelsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -68841,7 +68688,7 @@ final class ListModelVersionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -68950,7 +68797,7 @@ final class ListModelVersionCheckpointsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -69144,7 +68991,7 @@ final class UpdateExplanationDatasetRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (examples != null) 'examples': examples!.toJson(),
     };
   }
@@ -69209,7 +69056,7 @@ final class DeleteModelRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -69239,7 +69086,7 @@ final class DeleteModelVersionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -69287,10 +69134,7 @@ final class MergeVersionAliasesRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (versionAliases.isNotDefault) 'versionAliases': versionAliases,
-    };
+    return {'name': name, 'versionAliases': versionAliases};
   }
 
   @override
@@ -69330,7 +69174,7 @@ final class ExportModelRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (outputConfig != null) 'outputConfig': outputConfig!.toJson(),
     };
   }
@@ -69597,8 +69441,8 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
     return {
       if (modelId != null) 'modelId': modelId,
       if (parentModel != null) 'parentModel': parentModel,
-      if (parent.isNotDefault) 'parent': parent,
-      if (sourceModel.isNotDefault) 'sourceModel': sourceModel,
+      'parent': parent,
+      'sourceModel': sourceModel,
       if (encryptionSpec != null) 'encryptionSpec': encryptionSpec!.toJson(),
     };
   }
@@ -69721,7 +69565,7 @@ final class ImportModelEvaluationRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (modelEvaluation != null) 'modelEvaluation': modelEvaluation!.toJson(),
     };
   }
@@ -69770,9 +69614,8 @@ final class BatchImportModelEvaluationSlicesRequest
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (modelEvaluationSlices.isNotDefault)
-        'modelEvaluationSlices': encodeList(modelEvaluationSlices),
+      'parent': parent,
+      'modelEvaluationSlices': encodeList(modelEvaluationSlices),
     };
   }
 
@@ -69856,9 +69699,8 @@ final class BatchImportEvaluatedAnnotationsRequest
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (evaluatedAnnotations.isNotDefault)
-        'evaluatedAnnotations': encodeList(evaluatedAnnotations),
+      'parent': parent,
+      'evaluatedAnnotations': encodeList(evaluatedAnnotations),
     };
   }
 
@@ -69928,7 +69770,7 @@ final class GetModelEvaluationRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -69986,7 +69828,7 @@ final class ListModelEvaluationsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -70074,7 +69916,7 @@ final class GetModelEvaluationSliceRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -70135,7 +69977,7 @@ final class ListModelEvaluationSlicesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -70249,8 +70091,8 @@ final class RecommendSpecRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (gcsUri.isNotDefault) 'gcsUri': gcsUri,
+      'parent': parent,
+      'gcsUri': gcsUri,
       if (checkMachineAvailability.isNotDefault)
         'checkMachineAvailability': checkMachineAvailability,
       if (checkUserQuota.isNotDefault) 'checkUserQuota': checkUserQuota,
@@ -70568,7 +70410,7 @@ final class NasJob extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (nasJobSpec != null) 'nasJobSpec': nasJobSpec!.toJson(),
       if (nasJobOutput != null) 'nasJobOutput': nasJobOutput!.toJson(),
       if (state.isNotDefault) 'state': state.toJson(),
@@ -70815,10 +70657,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec
 
   @override
   Object toJson() {
-    return {
-      if (metricId.isNotDefault) 'metricId': metricId,
-      if (goal.isNotDefault) 'goal': goal.toJson(),
-    };
+    return {'metricId': metricId, 'goal': goal.toJson()};
   }
 
   @override
@@ -70910,9 +70749,8 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec
     return {
       if (searchTrialJobSpec != null)
         'searchTrialJobSpec': searchTrialJobSpec!.toJson(),
-      if (maxTrialCount.isNotDefault) 'maxTrialCount': maxTrialCount,
-      if (maxParallelTrialCount.isNotDefault)
-        'maxParallelTrialCount': maxParallelTrialCount,
+      'maxTrialCount': maxTrialCount,
+      'maxParallelTrialCount': maxParallelTrialCount,
       if (maxFailedTrialCount.isNotDefault)
         'maxFailedTrialCount': maxFailedTrialCount,
     };
@@ -70972,9 +70810,8 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_TrainTrialSpec
     return {
       if (trainTrialJobSpec != null)
         'trainTrialJobSpec': trainTrialJobSpec!.toJson(),
-      if (maxParallelTrialCount.isNotDefault)
-        'maxParallelTrialCount': maxParallelTrialCount,
-      if (frequency.isNotDefault) 'frequency': frequency,
+      'maxParallelTrialCount': maxParallelTrialCount,
+      'frequency': frequency,
     };
   }
 
@@ -71897,7 +71734,7 @@ final class NotebookRuntimeTemplate extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (isDefault.isNotDefault) 'isDefault': isDefault,
       if (machineSpec != null) 'machineSpec': machineSpec!.toJson(),
@@ -72161,14 +71998,14 @@ final class NotebookRuntime extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (runtimeUser.isNotDefault) 'runtimeUser': runtimeUser,
+      'runtimeUser': runtimeUser,
       if (notebookRuntimeTemplateRef != null)
         'notebookRuntimeTemplateRef': notebookRuntimeTemplateRef!.toJson(),
       if (proxyUri.isNotDefault) 'proxyUri': proxyUri,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (healthState.isNotDefault) 'healthState': healthState.toJson(),
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
       if (runtimeState.isNotDefault) 'runtimeState': runtimeState.toJson(),
@@ -72360,7 +72197,7 @@ final class CreateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (notebookRuntimeTemplate != null)
         'notebookRuntimeTemplate': notebookRuntimeTemplate!.toJson(),
       if (notebookRuntimeTemplateId.isNotDefault)
@@ -72435,7 +72272,7 @@ final class GetNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -72532,7 +72369,7 @@ final class ListNotebookRuntimeTemplatesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -72626,7 +72463,7 @@ final class DeleteNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -72726,9 +72563,8 @@ final class AssignNotebookRuntimeRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (notebookRuntimeTemplate.isNotDefault)
-        'notebookRuntimeTemplate': notebookRuntimeTemplate,
+      'parent': parent,
+      'notebookRuntimeTemplate': notebookRuntimeTemplate,
       if (notebookRuntime != null) 'notebookRuntime': notebookRuntime!.toJson(),
       if (notebookRuntimeId.isNotDefault)
         'notebookRuntimeId': notebookRuntimeId,
@@ -72812,7 +72648,7 @@ final class GetNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -72921,7 +72757,7 @@ final class ListNotebookRuntimesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -73012,7 +72848,7 @@ final class DeleteNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -73043,7 +72879,7 @@ final class UpgradeNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -73140,7 +72976,7 @@ final class StartNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -73237,7 +73073,7 @@ final class StopNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -73339,7 +73175,7 @@ final class CreateNotebookExecutionJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (notebookExecutionJob != null)
         'notebookExecutionJob': notebookExecutionJob!.toJson(),
       if (notebookExecutionJobId.isNotDefault)
@@ -73430,10 +73266,7 @@ final class GetNotebookExecutionJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (view.isNotDefault) 'view': view.toJson(),
-    };
+    return {'name': name, if (view.isNotDefault) 'view': view.toJson()};
   }
 
   @override
@@ -73516,7 +73349,7 @@ final class ListNotebookExecutionJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -73607,7 +73440,7 @@ final class DeleteNotebookExecutionJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -74262,8 +74095,7 @@ final class PersistentResource extends protobuf.ProtoMessage {
     return {
       if (name.isNotDefault) 'name': name,
       if (displayName.isNotDefault) 'displayName': displayName,
-      if (resourcePools.isNotDefault)
-        'resourcePools': encodeList(resourcePools),
+      'resourcePools': encodeList(resourcePools),
       if (state.isNotDefault) 'state': state.toJson(),
       if (error != null) 'error': error!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
@@ -74678,8 +74510,7 @@ final class ServiceAccountSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (enableCustomServiceAccount.isNotDefault)
-        'enableCustomServiceAccount': enableCustomServiceAccount,
+      'enableCustomServiceAccount': enableCustomServiceAccount,
       if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
     };
   }
@@ -74786,11 +74617,10 @@ final class CreatePersistentResourceRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (persistentResource != null)
         'persistentResource': persistentResource!.toJson(),
-      if (persistentResourceId.isNotDefault)
-        'persistentResourceId': persistentResourceId,
+      'persistentResourceId': persistentResourceId,
     };
   }
 
@@ -74956,7 +74786,7 @@ final class GetPersistentResourceRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -75001,7 +74831,7 @@ final class ListPersistentResourcesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -75085,7 +74915,7 @@ final class DeletePersistentResourceRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -75159,7 +74989,7 @@ final class RebootPersistentResourceRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -75526,8 +75356,7 @@ final class PipelineJob_RuntimeConfig extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (parameters.isNotDefault) 'parameters': encodeMap(parameters),
-      if (gcsOutputDirectory.isNotDefault)
-        'gcsOutputDirectory': gcsOutputDirectory,
+      'gcsOutputDirectory': gcsOutputDirectory,
       if (parameterValues.isNotDefault)
         'parameterValues': encodeMap(parameterValues),
       if (failurePolicy.isNotDefault) 'failurePolicy': failurePolicy.toJson(),
@@ -76454,7 +76283,7 @@ final class CreateTrainingPipelineRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (trainingPipeline != null)
         'trainingPipeline': trainingPipeline!.toJson(),
     };
@@ -76486,7 +76315,7 @@ final class GetTrainingPipelineRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -76563,7 +76392,7 @@ final class ListTrainingPipelinesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -76651,7 +76480,7 @@ final class DeleteTrainingPipelineRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -76681,7 +76510,7 @@ final class CancelTrainingPipelineRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -76729,7 +76558,7 @@ final class CreatePipelineJobRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pipelineJob != null) 'pipelineJob': pipelineJob!.toJson(),
       if (pipelineJobId.isNotDefault) 'pipelineJobId': pipelineJobId,
     };
@@ -76764,7 +76593,7 @@ final class GetPipelineJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -76872,7 +76701,7 @@ final class ListPipelineJobsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -76956,7 +76785,7 @@ final class DeletePipelineJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -76994,10 +76823,7 @@ final class BatchDeletePipelineJobsRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (names.isNotDefault) 'names': names,
-    };
+    return {'parent': parent, 'names': names};
   }
 
   @override
@@ -77056,7 +76882,7 @@ final class CancelPipelineJobRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -77094,10 +76920,7 @@ final class BatchCancelPipelineJobsRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (names.isNotDefault) 'names': names,
-    };
+    return {'parent': parent, 'names': names};
   }
 
   @override
@@ -77192,8 +77015,8 @@ final class PredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'endpoint': endpoint,
+      'instances': encodeList(instances),
       if (parameters != null) 'parameters': parameters!.toJson(),
       if (labels.isNotDefault) 'labels': labels,
     };
@@ -77330,7 +77153,7 @@ final class RawPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (httpBody != null) 'httpBody': httpBody!.toJson(),
     };
   }
@@ -77369,7 +77192,7 @@ final class StreamRawPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (httpBody != null) 'httpBody': httpBody!.toJson(),
     };
   }
@@ -77415,7 +77238,7 @@ final class DirectPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (inputs.isNotDefault) 'inputs': encodeList(inputs),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
@@ -77502,7 +77325,7 @@ final class DirectRawPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (methodName.isNotDefault) 'methodName': methodName,
       if (input != null) 'input': encodeBytes(input),
     };
@@ -77585,7 +77408,7 @@ final class StreamDirectPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (inputs.isNotDefault) 'inputs': encodeList(inputs),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
@@ -77683,7 +77506,7 @@ final class StreamDirectRawPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (methodName.isNotDefault) 'methodName': methodName,
       if (input != null) 'input': encodeBytes(input),
     };
@@ -77766,7 +77589,7 @@ final class StreamingPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (inputs.isNotDefault) 'inputs': encodeList(inputs),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
@@ -77864,7 +77687,7 @@ final class StreamingRawPredictRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (methodName.isNotDefault) 'methodName': methodName,
       if (input != null) 'input': encodeBytes(input),
     };
@@ -77995,8 +77818,8 @@ final class ExplainRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'endpoint': endpoint,
+      'instances': encodeList(instances),
       if (parameters != null) 'parameters': parameters!.toJson(),
       if (explanationSpecOverride != null)
         'explanationSpecOverride': explanationSpecOverride!.toJson(),
@@ -78197,7 +78020,7 @@ final class CountTokensRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (model.isNotDefault) 'model': model,
       if (instances.isNotDefault) 'instances': encodeList(instances),
       if (contents.isNotDefault) 'contents': encodeList(contents),
@@ -78377,8 +78200,8 @@ final class GenerateContentRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
-      if (contents.isNotDefault) 'contents': encodeList(contents),
+      'model': model,
+      'contents': encodeList(contents),
       if (systemInstruction != null)
         'systemInstruction': systemInstruction!.toJson(),
       if (cachedContent.isNotDefault) 'cachedContent': cachedContent,
@@ -78720,7 +78543,7 @@ final class ChatCompletionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (httpBody != null) 'httpBody': httpBody!.toJson(),
     };
   }
@@ -78931,8 +78754,7 @@ final class PublisherModel extends protobuf.ProtoMessage {
     return {
       if (name.isNotDefault) 'name': name,
       if (versionId.isNotDefault) 'versionId': versionId,
-      if (openSourceCategory.isNotDefault)
-        'openSourceCategory': openSourceCategory.toJson(),
+      'openSourceCategory': openSourceCategory.toJson(),
       if (parent != null) 'parent': parent!.toJson(),
       if (supportedActions != null)
         'supportedActions': supportedActions!.toJson(),
@@ -79042,7 +78864,7 @@ final class PublisherModel_Parent extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (reference != null) 'reference': reference!.toJson(),
     };
   }
@@ -79078,10 +78900,7 @@ final class PublisherModel_Documentation extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (title.isNotDefault) 'title': title,
-      if (content.isNotDefault) 'content': content,
-    };
+    return {'title': title, 'content': content};
   }
 
   @override
@@ -79304,8 +79123,8 @@ final class PublisherModel_CallToAction_RegionalResourceReferences
   @override
   Object toJson() {
     return {
-      if (references.isNotDefault) 'references': encodeMap(references),
-      if (title.isNotDefault) 'title': title,
+      'references': encodeMap(references),
+      'title': title,
       if (resourceTitle != null) 'resourceTitle': resourceTitle,
       if (resourceUseCase != null) 'resourceUseCase': resourceUseCase,
       if (resourceDescription != null)
@@ -79359,11 +79178,7 @@ final class PublisherModel_CallToAction_ViewRestApi
 
   @override
   Object toJson() {
-    return {
-      if (documentations.isNotDefault)
-        'documentations': encodeList(documentations),
-      if (title.isNotDefault) 'title': title,
-    };
+    return {'documentations': encodeList(documentations), 'title': title};
   }
 
   @override
@@ -79400,7 +79215,7 @@ final class PublisherModel_CallToAction_OpenNotebooks
 
   @override
   Object toJson() {
-    return {if (notebooks.isNotDefault) 'notebooks': encodeList(notebooks)};
+    return {'notebooks': encodeList(notebooks)};
   }
 
   @override
@@ -79436,10 +79251,7 @@ final class PublisherModel_CallToAction_OpenFineTuningPipelines
 
   @override
   Object toJson() {
-    return {
-      if (fineTuningPipelines.isNotDefault)
-        'fineTuningPipelines': encodeList(fineTuningPipelines),
-    };
+    return {'fineTuningPipelines': encodeList(fineTuningPipelines)};
   }
 
   @override
@@ -79590,7 +79402,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
       if (artifactUri.isNotDefault) 'artifactUri': artifactUri,
       if (deployTaskName != null) 'deployTaskName': deployTaskName,
       if (deployMetadata != null) 'deployMetadata': deployMetadata!.toJson(),
-      if (title.isNotDefault) 'title': title,
+      'title': title,
       if (publicArtifactUri.isNotDefault)
         'publicArtifactUri': publicArtifactUri,
     };
@@ -80276,7 +80088,7 @@ final class ReasoningEngine extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (spec != null) 'spec': spec!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
@@ -80526,7 +80338,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_GenerationConfig
 
   @override
   Object toJson() {
-    return {if (model.isNotDefault) 'model': model};
+    return {'model': model};
   }
 
   @override
@@ -80561,7 +80373,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_SimilaritySearchConfig
 
   @override
   Object toJson() {
-    return {if (embeddingModel.isNotDefault) 'embeddingModel': embeddingModel};
+    return {'embeddingModel': embeddingModel};
   }
 
   @override
@@ -80606,7 +80418,7 @@ final class QueryReasoningEngineRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (input != null) 'input': input!.toJson(),
       if (classMethod.isNotDefault) 'classMethod': classMethod,
     };
@@ -80681,7 +80493,7 @@ final class StreamQueryReasoningEngineRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (input != null) 'input': input!.toJson(),
       if (classMethod.isNotDefault) 'classMethod': classMethod,
     };
@@ -80725,7 +80537,7 @@ final class CreateReasoningEngineRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (reasoningEngine != null) 'reasoningEngine': reasoningEngine!.toJson(),
     };
   }
@@ -80792,7 +80604,7 @@ final class GetReasoningEngineRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -80914,7 +80726,7 @@ final class ListReasoningEnginesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -81009,10 +80821,7 @@ final class DeleteReasoningEngineRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -81064,8 +80873,7 @@ final class ReservationAffinity extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (reservationAffinityType.isNotDefault)
-        'reservationAffinityType': reservationAffinityType.toJson(),
+      'reservationAffinityType': reservationAffinityType.toJson(),
       if (key.isNotDefault) 'key': key,
       if (values.isNotDefault) 'values': values,
     };
@@ -81196,12 +81004,12 @@ final class SavedQuery extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (metadata != null) 'metadata': metadata!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (annotationFilter.isNotDefault) 'annotationFilter': annotationFilter,
-      if (problemType.isNotDefault) 'problemType': problemType,
+      'problemType': problemType,
       if (annotationSpecCount.isNotDefault)
         'annotationSpecCount': annotationSpecCount,
       if (etag.isNotDefault) 'etag': etag,
@@ -81411,7 +81219,7 @@ final class Schedule extends protobuf.ProtoMessage {
         'createNotebookExecutionJobRequest': createNotebookExecutionJobRequest!
             .toJson(),
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (startTime != null) 'startTime': startTime!.toJson(),
       if (endTime != null) 'endTime': endTime!.toJson(),
       if (maxRunCount.isNotDefault) 'maxRunCount': encodeInt64(maxRunCount),
@@ -81423,8 +81231,7 @@ final class Schedule extends protobuf.ProtoMessage {
       if (nextRunTime != null) 'nextRunTime': nextRunTime!.toJson(),
       if (lastPauseTime != null) 'lastPauseTime': lastPauseTime!.toJson(),
       if (lastResumeTime != null) 'lastResumeTime': lastResumeTime!.toJson(),
-      if (maxConcurrentRunCount.isNotDefault)
-        'maxConcurrentRunCount': encodeInt64(maxConcurrentRunCount),
+      'maxConcurrentRunCount': encodeInt64(maxConcurrentRunCount),
       if (allowQueueing.isNotDefault) 'allowQueueing': allowQueueing,
       if (catchUp.isNotDefault) 'catchUp': catchUp,
       if (lastScheduledRunResponse != null)
@@ -81546,7 +81353,7 @@ final class CreateScheduleRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (schedule != null) 'schedule': schedule!.toJson(),
     };
   }
@@ -81577,7 +81384,7 @@ final class GetScheduleRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -81681,7 +81488,7 @@ final class ListSchedulesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -81761,7 +81568,7 @@ final class DeleteScheduleRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -81790,7 +81597,7 @@ final class PauseScheduleRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -81830,10 +81637,7 @@ final class ResumeScheduleRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (catchUp.isNotDefault) 'catchUp': catchUp,
-    };
+    return {'name': name, if (catchUp.isNotDefault) 'catchUp': catchUp};
   }
 
   @override
@@ -81935,8 +81739,8 @@ final class PscautomationConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (projectId.isNotDefault) 'projectId': projectId,
-      if (network.isNotDefault) 'network': network,
+      'projectId': projectId,
+      'network': network,
       if (ipAddress.isNotDefault) 'ipAddress': ipAddress,
       if (forwardingRule.isNotDefault) 'forwardingRule': forwardingRule,
       if (state.isNotDefault) 'state': state.toJson(),
@@ -82012,8 +81816,7 @@ final class PrivateServiceConnectConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (enablePrivateServiceConnect.isNotDefault)
-        'enablePrivateServiceConnect': enablePrivateServiceConnect,
+      'enablePrivateServiceConnect': enablePrivateServiceConnect,
       if (projectAllowlist.isNotDefault) 'projectAllowlist': projectAllowlist,
       if (pscAutomationConfigs.isNotDefault)
         'pscAutomationConfigs': encodeList(pscAutomationConfigs),
@@ -82178,9 +81981,9 @@ final class DnsPeeringConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (domain.isNotDefault) 'domain': domain,
-      if (targetProject.isNotDefault) 'targetProject': targetProject,
-      if (targetNetwork.isNotDefault) 'targetNetwork': targetNetwork,
+      'domain': domain,
+      'targetProject': targetProject,
+      'targetNetwork': targetNetwork,
     };
   }
 
@@ -82265,7 +82068,7 @@ final class Session extends protobuf.ProtoMessage {
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (displayName.isNotDefault) 'displayName': displayName,
       if (sessionState != null) 'sessionState': sessionState!.toJson(),
-      if (userId.isNotDefault) 'userId': userId,
+      'userId': userId,
     };
   }
 
@@ -82344,9 +82147,9 @@ final class SessionEvent extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (author.isNotDefault) 'author': author,
+      'author': author,
       if (content != null) 'content': content!.toJson(),
-      if (invocationId.isNotDefault) 'invocationId': invocationId,
+      'invocationId': invocationId,
       if (actions != null) 'actions': actions!.toJson(),
       if (timestamp != null) 'timestamp': timestamp!.toJson(),
       if (errorCode.isNotDefault) 'errorCode': errorCode,
@@ -82569,7 +82372,7 @@ final class CreateSessionRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (session != null) 'session': session!.toJson(),
     };
   }
@@ -82633,7 +82436,7 @@ final class GetSessionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -82702,7 +82505,7 @@ final class ListSessionsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -82819,7 +82622,7 @@ final class DeleteSessionRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -82879,7 +82682,7 @@ final class ListEventsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -82967,10 +82770,7 @@ final class AppendEventRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (event != null) 'event': event!.toJson(),
-    };
+    return {'name': name, if (event != null) 'event': event!.toJson()};
   }
 
   @override
@@ -83057,8 +82857,8 @@ final class SpecialistPool extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'name': name,
+      'displayName': displayName,
       if (specialistManagersCount.isNotDefault)
         'specialistManagersCount': specialistManagersCount,
       if (specialistManagerEmails.isNotDefault)
@@ -83109,7 +82909,7 @@ final class CreateSpecialistPoolRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (specialistPool != null) 'specialistPool': specialistPool!.toJson(),
     };
   }
@@ -83175,7 +82975,7 @@ final class GetSpecialistPoolRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -83228,7 +83028,7 @@ final class ListSpecialistPoolsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (readMask != null) 'readMask': readMask!.toJson(),
@@ -83315,10 +83115,7 @@ final class DeleteSpecialistPoolRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -83462,7 +83259,7 @@ final class Study extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (studySpec != null) 'studySpec': studySpec!.toJson(),
       if (state.isNotDefault) 'state': state.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
@@ -83928,8 +83725,8 @@ final class StudySpec extends protobuf.ProtoMessage {
         'convexStopConfig': convexStopConfig!.toJson(),
       if (convexAutomatedStoppingSpec != null)
         'convexAutomatedStoppingSpec': convexAutomatedStoppingSpec!.toJson(),
-      if (metrics.isNotDefault) 'metrics': encodeList(metrics),
-      if (parameters.isNotDefault) 'parameters': encodeList(parameters),
+      'metrics': encodeList(metrics),
+      'parameters': encodeList(parameters),
       if (algorithm.isNotDefault) 'algorithm': algorithm.toJson(),
       if (observationNoise.isNotDefault)
         'observationNoise': observationNoise.toJson(),
@@ -83991,8 +83788,8 @@ final class StudySpec_MetricSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (metricId.isNotDefault) 'metricId': metricId,
-      if (goal.isNotDefault) 'goal': goal.toJson(),
+      'metricId': metricId,
+      'goal': goal.toJson(),
       if (safetyConfig != null) 'safetyConfig': safetyConfig!.toJson(),
     };
   }
@@ -84175,7 +83972,7 @@ final class StudySpec_ParameterSpec extends protobuf.ProtoMessage {
         'categoricalValueSpec': categoricalValueSpec!.toJson(),
       if (discreteValueSpec != null)
         'discreteValueSpec': discreteValueSpec!.toJson(),
-      if (parameterId.isNotDefault) 'parameterId': parameterId,
+      'parameterId': parameterId,
       if (scaleType.isNotDefault) 'scaleType': scaleType.toJson(),
       if (conditionalParameterSpecs.isNotDefault)
         'conditionalParameterSpecs': encodeList(conditionalParameterSpecs),
@@ -84231,8 +84028,8 @@ final class StudySpec_ParameterSpec_DoubleValueSpec
   @override
   Object toJson() {
     return {
-      if (minValue.isNotDefault) 'minValue': encodeDouble(minValue),
-      if (maxValue.isNotDefault) 'maxValue': encodeDouble(maxValue),
+      'minValue': encodeDouble(minValue),
+      'maxValue': encodeDouble(maxValue),
       if (defaultValue != null) 'defaultValue': encodeDouble(defaultValue),
     };
   }
@@ -84287,8 +84084,8 @@ final class StudySpec_ParameterSpec_IntegerValueSpec
   @override
   Object toJson() {
     return {
-      if (minValue.isNotDefault) 'minValue': encodeInt64(minValue),
-      if (maxValue.isNotDefault) 'maxValue': encodeInt64(maxValue),
+      'minValue': encodeInt64(minValue),
+      'maxValue': encodeInt64(maxValue),
       if (defaultValue != null) 'defaultValue': encodeInt64(defaultValue),
     };
   }
@@ -84338,7 +84135,7 @@ final class StudySpec_ParameterSpec_CategoricalValueSpec
   @override
   Object toJson() {
     return {
-      if (values.isNotDefault) 'values': values,
+      'values': values,
       if (defaultValue != null) 'defaultValue': defaultValue,
     };
   }
@@ -84390,7 +84187,7 @@ final class StudySpec_ParameterSpec_DiscreteValueSpec
   @override
   Object toJson() {
     return {
-      if (values.isNotDefault) 'values': values,
+      'values': values,
       if (defaultValue != null) 'defaultValue': encodeDouble(defaultValue),
     };
   }
@@ -84503,7 +84300,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondit
 
   @override
   Object toJson() {
-    return {if (values.isNotDefault) 'values': values};
+    return {'values': values};
   }
 
   @override
@@ -84534,7 +84331,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition
 
   @override
   Object toJson() {
-    return {if (values.isNotDefault) 'values': values};
+    return {'values': values};
   }
 
   @override
@@ -84566,7 +84363,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCon
 
   @override
   Object toJson() {
-    return {if (values.isNotDefault) 'values': values};
+    return {'values': values};
   }
 
   @override
@@ -85363,7 +85160,7 @@ final class Tensorboard extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (encryptionSpec != null) 'encryptionSpec': encryptionSpec!.toJson(),
       if (blobStoragePathPrefix.isNotDefault)
@@ -85435,10 +85232,9 @@ final class TimeSeriesData extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (tensorboardTimeSeriesId.isNotDefault)
-        'tensorboardTimeSeriesId': tensorboardTimeSeriesId,
-      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
-      if (values.isNotDefault) 'values': encodeList(values),
+      'tensorboardTimeSeriesId': tensorboardTimeSeriesId,
+      'valueType': valueType.toJson(),
+      'values': encodeList(values),
     };
   }
 
@@ -85814,7 +85610,7 @@ final class TensorboardRun extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
@@ -85861,7 +85657,7 @@ final class CreateTensorboardRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (tensorboard != null) 'tensorboard': tensorboard!.toJson(),
     };
   }
@@ -85892,7 +85688,7 @@ final class GetTensorboardRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -85960,7 +85756,7 @@ final class ListTensorboardsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -86087,7 +85883,7 @@ final class DeleteTensorboardRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -86117,7 +85913,7 @@ final class ReadTensorboardUsageRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (tensorboard.isNotDefault) 'tensorboard': tensorboard};
+    return {'tensorboard': tensorboard};
   }
 
   @override
@@ -86262,7 +86058,7 @@ final class ReadTensorboardSizeRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (tensorboard.isNotDefault) 'tensorboard': tensorboard};
+    return {'tensorboard': tensorboard};
   }
 
   @override
@@ -86348,11 +86144,10 @@ final class CreateTensorboardExperimentRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (tensorboardExperiment != null)
         'tensorboardExperiment': tensorboardExperiment!.toJson(),
-      if (tensorboardExperimentId.isNotDefault)
-        'tensorboardExperimentId': tensorboardExperimentId,
+      'tensorboardExperimentId': tensorboardExperimentId,
     };
   }
 
@@ -86386,7 +86181,7 @@ final class GetTensorboardExperimentRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -86456,7 +86251,7 @@ final class ListTensorboardExperimentsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -86599,7 +86394,7 @@ final class DeleteTensorboardExperimentRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -86647,10 +86442,7 @@ final class BatchCreateTensorboardRunsRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
-    };
+    return {'parent': parent, 'requests': encodeList(requests)};
   }
 
   @override
@@ -86732,9 +86524,9 @@ final class CreateTensorboardRunRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (tensorboardRun != null) 'tensorboardRun': tensorboardRun!.toJson(),
-      if (tensorboardRunId.isNotDefault) 'tensorboardRunId': tensorboardRunId,
+      'tensorboardRunId': tensorboardRunId,
     };
   }
 
@@ -86767,7 +86559,7 @@ final class GetTensorboardRunRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -86806,7 +86598,7 @@ final class ReadTensorboardBlobDataRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (timeSeries.isNotDefault) 'timeSeries': timeSeries,
+      'timeSeries': timeSeries,
       if (blobIds.isNotDefault) 'blobIds': blobIds,
     };
   }
@@ -86903,7 +86695,7 @@ final class ListTensorboardRunsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -87032,7 +86824,7 @@ final class DeleteTensorboardRunRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -87083,10 +86875,7 @@ final class BatchCreateTensorboardTimeSeriesRequest
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
-    };
+    return {'parent': parent, 'requests': encodeList(requests)};
   }
 
   @override
@@ -87178,7 +86967,7 @@ final class CreateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (tensorboardTimeSeriesId.isNotDefault)
         'tensorboardTimeSeriesId': tensorboardTimeSeriesId,
       if (tensorboardTimeSeries != null)
@@ -87216,7 +87005,7 @@ final class GetTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -87284,7 +87073,7 @@ final class ListTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -87428,7 +87217,7 @@ final class DeleteTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -87474,10 +87263,7 @@ final class BatchReadTensorboardTimeSeriesDataRequest
 
   @override
   Object toJson() {
-    return {
-      if (tensorboard.isNotDefault) 'tensorboard': tensorboard,
-      if (timeSeries.isNotDefault) 'timeSeries': timeSeries,
-    };
+    return {'tensorboard': tensorboard, 'timeSeries': timeSeries};
   }
 
   @override
@@ -87561,8 +87347,7 @@ final class ReadTensorboardTimeSeriesDataRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (tensorboardTimeSeries.isNotDefault)
-        'tensorboardTimeSeries': tensorboardTimeSeries,
+      'tensorboardTimeSeries': tensorboardTimeSeries,
       if (maxDataPoints.isNotDefault) 'maxDataPoints': maxDataPoints,
       if (filter.isNotDefault) 'filter': filter,
     };
@@ -87648,10 +87433,8 @@ final class WriteTensorboardExperimentDataRequest
   @override
   Object toJson() {
     return {
-      if (tensorboardExperiment.isNotDefault)
-        'tensorboardExperiment': tensorboardExperiment,
-      if (writeRunDataRequests.isNotDefault)
-        'writeRunDataRequests': encodeList(writeRunDataRequests),
+      'tensorboardExperiment': tensorboardExperiment,
+      'writeRunDataRequests': encodeList(writeRunDataRequests),
     };
   }
 
@@ -87721,9 +87504,8 @@ final class WriteTensorboardRunDataRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (tensorboardRun.isNotDefault) 'tensorboardRun': tensorboardRun,
-      if (timeSeriesData.isNotDefault)
-        'timeSeriesData': encodeList(timeSeriesData),
+      'tensorboardRun': tensorboardRun,
+      'timeSeriesData': encodeList(timeSeriesData),
     };
   }
 
@@ -87812,8 +87594,7 @@ final class ExportTensorboardTimeSeriesDataRequest
   @override
   Object toJson() {
     return {
-      if (tensorboardTimeSeries.isNotDefault)
-        'tensorboardTimeSeries': tensorboardTimeSeries,
+      'tensorboardTimeSeries': tensorboardTimeSeries,
       if (filter.isNotDefault) 'filter': filter,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
@@ -88031,9 +87812,9 @@ final class TensorboardTimeSeries extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
-      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
+      'valueType': valueType.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (etag.isNotDefault) 'etag': etag,
@@ -88354,7 +88135,7 @@ final class Tool_ComputerUse extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (environment.isNotDefault) 'environment': environment.toJson()};
+    return {'environment': environment.toJson()};
   }
 
   @override
@@ -88527,8 +88308,8 @@ final class ToolUseExample extends protobuf.ProtoMessage {
       if (extensionOperation != null)
         'extensionOperation': extensionOperation!.toJson(),
       if (functionName != null) 'functionName': functionName,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (query.isNotDefault) 'query': query,
+      'displayName': displayName,
+      'query': query,
       if (requestParams != null) 'requestParams': requestParams!.toJson(),
       if (responseParams != null) 'responseParams': responseParams!.toJson(),
       if (responseSummary.isNotDefault) 'responseSummary': responseSummary,
@@ -88576,7 +88357,7 @@ final class ToolUseExample_ExtensionOperation extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (extension.isNotDefault) 'extension': extension,
-      if (operationId.isNotDefault) 'operationId': operationId,
+      'operationId': operationId,
     };
   }
 
@@ -88685,7 +88466,7 @@ final class FunctionDeclaration extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (description.isNotDefault) 'description': description,
       if (parameters != null) 'parameters': parameters!.toJson(),
       if (parametersJsonSchema != null)
@@ -88737,7 +88518,7 @@ final class FunctionCall extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (id.isNotDefault) 'id': id,
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (args != null) 'args': args!.toJson(),
     };
   }
@@ -88786,7 +88567,7 @@ final class FunctionResponse extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (id.isNotDefault) 'id': id,
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (response != null) 'response': response!.toJson(),
     };
   }
@@ -88827,10 +88608,7 @@ final class ExecutableCode extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (language.isNotDefault) 'language': language.toJson(),
-      if (code.isNotDefault) 'code': code,
-    };
+    return {'language': language.toJson(), 'code': code};
   }
 
   @override
@@ -88893,7 +88671,7 @@ final class CodeExecutionResult extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (outcome.isNotDefault) 'outcome': outcome.toJson(),
+      'outcome': outcome.toJson(),
       if (output.isNotDefault) 'output': output,
     };
   }
@@ -89981,10 +89759,9 @@ final class TrainingPipeline extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (inputDataConfig != null) 'inputDataConfig': inputDataConfig!.toJson(),
-      if (trainingTaskDefinition.isNotDefault)
-        'trainingTaskDefinition': trainingTaskDefinition,
+      'trainingTaskDefinition': trainingTaskDefinition,
       if (trainingTaskInputs != null)
         'trainingTaskInputs': trainingTaskInputs!.toJson(),
       if (trainingTaskMetadata != null)
@@ -90209,7 +89986,7 @@ final class InputDataConfig extends protobuf.ProtoMessage {
       if (gcsDestination != null) 'gcsDestination': gcsDestination!.toJson(),
       if (bigqueryDestination != null)
         'bigqueryDestination': bigqueryDestination!.toJson(),
-      if (datasetId.isNotDefault) 'datasetId': datasetId,
+      'datasetId': datasetId,
       if (annotationsFilter.isNotDefault)
         'annotationsFilter': annotationsFilter,
       if (annotationSchemaUri.isNotDefault)
@@ -90343,9 +90120,9 @@ final class FilterSplit extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (trainingFilter.isNotDefault) 'trainingFilter': trainingFilter,
-      if (validationFilter.isNotDefault) 'validationFilter': validationFilter,
-      if (testFilter.isNotDefault) 'testFilter': testFilter,
+      'trainingFilter': trainingFilter,
+      'validationFilter': validationFilter,
+      'testFilter': testFilter,
     };
   }
 
@@ -90384,7 +90161,7 @@ final class PredefinedSplit extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (key.isNotDefault) 'key': key};
+    return {'key': key};
   }
 
   @override
@@ -90443,7 +90220,7 @@ final class TimestampSplit extends protobuf.ProtoMessage {
       if (validationFraction.isNotDefault)
         'validationFraction': encodeDouble(validationFraction),
       if (testFraction.isNotDefault) 'testFraction': encodeDouble(testFraction),
-      if (key.isNotDefault) 'key': key,
+      'key': key,
     };
   }
 
@@ -90517,7 +90294,7 @@ final class StratifiedSplit extends protobuf.ProtoMessage {
       if (validationFraction.isNotDefault)
         'validationFraction': encodeDouble(validationFraction),
       if (testFraction.isNotDefault) 'testFraction': encodeDouble(testFraction),
-      if (key.isNotDefault) 'key': key,
+      'key': key,
     };
   }
 
@@ -91624,8 +91401,7 @@ final class SupervisedTuningSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (trainingDatasetUri.isNotDefault)
-        'trainingDatasetUri': trainingDatasetUri,
+      'trainingDatasetUri': trainingDatasetUri,
       if (validationDatasetUri.isNotDefault)
         'validationDatasetUri': validationDatasetUri,
       if (hyperParameters != null) 'hyperParameters': hyperParameters!.toJson(),
@@ -91743,14 +91519,12 @@ final class DistillationSpec extends protobuf.ProtoMessage {
       if (baseTeacherModel != null) 'baseTeacherModel': baseTeacherModel,
       if (tunedTeacherModelSource != null)
         'tunedTeacherModelSource': tunedTeacherModelSource,
-      if (trainingDatasetUri.isNotDefault)
-        'trainingDatasetUri': trainingDatasetUri,
+      'trainingDatasetUri': trainingDatasetUri,
       if (validationDatasetUri != null)
         'validationDatasetUri': validationDatasetUri,
       if (hyperParameters != null) 'hyperParameters': hyperParameters!.toJson(),
       if (studentModel.isNotDefault) 'studentModel': studentModel,
-      if (pipelineRootDirectory.isNotDefault)
-        'pipelineRootDirectory': pipelineRootDirectory,
+      'pipelineRootDirectory': pipelineRootDirectory,
     };
   }
 
@@ -91865,8 +91639,7 @@ final class PartnerModelTuningSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (trainingDatasetUri.isNotDefault)
-        'trainingDatasetUri': trainingDatasetUri,
+      'trainingDatasetUri': trainingDatasetUri,
       if (validationDatasetUri.isNotDefault)
         'validationDatasetUri': validationDatasetUri,
       if (hyperParameters.isNotDefault)
@@ -92051,8 +91824,7 @@ final class VeoTuningSpec extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (trainingDatasetUri.isNotDefault)
-        'trainingDatasetUri': trainingDatasetUri,
+      'trainingDatasetUri': trainingDatasetUri,
       if (validationDatasetUri.isNotDefault)
         'validationDatasetUri': validationDatasetUri,
       if (hyperParameters != null) 'hyperParameters': hyperParameters!.toJson(),
@@ -92103,7 +91875,7 @@ final class EvaluationConfig extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+      'metrics': encodeList(metrics),
       if (outputConfig != null) 'outputConfig': outputConfig!.toJson(),
       if (autoraterConfig != null) 'autoraterConfig': autoraterConfig!.toJson(),
     };
@@ -92923,7 +92695,7 @@ final class RagEmbeddingModelConfig_VertexPredictionEndpoint
   @override
   Object toJson() {
     return {
-      if (endpoint.isNotDefault) 'endpoint': endpoint,
+      'endpoint': endpoint,
       if (model.isNotDefault) 'model': model,
       if (modelVersionId.isNotDefault) 'modelVersionId': modelVersionId,
     };
@@ -93687,7 +93459,7 @@ final class RagCorpus extends protobuf.ProtoMessage {
       if (vertexAiSearchConfig != null)
         'vertexAiSearchConfig': vertexAiSearchConfig!.toJson(),
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (ragEmbeddingModelConfig != null)
         'ragEmbeddingModelConfig': ragEmbeddingModelConfig!.toJson(),
@@ -93927,7 +93699,7 @@ final class RagFile extends protobuf.ProtoMessage {
       if (sharePointSources != null)
         'sharePointSources': sharePointSources!.toJson(),
       if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
+      'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (sizeBytes.isNotDefault) 'sizeBytes': encodeInt64(sizeBytes),
       if (ragFileType.isNotDefault) 'ragFileType': ragFileType.toJson(),
@@ -94999,7 +94771,7 @@ final class CreateRagCorpusRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (ragCorpus != null) 'ragCorpus': ragCorpus!.toJson(),
     };
   }
@@ -95030,7 +94802,7 @@ final class GetRagCorpusRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -95078,7 +94850,7 @@ final class ListRagCorporaRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -95164,10 +94936,7 @@ final class DeleteRagCorpusRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -95215,7 +94984,7 @@ final class UploadRagFileRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (ragFile != null) 'ragFile': ragFile!.toJson(),
       if (uploadRagFileConfig != null)
         'uploadRagFileConfig': uploadRagFileConfig!.toJson(),
@@ -95296,7 +95065,7 @@ final class ImportRagFilesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (importRagFilesConfig != null)
         'importRagFilesConfig': importRagFilesConfig!.toJson(),
     };
@@ -95399,7 +95168,7 @@ final class GetRagFileRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -95448,7 +95217,7 @@ final class ListRagFilesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -95533,7 +95302,7 @@ final class DeleteRagFileRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (forceDelete.isNotDefault) 'forceDelete': forceDelete,
     };
   }
@@ -95596,7 +95365,7 @@ final class GetRagEngineConfigRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -95923,7 +95692,7 @@ final class RetrieveContextsRequest extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (vertexRagStore != null) 'vertexRagStore': vertexRagStore!.toJson(),
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (query != null) 'query': query!.toJson(),
     };
   }
@@ -96221,7 +95990,7 @@ final class AugmentPromptRequest extends protobuf.ProtoMessage {
   Object toJson() {
     return {
       if (vertexRagStore != null) 'vertexRagStore': vertexRagStore!.toJson(),
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (contents.isNotDefault) 'contents': encodeList(contents),
       if (model != null) 'model': model!.toJson(),
     };
@@ -96353,7 +96122,7 @@ final class CorroborateContentRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (content != null) 'content': content!.toJson(),
       if (facts.isNotDefault) 'facts': encodeList(facts),
       if (parameters != null) 'parameters': parameters!.toJson(),
@@ -96598,7 +96367,7 @@ final class GetStudyRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -96633,10 +96402,7 @@ final class CreateStudyRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (study != null) 'study': study!.toJson(),
-    };
+    return {'parent': parent, if (study != null) 'study': study!.toJson()};
   }
 
   @override
@@ -96681,7 +96447,7 @@ final class ListStudiesRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
     };
@@ -96755,7 +96521,7 @@ final class DeleteStudyRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -96790,10 +96556,7 @@ final class LookupStudyRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (displayName.isNotDefault) 'displayName': displayName,
-    };
+    return {'parent': parent, 'displayName': displayName};
   }
 
   @override
@@ -96881,9 +96644,9 @@ final class SuggestTrialsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (suggestionCount.isNotDefault) 'suggestionCount': suggestionCount,
-      if (clientId.isNotDefault) 'clientId': clientId,
+      'parent': parent,
+      'suggestionCount': suggestionCount,
+      'clientId': clientId,
       if (contexts.isNotDefault) 'contexts': encodeList(contexts),
     };
   }
@@ -97020,10 +96783,7 @@ final class CreateTrialRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (trial != null) 'trial': trial!.toJson(),
-    };
+    return {'parent': parent, if (trial != null) 'trial': trial!.toJson()};
   }
 
   @override
@@ -97052,7 +96812,7 @@ final class GetTrialRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -97097,7 +96857,7 @@ final class ListTrialsRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
     };
@@ -97182,7 +96942,7 @@ final class AddTrialMeasurementRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (trialName.isNotDefault) 'trialName': trialName,
+      'trialName': trialName,
       if (measurement != null) 'measurement': measurement!.toJson(),
     };
   }
@@ -97237,7 +96997,7 @@ final class CompleteTrialRequest extends protobuf.ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (finalMeasurement != null)
         'finalMeasurement': finalMeasurement!.toJson(),
       if (trialInfeasible.isNotDefault) 'trialInfeasible': trialInfeasible,
@@ -97275,7 +97035,7 @@ final class DeleteTrialRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -97309,7 +97069,7 @@ final class CheckTrialEarlyStoppingStateRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (trialName.isNotDefault) 'trialName': trialName};
+    return {'trialName': trialName};
   }
 
   @override
@@ -97422,7 +97182,7 @@ final class StopTrialRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -97449,7 +97209,7 @@ final class ListOptimalTrialsRequest extends protobuf.ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (parent.isNotDefault) 'parent': parent};
+    return {'parent': parent};
   }
 
   @override

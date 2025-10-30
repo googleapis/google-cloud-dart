@@ -1767,7 +1767,7 @@ final class GetCachedContentRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -1827,7 +1827,7 @@ final class DeleteCachedContentRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -2389,7 +2389,7 @@ final class FileData extends ProtoMessage {
   Object toJson() {
     return {
       if (mimeType.isNotDefault) 'mimeType': mimeType,
-      if (fileUri.isNotDefault) 'fileUri': fileUri,
+      'fileUri': fileUri,
     };
   }
 
@@ -2472,10 +2472,7 @@ final class ExecutableCode extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (language.isNotDefault) 'language': language.toJson(),
-      if (code.isNotDefault) 'code': code,
-    };
+    return {'language': language.toJson(), 'code': code};
   }
 
   @override
@@ -2539,7 +2536,7 @@ final class CodeExecutionResult extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (outcome.isNotDefault) 'outcome': outcome.toJson(),
+      'outcome': outcome.toJson(),
       if (output.isNotDefault) 'output': output,
     };
   }
@@ -2741,7 +2738,7 @@ final class Tool_ComputerUse extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (environment.isNotDefault) 'environment': environment.toJson(),
+      'environment': environment.toJson(),
       if (excludedPredefinedFunctions.isNotDefault)
         'excludedPredefinedFunctions': excludedPredefinedFunctions,
     };
@@ -3137,8 +3134,8 @@ final class FunctionDeclaration extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
+      'name': name,
+      'description': description,
       if (parameters != null) 'parameters': parameters!.toJson(),
       if (parametersJsonSchema != null)
         'parametersJsonSchema': parametersJsonSchema!.toJson(),
@@ -3223,7 +3220,7 @@ final class FunctionCall extends ProtoMessage {
   Object toJson() {
     return {
       if (id.isNotDefault) 'id': id,
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (args != null) 'args': args!.toJson(),
     };
   }
@@ -3307,7 +3304,7 @@ final class FunctionResponse extends ProtoMessage {
   Object toJson() {
     return {
       if (id.isNotDefault) 'id': id,
-      if (name.isNotDefault) 'name': name,
+      'name': name,
       if (response != null) 'response': response!.toJson(),
       if (parts.isNotDefault) 'parts': encodeList(parts),
       if (willContinue.isNotDefault) 'willContinue': willContinue,
@@ -3503,7 +3500,7 @@ final class Schema extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (type.isNotDefault) 'type': type.toJson(),
+      'type': type.toJson(),
       if (format.isNotDefault) 'format': format,
       if (title.isNotDefault) 'title': title,
       if (description.isNotDefault) 'description': description,
@@ -3721,7 +3718,7 @@ final class GenerateMessageRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (prompt != null) 'prompt': prompt!.toJson(),
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (candidateCount != null) 'candidateCount': candidateCount,
@@ -3840,7 +3837,7 @@ final class Message extends ProtoMessage {
   Object toJson() {
     return {
       if (author.isNotDefault) 'author': author,
-      if (content.isNotDefault) 'content': content,
+      'content': content,
       if (citationMetadata != null)
         'citationMetadata': citationMetadata!.toJson(),
     };
@@ -3920,7 +3917,7 @@ final class MessagePrompt extends ProtoMessage {
     return {
       if (context.isNotDefault) 'context': context,
       if (examples.isNotDefault) 'examples': encodeList(examples),
-      if (messages.isNotDefault) 'messages': encodeList(messages),
+      'messages': encodeList(messages),
     };
   }
 
@@ -3997,10 +3994,7 @@ final class CountMessageTokensRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (model.isNotDefault) 'model': model,
-      if (prompt != null) 'prompt': prompt!.toJson(),
-    };
+    return {'model': model, if (prompt != null) 'prompt': prompt!.toJson()};
   }
 
   @override
@@ -4388,7 +4382,7 @@ final class GetFileRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -4415,7 +4409,7 @@ final class DeleteFileRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -4442,7 +4436,7 @@ final class DownloadFileRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -4573,10 +4567,10 @@ final class GenerateContentRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (systemInstruction != null)
         'systemInstruction': systemInstruction!.toJson(),
-      if (contents.isNotDefault) 'contents': encodeList(contents),
+      'contents': encodeList(contents),
       if (tools.isNotDefault) 'tools': encodeList(tools),
       if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
       if (safetySettings.isNotDefault)
@@ -4679,7 +4673,7 @@ final class SpeakerVoiceConfig extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (speaker.isNotDefault) 'speaker': speaker,
+      'speaker': speaker,
       if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
     };
   }
@@ -4715,10 +4709,7 @@ final class MultiSpeakerVoiceConfig extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (speakerVoiceConfigs.isNotDefault)
-        'speakerVoiceConfigs': encodeList(speakerVoiceConfigs),
-    };
+    return {'speakerVoiceConfigs': encodeList(speakerVoiceConfigs)};
   }
 
   @override
@@ -5285,7 +5276,7 @@ final class SemanticRetrieverConfig extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (source.isNotDefault) 'source': source,
+      'source': source,
       if (query != null) 'query': query!.toJson(),
       if (metadataFilters.isNotDefault)
         'metadataFilters': encodeList(metadataFilters),
@@ -6659,9 +6650,9 @@ final class GenerateAnswerRequest extends ProtoMessage {
       if (inlinePassages != null) 'inlinePassages': inlinePassages!.toJson(),
       if (semanticRetriever != null)
         'semanticRetriever': semanticRetriever!.toJson(),
-      if (model.isNotDefault) 'model': model,
-      if (contents.isNotDefault) 'contents': encodeList(contents),
-      if (answerStyle.isNotDefault) 'answerStyle': answerStyle.toJson(),
+      'model': model,
+      'contents': encodeList(contents),
+      'answerStyle': answerStyle.toJson(),
       if (safetySettings.isNotDefault)
         'safetySettings': encodeList(safetySettings),
       if (temperature != null) 'temperature': encodeDouble(temperature),
@@ -6926,7 +6917,7 @@ final class EmbedContentRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (content != null) 'content': content!.toJson(),
       if (taskType != null) 'taskType': taskType!.toJson(),
       if (title != null) 'title': title,
@@ -7027,10 +7018,7 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (model.isNotDefault) 'model': model,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
-    };
+    return {'model': model, 'requests': encodeList(requests)};
   }
 
   @override
@@ -7119,7 +7107,7 @@ final class CountTokensRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (contents.isNotDefault) 'contents': encodeList(contents),
       if (generateContentRequest != null)
         'generateContentRequest': generateContentRequest!.toJson(),
@@ -7753,7 +7741,7 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (generationConfig != null)
         'generationConfig': generationConfig!.toJson(),
       if (systemInstruction != null)
@@ -8715,9 +8703,9 @@ final class Model extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (baseModelId.isNotDefault) 'baseModelId': baseModelId,
-      if (version.isNotDefault) 'version': version,
+      'name': name,
+      'baseModelId': baseModelId,
+      'version': version,
       if (displayName.isNotDefault) 'displayName': displayName,
       if (description.isNotDefault) 'description': description,
       if (inputTokenLimit.isNotDefault) 'inputTokenLimit': inputTokenLimit,
@@ -8773,7 +8761,7 @@ final class GetModelRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -8885,7 +8873,7 @@ final class GetTunedModelRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -9163,7 +9151,7 @@ final class DeleteTunedModelRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -9335,7 +9323,7 @@ final class CreatePermissionRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (permission != null) 'permission': permission!.toJson(),
     };
   }
@@ -9367,7 +9355,7 @@ final class GetPermissionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -9422,7 +9410,7 @@ final class ListPermissionsRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -9536,7 +9524,7 @@ final class DeletePermissionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -9572,10 +9560,7 @@ final class TransferOwnershipRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (emailAddress.isNotDefault) 'emailAddress': emailAddress,
-    };
+    return {'name': name, 'emailAddress': emailAddress};
   }
 
   @override
@@ -9639,8 +9624,8 @@ final class PredictRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'model': model,
+      'instances': encodeList(instances),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
   }
@@ -9685,8 +9670,8 @@ final class PredictLongRunningRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
-      if (instances.isNotDefault) 'instances': encodeList(instances),
+      'model': model,
+      'instances': encodeList(instances),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
   }
@@ -10076,7 +10061,7 @@ final class CustomMetadata extends ProtoMessage {
       if (stringValue != null) 'stringValue': stringValue,
       if (stringListValue != null) 'stringListValue': stringListValue!.toJson(),
       if (numericValue != null) 'numericValue': encodeDouble(numericValue),
-      if (key.isNotDefault) 'key': key,
+      'key': key,
     };
   }
 
@@ -10121,10 +10106,7 @@ final class MetadataFilter extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (key.isNotDefault) 'key': key,
-      if (conditions.isNotDefault) 'conditions': encodeList(conditions),
-    };
+    return {'key': key, 'conditions': encodeList(conditions)};
   }
 
   @override
@@ -10167,7 +10149,7 @@ final class Condition extends ProtoMessage {
     return {
       if (stringValue != null) 'stringValue': stringValue,
       if (numericValue != null) 'numericValue': encodeDouble(numericValue),
-      if (operation.isNotDefault) 'operation': operation.toJson(),
+      'operation': operation.toJson(),
     };
   }
 
@@ -10398,7 +10380,7 @@ final class GetCorpusRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -10470,10 +10452,7 @@ final class DeleteCorpusRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -10640,8 +10619,8 @@ final class QueryCorpusRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (query.isNotDefault) 'query': query,
+      'name': name,
+      'query': query,
       if (metadataFilters.isNotDefault)
         'metadataFilters': encodeList(metadataFilters),
       if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
@@ -10757,7 +10736,7 @@ final class CreateDocumentRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (document != null) 'document': document!.toJson(),
     };
   }
@@ -10786,7 +10765,7 @@ final class GetDocumentRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -10859,10 +10838,7 @@ final class DeleteDocumentRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (force.isNotDefault) 'force': force,
-    };
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
@@ -10914,7 +10890,7 @@ final class ListDocumentsRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -11042,8 +11018,8 @@ final class QueryDocumentRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name.isNotDefault) 'name': name,
-      if (query.isNotDefault) 'query': query,
+      'name': name,
+      'query': query,
       if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
       if (metadataFilters.isNotDefault)
         'metadataFilters': encodeList(metadataFilters),
@@ -11116,10 +11092,7 @@ final class CreateChunkRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (chunk != null) 'chunk': chunk!.toJson(),
-    };
+    return {'parent': parent, if (chunk != null) 'chunk': chunk!.toJson()};
   }
 
   @override
@@ -11159,7 +11132,7 @@ final class BatchCreateChunksRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (parent.isNotDefault) 'parent': parent,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
+      'requests': encodeList(requests),
     };
   }
 
@@ -11213,7 +11186,7 @@ final class GetChunkRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -11287,7 +11260,7 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (parent.isNotDefault) 'parent': parent,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
+      'requests': encodeList(requests),
     };
   }
 
@@ -11341,7 +11314,7 @@ final class DeleteChunkRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -11380,7 +11353,7 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (parent.isNotDefault) 'parent': parent,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
+      'requests': encodeList(requests),
     };
   }
 
@@ -11433,7 +11406,7 @@ final class ListChunksRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
@@ -11643,8 +11616,8 @@ final class SafetyRating extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (category.isNotDefault) 'category': category.toJson(),
-      if (probability.isNotDefault) 'probability': probability.toJson(),
+      'category': category.toJson(),
+      'probability': probability.toJson(),
       if (blocked.isNotDefault) 'blocked': blocked,
     };
   }
@@ -11729,10 +11702,7 @@ final class SafetySetting extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (category.isNotDefault) 'category': category.toJson(),
-      if (threshold.isNotDefault) 'threshold': threshold.toJson(),
-    };
+    return {'category': category.toJson(), 'threshold': threshold.toJson()};
   }
 
   @override
@@ -11901,7 +11871,7 @@ final class GenerateTextRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (prompt != null) 'prompt': prompt!.toJson(),
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (candidateCount != null) 'candidateCount': candidateCount,
@@ -12001,7 +11971,7 @@ final class TextPrompt extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (text.isNotDefault) 'text': text};
+    return {'text': text};
   }
 
   @override
@@ -12091,10 +12061,7 @@ final class EmbedTextRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (model.isNotDefault) 'model': model,
-      if (text.isNotDefault) 'text': text,
-    };
+    return {'model': model, if (text.isNotDefault) 'text': text};
   }
 
   @override
@@ -12166,7 +12133,7 @@ final class BatchEmbedTextRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model.isNotDefault) 'model': model,
+      'model': model,
       if (texts.isNotDefault) 'texts': texts,
       if (requests.isNotDefault) 'requests': encodeList(requests),
     };
@@ -12260,10 +12227,7 @@ final class CountTextTokensRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (model.isNotDefault) 'model': model,
-      if (prompt != null) 'prompt': prompt!.toJson(),
-    };
+    return {'model': model, if (prompt != null) 'prompt': prompt!.toJson()};
   }
 
   @override
@@ -12722,10 +12686,7 @@ final class TuningExample extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (textInput != null) 'textInput': textInput,
-      if (output.isNotDefault) 'output': output,
-    };
+    return {if (textInput != null) 'textInput': textInput, 'output': output};
   }
 
   @override

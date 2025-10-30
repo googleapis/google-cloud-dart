@@ -1653,7 +1653,7 @@ final class EventTrigger extends ProtoMessage {
     return {
       if (trigger.isNotDefault) 'trigger': trigger,
       if (triggerRegion.isNotDefault) 'triggerRegion': triggerRegion,
-      if (eventType.isNotDefault) 'eventType': eventType,
+      'eventType': eventType,
       if (eventFilters.isNotDefault) 'eventFilters': encodeList(eventFilters),
       if (pubsubTopic.isNotDefault) 'pubsubTopic': pubsubTopic,
       if (serviceAccountEmail.isNotDefault)
@@ -1747,8 +1747,8 @@ final class EventFilter extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (attribute.isNotDefault) 'attribute': attribute,
-      if (value.isNotDefault) 'value': value,
+      'attribute': attribute,
+      'value': value,
       if (operator.isNotDefault) 'operator': operator,
     };
   }
@@ -1792,10 +1792,7 @@ final class GetFunctionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (revision.isNotDefault) 'revision': revision,
-    };
+    return {'name': name, if (revision.isNotDefault) 'revision': revision};
   }
 
   @override
@@ -1860,7 +1857,7 @@ final class ListFunctionsRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (pageSize.isNotDefault) 'pageSize': pageSize,
       if (pageToken.isNotDefault) 'pageToken': pageToken,
       if (filter.isNotDefault) 'filter': filter,
@@ -1963,7 +1960,7 @@ final class CreateFunctionRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (function != null) 'function': function!.toJson(),
       if (functionId.isNotDefault) 'functionId': functionId,
     };
@@ -2026,7 +2023,7 @@ final class DeleteFunctionRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -2087,7 +2084,7 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (parent.isNotDefault) 'parent': parent,
+      'parent': parent,
       if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
       if (environment.isNotDefault) 'environment': environment.toJson(),
     };
@@ -2166,7 +2163,7 @@ final class GenerateDownloadUrlRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
+    return {'name': name};
   }
 
   @override
@@ -2229,10 +2226,7 @@ final class ListRuntimesRequest extends ProtoMessage {
 
   @override
   Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (filter.isNotDefault) 'filter': filter,
-    };
+    return {'parent': parent, if (filter.isNotDefault) 'filter': filter};
   }
 
   @override
