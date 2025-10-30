@@ -25,11 +25,11 @@
 /// agents, summarization and classification systems, and more.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_rpc/src/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;
 

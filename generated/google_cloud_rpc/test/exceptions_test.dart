@@ -12,8 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_rpc/src/service_client.dart';
 import 'package:test/test.dart';
 
 void main() {

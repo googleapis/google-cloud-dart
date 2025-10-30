@@ -60,9 +60,6 @@ jobs:
       - name: "generated/**_test.dart"
         run: dart test -p ${{ matrix.platform }} .
         working-directory: generated
-      - name: "test package/google_cloud_gax"
-        run: dart test -p ${{ matrix.platform }}
-        working-directory: packages/google_cloud_gax
 
   generator:
     name: Generators

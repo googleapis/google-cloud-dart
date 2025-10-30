@@ -19,9 +19,9 @@
 /// Manages access control for Google Cloud Platform resources.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/src/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;
 

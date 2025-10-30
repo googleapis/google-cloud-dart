@@ -1,7 +1,12 @@
-## Google Cloud GAX
+## (Deprecated) Google Cloud GAX
 
 Google API eXtensions - common code for the Google Cloud client library
 packages.
+
+> [!WARNING]
+>
+> This package is deprecated, it's functionality has been migrated to
+> [`package:google_cloud_rpc`](https://pub.dev/packages/google_cloud_rpc).
 
 > [!NOTE]
 > This package is currently experimental and published under the

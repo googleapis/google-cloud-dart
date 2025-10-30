@@ -21,13 +21,13 @@
 library;
 
 import 'package:google_cloud_api/api.dart';
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_rpc/src/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;
 

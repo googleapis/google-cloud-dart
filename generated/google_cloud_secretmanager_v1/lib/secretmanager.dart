@@ -20,11 +20,11 @@
 /// Provides convenience while improving security.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/src/service_client.dart';
 import 'package:http/http.dart' as http;
 
 const _apiKeys = ['GOOGLE_API_KEY'];
