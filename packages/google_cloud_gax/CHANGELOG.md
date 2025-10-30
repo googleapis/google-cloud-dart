@@ -1,3 +1,7 @@
+## 0.2.0
+
+* Update the README.md to indicate that this package is deprecated.
+
 ## 0.1.2
 
 * **BREAKING**: Throw `ConfigurationException` instead of `ArgumentError` when

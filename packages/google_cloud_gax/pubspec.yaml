@@ -14,11 +14,7 @@
 
 name: google_cloud_gax
 description: Common code for the Google Cloud client library packages.
-# Keep these versions in sync:
-# * CHANGELOG.yaml
-# * pubspec.yaml
-# * lib/src/versions.dart
-version: 0.1.2
+version: 0.2.0
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/packages/google_cloud_gax
 
 environment:
@@ -27,10 +23,8 @@ environment:
 resolution: workspace
 
 dependencies:
-  google_cloud_protobuf: ^0.1.0
-  google_cloud_rpc: ^0.1.0
-  googleapis_auth: ^2.0.0
-  http: ^1.3.0
+  google_cloud_rpc: ^0.2.0
 
 dev_dependencies:
   test: ^1.25.0
+

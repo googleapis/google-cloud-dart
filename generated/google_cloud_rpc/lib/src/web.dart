@@ -12,24 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// VM-specific implementations.
+/// Web-specific implementations.
 library;
-
-import 'dart:io';
 
 import 'package:googleapis_auth/googleapis_auth.dart' as auth;
 import 'package:http/http.dart' as http;
 
-import '../gax.dart';
+import '../../service_client.dart';
 
 /// The Dart version to use in "x-goog-api-client" headers.
 ///
 /// The format is either `major.minor.patch` or the special value `0`, which
 /// indicates that the version is unknown.
-final clientDartVersion = Platform.version
-    .split(RegExp('[^0-9]+'))
-    .take(3)
-    .join('.');
+const String clientDartVersion = '0';
 
 /// A [http.Client] authenticated using an API key.
 ///
@@ -42,12 +37,8 @@ final clientDartVersion = Platform.version
 /// Throws [ConfigurationException] `apiKey` is `null` and no API key is found
 /// in the given environment variables.
 http.Client httpClientFromApiKey(String? apiKey, List<String> envKeys) {
-  apiKey ??= envKeys.map((n) => Platform.environment[n]).nonNulls.firstOrNull;
   if (apiKey == null) {
-    throw ConfigurationException(
-      'apiKey or one of these environment variables must be set to an API key: '
-      '${envKeys.join(', ')}',
-    );
+    throw ConfigurationException('apiKey must be set to an API key');
   }
   return auth.clientViaApiKey(apiKey);
 }

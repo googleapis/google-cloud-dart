@@ -21,9 +21,9 @@
 /// annotations, to developers.
 library;
 
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 const _apiKeys = ['GOOGLE_API_KEY'];
