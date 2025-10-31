@@ -24,7 +24,6 @@ void main() {
           '''{
   "status": 200,
   "reason": "OK",
-  "headers": [],
   "body": "$base64EncodedText"
 }''';
       final json = jsonDecode(data);

@@ -66,7 +66,7 @@ void main() {
 
     expect(actual.reason, expected.reason);
     expect(actual.domain, expected.domain);
-    expect(actual.metadata, isNull);
+    expect(actual.metadata, isEmpty);
 
     expected = ErrorInfo(
       reason: 'LOREM_IPSUM',
@@ -80,7 +80,7 @@ void main() {
     expect(actual.reason, expected.reason);
     expect(actual.domain, expected.domain);
     expect(actual.metadata, hasLength(1));
-    expect(actual.metadata!['instanceLimitPerRequest'], '100');
+    expect(actual.metadata['instanceLimitPerRequest'], '100');
   });
 
   // fields using custom encoding
@@ -107,9 +107,9 @@ void main() {
     );
 
     expect(actual.stackEntries, hasLength(3));
-    expect(actual.stackEntries![0], 'one');
-    expect(actual.stackEntries![1], 'two');
-    expect(actual.stackEntries![2], 'three');
+    expect(actual.stackEntries[0], 'one');
+    expect(actual.stackEntries[1], 'two');
+    expect(actual.stackEntries[2], 'three');
     expect(actual.detail, expected.detail);
   });
 
@@ -133,12 +133,12 @@ void main() {
 
     expect(actual.violations, hasLength(2));
     expect(
-      jsonEncode(actual.violations![0].toJson()),
-      jsonEncode(expected.violations![0].toJson()),
+      jsonEncode(actual.violations[0].toJson()),
+      jsonEncode(expected.violations[0].toJson()),
     );
     expect(
-      jsonEncode(actual.violations![1].toJson()),
-      jsonEncode(expected.violations![1].toJson()),
+      jsonEncode(actual.violations[1].toJson()),
+      jsonEncode(expected.violations[1].toJson()),
     );
   });
 

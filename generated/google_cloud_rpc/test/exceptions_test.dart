@@ -46,11 +46,12 @@ void main() {
     test('no body, no message', () {
       final e = StatusException.fromStatus(Status(code: 123), statusCode: 500);
 
-      expect(e.message, 'status returned without message');
+      expect(e.message, isEmpty);
       expect(e.status.code, 123);
       expect(e.statusCode, 500);
-      expect(e.toString(), 'StatusException: status returned without message');
+      expect(e.toString(), 'StatusException: ');
     });
+
     test('no body, status message', () {
       final e = StatusException.fromStatus(
         Status(message: 'bad auth', code: 123),

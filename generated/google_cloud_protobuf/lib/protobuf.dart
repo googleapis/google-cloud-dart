@@ -38,13 +38,13 @@ final class Api extends ProtoMessage {
 
   /// The fully qualified name of this interface, including package name
   /// followed by the interface's simple name.
-  final String? name;
+  final String name;
 
   /// The methods of this interface, in unspecified order.
-  final List<Method>? methods;
+  final List<Method> methods;
 
   /// Any metadata attached to the interface.
-  final List<Option>? options;
+  final List<Option> options;
 
   /// A version string for this interface. If specified, must have the form
   /// `major-version.minor-version`, as in `1.10`. If the minor version is
@@ -65,59 +65,59 @@ final class Api extends ProtoMessage {
   /// `google.feature.v1`. For major versions 0 and 1, the suffix can
   /// be omitted. Zero major versions must only be used for
   /// experimental, non-GA interfaces.
-  final String? version;
+  final String version;
 
   /// Source context for the protocol buffer service represented by this
   /// message.
   final SourceContext? sourceContext;
 
   /// Included interfaces. See `Mixin`.
-  final List<Mixin>? mixins;
+  final List<Mixin> mixins;
 
   /// The source syntax of the service.
-  final Syntax? syntax;
+  final Syntax syntax;
 
   Api({
-    this.name,
-    this.methods,
-    this.options,
-    this.version,
+    this.name = '',
+    this.methods = const [],
+    this.options = const [],
+    this.version = '',
     this.sourceContext,
-    this.mixins,
-    this.syntax,
+    this.mixins = const [],
+    this.syntax = Syntax.$default,
   }) : super(fullyQualifiedName);
 
   factory Api.fromJson(Map<String, dynamic> json) {
     return Api(
-      name: json['name'],
-      methods: decodeListMessage(json['methods'], Method.fromJson),
-      options: decodeListMessage(json['options'], Option.fromJson),
-      version: json['version'],
+      name: json['name'] ?? '',
+      methods: decodeListMessage(json['methods'], Method.fromJson) ?? [],
+      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+      version: json['version'] ?? '',
       sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-      mixins: decodeListMessage(json['mixins'], Mixin.fromJson),
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson),
+      mixins: decodeListMessage(json['mixins'], Mixin.fromJson) ?? [],
+      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (methods != null) 'methods': encodeList(methods),
-      if (options != null) 'options': encodeList(options),
-      if (version != null) 'version': version,
+      if (name.isNotDefault) 'name': name,
+      if (methods.isNotDefault) 'methods': encodeList(methods),
+      if (options.isNotDefault) 'options': encodeList(options),
+      if (version.isNotDefault) 'version': version,
       if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-      if (mixins != null) 'mixins': encodeList(mixins),
-      if (syntax != null) 'syntax': syntax!.toJson(),
+      if (mixins.isNotDefault) 'mixins': encodeList(mixins),
+      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (version != null) 'version=$version',
-      if (syntax != null) 'syntax=$syntax',
+      'name=$name',
+      'version=$version',
+      'syntax=$syntax',
     ].join(',');
     return 'Api($contents)';
   }
@@ -128,70 +128,71 @@ final class Method extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Method';
 
   /// The simple name of this method.
-  final String? name;
+  final String name;
 
   /// A URL of the input message type.
-  final String? requestTypeUrl;
+  final String requestTypeUrl;
 
   /// If true, the request is streamed.
-  final bool? requestStreaming;
+  final bool requestStreaming;
 
   /// The URL of the output message type.
-  final String? responseTypeUrl;
+  final String responseTypeUrl;
 
   /// If true, the response is streamed.
-  final bool? responseStreaming;
+  final bool responseStreaming;
 
   /// Any metadata attached to the method.
-  final List<Option>? options;
+  final List<Option> options;
 
   /// The source syntax of this method.
-  final Syntax? syntax;
+  final Syntax syntax;
 
   Method({
-    this.name,
-    this.requestTypeUrl,
-    this.requestStreaming,
-    this.responseTypeUrl,
-    this.responseStreaming,
-    this.options,
-    this.syntax,
+    this.name = '',
+    this.requestTypeUrl = '',
+    this.requestStreaming = false,
+    this.responseTypeUrl = '',
+    this.responseStreaming = false,
+    this.options = const [],
+    this.syntax = Syntax.$default,
   }) : super(fullyQualifiedName);
 
   factory Method.fromJson(Map<String, dynamic> json) {
     return Method(
-      name: json['name'],
-      requestTypeUrl: json['requestTypeUrl'],
-      requestStreaming: json['requestStreaming'],
-      responseTypeUrl: json['responseTypeUrl'],
-      responseStreaming: json['responseStreaming'],
-      options: decodeListMessage(json['options'], Option.fromJson),
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson),
+      name: json['name'] ?? '',
+      requestTypeUrl: json['requestTypeUrl'] ?? '',
+      requestStreaming: json['requestStreaming'] ?? false,
+      responseTypeUrl: json['responseTypeUrl'] ?? '',
+      responseStreaming: json['responseStreaming'] ?? false,
+      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (requestTypeUrl != null) 'requestTypeUrl': requestTypeUrl,
-      if (requestStreaming != null) 'requestStreaming': requestStreaming,
-      if (responseTypeUrl != null) 'responseTypeUrl': responseTypeUrl,
-      if (responseStreaming != null) 'responseStreaming': responseStreaming,
-      if (options != null) 'options': encodeList(options),
-      if (syntax != null) 'syntax': syntax!.toJson(),
+      if (name.isNotDefault) 'name': name,
+      if (requestTypeUrl.isNotDefault) 'requestTypeUrl': requestTypeUrl,
+      if (requestStreaming.isNotDefault) 'requestStreaming': requestStreaming,
+      if (responseTypeUrl.isNotDefault) 'responseTypeUrl': responseTypeUrl,
+      if (responseStreaming.isNotDefault)
+        'responseStreaming': responseStreaming,
+      if (options.isNotDefault) 'options': encodeList(options),
+      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (requestTypeUrl != null) 'requestTypeUrl=$requestTypeUrl',
-      if (requestStreaming != null) 'requestStreaming=$requestStreaming',
-      if (responseTypeUrl != null) 'responseTypeUrl=$responseTypeUrl',
-      if (responseStreaming != null) 'responseStreaming=$responseStreaming',
-      if (syntax != null) 'syntax=$syntax',
+      'name=$name',
+      'requestTypeUrl=$requestTypeUrl',
+      'requestStreaming=$requestStreaming',
+      'responseTypeUrl=$responseTypeUrl',
+      'responseStreaming=$responseStreaming',
+      'syntax=$syntax',
     ].join(',');
     return 'Method($contents)';
   }
@@ -279,29 +280,29 @@ final class Mixin extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Mixin';
 
   /// The fully qualified name of the interface which is included.
-  final String? name;
+  final String name;
 
   /// If non-empty specifies a path under which inherited HTTP paths
   /// are rooted.
-  final String? root;
+  final String root;
 
-  Mixin({this.name, this.root}) : super(fullyQualifiedName);
+  Mixin({this.name = '', this.root = ''}) : super(fullyQualifiedName);
 
   factory Mixin.fromJson(Map<String, dynamic> json) {
-    return Mixin(name: json['name'], root: json['root']);
+    return Mixin(name: json['name'] ?? '', root: json['root'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (name != null) 'name': name, if (root != null) 'root': root};
+    return {
+      if (name.isNotDefault) 'name': name,
+      if (root.isNotDefault) 'root': root,
+    };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (root != null) 'root=$root',
-    ].join(',');
+    final contents = ['name=$name', 'root=$root'].join(',');
     return 'Mixin($contents)';
   }
 }
@@ -370,7 +371,7 @@ final class Duration extends ProtoMessage {
   /// Signed seconds of the span of time. Must be from -315,576,000,000
   /// to +315,576,000,000 inclusive. Note: these bounds are computed from:
   /// 60 sec/min * 60 min/hr * 24 hr/day * 365.25 days/year * 10000 years
-  final int? seconds;
+  final int seconds;
 
   /// Signed fractions of a second at nanosecond resolution of the span
   /// of time. Durations less than one second are represented with a 0
@@ -378,9 +379,9 @@ final class Duration extends ProtoMessage {
   /// of one second or more, a non-zero value for the `nanos` field must be
   /// of the same sign as the `seconds` field. Must be from -999,999,999
   /// to +999,999,999 inclusive.
-  final int? nanos;
+  final int nanos;
 
-  Duration({this.seconds, this.nanos}) : super(fullyQualifiedName) {
+  Duration({this.seconds = 0, this.nanos = 0}) : super(fullyQualifiedName) {
     _validate();
   }
 
@@ -391,10 +392,7 @@ final class Duration extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (seconds != null) 'seconds=$seconds',
-      if (nanos != null) 'nanos=$nanos',
-    ].join(',');
+    final contents = ['seconds=$seconds', 'nanos=$nanos'].join(',');
     return 'Duration($contents)';
   }
 }
@@ -627,9 +625,9 @@ final class FieldMask extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.FieldMask';
 
   /// The set of field mask paths.
-  final List<String>? paths;
+  final List<String> paths;
 
-  FieldMask({this.paths}) : super(fullyQualifiedName);
+  FieldMask({this.paths = const []}) : super(fullyQualifiedName);
 
   factory FieldMask.fromJson(Object json) => _FieldMaskHelper.decode(json);
 
@@ -647,22 +645,22 @@ final class SourceContext extends ProtoMessage {
 
   /// The path-qualified name of the .proto file that contained the associated
   /// protobuf element.  For example: `"google/protobuf/source_context.proto"`.
-  final String? fileName;
+  final String fileName;
 
-  SourceContext({this.fileName}) : super(fullyQualifiedName);
+  SourceContext({this.fileName = ''}) : super(fullyQualifiedName);
 
   factory SourceContext.fromJson(Map<String, dynamic> json) {
-    return SourceContext(fileName: json['fileName']);
+    return SourceContext(fileName: json['fileName'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (fileName != null) 'fileName': fileName};
+    return {if (fileName.isNotDefault) 'fileName': fileName};
   }
 
   @override
   String toString() {
-    final contents = [if (fileName != null) 'fileName=$fileName'].join(',');
+    final contents = ['fileName=$fileName'].join(',');
     return 'SourceContext($contents)';
   }
 }
@@ -679,9 +677,9 @@ final class Struct extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Struct';
 
   /// Unordered map of dynamically typed values.
-  final Map<String, Value>? fields;
+  final Map<String, Value> fields;
 
-  Struct({this.fields}) : super(fullyQualifiedName);
+  Struct({this.fields = const {}}) : super(fullyQualifiedName);
 
   factory Struct.fromJson(Object json) => _StructHelper.decode(json);
 
@@ -699,9 +697,9 @@ final class ListValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.ListValue';
 
   /// Repeated field of dynamically typed values.
-  final List<Value>? values;
+  final List<Value> values;
 
-  ListValue({this.values}) : super(fullyQualifiedName);
+  ListValue({this.values = const []}) : super(fullyQualifiedName);
 
   factory ListValue.fromJson(Object json) => _ListValueHelper.decode(json);
 
@@ -807,15 +805,15 @@ final class Timestamp extends ProtoMessage {
   /// Represents seconds of UTC time since Unix epoch
   /// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
   /// 9999-12-31T23:59:59Z inclusive.
-  final int? seconds;
+  final int seconds;
 
   /// Non-negative fractions of a second at nanosecond resolution. Negative
   /// second values with fractions must still have non-negative nanos values
   /// that count forward in time. Must be from 0 to 999,999,999
   /// inclusive.
-  final int? nanos;
+  final int nanos;
 
-  Timestamp({this.seconds, this.nanos}) : super(fullyQualifiedName) {
+  Timestamp({this.seconds = 0, this.nanos = 0}) : super(fullyQualifiedName) {
     _validate();
   }
 
@@ -826,10 +824,7 @@ final class Timestamp extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (seconds != null) 'seconds=$seconds',
-      if (nanos != null) 'nanos=$nanos',
-    ].join(',');
+    final contents = ['seconds=$seconds', 'nanos=$nanos'].join(',');
     return 'Timestamp($contents)';
   }
 }
@@ -839,67 +834,67 @@ final class Type extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Type';
 
   /// The fully qualified message name.
-  final String? name;
+  final String name;
 
   /// The list of fields.
-  final List<Field>? fields;
+  final List<Field> fields;
 
   /// The list of types appearing in `oneof` definitions in this type.
-  final List<String>? oneofs;
+  final List<String> oneofs;
 
   /// The protocol buffer options.
-  final List<Option>? options;
+  final List<Option> options;
 
   /// The source context.
   final SourceContext? sourceContext;
 
   /// The source syntax.
-  final Syntax? syntax;
+  final Syntax syntax;
 
   /// The source edition string, only valid when syntax is SYNTAX_EDITIONS.
-  final String? edition;
+  final String edition;
 
   Type({
-    this.name,
-    this.fields,
-    this.oneofs,
-    this.options,
+    this.name = '',
+    this.fields = const [],
+    this.oneofs = const [],
+    this.options = const [],
     this.sourceContext,
-    this.syntax,
-    this.edition,
+    this.syntax = Syntax.$default,
+    this.edition = '',
   }) : super(fullyQualifiedName);
 
   factory Type.fromJson(Map<String, dynamic> json) {
     return Type(
-      name: json['name'],
-      fields: decodeListMessage(json['fields'], Field.fromJson),
-      oneofs: decodeList(json['oneofs']),
-      options: decodeListMessage(json['options'], Option.fromJson),
+      name: json['name'] ?? '',
+      fields: decodeListMessage(json['fields'], Field.fromJson) ?? [],
+      oneofs: decodeList(json['oneofs']) ?? [],
+      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
       sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson),
-      edition: json['edition'],
+      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
+      edition: json['edition'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (fields != null) 'fields': encodeList(fields),
-      if (oneofs != null) 'oneofs': oneofs,
-      if (options != null) 'options': encodeList(options),
+      if (name.isNotDefault) 'name': name,
+      if (fields.isNotDefault) 'fields': encodeList(fields),
+      if (oneofs.isNotDefault) 'oneofs': oneofs,
+      if (options.isNotDefault) 'options': encodeList(options),
       if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-      if (syntax != null) 'syntax': syntax!.toJson(),
-      if (edition != null) 'edition': edition,
+      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+      if (edition.isNotDefault) 'edition': edition,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (syntax != null) 'syntax=$syntax',
-      if (edition != null) 'edition=$edition',
+      'name=$name',
+      'syntax=$syntax',
+      'edition=$edition',
     ].join(',');
     return 'Type($contents)';
   }
@@ -910,93 +905,96 @@ final class Field extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Field';
 
   /// The field type.
-  final Field_Kind? kind;
+  final Field_Kind kind;
 
   /// The field cardinality.
-  final Field_Cardinality? cardinality;
+  final Field_Cardinality cardinality;
 
   /// The field number.
-  final int? number;
+  final int number;
 
   /// The field name.
-  final String? name;
+  final String name;
 
   /// The field type URL, without the scheme, for message or enumeration
   /// types. Example: `"type.googleapis.com/google.protobuf.Timestamp"`.
-  final String? typeUrl;
+  final String typeUrl;
 
   /// The index of the field type in `Type.oneofs`, for message or enumeration
   /// types. The first type has index 1; zero means the type is not in the list.
-  final int? oneofIndex;
+  final int oneofIndex;
 
   /// Whether to use alternative packed wire representation.
-  final bool? packed;
+  final bool packed;
 
   /// The protocol buffer options.
-  final List<Option>? options;
+  final List<Option> options;
 
   /// The field JSON name.
-  final String? jsonName;
+  final String jsonName;
 
   /// The string value of the default value of this field. Proto2 syntax only.
-  final String? defaultValue;
+  final String defaultValue;
 
   Field({
-    this.kind,
-    this.cardinality,
-    this.number,
-    this.name,
-    this.typeUrl,
-    this.oneofIndex,
-    this.packed,
-    this.options,
-    this.jsonName,
-    this.defaultValue,
+    this.kind = Field_Kind.$default,
+    this.cardinality = Field_Cardinality.$default,
+    this.number = 0,
+    this.name = '',
+    this.typeUrl = '',
+    this.oneofIndex = 0,
+    this.packed = false,
+    this.options = const [],
+    this.jsonName = '',
+    this.defaultValue = '',
   }) : super(fullyQualifiedName);
 
   factory Field.fromJson(Map<String, dynamic> json) {
     return Field(
-      kind: decodeEnum(json['kind'], Field_Kind.fromJson),
-      cardinality: decodeEnum(json['cardinality'], Field_Cardinality.fromJson),
-      number: json['number'],
-      name: json['name'],
-      typeUrl: json['typeUrl'],
-      oneofIndex: json['oneofIndex'],
-      packed: json['packed'],
-      options: decodeListMessage(json['options'], Option.fromJson),
-      jsonName: json['jsonName'],
-      defaultValue: json['defaultValue'],
+      kind:
+          decodeEnum(json['kind'], Field_Kind.fromJson) ?? Field_Kind.$default,
+      cardinality:
+          decodeEnum(json['cardinality'], Field_Cardinality.fromJson) ??
+          Field_Cardinality.$default,
+      number: json['number'] ?? 0,
+      name: json['name'] ?? '',
+      typeUrl: json['typeUrl'] ?? '',
+      oneofIndex: json['oneofIndex'] ?? 0,
+      packed: json['packed'] ?? false,
+      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+      jsonName: json['jsonName'] ?? '',
+      defaultValue: json['defaultValue'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (kind != null) 'kind': kind!.toJson(),
-      if (cardinality != null) 'cardinality': cardinality!.toJson(),
-      if (number != null) 'number': number,
-      if (name != null) 'name': name,
-      if (typeUrl != null) 'typeUrl': typeUrl,
-      if (oneofIndex != null) 'oneofIndex': oneofIndex,
-      if (packed != null) 'packed': packed,
-      if (options != null) 'options': encodeList(options),
-      if (jsonName != null) 'jsonName': jsonName,
-      if (defaultValue != null) 'defaultValue': defaultValue,
+      if (kind.isNotDefault) 'kind': kind.toJson(),
+      if (cardinality.isNotDefault) 'cardinality': cardinality.toJson(),
+      if (number.isNotDefault) 'number': number,
+      if (name.isNotDefault) 'name': name,
+      if (typeUrl.isNotDefault) 'typeUrl': typeUrl,
+      if (oneofIndex.isNotDefault) 'oneofIndex': oneofIndex,
+      if (packed.isNotDefault) 'packed': packed,
+      if (options.isNotDefault) 'options': encodeList(options),
+      if (jsonName.isNotDefault) 'jsonName': jsonName,
+      if (defaultValue.isNotDefault) 'defaultValue': defaultValue,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (kind != null) 'kind=$kind',
-      if (cardinality != null) 'cardinality=$cardinality',
-      if (number != null) 'number=$number',
-      if (name != null) 'name=$name',
-      if (typeUrl != null) 'typeUrl=$typeUrl',
-      if (oneofIndex != null) 'oneofIndex=$oneofIndex',
-      if (packed != null) 'packed=$packed',
-      if (jsonName != null) 'jsonName=$jsonName',
-      if (defaultValue != null) 'defaultValue=$defaultValue',
+      'kind=$kind',
+      'cardinality=$cardinality',
+      'number=$number',
+      'name=$name',
+      'typeUrl=$typeUrl',
+      'oneofIndex=$oneofIndex',
+      'packed=$packed',
+      'jsonName=$jsonName',
+      'defaultValue=$defaultValue',
     ].join(',');
     return 'Field($contents)';
   }
@@ -1061,9 +1059,14 @@ final class Field_Kind extends ProtoEnum {
   /// Field type sint64.
   static const typeSint64 = Field_Kind('TYPE_SINT64');
 
+  /// The default value for [Field_Kind].
+  static const $default = typeUnknown;
+
   const Field_Kind(super.value);
 
   factory Field_Kind.fromJson(String json) => Field_Kind(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Kind.$value';
@@ -1083,9 +1086,14 @@ final class Field_Cardinality extends ProtoEnum {
   /// For repeated fields.
   static const cardinalityRepeated = Field_Cardinality('CARDINALITY_REPEATED');
 
+  /// The default value for [Field_Cardinality].
+  static const $default = cardinalityUnknown;
+
   const Field_Cardinality(super.value);
 
   factory Field_Cardinality.fromJson(String json) => Field_Cardinality(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Cardinality.$value';
@@ -1096,61 +1104,61 @@ final class Enum extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Enum';
 
   /// Enum type name.
-  final String? name;
+  final String name;
 
   /// Enum value definitions.
-  final List<EnumValue>? enumvalue;
+  final List<EnumValue> enumvalue;
 
   /// Protocol buffer options.
-  final List<Option>? options;
+  final List<Option> options;
 
   /// The source context.
   final SourceContext? sourceContext;
 
   /// The source syntax.
-  final Syntax? syntax;
+  final Syntax syntax;
 
   /// The source edition string, only valid when syntax is SYNTAX_EDITIONS.
-  final String? edition;
+  final String edition;
 
   Enum({
-    this.name,
-    this.enumvalue,
-    this.options,
+    this.name = '',
+    this.enumvalue = const [],
+    this.options = const [],
     this.sourceContext,
-    this.syntax,
-    this.edition,
+    this.syntax = Syntax.$default,
+    this.edition = '',
   }) : super(fullyQualifiedName);
 
   factory Enum.fromJson(Map<String, dynamic> json) {
     return Enum(
-      name: json['name'],
-      enumvalue: decodeListMessage(json['enumvalue'], EnumValue.fromJson),
-      options: decodeListMessage(json['options'], Option.fromJson),
+      name: json['name'] ?? '',
+      enumvalue: decodeListMessage(json['enumvalue'], EnumValue.fromJson) ?? [],
+      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
       sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson),
-      edition: json['edition'],
+      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
+      edition: json['edition'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (enumvalue != null) 'enumvalue': encodeList(enumvalue),
-      if (options != null) 'options': encodeList(options),
+      if (name.isNotDefault) 'name': name,
+      if (enumvalue.isNotDefault) 'enumvalue': encodeList(enumvalue),
+      if (options.isNotDefault) 'options': encodeList(options),
       if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-      if (syntax != null) 'syntax': syntax!.toJson(),
-      if (edition != null) 'edition': edition,
+      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+      if (edition.isNotDefault) 'edition': edition,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (syntax != null) 'syntax=$syntax',
-      if (edition != null) 'edition=$edition',
+      'name=$name',
+      'syntax=$syntax',
+      'edition=$edition',
     ].join(',');
     return 'Enum($contents)';
   }
@@ -1161,39 +1169,37 @@ final class EnumValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.EnumValue';
 
   /// Enum value name.
-  final String? name;
+  final String name;
 
   /// Enum value number.
-  final int? number;
+  final int number;
 
   /// Protocol buffer options.
-  final List<Option>? options;
+  final List<Option> options;
 
-  EnumValue({this.name, this.number, this.options}) : super(fullyQualifiedName);
+  EnumValue({this.name = '', this.number = 0, this.options = const []})
+    : super(fullyQualifiedName);
 
   factory EnumValue.fromJson(Map<String, dynamic> json) {
     return EnumValue(
-      name: json['name'],
-      number: json['number'],
-      options: decodeListMessage(json['options'], Option.fromJson),
+      name: json['name'] ?? '',
+      number: json['number'] ?? 0,
+      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (number != null) 'number': number,
-      if (options != null) 'options': encodeList(options),
+      if (name.isNotDefault) 'name': name,
+      if (number.isNotDefault) 'number': number,
+      if (options.isNotDefault) 'options': encodeList(options),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (number != null) 'number=$number',
-    ].join(',');
+    final contents = ['name=$name', 'number=$number'].join(',');
     return 'EnumValue($contents)';
   }
 }
@@ -1207,7 +1213,7 @@ final class Option extends ProtoMessage {
   /// descriptor.proto), this is the short name. For example, `"map_entry"`.
   /// For custom options, it should be the fully-qualified name. For example,
   /// `"google.api.http"`.
-  final String? name;
+  final String name;
 
   /// The option's value packed in an Any message. If the value is a primitive,
   /// the corresponding wrapper type defined in google/protobuf/wrappers.proto
@@ -1215,11 +1221,11 @@ final class Option extends ProtoMessage {
   /// value using the google.protobuf.Int32Value type.
   final Any? value;
 
-  Option({this.name, this.value}) : super(fullyQualifiedName);
+  Option({this.name = '', this.value}) : super(fullyQualifiedName);
 
   factory Option.fromJson(Map<String, dynamic> json) {
     return Option(
-      name: json['name'],
+      name: json['name'] ?? '',
       value: decode(json['value'], Any.fromJson),
     );
   }
@@ -1227,14 +1233,14 @@ final class Option extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
+      if (name.isNotDefault) 'name': name,
       if (value != null) 'value': value!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (name != null) 'name=$name'].join(',');
+    final contents = ['name=$name'].join(',');
     return 'Option($contents)';
   }
 }
@@ -1246,9 +1252,9 @@ final class DoubleValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.DoubleValue';
 
   /// The double value.
-  final double? value;
+  final double value;
 
-  DoubleValue({this.value}) : super(fullyQualifiedName);
+  DoubleValue({this.value = 0}) : super(fullyQualifiedName);
 
   factory DoubleValue.fromJson(Object json) => _DoubleValueHelper.decode(json);
 
@@ -1257,7 +1263,7 @@ final class DoubleValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'DoubleValue($contents)';
   }
 }
@@ -1269,9 +1275,9 @@ final class FloatValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.FloatValue';
 
   /// The float value.
-  final double? value;
+  final double value;
 
-  FloatValue({this.value}) : super(fullyQualifiedName);
+  FloatValue({this.value = 0}) : super(fullyQualifiedName);
 
   factory FloatValue.fromJson(Object json) => _FloatValueHelper.decode(json);
 
@@ -1280,7 +1286,7 @@ final class FloatValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'FloatValue($contents)';
   }
 }
@@ -1292,9 +1298,9 @@ final class Int64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Int64Value';
 
   /// The int64 value.
-  final int? value;
+  final int value;
 
-  Int64Value({this.value}) : super(fullyQualifiedName);
+  Int64Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Int64Value.fromJson(Object json) => _Int64ValueHelper.decode(json);
 
@@ -1303,7 +1309,7 @@ final class Int64Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'Int64Value($contents)';
   }
 }
@@ -1315,9 +1321,9 @@ final class Uint64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt64Value';
 
   /// The uint64 value.
-  final int? value;
+  final int value;
 
-  Uint64Value({this.value}) : super(fullyQualifiedName);
+  Uint64Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Uint64Value.fromJson(Object json) => _Uint64ValueHelper.decode(json);
 
@@ -1326,7 +1332,7 @@ final class Uint64Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'UInt64Value($contents)';
   }
 }
@@ -1338,9 +1344,9 @@ final class Int32Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Int32Value';
 
   /// The int32 value.
-  final int? value;
+  final int value;
 
-  Int32Value({this.value}) : super(fullyQualifiedName);
+  Int32Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Int32Value.fromJson(Object json) => _Int32ValueHelper.decode(json);
 
@@ -1349,7 +1355,7 @@ final class Int32Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'Int32Value($contents)';
   }
 }
@@ -1361,9 +1367,9 @@ final class Uint32Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt32Value';
 
   /// The uint32 value.
-  final int? value;
+  final int value;
 
-  Uint32Value({this.value}) : super(fullyQualifiedName);
+  Uint32Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Uint32Value.fromJson(Object json) => _Uint32ValueHelper.decode(json);
 
@@ -1372,7 +1378,7 @@ final class Uint32Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'UInt32Value($contents)';
   }
 }
@@ -1384,9 +1390,9 @@ final class BoolValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BoolValue';
 
   /// The bool value.
-  final bool? value;
+  final bool value;
 
-  BoolValue({this.value}) : super(fullyQualifiedName);
+  BoolValue({this.value = false}) : super(fullyQualifiedName);
 
   factory BoolValue.fromJson(Object json) => _BoolValueHelper.decode(json);
 
@@ -1395,7 +1401,7 @@ final class BoolValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'BoolValue($contents)';
   }
 }
@@ -1407,9 +1413,9 @@ final class StringValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.StringValue';
 
   /// The string value.
-  final String? value;
+  final String value;
 
-  StringValue({this.value}) : super(fullyQualifiedName);
+  StringValue({this.value = ''}) : super(fullyQualifiedName);
 
   factory StringValue.fromJson(Object json) => _StringValueHelper.decode(json);
 
@@ -1418,7 +1424,7 @@ final class StringValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'StringValue($contents)';
   }
 }
@@ -1454,9 +1460,14 @@ final class NullValue extends ProtoEnum {
   /// Null value.
   static const nullValue = NullValue('NULL_VALUE');
 
+  /// The default value for [NullValue].
+  static const $default = nullValue;
+
   const NullValue(super.value);
 
   factory NullValue.fromJson(String json) => NullValue(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'NullValue.$value';
@@ -1473,9 +1484,14 @@ final class Syntax extends ProtoEnum {
   /// Syntax `editions`.
   static const syntaxEditions = Syntax('SYNTAX_EDITIONS');
 
+  /// The default value for [Syntax].
+  static const $default = syntaxProto2;
+
   const Syntax(super.value);
 
   factory Syntax.fromJson(String json) => Syntax(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Syntax.$value';

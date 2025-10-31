@@ -73,7 +73,7 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Function$> getFunction(GetFunctionRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.revision != null) 'revision': request.revision!,
+      if (request.revision.isNotDefault) 'revision': request.revision,
     });
     final response = await _client.get(url);
     return Function$.fromJson(response);
@@ -88,10 +88,10 @@ final class FunctionService {
     ListFunctionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.orderBy != null) 'orderBy': request.orderBy!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
     return ListFunctionsResponse.fromJson(response);
@@ -114,7 +114,7 @@ final class FunctionService {
     CreateFunctionRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.functionId != null) 'functionId': request.functionId!,
+      if (request.functionId.isNotDefault) 'functionId': request.functionId,
     });
     final response = await _client.post(url, body: request.function);
     return Operation.fromJson(
@@ -137,9 +137,9 @@ final class FunctionService {
   Future<Operation<Function$, OperationMetadata>> updateFunction(
     UpdateFunctionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.function.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v2/${request.function!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.function);
     return Operation.fromJson(
@@ -234,7 +234,7 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/runtimes', {
-      if (request.filter != null) 'filter': request.filter!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
     });
     final response = await _client.get(url);
     return ListRuntimesResponse.fromJson(response);
@@ -249,9 +249,9 @@ final class FunctionService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/locations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -280,9 +280,9 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v2/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion != null)
+      if (request.options!.requestedPolicyVersion.isNotDefault)
         'options.requestedPolicyVersion':
-            '${request.options?.requestedPolicyVersion}',
+            '${request.options!.requestedPolicyVersion}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -316,9 +316,9 @@ final class FunctionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -354,10 +354,10 @@ final class Function$ extends ProtoMessage {
 
   /// A user-defined name of the function. Function names must be unique
   /// globally and match pattern `projects/*/locations/*/functions/*`
-  final String? name;
+  final String name;
 
   /// User-provided description of a function.
-  final String? description;
+  final String description;
 
   /// Describes the Build step of the function that builds a container from the
   /// given source.
@@ -372,72 +372,74 @@ final class Function$ extends ProtoMessage {
   final EventTrigger? eventTrigger;
 
   /// Output only. State of the function.
-  final Function$_State? state;
+  final Function$_State state;
 
   /// Output only. The last update timestamp of a Cloud Function.
   final Timestamp? updateTime;
 
   /// Labels associated with this Cloud Function.
-  final Map<String, String>? labels;
+  final Map<String, String> labels;
 
   /// Output only. State Messages for this Cloud Function.
-  final List<StateMessage>? stateMessages;
+  final List<StateMessage> stateMessages;
 
   /// Describe whether the function is 1st Gen or 2nd Gen.
-  final Environment? environment;
+  final Environment environment;
 
   /// Output only. The deployed url for the function.
-  final String? url;
+  final String url;
 
   /// Resource name of a KMS crypto key (managed by the user) used to
   /// encrypt/decrypt function resources.
   ///
   /// It must match the pattern
   /// `projects/{project}/locations/{location}/keyRings/{key_ring}/cryptoKeys/{crypto_key}`.
-  final String? kmsKeyName;
+  final String kmsKeyName;
 
   /// Output only. Reserved for future use.
-  final bool? satisfiesPzs;
+  final bool satisfiesPzs;
 
   /// Output only. The create timestamp of a Cloud Function. This is only
   /// applicable to 2nd Gen functions.
   final Timestamp? createTime;
 
   Function$({
-    this.name,
-    this.description,
+    this.name = '',
+    this.description = '',
     this.buildConfig,
     this.serviceConfig,
     this.eventTrigger,
-    this.state,
+    this.state = Function$_State.$default,
     this.updateTime,
-    this.labels,
-    this.stateMessages,
-    this.environment,
-    this.url,
-    this.kmsKeyName,
-    this.satisfiesPzs,
+    this.labels = const {},
+    this.stateMessages = const [],
+    this.environment = Environment.$default,
+    this.url = '',
+    this.kmsKeyName = '',
+    this.satisfiesPzs = false,
     this.createTime,
   }) : super(fullyQualifiedName);
 
   factory Function$.fromJson(Map<String, dynamic> json) {
     return Function$(
-      name: json['name'],
-      description: json['description'],
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
       buildConfig: decode(json['buildConfig'], BuildConfig.fromJson),
       serviceConfig: decode(json['serviceConfig'], ServiceConfig.fromJson),
       eventTrigger: decode(json['eventTrigger'], EventTrigger.fromJson),
-      state: decodeEnum(json['state'], Function$_State.fromJson),
+      state:
+          decodeEnum(json['state'], Function$_State.fromJson) ??
+          Function$_State.$default,
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      labels: decodeMap(json['labels']),
-      stateMessages: decodeListMessage(
-        json['stateMessages'],
-        StateMessage.fromJson,
-      ),
-      environment: decodeEnum(json['environment'], Environment.fromJson),
-      url: json['url'],
-      kmsKeyName: json['kmsKeyName'],
-      satisfiesPzs: json['satisfiesPzs'],
+      labels: decodeMap(json['labels']) ?? {},
+      stateMessages:
+          decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
+      environment:
+          decodeEnum(json['environment'], Environment.fromJson) ??
+          Environment.$default,
+      url: json['url'] ?? '',
+      kmsKeyName: json['kmsKeyName'] ?? '',
+      satisfiesPzs: json['satisfiesPzs'] ?? false,
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
     );
   }
@@ -445,19 +447,20 @@ final class Function$ extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (description != null) 'description': description,
+      if (name.isNotDefault) 'name': name,
+      if (description.isNotDefault) 'description': description,
       if (buildConfig != null) 'buildConfig': buildConfig!.toJson(),
       if (serviceConfig != null) 'serviceConfig': serviceConfig!.toJson(),
       if (eventTrigger != null) 'eventTrigger': eventTrigger!.toJson(),
-      if (state != null) 'state': state!.toJson(),
+      if (state.isNotDefault) 'state': state.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (labels != null) 'labels': labels,
-      if (stateMessages != null) 'stateMessages': encodeList(stateMessages),
-      if (environment != null) 'environment': environment!.toJson(),
-      if (url != null) 'url': url,
-      if (kmsKeyName != null) 'kmsKeyName': kmsKeyName,
-      if (satisfiesPzs != null) 'satisfiesPzs': satisfiesPzs,
+      if (labels.isNotDefault) 'labels': labels,
+      if (stateMessages.isNotDefault)
+        'stateMessages': encodeList(stateMessages),
+      if (environment.isNotDefault) 'environment': environment.toJson(),
+      if (url.isNotDefault) 'url': url,
+      if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
+      if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
       if (createTime != null) 'createTime': createTime!.toJson(),
     };
   }
@@ -465,13 +468,13 @@ final class Function$ extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (description != null) 'description=$description',
-      if (state != null) 'state=$state',
-      if (environment != null) 'environment=$environment',
-      if (url != null) 'url=$url',
-      if (kmsKeyName != null) 'kmsKeyName=$kmsKeyName',
-      if (satisfiesPzs != null) 'satisfiesPzs=$satisfiesPzs',
+      'name=$name',
+      'description=$description',
+      'state=$state',
+      'environment=$environment',
+      'url=$url',
+      'kmsKeyName=$kmsKeyName',
+      'satisfiesPzs=$satisfiesPzs',
     ].join(',');
     return 'Function($contents)';
   }
@@ -498,9 +501,14 @@ final class Function$_State extends ProtoEnum {
   /// The function should be updated or deleted to move it out of this state.
   static const unknown = Function$_State('UNKNOWN');
 
+  /// The default value for [Function$_State].
+  static const $default = stateUnspecified;
+
   const Function$_State(super.value);
 
   factory Function$_State.fromJson(String json) => Function$_State(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'State.$value';
@@ -512,40 +520,45 @@ final class StateMessage extends ProtoMessage {
       'google.cloud.functions.v2.StateMessage';
 
   /// Severity of the state message.
-  final StateMessage_Severity? severity;
+  final StateMessage_Severity severity;
 
   /// One-word CamelCase type of the state message.
-  final String? type;
+  final String type;
 
   /// The message.
-  final String? message;
+  final String message;
 
-  StateMessage({this.severity, this.type, this.message})
-    : super(fullyQualifiedName);
+  StateMessage({
+    this.severity = StateMessage_Severity.$default,
+    this.type = '',
+    this.message = '',
+  }) : super(fullyQualifiedName);
 
   factory StateMessage.fromJson(Map<String, dynamic> json) {
     return StateMessage(
-      severity: decodeEnum(json['severity'], StateMessage_Severity.fromJson),
-      type: json['type'],
-      message: json['message'],
+      severity:
+          decodeEnum(json['severity'], StateMessage_Severity.fromJson) ??
+          StateMessage_Severity.$default,
+      type: json['type'] ?? '',
+      message: json['message'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (severity != null) 'severity': severity!.toJson(),
-      if (type != null) 'type': type,
-      if (message != null) 'message': message,
+      if (severity.isNotDefault) 'severity': severity.toJson(),
+      if (type.isNotDefault) 'type': type,
+      if (message.isNotDefault) 'message': message,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (severity != null) 'severity=$severity',
-      if (type != null) 'type=$type',
-      if (message != null) 'message=$message',
+      'severity=$severity',
+      'type=$type',
+      'message=$message',
     ].join(',');
     return 'StateMessage($contents)';
   }
@@ -567,10 +580,15 @@ final class StateMessage_Severity extends ProtoEnum {
   /// INFO-level severity.
   static const info = StateMessage_Severity('INFO');
 
+  /// The default value for [StateMessage_Severity].
+  static const $default = severityUnspecified;
+
   const StateMessage_Severity(super.value);
 
   factory StateMessage_Severity.fromJson(String json) =>
       StateMessage_Severity(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Severity.$value';
@@ -584,56 +602,56 @@ final class StorageSource extends ProtoMessage {
   /// Google Cloud Storage bucket containing the source (see
   /// [Bucket Name
   /// Requirements](https://cloud.google.com/storage/docs/bucket-naming#requirements)).
-  final String? bucket;
+  final String bucket;
 
   /// Google Cloud Storage object containing the source.
   ///
   /// This object must be a gzipped archive file (`.tar.gz`) containing source to
   /// build.
-  final String? object;
+  final String object;
 
   /// Google Cloud Storage generation for the object. If the generation is
   /// omitted, the latest generation will be used.
-  final int? generation;
+  final int generation;
 
   /// When the specified storage bucket is a 1st gen function uploard url bucket,
   /// this field should be set as the generated upload url for 1st gen
   /// deployment.
-  final String? sourceUploadUrl;
+  final String sourceUploadUrl;
 
   StorageSource({
-    this.bucket,
-    this.object,
-    this.generation,
-    this.sourceUploadUrl,
+    this.bucket = '',
+    this.object = '',
+    this.generation = 0,
+    this.sourceUploadUrl = '',
   }) : super(fullyQualifiedName);
 
   factory StorageSource.fromJson(Map<String, dynamic> json) {
     return StorageSource(
-      bucket: json['bucket'],
-      object: json['object'],
-      generation: decodeInt64(json['generation']),
-      sourceUploadUrl: json['sourceUploadUrl'],
+      bucket: json['bucket'] ?? '',
+      object: json['object'] ?? '',
+      generation: decodeInt64(json['generation']) ?? 0,
+      sourceUploadUrl: json['sourceUploadUrl'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (bucket != null) 'bucket': bucket,
-      if (object != null) 'object': object,
-      if (generation != null) 'generation': encodeInt64(generation),
-      if (sourceUploadUrl != null) 'sourceUploadUrl': sourceUploadUrl,
+      if (bucket.isNotDefault) 'bucket': bucket,
+      if (object.isNotDefault) 'object': object,
+      if (generation.isNotDefault) 'generation': encodeInt64(generation),
+      if (sourceUploadUrl.isNotDefault) 'sourceUploadUrl': sourceUploadUrl,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (bucket != null) 'bucket=$bucket',
-      if (object != null) 'object=$object',
-      if (generation != null) 'generation=$generation',
-      if (sourceUploadUrl != null) 'sourceUploadUrl=$sourceUploadUrl',
+      'bucket=$bucket',
+      'object=$object',
+      'generation=$generation',
+      'sourceUploadUrl=$sourceUploadUrl',
     ].join(',');
     return 'StorageSource($contents)';
   }
@@ -661,30 +679,30 @@ final class RepoSource extends ProtoMessage {
 
   /// ID of the project that owns the Cloud Source Repository. If omitted, the
   /// project ID requesting the build is assumed.
-  final String? projectId;
+  final String projectId;
 
   /// Name of the Cloud Source Repository.
-  final String? repoName;
+  final String repoName;
 
   /// Directory, relative to the source root, in which to run the build.
   ///
   /// This must be a relative path. If a step's `dir` is specified and is an
   /// absolute path, this value is ignored for that step's execution.
   /// eg. helloworld (no leading slash allowed)
-  final String? dir;
+  final String dir;
 
   /// Only trigger a build if the revision regex does NOT match the revision
   /// regex.
-  final bool? invertRegex;
+  final bool invertRegex;
 
   RepoSource({
     this.branchName,
     this.tagName,
     this.commitSha,
-    this.projectId,
-    this.repoName,
-    this.dir,
-    this.invertRegex,
+    this.projectId = '',
+    this.repoName = '',
+    this.dir = '',
+    this.invertRegex = false,
   }) : super(fullyQualifiedName);
 
   factory RepoSource.fromJson(Map<String, dynamic> json) {
@@ -692,10 +710,10 @@ final class RepoSource extends ProtoMessage {
       branchName: json['branchName'],
       tagName: json['tagName'],
       commitSha: json['commitSha'],
-      projectId: json['projectId'],
-      repoName: json['repoName'],
-      dir: json['dir'],
-      invertRegex: json['invertRegex'],
+      projectId: json['projectId'] ?? '',
+      repoName: json['repoName'] ?? '',
+      dir: json['dir'] ?? '',
+      invertRegex: json['invertRegex'] ?? false,
     );
   }
 
@@ -705,10 +723,10 @@ final class RepoSource extends ProtoMessage {
       if (branchName != null) 'branchName': branchName,
       if (tagName != null) 'tagName': tagName,
       if (commitSha != null) 'commitSha': commitSha,
-      if (projectId != null) 'projectId': projectId,
-      if (repoName != null) 'repoName': repoName,
-      if (dir != null) 'dir': dir,
-      if (invertRegex != null) 'invertRegex': invertRegex,
+      if (projectId.isNotDefault) 'projectId': projectId,
+      if (repoName.isNotDefault) 'repoName': repoName,
+      if (dir.isNotDefault) 'dir': dir,
+      if (invertRegex.isNotDefault) 'invertRegex': invertRegex,
     };
   }
 
@@ -718,10 +736,10 @@ final class RepoSource extends ProtoMessage {
       if (branchName != null) 'branchName=$branchName',
       if (tagName != null) 'tagName=$tagName',
       if (commitSha != null) 'commitSha=$commitSha',
-      if (projectId != null) 'projectId=$projectId',
-      if (repoName != null) 'repoName=$repoName',
-      if (dir != null) 'dir=$dir',
-      if (invertRegex != null) 'invertRegex=$invertRegex',
+      'projectId=$projectId',
+      'repoName=$repoName',
+      'dir=$dir',
+      'invertRegex=$invertRegex',
     ].join(',');
     return 'RepoSource($contents)';
   }
@@ -786,12 +804,12 @@ final class SourceProvenance extends ProtoMessage {
 
   /// A copy of the build's `source.git_uri`, if exists, with any commits
   /// resolved.
-  final String? gitUri;
+  final String gitUri;
 
   SourceProvenance({
     this.resolvedStorageSource,
     this.resolvedRepoSource,
-    this.gitUri,
+    this.gitUri = '',
   }) : super(fullyQualifiedName);
 
   factory SourceProvenance.fromJson(Map<String, dynamic> json) {
@@ -804,7 +822,7 @@ final class SourceProvenance extends ProtoMessage {
         json['resolvedRepoSource'],
         RepoSource.fromJson,
       ),
-      gitUri: json['gitUri'],
+      gitUri: json['gitUri'] ?? '',
     );
   }
 
@@ -815,13 +833,13 @@ final class SourceProvenance extends ProtoMessage {
         'resolvedStorageSource': resolvedStorageSource!.toJson(),
       if (resolvedRepoSource != null)
         'resolvedRepoSource': resolvedRepoSource!.toJson(),
-      if (gitUri != null) 'gitUri': gitUri,
+      if (gitUri.isNotDefault) 'gitUri': gitUri,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (gitUri != null) 'gitUri=$gitUri'].join(',');
+    final contents = ['gitUri=$gitUri'].join(',');
     return 'SourceProvenance($contents)';
   }
 }
@@ -838,14 +856,14 @@ final class BuildConfig extends ProtoMessage {
 
   /// Output only. The Cloud Build name of the latest successful deployment of
   /// the function.
-  final String? build;
+  final String build;
 
   /// The runtime in which to run the function. Required when deploying a new
   /// function, optional when updating an existing function. For a complete
   /// list of possible choices, see the
   /// [`gcloud` command
   /// reference](https://cloud.google.com/sdk/gcloud/reference/functions/deploy#--runtime).
-  final String? runtime;
+  final String runtime;
 
   /// The name of the function (as defined in source code) that will be
   /// executed. Defaults to the resource name suffix, if not specified. For
@@ -853,7 +871,7 @@ final class BuildConfig extends ProtoMessage {
   /// system will try to use function named "function".
   /// For Node.js this is name of a function exported by the module specified
   /// in `source_location`.
-  final String? entryPoint;
+  final String entryPoint;
 
   /// The location of the function source code.
   final Source? source;
@@ -873,10 +891,10 @@ final class BuildConfig extends ProtoMessage {
   /// (service-<project_number>@gcf-admin-robot.iam.gserviceaccount.com) must be
   /// granted the role Cloud Build Custom Workers Builder
   /// (roles/cloudbuild.customworkers.builder) in the project.
-  final String? workerPool;
+  final String workerPool;
 
   /// User-provided build-time environment variables for the function
-  final Map<String, String>? environmentVariables;
+  final Map<String, String> environmentVariables;
 
   /// Docker Registry to use for this deployment. This configuration is only
   /// applicable to 1st Gen functions, 2nd Gen functions can only use Artifact
@@ -889,7 +907,7 @@ final class BuildConfig extends ProtoMessage {
   /// If unspecified, it defaults to `ARTIFACT_REGISTRY`.
   /// If `docker_repository` field is specified, this field should either be left
   /// unspecified or set to `ARTIFACT_REGISTRY`.
-  final BuildConfig_DockerRegistry? dockerRegistry;
+  final BuildConfig_DockerRegistry dockerRegistry;
 
   /// Repository in Artifact Registry to which the function docker image will be
   /// pushed after it is built by Cloud Build. If specified by user, it is
@@ -900,25 +918,25 @@ final class BuildConfig extends ProtoMessage {
   /// It must match the pattern
   /// `projects/{project}/locations/{location}/repositories/{repository}`.
   /// Repository format must be 'DOCKER'.
-  final String? dockerRepository;
+  final String dockerRepository;
 
   /// Service account to be used for building the container. The format of this
   /// field is `projects/{projectId}/serviceAccounts/{serviceAccountEmail}`.
-  final String? serviceAccount;
+  final String serviceAccount;
 
   BuildConfig({
     this.automaticUpdatePolicy,
     this.onDeployUpdatePolicy,
-    this.build,
-    this.runtime,
-    this.entryPoint,
+    this.build = '',
+    this.runtime = '',
+    this.entryPoint = '',
     this.source,
     this.sourceProvenance,
-    this.workerPool,
-    this.environmentVariables,
-    this.dockerRegistry,
-    this.dockerRepository,
-    this.serviceAccount,
+    this.workerPool = '',
+    this.environmentVariables = const {},
+    this.dockerRegistry = BuildConfig_DockerRegistry.$default,
+    this.dockerRepository = '',
+    this.serviceAccount = '',
   }) : super(fullyQualifiedName);
 
   factory BuildConfig.fromJson(Map<String, dynamic> json) {
@@ -931,22 +949,24 @@ final class BuildConfig extends ProtoMessage {
         json['onDeployUpdatePolicy'],
         OnDeployUpdatePolicy.fromJson,
       ),
-      build: json['build'],
-      runtime: json['runtime'],
-      entryPoint: json['entryPoint'],
+      build: json['build'] ?? '',
+      runtime: json['runtime'] ?? '',
+      entryPoint: json['entryPoint'] ?? '',
       source: decode(json['source'], Source.fromJson),
       sourceProvenance: decode(
         json['sourceProvenance'],
         SourceProvenance.fromJson,
       ),
-      workerPool: json['workerPool'],
-      environmentVariables: decodeMap(json['environmentVariables']),
-      dockerRegistry: decodeEnum(
-        json['dockerRegistry'],
-        BuildConfig_DockerRegistry.fromJson,
-      ),
-      dockerRepository: json['dockerRepository'],
-      serviceAccount: json['serviceAccount'],
+      workerPool: json['workerPool'] ?? '',
+      environmentVariables: decodeMap(json['environmentVariables']) ?? {},
+      dockerRegistry:
+          decodeEnum(
+            json['dockerRegistry'],
+            BuildConfig_DockerRegistry.fromJson,
+          ) ??
+          BuildConfig_DockerRegistry.$default,
+      dockerRepository: json['dockerRepository'] ?? '',
+      serviceAccount: json['serviceAccount'] ?? '',
     );
   }
 
@@ -957,31 +977,32 @@ final class BuildConfig extends ProtoMessage {
         'automaticUpdatePolicy': automaticUpdatePolicy!.toJson(),
       if (onDeployUpdatePolicy != null)
         'onDeployUpdatePolicy': onDeployUpdatePolicy!.toJson(),
-      if (build != null) 'build': build,
-      if (runtime != null) 'runtime': runtime,
-      if (entryPoint != null) 'entryPoint': entryPoint,
+      if (build.isNotDefault) 'build': build,
+      if (runtime.isNotDefault) 'runtime': runtime,
+      if (entryPoint.isNotDefault) 'entryPoint': entryPoint,
       if (source != null) 'source': source!.toJson(),
       if (sourceProvenance != null)
         'sourceProvenance': sourceProvenance!.toJson(),
-      if (workerPool != null) 'workerPool': workerPool,
-      if (environmentVariables != null)
+      if (workerPool.isNotDefault) 'workerPool': workerPool,
+      if (environmentVariables.isNotDefault)
         'environmentVariables': environmentVariables,
-      if (dockerRegistry != null) 'dockerRegistry': dockerRegistry!.toJson(),
-      if (dockerRepository != null) 'dockerRepository': dockerRepository,
-      if (serviceAccount != null) 'serviceAccount': serviceAccount,
+      if (dockerRegistry.isNotDefault)
+        'dockerRegistry': dockerRegistry.toJson(),
+      if (dockerRepository.isNotDefault) 'dockerRepository': dockerRepository,
+      if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (build != null) 'build=$build',
-      if (runtime != null) 'runtime=$runtime',
-      if (entryPoint != null) 'entryPoint=$entryPoint',
-      if (workerPool != null) 'workerPool=$workerPool',
-      if (dockerRegistry != null) 'dockerRegistry=$dockerRegistry',
-      if (dockerRepository != null) 'dockerRepository=$dockerRepository',
-      if (serviceAccount != null) 'serviceAccount=$serviceAccount',
+      'build=$build',
+      'runtime=$runtime',
+      'entryPoint=$entryPoint',
+      'workerPool=$workerPool',
+      'dockerRegistry=$dockerRegistry',
+      'dockerRepository=$dockerRepository',
+      'serviceAccount=$serviceAccount',
     ].join(',');
     return 'BuildConfig($contents)';
   }
@@ -1009,10 +1030,15 @@ final class BuildConfig_DockerRegistry extends ProtoEnum {
     'ARTIFACT_REGISTRY',
   );
 
+  /// The default value for [BuildConfig_DockerRegistry].
+  static const $default = dockerRegistryUnspecified;
+
   const BuildConfig_DockerRegistry(super.value);
 
   factory BuildConfig_DockerRegistry.fromJson(String json) =>
       BuildConfig_DockerRegistry(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'DockerRegistry.$value';
@@ -1027,12 +1053,12 @@ final class ServiceConfig extends ProtoMessage {
   /// Output only. Name of the service associated with a Function.
   /// The format of this field is
   /// `projects/{project}/locations/{region}/services/{service}`
-  final String? service;
+  final String service;
 
   /// The function execution timeout. Execution is considered failed and
   /// can be terminated if the function is not completed at the end of the
   /// timeout period. Defaults to 60 seconds.
-  final int? timeoutSeconds;
+  final int timeoutSeconds;
 
   /// The amount of memory available for a function.
   /// Defaults to 256M. Supported units are k, M, G, Mi, Gi. If no unit is
@@ -1040,17 +1066,17 @@ final class ServiceConfig extends ProtoMessage {
   /// See
   /// https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/apimachinery/pkg/api/resource/quantity.go
   /// a full description.
-  final String? availableMemory;
+  final String availableMemory;
 
   /// The number of CPUs used in a single container instance.
   /// Default value is calculated from available memory.
   /// Supports the same values as Cloud Run, see
   /// https://cloud.google.com/run/docs/reference/rest/v1/Container#resourcerequirements
   /// Example: "1" indicates 1 vCPU
-  final String? availableCpu;
+  final String availableCpu;
 
   /// Environment variables that shall be available during function execution.
-  final Map<String, String>? environmentVariables;
+  final Map<String, String> environmentVariables;
 
   /// The limit on the maximum number of function instances that may coexist at a
   /// given time.
@@ -1064,7 +1090,7 @@ final class ServiceConfig extends ProtoMessage {
   /// See the [Max
   /// Instances](https://cloud.google.com/functions/docs/max-instances) Guide for
   /// more details.
-  final int? maxInstanceCount;
+  final int maxInstanceCount;
 
   /// The limit on the minimum number of function instances that may coexist at a
   /// given time.
@@ -1075,146 +1101,155 @@ final class ServiceConfig extends ProtoMessage {
   /// number of instances are kept running in idle state always. This can help
   /// with cold start times when jump in incoming request count occurs after the
   /// idle instance would have been stopped in the default case.
-  final int? minInstanceCount;
+  final int minInstanceCount;
 
   /// The Serverless VPC Access connector that this cloud function can connect
   /// to. The format of this field is `projects/*/locations/*/connectors/*`.
-  final String? vpcConnector;
+  final String vpcConnector;
 
   /// The egress settings for the connector, controlling what traffic is diverted
   /// through it.
-  final ServiceConfig_VpcConnectorEgressSettings? vpcConnectorEgressSettings;
+  final ServiceConfig_VpcConnectorEgressSettings vpcConnectorEgressSettings;
 
   /// The ingress settings for the function, controlling what traffic can reach
   /// it.
-  final ServiceConfig_IngressSettings? ingressSettings;
+  final ServiceConfig_IngressSettings ingressSettings;
 
   /// Output only. URI of the Service deployed.
-  final String? uri;
+  final String uri;
 
   /// The email of the service's service account. If empty, defaults to
   /// `{project_number}-compute@developer.gserviceaccount.com`.
-  final String? serviceAccountEmail;
+  final String serviceAccountEmail;
 
   /// Whether 100% of traffic is routed to the latest revision.
   /// On CreateFunction and UpdateFunction, when set to true, the revision being
   /// deployed will serve 100% of traffic, ignoring any traffic split settings,
   /// if any. On GetFunction, true will be returned if the latest revision is
   /// serving 100% of traffic.
-  final bool? allTrafficOnLatestRevision;
+  final bool allTrafficOnLatestRevision;
 
   /// Secret environment variables configuration.
-  final List<SecretEnvVar>? secretEnvironmentVariables;
+  final List<SecretEnvVar> secretEnvironmentVariables;
 
   /// Secret volumes configuration.
-  final List<SecretVolume>? secretVolumes;
+  final List<SecretVolume> secretVolumes;
 
   /// Output only. The name of service revision.
-  final String? revision;
+  final String revision;
 
   /// Sets the maximum number of concurrent requests that each instance
   /// can receive. Defaults to 1.
-  final int? maxInstanceRequestConcurrency;
+  final int maxInstanceRequestConcurrency;
 
   /// Security level configure whether the function only accepts https.
   /// This configuration is only applicable to 1st Gen functions with Http
   /// trigger. By default https is optional for 1st Gen functions; 2nd Gen
   /// functions are https ONLY.
-  final ServiceConfig_SecurityLevel? securityLevel;
+  final ServiceConfig_SecurityLevel securityLevel;
 
   /// Optional. The binary authorization policy to be checked when deploying the
   /// Cloud Run service.
-  final String? binaryAuthorizationPolicy;
+  final String binaryAuthorizationPolicy;
 
   ServiceConfig({
-    this.service,
-    this.timeoutSeconds,
-    this.availableMemory,
-    this.availableCpu,
-    this.environmentVariables,
-    this.maxInstanceCount,
-    this.minInstanceCount,
-    this.vpcConnector,
-    this.vpcConnectorEgressSettings,
-    this.ingressSettings,
-    this.uri,
-    this.serviceAccountEmail,
-    this.allTrafficOnLatestRevision,
-    this.secretEnvironmentVariables,
-    this.secretVolumes,
-    this.revision,
-    this.maxInstanceRequestConcurrency,
-    this.securityLevel,
-    this.binaryAuthorizationPolicy,
+    this.service = '',
+    this.timeoutSeconds = 0,
+    this.availableMemory = '',
+    this.availableCpu = '',
+    this.environmentVariables = const {},
+    this.maxInstanceCount = 0,
+    this.minInstanceCount = 0,
+    this.vpcConnector = '',
+    this.vpcConnectorEgressSettings =
+        ServiceConfig_VpcConnectorEgressSettings.$default,
+    this.ingressSettings = ServiceConfig_IngressSettings.$default,
+    this.uri = '',
+    this.serviceAccountEmail = '',
+    this.allTrafficOnLatestRevision = false,
+    this.secretEnvironmentVariables = const [],
+    this.secretVolumes = const [],
+    this.revision = '',
+    this.maxInstanceRequestConcurrency = 0,
+    this.securityLevel = ServiceConfig_SecurityLevel.$default,
+    this.binaryAuthorizationPolicy = '',
   }) : super(fullyQualifiedName);
 
   factory ServiceConfig.fromJson(Map<String, dynamic> json) {
     return ServiceConfig(
-      service: json['service'],
-      timeoutSeconds: json['timeoutSeconds'],
-      availableMemory: json['availableMemory'],
-      availableCpu: json['availableCpu'],
-      environmentVariables: decodeMap(json['environmentVariables']),
-      maxInstanceCount: json['maxInstanceCount'],
-      minInstanceCount: json['minInstanceCount'],
-      vpcConnector: json['vpcConnector'],
-      vpcConnectorEgressSettings: decodeEnum(
-        json['vpcConnectorEgressSettings'],
-        ServiceConfig_VpcConnectorEgressSettings.fromJson,
-      ),
-      ingressSettings: decodeEnum(
-        json['ingressSettings'],
-        ServiceConfig_IngressSettings.fromJson,
-      ),
-      uri: json['uri'],
-      serviceAccountEmail: json['serviceAccountEmail'],
-      allTrafficOnLatestRevision: json['allTrafficOnLatestRevision'],
-      secretEnvironmentVariables: decodeListMessage(
-        json['secretEnvironmentVariables'],
-        SecretEnvVar.fromJson,
-      ),
-      secretVolumes: decodeListMessage(
-        json['secretVolumes'],
-        SecretVolume.fromJson,
-      ),
-      revision: json['revision'],
-      maxInstanceRequestConcurrency: json['maxInstanceRequestConcurrency'],
-      securityLevel: decodeEnum(
-        json['securityLevel'],
-        ServiceConfig_SecurityLevel.fromJson,
-      ),
-      binaryAuthorizationPolicy: json['binaryAuthorizationPolicy'],
+      service: json['service'] ?? '',
+      timeoutSeconds: json['timeoutSeconds'] ?? 0,
+      availableMemory: json['availableMemory'] ?? '',
+      availableCpu: json['availableCpu'] ?? '',
+      environmentVariables: decodeMap(json['environmentVariables']) ?? {},
+      maxInstanceCount: json['maxInstanceCount'] ?? 0,
+      minInstanceCount: json['minInstanceCount'] ?? 0,
+      vpcConnector: json['vpcConnector'] ?? '',
+      vpcConnectorEgressSettings:
+          decodeEnum(
+            json['vpcConnectorEgressSettings'],
+            ServiceConfig_VpcConnectorEgressSettings.fromJson,
+          ) ??
+          ServiceConfig_VpcConnectorEgressSettings.$default,
+      ingressSettings:
+          decodeEnum(
+            json['ingressSettings'],
+            ServiceConfig_IngressSettings.fromJson,
+          ) ??
+          ServiceConfig_IngressSettings.$default,
+      uri: json['uri'] ?? '',
+      serviceAccountEmail: json['serviceAccountEmail'] ?? '',
+      allTrafficOnLatestRevision: json['allTrafficOnLatestRevision'] ?? false,
+      secretEnvironmentVariables:
+          decodeListMessage(
+            json['secretEnvironmentVariables'],
+            SecretEnvVar.fromJson,
+          ) ??
+          [],
+      secretVolumes:
+          decodeListMessage(json['secretVolumes'], SecretVolume.fromJson) ?? [],
+      revision: json['revision'] ?? '',
+      maxInstanceRequestConcurrency: json['maxInstanceRequestConcurrency'] ?? 0,
+      securityLevel:
+          decodeEnum(
+            json['securityLevel'],
+            ServiceConfig_SecurityLevel.fromJson,
+          ) ??
+          ServiceConfig_SecurityLevel.$default,
+      binaryAuthorizationPolicy: json['binaryAuthorizationPolicy'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (service != null) 'service': service,
-      if (timeoutSeconds != null) 'timeoutSeconds': timeoutSeconds,
-      if (availableMemory != null) 'availableMemory': availableMemory,
-      if (availableCpu != null) 'availableCpu': availableCpu,
-      if (environmentVariables != null)
+      if (service.isNotDefault) 'service': service,
+      if (timeoutSeconds.isNotDefault) 'timeoutSeconds': timeoutSeconds,
+      if (availableMemory.isNotDefault) 'availableMemory': availableMemory,
+      if (availableCpu.isNotDefault) 'availableCpu': availableCpu,
+      if (environmentVariables.isNotDefault)
         'environmentVariables': environmentVariables,
-      if (maxInstanceCount != null) 'maxInstanceCount': maxInstanceCount,
-      if (minInstanceCount != null) 'minInstanceCount': minInstanceCount,
-      if (vpcConnector != null) 'vpcConnector': vpcConnector,
-      if (vpcConnectorEgressSettings != null)
-        'vpcConnectorEgressSettings': vpcConnectorEgressSettings!.toJson(),
-      if (ingressSettings != null) 'ingressSettings': ingressSettings!.toJson(),
-      if (uri != null) 'uri': uri,
-      if (serviceAccountEmail != null)
+      if (maxInstanceCount.isNotDefault) 'maxInstanceCount': maxInstanceCount,
+      if (minInstanceCount.isNotDefault) 'minInstanceCount': minInstanceCount,
+      if (vpcConnector.isNotDefault) 'vpcConnector': vpcConnector,
+      if (vpcConnectorEgressSettings.isNotDefault)
+        'vpcConnectorEgressSettings': vpcConnectorEgressSettings.toJson(),
+      if (ingressSettings.isNotDefault)
+        'ingressSettings': ingressSettings.toJson(),
+      if (uri.isNotDefault) 'uri': uri,
+      if (serviceAccountEmail.isNotDefault)
         'serviceAccountEmail': serviceAccountEmail,
-      if (allTrafficOnLatestRevision != null)
+      if (allTrafficOnLatestRevision.isNotDefault)
         'allTrafficOnLatestRevision': allTrafficOnLatestRevision,
-      if (secretEnvironmentVariables != null)
+      if (secretEnvironmentVariables.isNotDefault)
         'secretEnvironmentVariables': encodeList(secretEnvironmentVariables),
-      if (secretVolumes != null) 'secretVolumes': encodeList(secretVolumes),
-      if (revision != null) 'revision': revision,
-      if (maxInstanceRequestConcurrency != null)
+      if (secretVolumes.isNotDefault)
+        'secretVolumes': encodeList(secretVolumes),
+      if (revision.isNotDefault) 'revision': revision,
+      if (maxInstanceRequestConcurrency.isNotDefault)
         'maxInstanceRequestConcurrency': maxInstanceRequestConcurrency,
-      if (securityLevel != null) 'securityLevel': securityLevel!.toJson(),
-      if (binaryAuthorizationPolicy != null)
+      if (securityLevel.isNotDefault) 'securityLevel': securityLevel.toJson(),
+      if (binaryAuthorizationPolicy.isNotDefault)
         'binaryAuthorizationPolicy': binaryAuthorizationPolicy,
     };
   }
@@ -1222,27 +1257,22 @@ final class ServiceConfig extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (service != null) 'service=$service',
-      if (timeoutSeconds != null) 'timeoutSeconds=$timeoutSeconds',
-      if (availableMemory != null) 'availableMemory=$availableMemory',
-      if (availableCpu != null) 'availableCpu=$availableCpu',
-      if (maxInstanceCount != null) 'maxInstanceCount=$maxInstanceCount',
-      if (minInstanceCount != null) 'minInstanceCount=$minInstanceCount',
-      if (vpcConnector != null) 'vpcConnector=$vpcConnector',
-      if (vpcConnectorEgressSettings != null)
-        'vpcConnectorEgressSettings=$vpcConnectorEgressSettings',
-      if (ingressSettings != null) 'ingressSettings=$ingressSettings',
-      if (uri != null) 'uri=$uri',
-      if (serviceAccountEmail != null)
-        'serviceAccountEmail=$serviceAccountEmail',
-      if (allTrafficOnLatestRevision != null)
-        'allTrafficOnLatestRevision=$allTrafficOnLatestRevision',
-      if (revision != null) 'revision=$revision',
-      if (maxInstanceRequestConcurrency != null)
-        'maxInstanceRequestConcurrency=$maxInstanceRequestConcurrency',
-      if (securityLevel != null) 'securityLevel=$securityLevel',
-      if (binaryAuthorizationPolicy != null)
-        'binaryAuthorizationPolicy=$binaryAuthorizationPolicy',
+      'service=$service',
+      'timeoutSeconds=$timeoutSeconds',
+      'availableMemory=$availableMemory',
+      'availableCpu=$availableCpu',
+      'maxInstanceCount=$maxInstanceCount',
+      'minInstanceCount=$minInstanceCount',
+      'vpcConnector=$vpcConnector',
+      'vpcConnectorEgressSettings=$vpcConnectorEgressSettings',
+      'ingressSettings=$ingressSettings',
+      'uri=$uri',
+      'serviceAccountEmail=$serviceAccountEmail',
+      'allTrafficOnLatestRevision=$allTrafficOnLatestRevision',
+      'revision=$revision',
+      'maxInstanceRequestConcurrency=$maxInstanceRequestConcurrency',
+      'securityLevel=$securityLevel',
+      'binaryAuthorizationPolicy=$binaryAuthorizationPolicy',
     ].join(',');
     return 'ServiceConfig($contents)';
   }
@@ -1270,10 +1300,15 @@ final class ServiceConfig_VpcConnectorEgressSettings extends ProtoEnum {
     'ALL_TRAFFIC',
   );
 
+  /// The default value for [ServiceConfig_VpcConnectorEgressSettings].
+  static const $default = vpcConnectorEgressSettingsUnspecified;
+
   const ServiceConfig_VpcConnectorEgressSettings(super.value);
 
   factory ServiceConfig_VpcConnectorEgressSettings.fromJson(String json) =>
       ServiceConfig_VpcConnectorEgressSettings(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'VpcConnectorEgressSettings.$value';
@@ -1303,10 +1338,15 @@ final class ServiceConfig_IngressSettings extends ProtoEnum {
     'ALLOW_INTERNAL_AND_GCLB',
   );
 
+  /// The default value for [ServiceConfig_IngressSettings].
+  static const $default = ingressSettingsUnspecified;
+
   const ServiceConfig_IngressSettings(super.value);
 
   factory ServiceConfig_IngressSettings.fromJson(String json) =>
       ServiceConfig_IngressSettings(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'IngressSettings.$value';
@@ -1334,10 +1374,15 @@ final class ServiceConfig_SecurityLevel extends ProtoEnum {
   /// which protocol was used and respond accordingly.
   static const secureOptional = ServiceConfig_SecurityLevel('SECURE_OPTIONAL');
 
+  /// The default value for [ServiceConfig_SecurityLevel].
+  static const $default = securityLevelUnspecified;
+
   const ServiceConfig_SecurityLevel(super.value);
 
   factory ServiceConfig_SecurityLevel.fromJson(String json) =>
       ServiceConfig_SecurityLevel(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'SecurityLevel.$value';
@@ -1351,51 +1396,55 @@ final class SecretEnvVar extends ProtoMessage {
       'google.cloud.functions.v2.SecretEnvVar';
 
   /// Name of the environment variable.
-  final String? key;
+  final String key;
 
   /// Project identifier (preferably project number but can also be the
   /// project ID) of the project that contains the secret. If not set, it is
   /// assumed that the secret is in the same project as the function.
-  final String? projectId;
+  final String projectId;
 
   /// Name of the secret in secret manager (not the full resource name).
-  final String? secret;
+  final String secret;
 
   /// Version of the secret (version number or the string 'latest'). It is
   /// recommended to use a numeric version for secret environment variables as
   /// any updates to the secret value is not reflected until new instances
   /// start.
-  final String? version;
+  final String version;
 
-  SecretEnvVar({this.key, this.projectId, this.secret, this.version})
-    : super(fullyQualifiedName);
+  SecretEnvVar({
+    this.key = '',
+    this.projectId = '',
+    this.secret = '',
+    this.version = '',
+  }) : super(fullyQualifiedName);
 
   factory SecretEnvVar.fromJson(Map<String, dynamic> json) {
     return SecretEnvVar(
-      key: json['key'],
-      projectId: json['projectId'],
-      secret: json['secret'],
-      version: json['version'],
+      key: json['key'] ?? '',
+      projectId: json['projectId'] ?? '',
+      secret: json['secret'] ?? '',
+      version: json['version'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (key != null) 'key': key,
-      if (projectId != null) 'projectId': projectId,
-      if (secret != null) 'secret': secret,
-      if (version != null) 'version': version,
+      if (key.isNotDefault) 'key': key,
+      if (projectId.isNotDefault) 'projectId': projectId,
+      if (secret.isNotDefault) 'secret': secret,
+      if (version.isNotDefault) 'version': version,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (key != null) 'key=$key',
-      if (projectId != null) 'projectId=$projectId',
-      if (secret != null) 'secret=$secret',
-      if (version != null) 'version=$version',
+      'key=$key',
+      'projectId=$projectId',
+      'secret=$secret',
+      'version=$version',
     ].join(',');
     return 'SecretEnvVar($contents)';
   }
@@ -1413,52 +1462,58 @@ final class SecretVolume extends ProtoMessage {
   /// under the `/etc/secrets` directory. This directory will also be completely
   /// shadowed and unavailable to mount any other secrets.
   /// Recommended mount path: /etc/secrets
-  final String? mountPath;
+  final String mountPath;
 
   /// Project identifier (preferably project number but can also be the project
   /// ID) of the project that contains the secret. If not set, it is
   /// assumed that the secret is in the same project as the function.
-  final String? projectId;
+  final String projectId;
 
   /// Name of the secret in secret manager (not the full resource name).
-  final String? secret;
+  final String secret;
 
   /// List of secret versions to mount for this secret. If empty, the `latest`
   /// version of the secret will be made available in a file named after the
   /// secret under the mount point.
-  final List<SecretVolume_SecretVersion>? versions;
+  final List<SecretVolume_SecretVersion> versions;
 
-  SecretVolume({this.mountPath, this.projectId, this.secret, this.versions})
-    : super(fullyQualifiedName);
+  SecretVolume({
+    this.mountPath = '',
+    this.projectId = '',
+    this.secret = '',
+    this.versions = const [],
+  }) : super(fullyQualifiedName);
 
   factory SecretVolume.fromJson(Map<String, dynamic> json) {
     return SecretVolume(
-      mountPath: json['mountPath'],
-      projectId: json['projectId'],
-      secret: json['secret'],
-      versions: decodeListMessage(
-        json['versions'],
-        SecretVolume_SecretVersion.fromJson,
-      ),
+      mountPath: json['mountPath'] ?? '',
+      projectId: json['projectId'] ?? '',
+      secret: json['secret'] ?? '',
+      versions:
+          decodeListMessage(
+            json['versions'],
+            SecretVolume_SecretVersion.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (mountPath != null) 'mountPath': mountPath,
-      if (projectId != null) 'projectId': projectId,
-      if (secret != null) 'secret': secret,
-      if (versions != null) 'versions': encodeList(versions),
+      if (mountPath.isNotDefault) 'mountPath': mountPath,
+      if (projectId.isNotDefault) 'projectId': projectId,
+      if (secret.isNotDefault) 'secret': secret,
+      if (versions.isNotDefault) 'versions': encodeList(versions),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (mountPath != null) 'mountPath=$mountPath',
-      if (projectId != null) 'projectId=$projectId',
-      if (secret != null) 'secret=$secret',
+      'mountPath=$mountPath',
+      'projectId=$projectId',
+      'secret=$secret',
     ].join(',');
     return 'SecretVolume($contents)';
   }
@@ -1472,38 +1527,35 @@ final class SecretVolume_SecretVersion extends ProtoMessage {
   /// Version of the secret (version number or the string 'latest'). It is
   /// preferable to use `latest` version with secret volumes as secret value
   /// changes are reflected immediately.
-  final String? version;
+  final String version;
 
   /// Relative path of the file under the mount path where the secret value for
   /// this version will be fetched and made available. For example, setting the
   /// mount_path as '/etc/secrets' and path as `secret_foo` would mount the
   /// secret value file at `/etc/secrets/secret_foo`.
-  final String? path;
+  final String path;
 
-  SecretVolume_SecretVersion({this.version, this.path})
+  SecretVolume_SecretVersion({this.version = '', this.path = ''})
     : super(fullyQualifiedName);
 
   factory SecretVolume_SecretVersion.fromJson(Map<String, dynamic> json) {
     return SecretVolume_SecretVersion(
-      version: json['version'],
-      path: json['path'],
+      version: json['version'] ?? '',
+      path: json['path'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (version != null) 'version': version,
-      if (path != null) 'path': path,
+      if (version.isNotDefault) 'version': version,
+      if (path.isNotDefault) 'path': path,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (version != null) 'version=$version',
-      if (path != null) 'path=$path',
-    ].join(',');
+    final contents = ['version=$version', 'path=$path'].join(',');
     return 'SecretVersion($contents)';
   }
 }
@@ -1516,21 +1568,21 @@ final class EventTrigger extends ProtoMessage {
 
   /// Output only. The resource name of the Eventarc trigger. The format of this
   /// field is `projects/{project}/locations/{region}/triggers/{trigger}`.
-  final String? trigger;
+  final String trigger;
 
   /// The region that the trigger will be in. The trigger will only receive
   /// events originating in this region. It can be the same
   /// region as the function, a different region or multi-region, or the global
   /// region. If not provided, defaults to the same region as the function.
-  final String? triggerRegion;
+  final String triggerRegion;
 
   /// Required. The type of event to observe. For example:
   /// `google.cloud.audit.log.v1.written` or
   /// `google.cloud.pubsub.topic.v1.messagePublished`.
-  final String? eventType;
+  final String eventType;
 
   /// Criteria used to filter events.
-  final List<EventFilter>? eventFilters;
+  final List<EventFilter> eventFilters;
 
   /// Optional. The name of a Pub/Sub topic in the same project that will be used
   /// as the transport topic for the event delivery. Format:
@@ -1539,23 +1591,23 @@ final class EventTrigger extends ProtoMessage {
   /// This is only valid for events of type
   /// `google.cloud.pubsub.topic.v1.messagePublished`. The topic provided here
   /// will not be deleted at function deletion.
-  final String? pubsubTopic;
+  final String pubsubTopic;
 
   /// Optional. The email of the trigger's service account. The service account
   /// must have permission to invoke Cloud Run services, the permission is
   /// `run.routes.invoke`.
   /// If empty, defaults to the Compute Engine default service account:
   /// `{project_number}-compute@developer.gserviceaccount.com`.
-  final String? serviceAccountEmail;
+  final String serviceAccountEmail;
 
   /// Optional. If unset, then defaults to ignoring failures (i.e. not retrying
   /// them).
-  final EventTrigger_RetryPolicy? retryPolicy;
+  final EventTrigger_RetryPolicy retryPolicy;
 
   /// Optional. The name of the channel associated with the trigger in
   /// `projects/{project}/locations/{location}/channels/{channel}` format.
   /// You must provide a channel to receive events from Eventarc SaaS partners.
-  final String? channel;
+  final String channel;
 
   /// Optional. The hostname of the service that 1st Gen function should be
   /// observed.
@@ -1565,68 +1617,64 @@ final class EventTrigger extends ProtoMessage {
   /// event types in the `google.storage` namespace.
   ///
   /// The field is only applicable to 1st Gen functions.
-  final String? service;
+  final String service;
 
   EventTrigger({
-    this.trigger,
-    this.triggerRegion,
-    this.eventType,
-    this.eventFilters,
-    this.pubsubTopic,
-    this.serviceAccountEmail,
-    this.retryPolicy,
-    this.channel,
-    this.service,
+    this.trigger = '',
+    this.triggerRegion = '',
+    required this.eventType,
+    this.eventFilters = const [],
+    this.pubsubTopic = '',
+    this.serviceAccountEmail = '',
+    this.retryPolicy = EventTrigger_RetryPolicy.$default,
+    this.channel = '',
+    this.service = '',
   }) : super(fullyQualifiedName);
 
   factory EventTrigger.fromJson(Map<String, dynamic> json) {
     return EventTrigger(
-      trigger: json['trigger'],
-      triggerRegion: json['triggerRegion'],
-      eventType: json['eventType'],
-      eventFilters: decodeListMessage(
-        json['eventFilters'],
-        EventFilter.fromJson,
-      ),
-      pubsubTopic: json['pubsubTopic'],
-      serviceAccountEmail: json['serviceAccountEmail'],
-      retryPolicy: decodeEnum(
-        json['retryPolicy'],
-        EventTrigger_RetryPolicy.fromJson,
-      ),
-      channel: json['channel'],
-      service: json['service'],
+      trigger: json['trigger'] ?? '',
+      triggerRegion: json['triggerRegion'] ?? '',
+      eventType: json['eventType'] ?? '',
+      eventFilters:
+          decodeListMessage(json['eventFilters'], EventFilter.fromJson) ?? [],
+      pubsubTopic: json['pubsubTopic'] ?? '',
+      serviceAccountEmail: json['serviceAccountEmail'] ?? '',
+      retryPolicy:
+          decodeEnum(json['retryPolicy'], EventTrigger_RetryPolicy.fromJson) ??
+          EventTrigger_RetryPolicy.$default,
+      channel: json['channel'] ?? '',
+      service: json['service'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (trigger != null) 'trigger': trigger,
-      if (triggerRegion != null) 'triggerRegion': triggerRegion,
-      if (eventType != null) 'eventType': eventType,
-      if (eventFilters != null) 'eventFilters': encodeList(eventFilters),
-      if (pubsubTopic != null) 'pubsubTopic': pubsubTopic,
-      if (serviceAccountEmail != null)
+      if (trigger.isNotDefault) 'trigger': trigger,
+      if (triggerRegion.isNotDefault) 'triggerRegion': triggerRegion,
+      'eventType': eventType,
+      if (eventFilters.isNotDefault) 'eventFilters': encodeList(eventFilters),
+      if (pubsubTopic.isNotDefault) 'pubsubTopic': pubsubTopic,
+      if (serviceAccountEmail.isNotDefault)
         'serviceAccountEmail': serviceAccountEmail,
-      if (retryPolicy != null) 'retryPolicy': retryPolicy!.toJson(),
-      if (channel != null) 'channel': channel,
-      if (service != null) 'service': service,
+      if (retryPolicy.isNotDefault) 'retryPolicy': retryPolicy.toJson(),
+      if (channel.isNotDefault) 'channel': channel,
+      if (service.isNotDefault) 'service': service,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (trigger != null) 'trigger=$trigger',
-      if (triggerRegion != null) 'triggerRegion=$triggerRegion',
-      if (eventType != null) 'eventType=$eventType',
-      if (pubsubTopic != null) 'pubsubTopic=$pubsubTopic',
-      if (serviceAccountEmail != null)
-        'serviceAccountEmail=$serviceAccountEmail',
-      if (retryPolicy != null) 'retryPolicy=$retryPolicy',
-      if (channel != null) 'channel=$channel',
-      if (service != null) 'service=$service',
+      'trigger=$trigger',
+      'triggerRegion=$triggerRegion',
+      'eventType=$eventType',
+      'pubsubTopic=$pubsubTopic',
+      'serviceAccountEmail=$serviceAccountEmail',
+      'retryPolicy=$retryPolicy',
+      'channel=$channel',
+      'service=$service',
     ].join(',');
     return 'EventTrigger($contents)';
   }
@@ -1651,10 +1699,15 @@ final class EventTrigger_RetryPolicy extends ProtoEnum {
     'RETRY_POLICY_RETRY',
   );
 
+  /// The default value for [EventTrigger_RetryPolicy].
+  static const $default = retryPolicyUnspecified;
+
   const EventTrigger_RetryPolicy(super.value);
 
   factory EventTrigger_RetryPolicy.fromJson(String json) =>
       EventTrigger_RetryPolicy(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'RetryPolicy.$value';
@@ -1666,43 +1719,46 @@ final class EventFilter extends ProtoMessage {
       'google.cloud.functions.v2.EventFilter';
 
   /// Required. The name of a CloudEvents attribute.
-  final String? attribute;
+  final String attribute;
 
   /// Required. The value for the attribute.
-  final String? value;
+  final String value;
 
   /// Optional. The operator used for matching the events with the value of the
   /// filter. If not specified, only events that have an exact key-value pair
   /// specified in the filter are matched. The only allowed value is
   /// `match-path-pattern`.
-  final String? operator;
+  final String operator;
 
-  EventFilter({this.attribute, this.value, this.operator})
-    : super(fullyQualifiedName);
+  EventFilter({
+    required this.attribute,
+    required this.value,
+    this.operator = '',
+  }) : super(fullyQualifiedName);
 
   factory EventFilter.fromJson(Map<String, dynamic> json) {
     return EventFilter(
-      attribute: json['attribute'],
-      value: json['value'],
-      operator: json['operator'],
+      attribute: json['attribute'] ?? '',
+      value: json['value'] ?? '',
+      operator: json['operator'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (attribute != null) 'attribute': attribute,
-      if (value != null) 'value': value,
-      if (operator != null) 'operator': operator,
+      'attribute': attribute,
+      'value': value,
+      if (operator.isNotDefault) 'operator': operator,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (attribute != null) 'attribute=$attribute',
-      if (value != null) 'value=$value',
-      if (operator != null) 'operator=$operator',
+      'attribute=$attribute',
+      'value=$value',
+      'operator=$operator',
     ].join(',');
     return 'EventFilter($contents)';
   }
@@ -1722,26 +1778,26 @@ final class GetFunctionRequest extends ProtoMessage {
   /// configs for old versions of 1st gen function. This field can be specified
   /// to fetch the historical configs. This field is valid only for GCF 1st gen
   /// function.
-  final String? revision;
+  final String revision;
 
-  GetFunctionRequest({required this.name, this.revision})
+  GetFunctionRequest({required this.name, this.revision = ''})
     : super(fullyQualifiedName);
 
   factory GetFunctionRequest.fromJson(Map<String, dynamic> json) {
-    return GetFunctionRequest(name: json['name'], revision: json['revision']);
+    return GetFunctionRequest(
+      name: json['name'] ?? '',
+      revision: json['revision'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (revision != null) 'revision': revision};
+    return {'name': name, if (revision.isNotDefault) 'revision': revision};
   }
 
   @override
   String toString() {
-    final contents = [
-      'name=$name',
-      if (revision != null) 'revision=$revision',
-    ].join(',');
+    final contents = ['name=$name', 'revision=$revision'].join(',');
     return 'GetFunctionRequest($contents)';
   }
 }
@@ -1763,38 +1819,38 @@ final class ListFunctionsRequest extends ProtoMessage {
   /// page_size is 1,000, if the page_size is omitted or specified as greater
   /// than 1,000 then it will be replaced as 1,000. The size of the list
   /// response can be less than specified when used with filters.
-  final int? pageSize;
+  final int pageSize;
 
   /// The value returned by the last
   /// `ListFunctionsResponse`; indicates that
   /// this is a continuation of a prior `ListFunctions` call, and that the
   /// system should return the next page of data.
-  final String? pageToken;
+  final String pageToken;
 
   /// The filter for Functions that match the filter expression,
   /// following the syntax outlined in https://google.aip.dev/160.
-  final String? filter;
+  final String filter;
 
   /// The sorting order of the resources returned. Value should be a comma
   /// separated list of fields. The default sorting order is ascending.
   /// See https://google.aip.dev/132#ordering.
-  final String? orderBy;
+  final String orderBy;
 
   ListFunctionsRequest({
     required this.parent,
-    this.pageSize,
-    this.pageToken,
-    this.filter,
-    this.orderBy,
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+    this.orderBy = '',
   }) : super(fullyQualifiedName);
 
   factory ListFunctionsRequest.fromJson(Map<String, dynamic> json) {
     return ListFunctionsRequest(
-      parent: json['parent'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
-      filter: json['filter'],
-      orderBy: json['orderBy'],
+      parent: json['parent'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
+      filter: json['filter'] ?? '',
+      orderBy: json['orderBy'] ?? '',
     );
   }
 
@@ -1802,10 +1858,10 @@ final class ListFunctionsRequest extends ProtoMessage {
   Object toJson() {
     return {
       'parent': parent,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
-      if (filter != null) 'filter': filter,
-      if (orderBy != null) 'orderBy': orderBy,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
+      if (filter.isNotDefault) 'filter': filter,
+      if (orderBy.isNotDefault) 'orderBy': orderBy,
     };
   }
 
@@ -1813,10 +1869,10 @@ final class ListFunctionsRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-      if (filter != null) 'filter=$filter',
-      if (orderBy != null) 'orderBy=$orderBy',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+      'filter=$filter',
+      'orderBy=$orderBy',
     ].join(',');
     return 'ListFunctionsRequest($contents)';
   }
@@ -1828,41 +1884,42 @@ final class ListFunctionsResponse extends ProtoMessage {
       'google.cloud.functions.v2.ListFunctionsResponse';
 
   /// The functions that match the request.
-  final List<Function$>? functions;
+  final List<Function$> functions;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   /// If this field is omitted, there are no subsequent pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
   /// Locations that could not be reached. The response does not include any
   /// functions from these locations.
-  final List<String>? unreachable;
+  final List<String> unreachable;
 
-  ListFunctionsResponse({this.functions, this.nextPageToken, this.unreachable})
-    : super(fullyQualifiedName);
+  ListFunctionsResponse({
+    this.functions = const [],
+    this.nextPageToken = '',
+    this.unreachable = const [],
+  }) : super(fullyQualifiedName);
 
   factory ListFunctionsResponse.fromJson(Map<String, dynamic> json) {
     return ListFunctionsResponse(
-      functions: decodeListMessage(json['functions'], Function$.fromJson),
-      nextPageToken: json['nextPageToken'],
-      unreachable: decodeList(json['unreachable']),
+      functions: decodeListMessage(json['functions'], Function$.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
+      unreachable: decodeList(json['unreachable']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (functions != null) 'functions': encodeList(functions),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
-      if (unreachable != null) 'unreachable': unreachable,
+      if (functions.isNotDefault) 'functions': encodeList(functions),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+      if (unreachable.isNotDefault) 'unreachable': unreachable,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListFunctionsResponse($contents)';
   }
 }
@@ -1877,26 +1934,26 @@ final class CreateFunctionRequest extends ProtoMessage {
   final String parent;
 
   /// Required. Function to be created.
-  final Function$ function;
+  final Function$? function;
 
   /// The ID to use for the function, which will become the final component of
   /// the function's resource name.
   ///
   /// This value should be 4-63 characters, and valid characters
   /// are /[a-z][0-9]-/.
-  final String? functionId;
+  final String functionId;
 
   CreateFunctionRequest({
     required this.parent,
     required this.function,
-    this.functionId,
+    this.functionId = '',
   }) : super(fullyQualifiedName);
 
   factory CreateFunctionRequest.fromJson(Map<String, dynamic> json) {
     return CreateFunctionRequest(
-      parent: json['parent'],
-      function: decode(json['function'], Function$.fromJson)!,
-      functionId: json['functionId'],
+      parent: json['parent'] ?? '',
+      function: decode(json['function'], Function$.fromJson),
+      functionId: json['functionId'] ?? '',
     );
   }
 
@@ -1904,17 +1961,14 @@ final class CreateFunctionRequest extends ProtoMessage {
   Object toJson() {
     return {
       'parent': parent,
-      'function': function.toJson(),
-      if (functionId != null) 'functionId': functionId,
+      if (function != null) 'function': function!.toJson(),
+      if (functionId.isNotDefault) 'functionId': functionId,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      'parent=$parent',
-      if (functionId != null) 'functionId=$functionId',
-    ].join(',');
+    final contents = ['parent=$parent', 'functionId=$functionId'].join(',');
     return 'CreateFunctionRequest($contents)';
   }
 }
@@ -1925,7 +1979,7 @@ final class UpdateFunctionRequest extends ProtoMessage {
       'google.cloud.functions.v2.UpdateFunctionRequest';
 
   /// Required. New version of the function.
-  final Function$ function;
+  final Function$? function;
 
   /// The list of fields to be updated.
   /// If no field mask is provided, all fields will be updated.
@@ -1936,7 +1990,7 @@ final class UpdateFunctionRequest extends ProtoMessage {
 
   factory UpdateFunctionRequest.fromJson(Map<String, dynamic> json) {
     return UpdateFunctionRequest(
-      function: decode(json['function'], Function$.fromJson)!,
+      function: decode(json['function'], Function$.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -1944,7 +1998,7 @@ final class UpdateFunctionRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'function': function.toJson(),
+      if (function != null) 'function': function!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -1964,7 +2018,7 @@ final class DeleteFunctionRequest extends ProtoMessage {
   DeleteFunctionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFunctionRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteFunctionRequest(name: json['name']);
+    return DeleteFunctionRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -2003,25 +2057,27 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
   /// granted the role 'Cloud KMS CryptoKey Encrypter/Decrypter
   /// (roles/cloudkms.cryptoKeyEncrypterDecrypter)' on the
   /// Key/KeyRing/Project/Organization (least access preferred).
-  final String? kmsKeyName;
+  final String kmsKeyName;
 
   /// The function environment the generated upload url will be used for.
   /// The upload url for 2nd Gen functions can also be used for 1st gen
   /// functions, but not vice versa. If not specified, 2nd generation-style
   /// upload URLs are generated.
-  final Environment? environment;
+  final Environment environment;
 
   GenerateUploadUrlRequest({
     required this.parent,
-    this.kmsKeyName,
-    this.environment,
+    this.kmsKeyName = '',
+    this.environment = Environment.$default,
   }) : super(fullyQualifiedName);
 
   factory GenerateUploadUrlRequest.fromJson(Map<String, dynamic> json) {
     return GenerateUploadUrlRequest(
-      parent: json['parent'],
-      kmsKeyName: json['kmsKeyName'],
-      environment: decodeEnum(json['environment'], Environment.fromJson),
+      parent: json['parent'] ?? '',
+      kmsKeyName: json['kmsKeyName'] ?? '',
+      environment:
+          decodeEnum(json['environment'], Environment.fromJson) ??
+          Environment.$default,
     );
   }
 
@@ -2029,8 +2085,8 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
   Object toJson() {
     return {
       'parent': parent,
-      if (kmsKeyName != null) 'kmsKeyName': kmsKeyName,
-      if (environment != null) 'environment': environment!.toJson(),
+      if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
+      if (environment.isNotDefault) 'environment': environment.toJson(),
     };
   }
 
@@ -2038,8 +2094,8 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (kmsKeyName != null) 'kmsKeyName=$kmsKeyName',
-      if (environment != null) 'environment=$environment',
+      'kmsKeyName=$kmsKeyName',
+      'environment=$environment',
     ].join(',');
     return 'GenerateUploadUrlRequest($contents)';
   }
@@ -2053,7 +2109,7 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   /// The generated Google Cloud Storage signed URL that should be used for a
   /// function source code upload. The uploaded file should be a zip archive
   /// which contains a function.
-  final String? uploadUrl;
+  final String uploadUrl;
 
   /// The location of the source code in the upload bucket.
   ///
@@ -2065,12 +2121,12 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   /// upon uploading a new object or version of an object.
   final StorageSource? storageSource;
 
-  GenerateUploadUrlResponse({this.uploadUrl, this.storageSource})
+  GenerateUploadUrlResponse({this.uploadUrl = '', this.storageSource})
     : super(fullyQualifiedName);
 
   factory GenerateUploadUrlResponse.fromJson(Map<String, dynamic> json) {
     return GenerateUploadUrlResponse(
-      uploadUrl: json['uploadUrl'],
+      uploadUrl: json['uploadUrl'] ?? '',
       storageSource: decode(json['storageSource'], StorageSource.fromJson),
     );
   }
@@ -2078,14 +2134,14 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (uploadUrl != null) 'uploadUrl': uploadUrl,
+      if (uploadUrl.isNotDefault) 'uploadUrl': uploadUrl,
       if (storageSource != null) 'storageSource': storageSource!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (uploadUrl != null) 'uploadUrl=$uploadUrl'].join(',');
+    final contents = ['uploadUrl=$uploadUrl'].join(',');
     return 'GenerateUploadUrlResponse($contents)';
   }
 }
@@ -2102,7 +2158,7 @@ final class GenerateDownloadUrlRequest extends ProtoMessage {
   GenerateDownloadUrlRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GenerateDownloadUrlRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateDownloadUrlRequest(name: json['name']);
+    return GenerateDownloadUrlRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -2124,24 +2180,23 @@ final class GenerateDownloadUrlResponse extends ProtoMessage {
 
   /// The generated Google Cloud Storage signed URL that should be used for
   /// function source code download.
-  final String? downloadUrl;
+  final String downloadUrl;
 
-  GenerateDownloadUrlResponse({this.downloadUrl}) : super(fullyQualifiedName);
+  GenerateDownloadUrlResponse({this.downloadUrl = ''})
+    : super(fullyQualifiedName);
 
   factory GenerateDownloadUrlResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateDownloadUrlResponse(downloadUrl: json['downloadUrl']);
+    return GenerateDownloadUrlResponse(downloadUrl: json['downloadUrl'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (downloadUrl != null) 'downloadUrl': downloadUrl};
+    return {if (downloadUrl.isNotDefault) 'downloadUrl': downloadUrl};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (downloadUrl != null) 'downloadUrl=$downloadUrl',
-    ].join(',');
+    final contents = ['downloadUrl=$downloadUrl'].join(',');
     return 'GenerateDownloadUrlResponse($contents)';
   }
 }
@@ -2157,26 +2212,26 @@ final class ListRuntimesRequest extends ProtoMessage {
 
   /// The filter for Runtimes that match the filter expression,
   /// following the syntax outlined in https://google.aip.dev/160.
-  final String? filter;
+  final String filter;
 
-  ListRuntimesRequest({required this.parent, this.filter})
+  ListRuntimesRequest({required this.parent, this.filter = ''})
     : super(fullyQualifiedName);
 
   factory ListRuntimesRequest.fromJson(Map<String, dynamic> json) {
-    return ListRuntimesRequest(parent: json['parent'], filter: json['filter']);
+    return ListRuntimesRequest(
+      parent: json['parent'] ?? '',
+      filter: json['filter'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'parent': parent, if (filter != null) 'filter': filter};
+    return {'parent': parent, if (filter.isNotDefault) 'filter': filter};
   }
 
   @override
   String toString() {
-    final contents = [
-      'parent=$parent',
-      if (filter != null) 'filter=$filter',
-    ].join(',');
+    final contents = ['parent=$parent', 'filter=$filter'].join(',');
     return 'ListRuntimesRequest($contents)';
   }
 }
@@ -2187,22 +2242,24 @@ final class ListRuntimesResponse extends ProtoMessage {
       'google.cloud.functions.v2.ListRuntimesResponse';
 
   /// The runtimes that match the request.
-  final List<ListRuntimesResponse_Runtime>? runtimes;
+  final List<ListRuntimesResponse_Runtime> runtimes;
 
-  ListRuntimesResponse({this.runtimes}) : super(fullyQualifiedName);
+  ListRuntimesResponse({this.runtimes = const []}) : super(fullyQualifiedName);
 
   factory ListRuntimesResponse.fromJson(Map<String, dynamic> json) {
     return ListRuntimesResponse(
-      runtimes: decodeListMessage(
-        json['runtimes'],
-        ListRuntimesResponse_Runtime.fromJson,
-      ),
+      runtimes:
+          decodeListMessage(
+            json['runtimes'],
+            ListRuntimesResponse_Runtime.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (runtimes != null) 'runtimes': encodeList(runtimes)};
+    return {if (runtimes.isNotDefault) 'runtimes': encodeList(runtimes)};
   }
 
   @override
@@ -2216,19 +2273,19 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
       'google.cloud.functions.v2.ListRuntimesResponse.Runtime';
 
   /// The name of the runtime, e.g., 'go113', 'nodejs12', etc.
-  final String? name;
+  final String name;
 
   /// The user facing name, eg 'Go 1.13', 'Node.js 12', etc.
-  final String? displayName;
+  final String displayName;
 
   /// The stage of life this runtime is in, e.g., BETA, GA, etc.
-  final ListRuntimesResponse_RuntimeStage? stage;
+  final ListRuntimesResponse_RuntimeStage stage;
 
   /// Warning messages, e.g., a deprecation warning.
-  final List<String>? warnings;
+  final List<String> warnings;
 
   /// The environment for the runtime.
-  final Environment? environment;
+  final Environment environment;
 
   /// Deprecation date for the runtime.
   final Date? deprecationDate;
@@ -2237,25 +2294,29 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
   final Date? decommissionDate;
 
   ListRuntimesResponse_Runtime({
-    this.name,
-    this.displayName,
-    this.stage,
-    this.warnings,
-    this.environment,
+    this.name = '',
+    this.displayName = '',
+    this.stage = ListRuntimesResponse_RuntimeStage.$default,
+    this.warnings = const [],
+    this.environment = Environment.$default,
     this.deprecationDate,
     this.decommissionDate,
   }) : super(fullyQualifiedName);
 
   factory ListRuntimesResponse_Runtime.fromJson(Map<String, dynamic> json) {
     return ListRuntimesResponse_Runtime(
-      name: json['name'],
-      displayName: json['displayName'],
-      stage: decodeEnum(
-        json['stage'],
-        ListRuntimesResponse_RuntimeStage.fromJson,
-      ),
-      warnings: decodeList(json['warnings']),
-      environment: decodeEnum(json['environment'], Environment.fromJson),
+      name: json['name'] ?? '',
+      displayName: json['displayName'] ?? '',
+      stage:
+          decodeEnum(
+            json['stage'],
+            ListRuntimesResponse_RuntimeStage.fromJson,
+          ) ??
+          ListRuntimesResponse_RuntimeStage.$default,
+      warnings: decodeList(json['warnings']) ?? [],
+      environment:
+          decodeEnum(json['environment'], Environment.fromJson) ??
+          Environment.$default,
       deprecationDate: decode(json['deprecationDate'], Date.fromJson),
       decommissionDate: decode(json['decommissionDate'], Date.fromJson),
     );
@@ -2264,11 +2325,11 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (displayName != null) 'displayName': displayName,
-      if (stage != null) 'stage': stage!.toJson(),
-      if (warnings != null) 'warnings': warnings,
-      if (environment != null) 'environment': environment!.toJson(),
+      if (name.isNotDefault) 'name': name,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (stage.isNotDefault) 'stage': stage.toJson(),
+      if (warnings.isNotDefault) 'warnings': warnings,
+      if (environment.isNotDefault) 'environment': environment.toJson(),
       if (deprecationDate != null) 'deprecationDate': deprecationDate!.toJson(),
       if (decommissionDate != null)
         'decommissionDate': decommissionDate!.toJson(),
@@ -2278,10 +2339,10 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (displayName != null) 'displayName=$displayName',
-      if (stage != null) 'stage=$stage',
-      if (environment != null) 'environment=$environment',
+      'name=$name',
+      'displayName=$displayName',
+      'stage=$stage',
+      'environment=$environment',
     ].join(',');
     return 'Runtime($contents)';
   }
@@ -2314,10 +2375,15 @@ final class ListRuntimesResponse_RuntimeStage extends ProtoEnum {
     'DECOMMISSIONED',
   );
 
+  /// The default value for [ListRuntimesResponse_RuntimeStage].
+  static const $default = runtimeStageUnspecified;
+
   const ListRuntimesResponse_RuntimeStage(super.value);
 
   factory ListRuntimesResponse_RuntimeStage.fromJson(String json) =>
       ListRuntimesResponse_RuntimeStage(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'RuntimeStage.$value';
@@ -2351,24 +2417,22 @@ final class OnDeployUpdatePolicy extends ProtoMessage {
 
   /// Output only. contains the runtime version which was used during latest
   /// function deployment.
-  final String? runtimeVersion;
+  final String runtimeVersion;
 
-  OnDeployUpdatePolicy({this.runtimeVersion}) : super(fullyQualifiedName);
+  OnDeployUpdatePolicy({this.runtimeVersion = ''}) : super(fullyQualifiedName);
 
   factory OnDeployUpdatePolicy.fromJson(Map<String, dynamic> json) {
-    return OnDeployUpdatePolicy(runtimeVersion: json['runtimeVersion']);
+    return OnDeployUpdatePolicy(runtimeVersion: json['runtimeVersion'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (runtimeVersion != null) 'runtimeVersion': runtimeVersion};
+    return {if (runtimeVersion.isNotDefault) 'runtimeVersion': runtimeVersion};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (runtimeVersion != null) 'runtimeVersion=$runtimeVersion',
-    ].join(',');
+    final contents = ['runtimeVersion=$runtimeVersion'].join(',');
     return 'OnDeployUpdatePolicy($contents)';
   }
 }
@@ -2385,13 +2449,13 @@ final class OperationMetadata extends ProtoMessage {
   final Timestamp? endTime;
 
   /// Server-defined resource path for the target of the operation.
-  final String? target;
+  final String target;
 
   /// Name of the verb executed by the operation.
-  final String? verb;
+  final String verb;
 
   /// Human-readable status of the operation, if any.
-  final String? statusDetail;
+  final String statusDetail;
 
   /// Identifies whether the user has requested cancellation
   /// of the operation. Operations that have successfully been cancelled
@@ -2399,56 +2463,58 @@ final class OperationMetadata extends ProtoMessage {
   /// `google.longrunning.Operation.error`
   /// value with a `google.rpc.Status.code` of 1,
   /// corresponding to `Code.CANCELLED`.
-  final bool? cancelRequested;
+  final bool cancelRequested;
 
   /// API version used to start the operation.
-  final String? apiVersion;
+  final String apiVersion;
 
   /// The original request that started the operation.
   final Any? requestResource;
 
   /// Mechanism for reporting in-progress stages
-  final List<Stage>? stages;
+  final List<Stage> stages;
 
   /// An identifier for Firebase function sources. Disclaimer: This field is only
   /// supported for Firebase function deployments.
-  final String? sourceToken;
+  final String sourceToken;
 
   /// The build name of the function for create and update operations.
-  final String? buildName;
+  final String buildName;
 
   /// The operation type.
-  final OperationType? operationType;
+  final OperationType operationType;
 
   OperationMetadata({
     this.createTime,
     this.endTime,
-    this.target,
-    this.verb,
-    this.statusDetail,
-    this.cancelRequested,
-    this.apiVersion,
+    this.target = '',
+    this.verb = '',
+    this.statusDetail = '',
+    this.cancelRequested = false,
+    this.apiVersion = '',
     this.requestResource,
-    this.stages,
-    this.sourceToken,
-    this.buildName,
-    this.operationType,
+    this.stages = const [],
+    this.sourceToken = '',
+    this.buildName = '',
+    this.operationType = OperationType.$default,
   }) : super(fullyQualifiedName);
 
   factory OperationMetadata.fromJson(Map<String, dynamic> json) {
     return OperationMetadata(
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      target: json['target'],
-      verb: json['verb'],
-      statusDetail: json['statusDetail'],
-      cancelRequested: json['cancelRequested'],
-      apiVersion: json['apiVersion'],
+      target: json['target'] ?? '',
+      verb: json['verb'] ?? '',
+      statusDetail: json['statusDetail'] ?? '',
+      cancelRequested: json['cancelRequested'] ?? false,
+      apiVersion: json['apiVersion'] ?? '',
       requestResource: decode(json['requestResource'], Any.fromJson),
-      stages: decodeListMessage(json['stages'], Stage.fromJson),
-      sourceToken: json['sourceToken'],
-      buildName: json['buildName'],
-      operationType: decodeEnum(json['operationType'], OperationType.fromJson),
+      stages: decodeListMessage(json['stages'], Stage.fromJson) ?? [],
+      sourceToken: json['sourceToken'] ?? '',
+      buildName: json['buildName'] ?? '',
+      operationType:
+          decodeEnum(json['operationType'], OperationType.fromJson) ??
+          OperationType.$default,
     );
   }
 
@@ -2457,30 +2523,30 @@ final class OperationMetadata extends ProtoMessage {
     return {
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (endTime != null) 'endTime': endTime!.toJson(),
-      if (target != null) 'target': target,
-      if (verb != null) 'verb': verb,
-      if (statusDetail != null) 'statusDetail': statusDetail,
-      if (cancelRequested != null) 'cancelRequested': cancelRequested,
-      if (apiVersion != null) 'apiVersion': apiVersion,
+      if (target.isNotDefault) 'target': target,
+      if (verb.isNotDefault) 'verb': verb,
+      if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
+      if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
+      if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
       if (requestResource != null) 'requestResource': requestResource!.toJson(),
-      if (stages != null) 'stages': encodeList(stages),
-      if (sourceToken != null) 'sourceToken': sourceToken,
-      if (buildName != null) 'buildName': buildName,
-      if (operationType != null) 'operationType': operationType!.toJson(),
+      if (stages.isNotDefault) 'stages': encodeList(stages),
+      if (sourceToken.isNotDefault) 'sourceToken': sourceToken,
+      if (buildName.isNotDefault) 'buildName': buildName,
+      if (operationType.isNotDefault) 'operationType': operationType.toJson(),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (target != null) 'target=$target',
-      if (verb != null) 'verb=$verb',
-      if (statusDetail != null) 'statusDetail=$statusDetail',
-      if (cancelRequested != null) 'cancelRequested=$cancelRequested',
-      if (apiVersion != null) 'apiVersion=$apiVersion',
-      if (sourceToken != null) 'sourceToken=$sourceToken',
-      if (buildName != null) 'buildName=$buildName',
-      if (operationType != null) 'operationType=$operationType',
+      'target=$target',
+      'verb=$verb',
+      'statusDetail=$statusDetail',
+      'cancelRequested=$cancelRequested',
+      'apiVersion=$apiVersion',
+      'sourceToken=$sourceToken',
+      'buildName=$buildName',
+      'operationType=$operationType',
     ].join(',');
     return 'OperationMetadata($contents)';
   }
@@ -2492,19 +2558,22 @@ final class LocationMetadata extends ProtoMessage {
       'google.cloud.functions.v2.LocationMetadata';
 
   /// The Cloud Function environments this location supports.
-  final List<Environment>? environments;
+  final List<Environment> environments;
 
-  LocationMetadata({this.environments}) : super(fullyQualifiedName);
+  LocationMetadata({this.environments = const []}) : super(fullyQualifiedName);
 
   factory LocationMetadata.fromJson(Map<String, dynamic> json) {
     return LocationMetadata(
-      environments: decodeListEnum(json['environments'], Environment.fromJson),
+      environments:
+          decodeListEnum(json['environments'], Environment.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (environments != null) 'environments': encodeList(environments)};
+    return {
+      if (environments.isNotDefault) 'environments': encodeList(environments),
+    };
   }
 
   @override
@@ -2516,66 +2585,68 @@ final class Stage extends ProtoMessage {
   static const String fullyQualifiedName = 'google.cloud.functions.v2.Stage';
 
   /// Name of the Stage. This will be unique for each Stage.
-  final Stage_Name? name;
+  final Stage_Name name;
 
   /// Message describing the Stage
-  final String? message;
+  final String message;
 
   /// Current state of the Stage
-  final Stage_State? state;
+  final Stage_State state;
 
   /// Resource of the Stage
-  final String? resource;
+  final String resource;
 
   /// Link to the current Stage resource
-  final String? resourceUri;
+  final String resourceUri;
 
   /// State messages from the current Stage.
-  final List<StateMessage>? stateMessages;
+  final List<StateMessage> stateMessages;
 
   Stage({
-    this.name,
-    this.message,
-    this.state,
-    this.resource,
-    this.resourceUri,
-    this.stateMessages,
+    this.name = Stage_Name.$default,
+    this.message = '',
+    this.state = Stage_State.$default,
+    this.resource = '',
+    this.resourceUri = '',
+    this.stateMessages = const [],
   }) : super(fullyQualifiedName);
 
   factory Stage.fromJson(Map<String, dynamic> json) {
     return Stage(
-      name: decodeEnum(json['name'], Stage_Name.fromJson),
-      message: json['message'],
-      state: decodeEnum(json['state'], Stage_State.fromJson),
-      resource: json['resource'],
-      resourceUri: json['resourceUri'],
-      stateMessages: decodeListMessage(
-        json['stateMessages'],
-        StateMessage.fromJson,
-      ),
+      name:
+          decodeEnum(json['name'], Stage_Name.fromJson) ?? Stage_Name.$default,
+      message: json['message'] ?? '',
+      state:
+          decodeEnum(json['state'], Stage_State.fromJson) ??
+          Stage_State.$default,
+      resource: json['resource'] ?? '',
+      resourceUri: json['resourceUri'] ?? '',
+      stateMessages:
+          decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name!.toJson(),
-      if (message != null) 'message': message,
-      if (state != null) 'state': state!.toJson(),
-      if (resource != null) 'resource': resource,
-      if (resourceUri != null) 'resourceUri': resourceUri,
-      if (stateMessages != null) 'stateMessages': encodeList(stateMessages),
+      if (name.isNotDefault) 'name': name.toJson(),
+      if (message.isNotDefault) 'message': message,
+      if (state.isNotDefault) 'state': state.toJson(),
+      if (resource.isNotDefault) 'resource': resource,
+      if (resourceUri.isNotDefault) 'resourceUri': resourceUri,
+      if (stateMessages.isNotDefault)
+        'stateMessages': encodeList(stateMessages),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (message != null) 'message=$message',
-      if (state != null) 'state=$state',
-      if (resource != null) 'resource=$resource',
-      if (resourceUri != null) 'resourceUri=$resourceUri',
+      'name=$name',
+      'message=$message',
+      'state=$state',
+      'resource=$resource',
+      'resourceUri=$resourceUri',
     ].join(',');
     return 'Stage($contents)';
   }
@@ -2604,9 +2675,14 @@ final class Stage_Name extends ProtoEnum {
   /// Trigger Rollback Stage
   static const triggerRollback = Stage_Name('TRIGGER_ROLLBACK');
 
+  /// The default value for [Stage_Name].
+  static const $default = nameUnspecified;
+
   const Stage_Name(super.value);
 
   factory Stage_Name.fromJson(String json) => Stage_Name(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Name.$value';
@@ -2626,9 +2702,14 @@ final class Stage_State extends ProtoEnum {
   /// Stage has completed.
   static const complete = Stage_State('COMPLETE');
 
+  /// The default value for [Stage_State].
+  static const $default = stateUnspecified;
+
   const Stage_State(super.value);
 
   factory Stage_State.fromJson(String json) => Stage_State(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'State.$value';
@@ -2650,9 +2731,14 @@ final class OperationType extends ProtoEnum {
   /// DeleteFunction
   static const deleteFunction = OperationType('DELETE_FUNCTION');
 
+  /// The default value for [OperationType].
+  static const $default = operationtypeUnspecified;
+
   const OperationType(super.value);
 
   factory OperationType.fromJson(String json) => OperationType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'OperationType.$value';
@@ -2669,9 +2755,14 @@ final class Environment extends ProtoEnum {
   /// Gen 2
   static const gen2 = Environment('GEN_2');
 
+  /// The default value for [Environment].
+  static const $default = environmentUnspecified;
+
   const Environment(super.value);
 
   factory Environment.fromJson(String json) => Environment(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Environment.$value';
