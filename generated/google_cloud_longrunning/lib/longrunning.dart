@@ -28,10 +28,10 @@
 /// [Long-running operations]: https://google.aip.dev/151
 library;
 
-import 'package:google_cloud_gax/gax.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/rpc.dart';
+import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 part 'src/longrunning.p.dart';
