@@ -29,7 +29,7 @@ void main() async {
   );
 
   await for (final result in service.streamGenerateContent(request)) {
-    final parts = result.candidates?[0].content?.parts;
+    final parts = result.candidates.firstOrNull?.content?.parts;
     if (parts != null) {
       parts.forEach((p) => stdout.write(p.text ?? ''));
     }

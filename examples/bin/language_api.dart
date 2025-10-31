@@ -46,7 +46,7 @@ void main(List<String> args) async {
     print('result: $result');
     print('documentSentiment: ${result.documentSentiment}');
 
-    for (final sentence in result.sentences!) {
+    for (final sentence in result.sentences) {
       print('');
       print('sentence:');
       print('  text: ${sentence.text}');
