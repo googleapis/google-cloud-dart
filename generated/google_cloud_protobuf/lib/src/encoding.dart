@@ -12,18 +12,18 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library;
-
-import 'dart:convert';
-import 'dart:typed_data';
-export 'dart:typed_data' show Uint8List;
-
-import 'package:google_cloud_protobuf/protobuf.dart';
-
 /// Utility methods for JSON encoding and decoding from [ProtoMessage] objects.
 ///
 /// See https://protobuf.dev/programming-guides/json/ for docs on the JSON
 /// encoding of many of these types.
+library;
+
+import 'dart:convert';
+import 'dart:typed_data';
+
+import 'package:google_cloud_protobuf/protobuf.dart';
+
+export 'dart:typed_data' show Uint8List;
 
 /// Decode an `int64` value.
 int? decodeInt64(Object? value) =>
@@ -155,3 +155,39 @@ Map<T, Object?>? encodeMap<T>(Map<T, JsonEncodable>? value) =>
 /// Encode a list of `bytes` values into JSON.
 Map<T, String>? encodeMapBytes<T>(Map<T, Uint8List>? value) =>
     value?.map((key, value) => MapEntry(key, base64Encode(value)));
+
+/// Extensions methods used for comparing to proto default values.
+extension BoolProtoDefault on bool {
+  /// Whether this is the proto default value for [bool] (`false`).
+  bool get isNotDefault => this != false;
+}
+
+/// Extensions methods used for comparing to proto default values.
+extension IntProtoDefault on int {
+  /// Whether this is the proto default value for [int] (`0`).
+  bool get isNotDefault => this != 0;
+}
+
+/// Extensions methods used for comparing to proto default values.
+extension DoubleProtoDefault on double {
+  /// Whether this is the proto default value for [double] (`0`).
+  bool get isNotDefault => this != 0;
+}
+
+/// Extensions methods used for comparing to proto default values.
+extension StringProtoDefault on String {
+  /// Whether this is the proto default value for [String] (an empty string).
+  bool get isNotDefault => isNotEmpty;
+}
+
+/// Extensions methods used for comparing to proto default values.
+extension ListProtoDefault on List {
+  /// Whether this is the proto default value for [List] (an empty list).
+  bool get isNotDefault => isNotEmpty;
+}
+
+/// Extensions methods used for comparing to proto default values.
+extension MapProtoDefault on Map {
+  /// Whether this is the proto default value for [Map] (an empty map).
+  bool get isNotDefault => isNotEmpty;
+}
