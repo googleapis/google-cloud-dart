@@ -69,9 +69,9 @@ final class Locations {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -103,37 +103,37 @@ final class ListLocationsRequest extends ProtoMessage {
   final String name;
 
   /// The standard list filter.
-  final String? filter;
+  final String filter;
 
   /// The standard list page size.
-  final int? pageSize;
+  final int pageSize;
 
   /// The standard list page token.
-  final String? pageToken;
+  final String pageToken;
 
   ListLocationsRequest({
-    required this.name,
-    this.filter,
-    this.pageSize,
-    this.pageToken,
+    this.name = '',
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
   }) : super(fullyQualifiedName);
 
   factory ListLocationsRequest.fromJson(Map<String, dynamic> json) {
     return ListLocationsRequest(
-      name: json['name'],
-      filter: json['filter'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      name: json['name'] ?? '',
+      filter: json['filter'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      'name': name,
-      if (filter != null) 'filter': filter,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (name.isNotDefault) 'name': name,
+      if (filter.isNotDefault) 'filter': filter,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
@@ -141,9 +141,9 @@ final class ListLocationsRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'name=$name',
-      if (filter != null) 'filter=$filter',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
+      'filter=$filter',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
     ].join(',');
     return 'ListLocationsRequest($contents)';
   }
@@ -155,34 +155,32 @@ final class ListLocationsResponse extends ProtoMessage {
       'google.cloud.location.ListLocationsResponse';
 
   /// A list of locations that matches the specified filter in the request.
-  final List<Location>? locations;
+  final List<Location> locations;
 
   /// The standard List next-page token.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListLocationsResponse({this.locations, this.nextPageToken})
+  ListLocationsResponse({this.locations = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListLocationsResponse.fromJson(Map<String, dynamic> json) {
     return ListLocationsResponse(
-      locations: decodeListMessage(json['locations'], Location.fromJson),
-      nextPageToken: json['nextPageToken'],
+      locations: decodeListMessage(json['locations'], Location.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (locations != null) 'locations': encodeList(locations),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (locations.isNotDefault) 'locations': encodeList(locations),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListLocationsResponse($contents)';
   }
 }
@@ -195,15 +193,15 @@ final class GetLocationRequest extends ProtoMessage {
   /// Resource name for the location.
   final String name;
 
-  GetLocationRequest({required this.name}) : super(fullyQualifiedName);
+  GetLocationRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory GetLocationRequest.fromJson(Map<String, dynamic> json) {
-    return GetLocationRequest(name: json['name']);
+    return GetLocationRequest(name: json['name'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {'name': name};
+    return {if (name.isNotDefault) 'name': name};
   }
 
   @override
@@ -219,38 +217,38 @@ final class Location extends ProtoMessage {
 
   /// Resource name for the location, which may vary between implementations.
   /// For example: `"projects/example-project/locations/us-east1"`
-  final String? name;
+  final String name;
 
   /// The canonical id for this location. For example: `"us-east1"`.
-  final String? locationId;
+  final String locationId;
 
   /// The friendly name for this location, typically a nearby city name.
   /// For example, "Tokyo".
-  final String? displayName;
+  final String displayName;
 
   /// Cross-service attributes for the location. For example
   ///
   ///     {"cloud.googleapis.com/region": "us-east1"}
-  final Map<String, String>? labels;
+  final Map<String, String> labels;
 
   /// Service-specific metadata. For example the available capacity at the given
   /// location.
   final Any? metadata;
 
   Location({
-    this.name,
-    this.locationId,
-    this.displayName,
-    this.labels,
+    this.name = '',
+    this.locationId = '',
+    this.displayName = '',
+    this.labels = const {},
     this.metadata,
   }) : super(fullyQualifiedName);
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
-      name: json['name'],
-      locationId: json['locationId'],
-      displayName: json['displayName'],
-      labels: decodeMap(json['labels']),
+      name: json['name'] ?? '',
+      locationId: json['locationId'] ?? '',
+      displayName: json['displayName'] ?? '',
+      labels: decodeMap(json['labels']) ?? {},
       metadata: decode(json['metadata'], Any.fromJson),
     );
   }
@@ -258,10 +256,10 @@ final class Location extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (locationId != null) 'locationId': locationId,
-      if (displayName != null) 'displayName': displayName,
-      if (labels != null) 'labels': labels,
+      if (name.isNotDefault) 'name': name,
+      if (locationId.isNotDefault) 'locationId': locationId,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (labels.isNotDefault) 'labels': labels,
       if (metadata != null) 'metadata': metadata!.toJson(),
     };
   }
@@ -269,9 +267,9 @@ final class Location extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (locationId != null) 'locationId=$locationId',
-      if (displayName != null) 'displayName=$displayName',
+      'name=$name',
+      'locationId=$locationId',
+      'displayName=$displayName',
     ].join(',');
     return 'Location($contents)';
   }

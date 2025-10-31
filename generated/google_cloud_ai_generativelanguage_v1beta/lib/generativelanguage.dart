@@ -78,8 +78,8 @@ final class CacheService {
     ListCachedContentsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/cachedContents', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListCachedContentsResponse.fromJson(response);
@@ -119,9 +119,9 @@ final class CacheService {
   Future<CachedContent> updateCachedContent(
     UpdateCachedContentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.cachedContent.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1beta/${request.cachedContent!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.cachedContent);
     return CachedContent.fromJson(response);
@@ -146,9 +146,9 @@ final class CacheService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -266,9 +266,9 @@ final class DiscussService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -366,8 +366,8 @@ final class FileService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListFilesResponse> listFiles(ListFilesRequest request) async {
     final url = Uri.https(_host, '/v1beta/files', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListFilesResponse.fromJson(response);
@@ -414,9 +414,9 @@ final class FileService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -599,9 +599,9 @@ final class GenerativeService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -705,8 +705,8 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListModelsResponse> listModels(ListModelsRequest request) async {
     final url = Uri.https(_host, '/v1beta/models', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListModelsResponse.fromJson(response);
@@ -732,9 +732,9 @@ final class ModelService {
     ListTunedModelsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
-      if (request.filter != null) 'filter': request.filter!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter.isNotDefault) 'filter': request.filter,
     });
     final response = await _client.get(url);
     return ListTunedModelsResponse.fromJson(response);
@@ -776,9 +776,9 @@ final class ModelService {
   /// the API service. Throws a [StatusException] if the API failed with a
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<TunedModel> updateTunedModel(UpdateTunedModelRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.tunedModel.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1beta/${request.tunedModel!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.tunedModel);
     return TunedModel.fromJson(response);
@@ -803,9 +803,9 @@ final class ModelService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -916,8 +916,8 @@ final class PermissionService {
     ListPermissionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/permissions', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListPermissionsResponse.fromJson(response);
@@ -929,9 +929,9 @@ final class PermissionService {
   /// the API service. Throws a [StatusException] if the API failed with a
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Permission> updatePermission(UpdatePermissionRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.permission.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1beta/${request.permission!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.permission);
     return Permission.fromJson(response);
@@ -971,9 +971,9 @@ final class PermissionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1097,9 +1097,9 @@ final class PredictionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1207,9 +1207,9 @@ final class RetrieverService {
   /// the API service. Throws a [StatusException] if the API failed with a
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Corpus> updateCorpus(UpdateCorpusRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.corpus.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1beta/${request.corpus!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.corpus);
     return Corpus.fromJson(response);
@@ -1222,7 +1222,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteCorpus(DeleteCorpusRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force != null) 'force': '${request.force}',
+      if (request.force.isNotDefault) 'force': '${request.force}',
     });
     await _client.delete(url);
   }
@@ -1234,8 +1234,8 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListCorporaResponse> listCorpora(ListCorporaRequest request) async {
     final url = Uri.https(_host, '/v1beta/corpora', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListCorporaResponse.fromJson(response);
@@ -1280,9 +1280,9 @@ final class RetrieverService {
   /// the API service. Throws a [StatusException] if the API failed with a
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Document> updateDocument(UpdateDocumentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.document.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1beta/${request.document!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.document);
     return Document.fromJson(response);
@@ -1295,7 +1295,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteDocument(DeleteDocumentRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force != null) 'force': '${request.force}',
+      if (request.force.isNotDefault) 'force': '${request.force}',
     });
     await _client.delete(url);
   }
@@ -1309,8 +1309,8 @@ final class RetrieverService {
     ListDocumentsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/documents', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListDocumentsResponse.fromJson(response);
@@ -1373,9 +1373,9 @@ final class RetrieverService {
   /// the API service. Throws a [StatusException] if the API failed with a
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Chunk> updateChunk(UpdateChunkRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.chunk.name}', {
-      if (request.updateMask?.paths != null)
-        'updateMask.paths': request.updateMask?.paths!,
+    final url = Uri.https(_host, '/v1beta/${request.chunk!.name}', {
+      if (request.updateMask!.paths.isNotDefault)
+        'updateMask.paths': request.updateMask!.paths,
     });
     final response = await _client.patch(url, body: request.chunk);
     return Chunk.fromJson(response);
@@ -1427,8 +1427,8 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListChunksResponse> listChunks(ListChunksRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/chunks', {
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListChunksResponse.fromJson(response);
@@ -1443,9 +1443,9 @@ final class RetrieverService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1586,9 +1586,9 @@ final class TextService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter != null) 'filter': request.filter!,
-      if (request.pageSize != null) 'pageSize': '${request.pageSize}',
-      if (request.pageToken != null) 'pageToken': request.pageToken!,
+      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1646,39 +1646,36 @@ final class ListCachedContentsRequest extends ProtoMessage {
   /// return fewer than this value. If unspecified, some default (under maximum)
   /// number of items will be returned. The maximum value is 1000; values above
   /// 1000 will be coerced to 1000.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token, received from a previous `ListCachedContents` call.
   /// Provide this to retrieve the subsequent page.
   ///
   /// When paginating, all other parameters provided to `ListCachedContents` must
   /// match the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
-  ListCachedContentsRequest({this.pageSize, this.pageToken})
+  ListCachedContentsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) {
     return ListCachedContentsRequest(
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-    ].join(',');
+    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
     return 'ListCachedContentsRequest($contents)';
   }
 }
@@ -1689,38 +1686,38 @@ final class ListCachedContentsResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListCachedContentsResponse';
 
   /// List of cached contents.
-  final List<CachedContent>? cachedContents;
+  final List<CachedContent> cachedContents;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   /// If this field is omitted, there are no subsequent pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListCachedContentsResponse({this.cachedContents, this.nextPageToken})
-    : super(fullyQualifiedName);
+  ListCachedContentsResponse({
+    this.cachedContents = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) {
     return ListCachedContentsResponse(
-      cachedContents: decodeListMessage(
-        json['cachedContents'],
-        CachedContent.fromJson,
-      ),
-      nextPageToken: json['nextPageToken'],
+      cachedContents:
+          decodeListMessage(json['cachedContents'], CachedContent.fromJson) ??
+          [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (cachedContents != null) 'cachedContents': encodeList(cachedContents),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (cachedContents.isNotDefault)
+        'cachedContents': encodeList(cachedContents),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListCachedContentsResponse($contents)';
   }
 }
@@ -1731,20 +1728,22 @@ final class CreateCachedContentRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CreateCachedContentRequest';
 
   /// Required. The cached content to create.
-  final CachedContent cachedContent;
+  final CachedContent? cachedContent;
 
   CreateCachedContentRequest({required this.cachedContent})
     : super(fullyQualifiedName);
 
   factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return CreateCachedContentRequest(
-      cachedContent: decode(json['cachedContent'], CachedContent.fromJson)!,
+      cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
     );
   }
 
   @override
   Object toJson() {
-    return {'cachedContent': cachedContent.toJson()};
+    return {
+      if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
+    };
   }
 
   @override
@@ -1763,7 +1762,7 @@ final class GetCachedContentRequest extends ProtoMessage {
   GetCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) {
-    return GetCachedContentRequest(name: json['name']);
+    return GetCachedContentRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -1784,7 +1783,7 @@ final class UpdateCachedContentRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UpdateCachedContentRequest';
 
   /// Required. The content cache entry to update
-  final CachedContent cachedContent;
+  final CachedContent? cachedContent;
 
   /// The list of fields to update.
   final FieldMask? updateMask;
@@ -1794,7 +1793,7 @@ final class UpdateCachedContentRequest extends ProtoMessage {
 
   factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) {
     return UpdateCachedContentRequest(
-      cachedContent: decode(json['cachedContent'], CachedContent.fromJson)!,
+      cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -1802,7 +1801,7 @@ final class UpdateCachedContentRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'cachedContent': cachedContent.toJson(),
+      if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -1823,7 +1822,7 @@ final class DeleteCachedContentRequest extends ProtoMessage {
   DeleteCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteCachedContentRequest(name: json['name']);
+    return DeleteCachedContentRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -1871,11 +1870,11 @@ final class CachedContent extends ProtoMessage {
   final Content? systemInstruction;
 
   /// Optional. Input only. Immutable. The content to cache.
-  final List<Content>? contents;
+  final List<Content> contents;
 
   /// Optional. Input only. Immutable. A list of `Tools` the model may use to
   /// generate the next response
-  final List<Tool>? tools;
+  final List<Tool> tools;
 
   /// Optional. Input only. Immutable. Tool config. This config is shared for all
   /// tools.
@@ -1895,10 +1894,10 @@ final class CachedContent extends ProtoMessage {
     this.ttl,
     this.name,
     this.displayName,
-    this.model,
+    required this.model,
     this.systemInstruction,
-    this.contents,
-    this.tools,
+    this.contents = const [],
+    this.tools = const [],
     this.toolConfig,
     this.createTime,
     this.updateTime,
@@ -1913,8 +1912,8 @@ final class CachedContent extends ProtoMessage {
       displayName: json['displayName'],
       model: json['model'],
       systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-      contents: decodeListMessage(json['contents'], Content.fromJson),
-      tools: decodeListMessage(json['tools'], Tool.fromJson),
+      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+      tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
       toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
@@ -1935,8 +1934,8 @@ final class CachedContent extends ProtoMessage {
       if (model != null) 'model': model,
       if (systemInstruction != null)
         'systemInstruction': systemInstruction!.toJson(),
-      if (contents != null) 'contents': encodeList(contents),
-      if (tools != null) 'tools': encodeList(tools),
+      if (contents.isNotDefault) 'contents': encodeList(contents),
+      if (tools.isNotDefault) 'tools': encodeList(tools),
       if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
@@ -1961,27 +1960,27 @@ final class CachedContent_UsageMetadata extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CachedContent.UsageMetadata';
 
   /// Total number of tokens that the cached content consumes.
-  final int? totalTokenCount;
+  final int totalTokenCount;
 
-  CachedContent_UsageMetadata({this.totalTokenCount})
+  CachedContent_UsageMetadata({this.totalTokenCount = 0})
     : super(fullyQualifiedName);
 
   factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) {
     return CachedContent_UsageMetadata(
-      totalTokenCount: json['totalTokenCount'],
+      totalTokenCount: json['totalTokenCount'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
-    return {if (totalTokenCount != null) 'totalTokenCount': totalTokenCount};
+    return {
+      if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+    };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
-    ].join(',');
+    final contents = ['totalTokenCount=$totalTokenCount'].join(',');
     return 'UsageMetadata($contents)';
   }
 }
@@ -1992,23 +1991,23 @@ final class CitationMetadata extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CitationMetadata';
 
   /// Citations to sources for a specific response.
-  final List<CitationSource>? citationSources;
+  final List<CitationSource> citationSources;
 
-  CitationMetadata({this.citationSources}) : super(fullyQualifiedName);
+  CitationMetadata({this.citationSources = const []})
+    : super(fullyQualifiedName);
 
   factory CitationMetadata.fromJson(Map<String, dynamic> json) {
     return CitationMetadata(
-      citationSources: decodeListMessage(
-        json['citationSources'],
-        CitationSource.fromJson,
-      ),
+      citationSources:
+          decodeListMessage(json['citationSources'], CitationSource.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (citationSources != null)
+      if (citationSources.isNotDefault)
         'citationSources': encodeList(citationSources),
     };
   }
@@ -2085,34 +2084,34 @@ final class Content extends ProtoMessage {
 
   /// Ordered `Parts` that constitute a single message. Parts may have different
   /// MIME types.
-  final List<Part>? parts;
+  final List<Part> parts;
 
   /// Optional. The producer of the content. Must be either 'user' or 'model'.
   ///
   /// Useful to set for multi-turn conversations, otherwise can be left blank
   /// or unset.
-  final String? role;
+  final String role;
 
-  Content({this.parts, this.role}) : super(fullyQualifiedName);
+  Content({this.parts = const [], this.role = ''}) : super(fullyQualifiedName);
 
   factory Content.fromJson(Map<String, dynamic> json) {
     return Content(
-      parts: decodeListMessage(json['parts'], Part.fromJson),
-      role: json['role'],
+      parts: decodeListMessage(json['parts'], Part.fromJson) ?? [],
+      role: json['role'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (parts != null) 'parts': encodeList(parts),
-      if (role != null) 'role': role,
+      if (parts.isNotDefault) 'parts': encodeList(parts),
+      if (role.isNotDefault) 'role': role,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (role != null) 'role=$role'].join(',');
+    final contents = ['role=$role'].join(',');
     return 'Content($contents)';
   }
 }
@@ -2159,7 +2158,7 @@ final class Part extends ProtoMessage {
   final VideoMetadata? videoMetadata;
 
   /// Optional. Indicates if the part is thought from the model.
-  final bool? thought;
+  final bool thought;
 
   /// Optional. An opaque signature for the thought so it can be reused in
   /// subsequent requests.
@@ -2180,7 +2179,7 @@ final class Part extends ProtoMessage {
     this.executableCode,
     this.codeExecutionResult,
     this.videoMetadata,
-    this.thought,
+    this.thought = false,
     this.thoughtSignature,
     this.partMetadata,
   }) : super(fullyQualifiedName);
@@ -2201,7 +2200,7 @@ final class Part extends ProtoMessage {
         CodeExecutionResult.fromJson,
       ),
       videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
-      thought: json['thought'],
+      thought: json['thought'] ?? false,
       thoughtSignature: decodeBytes(json['thoughtSignature']),
       partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
     );
@@ -2220,7 +2219,7 @@ final class Part extends ProtoMessage {
       if (codeExecutionResult != null)
         'codeExecutionResult': codeExecutionResult!.toJson(),
       if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
-      if (thought != null) 'thought': thought,
+      if (thought.isNotDefault) 'thought': thought,
       if (thoughtSignature != null)
         'thoughtSignature': encodeBytes(thoughtSignature),
       if (partMetadata != null) 'partMetadata': partMetadata!.toJson(),
@@ -2231,7 +2230,7 @@ final class Part extends ProtoMessage {
   String toString() {
     final contents = [
       if (text != null) 'text=$text',
-      if (thought != null) 'thought=$thought',
+      'thought=$thought',
       if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
     ].join(',');
     return 'Part($contents)';
@@ -2285,21 +2284,24 @@ final class Blob extends ProtoMessage {
   /// If an unsupported MIME type is provided, an error will be returned. For a
   /// complete list of supported types, see [Supported file
   /// formats](https://ai.google.dev/gemini-api/docs/prompting_with_media#supported_file_formats).
-  final String? mimeType;
+  final String mimeType;
 
   /// Raw bytes for media formats.
   final Uint8List? data;
 
-  Blob({this.mimeType, this.data}) : super(fullyQualifiedName);
+  Blob({this.mimeType = '', this.data}) : super(fullyQualifiedName);
 
   factory Blob.fromJson(Map<String, dynamic> json) {
-    return Blob(mimeType: json['mimeType'], data: decodeBytes(json['data']));
+    return Blob(
+      mimeType: json['mimeType'] ?? '',
+      data: decodeBytes(json['data']),
+    );
   }
 
   @override
   Object toJson() {
     return {
-      if (mimeType != null) 'mimeType': mimeType,
+      if (mimeType.isNotDefault) 'mimeType': mimeType,
       if (data != null) 'data': encodeBytes(data),
     };
   }
@@ -2307,7 +2309,7 @@ final class Blob extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (mimeType != null) 'mimeType=$mimeType',
+      'mimeType=$mimeType',
       if (data != null) 'data=$data',
     ].join(',');
     return 'Blob($contents)';
@@ -2329,16 +2331,17 @@ final class FunctionResponseBlob extends ProtoMessage {
   /// If an unsupported MIME type is provided, an error will be returned. For a
   /// complete list of supported types, see [Supported file
   /// formats](https://ai.google.dev/gemini-api/docs/prompting_with_media#supported_file_formats).
-  final String? mimeType;
+  final String mimeType;
 
   /// Raw bytes for media formats.
   final Uint8List? data;
 
-  FunctionResponseBlob({this.mimeType, this.data}) : super(fullyQualifiedName);
+  FunctionResponseBlob({this.mimeType = '', this.data})
+    : super(fullyQualifiedName);
 
   factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) {
     return FunctionResponseBlob(
-      mimeType: json['mimeType'],
+      mimeType: json['mimeType'] ?? '',
       data: decodeBytes(json['data']),
     );
   }
@@ -2346,7 +2349,7 @@ final class FunctionResponseBlob extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (mimeType != null) 'mimeType': mimeType,
+      if (mimeType.isNotDefault) 'mimeType': mimeType,
       if (data != null) 'data': encodeBytes(data),
     };
   }
@@ -2354,7 +2357,7 @@ final class FunctionResponseBlob extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (mimeType != null) 'mimeType=$mimeType',
+      'mimeType=$mimeType',
       if (data != null) 'data=$data',
     ].join(',');
     return 'FunctionResponseBlob($contents)';
@@ -2367,31 +2370,32 @@ final class FileData extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.FileData';
 
   /// Optional. The IANA standard MIME type of the source data.
-  final String? mimeType;
+  final String mimeType;
 
   /// Required. URI.
-  final String? fileUri;
+  final String fileUri;
 
-  FileData({this.mimeType, this.fileUri}) : super(fullyQualifiedName);
+  FileData({this.mimeType = '', required this.fileUri})
+    : super(fullyQualifiedName);
 
   factory FileData.fromJson(Map<String, dynamic> json) {
-    return FileData(mimeType: json['mimeType'], fileUri: json['fileUri']);
+    return FileData(
+      mimeType: json['mimeType'] ?? '',
+      fileUri: json['fileUri'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
     return {
-      if (mimeType != null) 'mimeType': mimeType,
-      if (fileUri != null) 'fileUri': fileUri,
+      if (mimeType.isNotDefault) 'mimeType': mimeType,
+      'fileUri': fileUri,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (mimeType != null) 'mimeType=$mimeType',
-      if (fileUri != null) 'fileUri=$fileUri',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'fileUri=$fileUri'].join(',');
     return 'FileData($contents)';
   }
 }
@@ -2409,16 +2413,16 @@ final class VideoMetadata extends ProtoMessage {
 
   /// Optional. The frame rate of the video sent to the model. If not specified,
   /// the default value will be 1.0. The fps range is (0.0, 24.0].
-  final double? fps;
+  final double fps;
 
-  VideoMetadata({this.startOffset, this.endOffset, this.fps})
+  VideoMetadata({this.startOffset, this.endOffset, this.fps = 0})
     : super(fullyQualifiedName);
 
   factory VideoMetadata.fromJson(Map<String, dynamic> json) {
     return VideoMetadata(
       startOffset: decodeCustom(json['startOffset'], Duration.fromJson),
       endOffset: decodeCustom(json['endOffset'], Duration.fromJson),
-      fps: decodeDouble(json['fps']),
+      fps: decodeDouble(json['fps']) ?? 0,
     );
   }
 
@@ -2427,13 +2431,13 @@ final class VideoMetadata extends ProtoMessage {
     return {
       if (startOffset != null) 'startOffset': startOffset!.toJson(),
       if (endOffset != null) 'endOffset': endOffset!.toJson(),
-      if (fps != null) 'fps': encodeDouble(fps),
+      if (fps.isNotDefault) 'fps': encodeDouble(fps),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (fps != null) 'fps=$fps'].join(',');
+    final contents = ['fps=$fps'].join(',');
     return 'VideoMetadata($contents)';
   }
 }
@@ -2449,34 +2453,31 @@ final class ExecutableCode extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ExecutableCode';
 
   /// Required. Programming language of the `code`.
-  final ExecutableCode_Language? language;
+  final ExecutableCode_Language language;
 
   /// Required. The code to be executed.
-  final String? code;
+  final String code;
 
-  ExecutableCode({this.language, this.code}) : super(fullyQualifiedName);
+  ExecutableCode({required this.language, required this.code})
+    : super(fullyQualifiedName);
 
   factory ExecutableCode.fromJson(Map<String, dynamic> json) {
     return ExecutableCode(
-      language: decodeEnum(json['language'], ExecutableCode_Language.fromJson),
-      code: json['code'],
+      language:
+          decodeEnum(json['language'], ExecutableCode_Language.fromJson) ??
+          ExecutableCode_Language.$default,
+      code: json['code'] ?? '',
     );
   }
 
   @override
   Object toJson() {
-    return {
-      if (language != null) 'language': language!.toJson(),
-      if (code != null) 'code': code,
-    };
+    return {'language': language.toJson(), 'code': code};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (language != null) 'language=$language',
-      if (code != null) 'code=$code',
-    ].join(',');
+    final contents = ['language=$language', 'code=$code'].join(',');
     return 'ExecutableCode($contents)';
   }
 }
@@ -2491,10 +2492,15 @@ final class ExecutableCode_Language extends ProtoEnum {
   /// Python >= 3.10, with numpy and simpy available.
   static const python = ExecutableCode_Language('PYTHON');
 
+  /// The default value for [ExecutableCode_Language].
+  static const $default = languageUnspecified;
+
   const ExecutableCode_Language(super.value);
 
   factory ExecutableCode_Language.fromJson(String json) =>
       ExecutableCode_Language(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Language.$value';
@@ -2509,38 +2515,35 @@ final class CodeExecutionResult extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CodeExecutionResult';
 
   /// Required. Outcome of the code execution.
-  final CodeExecutionResult_Outcome? outcome;
+  final CodeExecutionResult_Outcome outcome;
 
   /// Optional. Contains stdout when code execution is successful, stderr or
   /// other description otherwise.
-  final String? output;
+  final String output;
 
-  CodeExecutionResult({this.outcome, this.output}) : super(fullyQualifiedName);
+  CodeExecutionResult({required this.outcome, this.output = ''})
+    : super(fullyQualifiedName);
 
   factory CodeExecutionResult.fromJson(Map<String, dynamic> json) {
     return CodeExecutionResult(
-      outcome: decodeEnum(
-        json['outcome'],
-        CodeExecutionResult_Outcome.fromJson,
-      ),
-      output: json['output'],
+      outcome:
+          decodeEnum(json['outcome'], CodeExecutionResult_Outcome.fromJson) ??
+          CodeExecutionResult_Outcome.$default,
+      output: json['output'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (outcome != null) 'outcome': outcome!.toJson(),
-      if (output != null) 'output': output,
+      'outcome': outcome.toJson(),
+      if (output.isNotDefault) 'output': output,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (outcome != null) 'outcome=$outcome',
-      if (output != null) 'output=$output',
-    ].join(',');
+    final contents = ['outcome=$outcome', 'output=$output'].join(',');
     return 'CodeExecutionResult($contents)';
   }
 }
@@ -2565,10 +2568,15 @@ final class CodeExecutionResult_Outcome extends ProtoEnum {
     'OUTCOME_DEADLINE_EXCEEDED',
   );
 
+  /// The default value for [CodeExecutionResult_Outcome].
+  static const $default = outcomeUnspecified;
+
   const CodeExecutionResult_Outcome(super.value);
 
   factory CodeExecutionResult_Outcome.fromJson(String json) =>
       CodeExecutionResult_Outcome(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Outcome.$value';
@@ -2598,7 +2606,7 @@ final class Tool extends ProtoMessage {
   /// `FunctionResponse`
   /// with the `Content.role`
   /// "function" generation context for the next model turn.
-  final List<FunctionDeclaration>? functionDeclarations;
+  final List<FunctionDeclaration> functionDeclarations;
 
   /// Optional. Retrieval tool that is powered by Google search.
   final GoogleSearchRetrieval? googleSearchRetrieval;
@@ -2619,7 +2627,7 @@ final class Tool extends ProtoMessage {
   final UrlContext? urlContext;
 
   Tool({
-    this.functionDeclarations,
+    this.functionDeclarations = const [],
     this.googleSearchRetrieval,
     this.codeExecution,
     this.googleSearch,
@@ -2629,10 +2637,12 @@ final class Tool extends ProtoMessage {
 
   factory Tool.fromJson(Map<String, dynamic> json) {
     return Tool(
-      functionDeclarations: decodeListMessage(
-        json['functionDeclarations'],
-        FunctionDeclaration.fromJson,
-      ),
+      functionDeclarations:
+          decodeListMessage(
+            json['functionDeclarations'],
+            FunctionDeclaration.fromJson,
+          ) ??
+          [],
       googleSearchRetrieval: decode(
         json['googleSearchRetrieval'],
         GoogleSearchRetrieval.fromJson,
@@ -2647,7 +2657,7 @@ final class Tool extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (functionDeclarations != null)
+      if (functionDeclarations.isNotDefault)
         'functionDeclarations': encodeList(functionDeclarations),
       if (googleSearchRetrieval != null)
         'googleSearchRetrieval': googleSearchRetrieval!.toJson(),
@@ -2698,44 +2708,45 @@ final class Tool_ComputerUse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.Tool.ComputerUse';
 
   /// Required. The environment being operated.
-  final Tool_ComputerUse_Environment? environment;
+  final Tool_ComputerUse_Environment environment;
 
   /// Optional. By default, predefined functions are included in the final
   /// model call. Some of them can be explicitly excluded from being
   /// automatically included. This can serve two purposes:
   /// 1. Using a more restricted / different action space.
   /// 2. Improving the definitions / instructions of predefined functions.
-  final List<String>? excludedPredefinedFunctions;
+  final List<String> excludedPredefinedFunctions;
 
-  Tool_ComputerUse({this.environment, this.excludedPredefinedFunctions})
-    : super(fullyQualifiedName);
+  Tool_ComputerUse({
+    required this.environment,
+    this.excludedPredefinedFunctions = const [],
+  }) : super(fullyQualifiedName);
 
   factory Tool_ComputerUse.fromJson(Map<String, dynamic> json) {
     return Tool_ComputerUse(
-      environment: decodeEnum(
-        json['environment'],
-        Tool_ComputerUse_Environment.fromJson,
-      ),
-      excludedPredefinedFunctions: decodeList(
-        json['excludedPredefinedFunctions'],
-      ),
+      environment:
+          decodeEnum(
+            json['environment'],
+            Tool_ComputerUse_Environment.fromJson,
+          ) ??
+          Tool_ComputerUse_Environment.$default,
+      excludedPredefinedFunctions:
+          decodeList(json['excludedPredefinedFunctions']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (environment != null) 'environment': environment!.toJson(),
-      if (excludedPredefinedFunctions != null)
+      'environment': environment.toJson(),
+      if (excludedPredefinedFunctions.isNotDefault)
         'excludedPredefinedFunctions': excludedPredefinedFunctions,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (environment != null) 'environment=$environment',
-    ].join(',');
+    final contents = ['environment=$environment'].join(',');
     return 'ComputerUse($contents)';
   }
 }
@@ -2752,10 +2763,15 @@ final class Tool_ComputerUse_Environment extends ProtoEnum {
     'ENVIRONMENT_BROWSER',
   );
 
+  /// The default value for [Tool_ComputerUse_Environment].
+  static const $default = environmentUnspecified;
+
   const Tool_ComputerUse_Environment(super.value);
 
   factory Tool_ComputerUse_Environment.fromJson(String json) =>
       Tool_ComputerUse_Environment(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Environment.$value';
@@ -2819,18 +2835,22 @@ final class DynamicRetrievalConfig extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.DynamicRetrievalConfig';
 
   /// The mode of the predictor to be used in dynamic retrieval.
-  final DynamicRetrievalConfig_Mode? mode;
+  final DynamicRetrievalConfig_Mode mode;
 
   /// The threshold to be used in dynamic retrieval.
   /// If not set, a system default value is used.
   final double? dynamicThreshold;
 
-  DynamicRetrievalConfig({this.mode, this.dynamicThreshold})
-    : super(fullyQualifiedName);
+  DynamicRetrievalConfig({
+    this.mode = DynamicRetrievalConfig_Mode.$default,
+    this.dynamicThreshold,
+  }) : super(fullyQualifiedName);
 
   factory DynamicRetrievalConfig.fromJson(Map<String, dynamic> json) {
     return DynamicRetrievalConfig(
-      mode: decodeEnum(json['mode'], DynamicRetrievalConfig_Mode.fromJson),
+      mode:
+          decodeEnum(json['mode'], DynamicRetrievalConfig_Mode.fromJson) ??
+          DynamicRetrievalConfig_Mode.$default,
       dynamicThreshold: decodeDouble(json['dynamicThreshold']),
     );
   }
@@ -2838,7 +2858,7 @@ final class DynamicRetrievalConfig extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (mode != null) 'mode': mode!.toJson(),
+      if (mode.isNotDefault) 'mode': mode.toJson(),
       if (dynamicThreshold != null)
         'dynamicThreshold': encodeDouble(dynamicThreshold),
     };
@@ -2847,7 +2867,7 @@ final class DynamicRetrievalConfig extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (mode != null) 'mode=$mode',
+      'mode=$mode',
       if (dynamicThreshold != null) 'dynamicThreshold=$dynamicThreshold',
     ].join(',');
     return 'DynamicRetrievalConfig($contents)';
@@ -2864,10 +2884,15 @@ final class DynamicRetrievalConfig_Mode extends ProtoEnum {
   /// Run retrieval only when system decides it is necessary.
   static const modeDynamic = DynamicRetrievalConfig_Mode('MODE_DYNAMIC');
 
+  /// The default value for [DynamicRetrievalConfig_Mode].
+  static const $default = modeUnspecified;
+
   const DynamicRetrievalConfig_Mode(super.value);
 
   factory DynamicRetrievalConfig_Mode.fromJson(String json) =>
       DynamicRetrievalConfig_Mode(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Mode.$value';
@@ -2936,7 +2961,7 @@ final class FunctionCallingConfig extends ProtoMessage {
 
   /// Optional. Specifies the mode in which function calling should execute. If
   /// unspecified, the default value will be set to AUTO.
-  final FunctionCallingConfig_Mode? mode;
+  final FunctionCallingConfig_Mode mode;
 
   /// Optional. A set of function names that, when provided, limits the functions
   /// the model will call.
@@ -2944,30 +2969,34 @@ final class FunctionCallingConfig extends ProtoMessage {
   /// This should only be set when the Mode is ANY or VALIDATED. Function names
   /// should match [FunctionDeclaration.name]. When set, model will
   /// predict a function call from only allowed function names.
-  final List<String>? allowedFunctionNames;
+  final List<String> allowedFunctionNames;
 
-  FunctionCallingConfig({this.mode, this.allowedFunctionNames})
-    : super(fullyQualifiedName);
+  FunctionCallingConfig({
+    this.mode = FunctionCallingConfig_Mode.$default,
+    this.allowedFunctionNames = const [],
+  }) : super(fullyQualifiedName);
 
   factory FunctionCallingConfig.fromJson(Map<String, dynamic> json) {
     return FunctionCallingConfig(
-      mode: decodeEnum(json['mode'], FunctionCallingConfig_Mode.fromJson),
-      allowedFunctionNames: decodeList(json['allowedFunctionNames']),
+      mode:
+          decodeEnum(json['mode'], FunctionCallingConfig_Mode.fromJson) ??
+          FunctionCallingConfig_Mode.$default,
+      allowedFunctionNames: decodeList(json['allowedFunctionNames']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (mode != null) 'mode': mode!.toJson(),
-      if (allowedFunctionNames != null)
+      if (mode.isNotDefault) 'mode': mode.toJson(),
+      if (allowedFunctionNames.isNotDefault)
         'allowedFunctionNames': allowedFunctionNames,
     };
   }
 
   @override
   String toString() {
-    final contents = [if (mode != null) 'mode=$mode'].join(',');
+    final contents = ['mode=$mode'].join(',');
     return 'FunctionCallingConfig($contents)';
   }
 }
@@ -3000,10 +3029,15 @@ final class FunctionCallingConfig_Mode extends ProtoEnum {
   /// function call will be any one of the provided "function_declarations".
   static const validated = FunctionCallingConfig_Mode('VALIDATED');
 
+  /// The default value for [FunctionCallingConfig_Mode].
+  static const $default = modeUnspecified;
+
   const FunctionCallingConfig_Mode(super.value);
 
   factory FunctionCallingConfig_Mode.fromJson(String json) =>
       FunctionCallingConfig_Mode(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Mode.$value';
@@ -3021,10 +3055,10 @@ final class FunctionDeclaration extends ProtoMessage {
   /// Required. The name of the function.
   /// Must be a-z, A-Z, 0-9, or contain underscores, colons, dots, and dashes,
   /// with a maximum length of 64.
-  final String? name;
+  final String name;
 
   /// Required. A brief description of the function.
-  final String? description;
+  final String description;
 
   /// Optional. Describes the parameters to this function. Reflects the Open
   /// API 3.03 Parameter Object string Key: the name of the parameter. Parameter
@@ -3065,22 +3099,22 @@ final class FunctionDeclaration extends ProtoMessage {
 
   /// Optional. Specifies the function Behavior.
   /// Currently only supported by the BidiGenerateContent method.
-  final FunctionDeclaration_Behavior? behavior;
+  final FunctionDeclaration_Behavior behavior;
 
   FunctionDeclaration({
-    this.name,
-    this.description,
+    required this.name,
+    required this.description,
     this.parameters,
     this.parametersJsonSchema,
     this.response,
     this.responseJsonSchema,
-    this.behavior,
+    this.behavior = FunctionDeclaration_Behavior.$default,
   }) : super(fullyQualifiedName);
 
   factory FunctionDeclaration.fromJson(Map<String, dynamic> json) {
     return FunctionDeclaration(
-      name: json['name'],
-      description: json['description'],
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
       parameters: decode(json['parameters'], Schema.fromJson),
       parametersJsonSchema: decodeCustom(
         json['parametersJsonSchema'],
@@ -3091,34 +3125,33 @@ final class FunctionDeclaration extends ProtoMessage {
         json['responseJsonSchema'],
         Value.fromJson,
       ),
-      behavior: decodeEnum(
-        json['behavior'],
-        FunctionDeclaration_Behavior.fromJson,
-      ),
+      behavior:
+          decodeEnum(json['behavior'], FunctionDeclaration_Behavior.fromJson) ??
+          FunctionDeclaration_Behavior.$default,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (description != null) 'description': description,
+      'name': name,
+      'description': description,
       if (parameters != null) 'parameters': parameters!.toJson(),
       if (parametersJsonSchema != null)
         'parametersJsonSchema': parametersJsonSchema!.toJson(),
       if (response != null) 'response': response!.toJson(),
       if (responseJsonSchema != null)
         'responseJsonSchema': responseJsonSchema!.toJson(),
-      if (behavior != null) 'behavior': behavior!.toJson(),
+      if (behavior.isNotDefault) 'behavior': behavior.toJson(),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (description != null) 'description=$description',
-      if (behavior != null) 'behavior=$behavior',
+      'name=$name',
+      'description=$description',
+      'behavior=$behavior',
     ].join(',');
     return 'FunctionDeclaration($contents)';
   }
@@ -3139,10 +3172,15 @@ final class FunctionDeclaration_Behavior extends ProtoEnum {
   /// model.
   static const nonBlocking = FunctionDeclaration_Behavior('NON_BLOCKING');
 
+  /// The default value for [FunctionDeclaration_Behavior].
+  static const $default = unspecified;
+
   const FunctionDeclaration_Behavior(super.value);
 
   factory FunctionDeclaration_Behavior.fromJson(String json) =>
       FunctionDeclaration_Behavior(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Behavior.$value';
@@ -3157,22 +3195,23 @@ final class FunctionCall extends ProtoMessage {
 
   /// Optional. The unique id of the function call. If populated, the client to
   /// execute the `function_call` and return the response with the matching `id`.
-  final String? id;
+  final String id;
 
   /// Required. The name of the function to call.
   /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
   /// length of 64.
-  final String? name;
+  final String name;
 
   /// Optional. The function parameters and values in JSON object format.
   final Struct? args;
 
-  FunctionCall({this.id, this.name, this.args}) : super(fullyQualifiedName);
+  FunctionCall({this.id = '', required this.name, this.args})
+    : super(fullyQualifiedName);
 
   factory FunctionCall.fromJson(Map<String, dynamic> json) {
     return FunctionCall(
-      id: json['id'],
-      name: json['name'],
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
       args: decodeCustom(json['args'], Struct.fromJson),
     );
   }
@@ -3180,18 +3219,15 @@ final class FunctionCall extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (id.isNotDefault) 'id': id,
+      'name': name,
       if (args != null) 'args': args!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (id != null) 'id=$id',
-      if (name != null) 'name=$name',
-    ].join(',');
+    final contents = ['id=$id', 'name=$name'].join(',');
     return 'FunctionCall($contents)';
   }
 }
@@ -3207,12 +3243,12 @@ final class FunctionResponse extends ProtoMessage {
 
   /// Optional. The id of the function call this response is for. Populated by
   /// the client to match the corresponding function call `id`.
-  final String? id;
+  final String id;
 
   /// Required. The name of the function to call.
   /// Must be a-z, A-Z, 0-9, or contain underscores and dashes, with a maximum
   /// length of 64.
-  final String? name;
+  final String name;
 
   /// Required. The function response in JSON object format.
   /// Callers can use any keys of their choice that fit the function's syntax
@@ -3223,7 +3259,7 @@ final class FunctionResponse extends ProtoMessage {
 
   /// Optional. Ordered `Parts` that constitute a function response. Parts may
   /// have different IANA MIME types.
-  final List<FunctionResponsePart>? parts;
+  final List<FunctionResponsePart> parts;
 
   /// Optional. Signals that function call continues, and more responses will be
   /// returned, turning the function call into a generator.
@@ -3233,7 +3269,7 @@ final class FunctionResponse extends ProtoMessage {
   /// signal that the function call is finished. This may still trigger the model
   /// generation. To avoid triggering the generation and finish the function
   /// call, additionally set `scheduling` to `SILENT`.
-  final bool? willContinue;
+  final bool willContinue;
 
   /// Optional. Specifies how the response should be scheduled in the
   /// conversation. Only applicable to NON_BLOCKING function calls, is ignored
@@ -3241,21 +3277,22 @@ final class FunctionResponse extends ProtoMessage {
   final FunctionResponse_Scheduling? scheduling;
 
   FunctionResponse({
-    this.id,
-    this.name,
-    this.response,
-    this.parts,
-    this.willContinue,
+    this.id = '',
+    required this.name,
+    required this.response,
+    this.parts = const [],
+    this.willContinue = false,
     this.scheduling,
   }) : super(fullyQualifiedName);
 
   factory FunctionResponse.fromJson(Map<String, dynamic> json) {
     return FunctionResponse(
-      id: json['id'],
-      name: json['name'],
+      id: json['id'] ?? '',
+      name: json['name'] ?? '',
       response: decodeCustom(json['response'], Struct.fromJson),
-      parts: decodeListMessage(json['parts'], FunctionResponsePart.fromJson),
-      willContinue: json['willContinue'],
+      parts:
+          decodeListMessage(json['parts'], FunctionResponsePart.fromJson) ?? [],
+      willContinue: json['willContinue'] ?? false,
       scheduling: decodeEnum(
         json['scheduling'],
         FunctionResponse_Scheduling.fromJson,
@@ -3266,11 +3303,11 @@ final class FunctionResponse extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (id != null) 'id': id,
-      if (name != null) 'name': name,
+      if (id.isNotDefault) 'id': id,
+      'name': name,
       if (response != null) 'response': response!.toJson(),
-      if (parts != null) 'parts': encodeList(parts),
-      if (willContinue != null) 'willContinue': willContinue,
+      if (parts.isNotDefault) 'parts': encodeList(parts),
+      if (willContinue.isNotDefault) 'willContinue': willContinue,
       if (scheduling != null) 'scheduling': scheduling!.toJson(),
     };
   }
@@ -3278,9 +3315,9 @@ final class FunctionResponse extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (id != null) 'id=$id',
-      if (name != null) 'name=$name',
-      if (willContinue != null) 'willContinue=$willContinue',
+      'id=$id',
+      'name=$name',
+      'willContinue=$willContinue',
       if (scheduling != null) 'scheduling=$scheduling',
     ].join(',');
     return 'FunctionResponse($contents)';
@@ -3306,10 +3343,15 @@ final class FunctionResponse_Scheduling extends ProtoEnum {
   /// and prompt to generate output.
   static const interrupt = FunctionResponse_Scheduling('INTERRUPT');
 
+  /// The default value for [FunctionResponse_Scheduling].
+  static const $default = schedulingUnspecified;
+
   const FunctionResponse_Scheduling(super.value);
 
   factory FunctionResponse_Scheduling.fromJson(String json) =>
       FunctionResponse_Scheduling(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Scheduling.$value';
@@ -3324,47 +3366,47 @@ final class Schema extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.Schema';
 
   /// Required. Data type.
-  final Type? type;
+  final Type type;
 
   /// Optional. The format of the data. Any value is allowed, but most do not
   /// trigger any special functionality.
-  final String? format;
+  final String format;
 
   /// Optional. The title of the schema.
-  final String? title;
+  final String title;
 
   /// Optional. A brief description of the parameter. This could contain examples
   /// of use. Parameter description may be formatted as Markdown.
-  final String? description;
+  final String description;
 
   /// Optional. Indicates if the value may be null.
-  final bool? nullable;
+  final bool nullable;
 
   /// Optional. Possible values of the element of Type.STRING with enum format.
   /// For example we can define an Enum Direction as :
   /// {type:STRING, format:enum, enum:["EAST", NORTH", "SOUTH", "WEST"]}
-  final List<String>? enum$;
+  final List<String> enum$;
 
   /// Optional. Schema of the elements of Type.ARRAY.
   final Schema? items;
 
   /// Optional. Maximum number of the elements for Type.ARRAY.
-  final int? maxItems;
+  final int maxItems;
 
   /// Optional. Minimum number of the elements for Type.ARRAY.
-  final int? minItems;
+  final int minItems;
 
   /// Optional. Properties of Type.OBJECT.
-  final Map<String, Schema>? properties;
+  final Map<String, Schema> properties;
 
   /// Optional. Required properties of Type.OBJECT.
-  final List<String>? required;
+  final List<String> required;
 
   /// Optional. Minimum number of the properties for Type.OBJECT.
-  final int? minProperties;
+  final int minProperties;
 
   /// Optional. Maximum number of the properties for Type.OBJECT.
-  final int? maxProperties;
+  final int maxProperties;
 
   /// Optional. SCHEMA FIELDS FOR TYPE INTEGER and NUMBER
   /// Minimum value of the Type.INTEGER and Type.NUMBER
@@ -3375,14 +3417,14 @@ final class Schema extends ProtoMessage {
 
   /// Optional. SCHEMA FIELDS FOR TYPE STRING
   /// Minimum length of the Type.STRING
-  final int? minLength;
+  final int minLength;
 
   /// Optional. Maximum length of the Type.STRING
-  final int? maxLength;
+  final int maxLength;
 
   /// Optional. Pattern of the Type.STRING to restrict a string to a regular
   /// expression.
-  final String? pattern;
+  final String pattern;
 
   /// Optional. Example of the object. Will only populated when the object is the
   /// root.
@@ -3390,12 +3432,12 @@ final class Schema extends ProtoMessage {
 
   /// Optional. The value should be validated against any (one or more) of the
   /// subschemas in the list.
-  final List<Schema>? anyOf;
+  final List<Schema> anyOf;
 
   /// Optional. The order of the properties.
   /// Not a standard field in open api spec. Used to determine the order of the
   /// properties in the response.
-  final List<String>? propertyOrdering;
+  final List<String> propertyOrdering;
 
   /// Optional. Default value of the field. Per JSON Schema, this field is
   /// intended for documentation generators and doesn't affect validation. Thus
@@ -3404,53 +3446,53 @@ final class Schema extends ProtoMessage {
   final Value? default$;
 
   Schema({
-    this.type,
-    this.format,
-    this.title,
-    this.description,
-    this.nullable,
-    this.enum$,
+    required this.type,
+    this.format = '',
+    this.title = '',
+    this.description = '',
+    this.nullable = false,
+    this.enum$ = const [],
     this.items,
-    this.maxItems,
-    this.minItems,
-    this.properties,
-    this.required,
-    this.minProperties,
-    this.maxProperties,
+    this.maxItems = 0,
+    this.minItems = 0,
+    this.properties = const {},
+    this.required = const [],
+    this.minProperties = 0,
+    this.maxProperties = 0,
     this.minimum,
     this.maximum,
-    this.minLength,
-    this.maxLength,
-    this.pattern,
+    this.minLength = 0,
+    this.maxLength = 0,
+    this.pattern = '',
     this.example,
-    this.anyOf,
-    this.propertyOrdering,
+    this.anyOf = const [],
+    this.propertyOrdering = const [],
     this.default$,
   }) : super(fullyQualifiedName);
 
   factory Schema.fromJson(Map<String, dynamic> json) {
     return Schema(
-      type: decodeEnum(json['type'], Type.fromJson),
-      format: json['format'],
-      title: json['title'],
-      description: json['description'],
-      nullable: json['nullable'],
-      enum$: decodeList(json['enum']),
+      type: decodeEnum(json['type'], Type.fromJson) ?? Type.$default,
+      format: json['format'] ?? '',
+      title: json['title'] ?? '',
+      description: json['description'] ?? '',
+      nullable: json['nullable'] ?? false,
+      enum$: decodeList(json['enum']) ?? [],
       items: decode(json['items'], Schema.fromJson),
-      maxItems: decodeInt64(json['maxItems']),
-      minItems: decodeInt64(json['minItems']),
-      properties: decodeMapMessage(json['properties'], Schema.fromJson),
-      required: decodeList(json['required']),
-      minProperties: decodeInt64(json['minProperties']),
-      maxProperties: decodeInt64(json['maxProperties']),
+      maxItems: decodeInt64(json['maxItems']) ?? 0,
+      minItems: decodeInt64(json['minItems']) ?? 0,
+      properties: decodeMapMessage(json['properties'], Schema.fromJson) ?? {},
+      required: decodeList(json['required']) ?? [],
+      minProperties: decodeInt64(json['minProperties']) ?? 0,
+      maxProperties: decodeInt64(json['maxProperties']) ?? 0,
       minimum: decodeDouble(json['minimum']),
       maximum: decodeDouble(json['maximum']),
-      minLength: decodeInt64(json['minLength']),
-      maxLength: decodeInt64(json['maxLength']),
-      pattern: json['pattern'],
+      minLength: decodeInt64(json['minLength']) ?? 0,
+      maxLength: decodeInt64(json['maxLength']) ?? 0,
+      pattern: json['pattern'] ?? '',
       example: decodeCustom(json['example'], Value.fromJson),
-      anyOf: decodeListMessage(json['anyOf'], Schema.fromJson),
-      propertyOrdering: decodeList(json['propertyOrdering']),
+      anyOf: decodeListMessage(json['anyOf'], Schema.fromJson) ?? [],
+      propertyOrdering: decodeList(json['propertyOrdering']) ?? [],
       default$: decodeCustom(json['default'], Value.fromJson),
     );
   }
@@ -3458,27 +3500,29 @@ final class Schema extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (type != null) 'type': type!.toJson(),
-      if (format != null) 'format': format,
-      if (title != null) 'title': title,
-      if (description != null) 'description': description,
-      if (nullable != null) 'nullable': nullable,
-      if (enum$ != null) 'enum': enum$,
+      'type': type.toJson(),
+      if (format.isNotDefault) 'format': format,
+      if (title.isNotDefault) 'title': title,
+      if (description.isNotDefault) 'description': description,
+      if (nullable.isNotDefault) 'nullable': nullable,
+      if (enum$.isNotDefault) 'enum': enum$,
       if (items != null) 'items': items!.toJson(),
-      if (maxItems != null) 'maxItems': encodeInt64(maxItems),
-      if (minItems != null) 'minItems': encodeInt64(minItems),
-      if (properties != null) 'properties': encodeMap(properties),
-      if (required != null) 'required': required,
-      if (minProperties != null) 'minProperties': encodeInt64(minProperties),
-      if (maxProperties != null) 'maxProperties': encodeInt64(maxProperties),
+      if (maxItems.isNotDefault) 'maxItems': encodeInt64(maxItems),
+      if (minItems.isNotDefault) 'minItems': encodeInt64(minItems),
+      if (properties.isNotDefault) 'properties': encodeMap(properties),
+      if (required.isNotDefault) 'required': required,
+      if (minProperties.isNotDefault)
+        'minProperties': encodeInt64(minProperties),
+      if (maxProperties.isNotDefault)
+        'maxProperties': encodeInt64(maxProperties),
       if (minimum != null) 'minimum': encodeDouble(minimum),
       if (maximum != null) 'maximum': encodeDouble(maximum),
-      if (minLength != null) 'minLength': encodeInt64(minLength),
-      if (maxLength != null) 'maxLength': encodeInt64(maxLength),
-      if (pattern != null) 'pattern': pattern,
+      if (minLength.isNotDefault) 'minLength': encodeInt64(minLength),
+      if (maxLength.isNotDefault) 'maxLength': encodeInt64(maxLength),
+      if (pattern.isNotDefault) 'pattern': pattern,
       if (example != null) 'example': example!.toJson(),
-      if (anyOf != null) 'anyOf': encodeList(anyOf),
-      if (propertyOrdering != null) 'propertyOrdering': propertyOrdering,
+      if (anyOf.isNotDefault) 'anyOf': encodeList(anyOf),
+      if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
       if (default$ != null) 'default': default$!.toJson(),
     };
   }
@@ -3486,20 +3530,20 @@ final class Schema extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (type != null) 'type=$type',
-      if (format != null) 'format=$format',
-      if (title != null) 'title=$title',
-      if (description != null) 'description=$description',
-      if (nullable != null) 'nullable=$nullable',
-      if (maxItems != null) 'maxItems=$maxItems',
-      if (minItems != null) 'minItems=$minItems',
-      if (minProperties != null) 'minProperties=$minProperties',
-      if (maxProperties != null) 'maxProperties=$maxProperties',
+      'type=$type',
+      'format=$format',
+      'title=$title',
+      'description=$description',
+      'nullable=$nullable',
+      'maxItems=$maxItems',
+      'minItems=$minItems',
+      'minProperties=$minProperties',
+      'maxProperties=$maxProperties',
       if (minimum != null) 'minimum=$minimum',
       if (maximum != null) 'maximum=$maximum',
-      if (minLength != null) 'minLength=$minLength',
-      if (maxLength != null) 'maxLength=$maxLength',
-      if (pattern != null) 'pattern=$pattern',
+      'minLength=$minLength',
+      'maxLength=$maxLength',
+      'pattern=$pattern',
     ].join(',');
     return 'Schema($contents)';
   }
@@ -3512,16 +3556,16 @@ final class GroundingPassage extends ProtoMessage {
 
   /// Identifier for the passage for attributing this passage in grounded
   /// answers.
-  final String? id;
+  final String id;
 
   /// Content of the passage.
   final Content? content;
 
-  GroundingPassage({this.id, this.content}) : super(fullyQualifiedName);
+  GroundingPassage({this.id = '', this.content}) : super(fullyQualifiedName);
 
   factory GroundingPassage.fromJson(Map<String, dynamic> json) {
     return GroundingPassage(
-      id: json['id'],
+      id: json['id'] ?? '',
       content: decode(json['content'], Content.fromJson),
     );
   }
@@ -3529,14 +3573,14 @@ final class GroundingPassage extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (id != null) 'id': id,
+      if (id.isNotDefault) 'id': id,
       if (content != null) 'content': content!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (id != null) 'id=$id'].join(',');
+    final contents = ['id=$id'].join(',');
     return 'GroundingPassage($contents)';
   }
 }
@@ -3547,19 +3591,20 @@ final class GroundingPassages extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.GroundingPassages';
 
   /// List of passages.
-  final List<GroundingPassage>? passages;
+  final List<GroundingPassage> passages;
 
-  GroundingPassages({this.passages}) : super(fullyQualifiedName);
+  GroundingPassages({this.passages = const []}) : super(fullyQualifiedName);
 
   factory GroundingPassages.fromJson(Map<String, dynamic> json) {
     return GroundingPassages(
-      passages: decodeListMessage(json['passages'], GroundingPassage.fromJson),
+      passages:
+          decodeListMessage(json['passages'], GroundingPassage.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (passages != null) 'passages': encodeList(passages)};
+    return {if (passages.isNotDefault) 'passages': encodeList(passages)};
   }
 
   @override
@@ -3572,35 +3617,33 @@ final class ModalityTokenCount extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ModalityTokenCount';
 
   /// The modality associated with this token count.
-  final Modality? modality;
+  final Modality modality;
 
   /// Number of tokens.
-  final int? tokenCount;
+  final int tokenCount;
 
-  ModalityTokenCount({this.modality, this.tokenCount})
+  ModalityTokenCount({this.modality = Modality.$default, this.tokenCount = 0})
     : super(fullyQualifiedName);
 
   factory ModalityTokenCount.fromJson(Map<String, dynamic> json) {
     return ModalityTokenCount(
-      modality: decodeEnum(json['modality'], Modality.fromJson),
-      tokenCount: json['tokenCount'],
+      modality:
+          decodeEnum(json['modality'], Modality.fromJson) ?? Modality.$default,
+      tokenCount: json['tokenCount'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (modality != null) 'modality': modality!.toJson(),
-      if (tokenCount != null) 'tokenCount': tokenCount,
+      if (modality.isNotDefault) 'modality': modality.toJson(),
+      if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (modality != null) 'modality=$modality',
-      if (tokenCount != null) 'tokenCount=$tokenCount',
-    ].join(',');
+    final contents = ['modality=$modality', 'tokenCount=$tokenCount'].join(',');
     return 'ModalityTokenCount($contents)';
   }
 }
@@ -3654,7 +3697,7 @@ final class GenerateMessageRequest extends ProtoMessage {
 
   GenerateMessageRequest({
     required this.model,
-    this.prompt,
+    required this.prompt,
     this.temperature,
     this.candidateCount,
     this.topP,
@@ -3663,7 +3706,7 @@ final class GenerateMessageRequest extends ProtoMessage {
 
   factory GenerateMessageRequest.fromJson(Map<String, dynamic> json) {
     return GenerateMessageRequest(
-      model: json['model'],
+      model: json['model'] ?? '',
       prompt: decode(json['prompt'], MessagePrompt.fromJson),
       temperature: decodeDouble(json['temperature']),
       candidateCount: json['candidateCount'],
@@ -3706,10 +3749,10 @@ final class GenerateMessageResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.GenerateMessageResponse';
 
   /// Candidate response messages from the model.
-  final List<Message>? candidates;
+  final List<Message> candidates;
 
   /// The conversation history used by the model.
-  final List<Message>? messages;
+  final List<Message> messages;
 
   /// A set of content filtering metadata for the prompt and response
   /// text.
@@ -3717,25 +3760,28 @@ final class GenerateMessageResponse extends ProtoMessage {
   /// This indicates which `SafetyCategory`(s) blocked a
   /// candidate from this response, the lowest `HarmProbability`
   /// that triggered a block, and the HarmThreshold setting for that category.
-  final List<ContentFilter>? filters;
+  final List<ContentFilter> filters;
 
-  GenerateMessageResponse({this.candidates, this.messages, this.filters})
-    : super(fullyQualifiedName);
+  GenerateMessageResponse({
+    this.candidates = const [],
+    this.messages = const [],
+    this.filters = const [],
+  }) : super(fullyQualifiedName);
 
   factory GenerateMessageResponse.fromJson(Map<String, dynamic> json) {
     return GenerateMessageResponse(
-      candidates: decodeListMessage(json['candidates'], Message.fromJson),
-      messages: decodeListMessage(json['messages'], Message.fromJson),
-      filters: decodeListMessage(json['filters'], ContentFilter.fromJson),
+      candidates: decodeListMessage(json['candidates'], Message.fromJson) ?? [],
+      messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
+      filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (candidates != null) 'candidates': encodeList(candidates),
-      if (messages != null) 'messages': encodeList(messages),
-      if (filters != null) 'filters': encodeList(filters),
+      if (candidates.isNotDefault) 'candidates': encodeList(candidates),
+      if (messages.isNotDefault) 'messages': encodeList(messages),
+      if (filters.isNotDefault) 'filters': encodeList(filters),
     };
   }
 
@@ -3760,10 +3806,10 @@ final class Message extends ProtoMessage {
   /// the content of this Message when it is fed to the model as text.
   ///
   /// The author can be any alphanumeric string.
-  final String? author;
+  final String author;
 
   /// Required. The text content of the structured `Message`.
-  final String? content;
+  final String content;
 
   /// Output only. Citation information for model-generated `content` in this
   /// `Message`.
@@ -3773,13 +3819,13 @@ final class Message extends ProtoMessage {
   /// `content`. This field is used only on output.
   final CitationMetadata? citationMetadata;
 
-  Message({this.author, this.content, this.citationMetadata})
+  Message({this.author = '', required this.content, this.citationMetadata})
     : super(fullyQualifiedName);
 
   factory Message.fromJson(Map<String, dynamic> json) {
     return Message(
-      author: json['author'],
-      content: json['content'],
+      author: json['author'] ?? '',
+      content: json['content'] ?? '',
       citationMetadata: decode(
         json['citationMetadata'],
         CitationMetadata.fromJson,
@@ -3790,8 +3836,8 @@ final class Message extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (author != null) 'author': author,
-      if (content != null) 'content': content,
+      if (author.isNotDefault) 'author': author,
+      'content': content,
       if (citationMetadata != null)
         'citationMetadata': citationMetadata!.toJson(),
     };
@@ -3799,10 +3845,7 @@ final class Message extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (author != null) 'author=$author',
-      if (content != null) 'content=$content',
-    ].join(',');
+    final contents = ['author=$author', 'content=$content'].join(',');
     return 'Message($contents)';
   }
 }
@@ -3833,7 +3876,7 @@ final class MessagePrompt extends ProtoMessage {
   /// Anything included in this field will take precedence over message history
   /// if the total input size exceeds the model's `input_token_limit` and the
   /// input request is truncated.
-  final String? context;
+  final String context;
 
   /// Optional. Examples of what the model should generate.
   ///
@@ -3844,7 +3887,7 @@ final class MessagePrompt extends ProtoMessage {
   /// that they take precedence over the history in `messages`:
   /// If the total input size exceeds the model's `input_token_limit` the input
   /// will be truncated. Items will be dropped from `messages` before `examples`.
-  final List<Example>? examples;
+  final List<Example> examples;
 
   /// Required. A snapshot of the recent conversation history sorted
   /// chronologically.
@@ -3853,31 +3896,34 @@ final class MessagePrompt extends ProtoMessage {
   ///
   /// If the total input size exceeds the model's `input_token_limit` the input
   /// will be truncated: The oldest items will be dropped from `messages`.
-  final List<Message>? messages;
+  final List<Message> messages;
 
-  MessagePrompt({this.context, this.examples, this.messages})
-    : super(fullyQualifiedName);
+  MessagePrompt({
+    this.context = '',
+    this.examples = const [],
+    required this.messages,
+  }) : super(fullyQualifiedName);
 
   factory MessagePrompt.fromJson(Map<String, dynamic> json) {
     return MessagePrompt(
-      context: json['context'],
-      examples: decodeListMessage(json['examples'], Example.fromJson),
-      messages: decodeListMessage(json['messages'], Message.fromJson),
+      context: json['context'] ?? '',
+      examples: decodeListMessage(json['examples'], Example.fromJson) ?? [],
+      messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (context != null) 'context': context,
-      if (examples != null) 'examples': encodeList(examples),
-      if (messages != null) 'messages': encodeList(messages),
+      if (context.isNotDefault) 'context': context,
+      if (examples.isNotDefault) 'examples': encodeList(examples),
+      'messages': encodeList(messages),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (context != null) 'context=$context'].join(',');
+    final contents = ['context=$context'].join(',');
     return 'MessagePrompt($contents)';
   }
 }
@@ -3895,7 +3941,8 @@ final class Example extends ProtoMessage {
   /// Required. An example of what the model should output given the input.
   final Message? output;
 
-  Example({this.input, this.output}) : super(fullyQualifiedName);
+  Example({required this.input, required this.output})
+    : super(fullyQualifiedName);
 
   factory Example.fromJson(Map<String, dynamic> json) {
     return Example(
@@ -3935,12 +3982,12 @@ final class CountMessageTokensRequest extends ProtoMessage {
   /// Required. The prompt, whose token count is to be returned.
   final MessagePrompt? prompt;
 
-  CountMessageTokensRequest({required this.model, this.prompt})
+  CountMessageTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
   factory CountMessageTokensRequest.fromJson(Map<String, dynamic> json) {
     return CountMessageTokensRequest(
-      model: json['model'],
+      model: json['model'] ?? '',
       prompt: decode(json['prompt'], MessagePrompt.fromJson),
     );
   }
@@ -3967,24 +4014,22 @@ final class CountMessageTokensResponse extends ProtoMessage {
   /// The number of tokens that the `model` tokenizes the `prompt` into.
   ///
   /// Always non-negative.
-  final int? tokenCount;
+  final int tokenCount;
 
-  CountMessageTokensResponse({this.tokenCount}) : super(fullyQualifiedName);
+  CountMessageTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
 
   factory CountMessageTokensResponse.fromJson(Map<String, dynamic> json) {
-    return CountMessageTokensResponse(tokenCount: json['tokenCount']);
+    return CountMessageTokensResponse(tokenCount: json['tokenCount'] ?? 0);
   }
 
   @override
   Object toJson() {
-    return {if (tokenCount != null) 'tokenCount': tokenCount};
+    return {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (tokenCount != null) 'tokenCount=$tokenCount',
-    ].join(',');
+    final contents = ['tokenCount=$tokenCount'].join(',');
     return 'CountMessageTokensResponse($contents)';
   }
 }
@@ -4003,18 +4048,18 @@ final class File extends ProtoMessage {
   /// alphanumeric or dashes (-). The ID cannot start or end with a dash. If the
   /// name is empty on create, a unique name will be generated. Example:
   /// `files/123-456`
-  final String? name;
+  final String name;
 
   /// Optional. The human-readable display name for the `File`. The display name
   /// must be no more than 512 characters in length, including spaces. Example:
   /// "Welcome Image"
-  final String? displayName;
+  final String displayName;
 
   /// Output only. MIME type of the file.
-  final String? mimeType;
+  final String mimeType;
 
   /// Output only. Size of the file in bytes.
-  final int? sizeBytes;
+  final int sizeBytes;
 
   /// Output only. The timestamp of when the `File` was created.
   final Timestamp? createTime;
@@ -4030,52 +4075,55 @@ final class File extends ProtoMessage {
   final Uint8List? sha256Hash;
 
   /// Output only. The uri of the `File`.
-  final String? uri;
+  final String uri;
 
   /// Output only. The download uri of the `File`.
-  final String? downloadUri;
+  final String downloadUri;
 
   /// Output only. Processing state of the File.
-  final File_State? state;
+  final File_State state;
 
   /// Source of the File.
-  final File_Source? source;
+  final File_Source source;
 
   /// Output only. Error status if File processing failed.
   final Status? error;
 
   File({
     this.videoMetadata,
-    this.name,
-    this.displayName,
-    this.mimeType,
-    this.sizeBytes,
+    this.name = '',
+    this.displayName = '',
+    this.mimeType = '',
+    this.sizeBytes = 0,
     this.createTime,
     this.updateTime,
     this.expirationTime,
     this.sha256Hash,
-    this.uri,
-    this.downloadUri,
-    this.state,
-    this.source,
+    this.uri = '',
+    this.downloadUri = '',
+    this.state = File_State.$default,
+    this.source = File_Source.$default,
     this.error,
   }) : super(fullyQualifiedName);
 
   factory File.fromJson(Map<String, dynamic> json) {
     return File(
       videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
-      name: json['name'],
-      displayName: json['displayName'],
-      mimeType: json['mimeType'],
-      sizeBytes: decodeInt64(json['sizeBytes']),
+      name: json['name'] ?? '',
+      displayName: json['displayName'] ?? '',
+      mimeType: json['mimeType'] ?? '',
+      sizeBytes: decodeInt64(json['sizeBytes']) ?? 0,
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
       expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
       sha256Hash: decodeBytes(json['sha256Hash']),
-      uri: json['uri'],
-      downloadUri: json['downloadUri'],
-      state: decodeEnum(json['state'], File_State.fromJson),
-      source: decodeEnum(json['source'], File_Source.fromJson),
+      uri: json['uri'] ?? '',
+      downloadUri: json['downloadUri'] ?? '',
+      state:
+          decodeEnum(json['state'], File_State.fromJson) ?? File_State.$default,
+      source:
+          decodeEnum(json['source'], File_Source.fromJson) ??
+          File_Source.$default,
       error: decode(json['error'], Status.fromJson),
     );
   }
@@ -4084,18 +4132,18 @@ final class File extends ProtoMessage {
   Object toJson() {
     return {
       if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
-      if (name != null) 'name': name,
-      if (displayName != null) 'displayName': displayName,
-      if (mimeType != null) 'mimeType': mimeType,
-      if (sizeBytes != null) 'sizeBytes': encodeInt64(sizeBytes),
+      if (name.isNotDefault) 'name': name,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (mimeType.isNotDefault) 'mimeType': mimeType,
+      if (sizeBytes.isNotDefault) 'sizeBytes': encodeInt64(sizeBytes),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
       if (sha256Hash != null) 'sha256Hash': encodeBytes(sha256Hash),
-      if (uri != null) 'uri': uri,
-      if (downloadUri != null) 'downloadUri': downloadUri,
-      if (state != null) 'state': state!.toJson(),
-      if (source != null) 'source': source!.toJson(),
+      if (uri.isNotDefault) 'uri': uri,
+      if (downloadUri.isNotDefault) 'downloadUri': downloadUri,
+      if (state.isNotDefault) 'state': state.toJson(),
+      if (source.isNotDefault) 'source': source.toJson(),
       if (error != null) 'error': error!.toJson(),
     };
   }
@@ -4103,15 +4151,15 @@ final class File extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (displayName != null) 'displayName=$displayName',
-      if (mimeType != null) 'mimeType=$mimeType',
-      if (sizeBytes != null) 'sizeBytes=$sizeBytes',
+      'name=$name',
+      'displayName=$displayName',
+      'mimeType=$mimeType',
+      'sizeBytes=$sizeBytes',
       if (sha256Hash != null) 'sha256Hash=$sha256Hash',
-      if (uri != null) 'uri=$uri',
-      if (downloadUri != null) 'downloadUri=$downloadUri',
-      if (state != null) 'state=$state',
-      if (source != null) 'source=$source',
+      'uri=$uri',
+      'downloadUri=$downloadUri',
+      'state=$state',
+      'source=$source',
     ].join(',');
     return 'File($contents)';
   }
@@ -4131,9 +4179,14 @@ final class File_State extends ProtoEnum {
   /// File failed processing.
   static const failed = File_State('FAILED');
 
+  /// The default value for [File_State].
+  static const $default = stateUnspecified;
+
   const File_State(super.value);
 
   factory File_State.fromJson(String json) => File_State(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'State.$value';
@@ -4152,9 +4205,14 @@ final class File_Source extends ProtoEnum {
   /// Indicates the file is a registered, i.e. a Google Cloud Storage file.
   static const registered = File_Source('REGISTERED');
 
+  /// The default value for [File_Source].
+  static const $default = sourceUnspecified;
+
   const File_Source(super.value);
 
   factory File_Source.fromJson(String json) => File_Source(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Source.$value';
@@ -4240,34 +4298,32 @@ final class ListFilesRequest extends ProtoMessage {
 
   /// Optional. Maximum number of `File`s to return per page.
   /// If unspecified, defaults to 10. Maximum `page_size` is 100.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token from a previous `ListFiles` call.
-  final String? pageToken;
+  final String pageToken;
 
-  ListFilesRequest({this.pageSize, this.pageToken}) : super(fullyQualifiedName);
+  ListFilesRequest({this.pageSize = 0, this.pageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListFilesRequest.fromJson(Map<String, dynamic> json) {
     return ListFilesRequest(
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-    ].join(',');
+    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
     return 'ListFilesRequest($contents)';
   }
 }
@@ -4278,35 +4334,33 @@ final class ListFilesResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListFilesResponse';
 
   /// The list of `File`s.
-  final List<File>? files;
+  final List<File> files;
 
   /// A token that can be sent as a `page_token` into a subsequent `ListFiles`
   /// call.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListFilesResponse({this.files, this.nextPageToken})
+  ListFilesResponse({this.files = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListFilesResponse.fromJson(Map<String, dynamic> json) {
     return ListFilesResponse(
-      files: decodeListMessage(json['files'], File.fromJson),
-      nextPageToken: json['nextPageToken'],
+      files: decodeListMessage(json['files'], File.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (files != null) 'files': encodeList(files),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (files.isNotDefault) 'files': encodeList(files),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListFilesResponse($contents)';
   }
 }
@@ -4323,7 +4377,7 @@ final class GetFileRequest extends ProtoMessage {
   GetFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetFileRequest.fromJson(Map<String, dynamic> json) {
-    return GetFileRequest(name: json['name']);
+    return GetFileRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -4350,7 +4404,7 @@ final class DeleteFileRequest extends ProtoMessage {
   DeleteFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteFileRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteFileRequest(name: json['name']);
+    return DeleteFileRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -4377,7 +4431,7 @@ final class DownloadFileRequest extends ProtoMessage {
   DownloadFileRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DownloadFileRequest.fromJson(Map<String, dynamic> json) {
-    return DownloadFileRequest(name: json['name']);
+    return DownloadFileRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -4434,7 +4488,7 @@ final class GenerateContentRequest extends ProtoMessage {
   /// like [chat](https://ai.google.dev/gemini-api/docs/text-generation#chat),
   /// this is a repeated field that contains the conversation history and the
   /// latest request.
-  final List<Content>? contents;
+  final List<Content> contents;
 
   /// Optional. A list of `Tools` the `Model` may use to generate the next
   /// response.
@@ -4446,7 +4500,7 @@ final class GenerateContentRequest extends ProtoMessage {
   /// calling](https://ai.google.dev/gemini-api/docs/function-calling) and the
   /// [Code execution](https://ai.google.dev/gemini-api/docs/code-execution)
   /// guides to learn more.
-  final List<Tool>? tools;
+  final List<Tool> tools;
 
   /// Optional. Tool configuration for any `Tool` specified in the request. Refer
   /// to the [Function calling
@@ -4471,7 +4525,7 @@ final class GenerateContentRequest extends ProtoMessage {
   /// for detailed information on available safety settings. Also refer to the
   /// [Safety guidance](https://ai.google.dev/gemini-api/docs/safety-guidance) to
   /// learn how to incorporate safety considerations in your AI applications.
-  final List<SafetySetting>? safetySettings;
+  final List<SafetySetting> safetySettings;
 
   /// Optional. Configuration options for model generation and outputs.
   final GenerationConfig? generationConfig;
@@ -4484,25 +4538,24 @@ final class GenerateContentRequest extends ProtoMessage {
   GenerateContentRequest({
     required this.model,
     this.systemInstruction,
-    this.contents,
-    this.tools,
+    required this.contents,
+    this.tools = const [],
     this.toolConfig,
-    this.safetySettings,
+    this.safetySettings = const [],
     this.generationConfig,
     this.cachedContent,
   }) : super(fullyQualifiedName);
 
   factory GenerateContentRequest.fromJson(Map<String, dynamic> json) {
     return GenerateContentRequest(
-      model: json['model'],
+      model: json['model'] ?? '',
       systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-      contents: decodeListMessage(json['contents'], Content.fromJson),
-      tools: decodeListMessage(json['tools'], Tool.fromJson),
+      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+      tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
       toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
-      safetySettings: decodeListMessage(
-        json['safetySettings'],
-        SafetySetting.fromJson,
-      ),
+      safetySettings:
+          decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
+          [],
       generationConfig: decode(
         json['generationConfig'],
         GenerationConfig.fromJson,
@@ -4517,10 +4570,11 @@ final class GenerateContentRequest extends ProtoMessage {
       'model': model,
       if (systemInstruction != null)
         'systemInstruction': systemInstruction!.toJson(),
-      if (contents != null) 'contents': encodeList(contents),
-      if (tools != null) 'tools': encodeList(tools),
+      'contents': encodeList(contents),
+      if (tools.isNotDefault) 'tools': encodeList(tools),
       if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
-      if (safetySettings != null) 'safetySettings': encodeList(safetySettings),
+      if (safetySettings.isNotDefault)
+        'safetySettings': encodeList(safetySettings),
       if (generationConfig != null)
         'generationConfig': generationConfig!.toJson(),
       if (cachedContent != null) 'cachedContent': cachedContent,
@@ -4601,17 +4655,17 @@ final class SpeakerVoiceConfig extends ProtoMessage {
 
   /// Required. The name of the speaker to use. Should be the same as in the
   /// prompt.
-  final String? speaker;
+  final String speaker;
 
   /// Required. The configuration for the voice to use.
   final VoiceConfig? voiceConfig;
 
-  SpeakerVoiceConfig({this.speaker, this.voiceConfig})
+  SpeakerVoiceConfig({required this.speaker, required this.voiceConfig})
     : super(fullyQualifiedName);
 
   factory SpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
     return SpeakerVoiceConfig(
-      speaker: json['speaker'],
+      speaker: json['speaker'] ?? '',
       voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
     );
   }
@@ -4619,14 +4673,14 @@ final class SpeakerVoiceConfig extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (speaker != null) 'speaker': speaker,
+      'speaker': speaker,
       if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [if (speaker != null) 'speaker=$speaker'].join(',');
+    final contents = ['speaker=$speaker'].join(',');
     return 'SpeakerVoiceConfig($contents)';
   }
 }
@@ -4637,26 +4691,25 @@ final class MultiSpeakerVoiceConfig extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.MultiSpeakerVoiceConfig';
 
   /// Required. All the enabled speaker voices.
-  final List<SpeakerVoiceConfig>? speakerVoiceConfigs;
+  final List<SpeakerVoiceConfig> speakerVoiceConfigs;
 
-  MultiSpeakerVoiceConfig({this.speakerVoiceConfigs})
+  MultiSpeakerVoiceConfig({required this.speakerVoiceConfigs})
     : super(fullyQualifiedName);
 
   factory MultiSpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
     return MultiSpeakerVoiceConfig(
-      speakerVoiceConfigs: decodeListMessage(
-        json['speakerVoiceConfigs'],
-        SpeakerVoiceConfig.fromJson,
-      ),
+      speakerVoiceConfigs:
+          decodeListMessage(
+            json['speakerVoiceConfigs'],
+            SpeakerVoiceConfig.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {
-      if (speakerVoiceConfigs != null)
-        'speakerVoiceConfigs': encodeList(speakerVoiceConfigs),
-    };
+    return {'speakerVoiceConfigs': encodeList(speakerVoiceConfigs)};
   }
 
   @override
@@ -4682,12 +4735,12 @@ final class SpeechConfig extends ProtoMessage {
   /// pt-BR, ar-XA, es-ES, fr-CA, id-ID, it-IT, ja-JP, tr-TR, vi-VN, bn-IN,
   /// gu-IN, kn-IN, ml-IN, mr-IN, ta-IN, te-IN, nl-NL, ko-KR, cmn-CN, pl-PL,
   /// ru-RU, and th-TH.
-  final String? languageCode;
+  final String languageCode;
 
   SpeechConfig({
     this.voiceConfig,
     this.multiSpeakerVoiceConfig,
-    this.languageCode,
+    this.languageCode = '',
   }) : super(fullyQualifiedName);
 
   factory SpeechConfig.fromJson(Map<String, dynamic> json) {
@@ -4697,7 +4750,7 @@ final class SpeechConfig extends ProtoMessage {
         json['multiSpeakerVoiceConfig'],
         MultiSpeakerVoiceConfig.fromJson,
       ),
-      languageCode: json['languageCode'],
+      languageCode: json['languageCode'] ?? '',
     );
   }
 
@@ -4707,15 +4760,13 @@ final class SpeechConfig extends ProtoMessage {
       if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
       if (multiSpeakerVoiceConfig != null)
         'multiSpeakerVoiceConfig': multiSpeakerVoiceConfig!.toJson(),
-      if (languageCode != null) 'languageCode': languageCode,
+      if (languageCode.isNotDefault) 'languageCode': languageCode,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (languageCode != null) 'languageCode=$languageCode',
-    ].join(',');
+    final contents = ['languageCode=$languageCode'].join(',');
     return 'SpeechConfig($contents)';
   }
 }
@@ -4808,7 +4859,7 @@ final class GenerationConfig extends ProtoMessage {
   /// generation. If specified, the API will stop at the first appearance of a
   /// `stop_sequence`. The stop sequence will not be included as part of the
   /// response.
-  final List<String>? stopSequences;
+  final List<String> stopSequences;
 
   /// Optional. The maximum number of tokens to include in a response candidate.
   ///
@@ -4864,7 +4915,7 @@ final class GenerationConfig extends ProtoMessage {
   /// Refer to the
   /// [docs](https://ai.google.dev/gemini-api/docs/prompting_with_media#plain_text_formats)
   /// for a list of all supported text MIME types.
-  final String? responseMimeType;
+  final String responseMimeType;
 
   /// Optional. Output schema of the generated candidate text. Schemas must be a
   /// subset of the [OpenAPI schema](https://spec.openapis.org/oas/v3.0.3#schema)
@@ -4975,7 +5026,7 @@ final class GenerationConfig extends ProtoMessage {
   /// error will be returned.
   ///
   /// An empty list is equivalent to requesting only text.
-  final List<GenerationConfig_Modality>? responseModalities;
+  final List<GenerationConfig_Modality> responseModalities;
 
   /// Optional. The speech generation config.
   final SpeechConfig? speechConfig;
@@ -4995,13 +5046,13 @@ final class GenerationConfig extends ProtoMessage {
 
   GenerationConfig({
     this.candidateCount,
-    this.stopSequences,
+    this.stopSequences = const [],
     this.maxOutputTokens,
     this.temperature,
     this.topP,
     this.topK,
     this.seed,
-    this.responseMimeType,
+    this.responseMimeType = '',
     this.responseSchema,
     this.responseJsonSchema,
     this.responseJsonSchemaOrdered,
@@ -5010,7 +5061,7 @@ final class GenerationConfig extends ProtoMessage {
     this.responseLogprobs,
     this.logprobs,
     this.enableEnhancedCivicAnswers,
-    this.responseModalities,
+    this.responseModalities = const [],
     this.speechConfig,
     this.thinkingConfig,
     this.imageConfig,
@@ -5020,13 +5071,13 @@ final class GenerationConfig extends ProtoMessage {
   factory GenerationConfig.fromJson(Map<String, dynamic> json) {
     return GenerationConfig(
       candidateCount: json['candidateCount'],
-      stopSequences: decodeList(json['stopSequences']),
+      stopSequences: decodeList(json['stopSequences']) ?? [],
       maxOutputTokens: json['maxOutputTokens'],
       temperature: decodeDouble(json['temperature']),
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
       seed: json['seed'],
-      responseMimeType: json['responseMimeType'],
+      responseMimeType: json['responseMimeType'] ?? '',
       responseSchema: decode(json['responseSchema'], Schema.fromJson),
       responseJsonSchema: decodeCustom(
         json['_responseJsonSchema'],
@@ -5041,10 +5092,12 @@ final class GenerationConfig extends ProtoMessage {
       responseLogprobs: json['responseLogprobs'],
       logprobs: json['logprobs'],
       enableEnhancedCivicAnswers: json['enableEnhancedCivicAnswers'],
-      responseModalities: decodeListEnum(
-        json['responseModalities'],
-        GenerationConfig_Modality.fromJson,
-      ),
+      responseModalities:
+          decodeListEnum(
+            json['responseModalities'],
+            GenerationConfig_Modality.fromJson,
+          ) ??
+          [],
       speechConfig: decode(json['speechConfig'], SpeechConfig.fromJson),
       thinkingConfig: decode(json['thinkingConfig'], ThinkingConfig.fromJson),
       imageConfig: decode(json['imageConfig'], ImageConfig.fromJson),
@@ -5059,13 +5112,13 @@ final class GenerationConfig extends ProtoMessage {
   Object toJson() {
     return {
       if (candidateCount != null) 'candidateCount': candidateCount,
-      if (stopSequences != null) 'stopSequences': stopSequences,
+      if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
       if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
       if (seed != null) 'seed': seed,
-      if (responseMimeType != null) 'responseMimeType': responseMimeType,
+      if (responseMimeType.isNotDefault) 'responseMimeType': responseMimeType,
       if (responseSchema != null) 'responseSchema': responseSchema!.toJson(),
       if (responseJsonSchema != null)
         '_responseJsonSchema': responseJsonSchema!.toJson(),
@@ -5079,7 +5132,7 @@ final class GenerationConfig extends ProtoMessage {
       if (logprobs != null) 'logprobs': logprobs,
       if (enableEnhancedCivicAnswers != null)
         'enableEnhancedCivicAnswers': enableEnhancedCivicAnswers,
-      if (responseModalities != null)
+      if (responseModalities.isNotDefault)
         'responseModalities': encodeList(responseModalities),
       if (speechConfig != null) 'speechConfig': speechConfig!.toJson(),
       if (thinkingConfig != null) 'thinkingConfig': thinkingConfig!.toJson(),
@@ -5097,7 +5150,7 @@ final class GenerationConfig extends ProtoMessage {
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
       if (seed != null) 'seed=$seed',
-      if (responseMimeType != null) 'responseMimeType=$responseMimeType',
+      'responseMimeType=$responseMimeType',
       if (presencePenalty != null) 'presencePenalty=$presencePenalty',
       if (frequencyPenalty != null) 'frequencyPenalty=$frequencyPenalty',
       if (responseLogprobs != null) 'responseLogprobs=$responseLogprobs',
@@ -5126,10 +5179,15 @@ final class GenerationConfig_Modality extends ProtoEnum {
   /// Indicates the model should return audio.
   static const audio = GenerationConfig_Modality('AUDIO');
 
+  /// The default value for [GenerationConfig_Modality].
+  static const $default = modalityUnspecified;
+
   const GenerationConfig_Modality(super.value);
 
   factory GenerationConfig_Modality.fromJson(String json) =>
       GenerationConfig_Modality(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Modality.$value';
@@ -5157,10 +5215,15 @@ final class GenerationConfig_MediaResolution extends ProtoEnum {
     'MEDIA_RESOLUTION_HIGH',
   );
 
+  /// The default value for [GenerationConfig_MediaResolution].
+  static const $default = mediaResolutionUnspecified;
+
   const GenerationConfig_MediaResolution(super.value);
 
   factory GenerationConfig_MediaResolution.fromJson(String json) =>
       GenerationConfig_MediaResolution(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'MediaResolution.$value';
@@ -5174,7 +5237,7 @@ final class SemanticRetrieverConfig extends ProtoMessage {
 
   /// Required. Name of the resource for retrieval. Example: `corpora/123` or
   /// `corpora/123/documents/abc`.
-  final String? source;
+  final String source;
 
   /// Required. Query to use for matching `Chunk`s in the given resource by
   /// similarity.
@@ -5182,7 +5245,7 @@ final class SemanticRetrieverConfig extends ProtoMessage {
 
   /// Optional. Filters for selecting `Document`s and/or `Chunk`s from the
   /// resource.
-  final List<MetadataFilter>? metadataFilters;
+  final List<MetadataFilter> metadataFilters;
 
   /// Optional. Maximum number of relevant `Chunk`s to retrieve.
   final int? maxChunksCount;
@@ -5191,21 +5254,20 @@ final class SemanticRetrieverConfig extends ProtoMessage {
   final double? minimumRelevanceScore;
 
   SemanticRetrieverConfig({
-    this.source,
-    this.query,
-    this.metadataFilters,
+    required this.source,
+    required this.query,
+    this.metadataFilters = const [],
     this.maxChunksCount,
     this.minimumRelevanceScore,
   }) : super(fullyQualifiedName);
 
   factory SemanticRetrieverConfig.fromJson(Map<String, dynamic> json) {
     return SemanticRetrieverConfig(
-      source: json['source'],
+      source: json['source'] ?? '',
       query: decode(json['query'], Content.fromJson),
-      metadataFilters: decodeListMessage(
-        json['metadataFilters'],
-        MetadataFilter.fromJson,
-      ),
+      metadataFilters:
+          decodeListMessage(json['metadataFilters'], MetadataFilter.fromJson) ??
+          [],
       maxChunksCount: json['maxChunksCount'],
       minimumRelevanceScore: decodeDouble(json['minimumRelevanceScore']),
     );
@@ -5214,9 +5276,9 @@ final class SemanticRetrieverConfig extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (source != null) 'source': source,
+      'source': source,
       if (query != null) 'query': query!.toJson(),
-      if (metadataFilters != null)
+      if (metadataFilters.isNotDefault)
         'metadataFilters': encodeList(metadataFilters),
       if (maxChunksCount != null) 'maxChunksCount': maxChunksCount,
       if (minimumRelevanceScore != null)
@@ -5227,7 +5289,7 @@ final class SemanticRetrieverConfig extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (source != null) 'source=$source',
+      'source=$source',
       if (maxChunksCount != null) 'maxChunksCount=$maxChunksCount',
       if (minimumRelevanceScore != null)
         'minimumRelevanceScore=$minimumRelevanceScore',
@@ -5251,7 +5313,7 @@ final class GenerateContentResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.GenerateContentResponse';
 
   /// Candidate responses from the model.
-  final List<Candidate>? candidates;
+  final List<Candidate> candidates;
 
   /// Returns the prompt's feedback related to the content filters.
   final GenerateContentResponse_PromptFeedback? promptFeedback;
@@ -5260,22 +5322,23 @@ final class GenerateContentResponse extends ProtoMessage {
   final GenerateContentResponse_UsageMetadata? usageMetadata;
 
   /// Output only. The model version used to generate the response.
-  final String? modelVersion;
+  final String modelVersion;
 
   /// Output only. response_id is used to identify each response.
-  final String? responseId;
+  final String responseId;
 
   GenerateContentResponse({
-    this.candidates,
+    this.candidates = const [],
     this.promptFeedback,
     this.usageMetadata,
-    this.modelVersion,
-    this.responseId,
+    this.modelVersion = '',
+    this.responseId = '',
   }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse.fromJson(Map<String, dynamic> json) {
     return GenerateContentResponse(
-      candidates: decodeListMessage(json['candidates'], Candidate.fromJson),
+      candidates:
+          decodeListMessage(json['candidates'], Candidate.fromJson) ?? [],
       promptFeedback: decode(
         json['promptFeedback'],
         GenerateContentResponse_PromptFeedback.fromJson,
@@ -5284,27 +5347,27 @@ final class GenerateContentResponse extends ProtoMessage {
         json['usageMetadata'],
         GenerateContentResponse_UsageMetadata.fromJson,
       ),
-      modelVersion: json['modelVersion'],
-      responseId: json['responseId'],
+      modelVersion: json['modelVersion'] ?? '',
+      responseId: json['responseId'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (candidates != null) 'candidates': encodeList(candidates),
+      if (candidates.isNotDefault) 'candidates': encodeList(candidates),
       if (promptFeedback != null) 'promptFeedback': promptFeedback!.toJson(),
       if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
-      if (modelVersion != null) 'modelVersion': modelVersion,
-      if (responseId != null) 'responseId': responseId,
+      if (modelVersion.isNotDefault) 'modelVersion': modelVersion,
+      if (responseId.isNotDefault) 'responseId': responseId,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (modelVersion != null) 'modelVersion=$modelVersion',
-      if (responseId != null) 'responseId=$responseId',
+      'modelVersion=$modelVersion',
+      'responseId=$responseId',
     ].join(',');
     return 'GenerateContentResponse($contents)';
   }
@@ -5318,43 +5381,45 @@ final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
 
   /// Optional. If set, the prompt was blocked and no candidates are returned.
   /// Rephrase the prompt.
-  final GenerateContentResponse_PromptFeedback_BlockReason? blockReason;
+  final GenerateContentResponse_PromptFeedback_BlockReason blockReason;
 
   /// Ratings for safety of the prompt.
   /// There is at most one rating per category.
-  final List<SafetyRating>? safetyRatings;
+  final List<SafetyRating> safetyRatings;
 
-  GenerateContentResponse_PromptFeedback({this.blockReason, this.safetyRatings})
-    : super(fullyQualifiedName);
+  GenerateContentResponse_PromptFeedback({
+    this.blockReason =
+        GenerateContentResponse_PromptFeedback_BlockReason.$default,
+    this.safetyRatings = const [],
+  }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse_PromptFeedback.fromJson(
     Map<String, dynamic> json,
   ) {
     return GenerateContentResponse_PromptFeedback(
-      blockReason: decodeEnum(
-        json['blockReason'],
-        GenerateContentResponse_PromptFeedback_BlockReason.fromJson,
-      ),
-      safetyRatings: decodeListMessage(
-        json['safetyRatings'],
-        SafetyRating.fromJson,
-      ),
+      blockReason:
+          decodeEnum(
+            json['blockReason'],
+            GenerateContentResponse_PromptFeedback_BlockReason.fromJson,
+          ) ??
+          GenerateContentResponse_PromptFeedback_BlockReason.$default,
+      safetyRatings:
+          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (blockReason != null) 'blockReason': blockReason!.toJson(),
-      if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
+      if (blockReason.isNotDefault) 'blockReason': blockReason.toJson(),
+      if (safetyRatings.isNotDefault)
+        'safetyRatings': encodeList(safetyRatings),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (blockReason != null) 'blockReason=$blockReason',
-    ].join(',');
+    final contents = ['blockReason=$blockReason'].join(',');
     return 'PromptFeedback($contents)';
   }
 }
@@ -5394,11 +5459,16 @@ final class GenerateContentResponse_PromptFeedback_BlockReason
     'IMAGE_SAFETY',
   );
 
+  /// The default value for [GenerateContentResponse_PromptFeedback_BlockReason].
+  static const $default = blockReasonUnspecified;
+
   const GenerateContentResponse_PromptFeedback_BlockReason(super.value);
 
   factory GenerateContentResponse_PromptFeedback_BlockReason.fromJson(
     String json,
   ) => GenerateContentResponse_PromptFeedback_BlockReason(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'BlockReason.$value';
@@ -5412,99 +5482,108 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   /// Number of tokens in the prompt. When `cached_content` is set, this is
   /// still the total effective prompt size meaning this includes the number of
   /// tokens in the cached content.
-  final int? promptTokenCount;
+  final int promptTokenCount;
 
   /// Number of tokens in the cached part of the prompt (the cached content)
-  final int? cachedContentTokenCount;
+  final int cachedContentTokenCount;
 
   /// Total number of tokens across all the generated response candidates.
-  final int? candidatesTokenCount;
+  final int candidatesTokenCount;
 
   /// Output only. Number of tokens present in tool-use prompt(s).
-  final int? toolUsePromptTokenCount;
+  final int toolUsePromptTokenCount;
 
   /// Output only. Number of tokens of thoughts for thinking models.
-  final int? thoughtsTokenCount;
+  final int thoughtsTokenCount;
 
   /// Total token count for the generation request (prompt + response
   /// candidates).
-  final int? totalTokenCount;
+  final int totalTokenCount;
 
   /// Output only. List of modalities that were processed in the request input.
-  final List<ModalityTokenCount>? promptTokensDetails;
+  final List<ModalityTokenCount> promptTokensDetails;
 
   /// Output only. List of modalities of the cached content in the request
   /// input.
-  final List<ModalityTokenCount>? cacheTokensDetails;
+  final List<ModalityTokenCount> cacheTokensDetails;
 
   /// Output only. List of modalities that were returned in the response.
-  final List<ModalityTokenCount>? candidatesTokensDetails;
+  final List<ModalityTokenCount> candidatesTokensDetails;
 
   /// Output only. List of modalities that were processed for tool-use request
   /// inputs.
-  final List<ModalityTokenCount>? toolUsePromptTokensDetails;
+  final List<ModalityTokenCount> toolUsePromptTokensDetails;
 
   GenerateContentResponse_UsageMetadata({
-    this.promptTokenCount,
-    this.cachedContentTokenCount,
-    this.candidatesTokenCount,
-    this.toolUsePromptTokenCount,
-    this.thoughtsTokenCount,
-    this.totalTokenCount,
-    this.promptTokensDetails,
-    this.cacheTokensDetails,
-    this.candidatesTokensDetails,
-    this.toolUsePromptTokensDetails,
+    this.promptTokenCount = 0,
+    this.cachedContentTokenCount = 0,
+    this.candidatesTokenCount = 0,
+    this.toolUsePromptTokenCount = 0,
+    this.thoughtsTokenCount = 0,
+    this.totalTokenCount = 0,
+    this.promptTokensDetails = const [],
+    this.cacheTokensDetails = const [],
+    this.candidatesTokensDetails = const [],
+    this.toolUsePromptTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse_UsageMetadata.fromJson(
     Map<String, dynamic> json,
   ) {
     return GenerateContentResponse_UsageMetadata(
-      promptTokenCount: json['promptTokenCount'],
-      cachedContentTokenCount: json['cachedContentTokenCount'],
-      candidatesTokenCount: json['candidatesTokenCount'],
-      toolUsePromptTokenCount: json['toolUsePromptTokenCount'],
-      thoughtsTokenCount: json['thoughtsTokenCount'],
-      totalTokenCount: json['totalTokenCount'],
-      promptTokensDetails: decodeListMessage(
-        json['promptTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      cacheTokensDetails: decodeListMessage(
-        json['cacheTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      candidatesTokensDetails: decodeListMessage(
-        json['candidatesTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      toolUsePromptTokensDetails: decodeListMessage(
-        json['toolUsePromptTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
+      promptTokenCount: json['promptTokenCount'] ?? 0,
+      cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
+      candidatesTokenCount: json['candidatesTokenCount'] ?? 0,
+      toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
+      thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
+      totalTokenCount: json['totalTokenCount'] ?? 0,
+      promptTokensDetails:
+          decodeListMessage(
+            json['promptTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      cacheTokensDetails:
+          decodeListMessage(
+            json['cacheTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      candidatesTokensDetails:
+          decodeListMessage(
+            json['candidatesTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      toolUsePromptTokensDetails:
+          decodeListMessage(
+            json['toolUsePromptTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (promptTokenCount != null) 'promptTokenCount': promptTokenCount,
-      if (cachedContentTokenCount != null)
+      if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
+      if (cachedContentTokenCount.isNotDefault)
         'cachedContentTokenCount': cachedContentTokenCount,
-      if (candidatesTokenCount != null)
+      if (candidatesTokenCount.isNotDefault)
         'candidatesTokenCount': candidatesTokenCount,
-      if (toolUsePromptTokenCount != null)
+      if (toolUsePromptTokenCount.isNotDefault)
         'toolUsePromptTokenCount': toolUsePromptTokenCount,
-      if (thoughtsTokenCount != null) 'thoughtsTokenCount': thoughtsTokenCount,
-      if (totalTokenCount != null) 'totalTokenCount': totalTokenCount,
-      if (promptTokensDetails != null)
+      if (thoughtsTokenCount.isNotDefault)
+        'thoughtsTokenCount': thoughtsTokenCount,
+      if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+      if (promptTokensDetails.isNotDefault)
         'promptTokensDetails': encodeList(promptTokensDetails),
-      if (cacheTokensDetails != null)
+      if (cacheTokensDetails.isNotDefault)
         'cacheTokensDetails': encodeList(cacheTokensDetails),
-      if (candidatesTokensDetails != null)
+      if (candidatesTokensDetails.isNotDefault)
         'candidatesTokensDetails': encodeList(candidatesTokensDetails),
-      if (toolUsePromptTokensDetails != null)
+      if (toolUsePromptTokensDetails.isNotDefault)
         'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
     };
   }
@@ -5512,15 +5591,12 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (promptTokenCount != null) 'promptTokenCount=$promptTokenCount',
-      if (cachedContentTokenCount != null)
-        'cachedContentTokenCount=$cachedContentTokenCount',
-      if (candidatesTokenCount != null)
-        'candidatesTokenCount=$candidatesTokenCount',
-      if (toolUsePromptTokenCount != null)
-        'toolUsePromptTokenCount=$toolUsePromptTokenCount',
-      if (thoughtsTokenCount != null) 'thoughtsTokenCount=$thoughtsTokenCount',
-      if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
+      'promptTokenCount=$promptTokenCount',
+      'cachedContentTokenCount=$cachedContentTokenCount',
+      'candidatesTokenCount=$candidatesTokenCount',
+      'toolUsePromptTokenCount=$toolUsePromptTokenCount',
+      'thoughtsTokenCount=$thoughtsTokenCount',
+      'totalTokenCount=$totalTokenCount',
     ].join(',');
     return 'UsageMetadata($contents)';
   }
@@ -5540,7 +5616,7 @@ final class Candidate extends ProtoMessage {
   /// Optional. Output only. The reason why the model stopped generating tokens.
   ///
   /// If empty, the model has not stopped generating tokens.
-  final Candidate_FinishReason? finishReason;
+  final Candidate_FinishReason finishReason;
 
   /// Optional. Output only. Details the reason why the model stopped generating
   /// tokens. This is populated only when `finish_reason` is set.
@@ -5549,7 +5625,7 @@ final class Candidate extends ProtoMessage {
   /// List of ratings for the safety of a response candidate.
   ///
   /// There is at most one rating per category.
-  final List<SafetyRating>? safetyRatings;
+  final List<SafetyRating> safetyRatings;
 
   /// Output only. Citation information for model-generated candidate.
   ///
@@ -5559,13 +5635,13 @@ final class Candidate extends ProtoMessage {
   final CitationMetadata? citationMetadata;
 
   /// Output only. Token count for this candidate.
-  final int? tokenCount;
+  final int tokenCount;
 
   /// Output only. Attribution information for sources that contributed to a
   /// grounded answer.
   ///
   /// This field is populated for `GenerateAnswer` calls.
-  final List<GroundingAttribution>? groundingAttributions;
+  final List<GroundingAttribution> groundingAttributions;
 
   /// Output only. Grounding metadata for the candidate.
   ///
@@ -5573,7 +5649,7 @@ final class Candidate extends ProtoMessage {
   final GroundingMetadata? groundingMetadata;
 
   /// Output only. Average log probability score of the candidate.
-  final double? avgLogprobs;
+  final double avgLogprobs;
 
   /// Output only. Log-likelihood scores for the response tokens and top tokens
   final LogprobsResult? logprobsResult;
@@ -5584,14 +5660,14 @@ final class Candidate extends ProtoMessage {
   Candidate({
     this.index,
     this.content,
-    this.finishReason,
+    this.finishReason = Candidate_FinishReason.$default,
     this.finishMessage,
-    this.safetyRatings,
+    this.safetyRatings = const [],
     this.citationMetadata,
-    this.tokenCount,
-    this.groundingAttributions,
+    this.tokenCount = 0,
+    this.groundingAttributions = const [],
     this.groundingMetadata,
-    this.avgLogprobs,
+    this.avgLogprobs = 0,
     this.logprobsResult,
     this.urlContextMetadata,
   }) : super(fullyQualifiedName);
@@ -5600,29 +5676,28 @@ final class Candidate extends ProtoMessage {
     return Candidate(
       index: json['index'],
       content: decode(json['content'], Content.fromJson),
-      finishReason: decodeEnum(
-        json['finishReason'],
-        Candidate_FinishReason.fromJson,
-      ),
+      finishReason:
+          decodeEnum(json['finishReason'], Candidate_FinishReason.fromJson) ??
+          Candidate_FinishReason.$default,
       finishMessage: json['finishMessage'],
-      safetyRatings: decodeListMessage(
-        json['safetyRatings'],
-        SafetyRating.fromJson,
-      ),
+      safetyRatings:
+          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
       citationMetadata: decode(
         json['citationMetadata'],
         CitationMetadata.fromJson,
       ),
-      tokenCount: json['tokenCount'],
-      groundingAttributions: decodeListMessage(
-        json['groundingAttributions'],
-        GroundingAttribution.fromJson,
-      ),
+      tokenCount: json['tokenCount'] ?? 0,
+      groundingAttributions:
+          decodeListMessage(
+            json['groundingAttributions'],
+            GroundingAttribution.fromJson,
+          ) ??
+          [],
       groundingMetadata: decode(
         json['groundingMetadata'],
         GroundingMetadata.fromJson,
       ),
-      avgLogprobs: decodeDouble(json['avgLogprobs']),
+      avgLogprobs: decodeDouble(json['avgLogprobs']) ?? 0,
       logprobsResult: decode(json['logprobsResult'], LogprobsResult.fromJson),
       urlContextMetadata: decode(
         json['urlContextMetadata'],
@@ -5636,17 +5711,18 @@ final class Candidate extends ProtoMessage {
     return {
       if (index != null) 'index': index,
       if (content != null) 'content': content!.toJson(),
-      if (finishReason != null) 'finishReason': finishReason!.toJson(),
+      if (finishReason.isNotDefault) 'finishReason': finishReason.toJson(),
       if (finishMessage != null) 'finishMessage': finishMessage,
-      if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
+      if (safetyRatings.isNotDefault)
+        'safetyRatings': encodeList(safetyRatings),
       if (citationMetadata != null)
         'citationMetadata': citationMetadata!.toJson(),
-      if (tokenCount != null) 'tokenCount': tokenCount,
-      if (groundingAttributions != null)
+      if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
+      if (groundingAttributions.isNotDefault)
         'groundingAttributions': encodeList(groundingAttributions),
       if (groundingMetadata != null)
         'groundingMetadata': groundingMetadata!.toJson(),
-      if (avgLogprobs != null) 'avgLogprobs': encodeDouble(avgLogprobs),
+      if (avgLogprobs.isNotDefault) 'avgLogprobs': encodeDouble(avgLogprobs),
       if (logprobsResult != null) 'logprobsResult': logprobsResult!.toJson(),
       if (urlContextMetadata != null)
         'urlContextMetadata': urlContextMetadata!.toJson(),
@@ -5657,10 +5733,10 @@ final class Candidate extends ProtoMessage {
   String toString() {
     final contents = [
       if (index != null) 'index=$index',
-      if (finishReason != null) 'finishReason=$finishReason',
+      'finishReason=$finishReason',
       if (finishMessage != null) 'finishMessage=$finishMessage',
-      if (tokenCount != null) 'tokenCount=$tokenCount',
-      if (avgLogprobs != null) 'avgLogprobs=$avgLogprobs',
+      'tokenCount=$tokenCount',
+      'avgLogprobs=$avgLogprobs',
     ].join(',');
     return 'Candidate($contents)';
   }
@@ -5735,10 +5811,15 @@ final class Candidate_FinishReason extends ProtoEnum {
   /// execution.
   static const tooManyToolCalls = Candidate_FinishReason('TOO_MANY_TOOL_CALLS');
 
+  /// The default value for [Candidate_FinishReason].
+  static const $default = finishReasonUnspecified;
+
   const Candidate_FinishReason(super.value);
 
   factory Candidate_FinishReason.fromJson(String json) =>
       Candidate_FinishReason(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'FinishReason.$value';
@@ -5750,19 +5831,22 @@ final class UrlContextMetadata extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UrlContextMetadata';
 
   /// List of url context.
-  final List<UrlMetadata>? urlMetadata;
+  final List<UrlMetadata> urlMetadata;
 
-  UrlContextMetadata({this.urlMetadata}) : super(fullyQualifiedName);
+  UrlContextMetadata({this.urlMetadata = const []}) : super(fullyQualifiedName);
 
   factory UrlContextMetadata.fromJson(Map<String, dynamic> json) {
     return UrlContextMetadata(
-      urlMetadata: decodeListMessage(json['urlMetadata'], UrlMetadata.fromJson),
+      urlMetadata:
+          decodeListMessage(json['urlMetadata'], UrlMetadata.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (urlMetadata != null) 'urlMetadata': encodeList(urlMetadata)};
+    return {
+      if (urlMetadata.isNotDefault) 'urlMetadata': encodeList(urlMetadata),
+    };
   }
 
   @override
@@ -5775,38 +5859,42 @@ final class UrlMetadata extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UrlMetadata';
 
   /// Retrieved url by the tool.
-  final String? retrievedUrl;
+  final String retrievedUrl;
 
   /// Status of the url retrieval.
-  final UrlMetadata_UrlRetrievalStatus? urlRetrievalStatus;
+  final UrlMetadata_UrlRetrievalStatus urlRetrievalStatus;
 
-  UrlMetadata({this.retrievedUrl, this.urlRetrievalStatus})
-    : super(fullyQualifiedName);
+  UrlMetadata({
+    this.retrievedUrl = '',
+    this.urlRetrievalStatus = UrlMetadata_UrlRetrievalStatus.$default,
+  }) : super(fullyQualifiedName);
 
   factory UrlMetadata.fromJson(Map<String, dynamic> json) {
     return UrlMetadata(
-      retrievedUrl: json['retrievedUrl'],
-      urlRetrievalStatus: decodeEnum(
-        json['urlRetrievalStatus'],
-        UrlMetadata_UrlRetrievalStatus.fromJson,
-      ),
+      retrievedUrl: json['retrievedUrl'] ?? '',
+      urlRetrievalStatus:
+          decodeEnum(
+            json['urlRetrievalStatus'],
+            UrlMetadata_UrlRetrievalStatus.fromJson,
+          ) ??
+          UrlMetadata_UrlRetrievalStatus.$default,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (retrievedUrl != null) 'retrievedUrl': retrievedUrl,
-      if (urlRetrievalStatus != null)
-        'urlRetrievalStatus': urlRetrievalStatus!.toJson(),
+      if (retrievedUrl.isNotDefault) 'retrievedUrl': retrievedUrl,
+      if (urlRetrievalStatus.isNotDefault)
+        'urlRetrievalStatus': urlRetrievalStatus.toJson(),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (retrievedUrl != null) 'retrievedUrl=$retrievedUrl',
-      if (urlRetrievalStatus != null) 'urlRetrievalStatus=$urlRetrievalStatus',
+      'retrievedUrl=$retrievedUrl',
+      'urlRetrievalStatus=$urlRetrievalStatus',
     ].join(',');
     return 'UrlMetadata($contents)';
   }
@@ -5839,10 +5927,15 @@ final class UrlMetadata_UrlRetrievalStatus extends ProtoEnum {
     'URL_RETRIEVAL_STATUS_UNSAFE',
   );
 
+  /// The default value for [UrlMetadata_UrlRetrievalStatus].
+  static const $default = urlRetrievalStatusUnspecified;
+
   const UrlMetadata_UrlRetrievalStatus(super.value);
 
   factory UrlMetadata_UrlRetrievalStatus.fromJson(String json) =>
       UrlMetadata_UrlRetrievalStatus(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'UrlRetrievalStatus.$value';
@@ -5857,29 +5950,33 @@ final class LogprobsResult extends ProtoMessage {
   final double? logProbabilitySum;
 
   /// Length = total number of decoding steps.
-  final List<LogprobsResult_TopCandidates>? topCandidates;
+  final List<LogprobsResult_TopCandidates> topCandidates;
 
   /// Length = total number of decoding steps.
   /// The chosen candidates may or may not be in top_candidates.
-  final List<LogprobsResult_Candidate>? chosenCandidates;
+  final List<LogprobsResult_Candidate> chosenCandidates;
 
   LogprobsResult({
     this.logProbabilitySum,
-    this.topCandidates,
-    this.chosenCandidates,
+    this.topCandidates = const [],
+    this.chosenCandidates = const [],
   }) : super(fullyQualifiedName);
 
   factory LogprobsResult.fromJson(Map<String, dynamic> json) {
     return LogprobsResult(
       logProbabilitySum: decodeDouble(json['logProbabilitySum']),
-      topCandidates: decodeListMessage(
-        json['topCandidates'],
-        LogprobsResult_TopCandidates.fromJson,
-      ),
-      chosenCandidates: decodeListMessage(
-        json['chosenCandidates'],
-        LogprobsResult_Candidate.fromJson,
-      ),
+      topCandidates:
+          decodeListMessage(
+            json['topCandidates'],
+            LogprobsResult_TopCandidates.fromJson,
+          ) ??
+          [],
+      chosenCandidates:
+          decodeListMessage(
+            json['chosenCandidates'],
+            LogprobsResult_Candidate.fromJson,
+          ) ??
+          [],
     );
   }
 
@@ -5888,8 +5985,9 @@ final class LogprobsResult extends ProtoMessage {
     return {
       if (logProbabilitySum != null)
         'logProbabilitySum': encodeDouble(logProbabilitySum),
-      if (topCandidates != null) 'topCandidates': encodeList(topCandidates),
-      if (chosenCandidates != null)
+      if (topCandidates.isNotDefault)
+        'topCandidates': encodeList(topCandidates),
+      if (chosenCandidates.isNotDefault)
         'chosenCandidates': encodeList(chosenCandidates),
     };
   }
@@ -5955,22 +6053,25 @@ final class LogprobsResult_TopCandidates extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.LogprobsResult.TopCandidates';
 
   /// Sorted by log probability in descending order.
-  final List<LogprobsResult_Candidate>? candidates;
+  final List<LogprobsResult_Candidate> candidates;
 
-  LogprobsResult_TopCandidates({this.candidates}) : super(fullyQualifiedName);
+  LogprobsResult_TopCandidates({this.candidates = const []})
+    : super(fullyQualifiedName);
 
   factory LogprobsResult_TopCandidates.fromJson(Map<String, dynamic> json) {
     return LogprobsResult_TopCandidates(
-      candidates: decodeListMessage(
-        json['candidates'],
-        LogprobsResult_Candidate.fromJson,
-      ),
+      candidates:
+          decodeListMessage(
+            json['candidates'],
+            LogprobsResult_Candidate.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (candidates != null) 'candidates': encodeList(candidates)};
+    return {if (candidates.isNotDefault) 'candidates': encodeList(candidates)};
   }
 
   @override
@@ -6025,38 +6126,37 @@ final class AttributionSourceId_GroundingPassageId extends ProtoMessage {
 
   /// Output only. ID of the passage matching the `GenerateAnswerRequest`'s
   /// `GroundingPassage.id`.
-  final String? passageId;
+  final String passageId;
 
   /// Output only. Index of the part within the `GenerateAnswerRequest`'s
   /// `GroundingPassage.content`.
-  final int? partIndex;
+  final int partIndex;
 
-  AttributionSourceId_GroundingPassageId({this.passageId, this.partIndex})
-    : super(fullyQualifiedName);
+  AttributionSourceId_GroundingPassageId({
+    this.passageId = '',
+    this.partIndex = 0,
+  }) : super(fullyQualifiedName);
 
   factory AttributionSourceId_GroundingPassageId.fromJson(
     Map<String, dynamic> json,
   ) {
     return AttributionSourceId_GroundingPassageId(
-      passageId: json['passageId'],
-      partIndex: json['partIndex'],
+      passageId: json['passageId'] ?? '',
+      partIndex: json['partIndex'] ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (passageId != null) 'passageId': passageId,
-      if (partIndex != null) 'partIndex': partIndex,
+      if (passageId.isNotDefault) 'passageId': passageId,
+      if (partIndex.isNotDefault) 'partIndex': partIndex,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (passageId != null) 'passageId=$passageId',
-      if (partIndex != null) 'partIndex=$partIndex',
-    ].join(',');
+    final contents = ['passageId=$passageId', 'partIndex=$partIndex'].join(',');
     return 'GroundingPassageId($contents)';
   }
 }
@@ -6070,38 +6170,37 @@ final class AttributionSourceId_SemanticRetrieverChunk extends ProtoMessage {
   /// Output only. Name of the source matching the request's
   /// `SemanticRetrieverConfig.source`. Example: `corpora/123` or
   /// `corpora/123/documents/abc`
-  final String? source;
+  final String source;
 
   /// Output only. Name of the `Chunk` containing the attributed text.
   /// Example: `corpora/123/documents/abc/chunks/xyz`
-  final String? chunk;
+  final String chunk;
 
-  AttributionSourceId_SemanticRetrieverChunk({this.source, this.chunk})
-    : super(fullyQualifiedName);
+  AttributionSourceId_SemanticRetrieverChunk({
+    this.source = '',
+    this.chunk = '',
+  }) : super(fullyQualifiedName);
 
   factory AttributionSourceId_SemanticRetrieverChunk.fromJson(
     Map<String, dynamic> json,
   ) {
     return AttributionSourceId_SemanticRetrieverChunk(
-      source: json['source'],
-      chunk: json['chunk'],
+      source: json['source'] ?? '',
+      chunk: json['chunk'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (source != null) 'source': source,
-      if (chunk != null) 'chunk': chunk,
+      if (source.isNotDefault) 'source': source,
+      if (chunk.isNotDefault) 'chunk': chunk,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (source != null) 'source=$source',
-      if (chunk != null) 'chunk=$chunk',
-    ].join(',');
+    final contents = ['source=$source', 'chunk=$chunk'].join(',');
     return 'SemanticRetrieverChunk($contents)';
   }
 }
@@ -6149,23 +6248,22 @@ final class RetrievalMetadata extends ProtoMessage {
   /// least likely and 1 is the most likely. This score is only populated when
   /// google search grounding and dynamic retrieval is enabled. It will be
   /// compared to the threshold to determine whether to trigger google search.
-  final double? googleSearchDynamicRetrievalScore;
+  final double googleSearchDynamicRetrievalScore;
 
-  RetrievalMetadata({this.googleSearchDynamicRetrievalScore})
+  RetrievalMetadata({this.googleSearchDynamicRetrievalScore = 0})
     : super(fullyQualifiedName);
 
   factory RetrievalMetadata.fromJson(Map<String, dynamic> json) {
     return RetrievalMetadata(
-      googleSearchDynamicRetrievalScore: decodeDouble(
-        json['googleSearchDynamicRetrievalScore'],
-      ),
+      googleSearchDynamicRetrievalScore:
+          decodeDouble(json['googleSearchDynamicRetrievalScore']) ?? 0,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (googleSearchDynamicRetrievalScore != null)
+      if (googleSearchDynamicRetrievalScore.isNotDefault)
         'googleSearchDynamicRetrievalScore': encodeDouble(
           googleSearchDynamicRetrievalScore,
         ),
@@ -6175,8 +6273,7 @@ final class RetrievalMetadata extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (googleSearchDynamicRetrievalScore != null)
-        'googleSearchDynamicRetrievalScore=$googleSearchDynamicRetrievalScore',
+      'googleSearchDynamicRetrievalScore=$googleSearchDynamicRetrievalScore',
     ].join(',');
     return 'RetrievalMetadata($contents)';
   }
@@ -6191,23 +6288,23 @@ final class GroundingMetadata extends ProtoMessage {
   final SearchEntryPoint? searchEntryPoint;
 
   /// List of supporting references retrieved from specified grounding source.
-  final List<GroundingChunk>? groundingChunks;
+  final List<GroundingChunk> groundingChunks;
 
   /// List of grounding support.
-  final List<GroundingSupport>? groundingSupports;
+  final List<GroundingSupport> groundingSupports;
 
   /// Metadata related to retrieval in the grounding flow.
   final RetrievalMetadata? retrievalMetadata;
 
   /// Web search queries for the following-up web search.
-  final List<String>? webSearchQueries;
+  final List<String> webSearchQueries;
 
   GroundingMetadata({
     this.searchEntryPoint,
-    this.groundingChunks,
-    this.groundingSupports,
+    this.groundingChunks = const [],
+    this.groundingSupports = const [],
     this.retrievalMetadata,
-    this.webSearchQueries,
+    this.webSearchQueries = const [],
   }) : super(fullyQualifiedName);
 
   factory GroundingMetadata.fromJson(Map<String, dynamic> json) {
@@ -6216,19 +6313,20 @@ final class GroundingMetadata extends ProtoMessage {
         json['searchEntryPoint'],
         SearchEntryPoint.fromJson,
       ),
-      groundingChunks: decodeListMessage(
-        json['groundingChunks'],
-        GroundingChunk.fromJson,
-      ),
-      groundingSupports: decodeListMessage(
-        json['groundingSupports'],
-        GroundingSupport.fromJson,
-      ),
+      groundingChunks:
+          decodeListMessage(json['groundingChunks'], GroundingChunk.fromJson) ??
+          [],
+      groundingSupports:
+          decodeListMessage(
+            json['groundingSupports'],
+            GroundingSupport.fromJson,
+          ) ??
+          [],
       retrievalMetadata: decode(
         json['retrievalMetadata'],
         RetrievalMetadata.fromJson,
       ),
-      webSearchQueries: decodeList(json['webSearchQueries']),
+      webSearchQueries: decodeList(json['webSearchQueries']) ?? [],
     );
   }
 
@@ -6237,13 +6335,13 @@ final class GroundingMetadata extends ProtoMessage {
     return {
       if (searchEntryPoint != null)
         'searchEntryPoint': searchEntryPoint!.toJson(),
-      if (groundingChunks != null)
+      if (groundingChunks.isNotDefault)
         'groundingChunks': encodeList(groundingChunks),
-      if (groundingSupports != null)
+      if (groundingSupports.isNotDefault)
         'groundingSupports': encodeList(groundingSupports),
       if (retrievalMetadata != null)
         'retrievalMetadata': retrievalMetadata!.toJson(),
-      if (webSearchQueries != null) 'webSearchQueries': webSearchQueries,
+      if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
     };
   }
 
@@ -6258,18 +6356,18 @@ final class SearchEntryPoint extends ProtoMessage {
 
   /// Optional. Web content snippet that can be embedded in a web page or an app
   /// webview.
-  final String? renderedContent;
+  final String renderedContent;
 
   /// Optional. Base64 encoded JSON representing array of <search term, search
   /// url> tuple.
   final Uint8List? sdkBlob;
 
-  SearchEntryPoint({this.renderedContent, this.sdkBlob})
+  SearchEntryPoint({this.renderedContent = '', this.sdkBlob})
     : super(fullyQualifiedName);
 
   factory SearchEntryPoint.fromJson(Map<String, dynamic> json) {
     return SearchEntryPoint(
-      renderedContent: json['renderedContent'],
+      renderedContent: json['renderedContent'] ?? '',
       sdkBlob: decodeBytes(json['sdkBlob']),
     );
   }
@@ -6277,7 +6375,7 @@ final class SearchEntryPoint extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (renderedContent != null) 'renderedContent': renderedContent,
+      if (renderedContent.isNotDefault) 'renderedContent': renderedContent,
       if (sdkBlob != null) 'sdkBlob': encodeBytes(sdkBlob),
     };
   }
@@ -6285,7 +6383,7 @@ final class SearchEntryPoint extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (renderedContent != null) 'renderedContent=$renderedContent',
+      'renderedContent=$renderedContent',
       if (sdkBlob != null) 'sdkBlob=$sdkBlob',
     ].join(',');
     return 'SearchEntryPoint($contents)';
@@ -6355,48 +6453,52 @@ final class Segment extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.Segment';
 
   /// Output only. The index of a Part object within its parent Content object.
-  final int? partIndex;
+  final int partIndex;
 
   /// Output only. Start index in the given Part, measured in bytes. Offset from
   /// the start of the Part, inclusive, starting at zero.
-  final int? startIndex;
+  final int startIndex;
 
   /// Output only. End index in the given Part, measured in bytes. Offset from
   /// the start of the Part, exclusive, starting at zero.
-  final int? endIndex;
+  final int endIndex;
 
   /// Output only. The text corresponding to the segment from the response.
-  final String? text;
+  final String text;
 
-  Segment({this.partIndex, this.startIndex, this.endIndex, this.text})
-    : super(fullyQualifiedName);
+  Segment({
+    this.partIndex = 0,
+    this.startIndex = 0,
+    this.endIndex = 0,
+    this.text = '',
+  }) : super(fullyQualifiedName);
 
   factory Segment.fromJson(Map<String, dynamic> json) {
     return Segment(
-      partIndex: json['partIndex'],
-      startIndex: json['startIndex'],
-      endIndex: json['endIndex'],
-      text: json['text'],
+      partIndex: json['partIndex'] ?? 0,
+      startIndex: json['startIndex'] ?? 0,
+      endIndex: json['endIndex'] ?? 0,
+      text: json['text'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (partIndex != null) 'partIndex': partIndex,
-      if (startIndex != null) 'startIndex': startIndex,
-      if (endIndex != null) 'endIndex': endIndex,
-      if (text != null) 'text': text,
+      if (partIndex.isNotDefault) 'partIndex': partIndex,
+      if (startIndex.isNotDefault) 'startIndex': startIndex,
+      if (endIndex.isNotDefault) 'endIndex': endIndex,
+      if (text.isNotDefault) 'text': text,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (partIndex != null) 'partIndex=$partIndex',
-      if (startIndex != null) 'startIndex=$startIndex',
-      if (endIndex != null) 'endIndex=$endIndex',
-      if (text != null) 'text=$text',
+      'partIndex=$partIndex',
+      'startIndex=$startIndex',
+      'endIndex=$endIndex',
+      'text=$text',
     ].join(',');
     return 'Segment($contents)';
   }
@@ -6414,24 +6516,24 @@ final class GroundingSupport extends ProtoMessage {
   /// citations associated with the claim. For instance [1,3,4] means
   /// that grounding_chunk[1], grounding_chunk[3],
   /// grounding_chunk[4] are the retrieved content attributed to the claim.
-  final List<int>? groundingChunkIndices;
+  final List<int> groundingChunkIndices;
 
   /// Confidence score of the support references. Ranges from 0 to 1. 1 is the
   /// most confident. This list must have the same size as the
   /// grounding_chunk_indices.
-  final List<double>? confidenceScores;
+  final List<double> confidenceScores;
 
   GroundingSupport({
     this.segment,
-    this.groundingChunkIndices,
-    this.confidenceScores,
+    this.groundingChunkIndices = const [],
+    this.confidenceScores = const [],
   }) : super(fullyQualifiedName);
 
   factory GroundingSupport.fromJson(Map<String, dynamic> json) {
     return GroundingSupport(
       segment: decode(json['segment'], Segment.fromJson),
-      groundingChunkIndices: decodeList(json['groundingChunkIndices']),
-      confidenceScores: decodeList(json['confidenceScores']),
+      groundingChunkIndices: decodeList(json['groundingChunkIndices']) ?? [],
+      confidenceScores: decodeList(json['confidenceScores']) ?? [],
     );
   }
 
@@ -6439,9 +6541,9 @@ final class GroundingSupport extends ProtoMessage {
   Object toJson() {
     return {
       if (segment != null) 'segment': segment!.toJson(),
-      if (groundingChunkIndices != null)
+      if (groundingChunkIndices.isNotDefault)
         'groundingChunkIndices': groundingChunkIndices,
-      if (confidenceScores != null) 'confidenceScores': confidenceScores,
+      if (confidenceScores.isNotDefault) 'confidenceScores': confidenceScores,
     };
   }
 
@@ -6473,10 +6575,10 @@ final class GenerateAnswerRequest extends ProtoMessage {
   /// the last `Content` in the list containing the question.
   ///
   /// Note: `GenerateAnswer` only supports queries in English.
-  final List<Content>? contents;
+  final List<Content> contents;
 
   /// Required. Style in which answers should be returned.
-  final GenerateAnswerRequest_AnswerStyle? answerStyle;
+  final GenerateAnswerRequest_AnswerStyle answerStyle;
 
   /// Optional. A list of unique `SafetySetting` instances for blocking unsafe
   /// content.
@@ -6496,7 +6598,7 @@ final class GenerateAnswerRequest extends ProtoMessage {
   /// for detailed information on available safety settings. Also refer to the
   /// [Safety guidance](https://ai.google.dev/gemini-api/docs/safety-guidance) to
   /// learn how to incorporate safety considerations in your AI applications.
-  final List<SafetySetting>? safetySettings;
+  final List<SafetySetting> safetySettings;
 
   /// Optional. Controls the randomness of the output.
   ///
@@ -6511,9 +6613,9 @@ final class GenerateAnswerRequest extends ProtoMessage {
     this.inlinePassages,
     this.semanticRetriever,
     required this.model,
-    this.contents,
-    this.answerStyle,
-    this.safetySettings,
+    required this.contents,
+    required this.answerStyle,
+    this.safetySettings = const [],
     this.temperature,
   }) : super(fullyQualifiedName);
 
@@ -6527,16 +6629,17 @@ final class GenerateAnswerRequest extends ProtoMessage {
         json['semanticRetriever'],
         SemanticRetrieverConfig.fromJson,
       ),
-      model: json['model'],
-      contents: decodeListMessage(json['contents'], Content.fromJson),
-      answerStyle: decodeEnum(
-        json['answerStyle'],
-        GenerateAnswerRequest_AnswerStyle.fromJson,
-      ),
-      safetySettings: decodeListMessage(
-        json['safetySettings'],
-        SafetySetting.fromJson,
-      ),
+      model: json['model'] ?? '',
+      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+      answerStyle:
+          decodeEnum(
+            json['answerStyle'],
+            GenerateAnswerRequest_AnswerStyle.fromJson,
+          ) ??
+          GenerateAnswerRequest_AnswerStyle.$default,
+      safetySettings:
+          decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
+          [],
       temperature: decodeDouble(json['temperature']),
     );
   }
@@ -6548,9 +6651,10 @@ final class GenerateAnswerRequest extends ProtoMessage {
       if (semanticRetriever != null)
         'semanticRetriever': semanticRetriever!.toJson(),
       'model': model,
-      if (contents != null) 'contents': encodeList(contents),
-      if (answerStyle != null) 'answerStyle': answerStyle!.toJson(),
-      if (safetySettings != null) 'safetySettings': encodeList(safetySettings),
+      'contents': encodeList(contents),
+      'answerStyle': answerStyle.toJson(),
+      if (safetySettings.isNotDefault)
+        'safetySettings': encodeList(safetySettings),
       if (temperature != null) 'temperature': encodeDouble(temperature),
     };
   }
@@ -6559,7 +6663,7 @@ final class GenerateAnswerRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'model=$model',
-      if (answerStyle != null) 'answerStyle=$answerStyle',
+      'answerStyle=$answerStyle',
       if (temperature != null) 'temperature=$temperature',
     ].join(',');
     return 'GenerateAnswerRequest($contents)';
@@ -6583,10 +6687,15 @@ final class GenerateAnswerRequest_AnswerStyle extends ProtoEnum {
   /// sentence, paragraph, multiple paragraphs, or bullet points, etc.
   static const verbose = GenerateAnswerRequest_AnswerStyle('VERBOSE');
 
+  /// The default value for [GenerateAnswerRequest_AnswerStyle].
+  static const $default = answerStyleUnspecified;
+
   const GenerateAnswerRequest_AnswerStyle(super.value);
 
   factory GenerateAnswerRequest_AnswerStyle.fromJson(String json) =>
       GenerateAnswerRequest_AnswerStyle(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'AnswerStyle.$value';
@@ -6681,10 +6790,12 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
 
   /// Ratings for safety of the input.
   /// There is at most one rating per category.
-  final List<SafetyRating>? safetyRatings;
+  final List<SafetyRating> safetyRatings;
 
-  GenerateAnswerResponse_InputFeedback({this.blockReason, this.safetyRatings})
-    : super(fullyQualifiedName);
+  GenerateAnswerResponse_InputFeedback({
+    this.blockReason,
+    this.safetyRatings = const [],
+  }) : super(fullyQualifiedName);
 
   factory GenerateAnswerResponse_InputFeedback.fromJson(
     Map<String, dynamic> json,
@@ -6694,10 +6805,8 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
         json['blockReason'],
         GenerateAnswerResponse_InputFeedback_BlockReason.fromJson,
       ),
-      safetyRatings: decodeListMessage(
-        json['safetyRatings'],
-        SafetyRating.fromJson,
-      ),
+      safetyRatings:
+          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
     );
   }
 
@@ -6705,7 +6814,8 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
   Object toJson() {
     return {
       if (blockReason != null) 'blockReason': blockReason!.toJson(),
-      if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
+      if (safetyRatings.isNotDefault)
+        'safetyRatings': encodeList(safetyRatings),
     };
   }
 
@@ -6737,11 +6847,16 @@ final class GenerateAnswerResponse_InputFeedback_BlockReason extends ProtoEnum {
     'OTHER',
   );
 
+  /// The default value for [GenerateAnswerResponse_InputFeedback_BlockReason].
+  static const $default = blockReasonUnspecified;
+
   const GenerateAnswerResponse_InputFeedback_BlockReason(super.value);
 
   factory GenerateAnswerResponse_InputFeedback_BlockReason.fromJson(
     String json,
   ) => GenerateAnswerResponse_InputFeedback_BlockReason(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'BlockReason.$value';
@@ -6783,7 +6898,7 @@ final class EmbedContentRequest extends ProtoMessage {
 
   EmbedContentRequest({
     required this.model,
-    this.content,
+    required this.content,
     this.taskType,
     this.title,
     this.outputDimensionality,
@@ -6791,7 +6906,7 @@ final class EmbedContentRequest extends ProtoMessage {
 
   factory EmbedContentRequest.fromJson(Map<String, dynamic> json) {
     return EmbedContentRequest(
-      model: json['model'],
+      model: json['model'] ?? '',
       content: decode(json['content'], Content.fromJson),
       taskType: decodeEnum(json['taskType'], TaskType.fromJson),
       title: json['title'],
@@ -6830,17 +6945,17 @@ final class ContentEmbedding extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ContentEmbedding';
 
   /// The embedding values.
-  final List<double>? values;
+  final List<double> values;
 
-  ContentEmbedding({this.values}) : super(fullyQualifiedName);
+  ContentEmbedding({this.values = const []}) : super(fullyQualifiedName);
 
   factory ContentEmbedding.fromJson(Map<String, dynamic> json) {
-    return ContentEmbedding(values: decodeList(json['values']));
+    return ContentEmbedding(values: decodeList(json['values']) ?? []);
   }
 
   @override
   Object toJson() {
-    return {if (values != null) 'values': values};
+    return {if (values.isNotDefault) 'values': values};
   }
 
   @override
@@ -6887,27 +7002,23 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
 
   /// Required. Embed requests for the batch. The model in each of these requests
   /// must match the model specified `BatchEmbedContentsRequest.model`.
-  final List<EmbedContentRequest>? requests;
+  final List<EmbedContentRequest> requests;
 
-  BatchEmbedContentsRequest({required this.model, this.requests})
+  BatchEmbedContentsRequest({required this.model, required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchEmbedContentsRequest.fromJson(Map<String, dynamic> json) {
     return BatchEmbedContentsRequest(
-      model: json['model'],
-      requests: decodeListMessage(
-        json['requests'],
-        EmbedContentRequest.fromJson,
-      ),
+      model: json['model'] ?? '',
+      requests:
+          decodeListMessage(json['requests'], EmbedContentRequest.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {
-      'model': model,
-      if (requests != null) 'requests': encodeList(requests),
-    };
+    return {'model': model, 'requests': encodeList(requests)};
   }
 
   @override
@@ -6924,22 +7035,22 @@ final class BatchEmbedContentsResponse extends ProtoMessage {
 
   /// Output only. The embeddings for each request, in the same order as provided
   /// in the batch request.
-  final List<ContentEmbedding>? embeddings;
+  final List<ContentEmbedding> embeddings;
 
-  BatchEmbedContentsResponse({this.embeddings}) : super(fullyQualifiedName);
+  BatchEmbedContentsResponse({this.embeddings = const []})
+    : super(fullyQualifiedName);
 
   factory BatchEmbedContentsResponse.fromJson(Map<String, dynamic> json) {
     return BatchEmbedContentsResponse(
-      embeddings: decodeListMessage(
-        json['embeddings'],
-        ContentEmbedding.fromJson,
-      ),
+      embeddings:
+          decodeListMessage(json['embeddings'], ContentEmbedding.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (embeddings != null) 'embeddings': encodeList(embeddings)};
+    return {if (embeddings.isNotDefault) 'embeddings': encodeList(embeddings)};
   }
 
   @override
@@ -6964,7 +7075,7 @@ final class CountTokensRequest extends ProtoMessage {
 
   /// Optional. The input given to the model as a prompt. This field is ignored
   /// when `generate_content_request` is set.
-  final List<Content>? contents;
+  final List<Content> contents;
 
   /// Optional. The overall input given to the `Model`. This includes the prompt
   /// as well as other model steering information like [system
@@ -6978,14 +7089,14 @@ final class CountTokensRequest extends ProtoMessage {
 
   CountTokensRequest({
     required this.model,
-    this.contents,
+    this.contents = const [],
     this.generateContentRequest,
   }) : super(fullyQualifiedName);
 
   factory CountTokensRequest.fromJson(Map<String, dynamic> json) {
     return CountTokensRequest(
-      model: json['model'],
-      contents: decodeListMessage(json['contents'], Content.fromJson),
+      model: json['model'] ?? '',
+      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
       generateContentRequest: decode(
         json['generateContentRequest'],
         GenerateContentRequest.fromJson,
@@ -6997,7 +7108,7 @@ final class CountTokensRequest extends ProtoMessage {
   Object toJson() {
     return {
       'model': model,
-      if (contents != null) 'contents': encodeList(contents),
+      if (contents.isNotDefault) 'contents': encodeList(contents),
       if (generateContentRequest != null)
         'generateContentRequest': generateContentRequest!.toJson(),
     };
@@ -7019,48 +7130,52 @@ final class CountTokensResponse extends ProtoMessage {
 
   /// The number of tokens that the `Model` tokenizes the `prompt` into. Always
   /// non-negative.
-  final int? totalTokens;
+  final int totalTokens;
 
   /// Number of tokens in the cached part of the prompt (the cached content).
-  final int? cachedContentTokenCount;
+  final int cachedContentTokenCount;
 
   /// Output only. List of modalities that were processed in the request input.
-  final List<ModalityTokenCount>? promptTokensDetails;
+  final List<ModalityTokenCount> promptTokensDetails;
 
   /// Output only. List of modalities that were processed in the cached content.
-  final List<ModalityTokenCount>? cacheTokensDetails;
+  final List<ModalityTokenCount> cacheTokensDetails;
 
   CountTokensResponse({
-    this.totalTokens,
-    this.cachedContentTokenCount,
-    this.promptTokensDetails,
-    this.cacheTokensDetails,
+    this.totalTokens = 0,
+    this.cachedContentTokenCount = 0,
+    this.promptTokensDetails = const [],
+    this.cacheTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
   factory CountTokensResponse.fromJson(Map<String, dynamic> json) {
     return CountTokensResponse(
-      totalTokens: json['totalTokens'],
-      cachedContentTokenCount: json['cachedContentTokenCount'],
-      promptTokensDetails: decodeListMessage(
-        json['promptTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      cacheTokensDetails: decodeListMessage(
-        json['cacheTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
+      totalTokens: json['totalTokens'] ?? 0,
+      cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
+      promptTokensDetails:
+          decodeListMessage(
+            json['promptTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      cacheTokensDetails:
+          decodeListMessage(
+            json['cacheTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (totalTokens != null) 'totalTokens': totalTokens,
-      if (cachedContentTokenCount != null)
+      if (totalTokens.isNotDefault) 'totalTokens': totalTokens,
+      if (cachedContentTokenCount.isNotDefault)
         'cachedContentTokenCount': cachedContentTokenCount,
-      if (promptTokensDetails != null)
+      if (promptTokensDetails.isNotDefault)
         'promptTokensDetails': encodeList(promptTokensDetails),
-      if (cacheTokensDetails != null)
+      if (cacheTokensDetails.isNotDefault)
         'cacheTokensDetails': encodeList(cacheTokensDetails),
     };
   }
@@ -7068,9 +7183,8 @@ final class CountTokensResponse extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (totalTokens != null) 'totalTokens=$totalTokens',
-      if (cachedContentTokenCount != null)
-        'cachedContentTokenCount=$cachedContentTokenCount',
+      'totalTokens=$totalTokens',
+      'cachedContentTokenCount=$cachedContentTokenCount',
     ].join(',');
     return 'CountTokensResponse($contents)';
   }
@@ -7243,6 +7357,9 @@ final class RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity
         'START_SENSITIVITY_LOW',
       );
 
+  /// The default value for [RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity].
+  static const $default = startSensitivityUnspecified;
+
   const RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(
     super.value,
   );
@@ -7250,6 +7367,8 @@ final class RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity
   factory RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.fromJson(
     String json,
   ) => RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'StartSensitivity.$value';
@@ -7276,6 +7395,9 @@ final class RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity
         'END_SENSITIVITY_LOW',
       );
 
+  /// The default value for [RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity].
+  static const $default = endSensitivityUnspecified;
+
   const RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(
     super.value,
   );
@@ -7283,6 +7405,8 @@ final class RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity
   factory RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson(
     String json,
   ) => RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'EndSensitivity.$value';
@@ -7306,10 +7430,15 @@ final class RealtimeInputConfig_ActivityHandling extends ProtoEnum {
     'NO_INTERRUPTION',
   );
 
+  /// The default value for [RealtimeInputConfig_ActivityHandling].
+  static const $default = activityHandlingUnspecified;
+
   const RealtimeInputConfig_ActivityHandling(super.value);
 
   factory RealtimeInputConfig_ActivityHandling.fromJson(String json) =>
       RealtimeInputConfig_ActivityHandling(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'ActivityHandling.$value';
@@ -7335,10 +7464,15 @@ final class RealtimeInputConfig_TurnCoverage extends ProtoEnum {
     'TURN_INCLUDES_ALL_INPUT',
   );
 
+  /// The default value for [RealtimeInputConfig_TurnCoverage].
+  static const $default = turnCoverageUnspecified;
+
   const RealtimeInputConfig_TurnCoverage(super.value);
 
   factory RealtimeInputConfig_TurnCoverage.fromJson(String json) =>
       RealtimeInputConfig_TurnCoverage(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'TurnCoverage.$value';
@@ -7507,7 +7641,7 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   /// use.
   ///
   /// Format: `models/{model}`
-  final String? model;
+  final String model;
 
   /// Optional. Generation config.
   ///
@@ -7535,7 +7669,7 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   /// A `Tool` is a piece of code that enables the system to interact with
   /// external systems to perform an action, or set of actions, outside of
   /// knowledge and scope of the model.
-  final List<Tool>? tools;
+  final List<Tool> tools;
 
   /// Optional. Configures the handling of realtime input.
   final RealtimeInputConfig? realtimeInputConfig;
@@ -7561,10 +7695,10 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   final AudioTranscriptionConfig? outputAudioTranscription;
 
   BidiGenerateContentSetup({
-    this.model,
+    required this.model,
     this.generationConfig,
     this.systemInstruction,
-    this.tools,
+    this.tools = const [],
     this.realtimeInputConfig,
     this.sessionResumption,
     this.contextWindowCompression,
@@ -7574,13 +7708,13 @@ final class BidiGenerateContentSetup extends ProtoMessage {
 
   factory BidiGenerateContentSetup.fromJson(Map<String, dynamic> json) {
     return BidiGenerateContentSetup(
-      model: json['model'],
+      model: json['model'] ?? '',
       generationConfig: decode(
         json['generationConfig'],
         GenerationConfig.fromJson,
       ),
       systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-      tools: decodeListMessage(json['tools'], Tool.fromJson),
+      tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
       realtimeInputConfig: decode(
         json['realtimeInputConfig'],
         RealtimeInputConfig.fromJson,
@@ -7607,12 +7741,12 @@ final class BidiGenerateContentSetup extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (model != null) 'model': model,
+      'model': model,
       if (generationConfig != null)
         'generationConfig': generationConfig!.toJson(),
       if (systemInstruction != null)
         'systemInstruction': systemInstruction!.toJson(),
-      if (tools != null) 'tools': encodeList(tools),
+      if (tools.isNotDefault) 'tools': encodeList(tools),
       if (realtimeInputConfig != null)
         'realtimeInputConfig': realtimeInputConfig!.toJson(),
       if (sessionResumption != null)
@@ -7628,7 +7762,7 @@ final class BidiGenerateContentSetup extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (model != null) 'model=$model'].join(',');
+    final contents = ['model=$model'].join(',');
     return 'BidiGenerateContentSetup($contents)';
   }
 }
@@ -7647,36 +7781,36 @@ final class BidiGenerateContentClientContent extends ProtoMessage {
   /// For single-turn queries, this is a single instance. For multi-turn
   /// queries, this is a repeated field that contains conversation history and
   /// the latest request.
-  final List<Content>? turns;
+  final List<Content> turns;
 
   /// Optional. If true, indicates that the server content generation should
   /// start with the currently accumulated prompt. Otherwise, the server awaits
   /// additional messages before starting generation.
-  final bool? turnComplete;
+  final bool turnComplete;
 
-  BidiGenerateContentClientContent({this.turns, this.turnComplete})
-    : super(fullyQualifiedName);
+  BidiGenerateContentClientContent({
+    this.turns = const [],
+    this.turnComplete = false,
+  }) : super(fullyQualifiedName);
 
   factory BidiGenerateContentClientContent.fromJson(Map<String, dynamic> json) {
     return BidiGenerateContentClientContent(
-      turns: decodeListMessage(json['turns'], Content.fromJson),
-      turnComplete: json['turnComplete'],
+      turns: decodeListMessage(json['turns'], Content.fromJson) ?? [],
+      turnComplete: json['turnComplete'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (turns != null) 'turns': encodeList(turns),
-      if (turnComplete != null) 'turnComplete': turnComplete,
+      if (turns.isNotDefault) 'turns': encodeList(turns),
+      if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (turnComplete != null) 'turnComplete=$turnComplete',
-    ].join(',');
+    final contents = ['turnComplete=$turnComplete'].join(',');
     return 'BidiGenerateContentClientContent($contents)';
   }
 }
@@ -7709,7 +7843,7 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
   /// not supported, all but the first will be ignored.
   ///
   /// DEPRECATED: Use one of `audio`, `video`, or `text` instead.
-  final List<Blob>? mediaChunks;
+  final List<Blob> mediaChunks;
 
   /// Optional. These form the realtime audio input stream.
   final Blob? audio;
@@ -7738,7 +7872,7 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
   final BidiGenerateContentRealtimeInput_ActivityEnd? activityEnd;
 
   BidiGenerateContentRealtimeInput({
-    this.mediaChunks,
+    this.mediaChunks = const [],
     this.audio,
     this.audioStreamEnd,
     this.video,
@@ -7749,7 +7883,7 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
 
   factory BidiGenerateContentRealtimeInput.fromJson(Map<String, dynamic> json) {
     return BidiGenerateContentRealtimeInput(
-      mediaChunks: decodeListMessage(json['mediaChunks'], Blob.fromJson),
+      mediaChunks: decodeListMessage(json['mediaChunks'], Blob.fromJson) ?? [],
       audio: decode(json['audio'], Blob.fromJson),
       audioStreamEnd: json['audioStreamEnd'],
       video: decode(json['video'], Blob.fromJson),
@@ -7768,7 +7902,7 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (mediaChunks != null) 'mediaChunks': encodeList(mediaChunks),
+      if (mediaChunks.isNotDefault) 'mediaChunks': encodeList(mediaChunks),
       if (audio != null) 'audio': audio!.toJson(),
       if (audioStreamEnd != null) 'audioStreamEnd': audioStreamEnd,
       if (video != null) 'video': video!.toJson(),
@@ -7846,24 +7980,26 @@ final class BidiGenerateContentToolResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BidiGenerateContentToolResponse';
 
   /// Optional. The response to the function calls.
-  final List<FunctionResponse>? functionResponses;
+  final List<FunctionResponse> functionResponses;
 
-  BidiGenerateContentToolResponse({this.functionResponses})
+  BidiGenerateContentToolResponse({this.functionResponses = const []})
     : super(fullyQualifiedName);
 
   factory BidiGenerateContentToolResponse.fromJson(Map<String, dynamic> json) {
     return BidiGenerateContentToolResponse(
-      functionResponses: decodeListMessage(
-        json['functionResponses'],
-        FunctionResponse.fromJson,
-      ),
+      functionResponses:
+          decodeListMessage(
+            json['functionResponses'],
+            FunctionResponse.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (functionResponses != null)
+      if (functionResponses.isNotDefault)
         'functionResponses': encodeList(functionResponses),
     };
   }
@@ -7971,16 +8107,16 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
   /// When model assumes realtime playback there will be delay between
   /// generation_complete and turn_complete that is caused by model waiting for
   /// playback to finish.
-  final bool? generationComplete;
+  final bool generationComplete;
 
   /// Output only. If true, indicates that the model has completed its turn.
   /// Generation will only start in response to additional client messages.
-  final bool? turnComplete;
+  final bool turnComplete;
 
   /// Output only. If true, indicates that a client message has interrupted
   /// current model generation. If the client is playing out the content in real
   /// time, this is a good signal to stop and empty the current playback queue.
-  final bool? interrupted;
+  final bool interrupted;
 
   /// Output only. Grounding metadata for the generated content.
   final GroundingMetadata? groundingMetadata;
@@ -8003,26 +8139,26 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
   /// Output only. If true, indicates that the model is not generating content
   /// because it is waiting for more input from the user, e.g. because it expects
   /// the user to continue talking.
-  final bool? waitingForInput;
+  final bool waitingForInput;
 
   BidiGenerateContentServerContent({
     this.modelTurn,
-    this.generationComplete,
-    this.turnComplete,
-    this.interrupted,
+    this.generationComplete = false,
+    this.turnComplete = false,
+    this.interrupted = false,
     this.groundingMetadata,
     this.inputTranscription,
     this.outputTranscription,
     this.urlContextMetadata,
-    this.waitingForInput,
+    this.waitingForInput = false,
   }) : super(fullyQualifiedName);
 
   factory BidiGenerateContentServerContent.fromJson(Map<String, dynamic> json) {
     return BidiGenerateContentServerContent(
       modelTurn: decode(json['modelTurn'], Content.fromJson),
-      generationComplete: json['generationComplete'],
-      turnComplete: json['turnComplete'],
-      interrupted: json['interrupted'],
+      generationComplete: json['generationComplete'] ?? false,
+      turnComplete: json['turnComplete'] ?? false,
+      interrupted: json['interrupted'] ?? false,
       groundingMetadata: decode(
         json['groundingMetadata'],
         GroundingMetadata.fromJson,
@@ -8039,7 +8175,7 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
         json['urlContextMetadata'],
         UrlContextMetadata.fromJson,
       ),
-      waitingForInput: json['waitingForInput'],
+      waitingForInput: json['waitingForInput'] ?? false,
     );
   }
 
@@ -8047,9 +8183,10 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
   Object toJson() {
     return {
       if (modelTurn != null) 'modelTurn': modelTurn!.toJson(),
-      if (generationComplete != null) 'generationComplete': generationComplete,
-      if (turnComplete != null) 'turnComplete': turnComplete,
-      if (interrupted != null) 'interrupted': interrupted,
+      if (generationComplete.isNotDefault)
+        'generationComplete': generationComplete,
+      if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
+      if (interrupted.isNotDefault) 'interrupted': interrupted,
       if (groundingMetadata != null)
         'groundingMetadata': groundingMetadata!.toJson(),
       if (inputTranscription != null)
@@ -8058,17 +8195,17 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
         'outputTranscription': outputTranscription!.toJson(),
       if (urlContextMetadata != null)
         'urlContextMetadata': urlContextMetadata!.toJson(),
-      if (waitingForInput != null) 'waitingForInput': waitingForInput,
+      if (waitingForInput.isNotDefault) 'waitingForInput': waitingForInput,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (generationComplete != null) 'generationComplete=$generationComplete',
-      if (turnComplete != null) 'turnComplete=$turnComplete',
-      if (interrupted != null) 'interrupted=$interrupted',
-      if (waitingForInput != null) 'waitingForInput=$waitingForInput',
+      'generationComplete=$generationComplete',
+      'turnComplete=$turnComplete',
+      'interrupted=$interrupted',
+      'waitingForInput=$waitingForInput',
     ].join(',');
     return 'BidiGenerateContentServerContent($contents)';
   }
@@ -8081,23 +8218,23 @@ final class BidiGenerateContentToolCall extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BidiGenerateContentToolCall';
 
   /// Output only. The function call to be executed.
-  final List<FunctionCall>? functionCalls;
+  final List<FunctionCall> functionCalls;
 
-  BidiGenerateContentToolCall({this.functionCalls}) : super(fullyQualifiedName);
+  BidiGenerateContentToolCall({this.functionCalls = const []})
+    : super(fullyQualifiedName);
 
   factory BidiGenerateContentToolCall.fromJson(Map<String, dynamic> json) {
     return BidiGenerateContentToolCall(
-      functionCalls: decodeListMessage(
-        json['functionCalls'],
-        FunctionCall.fromJson,
-      ),
+      functionCalls:
+          decodeListMessage(json['functionCalls'], FunctionCall.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (functionCalls != null) 'functionCalls': encodeList(functionCalls),
+      if (functionCalls.isNotDefault)
+        'functionCalls': encodeList(functionCalls),
     };
   }
 
@@ -8115,22 +8252,22 @@ final class BidiGenerateContentToolCallCancellation extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BidiGenerateContentToolCallCancellation';
 
   /// Output only. The ids of the tool calls to be cancelled.
-  final List<String>? ids;
+  final List<String> ids;
 
-  BidiGenerateContentToolCallCancellation({this.ids})
+  BidiGenerateContentToolCallCancellation({this.ids = const []})
     : super(fullyQualifiedName);
 
   factory BidiGenerateContentToolCallCancellation.fromJson(
     Map<String, dynamic> json,
   ) {
     return BidiGenerateContentToolCallCancellation(
-      ids: decodeList(json['ids']),
+      ids: decodeList(json['ids']) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (ids != null) 'ids': ids};
+    return {if (ids.isNotDefault) 'ids': ids};
   }
 
   @override
@@ -8172,7 +8309,7 @@ final class SessionResumptionUpdate extends ProtoMessage {
 
   /// New handle that represents a state that can be resumed. Empty if
   /// `resumable`=false.
-  final String? newHandle;
+  final String newHandle;
 
   /// True if the current session can be resumed at this point.
   ///
@@ -8181,32 +8318,29 @@ final class SessionResumptionUpdate extends ProtoMessage {
   /// (using a previous session token) in such a state will result in some data
   /// loss. In these cases, `new_handle` will be empty and `resumable` will be
   /// false.
-  final bool? resumable;
+  final bool resumable;
 
-  SessionResumptionUpdate({this.newHandle, this.resumable})
+  SessionResumptionUpdate({this.newHandle = '', this.resumable = false})
     : super(fullyQualifiedName);
 
   factory SessionResumptionUpdate.fromJson(Map<String, dynamic> json) {
     return SessionResumptionUpdate(
-      newHandle: json['newHandle'],
-      resumable: json['resumable'],
+      newHandle: json['newHandle'] ?? '',
+      resumable: json['resumable'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (newHandle != null) 'newHandle': newHandle,
-      if (resumable != null) 'resumable': resumable,
+      if (newHandle.isNotDefault) 'newHandle': newHandle,
+      if (resumable.isNotDefault) 'resumable': resumable,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (newHandle != null) 'newHandle=$newHandle',
-      if (resumable != null) 'resumable=$resumable',
-    ].join(',');
+    final contents = ['newHandle=$newHandle', 'resumable=$resumable'].join(',');
     return 'SessionResumptionUpdate($contents)';
   }
 }
@@ -8217,22 +8351,23 @@ final class BidiGenerateContentTranscription extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BidiGenerateContentTranscription';
 
   /// Transcription text.
-  final String? text;
+  final String text;
 
-  BidiGenerateContentTranscription({this.text}) : super(fullyQualifiedName);
+  BidiGenerateContentTranscription({this.text = ''})
+    : super(fullyQualifiedName);
 
   factory BidiGenerateContentTranscription.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentTranscription(text: json['text']);
+    return BidiGenerateContentTranscription(text: json['text'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (text != null) 'text': text};
+    return {if (text.isNotDefault) 'text': text};
   }
 
   @override
   String toString() {
-    final contents = [if (text != null) 'text=$text'].join(',');
+    final contents = ['text=$text'].join(',');
     return 'BidiGenerateContentTranscription($contents)';
   }
 }
@@ -8328,96 +8463,106 @@ final class UsageMetadata extends ProtoMessage {
   /// Output only. Number of tokens in the prompt. When `cached_content` is set,
   /// this is still the total effective prompt size meaning this includes the
   /// number of tokens in the cached content.
-  final int? promptTokenCount;
+  final int promptTokenCount;
 
   /// Number of tokens in the cached part of the prompt (the cached content)
-  final int? cachedContentTokenCount;
+  final int cachedContentTokenCount;
 
   /// Output only. Total number of tokens across all the generated response
   /// candidates.
-  final int? responseTokenCount;
+  final int responseTokenCount;
 
   /// Output only. Number of tokens present in tool-use prompt(s).
-  final int? toolUsePromptTokenCount;
+  final int toolUsePromptTokenCount;
 
   /// Output only. Number of tokens of thoughts for thinking models.
-  final int? thoughtsTokenCount;
+  final int thoughtsTokenCount;
 
   /// Output only. Total token count for the generation request (prompt +
   /// response candidates).
-  final int? totalTokenCount;
+  final int totalTokenCount;
 
   /// Output only. List of modalities that were processed in the request input.
-  final List<ModalityTokenCount>? promptTokensDetails;
+  final List<ModalityTokenCount> promptTokensDetails;
 
   /// Output only. List of modalities of the cached content in the request input.
-  final List<ModalityTokenCount>? cacheTokensDetails;
+  final List<ModalityTokenCount> cacheTokensDetails;
 
   /// Output only. List of modalities that were returned in the response.
-  final List<ModalityTokenCount>? responseTokensDetails;
+  final List<ModalityTokenCount> responseTokensDetails;
 
   /// Output only. List of modalities that were processed for tool-use request
   /// inputs.
-  final List<ModalityTokenCount>? toolUsePromptTokensDetails;
+  final List<ModalityTokenCount> toolUsePromptTokensDetails;
 
   UsageMetadata({
-    this.promptTokenCount,
-    this.cachedContentTokenCount,
-    this.responseTokenCount,
-    this.toolUsePromptTokenCount,
-    this.thoughtsTokenCount,
-    this.totalTokenCount,
-    this.promptTokensDetails,
-    this.cacheTokensDetails,
-    this.responseTokensDetails,
-    this.toolUsePromptTokensDetails,
+    this.promptTokenCount = 0,
+    this.cachedContentTokenCount = 0,
+    this.responseTokenCount = 0,
+    this.toolUsePromptTokenCount = 0,
+    this.thoughtsTokenCount = 0,
+    this.totalTokenCount = 0,
+    this.promptTokensDetails = const [],
+    this.cacheTokensDetails = const [],
+    this.responseTokensDetails = const [],
+    this.toolUsePromptTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
   factory UsageMetadata.fromJson(Map<String, dynamic> json) {
     return UsageMetadata(
-      promptTokenCount: json['promptTokenCount'],
-      cachedContentTokenCount: json['cachedContentTokenCount'],
-      responseTokenCount: json['responseTokenCount'],
-      toolUsePromptTokenCount: json['toolUsePromptTokenCount'],
-      thoughtsTokenCount: json['thoughtsTokenCount'],
-      totalTokenCount: json['totalTokenCount'],
-      promptTokensDetails: decodeListMessage(
-        json['promptTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      cacheTokensDetails: decodeListMessage(
-        json['cacheTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      responseTokensDetails: decodeListMessage(
-        json['responseTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
-      toolUsePromptTokensDetails: decodeListMessage(
-        json['toolUsePromptTokensDetails'],
-        ModalityTokenCount.fromJson,
-      ),
+      promptTokenCount: json['promptTokenCount'] ?? 0,
+      cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
+      responseTokenCount: json['responseTokenCount'] ?? 0,
+      toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
+      thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
+      totalTokenCount: json['totalTokenCount'] ?? 0,
+      promptTokensDetails:
+          decodeListMessage(
+            json['promptTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      cacheTokensDetails:
+          decodeListMessage(
+            json['cacheTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      responseTokensDetails:
+          decodeListMessage(
+            json['responseTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
+      toolUsePromptTokensDetails:
+          decodeListMessage(
+            json['toolUsePromptTokensDetails'],
+            ModalityTokenCount.fromJson,
+          ) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (promptTokenCount != null) 'promptTokenCount': promptTokenCount,
-      if (cachedContentTokenCount != null)
+      if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
+      if (cachedContentTokenCount.isNotDefault)
         'cachedContentTokenCount': cachedContentTokenCount,
-      if (responseTokenCount != null) 'responseTokenCount': responseTokenCount,
-      if (toolUsePromptTokenCount != null)
+      if (responseTokenCount.isNotDefault)
+        'responseTokenCount': responseTokenCount,
+      if (toolUsePromptTokenCount.isNotDefault)
         'toolUsePromptTokenCount': toolUsePromptTokenCount,
-      if (thoughtsTokenCount != null) 'thoughtsTokenCount': thoughtsTokenCount,
-      if (totalTokenCount != null) 'totalTokenCount': totalTokenCount,
-      if (promptTokensDetails != null)
+      if (thoughtsTokenCount.isNotDefault)
+        'thoughtsTokenCount': thoughtsTokenCount,
+      if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+      if (promptTokensDetails.isNotDefault)
         'promptTokensDetails': encodeList(promptTokensDetails),
-      if (cacheTokensDetails != null)
+      if (cacheTokensDetails.isNotDefault)
         'cacheTokensDetails': encodeList(cacheTokensDetails),
-      if (responseTokensDetails != null)
+      if (responseTokensDetails.isNotDefault)
         'responseTokensDetails': encodeList(responseTokensDetails),
-      if (toolUsePromptTokensDetails != null)
+      if (toolUsePromptTokensDetails.isNotDefault)
         'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
     };
   }
@@ -8425,14 +8570,12 @@ final class UsageMetadata extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (promptTokenCount != null) 'promptTokenCount=$promptTokenCount',
-      if (cachedContentTokenCount != null)
-        'cachedContentTokenCount=$cachedContentTokenCount',
-      if (responseTokenCount != null) 'responseTokenCount=$responseTokenCount',
-      if (toolUsePromptTokenCount != null)
-        'toolUsePromptTokenCount=$toolUsePromptTokenCount',
-      if (thoughtsTokenCount != null) 'thoughtsTokenCount=$thoughtsTokenCount',
-      if (totalTokenCount != null) 'totalTokenCount=$totalTokenCount',
+      'promptTokenCount=$promptTokenCount',
+      'cachedContentTokenCount=$cachedContentTokenCount',
+      'responseTokenCount=$responseTokenCount',
+      'toolUsePromptTokenCount=$toolUsePromptTokenCount',
+      'thoughtsTokenCount=$thoughtsTokenCount',
+      'totalTokenCount=$totalTokenCount',
     ].join(',');
     return 'UsageMetadata($contents)';
   }
@@ -8454,40 +8597,40 @@ final class Model extends ProtoMessage {
   /// Examples:
   ///
   /// * `models/gemini-1.5-flash-001`
-  final String? name;
+  final String name;
 
   /// Required. The name of the base model, pass this to the generation request.
   ///
   /// Examples:
   ///
   /// * `gemini-1.5-flash`
-  final String? baseModelId;
+  final String baseModelId;
 
   /// Required. The version number of the model.
   ///
   /// This represents the major version (`1.0` or `1.5`)
-  final String? version;
+  final String version;
 
   /// The human-readable name of the model. E.g. "Gemini 1.5 Flash".
   ///
   /// The name can be up to 128 characters long and can consist of any UTF-8
   /// characters.
-  final String? displayName;
+  final String displayName;
 
   /// A short description of the model.
-  final String? description;
+  final String description;
 
   /// Maximum number of input tokens allowed for this model.
-  final int? inputTokenLimit;
+  final int inputTokenLimit;
 
   /// Maximum number of output tokens available for this model.
-  final int? outputTokenLimit;
+  final int outputTokenLimit;
 
   /// The model's supported generation methods.
   ///
   /// The corresponding API method names are defined as Pascal case
   /// strings, such as `generateMessage` and `generateContent`.
-  final List<String>? supportedGenerationMethods;
+  final List<String> supportedGenerationMethods;
 
   /// Controls the randomness of the output.
   ///
@@ -8520,80 +8663,79 @@ final class Model extends ProtoMessage {
   final int? topK;
 
   /// Whether the model supports thinking.
-  final bool? thinking;
+  final bool thinking;
 
   Model({
-    this.name,
-    this.baseModelId,
-    this.version,
-    this.displayName,
-    this.description,
-    this.inputTokenLimit,
-    this.outputTokenLimit,
-    this.supportedGenerationMethods,
+    required this.name,
+    required this.baseModelId,
+    required this.version,
+    this.displayName = '',
+    this.description = '',
+    this.inputTokenLimit = 0,
+    this.outputTokenLimit = 0,
+    this.supportedGenerationMethods = const [],
     this.temperature,
     this.maxTemperature,
     this.topP,
     this.topK,
-    this.thinking,
+    this.thinking = false,
   }) : super(fullyQualifiedName);
 
   factory Model.fromJson(Map<String, dynamic> json) {
     return Model(
-      name: json['name'],
-      baseModelId: json['baseModelId'],
-      version: json['version'],
-      displayName: json['displayName'],
-      description: json['description'],
-      inputTokenLimit: json['inputTokenLimit'],
-      outputTokenLimit: json['outputTokenLimit'],
-      supportedGenerationMethods: decodeList(
-        json['supportedGenerationMethods'],
-      ),
+      name: json['name'] ?? '',
+      baseModelId: json['baseModelId'] ?? '',
+      version: json['version'] ?? '',
+      displayName: json['displayName'] ?? '',
+      description: json['description'] ?? '',
+      inputTokenLimit: json['inputTokenLimit'] ?? 0,
+      outputTokenLimit: json['outputTokenLimit'] ?? 0,
+      supportedGenerationMethods:
+          decodeList(json['supportedGenerationMethods']) ?? [],
       temperature: decodeDouble(json['temperature']),
       maxTemperature: decodeDouble(json['maxTemperature']),
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
-      thinking: json['thinking'],
+      thinking: json['thinking'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (baseModelId != null) 'baseModelId': baseModelId,
-      if (version != null) 'version': version,
-      if (displayName != null) 'displayName': displayName,
-      if (description != null) 'description': description,
-      if (inputTokenLimit != null) 'inputTokenLimit': inputTokenLimit,
-      if (outputTokenLimit != null) 'outputTokenLimit': outputTokenLimit,
-      if (supportedGenerationMethods != null)
+      'name': name,
+      'baseModelId': baseModelId,
+      'version': version,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (description.isNotDefault) 'description': description,
+      if (inputTokenLimit.isNotDefault) 'inputTokenLimit': inputTokenLimit,
+      if (outputTokenLimit.isNotDefault) 'outputTokenLimit': outputTokenLimit,
+      if (supportedGenerationMethods.isNotDefault)
         'supportedGenerationMethods': supportedGenerationMethods,
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (maxTemperature != null)
         'maxTemperature': encodeDouble(maxTemperature),
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
-      if (thinking != null) 'thinking': thinking,
+      if (thinking.isNotDefault) 'thinking': thinking,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
-      if (baseModelId != null) 'baseModelId=$baseModelId',
-      if (version != null) 'version=$version',
-      if (displayName != null) 'displayName=$displayName',
-      if (description != null) 'description=$description',
-      if (inputTokenLimit != null) 'inputTokenLimit=$inputTokenLimit',
-      if (outputTokenLimit != null) 'outputTokenLimit=$outputTokenLimit',
+      'name=$name',
+      'baseModelId=$baseModelId',
+      'version=$version',
+      'displayName=$displayName',
+      'description=$description',
+      'inputTokenLimit=$inputTokenLimit',
+      'outputTokenLimit=$outputTokenLimit',
       if (temperature != null) 'temperature=$temperature',
       if (maxTemperature != null) 'maxTemperature=$maxTemperature',
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
-      if (thinking != null) 'thinking=$thinking',
+      'thinking=$thinking',
     ].join(',');
     return 'Model($contents)';
   }
@@ -8614,7 +8756,7 @@ final class GetModelRequest extends ProtoMessage {
   GetModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetModelRequest.fromJson(Map<String, dynamic> json) {
-    return GetModelRequest(name: json['name']);
+    return GetModelRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -8639,7 +8781,7 @@ final class ListModelsRequest extends ProtoMessage {
   /// If unspecified, 50 models will be returned per page.
   /// This method returns at most 1000 models per page, even if you pass a larger
   /// page_size.
-  final int? pageSize;
+  final int pageSize;
 
   /// A page token, received from a previous `ListModels` call.
   ///
@@ -8648,32 +8790,29 @@ final class ListModelsRequest extends ProtoMessage {
   ///
   /// When paginating, all other parameters provided to `ListModels` must match
   /// the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
-  ListModelsRequest({this.pageSize, this.pageToken})
+  ListModelsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListModelsRequest.fromJson(Map<String, dynamic> json) {
     return ListModelsRequest(
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-    ].join(',');
+    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
     return 'ListModelsRequest($contents)';
   }
 }
@@ -8684,36 +8823,34 @@ final class ListModelsResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListModelsResponse';
 
   /// The returned Models.
-  final List<Model>? models;
+  final List<Model> models;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   ///
   /// If this field is omitted, there are no more pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListModelsResponse({this.models, this.nextPageToken})
+  ListModelsResponse({this.models = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListModelsResponse.fromJson(Map<String, dynamic> json) {
     return ListModelsResponse(
-      models: decodeListMessage(json['models'], Model.fromJson),
-      nextPageToken: json['nextPageToken'],
+      models: decodeListMessage(json['models'], Model.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (models != null) 'models': encodeList(models),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (models.isNotDefault) 'models': encodeList(models),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListModelsResponse($contents)';
   }
 }
@@ -8731,7 +8868,7 @@ final class GetTunedModelRequest extends ProtoMessage {
   GetTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetTunedModelRequest.fromJson(Map<String, dynamic> json) {
-    return GetTunedModelRequest(name: json['name']);
+    return GetTunedModelRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -8757,7 +8894,7 @@ final class ListTunedModelsRequest extends ProtoMessage {
   /// If unspecified, at most 10 tuned models will be returned.
   /// This method returns at most 1000 models per page, even if you pass a larger
   /// page_size.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token, received from a previous `ListTunedModels` call.
   ///
@@ -8766,7 +8903,7 @@ final class ListTunedModelsRequest extends ProtoMessage {
   ///
   /// When paginating, all other parameters provided to `ListTunedModels`
   /// must match the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
   /// Optional. A filter is a full text search over the tuned model's description
   /// and display name. By default, results will not include tuned models shared
@@ -8782,34 +8919,37 @@ final class ListTunedModelsRequest extends ProtoMessage {
   ///   "owner:me" returns all tuned models to which caller has owner role
   ///   "readers:me" returns all tuned models to which caller has reader role
   ///   "readers:everyone" returns all tuned models that are shared with everyone
-  final String? filter;
+  final String filter;
 
-  ListTunedModelsRequest({this.pageSize, this.pageToken, this.filter})
-    : super(fullyQualifiedName);
+  ListTunedModelsRequest({
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTunedModelsRequest.fromJson(Map<String, dynamic> json) {
     return ListTunedModelsRequest(
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
-      filter: json['filter'],
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
+      filter: json['filter'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
-      if (filter != null) 'filter': filter,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
+      if (filter.isNotDefault) 'filter': filter,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-      if (filter != null) 'filter=$filter',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+      'filter=$filter',
     ].join(',');
     return 'ListTunedModelsRequest($contents)';
   }
@@ -8821,36 +8961,37 @@ final class ListTunedModelsResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListTunedModelsResponse';
 
   /// The returned Models.
-  final List<TunedModel>? tunedModels;
+  final List<TunedModel> tunedModels;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   ///
   /// If this field is omitted, there are no more pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListTunedModelsResponse({this.tunedModels, this.nextPageToken})
-    : super(fullyQualifiedName);
+  ListTunedModelsResponse({
+    this.tunedModels = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTunedModelsResponse.fromJson(Map<String, dynamic> json) {
     return ListTunedModelsResponse(
-      tunedModels: decodeListMessage(json['tunedModels'], TunedModel.fromJson),
-      nextPageToken: json['nextPageToken'],
+      tunedModels:
+          decodeListMessage(json['tunedModels'], TunedModel.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (tunedModels != null) 'tunedModels': encodeList(tunedModels),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (tunedModels.isNotDefault) 'tunedModels': encodeList(tunedModels),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListTunedModelsResponse($contents)';
   }
 }
@@ -8867,7 +9008,7 @@ final class CreateTunedModelRequest extends ProtoMessage {
   final String? tunedModelId;
 
   /// Required. The tuned model to create.
-  final TunedModel tunedModel;
+  final TunedModel? tunedModel;
 
   CreateTunedModelRequest({this.tunedModelId, required this.tunedModel})
     : super(fullyQualifiedName);
@@ -8875,7 +9016,7 @@ final class CreateTunedModelRequest extends ProtoMessage {
   factory CreateTunedModelRequest.fromJson(Map<String, dynamic> json) {
     return CreateTunedModelRequest(
       tunedModelId: json['tunedModelId'],
-      tunedModel: decode(json['tunedModel'], TunedModel.fromJson)!,
+      tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
     );
   }
 
@@ -8883,7 +9024,7 @@ final class CreateTunedModelRequest extends ProtoMessage {
   Object toJson() {
     return {
       if (tunedModelId != null) 'tunedModelId': tunedModelId,
-      'tunedModel': tunedModel.toJson(),
+      if (tunedModel != null) 'tunedModel': tunedModel!.toJson(),
     };
   }
 
@@ -8903,57 +9044,58 @@ final class CreateTunedModelMetadata extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CreateTunedModelMetadata';
 
   /// Name of the tuned model associated with the tuning operation.
-  final String? tunedModel;
+  final String tunedModel;
 
   /// The total number of tuning steps.
-  final int? totalSteps;
+  final int totalSteps;
 
   /// The number of steps completed.
-  final int? completedSteps;
+  final int completedSteps;
 
   /// The completed percentage for the tuning operation.
-  final double? completedPercent;
+  final double completedPercent;
 
   /// Metrics collected during tuning.
-  final List<TuningSnapshot>? snapshots;
+  final List<TuningSnapshot> snapshots;
 
   CreateTunedModelMetadata({
-    this.tunedModel,
-    this.totalSteps,
-    this.completedSteps,
-    this.completedPercent,
-    this.snapshots,
+    this.tunedModel = '',
+    this.totalSteps = 0,
+    this.completedSteps = 0,
+    this.completedPercent = 0,
+    this.snapshots = const [],
   }) : super(fullyQualifiedName);
 
   factory CreateTunedModelMetadata.fromJson(Map<String, dynamic> json) {
     return CreateTunedModelMetadata(
-      tunedModel: json['tunedModel'],
-      totalSteps: json['totalSteps'],
-      completedSteps: json['completedSteps'],
-      completedPercent: decodeDouble(json['completedPercent']),
-      snapshots: decodeListMessage(json['snapshots'], TuningSnapshot.fromJson),
+      tunedModel: json['tunedModel'] ?? '',
+      totalSteps: json['totalSteps'] ?? 0,
+      completedSteps: json['completedSteps'] ?? 0,
+      completedPercent: decodeDouble(json['completedPercent']) ?? 0,
+      snapshots:
+          decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (tunedModel != null) 'tunedModel': tunedModel,
-      if (totalSteps != null) 'totalSteps': totalSteps,
-      if (completedSteps != null) 'completedSteps': completedSteps,
-      if (completedPercent != null)
+      if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
+      if (totalSteps.isNotDefault) 'totalSteps': totalSteps,
+      if (completedSteps.isNotDefault) 'completedSteps': completedSteps,
+      if (completedPercent.isNotDefault)
         'completedPercent': encodeDouble(completedPercent),
-      if (snapshots != null) 'snapshots': encodeList(snapshots),
+      if (snapshots.isNotDefault) 'snapshots': encodeList(snapshots),
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (tunedModel != null) 'tunedModel=$tunedModel',
-      if (totalSteps != null) 'totalSteps=$totalSteps',
-      if (completedSteps != null) 'completedSteps=$completedSteps',
-      if (completedPercent != null) 'completedPercent=$completedPercent',
+      'tunedModel=$tunedModel',
+      'totalSteps=$totalSteps',
+      'completedSteps=$completedSteps',
+      'completedPercent=$completedPercent',
     ].join(',');
     return 'CreateTunedModelMetadata($contents)';
   }
@@ -8965,7 +9107,7 @@ final class UpdateTunedModelRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UpdateTunedModelRequest';
 
   /// Required. The tuned model to update.
-  final TunedModel tunedModel;
+  final TunedModel? tunedModel;
 
   /// Optional. The list of fields to update.
   final FieldMask? updateMask;
@@ -8975,7 +9117,7 @@ final class UpdateTunedModelRequest extends ProtoMessage {
 
   factory UpdateTunedModelRequest.fromJson(Map<String, dynamic> json) {
     return UpdateTunedModelRequest(
-      tunedModel: decode(json['tunedModel'], TunedModel.fromJson)!,
+      tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -8983,7 +9125,7 @@ final class UpdateTunedModelRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'tunedModel': tunedModel.toJson(),
+      if (tunedModel != null) 'tunedModel': tunedModel!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -9004,7 +9146,7 @@ final class DeleteTunedModelRequest extends ProtoMessage {
   DeleteTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteTunedModelRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteTunedModelRequest(name: json['name']);
+    return DeleteTunedModelRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -9042,7 +9184,7 @@ final class Permission extends ProtoMessage {
   ///     tunedModels/{tuned_model}/permissions/{permission}
   ///     corpora/{corpus}/permissions/{permission}
   /// Output only.
-  final String? name;
+  final String name;
 
   /// Optional. Immutable. The type of the grantee.
   final Permission_GranteeType? granteeType;
@@ -9055,12 +9197,16 @@ final class Permission extends ProtoMessage {
   /// Required. The role granted by this permission.
   final Permission_Role? role;
 
-  Permission({this.name, this.granteeType, this.emailAddress, this.role})
-    : super(fullyQualifiedName);
+  Permission({
+    this.name = '',
+    this.granteeType,
+    this.emailAddress,
+    required this.role,
+  }) : super(fullyQualifiedName);
 
   factory Permission.fromJson(Map<String, dynamic> json) {
     return Permission(
-      name: json['name'],
+      name: json['name'] ?? '',
       granteeType: decodeEnum(
         json['granteeType'],
         Permission_GranteeType.fromJson,
@@ -9073,7 +9219,7 @@ final class Permission extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
+      if (name.isNotDefault) 'name': name,
       if (granteeType != null) 'granteeType': granteeType!.toJson(),
       if (emailAddress != null) 'emailAddress': emailAddress,
       if (role != null) 'role': role!.toJson(),
@@ -9083,7 +9229,7 @@ final class Permission extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (name != null) 'name=$name',
+      'name=$name',
       if (granteeType != null) 'granteeType=$granteeType',
       if (emailAddress != null) 'emailAddress=$emailAddress',
       if (role != null) 'role=$role',
@@ -9109,10 +9255,15 @@ final class Permission_GranteeType extends ProtoEnum {
   /// Represents access to everyone. No extra information is required.
   static const everyone = Permission_GranteeType('EVERYONE');
 
+  /// The default value for [Permission_GranteeType].
+  static const $default = granteeTypeUnspecified;
+
   const Permission_GranteeType(super.value);
 
   factory Permission_GranteeType.fromJson(String json) =>
       Permission_GranteeType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'GranteeType.$value';
@@ -9132,9 +9283,14 @@ final class Permission_Role extends ProtoEnum {
   /// Reader can use the resource.
   static const reader = Permission_Role('READER');
 
+  /// The default value for [Permission_Role].
+  static const $default = roleUnspecified;
+
   const Permission_Role(super.value);
 
   factory Permission_Role.fromJson(String json) => Permission_Role(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Role.$value';
@@ -9152,21 +9308,24 @@ final class CreatePermissionRequest extends ProtoMessage {
   final String parent;
 
   /// Required. The permission to create.
-  final Permission permission;
+  final Permission? permission;
 
   CreatePermissionRequest({required this.parent, required this.permission})
     : super(fullyQualifiedName);
 
   factory CreatePermissionRequest.fromJson(Map<String, dynamic> json) {
     return CreatePermissionRequest(
-      parent: json['parent'],
-      permission: decode(json['permission'], Permission.fromJson)!,
+      parent: json['parent'] ?? '',
+      permission: decode(json['permission'], Permission.fromJson),
     );
   }
 
   @override
   Object toJson() {
-    return {'parent': parent, 'permission': permission.toJson()};
+    return {
+      'parent': parent,
+      if (permission != null) 'permission': permission!.toJson(),
+    };
   }
 
   @override
@@ -9191,7 +9350,7 @@ final class GetPermissionRequest extends ProtoMessage {
   GetPermissionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetPermissionRequest.fromJson(Map<String, dynamic> json) {
-    return GetPermissionRequest(name: json['name']);
+    return GetPermissionRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -9223,7 +9382,7 @@ final class ListPermissionsRequest extends ProtoMessage {
   /// If unspecified, at most 10 permissions will be returned.
   /// This method returns at most 1000 permissions per page, even if you pass
   /// larger page_size.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token, received from a previous `ListPermissions` call.
   ///
@@ -9232,16 +9391,19 @@ final class ListPermissionsRequest extends ProtoMessage {
   ///
   /// When paginating, all other parameters provided to `ListPermissions`
   /// must match the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
-  ListPermissionsRequest({required this.parent, this.pageSize, this.pageToken})
-    : super(fullyQualifiedName);
+  ListPermissionsRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListPermissionsRequest.fromJson(Map<String, dynamic> json) {
     return ListPermissionsRequest(
-      parent: json['parent'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      parent: json['parent'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
@@ -9249,8 +9411,8 @@ final class ListPermissionsRequest extends ProtoMessage {
   Object toJson() {
     return {
       'parent': parent,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
@@ -9258,8 +9420,8 @@ final class ListPermissionsRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
     ].join(',');
     return 'ListPermissionsRequest($contents)';
   }
@@ -9272,36 +9434,37 @@ final class ListPermissionsResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListPermissionsResponse';
 
   /// Returned permissions.
-  final List<Permission>? permissions;
+  final List<Permission> permissions;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   ///
   /// If this field is omitted, there are no more pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListPermissionsResponse({this.permissions, this.nextPageToken})
-    : super(fullyQualifiedName);
+  ListPermissionsResponse({
+    this.permissions = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListPermissionsResponse.fromJson(Map<String, dynamic> json) {
     return ListPermissionsResponse(
-      permissions: decodeListMessage(json['permissions'], Permission.fromJson),
-      nextPageToken: json['nextPageToken'],
+      permissions:
+          decodeListMessage(json['permissions'], Permission.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (permissions != null) 'permissions': encodeList(permissions),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (permissions.isNotDefault) 'permissions': encodeList(permissions),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListPermissionsResponse($contents)';
   }
 }
@@ -9314,18 +9477,18 @@ final class UpdatePermissionRequest extends ProtoMessage {
   /// Required. The permission to update.
   ///
   /// The permission's `name` field is used to identify the permission to update.
-  final Permission permission;
+  final Permission? permission;
 
   /// Required. The list of fields to update. Accepted ones:
   ///  - role (`Permission.role` field)
   final FieldMask? updateMask;
 
-  UpdatePermissionRequest({required this.permission, this.updateMask})
+  UpdatePermissionRequest({required this.permission, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdatePermissionRequest.fromJson(Map<String, dynamic> json) {
     return UpdatePermissionRequest(
-      permission: decode(json['permission'], Permission.fromJson)!,
+      permission: decode(json['permission'], Permission.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -9333,7 +9496,7 @@ final class UpdatePermissionRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'permission': permission.toJson(),
+      if (permission != null) 'permission': permission!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -9356,7 +9519,7 @@ final class DeletePermissionRequest extends ProtoMessage {
   DeletePermissionRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeletePermissionRequest.fromJson(Map<String, dynamic> json) {
-    return DeletePermissionRequest(name: json['name']);
+    return DeletePermissionRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -9383,32 +9546,26 @@ final class TransferOwnershipRequest extends ProtoMessage {
 
   /// Required. The email address of the user to whom the tuned model is being
   /// transferred to.
-  final String? emailAddress;
+  final String emailAddress;
 
-  TransferOwnershipRequest({required this.name, this.emailAddress})
+  TransferOwnershipRequest({required this.name, required this.emailAddress})
     : super(fullyQualifiedName);
 
   factory TransferOwnershipRequest.fromJson(Map<String, dynamic> json) {
     return TransferOwnershipRequest(
-      name: json['name'],
-      emailAddress: json['emailAddress'],
+      name: json['name'] ?? '',
+      emailAddress: json['emailAddress'] ?? '',
     );
   }
 
   @override
   Object toJson() {
-    return {
-      'name': name,
-      if (emailAddress != null) 'emailAddress': emailAddress,
-    };
+    return {'name': name, 'emailAddress': emailAddress};
   }
 
   @override
   String toString() {
-    final contents = [
-      'name=$name',
-      if (emailAddress != null) 'emailAddress=$emailAddress',
-    ].join(',');
+    final contents = ['name=$name', 'emailAddress=$emailAddress'].join(',');
     return 'TransferOwnershipRequest($contents)';
   }
 }
@@ -9444,18 +9601,22 @@ final class PredictRequest extends ProtoMessage {
   final String model;
 
   /// Required. The instances that are the input to the prediction call.
-  final List<Value>? instances;
+  final List<Value> instances;
 
   /// Optional. The parameters that govern the prediction call.
   final Value? parameters;
 
-  PredictRequest({required this.model, this.instances, this.parameters})
-    : super(fullyQualifiedName);
+  PredictRequest({
+    required this.model,
+    required this.instances,
+    this.parameters,
+  }) : super(fullyQualifiedName);
 
   factory PredictRequest.fromJson(Map<String, dynamic> json) {
     return PredictRequest(
-      model: json['model'],
-      instances: decodeListMessageCustom(json['instances'], Value.fromJson),
+      model: json['model'] ?? '',
+      instances:
+          decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
       parameters: decodeCustom(json['parameters'], Value.fromJson),
     );
   }
@@ -9464,7 +9625,7 @@ final class PredictRequest extends ProtoMessage {
   Object toJson() {
     return {
       'model': model,
-      if (instances != null) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
   }
@@ -9486,21 +9647,22 @@ final class PredictLongRunningRequest extends ProtoMessage {
   final String model;
 
   /// Required. The instances that are the input to the prediction call.
-  final List<Value>? instances;
+  final List<Value> instances;
 
   /// Optional. The parameters that govern the prediction call.
   final Value? parameters;
 
   PredictLongRunningRequest({
     required this.model,
-    this.instances,
+    required this.instances,
     this.parameters,
   }) : super(fullyQualifiedName);
 
   factory PredictLongRunningRequest.fromJson(Map<String, dynamic> json) {
     return PredictLongRunningRequest(
-      model: json['model'],
-      instances: decodeListMessageCustom(json['instances'], Value.fromJson),
+      model: json['model'] ?? '',
+      instances:
+          decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
       parameters: decodeCustom(json['parameters'], Value.fromJson),
     );
   }
@@ -9509,7 +9671,7 @@ final class PredictLongRunningRequest extends ProtoMessage {
   Object toJson() {
     return {
       'model': model,
-      if (instances != null) 'instances': encodeList(instances),
+      'instances': encodeList(instances),
       if (parameters != null) 'parameters': parameters!.toJson(),
     };
   }
@@ -9527,19 +9689,22 @@ final class PredictResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.PredictResponse';
 
   /// The outputs of the prediction call.
-  final List<Value>? predictions;
+  final List<Value> predictions;
 
-  PredictResponse({this.predictions}) : super(fullyQualifiedName);
+  PredictResponse({this.predictions = const []}) : super(fullyQualifiedName);
 
   factory PredictResponse.fromJson(Map<String, dynamic> json) {
     return PredictResponse(
-      predictions: decodeListMessageCustom(json['predictions'], Value.fromJson),
+      predictions:
+          decodeListMessageCustom(json['predictions'], Value.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (predictions != null) 'predictions': encodeList(predictions)};
+    return {
+      if (predictions.isNotDefault) 'predictions': encodeList(predictions),
+    };
   }
 
   @override
@@ -9662,51 +9827,47 @@ final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.PredictLongRunningGeneratedVideoResponse';
 
   /// The generated samples.
-  final List<Media>? generatedSamples;
+  final List<Media> generatedSamples;
 
   /// Returns if any videos were filtered due to RAI policies.
-  final int? raiMediaFilteredCount;
+  final int raiMediaFilteredCount;
 
   /// Returns rai failure reasons if any.
-  final List<String>? raiMediaFilteredReasons;
+  final List<String> raiMediaFilteredReasons;
 
   PredictLongRunningGeneratedVideoResponse({
-    this.generatedSamples,
-    this.raiMediaFilteredCount,
-    this.raiMediaFilteredReasons,
+    this.generatedSamples = const [],
+    this.raiMediaFilteredCount = 0,
+    this.raiMediaFilteredReasons = const [],
   }) : super(fullyQualifiedName);
 
   factory PredictLongRunningGeneratedVideoResponse.fromJson(
     Map<String, dynamic> json,
   ) {
     return PredictLongRunningGeneratedVideoResponse(
-      generatedSamples: decodeListMessage(
-        json['generatedSamples'],
-        Media.fromJson,
-      ),
-      raiMediaFilteredCount: json['raiMediaFilteredCount'],
-      raiMediaFilteredReasons: decodeList(json['raiMediaFilteredReasons']),
+      generatedSamples:
+          decodeListMessage(json['generatedSamples'], Media.fromJson) ?? [],
+      raiMediaFilteredCount: json['raiMediaFilteredCount'] ?? 0,
+      raiMediaFilteredReasons:
+          decodeList(json['raiMediaFilteredReasons']) ?? [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (generatedSamples != null)
+      if (generatedSamples.isNotDefault)
         'generatedSamples': encodeList(generatedSamples),
-      if (raiMediaFilteredCount != null)
+      if (raiMediaFilteredCount.isNotDefault)
         'raiMediaFilteredCount': raiMediaFilteredCount,
-      if (raiMediaFilteredReasons != null)
+      if (raiMediaFilteredReasons.isNotDefault)
         'raiMediaFilteredReasons': raiMediaFilteredReasons,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (raiMediaFilteredCount != null)
-        'raiMediaFilteredCount=$raiMediaFilteredCount',
-    ].join(',');
+    final contents = ['raiMediaFilteredCount=$raiMediaFilteredCount'].join(',');
     return 'PredictLongRunningGeneratedVideoResponse($contents)';
   }
 }
@@ -9724,12 +9885,12 @@ final class Corpus extends ProtoMessage {
   /// create, a unique name will be derived from `display_name` along with a 12
   /// character random suffix.
   /// Example: `corpora/my-awesome-corpora-123a456b789c`
-  final String? name;
+  final String name;
 
   /// Optional. The human-readable display name for the `Corpus`. The display
   /// name must be no more than 512 characters in length, including spaces.
   /// Example: "Docs on Semantic Retriever"
-  final String? displayName;
+  final String displayName;
 
   /// Output only. The Timestamp of when the `Corpus` was created.
   final Timestamp? createTime;
@@ -9737,13 +9898,17 @@ final class Corpus extends ProtoMessage {
   /// Output only. The Timestamp of when the `Corpus` was last updated.
   final Timestamp? updateTime;
 
-  Corpus({this.name, this.displayName, this.createTime, this.updateTime})
-    : super(fullyQualifiedName);
+  Corpus({
+    this.name = '',
+    this.displayName = '',
+    this.createTime,
+    this.updateTime,
+  }) : super(fullyQualifiedName);
 
   factory Corpus.fromJson(Map<String, dynamic> json) {
     return Corpus(
-      name: json['name'],
-      displayName: json['displayName'],
+      name: json['name'] ?? '',
+      displayName: json['displayName'] ?? '',
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
     );
@@ -9752,8 +9917,8 @@ final class Corpus extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (displayName != null) 'displayName': displayName,
+      if (name.isNotDefault) 'name': name,
+      if (displayName.isNotDefault) 'displayName': displayName,
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
     };
@@ -9761,10 +9926,7 @@ final class Corpus extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (displayName != null) 'displayName=$displayName',
-    ].join(',');
+    final contents = ['name=$name', 'displayName=$displayName'].join(',');
     return 'Corpus($contents)';
   }
 }
@@ -9781,16 +9943,16 @@ final class Document extends ProtoMessage {
   /// dash. If the name is empty on create, a unique name will be derived from
   /// `display_name` along with a 12 character random suffix.
   /// Example: `corpora/{corpus_id}/documents/my-awesome-doc-123a456b789c`
-  final String? name;
+  final String name;
 
   /// Optional. The human-readable display name for the `Document`. The display
   /// name must be no more than 512 characters in length, including spaces.
   /// Example: "Semantic Retriever Documentation"
-  final String? displayName;
+  final String displayName;
 
   /// Optional. User provided custom metadata stored as key-value pairs used for
   /// querying. A `Document` can have a maximum of 20 `CustomMetadata`.
-  final List<CustomMetadata>? customMetadata;
+  final List<CustomMetadata> customMetadata;
 
   /// Output only. The Timestamp of when the `Document` was last updated.
   final Timestamp? updateTime;
@@ -9799,21 +9961,20 @@ final class Document extends ProtoMessage {
   final Timestamp? createTime;
 
   Document({
-    this.name,
-    this.displayName,
-    this.customMetadata,
+    this.name = '',
+    this.displayName = '',
+    this.customMetadata = const [],
     this.updateTime,
     this.createTime,
   }) : super(fullyQualifiedName);
 
   factory Document.fromJson(Map<String, dynamic> json) {
     return Document(
-      name: json['name'],
-      displayName: json['displayName'],
-      customMetadata: decodeListMessage(
-        json['customMetadata'],
-        CustomMetadata.fromJson,
-      ),
+      name: json['name'] ?? '',
+      displayName: json['displayName'] ?? '',
+      customMetadata:
+          decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
+          [],
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
     );
@@ -9822,9 +9983,10 @@ final class Document extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
-      if (displayName != null) 'displayName': displayName,
-      if (customMetadata != null) 'customMetadata': encodeList(customMetadata),
+      if (name.isNotDefault) 'name': name,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (customMetadata.isNotDefault)
+        'customMetadata': encodeList(customMetadata),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
     };
@@ -9832,10 +9994,7 @@ final class Document extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (displayName != null) 'displayName=$displayName',
-    ].join(',');
+    final contents = ['name=$name', 'displayName=$displayName'].join(',');
     return 'Document($contents)';
   }
 }
@@ -9846,17 +10005,17 @@ final class StringList extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.StringList';
 
   /// The string values of the metadata to store.
-  final List<String>? values;
+  final List<String> values;
 
-  StringList({this.values}) : super(fullyQualifiedName);
+  StringList({this.values = const []}) : super(fullyQualifiedName);
 
   factory StringList.fromJson(Map<String, dynamic> json) {
-    return StringList(values: decodeList(json['values']));
+    return StringList(values: decodeList(json['values']) ?? []);
   }
 
   @override
   Object toJson() {
-    return {if (values != null) 'values': values};
+    return {if (values.isNotDefault) 'values': values};
   }
 
   @override
@@ -9878,13 +10037,13 @@ final class CustomMetadata extends ProtoMessage {
   final double? numericValue;
 
   /// Required. The key of the metadata to store.
-  final String? key;
+  final String key;
 
   CustomMetadata({
     this.stringValue,
     this.stringListValue,
     this.numericValue,
-    this.key,
+    required this.key,
   }) : super(fullyQualifiedName);
 
   factory CustomMetadata.fromJson(Map<String, dynamic> json) {
@@ -9892,7 +10051,7 @@ final class CustomMetadata extends ProtoMessage {
       stringValue: json['stringValue'],
       stringListValue: decode(json['stringListValue'], StringList.fromJson),
       numericValue: decodeDouble(json['numericValue']),
-      key: json['key'],
+      key: json['key'] ?? '',
     );
   }
 
@@ -9902,7 +10061,7 @@ final class CustomMetadata extends ProtoMessage {
       if (stringValue != null) 'stringValue': stringValue,
       if (stringListValue != null) 'stringListValue': stringListValue!.toJson(),
       if (numericValue != null) 'numericValue': encodeDouble(numericValue),
-      if (key != null) 'key': key,
+      'key': key,
     };
   }
 
@@ -9911,7 +10070,7 @@ final class CustomMetadata extends ProtoMessage {
     final contents = [
       if (stringValue != null) 'stringValue=$stringValue',
       if (numericValue != null) 'numericValue=$numericValue',
-      if (key != null) 'key=$key',
+      'key=$key',
     ].join(',');
     return 'CustomMetadata($contents)';
   }
@@ -9928,32 +10087,31 @@ final class MetadataFilter extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.MetadataFilter';
 
   /// Required. The key of the metadata to filter on.
-  final String? key;
+  final String key;
 
   /// Required. The `Condition`s for the given key that will trigger this filter.
   /// Multiple `Condition`s are joined by logical ORs.
-  final List<Condition>? conditions;
+  final List<Condition> conditions;
 
-  MetadataFilter({this.key, this.conditions}) : super(fullyQualifiedName);
+  MetadataFilter({required this.key, required this.conditions})
+    : super(fullyQualifiedName);
 
   factory MetadataFilter.fromJson(Map<String, dynamic> json) {
     return MetadataFilter(
-      key: json['key'],
-      conditions: decodeListMessage(json['conditions'], Condition.fromJson),
+      key: json['key'] ?? '',
+      conditions:
+          decodeListMessage(json['conditions'], Condition.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {
-      if (key != null) 'key': key,
-      if (conditions != null) 'conditions': encodeList(conditions),
-    };
+    return {'key': key, 'conditions': encodeList(conditions)};
   }
 
   @override
   String toString() {
-    final contents = [if (key != null) 'key=$key'].join(',');
+    final contents = ['key=$key'].join(',');
     return 'MetadataFilter($contents)';
   }
 }
@@ -9971,16 +10129,18 @@ final class Condition extends ProtoMessage {
 
   /// Required. Operator applied to the given key-value pair to trigger the
   /// condition.
-  final Condition_Operator? operation;
+  final Condition_Operator operation;
 
-  Condition({this.stringValue, this.numericValue, this.operation})
+  Condition({this.stringValue, this.numericValue, required this.operation})
     : super(fullyQualifiedName);
 
   factory Condition.fromJson(Map<String, dynamic> json) {
     return Condition(
       stringValue: json['stringValue'],
       numericValue: decodeDouble(json['numericValue']),
-      operation: decodeEnum(json['operation'], Condition_Operator.fromJson),
+      operation:
+          decodeEnum(json['operation'], Condition_Operator.fromJson) ??
+          Condition_Operator.$default,
     );
   }
 
@@ -9989,7 +10149,7 @@ final class Condition extends ProtoMessage {
     return {
       if (stringValue != null) 'stringValue': stringValue,
       if (numericValue != null) 'numericValue': encodeDouble(numericValue),
-      if (operation != null) 'operation': operation!.toJson(),
+      'operation': operation.toJson(),
     };
   }
 
@@ -9998,7 +10158,7 @@ final class Condition extends ProtoMessage {
     final contents = [
       if (stringValue != null) 'stringValue=$stringValue',
       if (numericValue != null) 'numericValue=$numericValue',
-      if (operation != null) 'operation=$operation',
+      'operation=$operation',
     ].join(',');
     return 'Condition($contents)';
   }
@@ -10035,9 +10195,14 @@ final class Condition_Operator extends ProtoEnum {
   /// key has a `string_list_value`.
   static const excludes = Condition_Operator('EXCLUDES');
 
+  /// The default value for [Condition_Operator].
+  static const $default = operatorUnspecified;
+
   const Condition_Operator(super.value);
 
   factory Condition_Operator.fromJson(String json) => Condition_Operator(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Operator.$value';
@@ -10056,7 +10221,7 @@ final class Chunk extends ProtoMessage {
   /// with a dash. If the name is empty on create, a random 12-character unique
   /// ID will be generated.
   /// Example: `corpora/{corpus_id}/documents/{document_id}/chunks/123a456b789c`
-  final String? name;
+  final String name;
 
   /// Required. The content for the `Chunk`, such as the text string.
   /// The maximum number of tokens per chunk is 2043.
@@ -10064,7 +10229,7 @@ final class Chunk extends ProtoMessage {
 
   /// Optional. User provided custom metadata stored as key-value pairs.
   /// The maximum number of `CustomMetadata` per chunk is 20.
-  final List<CustomMetadata>? customMetadata;
+  final List<CustomMetadata> customMetadata;
 
   /// Output only. The Timestamp of when the `Chunk` was created.
   final Timestamp? createTime;
@@ -10073,49 +10238,48 @@ final class Chunk extends ProtoMessage {
   final Timestamp? updateTime;
 
   /// Output only. Current state of the `Chunk`.
-  final Chunk_State? state;
+  final Chunk_State state;
 
   Chunk({
-    this.name,
-    this.data,
-    this.customMetadata,
+    this.name = '',
+    required this.data,
+    this.customMetadata = const [],
     this.createTime,
     this.updateTime,
-    this.state,
+    this.state = Chunk_State.$default,
   }) : super(fullyQualifiedName);
 
   factory Chunk.fromJson(Map<String, dynamic> json) {
     return Chunk(
-      name: json['name'],
+      name: json['name'] ?? '',
       data: decode(json['data'], ChunkData.fromJson),
-      customMetadata: decodeListMessage(
-        json['customMetadata'],
-        CustomMetadata.fromJson,
-      ),
+      customMetadata:
+          decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
+          [],
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      state: decodeEnum(json['state'], Chunk_State.fromJson),
+      state:
+          decodeEnum(json['state'], Chunk_State.fromJson) ??
+          Chunk_State.$default,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (name != null) 'name': name,
+      if (name.isNotDefault) 'name': name,
       if (data != null) 'data': data!.toJson(),
-      if (customMetadata != null) 'customMetadata': encodeList(customMetadata),
+      if (customMetadata.isNotDefault)
+        'customMetadata': encodeList(customMetadata),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (state != null) 'state': state!.toJson(),
+      if (state.isNotDefault) 'state': state.toJson(),
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (name != null) 'name=$name',
-      if (state != null) 'state=$state',
-    ].join(',');
+    final contents = ['name=$name', 'state=$state'].join(',');
     return 'Chunk($contents)';
   }
 }
@@ -10134,9 +10298,14 @@ final class Chunk_State extends ProtoEnum {
   /// `Chunk` failed processing.
   static const stateFailed = Chunk_State('STATE_FAILED');
 
+  /// The default value for [Chunk_State].
+  static const $default = stateUnspecified;
+
   const Chunk_State(super.value);
 
   factory Chunk_State.fromJson(String json) => Chunk_State(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'State.$value';
@@ -10177,19 +10346,17 @@ final class CreateCorpusRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.CreateCorpusRequest';
 
   /// Required. The `Corpus` to create.
-  final Corpus corpus;
+  final Corpus? corpus;
 
   CreateCorpusRequest({required this.corpus}) : super(fullyQualifiedName);
 
   factory CreateCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return CreateCorpusRequest(
-      corpus: decode(json['corpus'], Corpus.fromJson)!,
-    );
+    return CreateCorpusRequest(corpus: decode(json['corpus'], Corpus.fromJson));
   }
 
   @override
   Object toJson() {
-    return {'corpus': corpus.toJson()};
+    return {if (corpus != null) 'corpus': corpus!.toJson()};
   }
 
   @override
@@ -10208,7 +10375,7 @@ final class GetCorpusRequest extends ProtoMessage {
   GetCorpusRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return GetCorpusRequest(name: json['name']);
+    return GetCorpusRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -10229,18 +10396,18 @@ final class UpdateCorpusRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UpdateCorpusRequest';
 
   /// Required. The `Corpus` to update.
-  final Corpus corpus;
+  final Corpus? corpus;
 
   /// Required. The list of fields to update.
   /// Currently, this only supports updating `display_name`.
   final FieldMask? updateMask;
 
-  UpdateCorpusRequest({required this.corpus, this.updateMask})
+  UpdateCorpusRequest({required this.corpus, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateCorpusRequest.fromJson(Map<String, dynamic> json) {
     return UpdateCorpusRequest(
-      corpus: decode(json['corpus'], Corpus.fromJson)!,
+      corpus: decode(json['corpus'], Corpus.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -10248,7 +10415,7 @@ final class UpdateCorpusRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'corpus': corpus.toJson(),
+      if (corpus != null) 'corpus': corpus!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -10271,26 +10438,26 @@ final class DeleteCorpusRequest extends ProtoMessage {
   ///
   /// If false (the default), a `FAILED_PRECONDITION` error will be returned if
   /// `Corpus` contains any `Document`s.
-  final bool? force;
+  final bool force;
 
-  DeleteCorpusRequest({required this.name, this.force})
+  DeleteCorpusRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteCorpusRequest(name: json['name'], force: json['force']);
+    return DeleteCorpusRequest(
+      name: json['name'] ?? '',
+      force: json['force'] ?? false,
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (force != null) 'force': force};
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
   String toString() {
-    final contents = [
-      'name=$name',
-      if (force != null) 'force=$force',
-    ].join(',');
+    final contents = ['name=$name', 'force=$force'].join(',');
     return 'DeleteCorpusRequest($contents)';
   }
 }
@@ -10305,7 +10472,7 @@ final class ListCorporaRequest extends ProtoMessage {
   ///
   /// If unspecified, at most 10 `Corpora` will be returned.
   /// The maximum size limit is 20 `Corpora` per page.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token, received from a previous `ListCorpora` call.
   ///
@@ -10314,32 +10481,29 @@ final class ListCorporaRequest extends ProtoMessage {
   ///
   /// When paginating, all other parameters provided to `ListCorpora`
   /// must match the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
-  ListCorporaRequest({this.pageSize, this.pageToken})
+  ListCorporaRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListCorporaRequest.fromJson(Map<String, dynamic> json) {
     return ListCorporaRequest(
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
-    ].join(',');
+    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
     return 'ListCorporaRequest($contents)';
   }
 }
@@ -10351,35 +10515,33 @@ final class ListCorporaResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListCorporaResponse';
 
   /// The returned corpora.
-  final List<Corpus>? corpora;
+  final List<Corpus> corpora;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   /// If this field is omitted, there are no more pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListCorporaResponse({this.corpora, this.nextPageToken})
+  ListCorporaResponse({this.corpora = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListCorporaResponse.fromJson(Map<String, dynamic> json) {
     return ListCorporaResponse(
-      corpora: decodeListMessage(json['corpora'], Corpus.fromJson),
-      nextPageToken: json['nextPageToken'],
+      corpora: decodeListMessage(json['corpora'], Corpus.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (corpora != null) 'corpora': encodeList(corpora),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (corpora.isNotDefault) 'corpora': encodeList(corpora),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListCorporaResponse($contents)';
   }
 }
@@ -10394,7 +10556,7 @@ final class QueryCorpusRequest extends ProtoMessage {
   final String name;
 
   /// Required. Query string to perform semantic search.
-  final String? query;
+  final String query;
 
   /// Optional. Filter for `Chunk` and `Document` metadata. Each `MetadataFilter`
   /// object should correspond to a unique key. Multiple `MetadataFilter` objects
@@ -10427,31 +10589,30 @@ final class QueryCorpusRequest extends ProtoMessage {
   ///
   /// Note: "AND"s for the same key are only supported for numeric values. String
   /// values only support "OR"s for the same key.
-  final List<MetadataFilter>? metadataFilters;
+  final List<MetadataFilter> metadataFilters;
 
   /// Optional. The maximum number of `Chunk`s to return.
   /// The service may return fewer `Chunk`s.
   ///
   /// If unspecified, at most 10 `Chunk`s will be returned.
   /// The maximum specified result count is 100.
-  final int? resultsCount;
+  final int resultsCount;
 
   QueryCorpusRequest({
     required this.name,
-    this.query,
-    this.metadataFilters,
-    this.resultsCount,
+    required this.query,
+    this.metadataFilters = const [],
+    this.resultsCount = 0,
   }) : super(fullyQualifiedName);
 
   factory QueryCorpusRequest.fromJson(Map<String, dynamic> json) {
     return QueryCorpusRequest(
-      name: json['name'],
-      query: json['query'],
-      metadataFilters: decodeListMessage(
-        json['metadataFilters'],
-        MetadataFilter.fromJson,
-      ),
-      resultsCount: json['resultsCount'],
+      name: json['name'] ?? '',
+      query: json['query'] ?? '',
+      metadataFilters:
+          decodeListMessage(json['metadataFilters'], MetadataFilter.fromJson) ??
+          [],
+      resultsCount: json['resultsCount'] ?? 0,
     );
   }
 
@@ -10459,10 +10620,10 @@ final class QueryCorpusRequest extends ProtoMessage {
   Object toJson() {
     return {
       'name': name,
-      if (query != null) 'query': query,
-      if (metadataFilters != null)
+      'query': query,
+      if (metadataFilters.isNotDefault)
         'metadataFilters': encodeList(metadataFilters),
-      if (resultsCount != null) 'resultsCount': resultsCount,
+      if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
     };
   }
 
@@ -10470,8 +10631,8 @@ final class QueryCorpusRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'name=$name',
-      if (query != null) 'query=$query',
-      if (resultsCount != null) 'resultsCount=$resultsCount',
+      'query=$query',
+      'resultsCount=$resultsCount',
     ].join(',');
     return 'QueryCorpusRequest($contents)';
   }
@@ -10483,23 +10644,24 @@ final class QueryCorpusResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.QueryCorpusResponse';
 
   /// The relevant chunks.
-  final List<RelevantChunk>? relevantChunks;
+  final List<RelevantChunk> relevantChunks;
 
-  QueryCorpusResponse({this.relevantChunks}) : super(fullyQualifiedName);
+  QueryCorpusResponse({this.relevantChunks = const []})
+    : super(fullyQualifiedName);
 
   factory QueryCorpusResponse.fromJson(Map<String, dynamic> json) {
     return QueryCorpusResponse(
-      relevantChunks: decodeListMessage(
-        json['relevantChunks'],
-        RelevantChunk.fromJson,
-      ),
+      relevantChunks:
+          decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (relevantChunks != null) 'relevantChunks': encodeList(relevantChunks),
+      if (relevantChunks.isNotDefault)
+        'relevantChunks': encodeList(relevantChunks),
     };
   }
 
@@ -10513,7 +10675,7 @@ final class RelevantChunk extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.RelevantChunk';
 
   /// `Chunk` relevance to the query.
-  final double? chunkRelevanceScore;
+  final double chunkRelevanceScore;
 
   /// `Chunk` associated with the query.
   final Chunk? chunk;
@@ -10521,12 +10683,12 @@ final class RelevantChunk extends ProtoMessage {
   /// `Document` associated with the chunk.
   final Document? document;
 
-  RelevantChunk({this.chunkRelevanceScore, this.chunk, this.document})
+  RelevantChunk({this.chunkRelevanceScore = 0, this.chunk, this.document})
     : super(fullyQualifiedName);
 
   factory RelevantChunk.fromJson(Map<String, dynamic> json) {
     return RelevantChunk(
-      chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']),
+      chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']) ?? 0,
       chunk: decode(json['chunk'], Chunk.fromJson),
       document: decode(json['document'], Document.fromJson),
     );
@@ -10535,7 +10697,7 @@ final class RelevantChunk extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (chunkRelevanceScore != null)
+      if (chunkRelevanceScore.isNotDefault)
         'chunkRelevanceScore': encodeDouble(chunkRelevanceScore),
       if (chunk != null) 'chunk': chunk!.toJson(),
       if (document != null) 'document': document!.toJson(),
@@ -10544,10 +10706,7 @@ final class RelevantChunk extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
-      if (chunkRelevanceScore != null)
-        'chunkRelevanceScore=$chunkRelevanceScore',
-    ].join(',');
+    final contents = ['chunkRelevanceScore=$chunkRelevanceScore'].join(',');
     return 'RelevantChunk($contents)';
   }
 }
@@ -10562,21 +10721,24 @@ final class CreateDocumentRequest extends ProtoMessage {
   final String parent;
 
   /// Required. The `Document` to create.
-  final Document document;
+  final Document? document;
 
   CreateDocumentRequest({required this.parent, required this.document})
     : super(fullyQualifiedName);
 
   factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) {
     return CreateDocumentRequest(
-      parent: json['parent'],
-      document: decode(json['document'], Document.fromJson)!,
+      parent: json['parent'] ?? '',
+      document: decode(json['document'], Document.fromJson),
     );
   }
 
   @override
   Object toJson() {
-    return {'parent': parent, 'document': document.toJson()};
+    return {
+      'parent': parent,
+      if (document != null) 'document': document!.toJson(),
+    };
   }
 
   @override
@@ -10598,7 +10760,7 @@ final class GetDocumentRequest extends ProtoMessage {
   GetDocumentRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return GetDocumentRequest(name: json['name']);
+    return GetDocumentRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -10619,19 +10781,19 @@ final class UpdateDocumentRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UpdateDocumentRequest';
 
   /// Required. The `Document` to update.
-  final Document document;
+  final Document? document;
 
   /// Required. The list of fields to update.
   /// Currently, this only supports updating `display_name` and
   /// `custom_metadata`.
   final FieldMask? updateMask;
 
-  UpdateDocumentRequest({required this.document, this.updateMask})
+  UpdateDocumentRequest({required this.document, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateDocumentRequest.fromJson(Map<String, dynamic> json) {
     return UpdateDocumentRequest(
-      document: decode(json['document'], Document.fromJson)!,
+      document: decode(json['document'], Document.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -10639,7 +10801,7 @@ final class UpdateDocumentRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'document': document.toJson(),
+      if (document != null) 'document': document!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -10662,26 +10824,26 @@ final class DeleteDocumentRequest extends ProtoMessage {
   ///
   /// If false (the default), a `FAILED_PRECONDITION` error will be returned if
   /// `Document` contains any `Chunk`s.
-  final bool? force;
+  final bool force;
 
-  DeleteDocumentRequest({required this.name, this.force})
+  DeleteDocumentRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
   factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteDocumentRequest(name: json['name'], force: json['force']);
+    return DeleteDocumentRequest(
+      name: json['name'] ?? '',
+      force: json['force'] ?? false,
+    );
   }
 
   @override
   Object toJson() {
-    return {'name': name, if (force != null) 'force': force};
+    return {'name': name, if (force.isNotDefault) 'force': force};
   }
 
   @override
   String toString() {
-    final contents = [
-      'name=$name',
-      if (force != null) 'force=$force',
-    ].join(',');
+    final contents = ['name=$name', 'force=$force'].join(',');
     return 'DeleteDocumentRequest($contents)';
   }
 }
@@ -10700,7 +10862,7 @@ final class ListDocumentsRequest extends ProtoMessage {
   ///
   /// If unspecified, at most 10 `Document`s will be returned.
   /// The maximum size limit is 20 `Document`s per page.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token, received from a previous `ListDocuments` call.
   ///
@@ -10709,16 +10871,19 @@ final class ListDocumentsRequest extends ProtoMessage {
   ///
   /// When paginating, all other parameters provided to `ListDocuments`
   /// must match the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
-  ListDocumentsRequest({required this.parent, this.pageSize, this.pageToken})
-    : super(fullyQualifiedName);
+  ListDocumentsRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDocumentsRequest.fromJson(Map<String, dynamic> json) {
     return ListDocumentsRequest(
-      parent: json['parent'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      parent: json['parent'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
@@ -10726,8 +10891,8 @@ final class ListDocumentsRequest extends ProtoMessage {
   Object toJson() {
     return {
       'parent': parent,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
@@ -10735,8 +10900,8 @@ final class ListDocumentsRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
     ].join(',');
     return 'ListDocumentsRequest($contents)';
   }
@@ -10749,35 +10914,33 @@ final class ListDocumentsResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListDocumentsResponse';
 
   /// The returned `Document`s.
-  final List<Document>? documents;
+  final List<Document> documents;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   /// If this field is omitted, there are no more pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListDocumentsResponse({this.documents, this.nextPageToken})
+  ListDocumentsResponse({this.documents = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListDocumentsResponse.fromJson(Map<String, dynamic> json) {
     return ListDocumentsResponse(
-      documents: decodeListMessage(json['documents'], Document.fromJson),
-      nextPageToken: json['nextPageToken'],
+      documents: decodeListMessage(json['documents'], Document.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (documents != null) 'documents': encodeList(documents),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (documents.isNotDefault) 'documents': encodeList(documents),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListDocumentsResponse($contents)';
   }
 }
@@ -10792,14 +10955,14 @@ final class QueryDocumentRequest extends ProtoMessage {
   final String name;
 
   /// Required. Query string to perform semantic search.
-  final String? query;
+  final String query;
 
   /// Optional. The maximum number of `Chunk`s to return.
   /// The service may return fewer `Chunk`s.
   ///
   /// If unspecified, at most 10 `Chunk`s will be returned.
   /// The maximum specified result count is 100.
-  final int? resultsCount;
+  final int resultsCount;
 
   /// Optional. Filter for `Chunk` metadata. Each `MetadataFilter` object should
   /// correspond to a unique key. Multiple `MetadataFilter` objects are joined by
@@ -10832,24 +10995,23 @@ final class QueryDocumentRequest extends ProtoMessage {
   ///
   /// Note: "AND"s for the same key are only supported for numeric values. String
   /// values only support "OR"s for the same key.
-  final List<MetadataFilter>? metadataFilters;
+  final List<MetadataFilter> metadataFilters;
 
   QueryDocumentRequest({
     required this.name,
-    this.query,
-    this.resultsCount,
-    this.metadataFilters,
+    required this.query,
+    this.resultsCount = 0,
+    this.metadataFilters = const [],
   }) : super(fullyQualifiedName);
 
   factory QueryDocumentRequest.fromJson(Map<String, dynamic> json) {
     return QueryDocumentRequest(
-      name: json['name'],
-      query: json['query'],
-      resultsCount: json['resultsCount'],
-      metadataFilters: decodeListMessage(
-        json['metadataFilters'],
-        MetadataFilter.fromJson,
-      ),
+      name: json['name'] ?? '',
+      query: json['query'] ?? '',
+      resultsCount: json['resultsCount'] ?? 0,
+      metadataFilters:
+          decodeListMessage(json['metadataFilters'], MetadataFilter.fromJson) ??
+          [],
     );
   }
 
@@ -10857,9 +11019,9 @@ final class QueryDocumentRequest extends ProtoMessage {
   Object toJson() {
     return {
       'name': name,
-      if (query != null) 'query': query,
-      if (resultsCount != null) 'resultsCount': resultsCount,
-      if (metadataFilters != null)
+      'query': query,
+      if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
+      if (metadataFilters.isNotDefault)
         'metadataFilters': encodeList(metadataFilters),
     };
   }
@@ -10868,8 +11030,8 @@ final class QueryDocumentRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'name=$name',
-      if (query != null) 'query=$query',
-      if (resultsCount != null) 'resultsCount=$resultsCount',
+      'query=$query',
+      'resultsCount=$resultsCount',
     ].join(',');
     return 'QueryDocumentRequest($contents)';
   }
@@ -10881,23 +11043,24 @@ final class QueryDocumentResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.QueryDocumentResponse';
 
   /// The returned relevant chunks.
-  final List<RelevantChunk>? relevantChunks;
+  final List<RelevantChunk> relevantChunks;
 
-  QueryDocumentResponse({this.relevantChunks}) : super(fullyQualifiedName);
+  QueryDocumentResponse({this.relevantChunks = const []})
+    : super(fullyQualifiedName);
 
   factory QueryDocumentResponse.fromJson(Map<String, dynamic> json) {
     return QueryDocumentResponse(
-      relevantChunks: decodeListMessage(
-        json['relevantChunks'],
-        RelevantChunk.fromJson,
-      ),
+      relevantChunks:
+          decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (relevantChunks != null) 'relevantChunks': encodeList(relevantChunks),
+      if (relevantChunks.isNotDefault)
+        'relevantChunks': encodeList(relevantChunks),
     };
   }
 
@@ -10915,21 +11078,21 @@ final class CreateChunkRequest extends ProtoMessage {
   final String parent;
 
   /// Required. The `Chunk` to create.
-  final Chunk chunk;
+  final Chunk? chunk;
 
   CreateChunkRequest({required this.parent, required this.chunk})
     : super(fullyQualifiedName);
 
   factory CreateChunkRequest.fromJson(Map<String, dynamic> json) {
     return CreateChunkRequest(
-      parent: json['parent'],
-      chunk: decode(json['chunk'], Chunk.fromJson)!,
+      parent: json['parent'] ?? '',
+      chunk: decode(json['chunk'], Chunk.fromJson),
     );
   }
 
   @override
   Object toJson() {
-    return {'parent': parent, 'chunk': chunk.toJson()};
+    return {'parent': parent, if (chunk != null) 'chunk': chunk!.toJson()};
   }
 
   @override
@@ -10951,26 +11114,25 @@ final class BatchCreateChunksRequest extends ProtoMessage {
 
   /// Required. The request messages specifying the `Chunk`s to create.
   /// A maximum of 100 `Chunk`s can be created in a batch.
-  final List<CreateChunkRequest>? requests;
+  final List<CreateChunkRequest> requests;
 
-  BatchCreateChunksRequest({required this.parent, this.requests})
+  BatchCreateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) {
     return BatchCreateChunksRequest(
-      parent: json['parent'],
-      requests: decodeListMessage(
-        json['requests'],
-        CreateChunkRequest.fromJson,
-      ),
+      parent: json['parent'] ?? '',
+      requests:
+          decodeListMessage(json['requests'], CreateChunkRequest.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      'parent': parent,
-      if (requests != null) 'requests': encodeList(requests),
+      if (parent.isNotDefault) 'parent': parent,
+      'requests': encodeList(requests),
     };
   }
 
@@ -10987,19 +11149,20 @@ final class BatchCreateChunksResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BatchCreateChunksResponse';
 
   /// `Chunk`s created.
-  final List<Chunk>? chunks;
+  final List<Chunk> chunks;
 
-  BatchCreateChunksResponse({this.chunks}) : super(fullyQualifiedName);
+  BatchCreateChunksResponse({this.chunks = const []})
+    : super(fullyQualifiedName);
 
   factory BatchCreateChunksResponse.fromJson(Map<String, dynamic> json) {
     return BatchCreateChunksResponse(
-      chunks: decodeListMessage(json['chunks'], Chunk.fromJson),
+      chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (chunks != null) 'chunks': encodeList(chunks)};
+    return {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
   }
 
   @override
@@ -11018,7 +11181,7 @@ final class GetChunkRequest extends ProtoMessage {
   GetChunkRequest({required this.name}) : super(fullyQualifiedName);
 
   factory GetChunkRequest.fromJson(Map<String, dynamic> json) {
-    return GetChunkRequest(name: json['name']);
+    return GetChunkRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -11039,18 +11202,18 @@ final class UpdateChunkRequest extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.UpdateChunkRequest';
 
   /// Required. The `Chunk` to update.
-  final Chunk chunk;
+  final Chunk? chunk;
 
   /// Required. The list of fields to update.
   /// Currently, this only supports updating `custom_metadata` and `data`.
   final FieldMask? updateMask;
 
-  UpdateChunkRequest({required this.chunk, this.updateMask})
+  UpdateChunkRequest({required this.chunk, required this.updateMask})
     : super(fullyQualifiedName);
 
   factory UpdateChunkRequest.fromJson(Map<String, dynamic> json) {
     return UpdateChunkRequest(
-      chunk: decode(json['chunk'], Chunk.fromJson)!,
+      chunk: decode(json['chunk'], Chunk.fromJson),
       updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
     );
   }
@@ -11058,7 +11221,7 @@ final class UpdateChunkRequest extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      'chunk': chunk.toJson(),
+      if (chunk != null) 'chunk': chunk!.toJson(),
       if (updateMask != null) 'updateMask': updateMask!.toJson(),
     };
   }
@@ -11079,26 +11242,25 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
 
   /// Required. The request messages specifying the `Chunk`s to update.
   /// A maximum of 100 `Chunk`s can be updated in a batch.
-  final List<UpdateChunkRequest>? requests;
+  final List<UpdateChunkRequest> requests;
 
-  BatchUpdateChunksRequest({required this.parent, this.requests})
+  BatchUpdateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) {
     return BatchUpdateChunksRequest(
-      parent: json['parent'],
-      requests: decodeListMessage(
-        json['requests'],
-        UpdateChunkRequest.fromJson,
-      ),
+      parent: json['parent'] ?? '',
+      requests:
+          decodeListMessage(json['requests'], UpdateChunkRequest.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      'parent': parent,
-      if (requests != null) 'requests': encodeList(requests),
+      if (parent.isNotDefault) 'parent': parent,
+      'requests': encodeList(requests),
     };
   }
 
@@ -11115,19 +11277,20 @@ final class BatchUpdateChunksResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BatchUpdateChunksResponse';
 
   /// `Chunk`s updated.
-  final List<Chunk>? chunks;
+  final List<Chunk> chunks;
 
-  BatchUpdateChunksResponse({this.chunks}) : super(fullyQualifiedName);
+  BatchUpdateChunksResponse({this.chunks = const []})
+    : super(fullyQualifiedName);
 
   factory BatchUpdateChunksResponse.fromJson(Map<String, dynamic> json) {
     return BatchUpdateChunksResponse(
-      chunks: decodeListMessage(json['chunks'], Chunk.fromJson),
+      chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (chunks != null) 'chunks': encodeList(chunks)};
+    return {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
   }
 
   @override
@@ -11146,7 +11309,7 @@ final class DeleteChunkRequest extends ProtoMessage {
   DeleteChunkRequest({required this.name}) : super(fullyQualifiedName);
 
   factory DeleteChunkRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteChunkRequest(name: json['name']);
+    return DeleteChunkRequest(name: json['name'] ?? '');
   }
 
   @override
@@ -11172,26 +11335,25 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
   final String parent;
 
   /// Required. The request messages specifying the `Chunk`s to delete.
-  final List<DeleteChunkRequest>? requests;
+  final List<DeleteChunkRequest> requests;
 
-  BatchDeleteChunksRequest({required this.parent, this.requests})
+  BatchDeleteChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
   factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) {
     return BatchDeleteChunksRequest(
-      parent: json['parent'],
-      requests: decodeListMessage(
-        json['requests'],
-        DeleteChunkRequest.fromJson,
-      ),
+      parent: json['parent'] ?? '',
+      requests:
+          decodeListMessage(json['requests'], DeleteChunkRequest.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      'parent': parent,
-      if (requests != null) 'requests': encodeList(requests),
+      if (parent.isNotDefault) 'parent': parent,
+      'requests': encodeList(requests),
     };
   }
 
@@ -11216,7 +11378,7 @@ final class ListChunksRequest extends ProtoMessage {
   ///
   /// If unspecified, at most 10 `Chunk`s will be returned.
   /// The maximum size limit is 100 `Chunk`s per page.
-  final int? pageSize;
+  final int pageSize;
 
   /// Optional. A page token, received from a previous `ListChunks` call.
   ///
@@ -11225,16 +11387,19 @@ final class ListChunksRequest extends ProtoMessage {
   ///
   /// When paginating, all other parameters provided to `ListChunks`
   /// must match the call that provided the page token.
-  final String? pageToken;
+  final String pageToken;
 
-  ListChunksRequest({required this.parent, this.pageSize, this.pageToken})
-    : super(fullyQualifiedName);
+  ListChunksRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListChunksRequest.fromJson(Map<String, dynamic> json) {
     return ListChunksRequest(
-      parent: json['parent'],
-      pageSize: json['pageSize'],
-      pageToken: json['pageToken'],
+      parent: json['parent'] ?? '',
+      pageSize: json['pageSize'] ?? 0,
+      pageToken: json['pageToken'] ?? '',
     );
   }
 
@@ -11242,8 +11407,8 @@ final class ListChunksRequest extends ProtoMessage {
   Object toJson() {
     return {
       'parent': parent,
-      if (pageSize != null) 'pageSize': pageSize,
-      if (pageToken != null) 'pageToken': pageToken,
+      if (pageSize.isNotDefault) 'pageSize': pageSize,
+      if (pageToken.isNotDefault) 'pageToken': pageToken,
     };
   }
 
@@ -11251,8 +11416,8 @@ final class ListChunksRequest extends ProtoMessage {
   String toString() {
     final contents = [
       'parent=$parent',
-      if (pageSize != null) 'pageSize=$pageSize',
-      if (pageToken != null) 'pageToken=$pageToken',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
     ].join(',');
     return 'ListChunksRequest($contents)';
   }
@@ -11265,35 +11430,33 @@ final class ListChunksResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ListChunksResponse';
 
   /// The returned `Chunk`s.
-  final List<Chunk>? chunks;
+  final List<Chunk> chunks;
 
   /// A token, which can be sent as `page_token` to retrieve the next page.
   /// If this field is omitted, there are no more pages.
-  final String? nextPageToken;
+  final String nextPageToken;
 
-  ListChunksResponse({this.chunks, this.nextPageToken})
+  ListChunksResponse({this.chunks = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
   factory ListChunksResponse.fromJson(Map<String, dynamic> json) {
     return ListChunksResponse(
-      chunks: decodeListMessage(json['chunks'], Chunk.fromJson),
-      nextPageToken: json['nextPageToken'],
+      chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
+      nextPageToken: json['nextPageToken'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (chunks != null) 'chunks': encodeList(chunks),
-      if (nextPageToken != null) 'nextPageToken': nextPageToken,
+      if (chunks.isNotDefault) 'chunks': encodeList(chunks),
+      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     };
   }
 
   @override
   String toString() {
-    final contents = [
-      if (nextPageToken != null) 'nextPageToken=$nextPageToken',
-    ].join(',');
+    final contents = ['nextPageToken=$nextPageToken'].join(',');
     return 'ListChunksResponse($contents)';
   }
 }
@@ -11307,16 +11470,21 @@ final class ContentFilter extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.ContentFilter';
 
   /// The reason content was blocked during request processing.
-  final ContentFilter_BlockedReason? reason;
+  final ContentFilter_BlockedReason reason;
 
   /// A string that describes the filtering behavior in more detail.
   final String? message;
 
-  ContentFilter({this.reason, this.message}) : super(fullyQualifiedName);
+  ContentFilter({
+    this.reason = ContentFilter_BlockedReason.$default,
+    this.message,
+  }) : super(fullyQualifiedName);
 
   factory ContentFilter.fromJson(Map<String, dynamic> json) {
     return ContentFilter(
-      reason: decodeEnum(json['reason'], ContentFilter_BlockedReason.fromJson),
+      reason:
+          decodeEnum(json['reason'], ContentFilter_BlockedReason.fromJson) ??
+          ContentFilter_BlockedReason.$default,
       message: json['message'],
     );
   }
@@ -11324,7 +11492,7 @@ final class ContentFilter extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (reason != null) 'reason': reason!.toJson(),
+      if (reason.isNotDefault) 'reason': reason.toJson(),
       if (message != null) 'message': message,
     };
   }
@@ -11332,7 +11500,7 @@ final class ContentFilter extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (reason != null) 'reason=$reason',
+      'reason=$reason',
       if (message != null) 'message=$message',
     ].join(',');
     return 'ContentFilter($contents)';
@@ -11352,10 +11520,15 @@ final class ContentFilter_BlockedReason extends ProtoEnum {
   /// Content was blocked, but the reason is uncategorized.
   static const other = ContentFilter_BlockedReason('OTHER');
 
+  /// The default value for [ContentFilter_BlockedReason].
+  static const $default = blockedReasonUnspecified;
+
   const ContentFilter_BlockedReason(super.value);
 
   factory ContentFilter_BlockedReason.fromJson(String json) =>
       ContentFilter_BlockedReason(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'BlockedReason.$value';
@@ -11411,43 +11584,50 @@ final class SafetyRating extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.SafetyRating';
 
   /// Required. The category for this rating.
-  final HarmCategory? category;
+  final HarmCategory category;
 
   /// Required. The probability of harm for this content.
-  final SafetyRating_HarmProbability? probability;
+  final SafetyRating_HarmProbability probability;
 
   /// Was this content blocked because of this rating?
-  final bool? blocked;
+  final bool blocked;
 
-  SafetyRating({this.category, this.probability, this.blocked})
-    : super(fullyQualifiedName);
+  SafetyRating({
+    required this.category,
+    required this.probability,
+    this.blocked = false,
+  }) : super(fullyQualifiedName);
 
   factory SafetyRating.fromJson(Map<String, dynamic> json) {
     return SafetyRating(
-      category: decodeEnum(json['category'], HarmCategory.fromJson),
-      probability: decodeEnum(
-        json['probability'],
-        SafetyRating_HarmProbability.fromJson,
-      ),
-      blocked: json['blocked'],
+      category:
+          decodeEnum(json['category'], HarmCategory.fromJson) ??
+          HarmCategory.$default,
+      probability:
+          decodeEnum(
+            json['probability'],
+            SafetyRating_HarmProbability.fromJson,
+          ) ??
+          SafetyRating_HarmProbability.$default,
+      blocked: json['blocked'] ?? false,
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (category != null) 'category': category!.toJson(),
-      if (probability != null) 'probability': probability!.toJson(),
-      if (blocked != null) 'blocked': blocked,
+      'category': category.toJson(),
+      'probability': probability.toJson(),
+      if (blocked.isNotDefault) 'blocked': blocked,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (category != null) 'category=$category',
-      if (probability != null) 'probability=$probability',
-      if (blocked != null) 'blocked=$blocked',
+      'category=$category',
+      'probability=$probability',
+      'blocked=$blocked',
     ].join(',');
     return 'SafetyRating($contents)';
   }
@@ -11475,10 +11655,15 @@ final class SafetyRating_HarmProbability extends ProtoEnum {
   /// Content has a high chance of being unsafe.
   static const high = SafetyRating_HarmProbability('HIGH');
 
+  /// The default value for [SafetyRating_HarmProbability].
+  static const $default = harmProbabilityUnspecified;
+
   const SafetyRating_HarmProbability(super.value);
 
   factory SafetyRating_HarmProbability.fromJson(String json) =>
       SafetyRating_HarmProbability(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'HarmProbability.$value';
@@ -11493,37 +11678,36 @@ final class SafetySetting extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.SafetySetting';
 
   /// Required. The category for this setting.
-  final HarmCategory? category;
+  final HarmCategory category;
 
   /// Required. Controls the probability threshold at which harm is blocked.
-  final SafetySetting_HarmBlockThreshold? threshold;
+  final SafetySetting_HarmBlockThreshold threshold;
 
-  SafetySetting({this.category, this.threshold}) : super(fullyQualifiedName);
+  SafetySetting({required this.category, required this.threshold})
+    : super(fullyQualifiedName);
 
   factory SafetySetting.fromJson(Map<String, dynamic> json) {
     return SafetySetting(
-      category: decodeEnum(json['category'], HarmCategory.fromJson),
-      threshold: decodeEnum(
-        json['threshold'],
-        SafetySetting_HarmBlockThreshold.fromJson,
-      ),
+      category:
+          decodeEnum(json['category'], HarmCategory.fromJson) ??
+          HarmCategory.$default,
+      threshold:
+          decodeEnum(
+            json['threshold'],
+            SafetySetting_HarmBlockThreshold.fromJson,
+          ) ??
+          SafetySetting_HarmBlockThreshold.$default,
     );
   }
 
   @override
   Object toJson() {
-    return {
-      if (category != null) 'category': category!.toJson(),
-      if (threshold != null) 'threshold': threshold!.toJson(),
-    };
+    return {'category': category.toJson(), 'threshold': threshold.toJson()};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (category != null) 'category=$category',
-      if (threshold != null) 'threshold=$threshold',
-    ].join(',');
+    final contents = ['category=$category', 'threshold=$threshold'].join(',');
     return 'SafetySetting($contents)';
   }
 }
@@ -11556,10 +11740,15 @@ final class SafetySetting_HarmBlockThreshold extends ProtoEnum {
   /// Turn off the safety filter.
   static const off = SafetySetting_HarmBlockThreshold('OFF');
 
+  /// The default value for [SafetySetting_HarmBlockThreshold].
+  static const $default = harmBlockThresholdUnspecified;
+
   const SafetySetting_HarmBlockThreshold(super.value);
 
   factory SafetySetting_HarmBlockThreshold.fromJson(String json) =>
       SafetySetting_HarmBlockThreshold(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'HarmBlockThreshold.$value';
@@ -11644,39 +11833,38 @@ final class GenerateTextRequest extends ProtoMessage {
   /// HARM_CATEGORY_TOXICITY, HARM_CATEGORY_VIOLENCE, HARM_CATEGORY_SEXUAL,
   /// HARM_CATEGORY_MEDICAL, HARM_CATEGORY_DANGEROUS are supported in text
   /// service.
-  final List<SafetySetting>? safetySettings;
+  final List<SafetySetting> safetySettings;
 
   /// The set of character sequences (up to 5) that will stop output generation.
   /// If specified, the API will stop at the first appearance of a stop
   /// sequence. The stop sequence will not be included as part of the response.
-  final List<String>? stopSequences;
+  final List<String> stopSequences;
 
   GenerateTextRequest({
     required this.model,
-    this.prompt,
+    required this.prompt,
     this.temperature,
     this.candidateCount,
     this.maxOutputTokens,
     this.topP,
     this.topK,
-    this.safetySettings,
-    this.stopSequences,
+    this.safetySettings = const [],
+    this.stopSequences = const [],
   }) : super(fullyQualifiedName);
 
   factory GenerateTextRequest.fromJson(Map<String, dynamic> json) {
     return GenerateTextRequest(
-      model: json['model'],
+      model: json['model'] ?? '',
       prompt: decode(json['prompt'], TextPrompt.fromJson),
       temperature: decodeDouble(json['temperature']),
       candidateCount: json['candidateCount'],
       maxOutputTokens: json['maxOutputTokens'],
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
-      safetySettings: decodeListMessage(
-        json['safetySettings'],
-        SafetySetting.fromJson,
-      ),
-      stopSequences: decodeList(json['stopSequences']),
+      safetySettings:
+          decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
+          [],
+      stopSequences: decodeList(json['stopSequences']) ?? [],
     );
   }
 
@@ -11690,8 +11878,9 @@ final class GenerateTextRequest extends ProtoMessage {
       if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
-      if (safetySettings != null) 'safetySettings': encodeList(safetySettings),
-      if (stopSequences != null) 'stopSequences': stopSequences,
+      if (safetySettings.isNotDefault)
+        'safetySettings': encodeList(safetySettings),
+      if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
     };
   }
 
@@ -11715,7 +11904,7 @@ final class GenerateTextResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.GenerateTextResponse';
 
   /// Candidate responses from the model.
-  final List<TextCompletion>? candidates;
+  final List<TextCompletion> candidates;
 
   /// A set of content filtering metadata for the prompt and response
   /// text.
@@ -11728,34 +11917,35 @@ final class GenerateTextResponse extends ProtoMessage {
   ///
   /// The blocking is configured by the `SafetySettings` in the request (or the
   /// default `SafetySettings` of the API).
-  final List<ContentFilter>? filters;
+  final List<ContentFilter> filters;
 
   /// Returns any safety feedback related to content filtering.
-  final List<SafetyFeedback>? safetyFeedback;
+  final List<SafetyFeedback> safetyFeedback;
 
-  GenerateTextResponse({this.candidates, this.filters, this.safetyFeedback})
-    : super(fullyQualifiedName);
+  GenerateTextResponse({
+    this.candidates = const [],
+    this.filters = const [],
+    this.safetyFeedback = const [],
+  }) : super(fullyQualifiedName);
 
   factory GenerateTextResponse.fromJson(Map<String, dynamic> json) {
     return GenerateTextResponse(
-      candidates: decodeListMessage(
-        json['candidates'],
-        TextCompletion.fromJson,
-      ),
-      filters: decodeListMessage(json['filters'], ContentFilter.fromJson),
-      safetyFeedback: decodeListMessage(
-        json['safetyFeedback'],
-        SafetyFeedback.fromJson,
-      ),
+      candidates:
+          decodeListMessage(json['candidates'], TextCompletion.fromJson) ?? [],
+      filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
+      safetyFeedback:
+          decodeListMessage(json['safetyFeedback'], SafetyFeedback.fromJson) ??
+          [],
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (candidates != null) 'candidates': encodeList(candidates),
-      if (filters != null) 'filters': encodeList(filters),
-      if (safetyFeedback != null) 'safetyFeedback': encodeList(safetyFeedback),
+      if (candidates.isNotDefault) 'candidates': encodeList(candidates),
+      if (filters.isNotDefault) 'filters': encodeList(filters),
+      if (safetyFeedback.isNotDefault)
+        'safetyFeedback': encodeList(safetyFeedback),
     };
   }
 
@@ -11771,22 +11961,22 @@ final class TextPrompt extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.TextPrompt';
 
   /// Required. The prompt text.
-  final String? text;
+  final String text;
 
-  TextPrompt({this.text}) : super(fullyQualifiedName);
+  TextPrompt({required this.text}) : super(fullyQualifiedName);
 
   factory TextPrompt.fromJson(Map<String, dynamic> json) {
-    return TextPrompt(text: json['text']);
+    return TextPrompt(text: json['text'] ?? '');
   }
 
   @override
   Object toJson() {
-    return {if (text != null) 'text': text};
+    return {'text': text};
   }
 
   @override
   String toString() {
-    final contents = [if (text != null) 'text=$text'].join(',');
+    final contents = ['text=$text'].join(',');
     return 'TextPrompt($contents)';
   }
 }
@@ -11797,12 +11987,12 @@ final class TextCompletion extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.TextCompletion';
 
   /// Output only. The generated text returned from the model.
-  final String? output;
+  final String output;
 
   /// Ratings for the safety of a response.
   ///
   /// There is at most one rating per category.
-  final List<SafetyRating>? safetyRatings;
+  final List<SafetyRating> safetyRatings;
 
   /// Output only. Citation information for model-generated `output` in this
   /// `TextCompletion`.
@@ -11811,16 +12001,17 @@ final class TextCompletion extends ProtoMessage {
   /// included in the `output`.
   final CitationMetadata? citationMetadata;
 
-  TextCompletion({this.output, this.safetyRatings, this.citationMetadata})
-    : super(fullyQualifiedName);
+  TextCompletion({
+    this.output = '',
+    this.safetyRatings = const [],
+    this.citationMetadata,
+  }) : super(fullyQualifiedName);
 
   factory TextCompletion.fromJson(Map<String, dynamic> json) {
     return TextCompletion(
-      output: json['output'],
-      safetyRatings: decodeListMessage(
-        json['safetyRatings'],
-        SafetyRating.fromJson,
-      ),
+      output: json['output'] ?? '',
+      safetyRatings:
+          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
       citationMetadata: decode(
         json['citationMetadata'],
         CitationMetadata.fromJson,
@@ -11831,8 +12022,9 @@ final class TextCompletion extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (output != null) 'output': output,
-      if (safetyRatings != null) 'safetyRatings': encodeList(safetyRatings),
+      if (output.isNotDefault) 'output': output,
+      if (safetyRatings.isNotDefault)
+        'safetyRatings': encodeList(safetyRatings),
       if (citationMetadata != null)
         'citationMetadata': citationMetadata!.toJson(),
     };
@@ -11840,7 +12032,7 @@ final class TextCompletion extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (output != null) 'output=$output'].join(',');
+    final contents = ['output=$output'].join(',');
     return 'TextCompletion($contents)';
   }
 }
@@ -11855,23 +12047,26 @@ final class EmbedTextRequest extends ProtoMessage {
 
   /// Optional. The free-form input text that the model will turn into an
   /// embedding.
-  final String? text;
+  final String text;
 
-  EmbedTextRequest({required this.model, this.text})
+  EmbedTextRequest({required this.model, this.text = ''})
     : super(fullyQualifiedName);
 
   factory EmbedTextRequest.fromJson(Map<String, dynamic> json) {
-    return EmbedTextRequest(model: json['model'], text: json['text']);
+    return EmbedTextRequest(
+      model: json['model'] ?? '',
+      text: json['text'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {'model': model, if (text != null) 'text': text};
+    return {'model': model, if (text.isNotDefault) 'text': text};
   }
 
   @override
   String toString() {
-    final contents = ['model=$model', if (text != null) 'text=$text'].join(',');
+    final contents = ['model=$model', 'text=$text'].join(',');
     return 'EmbedTextRequest($contents)';
   }
 }
@@ -11914,20 +12109,24 @@ final class BatchEmbedTextRequest extends ProtoMessage {
   /// Optional. The free-form input texts that the model will turn into an
   /// embedding. The current limit is 100 texts, over which an error will be
   /// thrown.
-  final List<String>? texts;
+  final List<String> texts;
 
   /// Optional. Embed requests for the batch. Only one of `texts` or `requests`
   /// can be set.
-  final List<EmbedTextRequest>? requests;
+  final List<EmbedTextRequest> requests;
 
-  BatchEmbedTextRequest({required this.model, this.texts, this.requests})
-    : super(fullyQualifiedName);
+  BatchEmbedTextRequest({
+    required this.model,
+    this.texts = const [],
+    this.requests = const [],
+  }) : super(fullyQualifiedName);
 
   factory BatchEmbedTextRequest.fromJson(Map<String, dynamic> json) {
     return BatchEmbedTextRequest(
-      model: json['model'],
-      texts: decodeList(json['texts']),
-      requests: decodeListMessage(json['requests'], EmbedTextRequest.fromJson),
+      model: json['model'] ?? '',
+      texts: decodeList(json['texts']) ?? [],
+      requests:
+          decodeListMessage(json['requests'], EmbedTextRequest.fromJson) ?? [],
     );
   }
 
@@ -11935,8 +12134,8 @@ final class BatchEmbedTextRequest extends ProtoMessage {
   Object toJson() {
     return {
       'model': model,
-      if (texts != null) 'texts': texts,
-      if (requests != null) 'requests': encodeList(requests),
+      if (texts.isNotDefault) 'texts': texts,
+      if (requests.isNotDefault) 'requests': encodeList(requests),
     };
   }
 
@@ -11953,19 +12152,21 @@ final class BatchEmbedTextResponse extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.BatchEmbedTextResponse';
 
   /// Output only. The embeddings generated from the input text.
-  final List<Embedding>? embeddings;
+  final List<Embedding> embeddings;
 
-  BatchEmbedTextResponse({this.embeddings}) : super(fullyQualifiedName);
+  BatchEmbedTextResponse({this.embeddings = const []})
+    : super(fullyQualifiedName);
 
   factory BatchEmbedTextResponse.fromJson(Map<String, dynamic> json) {
     return BatchEmbedTextResponse(
-      embeddings: decodeListMessage(json['embeddings'], Embedding.fromJson),
+      embeddings:
+          decodeListMessage(json['embeddings'], Embedding.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (embeddings != null) 'embeddings': encodeList(embeddings)};
+    return {if (embeddings.isNotDefault) 'embeddings': encodeList(embeddings)};
   }
 
   @override
@@ -11978,17 +12179,17 @@ final class Embedding extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.Embedding';
 
   /// The embedding values.
-  final List<double>? value;
+  final List<double> value;
 
-  Embedding({this.value}) : super(fullyQualifiedName);
+  Embedding({this.value = const []}) : super(fullyQualifiedName);
 
   factory Embedding.fromJson(Map<String, dynamic> json) {
-    return Embedding(value: decodeList(json['value']));
+    return Embedding(value: decodeList(json['value']) ?? []);
   }
 
   @override
   Object toJson() {
-    return {if (value != null) 'value': value};
+    return {if (value.isNotDefault) 'value': value};
   }
 
   @override
@@ -12014,12 +12215,12 @@ final class CountTextTokensRequest extends ProtoMessage {
   /// Required. The free-form input text given to the model as a prompt.
   final TextPrompt? prompt;
 
-  CountTextTokensRequest({required this.model, this.prompt})
+  CountTextTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
   factory CountTextTokensRequest.fromJson(Map<String, dynamic> json) {
     return CountTextTokensRequest(
-      model: json['model'],
+      model: json['model'] ?? '',
       prompt: decode(json['prompt'], TextPrompt.fromJson),
     );
   }
@@ -12046,24 +12247,22 @@ final class CountTextTokensResponse extends ProtoMessage {
   /// The number of tokens that the `model` tokenizes the `prompt` into.
   ///
   /// Always non-negative.
-  final int? tokenCount;
+  final int tokenCount;
 
-  CountTextTokensResponse({this.tokenCount}) : super(fullyQualifiedName);
+  CountTextTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
 
   factory CountTextTokensResponse.fromJson(Map<String, dynamic> json) {
-    return CountTextTokensResponse(tokenCount: json['tokenCount']);
+    return CountTextTokensResponse(tokenCount: json['tokenCount'] ?? 0);
   }
 
   @override
   Object toJson() {
-    return {if (tokenCount != null) 'tokenCount': tokenCount};
+    return {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
   }
 
   @override
   String toString() {
-    final contents = [
-      if (tokenCount != null) 'tokenCount=$tokenCount',
-    ].join(',');
+    final contents = ['tokenCount=$tokenCount'].join(',');
     return 'CountTextTokensResponse($contents)';
   }
 }
@@ -12091,14 +12290,14 @@ final class TunedModel extends ProtoMessage {
   ///
   ///  * display_name = `Sentence Translator`
   ///  * name = `tunedModels/sentence-translator-u3b7m`
-  final String? name;
+  final String name;
 
   /// Optional. The name to display for this model in user interfaces.
   /// The display name must be up to 40 characters including spaces.
-  final String? displayName;
+  final String displayName;
 
   /// Optional. A short description of this model.
-  final String? description;
+  final String description;
 
   /// Optional. Controls the randomness of the output.
   ///
@@ -12130,7 +12329,7 @@ final class TunedModel extends ProtoMessage {
   final int? topK;
 
   /// Output only. The state of the tuned model.
-  final TunedModel_State? state;
+  final TunedModel_State state;
 
   /// Output only. The timestamp when this model was created.
   final Timestamp? createTime;
@@ -12142,22 +12341,22 @@ final class TunedModel extends ProtoMessage {
   final TuningTask? tuningTask;
 
   /// Optional. List of project numbers that have read access to the tuned model.
-  final List<int>? readerProjectNumbers;
+  final List<int> readerProjectNumbers;
 
   TunedModel({
     this.tunedModelSource,
     this.baseModel,
-    this.name,
-    this.displayName,
-    this.description,
+    this.name = '',
+    this.displayName = '',
+    this.description = '',
     this.temperature,
     this.topP,
     this.topK,
-    this.state,
+    this.state = TunedModel_State.$default,
     this.createTime,
     this.updateTime,
-    this.tuningTask,
-    this.readerProjectNumbers,
+    required this.tuningTask,
+    this.readerProjectNumbers = const [],
   }) : super(fullyQualifiedName);
 
   factory TunedModel.fromJson(Map<String, dynamic> json) {
@@ -12167,17 +12366,19 @@ final class TunedModel extends ProtoMessage {
         TunedModelSource.fromJson,
       ),
       baseModel: json['baseModel'],
-      name: json['name'],
-      displayName: json['displayName'],
-      description: json['description'],
+      name: json['name'] ?? '',
+      displayName: json['displayName'] ?? '',
+      description: json['description'] ?? '',
       temperature: decodeDouble(json['temperature']),
       topP: decodeDouble(json['topP']),
       topK: json['topK'],
-      state: decodeEnum(json['state'], TunedModel_State.fromJson),
+      state:
+          decodeEnum(json['state'], TunedModel_State.fromJson) ??
+          TunedModel_State.$default,
       createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
       updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
       tuningTask: decode(json['tuningTask'], TuningTask.fromJson),
-      readerProjectNumbers: decodeList(json['readerProjectNumbers']),
+      readerProjectNumbers: decodeList(json['readerProjectNumbers']) ?? [],
     );
   }
 
@@ -12187,17 +12388,17 @@ final class TunedModel extends ProtoMessage {
       if (tunedModelSource != null)
         'tunedModelSource': tunedModelSource!.toJson(),
       if (baseModel != null) 'baseModel': baseModel,
-      if (name != null) 'name': name,
-      if (displayName != null) 'displayName': displayName,
-      if (description != null) 'description': description,
+      if (name.isNotDefault) 'name': name,
+      if (displayName.isNotDefault) 'displayName': displayName,
+      if (description.isNotDefault) 'description': description,
       if (temperature != null) 'temperature': encodeDouble(temperature),
       if (topP != null) 'topP': encodeDouble(topP),
       if (topK != null) 'topK': topK,
-      if (state != null) 'state': state!.toJson(),
+      if (state.isNotDefault) 'state': state.toJson(),
       if (createTime != null) 'createTime': createTime!.toJson(),
       if (updateTime != null) 'updateTime': updateTime!.toJson(),
       if (tuningTask != null) 'tuningTask': tuningTask!.toJson(),
-      if (readerProjectNumbers != null)
+      if (readerProjectNumbers.isNotDefault)
         'readerProjectNumbers': readerProjectNumbers,
     };
   }
@@ -12206,13 +12407,13 @@ final class TunedModel extends ProtoMessage {
   String toString() {
     final contents = [
       if (baseModel != null) 'baseModel=$baseModel',
-      if (name != null) 'name=$name',
-      if (displayName != null) 'displayName=$displayName',
-      if (description != null) 'description=$description',
+      'name=$name',
+      'displayName=$displayName',
+      'description=$description',
       if (temperature != null) 'temperature=$temperature',
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
-      if (state != null) 'state=$state',
+      'state=$state',
     ].join(',');
     return 'TunedModel($contents)';
   }
@@ -12232,9 +12433,14 @@ final class TunedModel_State extends ProtoEnum {
   /// The model failed to be created.
   static const failed = TunedModel_State('FAILED');
 
+  /// The default value for [TunedModel_State].
+  static const $default = stateUnspecified;
+
   const TunedModel_State(super.value);
 
   factory TunedModel_State.fromJson(String json) => TunedModel_State(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'State.$value';
@@ -12248,35 +12454,35 @@ final class TunedModelSource extends ProtoMessage {
   /// Immutable. The name of the `TunedModel` to use as the starting point for
   /// training the new model.
   /// Example: `tunedModels/my-tuned-model`
-  final String? tunedModel;
+  final String tunedModel;
 
   /// Output only. The name of the base `Model` this `TunedModel` was tuned from.
   /// Example: `models/gemini-1.5-flash-001`
-  final String? baseModel;
+  final String baseModel;
 
-  TunedModelSource({this.tunedModel, this.baseModel})
+  TunedModelSource({this.tunedModel = '', this.baseModel = ''})
     : super(fullyQualifiedName);
 
   factory TunedModelSource.fromJson(Map<String, dynamic> json) {
     return TunedModelSource(
-      tunedModel: json['tunedModel'],
-      baseModel: json['baseModel'],
+      tunedModel: json['tunedModel'] ?? '',
+      baseModel: json['baseModel'] ?? '',
     );
   }
 
   @override
   Object toJson() {
     return {
-      if (tunedModel != null) 'tunedModel': tunedModel,
-      if (baseModel != null) 'baseModel': baseModel,
+      if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
+      if (baseModel.isNotDefault) 'baseModel': baseModel,
     };
   }
 
   @override
   String toString() {
     final contents = [
-      if (tunedModel != null) 'tunedModel=$tunedModel',
-      if (baseModel != null) 'baseModel=$baseModel',
+      'tunedModel=$tunedModel',
+      'baseModel=$baseModel',
     ].join(',');
     return 'TunedModelSource($contents)';
   }
@@ -12294,7 +12500,7 @@ final class TuningTask extends ProtoMessage {
   final Timestamp? completeTime;
 
   /// Output only. Metrics collected during tuning.
-  final List<TuningSnapshot>? snapshots;
+  final List<TuningSnapshot> snapshots;
 
   /// Required. Input only. Immutable. The model training data.
   final Dataset? trainingData;
@@ -12306,8 +12512,8 @@ final class TuningTask extends ProtoMessage {
   TuningTask({
     this.startTime,
     this.completeTime,
-    this.snapshots,
-    this.trainingData,
+    this.snapshots = const [],
+    required this.trainingData,
     this.hyperparameters,
   }) : super(fullyQualifiedName);
 
@@ -12315,7 +12521,8 @@ final class TuningTask extends ProtoMessage {
     return TuningTask(
       startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
       completeTime: decodeCustom(json['completeTime'], Timestamp.fromJson),
-      snapshots: decodeListMessage(json['snapshots'], TuningSnapshot.fromJson),
+      snapshots:
+          decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
       trainingData: decode(json['trainingData'], Dataset.fromJson),
       hyperparameters: decode(
         json['hyperparameters'],
@@ -12329,7 +12536,7 @@ final class TuningTask extends ProtoMessage {
     return {
       if (startTime != null) 'startTime': startTime!.toJson(),
       if (completeTime != null) 'completeTime': completeTime!.toJson(),
-      if (snapshots != null) 'snapshots': encodeList(snapshots),
+      if (snapshots.isNotDefault) 'snapshots': encodeList(snapshots),
       if (trainingData != null) 'trainingData': trainingData!.toJson(),
       if (hyperparameters != null) 'hyperparameters': hyperparameters!.toJson(),
     };
@@ -12436,19 +12643,20 @@ final class TuningExamples extends ProtoMessage {
 
   /// The examples. Example input can be for text or discuss, but all examples
   /// in a set must be of the same type.
-  final List<TuningExample>? examples;
+  final List<TuningExample> examples;
 
-  TuningExamples({this.examples}) : super(fullyQualifiedName);
+  TuningExamples({this.examples = const []}) : super(fullyQualifiedName);
 
   factory TuningExamples.fromJson(Map<String, dynamic> json) {
     return TuningExamples(
-      examples: decodeListMessage(json['examples'], TuningExample.fromJson),
+      examples:
+          decodeListMessage(json['examples'], TuningExample.fromJson) ?? [],
     );
   }
 
   @override
   Object toJson() {
-    return {if (examples != null) 'examples': encodeList(examples)};
+    return {if (examples.isNotDefault) 'examples': encodeList(examples)};
   }
 
   @override
@@ -12464,27 +12672,28 @@ final class TuningExample extends ProtoMessage {
   final String? textInput;
 
   /// Required. The expected model output.
-  final String? output;
+  final String output;
 
-  TuningExample({this.textInput, this.output}) : super(fullyQualifiedName);
+  TuningExample({this.textInput, required this.output})
+    : super(fullyQualifiedName);
 
   factory TuningExample.fromJson(Map<String, dynamic> json) {
-    return TuningExample(textInput: json['textInput'], output: json['output']);
+    return TuningExample(
+      textInput: json['textInput'],
+      output: json['output'] ?? '',
+    );
   }
 
   @override
   Object toJson() {
-    return {
-      if (textInput != null) 'textInput': textInput,
-      if (output != null) 'output': output,
-    };
+    return {if (textInput != null) 'textInput': textInput, 'output': output};
   }
 
   @override
   String toString() {
     final contents = [
       if (textInput != null) 'textInput=$textInput',
-      if (output != null) 'output=$output',
+      'output=$output',
     ].join(',');
     return 'TuningExample($contents)';
   }
@@ -12496,25 +12705,29 @@ final class TuningSnapshot extends ProtoMessage {
       'google.ai.generativelanguage.v1beta.TuningSnapshot';
 
   /// Output only. The tuning step.
-  final int? step;
+  final int step;
 
   /// Output only. The epoch this step was part of.
-  final int? epoch;
+  final int epoch;
 
   /// Output only. The mean loss of the training examples for this step.
-  final double? meanLoss;
+  final double meanLoss;
 
   /// Output only. The timestamp when this metric was computed.
   final Timestamp? computeTime;
 
-  TuningSnapshot({this.step, this.epoch, this.meanLoss, this.computeTime})
-    : super(fullyQualifiedName);
+  TuningSnapshot({
+    this.step = 0,
+    this.epoch = 0,
+    this.meanLoss = 0,
+    this.computeTime,
+  }) : super(fullyQualifiedName);
 
   factory TuningSnapshot.fromJson(Map<String, dynamic> json) {
     return TuningSnapshot(
-      step: json['step'],
-      epoch: json['epoch'],
-      meanLoss: decodeDouble(json['meanLoss']),
+      step: json['step'] ?? 0,
+      epoch: json['epoch'] ?? 0,
+      meanLoss: decodeDouble(json['meanLoss']) ?? 0,
       computeTime: decodeCustom(json['computeTime'], Timestamp.fromJson),
     );
   }
@@ -12522,9 +12735,9 @@ final class TuningSnapshot extends ProtoMessage {
   @override
   Object toJson() {
     return {
-      if (step != null) 'step': step,
-      if (epoch != null) 'epoch': epoch,
-      if (meanLoss != null) 'meanLoss': encodeDouble(meanLoss),
+      if (step.isNotDefault) 'step': step,
+      if (epoch.isNotDefault) 'epoch': epoch,
+      if (meanLoss.isNotDefault) 'meanLoss': encodeDouble(meanLoss),
       if (computeTime != null) 'computeTime': computeTime!.toJson(),
     };
   }
@@ -12532,9 +12745,9 @@ final class TuningSnapshot extends ProtoMessage {
   @override
   String toString() {
     final contents = [
-      if (step != null) 'step=$step',
-      if (epoch != null) 'epoch=$epoch',
-      if (meanLoss != null) 'meanLoss=$meanLoss',
+      'step=$step',
+      'epoch=$epoch',
+      'meanLoss=$meanLoss',
     ].join(',');
     return 'TuningSnapshot($contents)';
   }
@@ -12567,9 +12780,14 @@ final class Type extends ProtoEnum {
   /// Null type.
   static const null$ = Type('NULL');
 
+  /// The default value for [Type].
+  static const $default = typeUnspecified;
+
   const Type(super.value);
 
   factory Type.fromJson(String json) => Type(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Type.$value';
@@ -12595,9 +12813,14 @@ final class Modality extends ProtoEnum {
   /// Document, e.g. PDF.
   static const document = Modality('DOCUMENT');
 
+  /// The default value for [Modality].
+  static const $default = modalityUnspecified;
+
   const Modality(super.value);
 
   factory Modality.fromJson(String json) => Modality(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'Modality.$value';
@@ -12632,9 +12855,14 @@ final class TaskType extends ProtoEnum {
   /// Specifies that the given text will be used for code retrieval.
   static const codeRetrievalQuery = TaskType('CODE_RETRIEVAL_QUERY');
 
+  /// The default value for [TaskType].
+  static const $default = taskTypeUnspecified;
+
   const TaskType(super.value);
 
   factory TaskType.fromJson(String json) => TaskType(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'TaskType.$value';
@@ -12699,9 +12927,14 @@ final class HarmCategory extends ProtoEnum {
     'HARM_CATEGORY_CIVIC_INTEGRITY',
   );
 
+  /// The default value for [HarmCategory].
+  static const $default = harmCategoryUnspecified;
+
   const HarmCategory(super.value);
 
   factory HarmCategory.fromJson(String json) => HarmCategory(json);
+
+  bool get isNotDefault => this != $default;
 
   @override
   String toString() => 'HarmCategory.$value';
