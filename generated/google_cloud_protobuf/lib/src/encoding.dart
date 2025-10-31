@@ -157,37 +157,37 @@ Map<T, String>? encodeMapBytes<T>(Map<T, Uint8List>? value) =>
     value?.map((key, value) => MapEntry(key, base64Encode(value)));
 
 /// Extensions methods used for comparing to proto default values.
-extension BoolExtension on bool {
+extension BoolProtoDefault on bool {
   /// Whether this is the proto default value for [bool] (`false`).
   bool get isNotDefault => this != false;
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension IntExtension on int {
+extension IntProtoDefault on int {
   /// Whether this is the proto default value for [int] (`0`).
   bool get isNotDefault => this != 0;
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension DoubleExtension on double {
+extension DoubleProtoDefault on double {
   /// Whether this is the proto default value for [double] (`0`).
   bool get isNotDefault => this != 0;
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension StringExtension on String {
+extension StringProtoDefault on String {
   /// Whether this is the proto default value for [String] (an empty string).
   bool get isNotDefault => isNotEmpty;
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension ListExtension on List {
+extension ListProtoDefault on List {
   /// Whether this is the proto default value for [List] (an empty list).
   bool get isNotDefault => isNotEmpty;
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension MapExtension on Map {
+extension MapProtoDefault on Map {
   /// Whether this is the proto default value for [Map] (an empty map).
   bool get isNotDefault => isNotEmpty;
 }
