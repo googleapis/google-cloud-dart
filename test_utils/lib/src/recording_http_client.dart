@@ -23,11 +23,12 @@ import 'model.dart';
 import 'test_http_client.dart';
 
 class RecordingHttpClient extends TestHttpClient {
+  final Client client;
   String? _path;
   List<(RecordedRequest, RecordedResponse)> requestResponse = [];
   Future<void>? _lastSave;
 
-  RecordingHttpClient({required super.client});
+  RecordingHttpClient({required this.client});
 
   @override
   Future<void> startTest(String path) async {

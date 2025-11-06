@@ -24,14 +24,15 @@ void main() async {
 
   group('model', () {
     setUp(() async {
-      final client = await auth.clientViaApplicationDefaultCredentials(
-        scopes: [
-          'https://www.googleapis.com/auth/cloud-platform',
-          'https://www.googleapis.com/auth/generative-language.retriever',
-        ],
-      );
+      final client = () async =>
+          await auth.clientViaApplicationDefaultCredentials(
+            scopes: [
+              'https://www.googleapis.com/auth/cloud-platform',
+              'https://www.googleapis.com/auth/generative-language.retriever',
+            ],
+          );
 
-      testClient = TestHttpClient.fromEnvironment(client);
+      testClient = await TestHttpClient.fromEnvironment(client);
       modelService = ModelService(client: testClient);
     });
 

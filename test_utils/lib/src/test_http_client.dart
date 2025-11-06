@@ -38,27 +38,22 @@ import 'replay_http_client.dart';
 ///
 ///    Pass through requests/responses without recording or modifying them.
 abstract class TestHttpClient extends BaseClient {
-  final Client client;
-
-  TestHttpClient({required this.client});
-
   Future<void> startTest(String path);
   Future<void> endTest();
 
-  // ignore: prefer_expression_function_bodies
-  factory TestHttpClient.fromEnvironment(Client client) {
-    return switch (const String.fromEnvironment(
-      'http',
-      defaultValue: 'replay',
-    )) {
-      'replay' => ReplayHttpClient(client: client),
-      'record' => RecordingHttpClient(client: client),
-      'proxy' => ProxyHttpClient(client: client),
-      final x => throw ArgumentError.value(
-        x,
-        'http',
-        'unexpected environment setting',
-      ),
-    };
-  }
+  TestHttpClient();
+
+  static Future<TestHttpClient> fromEnvironment(
+    Future<Client> Function() clientFn,
+  ) async =>
+      switch (const String.fromEnvironment('http', defaultValue: 'replay')) {
+        'replay' => ReplayHttpClient(),
+        'record' => RecordingHttpClient(client: await clientFn()),
+        'proxy' => ProxyHttpClient(client: await clientFn()),
+        final x => throw ArgumentError.value(
+          x,
+          'http',
+          'unexpected environment setting',
+        ),
+      };
 }

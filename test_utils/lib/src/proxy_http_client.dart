@@ -17,7 +17,9 @@ import 'package:http/http.dart';
 import 'test_http_client.dart';
 
 class ProxyHttpClient extends TestHttpClient {
-  ProxyHttpClient({required super.client});
+  final Client client;
+
+  ProxyHttpClient({required this.client});
 
   @override
   Future<StreamedResponse> send(BaseRequest originalRequest) =>

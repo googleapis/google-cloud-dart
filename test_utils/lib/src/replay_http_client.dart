@@ -24,7 +24,7 @@ import 'test_http_client.dart';
 class ReplayHttpClient extends TestHttpClient {
   List<(RecordedRequest, RecordedResponse)> _requestResponse = [];
 
-  ReplayHttpClient({required super.client});
+  ReplayHttpClient();
 
   @override
   Future<void> startTest(String path) async {
@@ -97,10 +97,5 @@ class ReplayHttpClient extends TestHttpClient {
       headers: savedResponse.headers,
       reasonPhrase: savedResponse.reasonPhrase,
     );
-  }
-
-  @override
-  void close() {
-    client.close();
   }
 }
