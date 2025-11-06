@@ -27,7 +27,7 @@ import 'replay_http_client.dart';
 /// This works similarly to `package:dartvcr` but fixes some issues, e.g.
 /// https://github.com/nwithan8/dartvcr/issues/3
 ///
-/// It has 3 modes:
+/// It has 3 modes, controlled by the `http` define:
 ///
 /// 1. `dart --define=http=record test -c vm:source`
 ///
@@ -41,7 +41,13 @@ import 'replay_http_client.dart';
 ///
 ///    Pass through requests/responses without recording or modifying them.
 abstract class TestHttpClient extends BaseClient {
+  /// Indicates that a test is about to start.
+  ///
+  /// `library` is the symbol for the test library, e.g. `#model_test`.
+  /// `test` is a name for the test, e.g. `'model_list'`.
   Future<void> startTest(Symbol library, String test);
+
+  /// Inidcates that the test has completed.
   Future<void> endTest();
 
   TestHttpClient();
@@ -51,8 +57,8 @@ abstract class TestHttpClient extends BaseClient {
   ) async =>
       switch (const String.fromEnvironment('http', defaultValue: 'replay')) {
         'replay' => ReplayHttpClient(),
-        'record' => RecordingHttpClient(client: await clientFn()),
-        'proxy' => ProxyHttpClient(client: await clientFn()),
+        'record' => RecordingHttpClient(await clientFn()),
+        'proxy' => ProxyHttpClient(await clientFn()),
         final x => throw ArgumentError.value(
           x,
           'http',

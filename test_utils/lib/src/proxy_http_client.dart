@@ -16,14 +16,15 @@ import 'package:http/http.dart';
 
 import 'test_http_client.dart';
 
+/// An HTTP client that proxies requests to another client.
 class ProxyHttpClient extends TestHttpClient {
-  final Client client;
+  final Client _client;
 
-  ProxyHttpClient({required this.client});
+  ProxyHttpClient(this._client);
 
   @override
   Future<StreamedResponse> send(BaseRequest originalRequest) =>
-      client.send(originalRequest);
+      _client.send(originalRequest);
 
   @override
   Future<void> startTest(Symbol library, String test) async {}

@@ -22,13 +22,14 @@ import 'package:http/http.dart';
 import 'model.dart';
 import 'test_http_client.dart';
 
+/// An HTTP client that records requests and responses to a file.
 class RecordingHttpClient extends TestHttpClient {
-  final Client client;
+  final Client _client;
+  final List<(RecordedRequest, RecordedResponse)> _requestResponse = [];
   String? _path;
-  List<(RecordedRequest, RecordedResponse)> requestResponse = [];
   Future<void>? _lastSave;
 
-  RecordingHttpClient({required this.client});
+  RecordingHttpClient(this._client);
 
   @override
   Future<void> startTest(Symbol library, String test) async {
@@ -41,7 +42,7 @@ class RecordingHttpClient extends TestHttpClient {
     await File(_path!).writeAsString(
       const JsonEncoder.withIndent(
         '  ',
-      ).convert(RecordedSession(requestResponse).toJson()),
+      ).convert(RecordedSession(_requestResponse).toJson()),
     );
   }
 
@@ -59,7 +60,7 @@ class RecordingHttpClient extends TestHttpClient {
     )..bodyBytes = requestBody;
 
     forwardedRequest.headers.addAll(originalRequest.headers);
-    final response = await client.send(forwardedRequest);
+    final response = await _client.send(forwardedRequest);
     final responseStream = StreamSplitter(response.stream);
     final recordedRequest = RecordedRequest(
       url: originalRequest.url,
@@ -77,7 +78,7 @@ class RecordingHttpClient extends TestHttpClient {
         body: responseBody,
         reasonPhrase: response.reasonPhrase,
       );
-      requestResponse.add((recordedRequest, recordedResponse));
+      _requestResponse.add((recordedRequest, recordedResponse));
     });
 
     return StreamedResponse(
@@ -89,5 +90,5 @@ class RecordingHttpClient extends TestHttpClient {
   }
 
   @override
-  void close() => client.close();
+  void close() => _client.close();
 }
