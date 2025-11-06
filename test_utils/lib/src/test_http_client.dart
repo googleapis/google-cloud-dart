@@ -14,7 +14,6 @@
 
 import 'dart:async';
 import 'dart:isolate';
-import 'dart:mirrors';
 
 import 'package:http/http.dart';
 import 'package:path/path.dart' as p;
