@@ -61,9 +61,16 @@ class ReplayHttpClient extends TestHttpClient {
       );
     }
 
+    // Don't consider "x-goog-api-client" because it is non-semantic and
+    // varies based on the current Dart version.
+    final recordedHeaders = Map<String, String>.from(recordedRequest.headers)
+      ..remove('x-goog-api-client');
+    final requestHeaders = Map<String, String>.from(request.headers)
+      ..remove('x-goog-api-client');
+
     if (!const MapEquality<void, void>().equals(
-      recordedRequest.headers,
-      request.headers,
+      recordedHeaders,
+      requestHeaders,
     )) {
       throw StateError(
         'recorded headers ${recordedRequest.headers} '
