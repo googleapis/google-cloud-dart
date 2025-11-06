@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@TestOn('vm')
+library model_test;
+
 import 'package:test/test.dart';
 
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
@@ -39,7 +42,7 @@ void main() async {
     tearDown(() => modelService.close());
 
     test('list', () async {
-      await testClient.startTest('test/model_list.json');
+      await testClient.startTest(#model_test, 'model_list');
 
       final request = ListModelsRequest();
 

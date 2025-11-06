@@ -31,8 +31,8 @@ class RecordingHttpClient extends TestHttpClient {
   RecordingHttpClient({required this.client});
 
   @override
-  Future<void> startTest(String path) async {
-    _path = path;
+  Future<void> startTest(Symbol library, String test) async {
+    _path = TestHttpClient.recordPath(library, test);
   }
 
   @override

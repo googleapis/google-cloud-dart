@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:mirrors';
+
 import 'package:http/http.dart';
+import 'package:path/path.dart' as p;
 
 import 'proxy_http_client.dart';
 import 'recording_http_client.dart';
@@ -38,7 +41,7 @@ import 'replay_http_client.dart';
 ///
 ///    Pass through requests/responses without recording or modifying them.
 abstract class TestHttpClient extends BaseClient {
-  Future<void> startTest(String path);
+  Future<void> startTest(Symbol library, String test);
   Future<void> endTest();
 
   TestHttpClient();
@@ -56,4 +59,12 @@ abstract class TestHttpClient extends BaseClient {
           'unexpected environment setting',
         ),
       };
+
+  static String recordPath(Symbol library, String test) => p.setExtension(
+    p.join(
+      p.dirname(currentMirrorSystem().findLibrary(library).uri.path),
+      test,
+    ),
+    '.json',
+  );
 }

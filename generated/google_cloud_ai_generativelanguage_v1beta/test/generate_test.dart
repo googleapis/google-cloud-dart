@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@TestOn('vm')
+library generative_test;
+
 import 'package:test/test.dart';
 
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
@@ -38,7 +41,7 @@ void main() async {
 
     tearDown(() => generativeService.close());
     test('streamed', () async {
-      await testClient.startTest('test/generative_streamed.json');
+      await testClient.startTest(#generative_test, 'generative_streamed');
 
       final request = GenerateContentRequest(
         model: 'models/gemini-2.5-flash',

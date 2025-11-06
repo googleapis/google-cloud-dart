@@ -26,7 +26,7 @@ class ProxyHttpClient extends TestHttpClient {
       client.send(originalRequest);
 
   @override
-  Future<void> startTest(String path) async {}
+  Future<void> startTest(Symbol library, String test) async {}
 
   @override
   Future<void> endTest() async {}
