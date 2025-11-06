@@ -81,11 +81,17 @@ class RecordingHttpClient extends TestHttpClient {
       _requestResponse.add((recordedRequest, recordedResponse));
     });
 
+    // This returns a more complete response than `ReplayHttpClient`. This is
+    // done intentionally to ensure that the tests don't rely on the exact
+    // behavior of ``ReplayHttpClient`.
     return StreamedResponse(
-      // TODO: More here!
       responseStream.split(),
       response.statusCode,
       headers: response.headers,
+      reasonPhrase: response.reasonPhrase,
+      contentLength: response.contentLength,
+      isRedirect: response.isRedirect,
+      persistentConnection: response.persistentConnection,
     );
   }
 
