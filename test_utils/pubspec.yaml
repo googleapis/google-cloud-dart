@@ -6,7 +6,7 @@ publish_to: none
 resolution: workspace
 
 environment:
-  sdk: ^3.9.4
+  sdk: ^3.9.0
   
 dependencies:
   async: ^2.13.0
