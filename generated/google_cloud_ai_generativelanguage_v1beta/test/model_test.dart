@@ -27,7 +27,7 @@ void main() async {
 
   group('model', () {
     setUp(() async {
-      final client = () async =>
+      final authClient = () async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
               'https://www.googleapis.com/auth/cloud-platform',
@@ -35,7 +35,7 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(client);
+      testClient = await TestHttpClient.fromEnvironment(authClient);
       modelService = ModelService(client: testClient);
     });
 
