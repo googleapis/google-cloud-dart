@@ -1,0 +1,14 @@
+name: test_utils
+description: A package containing helper functionality for Dart Cloud SDK packages.
+version: 0.1.0
+publish_to: none
+
+resolution: workspace
+
+environment:
+  sdk: ^3.9.4
+  
+dependencies:
+  async: ^2.13.0
+  collection: ^1.19.1
+  http: ^1.5.0
