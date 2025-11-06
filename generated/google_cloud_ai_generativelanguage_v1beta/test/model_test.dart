@@ -42,7 +42,10 @@ void main() async {
     tearDown(() => modelService.close());
 
     test('list', () async {
-      await testClient.startTest(#model_test, 'model_list');
+      await testClient.startTest(
+        'google_cloud_ai_generativelanguage_v1beta',
+        'model_list',
+      );
 
       final request = ListModelsRequest();
 

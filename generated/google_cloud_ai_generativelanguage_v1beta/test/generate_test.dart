@@ -41,7 +41,10 @@ void main() async {
 
     tearDown(() => generativeService.close());
     test('streamed', () async {
-      await testClient.startTest(#generative_test, 'generative_streamed');
+      await testClient.startTest(
+        'google_cloud_ai_generativelanguage_v1beta',
+        'generative_streamed',
+      );
 
       final request = GenerateContentRequest(
         model: 'models/gemini-2.5-flash',

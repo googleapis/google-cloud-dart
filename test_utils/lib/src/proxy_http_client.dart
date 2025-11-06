@@ -23,12 +23,12 @@ class ProxyHttpClient extends TestHttpClient {
   ProxyHttpClient(this._client);
 
   @override
-  Future<StreamedResponse> send(BaseRequest originalRequest) =>
-      _client.send(originalRequest);
-
-  @override
-  Future<void> startTest(Symbol library, String test) async {}
+  Future<void> startTest(String packageName, String test) async {}
 
   @override
   Future<void> endTest() async {}
+
+  @override
+  Future<StreamedResponse> send(BaseRequest originalRequest) =>
+      _client.send(originalRequest);
 }

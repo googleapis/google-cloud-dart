@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+import 'dart:isolate';
 import 'dart:mirrors';
 
 import 'package:http/http.dart';
@@ -43,11 +45,13 @@ import 'replay_http_client.dart';
 abstract class TestHttpClient extends BaseClient {
   /// Indicates that a test is about to start.
   ///
-  /// `library` is the symbol for the test library, e.g. `#model_test`.
+  /// `packageName` is the name of the package executing the test, e.g.
+  /// `'google_cloud_ai_generativelanguage_v1beta'`.
+  ///
   /// `test` is a name for the test, e.g. `'model_list'`.
-  Future<void> startTest(Symbol library, String test);
+  Future<void> startTest(String packageName, String test);
 
-  /// Inidcates that the test has completed.
+  /// Indicates that the test has completed.
   Future<void> endTest();
 
   TestHttpClient();
@@ -66,11 +70,14 @@ abstract class TestHttpClient extends BaseClient {
         ),
       };
 
-  static String recordPath(Symbol library, String test) => p.setExtension(
-    p.join(
-      p.dirname(currentMirrorSystem().findLibrary(library).uri.path),
-      test,
-    ),
-    '.json',
-  );
+  static FutureOr<String> recordPath(String packageName, String test) async {
+    final packageUri = await Isolate.resolvePackageUri(
+      Uri.parse('package:$packageName/'),
+    );
+
+    return p.setExtension(
+      p.join(p.dirname(packageUri!.path), 'test', test),
+      '.json',
+    );
+  }
 }

@@ -27,10 +27,12 @@ class ReplayHttpClient extends TestHttpClient {
   ReplayHttpClient();
 
   @override
-  Future<void> startTest(Symbol library, String test) async {
+  Future<void> startTest(String packageName, String test) async {
     _requestResponse = RecordedSession.fromJson(
       jsonDecode(
-        await File(TestHttpClient.recordPath(library, test)).readAsString(),
+        await File(
+          await TestHttpClient.recordPath(packageName, test),
+        ).readAsString(),
       ),
     ).requestResponse;
   }
