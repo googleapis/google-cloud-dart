@@ -13,7 +13,12 @@ The dependency graph for the current set of packages:
 
 ## Developing
 
-### Regenerating the Dart packages
+### Sidekick
+
+[Sidekick](https://github.com/googleapis/librarian/blob/main/doc/sidekick.md)
+is the tool used to generate Dart packages from API descriptions.
+
+#### Regenerating the Dart packages
 
 From the root of the project:
 
@@ -24,7 +29,7 @@ go run github.com/googleapis/librarian/cmd/sidekick@main refreshall
 > [!NOTE]
 > You will have to [update Sidekick](#updating-sidekick) if you want to merge these changes.
 
-### Regenerating from a locally modified Sidekick
+#### Regenerating from a locally modified Sidekick
 
 Clone https://github.com/googleapis/librarian as a sibling directory to this
 repo, make any desired changes to Sidekick, then - from the root of the
@@ -34,7 +39,7 @@ project - run:
 go -C ../librarian run ./cmd/sidekick refreshall -project-root $PWD
 ```
 
-### Updating Sidekick
+#### Updating Sidekick
 
 [Workflow automation](.github/workflows/dart_checks.yaml) ensures that all
 generated code matches what the generator would actually produce.
@@ -50,7 +55,7 @@ the version of Sidekick used in the automation:
    `GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main`
 2. Modify the Sidekick invocation in [.github/workflows/dart_checks.yaml](.github/workflows/dart_checks.yaml)
 
-### Updating API sources
+#### Updating API sources
 
 Configuration for API source descriptions is found in the `[source]`
 section of the root [`.sidekick.toml`](.sidekick.toml).
@@ -60,4 +65,19 @@ You can update these sources to their latest versions by running
 
 ```bash
 go run github.com/googleapis/librarian/cmd/sidekick@main update
+```
+
+### Testing
+
+Some generated packages contain integration tests, e.g.,
+[`package:google_cloud_ai_generativelanguage_v1beta`](generated/google_cloud_ai_generativelanguage_v1beta/test/).
+
+By default, these tests use a recorded version of the interation between the
+API client and the server.
+
+If new tests are added or the communication between the API client and the
+server changes, these changes must be regenerated with:
+
+```bash
+cd generated && dart --define=http=record test . -c vm:source
 ```
