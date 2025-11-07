@@ -1,0 +1,100 @@
+// Copyright 2025 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:async/async.dart';
+import 'package:http/http.dart';
+
+import 'model.dart';
+import 'test_http_client.dart';
+
+/// An HTTP client that records requests and responses to a file.
+class RecordingHttpClient extends TestHttpClient {
+  final Client _client;
+  final List<(RecordedRequest, RecordedResponse)> _requestResponse = [];
+  String? _path;
+  Future<void>? _lastSave;
+
+  RecordingHttpClient(this._client);
+
+  @override
+  Future<void> startTest(String packageName, String test) async {
+    _path = await TestHttpClient.recordPath(packageName, test);
+  }
+
+  @override
+  Future<void> endTest() async {
+    await _lastSave;
+    await File(_path!).writeAsString(
+      const JsonEncoder.withIndent(
+        '  ',
+      ).convert(RecordedSession(_requestResponse).toJson()),
+    );
+  }
+
+  @override
+  Future<StreamedResponse> send(BaseRequest originalRequest) async {
+    await _lastSave;
+    _lastSave = null;
+
+    final stream = originalRequest.finalize();
+    final requestBody = await stream.expand((i) => i).toList();
+
+    final forwardedRequest = Request(
+      originalRequest.method,
+      originalRequest.url,
+    )..bodyBytes = requestBody;
+
+    forwardedRequest.headers.addAll(originalRequest.headers);
+    final response = await _client.send(forwardedRequest);
+    final responseStream = StreamSplitter(response.stream);
+    final recordedRequest = RecordedRequest(
+      url: originalRequest.url,
+      method: originalRequest.method,
+      headers: originalRequest.headers,
+      body: requestBody,
+    );
+
+    _lastSave = responseStream.split().expand((i) => i).toList().then((
+      responseBody,
+    ) {
+      final recordedResponse = RecordedResponse(
+        statusCode: response.statusCode,
+        headers: response.headers,
+        body: responseBody,
+        reasonPhrase: response.reasonPhrase,
+      );
+      _requestResponse.add((recordedRequest, recordedResponse));
+    });
+
+    // This returns a more complete response than `ReplayHttpClient`. This is
+    // done intentionally to ensure that the tests don't rely on the exact
+    // behavior of ``ReplayHttpClient`.
+    return StreamedResponse(
+      responseStream.split(),
+      response.statusCode,
+      headers: response.headers,
+      reasonPhrase: response.reasonPhrase,
+      contentLength: response.contentLength,
+      isRedirect: response.isRedirect,
+      persistentConnection: response.persistentConnection,
+    );
+  }
+
+  @override
+  void close() => _client.close();
+}

@@ -24,15 +24,13 @@ void main() async {
   final request = GenerateContentRequest(
     model: 'models/gemini-2.5-flash',
     contents: [
-      Content(parts: [Part(text: "Explain how AI works in extensive detail")]),
+      Content(parts: [Part(text: 'Explain how AI works in extensive detail')]),
     ],
   );
 
   await for (final result in service.streamGenerateContent(request)) {
     final parts = result.candidates.firstOrNull?.content?.parts;
-    if (parts != null) {
-      parts.forEach((p) => stdout.write(p.text ?? ''));
-    }
+    parts?.forEach((p) => stdout.write(p.text ?? ''));
   }
   service.close();
 }

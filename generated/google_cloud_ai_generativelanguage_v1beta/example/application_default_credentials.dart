@@ -40,7 +40,7 @@ void main() async {
   final request = GenerateContentRequest(
     model: 'models/gemini-2.5-flash',
     contents: [
-      Content(parts: [Part(text: "Explain how AI works in a few words")]),
+      Content(parts: [Part(text: 'Explain how AI works in a few words')]),
     ],
   );
 
