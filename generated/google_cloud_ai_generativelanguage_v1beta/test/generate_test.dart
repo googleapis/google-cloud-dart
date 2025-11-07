@@ -50,7 +50,7 @@ void main() async {
         model: 'models/gemini-2.5-flash',
         contents: [
           Content(
-            parts: [Part(text: "Explain how AI works in extensive detail")],
+            parts: [Part(text: 'Explain how AI works in extensive detail')],
           ),
         ],
       );

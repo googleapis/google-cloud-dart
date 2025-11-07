@@ -41,6 +41,14 @@ import 'replay_http_client.dart';
 /// 3. `dart --define=http=proxy test -c vm:source`
 ///
 ///    Pass through requests/responses without recording or modifying them.
+///
+///
+/// In replay mode, the request passed to `Client.send` must exactly match the
+/// recorded request in terms of:
+/// 1. request method
+/// 2. request URI
+/// 3. request headers (except for `'x-goog-api-client'`)
+/// 4. request body
 abstract class TestHttpClient extends BaseClient {
   /// Indicates that a test is about to start.
   ///
@@ -52,8 +60,6 @@ abstract class TestHttpClient extends BaseClient {
 
   /// Indicates that the test has completed.
   Future<void> endTest();
-
-  TestHttpClient();
 
   static Future<TestHttpClient> fromEnvironment(
     Future<Client> Function() clientFn,

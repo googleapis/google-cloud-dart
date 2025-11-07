@@ -77,22 +77,16 @@ class RecordedSession {
 
   RecordedSession(this.requestResponse);
 
-  factory RecordedSession.fromJson(dynamic json) {
-    final requestResponse = <(RecordedRequest, RecordedResponse)>[];
-    for (var r in (json as List).cast<Map<String, dynamic>>()) {
-      requestResponse.add((
+  factory RecordedSession.fromJson(dynamic json) => RecordedSession([
+    for (var r in (json as List).cast<Map<String, dynamic>>())
+      (
         RecordedRequest.fromJson(r['request'] as Map<String, dynamic>),
         RecordedResponse.fromJson(r['response'] as Map<String, dynamic>),
-      ));
-    }
-    return RecordedSession(requestResponse);
-  }
+      ),
+  ]);
 
-  List<dynamic> toJson() {
-    final d = <Map<String, dynamic>>[];
-    for (final (request, response) in requestResponse) {
-      d.add({'request': request, 'response': response});
-    }
-    return d;
-  }
+  List<dynamic> toJson() => <Map<String, dynamic>>[
+    for (final (request, response) in requestResponse)
+      {'request': request, 'response': response},
+  ];
 }

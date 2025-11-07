@@ -17,6 +17,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:http/http.dart';
+import 'package:test/test.dart';
 
 import 'model.dart';
 import 'test_http_client.dart';
@@ -40,7 +41,7 @@ class ReplayHttpClient extends TestHttpClient {
   @override
   Future<void> endTest() async {
     if (_requestResponse.isNotEmpty) {
-      throw StateError('test completed without sending all expected requests');
+      throw TestFailure('test completed without sending all expected requests');
     }
   }
 
@@ -50,31 +51,29 @@ class ReplayHttpClient extends TestHttpClient {
     List<int> body,
   ) {
     if (recordedRequest.url != request.url) {
-      throw StateError(
+      throw TestFailure(
         'recorded request URL ${recordedRequest.url} '
         'does not match ${request.url}',
       );
     }
 
     if (recordedRequest.method != request.method) {
-      throw StateError(
+      throw TestFailure(
         'recorded request method ${recordedRequest.method} '
         'does not match ${request.method}',
       );
     }
 
     // Don't consider "x-goog-api-client" because it is non-semantic and
-    // varies based on the current Dart version.
-    final recordedHeaders = Map<String, String>.from(recordedRequest.headers)
+    final recordedHeaders = {...recordedRequest.headers}
       ..remove('x-goog-api-client');
-    final requestHeaders = Map<String, String>.from(request.headers)
-      ..remove('x-goog-api-client');
+    final requestHeaders = {...request.headers}..remove('x-goog-api-client');
 
     if (!const MapEquality<void, void>().equals(
       recordedHeaders,
       requestHeaders,
     )) {
-      throw StateError(
+      throw TestFailure(
         'recorded headers ${recordedRequest.headers} '
         'do not match ${request.headers}',
       );
