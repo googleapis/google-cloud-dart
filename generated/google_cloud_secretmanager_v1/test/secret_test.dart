@@ -13,7 +13,9 @@
 // limitations under the License.
 
 @TestOn('vm')
-library generative_test;
+library secret_test;
+
+import 'dart:math';
 
 import 'package:google_cloud_secretmanager_v1/secretmanager.dart';
 import 'package:test/test.dart';
@@ -48,16 +50,38 @@ void main() async {
         'create_and_update',
       );
 
-      final request = CreateSecretRequest(
-        parent: 'projects/$projectId',
-        secretId: "12345",
-        secret: Secret(ttl: protobuf.Duration(seconds: 120)),
+      final secretName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'mysecret'
+          : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
+
+      final createdSecret = await secretManangerService.createSecret(
+        CreateSecretRequest(
+          parent: 'projects/$projectId',
+          secretId: secretName,
+          secret: Secret(
+            replication: Replication(automatic: Replication_Automatic()),
+            ttl: protobuf.Duration(seconds: 120),
+          ),
+        ),
       );
+      expect(createdSecret.name, endsWith(secretName));
 
-      final secret = await secretManangerService.createSecret(request);
+      final updatedSecret = await secretManangerService.updateSecret(
+        UpdateSecretRequest(
+          secret: Secret(
+            name: createdSecret.name,
+            annotations: {'a': 'b'},
+            labels: {'x': 'y'},
+          ),
+          updateMask: protobuf.FieldMask(paths: ['annotations']),
+        ),
+      );
+      expect(updatedSecret.name, endsWith(secretName));
+      expect(updatedSecret.annotations, {'a': 'b'});
+      expect(updatedSecret.labels, isEmpty); // Not in `updateMask`.
 
-      expect(secret.name, "12345");
       await testClient.endTest();
-    }, timeout: const Timeout(const Duration(seconds: 60)));
+    });
   });
 }
