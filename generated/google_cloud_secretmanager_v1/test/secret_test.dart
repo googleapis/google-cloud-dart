@@ -13,19 +13,21 @@
 // limitations under the License.
 
 @TestOn('vm')
-library model_test;
+library generative_test;
 
+import 'package:google_cloud_secretmanager_v1/secretmanager.dart';
 import 'package:test/test.dart';
+import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 
-import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
 void main() async {
-  late ModelService modelService;
+  late SecretManagerService secretManangerService;
   late TestHttpClient testClient;
 
-  group('model', () {
+  group('secret', () {
     setUp(() async {
       final authClient = () async =>
           await auth.clientViaApplicationDefaultCredentials(
@@ -36,23 +38,26 @@ void main() async {
           );
 
       testClient = await TestHttpClient.fromEnvironment(authClient);
-      modelService = ModelService(client: testClient);
+      secretManangerService = SecretManagerService(client: testClient);
     });
 
-    tearDown(() => modelService.close());
-
-    test('list', () async {
+    tearDown(() => secretManangerService.close());
+    test('create_and_update', () async {
       await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
-        'model_list',
+        'google_cloud_secretmanager_v1',
+        'create_and_update',
       );
 
-      final request = ListModelsRequest();
+      final request = CreateSecretRequest(
+        parent: 'projects/$projectId',
+        secretId: "12345",
+        secret: Secret(ttl: protobuf.Duration(seconds: 120)),
+      );
 
-      final result = await modelService.listModels(request);
-      expect(result.models.first.name, isNotEmpty);
+      final secret = await secretManangerService.createSecret(request);
 
+      expect(secret.name, "12345");
       await testClient.endTest();
-    });
+    }, timeout: const Timeout(const Duration(seconds: 60)));
   });
 }

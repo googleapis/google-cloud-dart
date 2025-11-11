@@ -138,8 +138,8 @@ final class FunctionService {
     UpdateFunctionRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.function!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.function);
     return Operation.fromJson(
@@ -319,6 +319,8 @@ final class FunctionService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
