@@ -22,7 +22,7 @@ import 'dart:io';
 String get projectId {
   final project = Platform.environment['GOOGLE_CLOUD_PROJECT'];
   if (project == null) {
-    throw Exception();
+    throw StateError('Missing environment variable: GOOGLE_CLOUD_PROJECT');
   }
   return project;
 }
