@@ -128,8 +128,8 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.secret!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.secret);
     return Secret.fromJson(response);

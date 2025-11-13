@@ -95,8 +95,7 @@ final class DatasetService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Dataset> getDataset(GetDatasetRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return Dataset.fromJson(response);
@@ -109,8 +108,8 @@ final class DatasetService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Dataset> updateDataset(UpdateDatasetRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.dataset!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.dataset);
     return Dataset.fromJson(response);
@@ -126,8 +125,7 @@ final class DatasetService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
@@ -242,8 +240,8 @@ final class DatasetService {
     UpdateDatasetVersionRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.datasetVersion!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.datasetVersion);
     return DatasetVersion.fromJson(response);
@@ -282,8 +280,7 @@ final class DatasetService {
     GetDatasetVersionRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return DatasetVersion.fromJson(response);
@@ -301,8 +298,7 @@ final class DatasetService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
@@ -345,8 +341,7 @@ final class DatasetService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
@@ -380,8 +375,7 @@ final class DatasetService {
           'annotationsFilter': request.annotationsFilter,
         if (request.annotationFilters.isNotDefault)
           'annotationFilters': request.annotationFilters,
-        if (request.fieldMask!.paths.isNotDefault)
-          'fieldMask.paths': request.fieldMask!.paths,
+        if (request.fieldMask != null) 'fieldMask': request.fieldMask!.toJson(),
         if (request.annotationsLimit.isNotDefault)
           'annotationsLimit': '${request.annotationsLimit}',
         if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
@@ -405,8 +399,7 @@ final class DatasetService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
@@ -447,8 +440,7 @@ final class DatasetService {
     GetAnnotationSpecRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return AnnotationSpec.fromJson(response);
@@ -466,8 +458,7 @@ final class DatasetService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
@@ -614,6 +605,8 @@ final class DatasetService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -663,10 +656,7 @@ final class DatasetService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -794,11 +784,14 @@ final class DeploymentResourcePoolService {
   updateDeploymentResourcePool(
     UpdateDeploymentResourcePoolRequest request,
   ) async {
-    final url =
-        Uri.https(_host, '/v1beta1/${request.deploymentResourcePool!.name}', {
-          if (request.updateMask!.paths.isNotDefault)
-            'updateMask.paths': request.updateMask!.paths,
-        });
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.deploymentResourcePool!.name}',
+      {
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
+      },
+    );
     final response = await _client.patch(
       url,
       body: request.deploymentResourcePool,
@@ -947,6 +940,8 @@ final class DeploymentResourcePoolService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -996,10 +991,7 @@ final class DeploymentResourcePoolService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -1091,8 +1083,7 @@ final class EndpointService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListEndpointsResponse.fromJson(response);
@@ -1105,8 +1096,8 @@ final class EndpointService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Endpoint> updateEndpoint(UpdateEndpointRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.endpoint!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.endpoint);
     return Endpoint.fromJson(response);
@@ -1377,6 +1368,8 @@ final class EndpointService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1426,10 +1419,7 @@ final class EndpointService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -1603,6 +1593,8 @@ final class EvaluationService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1652,10 +1644,7 @@ final class EvaluationService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -1746,8 +1735,8 @@ final class ExampleStoreService {
   Future<Operation<ExampleStore, UpdateExampleStoreOperationMetadata>>
   updateExampleStore(UpdateExampleStoreRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.exampleStore!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.exampleStore);
     return Operation.fromJson(
@@ -1953,6 +1942,8 @@ final class ExampleStoreService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -2002,10 +1993,7 @@ final class ExampleStoreService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -2164,6 +2152,8 @@ final class ExtensionExecutionService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -2213,10 +2203,7 @@ final class ExtensionExecutionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -2323,8 +2310,8 @@ final class ExtensionRegistryService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Extension> updateExtension(UpdateExtensionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.extension!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.extension);
     return Extension.fromJson(response);
@@ -2444,6 +2431,8 @@ final class ExtensionRegistryService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -2493,10 +2482,7 @@ final class ExtensionRegistryService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -2618,11 +2604,14 @@ final class FeatureOnlineStoreAdminService {
     Operation<FeatureOnlineStore, UpdateFeatureOnlineStoreOperationMetadata>
   >
   updateFeatureOnlineStore(UpdateFeatureOnlineStoreRequest request) async {
-    final url =
-        Uri.https(_host, '/v1beta1/${request.featureOnlineStore!.name}', {
-          if (request.updateMask!.paths.isNotDefault)
-            'updateMask.paths': request.updateMask!.paths,
-        });
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.featureOnlineStore!.name}',
+      {
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.featureOnlineStore);
     return Operation.fromJson(
       response,
@@ -2732,8 +2721,8 @@ final class FeatureOnlineStoreAdminService {
   Future<Operation<FeatureView, UpdateFeatureViewOperationMetadata>>
   updateFeatureView(UpdateFeatureViewRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.featureView!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.featureView);
     return Operation.fromJson(
@@ -2904,6 +2893,8 @@ final class FeatureOnlineStoreAdminService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -2953,10 +2944,7 @@ final class FeatureOnlineStoreAdminService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -3140,6 +3128,8 @@ final class FeatureOnlineStoreService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -3189,10 +3179,7 @@ final class FeatureOnlineStoreService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -3307,8 +3294,8 @@ final class FeatureRegistryService {
   Future<Operation<FeatureGroup, UpdateFeatureGroupOperationMetadata>>
   updateFeatureGroup(UpdateFeatureGroupRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.featureGroup!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.featureGroup);
     return Operation.fromJson(
@@ -3413,38 +3400,18 @@ final class FeatureRegistryService {
       if (request.featureStatsAndAnomalySpec!.latestStatsCount != null)
         'featureStatsAndAnomalySpec.latestStatsCount':
             '${request.featureStatsAndAnomalySpec!.latestStatsCount}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .startTime!
-          .seconds
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.startTime.seconds':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime!.seconds}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .startTime!
-          .nanos
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.startTime.nanos':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime!.nanos}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .endTime!
-          .seconds
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.endTime.seconds':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime!.seconds}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .endTime!
-          .nanos
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.endTime.nanos':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime!.nanos}',
+      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime != null)
+        'featureStatsAndAnomalySpec.statsTimeRange.startTime': request
+            .featureStatsAndAnomalySpec!
+            .statsTimeRange!
+            .startTime!
+            .toJson(),
+      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime != null)
+        'featureStatsAndAnomalySpec.statsTimeRange.endTime': request
+            .featureStatsAndAnomalySpec!
+            .statsTimeRange!
+            .endTime!
+            .toJson(),
     });
     final response = await _client.get(url);
     return Feature.fromJson(response);
@@ -3461,8 +3428,7 @@ final class FeatureRegistryService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.latestStatsCount.isNotDefault)
         'latestStatsCount': '${request.latestStatsCount}',
     });
@@ -3485,8 +3451,8 @@ final class FeatureRegistryService {
     UpdateFeatureRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.feature!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.feature);
     return Operation.fromJson(
@@ -3595,8 +3561,8 @@ final class FeatureRegistryService {
   Future<Operation<FeatureMonitor, UpdateFeatureMonitorOperationMetadata>>
   updateFeatureMonitor(UpdateFeatureMonitorRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.featureMonitor!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.featureMonitor);
     return Operation.fromJson(
@@ -3770,6 +3736,8 @@ final class FeatureRegistryService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -3819,10 +3787,7 @@ final class FeatureRegistryService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -4012,6 +3977,8 @@ final class FeaturestoreOnlineServingService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -4061,10 +4028,7 @@ final class FeaturestoreOnlineServingService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -4157,8 +4121,7 @@ final class FeaturestoreService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListFeaturestoresResponse.fromJson(response);
@@ -4178,8 +4141,8 @@ final class FeaturestoreService {
   Future<Operation<Featurestore, UpdateFeaturestoreOperationMetadata>>
   updateFeaturestore(UpdateFeaturestoreRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.featurestore!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.featurestore);
     return Operation.fromJson(
@@ -4270,8 +4233,7 @@ final class FeaturestoreService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListEntityTypesResponse.fromJson(response);
@@ -4284,8 +4246,8 @@ final class FeaturestoreService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<EntityType> updateEntityType(UpdateEntityTypeRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.entityType!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.entityType);
     return EntityType.fromJson(response);
@@ -4385,38 +4347,18 @@ final class FeaturestoreService {
       if (request.featureStatsAndAnomalySpec!.latestStatsCount != null)
         'featureStatsAndAnomalySpec.latestStatsCount':
             '${request.featureStatsAndAnomalySpec!.latestStatsCount}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .startTime!
-          .seconds
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.startTime.seconds':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime!.seconds}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .startTime!
-          .nanos
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.startTime.nanos':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime!.nanos}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .endTime!
-          .seconds
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.endTime.seconds':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime!.seconds}',
-      if (request
-          .featureStatsAndAnomalySpec!
-          .statsTimeRange!
-          .endTime!
-          .nanos
-          .isNotDefault)
-        'featureStatsAndAnomalySpec.statsTimeRange.endTime.nanos':
-            '${request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime!.nanos}',
+      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime != null)
+        'featureStatsAndAnomalySpec.statsTimeRange.startTime': request
+            .featureStatsAndAnomalySpec!
+            .statsTimeRange!
+            .startTime!
+            .toJson(),
+      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime != null)
+        'featureStatsAndAnomalySpec.statsTimeRange.endTime': request
+            .featureStatsAndAnomalySpec!
+            .statsTimeRange!
+            .endTime!
+            .toJson(),
     });
     final response = await _client.get(url);
     return Feature.fromJson(response);
@@ -4433,8 +4375,7 @@ final class FeaturestoreService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.latestStatsCount.isNotDefault)
         'latestStatsCount': '${request.latestStatsCount}',
     });
@@ -4449,8 +4390,8 @@ final class FeaturestoreService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Feature> updateFeature(UpdateFeatureRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.feature!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.feature);
     return Feature.fromJson(response);
@@ -4743,6 +4684,8 @@ final class FeaturestoreService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -4792,10 +4735,7 @@ final class FeaturestoreService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -4873,8 +4813,8 @@ final class GenAiCacheService {
     UpdateCachedContentRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.cachedContent!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.cachedContent);
     return CachedContent.fromJson(response);
@@ -4995,6 +4935,8 @@ final class GenAiCacheService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -5044,10 +4986,7 @@ final class GenAiCacheService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -5268,6 +5207,8 @@ final class GenAiTuningService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -5317,10 +5258,7 @@ final class GenAiTuningService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -5411,8 +5349,7 @@ final class IndexEndpointService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListIndexEndpointsResponse.fromJson(response);
@@ -5427,8 +5364,8 @@ final class IndexEndpointService {
     UpdateIndexEndpointRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.indexEndpoint!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.indexEndpoint);
     return IndexEndpoint.fromJson(response);
@@ -5633,6 +5570,8 @@ final class IndexEndpointService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -5682,10 +5621,7 @@ final class IndexEndpointService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -5792,8 +5728,7 @@ final class IndexService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListIndexesResponse.fromJson(response);
@@ -5814,8 +5749,8 @@ final class IndexService {
     UpdateIndexRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.index!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.index);
     return Operation.fromJson(
@@ -5967,6 +5902,8 @@ final class IndexService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -6016,10 +5953,7 @@ final class IndexService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -6096,8 +6030,7 @@ final class JobService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListCustomJobsResponse.fromJson(response);
@@ -6189,8 +6122,7 @@ final class JobService {
           if (request.filter.isNotDefault) 'filter': request.filter,
           if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
           if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-          if (request.readMask!.paths.isNotDefault)
-            'readMask.paths': request.readMask!.paths,
+          if (request.readMask != null) 'readMask': request.readMask!.toJson(),
           if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
         });
     final response = await _client.get(url);
@@ -6280,8 +6212,7 @@ final class JobService {
         if (request.filter.isNotDefault) 'filter': request.filter,
         if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
         if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-        if (request.readMask!.paths.isNotDefault)
-          'readMask.paths': request.readMask!.paths,
+        if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       },
     );
     final response = await _client.get(url);
@@ -6371,8 +6302,7 @@ final class JobService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListNasJobsResponse.fromJson(response);
@@ -6497,8 +6427,7 @@ final class JobService {
           if (request.filter.isNotDefault) 'filter': request.filter,
           if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
           if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-          if (request.readMask!.paths.isNotDefault)
-            'readMask.paths': request.readMask!.paths,
+          if (request.readMask != null) 'readMask': request.readMask!.toJson(),
         });
     final response = await _client.get(url);
     return ListBatchPredictionJobsResponse.fromJson(response);
@@ -6620,8 +6549,7 @@ final class JobService {
         if (request.filter.isNotDefault) 'filter': request.filter,
         if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
         if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-        if (request.readMask!.paths.isNotDefault)
-          'readMask.paths': request.readMask!.paths,
+        if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       },
     );
     final response = await _client.get(url);
@@ -6652,8 +6580,8 @@ final class JobService {
       _host,
       '/v1beta1/${request.modelDeploymentMonitoringJob!.name}',
       {
-        if (request.updateMask!.paths.isNotDefault)
-          'updateMask.paths': request.updateMask!.paths,
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
       },
     );
     final response = await _client.patch(
@@ -6813,6 +6741,8 @@ final class JobService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -6862,10 +6792,7 @@ final class JobService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -7009,6 +6936,8 @@ final class LlmUtilityService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -7058,10 +6987,7 @@ final class LlmUtilityService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -7226,6 +7152,8 @@ final class MatchService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -7275,10 +7203,7 @@ final class MatchService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -7368,8 +7293,8 @@ final class MemoryBankService {
     UpdateMemoryRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.memory!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.memory);
     return Operation.fromJson(
@@ -7550,6 +7475,8 @@ final class MemoryBankService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -7599,10 +7526,7 @@ final class MemoryBankService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -7776,8 +7700,8 @@ final class MetadataService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Artifact> updateArtifact(UpdateArtifactRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.artifact!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
       if (request.allowMissing.isNotDefault)
         'allowMissing': '${request.allowMissing}',
     });
@@ -7883,8 +7807,8 @@ final class MetadataService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Context> updateContext(UpdateContextRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.context!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
       if (request.allowMissing.isNotDefault)
         'allowMissing': '${request.allowMissing}',
     });
@@ -8068,8 +7992,8 @@ final class MetadataService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Execution> updateExecution(UpdateExecutionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.execution!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
       if (request.allowMissing.isNotDefault)
         'allowMissing': '${request.allowMissing}',
     });
@@ -8321,6 +8245,8 @@ final class MetadataService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -8370,10 +8296,7 @@ final class MetadataService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -8556,6 +8479,8 @@ final class MigrationService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -8605,10 +8530,7 @@ final class MigrationService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -8909,6 +8831,8 @@ final class ModelGardenService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -8958,10 +8882,7 @@ final class ModelGardenService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -9047,8 +8968,8 @@ final class ModelMonitoringService {
   Future<Operation<ModelMonitor, UpdateModelMonitorOperationMetadata>>
   updateModelMonitor(UpdateModelMonitorRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.modelMonitor!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.modelMonitor);
     return Operation.fromJson(
@@ -9083,8 +9004,7 @@ final class ModelMonitoringService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListModelMonitorsResponse.fromJson(response);
@@ -9165,8 +9085,7 @@ final class ModelMonitoringService {
           if (request.filter.isNotDefault) 'filter': request.filter,
           if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
           if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-          if (request.readMask!.paths.isNotDefault)
-            'readMask.paths': request.readMask!.paths,
+          if (request.readMask != null) 'readMask': request.readMask!.toJson(),
         });
     final response = await _client.get(url);
     return ListModelMonitoringJobsResponse.fromJson(response);
@@ -9317,6 +9236,8 @@ final class ModelMonitoringService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -9366,10 +9287,7 @@ final class ModelMonitoringService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -9456,8 +9374,7 @@ final class ModelService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListModelsResponse.fromJson(response);
@@ -9475,8 +9392,7 @@ final class ModelService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
     });
     final response = await _client.get(url);
@@ -9506,8 +9422,8 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Model> updateModel(UpdateModelRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.model!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.model);
     return Model.fromJson(response);
@@ -9751,8 +9667,7 @@ final class ModelService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListModelEvaluationsResponse.fromJson(response);
@@ -9783,8 +9698,7 @@ final class ModelService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListModelEvaluationSlicesResponse.fromJson(response);
@@ -9892,6 +9806,8 @@ final class ModelService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -9941,10 +9857,7 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -10055,8 +9968,7 @@ final class NotebookService {
         if (request.filter.isNotDefault) 'filter': request.filter,
         if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
         if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-        if (request.readMask!.paths.isNotDefault)
-          'readMask.paths': request.readMask!.paths,
+        if (request.readMask != null) 'readMask': request.readMask!.toJson(),
         if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
       },
     );
@@ -10098,11 +10010,14 @@ final class NotebookService {
   Future<NotebookRuntimeTemplate> updateNotebookRuntimeTemplate(
     UpdateNotebookRuntimeTemplateRequest request,
   ) async {
-    final url =
-        Uri.https(_host, '/v1beta1/${request.notebookRuntimeTemplate!.name}', {
-          if (request.updateMask!.paths.isNotDefault)
-            'updateMask.paths': request.updateMask!.paths,
-        });
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.notebookRuntimeTemplate!.name}',
+      {
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
+      },
+    );
     final response = await _client.patch(
       url,
       body: request.notebookRuntimeTemplate,
@@ -10164,8 +10079,7 @@ final class NotebookService {
           if (request.filter.isNotDefault) 'filter': request.filter,
           if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
           if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-          if (request.readMask!.paths.isNotDefault)
-            'readMask.paths': request.readMask!.paths,
+          if (request.readMask != null) 'readMask': request.readMask!.toJson(),
           if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
         });
     final response = await _client.get(url);
@@ -10461,6 +10375,8 @@ final class NotebookService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -10510,10 +10426,7 @@ final class NotebookService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -10656,11 +10569,14 @@ final class PersistentResourceService {
     Operation<PersistentResource, UpdatePersistentResourceOperationMetadata>
   >
   updatePersistentResource(UpdatePersistentResourceRequest request) async {
-    final url =
-        Uri.https(_host, '/v1beta1/${request.persistentResource!.name}', {
-          if (request.updateMask!.paths.isNotDefault)
-            'updateMask.paths': request.updateMask!.paths,
-        });
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.persistentResource!.name}',
+      {
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.persistentResource);
     return Operation.fromJson(
       response,
@@ -10786,6 +10702,8 @@ final class PersistentResourceService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -10835,10 +10753,7 @@ final class PersistentResourceService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -10925,8 +10840,7 @@ final class PipelineService {
           if (request.filter.isNotDefault) 'filter': request.filter,
           if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
           if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-          if (request.readMask!.paths.isNotDefault)
-            'readMask.paths': request.readMask!.paths,
+          if (request.readMask != null) 'readMask': request.readMask!.toJson(),
         });
     final response = await _client.get(url);
     return ListTrainingPipelinesResponse.fromJson(response);
@@ -11021,8 +10935,7 @@ final class PipelineService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListPipelineJobsResponse.fromJson(response);
@@ -11231,6 +11144,8 @@ final class PipelineService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -11280,10 +11195,7 @@ final class PipelineService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -11585,6 +11497,8 @@ final class PredictionService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -11634,10 +11548,7 @@ final class PredictionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -11795,6 +11706,8 @@ final class ReasoningEngineExecutionService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -11844,10 +11757,7 @@ final class ReasoningEngineExecutionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -11960,8 +11870,8 @@ final class ReasoningEngineService {
   Future<Operation<ReasoningEngine, UpdateReasoningEngineOperationMetadata>>
   updateReasoningEngine(UpdateReasoningEngineRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.reasoningEngine!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.reasoningEngine);
     return Operation.fromJson(
@@ -12088,6 +11998,8 @@ final class ReasoningEngineService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -12137,10 +12049,7 @@ final class ReasoningEngineService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -12291,8 +12200,8 @@ final class ScheduleService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Schedule> updateSchedule(UpdateScheduleRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.schedule!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.schedule);
     return Schedule.fromJson(response);
@@ -12387,6 +12296,8 @@ final class ScheduleService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -12436,10 +12347,7 @@ final class ScheduleService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -12542,8 +12450,8 @@ final class SessionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Session> updateSession(UpdateSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.session!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.session);
     return Session.fromJson(response);
@@ -12690,6 +12598,8 @@ final class SessionService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -12739,10 +12649,7 @@ final class SessionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -12839,8 +12746,7 @@ final class SpecialistPoolService {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/specialistPools', {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListSpecialistPoolsResponse.fromJson(response);
@@ -12886,8 +12792,8 @@ final class SpecialistPoolService {
   Future<Operation<SpecialistPool, UpdateSpecialistPoolOperationMetadata>>
   updateSpecialistPool(UpdateSpecialistPoolRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.specialistPool!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.specialistPool);
     return Operation.fromJson(
@@ -12988,6 +12894,8 @@ final class SpecialistPoolService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -13037,10 +12945,7 @@ final class SpecialistPoolService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -13131,8 +13036,8 @@ final class TensorboardService {
   Future<Operation<Tensorboard, UpdateTensorboardOperationMetadata>>
   updateTensorboard(UpdateTensorboardRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.tensorboard!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.tensorboard);
     return Operation.fromJson(
@@ -13157,8 +13062,7 @@ final class TensorboardService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListTensorboardsResponse.fromJson(response);
@@ -13255,11 +13159,14 @@ final class TensorboardService {
   Future<TensorboardExperiment> updateTensorboardExperiment(
     UpdateTensorboardExperimentRequest request,
   ) async {
-    final url =
-        Uri.https(_host, '/v1beta1/${request.tensorboardExperiment!.name}', {
-          if (request.updateMask!.paths.isNotDefault)
-            'updateMask.paths': request.updateMask!.paths,
-        });
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.tensorboardExperiment!.name}',
+      {
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
+      },
+    );
     final response = await _client.patch(
       url,
       body: request.tensorboardExperiment,
@@ -13280,8 +13187,7 @@ final class TensorboardService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListTensorboardExperimentsResponse.fromJson(response);
@@ -13364,8 +13270,8 @@ final class TensorboardService {
     UpdateTensorboardRunRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.tensorboardRun!.name}', {
-      if (request.updateMask!.paths.isNotDefault)
-        'updateMask.paths': request.updateMask!.paths,
+      if (request.updateMask != null)
+        'updateMask': request.updateMask!.toJson(),
     });
     final response = await _client.patch(url, body: request.tensorboardRun);
     return TensorboardRun.fromJson(response);
@@ -13384,8 +13290,7 @@ final class TensorboardService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListTensorboardRunsResponse.fromJson(response);
@@ -13469,11 +13374,14 @@ final class TensorboardService {
   Future<TensorboardTimeSeries> updateTensorboardTimeSeries(
     UpdateTensorboardTimeSeriesRequest request,
   ) async {
-    final url =
-        Uri.https(_host, '/v1beta1/${request.tensorboardTimeSeries!.name}', {
-          if (request.updateMask!.paths.isNotDefault)
-            'updateMask.paths': request.updateMask!.paths,
-        });
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.tensorboardTimeSeries!.name}',
+      {
+        if (request.updateMask != null)
+          'updateMask': request.updateMask!.toJson(),
+      },
+    );
     final response = await _client.patch(
       url,
       body: request.tensorboardTimeSeries,
@@ -13494,8 +13402,7 @@ final class TensorboardService {
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
       if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
-      if (request.readMask!.paths.isNotDefault)
-        'readMask.paths': request.readMask!.paths,
+      if (request.readMask != null) 'readMask': request.readMask!.toJson(),
     });
     final response = await _client.get(url);
     return ListTensorboardTimeSeriesResponse.fromJson(response);
@@ -13728,6 +13635,8 @@ final class TensorboardService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -13777,10 +13686,7 @@ final class TensorboardService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -14140,6 +14046,8 @@ final class VertexRagDataService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -14189,10 +14097,7 @@ final class VertexRagDataService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -14368,6 +14273,8 @@ final class VertexRagService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -14417,10 +14324,7 @@ final class VertexRagService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
@@ -14783,6 +14687,8 @@ final class VizierService {
       if (request.filter.isNotDefault) 'filter': request.filter,
       if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
       if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.returnPartialSuccess.isNotDefault)
+        'returnPartialSuccess': '${request.returnPartialSuccess}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -14832,10 +14738,7 @@ final class VizierService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Operation> waitOperation(WaitOperationRequest request) async {
     final url = Uri.https(_host, '/ui/${request.name}:wait', {
-      if (request.timeout!.seconds.isNotDefault)
-        'timeout.seconds': '${request.timeout!.seconds}',
-      if (request.timeout!.nanos.isNotDefault)
-        'timeout.nanos': '${request.timeout!.nanos}',
+      if (request.timeout != null) 'timeout': request.timeout!.toJson(),
     });
     final response = await _client.post(url);
     return Operation.fromJson(response);
