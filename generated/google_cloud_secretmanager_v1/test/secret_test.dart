@@ -26,7 +26,7 @@ import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
 void main() async {
-  late SecretManagerService secretManangerService;
+  late SecretManagerService secretManagerService;
   late TestHttpClient testClient;
 
   group('secret', () {
@@ -35,15 +35,14 @@ void main() async {
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
               'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/generative-language.retriever',
             ],
           );
 
       testClient = await TestHttpClient.fromEnvironment(authClient);
-      secretManangerService = SecretManagerService(client: testClient);
+      secretManagerService = SecretManagerService(client: testClient);
     });
 
-    tearDown(() => secretManangerService.close());
+    tearDown(() => secretManagerService.close());
     test('create_and_update', () async {
       await testClient.startTest(
         'google_cloud_secretmanager_v1',
@@ -55,7 +54,7 @@ void main() async {
           ? 'mysecret'
           : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
 
-      final createdSecret = await secretManangerService.createSecret(
+      final createdSecret = await secretManagerService.createSecret(
         CreateSecretRequest(
           parent: 'projects/$projectId',
           secretId: secretName,
@@ -67,7 +66,7 @@ void main() async {
       );
       expect(createdSecret.name, endsWith(secretName));
 
-      final updatedSecret = await secretManangerService.updateSecret(
+      final updatedSecret = await secretManagerService.updateSecret(
         UpdateSecretRequest(
           secret: Secret(
             name: createdSecret.name,
