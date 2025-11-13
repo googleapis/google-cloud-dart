@@ -33,9 +33,7 @@ void main() async {
     setUp(() async {
       final authClient = () async =>
           await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-            ],
+            scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
 
       testClient = await TestHttpClient.fromEnvironment(authClient);
