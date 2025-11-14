@@ -28,14 +28,8 @@ import 'package:path/path.dart' as p;
 import 'package:test_utils/insecure_proxy_http_client.dart';
 import 'package:test/test.dart';
 
-class AnyTypeName extends CustomMatcher {
-  AnyTypeName(dynamic matcher) : super('', 'typeName', matcher);
-
-  @override
-  Object? featureValueOf(dynamic actual) {
-    return (actual as Any).typeName;
-  }
-}
+Matcher anyTypeName(dynamic matcher) =>
+    TypeMatcher<Any>().having((a) => a.typeName, 'typeName', matcher);
 
 class ShowcaseServer {
   final Process _process;
