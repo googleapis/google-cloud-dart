@@ -75,6 +75,12 @@ abstract class TestHttpClient extends BaseClient {
         ),
       };
 
+  static bool get isRecording =>
+      const String.fromEnvironment('http', defaultValue: 'replay') == 'record';
+
+  static bool get isReplaying =>
+      const String.fromEnvironment('http', defaultValue: 'replay') == 'replay';
+
   static FutureOr<String> recordPath(String packageName, String test) async {
     final packageUri = await Isolate.resolvePackageUri(
       Uri.parse('package:$packageName/'),

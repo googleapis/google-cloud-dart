@@ -1,0 +1,58 @@
+[
+  {
+    "request": {
+      "url": "https://secretmanager.googleapis.com/v1/projects/skilful-orb-203421/secrets?secretId=mysecret",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.9.4 gax/0.2.0"
+      },
+      "body": "eyJyZXBsaWNhdGlvbiI6eyJhdXRvbWF0aWMiOnt9fSwidHRsIjoiMTIwcyJ9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Tue, 11 Nov 2025 22:14:51 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "ewogICJuYW1lIjogInByb2plY3RzLzc0NzU3NTEwNjM3NS9zZWNyZXRzL215c2VjcmV0IiwKICAicmVwbGljYXRpb24iOiB7CiAgICAiYXV0b21hdGljIjoge30KICB9LAogICJjcmVhdGVUaW1lIjogIjIwMjUtMTEtMTFUMjI6MTQ6NDkuMjA1MTM0WiIsCiAgImV4cGlyZVRpbWUiOiAiMjAyNS0xMS0xMVQyMjoxNjo0OS4xNzUyNjUwODdaIiwKICAiZXRhZyI6ICJcIjE2NDM1OGZhMGIxN2E3XCIiCn0K",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://secretmanager.googleapis.com/v1/projects/747575106375/secrets/mysecret?updateMask=annotations",
+      "method": "PATCH",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.9.4 gax/0.2.0"
+      },
+      "body": "eyJuYW1lIjoicHJvamVjdHMvNzQ3NTc1MTA2Mzc1L3NlY3JldHMvbXlzZWNyZXQiLCJsYWJlbHMiOnsieCI6InkifSwiYW5ub3RhdGlvbnMiOnsiYSI6ImIifX0="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Tue, 11 Nov 2025 22:14:51 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "ewogICJuYW1lIjogInByb2plY3RzLzc0NzU3NTEwNjM3NS9zZWNyZXRzL215c2VjcmV0IiwKICAicmVwbGljYXRpb24iOiB7CiAgICAiYXV0b21hdGljIjoge30KICB9LAogICJjcmVhdGVUaW1lIjogIjIwMjUtMTEtMTFUMjI6MTQ6NDkuMjA1MTM0WiIsCiAgImV4cGlyZVRpbWUiOiAiMjAyNS0xMS0xMVQyMjoxNjo0OS4xNzUyNjUwODdaIiwKICAiZXRhZyI6ICJcIjE2NDM1OGZhMGVmNmVhXCIiLAogICJhbm5vdGF0aW9ucyI6IHsKICAgICJhIjogImIiCiAgfQp9Cg==",
+      "reasonPhrase": "OK"
+    }
+  }
+]
