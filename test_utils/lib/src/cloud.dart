@@ -19,10 +19,6 @@ import 'dart:io';
 /// Taken from the `"GOOGLE_CLOUD_PROJECT"` environment variable.
 ///
 /// Throws [StateError] if the environment variable is not set.
-String get projectId {
-  final project = Platform.environment['GOOGLE_CLOUD_PROJECT'];
-  if (project == null) {
-    throw StateError('Missing environment variable: GOOGLE_CLOUD_PROJECT');
-  }
-  return project;
-}
+String get projectId =>
+    Platform.environment['GOOGLE_CLOUD_PROJECT'] ??
+    (throw StateError('Missing environment variable: GOOGLE_CLOUD_PROJECT'));
