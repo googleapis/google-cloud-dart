@@ -4,7 +4,7 @@
       "url": "https://generativelanguage.googleapis.com/v1beta/models?",
       "method": "GET",
       "headers": {
-        "x-goog-api-client": "gl-dart/3.9.4 gax/0.2.0"
+        "x-goog-api-client": "gl-dart/3.10.0 gax/0.2.0"
       },
       "body": ""
     },
@@ -13,10 +13,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "transfer-encoding": "chunked",
-        "date": "Thu, 06 Nov 2025 18:48:40 GMT",
+        "date": "Fri, 14 Nov 2025 18:57:51 GMT",
         "vary": "Origin,X-Origin,Referer",
         "content-encoding": "gzip",
-        "server-timing": "gfet4t7; dur=96",
+        "server-timing": "gfet4t7; dur=146",
         "content-type": "application/json; charset=UTF-8",
         "x-frame-options": "SAMEORIGIN",
         "x-xss-protection": "0",
