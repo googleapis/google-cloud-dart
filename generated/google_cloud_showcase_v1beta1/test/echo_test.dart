@@ -64,18 +64,12 @@ class ShowcaseServer {
   static Future<ShowcaseServer> start() async {
     await _install();
     final process = await Process.start(await _showcasePath(), ['run']);
-    final serverStarted = Completer<void>();
     stderr.addStream(process.stderr);
     process.stdin.close();
-    process.stdout
+    await process.stdout
         .transform(utf8.decoder)
         .transform(const LineSplitter())
-        .listen((line) {
-          if (line.contains('Listening for REST connections')) {
-            serverStarted.complete();
-          }
-        });
-    await serverStarted.future;
+        .firstWhere((line) => line.contains('Listening for REST connections'));
 
     return ShowcaseServer._(process);
   }
