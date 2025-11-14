@@ -43,7 +43,7 @@ void main() async {
     tearDown(() => predictionService.close());
     test('streamed', () async {
       await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
+        'google_cloud_aiplatform_v1beta1',
         'generative_streamed',
       );
       final request = GenerateContentRequest(
