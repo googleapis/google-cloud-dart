@@ -12,26 +12,4 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:http/http.dart';
-
-import 'test_http_client.dart';
-
-/// An HTTP client that proxies requests to another client.
-class ProxyHttpClient extends TestHttpClient {
-  final Client _client;
-
-  ProxyHttpClient(this._client);
-
-  @override
-  Future<void> startTest(String packageName, String test) async {}
-
-  @override
-  Future<void> endTest() async {}
-
-  @override
-  Future<StreamedResponse> send(BaseRequest originalRequest) =>
-      _client.send(originalRequest);
-
-  @override
-  void close() => _client.close();
-}
+export 'src/insecure_proxy_http_client.dart';

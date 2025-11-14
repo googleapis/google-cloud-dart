@@ -32,6 +32,8 @@ digraph "" {
 }
 ''';
 
+const noPublishVersion = '0.0.0';
+
 class Package implements Comparable<Package> {
   static Map<String, Package> namesToPackages = {};
   final String name;
@@ -59,7 +61,9 @@ void main() {
 
   for (final packageMap in packageMaps) {
     final packageName = packageMap['name'] as String;
-    if (packageName.startsWith('google_cloud')) {
+    final packageVersion = packageMap['version'] as String;
+    if (packageName.startsWith('google_cloud') &&
+        packageVersion != noPublishVersion) {
       final package = Package.putIfAbsent(packageName);
       final dependencies = (packageMap['directDependencies'] as List)
           .cast<String>();
