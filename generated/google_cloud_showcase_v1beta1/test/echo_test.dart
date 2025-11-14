@@ -22,14 +22,11 @@ import 'dart:io';
 import 'package:google_cloud_protobuf/protobuf.dart' show Any;
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
-import 'package:http/http.dart' as http;
-import 'package:test/test.dart';
-
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:test_utils/insecure_proxy_http_client.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
+import 'package:test_utils/insecure_proxy_http_client.dart';
+import 'package:test/test.dart';
 
 class AnyTypeName extends CustomMatcher {
   AnyTypeName(dynamic matcher) : super('', 'typeName', matcher);
@@ -72,7 +69,7 @@ class ShowcaseServer {
 
   static Future<ShowcaseServer> start() async {
     await _install();
-    final process = await Process.start(await _showcasePath(), ["run"]);
+    final process = await Process.start(await _showcasePath(), ['run']);
     final serverStarted = Completer<void>();
     stderr.addStream(process.stderr);
     process.stdin.close();
@@ -80,7 +77,7 @@ class ShowcaseServer {
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .listen((line) {
-          if (line.contains("Listening for REST connections")) {
+          if (line.contains('Listening for REST connections')) {
             serverStarted.complete();
           }
         });
