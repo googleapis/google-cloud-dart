@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-library generative_test;
+library;
 
 import 'package:test/test.dart';
 
