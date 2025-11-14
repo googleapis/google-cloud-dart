@@ -25,6 +25,7 @@ on:
 # reproducable builds (formatting can change between SDK versions, ...).
 env:
   DART_VERSION: 3.9.2
+  GOOGLE_CLOUD_PROJECT: skilful-orb-203421
 
 name: Dart Checks
 jobs:
