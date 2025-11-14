@@ -66,11 +66,16 @@ class ShowcaseServer {
     final process = await Process.start(await _showcasePath(), ['run']);
     stderr.addStream(process.stderr);
     process.stdin.close();
-    await process.stdout
+    final serverStarted = Completer<void>();
+    process.stdout
         .transform(utf8.decoder)
         .transform(const LineSplitter())
-        .firstWhere((line) => line.contains('Listening for REST connections'));
-
+        .listen((line) {
+          if (line.contains('Listening for REST connections')) {
+            serverStarted.complete();
+          }
+        });
+    await serverStarted.future;
     return ShowcaseServer._(process);
   }
 
@@ -121,20 +126,20 @@ void main() async {
                 409, // Aborted
               )
               .having((e) => e.status.details, 'status.details', [
-                AnyTypeName('google.rpc.ErrorInfo'),
-                AnyTypeName('google.rpc.LocalizedMessage'),
+                anyTypeName('google.rpc.ErrorInfo'),
+                anyTypeName('google.rpc.LocalizedMessage'),
                 wrapMatcher((Any x) {
                   final poetryError = x.unpackFrom(PoetryError.fromJson);
                   return poetryError.poem == text;
                 }),
-                AnyTypeName('google.rpc.RetryInfo'),
-                AnyTypeName('google.rpc.DebugInfo'),
-                AnyTypeName('google.rpc.QuotaFailure'),
-                AnyTypeName('google.rpc.PreconditionFailure'),
-                AnyTypeName('google.rpc.BadRequest'),
-                AnyTypeName('google.rpc.RequestInfo'),
-                AnyTypeName('google.rpc.ResourceInfo'),
-                AnyTypeName('google.rpc.Help'),
+                anyTypeName('google.rpc.RetryInfo'),
+                anyTypeName('google.rpc.DebugInfo'),
+                anyTypeName('google.rpc.QuotaFailure'),
+                anyTypeName('google.rpc.PreconditionFailure'),
+                anyTypeName('google.rpc.BadRequest'),
+                anyTypeName('google.rpc.RequestInfo'),
+                anyTypeName('google.rpc.ResourceInfo'),
+                anyTypeName('google.rpc.Help'),
               ]),
         ),
       );
