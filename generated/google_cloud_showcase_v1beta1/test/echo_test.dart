@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-library echo_test;
+library;
 
 import 'dart:async';
 import 'dart:convert';
