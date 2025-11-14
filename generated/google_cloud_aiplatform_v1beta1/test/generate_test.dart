@@ -17,12 +17,13 @@ library;
 
 import 'package:test/test.dart';
 
-import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
+import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
 void main() async {
-  late GenerativeService generativeService;
+  late PredictionService predictionService;
   late TestHttpClient testClient;
 
   group('generative', () {
@@ -36,26 +37,28 @@ void main() async {
           );
 
       testClient = await TestHttpClient.fromEnvironment(authClient);
-      generativeService = GenerativeService(client: testClient);
+      predictionService = PredictionService(client: testClient);
     });
 
-    tearDown(() => generativeService.close());
+    tearDown(() => predictionService.close());
     test('streamed', () async {
       await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
+        'google_cloud_aiplatform_v1beta1',
         'generative_streamed',
       );
-
       final request = GenerateContentRequest(
-        model: 'models/gemini-2.5-flash',
+        model:
+            'projects/$projectId/locations/global/'
+            'publishers/google/models/gemini-2.5-flash',
         contents: [
           Content(
             parts: [Part(text: 'Explain how AI works in extensive detail')],
+            role: 'user',
           ),
         ],
       );
 
-      final results = generativeService.streamGenerateContent(request);
+      final results = predictionService.streamGenerateContent(request);
       final text = StringBuffer();
       await for (final result in results) {
         final parts = result.candidates.firstOrNull?.content?.parts;
