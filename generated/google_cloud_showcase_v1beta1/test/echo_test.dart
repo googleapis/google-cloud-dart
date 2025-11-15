@@ -257,7 +257,7 @@ void main() async {
       expect(response2.nextPageToken, '6');
     });
 
-    test('pagination', () async {
+    test('legacy mapped pagination', () async {
       const content = 'It was the best of times, it was the worst of times';
       final response = await echoService.pagedExpandLegacyMapped(
         PagedExpandRequest(content: content),
