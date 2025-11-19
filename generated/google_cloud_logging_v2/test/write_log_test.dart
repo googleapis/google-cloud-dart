@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-library secret_test;
+library;
 
 import 'dart:math';
 
@@ -21,7 +21,6 @@ import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart';
 import 'package:google_cloud_logging_v2/logging.dart';
 import 'package:test/test.dart';
-import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test_utils/cloud.dart';
@@ -31,7 +30,7 @@ void main() async {
   late LoggingServiceV2 logService;
   late TestHttpClient testClient;
 
-  group('secret', () {
+  group('LoggingServiceV2', () {
     setUp(() async {
       final authClient = () async =>
           await auth.clientViaApplicationDefaultCredentials(
@@ -68,7 +67,9 @@ void main() async {
       );
 
       if (!TestHttpClient.isReplaying) {
-        // Writes are not always committed instantly.
+        // Writes are not always committed instantly. Uses a fixed delay instead
+        // of polling in order to cause recordings to make a deterministic
+        // number of requests.
         await Future.delayed(const Duration(seconds: 15));
 
         addTearDown(
