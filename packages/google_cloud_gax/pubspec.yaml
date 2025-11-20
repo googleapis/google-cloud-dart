@@ -20,8 +20,6 @@ repository: https://github.com/googleapis/google-cloud-dart/tree/main/packages/g
 environment:
   sdk: ^3.9.0
 
-resolution: workspace
-
 dependencies:
   google_cloud_rpc: ^0.2.0
 
