@@ -1,0 +1,60 @@
+[
+  {
+    "request": {
+      "url": "https://logging.googleapis.com/v2/entries:write",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.0 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJlbnRyaWVzIjpbeyJsb2dOYW1lIjoicHJvamVjdHMvc2tpbGZ1bC1vcmItMjAzNDIxL2xvZ3MvbG9nZ2luZ190ZXN0XzEyMzQiLCJyZXNvdXJjZSI6eyJ0eXBlIjoiZ2NlX2luc3RhbmNlIn0sInRleHRQYXlsb2FkIjoiSGVsbG8gV29ybGQhIiwic2V2ZXJpdHkiOiJDUklUSUNBTCJ9XX0="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 19 Nov 2025 21:01:25 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "server-timing": "gfet4t7; dur=97",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "e30K",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://logging.googleapis.com/v2/entries:list",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.0 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJyZXNvdXJjZU5hbWVzIjpbInByb2plY3RzL3NraWxmdWwtb3JiLTIwMzQyMSJdLCJmaWx0ZXIiOiJsb2dOYW1lOlwicHJvamVjdHMvc2tpbGZ1bC1vcmItMjAzNDIxL2xvZ3MvbG9nZ2luZ190ZXN0XzEyMzRcIiIsIm9yZGVyQnkiOiJ0aW1lc3RhbXAgZGVzYyJ9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 19 Nov 2025 21:01:45 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "server-timing": "gfet4t7; dur=5046",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "ewogICJlbnRyaWVzIjogWwogICAgewogICAgICAidGV4dFBheWxvYWQiOiAiSGVsbG8gV29ybGQhIiwKICAgICAgImluc2VydElkIjogInN3eHh4ZGZsNzYxMDIiLAogICAgICAicmVzb3VyY2UiOiB7CiAgICAgICAgInR5cGUiOiAiZ2NlX2luc3RhbmNlIiwKICAgICAgICAibGFiZWxzIjogewogICAgICAgICAgInByb2plY3RfaWQiOiAic2tpbGZ1bC1vcmItMjAzNDIxIiwKICAgICAgICAgICJpbnN0YW5jZV9pZCI6ICIiLAogICAgICAgICAgInpvbmUiOiAiIgogICAgICAgIH0KICAgICAgfSwKICAgICAgInRpbWVzdGFtcCI6ICIyMDI1LTExLTE5VDIxOjAxOjI1LjE5NDU1MzYxNloiLAogICAgICAic2V2ZXJpdHkiOiAiQ1JJVElDQUwiLAogICAgICAibG9nTmFtZSI6ICJwcm9qZWN0cy9za2lsZnVsLW9yYi0yMDM0MjEvbG9ncy9sb2dnaW5nX3Rlc3RfMTIzNCIsCiAgICAgICJyZWNlaXZlVGltZXN0YW1wIjogIjIwMjUtMTEtMTlUMjE6MDE6MjUuMTk0NTUzNjE2WiIKICAgIH0KICBdLAogICJuZXh0UGFnZVRva2VuIjogImVvOEJDb29CQWNwT2pNelFZbHhrdlNoWXF1TFU4Ukw3NzVZTzdEcXBkWWNBdC1zM1llaThFQnNrSTN4aUFBUExxbjV6OWdMQ01ZZ1Q4dC1Nb2FOdWduSi13NEoxaEJNbVBxbFRkMVdSWlVSS0FvNzlUOFUwYTE3dE83MjFtWmx4eHAwemZ2dlNqRDJGNHBTUU9lRWU2UkludDBCTmo0TUFaTkpWVEdKSnhrRXczMF96ZS1ZUWNVSVNYaDk3TlQ4eEVBQSIKfQo=",
+      "reasonPhrase": "OK"
+    }
+  }
+]
