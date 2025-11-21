@@ -16,7 +16,7 @@
 
 name: google_cloud_rpc
 description: The Google Cloud client library for the Google RPC Types.
-version: 0.2.0
+version: 0.2.1
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_rpc
 issue_tracker: https://github.com/googleapis/google-cloud-dart/issues
 

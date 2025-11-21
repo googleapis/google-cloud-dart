@@ -17,7 +17,7 @@ specification-source = 'google/longrunning'
 service-config = 'google/longrunning/longrunning.yaml'
 
 [source]
-description-override = """
+description-override = '''
 Defines types and an abstract service to handle long-running operations.
 
 [Long-running operations] are a common pattern to handle methods that may take
@@ -27,10 +27,10 @@ operation will eventually complete, though it may still return an error on
 completion. The client libraries provide helpers to simplify polling of these
 operations.
 
-[Long-running operations]: https://google.aip.dev/151"""
+[Long-running operations]: https://google.aip.dev/151'''
 
 [codec]
 copyright-year = '2025'
-dev-dependencies = "test"
-part-file = "src/longrunning.p.dart"
-repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_longrunning"
+dev-dependencies = 'test'
+part-file = 'src/longrunning.p.dart'
+repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_longrunning'

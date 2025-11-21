@@ -73,8 +73,8 @@ API key as an argument when initializing the client.
 
 > [!NOTE]
 >
-> Models names must be prefixed with the string `"models/"`. For example,
-> `"models/gemini-2.5-pro"`.
+> Models names must be prefixed with the string `'models/'`. For example,
+> `'models/gemini-2.5-pro'`.
 
 ```dart
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
@@ -87,7 +87,7 @@ void main() async {
   final request = GenerateContentRequest(
     model: 'models/gemini-2.5-flash',
     contents: [
-      Content(parts: [Part(text: "Explain how AI works in a few words")]),
+      Content(parts: [Part(text: 'Explain how AI works in a few words')]),
     ],
   );
 

@@ -35,6 +35,6 @@ include-list = """\
 
 [codec]
 copyright-year   = '2025'
-part-file        = "src/protobuf.p.dart"
-dev-dependencies = "test"
-repository-url   = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protobuf"
+part-file        = 'src/protobuf.p.dart'
+dev-dependencies = 'test'
+repository-url   = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protobuf'
