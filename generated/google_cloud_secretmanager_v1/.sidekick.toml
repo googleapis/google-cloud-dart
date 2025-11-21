@@ -18,5 +18,5 @@ service-config = 'google/cloud/secretmanager/v1/secretmanager_v1.yaml'
 
 [codec]
 copyright-year = '2025'
-dev-dependencies = "googleapis_auth,test,test_utils"
-repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_secretmanager_v1"
+dev-dependencies = 'googleapis_auth,test,test_utils'
+repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_secretmanager_v1'

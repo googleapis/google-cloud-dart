@@ -21,4 +21,4 @@ name-override = 'location'
 
 [codec]
 copyright-year = '2025'
-repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location"
+repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location'

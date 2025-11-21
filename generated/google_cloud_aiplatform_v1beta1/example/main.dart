@@ -42,8 +42,8 @@ void main() async {
         'publishers/google/models/gemini-2.5-flash',
     contents: [
       Content(
-        parts: [Part(text: "Explain how AI works in a few words")],
-        role: "user",
+        parts: [Part(text: 'Explain how AI works in a few words')],
+        role: 'user',
       ),
     ],
   );

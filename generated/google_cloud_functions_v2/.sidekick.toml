@@ -18,4 +18,4 @@ service-config = 'google/cloud/functions/v2/cloudfunctions_v2.yaml'
 
 [codec]
 copyright-year = '2025'
-repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_functions_v2"
+repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_functions_v2'
