@@ -152,8 +152,8 @@ class Any extends ProtoMessage {
     if (_customEncodedTypes.contains(qualifiedName)) {
       json['value'] = encoded;
     } else {
-      for (final key in (encoded as Map).keys) {
-        json[key as String] = encoded[key];
+      for (final key in (encoded as Map).cast<String, dynamic>().keys) {
+        json[key] = encoded[key];
       }
     }
   }
