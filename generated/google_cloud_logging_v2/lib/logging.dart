@@ -19,6 +19,14 @@
 /// Writes log entries and manages your Cloud Logging configuration.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: camel_case_types
+// ignore_for_file: unintended_html_in_doc_comment
+// ignore_for_file: comment_references
+// ignore_for_file: avoid_unused_constructor_parameters
+
 import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 import 'package:google_cloud_longrunning/longrunning.dart';
@@ -56,9 +64,8 @@ final class LoggingServiceV2 {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory LoggingServiceV2.fromApiKey([String? apiKey]) {
-    return LoggingServiceV2(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory LoggingServiceV2.fromApiKey([String? apiKey]) =>
+      LoggingServiceV2(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Deletes all the log entries in a log for the _Default Log Bucket. The log
   /// reappears if it receives new entries. Log entries written shortly before
@@ -220,9 +227,8 @@ final class ConfigServiceV2 {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory ConfigServiceV2.fromApiKey([String? apiKey]) {
-    return ConfigServiceV2(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory ConfigServiceV2.fromApiKey([String? apiKey]) =>
+      ConfigServiceV2(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Lists log buckets.
   ///
@@ -846,9 +852,8 @@ final class MetricsServiceV2 {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory MetricsServiceV2.fromApiKey([String? apiKey]) {
-    return MetricsServiceV2(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory MetricsServiceV2.fromApiKey([String? apiKey]) =>
+      MetricsServiceV2(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Lists logs-based metrics.
   ///
@@ -1152,62 +1157,55 @@ final class LogEntry extends ProtoMessage {
     this.split,
   }) : super(fullyQualifiedName);
 
-  factory LogEntry.fromJson(Map<String, dynamic> json) {
-    return LogEntry(
-      logName: json['logName'] ?? '',
-      resource: decode(json['resource'], MonitoredResource.fromJson),
-      protoPayload: decode(json['protoPayload'], Any.fromJson),
-      textPayload: json['textPayload'],
-      jsonPayload: decodeCustom(json['jsonPayload'], Struct.fromJson),
-      timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
-      receiveTimestamp: decodeCustom(
-        json['receiveTimestamp'],
-        Timestamp.fromJson,
-      ),
-      severity:
-          decodeEnum(json['severity'], logging_type.LogSeverity.fromJson) ??
-          logging_type.LogSeverity.$default,
-      insertId: json['insertId'] ?? '',
-      httpRequest: decode(
-        json['httpRequest'],
-        logging_type.HttpRequest.fromJson,
-      ),
-      labels: decodeMap(json['labels']) ?? {},
-      operation: decode(json['operation'], LogEntryOperation.fromJson),
-      trace: json['trace'] ?? '',
-      spanId: json['spanId'] ?? '',
-      traceSampled: json['traceSampled'] ?? false,
-      sourceLocation: decode(
-        json['sourceLocation'],
-        LogEntrySourceLocation.fromJson,
-      ),
-      split: decode(json['split'], LogSplit.fromJson),
-    );
-  }
+  factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
+    logName: json['logName'] ?? '',
+    resource: decode(json['resource'], MonitoredResource.fromJson),
+    protoPayload: decode(json['protoPayload'], Any.fromJson),
+    textPayload: json['textPayload'],
+    jsonPayload: decodeCustom(json['jsonPayload'], Struct.fromJson),
+    timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
+    receiveTimestamp: decodeCustom(
+      json['receiveTimestamp'],
+      Timestamp.fromJson,
+    ),
+    severity:
+        decodeEnum(json['severity'], logging_type.LogSeverity.fromJson) ??
+        logging_type.LogSeverity.$default,
+    insertId: json['insertId'] ?? '',
+    httpRequest: decode(json['httpRequest'], logging_type.HttpRequest.fromJson),
+    labels: decodeMap(json['labels']) ?? {},
+    operation: decode(json['operation'], LogEntryOperation.fromJson),
+    trace: json['trace'] ?? '',
+    spanId: json['spanId'] ?? '',
+    traceSampled: json['traceSampled'] ?? false,
+    sourceLocation: decode(
+      json['sourceLocation'],
+      LogEntrySourceLocation.fromJson,
+    ),
+    split: decode(json['split'], LogSplit.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      'logName': logName,
-      if (resource != null) 'resource': resource!.toJson(),
-      if (protoPayload != null) 'protoPayload': protoPayload!.toJson(),
-      if (textPayload != null) 'textPayload': textPayload,
-      if (jsonPayload != null) 'jsonPayload': jsonPayload!.toJson(),
-      if (timestamp != null) 'timestamp': timestamp!.toJson(),
-      if (receiveTimestamp != null)
-        'receiveTimestamp': receiveTimestamp!.toJson(),
-      if (severity.isNotDefault) 'severity': severity.toJson(),
-      if (insertId.isNotDefault) 'insertId': insertId,
-      if (httpRequest != null) 'httpRequest': httpRequest!.toJson(),
-      if (labels.isNotDefault) 'labels': labels,
-      if (operation != null) 'operation': operation!.toJson(),
-      if (trace.isNotDefault) 'trace': trace,
-      if (spanId.isNotDefault) 'spanId': spanId,
-      if (traceSampled.isNotDefault) 'traceSampled': traceSampled,
-      if (sourceLocation != null) 'sourceLocation': sourceLocation!.toJson(),
-      if (split != null) 'split': split!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'logName': logName,
+    if (resource != null) 'resource': resource!.toJson(),
+    if (protoPayload != null) 'protoPayload': protoPayload!.toJson(),
+    if (textPayload != null) 'textPayload': textPayload,
+    if (jsonPayload != null) 'jsonPayload': jsonPayload!.toJson(),
+    if (timestamp != null) 'timestamp': timestamp!.toJson(),
+    if (receiveTimestamp != null)
+      'receiveTimestamp': receiveTimestamp!.toJson(),
+    if (severity.isNotDefault) 'severity': severity.toJson(),
+    if (insertId.isNotDefault) 'insertId': insertId,
+    if (httpRequest != null) 'httpRequest': httpRequest!.toJson(),
+    if (labels.isNotDefault) 'labels': labels,
+    if (operation != null) 'operation': operation!.toJson(),
+    if (trace.isNotDefault) 'trace': trace,
+    if (spanId.isNotDefault) 'spanId': spanId,
+    if (traceSampled.isNotDefault) 'traceSampled': traceSampled,
+    if (sourceLocation != null) 'sourceLocation': sourceLocation!.toJson(),
+    if (split != null) 'split': split!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1252,24 +1250,21 @@ final class LogEntryOperation extends ProtoMessage {
     this.last = false,
   }) : super(fullyQualifiedName);
 
-  factory LogEntryOperation.fromJson(Map<String, dynamic> json) {
-    return LogEntryOperation(
-      id: json['id'] ?? '',
-      producer: json['producer'] ?? '',
-      first: json['first'] ?? false,
-      last: json['last'] ?? false,
-    );
-  }
+  factory LogEntryOperation.fromJson(Map<String, dynamic> json) =>
+      LogEntryOperation(
+        id: json['id'] ?? '',
+        producer: json['producer'] ?? '',
+        first: json['first'] ?? false,
+        last: json['last'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      if (producer.isNotDefault) 'producer': producer,
-      if (first.isNotDefault) 'first': first,
-      if (last.isNotDefault) 'last': last,
-    };
-  }
+  Object toJson() => {
+    if (id.isNotDefault) 'id': id,
+    if (producer.isNotDefault) 'producer': producer,
+    if (first.isNotDefault) 'first': first,
+    if (last.isNotDefault) 'last': last,
+  };
 
   @override
   String toString() {
@@ -1308,22 +1303,19 @@ final class LogEntrySourceLocation extends ProtoMessage {
   LogEntrySourceLocation({this.file = '', this.line = 0, this.function = ''})
     : super(fullyQualifiedName);
 
-  factory LogEntrySourceLocation.fromJson(Map<String, dynamic> json) {
-    return LogEntrySourceLocation(
-      file: json['file'] ?? '',
-      line: decodeInt64(json['line']) ?? 0,
-      function: json['function'] ?? '',
-    );
-  }
+  factory LogEntrySourceLocation.fromJson(Map<String, dynamic> json) =>
+      LogEntrySourceLocation(
+        file: json['file'] ?? '',
+        line: decodeInt64(json['line']) ?? 0,
+        function: json['function'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (file.isNotDefault) 'file': file,
-      if (line.isNotDefault) 'line': encodeInt64(line),
-      if (function.isNotDefault) 'function': function,
-    };
-  }
+  Object toJson() => {
+    if (file.isNotDefault) 'file': file,
+    if (line.isNotDefault) 'line': encodeInt64(line),
+    if (function.isNotDefault) 'function': function,
+  };
 
   @override
   String toString() {
@@ -1358,22 +1350,18 @@ final class LogSplit extends ProtoMessage {
   LogSplit({this.uid = '', this.index = 0, this.totalSplits = 0})
     : super(fullyQualifiedName);
 
-  factory LogSplit.fromJson(Map<String, dynamic> json) {
-    return LogSplit(
-      uid: json['uid'] ?? '',
-      index: json['index'] ?? 0,
-      totalSplits: json['totalSplits'] ?? 0,
-    );
-  }
+  factory LogSplit.fromJson(Map<String, dynamic> json) => LogSplit(
+    uid: json['uid'] ?? '',
+    index: json['index'] ?? 0,
+    totalSplits: json['totalSplits'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (uid.isNotDefault) 'uid': uid,
-      if (index.isNotDefault) 'index': index,
-      if (totalSplits.isNotDefault) 'totalSplits': totalSplits,
-    };
-  }
+  Object toJson() => {
+    if (uid.isNotDefault) 'uid': uid,
+    if (index.isNotDefault) 'index': index,
+    if (totalSplits.isNotDefault) 'totalSplits': totalSplits,
+  };
 
   @override
   String toString() {
@@ -1407,14 +1395,11 @@ final class DeleteLogRequest extends ProtoMessage {
 
   DeleteLogRequest({required this.logName}) : super(fullyQualifiedName);
 
-  factory DeleteLogRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteLogRequest(logName: json['logName'] ?? '');
-  }
+  factory DeleteLogRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteLogRequest(logName: json['logName'] ?? '');
 
   @override
-  Object toJson() {
-    return {'logName': logName};
-  }
+  Object toJson() => {'logName': logName};
 
   @override
   String toString() {
@@ -1512,28 +1497,25 @@ final class WriteLogEntriesRequest extends ProtoMessage {
     this.dryRun = false,
   }) : super(fullyQualifiedName);
 
-  factory WriteLogEntriesRequest.fromJson(Map<String, dynamic> json) {
-    return WriteLogEntriesRequest(
-      logName: json['logName'] ?? '',
-      resource: decode(json['resource'], MonitoredResource.fromJson),
-      labels: decodeMap(json['labels']) ?? {},
-      entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
-      partialSuccess: json['partialSuccess'] ?? false,
-      dryRun: json['dryRun'] ?? false,
-    );
-  }
+  factory WriteLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
+      WriteLogEntriesRequest(
+        logName: json['logName'] ?? '',
+        resource: decode(json['resource'], MonitoredResource.fromJson),
+        labels: decodeMap(json['labels']) ?? {},
+        entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
+        partialSuccess: json['partialSuccess'] ?? false,
+        dryRun: json['dryRun'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (logName.isNotDefault) 'logName': logName,
-      if (resource != null) 'resource': resource!.toJson(),
-      if (labels.isNotDefault) 'labels': labels,
-      'entries': encodeList(entries),
-      if (partialSuccess.isNotDefault) 'partialSuccess': partialSuccess,
-      if (dryRun.isNotDefault) 'dryRun': dryRun,
-    };
-  }
+  Object toJson() => {
+    if (logName.isNotDefault) 'logName': logName,
+    if (resource != null) 'resource': resource!.toJson(),
+    if (labels.isNotDefault) 'labels': labels,
+    'entries': encodeList(entries),
+    if (partialSuccess.isNotDefault) 'partialSuccess': partialSuccess,
+    if (dryRun.isNotDefault) 'dryRun': dryRun,
+  };
 
   @override
   String toString() {
@@ -1553,14 +1535,11 @@ final class WriteLogEntriesResponse extends ProtoMessage {
 
   WriteLogEntriesResponse() : super(fullyQualifiedName);
 
-  factory WriteLogEntriesResponse.fromJson(Map<String, dynamic> json) {
-    return WriteLogEntriesResponse();
-  }
+  factory WriteLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
+      WriteLogEntriesResponse();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'WriteLogEntriesResponse()';
@@ -1582,20 +1561,17 @@ final class WriteLogEntriesPartialErrors extends ProtoMessage {
   WriteLogEntriesPartialErrors({this.logEntryErrors = const {}})
     : super(fullyQualifiedName);
 
-  factory WriteLogEntriesPartialErrors.fromJson(Map<String, dynamic> json) {
-    return WriteLogEntriesPartialErrors(
-      logEntryErrors:
-          decodeMapMessage(json['logEntryErrors'], Status.fromJson) ?? {},
-    );
-  }
+  factory WriteLogEntriesPartialErrors.fromJson(Map<String, dynamic> json) =>
+      WriteLogEntriesPartialErrors(
+        logEntryErrors:
+            decodeMapMessage(json['logEntryErrors'], Status.fromJson) ?? {},
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (logEntryErrors.isNotDefault)
-        'logEntryErrors': encodeMap(logEntryErrors),
-    };
-  }
+  Object toJson() => {
+    if (logEntryErrors.isNotDefault)
+      'logEntryErrors': encodeMap(logEntryErrors),
+  };
 
   @override
   String toString() => 'WriteLogEntriesPartialErrors()';
@@ -1660,26 +1636,23 @@ final class ListLogEntriesRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListLogEntriesRequest.fromJson(Map<String, dynamic> json) {
-    return ListLogEntriesRequest(
-      resourceNames: decodeList(json['resourceNames']) ?? [],
-      filter: json['filter'] ?? '',
-      orderBy: json['orderBy'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
+      ListLogEntriesRequest(
+        resourceNames: decodeList(json['resourceNames']) ?? [],
+        filter: json['filter'] ?? '',
+        orderBy: json['orderBy'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'resourceNames': resourceNames,
-      if (filter.isNotDefault) 'filter': filter,
-      if (orderBy.isNotDefault) 'orderBy': orderBy,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'resourceNames': resourceNames,
+    if (filter.isNotDefault) 'filter': filter,
+    if (orderBy.isNotDefault) 'orderBy': orderBy,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -1718,20 +1691,17 @@ final class ListLogEntriesResponse extends ProtoMessage {
   ListLogEntriesResponse({this.entries = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLogEntriesResponse.fromJson(Map<String, dynamic> json) {
-    return ListLogEntriesResponse(
-      entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
+      ListLogEntriesResponse(
+        entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (entries.isNotDefault) 'entries': encodeList(entries),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (entries.isNotDefault) 'entries': encodeList(entries),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -1763,20 +1733,16 @@ final class ListMonitoredResourceDescriptorsRequest extends ProtoMessage {
 
   factory ListMonitoredResourceDescriptorsRequest.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return ListMonitoredResourceDescriptorsRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  ) => ListMonitoredResourceDescriptorsRequest(
+    pageSize: json['pageSize'] ?? 0,
+    pageToken: json['pageToken'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -1805,26 +1771,22 @@ final class ListMonitoredResourceDescriptorsResponse extends ProtoMessage {
 
   factory ListMonitoredResourceDescriptorsResponse.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return ListMonitoredResourceDescriptorsResponse(
-      resourceDescriptors:
-          decodeListMessage(
-            json['resourceDescriptors'],
-            MonitoredResourceDescriptor.fromJson,
-          ) ??
-          [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  ) => ListMonitoredResourceDescriptorsResponse(
+    resourceDescriptors:
+        decodeListMessage(
+          json['resourceDescriptors'],
+          MonitoredResourceDescriptor.fromJson,
+        ) ??
+        [],
+    nextPageToken: json['nextPageToken'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (resourceDescriptors.isNotDefault)
-        'resourceDescriptors': encodeList(resourceDescriptors),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (resourceDescriptors.isNotDefault)
+      'resourceDescriptors': encodeList(resourceDescriptors),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -1880,24 +1842,21 @@ final class ListLogsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListLogsRequest.fromJson(Map<String, dynamic> json) {
-    return ListLogsRequest(
-      parent: json['parent'] ?? '',
-      resourceNames: decodeList(json['resourceNames']) ?? [],
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListLogsRequest.fromJson(Map<String, dynamic> json) =>
+      ListLogsRequest(
+        parent: json['parent'] ?? '',
+        resourceNames: decodeList(json['resourceNames']) ?? [],
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (resourceNames.isNotDefault) 'resourceNames': resourceNames,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (resourceNames.isNotDefault) 'resourceNames': resourceNames,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -1927,20 +1886,17 @@ final class ListLogsResponse extends ProtoMessage {
   ListLogsResponse({this.logNames = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLogsResponse.fromJson(Map<String, dynamic> json) {
-    return ListLogsResponse(
-      logNames: decodeList(json['logNames']) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListLogsResponse.fromJson(Map<String, dynamic> json) =>
+      ListLogsResponse(
+        logNames: decodeList(json['logNames']) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (logNames.isNotDefault) 'logNames': logNames,
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (logNames.isNotDefault) 'logNames': logNames,
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -1988,22 +1944,19 @@ final class TailLogEntriesRequest extends ProtoMessage {
     this.bufferWindow,
   }) : super(fullyQualifiedName);
 
-  factory TailLogEntriesRequest.fromJson(Map<String, dynamic> json) {
-    return TailLogEntriesRequest(
-      resourceNames: decodeList(json['resourceNames']) ?? [],
-      filter: json['filter'] ?? '',
-      bufferWindow: decodeCustom(json['bufferWindow'], Duration.fromJson),
-    );
-  }
+  factory TailLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
+      TailLogEntriesRequest(
+        resourceNames: decodeList(json['resourceNames']) ?? [],
+        filter: json['filter'] ?? '',
+        bufferWindow: decodeCustom(json['bufferWindow'], Duration.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'resourceNames': resourceNames,
-      if (filter.isNotDefault) 'filter': filter,
-      if (bufferWindow != null) 'bufferWindow': bufferWindow!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'resourceNames': resourceNames,
+    if (filter.isNotDefault) 'filter': filter,
+    if (bufferWindow != null) 'bufferWindow': bufferWindow!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2034,26 +1987,23 @@ final class TailLogEntriesResponse extends ProtoMessage {
     this.suppressionInfo = const [],
   }) : super(fullyQualifiedName);
 
-  factory TailLogEntriesResponse.fromJson(Map<String, dynamic> json) {
-    return TailLogEntriesResponse(
-      entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
-      suppressionInfo:
-          decodeListMessage(
-            json['suppressionInfo'],
-            TailLogEntriesResponse_SuppressionInfo.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory TailLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
+      TailLogEntriesResponse(
+        entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
+        suppressionInfo:
+            decodeListMessage(
+              json['suppressionInfo'],
+              TailLogEntriesResponse_SuppressionInfo.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (entries.isNotDefault) 'entries': encodeList(entries),
-      if (suppressionInfo.isNotDefault)
-        'suppressionInfo': encodeList(suppressionInfo),
-    };
-  }
+  Object toJson() => {
+    if (entries.isNotDefault) 'entries': encodeList(entries),
+    if (suppressionInfo.isNotDefault)
+      'suppressionInfo': encodeList(suppressionInfo),
+  };
 
   @override
   String toString() => 'TailLogEntriesResponse()';
@@ -2077,25 +2027,21 @@ final class TailLogEntriesResponse_SuppressionInfo extends ProtoMessage {
 
   factory TailLogEntriesResponse_SuppressionInfo.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return TailLogEntriesResponse_SuppressionInfo(
-      reason:
-          decodeEnum(
-            json['reason'],
-            TailLogEntriesResponse_SuppressionInfo_Reason.fromJson,
-          ) ??
-          TailLogEntriesResponse_SuppressionInfo_Reason.$default,
-      suppressedCount: json['suppressedCount'] ?? 0,
-    );
-  }
+  ) => TailLogEntriesResponse_SuppressionInfo(
+    reason:
+        decodeEnum(
+          json['reason'],
+          TailLogEntriesResponse_SuppressionInfo_Reason.fromJson,
+        ) ??
+        TailLogEntriesResponse_SuppressionInfo_Reason.$default,
+    suppressedCount: json['suppressedCount'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (reason.isNotDefault) 'reason': reason.toJson(),
-      if (suppressedCount.isNotDefault) 'suppressedCount': suppressedCount,
-    };
-  }
+  Object toJson() => {
+    if (reason.isNotDefault) 'reason': reason.toJson(),
+    if (suppressedCount.isNotDefault) 'suppressedCount': suppressedCount,
+  };
 
   @override
   String toString() {
@@ -2167,22 +2113,18 @@ final class IndexConfig extends ProtoMessage {
   IndexConfig({required this.fieldPath, required this.type, this.createTime})
     : super(fullyQualifiedName);
 
-  factory IndexConfig.fromJson(Map<String, dynamic> json) {
-    return IndexConfig(
-      fieldPath: json['fieldPath'] ?? '',
-      type: decodeEnum(json['type'], IndexType.fromJson) ?? IndexType.$default,
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    );
-  }
+  factory IndexConfig.fromJson(Map<String, dynamic> json) => IndexConfig(
+    fieldPath: json['fieldPath'] ?? '',
+    type: decodeEnum(json['type'], IndexType.fromJson) ?? IndexType.$default,
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      'fieldPath': fieldPath,
-      'type': type.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'fieldPath': fieldPath,
+    'type': type.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2273,42 +2215,37 @@ final class LogBucket extends ProtoMessage {
     this.cmekSettings,
   }) : super(fullyQualifiedName);
 
-  factory LogBucket.fromJson(Map<String, dynamic> json) {
-    return LogBucket(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      retentionDays: json['retentionDays'] ?? 0,
-      locked: json['locked'] ?? false,
-      lifecycleState:
-          decodeEnum(json['lifecycleState'], LifecycleState.fromJson) ??
-          LifecycleState.$default,
-      analyticsEnabled: json['analyticsEnabled'] ?? false,
-      restrictedFields: decodeList(json['restrictedFields']) ?? [],
-      indexConfigs:
-          decodeListMessage(json['indexConfigs'], IndexConfig.fromJson) ?? [],
-      cmekSettings: decode(json['cmekSettings'], CmekSettings.fromJson),
-    );
-  }
+  factory LogBucket.fromJson(Map<String, dynamic> json) => LogBucket(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    retentionDays: json['retentionDays'] ?? 0,
+    locked: json['locked'] ?? false,
+    lifecycleState:
+        decodeEnum(json['lifecycleState'], LifecycleState.fromJson) ??
+        LifecycleState.$default,
+    analyticsEnabled: json['analyticsEnabled'] ?? false,
+    restrictedFields: decodeList(json['restrictedFields']) ?? [],
+    indexConfigs:
+        decodeListMessage(json['indexConfigs'], IndexConfig.fromJson) ?? [],
+    cmekSettings: decode(json['cmekSettings'], CmekSettings.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (retentionDays.isNotDefault) 'retentionDays': retentionDays,
-      if (locked.isNotDefault) 'locked': locked,
-      if (lifecycleState.isNotDefault)
-        'lifecycleState': lifecycleState.toJson(),
-      if (analyticsEnabled.isNotDefault) 'analyticsEnabled': analyticsEnabled,
-      if (restrictedFields.isNotDefault) 'restrictedFields': restrictedFields,
-      if (indexConfigs.isNotDefault) 'indexConfigs': encodeList(indexConfigs),
-      if (cmekSettings != null) 'cmekSettings': cmekSettings!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (description.isNotDefault) 'description': description,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (retentionDays.isNotDefault) 'retentionDays': retentionDays,
+    if (locked.isNotDefault) 'locked': locked,
+    if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
+    if (analyticsEnabled.isNotDefault) 'analyticsEnabled': analyticsEnabled,
+    if (restrictedFields.isNotDefault) 'restrictedFields': restrictedFields,
+    if (indexConfigs.isNotDefault) 'indexConfigs': encodeList(indexConfigs),
+    if (cmekSettings != null) 'cmekSettings': cmekSettings!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2368,26 +2305,22 @@ final class LogView extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory LogView.fromJson(Map<String, dynamic> json) {
-    return LogView(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      filter: json['filter'] ?? '',
-    );
-  }
+  factory LogView.fromJson(Map<String, dynamic> json) => LogView(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    filter: json['filter'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (filter.isNotDefault) 'filter': filter,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (description.isNotDefault) 'description': description,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (filter.isNotDefault) 'filter': filter,
+  };
 
   @override
   String toString() {
@@ -2525,50 +2458,43 @@ final class LogSink extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory LogSink.fromJson(Map<String, dynamic> json) {
-    return LogSink(
-      name: json['name'] ?? '',
-      destination: json['destination'] ?? '',
-      filter: json['filter'] ?? '',
-      description: json['description'] ?? '',
-      disabled: json['disabled'] ?? false,
-      exclusions:
-          decodeListMessage(json['exclusions'], LogExclusion.fromJson) ?? [],
-      outputVersionFormat:
-          decodeEnum(
-            json['outputVersionFormat'],
-            LogSink_VersionFormat.fromJson,
-          ) ??
-          LogSink_VersionFormat.$default,
-      writerIdentity: json['writerIdentity'] ?? '',
-      includeChildren: json['includeChildren'] ?? false,
-      bigqueryOptions: decode(
-        json['bigqueryOptions'],
-        BigQueryOptions.fromJson,
-      ),
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    );
-  }
+  factory LogSink.fromJson(Map<String, dynamic> json) => LogSink(
+    name: json['name'] ?? '',
+    destination: json['destination'] ?? '',
+    filter: json['filter'] ?? '',
+    description: json['description'] ?? '',
+    disabled: json['disabled'] ?? false,
+    exclusions:
+        decodeListMessage(json['exclusions'], LogExclusion.fromJson) ?? [],
+    outputVersionFormat:
+        decodeEnum(
+          json['outputVersionFormat'],
+          LogSink_VersionFormat.fromJson,
+        ) ??
+        LogSink_VersionFormat.$default,
+    writerIdentity: json['writerIdentity'] ?? '',
+    includeChildren: json['includeChildren'] ?? false,
+    bigqueryOptions: decode(json['bigqueryOptions'], BigQueryOptions.fromJson),
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      'destination': destination,
-      if (filter.isNotDefault) 'filter': filter,
-      if (description.isNotDefault) 'description': description,
-      if (disabled.isNotDefault) 'disabled': disabled,
-      if (exclusions.isNotDefault) 'exclusions': encodeList(exclusions),
-      if (outputVersionFormat.isNotDefault)
-        'outputVersionFormat': outputVersionFormat.toJson(),
-      if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
-      if (includeChildren.isNotDefault) 'includeChildren': includeChildren,
-      if (bigqueryOptions != null) 'bigqueryOptions': bigqueryOptions!.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    'destination': destination,
+    if (filter.isNotDefault) 'filter': filter,
+    if (description.isNotDefault) 'description': description,
+    if (disabled.isNotDefault) 'disabled': disabled,
+    if (exclusions.isNotDefault) 'exclusions': encodeList(exclusions),
+    if (outputVersionFormat.isNotDefault)
+      'outputVersionFormat': outputVersionFormat.toJson(),
+    if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
+    if (includeChildren.isNotDefault) 'includeChildren': includeChildren,
+    if (bigqueryOptions != null) 'bigqueryOptions': bigqueryOptions!.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2628,14 +2554,11 @@ final class BigQueryDataset extends ProtoMessage {
 
   BigQueryDataset({this.datasetId = ''}) : super(fullyQualifiedName);
 
-  factory BigQueryDataset.fromJson(Map<String, dynamic> json) {
-    return BigQueryDataset(datasetId: json['datasetId'] ?? '');
-  }
+  factory BigQueryDataset.fromJson(Map<String, dynamic> json) =>
+      BigQueryDataset(datasetId: json['datasetId'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (datasetId.isNotDefault) 'datasetId': datasetId};
-  }
+  Object toJson() => {if (datasetId.isNotDefault) 'datasetId': datasetId};
 
   @override
   String toString() {
@@ -2687,32 +2610,24 @@ final class Link extends ProtoMessage {
     this.bigqueryDataset,
   }) : super(fullyQualifiedName);
 
-  factory Link.fromJson(Map<String, dynamic> json) {
-    return Link(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      lifecycleState:
-          decodeEnum(json['lifecycleState'], LifecycleState.fromJson) ??
-          LifecycleState.$default,
-      bigqueryDataset: decode(
-        json['bigqueryDataset'],
-        BigQueryDataset.fromJson,
-      ),
-    );
-  }
+  factory Link.fromJson(Map<String, dynamic> json) => Link(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    lifecycleState:
+        decodeEnum(json['lifecycleState'], LifecycleState.fromJson) ??
+        LifecycleState.$default,
+    bigqueryDataset: decode(json['bigqueryDataset'], BigQueryDataset.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (lifecycleState.isNotDefault)
-        'lifecycleState': lifecycleState.toJson(),
-      if (bigqueryDataset != null) 'bigqueryDataset': bigqueryDataset!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (description.isNotDefault) 'description': description,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
+    if (bigqueryDataset != null) 'bigqueryDataset': bigqueryDataset!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2753,23 +2668,20 @@ final class BigQueryOptions extends ProtoMessage {
     this.usesTimestampColumnPartitioning = false,
   }) : super(fullyQualifiedName);
 
-  factory BigQueryOptions.fromJson(Map<String, dynamic> json) {
-    return BigQueryOptions(
-      usePartitionedTables: json['usePartitionedTables'] ?? false,
-      usesTimestampColumnPartitioning:
-          json['usesTimestampColumnPartitioning'] ?? false,
-    );
-  }
+  factory BigQueryOptions.fromJson(Map<String, dynamic> json) =>
+      BigQueryOptions(
+        usePartitionedTables: json['usePartitionedTables'] ?? false,
+        usesTimestampColumnPartitioning:
+            json['usesTimestampColumnPartitioning'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (usePartitionedTables.isNotDefault)
-        'usePartitionedTables': usePartitionedTables,
-      if (usesTimestampColumnPartitioning.isNotDefault)
-        'usesTimestampColumnPartitioning': usesTimestampColumnPartitioning,
-    };
-  }
+  Object toJson() => {
+    if (usePartitionedTables.isNotDefault)
+      'usePartitionedTables': usePartitionedTables,
+    if (usesTimestampColumnPartitioning.isNotDefault)
+      'usesTimestampColumnPartitioning': usesTimestampColumnPartitioning,
+  };
 
   @override
   String toString() {
@@ -2815,22 +2727,19 @@ final class ListBucketsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListBucketsRequest.fromJson(Map<String, dynamic> json) {
-    return ListBucketsRequest(
-      parent: json['parent'] ?? '',
-      pageToken: json['pageToken'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-    );
-  }
+  factory ListBucketsRequest.fromJson(Map<String, dynamic> json) =>
+      ListBucketsRequest(
+        parent: json['parent'] ?? '',
+        pageToken: json['pageToken'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+  };
 
   @override
   String toString() {
@@ -2859,20 +2768,17 @@ final class ListBucketsResponse extends ProtoMessage {
   ListBucketsResponse({this.buckets = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListBucketsResponse.fromJson(Map<String, dynamic> json) {
-    return ListBucketsResponse(
-      buckets: decodeListMessage(json['buckets'], LogBucket.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListBucketsResponse.fromJson(Map<String, dynamic> json) =>
+      ListBucketsResponse(
+        buckets: decodeListMessage(json['buckets'], LogBucket.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (buckets.isNotDefault) 'buckets': encodeList(buckets),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (buckets.isNotDefault) 'buckets': encodeList(buckets),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -2911,22 +2817,19 @@ final class CreateBucketRequest extends ProtoMessage {
     required this.bucket,
   }) : super(fullyQualifiedName);
 
-  factory CreateBucketRequest.fromJson(Map<String, dynamic> json) {
-    return CreateBucketRequest(
-      parent: json['parent'] ?? '',
-      bucketId: json['bucketId'] ?? '',
-      bucket: decode(json['bucket'], LogBucket.fromJson),
-    );
-  }
+  factory CreateBucketRequest.fromJson(Map<String, dynamic> json) =>
+      CreateBucketRequest(
+        parent: json['parent'] ?? '',
+        bucketId: json['bucketId'] ?? '',
+        bucket: decode(json['bucket'], LogBucket.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      'bucketId': bucketId,
-      if (bucket != null) 'bucket': bucket!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    'bucketId': bucketId,
+    if (bucket != null) 'bucket': bucket!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2971,22 +2874,19 @@ final class UpdateBucketRequest extends ProtoMessage {
     required this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateBucketRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateBucketRequest(
-      name: json['name'] ?? '',
-      bucket: decode(json['bucket'], LogBucket.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateBucketRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateBucketRequest(
+        name: json['name'] ?? '',
+        bucket: decode(json['bucket'], LogBucket.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (bucket != null) 'bucket': bucket!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (bucket != null) 'bucket': bucket!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3013,14 +2913,11 @@ final class GetBucketRequest extends ProtoMessage {
 
   GetBucketRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetBucketRequest.fromJson(Map<String, dynamic> json) {
-    return GetBucketRequest(name: json['name'] ?? '');
-  }
+  factory GetBucketRequest.fromJson(Map<String, dynamic> json) =>
+      GetBucketRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3048,14 +2945,11 @@ final class DeleteBucketRequest extends ProtoMessage {
 
   DeleteBucketRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteBucketRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteBucketRequest(name: json['name'] ?? '');
-  }
+  factory DeleteBucketRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteBucketRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3083,14 +2977,11 @@ final class UndeleteBucketRequest extends ProtoMessage {
 
   UndeleteBucketRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory UndeleteBucketRequest.fromJson(Map<String, dynamic> json) {
-    return UndeleteBucketRequest(name: json['name'] ?? '');
-  }
+  factory UndeleteBucketRequest.fromJson(Map<String, dynamic> json) =>
+      UndeleteBucketRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3126,22 +3017,19 @@ final class ListViewsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListViewsRequest.fromJson(Map<String, dynamic> json) {
-    return ListViewsRequest(
-      parent: json['parent'] ?? '',
-      pageToken: json['pageToken'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-    );
-  }
+  factory ListViewsRequest.fromJson(Map<String, dynamic> json) =>
+      ListViewsRequest(
+        parent: json['parent'] ?? '',
+        pageToken: json['pageToken'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+  };
 
   @override
   String toString() {
@@ -3170,20 +3058,17 @@ final class ListViewsResponse extends ProtoMessage {
   ListViewsResponse({this.views = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListViewsResponse.fromJson(Map<String, dynamic> json) {
-    return ListViewsResponse(
-      views: decodeListMessage(json['views'], LogView.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListViewsResponse.fromJson(Map<String, dynamic> json) =>
+      ListViewsResponse(
+        views: decodeListMessage(json['views'], LogView.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (views.isNotDefault) 'views': encodeList(views),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (views.isNotDefault) 'views': encodeList(views),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -3220,22 +3105,19 @@ final class CreateViewRequest extends ProtoMessage {
     required this.view,
   }) : super(fullyQualifiedName);
 
-  factory CreateViewRequest.fromJson(Map<String, dynamic> json) {
-    return CreateViewRequest(
-      parent: json['parent'] ?? '',
-      viewId: json['viewId'] ?? '',
-      view: decode(json['view'], LogView.fromJson),
-    );
-  }
+  factory CreateViewRequest.fromJson(Map<String, dynamic> json) =>
+      CreateViewRequest(
+        parent: json['parent'] ?? '',
+        viewId: json['viewId'] ?? '',
+        view: decode(json['view'], LogView.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      'viewId': viewId,
-      if (view != null) 'view': view!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    'viewId': viewId,
+    if (view != null) 'view': view!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3274,22 +3156,19 @@ final class UpdateViewRequest extends ProtoMessage {
   UpdateViewRequest({required this.name, required this.view, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateViewRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateViewRequest(
-      name: json['name'] ?? '',
-      view: decode(json['view'], LogView.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateViewRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateViewRequest(
+        name: json['name'] ?? '',
+        view: decode(json['view'], LogView.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (view != null) 'view': view!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (view != null) 'view': view!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3313,14 +3192,11 @@ final class GetViewRequest extends ProtoMessage {
 
   GetViewRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetViewRequest.fromJson(Map<String, dynamic> json) {
-    return GetViewRequest(name: json['name'] ?? '');
-  }
+  factory GetViewRequest.fromJson(Map<String, dynamic> json) =>
+      GetViewRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3345,14 +3221,11 @@ final class DeleteViewRequest extends ProtoMessage {
 
   DeleteViewRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteViewRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteViewRequest(name: json['name'] ?? '');
-  }
+  factory DeleteViewRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteViewRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3390,22 +3263,19 @@ final class ListSinksRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListSinksRequest.fromJson(Map<String, dynamic> json) {
-    return ListSinksRequest(
-      parent: json['parent'] ?? '',
-      pageToken: json['pageToken'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-    );
-  }
+  factory ListSinksRequest.fromJson(Map<String, dynamic> json) =>
+      ListSinksRequest(
+        parent: json['parent'] ?? '',
+        pageToken: json['pageToken'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+  };
 
   @override
   String toString() {
@@ -3434,20 +3304,17 @@ final class ListSinksResponse extends ProtoMessage {
   ListSinksResponse({this.sinks = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListSinksResponse.fromJson(Map<String, dynamic> json) {
-    return ListSinksResponse(
-      sinks: decodeListMessage(json['sinks'], LogSink.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListSinksResponse.fromJson(Map<String, dynamic> json) =>
+      ListSinksResponse(
+        sinks: decodeListMessage(json['sinks'], LogSink.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (sinks.isNotDefault) 'sinks': encodeList(sinks),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (sinks.isNotDefault) 'sinks': encodeList(sinks),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -3474,14 +3341,11 @@ final class GetSinkRequest extends ProtoMessage {
 
   GetSinkRequest({required this.sinkName}) : super(fullyQualifiedName);
 
-  factory GetSinkRequest.fromJson(Map<String, dynamic> json) {
-    return GetSinkRequest(sinkName: json['sinkName'] ?? '');
-  }
+  factory GetSinkRequest.fromJson(Map<String, dynamic> json) =>
+      GetSinkRequest(sinkName: json['sinkName'] ?? '');
 
   @override
-  Object toJson() {
-    return {'sinkName': sinkName};
-  }
+  Object toJson() => {'sinkName': sinkName};
 
   @override
   String toString() {
@@ -3532,23 +3396,20 @@ final class CreateSinkRequest extends ProtoMessage {
     this.uniqueWriterIdentity = false,
   }) : super(fullyQualifiedName);
 
-  factory CreateSinkRequest.fromJson(Map<String, dynamic> json) {
-    return CreateSinkRequest(
-      parent: json['parent'] ?? '',
-      sink: decode(json['sink'], LogSink.fromJson),
-      uniqueWriterIdentity: json['uniqueWriterIdentity'] ?? false,
-    );
-  }
+  factory CreateSinkRequest.fromJson(Map<String, dynamic> json) =>
+      CreateSinkRequest(
+        parent: json['parent'] ?? '',
+        sink: decode(json['sink'], LogSink.fromJson),
+        uniqueWriterIdentity: json['uniqueWriterIdentity'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (sink != null) 'sink': sink!.toJson(),
-      if (uniqueWriterIdentity.isNotDefault)
-        'uniqueWriterIdentity': uniqueWriterIdentity,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (sink != null) 'sink': sink!.toJson(),
+    if (uniqueWriterIdentity.isNotDefault)
+      'uniqueWriterIdentity': uniqueWriterIdentity,
+  };
 
   @override
   String toString() {
@@ -3620,25 +3481,22 @@ final class UpdateSinkRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateSinkRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateSinkRequest(
-      sinkName: json['sinkName'] ?? '',
-      sink: decode(json['sink'], LogSink.fromJson),
-      uniqueWriterIdentity: json['uniqueWriterIdentity'] ?? false,
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateSinkRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateSinkRequest(
+        sinkName: json['sinkName'] ?? '',
+        sink: decode(json['sink'], LogSink.fromJson),
+        uniqueWriterIdentity: json['uniqueWriterIdentity'] ?? false,
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'sinkName': sinkName,
-      if (sink != null) 'sink': sink!.toJson(),
-      if (uniqueWriterIdentity.isNotDefault)
-        'uniqueWriterIdentity': uniqueWriterIdentity,
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'sinkName': sinkName,
+    if (sink != null) 'sink': sink!.toJson(),
+    if (uniqueWriterIdentity.isNotDefault)
+      'uniqueWriterIdentity': uniqueWriterIdentity,
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3670,14 +3528,11 @@ final class DeleteSinkRequest extends ProtoMessage {
 
   DeleteSinkRequest({required this.sinkName}) : super(fullyQualifiedName);
 
-  factory DeleteSinkRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteSinkRequest(sinkName: json['sinkName'] ?? '');
-  }
+  factory DeleteSinkRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteSinkRequest(sinkName: json['sinkName'] ?? '');
 
   @override
-  Object toJson() {
-    return {'sinkName': sinkName};
-  }
+  Object toJson() => {'sinkName': sinkName};
 
   @override
   String toString() {
@@ -3713,22 +3568,19 @@ final class CreateLinkRequest extends ProtoMessage {
     required this.linkId,
   }) : super(fullyQualifiedName);
 
-  factory CreateLinkRequest.fromJson(Map<String, dynamic> json) {
-    return CreateLinkRequest(
-      parent: json['parent'] ?? '',
-      link: decode(json['link'], Link.fromJson),
-      linkId: json['linkId'] ?? '',
-    );
-  }
+  factory CreateLinkRequest.fromJson(Map<String, dynamic> json) =>
+      CreateLinkRequest(
+        parent: json['parent'] ?? '',
+        link: decode(json['link'], Link.fromJson),
+        linkId: json['linkId'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (link != null) 'link': link!.toJson(),
-      'linkId': linkId,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (link != null) 'link': link!.toJson(),
+    'linkId': linkId,
+  };
 
   @override
   String toString() {
@@ -3752,14 +3604,11 @@ final class DeleteLinkRequest extends ProtoMessage {
 
   DeleteLinkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteLinkRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteLinkRequest(name: json['name'] ?? '');
-  }
+  factory DeleteLinkRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteLinkRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3794,22 +3643,19 @@ final class ListLinksRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListLinksRequest.fromJson(Map<String, dynamic> json) {
-    return ListLinksRequest(
-      parent: json['parent'] ?? '',
-      pageToken: json['pageToken'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-    );
-  }
+  factory ListLinksRequest.fromJson(Map<String, dynamic> json) =>
+      ListLinksRequest(
+        parent: json['parent'] ?? '',
+        pageToken: json['pageToken'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+  };
 
   @override
   String toString() {
@@ -3838,20 +3684,17 @@ final class ListLinksResponse extends ProtoMessage {
   ListLinksResponse({this.links = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLinksResponse.fromJson(Map<String, dynamic> json) {
-    return ListLinksResponse(
-      links: decodeListMessage(json['links'], Link.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListLinksResponse.fromJson(Map<String, dynamic> json) =>
+      ListLinksResponse(
+        links: decodeListMessage(json['links'], Link.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (links.isNotDefault) 'links': encodeList(links),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (links.isNotDefault) 'links': encodeList(links),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -3874,14 +3717,11 @@ final class GetLinkRequest extends ProtoMessage {
 
   GetLinkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetLinkRequest.fromJson(Map<String, dynamic> json) {
-    return GetLinkRequest(name: json['name'] ?? '');
-  }
+  factory GetLinkRequest.fromJson(Map<String, dynamic> json) =>
+      GetLinkRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3944,28 +3784,24 @@ final class LogExclusion extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory LogExclusion.fromJson(Map<String, dynamic> json) {
-    return LogExclusion(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      filter: json['filter'] ?? '',
-      disabled: json['disabled'] ?? false,
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    );
-  }
+  factory LogExclusion.fromJson(Map<String, dynamic> json) => LogExclusion(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    filter: json['filter'] ?? '',
+    disabled: json['disabled'] ?? false,
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (description.isNotDefault) 'description': description,
-      'filter': filter,
-      if (disabled.isNotDefault) 'disabled': disabled,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (description.isNotDefault) 'description': description,
+    'filter': filter,
+    if (disabled.isNotDefault) 'disabled': disabled,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4009,22 +3845,19 @@ final class ListExclusionsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListExclusionsRequest.fromJson(Map<String, dynamic> json) {
-    return ListExclusionsRequest(
-      parent: json['parent'] ?? '',
-      pageToken: json['pageToken'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-    );
-  }
+  factory ListExclusionsRequest.fromJson(Map<String, dynamic> json) =>
+      ListExclusionsRequest(
+        parent: json['parent'] ?? '',
+        pageToken: json['pageToken'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+  };
 
   @override
   String toString() {
@@ -4053,21 +3886,18 @@ final class ListExclusionsResponse extends ProtoMessage {
   ListExclusionsResponse({this.exclusions = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListExclusionsResponse.fromJson(Map<String, dynamic> json) {
-    return ListExclusionsResponse(
-      exclusions:
-          decodeListMessage(json['exclusions'], LogExclusion.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListExclusionsResponse.fromJson(Map<String, dynamic> json) =>
+      ListExclusionsResponse(
+        exclusions:
+            decodeListMessage(json['exclusions'], LogExclusion.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (exclusions.isNotDefault) 'exclusions': encodeList(exclusions),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (exclusions.isNotDefault) 'exclusions': encodeList(exclusions),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -4095,14 +3925,11 @@ final class GetExclusionRequest extends ProtoMessage {
 
   GetExclusionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetExclusionRequest.fromJson(Map<String, dynamic> json) {
-    return GetExclusionRequest(name: json['name'] ?? '');
-  }
+  factory GetExclusionRequest.fromJson(Map<String, dynamic> json) =>
+      GetExclusionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4136,20 +3963,17 @@ final class CreateExclusionRequest extends ProtoMessage {
   CreateExclusionRequest({required this.parent, required this.exclusion})
     : super(fullyQualifiedName);
 
-  factory CreateExclusionRequest.fromJson(Map<String, dynamic> json) {
-    return CreateExclusionRequest(
-      parent: json['parent'] ?? '',
-      exclusion: decode(json['exclusion'], LogExclusion.fromJson),
-    );
-  }
+  factory CreateExclusionRequest.fromJson(Map<String, dynamic> json) =>
+      CreateExclusionRequest(
+        parent: json['parent'] ?? '',
+        exclusion: decode(json['exclusion'], LogExclusion.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (exclusion != null) 'exclusion': exclusion!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (exclusion != null) 'exclusion': exclusion!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4195,22 +4019,19 @@ final class UpdateExclusionRequest extends ProtoMessage {
     required this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateExclusionRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateExclusionRequest(
-      name: json['name'] ?? '',
-      exclusion: decode(json['exclusion'], LogExclusion.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateExclusionRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateExclusionRequest(
+        name: json['name'] ?? '',
+        exclusion: decode(json['exclusion'], LogExclusion.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (exclusion != null) 'exclusion': exclusion!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (exclusion != null) 'exclusion': exclusion!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4238,14 +4059,11 @@ final class DeleteExclusionRequest extends ProtoMessage {
 
   DeleteExclusionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteExclusionRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteExclusionRequest(name: json['name'] ?? '');
-  }
+  factory DeleteExclusionRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteExclusionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4283,14 +4101,11 @@ final class GetCmekSettingsRequest extends ProtoMessage {
 
   GetCmekSettingsRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetCmekSettingsRequest.fromJson(Map<String, dynamic> json) {
-    return GetCmekSettingsRequest(name: json['name'] ?? '');
-  }
+  factory GetCmekSettingsRequest.fromJson(Map<String, dynamic> json) =>
+      GetCmekSettingsRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4347,22 +4162,19 @@ final class UpdateCmekSettingsRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateCmekSettingsRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateCmekSettingsRequest(
-      name: json['name'] ?? '',
-      cmekSettings: decode(json['cmekSettings'], CmekSettings.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateCmekSettingsRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateCmekSettingsRequest(
+        name: json['name'] ?? '',
+        cmekSettings: decode(json['cmekSettings'], CmekSettings.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (cmekSettings != null) 'cmekSettings': cmekSettings!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (cmekSettings != null) 'cmekSettings': cmekSettings!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4457,25 +4269,20 @@ final class CmekSettings extends ProtoMessage {
     this.serviceAccountId = '',
   }) : super(fullyQualifiedName);
 
-  factory CmekSettings.fromJson(Map<String, dynamic> json) {
-    return CmekSettings(
-      name: json['name'] ?? '',
-      kmsKeyName: json['kmsKeyName'] ?? '',
-      kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
-      serviceAccountId: json['serviceAccountId'] ?? '',
-    );
-  }
+  factory CmekSettings.fromJson(Map<String, dynamic> json) => CmekSettings(
+    name: json['name'] ?? '',
+    kmsKeyName: json['kmsKeyName'] ?? '',
+    kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
+    serviceAccountId: json['serviceAccountId'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
-      if (kmsKeyVersionName.isNotDefault)
-        'kmsKeyVersionName': kmsKeyVersionName,
-      if (serviceAccountId.isNotDefault) 'serviceAccountId': serviceAccountId,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
+    if (kmsKeyVersionName.isNotDefault) 'kmsKeyVersionName': kmsKeyVersionName,
+    if (serviceAccountId.isNotDefault) 'serviceAccountId': serviceAccountId,
+  };
 
   @override
   String toString() {
@@ -4518,14 +4325,11 @@ final class GetSettingsRequest extends ProtoMessage {
 
   GetSettingsRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSettingsRequest.fromJson(Map<String, dynamic> json) {
-    return GetSettingsRequest(name: json['name'] ?? '');
-  }
+  factory GetSettingsRequest.fromJson(Map<String, dynamic> json) =>
+      GetSettingsRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4579,22 +4383,19 @@ final class UpdateSettingsRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateSettingsRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateSettingsRequest(
-      name: json['name'] ?? '',
-      settings: decode(json['settings'], Settings.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateSettingsRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateSettingsRequest(
+        name: json['name'] ?? '',
+        settings: decode(json['settings'], Settings.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (settings != null) 'settings': settings!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (settings != null) 'settings': settings!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4673,28 +4474,24 @@ final class Settings extends ProtoMessage {
     this.disableDefaultSink = false,
   }) : super(fullyQualifiedName);
 
-  factory Settings.fromJson(Map<String, dynamic> json) {
-    return Settings(
-      name: json['name'] ?? '',
-      kmsKeyName: json['kmsKeyName'] ?? '',
-      kmsServiceAccountId: json['kmsServiceAccountId'] ?? '',
-      storageLocation: json['storageLocation'] ?? '',
-      disableDefaultSink: json['disableDefaultSink'] ?? false,
-    );
-  }
+  factory Settings.fromJson(Map<String, dynamic> json) => Settings(
+    name: json['name'] ?? '',
+    kmsKeyName: json['kmsKeyName'] ?? '',
+    kmsServiceAccountId: json['kmsServiceAccountId'] ?? '',
+    storageLocation: json['storageLocation'] ?? '',
+    disableDefaultSink: json['disableDefaultSink'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
-      if (kmsServiceAccountId.isNotDefault)
-        'kmsServiceAccountId': kmsServiceAccountId,
-      if (storageLocation.isNotDefault) 'storageLocation': storageLocation,
-      if (disableDefaultSink.isNotDefault)
-        'disableDefaultSink': disableDefaultSink,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
+    if (kmsServiceAccountId.isNotDefault)
+      'kmsServiceAccountId': kmsServiceAccountId,
+    if (storageLocation.isNotDefault) 'storageLocation': storageLocation,
+    if (disableDefaultSink.isNotDefault)
+      'disableDefaultSink': disableDefaultSink,
+  };
 
   @override
   String toString() {
@@ -4734,22 +4531,19 @@ final class CopyLogEntriesRequest extends ProtoMessage {
     required this.destination,
   }) : super(fullyQualifiedName);
 
-  factory CopyLogEntriesRequest.fromJson(Map<String, dynamic> json) {
-    return CopyLogEntriesRequest(
-      name: json['name'] ?? '',
-      filter: json['filter'] ?? '',
-      destination: json['destination'] ?? '',
-    );
-  }
+  factory CopyLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
+      CopyLogEntriesRequest(
+        name: json['name'] ?? '',
+        filter: json['filter'] ?? '',
+        destination: json['destination'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (filter.isNotDefault) 'filter': filter,
-      'destination': destination,
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (filter.isNotDefault) 'filter': filter,
+    'destination': destination,
+  };
 
   @override
   String toString() {
@@ -4804,33 +4598,30 @@ final class CopyLogEntriesMetadata extends ProtoMessage {
     this.writerIdentity = '',
   }) : super(fullyQualifiedName);
 
-  factory CopyLogEntriesMetadata.fromJson(Map<String, dynamic> json) {
-    return CopyLogEntriesMetadata(
-      startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      state:
-          decodeEnum(json['state'], OperationState.fromJson) ??
-          OperationState.$default,
-      cancellationRequested: json['cancellationRequested'] ?? false,
-      request: decode(json['request'], CopyLogEntriesRequest.fromJson),
-      progress: json['progress'] ?? 0,
-      writerIdentity: json['writerIdentity'] ?? '',
-    );
-  }
+  factory CopyLogEntriesMetadata.fromJson(Map<String, dynamic> json) =>
+      CopyLogEntriesMetadata(
+        startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
+        endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+        state:
+            decodeEnum(json['state'], OperationState.fromJson) ??
+            OperationState.$default,
+        cancellationRequested: json['cancellationRequested'] ?? false,
+        request: decode(json['request'], CopyLogEntriesRequest.fromJson),
+        progress: json['progress'] ?? 0,
+        writerIdentity: json['writerIdentity'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (startTime != null) 'startTime': startTime!.toJson(),
-      if (endTime != null) 'endTime': endTime!.toJson(),
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (cancellationRequested.isNotDefault)
-        'cancellationRequested': cancellationRequested,
-      if (request != null) 'request': request!.toJson(),
-      if (progress.isNotDefault) 'progress': progress,
-      if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
-    };
-  }
+  Object toJson() => {
+    if (startTime != null) 'startTime': startTime!.toJson(),
+    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (cancellationRequested.isNotDefault)
+      'cancellationRequested': cancellationRequested,
+    if (request != null) 'request': request!.toJson(),
+    if (progress.isNotDefault) 'progress': progress,
+    if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
+  };
 
   @override
   String toString() {
@@ -4855,19 +4646,16 @@ final class CopyLogEntriesResponse extends ProtoMessage {
   CopyLogEntriesResponse({this.logEntriesCopiedCount = 0})
     : super(fullyQualifiedName);
 
-  factory CopyLogEntriesResponse.fromJson(Map<String, dynamic> json) {
-    return CopyLogEntriesResponse(
-      logEntriesCopiedCount: decodeInt64(json['logEntriesCopiedCount']) ?? 0,
-    );
-  }
+  factory CopyLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
+      CopyLogEntriesResponse(
+        logEntriesCopiedCount: decodeInt64(json['logEntriesCopiedCount']) ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (logEntriesCopiedCount.isNotDefault)
-        'logEntriesCopiedCount': encodeInt64(logEntriesCopiedCount),
-    };
-  }
+  Object toJson() => {
+    if (logEntriesCopiedCount.isNotDefault)
+      'logEntriesCopiedCount': encodeInt64(logEntriesCopiedCount),
+  };
 
   @override
   String toString() {
@@ -4903,36 +4691,32 @@ final class BucketMetadata extends ProtoMessage {
     this.updateBucketRequest,
   }) : super(fullyQualifiedName);
 
-  factory BucketMetadata.fromJson(Map<String, dynamic> json) {
-    return BucketMetadata(
-      startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      state:
-          decodeEnum(json['state'], OperationState.fromJson) ??
-          OperationState.$default,
-      createBucketRequest: decode(
-        json['createBucketRequest'],
-        CreateBucketRequest.fromJson,
-      ),
-      updateBucketRequest: decode(
-        json['updateBucketRequest'],
-        UpdateBucketRequest.fromJson,
-      ),
-    );
-  }
+  factory BucketMetadata.fromJson(Map<String, dynamic> json) => BucketMetadata(
+    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
+    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+    state:
+        decodeEnum(json['state'], OperationState.fromJson) ??
+        OperationState.$default,
+    createBucketRequest: decode(
+      json['createBucketRequest'],
+      CreateBucketRequest.fromJson,
+    ),
+    updateBucketRequest: decode(
+      json['updateBucketRequest'],
+      UpdateBucketRequest.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (startTime != null) 'startTime': startTime!.toJson(),
-      if (endTime != null) 'endTime': endTime!.toJson(),
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (createBucketRequest != null)
-        'createBucketRequest': createBucketRequest!.toJson(),
-      if (updateBucketRequest != null)
-        'updateBucketRequest': updateBucketRequest!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (startTime != null) 'startTime': startTime!.toJson(),
+    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (createBucketRequest != null)
+      'createBucketRequest': createBucketRequest!.toJson(),
+    if (updateBucketRequest != null)
+      'updateBucketRequest': updateBucketRequest!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4968,36 +4752,32 @@ final class LinkMetadata extends ProtoMessage {
     this.deleteLinkRequest,
   }) : super(fullyQualifiedName);
 
-  factory LinkMetadata.fromJson(Map<String, dynamic> json) {
-    return LinkMetadata(
-      startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      state:
-          decodeEnum(json['state'], OperationState.fromJson) ??
-          OperationState.$default,
-      createLinkRequest: decode(
-        json['createLinkRequest'],
-        CreateLinkRequest.fromJson,
-      ),
-      deleteLinkRequest: decode(
-        json['deleteLinkRequest'],
-        DeleteLinkRequest.fromJson,
-      ),
-    );
-  }
+  factory LinkMetadata.fromJson(Map<String, dynamic> json) => LinkMetadata(
+    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
+    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+    state:
+        decodeEnum(json['state'], OperationState.fromJson) ??
+        OperationState.$default,
+    createLinkRequest: decode(
+      json['createLinkRequest'],
+      CreateLinkRequest.fromJson,
+    ),
+    deleteLinkRequest: decode(
+      json['deleteLinkRequest'],
+      DeleteLinkRequest.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (startTime != null) 'startTime': startTime!.toJson(),
-      if (endTime != null) 'endTime': endTime!.toJson(),
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (createLinkRequest != null)
-        'createLinkRequest': createLinkRequest!.toJson(),
-      if (deleteLinkRequest != null)
-        'deleteLinkRequest': deleteLinkRequest!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (startTime != null) 'startTime': startTime!.toJson(),
+    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (createLinkRequest != null)
+      'createLinkRequest': createLinkRequest!.toJson(),
+    if (deleteLinkRequest != null)
+      'deleteLinkRequest': deleteLinkRequest!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5017,19 +4797,16 @@ final class LocationMetadata extends ProtoMessage {
   LocationMetadata({this.logAnalyticsEnabled = false})
     : super(fullyQualifiedName);
 
-  factory LocationMetadata.fromJson(Map<String, dynamic> json) {
-    return LocationMetadata(
-      logAnalyticsEnabled: json['logAnalyticsEnabled'] ?? false,
-    );
-  }
+  factory LocationMetadata.fromJson(Map<String, dynamic> json) =>
+      LocationMetadata(
+        logAnalyticsEnabled: json['logAnalyticsEnabled'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (logAnalyticsEnabled.isNotDefault)
-        'logAnalyticsEnabled': logAnalyticsEnabled,
-    };
-  }
+  Object toJson() => {
+    if (logAnalyticsEnabled.isNotDefault)
+      'logAnalyticsEnabled': logAnalyticsEnabled,
+  };
 
   @override
   String toString() {
@@ -5186,49 +4963,45 @@ final class LogMetric extends ProtoMessage {
     this.version = LogMetric_ApiVersion.$default,
   }) : super(fullyQualifiedName);
 
-  factory LogMetric.fromJson(Map<String, dynamic> json) {
-    return LogMetric(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      filter: json['filter'] ?? '',
-      bucketName: json['bucketName'] ?? '',
-      disabled: json['disabled'] ?? false,
-      metricDescriptor: decode(
-        json['metricDescriptor'],
-        MetricDescriptor.fromJson,
-      ),
-      valueExtractor: json['valueExtractor'] ?? '',
-      labelExtractors: decodeMap(json['labelExtractors']) ?? {},
-      bucketOptions: decode(
-        json['bucketOptions'],
-        Distribution_BucketOptions.fromJson,
-      ),
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      version:
-          decodeEnum(json['version'], LogMetric_ApiVersion.fromJson) ??
-          LogMetric_ApiVersion.$default,
-    );
-  }
+  factory LogMetric.fromJson(Map<String, dynamic> json) => LogMetric(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    filter: json['filter'] ?? '',
+    bucketName: json['bucketName'] ?? '',
+    disabled: json['disabled'] ?? false,
+    metricDescriptor: decode(
+      json['metricDescriptor'],
+      MetricDescriptor.fromJson,
+    ),
+    valueExtractor: json['valueExtractor'] ?? '',
+    labelExtractors: decodeMap(json['labelExtractors']) ?? {},
+    bucketOptions: decode(
+      json['bucketOptions'],
+      Distribution_BucketOptions.fromJson,
+    ),
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    version:
+        decodeEnum(json['version'], LogMetric_ApiVersion.fromJson) ??
+        LogMetric_ApiVersion.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (description.isNotDefault) 'description': description,
-      'filter': filter,
-      if (bucketName.isNotDefault) 'bucketName': bucketName,
-      if (disabled.isNotDefault) 'disabled': disabled,
-      if (metricDescriptor != null)
-        'metricDescriptor': metricDescriptor!.toJson(),
-      if (valueExtractor.isNotDefault) 'valueExtractor': valueExtractor,
-      if (labelExtractors.isNotDefault) 'labelExtractors': labelExtractors,
-      if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (version.isNotDefault) 'version': version.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (description.isNotDefault) 'description': description,
+    'filter': filter,
+    if (bucketName.isNotDefault) 'bucketName': bucketName,
+    if (disabled.isNotDefault) 'disabled': disabled,
+    if (metricDescriptor != null)
+      'metricDescriptor': metricDescriptor!.toJson(),
+    if (valueExtractor.isNotDefault) 'valueExtractor': valueExtractor,
+    if (labelExtractors.isNotDefault) 'labelExtractors': labelExtractors,
+    if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (version.isNotDefault) 'version': version.toJson(),
+  };
 
   @override
   String toString() {
@@ -5294,22 +5067,19 @@ final class ListLogMetricsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListLogMetricsRequest.fromJson(Map<String, dynamic> json) {
-    return ListLogMetricsRequest(
-      parent: json['parent'] ?? '',
-      pageToken: json['pageToken'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-    );
-  }
+  factory ListLogMetricsRequest.fromJson(Map<String, dynamic> json) =>
+      ListLogMetricsRequest(
+        parent: json['parent'] ?? '',
+        pageToken: json['pageToken'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+  };
 
   @override
   String toString() {
@@ -5338,20 +5108,17 @@ final class ListLogMetricsResponse extends ProtoMessage {
   ListLogMetricsResponse({this.metrics = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLogMetricsResponse.fromJson(Map<String, dynamic> json) {
-    return ListLogMetricsResponse(
-      metrics: decodeListMessage(json['metrics'], LogMetric.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListLogMetricsResponse.fromJson(Map<String, dynamic> json) =>
+      ListLogMetricsResponse(
+        metrics: decodeListMessage(json['metrics'], LogMetric.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (metrics.isNotDefault) 'metrics': encodeList(metrics),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -5372,14 +5139,11 @@ final class GetLogMetricRequest extends ProtoMessage {
 
   GetLogMetricRequest({required this.metricName}) : super(fullyQualifiedName);
 
-  factory GetLogMetricRequest.fromJson(Map<String, dynamic> json) {
-    return GetLogMetricRequest(metricName: json['metricName'] ?? '');
-  }
+  factory GetLogMetricRequest.fromJson(Map<String, dynamic> json) =>
+      GetLogMetricRequest(metricName: json['metricName'] ?? '');
 
   @override
-  Object toJson() {
-    return {'metricName': metricName};
-  }
+  Object toJson() => {'metricName': metricName};
 
   @override
   String toString() {
@@ -5407,17 +5171,17 @@ final class CreateLogMetricRequest extends ProtoMessage {
   CreateLogMetricRequest({required this.parent, required this.metric})
     : super(fullyQualifiedName);
 
-  factory CreateLogMetricRequest.fromJson(Map<String, dynamic> json) {
-    return CreateLogMetricRequest(
-      parent: json['parent'] ?? '',
-      metric: decode(json['metric'], LogMetric.fromJson),
-    );
-  }
+  factory CreateLogMetricRequest.fromJson(Map<String, dynamic> json) =>
+      CreateLogMetricRequest(
+        parent: json['parent'] ?? '',
+        metric: decode(json['metric'], LogMetric.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {'parent': parent, if (metric != null) 'metric': metric!.toJson()};
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (metric != null) 'metric': metric!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5446,20 +5210,17 @@ final class UpdateLogMetricRequest extends ProtoMessage {
   UpdateLogMetricRequest({required this.metricName, required this.metric})
     : super(fullyQualifiedName);
 
-  factory UpdateLogMetricRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateLogMetricRequest(
-      metricName: json['metricName'] ?? '',
-      metric: decode(json['metric'], LogMetric.fromJson),
-    );
-  }
+  factory UpdateLogMetricRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateLogMetricRequest(
+        metricName: json['metricName'] ?? '',
+        metric: decode(json['metric'], LogMetric.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'metricName': metricName,
-      if (metric != null) 'metric': metric!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'metricName': metricName,
+    if (metric != null) 'metric': metric!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5481,14 +5242,11 @@ final class DeleteLogMetricRequest extends ProtoMessage {
   DeleteLogMetricRequest({required this.metricName})
     : super(fullyQualifiedName);
 
-  factory DeleteLogMetricRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteLogMetricRequest(metricName: json['metricName'] ?? '');
-  }
+  factory DeleteLogMetricRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteLogMetricRequest(metricName: json['metricName'] ?? '');
 
   @override
-  Object toJson() {
-    return {'metricName': metricName};
-  }
+  Object toJson() => {'metricName': metricName};
 
   @override
   String toString() {

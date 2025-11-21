@@ -79,10 +79,8 @@ extension StatusExtension on Status {
   ///
   /// For more information see https://google.aip.dev/193 and
   /// https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto.
-  List<ProtoMessage> get detailsAsMessages {
-    return details.map((any) {
-      final decoder = _decoders[any.typeName];
-      return decoder == null ? any : any.unpackFrom(decoder);
-    }).toList();
-  }
+  List<ProtoMessage> get detailsAsMessages => details.map((any) {
+    final decoder = _decoders[any.typeName];
+    return decoder == null ? any : any.unpackFrom(decoder);
+  }).toList();
 }

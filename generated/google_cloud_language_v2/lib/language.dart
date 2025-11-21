@@ -21,6 +21,14 @@
 /// annotations, to developers.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: camel_case_types
+// ignore_for_file: unintended_html_in_doc_comment
+// ignore_for_file: comment_references
+// ignore_for_file: avoid_unused_constructor_parameters
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/service_client.dart';
@@ -55,9 +63,8 @@ final class LanguageService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory LanguageService.fromApiKey([String? apiKey]) {
-    return LanguageService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory LanguageService.fromApiKey([String? apiKey]) =>
+      LanguageService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Analyzes the sentiment of the provided text.
   ///
@@ -161,26 +168,22 @@ final class Document extends ProtoMessage {
     this.languageCode = '',
   }) : super(fullyQualifiedName);
 
-  factory Document.fromJson(Map<String, dynamic> json) {
-    return Document(
-      type:
-          decodeEnum(json['type'], Document_Type.fromJson) ??
-          Document_Type.$default,
-      content: json['content'],
-      gcsContentUri: json['gcsContentUri'],
-      languageCode: json['languageCode'] ?? '',
-    );
-  }
+  factory Document.fromJson(Map<String, dynamic> json) => Document(
+    type:
+        decodeEnum(json['type'], Document_Type.fromJson) ??
+        Document_Type.$default,
+    content: json['content'],
+    gcsContentUri: json['gcsContentUri'],
+    languageCode: json['languageCode'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type.toJson(),
-      if (content != null) 'content': content,
-      if (gcsContentUri != null) 'gcsContentUri': gcsContentUri,
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type.toJson(),
+    if (content != null) 'content': content,
+    if (gcsContentUri != null) 'gcsContentUri': gcsContentUri,
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+  };
 
   @override
   String toString() {
@@ -232,20 +235,16 @@ final class Sentence extends ProtoMessage {
 
   Sentence({this.text, this.sentiment}) : super(fullyQualifiedName);
 
-  factory Sentence.fromJson(Map<String, dynamic> json) {
-    return Sentence(
-      text: decode(json['text'], TextSpan.fromJson),
-      sentiment: decode(json['sentiment'], Sentiment.fromJson),
-    );
-  }
+  factory Sentence.fromJson(Map<String, dynamic> json) => Sentence(
+    text: decode(json['text'], TextSpan.fromJson),
+    sentiment: decode(json['sentiment'], Sentiment.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (text != null) 'text': text!.toJson(),
-      if (sentiment != null) 'sentiment': sentiment!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (text != null) 'text': text!.toJson(),
+    if (sentiment != null) 'sentiment': sentiment!.toJson(),
+  };
 
   @override
   String toString() => 'Sentence()';
@@ -287,29 +286,23 @@ final class Entity extends ProtoMessage {
     this.sentiment,
   }) : super(fullyQualifiedName);
 
-  factory Entity.fromJson(Map<String, dynamic> json) {
-    return Entity(
-      name: json['name'] ?? '',
-      type:
-          decodeEnum(json['type'], Entity_Type.fromJson) ??
-          Entity_Type.$default,
-      metadata: decodeMap(json['metadata']) ?? {},
-      mentions:
-          decodeListMessage(json['mentions'], EntityMention.fromJson) ?? [],
-      sentiment: decode(json['sentiment'], Sentiment.fromJson),
-    );
-  }
+  factory Entity.fromJson(Map<String, dynamic> json) => Entity(
+    name: json['name'] ?? '',
+    type:
+        decodeEnum(json['type'], Entity_Type.fromJson) ?? Entity_Type.$default,
+    metadata: decodeMap(json['metadata']) ?? {},
+    mentions: decodeListMessage(json['mentions'], EntityMention.fromJson) ?? [],
+    sentiment: decode(json['sentiment'], Sentiment.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (type.isNotDefault) 'type': type.toJson(),
-      if (metadata.isNotDefault) 'metadata': metadata,
-      if (mentions.isNotDefault) 'mentions': encodeList(mentions),
-      if (sentiment != null) 'sentiment': sentiment!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (type.isNotDefault) 'type': type.toJson(),
+    if (metadata.isNotDefault) 'metadata': metadata,
+    if (mentions.isNotDefault) 'mentions': encodeList(mentions),
+    if (sentiment != null) 'sentiment': sentiment!.toJson(),
+  };
 
   @override
   String toString() {
@@ -424,20 +417,16 @@ final class Sentiment extends ProtoMessage {
 
   Sentiment({this.magnitude = 0, this.score = 0}) : super(fullyQualifiedName);
 
-  factory Sentiment.fromJson(Map<String, dynamic> json) {
-    return Sentiment(
-      magnitude: decodeDouble(json['magnitude']) ?? 0,
-      score: decodeDouble(json['score']) ?? 0,
-    );
-  }
+  factory Sentiment.fromJson(Map<String, dynamic> json) => Sentiment(
+    magnitude: decodeDouble(json['magnitude']) ?? 0,
+    score: decodeDouble(json['score']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (magnitude.isNotDefault) 'magnitude': encodeDouble(magnitude),
-      if (score.isNotDefault) 'score': encodeDouble(score),
-    };
-  }
+  Object toJson() => {
+    if (magnitude.isNotDefault) 'magnitude': encodeDouble(magnitude),
+    if (score.isNotDefault) 'score': encodeDouble(score),
+  };
 
   @override
   String toString() {
@@ -477,26 +466,22 @@ final class EntityMention extends ProtoMessage {
     this.probability = 0,
   }) : super(fullyQualifiedName);
 
-  factory EntityMention.fromJson(Map<String, dynamic> json) {
-    return EntityMention(
-      text: decode(json['text'], TextSpan.fromJson),
-      type:
-          decodeEnum(json['type'], EntityMention_Type.fromJson) ??
-          EntityMention_Type.$default,
-      sentiment: decode(json['sentiment'], Sentiment.fromJson),
-      probability: decodeDouble(json['probability']) ?? 0,
-    );
-  }
+  factory EntityMention.fromJson(Map<String, dynamic> json) => EntityMention(
+    text: decode(json['text'], TextSpan.fromJson),
+    type:
+        decodeEnum(json['type'], EntityMention_Type.fromJson) ??
+        EntityMention_Type.$default,
+    sentiment: decode(json['sentiment'], Sentiment.fromJson),
+    probability: decodeDouble(json['probability']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (text != null) 'text': text!.toJson(),
-      if (type.isNotDefault) 'type': type.toJson(),
-      if (sentiment != null) 'sentiment': sentiment!.toJson(),
-      if (probability.isNotDefault) 'probability': encodeDouble(probability),
-    };
-  }
+  Object toJson() => {
+    if (text != null) 'text': text!.toJson(),
+    if (type.isNotDefault) 'type': type.toJson(),
+    if (sentiment != null) 'sentiment': sentiment!.toJson(),
+    if (probability.isNotDefault) 'probability': encodeDouble(probability),
+  };
 
   @override
   String toString() {
@@ -545,20 +530,16 @@ final class TextSpan extends ProtoMessage {
   TextSpan({this.content = '', this.beginOffset = 0})
     : super(fullyQualifiedName);
 
-  factory TextSpan.fromJson(Map<String, dynamic> json) {
-    return TextSpan(
-      content: json['content'] ?? '',
-      beginOffset: json['beginOffset'] ?? 0,
-    );
-  }
+  factory TextSpan.fromJson(Map<String, dynamic> json) => TextSpan(
+    content: json['content'] ?? '',
+    beginOffset: json['beginOffset'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (content.isNotDefault) 'content': content,
-      if (beginOffset.isNotDefault) 'beginOffset': beginOffset,
-    };
-  }
+  Object toJson() => {
+    if (content.isNotDefault) 'content': content,
+    if (beginOffset.isNotDefault) 'beginOffset': beginOffset,
+  };
 
   @override
   String toString() {
@@ -590,22 +571,19 @@ final class ClassificationCategory extends ProtoMessage {
     this.severity = 0,
   }) : super(fullyQualifiedName);
 
-  factory ClassificationCategory.fromJson(Map<String, dynamic> json) {
-    return ClassificationCategory(
-      name: json['name'] ?? '',
-      confidence: decodeDouble(json['confidence']) ?? 0,
-      severity: decodeDouble(json['severity']) ?? 0,
-    );
-  }
+  factory ClassificationCategory.fromJson(Map<String, dynamic> json) =>
+      ClassificationCategory(
+        name: json['name'] ?? '',
+        confidence: decodeDouble(json['confidence']) ?? 0,
+        severity: decodeDouble(json['severity']) ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (confidence.isNotDefault) 'confidence': encodeDouble(confidence),
-      if (severity.isNotDefault) 'severity': encodeDouble(severity),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (confidence.isNotDefault) 'confidence': encodeDouble(confidence),
+    if (severity.isNotDefault) 'severity': encodeDouble(severity),
+  };
 
   @override
   String toString() {
@@ -634,22 +612,19 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeSentimentRequest.fromJson(Map<String, dynamic> json) {
-    return AnalyzeSentimentRequest(
-      document: decode(json['document'], Document.fromJson),
-      encodingType:
-          decodeEnum(json['encodingType'], EncodingType.fromJson) ??
-          EncodingType.$default,
-    );
-  }
+  factory AnalyzeSentimentRequest.fromJson(Map<String, dynamic> json) =>
+      AnalyzeSentimentRequest(
+        document: decode(json['document'], Document.fromJson),
+        encodingType:
+            decodeEnum(json['encodingType'], EncodingType.fromJson) ??
+            EncodingType.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (document != null) 'document': document!.toJson(),
-      if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (document != null) 'document': document!.toJson(),
+    if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
+  };
 
   @override
   String toString() {
@@ -686,26 +661,23 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeSentimentResponse.fromJson(Map<String, dynamic> json) {
-    return AnalyzeSentimentResponse(
-      documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
-      languageCode: json['languageCode'] ?? '',
-      sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
-      languageSupported: json['languageSupported'] ?? false,
-    );
-  }
+  factory AnalyzeSentimentResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => AnalyzeSentimentResponse(
+    documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
+    languageCode: json['languageCode'] ?? '',
+    sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
+    languageSupported: json['languageSupported'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (documentSentiment != null)
-        'documentSentiment': documentSentiment!.toJson(),
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-      if (sentences.isNotDefault) 'sentences': encodeList(sentences),
-      if (languageSupported.isNotDefault)
-        'languageSupported': languageSupported,
-    };
-  }
+  Object toJson() => {
+    if (documentSentiment != null)
+      'documentSentiment': documentSentiment!.toJson(),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (sentences.isNotDefault) 'sentences': encodeList(sentences),
+    if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
+  };
 
   @override
   String toString() {
@@ -733,22 +705,19 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeEntitiesRequest.fromJson(Map<String, dynamic> json) {
-    return AnalyzeEntitiesRequest(
-      document: decode(json['document'], Document.fromJson),
-      encodingType:
-          decodeEnum(json['encodingType'], EncodingType.fromJson) ??
-          EncodingType.$default,
-    );
-  }
+  factory AnalyzeEntitiesRequest.fromJson(Map<String, dynamic> json) =>
+      AnalyzeEntitiesRequest(
+        document: decode(json['document'], Document.fromJson),
+        encodingType:
+            decodeEnum(json['encodingType'], EncodingType.fromJson) ??
+            EncodingType.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (document != null) 'document': document!.toJson(),
-      if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (document != null) 'document': document!.toJson(),
+    if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
+  };
 
   @override
   String toString() {
@@ -781,23 +750,19 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeEntitiesResponse.fromJson(Map<String, dynamic> json) {
-    return AnalyzeEntitiesResponse(
-      entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
-      languageCode: json['languageCode'] ?? '',
-      languageSupported: json['languageSupported'] ?? false,
-    );
-  }
+  factory AnalyzeEntitiesResponse.fromJson(Map<String, dynamic> json) =>
+      AnalyzeEntitiesResponse(
+        entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
+        languageCode: json['languageCode'] ?? '',
+        languageSupported: json['languageSupported'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (entities.isNotDefault) 'entities': encodeList(entities),
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-      if (languageSupported.isNotDefault)
-        'languageSupported': languageSupported,
-    };
-  }
+  Object toJson() => {
+    if (entities.isNotDefault) 'entities': encodeList(entities),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
+  };
 
   @override
   String toString() {
@@ -819,16 +784,13 @@ final class ClassifyTextRequest extends ProtoMessage {
 
   ClassifyTextRequest({required this.document}) : super(fullyQualifiedName);
 
-  factory ClassifyTextRequest.fromJson(Map<String, dynamic> json) {
-    return ClassifyTextRequest(
-      document: decode(json['document'], Document.fromJson),
-    );
-  }
+  factory ClassifyTextRequest.fromJson(Map<String, dynamic> json) =>
+      ClassifyTextRequest(
+        document: decode(json['document'], Document.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {if (document != null) 'document': document!.toJson()};
-  }
+  Object toJson() => {if (document != null) 'document': document!.toJson()};
 
   @override
   String toString() => 'ClassifyTextRequest()';
@@ -858,28 +820,24 @@ final class ClassifyTextResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory ClassifyTextResponse.fromJson(Map<String, dynamic> json) {
-    return ClassifyTextResponse(
-      categories:
-          decodeListMessage(
-            json['categories'],
-            ClassificationCategory.fromJson,
-          ) ??
-          [],
-      languageCode: json['languageCode'] ?? '',
-      languageSupported: json['languageSupported'] ?? false,
-    );
-  }
+  factory ClassifyTextResponse.fromJson(Map<String, dynamic> json) =>
+      ClassifyTextResponse(
+        categories:
+            decodeListMessage(
+              json['categories'],
+              ClassificationCategory.fromJson,
+            ) ??
+            [],
+        languageCode: json['languageCode'] ?? '',
+        languageSupported: json['languageSupported'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (categories.isNotDefault) 'categories': encodeList(categories),
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-      if (languageSupported.isNotDefault)
-        'languageSupported': languageSupported,
-    };
-  }
+  Object toJson() => {
+    if (categories.isNotDefault) 'categories': encodeList(categories),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
+  };
 
   @override
   String toString() {
@@ -907,25 +865,22 @@ final class ModerateTextRequest extends ProtoMessage {
     this.modelVersion = ModerateTextRequest_ModelVersion.$default,
   }) : super(fullyQualifiedName);
 
-  factory ModerateTextRequest.fromJson(Map<String, dynamic> json) {
-    return ModerateTextRequest(
-      document: decode(json['document'], Document.fromJson),
-      modelVersion:
-          decodeEnum(
-            json['modelVersion'],
-            ModerateTextRequest_ModelVersion.fromJson,
-          ) ??
-          ModerateTextRequest_ModelVersion.$default,
-    );
-  }
+  factory ModerateTextRequest.fromJson(Map<String, dynamic> json) =>
+      ModerateTextRequest(
+        document: decode(json['document'], Document.fromJson),
+        modelVersion:
+            decodeEnum(
+              json['modelVersion'],
+              ModerateTextRequest_ModelVersion.fromJson,
+            ) ??
+            ModerateTextRequest_ModelVersion.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (document != null) 'document': document!.toJson(),
-      if (modelVersion.isNotDefault) 'modelVersion': modelVersion.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (document != null) 'document': document!.toJson(),
+    if (modelVersion.isNotDefault) 'modelVersion': modelVersion.toJson(),
+  };
 
   @override
   String toString() {
@@ -993,29 +948,25 @@ final class ModerateTextResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory ModerateTextResponse.fromJson(Map<String, dynamic> json) {
-    return ModerateTextResponse(
-      moderationCategories:
-          decodeListMessage(
-            json['moderationCategories'],
-            ClassificationCategory.fromJson,
-          ) ??
-          [],
-      languageCode: json['languageCode'] ?? '',
-      languageSupported: json['languageSupported'] ?? false,
-    );
-  }
+  factory ModerateTextResponse.fromJson(Map<String, dynamic> json) =>
+      ModerateTextResponse(
+        moderationCategories:
+            decodeListMessage(
+              json['moderationCategories'],
+              ClassificationCategory.fromJson,
+            ) ??
+            [],
+        languageCode: json['languageCode'] ?? '',
+        languageSupported: json['languageSupported'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (moderationCategories.isNotDefault)
-        'moderationCategories': encodeList(moderationCategories),
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-      if (languageSupported.isNotDefault)
-        'languageSupported': languageSupported,
-    };
-  }
+  Object toJson() => {
+    if (moderationCategories.isNotDefault)
+      'moderationCategories': encodeList(moderationCategories),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
+  };
 
   @override
   String toString() {
@@ -1048,24 +999,24 @@ final class AnnotateTextRequest extends ProtoMessage {
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
-  factory AnnotateTextRequest.fromJson(Map<String, dynamic> json) {
-    return AnnotateTextRequest(
-      document: decode(json['document'], Document.fromJson),
-      features: decode(json['features'], AnnotateTextRequest_Features.fromJson),
-      encodingType:
-          decodeEnum(json['encodingType'], EncodingType.fromJson) ??
-          EncodingType.$default,
-    );
-  }
+  factory AnnotateTextRequest.fromJson(Map<String, dynamic> json) =>
+      AnnotateTextRequest(
+        document: decode(json['document'], Document.fromJson),
+        features: decode(
+          json['features'],
+          AnnotateTextRequest_Features.fromJson,
+        ),
+        encodingType:
+            decodeEnum(json['encodingType'], EncodingType.fromJson) ??
+            EncodingType.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (document != null) 'document': document!.toJson(),
-      if (features != null) 'features': features!.toJson(),
-      if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (document != null) 'document': document!.toJson(),
+    if (features != null) 'features': features!.toJson(),
+    if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
+  };
 
   @override
   String toString() {
@@ -1099,25 +1050,22 @@ final class AnnotateTextRequest_Features extends ProtoMessage {
     this.moderateText = false,
   }) : super(fullyQualifiedName);
 
-  factory AnnotateTextRequest_Features.fromJson(Map<String, dynamic> json) {
-    return AnnotateTextRequest_Features(
-      extractEntities: json['extractEntities'] ?? false,
-      extractDocumentSentiment: json['extractDocumentSentiment'] ?? false,
-      classifyText: json['classifyText'] ?? false,
-      moderateText: json['moderateText'] ?? false,
-    );
-  }
+  factory AnnotateTextRequest_Features.fromJson(Map<String, dynamic> json) =>
+      AnnotateTextRequest_Features(
+        extractEntities: json['extractEntities'] ?? false,
+        extractDocumentSentiment: json['extractDocumentSentiment'] ?? false,
+        classifyText: json['classifyText'] ?? false,
+        moderateText: json['moderateText'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (extractEntities.isNotDefault) 'extractEntities': extractEntities,
-      if (extractDocumentSentiment.isNotDefault)
-        'extractDocumentSentiment': extractDocumentSentiment,
-      if (classifyText.isNotDefault) 'classifyText': classifyText,
-      if (moderateText.isNotDefault) 'moderateText': moderateText,
-    };
-  }
+  Object toJson() => {
+    if (extractEntities.isNotDefault) 'extractEntities': extractEntities,
+    if (extractDocumentSentiment.isNotDefault)
+      'extractDocumentSentiment': extractDocumentSentiment,
+    if (classifyText.isNotDefault) 'classifyText': classifyText,
+    if (moderateText.isNotDefault) 'moderateText': moderateText,
+  };
 
   @override
   String toString() {
@@ -1177,43 +1125,40 @@ final class AnnotateTextResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory AnnotateTextResponse.fromJson(Map<String, dynamic> json) {
-    return AnnotateTextResponse(
-      sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
-      entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
-      documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
-      languageCode: json['languageCode'] ?? '',
-      categories:
-          decodeListMessage(
-            json['categories'],
-            ClassificationCategory.fromJson,
-          ) ??
-          [],
-      moderationCategories:
-          decodeListMessage(
-            json['moderationCategories'],
-            ClassificationCategory.fromJson,
-          ) ??
-          [],
-      languageSupported: json['languageSupported'] ?? false,
-    );
-  }
+  factory AnnotateTextResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => AnnotateTextResponse(
+    sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
+    entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
+    documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
+    languageCode: json['languageCode'] ?? '',
+    categories:
+        decodeListMessage(
+          json['categories'],
+          ClassificationCategory.fromJson,
+        ) ??
+        [],
+    moderationCategories:
+        decodeListMessage(
+          json['moderationCategories'],
+          ClassificationCategory.fromJson,
+        ) ??
+        [],
+    languageSupported: json['languageSupported'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (sentences.isNotDefault) 'sentences': encodeList(sentences),
-      if (entities.isNotDefault) 'entities': encodeList(entities),
-      if (documentSentiment != null)
-        'documentSentiment': documentSentiment!.toJson(),
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-      if (categories.isNotDefault) 'categories': encodeList(categories),
-      if (moderationCategories.isNotDefault)
-        'moderationCategories': encodeList(moderationCategories),
-      if (languageSupported.isNotDefault)
-        'languageSupported': languageSupported,
-    };
-  }
+  Object toJson() => {
+    if (sentences.isNotDefault) 'sentences': encodeList(sentences),
+    if (entities.isNotDefault) 'entities': encodeList(entities),
+    if (documentSentiment != null)
+      'documentSentiment': documentSentiment!.toJson(),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (categories.isNotDefault) 'categories': encodeList(categories),
+    if (moderationCategories.isNotDefault)
+      'moderationCategories': encodeList(moderationCategories),
+    if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
+  };
 
   @override
   String toString() {

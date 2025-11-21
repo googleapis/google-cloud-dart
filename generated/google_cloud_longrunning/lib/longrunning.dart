@@ -28,6 +28,14 @@
 /// [Long-running operations]: https://google.aip.dev/151
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: camel_case_types
+// ignore_for_file: unintended_html_in_doc_comment
+// ignore_for_file: comment_references
+// ignore_for_file: avoid_unused_constructor_parameters
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/rpc.dart';
@@ -72,9 +80,8 @@ final class Operations {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Operations.fromApiKey([String? apiKey]) {
-    return Operations(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Operations.fromApiKey([String? apiKey]) =>
+      Operations(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Lists operations that match the specified filter in the request. If the
   /// server doesn't support this method, it returns `UNIMPLEMENTED`.
@@ -159,14 +166,11 @@ final class GetOperationRequest extends ProtoMessage {
 
   GetOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory GetOperationRequest.fromJson(Map<String, dynamic> json) {
-    return GetOperationRequest(name: json['name'] ?? '');
-  }
+  factory GetOperationRequest.fromJson(Map<String, dynamic> json) =>
+      GetOperationRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -213,27 +217,24 @@ final class ListOperationsRequest extends ProtoMessage {
     this.returnPartialSuccess = false,
   }) : super(fullyQualifiedName);
 
-  factory ListOperationsRequest.fromJson(Map<String, dynamic> json) {
-    return ListOperationsRequest(
-      name: json['name'] ?? '',
-      filter: json['filter'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-      returnPartialSuccess: json['returnPartialSuccess'] ?? false,
-    );
-  }
+  factory ListOperationsRequest.fromJson(Map<String, dynamic> json) =>
+      ListOperationsRequest(
+        name: json['name'] ?? '',
+        filter: json['filter'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+        returnPartialSuccess: json['returnPartialSuccess'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (filter.isNotDefault) 'filter': filter,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': returnPartialSuccess,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (filter.isNotDefault) 'filter': filter,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (returnPartialSuccess.isNotDefault)
+      'returnPartialSuccess': returnPartialSuccess,
+  };
 
   @override
   String toString() {
@@ -272,23 +273,20 @@ final class ListOperationsResponse extends ProtoMessage {
     this.unreachable = const [],
   }) : super(fullyQualifiedName);
 
-  factory ListOperationsResponse.fromJson(Map<String, dynamic> json) {
-    return ListOperationsResponse(
-      operations:
-          decodeListMessage(json['operations'], Operation.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-      unreachable: decodeList(json['unreachable']) ?? [],
-    );
-  }
+  factory ListOperationsResponse.fromJson(Map<String, dynamic> json) =>
+      ListOperationsResponse(
+        operations:
+            decodeListMessage(json['operations'], Operation.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+        unreachable: decodeList(json['unreachable']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (operations.isNotDefault) 'operations': encodeList(operations),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-      if (unreachable.isNotDefault) 'unreachable': unreachable,
-    };
-  }
+  Object toJson() => {
+    if (operations.isNotDefault) 'operations': encodeList(operations),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+    if (unreachable.isNotDefault) 'unreachable': unreachable,
+  };
 
   @override
   String toString() {
@@ -308,14 +306,11 @@ final class CancelOperationRequest extends ProtoMessage {
 
   CancelOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory CancelOperationRequest.fromJson(Map<String, dynamic> json) {
-    return CancelOperationRequest(name: json['name'] ?? '');
-  }
+  factory CancelOperationRequest.fromJson(Map<String, dynamic> json) =>
+      CancelOperationRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -335,14 +330,11 @@ final class DeleteOperationRequest extends ProtoMessage {
 
   DeleteOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory DeleteOperationRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteOperationRequest(name: json['name'] ?? '');
-  }
+  factory DeleteOperationRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteOperationRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -368,20 +360,17 @@ final class WaitOperationRequest extends ProtoMessage {
   WaitOperationRequest({this.name = '', this.timeout})
     : super(fullyQualifiedName);
 
-  factory WaitOperationRequest.fromJson(Map<String, dynamic> json) {
-    return WaitOperationRequest(
-      name: json['name'] ?? '',
-      timeout: decodeCustom(json['timeout'], Duration.fromJson),
-    );
-  }
+  factory WaitOperationRequest.fromJson(Map<String, dynamic> json) =>
+      WaitOperationRequest(
+        name: json['name'] ?? '',
+        timeout: decodeCustom(json['timeout'], Duration.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (timeout != null) 'timeout': timeout!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (timeout != null) 'timeout': timeout!.toJson(),
+  };
 
   @override
   String toString() {
@@ -425,20 +414,16 @@ final class OperationInfo extends ProtoMessage {
   OperationInfo({this.responseType = '', this.metadataType = ''})
     : super(fullyQualifiedName);
 
-  factory OperationInfo.fromJson(Map<String, dynamic> json) {
-    return OperationInfo(
-      responseType: json['responseType'] ?? '',
-      metadataType: json['metadataType'] ?? '',
-    );
-  }
+  factory OperationInfo.fromJson(Map<String, dynamic> json) => OperationInfo(
+    responseType: json['responseType'] ?? '',
+    metadataType: json['metadataType'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (responseType.isNotDefault) 'responseType': responseType,
-      if (metadataType.isNotDefault) 'metadataType': metadataType,
-    };
-  }
+  Object toJson() => {
+    if (responseType.isNotDefault) 'responseType': responseType,
+    if (metadataType.isNotDefault) 'metadataType': metadataType,
+  };
 
   @override
   String toString() {

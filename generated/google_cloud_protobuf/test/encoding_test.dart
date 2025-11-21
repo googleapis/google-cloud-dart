@@ -35,20 +35,15 @@ final class TestMessage extends ProtoMessage {
 
   TestMessage({this.message}) : super(fullyQualifiedName);
 
-  factory TestMessage.fromJson(Map<String, dynamic> json) {
-    return TestMessage(message: json['message']);
-  }
+  factory TestMessage.fromJson(Map<String, dynamic> json) =>
+      TestMessage(message: json['message'] as String?);
 
   @override
-  Object toJson() {
-    return {if (message != null) 'message': message};
-  }
+  Object toJson() => {if (message != null) 'message': message};
 
   @override
-  String toString() {
-    final contents = [if (message != null) 'message=$message'].join(',');
-    return 'TestMessage($contents)';
-  }
+  String toString() =>
+      'TestMessage(${[if (message != null) 'message=$message'].join(",")})';
 }
 
 void main() {

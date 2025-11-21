@@ -15,10 +15,9 @@
 @TestOn('vm')
 library;
 
-import 'package:test/test.dart';
-
 import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
@@ -28,7 +27,7 @@ void main() async {
 
   group('generative', () {
     setUp(() async {
-      final authClient = () async =>
+      Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
               'https://www.googleapis.com/auth/cloud-platform',
@@ -63,11 +62,13 @@ void main() async {
       await for (final result in results) {
         final parts = result.candidates.firstOrNull?.content?.parts;
         if (parts != null) {
-          parts.forEach((p) => text.write(p.text ?? ''));
+          for (var p in parts) {
+            text.write(p.text ?? '');
+          }
         }
       }
       expect(text.toString(), hasLength(greaterThan(1000)));
       await testClient.endTest();
-    }, timeout: const Timeout(const Duration(seconds: 60)));
+    }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

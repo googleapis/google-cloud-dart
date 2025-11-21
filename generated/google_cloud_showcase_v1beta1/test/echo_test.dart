@@ -28,16 +28,20 @@ import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
 import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
-import 'package:test_utils/insecure_proxy_http_client.dart';
 import 'package:test/test.dart';
+import 'package:test_utils/insecure_proxy_http_client.dart';
 
-Matcher anyTypeName(dynamic matcher) =>
-    TypeMatcher<protobuf.Any>().having((a) => a.typeName, 'typeName', matcher);
+Matcher anyTypeName(dynamic matcher) => const TypeMatcher<protobuf.Any>()
+    .having((a) => a.typeName, 'typeName', matcher);
 
 // TODO(https://github.com/googleapis/google-cloud-dart/issues/81):
 // Remove when `ProtoMessage` equality is supported
-Matcher pageWords(dynamic matcher) => TypeMatcher<PagedExpandResponseList>()
-    .having((a) => a.words, 'words', matcher);
+Matcher pageWords(dynamic matcher) =>
+    const TypeMatcher<PagedExpandResponseList>().having(
+      (a) => a.words,
+      'words',
+      matcher,
+    );
 
 class ShowcaseServer {
   final Process _process;
@@ -63,17 +67,16 @@ class ShowcaseServer {
     return (result.stdout as String).trim();
   }
 
-  static Future<String> _showcasePath() async {
-    return p.join(await _goBinaryPath(), 'bin', 'gapic-showcase');
-  }
+  static Future<String> _showcasePath() async =>
+      p.join(await _goBinaryPath(), 'bin', 'gapic-showcase');
 
   ShowcaseServer._(this._process);
 
   static Future<ShowcaseServer> start() async {
     await _install();
     final process = await Process.start(await _showcasePath(), ['run']);
-    stderr.addStream(process.stderr);
-    process.stdin.close();
+    unawaited(stderr.addStream(process.stderr));
+    await process.stdin.close();
     final serverStarted = Completer<void>();
     process.stdout
         .transform(utf8.decoder)
@@ -103,7 +106,7 @@ void main() async {
 
     tearDownAll(() async {
       echoService.close();
-      showcaseServer.stop();
+      await showcaseServer.stop();
     });
 
     test('echo content', () async {

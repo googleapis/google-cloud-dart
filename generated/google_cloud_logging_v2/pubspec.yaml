@@ -37,4 +37,3 @@ dev_dependencies:
   googleapis_auth: any
   test: any
   test_utils: any
-  lints: any

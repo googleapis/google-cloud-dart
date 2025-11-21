@@ -30,13 +30,21 @@ void main() {
 }
 ''';
 
-    final struct = Struct.fromJson(jsonDecode(data));
+    final struct = Struct.fromJson(jsonDecode(data) as Object);
     expect(struct.fields, hasLength(3));
     expect(struct.fields['billing_details'], isA<Value>());
     final billingDetails = struct.fields['billing_details']!;
     expect(billingDetails.structValue, isNotNull);
 
-    expect(struct.toJson(), isA<Map>());
+    expect(struct.toJson(), {
+      'indexes_entries_scanned': '1000',
+      'documents_scanned': '20',
+      'billing_details': {
+        'documents_billable': '20',
+        'index_entries_billable': '1000',
+        'min_query_cost': '0',
+      },
+    });
   });
 
   test('ListValue', () {
@@ -46,14 +54,17 @@ void main() {
 ]
 ''';
 
-    final list = ListValue.fromJson(jsonDecode(data));
+    final list = ListValue.fromJson(jsonDecode(data) as Object);
     expect(list.values, hasLength(2));
     expect(list.values[0].structValue, isNotNull);
     expect(list.values[1].structValue, isNotNull);
     final childStruct = list.values[0].structValue!;
     expect(childStruct.fields, hasLength(2));
 
-    expect(list.toJson(), isA<List>());
+    expect(list.toJson(), [
+      {'query_scope': 'Collection', 'properties': '(foo ASC, __name__ ASC)'},
+      {'query_scope': 'Collection', 'properties': '(bar ASC, __name__ ASC)'},
+    ]);
   });
 
   test('NullValue', () {

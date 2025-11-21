@@ -19,6 +19,14 @@
 /// Additional metadata for operations.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: camel_case_types
+// ignore_for_file: unintended_html_in_doc_comment
+// ignore_for_file: comment_references
+// ignore_for_file: avoid_unused_constructor_parameters
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 
@@ -61,30 +69,27 @@ final class OperationMetadata extends ProtoMessage {
     this.apiVersion = '',
   }) : super(fullyQualifiedName);
 
-  factory OperationMetadata.fromJson(Map<String, dynamic> json) {
-    return OperationMetadata(
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      target: json['target'] ?? '',
-      verb: json['verb'] ?? '',
-      statusDetail: json['statusDetail'] ?? '',
-      cancelRequested: json['cancelRequested'] ?? false,
-      apiVersion: json['apiVersion'] ?? '',
-    );
-  }
+  factory OperationMetadata.fromJson(Map<String, dynamic> json) =>
+      OperationMetadata(
+        createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+        endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+        target: json['target'] ?? '',
+        verb: json['verb'] ?? '',
+        statusDetail: json['statusDetail'] ?? '',
+        cancelRequested: json['cancelRequested'] ?? false,
+        apiVersion: json['apiVersion'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (endTime != null) 'endTime': endTime!.toJson(),
-      if (target.isNotDefault) 'target': target,
-      if (verb.isNotDefault) 'verb': verb,
-      if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
-      if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
-      if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
-    };
-  }
+  Object toJson() => {
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (target.isNotDefault) 'target': target,
+    if (verb.isNotDefault) 'verb': verb,
+    if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
+    if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
+    if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
+  };
 
   @override
   String toString() {

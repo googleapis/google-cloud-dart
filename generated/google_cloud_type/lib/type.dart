@@ -19,6 +19,14 @@
 /// Defines common types for Google APIs.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: camel_case_types
+// ignore_for_file: unintended_html_in_doc_comment
+// ignore_for_file: comment_references
+// ignore_for_file: avoid_unused_constructor_parameters
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 
@@ -174,24 +182,20 @@ final class Color extends ProtoMessage {
   Color({this.red = 0, this.green = 0, this.blue = 0, this.alpha})
     : super(fullyQualifiedName);
 
-  factory Color.fromJson(Map<String, dynamic> json) {
-    return Color(
-      red: decodeDouble(json['red']) ?? 0,
-      green: decodeDouble(json['green']) ?? 0,
-      blue: decodeDouble(json['blue']) ?? 0,
-      alpha: decodeCustom(json['alpha'], FloatValue.fromJson),
-    );
-  }
+  factory Color.fromJson(Map<String, dynamic> json) => Color(
+    red: decodeDouble(json['red']) ?? 0,
+    green: decodeDouble(json['green']) ?? 0,
+    blue: decodeDouble(json['blue']) ?? 0,
+    alpha: decodeCustom(json['alpha'], FloatValue.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (red.isNotDefault) 'red': encodeDouble(red),
-      if (green.isNotDefault) 'green': encodeDouble(green),
-      if (blue.isNotDefault) 'blue': encodeDouble(blue),
-      if (alpha != null) 'alpha': alpha!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (red.isNotDefault) 'red': encodeDouble(red),
+    if (green.isNotDefault) 'green': encodeDouble(green),
+    if (blue.isNotDefault) 'blue': encodeDouble(blue),
+    if (alpha != null) 'alpha': alpha!.toJson(),
+  };
 
   @override
   String toString() {
@@ -232,22 +236,18 @@ final class Date extends ProtoMessage {
   Date({this.year = 0, this.month = 0, this.day = 0})
     : super(fullyQualifiedName);
 
-  factory Date.fromJson(Map<String, dynamic> json) {
-    return Date(
-      year: json['year'] ?? 0,
-      month: json['month'] ?? 0,
-      day: json['day'] ?? 0,
-    );
-  }
+  factory Date.fromJson(Map<String, dynamic> json) => Date(
+    year: json['year'] ?? 0,
+    month: json['month'] ?? 0,
+    day: json['day'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (year.isNotDefault) 'year': year,
-      if (month.isNotDefault) 'month': month,
-      if (day.isNotDefault) 'day': day,
-    };
-  }
+  Object toJson() => {
+    if (year.isNotDefault) 'year': year,
+    if (month.isNotDefault) 'month': month,
+    if (day.isNotDefault) 'day': day,
+  };
 
   @override
   String toString() {
@@ -330,34 +330,30 @@ final class DateTime extends ProtoMessage {
     this.timeZone,
   }) : super(fullyQualifiedName);
 
-  factory DateTime.fromJson(Map<String, dynamic> json) {
-    return DateTime(
-      year: json['year'] ?? 0,
-      month: json['month'] ?? 0,
-      day: json['day'] ?? 0,
-      hours: json['hours'] ?? 0,
-      minutes: json['minutes'] ?? 0,
-      seconds: json['seconds'] ?? 0,
-      nanos: json['nanos'] ?? 0,
-      utcOffset: decodeCustom(json['utcOffset'], Duration.fromJson),
-      timeZone: decode(json['timeZone'], TimeZone.fromJson),
-    );
-  }
+  factory DateTime.fromJson(Map<String, dynamic> json) => DateTime(
+    year: json['year'] ?? 0,
+    month: json['month'] ?? 0,
+    day: json['day'] ?? 0,
+    hours: json['hours'] ?? 0,
+    minutes: json['minutes'] ?? 0,
+    seconds: json['seconds'] ?? 0,
+    nanos: json['nanos'] ?? 0,
+    utcOffset: decodeCustom(json['utcOffset'], Duration.fromJson),
+    timeZone: decode(json['timeZone'], TimeZone.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (year.isNotDefault) 'year': year,
-      if (month.isNotDefault) 'month': month,
-      if (day.isNotDefault) 'day': day,
-      if (hours.isNotDefault) 'hours': hours,
-      if (minutes.isNotDefault) 'minutes': minutes,
-      if (seconds.isNotDefault) 'seconds': seconds,
-      if (nanos.isNotDefault) 'nanos': nanos,
-      if (utcOffset != null) 'utcOffset': utcOffset!.toJson(),
-      if (timeZone != null) 'timeZone': timeZone!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (year.isNotDefault) 'year': year,
+    if (month.isNotDefault) 'month': month,
+    if (day.isNotDefault) 'day': day,
+    if (hours.isNotDefault) 'hours': hours,
+    if (minutes.isNotDefault) 'minutes': minutes,
+    if (seconds.isNotDefault) 'seconds': seconds,
+    if (nanos.isNotDefault) 'nanos': nanos,
+    if (utcOffset != null) 'utcOffset': utcOffset!.toJson(),
+    if (timeZone != null) 'timeZone': timeZone!.toJson(),
+  };
 
   @override
   String toString() {
@@ -387,17 +383,14 @@ final class TimeZone extends ProtoMessage {
 
   TimeZone({this.id = '', this.version = ''}) : super(fullyQualifiedName);
 
-  factory TimeZone.fromJson(Map<String, dynamic> json) {
-    return TimeZone(id: json['id'] ?? '', version: json['version'] ?? '');
-  }
+  factory TimeZone.fromJson(Map<String, dynamic> json) =>
+      TimeZone(id: json['id'] ?? '', version: json['version'] ?? '');
 
   @override
-  Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      if (version.isNotDefault) 'version': version,
-    };
-  }
+  Object toJson() => {
+    if (id.isNotDefault) 'id': id,
+    if (version.isNotDefault) 'version': version,
+  };
 
   @override
   String toString() {
@@ -480,14 +473,11 @@ final class Decimal extends ProtoMessage {
 
   Decimal({this.value = ''}) : super(fullyQualifiedName);
 
-  factory Decimal.fromJson(Map<String, dynamic> json) {
-    return Decimal(value: json['value'] ?? '');
-  }
+  factory Decimal.fromJson(Map<String, dynamic> json) =>
+      Decimal(value: json['value'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (value.isNotDefault) 'value': value};
-  }
+  Object toJson() => {if (value.isNotDefault) 'value': value};
 
   @override
   String toString() {
@@ -554,24 +544,20 @@ final class Expr extends ProtoMessage {
     this.location = '',
   }) : super(fullyQualifiedName);
 
-  factory Expr.fromJson(Map<String, dynamic> json) {
-    return Expr(
-      expression: json['expression'] ?? '',
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      location: json['location'] ?? '',
-    );
-  }
+  factory Expr.fromJson(Map<String, dynamic> json) => Expr(
+    expression: json['expression'] ?? '',
+    title: json['title'] ?? '',
+    description: json['description'] ?? '',
+    location: json['location'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (expression.isNotDefault) 'expression': expression,
-      if (title.isNotDefault) 'title': title,
-      if (description.isNotDefault) 'description': description,
-      if (location.isNotDefault) 'location': location,
-    };
-  }
+  Object toJson() => {
+    if (expression.isNotDefault) 'expression': expression,
+    if (title.isNotDefault) 'title': title,
+    if (description.isNotDefault) 'description': description,
+    if (location.isNotDefault) 'location': location,
+  };
 
   @override
   String toString() {
@@ -599,20 +585,16 @@ final class Fraction extends ProtoMessage {
   Fraction({this.numerator = 0, this.denominator = 0})
     : super(fullyQualifiedName);
 
-  factory Fraction.fromJson(Map<String, dynamic> json) {
-    return Fraction(
-      numerator: decodeInt64(json['numerator']) ?? 0,
-      denominator: decodeInt64(json['denominator']) ?? 0,
-    );
-  }
+  factory Fraction.fromJson(Map<String, dynamic> json) => Fraction(
+    numerator: decodeInt64(json['numerator']) ?? 0,
+    denominator: decodeInt64(json['denominator']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (numerator.isNotDefault) 'numerator': encodeInt64(numerator),
-      if (denominator.isNotDefault) 'denominator': encodeInt64(denominator),
-    };
-  }
+  Object toJson() => {
+    if (numerator.isNotDefault) 'numerator': encodeInt64(numerator),
+    if (denominator.isNotDefault) 'denominator': encodeInt64(denominator),
+  };
 
   @override
   String toString() {
@@ -647,20 +629,16 @@ final class Interval extends ProtoMessage {
 
   Interval({this.startTime, this.endTime}) : super(fullyQualifiedName);
 
-  factory Interval.fromJson(Map<String, dynamic> json) {
-    return Interval(
-      startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-    );
-  }
+  factory Interval.fromJson(Map<String, dynamic> json) => Interval(
+    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
+    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (startTime != null) 'startTime': startTime!.toJson(),
-      if (endTime != null) 'endTime': endTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (startTime != null) 'startTime': startTime!.toJson(),
+    if (endTime != null) 'endTime': endTime!.toJson(),
+  };
 
   @override
   String toString() => 'Interval()';
@@ -682,20 +660,16 @@ final class LatLng extends ProtoMessage {
 
   LatLng({this.latitude = 0, this.longitude = 0}) : super(fullyQualifiedName);
 
-  factory LatLng.fromJson(Map<String, dynamic> json) {
-    return LatLng(
-      latitude: decodeDouble(json['latitude']) ?? 0,
-      longitude: decodeDouble(json['longitude']) ?? 0,
-    );
-  }
+  factory LatLng.fromJson(Map<String, dynamic> json) => LatLng(
+    latitude: decodeDouble(json['latitude']) ?? 0,
+    longitude: decodeDouble(json['longitude']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (latitude.isNotDefault) 'latitude': encodeDouble(latitude),
-      if (longitude.isNotDefault) 'longitude': encodeDouble(longitude),
-    };
-  }
+  Object toJson() => {
+    if (latitude.isNotDefault) 'latitude': encodeDouble(latitude),
+    if (longitude.isNotDefault) 'longitude': encodeDouble(longitude),
+  };
 
   @override
   String toString() {
@@ -720,20 +694,16 @@ final class LocalizedText extends ProtoMessage {
   LocalizedText({this.text = '', this.languageCode = ''})
     : super(fullyQualifiedName);
 
-  factory LocalizedText.fromJson(Map<String, dynamic> json) {
-    return LocalizedText(
-      text: json['text'] ?? '',
-      languageCode: json['languageCode'] ?? '',
-    );
-  }
+  factory LocalizedText.fromJson(Map<String, dynamic> json) => LocalizedText(
+    text: json['text'] ?? '',
+    languageCode: json['languageCode'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (text.isNotDefault) 'text': text,
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-    };
-  }
+  Object toJson() => {
+    if (text.isNotDefault) 'text': text,
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+  };
 
   @override
   String toString() {
@@ -764,22 +734,18 @@ final class Money extends ProtoMessage {
   Money({this.currencyCode = '', this.units = 0, this.nanos = 0})
     : super(fullyQualifiedName);
 
-  factory Money.fromJson(Map<String, dynamic> json) {
-    return Money(
-      currencyCode: json['currencyCode'] ?? '',
-      units: decodeInt64(json['units']) ?? 0,
-      nanos: json['nanos'] ?? 0,
-    );
-  }
+  factory Money.fromJson(Map<String, dynamic> json) => Money(
+    currencyCode: json['currencyCode'] ?? '',
+    units: decodeInt64(json['units']) ?? 0,
+    nanos: json['nanos'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (currencyCode.isNotDefault) 'currencyCode': currencyCode,
-      if (units.isNotDefault) 'units': encodeInt64(units),
-      if (nanos.isNotDefault) 'nanos': nanos,
-    };
-  }
+  Object toJson() => {
+    if (currencyCode.isNotDefault) 'currencyCode': currencyCode,
+    if (units.isNotDefault) 'units': encodeInt64(units),
+    if (nanos.isNotDefault) 'nanos': nanos,
+  };
 
   @override
   String toString() {
@@ -858,22 +824,18 @@ final class PhoneNumber extends ProtoMessage {
   PhoneNumber({this.e164Number, this.shortCode, this.extension = ''})
     : super(fullyQualifiedName);
 
-  factory PhoneNumber.fromJson(Map<String, dynamic> json) {
-    return PhoneNumber(
-      e164Number: json['e164Number'],
-      shortCode: decode(json['shortCode'], PhoneNumber_ShortCode.fromJson),
-      extension: json['extension'] ?? '',
-    );
-  }
+  factory PhoneNumber.fromJson(Map<String, dynamic> json) => PhoneNumber(
+    e164Number: json['e164Number'],
+    shortCode: decode(json['shortCode'], PhoneNumber_ShortCode.fromJson),
+    extension: json['extension'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (e164Number != null) 'e164Number': e164Number,
-      if (shortCode != null) 'shortCode': shortCode!.toJson(),
-      if (extension.isNotDefault) 'extension': extension,
-    };
-  }
+  Object toJson() => {
+    if (e164Number != null) 'e164Number': e164Number,
+    if (shortCode != null) 'shortCode': shortCode!.toJson(),
+    if (extension.isNotDefault) 'extension': extension,
+  };
 
   @override
   String toString() {
@@ -911,20 +873,17 @@ final class PhoneNumber_ShortCode extends ProtoMessage {
   PhoneNumber_ShortCode({this.regionCode = '', this.number = ''})
     : super(fullyQualifiedName);
 
-  factory PhoneNumber_ShortCode.fromJson(Map<String, dynamic> json) {
-    return PhoneNumber_ShortCode(
-      regionCode: json['regionCode'] ?? '',
-      number: json['number'] ?? '',
-    );
-  }
+  factory PhoneNumber_ShortCode.fromJson(Map<String, dynamic> json) =>
+      PhoneNumber_ShortCode(
+        regionCode: json['regionCode'] ?? '',
+        number: json['number'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (regionCode.isNotDefault) 'regionCode': regionCode,
-      if (number.isNotDefault) 'number': number,
-    };
-  }
+  Object toJson() => {
+    if (regionCode.isNotDefault) 'regionCode': regionCode,
+    if (number.isNotDefault) 'number': number,
+  };
 
   @override
   String toString() {
@@ -1058,39 +1017,35 @@ final class PostalAddress extends ProtoMessage {
     this.organization = '',
   }) : super(fullyQualifiedName);
 
-  factory PostalAddress.fromJson(Map<String, dynamic> json) {
-    return PostalAddress(
-      revision: json['revision'] ?? 0,
-      regionCode: json['regionCode'] ?? '',
-      languageCode: json['languageCode'] ?? '',
-      postalCode: json['postalCode'] ?? '',
-      sortingCode: json['sortingCode'] ?? '',
-      administrativeArea: json['administrativeArea'] ?? '',
-      locality: json['locality'] ?? '',
-      sublocality: json['sublocality'] ?? '',
-      addressLines: decodeList(json['addressLines']) ?? [],
-      recipients: decodeList(json['recipients']) ?? [],
-      organization: json['organization'] ?? '',
-    );
-  }
+  factory PostalAddress.fromJson(Map<String, dynamic> json) => PostalAddress(
+    revision: json['revision'] ?? 0,
+    regionCode: json['regionCode'] ?? '',
+    languageCode: json['languageCode'] ?? '',
+    postalCode: json['postalCode'] ?? '',
+    sortingCode: json['sortingCode'] ?? '',
+    administrativeArea: json['administrativeArea'] ?? '',
+    locality: json['locality'] ?? '',
+    sublocality: json['sublocality'] ?? '',
+    addressLines: decodeList(json['addressLines']) ?? [],
+    recipients: decodeList(json['recipients']) ?? [],
+    organization: json['organization'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (revision.isNotDefault) 'revision': revision,
-      if (regionCode.isNotDefault) 'regionCode': regionCode,
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-      if (postalCode.isNotDefault) 'postalCode': postalCode,
-      if (sortingCode.isNotDefault) 'sortingCode': sortingCode,
-      if (administrativeArea.isNotDefault)
-        'administrativeArea': administrativeArea,
-      if (locality.isNotDefault) 'locality': locality,
-      if (sublocality.isNotDefault) 'sublocality': sublocality,
-      if (addressLines.isNotDefault) 'addressLines': addressLines,
-      if (recipients.isNotDefault) 'recipients': recipients,
-      if (organization.isNotDefault) 'organization': organization,
-    };
-  }
+  Object toJson() => {
+    if (revision.isNotDefault) 'revision': revision,
+    if (regionCode.isNotDefault) 'regionCode': regionCode,
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (postalCode.isNotDefault) 'postalCode': postalCode,
+    if (sortingCode.isNotDefault) 'sortingCode': sortingCode,
+    if (administrativeArea.isNotDefault)
+      'administrativeArea': administrativeArea,
+    if (locality.isNotDefault) 'locality': locality,
+    if (sublocality.isNotDefault) 'sublocality': sublocality,
+    if (addressLines.isNotDefault) 'addressLines': addressLines,
+    if (recipients.isNotDefault) 'recipients': recipients,
+    if (organization.isNotDefault) 'organization': organization,
+  };
 
   @override
   String toString() {
@@ -1182,24 +1137,20 @@ final class Quaternion extends ProtoMessage {
   Quaternion({this.x = 0, this.y = 0, this.z = 0, this.w = 0})
     : super(fullyQualifiedName);
 
-  factory Quaternion.fromJson(Map<String, dynamic> json) {
-    return Quaternion(
-      x: decodeDouble(json['x']) ?? 0,
-      y: decodeDouble(json['y']) ?? 0,
-      z: decodeDouble(json['z']) ?? 0,
-      w: decodeDouble(json['w']) ?? 0,
-    );
-  }
+  factory Quaternion.fromJson(Map<String, dynamic> json) => Quaternion(
+    x: decodeDouble(json['x']) ?? 0,
+    y: decodeDouble(json['y']) ?? 0,
+    z: decodeDouble(json['z']) ?? 0,
+    w: decodeDouble(json['w']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (x.isNotDefault) 'x': encodeDouble(x),
-      if (y.isNotDefault) 'y': encodeDouble(y),
-      if (z.isNotDefault) 'z': encodeDouble(z),
-      if (w.isNotDefault) 'w': encodeDouble(w),
-    };
-  }
+  Object toJson() => {
+    if (x.isNotDefault) 'x': encodeDouble(x),
+    if (y.isNotDefault) 'y': encodeDouble(y),
+    if (z.isNotDefault) 'z': encodeDouble(z),
+    if (w.isNotDefault) 'w': encodeDouble(w),
+  };
 
   @override
   String toString() {
@@ -1236,24 +1187,20 @@ final class TimeOfDay extends ProtoMessage {
     this.nanos = 0,
   }) : super(fullyQualifiedName);
 
-  factory TimeOfDay.fromJson(Map<String, dynamic> json) {
-    return TimeOfDay(
-      hours: json['hours'] ?? 0,
-      minutes: json['minutes'] ?? 0,
-      seconds: json['seconds'] ?? 0,
-      nanos: json['nanos'] ?? 0,
-    );
-  }
+  factory TimeOfDay.fromJson(Map<String, dynamic> json) => TimeOfDay(
+    hours: json['hours'] ?? 0,
+    minutes: json['minutes'] ?? 0,
+    seconds: json['seconds'] ?? 0,
+    nanos: json['nanos'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (hours.isNotDefault) 'hours': hours,
-      if (minutes.isNotDefault) 'minutes': minutes,
-      if (seconds.isNotDefault) 'seconds': seconds,
-      if (nanos.isNotDefault) 'nanos': nanos,
-    };
-  }
+  Object toJson() => {
+    if (hours.isNotDefault) 'hours': hours,
+    if (minutes.isNotDefault) 'minutes': minutes,
+    if (seconds.isNotDefault) 'seconds': seconds,
+    if (nanos.isNotDefault) 'nanos': nanos,
+  };
 
   @override
   String toString() {
