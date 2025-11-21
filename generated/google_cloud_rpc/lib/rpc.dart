@@ -19,6 +19,14 @@
 /// Defines RPC types.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 
@@ -80,22 +88,18 @@ final class ErrorInfo extends ProtoMessage {
   ErrorInfo({this.reason = '', this.domain = '', this.metadata = const {}})
     : super(fullyQualifiedName);
 
-  factory ErrorInfo.fromJson(Map<String, dynamic> json) {
-    return ErrorInfo(
-      reason: json['reason'] ?? '',
-      domain: json['domain'] ?? '',
-      metadata: decodeMap(json['metadata']) ?? {},
-    );
-  }
+  factory ErrorInfo.fromJson(Map<String, dynamic> json) => ErrorInfo(
+    reason: json['reason'] ?? '',
+    domain: json['domain'] ?? '',
+    metadata: decodeMap(json['metadata']) ?? {},
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (reason.isNotDefault) 'reason': reason,
-      if (domain.isNotDefault) 'domain': domain,
-      if (metadata.isNotDefault) 'metadata': metadata,
-    };
-  }
+  Object toJson() => {
+    if (reason.isNotDefault) 'reason': reason,
+    if (domain.isNotDefault) 'domain': domain,
+    if (metadata.isNotDefault) 'metadata': metadata,
+  };
 
   @override
   String toString() {
@@ -125,16 +129,14 @@ final class RetryInfo extends ProtoMessage {
 
   RetryInfo({this.retryDelay}) : super(fullyQualifiedName);
 
-  factory RetryInfo.fromJson(Map<String, dynamic> json) {
-    return RetryInfo(
-      retryDelay: decodeCustom(json['retryDelay'], Duration.fromJson),
-    );
-  }
+  factory RetryInfo.fromJson(Map<String, dynamic> json) => RetryInfo(
+    retryDelay: decodeCustom(json['retryDelay'], Duration.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (retryDelay != null) 'retryDelay': retryDelay!.toJson()};
-  }
+  Object toJson() => {
+    if (retryDelay != null) 'retryDelay': retryDelay!.toJson(),
+  };
 
   @override
   String toString() => 'RetryInfo()';
@@ -153,20 +155,16 @@ final class DebugInfo extends ProtoMessage {
   DebugInfo({this.stackEntries = const [], this.detail = ''})
     : super(fullyQualifiedName);
 
-  factory DebugInfo.fromJson(Map<String, dynamic> json) {
-    return DebugInfo(
-      stackEntries: decodeList(json['stackEntries']) ?? [],
-      detail: json['detail'] ?? '',
-    );
-  }
+  factory DebugInfo.fromJson(Map<String, dynamic> json) => DebugInfo(
+    stackEntries: decodeList(json['stackEntries']) ?? [],
+    detail: json['detail'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (stackEntries.isNotDefault) 'stackEntries': stackEntries,
-      if (detail.isNotDefault) 'detail': detail,
-    };
-  }
+  Object toJson() => {
+    if (stackEntries.isNotDefault) 'stackEntries': stackEntries,
+    if (detail.isNotDefault) 'detail': detail,
+  };
 
   @override
   String toString() {
@@ -194,21 +192,19 @@ final class QuotaFailure extends ProtoMessage {
 
   QuotaFailure({this.violations = const []}) : super(fullyQualifiedName);
 
-  factory QuotaFailure.fromJson(Map<String, dynamic> json) {
-    return QuotaFailure(
-      violations:
-          decodeListMessage(
-            json['violations'],
-            QuotaFailure_Violation.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory QuotaFailure.fromJson(Map<String, dynamic> json) => QuotaFailure(
+    violations:
+        decodeListMessage(
+          json['violations'],
+          QuotaFailure_Violation.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {if (violations.isNotDefault) 'violations': encodeList(violations)};
-  }
+  Object toJson() => {
+    if (violations.isNotDefault) 'violations': encodeList(violations),
+  };
 
   @override
   String toString() => 'QuotaFailure()';
@@ -309,33 +305,30 @@ final class QuotaFailure_Violation extends ProtoMessage {
     this.futureQuotaValue,
   }) : super(fullyQualifiedName);
 
-  factory QuotaFailure_Violation.fromJson(Map<String, dynamic> json) {
-    return QuotaFailure_Violation(
-      subject: json['subject'] ?? '',
-      description: json['description'] ?? '',
-      apiService: json['apiService'] ?? '',
-      quotaMetric: json['quotaMetric'] ?? '',
-      quotaId: json['quotaId'] ?? '',
-      quotaDimensions: decodeMap(json['quotaDimensions']) ?? {},
-      quotaValue: decodeInt64(json['quotaValue']) ?? 0,
-      futureQuotaValue: decodeInt64(json['futureQuotaValue']),
-    );
-  }
+  factory QuotaFailure_Violation.fromJson(Map<String, dynamic> json) =>
+      QuotaFailure_Violation(
+        subject: json['subject'] ?? '',
+        description: json['description'] ?? '',
+        apiService: json['apiService'] ?? '',
+        quotaMetric: json['quotaMetric'] ?? '',
+        quotaId: json['quotaId'] ?? '',
+        quotaDimensions: decodeMap(json['quotaDimensions']) ?? {},
+        quotaValue: decodeInt64(json['quotaValue']) ?? 0,
+        futureQuotaValue: decodeInt64(json['futureQuotaValue']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (subject.isNotDefault) 'subject': subject,
-      if (description.isNotDefault) 'description': description,
-      if (apiService.isNotDefault) 'apiService': apiService,
-      if (quotaMetric.isNotDefault) 'quotaMetric': quotaMetric,
-      if (quotaId.isNotDefault) 'quotaId': quotaId,
-      if (quotaDimensions.isNotDefault) 'quotaDimensions': quotaDimensions,
-      if (quotaValue.isNotDefault) 'quotaValue': encodeInt64(quotaValue),
-      if (futureQuotaValue != null)
-        'futureQuotaValue': encodeInt64(futureQuotaValue),
-    };
-  }
+  Object toJson() => {
+    if (subject.isNotDefault) 'subject': subject,
+    if (description.isNotDefault) 'description': description,
+    if (apiService.isNotDefault) 'apiService': apiService,
+    if (quotaMetric.isNotDefault) 'quotaMetric': quotaMetric,
+    if (quotaId.isNotDefault) 'quotaId': quotaId,
+    if (quotaDimensions.isNotDefault) 'quotaDimensions': quotaDimensions,
+    if (quotaValue.isNotDefault) 'quotaValue': encodeInt64(quotaValue),
+    if (futureQuotaValue != null)
+      'futureQuotaValue': encodeInt64(futureQuotaValue),
+  };
 
   @override
   String toString() {
@@ -365,21 +358,20 @@ final class PreconditionFailure extends ProtoMessage {
 
   PreconditionFailure({this.violations = const []}) : super(fullyQualifiedName);
 
-  factory PreconditionFailure.fromJson(Map<String, dynamic> json) {
-    return PreconditionFailure(
-      violations:
-          decodeListMessage(
-            json['violations'],
-            PreconditionFailure_Violation.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory PreconditionFailure.fromJson(Map<String, dynamic> json) =>
+      PreconditionFailure(
+        violations:
+            decodeListMessage(
+              json['violations'],
+              PreconditionFailure_Violation.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {if (violations.isNotDefault) 'violations': encodeList(violations)};
-  }
+  Object toJson() => {
+    if (violations.isNotDefault) 'violations': encodeList(violations),
+  };
 
   @override
   String toString() => 'PreconditionFailure()';
@@ -412,22 +404,19 @@ final class PreconditionFailure_Violation extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory PreconditionFailure_Violation.fromJson(Map<String, dynamic> json) {
-    return PreconditionFailure_Violation(
-      type: json['type'] ?? '',
-      subject: json['subject'] ?? '',
-      description: json['description'] ?? '',
-    );
-  }
+  factory PreconditionFailure_Violation.fromJson(Map<String, dynamic> json) =>
+      PreconditionFailure_Violation(
+        type: json['type'] ?? '',
+        subject: json['subject'] ?? '',
+        description: json['description'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type,
-      if (subject.isNotDefault) 'subject': subject,
-      if (description.isNotDefault) 'description': description,
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type,
+    if (subject.isNotDefault) 'subject': subject,
+    if (description.isNotDefault) 'description': description,
+  };
 
   @override
   String toString() {
@@ -450,24 +439,20 @@ final class BadRequest extends ProtoMessage {
 
   BadRequest({this.fieldViolations = const []}) : super(fullyQualifiedName);
 
-  factory BadRequest.fromJson(Map<String, dynamic> json) {
-    return BadRequest(
-      fieldViolations:
-          decodeListMessage(
-            json['fieldViolations'],
-            BadRequest_FieldViolation.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory BadRequest.fromJson(Map<String, dynamic> json) => BadRequest(
+    fieldViolations:
+        decodeListMessage(
+          json['fieldViolations'],
+          BadRequest_FieldViolation.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (fieldViolations.isNotDefault)
-        'fieldViolations': encodeList(fieldViolations),
-    };
-  }
+  Object toJson() => {
+    if (fieldViolations.isNotDefault)
+      'fieldViolations': encodeList(fieldViolations),
+  };
 
   @override
   String toString() => 'BadRequest()';
@@ -539,28 +524,25 @@ final class BadRequest_FieldViolation extends ProtoMessage {
     this.localizedMessage,
   }) : super(fullyQualifiedName);
 
-  factory BadRequest_FieldViolation.fromJson(Map<String, dynamic> json) {
-    return BadRequest_FieldViolation(
-      field: json['field'] ?? '',
-      description: json['description'] ?? '',
-      reason: json['reason'] ?? '',
-      localizedMessage: decode(
-        json['localizedMessage'],
-        LocalizedMessage.fromJson,
-      ),
-    );
-  }
+  factory BadRequest_FieldViolation.fromJson(Map<String, dynamic> json) =>
+      BadRequest_FieldViolation(
+        field: json['field'] ?? '',
+        description: json['description'] ?? '',
+        reason: json['reason'] ?? '',
+        localizedMessage: decode(
+          json['localizedMessage'],
+          LocalizedMessage.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (field.isNotDefault) 'field': field,
-      if (description.isNotDefault) 'description': description,
-      if (reason.isNotDefault) 'reason': reason,
-      if (localizedMessage != null)
-        'localizedMessage': localizedMessage!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (field.isNotDefault) 'field': field,
+    if (description.isNotDefault) 'description': description,
+    if (reason.isNotDefault) 'reason': reason,
+    if (localizedMessage != null)
+      'localizedMessage': localizedMessage!.toJson(),
+  };
 
   @override
   String toString() {
@@ -589,20 +571,16 @@ final class RequestInfo extends ProtoMessage {
   RequestInfo({this.requestId = '', this.servingData = ''})
     : super(fullyQualifiedName);
 
-  factory RequestInfo.fromJson(Map<String, dynamic> json) {
-    return RequestInfo(
-      requestId: json['requestId'] ?? '',
-      servingData: json['servingData'] ?? '',
-    );
-  }
+  factory RequestInfo.fromJson(Map<String, dynamic> json) => RequestInfo(
+    requestId: json['requestId'] ?? '',
+    servingData: json['servingData'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (requestId.isNotDefault) 'requestId': requestId,
-      if (servingData.isNotDefault) 'servingData': servingData,
-    };
-  }
+  Object toJson() => {
+    if (requestId.isNotDefault) 'requestId': requestId,
+    if (servingData.isNotDefault) 'servingData': servingData,
+  };
 
   @override
   String toString() {
@@ -646,24 +624,20 @@ final class ResourceInfo extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory ResourceInfo.fromJson(Map<String, dynamic> json) {
-    return ResourceInfo(
-      resourceType: json['resourceType'] ?? '',
-      resourceName: json['resourceName'] ?? '',
-      owner: json['owner'] ?? '',
-      description: json['description'] ?? '',
-    );
-  }
+  factory ResourceInfo.fromJson(Map<String, dynamic> json) => ResourceInfo(
+    resourceType: json['resourceType'] ?? '',
+    resourceName: json['resourceName'] ?? '',
+    owner: json['owner'] ?? '',
+    description: json['description'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (resourceType.isNotDefault) 'resourceType': resourceType,
-      if (resourceName.isNotDefault) 'resourceName': resourceName,
-      if (owner.isNotDefault) 'owner': owner,
-      if (description.isNotDefault) 'description': description,
-    };
-  }
+  Object toJson() => {
+    if (resourceType.isNotDefault) 'resourceType': resourceType,
+    if (resourceName.isNotDefault) 'resourceName': resourceName,
+    if (owner.isNotDefault) 'owner': owner,
+    if (description.isNotDefault) 'description': description,
+  };
 
   @override
   String toString() {
@@ -690,16 +664,11 @@ final class Help extends ProtoMessage {
 
   Help({this.links = const []}) : super(fullyQualifiedName);
 
-  factory Help.fromJson(Map<String, dynamic> json) {
-    return Help(
-      links: decodeListMessage(json['links'], Help_Link.fromJson) ?? [],
-    );
-  }
+  factory Help.fromJson(Map<String, dynamic> json) =>
+      Help(links: decodeListMessage(json['links'], Help_Link.fromJson) ?? []);
 
   @override
-  Object toJson() {
-    return {if (links.isNotDefault) 'links': encodeList(links)};
-  }
+  Object toJson() => {if (links.isNotDefault) 'links': encodeList(links)};
 
   @override
   String toString() => 'Help()';
@@ -717,20 +686,14 @@ final class Help_Link extends ProtoMessage {
 
   Help_Link({this.description = '', this.url = ''}) : super(fullyQualifiedName);
 
-  factory Help_Link.fromJson(Map<String, dynamic> json) {
-    return Help_Link(
-      description: json['description'] ?? '',
-      url: json['url'] ?? '',
-    );
-  }
+  factory Help_Link.fromJson(Map<String, dynamic> json) =>
+      Help_Link(description: json['description'] ?? '', url: json['url'] ?? '');
 
   @override
-  Object toJson() {
-    return {
-      if (description.isNotDefault) 'description': description,
-      if (url.isNotDefault) 'url': url,
-    };
-  }
+  Object toJson() => {
+    if (description.isNotDefault) 'description': description,
+    if (url.isNotDefault) 'url': url,
+  };
 
   @override
   String toString() {
@@ -755,20 +718,17 @@ final class LocalizedMessage extends ProtoMessage {
   LocalizedMessage({this.locale = '', this.message = ''})
     : super(fullyQualifiedName);
 
-  factory LocalizedMessage.fromJson(Map<String, dynamic> json) {
-    return LocalizedMessage(
-      locale: json['locale'] ?? '',
-      message: json['message'] ?? '',
-    );
-  }
+  factory LocalizedMessage.fromJson(Map<String, dynamic> json) =>
+      LocalizedMessage(
+        locale: json['locale'] ?? '',
+        message: json['message'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (locale.isNotDefault) 'locale': locale,
-      if (message.isNotDefault) 'message': message,
-    };
-  }
+  Object toJson() => {
+    if (locale.isNotDefault) 'locale': locale,
+    if (message.isNotDefault) 'message': message,
+  };
 
   @override
   String toString() {
@@ -801,24 +761,20 @@ final class HttpRequest extends ProtoMessage {
     this.body,
   }) : super(fullyQualifiedName);
 
-  factory HttpRequest.fromJson(Map<String, dynamic> json) {
-    return HttpRequest(
-      method: json['method'] ?? '',
-      uri: json['uri'] ?? '',
-      headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
-      body: decodeBytes(json['body']),
-    );
-  }
+  factory HttpRequest.fromJson(Map<String, dynamic> json) => HttpRequest(
+    method: json['method'] ?? '',
+    uri: json['uri'] ?? '',
+    headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
+    body: decodeBytes(json['body']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (method.isNotDefault) 'method': method,
-      if (uri.isNotDefault) 'uri': uri,
-      if (headers.isNotDefault) 'headers': encodeList(headers),
-      if (body != null) 'body': encodeBytes(body),
-    };
-  }
+  Object toJson() => {
+    if (method.isNotDefault) 'method': method,
+    if (uri.isNotDefault) 'uri': uri,
+    if (headers.isNotDefault) 'headers': encodeList(headers),
+    if (body != null) 'body': encodeBytes(body),
+  };
 
   @override
   String toString() {
@@ -855,24 +811,20 @@ final class HttpResponse extends ProtoMessage {
     this.body,
   }) : super(fullyQualifiedName);
 
-  factory HttpResponse.fromJson(Map<String, dynamic> json) {
-    return HttpResponse(
-      status: json['status'] ?? 0,
-      reason: json['reason'] ?? '',
-      headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
-      body: decodeBytes(json['body']),
-    );
-  }
+  factory HttpResponse.fromJson(Map<String, dynamic> json) => HttpResponse(
+    status: json['status'] ?? 0,
+    reason: json['reason'] ?? '',
+    headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
+    body: decodeBytes(json['body']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (status.isNotDefault) 'status': status,
-      if (reason.isNotDefault) 'reason': reason,
-      if (headers.isNotDefault) 'headers': encodeList(headers),
-      if (body != null) 'body': encodeBytes(body),
-    };
-  }
+  Object toJson() => {
+    if (status.isNotDefault) 'status': status,
+    if (reason.isNotDefault) 'reason': reason,
+    if (headers.isNotDefault) 'headers': encodeList(headers),
+    if (body != null) 'body': encodeBytes(body),
+  };
 
   @override
   String toString() {
@@ -897,17 +849,14 @@ final class HttpHeader extends ProtoMessage {
 
   HttpHeader({this.key = '', this.value = ''}) : super(fullyQualifiedName);
 
-  factory HttpHeader.fromJson(Map<String, dynamic> json) {
-    return HttpHeader(key: json['key'] ?? '', value: json['value'] ?? '');
-  }
+  factory HttpHeader.fromJson(Map<String, dynamic> json) =>
+      HttpHeader(key: json['key'] ?? '', value: json['value'] ?? '');
 
   @override
-  Object toJson() {
-    return {
-      if (key.isNotDefault) 'key': key,
-      if (value.isNotDefault) 'value': value,
-    };
-  }
+  Object toJson() => {
+    if (key.isNotDefault) 'key': key,
+    if (value.isNotDefault) 'value': value,
+  };
 
   @override
   String toString() {
@@ -943,22 +892,18 @@ final class Status extends ProtoMessage {
   Status({this.code = 0, this.message = '', this.details = const []})
     : super(fullyQualifiedName);
 
-  factory Status.fromJson(Map<String, dynamic> json) {
-    return Status(
-      code: json['code'] ?? 0,
-      message: json['message'] ?? '',
-      details: decodeListMessage(json['details'], Any.fromJson) ?? [],
-    );
-  }
+  factory Status.fromJson(Map<String, dynamic> json) => Status(
+    code: json['code'] ?? 0,
+    message: json['message'] ?? '',
+    details: decodeListMessage(json['details'], Any.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (code.isNotDefault) 'code': code,
-      if (message.isNotDefault) 'message': message,
-      if (details.isNotDefault) 'details': encodeList(details),
-    };
-  }
+  Object toJson() => {
+    if (code.isNotDefault) 'code': code,
+    if (message.isNotDefault) 'message': message,
+    if (details.isNotDefault) 'details': encodeList(details),
+  };
 
   @override
   String toString() {

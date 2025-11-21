@@ -20,6 +20,14 @@
 /// client library generator consumption.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
@@ -59,9 +67,8 @@ final class Compliance {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Compliance.fromApiKey([String? apiKey]) {
-    return Compliance(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Compliance.fromApiKey([String? apiKey]) =>
+      Compliance(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// This method echoes the ComplianceData request. This method exercises
   /// sending the entire request object in the REST body.
@@ -84,17 +91,17 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodyinfo', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.serverVerify.isNotDefault)
-        'serverVerify': '${request.serverVerify}',
-      if (request.intendedBindingUri != null)
-        'intendedBindingUri': request.intendedBindingUri!,
-      if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-      if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-      if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-      if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-      if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-      if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.serverVerify case final $1 when $1.isNotDefault)
+        'serverVerify': '${$1}',
+      if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+      if (request.fInt32 case final $1 when $1.isNotDefault) 'fInt32': '${$1}',
+      if (request.fInt64 case final $1 when $1.isNotDefault) 'fInt64': '${$1}',
+      if (request.fDouble case final $1 when $1.isNotDefault)
+        'fDouble': '${$1}',
+      if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+      if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+      if (request.pDouble case final $1?) 'pDouble': '${$1}',
     });
     final response = await _client.post(url, body: request.info);
     return RepeatResponse.fromJson(response);
@@ -108,125 +115,129 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:query', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.info!.fString.isNotDefault)
-        'info.fString': request.info!.fString,
-      if (request.info!.fInt32.isNotDefault)
-        'info.fInt32': '${request.info!.fInt32}',
-      if (request.info!.fSint32.isNotDefault)
-        'info.fSint32': '${request.info!.fSint32}',
-      if (request.info!.fSfixed32.isNotDefault)
-        'info.fSfixed32': '${request.info!.fSfixed32}',
-      if (request.info!.fUint32.isNotDefault)
-        'info.fUint32': '${request.info!.fUint32}',
-      if (request.info!.fFixed32.isNotDefault)
-        'info.fFixed32': '${request.info!.fFixed32}',
-      if (request.info!.fInt64.isNotDefault)
-        'info.fInt64': '${request.info!.fInt64}',
-      if (request.info!.fSint64.isNotDefault)
-        'info.fSint64': '${request.info!.fSint64}',
-      if (request.info!.fSfixed64.isNotDefault)
-        'info.fSfixed64': '${request.info!.fSfixed64}',
-      if (request.info!.fUint64.isNotDefault)
-        'info.fUint64': '${request.info!.fUint64}',
-      if (request.info!.fFixed64.isNotDefault)
-        'info.fFixed64': '${request.info!.fFixed64}',
-      if (request.info!.fDouble.isNotDefault)
-        'info.fDouble': '${request.info!.fDouble}',
-      if (request.info!.fFloat.isNotDefault)
-        'info.fFloat': '${request.info!.fFloat}',
-      if (request.info!.fBool.isNotDefault)
-        'info.fBool': '${request.info!.fBool}',
-      if (request.info!.fBytes != null)
-        'info.fBytes': encodeBytes(request.info!.fBytes)!,
-      if (request.info!.fKingdom.isNotDefault)
-        'info.fKingdom': request.info!.fKingdom.value,
-      if (request.info!.fChild!.fString.isNotDefault)
-        'info.fChild.fString': request.info!.fChild!.fString,
-      if (request.info!.fChild!.fFloat.isNotDefault)
-        'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-      if (request.info!.fChild!.fDouble.isNotDefault)
-        'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-      if (request.info!.fChild!.fBool.isNotDefault)
-        'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-      if (request.info!.fChild!.fContinent.isNotDefault)
-        'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-      if (request.info!.fChild!.fChild!.fString.isNotDefault)
-        'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-      if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-        'info.fChild.fChild.fDouble':
-            '${request.info!.fChild!.fChild!.fDouble}',
-      if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-        'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-      if (request.info!.fChild!.pString != null)
-        'info.fChild.pString': request.info!.fChild!.pString!,
-      if (request.info!.fChild!.pFloat != null)
-        'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-      if (request.info!.fChild!.pDouble != null)
-        'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-      if (request.info!.fChild!.pBool != null)
-        'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-      if (request.info!.fChild!.pContinent.isNotDefault)
-        'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-      if (request.info!.fChild!.pChild!.fString.isNotDefault)
-        'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-      if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-        'info.fChild.pChild.fDouble':
-            '${request.info!.fChild!.pChild!.fDouble}',
-      if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-        'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-      if (request.info!.pString != null) 'info.pString': request.info!.pString!,
-      if (request.info!.pInt32 != null)
-        'info.pInt32': '${request.info!.pInt32}',
-      if (request.info!.pDouble != null)
-        'info.pDouble': '${request.info!.pDouble}',
-      if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-      if (request.info!.pKingdom != null)
-        'info.pKingdom': request.info!.pKingdom!.value,
-      if (request.info!.pChild!.fString.isNotDefault)
-        'info.pChild.fString': request.info!.pChild!.fString,
-      if (request.info!.pChild!.fFloat.isNotDefault)
-        'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-      if (request.info!.pChild!.fDouble.isNotDefault)
-        'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-      if (request.info!.pChild!.fBool.isNotDefault)
-        'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-      if (request.info!.pChild!.fContinent.isNotDefault)
-        'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-      if (request.info!.pChild!.fChild!.fString.isNotDefault)
-        'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-      if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-        'info.pChild.fChild.fDouble':
-            '${request.info!.pChild!.fChild!.fDouble}',
-      if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-        'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-      if (request.info!.pChild!.pString != null)
-        'info.pChild.pString': request.info!.pChild!.pString!,
-      if (request.info!.pChild!.pFloat != null)
-        'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-      if (request.info!.pChild!.pDouble != null)
-        'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-      if (request.info!.pChild!.pBool != null)
-        'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-      if (request.info!.pChild!.pContinent.isNotDefault)
-        'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-      if (request.info!.pChild!.pChild!.fString.isNotDefault)
-        'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-      if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-        'info.pChild.pChild.fDouble':
-            '${request.info!.pChild!.pChild!.fDouble}',
-      if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-        'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-      if (request.serverVerify.isNotDefault)
-        'serverVerify': '${request.serverVerify}',
-      if (request.intendedBindingUri != null)
-        'intendedBindingUri': request.intendedBindingUri!,
-      if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-      if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-      if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-      if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-      if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-      if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.info!.fString case final $1 when $1.isNotDefault)
+        'info.fString': $1,
+      if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+        'info.fInt32': '${$1}',
+      if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+        'info.fSint32': '${$1}',
+      if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+        'info.fSfixed32': '${$1}',
+      if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+        'info.fUint32': '${$1}',
+      if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+        'info.fFixed32': '${$1}',
+      if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+        'info.fInt64': '${$1}',
+      if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+        'info.fSint64': '${$1}',
+      if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+        'info.fSfixed64': '${$1}',
+      if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+        'info.fUint64': '${$1}',
+      if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+        'info.fFixed64': '${$1}',
+      if (request.info!.fDouble case final $1 when $1.isNotDefault)
+        'info.fDouble': '${$1}',
+      if (request.info!.fFloat case final $1 when $1.isNotDefault)
+        'info.fFloat': '${$1}',
+      if (request.info!.fBool case final $1 when $1.isNotDefault)
+        'info.fBool': '${$1}',
+      if (request.info!.fBytes case final $1?) 'info.fBytes': encodeBytes($1)!,
+      if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+        'info.fKingdom': $1.value,
+      if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+        'info.fChild.fString': $1,
+      if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+        'info.fChild.fFloat': '${$1}',
+      if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+        'info.fChild.fDouble': '${$1}',
+      if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+        'info.fChild.fBool': '${$1}',
+      if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+        'info.fChild.fContinent': $1.value,
+      if (request.info!.fChild!.fChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.fChild.fChild.fString': $1,
+      if (request.info!.fChild!.fChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.fChild.fChild.fDouble': '${$1}',
+      if (request.info!.fChild!.fChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.fChild.fChild.fBool': '${$1}',
+      if (request.info!.fChild!.pString case final $1?)
+        'info.fChild.pString': $1,
+      if (request.info!.fChild!.pFloat case final $1?)
+        'info.fChild.pFloat': '${$1}',
+      if (request.info!.fChild!.pDouble case final $1?)
+        'info.fChild.pDouble': '${$1}',
+      if (request.info!.fChild!.pBool case final $1?)
+        'info.fChild.pBool': '${$1}',
+      if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+        'info.fChild.pContinent': $1.value,
+      if (request.info!.fChild!.pChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.fChild.pChild.fString': $1,
+      if (request.info!.fChild!.pChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.fChild.pChild.fDouble': '${$1}',
+      if (request.info!.fChild!.pChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.fChild.pChild.fBool': '${$1}',
+      if (request.info!.pString case final $1?) 'info.pString': $1,
+      if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+      if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+      if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+      if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+      if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+        'info.pChild.fString': $1,
+      if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+        'info.pChild.fFloat': '${$1}',
+      if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+        'info.pChild.fDouble': '${$1}',
+      if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+        'info.pChild.fBool': '${$1}',
+      if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+        'info.pChild.fContinent': $1.value,
+      if (request.info!.pChild!.fChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.pChild.fChild.fString': $1,
+      if (request.info!.pChild!.fChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.pChild.fChild.fDouble': '${$1}',
+      if (request.info!.pChild!.fChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.pChild.fChild.fBool': '${$1}',
+      if (request.info!.pChild!.pString case final $1?)
+        'info.pChild.pString': $1,
+      if (request.info!.pChild!.pFloat case final $1?)
+        'info.pChild.pFloat': '${$1}',
+      if (request.info!.pChild!.pDouble case final $1?)
+        'info.pChild.pDouble': '${$1}',
+      if (request.info!.pChild!.pBool case final $1?)
+        'info.pChild.pBool': '${$1}',
+      if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+        'info.pChild.pContinent': $1.value,
+      if (request.info!.pChild!.pChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.pChild.pChild.fString': $1,
+      if (request.info!.pChild!.pChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.pChild.pChild.fDouble': '${$1}',
+      if (request.info!.pChild!.pChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.pChild.pChild.fBool': '${$1}',
+      if (request.serverVerify case final $1 when $1.isNotDefault)
+        'serverVerify': '${$1}',
+      if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+      if (request.fInt32 case final $1 when $1.isNotDefault) 'fInt32': '${$1}',
+      if (request.fInt64 case final $1 when $1.isNotDefault) 'fInt64': '${$1}',
+      if (request.fDouble case final $1 when $1.isNotDefault)
+        'fDouble': '${$1}',
+      if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+      if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+      if (request.pDouble case final $1?) 'pDouble': '${$1}',
     });
     final response = await _client.get(url);
     return RepeatResponse.fromJson(response);
@@ -244,126 +255,132 @@ final class Compliance {
       _host,
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fInt32}/${request.info!.fDouble}/${request.info!.fBool}/${request.info!.fKingdom}:simplepath',
       {
-        if (request.name.isNotDefault) 'name': request.name,
-        if (request.info!.fString.isNotDefault)
-          'info.fString': request.info!.fString,
-        if (request.info!.fInt32.isNotDefault)
-          'info.fInt32': '${request.info!.fInt32}',
-        if (request.info!.fSint32.isNotDefault)
-          'info.fSint32': '${request.info!.fSint32}',
-        if (request.info!.fSfixed32.isNotDefault)
-          'info.fSfixed32': '${request.info!.fSfixed32}',
-        if (request.info!.fUint32.isNotDefault)
-          'info.fUint32': '${request.info!.fUint32}',
-        if (request.info!.fFixed32.isNotDefault)
-          'info.fFixed32': '${request.info!.fFixed32}',
-        if (request.info!.fInt64.isNotDefault)
-          'info.fInt64': '${request.info!.fInt64}',
-        if (request.info!.fSint64.isNotDefault)
-          'info.fSint64': '${request.info!.fSint64}',
-        if (request.info!.fSfixed64.isNotDefault)
-          'info.fSfixed64': '${request.info!.fSfixed64}',
-        if (request.info!.fUint64.isNotDefault)
-          'info.fUint64': '${request.info!.fUint64}',
-        if (request.info!.fFixed64.isNotDefault)
-          'info.fFixed64': '${request.info!.fFixed64}',
-        if (request.info!.fDouble.isNotDefault)
-          'info.fDouble': '${request.info!.fDouble}',
-        if (request.info!.fFloat.isNotDefault)
-          'info.fFloat': '${request.info!.fFloat}',
-        if (request.info!.fBool.isNotDefault)
-          'info.fBool': '${request.info!.fBool}',
-        if (request.info!.fBytes != null)
-          'info.fBytes': encodeBytes(request.info!.fBytes)!,
-        if (request.info!.fKingdom.isNotDefault)
-          'info.fKingdom': request.info!.fKingdom.value,
-        if (request.info!.fChild!.fString.isNotDefault)
-          'info.fChild.fString': request.info!.fChild!.fString,
-        if (request.info!.fChild!.fFloat.isNotDefault)
-          'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-        if (request.info!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-        if (request.info!.fChild!.fBool.isNotDefault)
-          'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-        if (request.info!.fChild!.fContinent.isNotDefault)
-          'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-        if (request.info!.fChild!.fChild!.fString.isNotDefault)
-          'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-        if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fChild.fDouble':
-              '${request.info!.fChild!.fChild!.fDouble}',
-        if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-          'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-        if (request.info!.fChild!.pString != null)
-          'info.fChild.pString': request.info!.fChild!.pString!,
-        if (request.info!.fChild!.pFloat != null)
-          'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-        if (request.info!.fChild!.pDouble != null)
-          'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-        if (request.info!.fChild!.pBool != null)
-          'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-        if (request.info!.fChild!.pContinent.isNotDefault)
-          'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-        if (request.info!.fChild!.pChild!.fString.isNotDefault)
-          'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-        if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-          'info.fChild.pChild.fDouble':
-              '${request.info!.fChild!.pChild!.fDouble}',
-        if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-          'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-        if (request.info!.pString != null)
-          'info.pString': request.info!.pString!,
-        if (request.info!.pInt32 != null)
-          'info.pInt32': '${request.info!.pInt32}',
-        if (request.info!.pDouble != null)
-          'info.pDouble': '${request.info!.pDouble}',
-        if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-        if (request.info!.pKingdom != null)
-          'info.pKingdom': request.info!.pKingdom!.value,
-        if (request.info!.pChild!.fString.isNotDefault)
-          'info.pChild.fString': request.info!.pChild!.fString,
-        if (request.info!.pChild!.fFloat.isNotDefault)
-          'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-        if (request.info!.pChild!.fDouble.isNotDefault)
-          'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-        if (request.info!.pChild!.fBool.isNotDefault)
-          'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-        if (request.info!.pChild!.fContinent.isNotDefault)
-          'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-        if (request.info!.pChild!.fChild!.fString.isNotDefault)
-          'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-        if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-          'info.pChild.fChild.fDouble':
-              '${request.info!.pChild!.fChild!.fDouble}',
-        if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-          'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-        if (request.info!.pChild!.pString != null)
-          'info.pChild.pString': request.info!.pChild!.pString!,
-        if (request.info!.pChild!.pFloat != null)
-          'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-        if (request.info!.pChild!.pDouble != null)
-          'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-        if (request.info!.pChild!.pBool != null)
-          'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-        if (request.info!.pChild!.pContinent.isNotDefault)
-          'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-        if (request.info!.pChild!.pChild!.fString.isNotDefault)
-          'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-        if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-          'info.pChild.pChild.fDouble':
-              '${request.info!.pChild!.pChild!.fDouble}',
-        if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-          'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-        if (request.serverVerify.isNotDefault)
-          'serverVerify': '${request.serverVerify}',
-        if (request.intendedBindingUri != null)
-          'intendedBindingUri': request.intendedBindingUri!,
-        if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-        if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-        if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-        if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-        if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-        if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info!.fString case final $1 when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info!.fBool case final $1 when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info!.fBytes case final $1?)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info!.fChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info!.fChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info!.fChild!.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info!.fChild!.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info!.fChild!.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info!.fChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info!.fChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info!.fChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info!.pString case final $1?) 'info.pString': $1,
+        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info!.pChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info!.pChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info!.pChild!.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info!.pChild!.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info!.pChild!.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info!.pChild!.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info!.pChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info!.pChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
       },
     );
     final response = await _client.get(url);
@@ -380,126 +397,132 @@ final class Compliance {
       _host,
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}/bool/${request.info!.fBool}:pathresource',
       {
-        if (request.name.isNotDefault) 'name': request.name,
-        if (request.info!.fString.isNotDefault)
-          'info.fString': request.info!.fString,
-        if (request.info!.fInt32.isNotDefault)
-          'info.fInt32': '${request.info!.fInt32}',
-        if (request.info!.fSint32.isNotDefault)
-          'info.fSint32': '${request.info!.fSint32}',
-        if (request.info!.fSfixed32.isNotDefault)
-          'info.fSfixed32': '${request.info!.fSfixed32}',
-        if (request.info!.fUint32.isNotDefault)
-          'info.fUint32': '${request.info!.fUint32}',
-        if (request.info!.fFixed32.isNotDefault)
-          'info.fFixed32': '${request.info!.fFixed32}',
-        if (request.info!.fInt64.isNotDefault)
-          'info.fInt64': '${request.info!.fInt64}',
-        if (request.info!.fSint64.isNotDefault)
-          'info.fSint64': '${request.info!.fSint64}',
-        if (request.info!.fSfixed64.isNotDefault)
-          'info.fSfixed64': '${request.info!.fSfixed64}',
-        if (request.info!.fUint64.isNotDefault)
-          'info.fUint64': '${request.info!.fUint64}',
-        if (request.info!.fFixed64.isNotDefault)
-          'info.fFixed64': '${request.info!.fFixed64}',
-        if (request.info!.fDouble.isNotDefault)
-          'info.fDouble': '${request.info!.fDouble}',
-        if (request.info!.fFloat.isNotDefault)
-          'info.fFloat': '${request.info!.fFloat}',
-        if (request.info!.fBool.isNotDefault)
-          'info.fBool': '${request.info!.fBool}',
-        if (request.info!.fBytes != null)
-          'info.fBytes': encodeBytes(request.info!.fBytes)!,
-        if (request.info!.fKingdom.isNotDefault)
-          'info.fKingdom': request.info!.fKingdom.value,
-        if (request.info!.fChild!.fString.isNotDefault)
-          'info.fChild.fString': request.info!.fChild!.fString,
-        if (request.info!.fChild!.fFloat.isNotDefault)
-          'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-        if (request.info!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-        if (request.info!.fChild!.fBool.isNotDefault)
-          'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-        if (request.info!.fChild!.fContinent.isNotDefault)
-          'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-        if (request.info!.fChild!.fChild!.fString.isNotDefault)
-          'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-        if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fChild.fDouble':
-              '${request.info!.fChild!.fChild!.fDouble}',
-        if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-          'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-        if (request.info!.fChild!.pString != null)
-          'info.fChild.pString': request.info!.fChild!.pString!,
-        if (request.info!.fChild!.pFloat != null)
-          'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-        if (request.info!.fChild!.pDouble != null)
-          'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-        if (request.info!.fChild!.pBool != null)
-          'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-        if (request.info!.fChild!.pContinent.isNotDefault)
-          'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-        if (request.info!.fChild!.pChild!.fString.isNotDefault)
-          'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-        if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-          'info.fChild.pChild.fDouble':
-              '${request.info!.fChild!.pChild!.fDouble}',
-        if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-          'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-        if (request.info!.pString != null)
-          'info.pString': request.info!.pString!,
-        if (request.info!.pInt32 != null)
-          'info.pInt32': '${request.info!.pInt32}',
-        if (request.info!.pDouble != null)
-          'info.pDouble': '${request.info!.pDouble}',
-        if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-        if (request.info!.pKingdom != null)
-          'info.pKingdom': request.info!.pKingdom!.value,
-        if (request.info!.pChild!.fString.isNotDefault)
-          'info.pChild.fString': request.info!.pChild!.fString,
-        if (request.info!.pChild!.fFloat.isNotDefault)
-          'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-        if (request.info!.pChild!.fDouble.isNotDefault)
-          'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-        if (request.info!.pChild!.fBool.isNotDefault)
-          'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-        if (request.info!.pChild!.fContinent.isNotDefault)
-          'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-        if (request.info!.pChild!.fChild!.fString.isNotDefault)
-          'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-        if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-          'info.pChild.fChild.fDouble':
-              '${request.info!.pChild!.fChild!.fDouble}',
-        if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-          'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-        if (request.info!.pChild!.pString != null)
-          'info.pChild.pString': request.info!.pChild!.pString!,
-        if (request.info!.pChild!.pFloat != null)
-          'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-        if (request.info!.pChild!.pDouble != null)
-          'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-        if (request.info!.pChild!.pBool != null)
-          'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-        if (request.info!.pChild!.pContinent.isNotDefault)
-          'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-        if (request.info!.pChild!.pChild!.fString.isNotDefault)
-          'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-        if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-          'info.pChild.pChild.fDouble':
-              '${request.info!.pChild!.pChild!.fDouble}',
-        if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-          'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-        if (request.serverVerify.isNotDefault)
-          'serverVerify': '${request.serverVerify}',
-        if (request.intendedBindingUri != null)
-          'intendedBindingUri': request.intendedBindingUri!,
-        if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-        if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-        if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-        if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-        if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-        if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info!.fString case final $1 when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info!.fBool case final $1 when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info!.fBytes case final $1?)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info!.fChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info!.fChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info!.fChild!.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info!.fChild!.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info!.fChild!.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info!.fChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info!.fChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info!.fChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info!.pString case final $1?) 'info.pString': $1,
+        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info!.pChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info!.pChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info!.pChild!.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info!.pChild!.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info!.pChild!.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info!.pChild!.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info!.pChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info!.pChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
       },
     );
     final response = await _client.get(url);
@@ -518,126 +541,132 @@ final class Compliance {
       _host,
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}:pathtrailingresource',
       {
-        if (request.name.isNotDefault) 'name': request.name,
-        if (request.info!.fString.isNotDefault)
-          'info.fString': request.info!.fString,
-        if (request.info!.fInt32.isNotDefault)
-          'info.fInt32': '${request.info!.fInt32}',
-        if (request.info!.fSint32.isNotDefault)
-          'info.fSint32': '${request.info!.fSint32}',
-        if (request.info!.fSfixed32.isNotDefault)
-          'info.fSfixed32': '${request.info!.fSfixed32}',
-        if (request.info!.fUint32.isNotDefault)
-          'info.fUint32': '${request.info!.fUint32}',
-        if (request.info!.fFixed32.isNotDefault)
-          'info.fFixed32': '${request.info!.fFixed32}',
-        if (request.info!.fInt64.isNotDefault)
-          'info.fInt64': '${request.info!.fInt64}',
-        if (request.info!.fSint64.isNotDefault)
-          'info.fSint64': '${request.info!.fSint64}',
-        if (request.info!.fSfixed64.isNotDefault)
-          'info.fSfixed64': '${request.info!.fSfixed64}',
-        if (request.info!.fUint64.isNotDefault)
-          'info.fUint64': '${request.info!.fUint64}',
-        if (request.info!.fFixed64.isNotDefault)
-          'info.fFixed64': '${request.info!.fFixed64}',
-        if (request.info!.fDouble.isNotDefault)
-          'info.fDouble': '${request.info!.fDouble}',
-        if (request.info!.fFloat.isNotDefault)
-          'info.fFloat': '${request.info!.fFloat}',
-        if (request.info!.fBool.isNotDefault)
-          'info.fBool': '${request.info!.fBool}',
-        if (request.info!.fBytes != null)
-          'info.fBytes': encodeBytes(request.info!.fBytes)!,
-        if (request.info!.fKingdom.isNotDefault)
-          'info.fKingdom': request.info!.fKingdom.value,
-        if (request.info!.fChild!.fString.isNotDefault)
-          'info.fChild.fString': request.info!.fChild!.fString,
-        if (request.info!.fChild!.fFloat.isNotDefault)
-          'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-        if (request.info!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-        if (request.info!.fChild!.fBool.isNotDefault)
-          'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-        if (request.info!.fChild!.fContinent.isNotDefault)
-          'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-        if (request.info!.fChild!.fChild!.fString.isNotDefault)
-          'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-        if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fChild.fDouble':
-              '${request.info!.fChild!.fChild!.fDouble}',
-        if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-          'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-        if (request.info!.fChild!.pString != null)
-          'info.fChild.pString': request.info!.fChild!.pString!,
-        if (request.info!.fChild!.pFloat != null)
-          'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-        if (request.info!.fChild!.pDouble != null)
-          'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-        if (request.info!.fChild!.pBool != null)
-          'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-        if (request.info!.fChild!.pContinent.isNotDefault)
-          'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-        if (request.info!.fChild!.pChild!.fString.isNotDefault)
-          'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-        if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-          'info.fChild.pChild.fDouble':
-              '${request.info!.fChild!.pChild!.fDouble}',
-        if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-          'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-        if (request.info!.pString != null)
-          'info.pString': request.info!.pString!,
-        if (request.info!.pInt32 != null)
-          'info.pInt32': '${request.info!.pInt32}',
-        if (request.info!.pDouble != null)
-          'info.pDouble': '${request.info!.pDouble}',
-        if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-        if (request.info!.pKingdom != null)
-          'info.pKingdom': request.info!.pKingdom!.value,
-        if (request.info!.pChild!.fString.isNotDefault)
-          'info.pChild.fString': request.info!.pChild!.fString,
-        if (request.info!.pChild!.fFloat.isNotDefault)
-          'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-        if (request.info!.pChild!.fDouble.isNotDefault)
-          'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-        if (request.info!.pChild!.fBool.isNotDefault)
-          'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-        if (request.info!.pChild!.fContinent.isNotDefault)
-          'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-        if (request.info!.pChild!.fChild!.fString.isNotDefault)
-          'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-        if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-          'info.pChild.fChild.fDouble':
-              '${request.info!.pChild!.fChild!.fDouble}',
-        if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-          'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-        if (request.info!.pChild!.pString != null)
-          'info.pChild.pString': request.info!.pChild!.pString!,
-        if (request.info!.pChild!.pFloat != null)
-          'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-        if (request.info!.pChild!.pDouble != null)
-          'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-        if (request.info!.pChild!.pBool != null)
-          'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-        if (request.info!.pChild!.pContinent.isNotDefault)
-          'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-        if (request.info!.pChild!.pChild!.fString.isNotDefault)
-          'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-        if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-          'info.pChild.pChild.fDouble':
-              '${request.info!.pChild!.pChild!.fDouble}',
-        if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-          'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-        if (request.serverVerify.isNotDefault)
-          'serverVerify': '${request.serverVerify}',
-        if (request.intendedBindingUri != null)
-          'intendedBindingUri': request.intendedBindingUri!,
-        if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-        if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-        if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-        if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-        if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-        if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info!.fString case final $1 when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info!.fBool case final $1 when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info!.fBytes case final $1?)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info!.fChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info!.fChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info!.fChild!.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info!.fChild!.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info!.fChild!.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info!.fChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info!.fChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info!.fChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info!.pString case final $1?) 'info.pString': $1,
+        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info!.pChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info!.pChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info!.pChild!.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info!.pChild!.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info!.pChild!.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info!.pChild!.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info!.pChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info!.pChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
       },
     );
     final response = await _client.get(url);
@@ -678,8 +707,8 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<EnumResponse> getEnum(EnumRequest request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.unknownEnum.isNotDefault)
-        'unknownEnum': '${request.unknownEnum}',
+      if (request.unknownEnum case final $1 when $1.isNotDefault)
+        'unknownEnum': '${$1}',
     });
     final response = await _client.get(url);
     return EnumResponse.fromJson(response);
@@ -697,9 +726,10 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.request!.unknownEnum.isNotDefault)
-        'request.unknownEnum': '${request.request!.unknownEnum}',
-      if (request.continent.isNotDefault) 'continent': request.continent.value,
+      if (request.request!.unknownEnum case final $1 when $1.isNotDefault)
+        'request.unknownEnum': '${$1}',
+      if (request.continent case final $1 when $1.isNotDefault)
+        'continent': $1.value,
     });
     final response = await _client.post(url);
     return EnumResponse.fromJson(response);
@@ -714,9 +744,10 @@ final class Compliance {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -751,9 +782,9 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -784,12 +815,13 @@ final class Compliance {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -869,9 +901,8 @@ final class Echo {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Echo.fromApiKey([String? apiKey]) {
-    return Echo(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Echo.fromApiKey([String? apiKey]) =>
+      Echo(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// This method simply echoes the request. This method showcases unary RPCs.
   ///
@@ -1021,9 +1052,10 @@ final class Echo {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1058,9 +1090,9 @@ final class Echo {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1091,12 +1123,13 @@ final class Echo {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1171,9 +1204,8 @@ final class Identity {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Identity.fromApiKey([String? apiKey]) {
-    return Identity(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Identity.fromApiKey([String? apiKey]) =>
+      Identity(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Creates a user.
   ///
@@ -1204,8 +1236,7 @@ final class Identity {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<User> updateUser(UpdateUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.user!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.user);
     return User.fromJson(response);
@@ -1228,8 +1259,9 @@ final class Identity {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
     final url = Uri.https(_host, '/v1beta1/users', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListUsersResponse.fromJson(response);
@@ -1244,9 +1276,10 @@ final class Identity {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1281,9 +1314,9 @@ final class Identity {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1314,12 +1347,13 @@ final class Identity {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1397,9 +1431,8 @@ final class Messaging {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Messaging.fromApiKey([String? apiKey]) {
-    return Messaging(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Messaging.fromApiKey([String? apiKey]) =>
+      Messaging(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Creates a room.
   ///
@@ -1430,8 +1463,7 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Room> updateRoom(UpdateRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.room!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.room);
     return Room.fromJson(response);
@@ -1454,8 +1486,9 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/rooms', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListRoomsResponse.fromJson(response);
@@ -1492,8 +1525,7 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.blurb!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.blurb);
     return Blurb.fromJson(response);
@@ -1517,8 +1549,9 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListBlurbsResponse.fromJson(response);
@@ -1573,9 +1606,10 @@ final class Messaging {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1610,9 +1644,9 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1643,12 +1677,13 @@ final class Messaging {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1722,9 +1757,8 @@ final class SequenceService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory SequenceService.fromApiKey([String? apiKey]) {
-    return SequenceService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory SequenceService.fromApiKey([String? apiKey]) =>
+      SequenceService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Creates a sequence.
   ///
@@ -1811,9 +1845,10 @@ final class SequenceService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1848,9 +1883,9 @@ final class SequenceService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1881,12 +1916,13 @@ final class SequenceService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1965,9 +2001,8 @@ final class Testing {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Testing.fromApiKey([String? apiKey]) {
-    return Testing(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Testing.fromApiKey([String? apiKey]) =>
+      Testing(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Creates a new testing session.
   /// Adding this comment with special characters for comment formatting tests:
@@ -2001,8 +2036,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sessions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListSessionsResponse.fromJson(response);
@@ -2040,8 +2076,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListTestsResponse> listTests(ListTestsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/tests', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListTestsResponse.fromJson(response);
@@ -2072,9 +2109,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:check', {
-      if (request.answer != null) 'answer': encodeBytes(request.answer)!,
-      if (request.answers != null)
-        'answers': request.answers!.map((e) => encodeBytes(e)!),
+      if (request.answer case final $1?) 'answer': encodeBytes($1)!,
+      if (request.answers case final $1?)
+        'answers': $1.map((e) => encodeBytes(e)!),
     });
     final response = await _client.post(url);
     return VerifyTestResponse.fromJson(response);
@@ -2089,9 +2126,10 @@ final class Testing {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -2126,9 +2164,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -2159,12 +2197,13 @@ final class Testing {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -2255,36 +2294,32 @@ final class RepeatRequest extends ProtoMessage {
     this.pDouble,
   }) : super(fullyQualifiedName);
 
-  factory RepeatRequest.fromJson(Map<String, dynamic> json) {
-    return RepeatRequest(
-      name: json['name'] ?? '',
-      info: decode(json['info'], ComplianceData.fromJson),
-      serverVerify: json['serverVerify'] ?? false,
-      intendedBindingUri: json['intendedBindingUri'],
-      fInt32: json['fInt32'] ?? 0,
-      fInt64: decodeInt64(json['fInt64']) ?? 0,
-      fDouble: decodeDouble(json['fDouble']) ?? 0,
-      pInt32: json['pInt32'],
-      pInt64: decodeInt64(json['pInt64']),
-      pDouble: decodeDouble(json['pDouble']),
-    );
-  }
+  factory RepeatRequest.fromJson(Map<String, dynamic> json) => RepeatRequest(
+    name: json['name'] ?? '',
+    info: decode(json['info'], ComplianceData.fromJson),
+    serverVerify: json['serverVerify'] ?? false,
+    intendedBindingUri: json['intendedBindingUri'],
+    fInt32: json['fInt32'] ?? 0,
+    fInt64: decodeInt64(json['fInt64']) ?? 0,
+    fDouble: decodeDouble(json['fDouble']) ?? 0,
+    pInt32: json['pInt32'],
+    pInt64: decodeInt64(json['pInt64']),
+    pDouble: decodeDouble(json['pDouble']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (info != null) 'info': info!.toJson(),
-      if (serverVerify.isNotDefault) 'serverVerify': serverVerify,
-      if (intendedBindingUri != null) 'intendedBindingUri': intendedBindingUri,
-      if (fInt32.isNotDefault) 'fInt32': fInt32,
-      if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
-      if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
-      if (pInt32 != null) 'pInt32': pInt32,
-      if (pInt64 != null) 'pInt64': encodeInt64(pInt64),
-      if (pDouble != null) 'pDouble': encodeDouble(pDouble),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (info != null) 'info': info!.toJson(),
+    if (serverVerify.isNotDefault) 'serverVerify': serverVerify,
+    if (intendedBindingUri != null) 'intendedBindingUri': intendedBindingUri,
+    if (fInt32.isNotDefault) 'fInt32': fInt32,
+    if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
+    if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
+    if (pInt32 != null) 'pInt32': pInt32,
+    if (pInt64 != null) 'pInt64': encodeInt64(pInt64),
+    if (pDouble != null) 'pDouble': encodeDouble(pDouble),
+  };
 
   @override
   String toString() {
@@ -2315,20 +2350,16 @@ final class RepeatResponse extends ProtoMessage {
   RepeatResponse({this.request, this.bindingUri = ''})
     : super(fullyQualifiedName);
 
-  factory RepeatResponse.fromJson(Map<String, dynamic> json) {
-    return RepeatResponse(
-      request: decode(json['request'], RepeatRequest.fromJson),
-      bindingUri: json['bindingUri'] ?? '',
-    );
-  }
+  factory RepeatResponse.fromJson(Map<String, dynamic> json) => RepeatResponse(
+    request: decode(json['request'], RepeatRequest.fromJson),
+    bindingUri: json['bindingUri'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (request != null) 'request': request!.toJson(),
-      if (bindingUri.isNotDefault) 'bindingUri': bindingUri,
-    };
-  }
+  Object toJson() => {
+    if (request != null) 'request': request!.toJson(),
+    if (bindingUri.isNotDefault) 'bindingUri': bindingUri,
+  };
 
   @override
   String toString() {
@@ -2348,16 +2379,13 @@ final class ComplianceSuite extends ProtoMessage {
 
   ComplianceSuite({this.group = const []}) : super(fullyQualifiedName);
 
-  factory ComplianceSuite.fromJson(Map<String, dynamic> json) {
-    return ComplianceSuite(
-      group: decodeListMessage(json['group'], ComplianceGroup.fromJson) ?? [],
-    );
-  }
+  factory ComplianceSuite.fromJson(Map<String, dynamic> json) =>
+      ComplianceSuite(
+        group: decodeListMessage(json['group'], ComplianceGroup.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (group.isNotDefault) 'group': encodeList(group)};
-  }
+  Object toJson() => {if (group.isNotDefault) 'group': encodeList(group)};
 
   @override
   String toString() => 'ComplianceSuite()';
@@ -2382,23 +2410,20 @@ final class ComplianceGroup extends ProtoMessage {
     this.requests = const [],
   }) : super(fullyQualifiedName);
 
-  factory ComplianceGroup.fromJson(Map<String, dynamic> json) {
-    return ComplianceGroup(
-      name: json['name'] ?? '',
-      rpcs: decodeList(json['rpcs']) ?? [],
-      requests:
-          decodeListMessage(json['requests'], RepeatRequest.fromJson) ?? [],
-    );
-  }
+  factory ComplianceGroup.fromJson(Map<String, dynamic> json) =>
+      ComplianceGroup(
+        name: json['name'] ?? '',
+        rpcs: decodeList(json['rpcs']) ?? [],
+        requests:
+            decodeListMessage(json['requests'], RepeatRequest.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (rpcs.isNotDefault) 'rpcs': rpcs,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (rpcs.isNotDefault) 'rpcs': rpcs,
+    if (requests.isNotDefault) 'requests': encodeList(requests),
+  };
 
   @override
   String toString() {
@@ -2485,67 +2510,60 @@ final class ComplianceData extends ProtoMessage {
     this.pChild,
   }) : super(fullyQualifiedName);
 
-  factory ComplianceData.fromJson(Map<String, dynamic> json) {
-    return ComplianceData(
-      fString: json['fString'] ?? '',
-      fInt32: json['fInt32'] ?? 0,
-      fSint32: json['fSint32'] ?? 0,
-      fSfixed32: json['fSfixed32'] ?? 0,
-      fUint32: json['fUint32'] ?? 0,
-      fFixed32: json['fFixed32'] ?? 0,
-      fInt64: decodeInt64(json['fInt64']) ?? 0,
-      fSint64: decodeInt64(json['fSint64']) ?? 0,
-      fSfixed64: decodeInt64(json['fSfixed64']) ?? 0,
-      fUint64: decodeInt64(json['fUint64']) ?? 0,
-      fFixed64: decodeInt64(json['fFixed64']) ?? 0,
-      fDouble: decodeDouble(json['fDouble']) ?? 0,
-      fFloat: decodeDouble(json['fFloat']) ?? 0,
-      fBool: json['fBool'] ?? false,
-      fBytes: decodeBytes(json['fBytes']),
-      fKingdom:
-          decodeEnum(json['fKingdom'], ComplianceData_LifeKingdom.fromJson) ??
-          ComplianceData_LifeKingdom.$default,
-      fChild: decode(json['fChild'], ComplianceDataChild.fromJson),
-      pString: json['pString'],
-      pInt32: json['pInt32'],
-      pDouble: decodeDouble(json['pDouble']),
-      pBool: json['pBool'],
-      pKingdom: decodeEnum(
-        json['pKingdom'],
-        ComplianceData_LifeKingdom.fromJson,
-      ),
-      pChild: decode(json['pChild'], ComplianceDataChild.fromJson),
-    );
-  }
+  factory ComplianceData.fromJson(Map<String, dynamic> json) => ComplianceData(
+    fString: json['fString'] ?? '',
+    fInt32: json['fInt32'] ?? 0,
+    fSint32: json['fSint32'] ?? 0,
+    fSfixed32: json['fSfixed32'] ?? 0,
+    fUint32: json['fUint32'] ?? 0,
+    fFixed32: json['fFixed32'] ?? 0,
+    fInt64: decodeInt64(json['fInt64']) ?? 0,
+    fSint64: decodeInt64(json['fSint64']) ?? 0,
+    fSfixed64: decodeInt64(json['fSfixed64']) ?? 0,
+    fUint64: decodeInt64(json['fUint64']) ?? 0,
+    fFixed64: decodeInt64(json['fFixed64']) ?? 0,
+    fDouble: decodeDouble(json['fDouble']) ?? 0,
+    fFloat: decodeDouble(json['fFloat']) ?? 0,
+    fBool: json['fBool'] ?? false,
+    fBytes: decodeBytes(json['fBytes']),
+    fKingdom:
+        decodeEnum(json['fKingdom'], ComplianceData_LifeKingdom.fromJson) ??
+        ComplianceData_LifeKingdom.$default,
+    fChild: decode(json['fChild'], ComplianceDataChild.fromJson),
+    pString: json['pString'],
+    pInt32: json['pInt32'],
+    pDouble: decodeDouble(json['pDouble']),
+    pBool: json['pBool'],
+    pKingdom: decodeEnum(json['pKingdom'], ComplianceData_LifeKingdom.fromJson),
+    pChild: decode(json['pChild'], ComplianceDataChild.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (fString.isNotDefault) 'fString': fString,
-      if (fInt32.isNotDefault) 'fInt32': fInt32,
-      if (fSint32.isNotDefault) 'fSint32': fSint32,
-      if (fSfixed32.isNotDefault) 'fSfixed32': fSfixed32,
-      if (fUint32.isNotDefault) 'fUint32': fUint32,
-      if (fFixed32.isNotDefault) 'fFixed32': fFixed32,
-      if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
-      if (fSint64.isNotDefault) 'fSint64': encodeInt64(fSint64),
-      if (fSfixed64.isNotDefault) 'fSfixed64': encodeInt64(fSfixed64),
-      if (fUint64.isNotDefault) 'fUint64': encodeInt64(fUint64),
-      if (fFixed64.isNotDefault) 'fFixed64': encodeInt64(fFixed64),
-      if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
-      if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
-      if (fBool.isNotDefault) 'fBool': fBool,
-      if (fBytes != null) 'fBytes': encodeBytes(fBytes),
-      if (fKingdom.isNotDefault) 'fKingdom': fKingdom.toJson(),
-      if (fChild != null) 'fChild': fChild!.toJson(),
-      if (pString != null) 'pString': pString,
-      if (pInt32 != null) 'pInt32': pInt32,
-      if (pDouble != null) 'pDouble': encodeDouble(pDouble),
-      if (pBool != null) 'pBool': pBool,
-      if (pKingdom != null) 'pKingdom': pKingdom!.toJson(),
-      if (pChild != null) 'pChild': pChild!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (fString.isNotDefault) 'fString': fString,
+    if (fInt32.isNotDefault) 'fInt32': fInt32,
+    if (fSint32.isNotDefault) 'fSint32': fSint32,
+    if (fSfixed32.isNotDefault) 'fSfixed32': fSfixed32,
+    if (fUint32.isNotDefault) 'fUint32': fUint32,
+    if (fFixed32.isNotDefault) 'fFixed32': fFixed32,
+    if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
+    if (fSint64.isNotDefault) 'fSint64': encodeInt64(fSint64),
+    if (fSfixed64.isNotDefault) 'fSfixed64': encodeInt64(fSfixed64),
+    if (fUint64.isNotDefault) 'fUint64': encodeInt64(fUint64),
+    if (fFixed64.isNotDefault) 'fFixed64': encodeInt64(fFixed64),
+    if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
+    if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
+    if (fBool.isNotDefault) 'fBool': fBool,
+    if (fBytes != null) 'fBytes': encodeBytes(fBytes),
+    if (fKingdom.isNotDefault) 'fKingdom': fKingdom.toJson(),
+    if (fChild != null) 'fChild': fChild!.toJson(),
+    if (pString != null) 'pString': pString,
+    if (pInt32 != null) 'pInt32': pInt32,
+    if (pDouble != null) 'pDouble': encodeDouble(pDouble),
+    if (pBool != null) 'pBool': pBool,
+    if (pKingdom != null) 'pKingdom': pKingdom!.toJson(),
+    if (pChild != null) 'pChild': pChild!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2650,44 +2668,41 @@ final class ComplianceDataChild extends ProtoMessage {
     this.pChild,
   }) : super(fullyQualifiedName);
 
-  factory ComplianceDataChild.fromJson(Map<String, dynamic> json) {
-    return ComplianceDataChild(
-      fString: json['fString'] ?? '',
-      fFloat: decodeDouble(json['fFloat']) ?? 0,
-      fDouble: decodeDouble(json['fDouble']) ?? 0,
-      fBool: json['fBool'] ?? false,
-      fContinent:
-          decodeEnum(json['fContinent'], Continent.fromJson) ??
-          Continent.$default,
-      fChild: decode(json['fChild'], ComplianceDataGrandchild.fromJson),
-      pString: json['pString'],
-      pFloat: decodeDouble(json['pFloat']),
-      pDouble: decodeDouble(json['pDouble']),
-      pBool: json['pBool'],
-      pContinent:
-          decodeEnum(json['pContinent'], Continent.fromJson) ??
-          Continent.$default,
-      pChild: decode(json['pChild'], ComplianceDataGrandchild.fromJson),
-    );
-  }
+  factory ComplianceDataChild.fromJson(Map<String, dynamic> json) =>
+      ComplianceDataChild(
+        fString: json['fString'] ?? '',
+        fFloat: decodeDouble(json['fFloat']) ?? 0,
+        fDouble: decodeDouble(json['fDouble']) ?? 0,
+        fBool: json['fBool'] ?? false,
+        fContinent:
+            decodeEnum(json['fContinent'], Continent.fromJson) ??
+            Continent.$default,
+        fChild: decode(json['fChild'], ComplianceDataGrandchild.fromJson),
+        pString: json['pString'],
+        pFloat: decodeDouble(json['pFloat']),
+        pDouble: decodeDouble(json['pDouble']),
+        pBool: json['pBool'],
+        pContinent:
+            decodeEnum(json['pContinent'], Continent.fromJson) ??
+            Continent.$default,
+        pChild: decode(json['pChild'], ComplianceDataGrandchild.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (fString.isNotDefault) 'fString': fString,
-      if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
-      if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
-      if (fBool.isNotDefault) 'fBool': fBool,
-      if (fContinent.isNotDefault) 'fContinent': fContinent.toJson(),
-      if (fChild != null) 'fChild': fChild!.toJson(),
-      if (pString != null) 'pString': pString,
-      if (pFloat != null) 'pFloat': encodeDouble(pFloat),
-      if (pDouble != null) 'pDouble': encodeDouble(pDouble),
-      if (pBool != null) 'pBool': pBool,
-      if (pContinent.isNotDefault) 'pContinent': pContinent.toJson(),
-      if (pChild != null) 'pChild': pChild!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (fString.isNotDefault) 'fString': fString,
+    if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
+    if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
+    if (fBool.isNotDefault) 'fBool': fBool,
+    if (fContinent.isNotDefault) 'fContinent': fContinent.toJson(),
+    if (fChild != null) 'fChild': fChild!.toJson(),
+    if (pString != null) 'pString': pString,
+    if (pFloat != null) 'pFloat': encodeDouble(pFloat),
+    if (pDouble != null) 'pDouble': encodeDouble(pDouble),
+    if (pBool != null) 'pBool': pBool,
+    if (pContinent.isNotDefault) 'pContinent': pContinent.toJson(),
+    if (pChild != null) 'pChild': pChild!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2723,22 +2738,19 @@ final class ComplianceDataGrandchild extends ProtoMessage {
     this.fBool = false,
   }) : super(fullyQualifiedName);
 
-  factory ComplianceDataGrandchild.fromJson(Map<String, dynamic> json) {
-    return ComplianceDataGrandchild(
-      fString: json['fString'] ?? '',
-      fDouble: decodeDouble(json['fDouble']) ?? 0,
-      fBool: json['fBool'] ?? false,
-    );
-  }
+  factory ComplianceDataGrandchild.fromJson(Map<String, dynamic> json) =>
+      ComplianceDataGrandchild(
+        fString: json['fString'] ?? '',
+        fDouble: decodeDouble(json['fDouble']) ?? 0,
+        fBool: json['fBool'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (fString.isNotDefault) 'fString': fString,
-      if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
-      if (fBool.isNotDefault) 'fBool': fBool,
-    };
-  }
+  Object toJson() => {
+    if (fString.isNotDefault) 'fString': fString,
+    if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
+    if (fBool.isNotDefault) 'fBool': fBool,
+  };
 
   @override
   String toString() {
@@ -2760,14 +2772,11 @@ final class EnumRequest extends ProtoMessage {
 
   EnumRequest({this.unknownEnum = false}) : super(fullyQualifiedName);
 
-  factory EnumRequest.fromJson(Map<String, dynamic> json) {
-    return EnumRequest(unknownEnum: json['unknownEnum'] ?? false);
-  }
+  factory EnumRequest.fromJson(Map<String, dynamic> json) =>
+      EnumRequest(unknownEnum: json['unknownEnum'] ?? false);
 
   @override
-  Object toJson() {
-    return {if (unknownEnum.isNotDefault) 'unknownEnum': unknownEnum};
-  }
+  Object toJson() => {if (unknownEnum.isNotDefault) 'unknownEnum': unknownEnum};
 
   @override
   String toString() {
@@ -2789,22 +2798,17 @@ final class EnumResponse extends ProtoMessage {
   EnumResponse({this.request, this.continent = Continent.$default})
     : super(fullyQualifiedName);
 
-  factory EnumResponse.fromJson(Map<String, dynamic> json) {
-    return EnumResponse(
-      request: decode(json['request'], EnumRequest.fromJson),
-      continent:
-          decodeEnum(json['continent'], Continent.fromJson) ??
-          Continent.$default,
-    );
-  }
+  factory EnumResponse.fromJson(Map<String, dynamic> json) => EnumResponse(
+    request: decode(json['request'], EnumRequest.fromJson),
+    continent:
+        decodeEnum(json['continent'], Continent.fromJson) ?? Continent.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (request != null) 'request': request!.toJson(),
-      if (continent.isNotDefault) 'continent': continent.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (request != null) 'request': request!.toJson(),
+    if (continent.isNotDefault) 'continent': continent.toJson(),
+  };
 
   @override
   String toString() {
@@ -2852,31 +2856,27 @@ final class EchoRequest extends ProtoMessage {
     this.otherRequestId,
   }) : super(fullyQualifiedName);
 
-  factory EchoRequest.fromJson(Map<String, dynamic> json) {
-    return EchoRequest(
-      content: json['content'],
-      error: decode(json['error'], Status.fromJson),
-      severity:
-          decodeEnum(json['severity'], Severity.fromJson) ?? Severity.$default,
-      header: json['header'] ?? '',
-      otherHeader: json['otherHeader'] ?? '',
-      requestId: json['requestId'] ?? '',
-      otherRequestId: json['otherRequestId'],
-    );
-  }
+  factory EchoRequest.fromJson(Map<String, dynamic> json) => EchoRequest(
+    content: json['content'],
+    error: decode(json['error'], Status.fromJson),
+    severity:
+        decodeEnum(json['severity'], Severity.fromJson) ?? Severity.$default,
+    header: json['header'] ?? '',
+    otherHeader: json['otherHeader'] ?? '',
+    requestId: json['requestId'] ?? '',
+    otherRequestId: json['otherRequestId'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (content != null) 'content': content,
-      if (error != null) 'error': error!.toJson(),
-      if (severity.isNotDefault) 'severity': severity.toJson(),
-      if (header.isNotDefault) 'header': header,
-      if (otherHeader.isNotDefault) 'otherHeader': otherHeader,
-      if (requestId.isNotDefault) 'requestId': requestId,
-      if (otherRequestId != null) 'otherRequestId': otherRequestId,
-    };
-  }
+  Object toJson() => {
+    if (content != null) 'content': content,
+    if (error != null) 'error': error!.toJson(),
+    if (severity.isNotDefault) 'severity': severity.toJson(),
+    if (header.isNotDefault) 'header': header,
+    if (otherHeader.isNotDefault) 'otherHeader': otherHeader,
+    if (requestId.isNotDefault) 'requestId': requestId,
+    if (otherRequestId != null) 'otherRequestId': otherRequestId,
+  };
 
   @override
   String toString() {
@@ -2916,25 +2916,21 @@ final class EchoResponse extends ProtoMessage {
     this.otherRequestId = '',
   }) : super(fullyQualifiedName);
 
-  factory EchoResponse.fromJson(Map<String, dynamic> json) {
-    return EchoResponse(
-      content: json['content'] ?? '',
-      severity:
-          decodeEnum(json['severity'], Severity.fromJson) ?? Severity.$default,
-      requestId: json['requestId'] ?? '',
-      otherRequestId: json['otherRequestId'] ?? '',
-    );
-  }
+  factory EchoResponse.fromJson(Map<String, dynamic> json) => EchoResponse(
+    content: json['content'] ?? '',
+    severity:
+        decodeEnum(json['severity'], Severity.fromJson) ?? Severity.$default,
+    requestId: json['requestId'] ?? '',
+    otherRequestId: json['otherRequestId'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (content.isNotDefault) 'content': content,
-      if (severity.isNotDefault) 'severity': severity.toJson(),
-      if (requestId.isNotDefault) 'requestId': requestId,
-      if (otherRequestId.isNotDefault) 'otherRequestId': otherRequestId,
-    };
-  }
+  Object toJson() => {
+    if (content.isNotDefault) 'content': content,
+    if (severity.isNotDefault) 'severity': severity.toJson(),
+    if (requestId.isNotDefault) 'requestId': requestId,
+    if (otherRequestId.isNotDefault) 'otherRequestId': otherRequestId,
+  };
 
   @override
   String toString() {
@@ -2966,20 +2962,17 @@ final class EchoErrorDetailsRequest extends ProtoMessage {
     this.multiDetailText = const [],
   }) : super(fullyQualifiedName);
 
-  factory EchoErrorDetailsRequest.fromJson(Map<String, dynamic> json) {
-    return EchoErrorDetailsRequest(
-      singleDetailText: json['singleDetailText'] ?? '',
-      multiDetailText: decodeList(json['multiDetailText']) ?? [],
-    );
-  }
+  factory EchoErrorDetailsRequest.fromJson(Map<String, dynamic> json) =>
+      EchoErrorDetailsRequest(
+        singleDetailText: json['singleDetailText'] ?? '',
+        multiDetailText: decodeList(json['multiDetailText']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (singleDetailText.isNotDefault) 'singleDetailText': singleDetailText,
-      if (multiDetailText.isNotDefault) 'multiDetailText': multiDetailText,
-    };
-  }
+  Object toJson() => {
+    if (singleDetailText.isNotDefault) 'singleDetailText': singleDetailText,
+    if (multiDetailText.isNotDefault) 'multiDetailText': multiDetailText,
+  };
 
   @override
   String toString() {
@@ -3000,26 +2993,23 @@ final class EchoErrorDetailsResponse extends ProtoMessage {
   EchoErrorDetailsResponse({this.singleDetail, this.multipleDetails})
     : super(fullyQualifiedName);
 
-  factory EchoErrorDetailsResponse.fromJson(Map<String, dynamic> json) {
-    return EchoErrorDetailsResponse(
-      singleDetail: decode(
-        json['singleDetail'],
-        EchoErrorDetailsResponse_SingleDetail.fromJson,
-      ),
-      multipleDetails: decode(
-        json['multipleDetails'],
-        EchoErrorDetailsResponse_MultipleDetails.fromJson,
-      ),
-    );
-  }
+  factory EchoErrorDetailsResponse.fromJson(Map<String, dynamic> json) =>
+      EchoErrorDetailsResponse(
+        singleDetail: decode(
+          json['singleDetail'],
+          EchoErrorDetailsResponse_SingleDetail.fromJson,
+        ),
+        multipleDetails: decode(
+          json['multipleDetails'],
+          EchoErrorDetailsResponse_MultipleDetails.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (singleDetail != null) 'singleDetail': singleDetail!.toJson(),
-      if (multipleDetails != null) 'multipleDetails': multipleDetails!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (singleDetail != null) 'singleDetail': singleDetail!.toJson(),
+    if (multipleDetails != null) 'multipleDetails': multipleDetails!.toJson(),
+  };
 
   @override
   String toString() => 'EchoErrorDetailsResponse()';
@@ -3036,16 +3026,12 @@ final class EchoErrorDetailsResponse_SingleDetail extends ProtoMessage {
 
   factory EchoErrorDetailsResponse_SingleDetail.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return EchoErrorDetailsResponse_SingleDetail(
-      error: decode(json['error'], ErrorWithSingleDetail.fromJson),
-    );
-  }
+  ) => EchoErrorDetailsResponse_SingleDetail(
+    error: decode(json['error'], ErrorWithSingleDetail.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (error != null) 'error': error!.toJson()};
-  }
+  Object toJson() => {if (error != null) 'error': error!.toJson()};
 
   @override
   String toString() => 'SingleDetail()';
@@ -3062,16 +3048,12 @@ final class EchoErrorDetailsResponse_MultipleDetails extends ProtoMessage {
 
   factory EchoErrorDetailsResponse_MultipleDetails.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return EchoErrorDetailsResponse_MultipleDetails(
-      error: decode(json['error'], ErrorWithMultipleDetails.fromJson),
-    );
-  }
+  ) => EchoErrorDetailsResponse_MultipleDetails(
+    error: decode(json['error'], ErrorWithMultipleDetails.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (error != null) 'error': error!.toJson()};
-  }
+  Object toJson() => {if (error != null) 'error': error!.toJson()};
 
   @override
   String toString() => 'MultipleDetails()';
@@ -3085,16 +3067,11 @@ final class ErrorWithSingleDetail extends ProtoMessage {
 
   ErrorWithSingleDetail({this.details}) : super(fullyQualifiedName);
 
-  factory ErrorWithSingleDetail.fromJson(Map<String, dynamic> json) {
-    return ErrorWithSingleDetail(
-      details: decode(json['details'], Any.fromJson),
-    );
-  }
+  factory ErrorWithSingleDetail.fromJson(Map<String, dynamic> json) =>
+      ErrorWithSingleDetail(details: decode(json['details'], Any.fromJson));
 
   @override
-  Object toJson() {
-    return {if (details != null) 'details': details!.toJson()};
-  }
+  Object toJson() => {if (details != null) 'details': details!.toJson()};
 
   @override
   String toString() => 'ErrorWithSingleDetail()';
@@ -3109,16 +3086,13 @@ final class ErrorWithMultipleDetails extends ProtoMessage {
   ErrorWithMultipleDetails({this.details = const []})
     : super(fullyQualifiedName);
 
-  factory ErrorWithMultipleDetails.fromJson(Map<String, dynamic> json) {
-    return ErrorWithMultipleDetails(
-      details: decodeListMessage(json['details'], Any.fromJson) ?? [],
-    );
-  }
+  factory ErrorWithMultipleDetails.fromJson(Map<String, dynamic> json) =>
+      ErrorWithMultipleDetails(
+        details: decodeListMessage(json['details'], Any.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (details.isNotDefault) 'details': encodeList(details)};
-  }
+  Object toJson() => {if (details.isNotDefault) 'details': encodeList(details)};
 
   @override
   String toString() => 'ErrorWithMultipleDetails()';
@@ -3135,14 +3109,11 @@ final class PoetryError extends ProtoMessage {
 
   PoetryError({this.poem = ''}) : super(fullyQualifiedName);
 
-  factory PoetryError.fromJson(Map<String, dynamic> json) {
-    return PoetryError(poem: json['poem'] ?? '');
-  }
+  factory PoetryError.fromJson(Map<String, dynamic> json) =>
+      PoetryError(poem: json['poem'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (poem.isNotDefault) 'poem': poem};
-  }
+  Object toJson() => {if (poem.isNotDefault) 'poem': poem};
 
   @override
   String toString() {
@@ -3162,14 +3133,11 @@ final class FailEchoWithDetailsRequest extends ProtoMessage {
 
   FailEchoWithDetailsRequest({this.message = ''}) : super(fullyQualifiedName);
 
-  factory FailEchoWithDetailsRequest.fromJson(Map<String, dynamic> json) {
-    return FailEchoWithDetailsRequest(message: json['message'] ?? '');
-  }
+  factory FailEchoWithDetailsRequest.fromJson(Map<String, dynamic> json) =>
+      FailEchoWithDetailsRequest(message: json['message'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (message.isNotDefault) 'message': message};
-  }
+  Object toJson() => {if (message.isNotDefault) 'message': message};
 
   @override
   String toString() {
@@ -3186,14 +3154,11 @@ final class FailEchoWithDetailsResponse extends ProtoMessage {
 
   FailEchoWithDetailsResponse() : super(fullyQualifiedName);
 
-  factory FailEchoWithDetailsResponse.fromJson(Map<String, dynamic> json) {
-    return FailEchoWithDetailsResponse();
-  }
+  factory FailEchoWithDetailsResponse.fromJson(Map<String, dynamic> json) =>
+      FailEchoWithDetailsResponse();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'FailEchoWithDetailsResponse()';
@@ -3216,22 +3181,18 @@ final class ExpandRequest extends ProtoMessage {
   ExpandRequest({this.content = '', this.error, this.streamWaitTime})
     : super(fullyQualifiedName);
 
-  factory ExpandRequest.fromJson(Map<String, dynamic> json) {
-    return ExpandRequest(
-      content: json['content'] ?? '',
-      error: decode(json['error'], Status.fromJson),
-      streamWaitTime: decodeCustom(json['streamWaitTime'], Duration.fromJson),
-    );
-  }
+  factory ExpandRequest.fromJson(Map<String, dynamic> json) => ExpandRequest(
+    content: json['content'] ?? '',
+    error: decode(json['error'], Status.fromJson),
+    streamWaitTime: decodeCustom(json['streamWaitTime'], Duration.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (content.isNotDefault) 'content': content,
-      if (error != null) 'error': error!.toJson(),
-      if (streamWaitTime != null) 'streamWaitTime': streamWaitTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (content.isNotDefault) 'content': content,
+    if (error != null) 'error': error!.toJson(),
+    if (streamWaitTime != null) 'streamWaitTime': streamWaitTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3260,22 +3221,19 @@ final class PagedExpandRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory PagedExpandRequest.fromJson(Map<String, dynamic> json) {
-    return PagedExpandRequest(
-      content: json['content'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory PagedExpandRequest.fromJson(Map<String, dynamic> json) =>
+      PagedExpandRequest(
+        content: json['content'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'content': content,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'content': content,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -3312,22 +3270,19 @@ final class PagedExpandLegacyRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory PagedExpandLegacyRequest.fromJson(Map<String, dynamic> json) {
-    return PagedExpandLegacyRequest(
-      content: json['content'] ?? '',
-      maxResults: json['maxResults'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory PagedExpandLegacyRequest.fromJson(Map<String, dynamic> json) =>
+      PagedExpandLegacyRequest(
+        content: json['content'] ?? '',
+        maxResults: json['maxResults'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'content': content,
-      if (maxResults.isNotDefault) 'maxResults': maxResults,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'content': content,
+    if (maxResults.isNotDefault) 'maxResults': maxResults,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -3354,21 +3309,18 @@ final class PagedExpandResponse extends ProtoMessage {
   PagedExpandResponse({this.responses = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory PagedExpandResponse.fromJson(Map<String, dynamic> json) {
-    return PagedExpandResponse(
-      responses:
-          decodeListMessage(json['responses'], EchoResponse.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory PagedExpandResponse.fromJson(Map<String, dynamic> json) =>
+      PagedExpandResponse(
+        responses:
+            decodeListMessage(json['responses'], EchoResponse.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (responses.isNotDefault) 'responses': encodeList(responses),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (responses.isNotDefault) 'responses': encodeList(responses),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -3386,14 +3338,11 @@ final class PagedExpandResponseList extends ProtoMessage {
 
   PagedExpandResponseList({this.words = const []}) : super(fullyQualifiedName);
 
-  factory PagedExpandResponseList.fromJson(Map<String, dynamic> json) {
-    return PagedExpandResponseList(words: decodeList(json['words']) ?? []);
-  }
+  factory PagedExpandResponseList.fromJson(Map<String, dynamic> json) =>
+      PagedExpandResponseList(words: decodeList(json['words']) ?? []);
 
   @override
-  Object toJson() {
-    return {if (words.isNotDefault) 'words': words};
-  }
+  Object toJson() => {if (words.isNotDefault) 'words': words};
 
   @override
   String toString() => 'PagedExpandResponseList()';
@@ -3416,25 +3365,22 @@ final class PagedExpandLegacyMappedResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory PagedExpandLegacyMappedResponse.fromJson(Map<String, dynamic> json) {
-    return PagedExpandLegacyMappedResponse(
-      alphabetized:
-          decodeMapMessage(
-            json['alphabetized'],
-            PagedExpandResponseList.fromJson,
-          ) ??
-          {},
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory PagedExpandLegacyMappedResponse.fromJson(Map<String, dynamic> json) =>
+      PagedExpandLegacyMappedResponse(
+        alphabetized:
+            decodeMapMessage(
+              json['alphabetized'],
+              PagedExpandResponseList.fromJson,
+            ) ??
+            {},
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (alphabetized.isNotDefault) 'alphabetized': encodeMap(alphabetized),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (alphabetized.isNotDefault) 'alphabetized': encodeMap(alphabetized),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -3464,24 +3410,20 @@ final class WaitRequest extends ProtoMessage {
   WaitRequest({this.endTime, this.ttl, this.error, this.success})
     : super(fullyQualifiedName);
 
-  factory WaitRequest.fromJson(Map<String, dynamic> json) {
-    return WaitRequest(
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      ttl: decodeCustom(json['ttl'], Duration.fromJson),
-      error: decode(json['error'], Status.fromJson),
-      success: decode(json['success'], WaitResponse.fromJson),
-    );
-  }
+  factory WaitRequest.fromJson(Map<String, dynamic> json) => WaitRequest(
+    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+    ttl: decodeCustom(json['ttl'], Duration.fromJson),
+    error: decode(json['error'], Status.fromJson),
+    success: decode(json['success'], WaitResponse.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (endTime != null) 'endTime': endTime!.toJson(),
-      if (ttl != null) 'ttl': ttl!.toJson(),
-      if (error != null) 'error': error!.toJson(),
-      if (success != null) 'success': success!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (ttl != null) 'ttl': ttl!.toJson(),
+    if (error != null) 'error': error!.toJson(),
+    if (success != null) 'success': success!.toJson(),
+  };
 
   @override
   String toString() => 'WaitRequest()';
@@ -3497,14 +3439,11 @@ final class WaitResponse extends ProtoMessage {
 
   WaitResponse({this.content = ''}) : super(fullyQualifiedName);
 
-  factory WaitResponse.fromJson(Map<String, dynamic> json) {
-    return WaitResponse(content: json['content'] ?? '');
-  }
+  factory WaitResponse.fromJson(Map<String, dynamic> json) =>
+      WaitResponse(content: json['content'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (content.isNotDefault) 'content': content};
-  }
+  Object toJson() => {if (content.isNotDefault) 'content': content};
 
   @override
   String toString() {
@@ -3523,16 +3462,11 @@ final class WaitMetadata extends ProtoMessage {
 
   WaitMetadata({this.endTime}) : super(fullyQualifiedName);
 
-  factory WaitMetadata.fromJson(Map<String, dynamic> json) {
-    return WaitMetadata(
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-    );
-  }
+  factory WaitMetadata.fromJson(Map<String, dynamic> json) =>
+      WaitMetadata(endTime: decodeCustom(json['endTime'], Timestamp.fromJson));
 
   @override
-  Object toJson() {
-    return {if (endTime != null) 'endTime': endTime!.toJson()};
-  }
+  Object toJson() => {if (endTime != null) 'endTime': endTime!.toJson()};
 
   @override
   String toString() => 'WaitMetadata()';
@@ -3556,22 +3490,18 @@ final class BlockRequest extends ProtoMessage {
   BlockRequest({this.responseDelay, this.error, this.success})
     : super(fullyQualifiedName);
 
-  factory BlockRequest.fromJson(Map<String, dynamic> json) {
-    return BlockRequest(
-      responseDelay: decodeCustom(json['responseDelay'], Duration.fromJson),
-      error: decode(json['error'], Status.fromJson),
-      success: decode(json['success'], BlockResponse.fromJson),
-    );
-  }
+  factory BlockRequest.fromJson(Map<String, dynamic> json) => BlockRequest(
+    responseDelay: decodeCustom(json['responseDelay'], Duration.fromJson),
+    error: decode(json['error'], Status.fromJson),
+    success: decode(json['success'], BlockResponse.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (responseDelay != null) 'responseDelay': responseDelay!.toJson(),
-      if (error != null) 'error': error!.toJson(),
-      if (success != null) 'success': success!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (responseDelay != null) 'responseDelay': responseDelay!.toJson(),
+    if (error != null) 'error': error!.toJson(),
+    if (success != null) 'success': success!.toJson(),
+  };
 
   @override
   String toString() => 'BlockRequest()';
@@ -3588,14 +3518,11 @@ final class BlockResponse extends ProtoMessage {
 
   BlockResponse({this.content = ''}) : super(fullyQualifiedName);
 
-  factory BlockResponse.fromJson(Map<String, dynamic> json) {
-    return BlockResponse(content: json['content'] ?? '');
-  }
+  factory BlockResponse.fromJson(Map<String, dynamic> json) =>
+      BlockResponse(content: json['content'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (content.isNotDefault) 'content': content};
-  }
+  Object toJson() => {if (content.isNotDefault) 'content': content};
 
   @override
   String toString() {
@@ -3653,35 +3580,30 @@ final class User extends ProtoMessage {
     this.enableNotifications,
   }) : super(fullyQualifiedName);
 
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      email: json['email'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      age: json['age'],
-      heightFeet: decodeDouble(json['heightFeet']),
-      nickname: json['nickname'],
-      enableNotifications: json['enableNotifications'],
-    );
-  }
+  factory User.fromJson(Map<String, dynamic> json) => User(
+    name: json['name'] ?? '',
+    displayName: json['displayName'] ?? '',
+    email: json['email'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    age: json['age'],
+    heightFeet: decodeDouble(json['heightFeet']),
+    nickname: json['nickname'],
+    enableNotifications: json['enableNotifications'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      'displayName': displayName,
-      'email': email,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (age != null) 'age': age,
-      if (heightFeet != null) 'heightFeet': encodeDouble(heightFeet),
-      if (nickname != null) 'nickname': nickname,
-      if (enableNotifications != null)
-        'enableNotifications': enableNotifications,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    'displayName': displayName,
+    'email': email,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (age != null) 'age': age,
+    if (heightFeet != null) 'heightFeet': encodeDouble(heightFeet),
+    if (nickname != null) 'nickname': nickname,
+    if (enableNotifications != null) 'enableNotifications': enableNotifications,
+  };
 
   @override
   String toString() {
@@ -3710,14 +3632,11 @@ final class CreateUserRequest extends ProtoMessage {
 
   CreateUserRequest({this.user}) : super(fullyQualifiedName);
 
-  factory CreateUserRequest.fromJson(Map<String, dynamic> json) {
-    return CreateUserRequest(user: decode(json['user'], User.fromJson));
-  }
+  factory CreateUserRequest.fromJson(Map<String, dynamic> json) =>
+      CreateUserRequest(user: decode(json['user'], User.fromJson));
 
   @override
-  Object toJson() {
-    return {if (user != null) 'user': user!.toJson()};
-  }
+  Object toJson() => {if (user != null) 'user': user!.toJson()};
 
   @override
   String toString() => 'CreateUserRequest()';
@@ -3734,14 +3653,11 @@ final class GetUserRequest extends ProtoMessage {
 
   GetUserRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetUserRequest.fromJson(Map<String, dynamic> json) {
-    return GetUserRequest(name: json['name'] ?? '');
-  }
+  factory GetUserRequest.fromJson(Map<String, dynamic> json) =>
+      GetUserRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3765,20 +3681,17 @@ final class UpdateUserRequest extends ProtoMessage {
 
   UpdateUserRequest({this.user, this.updateMask}) : super(fullyQualifiedName);
 
-  factory UpdateUserRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateUserRequest(
-      user: decode(json['user'], User.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateUserRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateUserRequest(
+        user: decode(json['user'], User.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (user != null) 'user': user!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (user != null) 'user': user!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateUserRequest()';
@@ -3795,14 +3708,11 @@ final class DeleteUserRequest extends ProtoMessage {
 
   DeleteUserRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteUserRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteUserRequest(name: json['name'] ?? '');
-  }
+  factory DeleteUserRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteUserRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -3829,20 +3739,17 @@ final class ListUsersRequest extends ProtoMessage {
   ListUsersRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListUsersRequest.fromJson(Map<String, dynamic> json) {
-    return ListUsersRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListUsersRequest.fromJson(Map<String, dynamic> json) =>
+      ListUsersRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -3869,20 +3776,17 @@ final class ListUsersResponse extends ProtoMessage {
   ListUsersResponse({this.users = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListUsersResponse.fromJson(Map<String, dynamic> json) {
-    return ListUsersResponse(
-      users: decodeListMessage(json['users'], User.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListUsersResponse.fromJson(Map<String, dynamic> json) =>
+      ListUsersResponse(
+        users: decodeListMessage(json['users'], User.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (users.isNotDefault) 'users': encodeList(users),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (users.isNotDefault) 'users': encodeList(users),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -3918,26 +3822,22 @@ final class Room extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory Room.fromJson(Map<String, dynamic> json) {
-    return Room(
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      description: json['description'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    );
-  }
+  factory Room.fromJson(Map<String, dynamic> json) => Room(
+    name: json['name'] ?? '',
+    displayName: json['displayName'] ?? '',
+    description: json['description'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      'displayName': displayName,
-      if (description.isNotDefault) 'description': description,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    'displayName': displayName,
+    if (description.isNotDefault) 'description': description,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3961,14 +3861,11 @@ final class CreateRoomRequest extends ProtoMessage {
 
   CreateRoomRequest({this.room}) : super(fullyQualifiedName);
 
-  factory CreateRoomRequest.fromJson(Map<String, dynamic> json) {
-    return CreateRoomRequest(room: decode(json['room'], Room.fromJson));
-  }
+  factory CreateRoomRequest.fromJson(Map<String, dynamic> json) =>
+      CreateRoomRequest(room: decode(json['room'], Room.fromJson));
 
   @override
-  Object toJson() {
-    return {if (room != null) 'room': room!.toJson()};
-  }
+  Object toJson() => {if (room != null) 'room': room!.toJson()};
 
   @override
   String toString() => 'CreateRoomRequest()';
@@ -3985,14 +3882,11 @@ final class GetRoomRequest extends ProtoMessage {
 
   GetRoomRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetRoomRequest.fromJson(Map<String, dynamic> json) {
-    return GetRoomRequest(name: json['name'] ?? '');
-  }
+  factory GetRoomRequest.fromJson(Map<String, dynamic> json) =>
+      GetRoomRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4016,20 +3910,17 @@ final class UpdateRoomRequest extends ProtoMessage {
 
   UpdateRoomRequest({this.room, this.updateMask}) : super(fullyQualifiedName);
 
-  factory UpdateRoomRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateRoomRequest(
-      room: decode(json['room'], Room.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateRoomRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateRoomRequest(
+        room: decode(json['room'], Room.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (room != null) 'room': room!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (room != null) 'room': room!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateRoomRequest()';
@@ -4046,14 +3937,11 @@ final class DeleteRoomRequest extends ProtoMessage {
 
   DeleteRoomRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteRoomRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteRoomRequest(name: json['name'] ?? '');
-  }
+  factory DeleteRoomRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteRoomRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4080,20 +3968,17 @@ final class ListRoomsRequest extends ProtoMessage {
   ListRoomsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListRoomsRequest.fromJson(Map<String, dynamic> json) {
-    return ListRoomsRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListRoomsRequest.fromJson(Map<String, dynamic> json) =>
+      ListRoomsRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -4120,20 +4005,17 @@ final class ListRoomsResponse extends ProtoMessage {
   ListRoomsResponse({this.rooms = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListRoomsResponse.fromJson(Map<String, dynamic> json) {
-    return ListRoomsResponse(
-      rooms: decodeListMessage(json['rooms'], Room.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListRoomsResponse.fromJson(Map<String, dynamic> json) =>
+      ListRoomsResponse(
+        rooms: decodeListMessage(json['rooms'], Room.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (rooms.isNotDefault) 'rooms': encodeList(rooms),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (rooms.isNotDefault) 'rooms': encodeList(rooms),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -4186,32 +4068,28 @@ final class Blurb extends ProtoMessage {
     this.legacyUserId,
   }) : super(fullyQualifiedName);
 
-  factory Blurb.fromJson(Map<String, dynamic> json) {
-    return Blurb(
-      name: json['name'] ?? '',
-      user: json['user'] ?? '',
-      text: json['text'],
-      image: decodeBytes(json['image']),
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      legacyRoomId: json['legacyRoomId'],
-      legacyUserId: json['legacyUserId'],
-    );
-  }
+  factory Blurb.fromJson(Map<String, dynamic> json) => Blurb(
+    name: json['name'] ?? '',
+    user: json['user'] ?? '',
+    text: json['text'],
+    image: decodeBytes(json['image']),
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    legacyRoomId: json['legacyRoomId'],
+    legacyUserId: json['legacyUserId'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      'user': user,
-      if (text != null) 'text': text,
-      if (image != null) 'image': encodeBytes(image),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (legacyRoomId != null) 'legacyRoomId': legacyRoomId,
-      if (legacyUserId != null) 'legacyUserId': legacyUserId,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    'user': user,
+    if (text != null) 'text': text,
+    if (image != null) 'image': encodeBytes(image),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (legacyRoomId != null) 'legacyRoomId': legacyRoomId,
+    if (legacyUserId != null) 'legacyUserId': legacyUserId,
+  };
 
   @override
   String toString() {
@@ -4243,17 +4121,17 @@ final class CreateBlurbRequest extends ProtoMessage {
   CreateBlurbRequest({required this.parent, this.blurb})
     : super(fullyQualifiedName);
 
-  factory CreateBlurbRequest.fromJson(Map<String, dynamic> json) {
-    return CreateBlurbRequest(
-      parent: json['parent'] ?? '',
-      blurb: decode(json['blurb'], Blurb.fromJson),
-    );
-  }
+  factory CreateBlurbRequest.fromJson(Map<String, dynamic> json) =>
+      CreateBlurbRequest(
+        parent: json['parent'] ?? '',
+        blurb: decode(json['blurb'], Blurb.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {'parent': parent, if (blurb != null) 'blurb': blurb!.toJson()};
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (blurb != null) 'blurb': blurb!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4273,14 +4151,11 @@ final class GetBlurbRequest extends ProtoMessage {
 
   GetBlurbRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetBlurbRequest.fromJson(Map<String, dynamic> json) {
-    return GetBlurbRequest(name: json['name'] ?? '');
-  }
+  factory GetBlurbRequest.fromJson(Map<String, dynamic> json) =>
+      GetBlurbRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4304,20 +4179,17 @@ final class UpdateBlurbRequest extends ProtoMessage {
 
   UpdateBlurbRequest({this.blurb, this.updateMask}) : super(fullyQualifiedName);
 
-  factory UpdateBlurbRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateBlurbRequest(
-      blurb: decode(json['blurb'], Blurb.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateBlurbRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateBlurbRequest(
+        blurb: decode(json['blurb'], Blurb.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (blurb != null) 'blurb': blurb!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (blurb != null) 'blurb': blurb!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateBlurbRequest()';
@@ -4334,14 +4206,11 @@ final class DeleteBlurbRequest extends ProtoMessage {
 
   DeleteBlurbRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteBlurbRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteBlurbRequest(name: json['name'] ?? '');
-  }
+  factory DeleteBlurbRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteBlurbRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4375,22 +4244,19 @@ final class ListBlurbsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListBlurbsRequest.fromJson(Map<String, dynamic> json) {
-    return ListBlurbsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListBlurbsRequest.fromJson(Map<String, dynamic> json) =>
+      ListBlurbsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -4421,20 +4287,17 @@ final class ListBlurbsResponse extends ProtoMessage {
   ListBlurbsResponse({this.blurbs = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListBlurbsResponse.fromJson(Map<String, dynamic> json) {
-    return ListBlurbsResponse(
-      blurbs: decodeListMessage(json['blurbs'], Blurb.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListBlurbsResponse.fromJson(Map<String, dynamic> json) =>
+      ListBlurbsResponse(
+        blurbs: decodeListMessage(json['blurbs'], Blurb.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (blurbs.isNotDefault) 'blurbs': encodeList(blurbs),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (blurbs.isNotDefault) 'blurbs': encodeList(blurbs),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -4475,24 +4338,21 @@ final class SearchBlurbsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory SearchBlurbsRequest.fromJson(Map<String, dynamic> json) {
-    return SearchBlurbsRequest(
-      query: json['query'] ?? '',
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory SearchBlurbsRequest.fromJson(Map<String, dynamic> json) =>
+      SearchBlurbsRequest(
+        query: json['query'] ?? '',
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'query': query,
-      if (parent.isNotDefault) 'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'query': query,
+    if (parent.isNotDefault) 'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -4517,16 +4377,13 @@ final class SearchBlurbsMetadata extends ProtoMessage {
 
   SearchBlurbsMetadata({this.retryInfo}) : super(fullyQualifiedName);
 
-  factory SearchBlurbsMetadata.fromJson(Map<String, dynamic> json) {
-    return SearchBlurbsMetadata(
-      retryInfo: decode(json['retryInfo'], RetryInfo.fromJson),
-    );
-  }
+  factory SearchBlurbsMetadata.fromJson(Map<String, dynamic> json) =>
+      SearchBlurbsMetadata(
+        retryInfo: decode(json['retryInfo'], RetryInfo.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {if (retryInfo != null) 'retryInfo': retryInfo!.toJson()};
-  }
+  Object toJson() => {if (retryInfo != null) 'retryInfo': retryInfo!.toJson()};
 
   @override
   String toString() => 'SearchBlurbsMetadata()';
@@ -4550,20 +4407,17 @@ final class SearchBlurbsResponse extends ProtoMessage {
   SearchBlurbsResponse({this.blurbs = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory SearchBlurbsResponse.fromJson(Map<String, dynamic> json) {
-    return SearchBlurbsResponse(
-      blurbs: decodeListMessage(json['blurbs'], Blurb.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory SearchBlurbsResponse.fromJson(Map<String, dynamic> json) =>
+      SearchBlurbsResponse(
+        blurbs: decodeListMessage(json['blurbs'], Blurb.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (blurbs.isNotDefault) 'blurbs': encodeList(blurbs),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (blurbs.isNotDefault) 'blurbs': encodeList(blurbs),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -4587,20 +4441,17 @@ final class StreamBlurbsRequest extends ProtoMessage {
   StreamBlurbsRequest({required this.name, required this.expireTime})
     : super(fullyQualifiedName);
 
-  factory StreamBlurbsRequest.fromJson(Map<String, dynamic> json) {
-    return StreamBlurbsRequest(
-      name: json['name'] ?? '',
-      expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
-    );
-  }
+  factory StreamBlurbsRequest.fromJson(Map<String, dynamic> json) =>
+      StreamBlurbsRequest(
+        name: json['name'] ?? '',
+        expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (expireTime != null) 'expireTime': expireTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (expireTime != null) 'expireTime': expireTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4626,22 +4477,19 @@ final class StreamBlurbsResponse extends ProtoMessage {
     this.action = StreamBlurbsResponse_Action.$default,
   }) : super(fullyQualifiedName);
 
-  factory StreamBlurbsResponse.fromJson(Map<String, dynamic> json) {
-    return StreamBlurbsResponse(
-      blurb: decode(json['blurb'], Blurb.fromJson),
-      action:
-          decodeEnum(json['action'], StreamBlurbsResponse_Action.fromJson) ??
-          StreamBlurbsResponse_Action.$default,
-    );
-  }
+  factory StreamBlurbsResponse.fromJson(Map<String, dynamic> json) =>
+      StreamBlurbsResponse(
+        blurb: decode(json['blurb'], Blurb.fromJson),
+        action:
+            decodeEnum(json['action'], StreamBlurbsResponse_Action.fromJson) ??
+            StreamBlurbsResponse_Action.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (blurb != null) 'blurb': blurb!.toJson(),
-      if (action.isNotDefault) 'action': action.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (blurb != null) 'blurb': blurb!.toJson(),
+    if (action.isNotDefault) 'action': action.toJson(),
+  };
 
   @override
   String toString() {
@@ -4690,14 +4538,11 @@ final class SendBlurbsResponse extends ProtoMessage {
 
   SendBlurbsResponse({this.names = const []}) : super(fullyQualifiedName);
 
-  factory SendBlurbsResponse.fromJson(Map<String, dynamic> json) {
-    return SendBlurbsResponse(names: decodeList(json['names']) ?? []);
-  }
+  factory SendBlurbsResponse.fromJson(Map<String, dynamic> json) =>
+      SendBlurbsResponse(names: decodeList(json['names']) ?? []);
 
   @override
-  Object toJson() {
-    return {if (names.isNotDefault) 'names': names};
-  }
+  Object toJson() => {if (names.isNotDefault) 'names': names};
 
   @override
   String toString() => 'SendBlurbsResponse()';
@@ -4718,20 +4563,16 @@ final class ConnectRequest extends ProtoMessage {
 
   ConnectRequest({this.config, this.blurb}) : super(fullyQualifiedName);
 
-  factory ConnectRequest.fromJson(Map<String, dynamic> json) {
-    return ConnectRequest(
-      config: decode(json['config'], ConnectRequest_ConnectConfig.fromJson),
-      blurb: decode(json['blurb'], Blurb.fromJson),
-    );
-  }
+  factory ConnectRequest.fromJson(Map<String, dynamic> json) => ConnectRequest(
+    config: decode(json['config'], ConnectRequest_ConnectConfig.fromJson),
+    blurb: decode(json['blurb'], Blurb.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (config != null) 'config': config!.toJson(),
-      if (blurb != null) 'blurb': blurb!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (config != null) 'config': config!.toJson(),
+    if (blurb != null) 'blurb': blurb!.toJson(),
+  };
 
   @override
   String toString() => 'ConnectRequest()';
@@ -4746,14 +4587,11 @@ final class ConnectRequest_ConnectConfig extends ProtoMessage {
 
   ConnectRequest_ConnectConfig({this.parent = ''}) : super(fullyQualifiedName);
 
-  factory ConnectRequest_ConnectConfig.fromJson(Map<String, dynamic> json) {
-    return ConnectRequest_ConnectConfig(parent: json['parent'] ?? '');
-  }
+  factory ConnectRequest_ConnectConfig.fromJson(Map<String, dynamic> json) =>
+      ConnectRequest_ConnectConfig(parent: json['parent'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (parent.isNotDefault) 'parent': parent};
-  }
+  Object toJson() => {if (parent.isNotDefault) 'parent': parent};
 
   @override
   String toString() {
@@ -4771,14 +4609,11 @@ final class RestError extends ProtoMessage {
 
   RestError({this.error}) : super(fullyQualifiedName);
 
-  factory RestError.fromJson(Map<String, dynamic> json) {
-    return RestError(error: decode(json['error'], RestError_Status.fromJson));
-  }
+  factory RestError.fromJson(Map<String, dynamic> json) =>
+      RestError(error: decode(json['error'], RestError_Status.fromJson));
 
   @override
-  Object toJson() {
-    return {if (error != null) 'error': error!.toJson()};
-  }
+  Object toJson() => {if (error != null) 'error': error!.toJson()};
 
   @override
   String toString() => 'RestError()';
@@ -4807,24 +4642,21 @@ final class RestError_Status extends ProtoMessage {
     this.details = const [],
   }) : super(fullyQualifiedName);
 
-  factory RestError_Status.fromJson(Map<String, dynamic> json) {
-    return RestError_Status(
-      code: json['code'] ?? 0,
-      message: json['message'] ?? '',
-      status: decodeEnum(json['status'], Code.fromJson) ?? Code.$default,
-      details: decodeListMessage(json['details'], Any.fromJson) ?? [],
-    );
-  }
+  factory RestError_Status.fromJson(Map<String, dynamic> json) =>
+      RestError_Status(
+        code: json['code'] ?? 0,
+        message: json['message'] ?? '',
+        status: decodeEnum(json['status'], Code.fromJson) ?? Code.$default,
+        details: decodeListMessage(json['details'], Any.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (code.isNotDefault) 'code': code,
-      if (message.isNotDefault) 'message': message,
-      if (status.isNotDefault) 'status': status.toJson(),
-      if (details.isNotDefault) 'details': encodeList(details),
-    };
-  }
+  Object toJson() => {
+    if (code.isNotDefault) 'code': code,
+    if (message.isNotDefault) 'message': message,
+    if (status.isNotDefault) 'status': status.toJson(),
+    if (details.isNotDefault) 'details': encodeList(details),
+  };
 
   @override
   String toString() {
@@ -4849,22 +4681,17 @@ final class Sequence extends ProtoMessage {
   Sequence({this.name = '', this.responses = const []})
     : super(fullyQualifiedName);
 
-  factory Sequence.fromJson(Map<String, dynamic> json) {
-    return Sequence(
-      name: json['name'] ?? '',
-      responses:
-          decodeListMessage(json['responses'], Sequence_Response.fromJson) ??
-          [],
-    );
-  }
+  factory Sequence.fromJson(Map<String, dynamic> json) => Sequence(
+    name: json['name'] ?? '',
+    responses:
+        decodeListMessage(json['responses'], Sequence_Response.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (responses.isNotDefault) 'responses': encodeList(responses),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (responses.isNotDefault) 'responses': encodeList(responses),
+  };
 
   @override
   String toString() {
@@ -4886,20 +4713,17 @@ final class Sequence_Response extends ProtoMessage {
 
   Sequence_Response({this.status, this.delay}) : super(fullyQualifiedName);
 
-  factory Sequence_Response.fromJson(Map<String, dynamic> json) {
-    return Sequence_Response(
-      status: decode(json['status'], Status.fromJson),
-      delay: decodeCustom(json['delay'], Duration.fromJson),
-    );
-  }
+  factory Sequence_Response.fromJson(Map<String, dynamic> json) =>
+      Sequence_Response(
+        status: decode(json['status'], Status.fromJson),
+        delay: decodeCustom(json['delay'], Duration.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (status != null) 'status': status!.toJson(),
-      if (delay != null) 'delay': delay!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (status != null) 'status': status!.toJson(),
+    if (delay != null) 'delay': delay!.toJson(),
+  };
 
   @override
   String toString() => 'Response()';
@@ -4924,27 +4748,24 @@ final class StreamingSequence extends ProtoMessage {
     this.responses = const [],
   }) : super(fullyQualifiedName);
 
-  factory StreamingSequence.fromJson(Map<String, dynamic> json) {
-    return StreamingSequence(
-      name: json['name'] ?? '',
-      content: json['content'] ?? '',
-      responses:
-          decodeListMessage(
-            json['responses'],
-            StreamingSequence_Response.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory StreamingSequence.fromJson(Map<String, dynamic> json) =>
+      StreamingSequence(
+        name: json['name'] ?? '',
+        content: json['content'] ?? '',
+        responses:
+            decodeListMessage(
+              json['responses'],
+              StreamingSequence_Response.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (content.isNotDefault) 'content': content,
-      if (responses.isNotDefault) 'responses': encodeList(responses),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (content.isNotDefault) 'content': content,
+    if (responses.isNotDefault) 'responses': encodeList(responses),
+  };
 
   @override
   String toString() {
@@ -4970,22 +4791,19 @@ final class StreamingSequence_Response extends ProtoMessage {
   StreamingSequence_Response({this.status, this.delay, this.responseIndex = 0})
     : super(fullyQualifiedName);
 
-  factory StreamingSequence_Response.fromJson(Map<String, dynamic> json) {
-    return StreamingSequence_Response(
-      status: decode(json['status'], Status.fromJson),
-      delay: decodeCustom(json['delay'], Duration.fromJson),
-      responseIndex: json['responseIndex'] ?? 0,
-    );
-  }
+  factory StreamingSequence_Response.fromJson(Map<String, dynamic> json) =>
+      StreamingSequence_Response(
+        status: decode(json['status'], Status.fromJson),
+        delay: decodeCustom(json['delay'], Duration.fromJson),
+        responseIndex: json['responseIndex'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (status != null) 'status': status!.toJson(),
-      if (delay != null) 'delay': delay!.toJson(),
-      if (responseIndex.isNotDefault) 'responseIndex': responseIndex,
-    };
-  }
+  Object toJson() => {
+    if (status != null) 'status': status!.toJson(),
+    if (delay != null) 'delay': delay!.toJson(),
+    if (responseIndex.isNotDefault) 'responseIndex': responseIndex,
+  };
 
   @override
   String toString() {
@@ -5006,25 +4824,22 @@ final class StreamingSequenceReport extends ProtoMessage {
   StreamingSequenceReport({this.name = '', this.attempts = const []})
     : super(fullyQualifiedName);
 
-  factory StreamingSequenceReport.fromJson(Map<String, dynamic> json) {
-    return StreamingSequenceReport(
-      name: json['name'] ?? '',
-      attempts:
-          decodeListMessage(
-            json['attempts'],
-            StreamingSequenceReport_Attempt.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory StreamingSequenceReport.fromJson(Map<String, dynamic> json) =>
+      StreamingSequenceReport(
+        name: json['name'] ?? '',
+        attempts:
+            decodeListMessage(
+              json['attempts'],
+              StreamingSequenceReport_Attempt.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (attempts.isNotDefault) 'attempts': encodeList(attempts),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (attempts.isNotDefault) 'attempts': encodeList(attempts),
+  };
 
   @override
   String toString() {
@@ -5063,29 +4878,26 @@ final class StreamingSequenceReport_Attempt extends ProtoMessage {
     this.status,
   }) : super(fullyQualifiedName);
 
-  factory StreamingSequenceReport_Attempt.fromJson(Map<String, dynamic> json) {
-    return StreamingSequenceReport_Attempt(
-      attemptNumber: json['attemptNumber'] ?? 0,
-      attemptDeadline: decodeCustom(
-        json['attemptDeadline'],
-        Timestamp.fromJson,
-      ),
-      responseTime: decodeCustom(json['responseTime'], Timestamp.fromJson),
-      attemptDelay: decodeCustom(json['attemptDelay'], Duration.fromJson),
-      status: decode(json['status'], Status.fromJson),
-    );
-  }
+  factory StreamingSequenceReport_Attempt.fromJson(Map<String, dynamic> json) =>
+      StreamingSequenceReport_Attempt(
+        attemptNumber: json['attemptNumber'] ?? 0,
+        attemptDeadline: decodeCustom(
+          json['attemptDeadline'],
+          Timestamp.fromJson,
+        ),
+        responseTime: decodeCustom(json['responseTime'], Timestamp.fromJson),
+        attemptDelay: decodeCustom(json['attemptDelay'], Duration.fromJson),
+        status: decode(json['status'], Status.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
-      if (attemptDeadline != null) 'attemptDeadline': attemptDeadline!.toJson(),
-      if (responseTime != null) 'responseTime': responseTime!.toJson(),
-      if (attemptDelay != null) 'attemptDelay': attemptDelay!.toJson(),
-      if (status != null) 'status': status!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
+    if (attemptDeadline != null) 'attemptDeadline': attemptDeadline!.toJson(),
+    if (responseTime != null) 'responseTime': responseTime!.toJson(),
+    if (attemptDelay != null) 'attemptDelay': attemptDelay!.toJson(),
+    if (status != null) 'status': status!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5106,25 +4918,18 @@ final class SequenceReport extends ProtoMessage {
   SequenceReport({this.name = '', this.attempts = const []})
     : super(fullyQualifiedName);
 
-  factory SequenceReport.fromJson(Map<String, dynamic> json) {
-    return SequenceReport(
-      name: json['name'] ?? '',
-      attempts:
-          decodeListMessage(
-            json['attempts'],
-            SequenceReport_Attempt.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory SequenceReport.fromJson(Map<String, dynamic> json) => SequenceReport(
+    name: json['name'] ?? '',
+    attempts:
+        decodeListMessage(json['attempts'], SequenceReport_Attempt.fromJson) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (attempts.isNotDefault) 'attempts': encodeList(attempts),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (attempts.isNotDefault) 'attempts': encodeList(attempts),
+  };
 
   @override
   String toString() {
@@ -5163,29 +4968,26 @@ final class SequenceReport_Attempt extends ProtoMessage {
     this.status,
   }) : super(fullyQualifiedName);
 
-  factory SequenceReport_Attempt.fromJson(Map<String, dynamic> json) {
-    return SequenceReport_Attempt(
-      attemptNumber: json['attemptNumber'] ?? 0,
-      attemptDeadline: decodeCustom(
-        json['attemptDeadline'],
-        Timestamp.fromJson,
-      ),
-      responseTime: decodeCustom(json['responseTime'], Timestamp.fromJson),
-      attemptDelay: decodeCustom(json['attemptDelay'], Duration.fromJson),
-      status: decode(json['status'], Status.fromJson),
-    );
-  }
+  factory SequenceReport_Attempt.fromJson(Map<String, dynamic> json) =>
+      SequenceReport_Attempt(
+        attemptNumber: json['attemptNumber'] ?? 0,
+        attemptDeadline: decodeCustom(
+          json['attemptDeadline'],
+          Timestamp.fromJson,
+        ),
+        responseTime: decodeCustom(json['responseTime'], Timestamp.fromJson),
+        attemptDelay: decodeCustom(json['attemptDelay'], Duration.fromJson),
+        status: decode(json['status'], Status.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
-      if (attemptDeadline != null) 'attemptDeadline': attemptDeadline!.toJson(),
-      if (responseTime != null) 'responseTime': responseTime!.toJson(),
-      if (attemptDelay != null) 'attemptDelay': attemptDelay!.toJson(),
-      if (status != null) 'status': status!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
+    if (attemptDeadline != null) 'attemptDeadline': attemptDeadline!.toJson(),
+    if (responseTime != null) 'responseTime': responseTime!.toJson(),
+    if (attemptDelay != null) 'attemptDelay': attemptDelay!.toJson(),
+    if (status != null) 'status': status!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5202,16 +5004,13 @@ final class CreateSequenceRequest extends ProtoMessage {
 
   CreateSequenceRequest({this.sequence}) : super(fullyQualifiedName);
 
-  factory CreateSequenceRequest.fromJson(Map<String, dynamic> json) {
-    return CreateSequenceRequest(
-      sequence: decode(json['sequence'], Sequence.fromJson),
-    );
-  }
+  factory CreateSequenceRequest.fromJson(Map<String, dynamic> json) =>
+      CreateSequenceRequest(
+        sequence: decode(json['sequence'], Sequence.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {if (sequence != null) 'sequence': sequence!.toJson()};
-  }
+  Object toJson() => {if (sequence != null) 'sequence': sequence!.toJson()};
 
   @override
   String toString() => 'CreateSequenceRequest()';
@@ -5226,22 +5025,19 @@ final class CreateStreamingSequenceRequest extends ProtoMessage {
   CreateStreamingSequenceRequest({this.streamingSequence})
     : super(fullyQualifiedName);
 
-  factory CreateStreamingSequenceRequest.fromJson(Map<String, dynamic> json) {
-    return CreateStreamingSequenceRequest(
-      streamingSequence: decode(
-        json['streamingSequence'],
-        StreamingSequence.fromJson,
-      ),
-    );
-  }
+  factory CreateStreamingSequenceRequest.fromJson(Map<String, dynamic> json) =>
+      CreateStreamingSequenceRequest(
+        streamingSequence: decode(
+          json['streamingSequence'],
+          StreamingSequence.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (streamingSequence != null)
-        'streamingSequence': streamingSequence!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (streamingSequence != null)
+      'streamingSequence': streamingSequence!.toJson(),
+  };
 
   @override
   String toString() => 'CreateStreamingSequenceRequest()';
@@ -5255,14 +5051,11 @@ final class AttemptSequenceRequest extends ProtoMessage {
 
   AttemptSequenceRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory AttemptSequenceRequest.fromJson(Map<String, dynamic> json) {
-    return AttemptSequenceRequest(name: json['name'] ?? '');
-  }
+  factory AttemptSequenceRequest.fromJson(Map<String, dynamic> json) =>
+      AttemptSequenceRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -5285,20 +5078,17 @@ final class AttemptStreamingSequenceRequest extends ProtoMessage {
   AttemptStreamingSequenceRequest({required this.name, this.lastFailIndex = 0})
     : super(fullyQualifiedName);
 
-  factory AttemptStreamingSequenceRequest.fromJson(Map<String, dynamic> json) {
-    return AttemptStreamingSequenceRequest(
-      name: json['name'] ?? '',
-      lastFailIndex: json['lastFailIndex'] ?? 0,
-    );
-  }
+  factory AttemptStreamingSequenceRequest.fromJson(Map<String, dynamic> json) =>
+      AttemptStreamingSequenceRequest(
+        name: json['name'] ?? '',
+        lastFailIndex: json['lastFailIndex'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      if (lastFailIndex.isNotDefault) 'lastFailIndex': lastFailIndex,
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    if (lastFailIndex.isNotDefault) 'lastFailIndex': lastFailIndex,
+  };
 
   @override
   String toString() {
@@ -5318,14 +5108,12 @@ final class AttemptStreamingSequenceResponse extends ProtoMessage {
   AttemptStreamingSequenceResponse({this.content = ''})
     : super(fullyQualifiedName);
 
-  factory AttemptStreamingSequenceResponse.fromJson(Map<String, dynamic> json) {
-    return AttemptStreamingSequenceResponse(content: json['content'] ?? '');
-  }
+  factory AttemptStreamingSequenceResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => AttemptStreamingSequenceResponse(content: json['content'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (content.isNotDefault) 'content': content};
-  }
+  Object toJson() => {if (content.isNotDefault) 'content': content};
 
   @override
   String toString() {
@@ -5342,14 +5130,11 @@ final class GetSequenceReportRequest extends ProtoMessage {
 
   GetSequenceReportRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSequenceReportRequest.fromJson(Map<String, dynamic> json) {
-    return GetSequenceReportRequest(name: json['name'] ?? '');
-  }
+  factory GetSequenceReportRequest.fromJson(Map<String, dynamic> json) =>
+      GetSequenceReportRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -5369,14 +5154,10 @@ final class GetStreamingSequenceReportRequest extends ProtoMessage {
 
   factory GetStreamingSequenceReportRequest.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return GetStreamingSequenceReportRequest(name: json['name'] ?? '');
-  }
+  ) => GetStreamingSequenceReportRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -5403,22 +5184,18 @@ final class Session extends ProtoMessage {
   Session({this.name = '', this.version = Session_Version.$default})
     : super(fullyQualifiedName);
 
-  factory Session.fromJson(Map<String, dynamic> json) {
-    return Session(
-      name: json['name'] ?? '',
-      version:
-          decodeEnum(json['version'], Session_Version.fromJson) ??
-          Session_Version.$default,
-    );
-  }
+  factory Session.fromJson(Map<String, dynamic> json) => Session(
+    name: json['name'] ?? '',
+    version:
+        decodeEnum(json['version'], Session_Version.fromJson) ??
+        Session_Version.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (version.isNotDefault) 'version': version.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (version.isNotDefault) 'version': version.toJson(),
+  };
 
   @override
   String toString() {
@@ -5464,16 +5241,11 @@ final class CreateSessionRequest extends ProtoMessage {
 
   CreateSessionRequest({this.session}) : super(fullyQualifiedName);
 
-  factory CreateSessionRequest.fromJson(Map<String, dynamic> json) {
-    return CreateSessionRequest(
-      session: decode(json['session'], Session.fromJson),
-    );
-  }
+  factory CreateSessionRequest.fromJson(Map<String, dynamic> json) =>
+      CreateSessionRequest(session: decode(json['session'], Session.fromJson));
 
   @override
-  Object toJson() {
-    return {if (session != null) 'session': session!.toJson()};
-  }
+  Object toJson() => {if (session != null) 'session': session!.toJson()};
 
   @override
   String toString() => 'CreateSessionRequest()';
@@ -5489,14 +5261,11 @@ final class GetSessionRequest extends ProtoMessage {
 
   GetSessionRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory GetSessionRequest.fromJson(Map<String, dynamic> json) {
-    return GetSessionRequest(name: json['name'] ?? '');
-  }
+  factory GetSessionRequest.fromJson(Map<String, dynamic> json) =>
+      GetSessionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -5519,20 +5288,17 @@ final class ListSessionsRequest extends ProtoMessage {
   ListSessionsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListSessionsRequest.fromJson(Map<String, dynamic> json) {
-    return ListSessionsRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListSessionsRequest.fromJson(Map<String, dynamic> json) =>
+      ListSessionsRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -5556,20 +5322,17 @@ final class ListSessionsResponse extends ProtoMessage {
   ListSessionsResponse({this.sessions = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListSessionsResponse.fromJson(Map<String, dynamic> json) {
-    return ListSessionsResponse(
-      sessions: decodeListMessage(json['sessions'], Session.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListSessionsResponse.fromJson(Map<String, dynamic> json) =>
+      ListSessionsResponse(
+        sessions: decodeListMessage(json['sessions'], Session.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (sessions.isNotDefault) 'sessions': encodeList(sessions),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (sessions.isNotDefault) 'sessions': encodeList(sessions),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -5588,14 +5351,11 @@ final class DeleteSessionRequest extends ProtoMessage {
 
   DeleteSessionRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory DeleteSessionRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteSessionRequest(name: json['name'] ?? '');
-  }
+  factory DeleteSessionRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteSessionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -5614,14 +5374,11 @@ final class ReportSessionRequest extends ProtoMessage {
 
   ReportSessionRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory ReportSessionRequest.fromJson(Map<String, dynamic> json) {
-    return ReportSessionRequest(name: json['name'] ?? '');
-  }
+  factory ReportSessionRequest.fromJson(Map<String, dynamic> json) =>
+      ReportSessionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -5646,22 +5403,19 @@ final class ReportSessionResponse extends ProtoMessage {
     this.testRuns = const [],
   }) : super(fullyQualifiedName);
 
-  factory ReportSessionResponse.fromJson(Map<String, dynamic> json) {
-    return ReportSessionResponse(
-      result:
-          decodeEnum(json['result'], ReportSessionResponse_Result.fromJson) ??
-          ReportSessionResponse_Result.$default,
-      testRuns: decodeListMessage(json['testRuns'], TestRun.fromJson) ?? [],
-    );
-  }
+  factory ReportSessionResponse.fromJson(Map<String, dynamic> json) =>
+      ReportSessionResponse(
+        result:
+            decodeEnum(json['result'], ReportSessionResponse_Result.fromJson) ??
+            ReportSessionResponse_Result.$default,
+        testRuns: decodeListMessage(json['testRuns'], TestRun.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (result.isNotDefault) 'result': result.toJson(),
-      if (testRuns.isNotDefault) 'testRuns': encodeList(testRuns),
-    };
-  }
+  Object toJson() => {
+    if (result.isNotDefault) 'result': result.toJson(),
+    if (testRuns.isNotDefault) 'testRuns': encodeList(testRuns),
+  };
 
   @override
   String toString() {
@@ -5726,31 +5480,24 @@ final class Test extends ProtoMessage {
     this.blueprints = const [],
   }) : super(fullyQualifiedName);
 
-  factory Test.fromJson(Map<String, dynamic> json) {
-    return Test(
-      name: json['name'] ?? '',
-      expectationLevel:
-          decodeEnum(
-            json['expectationLevel'],
-            Test_ExpectationLevel.fromJson,
-          ) ??
-          Test_ExpectationLevel.$default,
-      description: json['description'] ?? '',
-      blueprints:
-          decodeListMessage(json['blueprints'], Test_Blueprint.fromJson) ?? [],
-    );
-  }
+  factory Test.fromJson(Map<String, dynamic> json) => Test(
+    name: json['name'] ?? '',
+    expectationLevel:
+        decodeEnum(json['expectationLevel'], Test_ExpectationLevel.fromJson) ??
+        Test_ExpectationLevel.$default,
+    description: json['description'] ?? '',
+    blueprints:
+        decodeListMessage(json['blueprints'], Test_Blueprint.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (expectationLevel.isNotDefault)
-        'expectationLevel': expectationLevel.toJson(),
-      if (description.isNotDefault) 'description': description,
-      if (blueprints.isNotDefault) 'blueprints': encodeList(blueprints),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (expectationLevel.isNotDefault)
+      'expectationLevel': expectationLevel.toJson(),
+    if (description.isNotDefault) 'description': description,
+    if (blueprints.isNotDefault) 'blueprints': encodeList(blueprints),
+  };
 
   @override
   String toString() {
@@ -5790,30 +5537,26 @@ final class Test_Blueprint extends ProtoMessage {
     this.additionalRequests = const [],
   }) : super(fullyQualifiedName);
 
-  factory Test_Blueprint.fromJson(Map<String, dynamic> json) {
-    return Test_Blueprint(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      request: decode(json['request'], Test_Blueprint_Invocation.fromJson),
-      additionalRequests:
-          decodeListMessage(
-            json['additionalRequests'],
-            Test_Blueprint_Invocation.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory Test_Blueprint.fromJson(Map<String, dynamic> json) => Test_Blueprint(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    request: decode(json['request'], Test_Blueprint_Invocation.fromJson),
+    additionalRequests:
+        decodeListMessage(
+          json['additionalRequests'],
+          Test_Blueprint_Invocation.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
-      if (request != null) 'request': request!.toJson(),
-      if (additionalRequests.isNotDefault)
-        'additionalRequests': encodeList(additionalRequests),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (description.isNotDefault) 'description': description,
+    if (request != null) 'request': request!.toJson(),
+    if (additionalRequests.isNotDefault)
+      'additionalRequests': encodeList(additionalRequests),
+  };
 
   @override
   String toString() {
@@ -5836,21 +5579,18 @@ final class Test_Blueprint_Invocation extends ProtoMessage {
   Test_Blueprint_Invocation({this.method = '', this.serializedRequest})
     : super(fullyQualifiedName);
 
-  factory Test_Blueprint_Invocation.fromJson(Map<String, dynamic> json) {
-    return Test_Blueprint_Invocation(
-      method: json['method'] ?? '',
-      serializedRequest: decodeBytes(json['serializedRequest']),
-    );
-  }
+  factory Test_Blueprint_Invocation.fromJson(Map<String, dynamic> json) =>
+      Test_Blueprint_Invocation(
+        method: json['method'] ?? '',
+        serializedRequest: decodeBytes(json['serializedRequest']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (method.isNotDefault) 'method': method,
-      if (serializedRequest != null)
-        'serializedRequest': encodeBytes(serializedRequest),
-    };
-  }
+  Object toJson() => {
+    if (method.isNotDefault) 'method': method,
+    if (serializedRequest != null)
+      'serializedRequest': encodeBytes(serializedRequest),
+  };
 
   @override
   String toString() {
@@ -5923,25 +5663,20 @@ final class Issue extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory Issue.fromJson(Map<String, dynamic> json) {
-    return Issue(
-      type:
-          decodeEnum(json['type'], Issue_Type.fromJson) ?? Issue_Type.$default,
-      severity:
-          decodeEnum(json['severity'], Issue_Severity.fromJson) ??
-          Issue_Severity.$default,
-      description: json['description'] ?? '',
-    );
-  }
+  factory Issue.fromJson(Map<String, dynamic> json) => Issue(
+    type: decodeEnum(json['type'], Issue_Type.fromJson) ?? Issue_Type.$default,
+    severity:
+        decodeEnum(json['severity'], Issue_Severity.fromJson) ??
+        Issue_Severity.$default,
+    description: json['description'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type.toJson(),
-      if (severity.isNotDefault) 'severity': severity.toJson(),
-      if (description.isNotDefault) 'description': description,
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type.toJson(),
+    if (severity.isNotDefault) 'severity': severity.toJson(),
+    if (description.isNotDefault) 'description': description,
+  };
 
   @override
   String toString() {
@@ -6021,22 +5756,19 @@ final class ListTestsRequest extends ProtoMessage {
   ListTestsRequest({this.parent = '', this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListTestsRequest.fromJson(Map<String, dynamic> json) {
-    return ListTestsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListTestsRequest.fromJson(Map<String, dynamic> json) =>
+      ListTestsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (parent.isNotDefault) 'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -6064,20 +5796,17 @@ final class ListTestsResponse extends ProtoMessage {
   ListTestsResponse({this.tests = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListTestsResponse.fromJson(Map<String, dynamic> json) {
-    return ListTestsResponse(
-      tests: decodeListMessage(json['tests'], Test.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListTestsResponse.fromJson(Map<String, dynamic> json) =>
+      ListTestsResponse(
+        tests: decodeListMessage(json['tests'], Test.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (tests.isNotDefault) 'tests': encodeList(tests),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (tests.isNotDefault) 'tests': encodeList(tests),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -6100,20 +5829,16 @@ final class TestRun extends ProtoMessage {
 
   TestRun({this.test = '', this.issue}) : super(fullyQualifiedName);
 
-  factory TestRun.fromJson(Map<String, dynamic> json) {
-    return TestRun(
-      test: json['test'] ?? '',
-      issue: decode(json['issue'], Issue.fromJson),
-    );
-  }
+  factory TestRun.fromJson(Map<String, dynamic> json) => TestRun(
+    test: json['test'] ?? '',
+    issue: decode(json['issue'], Issue.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (test.isNotDefault) 'test': test,
-      if (issue != null) 'issue': issue!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (test.isNotDefault) 'test': test,
+    if (issue != null) 'issue': issue!.toJson(),
+  };
 
   @override
   String toString() {
@@ -6132,14 +5857,11 @@ final class DeleteTestRequest extends ProtoMessage {
 
   DeleteTestRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory DeleteTestRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteTestRequest(name: json['name'] ?? '');
-  }
+  factory DeleteTestRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteTestRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -6164,22 +5886,19 @@ final class VerifyTestRequest extends ProtoMessage {
   VerifyTestRequest({this.name = '', this.answer, this.answers})
     : super(fullyQualifiedName);
 
-  factory VerifyTestRequest.fromJson(Map<String, dynamic> json) {
-    return VerifyTestRequest(
-      name: json['name'] ?? '',
-      answer: decodeBytes(json['answer']),
-      answers: decodeListBytes(json['answers']),
-    );
-  }
+  factory VerifyTestRequest.fromJson(Map<String, dynamic> json) =>
+      VerifyTestRequest(
+        name: json['name'] ?? '',
+        answer: decodeBytes(json['answer']),
+        answers: decodeListBytes(json['answers']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (answer != null) 'answer': encodeBytes(answer),
-      if (answers != null) 'answers': encodeListBytes(answers),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (answer != null) 'answer': encodeBytes(answer),
+    if (answers != null) 'answers': encodeListBytes(answers),
+  };
 
   @override
   String toString() {
@@ -6200,14 +5919,11 @@ final class VerifyTestResponse extends ProtoMessage {
 
   VerifyTestResponse({this.issue}) : super(fullyQualifiedName);
 
-  factory VerifyTestResponse.fromJson(Map<String, dynamic> json) {
-    return VerifyTestResponse(issue: decode(json['issue'], Issue.fromJson));
-  }
+  factory VerifyTestResponse.fromJson(Map<String, dynamic> json) =>
+      VerifyTestResponse(issue: decode(json['issue'], Issue.fromJson));
 
   @override
-  Object toJson() {
-    return {if (issue != null) 'issue': issue!.toJson()};
-  }
+  Object toJson() => {if (issue != null) 'issue': issue!.toJson()};
 
   @override
   String toString() => 'VerifyTestResponse()';

@@ -19,6 +19,14 @@
 /// Manages access control for Google Cloud Platform resources.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/service_client.dart';
@@ -77,9 +85,8 @@ final class IAMPolicy {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory IAMPolicy.fromApiKey([String? apiKey]) {
-    return IAMPolicy(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory IAMPolicy.fromApiKey([String? apiKey]) =>
+      IAMPolicy(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Sets the access control policy on the specified resource. Replaces any
   /// existing policy.
@@ -160,22 +167,19 @@ final class SetIamPolicyRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory SetIamPolicyRequest.fromJson(Map<String, dynamic> json) {
-    return SetIamPolicyRequest(
-      resource: json['resource'] ?? '',
-      policy: decode(json['policy'], Policy.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory SetIamPolicyRequest.fromJson(Map<String, dynamic> json) =>
+      SetIamPolicyRequest(
+        resource: json['resource'] ?? '',
+        policy: decode(json['policy'], Policy.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'resource': resource,
-      if (policy != null) 'policy': policy!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'resource': resource,
+    if (policy != null) 'policy': policy!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() {
@@ -199,20 +203,17 @@ final class GetIamPolicyRequest extends ProtoMessage {
   GetIamPolicyRequest({required this.resource, this.options})
     : super(fullyQualifiedName);
 
-  factory GetIamPolicyRequest.fromJson(Map<String, dynamic> json) {
-    return GetIamPolicyRequest(
-      resource: json['resource'] ?? '',
-      options: decode(json['options'], GetPolicyOptions.fromJson),
-    );
-  }
+  factory GetIamPolicyRequest.fromJson(Map<String, dynamic> json) =>
+      GetIamPolicyRequest(
+        resource: json['resource'] ?? '',
+        options: decode(json['options'], GetPolicyOptions.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'resource': resource,
-      if (options != null) 'options': options!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'resource': resource,
+    if (options != null) 'options': options!.toJson(),
+  };
 
   @override
   String toString() {
@@ -239,17 +240,14 @@ final class TestIamPermissionsRequest extends ProtoMessage {
   TestIamPermissionsRequest({required this.resource, required this.permissions})
     : super(fullyQualifiedName);
 
-  factory TestIamPermissionsRequest.fromJson(Map<String, dynamic> json) {
-    return TestIamPermissionsRequest(
-      resource: json['resource'] ?? '',
-      permissions: decodeList(json['permissions']) ?? [],
-    );
-  }
+  factory TestIamPermissionsRequest.fromJson(Map<String, dynamic> json) =>
+      TestIamPermissionsRequest(
+        resource: json['resource'] ?? '',
+        permissions: decodeList(json['permissions']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {'resource': resource, 'permissions': permissions};
-  }
+  Object toJson() => {'resource': resource, 'permissions': permissions};
 
   @override
   String toString() {
@@ -270,16 +268,13 @@ final class TestIamPermissionsResponse extends ProtoMessage {
   TestIamPermissionsResponse({this.permissions = const []})
     : super(fullyQualifiedName);
 
-  factory TestIamPermissionsResponse.fromJson(Map<String, dynamic> json) {
-    return TestIamPermissionsResponse(
-      permissions: decodeList(json['permissions']) ?? [],
-    );
-  }
+  factory TestIamPermissionsResponse.fromJson(Map<String, dynamic> json) =>
+      TestIamPermissionsResponse(
+        permissions: decodeList(json['permissions']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (permissions.isNotDefault) 'permissions': permissions};
-  }
+  Object toJson() => {if (permissions.isNotDefault) 'permissions': permissions};
 
   @override
   String toString() => 'TestIamPermissionsResponse()';
@@ -312,19 +307,16 @@ final class GetPolicyOptions extends ProtoMessage {
   GetPolicyOptions({this.requestedPolicyVersion = 0})
     : super(fullyQualifiedName);
 
-  factory GetPolicyOptions.fromJson(Map<String, dynamic> json) {
-    return GetPolicyOptions(
-      requestedPolicyVersion: json['requestedPolicyVersion'] ?? 0,
-    );
-  }
+  factory GetPolicyOptions.fromJson(Map<String, dynamic> json) =>
+      GetPolicyOptions(
+        requestedPolicyVersion: json['requestedPolicyVersion'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (requestedPolicyVersion.isNotDefault)
-        'requestedPolicyVersion': requestedPolicyVersion,
-    };
-  }
+  Object toJson() => {
+    if (requestedPolicyVersion.isNotDefault)
+      'requestedPolicyVersion': requestedPolicyVersion,
+  };
 
   @override
   String toString() {
@@ -474,25 +466,21 @@ final class Policy extends ProtoMessage {
     this.etag,
   }) : super(fullyQualifiedName);
 
-  factory Policy.fromJson(Map<String, dynamic> json) {
-    return Policy(
-      version: json['version'] ?? 0,
-      bindings: decodeListMessage(json['bindings'], Binding.fromJson) ?? [],
-      auditConfigs:
-          decodeListMessage(json['auditConfigs'], AuditConfig.fromJson) ?? [],
-      etag: decodeBytes(json['etag']),
-    );
-  }
+  factory Policy.fromJson(Map<String, dynamic> json) => Policy(
+    version: json['version'] ?? 0,
+    bindings: decodeListMessage(json['bindings'], Binding.fromJson) ?? [],
+    auditConfigs:
+        decodeListMessage(json['auditConfigs'], AuditConfig.fromJson) ?? [],
+    etag: decodeBytes(json['etag']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (version.isNotDefault) 'version': version,
-      if (bindings.isNotDefault) 'bindings': encodeList(bindings),
-      if (auditConfigs.isNotDefault) 'auditConfigs': encodeList(auditConfigs),
-      if (etag != null) 'etag': encodeBytes(etag),
-    };
-  }
+  Object toJson() => {
+    if (version.isNotDefault) 'version': version,
+    if (bindings.isNotDefault) 'bindings': encodeList(bindings),
+    if (auditConfigs.isNotDefault) 'auditConfigs': encodeList(auditConfigs),
+    if (etag != null) 'etag': encodeBytes(etag),
+  };
 
   @override
   String toString() {
@@ -573,22 +561,18 @@ final class Binding extends ProtoMessage {
   Binding({this.role = '', this.members = const [], this.condition})
     : super(fullyQualifiedName);
 
-  factory Binding.fromJson(Map<String, dynamic> json) {
-    return Binding(
-      role: json['role'] ?? '',
-      members: decodeList(json['members']) ?? [],
-      condition: decode(json['condition'], Expr.fromJson),
-    );
-  }
+  factory Binding.fromJson(Map<String, dynamic> json) => Binding(
+    role: json['role'] ?? '',
+    members: decodeList(json['members']) ?? [],
+    condition: decode(json['condition'], Expr.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (role.isNotDefault) 'role': role,
-      if (members.isNotDefault) 'members': members,
-      if (condition != null) 'condition': condition!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (role.isNotDefault) 'role': role,
+    if (members.isNotDefault) 'members': members,
+    if (condition != null) 'condition': condition!.toJson(),
+  };
 
   @override
   String toString() {
@@ -662,23 +646,19 @@ final class AuditConfig extends ProtoMessage {
   AuditConfig({this.service = '', this.auditLogConfigs = const []})
     : super(fullyQualifiedName);
 
-  factory AuditConfig.fromJson(Map<String, dynamic> json) {
-    return AuditConfig(
-      service: json['service'] ?? '',
-      auditLogConfigs:
-          decodeListMessage(json['auditLogConfigs'], AuditLogConfig.fromJson) ??
-          [],
-    );
-  }
+  factory AuditConfig.fromJson(Map<String, dynamic> json) => AuditConfig(
+    service: json['service'] ?? '',
+    auditLogConfigs:
+        decodeListMessage(json['auditLogConfigs'], AuditLogConfig.fromJson) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (service.isNotDefault) 'service': service,
-      if (auditLogConfigs.isNotDefault)
-        'auditLogConfigs': encodeList(auditLogConfigs),
-    };
-  }
+  Object toJson() => {
+    if (service.isNotDefault) 'service': service,
+    if (auditLogConfigs.isNotDefault)
+      'auditLogConfigs': encodeList(auditLogConfigs),
+  };
 
   @override
   String toString() {
@@ -723,22 +703,18 @@ final class AuditLogConfig extends ProtoMessage {
     this.exemptedMembers = const [],
   }) : super(fullyQualifiedName);
 
-  factory AuditLogConfig.fromJson(Map<String, dynamic> json) {
-    return AuditLogConfig(
-      logType:
-          decodeEnum(json['logType'], AuditLogConfig_LogType.fromJson) ??
-          AuditLogConfig_LogType.$default,
-      exemptedMembers: decodeList(json['exemptedMembers']) ?? [],
-    );
-  }
+  factory AuditLogConfig.fromJson(Map<String, dynamic> json) => AuditLogConfig(
+    logType:
+        decodeEnum(json['logType'], AuditLogConfig_LogType.fromJson) ??
+        AuditLogConfig_LogType.$default,
+    exemptedMembers: decodeList(json['exemptedMembers']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (logType.isNotDefault) 'logType': logType.toJson(),
-      if (exemptedMembers.isNotDefault) 'exemptedMembers': exemptedMembers,
-    };
-  }
+  Object toJson() => {
+    if (logType.isNotDefault) 'logType': logType.toJson(),
+    if (exemptedMembers.isNotDefault) 'exemptedMembers': exemptedMembers,
+  };
 
   @override
   String toString() {
@@ -793,28 +769,23 @@ final class PolicyDelta extends ProtoMessage {
     this.auditConfigDeltas = const [],
   }) : super(fullyQualifiedName);
 
-  factory PolicyDelta.fromJson(Map<String, dynamic> json) {
-    return PolicyDelta(
-      bindingDeltas:
-          decodeListMessage(json['bindingDeltas'], BindingDelta.fromJson) ?? [],
-      auditConfigDeltas:
-          decodeListMessage(
-            json['auditConfigDeltas'],
-            AuditConfigDelta.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory PolicyDelta.fromJson(Map<String, dynamic> json) => PolicyDelta(
+    bindingDeltas:
+        decodeListMessage(json['bindingDeltas'], BindingDelta.fromJson) ?? [],
+    auditConfigDeltas:
+        decodeListMessage(
+          json['auditConfigDeltas'],
+          AuditConfigDelta.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (bindingDeltas.isNotDefault)
-        'bindingDeltas': encodeList(bindingDeltas),
-      if (auditConfigDeltas.isNotDefault)
-        'auditConfigDeltas': encodeList(auditConfigDeltas),
-    };
-  }
+  Object toJson() => {
+    if (bindingDeltas.isNotDefault) 'bindingDeltas': encodeList(bindingDeltas),
+    if (auditConfigDeltas.isNotDefault)
+      'auditConfigDeltas': encodeList(auditConfigDeltas),
+  };
 
   @override
   String toString() => 'PolicyDelta()';
@@ -849,26 +820,22 @@ final class BindingDelta extends ProtoMessage {
     this.condition,
   }) : super(fullyQualifiedName);
 
-  factory BindingDelta.fromJson(Map<String, dynamic> json) {
-    return BindingDelta(
-      action:
-          decodeEnum(json['action'], BindingDelta_Action.fromJson) ??
-          BindingDelta_Action.$default,
-      role: json['role'] ?? '',
-      member: json['member'] ?? '',
-      condition: decode(json['condition'], Expr.fromJson),
-    );
-  }
+  factory BindingDelta.fromJson(Map<String, dynamic> json) => BindingDelta(
+    action:
+        decodeEnum(json['action'], BindingDelta_Action.fromJson) ??
+        BindingDelta_Action.$default,
+    role: json['role'] ?? '',
+    member: json['member'] ?? '',
+    condition: decode(json['condition'], Expr.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (action.isNotDefault) 'action': action.toJson(),
-      if (role.isNotDefault) 'role': role,
-      if (member.isNotDefault) 'member': member,
-      if (condition != null) 'condition': condition!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (action.isNotDefault) 'action': action.toJson(),
+    if (role.isNotDefault) 'role': role,
+    if (member.isNotDefault) 'member': member,
+    if (condition != null) 'condition': condition!.toJson(),
+  };
 
   @override
   String toString() {
@@ -938,26 +905,23 @@ final class AuditConfigDelta extends ProtoMessage {
     this.logType = '',
   }) : super(fullyQualifiedName);
 
-  factory AuditConfigDelta.fromJson(Map<String, dynamic> json) {
-    return AuditConfigDelta(
-      action:
-          decodeEnum(json['action'], AuditConfigDelta_Action.fromJson) ??
-          AuditConfigDelta_Action.$default,
-      service: json['service'] ?? '',
-      exemptedMember: json['exemptedMember'] ?? '',
-      logType: json['logType'] ?? '',
-    );
-  }
+  factory AuditConfigDelta.fromJson(Map<String, dynamic> json) =>
+      AuditConfigDelta(
+        action:
+            decodeEnum(json['action'], AuditConfigDelta_Action.fromJson) ??
+            AuditConfigDelta_Action.$default,
+        service: json['service'] ?? '',
+        exemptedMember: json['exemptedMember'] ?? '',
+        logType: json['logType'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (action.isNotDefault) 'action': action.toJson(),
-      if (service.isNotDefault) 'service': service,
-      if (exemptedMember.isNotDefault) 'exemptedMember': exemptedMember,
-      if (logType.isNotDefault) 'logType': logType,
-    };
-  }
+  Object toJson() => {
+    if (action.isNotDefault) 'action': action.toJson(),
+    if (service.isNotDefault) 'service': service,
+    if (exemptedMember.isNotDefault) 'exemptedMember': exemptedMember,
+    if (logType.isNotDefault) 'logType': logType,
+  };
 
   @override
   String toString() {
@@ -1026,22 +990,19 @@ final class ResourcePolicyMember extends ProtoMessage {
     this.iamPolicyUidPrincipal = '',
   }) : super(fullyQualifiedName);
 
-  factory ResourcePolicyMember.fromJson(Map<String, dynamic> json) {
-    return ResourcePolicyMember(
-      iamPolicyNamePrincipal: json['iamPolicyNamePrincipal'] ?? '',
-      iamPolicyUidPrincipal: json['iamPolicyUidPrincipal'] ?? '',
-    );
-  }
+  factory ResourcePolicyMember.fromJson(Map<String, dynamic> json) =>
+      ResourcePolicyMember(
+        iamPolicyNamePrincipal: json['iamPolicyNamePrincipal'] ?? '',
+        iamPolicyUidPrincipal: json['iamPolicyUidPrincipal'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (iamPolicyNamePrincipal.isNotDefault)
-        'iamPolicyNamePrincipal': iamPolicyNamePrincipal,
-      if (iamPolicyUidPrincipal.isNotDefault)
-        'iamPolicyUidPrincipal': iamPolicyUidPrincipal,
-    };
-  }
+  Object toJson() => {
+    if (iamPolicyNamePrincipal.isNotDefault)
+      'iamPolicyNamePrincipal': iamPolicyNamePrincipal,
+    if (iamPolicyUidPrincipal.isNotDefault)
+      'iamPolicyUidPrincipal': iamPolicyUidPrincipal,
+  };
 
   @override
   String toString() {

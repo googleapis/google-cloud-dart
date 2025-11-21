@@ -13,12 +13,11 @@
 // limitations under the License.
 
 @TestOn('vm')
-library model_test;
-
-import 'package:test/test.dart';
+library;
 
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test/test.dart';
 import 'package:test_utils/test_http_client.dart';
 
 void main() async {
@@ -27,7 +26,7 @@ void main() async {
 
   group('model', () {
     setUp(() async {
-      final authClient = () async =>
+      Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
               'https://www.googleapis.com/auth/cloud-platform',

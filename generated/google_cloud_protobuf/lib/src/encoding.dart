@@ -21,7 +21,7 @@ library;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:google_cloud_protobuf/protobuf.dart';
+import '../protobuf.dart';
 
 export 'dart:typed_data' show Uint8List;
 
@@ -181,13 +181,13 @@ extension StringProtoDefault on String {
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension ListProtoDefault on List {
+extension ListProtoDefault on List<dynamic> {
   /// Whether this is the proto default value for [List] (an empty list).
   bool get isNotDefault => isNotEmpty;
 }
 
 /// Extensions methods used for comparing to proto default values.
-extension MapProtoDefault on Map {
+extension MapProtoDefault on Map<dynamic, dynamic> {
   /// Whether this is the proto default value for [Map] (an empty map).
   bool get isNotDefault => isNotEmpty;
 }

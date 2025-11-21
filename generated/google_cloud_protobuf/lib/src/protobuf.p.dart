@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// ignore_for_file: avoid_classes_with_only_static_members
+
 part of '../protobuf.dart';
 
 /// An abstract class that can return a JSON representation of itself.
@@ -86,14 +88,12 @@ class Any extends ProtoMessage {
     packInto(message);
   }
 
-  factory Any.fromJson(Map<String, dynamic> json) {
-    return Any(json: json);
-  }
+  factory Any.fromJson(Map<String, dynamic> json) => Any(json: json);
 
   /// '@type' will be something like
   /// `type.googleapis.com/google.protobuf.Duration`, or
   /// `type.googleapis.com/google.rpc.ErrorInfo`.
-  String get _type => json['@type'];
+  String get _type => json['@type'] as String;
 
   /// Return the fully qualified name of the contained type.
   ///
@@ -152,7 +152,7 @@ class Any extends ProtoMessage {
     if (_customEncodedTypes.contains(qualifiedName)) {
       json['value'] = encoded;
     } else {
-      for (final key in (encoded as Map).keys) {
+      for (final key in (encoded as Map).cast<String, dynamic>().keys) {
         json[key] = encoded[key];
       }
     }
@@ -213,9 +213,9 @@ class Value extends ProtoMessage {
         return Value(stringValue: s);
       case bool b:
         return Value(boolValue: b);
-      case List l:
+      case List<dynamic> l:
         return Value(listValue: ListValue.fromJson(l));
-      case Map m:
+      case Map<dynamic, dynamic> m:
         return Value(structValue: Struct.fromJson(m));
       default:
         return Value(nullValue: NullValue.nullValue);
@@ -223,13 +223,12 @@ class Value extends ProtoMessage {
   }
 
   @override
-  Object? toJson() {
-    return numberValue ??
-        stringValue ??
-        boolValue ??
-        listValue?.toJson() ??
-        structValue?.toJson();
-  }
+  Object? toJson() =>
+      numberValue ??
+      stringValue ??
+      boolValue ??
+      listValue?.toJson() ??
+      structValue?.toJson();
 
   @override
   String toString() {
@@ -289,7 +288,7 @@ class _DurationHelper {
   /// would be '3s'; 3 seconds with 70 nanosecond would be '3.00000007s'.
   static Duration decode(Object format) {
     if (!(format as String).endsWith('s')) {
-      throw FormatException("duration value should end in 's'");
+      throw const FormatException("duration value should end in 's'");
     }
 
     // '-123.456s'
@@ -298,7 +297,7 @@ class _DurationHelper {
 
     final parts = format.split('.');
     if (parts.length > 2) {
-      throw FormatException('too many periods');
+      throw const FormatException('too many periods');
     }
 
     final seconds = int.parse(parts[0]);
@@ -313,14 +312,11 @@ class _DurationHelper {
 
 class _FieldMaskHelper {
   /// Encode the field mask as a single comma-separated string.
-  static String encode(FieldMask fieldMask) {
-    return fieldMask.paths.join(',');
-  }
+  static String encode(FieldMask fieldMask) => fieldMask.paths.join(',');
 
   /// Decode the field mask from a single comma-separated string.
-  static FieldMask decode(Object format) {
-    return FieldMask(paths: (format as String).split(','));
-  }
+  static FieldMask decode(Object format) =>
+      FieldMask(paths: (format as String).split(','));
 }
 
 /// Called from the Timestamp constructor to validate construction parameters.
@@ -408,99 +404,68 @@ class _TimestampHelper {
 }
 
 class _DoubleValueHelper {
-  static Object encode(DoubleValue value) {
-    return encodeDouble(value.value)!;
-  }
+  static Object encode(DoubleValue value) => encodeDouble(value.value)!;
 
-  static DoubleValue decode(Object value) {
-    return DoubleValue(value: decodeDouble(value)!);
-  }
+  static DoubleValue decode(Object value) =>
+      DoubleValue(value: decodeDouble(value)!);
 }
 
 class _FloatValueHelper {
-  static Object encode(FloatValue value) {
-    return encodeDouble(value.value)!;
-  }
+  static Object encode(FloatValue value) => encodeDouble(value.value)!;
 
-  static FloatValue decode(Object value) {
-    return FloatValue(value: decodeDouble(value)!);
-  }
+  static FloatValue decode(Object value) =>
+      FloatValue(value: decodeDouble(value)!);
 }
 
 class _Int64ValueHelper {
-  static String encode(Int64Value value) {
-    return encodeInt64(value.value)!;
-  }
+  static String encode(Int64Value value) => encodeInt64(value.value)!;
 
-  static Int64Value decode(Object value) {
-    return Int64Value(value: decodeInt64(value)!);
-  }
+  static Int64Value decode(Object value) =>
+      Int64Value(value: decodeInt64(value)!);
 }
 
 class _Uint64ValueHelper {
-  static String encode(Uint64Value value) {
-    return encodeInt64(value.value)!;
-  }
+  static String encode(Uint64Value value) => encodeInt64(value.value)!;
 
-  static Uint64Value decode(Object value) {
-    return Uint64Value(value: decodeInt64(value)!);
-  }
+  static Uint64Value decode(Object value) =>
+      Uint64Value(value: decodeInt64(value)!);
 }
 
 class _Int32ValueHelper {
-  static int encode(Int32Value value) {
-    return value.value;
-  }
+  static int encode(Int32Value value) => value.value;
 
-  static Int32Value decode(Object value) {
-    return Int32Value(value: value as int);
-  }
+  static Int32Value decode(Object value) => Int32Value(value: value as int);
 }
 
 class _Uint32ValueHelper {
-  static int encode(Uint32Value value) {
-    return value.value;
-  }
+  static int encode(Uint32Value value) => value.value;
 
-  static Uint32Value decode(Object value) {
-    return Uint32Value(value: value as int);
-  }
+  static Uint32Value decode(Object value) => Uint32Value(value: value as int);
 }
 
 class _BoolValueHelper {
-  static bool encode(BoolValue value) {
-    return value.value;
-  }
+  static bool encode(BoolValue value) => value.value;
 
-  static BoolValue decode(Object value) {
-    return BoolValue(value: value as bool);
-  }
+  static BoolValue decode(Object value) => BoolValue(value: value as bool);
 }
 
 class _StringValueHelper {
-  static String encode(StringValue value) {
-    return value.value;
-  }
+  static String encode(StringValue value) => value.value;
 
-  static StringValue decode(Object value) {
-    return StringValue(value: value as String);
-  }
+  static StringValue decode(Object value) =>
+      StringValue(value: value as String);
 }
 
 class _BytesValueHelper {
-  static String encode(BytesValue value) {
-    return encodeBytes(value.value!)!;
-  }
+  static String encode(BytesValue value) => encodeBytes(value.value!)!;
 
-  static BytesValue decode(Object value) {
-    return BytesValue(value: decodeBytes(value as String));
-  }
+  static BytesValue decode(Object value) =>
+      BytesValue(value: decodeBytes(value as String));
 }
 
 class _StructHelper {
-  static Map<String, Object?> encode(Struct value) {
-    return value.fields.map((key, value) => MapEntry(key, value.toJson()));
-  }
+  static Map<String, Object?> encode(Struct value) =>
+      value.fields.map((key, value) => MapEntry(key, value.toJson()));
 
   static Struct decode(Object value) {
     final fields = (value as Map<String, dynamic>).map(
@@ -511,12 +476,11 @@ class _StructHelper {
 }
 
 class _ListValueHelper {
-  static List encode(ListValue value) {
-    return value.values.map((v) => v.toJson()).toList();
-  }
+  static List<Object?> encode(ListValue value) =>
+      value.values.map((v) => v.toJson()).toList();
 
   static ListValue decode(Object value) {
-    final values = (value as List).map((v) => Value.fromJson(v)).toList();
+    final values = (value as List).map(Value.fromJson).toList();
     return ListValue(values: values);
   }
 }

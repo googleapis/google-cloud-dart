@@ -14,10 +14,8 @@
 
 part of '../rpc.dart';
 
-typedef _MessageDecoder = ProtoMessage Function(Map<String, dynamic> json);
-
 // A map from message IDs to decoder functions.
-const Map<String, _MessageDecoder> _decoders = {
+const Map<String, ProtoMessage Function(Map<String, dynamic>)> _decoders = {
   BadRequest.fullyQualifiedName: BadRequest.fromJson,
   DebugInfo.fullyQualifiedName: DebugInfo.fromJson,
   ErrorInfo.fullyQualifiedName: ErrorInfo.fromJson,
@@ -79,10 +77,8 @@ extension StatusExtension on Status {
   ///
   /// For more information see https://google.aip.dev/193 and
   /// https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto.
-  List<ProtoMessage> get detailsAsMessages {
-    return details.map((any) {
-      final decoder = _decoders[any.typeName];
-      return decoder == null ? any : any.unpackFrom(decoder);
-    }).toList();
-  }
+  List<ProtoMessage> get detailsAsMessages => details.map((any) {
+    final decoder = _decoders[any.typeName];
+    return decoder == null ? any : any.unpackFrom(decoder);
+  }).toList();
 }

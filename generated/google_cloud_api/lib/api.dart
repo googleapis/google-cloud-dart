@@ -19,6 +19,14 @@
 /// Lets you define and config your API service.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 
@@ -54,22 +62,17 @@ final class Authentication extends ProtoMessage {
   Authentication({this.rules = const [], this.providers = const []})
     : super(fullyQualifiedName);
 
-  factory Authentication.fromJson(Map<String, dynamic> json) {
-    return Authentication(
-      rules:
-          decodeListMessage(json['rules'], AuthenticationRule.fromJson) ?? [],
-      providers:
-          decodeListMessage(json['providers'], AuthProvider.fromJson) ?? [],
-    );
-  }
+  factory Authentication.fromJson(Map<String, dynamic> json) => Authentication(
+    rules: decodeListMessage(json['rules'], AuthenticationRule.fromJson) ?? [],
+    providers:
+        decodeListMessage(json['providers'], AuthProvider.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (rules.isNotDefault) 'rules': encodeList(rules),
-      if (providers.isNotDefault) 'providers': encodeList(providers),
-    };
-  }
+  Object toJson() => {
+    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (providers.isNotDefault) 'providers': encodeList(providers),
+  };
 
   @override
   String toString() => 'Authentication()';
@@ -110,27 +113,24 @@ final class AuthenticationRule extends ProtoMessage {
     this.requirements = const [],
   }) : super(fullyQualifiedName);
 
-  factory AuthenticationRule.fromJson(Map<String, dynamic> json) {
-    return AuthenticationRule(
-      selector: json['selector'] ?? '',
-      oauth: decode(json['oauth'], OauthRequirements.fromJson),
-      allowWithoutCredential: json['allowWithoutCredential'] ?? false,
-      requirements:
-          decodeListMessage(json['requirements'], AuthRequirement.fromJson) ??
-          [],
-    );
-  }
+  factory AuthenticationRule.fromJson(Map<String, dynamic> json) =>
+      AuthenticationRule(
+        selector: json['selector'] ?? '',
+        oauth: decode(json['oauth'], OauthRequirements.fromJson),
+        allowWithoutCredential: json['allowWithoutCredential'] ?? false,
+        requirements:
+            decodeListMessage(json['requirements'], AuthRequirement.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (oauth != null) 'oauth': oauth!.toJson(),
-      if (allowWithoutCredential.isNotDefault)
-        'allowWithoutCredential': allowWithoutCredential,
-      if (requirements.isNotDefault) 'requirements': encodeList(requirements),
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (oauth != null) 'oauth': oauth!.toJson(),
+    if (allowWithoutCredential.isNotDefault)
+      'allowWithoutCredential': allowWithoutCredential,
+    if (requirements.isNotDefault) 'requirements': encodeList(requirements),
+  };
 
   @override
   String toString() {
@@ -168,24 +168,20 @@ final class JwtLocation extends ProtoMessage {
   JwtLocation({this.header, this.query, this.cookie, this.valuePrefix = ''})
     : super(fullyQualifiedName);
 
-  factory JwtLocation.fromJson(Map<String, dynamic> json) {
-    return JwtLocation(
-      header: json['header'],
-      query: json['query'],
-      cookie: json['cookie'],
-      valuePrefix: json['valuePrefix'] ?? '',
-    );
-  }
+  factory JwtLocation.fromJson(Map<String, dynamic> json) => JwtLocation(
+    header: json['header'],
+    query: json['query'],
+    cookie: json['cookie'],
+    valuePrefix: json['valuePrefix'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (header != null) 'header': header,
-      if (query != null) 'query': query,
-      if (cookie != null) 'cookie': cookie,
-      if (valuePrefix.isNotDefault) 'valuePrefix': valuePrefix,
-    };
-  }
+  Object toJson() => {
+    if (header != null) 'header': header,
+    if (query != null) 'query': query,
+    if (cookie != null) 'cookie': cookie,
+    if (valuePrefix.isNotDefault) 'valuePrefix': valuePrefix,
+  };
 
   @override
   String toString() {
@@ -285,29 +281,25 @@ final class AuthProvider extends ProtoMessage {
     this.jwtLocations = const [],
   }) : super(fullyQualifiedName);
 
-  factory AuthProvider.fromJson(Map<String, dynamic> json) {
-    return AuthProvider(
-      id: json['id'] ?? '',
-      issuer: json['issuer'] ?? '',
-      jwksUri: json['jwksUri'] ?? '',
-      audiences: json['audiences'] ?? '',
-      authorizationUrl: json['authorizationUrl'] ?? '',
-      jwtLocations:
-          decodeListMessage(json['jwtLocations'], JwtLocation.fromJson) ?? [],
-    );
-  }
+  factory AuthProvider.fromJson(Map<String, dynamic> json) => AuthProvider(
+    id: json['id'] ?? '',
+    issuer: json['issuer'] ?? '',
+    jwksUri: json['jwksUri'] ?? '',
+    audiences: json['audiences'] ?? '',
+    authorizationUrl: json['authorizationUrl'] ?? '',
+    jwtLocations:
+        decodeListMessage(json['jwtLocations'], JwtLocation.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      if (issuer.isNotDefault) 'issuer': issuer,
-      if (jwksUri.isNotDefault) 'jwksUri': jwksUri,
-      if (audiences.isNotDefault) 'audiences': audiences,
-      if (authorizationUrl.isNotDefault) 'authorizationUrl': authorizationUrl,
-      if (jwtLocations.isNotDefault) 'jwtLocations': encodeList(jwtLocations),
-    };
-  }
+  Object toJson() => {
+    if (id.isNotDefault) 'id': id,
+    if (issuer.isNotDefault) 'issuer': issuer,
+    if (jwksUri.isNotDefault) 'jwksUri': jwksUri,
+    if (audiences.isNotDefault) 'audiences': audiences,
+    if (authorizationUrl.isNotDefault) 'authorizationUrl': authorizationUrl,
+    if (jwtLocations.isNotDefault) 'jwtLocations': encodeList(jwtLocations),
+  };
 
   @override
   String toString() {
@@ -354,16 +346,13 @@ final class OauthRequirements extends ProtoMessage {
 
   OauthRequirements({this.canonicalScopes = ''}) : super(fullyQualifiedName);
 
-  factory OauthRequirements.fromJson(Map<String, dynamic> json) {
-    return OauthRequirements(canonicalScopes: json['canonicalScopes'] ?? '');
-  }
+  factory OauthRequirements.fromJson(Map<String, dynamic> json) =>
+      OauthRequirements(canonicalScopes: json['canonicalScopes'] ?? '');
 
   @override
-  Object toJson() {
-    return {
-      if (canonicalScopes.isNotDefault) 'canonicalScopes': canonicalScopes,
-    };
-  }
+  Object toJson() => {
+    if (canonicalScopes.isNotDefault) 'canonicalScopes': canonicalScopes,
+  };
 
   @override
   String toString() {
@@ -406,20 +395,17 @@ final class AuthRequirement extends ProtoMessage {
   AuthRequirement({this.providerId = '', this.audiences = ''})
     : super(fullyQualifiedName);
 
-  factory AuthRequirement.fromJson(Map<String, dynamic> json) {
-    return AuthRequirement(
-      providerId: json['providerId'] ?? '',
-      audiences: json['audiences'] ?? '',
-    );
-  }
+  factory AuthRequirement.fromJson(Map<String, dynamic> json) =>
+      AuthRequirement(
+        providerId: json['providerId'] ?? '',
+        audiences: json['audiences'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (providerId.isNotDefault) 'providerId': providerId,
-      if (audiences.isNotDefault) 'audiences': audiences,
-    };
-  }
+  Object toJson() => {
+    if (providerId.isNotDefault) 'providerId': providerId,
+    if (audiences.isNotDefault) 'audiences': audiences,
+  };
 
   @override
   String toString() {
@@ -442,16 +428,12 @@ final class Backend extends ProtoMessage {
 
   Backend({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory Backend.fromJson(Map<String, dynamic> json) {
-    return Backend(
-      rules: decodeListMessage(json['rules'], BackendRule.fromJson) ?? [],
-    );
-  }
+  factory Backend.fromJson(Map<String, dynamic> json) => Backend(
+    rules: decodeListMessage(json['rules'], BackendRule.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
-  }
+  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
 
   @override
   String toString() => 'Backend()';
@@ -552,49 +534,45 @@ final class BackendRule extends ProtoMessage {
     this.overridesByRequestProtocol = const {},
   }) : super(fullyQualifiedName);
 
-  factory BackendRule.fromJson(Map<String, dynamic> json) {
-    return BackendRule(
-      selector: json['selector'] ?? '',
-      address: json['address'] ?? '',
-      deadline: decodeDouble(json['deadline']) ?? 0,
-      minDeadline: decodeDouble(json['minDeadline']) ?? 0,
-      operationDeadline: decodeDouble(json['operationDeadline']) ?? 0,
-      pathTranslation:
-          decodeEnum(
-            json['pathTranslation'],
-            BackendRule_PathTranslation.fromJson,
-          ) ??
-          BackendRule_PathTranslation.$default,
-      jwtAudience: json['jwtAudience'],
-      disableAuth: json['disableAuth'],
-      protocol: json['protocol'] ?? '',
-      overridesByRequestProtocol:
-          decodeMapMessage(
-            json['overridesByRequestProtocol'],
-            BackendRule.fromJson,
-          ) ??
-          {},
-    );
-  }
+  factory BackendRule.fromJson(Map<String, dynamic> json) => BackendRule(
+    selector: json['selector'] ?? '',
+    address: json['address'] ?? '',
+    deadline: decodeDouble(json['deadline']) ?? 0,
+    minDeadline: decodeDouble(json['minDeadline']) ?? 0,
+    operationDeadline: decodeDouble(json['operationDeadline']) ?? 0,
+    pathTranslation:
+        decodeEnum(
+          json['pathTranslation'],
+          BackendRule_PathTranslation.fromJson,
+        ) ??
+        BackendRule_PathTranslation.$default,
+    jwtAudience: json['jwtAudience'],
+    disableAuth: json['disableAuth'],
+    protocol: json['protocol'] ?? '',
+    overridesByRequestProtocol:
+        decodeMapMessage(
+          json['overridesByRequestProtocol'],
+          BackendRule.fromJson,
+        ) ??
+        {},
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (address.isNotDefault) 'address': address,
-      if (deadline.isNotDefault) 'deadline': encodeDouble(deadline),
-      if (minDeadline.isNotDefault) 'minDeadline': encodeDouble(minDeadline),
-      if (operationDeadline.isNotDefault)
-        'operationDeadline': encodeDouble(operationDeadline),
-      if (pathTranslation.isNotDefault)
-        'pathTranslation': pathTranslation.toJson(),
-      if (jwtAudience != null) 'jwtAudience': jwtAudience,
-      if (disableAuth != null) 'disableAuth': disableAuth,
-      if (protocol.isNotDefault) 'protocol': protocol,
-      if (overridesByRequestProtocol.isNotDefault)
-        'overridesByRequestProtocol': encodeMap(overridesByRequestProtocol),
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (address.isNotDefault) 'address': address,
+    if (deadline.isNotDefault) 'deadline': encodeDouble(deadline),
+    if (minDeadline.isNotDefault) 'minDeadline': encodeDouble(minDeadline),
+    if (operationDeadline.isNotDefault)
+      'operationDeadline': encodeDouble(operationDeadline),
+    if (pathTranslation.isNotDefault)
+      'pathTranslation': pathTranslation.toJson(),
+    if (jwtAudience != null) 'jwtAudience': jwtAudience,
+    if (disableAuth != null) 'disableAuth': disableAuth,
+    if (protocol.isNotDefault) 'protocol': protocol,
+    if (overridesByRequestProtocol.isNotDefault)
+      'overridesByRequestProtocol': encodeMap(overridesByRequestProtocol),
+  };
 
   @override
   String toString() {
@@ -732,24 +710,20 @@ final class Billing extends ProtoMessage {
 
   Billing({this.consumerDestinations = const []}) : super(fullyQualifiedName);
 
-  factory Billing.fromJson(Map<String, dynamic> json) {
-    return Billing(
-      consumerDestinations:
-          decodeListMessage(
-            json['consumerDestinations'],
-            Billing_BillingDestination.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory Billing.fromJson(Map<String, dynamic> json) => Billing(
+    consumerDestinations:
+        decodeListMessage(
+          json['consumerDestinations'],
+          Billing_BillingDestination.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (consumerDestinations.isNotDefault)
-        'consumerDestinations': encodeList(consumerDestinations),
-    };
-  }
+  Object toJson() => {
+    if (consumerDestinations.isNotDefault)
+      'consumerDestinations': encodeList(consumerDestinations),
+  };
 
   @override
   String toString() => 'Billing()';
@@ -776,21 +750,17 @@ final class Billing_BillingDestination extends ProtoMessage {
     this.metrics = const [],
   }) : super(fullyQualifiedName);
 
-  factory Billing_BillingDestination.fromJson(Map<String, dynamic> json) {
-    return Billing_BillingDestination(
-      monitoredResource: json['monitoredResource'] ?? '',
-      metrics: decodeList(json['metrics']) ?? [],
-    );
-  }
+  factory Billing_BillingDestination.fromJson(Map<String, dynamic> json) =>
+      Billing_BillingDestination(
+        monitoredResource: json['monitoredResource'] ?? '',
+        metrics: decodeList(json['metrics']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (monitoredResource.isNotDefault)
-        'monitoredResource': monitoredResource,
-      if (metrics.isNotDefault) 'metrics': metrics,
-    };
-  }
+  Object toJson() => {
+    if (monitoredResource.isNotDefault) 'monitoredResource': monitoredResource,
+    if (metrics.isNotDefault) 'metrics': metrics,
+  };
 
   @override
   String toString() {
@@ -819,31 +789,28 @@ final class CommonLanguageSettings extends ProtoMessage {
     this.selectiveGapicGeneration,
   }) : super(fullyQualifiedName);
 
-  factory CommonLanguageSettings.fromJson(Map<String, dynamic> json) {
-    return CommonLanguageSettings(
-      referenceDocsUri: json['referenceDocsUri'] ?? '',
-      destinations:
-          decodeListEnum(
-            json['destinations'],
-            ClientLibraryDestination.fromJson,
-          ) ??
-          [],
-      selectiveGapicGeneration: decode(
-        json['selectiveGapicGeneration'],
-        SelectiveGapicGeneration.fromJson,
-      ),
-    );
-  }
+  factory CommonLanguageSettings.fromJson(Map<String, dynamic> json) =>
+      CommonLanguageSettings(
+        referenceDocsUri: json['referenceDocsUri'] ?? '',
+        destinations:
+            decodeListEnum(
+              json['destinations'],
+              ClientLibraryDestination.fromJson,
+            ) ??
+            [],
+        selectiveGapicGeneration: decode(
+          json['selectiveGapicGeneration'],
+          SelectiveGapicGeneration.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (referenceDocsUri.isNotDefault) 'referenceDocsUri': referenceDocsUri,
-      if (destinations.isNotDefault) 'destinations': encodeList(destinations),
-      if (selectiveGapicGeneration != null)
-        'selectiveGapicGeneration': selectiveGapicGeneration!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (referenceDocsUri.isNotDefault) 'referenceDocsUri': referenceDocsUri,
+    if (destinations.isNotDefault) 'destinations': encodeList(destinations),
+    if (selectiveGapicGeneration != null)
+      'selectiveGapicGeneration': selectiveGapicGeneration!.toJson(),
+  };
 
   @override
   String toString() {
@@ -906,40 +873,37 @@ final class ClientLibrarySettings extends ProtoMessage {
     this.goSettings,
   }) : super(fullyQualifiedName);
 
-  factory ClientLibrarySettings.fromJson(Map<String, dynamic> json) {
-    return ClientLibrarySettings(
-      version: json['version'] ?? '',
-      launchStage:
-          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-          LaunchStage.$default,
-      restNumericEnums: json['restNumericEnums'] ?? false,
-      javaSettings: decode(json['javaSettings'], JavaSettings.fromJson),
-      cppSettings: decode(json['cppSettings'], CppSettings.fromJson),
-      phpSettings: decode(json['phpSettings'], PhpSettings.fromJson),
-      pythonSettings: decode(json['pythonSettings'], PythonSettings.fromJson),
-      nodeSettings: decode(json['nodeSettings'], NodeSettings.fromJson),
-      dotnetSettings: decode(json['dotnetSettings'], DotnetSettings.fromJson),
-      rubySettings: decode(json['rubySettings'], RubySettings.fromJson),
-      goSettings: decode(json['goSettings'], GoSettings.fromJson),
-    );
-  }
+  factory ClientLibrarySettings.fromJson(Map<String, dynamic> json) =>
+      ClientLibrarySettings(
+        version: json['version'] ?? '',
+        launchStage:
+            decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+            LaunchStage.$default,
+        restNumericEnums: json['restNumericEnums'] ?? false,
+        javaSettings: decode(json['javaSettings'], JavaSettings.fromJson),
+        cppSettings: decode(json['cppSettings'], CppSettings.fromJson),
+        phpSettings: decode(json['phpSettings'], PhpSettings.fromJson),
+        pythonSettings: decode(json['pythonSettings'], PythonSettings.fromJson),
+        nodeSettings: decode(json['nodeSettings'], NodeSettings.fromJson),
+        dotnetSettings: decode(json['dotnetSettings'], DotnetSettings.fromJson),
+        rubySettings: decode(json['rubySettings'], RubySettings.fromJson),
+        goSettings: decode(json['goSettings'], GoSettings.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (version.isNotDefault) 'version': version,
-      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
-      if (restNumericEnums.isNotDefault) 'restNumericEnums': restNumericEnums,
-      if (javaSettings != null) 'javaSettings': javaSettings!.toJson(),
-      if (cppSettings != null) 'cppSettings': cppSettings!.toJson(),
-      if (phpSettings != null) 'phpSettings': phpSettings!.toJson(),
-      if (pythonSettings != null) 'pythonSettings': pythonSettings!.toJson(),
-      if (nodeSettings != null) 'nodeSettings': nodeSettings!.toJson(),
-      if (dotnetSettings != null) 'dotnetSettings': dotnetSettings!.toJson(),
-      if (rubySettings != null) 'rubySettings': rubySettings!.toJson(),
-      if (goSettings != null) 'goSettings': goSettings!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (version.isNotDefault) 'version': version,
+    if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
+    if (restNumericEnums.isNotDefault) 'restNumericEnums': restNumericEnums,
+    if (javaSettings != null) 'javaSettings': javaSettings!.toJson(),
+    if (cppSettings != null) 'cppSettings': cppSettings!.toJson(),
+    if (phpSettings != null) 'phpSettings': phpSettings!.toJson(),
+    if (pythonSettings != null) 'pythonSettings': pythonSettings!.toJson(),
+    if (nodeSettings != null) 'nodeSettings': nodeSettings!.toJson(),
+    if (dotnetSettings != null) 'dotnetSettings': dotnetSettings!.toJson(),
+    if (rubySettings != null) 'rubySettings': rubySettings!.toJson(),
+    if (goSettings != null) 'goSettings': goSettings!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1016,57 +980,49 @@ final class Publishing extends ProtoMessage {
     this.restReferenceDocumentationUri = '',
   }) : super(fullyQualifiedName);
 
-  factory Publishing.fromJson(Map<String, dynamic> json) {
-    return Publishing(
-      methodSettings:
-          decodeListMessage(json['methodSettings'], MethodSettings.fromJson) ??
-          [],
-      newIssueUri: json['newIssueUri'] ?? '',
-      documentationUri: json['documentationUri'] ?? '',
-      apiShortName: json['apiShortName'] ?? '',
-      githubLabel: json['githubLabel'] ?? '',
-      codeownerGithubTeams: decodeList(json['codeownerGithubTeams']) ?? [],
-      docTagPrefix: json['docTagPrefix'] ?? '',
-      organization:
-          decodeEnum(
-            json['organization'],
-            ClientLibraryOrganization.fromJson,
-          ) ??
-          ClientLibraryOrganization.$default,
-      librarySettings:
-          decodeListMessage(
-            json['librarySettings'],
-            ClientLibrarySettings.fromJson,
-          ) ??
-          [],
-      protoReferenceDocumentationUri:
-          json['protoReferenceDocumentationUri'] ?? '',
-      restReferenceDocumentationUri:
-          json['restReferenceDocumentationUri'] ?? '',
-    );
-  }
+  factory Publishing.fromJson(Map<String, dynamic> json) => Publishing(
+    methodSettings:
+        decodeListMessage(json['methodSettings'], MethodSettings.fromJson) ??
+        [],
+    newIssueUri: json['newIssueUri'] ?? '',
+    documentationUri: json['documentationUri'] ?? '',
+    apiShortName: json['apiShortName'] ?? '',
+    githubLabel: json['githubLabel'] ?? '',
+    codeownerGithubTeams: decodeList(json['codeownerGithubTeams']) ?? [],
+    docTagPrefix: json['docTagPrefix'] ?? '',
+    organization:
+        decodeEnum(json['organization'], ClientLibraryOrganization.fromJson) ??
+        ClientLibraryOrganization.$default,
+    librarySettings:
+        decodeListMessage(
+          json['librarySettings'],
+          ClientLibrarySettings.fromJson,
+        ) ??
+        [],
+    protoReferenceDocumentationUri:
+        json['protoReferenceDocumentationUri'] ?? '',
+    restReferenceDocumentationUri: json['restReferenceDocumentationUri'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (methodSettings.isNotDefault)
-        'methodSettings': encodeList(methodSettings),
-      if (newIssueUri.isNotDefault) 'newIssueUri': newIssueUri,
-      if (documentationUri.isNotDefault) 'documentationUri': documentationUri,
-      if (apiShortName.isNotDefault) 'apiShortName': apiShortName,
-      if (githubLabel.isNotDefault) 'githubLabel': githubLabel,
-      if (codeownerGithubTeams.isNotDefault)
-        'codeownerGithubTeams': codeownerGithubTeams,
-      if (docTagPrefix.isNotDefault) 'docTagPrefix': docTagPrefix,
-      if (organization.isNotDefault) 'organization': organization.toJson(),
-      if (librarySettings.isNotDefault)
-        'librarySettings': encodeList(librarySettings),
-      if (protoReferenceDocumentationUri.isNotDefault)
-        'protoReferenceDocumentationUri': protoReferenceDocumentationUri,
-      if (restReferenceDocumentationUri.isNotDefault)
-        'restReferenceDocumentationUri': restReferenceDocumentationUri,
-    };
-  }
+  Object toJson() => {
+    if (methodSettings.isNotDefault)
+      'methodSettings': encodeList(methodSettings),
+    if (newIssueUri.isNotDefault) 'newIssueUri': newIssueUri,
+    if (documentationUri.isNotDefault) 'documentationUri': documentationUri,
+    if (apiShortName.isNotDefault) 'apiShortName': apiShortName,
+    if (githubLabel.isNotDefault) 'githubLabel': githubLabel,
+    if (codeownerGithubTeams.isNotDefault)
+      'codeownerGithubTeams': codeownerGithubTeams,
+    if (docTagPrefix.isNotDefault) 'docTagPrefix': docTagPrefix,
+    if (organization.isNotDefault) 'organization': organization.toJson(),
+    if (librarySettings.isNotDefault)
+      'librarySettings': encodeList(librarySettings),
+    if (protoReferenceDocumentationUri.isNotDefault)
+      'protoReferenceDocumentationUri': protoReferenceDocumentationUri,
+    if (restReferenceDocumentationUri.isNotDefault)
+      'restReferenceDocumentationUri': restReferenceDocumentationUri,
+  };
 
   @override
   String toString() {
@@ -1126,23 +1082,18 @@ final class JavaSettings extends ProtoMessage {
     this.common,
   }) : super(fullyQualifiedName);
 
-  factory JavaSettings.fromJson(Map<String, dynamic> json) {
-    return JavaSettings(
-      libraryPackage: json['libraryPackage'] ?? '',
-      serviceClassNames: decodeMap(json['serviceClassNames']) ?? {},
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-    );
-  }
+  factory JavaSettings.fromJson(Map<String, dynamic> json) => JavaSettings(
+    libraryPackage: json['libraryPackage'] ?? '',
+    serviceClassNames: decodeMap(json['serviceClassNames']) ?? {},
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
-      if (serviceClassNames.isNotDefault)
-        'serviceClassNames': serviceClassNames,
-      if (common != null) 'common': common!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
+    if (serviceClassNames.isNotDefault) 'serviceClassNames': serviceClassNames,
+    if (common != null) 'common': common!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1160,16 +1111,12 @@ final class CppSettings extends ProtoMessage {
 
   CppSettings({this.common}) : super(fullyQualifiedName);
 
-  factory CppSettings.fromJson(Map<String, dynamic> json) {
-    return CppSettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-    );
-  }
+  factory CppSettings.fromJson(Map<String, dynamic> json) => CppSettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (common != null) 'common': common!.toJson()};
-  }
+  Object toJson() => {if (common != null) 'common': common!.toJson()};
 
   @override
   String toString() => 'CppSettings()';
@@ -1184,16 +1131,12 @@ final class PhpSettings extends ProtoMessage {
 
   PhpSettings({this.common}) : super(fullyQualifiedName);
 
-  factory PhpSettings.fromJson(Map<String, dynamic> json) {
-    return PhpSettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-    );
-  }
+  factory PhpSettings.fromJson(Map<String, dynamic> json) => PhpSettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (common != null) 'common': common!.toJson()};
-  }
+  Object toJson() => {if (common != null) 'common': common!.toJson()};
 
   @override
   String toString() => 'PhpSettings()';
@@ -1212,24 +1155,20 @@ final class PythonSettings extends ProtoMessage {
   PythonSettings({this.common, this.experimentalFeatures})
     : super(fullyQualifiedName);
 
-  factory PythonSettings.fromJson(Map<String, dynamic> json) {
-    return PythonSettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-      experimentalFeatures: decode(
-        json['experimentalFeatures'],
-        PythonSettings_ExperimentalFeatures.fromJson,
-      ),
-    );
-  }
+  factory PythonSettings.fromJson(Map<String, dynamic> json) => PythonSettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+    experimentalFeatures: decode(
+      json['experimentalFeatures'],
+      PythonSettings_ExperimentalFeatures.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (common != null) 'common': common!.toJson(),
-      if (experimentalFeatures != null)
-        'experimentalFeatures': experimentalFeatures!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (common != null) 'common': common!.toJson(),
+    if (experimentalFeatures != null)
+      'experimentalFeatures': experimentalFeatures!.toJson(),
+  };
 
   @override
   String toString() => 'PythonSettings()';
@@ -1268,26 +1207,21 @@ final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
 
   factory PythonSettings_ExperimentalFeatures.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return PythonSettings_ExperimentalFeatures(
-      restAsyncIoEnabled: json['restAsyncIoEnabled'] ?? false,
-      protobufPythonicTypesEnabled:
-          json['protobufPythonicTypesEnabled'] ?? false,
-      unversionedPackageDisabled: json['unversionedPackageDisabled'] ?? false,
-    );
-  }
+  ) => PythonSettings_ExperimentalFeatures(
+    restAsyncIoEnabled: json['restAsyncIoEnabled'] ?? false,
+    protobufPythonicTypesEnabled: json['protobufPythonicTypesEnabled'] ?? false,
+    unversionedPackageDisabled: json['unversionedPackageDisabled'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (restAsyncIoEnabled.isNotDefault)
-        'restAsyncIoEnabled': restAsyncIoEnabled,
-      if (protobufPythonicTypesEnabled.isNotDefault)
-        'protobufPythonicTypesEnabled': protobufPythonicTypesEnabled,
-      if (unversionedPackageDisabled.isNotDefault)
-        'unversionedPackageDisabled': unversionedPackageDisabled,
-    };
-  }
+  Object toJson() => {
+    if (restAsyncIoEnabled.isNotDefault)
+      'restAsyncIoEnabled': restAsyncIoEnabled,
+    if (protobufPythonicTypesEnabled.isNotDefault)
+      'protobufPythonicTypesEnabled': protobufPythonicTypesEnabled,
+    if (unversionedPackageDisabled.isNotDefault)
+      'unversionedPackageDisabled': unversionedPackageDisabled,
+  };
 
   @override
   String toString() {
@@ -1309,16 +1243,12 @@ final class NodeSettings extends ProtoMessage {
 
   NodeSettings({this.common}) : super(fullyQualifiedName);
 
-  factory NodeSettings.fromJson(Map<String, dynamic> json) {
-    return NodeSettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-    );
-  }
+  factory NodeSettings.fromJson(Map<String, dynamic> json) => NodeSettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (common != null) 'common': common!.toJson()};
-  }
+  Object toJson() => {if (common != null) 'common': common!.toJson()};
 
   @override
   String toString() => 'NodeSettings()';
@@ -1370,30 +1300,26 @@ final class DotnetSettings extends ProtoMessage {
     this.handwrittenSignatures = const [],
   }) : super(fullyQualifiedName);
 
-  factory DotnetSettings.fromJson(Map<String, dynamic> json) {
-    return DotnetSettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-      renamedServices: decodeMap(json['renamedServices']) ?? {},
-      renamedResources: decodeMap(json['renamedResources']) ?? {},
-      ignoredResources: decodeList(json['ignoredResources']) ?? [],
-      forcedNamespaceAliases: decodeList(json['forcedNamespaceAliases']) ?? [],
-      handwrittenSignatures: decodeList(json['handwrittenSignatures']) ?? [],
-    );
-  }
+  factory DotnetSettings.fromJson(Map<String, dynamic> json) => DotnetSettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+    renamedServices: decodeMap(json['renamedServices']) ?? {},
+    renamedResources: decodeMap(json['renamedResources']) ?? {},
+    ignoredResources: decodeList(json['ignoredResources']) ?? [],
+    forcedNamespaceAliases: decodeList(json['forcedNamespaceAliases']) ?? [],
+    handwrittenSignatures: decodeList(json['handwrittenSignatures']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (common != null) 'common': common!.toJson(),
-      if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
-      if (renamedResources.isNotDefault) 'renamedResources': renamedResources,
-      if (ignoredResources.isNotDefault) 'ignoredResources': ignoredResources,
-      if (forcedNamespaceAliases.isNotDefault)
-        'forcedNamespaceAliases': forcedNamespaceAliases,
-      if (handwrittenSignatures.isNotDefault)
-        'handwrittenSignatures': handwrittenSignatures,
-    };
-  }
+  Object toJson() => {
+    if (common != null) 'common': common!.toJson(),
+    if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
+    if (renamedResources.isNotDefault) 'renamedResources': renamedResources,
+    if (ignoredResources.isNotDefault) 'ignoredResources': ignoredResources,
+    if (forcedNamespaceAliases.isNotDefault)
+      'forcedNamespaceAliases': forcedNamespaceAliases,
+    if (handwrittenSignatures.isNotDefault)
+      'handwrittenSignatures': handwrittenSignatures,
+  };
 
   @override
   String toString() => 'DotnetSettings()';
@@ -1408,16 +1334,12 @@ final class RubySettings extends ProtoMessage {
 
   RubySettings({this.common}) : super(fullyQualifiedName);
 
-  factory RubySettings.fromJson(Map<String, dynamic> json) {
-    return RubySettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-    );
-  }
+  factory RubySettings.fromJson(Map<String, dynamic> json) => RubySettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {if (common != null) 'common': common!.toJson()};
-  }
+  Object toJson() => {if (common != null) 'common': common!.toJson()};
 
   @override
   String toString() => 'RubySettings()';
@@ -1443,20 +1365,16 @@ final class GoSettings extends ProtoMessage {
   GoSettings({this.common, this.renamedServices = const {}})
     : super(fullyQualifiedName);
 
-  factory GoSettings.fromJson(Map<String, dynamic> json) {
-    return GoSettings(
-      common: decode(json['common'], CommonLanguageSettings.fromJson),
-      renamedServices: decodeMap(json['renamedServices']) ?? {},
-    );
-  }
+  factory GoSettings.fromJson(Map<String, dynamic> json) => GoSettings(
+    common: decode(json['common'], CommonLanguageSettings.fromJson),
+    renamedServices: decodeMap(json['renamedServices']) ?? {},
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (common != null) 'common': common!.toJson(),
-      if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
-    };
-  }
+  Object toJson() => {
+    if (common != null) 'common': common!.toJson(),
+    if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
+  };
 
   @override
   String toString() => 'GoSettings()';
@@ -1512,26 +1430,22 @@ final class MethodSettings extends ProtoMessage {
     this.autoPopulatedFields = const [],
   }) : super(fullyQualifiedName);
 
-  factory MethodSettings.fromJson(Map<String, dynamic> json) {
-    return MethodSettings(
-      selector: json['selector'] ?? '',
-      longRunning: decode(
-        json['longRunning'],
-        MethodSettings_LongRunning.fromJson,
-      ),
-      autoPopulatedFields: decodeList(json['autoPopulatedFields']) ?? [],
-    );
-  }
+  factory MethodSettings.fromJson(Map<String, dynamic> json) => MethodSettings(
+    selector: json['selector'] ?? '',
+    longRunning: decode(
+      json['longRunning'],
+      MethodSettings_LongRunning.fromJson,
+    ),
+    autoPopulatedFields: decodeList(json['autoPopulatedFields']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (longRunning != null) 'longRunning': longRunning!.toJson(),
-      if (autoPopulatedFields.isNotDefault)
-        'autoPopulatedFields': autoPopulatedFields,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (longRunning != null) 'longRunning': longRunning!.toJson(),
+    if (autoPopulatedFields.isNotDefault)
+      'autoPopulatedFields': autoPopulatedFields,
+  };
 
   @override
   String toString() {
@@ -1573,33 +1487,25 @@ final class MethodSettings_LongRunning extends ProtoMessage {
     this.totalPollTimeout,
   }) : super(fullyQualifiedName);
 
-  factory MethodSettings_LongRunning.fromJson(Map<String, dynamic> json) {
-    return MethodSettings_LongRunning(
-      initialPollDelay: decodeCustom(
-        json['initialPollDelay'],
-        Duration.fromJson,
-      ),
-      pollDelayMultiplier: decodeDouble(json['pollDelayMultiplier']) ?? 0,
-      maxPollDelay: decodeCustom(json['maxPollDelay'], Duration.fromJson),
-      totalPollTimeout: decodeCustom(
-        json['totalPollTimeout'],
-        Duration.fromJson,
-      ),
-    );
-  }
+  factory MethodSettings_LongRunning.fromJson(
+    Map<String, dynamic> json,
+  ) => MethodSettings_LongRunning(
+    initialPollDelay: decodeCustom(json['initialPollDelay'], Duration.fromJson),
+    pollDelayMultiplier: decodeDouble(json['pollDelayMultiplier']) ?? 0,
+    maxPollDelay: decodeCustom(json['maxPollDelay'], Duration.fromJson),
+    totalPollTimeout: decodeCustom(json['totalPollTimeout'], Duration.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (initialPollDelay != null)
-        'initialPollDelay': initialPollDelay!.toJson(),
-      if (pollDelayMultiplier.isNotDefault)
-        'pollDelayMultiplier': encodeDouble(pollDelayMultiplier),
-      if (maxPollDelay != null) 'maxPollDelay': maxPollDelay!.toJson(),
-      if (totalPollTimeout != null)
-        'totalPollTimeout': totalPollTimeout!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (initialPollDelay != null)
+      'initialPollDelay': initialPollDelay!.toJson(),
+    if (pollDelayMultiplier.isNotDefault)
+      'pollDelayMultiplier': encodeDouble(pollDelayMultiplier),
+    if (maxPollDelay != null) 'maxPollDelay': maxPollDelay!.toJson(),
+    if (totalPollTimeout != null)
+      'totalPollTimeout': totalPollTimeout!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1631,21 +1537,18 @@ final class SelectiveGapicGeneration extends ProtoMessage {
     this.generateOmittedAsInternal = false,
   }) : super(fullyQualifiedName);
 
-  factory SelectiveGapicGeneration.fromJson(Map<String, dynamic> json) {
-    return SelectiveGapicGeneration(
-      methods: decodeList(json['methods']) ?? [],
-      generateOmittedAsInternal: json['generateOmittedAsInternal'] ?? false,
-    );
-  }
+  factory SelectiveGapicGeneration.fromJson(Map<String, dynamic> json) =>
+      SelectiveGapicGeneration(
+        methods: decodeList(json['methods']) ?? [],
+        generateOmittedAsInternal: json['generateOmittedAsInternal'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (methods.isNotDefault) 'methods': methods,
-      if (generateOmittedAsInternal.isNotDefault)
-        'generateOmittedAsInternal': generateOmittedAsInternal,
-    };
-  }
+  Object toJson() => {
+    if (methods.isNotDefault) 'methods': methods,
+    if (generateOmittedAsInternal.isNotDefault)
+      'generateOmittedAsInternal': generateOmittedAsInternal,
+  };
 
   @override
   String toString() {
@@ -1699,28 +1602,24 @@ final class ConfigChange extends ProtoMessage {
     this.advices = const [],
   }) : super(fullyQualifiedName);
 
-  factory ConfigChange.fromJson(Map<String, dynamic> json) {
-    return ConfigChange(
-      element: json['element'] ?? '',
-      oldValue: json['oldValue'] ?? '',
-      newValue: json['newValue'] ?? '',
-      changeType:
-          decodeEnum(json['changeType'], ChangeType.fromJson) ??
-          ChangeType.$default,
-      advices: decodeListMessage(json['advices'], Advice.fromJson) ?? [],
-    );
-  }
+  factory ConfigChange.fromJson(Map<String, dynamic> json) => ConfigChange(
+    element: json['element'] ?? '',
+    oldValue: json['oldValue'] ?? '',
+    newValue: json['newValue'] ?? '',
+    changeType:
+        decodeEnum(json['changeType'], ChangeType.fromJson) ??
+        ChangeType.$default,
+    advices: decodeListMessage(json['advices'], Advice.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (element.isNotDefault) 'element': element,
-      if (oldValue.isNotDefault) 'oldValue': oldValue,
-      if (newValue.isNotDefault) 'newValue': newValue,
-      if (changeType.isNotDefault) 'changeType': changeType.toJson(),
-      if (advices.isNotDefault) 'advices': encodeList(advices),
-    };
-  }
+  Object toJson() => {
+    if (element.isNotDefault) 'element': element,
+    if (oldValue.isNotDefault) 'oldValue': oldValue,
+    if (newValue.isNotDefault) 'newValue': newValue,
+    if (changeType.isNotDefault) 'changeType': changeType.toJson(),
+    if (advices.isNotDefault) 'advices': encodeList(advices),
+  };
 
   @override
   String toString() {
@@ -1745,14 +1644,11 @@ final class Advice extends ProtoMessage {
 
   Advice({this.description = ''}) : super(fullyQualifiedName);
 
-  factory Advice.fromJson(Map<String, dynamic> json) {
-    return Advice(description: json['description'] ?? '');
-  }
+  factory Advice.fromJson(Map<String, dynamic> json) =>
+      Advice(description: json['description'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (description.isNotDefault) 'description': description};
-  }
+  Object toJson() => {if (description.isNotDefault) 'description': description};
 
   @override
   String toString() {
@@ -1785,17 +1681,16 @@ final class ProjectProperties extends ProtoMessage {
 
   ProjectProperties({this.properties = const []}) : super(fullyQualifiedName);
 
-  factory ProjectProperties.fromJson(Map<String, dynamic> json) {
-    return ProjectProperties(
-      properties:
-          decodeListMessage(json['properties'], Property.fromJson) ?? [],
-    );
-  }
+  factory ProjectProperties.fromJson(Map<String, dynamic> json) =>
+      ProjectProperties(
+        properties:
+            decodeListMessage(json['properties'], Property.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (properties.isNotDefault) 'properties': encodeList(properties)};
-  }
+  Object toJson() => {
+    if (properties.isNotDefault) 'properties': encodeList(properties),
+  };
 
   @override
   String toString() => 'ProjectProperties()';
@@ -1829,24 +1724,20 @@ final class Property extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory Property.fromJson(Map<String, dynamic> json) {
-    return Property(
-      name: json['name'] ?? '',
-      type:
-          decodeEnum(json['type'], Property_PropertyType.fromJson) ??
-          Property_PropertyType.$default,
-      description: json['description'] ?? '',
-    );
-  }
+  factory Property.fromJson(Map<String, dynamic> json) => Property(
+    name: json['name'] ?? '',
+    type:
+        decodeEnum(json['type'], Property_PropertyType.fromJson) ??
+        Property_PropertyType.$default,
+    description: json['description'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (type.isNotDefault) 'type': type.toJson(),
-      if (description.isNotDefault) 'description': description,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (type.isNotDefault) 'type': type.toJson(),
+    if (description.isNotDefault) 'description': description,
+  };
 
   @override
   String toString() {
@@ -1936,16 +1827,12 @@ final class Context extends ProtoMessage {
 
   Context({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory Context.fromJson(Map<String, dynamic> json) {
-    return Context(
-      rules: decodeListMessage(json['rules'], ContextRule.fromJson) ?? [],
-    );
-  }
+  factory Context.fromJson(Map<String, dynamic> json) => Context(
+    rules: decodeListMessage(json['rules'], ContextRule.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
-  }
+  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
 
   @override
   String toString() => 'Context()';
@@ -1986,30 +1873,26 @@ final class ContextRule extends ProtoMessage {
     this.allowedResponseExtensions = const [],
   }) : super(fullyQualifiedName);
 
-  factory ContextRule.fromJson(Map<String, dynamic> json) {
-    return ContextRule(
-      selector: json['selector'] ?? '',
-      requested: decodeList(json['requested']) ?? [],
-      provided: decodeList(json['provided']) ?? [],
-      allowedRequestExtensions:
-          decodeList(json['allowedRequestExtensions']) ?? [],
-      allowedResponseExtensions:
-          decodeList(json['allowedResponseExtensions']) ?? [],
-    );
-  }
+  factory ContextRule.fromJson(Map<String, dynamic> json) => ContextRule(
+    selector: json['selector'] ?? '',
+    requested: decodeList(json['requested']) ?? [],
+    provided: decodeList(json['provided']) ?? [],
+    allowedRequestExtensions:
+        decodeList(json['allowedRequestExtensions']) ?? [],
+    allowedResponseExtensions:
+        decodeList(json['allowedResponseExtensions']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (requested.isNotDefault) 'requested': requested,
-      if (provided.isNotDefault) 'provided': provided,
-      if (allowedRequestExtensions.isNotDefault)
-        'allowedRequestExtensions': allowedRequestExtensions,
-      if (allowedResponseExtensions.isNotDefault)
-        'allowedResponseExtensions': allowedResponseExtensions,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (requested.isNotDefault) 'requested': requested,
+    if (provided.isNotDefault) 'provided': provided,
+    if (allowedRequestExtensions.isNotDefault)
+      'allowedRequestExtensions': allowedRequestExtensions,
+    if (allowedResponseExtensions.isNotDefault)
+      'allowedResponseExtensions': allowedResponseExtensions,
+  };
 
   @override
   String toString() {
@@ -2038,23 +1921,18 @@ final class Control extends ProtoMessage {
   Control({this.environment = '', this.methodPolicies = const []})
     : super(fullyQualifiedName);
 
-  factory Control.fromJson(Map<String, dynamic> json) {
-    return Control(
-      environment: json['environment'] ?? '',
-      methodPolicies:
-          decodeListMessage(json['methodPolicies'], MethodPolicy.fromJson) ??
-          [],
-    );
-  }
+  factory Control.fromJson(Map<String, dynamic> json) => Control(
+    environment: json['environment'] ?? '',
+    methodPolicies:
+        decodeListMessage(json['methodPolicies'], MethodPolicy.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (environment.isNotDefault) 'environment': environment,
-      if (methodPolicies.isNotDefault)
-        'methodPolicies': encodeList(methodPolicies),
-    };
-  }
+  Object toJson() => {
+    if (environment.isNotDefault) 'environment': environment,
+    if (methodPolicies.isNotDefault)
+      'methodPolicies': encodeList(methodPolicies),
+  };
 
   @override
   String toString() {
@@ -2138,39 +2016,32 @@ final class Distribution extends ProtoMessage {
     this.exemplars = const [],
   }) : super(fullyQualifiedName);
 
-  factory Distribution.fromJson(Map<String, dynamic> json) {
-    return Distribution(
-      count: decodeInt64(json['count']) ?? 0,
-      mean: decodeDouble(json['mean']) ?? 0,
-      sumOfSquaredDeviation: decodeDouble(json['sumOfSquaredDeviation']) ?? 0,
-      range: decode(json['range'], Distribution_Range.fromJson),
-      bucketOptions: decode(
-        json['bucketOptions'],
-        Distribution_BucketOptions.fromJson,
-      ),
-      bucketCounts: decodeList(json['bucketCounts']) ?? [],
-      exemplars:
-          decodeListMessage(
-            json['exemplars'],
-            Distribution_Exemplar.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory Distribution.fromJson(Map<String, dynamic> json) => Distribution(
+    count: decodeInt64(json['count']) ?? 0,
+    mean: decodeDouble(json['mean']) ?? 0,
+    sumOfSquaredDeviation: decodeDouble(json['sumOfSquaredDeviation']) ?? 0,
+    range: decode(json['range'], Distribution_Range.fromJson),
+    bucketOptions: decode(
+      json['bucketOptions'],
+      Distribution_BucketOptions.fromJson,
+    ),
+    bucketCounts: decodeList(json['bucketCounts']) ?? [],
+    exemplars:
+        decodeListMessage(json['exemplars'], Distribution_Exemplar.fromJson) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (count.isNotDefault) 'count': encodeInt64(count),
-      if (mean.isNotDefault) 'mean': encodeDouble(mean),
-      if (sumOfSquaredDeviation.isNotDefault)
-        'sumOfSquaredDeviation': encodeDouble(sumOfSquaredDeviation),
-      if (range != null) 'range': range!.toJson(),
-      if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
-      if (bucketCounts.isNotDefault) 'bucketCounts': bucketCounts,
-      if (exemplars.isNotDefault) 'exemplars': encodeList(exemplars),
-    };
-  }
+  Object toJson() => {
+    if (count.isNotDefault) 'count': encodeInt64(count),
+    if (mean.isNotDefault) 'mean': encodeDouble(mean),
+    if (sumOfSquaredDeviation.isNotDefault)
+      'sumOfSquaredDeviation': encodeDouble(sumOfSquaredDeviation),
+    if (range != null) 'range': range!.toJson(),
+    if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
+    if (bucketCounts.isNotDefault) 'bucketCounts': bucketCounts,
+    if (exemplars.isNotDefault) 'exemplars': encodeList(exemplars),
+  };
 
   @override
   String toString() {
@@ -2195,20 +2066,17 @@ final class Distribution_Range extends ProtoMessage {
 
   Distribution_Range({this.min = 0, this.max = 0}) : super(fullyQualifiedName);
 
-  factory Distribution_Range.fromJson(Map<String, dynamic> json) {
-    return Distribution_Range(
-      min: decodeDouble(json['min']) ?? 0,
-      max: decodeDouble(json['max']) ?? 0,
-    );
-  }
+  factory Distribution_Range.fromJson(Map<String, dynamic> json) =>
+      Distribution_Range(
+        min: decodeDouble(json['min']) ?? 0,
+        max: decodeDouble(json['max']) ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (min.isNotDefault) 'min': encodeDouble(min),
-      if (max.isNotDefault) 'max': encodeDouble(max),
-    };
-  }
+  Object toJson() => {
+    if (min.isNotDefault) 'min': encodeDouble(min),
+    if (max.isNotDefault) 'max': encodeDouble(max),
+  };
 
   @override
   String toString() {
@@ -2251,32 +2119,29 @@ final class Distribution_BucketOptions extends ProtoMessage {
     this.explicitBuckets,
   }) : super(fullyQualifiedName);
 
-  factory Distribution_BucketOptions.fromJson(Map<String, dynamic> json) {
-    return Distribution_BucketOptions(
-      linearBuckets: decode(
-        json['linearBuckets'],
-        Distribution_BucketOptions_Linear.fromJson,
-      ),
-      exponentialBuckets: decode(
-        json['exponentialBuckets'],
-        Distribution_BucketOptions_Exponential.fromJson,
-      ),
-      explicitBuckets: decode(
-        json['explicitBuckets'],
-        Distribution_BucketOptions_Explicit.fromJson,
-      ),
-    );
-  }
+  factory Distribution_BucketOptions.fromJson(Map<String, dynamic> json) =>
+      Distribution_BucketOptions(
+        linearBuckets: decode(
+          json['linearBuckets'],
+          Distribution_BucketOptions_Linear.fromJson,
+        ),
+        exponentialBuckets: decode(
+          json['exponentialBuckets'],
+          Distribution_BucketOptions_Exponential.fromJson,
+        ),
+        explicitBuckets: decode(
+          json['explicitBuckets'],
+          Distribution_BucketOptions_Explicit.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (linearBuckets != null) 'linearBuckets': linearBuckets!.toJson(),
-      if (exponentialBuckets != null)
-        'exponentialBuckets': exponentialBuckets!.toJson(),
-      if (explicitBuckets != null) 'explicitBuckets': explicitBuckets!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (linearBuckets != null) 'linearBuckets': linearBuckets!.toJson(),
+    if (exponentialBuckets != null)
+      'exponentialBuckets': exponentialBuckets!.toJson(),
+    if (explicitBuckets != null) 'explicitBuckets': explicitBuckets!.toJson(),
+  };
 
   @override
   String toString() => 'BucketOptions()';
@@ -2313,22 +2178,18 @@ final class Distribution_BucketOptions_Linear extends ProtoMessage {
 
   factory Distribution_BucketOptions_Linear.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return Distribution_BucketOptions_Linear(
-      numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
-      width: decodeDouble(json['width']) ?? 0,
-      offset: decodeDouble(json['offset']) ?? 0,
-    );
-  }
+  ) => Distribution_BucketOptions_Linear(
+    numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
+    width: decodeDouble(json['width']) ?? 0,
+    offset: decodeDouble(json['offset']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (numFiniteBuckets.isNotDefault) 'numFiniteBuckets': numFiniteBuckets,
-      if (width.isNotDefault) 'width': encodeDouble(width),
-      if (offset.isNotDefault) 'offset': encodeDouble(offset),
-    };
-  }
+  Object toJson() => {
+    if (numFiniteBuckets.isNotDefault) 'numFiniteBuckets': numFiniteBuckets,
+    if (width.isNotDefault) 'width': encodeDouble(width),
+    if (offset.isNotDefault) 'offset': encodeDouble(offset),
+  };
 
   @override
   String toString() {
@@ -2372,22 +2233,18 @@ final class Distribution_BucketOptions_Exponential extends ProtoMessage {
 
   factory Distribution_BucketOptions_Exponential.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return Distribution_BucketOptions_Exponential(
-      numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
-      growthFactor: decodeDouble(json['growthFactor']) ?? 0,
-      scale: decodeDouble(json['scale']) ?? 0,
-    );
-  }
+  ) => Distribution_BucketOptions_Exponential(
+    numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
+    growthFactor: decodeDouble(json['growthFactor']) ?? 0,
+    scale: decodeDouble(json['scale']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (numFiniteBuckets.isNotDefault) 'numFiniteBuckets': numFiniteBuckets,
-      if (growthFactor.isNotDefault) 'growthFactor': encodeDouble(growthFactor),
-      if (scale.isNotDefault) 'scale': encodeDouble(scale),
-    };
-  }
+  Object toJson() => {
+    if (numFiniteBuckets.isNotDefault) 'numFiniteBuckets': numFiniteBuckets,
+    if (growthFactor.isNotDefault) 'growthFactor': encodeDouble(growthFactor),
+    if (scale.isNotDefault) 'scale': encodeDouble(scale),
+  };
 
   @override
   String toString() {
@@ -2423,16 +2280,12 @@ final class Distribution_BucketOptions_Explicit extends ProtoMessage {
 
   factory Distribution_BucketOptions_Explicit.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return Distribution_BucketOptions_Explicit(
-      bounds: decodeList(json['bounds']) ?? [],
-    );
-  }
+  ) => Distribution_BucketOptions_Explicit(
+    bounds: decodeList(json['bounds']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (bounds.isNotDefault) 'bounds': bounds};
-  }
+  Object toJson() => {if (bounds.isNotDefault) 'bounds': bounds};
 
   @override
   String toString() => 'Explicit()';
@@ -2472,22 +2325,19 @@ final class Distribution_Exemplar extends ProtoMessage {
     this.attachments = const [],
   }) : super(fullyQualifiedName);
 
-  factory Distribution_Exemplar.fromJson(Map<String, dynamic> json) {
-    return Distribution_Exemplar(
-      value: decodeDouble(json['value']) ?? 0,
-      timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
-      attachments: decodeListMessage(json['attachments'], Any.fromJson) ?? [],
-    );
-  }
+  factory Distribution_Exemplar.fromJson(Map<String, dynamic> json) =>
+      Distribution_Exemplar(
+        value: decodeDouble(json['value']) ?? 0,
+        timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
+        attachments: decodeListMessage(json['attachments'], Any.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (value.isNotDefault) 'value': encodeDouble(value),
-      if (timestamp != null) 'timestamp': timestamp!.toJson(),
-      if (attachments.isNotDefault) 'attachments': encodeList(attachments),
-    };
-  }
+  Object toJson() => {
+    if (value.isNotDefault) 'value': encodeDouble(value),
+    if (timestamp != null) 'timestamp': timestamp!.toJson(),
+    if (attachments.isNotDefault) 'attachments': encodeList(attachments),
+  };
 
   @override
   String toString() {
@@ -2601,29 +2451,25 @@ final class Documentation extends ProtoMessage {
     this.overview = '',
   }) : super(fullyQualifiedName);
 
-  factory Documentation.fromJson(Map<String, dynamic> json) {
-    return Documentation(
-      summary: json['summary'] ?? '',
-      pages: decodeListMessage(json['pages'], Page.fromJson) ?? [],
-      rules: decodeListMessage(json['rules'], DocumentationRule.fromJson) ?? [],
-      documentationRootUrl: json['documentationRootUrl'] ?? '',
-      serviceRootUrl: json['serviceRootUrl'] ?? '',
-      overview: json['overview'] ?? '',
-    );
-  }
+  factory Documentation.fromJson(Map<String, dynamic> json) => Documentation(
+    summary: json['summary'] ?? '',
+    pages: decodeListMessage(json['pages'], Page.fromJson) ?? [],
+    rules: decodeListMessage(json['rules'], DocumentationRule.fromJson) ?? [],
+    documentationRootUrl: json['documentationRootUrl'] ?? '',
+    serviceRootUrl: json['serviceRootUrl'] ?? '',
+    overview: json['overview'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (summary.isNotDefault) 'summary': summary,
-      if (pages.isNotDefault) 'pages': encodeList(pages),
-      if (rules.isNotDefault) 'rules': encodeList(rules),
-      if (documentationRootUrl.isNotDefault)
-        'documentationRootUrl': documentationRootUrl,
-      if (serviceRootUrl.isNotDefault) 'serviceRootUrl': serviceRootUrl,
-      if (overview.isNotDefault) 'overview': overview,
-    };
-  }
+  Object toJson() => {
+    if (summary.isNotDefault) 'summary': summary,
+    if (pages.isNotDefault) 'pages': encodeList(pages),
+    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (documentationRootUrl.isNotDefault)
+      'documentationRootUrl': documentationRootUrl,
+    if (serviceRootUrl.isNotDefault) 'serviceRootUrl': serviceRootUrl,
+    if (overview.isNotDefault) 'overview': overview,
+  };
 
   @override
   String toString() {
@@ -2665,23 +2511,20 @@ final class DocumentationRule extends ProtoMessage {
     this.deprecationDescription = '',
   }) : super(fullyQualifiedName);
 
-  factory DocumentationRule.fromJson(Map<String, dynamic> json) {
-    return DocumentationRule(
-      selector: json['selector'] ?? '',
-      description: json['description'] ?? '',
-      deprecationDescription: json['deprecationDescription'] ?? '',
-    );
-  }
+  factory DocumentationRule.fromJson(Map<String, dynamic> json) =>
+      DocumentationRule(
+        selector: json['selector'] ?? '',
+        description: json['description'] ?? '',
+        deprecationDescription: json['deprecationDescription'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (description.isNotDefault) 'description': description,
-      if (deprecationDescription.isNotDefault)
-        'deprecationDescription': deprecationDescription,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (description.isNotDefault) 'description': description,
+    if (deprecationDescription.isNotDefault)
+      'deprecationDescription': deprecationDescription,
+  };
 
   @override
   String toString() {
@@ -2727,22 +2570,18 @@ final class Page extends ProtoMessage {
   Page({this.name = '', this.content = '', this.subpages = const []})
     : super(fullyQualifiedName);
 
-  factory Page.fromJson(Map<String, dynamic> json) {
-    return Page(
-      name: json['name'] ?? '',
-      content: json['content'] ?? '',
-      subpages: decodeListMessage(json['subpages'], Page.fromJson) ?? [],
-    );
-  }
+  factory Page.fromJson(Map<String, dynamic> json) => Page(
+    name: json['name'] ?? '',
+    content: json['content'] ?? '',
+    subpages: decodeListMessage(json['subpages'], Page.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (content.isNotDefault) 'content': content,
-      if (subpages.isNotDefault) 'subpages': encodeList(subpages),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (content.isNotDefault) 'content': content,
+    if (subpages.isNotDefault) 'subpages': encodeList(subpages),
+  };
 
   @override
   String toString() {
@@ -2805,24 +2644,20 @@ final class Endpoint extends ProtoMessage {
     this.allowCors = false,
   }) : super(fullyQualifiedName);
 
-  factory Endpoint.fromJson(Map<String, dynamic> json) {
-    return Endpoint(
-      name: json['name'] ?? '',
-      aliases: decodeList(json['aliases']) ?? [],
-      target: json['target'] ?? '',
-      allowCors: json['allowCors'] ?? false,
-    );
-  }
+  factory Endpoint.fromJson(Map<String, dynamic> json) => Endpoint(
+    name: json['name'] ?? '',
+    aliases: decodeList(json['aliases']) ?? [],
+    target: json['target'] ?? '',
+    allowCors: json['allowCors'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (aliases.isNotDefault) 'aliases': aliases,
-      if (target.isNotDefault) 'target': target,
-      if (allowCors.isNotDefault) 'allowCors': allowCors,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (aliases.isNotDefault) 'aliases': aliases,
+    if (target.isNotDefault) 'target': target,
+    if (allowCors.isNotDefault) 'allowCors': allowCors,
+  };
 
   @override
   String toString() {
@@ -2855,25 +2690,21 @@ final class FieldInfo extends ProtoMessage {
     this.referencedTypes = const [],
   }) : super(fullyQualifiedName);
 
-  factory FieldInfo.fromJson(Map<String, dynamic> json) {
-    return FieldInfo(
-      format:
-          decodeEnum(json['format'], FieldInfo_Format.fromJson) ??
-          FieldInfo_Format.$default,
-      referencedTypes:
-          decodeListMessage(json['referencedTypes'], TypeReference.fromJson) ??
-          [],
-    );
-  }
+  factory FieldInfo.fromJson(Map<String, dynamic> json) => FieldInfo(
+    format:
+        decodeEnum(json['format'], FieldInfo_Format.fromJson) ??
+        FieldInfo_Format.$default,
+    referencedTypes:
+        decodeListMessage(json['referencedTypes'], TypeReference.fromJson) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (format.isNotDefault) 'format': format.toJson(),
-      if (referencedTypes.isNotDefault)
-        'referencedTypes': encodeList(referencedTypes),
-    };
-  }
+  Object toJson() => {
+    if (format.isNotDefault) 'format': format.toJson(),
+    if (referencedTypes.isNotDefault)
+      'referencedTypes': encodeList(referencedTypes),
+  };
 
   @override
   String toString() {
@@ -2943,14 +2774,11 @@ final class TypeReference extends ProtoMessage {
 
   TypeReference({this.typeName = ''}) : super(fullyQualifiedName);
 
-  factory TypeReference.fromJson(Map<String, dynamic> json) {
-    return TypeReference(typeName: json['typeName'] ?? '');
-  }
+  factory TypeReference.fromJson(Map<String, dynamic> json) =>
+      TypeReference(typeName: json['typeName'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (typeName.isNotDefault) 'typeName': typeName};
-  }
+  Object toJson() => {if (typeName.isNotDefault) 'typeName': typeName};
 
   @override
   String toString() {
@@ -2981,22 +2809,17 @@ final class Http extends ProtoMessage {
   Http({this.rules = const [], this.fullyDecodeReservedExpansion = false})
     : super(fullyQualifiedName);
 
-  factory Http.fromJson(Map<String, dynamic> json) {
-    return Http(
-      rules: decodeListMessage(json['rules'], HttpRule.fromJson) ?? [],
-      fullyDecodeReservedExpansion:
-          json['fullyDecodeReservedExpansion'] ?? false,
-    );
-  }
+  factory Http.fromJson(Map<String, dynamic> json) => Http(
+    rules: decodeListMessage(json['rules'], HttpRule.fromJson) ?? [],
+    fullyDecodeReservedExpansion: json['fullyDecodeReservedExpansion'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (rules.isNotDefault) 'rules': encodeList(rules),
-      if (fullyDecodeReservedExpansion.isNotDefault)
-        'fullyDecodeReservedExpansion': fullyDecodeReservedExpansion,
-    };
-  }
+  Object toJson() => {
+    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (fullyDecodeReservedExpansion.isNotDefault)
+      'fullyDecodeReservedExpansion': fullyDecodeReservedExpansion,
+  };
 
   @override
   String toString() {
@@ -3336,39 +3159,34 @@ final class HttpRule extends ProtoMessage {
     this.additionalBindings = const [],
   }) : super(fullyQualifiedName);
 
-  factory HttpRule.fromJson(Map<String, dynamic> json) {
-    return HttpRule(
-      selector: json['selector'] ?? '',
-      get: json['get'],
-      put: json['put'],
-      post: json['post'],
-      delete: json['delete'],
-      patch: json['patch'],
-      custom: decode(json['custom'], CustomHttpPattern.fromJson),
-      body: json['body'] ?? '',
-      responseBody: json['responseBody'] ?? '',
-      additionalBindings:
-          decodeListMessage(json['additionalBindings'], HttpRule.fromJson) ??
-          [],
-    );
-  }
+  factory HttpRule.fromJson(Map<String, dynamic> json) => HttpRule(
+    selector: json['selector'] ?? '',
+    get: json['get'],
+    put: json['put'],
+    post: json['post'],
+    delete: json['delete'],
+    patch: json['patch'],
+    custom: decode(json['custom'], CustomHttpPattern.fromJson),
+    body: json['body'] ?? '',
+    responseBody: json['responseBody'] ?? '',
+    additionalBindings:
+        decodeListMessage(json['additionalBindings'], HttpRule.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (get != null) 'get': get,
-      if (put != null) 'put': put,
-      if (post != null) 'post': post,
-      if (delete != null) 'delete': delete,
-      if (patch != null) 'patch': patch,
-      if (custom != null) 'custom': custom!.toJson(),
-      if (body.isNotDefault) 'body': body,
-      if (responseBody.isNotDefault) 'responseBody': responseBody,
-      if (additionalBindings.isNotDefault)
-        'additionalBindings': encodeList(additionalBindings),
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (get != null) 'get': get,
+    if (put != null) 'put': put,
+    if (post != null) 'post': post,
+    if (delete != null) 'delete': delete,
+    if (patch != null) 'patch': patch,
+    if (custom != null) 'custom': custom!.toJson(),
+    if (body.isNotDefault) 'body': body,
+    if (responseBody.isNotDefault) 'responseBody': responseBody,
+    if (additionalBindings.isNotDefault)
+      'additionalBindings': encodeList(additionalBindings),
+  };
 
   @override
   String toString() {
@@ -3399,20 +3217,14 @@ final class CustomHttpPattern extends ProtoMessage {
   CustomHttpPattern({this.kind = '', this.path = ''})
     : super(fullyQualifiedName);
 
-  factory CustomHttpPattern.fromJson(Map<String, dynamic> json) {
-    return CustomHttpPattern(
-      kind: json['kind'] ?? '',
-      path: json['path'] ?? '',
-    );
-  }
+  factory CustomHttpPattern.fromJson(Map<String, dynamic> json) =>
+      CustomHttpPattern(kind: json['kind'] ?? '', path: json['path'] ?? '');
 
   @override
-  Object toJson() {
-    return {
-      if (kind.isNotDefault) 'kind': kind,
-      if (path.isNotDefault) 'path': path,
-    };
-  }
+  Object toJson() => {
+    if (kind.isNotDefault) 'kind': kind,
+    if (path.isNotDefault) 'path': path,
+  };
 
   @override
   String toString() {
@@ -3480,22 +3292,18 @@ final class HttpBody extends ProtoMessage {
   HttpBody({this.contentType = '', this.data, this.extensions = const []})
     : super(fullyQualifiedName);
 
-  factory HttpBody.fromJson(Map<String, dynamic> json) {
-    return HttpBody(
-      contentType: json['contentType'] ?? '',
-      data: decodeBytes(json['data']),
-      extensions: decodeListMessage(json['extensions'], Any.fromJson) ?? [],
-    );
-  }
+  factory HttpBody.fromJson(Map<String, dynamic> json) => HttpBody(
+    contentType: json['contentType'] ?? '',
+    data: decodeBytes(json['data']),
+    extensions: decodeListMessage(json['extensions'], Any.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (contentType.isNotDefault) 'contentType': contentType,
-      if (data != null) 'data': encodeBytes(data),
-      if (extensions.isNotDefault) 'extensions': encodeList(extensions),
-    };
-  }
+  Object toJson() => {
+    if (contentType.isNotDefault) 'contentType': contentType,
+    if (data != null) 'data': encodeBytes(data),
+    if (extensions.isNotDefault) 'extensions': encodeList(extensions),
+  };
 
   @override
   String toString() {
@@ -3526,24 +3334,21 @@ final class LabelDescriptor extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory LabelDescriptor.fromJson(Map<String, dynamic> json) {
-    return LabelDescriptor(
-      key: json['key'] ?? '',
-      valueType:
-          decodeEnum(json['valueType'], LabelDescriptor_ValueType.fromJson) ??
-          LabelDescriptor_ValueType.$default,
-      description: json['description'] ?? '',
-    );
-  }
+  factory LabelDescriptor.fromJson(Map<String, dynamic> json) =>
+      LabelDescriptor(
+        key: json['key'] ?? '',
+        valueType:
+            decodeEnum(json['valueType'], LabelDescriptor_ValueType.fromJson) ??
+            LabelDescriptor_ValueType.$default,
+        description: json['description'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (key.isNotDefault) 'key': key,
-      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
-      if (description.isNotDefault) 'description': description,
-    };
-  }
+  Object toJson() => {
+    if (key.isNotDefault) 'key': key,
+    if (valueType.isNotDefault) 'valueType': valueType.toJson(),
+    if (description.isNotDefault) 'description': description,
+  };
 
   @override
   String toString() {
@@ -3618,24 +3423,20 @@ final class LogDescriptor extends ProtoMessage {
     this.displayName = '',
   }) : super(fullyQualifiedName);
 
-  factory LogDescriptor.fromJson(Map<String, dynamic> json) {
-    return LogDescriptor(
-      name: json['name'] ?? '',
-      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
-      description: json['description'] ?? '',
-      displayName: json['displayName'] ?? '',
-    );
-  }
+  factory LogDescriptor.fromJson(Map<String, dynamic> json) => LogDescriptor(
+    name: json['name'] ?? '',
+    labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
+    description: json['description'] ?? '',
+    displayName: json['displayName'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (labels.isNotDefault) 'labels': encodeList(labels),
-      if (description.isNotDefault) 'description': description,
-      if (displayName.isNotDefault) 'displayName': displayName,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (labels.isNotDefault) 'labels': encodeList(labels),
+    if (description.isNotDefault) 'description': description,
+    if (displayName.isNotDefault) 'displayName': displayName,
+  };
 
   @override
   String toString() {
@@ -3697,32 +3498,28 @@ final class Logging extends ProtoMessage {
     this.consumerDestinations = const [],
   }) : super(fullyQualifiedName);
 
-  factory Logging.fromJson(Map<String, dynamic> json) {
-    return Logging(
-      producerDestinations:
-          decodeListMessage(
-            json['producerDestinations'],
-            Logging_LoggingDestination.fromJson,
-          ) ??
-          [],
-      consumerDestinations:
-          decodeListMessage(
-            json['consumerDestinations'],
-            Logging_LoggingDestination.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory Logging.fromJson(Map<String, dynamic> json) => Logging(
+    producerDestinations:
+        decodeListMessage(
+          json['producerDestinations'],
+          Logging_LoggingDestination.fromJson,
+        ) ??
+        [],
+    consumerDestinations:
+        decodeListMessage(
+          json['consumerDestinations'],
+          Logging_LoggingDestination.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (producerDestinations.isNotDefault)
-        'producerDestinations': encodeList(producerDestinations),
-      if (consumerDestinations.isNotDefault)
-        'consumerDestinations': encodeList(consumerDestinations),
-    };
-  }
+  Object toJson() => {
+    if (producerDestinations.isNotDefault)
+      'producerDestinations': encodeList(producerDestinations),
+    if (consumerDestinations.isNotDefault)
+      'consumerDestinations': encodeList(consumerDestinations),
+  };
 
   @override
   String toString() => 'Logging()';
@@ -3750,21 +3547,17 @@ final class Logging_LoggingDestination extends ProtoMessage {
     this.logs = const [],
   }) : super(fullyQualifiedName);
 
-  factory Logging_LoggingDestination.fromJson(Map<String, dynamic> json) {
-    return Logging_LoggingDestination(
-      monitoredResource: json['monitoredResource'] ?? '',
-      logs: decodeList(json['logs']) ?? [],
-    );
-  }
+  factory Logging_LoggingDestination.fromJson(Map<String, dynamic> json) =>
+      Logging_LoggingDestination(
+        monitoredResource: json['monitoredResource'] ?? '',
+        logs: decodeList(json['logs']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (monitoredResource.isNotDefault)
-        'monitoredResource': monitoredResource,
-      if (logs.isNotDefault) 'logs': logs,
-    };
-  }
+  Object toJson() => {
+    if (monitoredResource.isNotDefault) 'monitoredResource': monitoredResource,
+    if (logs.isNotDefault) 'logs': logs,
+  };
 
   @override
   String toString() {
@@ -3949,51 +3742,46 @@ final class MetricDescriptor extends ProtoMessage {
     this.monitoredResourceTypes = const [],
   }) : super(fullyQualifiedName);
 
-  factory MetricDescriptor.fromJson(Map<String, dynamic> json) {
-    return MetricDescriptor(
-      name: json['name'] ?? '',
-      type: json['type'] ?? '',
-      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
-      metricKind:
-          decodeEnum(
-            json['metricKind'],
-            MetricDescriptor_MetricKind.fromJson,
-          ) ??
-          MetricDescriptor_MetricKind.$default,
-      valueType:
-          decodeEnum(json['valueType'], MetricDescriptor_ValueType.fromJson) ??
-          MetricDescriptor_ValueType.$default,
-      unit: json['unit'] ?? '',
-      description: json['description'] ?? '',
-      displayName: json['displayName'] ?? '',
-      metadata: decode(
-        json['metadata'],
-        MetricDescriptor_MetricDescriptorMetadata.fromJson,
-      ),
-      launchStage:
-          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-          LaunchStage.$default,
-      monitoredResourceTypes: decodeList(json['monitoredResourceTypes']) ?? [],
-    );
-  }
+  factory MetricDescriptor.fromJson(
+    Map<String, dynamic> json,
+  ) => MetricDescriptor(
+    name: json['name'] ?? '',
+    type: json['type'] ?? '',
+    labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
+    metricKind:
+        decodeEnum(json['metricKind'], MetricDescriptor_MetricKind.fromJson) ??
+        MetricDescriptor_MetricKind.$default,
+    valueType:
+        decodeEnum(json['valueType'], MetricDescriptor_ValueType.fromJson) ??
+        MetricDescriptor_ValueType.$default,
+    unit: json['unit'] ?? '',
+    description: json['description'] ?? '',
+    displayName: json['displayName'] ?? '',
+    metadata: decode(
+      json['metadata'],
+      MetricDescriptor_MetricDescriptorMetadata.fromJson,
+    ),
+    launchStage:
+        decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+        LaunchStage.$default,
+    monitoredResourceTypes: decodeList(json['monitoredResourceTypes']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (type.isNotDefault) 'type': type,
-      if (labels.isNotDefault) 'labels': encodeList(labels),
-      if (metricKind.isNotDefault) 'metricKind': metricKind.toJson(),
-      if (valueType.isNotDefault) 'valueType': valueType.toJson(),
-      if (unit.isNotDefault) 'unit': unit,
-      if (description.isNotDefault) 'description': description,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (metadata != null) 'metadata': metadata!.toJson(),
-      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
-      if (monitoredResourceTypes.isNotDefault)
-        'monitoredResourceTypes': monitoredResourceTypes,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (type.isNotDefault) 'type': type,
+    if (labels.isNotDefault) 'labels': encodeList(labels),
+    if (metricKind.isNotDefault) 'metricKind': metricKind.toJson(),
+    if (valueType.isNotDefault) 'valueType': valueType.toJson(),
+    if (unit.isNotDefault) 'unit': unit,
+    if (description.isNotDefault) 'description': description,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (metadata != null) 'metadata': metadata!.toJson(),
+    if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
+    if (monitoredResourceTypes.isNotDefault)
+      'monitoredResourceTypes': monitoredResourceTypes,
+  };
 
   @override
   String toString() {
@@ -4047,35 +3835,31 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
 
   factory MetricDescriptor_MetricDescriptorMetadata.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return MetricDescriptor_MetricDescriptorMetadata(
-      launchStage:
-          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-          LaunchStage.$default,
-      samplePeriod: decodeCustom(json['samplePeriod'], Duration.fromJson),
-      ingestDelay: decodeCustom(json['ingestDelay'], Duration.fromJson),
-      timeSeriesResourceHierarchyLevel:
-          decodeListEnum(
-            json['timeSeriesResourceHierarchyLevel'],
-            MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
-                .fromJson,
-          ) ??
-          [],
-    );
-  }
+  ) => MetricDescriptor_MetricDescriptorMetadata(
+    launchStage:
+        decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+        LaunchStage.$default,
+    samplePeriod: decodeCustom(json['samplePeriod'], Duration.fromJson),
+    ingestDelay: decodeCustom(json['ingestDelay'], Duration.fromJson),
+    timeSeriesResourceHierarchyLevel:
+        decodeListEnum(
+          json['timeSeriesResourceHierarchyLevel'],
+          MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
+              .fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
-      if (samplePeriod != null) 'samplePeriod': samplePeriod!.toJson(),
-      if (ingestDelay != null) 'ingestDelay': ingestDelay!.toJson(),
-      if (timeSeriesResourceHierarchyLevel.isNotDefault)
-        'timeSeriesResourceHierarchyLevel': encodeList(
-          timeSeriesResourceHierarchyLevel,
-        ),
-    };
-  }
+  Object toJson() => {
+    if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
+    if (samplePeriod != null) 'samplePeriod': samplePeriod!.toJson(),
+    if (ingestDelay != null) 'ingestDelay': ingestDelay!.toJson(),
+    if (timeSeriesResourceHierarchyLevel.isNotDefault)
+      'timeSeriesResourceHierarchyLevel': encodeList(
+        timeSeriesResourceHierarchyLevel,
+      ),
+  };
 
   @override
   String toString() {
@@ -4224,20 +4008,14 @@ final class Metric extends ProtoMessage {
 
   Metric({this.type = '', this.labels = const {}}) : super(fullyQualifiedName);
 
-  factory Metric.fromJson(Map<String, dynamic> json) {
-    return Metric(
-      type: json['type'] ?? '',
-      labels: decodeMap(json['labels']) ?? {},
-    );
-  }
+  factory Metric.fromJson(Map<String, dynamic> json) =>
+      Metric(type: json['type'] ?? '', labels: decodeMap(json['labels']) ?? {});
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type,
-      if (labels.isNotDefault) 'labels': labels,
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type,
+    if (labels.isNotDefault) 'labels': labels,
+  };
 
   @override
   String toString() {
@@ -4303,30 +4081,28 @@ final class MonitoredResourceDescriptor extends ProtoMessage {
     this.launchStage = LaunchStage.$default,
   }) : super(fullyQualifiedName);
 
-  factory MonitoredResourceDescriptor.fromJson(Map<String, dynamic> json) {
-    return MonitoredResourceDescriptor(
-      name: json['name'] ?? '',
-      type: json['type'] ?? '',
-      displayName: json['displayName'] ?? '',
-      description: json['description'] ?? '',
-      labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
-      launchStage:
-          decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-          LaunchStage.$default,
-    );
-  }
+  factory MonitoredResourceDescriptor.fromJson(Map<String, dynamic> json) =>
+      MonitoredResourceDescriptor(
+        name: json['name'] ?? '',
+        type: json['type'] ?? '',
+        displayName: json['displayName'] ?? '',
+        description: json['description'] ?? '',
+        labels:
+            decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
+        launchStage:
+            decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
+            LaunchStage.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (type.isNotDefault) 'type': type,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (description.isNotDefault) 'description': description,
-      if (labels.isNotDefault) 'labels': encodeList(labels),
-      if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (type.isNotDefault) 'type': type,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (description.isNotDefault) 'description': description,
+    if (labels.isNotDefault) 'labels': encodeList(labels),
+    if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
+  };
 
   @override
   String toString() {
@@ -4377,20 +4153,17 @@ final class MonitoredResource extends ProtoMessage {
   MonitoredResource({this.type = '', this.labels = const {}})
     : super(fullyQualifiedName);
 
-  factory MonitoredResource.fromJson(Map<String, dynamic> json) {
-    return MonitoredResource(
-      type: json['type'] ?? '',
-      labels: decodeMap(json['labels']) ?? {},
-    );
-  }
+  factory MonitoredResource.fromJson(Map<String, dynamic> json) =>
+      MonitoredResource(
+        type: json['type'] ?? '',
+        labels: decodeMap(json['labels']) ?? {},
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type,
-      if (labels.isNotDefault) 'labels': labels,
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type,
+    if (labels.isNotDefault) 'labels': labels,
+  };
 
   @override
   String toString() {
@@ -4427,20 +4200,17 @@ final class MonitoredResourceMetadata extends ProtoMessage {
   MonitoredResourceMetadata({this.systemLabels, this.userLabels = const {}})
     : super(fullyQualifiedName);
 
-  factory MonitoredResourceMetadata.fromJson(Map<String, dynamic> json) {
-    return MonitoredResourceMetadata(
-      systemLabels: decodeCustom(json['systemLabels'], Struct.fromJson),
-      userLabels: decodeMap(json['userLabels']) ?? {},
-    );
-  }
+  factory MonitoredResourceMetadata.fromJson(Map<String, dynamic> json) =>
+      MonitoredResourceMetadata(
+        systemLabels: decodeCustom(json['systemLabels'], Struct.fromJson),
+        userLabels: decodeMap(json['userLabels']) ?? {},
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (systemLabels != null) 'systemLabels': systemLabels!.toJson(),
-      if (userLabels.isNotDefault) 'userLabels': userLabels,
-    };
-  }
+  Object toJson() => {
+    if (systemLabels != null) 'systemLabels': systemLabels!.toJson(),
+    if (userLabels.isNotDefault) 'userLabels': userLabels,
+  };
 
   @override
   String toString() => 'MonitoredResourceMetadata()';
@@ -4522,32 +4292,28 @@ final class Monitoring extends ProtoMessage {
     this.consumerDestinations = const [],
   }) : super(fullyQualifiedName);
 
-  factory Monitoring.fromJson(Map<String, dynamic> json) {
-    return Monitoring(
-      producerDestinations:
-          decodeListMessage(
-            json['producerDestinations'],
-            Monitoring_MonitoringDestination.fromJson,
-          ) ??
-          [],
-      consumerDestinations:
-          decodeListMessage(
-            json['consumerDestinations'],
-            Monitoring_MonitoringDestination.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory Monitoring.fromJson(Map<String, dynamic> json) => Monitoring(
+    producerDestinations:
+        decodeListMessage(
+          json['producerDestinations'],
+          Monitoring_MonitoringDestination.fromJson,
+        ) ??
+        [],
+    consumerDestinations:
+        decodeListMessage(
+          json['consumerDestinations'],
+          Monitoring_MonitoringDestination.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (producerDestinations.isNotDefault)
-        'producerDestinations': encodeList(producerDestinations),
-      if (consumerDestinations.isNotDefault)
-        'consumerDestinations': encodeList(consumerDestinations),
-    };
-  }
+  Object toJson() => {
+    if (producerDestinations.isNotDefault)
+      'producerDestinations': encodeList(producerDestinations),
+    if (consumerDestinations.isNotDefault)
+      'consumerDestinations': encodeList(consumerDestinations),
+  };
 
   @override
   String toString() => 'Monitoring()';
@@ -4574,21 +4340,18 @@ final class Monitoring_MonitoringDestination extends ProtoMessage {
     this.metrics = const [],
   }) : super(fullyQualifiedName);
 
-  factory Monitoring_MonitoringDestination.fromJson(Map<String, dynamic> json) {
-    return Monitoring_MonitoringDestination(
-      monitoredResource: json['monitoredResource'] ?? '',
-      metrics: decodeList(json['metrics']) ?? [],
-    );
-  }
+  factory Monitoring_MonitoringDestination.fromJson(
+    Map<String, dynamic> json,
+  ) => Monitoring_MonitoringDestination(
+    monitoredResource: json['monitoredResource'] ?? '',
+    metrics: decodeList(json['metrics']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (monitoredResource.isNotDefault)
-        'monitoredResource': monitoredResource,
-      if (metrics.isNotDefault) 'metrics': metrics,
-    };
-  }
+  Object toJson() => {
+    if (monitoredResource.isNotDefault) 'monitoredResource': monitoredResource,
+    if (metrics.isNotDefault) 'metrics': metrics,
+  };
 
   @override
   String toString() {
@@ -4635,23 +4398,19 @@ final class FieldPolicy extends ProtoMessage {
     this.resourceType = '',
   }) : super(fullyQualifiedName);
 
-  factory FieldPolicy.fromJson(Map<String, dynamic> json) {
-    return FieldPolicy(
-      selector: json['selector'] ?? '',
-      resourcePermission: json['resourcePermission'] ?? '',
-      resourceType: json['resourceType'] ?? '',
-    );
-  }
+  factory FieldPolicy.fromJson(Map<String, dynamic> json) => FieldPolicy(
+    selector: json['selector'] ?? '',
+    resourcePermission: json['resourcePermission'] ?? '',
+    resourceType: json['resourceType'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (resourcePermission.isNotDefault)
-        'resourcePermission': resourcePermission,
-      if (resourceType.isNotDefault) 'resourceType': resourceType,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (resourcePermission.isNotDefault)
+      'resourcePermission': resourcePermission,
+    if (resourceType.isNotDefault) 'resourceType': resourceType,
+  };
 
   @override
   String toString() {
@@ -4684,23 +4443,18 @@ final class MethodPolicy extends ProtoMessage {
   MethodPolicy({this.selector = '', this.requestPolicies = const []})
     : super(fullyQualifiedName);
 
-  factory MethodPolicy.fromJson(Map<String, dynamic> json) {
-    return MethodPolicy(
-      selector: json['selector'] ?? '',
-      requestPolicies:
-          decodeListMessage(json['requestPolicies'], FieldPolicy.fromJson) ??
-          [],
-    );
-  }
+  factory MethodPolicy.fromJson(Map<String, dynamic> json) => MethodPolicy(
+    selector: json['selector'] ?? '',
+    requestPolicies:
+        decodeListMessage(json['requestPolicies'], FieldPolicy.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (requestPolicies.isNotDefault)
-        'requestPolicies': encodeList(requestPolicies),
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (requestPolicies.isNotDefault)
+      'requestPolicies': encodeList(requestPolicies),
+  };
 
   @override
   String toString() {
@@ -4771,21 +4525,17 @@ final class Quota extends ProtoMessage {
   Quota({this.limits = const [], this.metricRules = const []})
     : super(fullyQualifiedName);
 
-  factory Quota.fromJson(Map<String, dynamic> json) {
-    return Quota(
-      limits: decodeListMessage(json['limits'], QuotaLimit.fromJson) ?? [],
-      metricRules:
-          decodeListMessage(json['metricRules'], MetricRule.fromJson) ?? [],
-    );
-  }
+  factory Quota.fromJson(Map<String, dynamic> json) => Quota(
+    limits: decodeListMessage(json['limits'], QuotaLimit.fromJson) ?? [],
+    metricRules:
+        decodeListMessage(json['metricRules'], MetricRule.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (limits.isNotDefault) 'limits': encodeList(limits),
-      if (metricRules.isNotDefault) 'metricRules': encodeList(metricRules),
-    };
-  }
+  Object toJson() => {
+    if (limits.isNotDefault) 'limits': encodeList(limits),
+    if (metricRules.isNotDefault) 'metricRules': encodeList(metricRules),
+  };
 
   @override
   String toString() => 'Quota()';
@@ -4813,20 +4563,16 @@ final class MetricRule extends ProtoMessage {
   MetricRule({this.selector = '', this.metricCosts = const {}})
     : super(fullyQualifiedName);
 
-  factory MetricRule.fromJson(Map<String, dynamic> json) {
-    return MetricRule(
-      selector: json['selector'] ?? '',
-      metricCosts: decodeMap(json['metricCosts']) ?? {},
-    );
-  }
+  factory MetricRule.fromJson(Map<String, dynamic> json) => MetricRule(
+    selector: json['selector'] ?? '',
+    metricCosts: decodeMap(json['metricCosts']) ?? {},
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (metricCosts.isNotDefault) 'metricCosts': metricCosts,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (metricCosts.isNotDefault) 'metricCosts': metricCosts,
+  };
 
   @override
   String toString() {
@@ -4932,36 +4678,32 @@ final class QuotaLimit extends ProtoMessage {
     this.displayName = '',
   }) : super(fullyQualifiedName);
 
-  factory QuotaLimit.fromJson(Map<String, dynamic> json) {
-    return QuotaLimit(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      defaultLimit: decodeInt64(json['defaultLimit']) ?? 0,
-      maxLimit: decodeInt64(json['maxLimit']) ?? 0,
-      freeTier: decodeInt64(json['freeTier']) ?? 0,
-      duration: json['duration'] ?? '',
-      metric: json['metric'] ?? '',
-      unit: json['unit'] ?? '',
-      values: decodeMap(json['values']) ?? {},
-      displayName: json['displayName'] ?? '',
-    );
-  }
+  factory QuotaLimit.fromJson(Map<String, dynamic> json) => QuotaLimit(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    defaultLimit: decodeInt64(json['defaultLimit']) ?? 0,
+    maxLimit: decodeInt64(json['maxLimit']) ?? 0,
+    freeTier: decodeInt64(json['freeTier']) ?? 0,
+    duration: json['duration'] ?? '',
+    metric: json['metric'] ?? '',
+    unit: json['unit'] ?? '',
+    values: decodeMap(json['values']) ?? {},
+    displayName: json['displayName'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
-      if (defaultLimit.isNotDefault) 'defaultLimit': encodeInt64(defaultLimit),
-      if (maxLimit.isNotDefault) 'maxLimit': encodeInt64(maxLimit),
-      if (freeTier.isNotDefault) 'freeTier': encodeInt64(freeTier),
-      if (duration.isNotDefault) 'duration': duration,
-      if (metric.isNotDefault) 'metric': metric,
-      if (unit.isNotDefault) 'unit': unit,
-      if (values.isNotDefault) 'values': values,
-      if (displayName.isNotDefault) 'displayName': displayName,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (description.isNotDefault) 'description': description,
+    if (defaultLimit.isNotDefault) 'defaultLimit': encodeInt64(defaultLimit),
+    if (maxLimit.isNotDefault) 'maxLimit': encodeInt64(maxLimit),
+    if (freeTier.isNotDefault) 'freeTier': encodeInt64(freeTier),
+    if (duration.isNotDefault) 'duration': duration,
+    if (metric.isNotDefault) 'metric': metric,
+    if (unit.isNotDefault) 'unit': unit,
+    if (values.isNotDefault) 'values': values,
+    if (displayName.isNotDefault) 'displayName': displayName,
+  };
 
   @override
   String toString() {
@@ -5119,34 +4861,31 @@ final class ResourceDescriptor extends ProtoMessage {
     this.style = const [],
   }) : super(fullyQualifiedName);
 
-  factory ResourceDescriptor.fromJson(Map<String, dynamic> json) {
-    return ResourceDescriptor(
-      type: json['type'] ?? '',
-      pattern: decodeList(json['pattern']) ?? [],
-      nameField: json['nameField'] ?? '',
-      history:
-          decodeEnum(json['history'], ResourceDescriptor_History.fromJson) ??
-          ResourceDescriptor_History.$default,
-      plural: json['plural'] ?? '',
-      singular: json['singular'] ?? '',
-      style:
-          decodeListEnum(json['style'], ResourceDescriptor_Style.fromJson) ??
-          [],
-    );
-  }
+  factory ResourceDescriptor.fromJson(Map<String, dynamic> json) =>
+      ResourceDescriptor(
+        type: json['type'] ?? '',
+        pattern: decodeList(json['pattern']) ?? [],
+        nameField: json['nameField'] ?? '',
+        history:
+            decodeEnum(json['history'], ResourceDescriptor_History.fromJson) ??
+            ResourceDescriptor_History.$default,
+        plural: json['plural'] ?? '',
+        singular: json['singular'] ?? '',
+        style:
+            decodeListEnum(json['style'], ResourceDescriptor_Style.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type,
-      if (pattern.isNotDefault) 'pattern': pattern,
-      if (nameField.isNotDefault) 'nameField': nameField,
-      if (history.isNotDefault) 'history': history.toJson(),
-      if (plural.isNotDefault) 'plural': plural,
-      if (singular.isNotDefault) 'singular': singular,
-      if (style.isNotDefault) 'style': encodeList(style),
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type,
+    if (pattern.isNotDefault) 'pattern': pattern,
+    if (nameField.isNotDefault) 'nameField': nameField,
+    if (history.isNotDefault) 'history': history.toJson(),
+    if (plural.isNotDefault) 'plural': plural,
+    if (singular.isNotDefault) 'singular': singular,
+    if (style.isNotDefault) 'style': encodeList(style),
+  };
 
   @override
   String toString() {
@@ -5270,20 +5009,17 @@ final class ResourceReference extends ProtoMessage {
   ResourceReference({this.type = '', this.childType = ''})
     : super(fullyQualifiedName);
 
-  factory ResourceReference.fromJson(Map<String, dynamic> json) {
-    return ResourceReference(
-      type: json['type'] ?? '',
-      childType: json['childType'] ?? '',
-    );
-  }
+  factory ResourceReference.fromJson(Map<String, dynamic> json) =>
+      ResourceReference(
+        type: json['type'] ?? '',
+        childType: json['childType'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (type.isNotDefault) 'type': type,
-      if (childType.isNotDefault) 'childType': childType,
-    };
-  }
+  Object toJson() => {
+    if (type.isNotDefault) 'type': type,
+    if (childType.isNotDefault) 'childType': childType,
+  };
 
   @override
   String toString() {
@@ -5664,24 +5400,20 @@ final class RoutingRule extends ProtoMessage {
 
   RoutingRule({this.routingParameters = const []}) : super(fullyQualifiedName);
 
-  factory RoutingRule.fromJson(Map<String, dynamic> json) {
-    return RoutingRule(
-      routingParameters:
-          decodeListMessage(
-            json['routingParameters'],
-            RoutingParameter.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory RoutingRule.fromJson(Map<String, dynamic> json) => RoutingRule(
+    routingParameters:
+        decodeListMessage(
+          json['routingParameters'],
+          RoutingParameter.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (routingParameters.isNotDefault)
-        'routingParameters': encodeList(routingParameters),
-    };
-  }
+  Object toJson() => {
+    if (routingParameters.isNotDefault)
+      'routingParameters': encodeList(routingParameters),
+  };
 
   @override
   String toString() => 'RoutingRule()';
@@ -5753,20 +5485,17 @@ final class RoutingParameter extends ProtoMessage {
   RoutingParameter({this.field = '', this.pathTemplate = ''})
     : super(fullyQualifiedName);
 
-  factory RoutingParameter.fromJson(Map<String, dynamic> json) {
-    return RoutingParameter(
-      field: json['field'] ?? '',
-      pathTemplate: json['pathTemplate'] ?? '',
-    );
-  }
+  factory RoutingParameter.fromJson(Map<String, dynamic> json) =>
+      RoutingParameter(
+        field: json['field'] ?? '',
+        pathTemplate: json['pathTemplate'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (field.isNotDefault) 'field': field,
-      if (pathTemplate.isNotDefault) 'pathTemplate': pathTemplate,
-    };
-  }
+  Object toJson() => {
+    if (field.isNotDefault) 'field': field,
+    if (pathTemplate.isNotDefault) 'pathTemplate': pathTemplate,
+  };
 
   @override
   String toString() {
@@ -5951,80 +5680,75 @@ final class Service extends ProtoMessage {
     this.configVersion,
   }) : super(fullyQualifiedName);
 
-  factory Service.fromJson(Map<String, dynamic> json) {
-    return Service(
-      name: json['name'] ?? '',
-      title: json['title'] ?? '',
-      producerProjectId: json['producerProjectId'] ?? '',
-      id: json['id'] ?? '',
-      apis: decodeListMessage(json['apis'], Api.fromJson) ?? [],
-      types: decodeListMessage(json['types'], Type.fromJson) ?? [],
-      enums: decodeListMessage(json['enums'], Enum.fromJson) ?? [],
-      documentation: decode(json['documentation'], Documentation.fromJson),
-      backend: decode(json['backend'], Backend.fromJson),
-      http: decode(json['http'], Http.fromJson),
-      quota: decode(json['quota'], Quota.fromJson),
-      authentication: decode(json['authentication'], Authentication.fromJson),
-      context: decode(json['context'], Context.fromJson),
-      usage: decode(json['usage'], Usage.fromJson),
-      endpoints: decodeListMessage(json['endpoints'], Endpoint.fromJson) ?? [],
-      control: decode(json['control'], Control.fromJson),
-      logs: decodeListMessage(json['logs'], LogDescriptor.fromJson) ?? [],
-      metrics:
-          decodeListMessage(json['metrics'], MetricDescriptor.fromJson) ?? [],
-      monitoredResources:
-          decodeListMessage(
-            json['monitoredResources'],
-            MonitoredResourceDescriptor.fromJson,
-          ) ??
-          [],
-      billing: decode(json['billing'], Billing.fromJson),
-      logging: decode(json['logging'], Logging.fromJson),
-      monitoring: decode(json['monitoring'], Monitoring.fromJson),
-      systemParameters: decode(
-        json['systemParameters'],
-        SystemParameters.fromJson,
-      ),
-      sourceInfo: decode(json['sourceInfo'], SourceInfo.fromJson),
-      publishing: decode(json['publishing'], Publishing.fromJson),
-      configVersion: decodeCustom(json['configVersion'], Uint32Value.fromJson),
-    );
-  }
+  factory Service.fromJson(Map<String, dynamic> json) => Service(
+    name: json['name'] ?? '',
+    title: json['title'] ?? '',
+    producerProjectId: json['producerProjectId'] ?? '',
+    id: json['id'] ?? '',
+    apis: decodeListMessage(json['apis'], Api.fromJson) ?? [],
+    types: decodeListMessage(json['types'], Type.fromJson) ?? [],
+    enums: decodeListMessage(json['enums'], Enum.fromJson) ?? [],
+    documentation: decode(json['documentation'], Documentation.fromJson),
+    backend: decode(json['backend'], Backend.fromJson),
+    http: decode(json['http'], Http.fromJson),
+    quota: decode(json['quota'], Quota.fromJson),
+    authentication: decode(json['authentication'], Authentication.fromJson),
+    context: decode(json['context'], Context.fromJson),
+    usage: decode(json['usage'], Usage.fromJson),
+    endpoints: decodeListMessage(json['endpoints'], Endpoint.fromJson) ?? [],
+    control: decode(json['control'], Control.fromJson),
+    logs: decodeListMessage(json['logs'], LogDescriptor.fromJson) ?? [],
+    metrics:
+        decodeListMessage(json['metrics'], MetricDescriptor.fromJson) ?? [],
+    monitoredResources:
+        decodeListMessage(
+          json['monitoredResources'],
+          MonitoredResourceDescriptor.fromJson,
+        ) ??
+        [],
+    billing: decode(json['billing'], Billing.fromJson),
+    logging: decode(json['logging'], Logging.fromJson),
+    monitoring: decode(json['monitoring'], Monitoring.fromJson),
+    systemParameters: decode(
+      json['systemParameters'],
+      SystemParameters.fromJson,
+    ),
+    sourceInfo: decode(json['sourceInfo'], SourceInfo.fromJson),
+    publishing: decode(json['publishing'], Publishing.fromJson),
+    configVersion: decodeCustom(json['configVersion'], Uint32Value.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (title.isNotDefault) 'title': title,
-      if (producerProjectId.isNotDefault)
-        'producerProjectId': producerProjectId,
-      if (id.isNotDefault) 'id': id,
-      if (apis.isNotDefault) 'apis': encodeList(apis),
-      if (types.isNotDefault) 'types': encodeList(types),
-      if (enums.isNotDefault) 'enums': encodeList(enums),
-      if (documentation != null) 'documentation': documentation!.toJson(),
-      if (backend != null) 'backend': backend!.toJson(),
-      if (http != null) 'http': http!.toJson(),
-      if (quota != null) 'quota': quota!.toJson(),
-      if (authentication != null) 'authentication': authentication!.toJson(),
-      if (context != null) 'context': context!.toJson(),
-      if (usage != null) 'usage': usage!.toJson(),
-      if (endpoints.isNotDefault) 'endpoints': encodeList(endpoints),
-      if (control != null) 'control': control!.toJson(),
-      if (logs.isNotDefault) 'logs': encodeList(logs),
-      if (metrics.isNotDefault) 'metrics': encodeList(metrics),
-      if (monitoredResources.isNotDefault)
-        'monitoredResources': encodeList(monitoredResources),
-      if (billing != null) 'billing': billing!.toJson(),
-      if (logging != null) 'logging': logging!.toJson(),
-      if (monitoring != null) 'monitoring': monitoring!.toJson(),
-      if (systemParameters != null)
-        'systemParameters': systemParameters!.toJson(),
-      if (sourceInfo != null) 'sourceInfo': sourceInfo!.toJson(),
-      if (publishing != null) 'publishing': publishing!.toJson(),
-      if (configVersion != null) 'configVersion': configVersion!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (title.isNotDefault) 'title': title,
+    if (producerProjectId.isNotDefault) 'producerProjectId': producerProjectId,
+    if (id.isNotDefault) 'id': id,
+    if (apis.isNotDefault) 'apis': encodeList(apis),
+    if (types.isNotDefault) 'types': encodeList(types),
+    if (enums.isNotDefault) 'enums': encodeList(enums),
+    if (documentation != null) 'documentation': documentation!.toJson(),
+    if (backend != null) 'backend': backend!.toJson(),
+    if (http != null) 'http': http!.toJson(),
+    if (quota != null) 'quota': quota!.toJson(),
+    if (authentication != null) 'authentication': authentication!.toJson(),
+    if (context != null) 'context': context!.toJson(),
+    if (usage != null) 'usage': usage!.toJson(),
+    if (endpoints.isNotDefault) 'endpoints': encodeList(endpoints),
+    if (control != null) 'control': control!.toJson(),
+    if (logs.isNotDefault) 'logs': encodeList(logs),
+    if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+    if (monitoredResources.isNotDefault)
+      'monitoredResources': encodeList(monitoredResources),
+    if (billing != null) 'billing': billing!.toJson(),
+    if (logging != null) 'logging': logging!.toJson(),
+    if (monitoring != null) 'monitoring': monitoring!.toJson(),
+    if (systemParameters != null)
+      'systemParameters': systemParameters!.toJson(),
+    if (sourceInfo != null) 'sourceInfo': sourceInfo!.toJson(),
+    if (publishing != null) 'publishing': publishing!.toJson(),
+    if (configVersion != null) 'configVersion': configVersion!.toJson(),
+  };
 
   @override
   String toString() {
@@ -6047,18 +5771,14 @@ final class SourceInfo extends ProtoMessage {
 
   SourceInfo({this.sourceFiles = const []}) : super(fullyQualifiedName);
 
-  factory SourceInfo.fromJson(Map<String, dynamic> json) {
-    return SourceInfo(
-      sourceFiles: decodeListMessage(json['sourceFiles'], Any.fromJson) ?? [],
-    );
-  }
+  factory SourceInfo.fromJson(Map<String, dynamic> json) => SourceInfo(
+    sourceFiles: decodeListMessage(json['sourceFiles'], Any.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (sourceFiles.isNotDefault) 'sourceFiles': encodeList(sourceFiles),
-    };
-  }
+  Object toJson() => {
+    if (sourceFiles.isNotDefault) 'sourceFiles': encodeList(sourceFiles),
+  };
 
   @override
   String toString() => 'SourceInfo()';
@@ -6106,17 +5826,14 @@ final class SystemParameters extends ProtoMessage {
 
   SystemParameters({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory SystemParameters.fromJson(Map<String, dynamic> json) {
-    return SystemParameters(
-      rules:
-          decodeListMessage(json['rules'], SystemParameterRule.fromJson) ?? [],
-    );
-  }
+  factory SystemParameters.fromJson(
+    Map<String, dynamic> json,
+  ) => SystemParameters(
+    rules: decodeListMessage(json['rules'], SystemParameterRule.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
-  }
+  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
 
   @override
   String toString() => 'SystemParameters()';
@@ -6144,21 +5861,19 @@ final class SystemParameterRule extends ProtoMessage {
   SystemParameterRule({this.selector = '', this.parameters = const []})
     : super(fullyQualifiedName);
 
-  factory SystemParameterRule.fromJson(Map<String, dynamic> json) {
-    return SystemParameterRule(
-      selector: json['selector'] ?? '',
-      parameters:
-          decodeListMessage(json['parameters'], SystemParameter.fromJson) ?? [],
-    );
-  }
+  factory SystemParameterRule.fromJson(Map<String, dynamic> json) =>
+      SystemParameterRule(
+        selector: json['selector'] ?? '',
+        parameters:
+            decodeListMessage(json['parameters'], SystemParameter.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (parameters.isNotDefault) 'parameters': encodeList(parameters),
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (parameters.isNotDefault) 'parameters': encodeList(parameters),
+  };
 
   @override
   String toString() {
@@ -6190,23 +5905,19 @@ final class SystemParameter extends ProtoMessage {
     this.urlQueryParameter = '',
   }) : super(fullyQualifiedName);
 
-  factory SystemParameter.fromJson(Map<String, dynamic> json) {
-    return SystemParameter(
-      name: json['name'] ?? '',
-      httpHeader: json['httpHeader'] ?? '',
-      urlQueryParameter: json['urlQueryParameter'] ?? '',
-    );
-  }
+  factory SystemParameter.fromJson(Map<String, dynamic> json) =>
+      SystemParameter(
+        name: json['name'] ?? '',
+        httpHeader: json['httpHeader'] ?? '',
+        urlQueryParameter: json['urlQueryParameter'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (httpHeader.isNotDefault) 'httpHeader': httpHeader,
-      if (urlQueryParameter.isNotDefault)
-        'urlQueryParameter': urlQueryParameter,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (httpHeader.isNotDefault) 'httpHeader': httpHeader,
+    if (urlQueryParameter.isNotDefault) 'urlQueryParameter': urlQueryParameter,
+  };
 
   @override
   String toString() {
@@ -6255,23 +5966,19 @@ final class Usage extends ProtoMessage {
     this.producerNotificationChannel = '',
   }) : super(fullyQualifiedName);
 
-  factory Usage.fromJson(Map<String, dynamic> json) {
-    return Usage(
-      requirements: decodeList(json['requirements']) ?? [],
-      rules: decodeListMessage(json['rules'], UsageRule.fromJson) ?? [],
-      producerNotificationChannel: json['producerNotificationChannel'] ?? '',
-    );
-  }
+  factory Usage.fromJson(Map<String, dynamic> json) => Usage(
+    requirements: decodeList(json['requirements']) ?? [],
+    rules: decodeListMessage(json['rules'], UsageRule.fromJson) ?? [],
+    producerNotificationChannel: json['producerNotificationChannel'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (requirements.isNotDefault) 'requirements': requirements,
-      if (rules.isNotDefault) 'rules': encodeList(rules),
-      if (producerNotificationChannel.isNotDefault)
-        'producerNotificationChannel': producerNotificationChannel,
-    };
-  }
+  Object toJson() => {
+    if (requirements.isNotDefault) 'requirements': requirements,
+    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (producerNotificationChannel.isNotDefault)
+      'producerNotificationChannel': producerNotificationChannel,
+  };
 
   @override
   String toString() {
@@ -6333,24 +6040,20 @@ final class UsageRule extends ProtoMessage {
     this.skipServiceControl = false,
   }) : super(fullyQualifiedName);
 
-  factory UsageRule.fromJson(Map<String, dynamic> json) {
-    return UsageRule(
-      selector: json['selector'] ?? '',
-      allowUnregisteredCalls: json['allowUnregisteredCalls'] ?? false,
-      skipServiceControl: json['skipServiceControl'] ?? false,
-    );
-  }
+  factory UsageRule.fromJson(Map<String, dynamic> json) => UsageRule(
+    selector: json['selector'] ?? '',
+    allowUnregisteredCalls: json['allowUnregisteredCalls'] ?? false,
+    skipServiceControl: json['skipServiceControl'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (allowUnregisteredCalls.isNotDefault)
-        'allowUnregisteredCalls': allowUnregisteredCalls,
-      if (skipServiceControl.isNotDefault)
-        'skipServiceControl': skipServiceControl,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (allowUnregisteredCalls.isNotDefault)
+      'allowUnregisteredCalls': allowUnregisteredCalls,
+    if (skipServiceControl.isNotDefault)
+      'skipServiceControl': skipServiceControl,
+  };
 
   @override
   String toString() {
@@ -6396,16 +6099,12 @@ final class Visibility extends ProtoMessage {
 
   Visibility({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory Visibility.fromJson(Map<String, dynamic> json) {
-    return Visibility(
-      rules: decodeListMessage(json['rules'], VisibilityRule.fromJson) ?? [],
-    );
-  }
+  factory Visibility.fromJson(Map<String, dynamic> json) => Visibility(
+    rules: decodeListMessage(json['rules'], VisibilityRule.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (rules.isNotDefault) 'rules': encodeList(rules)};
-  }
+  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
 
   @override
   String toString() => 'Visibility()';
@@ -6442,20 +6141,16 @@ final class VisibilityRule extends ProtoMessage {
   VisibilityRule({this.selector = '', this.restriction = ''})
     : super(fullyQualifiedName);
 
-  factory VisibilityRule.fromJson(Map<String, dynamic> json) {
-    return VisibilityRule(
-      selector: json['selector'] ?? '',
-      restriction: json['restriction'] ?? '',
-    );
-  }
+  factory VisibilityRule.fromJson(Map<String, dynamic> json) => VisibilityRule(
+    selector: json['selector'] ?? '',
+    restriction: json['restriction'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (selector.isNotDefault) 'selector': selector,
-      if (restriction.isNotDefault) 'restriction': restriction,
-    };
-  }
+  Object toJson() => {
+    if (selector.isNotDefault) 'selector': selector,
+    if (restriction.isNotDefault) 'restriction': restriction,
+  };
 
   @override
   String toString() {
