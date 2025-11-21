@@ -20,8 +20,8 @@ class Operation<T extends ProtoMessage, S extends ProtoMessage>
     extends ProtoMessage {
   static const String fullyQualifiedName = 'google.longrunning.Operation';
 
-  /// The server-assigned name, which is only unique within the same service that
-  /// originally returns it. If you use the default HTTP mapping, the
+  /// The server-assigned name, which is only unique within the same service
+  /// that originally returns it. If you use the default HTTP mapping, the
   /// `name` should be a resource name ending with `operations/{unique_id}`.
   final String? name;
 
@@ -71,16 +71,14 @@ class Operation<T extends ProtoMessage, S extends ProtoMessage>
   factory Operation.fromJson(
     Map<String, dynamic> json, [
     OperationHelper<T, S>? helper,
-  ]) {
-    return Operation(
-      name: json['name'],
-      metadata: decode(json['metadata'], Any.fromJson),
-      done: json['done'],
-      error: decode(json['error'], Status.fromJson),
-      response: decode(json['response'], Any.fromJson),
-      operationHelper: helper,
-    );
-  }
+  ]) => Operation(
+    name: json['name'] as String?,
+    metadata: decode(json['metadata'] as Map<String, dynamic>?, Any.fromJson),
+    done: json['done'] as bool?,
+    error: decode(json['error'] as Map<String, dynamic>?, Status.fromJson),
+    response: decode(json['response'] as Map<String, dynamic>?, Any.fromJson),
+    operationHelper: helper,
+  );
 
   /// The normal, successful response of the operation.
   ///
@@ -99,15 +97,13 @@ class Operation<T extends ProtoMessage, S extends ProtoMessage>
   }
 
   @override
-  Object toJson() {
-    return {
-      if (name != null) 'name': name,
-      if (metadata != null) 'metadata': metadata!.toJson(),
-      if (done != null) 'done': done,
-      if (error != null) 'error': error!.toJson(),
-      if (response != null) 'response': response!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name != null) 'name': name,
+    if (metadata != null) 'metadata': metadata!.toJson(),
+    if (done != null) 'done': done,
+    if (error != null) 'error': error!.toJson(),
+    if (response != null) 'response': response!.toJson(),
+  };
 
   @override
   String toString() {

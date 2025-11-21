@@ -17,7 +17,8 @@ import 'dart:io';
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 
 void main() async {
-  // Pass your API key here if the GEMINI_API_KEY environment variable is not set.
+  // Pass your API key here if the GEMINI_API_KEY environment variable is not
+  // set.
   // See https://ai.google.dev/gemini-api/docs/api-key
   final service = GenerativeService.fromApiKey();
 

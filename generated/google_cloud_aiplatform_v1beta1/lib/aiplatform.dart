@@ -32,6 +32,7 @@ import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
+import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/rpc.dart';
@@ -628,8 +629,8 @@ final class DatasetService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -962,8 +963,8 @@ final class DeploymentResourcePoolService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -1389,8 +1390,8 @@ final class EndpointService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -1613,8 +1614,8 @@ final class EvaluationService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -1961,8 +1962,8 @@ final class ExampleStoreService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -2168,8 +2169,8 @@ final class ExtensionExecutionService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -2444,8 +2445,8 @@ final class ExtensionRegistryService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -2905,8 +2906,8 @@ final class FeatureOnlineStoreAdminService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -3137,8 +3138,8 @@ final class FeatureOnlineStoreService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -3742,8 +3743,8 @@ final class FeatureRegistryService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -3982,8 +3983,8 @@ final class FeaturestoreOnlineServingService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -4688,8 +4689,8 @@ final class FeaturestoreService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -4938,8 +4939,8 @@ final class GenAiCacheService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -5209,8 +5210,8 @@ final class GenAiTuningService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -5571,8 +5572,8 @@ final class IndexEndpointService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -5902,8 +5903,8 @@ final class IndexService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -6740,8 +6741,8 @@ final class JobService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -6934,8 +6935,8 @@ final class LlmUtilityService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -7149,8 +7150,8 @@ final class MatchService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -7471,8 +7472,8 @@ final class MemoryBankService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -8240,8 +8241,8 @@ final class MetadataService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -8473,8 +8474,8 @@ final class MigrationService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -8824,8 +8825,8 @@ final class ModelGardenService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -9226,8 +9227,8 @@ final class ModelMonitoringService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -9795,8 +9796,8 @@ final class ModelService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -10363,8 +10364,8 @@ final class NotebookService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -10687,8 +10688,8 @@ final class PersistentResourceService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -11128,8 +11129,8 @@ final class PipelineService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -11480,8 +11481,8 @@ final class PredictionService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -11688,8 +11689,8 @@ final class ReasoningEngineExecutionService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -11977,8 +11978,8 @@ final class ReasoningEngineService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -12274,8 +12275,8 @@ final class ScheduleService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -12575,8 +12576,8 @@ final class SessionService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -12868,8 +12869,8 @@ final class SpecialistPoolService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -13608,8 +13609,8 @@ final class TensorboardService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -14018,8 +14019,8 @@ final class VertexRagDataService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -14244,8 +14245,8 @@ final class VertexRagService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -14657,8 +14658,8 @@ final class VizierService {
   /// This method can be used to get the current status of a long-running
   /// operation.
   Future<Operation<T, S>> getOperation<
-    T extends protobuf.ProtoMessage,
-    S extends protobuf.ProtoMessage
+    T extends ProtoMessage,
+    S extends ProtoMessage
   >(Operation<T, S> request) async {
     final url = Uri.https(_host, '/ui/${request.name}');
     final response = await _client.get(url);
@@ -14706,7 +14707,7 @@ final class VizierService {
 
 /// Used to assign specific AnnotationSpec to a particular area of a DataItem or
 /// the whole part of the DataItem.
-final class Annotation extends protobuf.ProtoMessage {
+final class Annotation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Annotation';
 
@@ -14813,7 +14814,7 @@ final class Annotation extends protobuf.ProtoMessage {
 }
 
 /// Identifies a concept with which DataItems may be annotated with.
-final class AnnotationSpec extends protobuf.ProtoMessage {
+final class AnnotationSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AnnotationSpec';
 
@@ -14872,7 +14873,7 @@ final class AnnotationSpec extends protobuf.ProtoMessage {
 }
 
 /// The generic reusable api auth config.
-final class ApiAuth extends protobuf.ProtoMessage {
+final class ApiAuth extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ApiAuth';
 
@@ -14895,7 +14896,7 @@ final class ApiAuth extends protobuf.ProtoMessage {
 }
 
 /// The API secret.
-final class ApiAuth_ApiKeyConfig extends protobuf.ProtoMessage {
+final class ApiAuth_ApiKeyConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ApiAuth.ApiKeyConfig';
 
@@ -14922,7 +14923,7 @@ final class ApiAuth_ApiKeyConfig extends protobuf.ProtoMessage {
 }
 
 /// Instance of a general artifact.
-final class Artifact extends protobuf.ProtoMessage {
+final class Artifact extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Artifact';
 
@@ -15049,7 +15050,7 @@ final class Artifact extends protobuf.ProtoMessage {
 }
 
 /// Describes the state of the Artifact.
-final class Artifact_State extends protobuf.ProtoEnum {
+final class Artifact_State extends ProtoEnum {
   /// Unspecified state for the Artifact.
   static const stateUnspecified = Artifact_State('STATE_UNSPECIFIED');
 
@@ -15080,7 +15081,7 @@ final class Artifact_State extends protobuf.ProtoEnum {
 /// instances][google.cloud.aiplatform.v1beta1.BatchPredictionJob.input_config].
 /// If predictions for significant portion of the instances fail, the job may
 /// finish without attempting predictions for all remaining instances.
-final class BatchPredictionJob extends protobuf.ProtoMessage {
+final class BatchPredictionJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchPredictionJob';
 
@@ -15472,7 +15473,7 @@ final class BatchPredictionJob extends protobuf.ProtoMessage {
 /// `Model.supported_input_storage_formats`
 /// for Model's supported input formats, and how instances should be expressed
 /// via any of them.
-final class BatchPredictionJob_InputConfig extends protobuf.ProtoMessage {
+final class BatchPredictionJob_InputConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchPredictionJob.InputConfig';
 
@@ -15520,7 +15521,7 @@ final class BatchPredictionJob_InputConfig extends protobuf.ProtoMessage {
 
 /// Configuration defining how to transform batch prediction input instances to
 /// the instances that the Model accepts.
-final class BatchPredictionJob_InstanceConfig extends protobuf.ProtoMessage {
+final class BatchPredictionJob_InstanceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchPredictionJob.InstanceConfig';
 
@@ -15658,7 +15659,7 @@ final class BatchPredictionJob_InstanceConfig extends protobuf.ProtoMessage {
 /// `Model.supported_output_storage_formats`
 /// for supported output formats, and how predictions are expressed via any of
 /// them.
-final class BatchPredictionJob_OutputConfig extends protobuf.ProtoMessage {
+final class BatchPredictionJob_OutputConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchPredictionJob.OutputConfig';
 
@@ -15748,7 +15749,7 @@ final class BatchPredictionJob_OutputConfig extends protobuf.ProtoMessage {
 /// Further describes this job's output.
 /// Supplements
 /// `output_config`.
-final class BatchPredictionJob_OutputInfo extends protobuf.ProtoMessage {
+final class BatchPredictionJob_OutputInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchPredictionJob.OutputInfo';
 
@@ -15803,7 +15804,7 @@ final class BatchPredictionJob_OutputInfo extends protobuf.ProtoMessage {
 
 /// A resource used in LLM queries for users to explicitly specify what to cache
 /// and how to cache.
-final class CachedContent extends protobuf.ProtoMessage {
+final class CachedContent extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CachedContent';
 
@@ -15924,7 +15925,7 @@ final class CachedContent extends protobuf.ProtoMessage {
 }
 
 /// Metadata on the usage of the cached content.
-final class CachedContent_UsageMetadata extends protobuf.ProtoMessage {
+final class CachedContent_UsageMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CachedContent.UsageMetadata';
 
@@ -15986,7 +15987,7 @@ final class CachedContent_UsageMetadata extends protobuf.ProtoMessage {
 
 /// Success and error statistics of processing multiple entities
 /// (for example, DataItems or structured data rows) in batch.
-final class CompletionStats extends protobuf.ProtoMessage {
+final class CompletionStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CompletionStats';
 
@@ -16052,7 +16053,7 @@ final class CompletionStats extends protobuf.ProtoMessage {
 /// A `Content` includes a `role` field designating the producer of the `Content`
 /// and a `parts` field containing multi-part data that contains the content of
 /// the message turn.
-final class Content extends protobuf.ProtoMessage {
+final class Content extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Content';
 
@@ -16093,7 +16094,7 @@ final class Content extends protobuf.ProtoMessage {
 ///
 /// A `Part` must have a fixed IANA MIME type identifying the type and subtype
 /// of the media if `inline_data` or `file_data` field is filled with raw bytes.
-final class Part extends protobuf.ProtoMessage {
+final class Part extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Part';
 
@@ -16198,7 +16199,7 @@ final class Part extends protobuf.ProtoMessage {
 ///
 /// It's preferred to send as `text`
 /// directly rather than raw bytes.
-final class Blob extends protobuf.ProtoMessage {
+final class Blob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Blob';
 
@@ -16231,7 +16232,7 @@ final class Blob extends protobuf.ProtoMessage {
 }
 
 /// URI based data.
-final class FileData extends protobuf.ProtoMessage {
+final class FileData extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FileData';
 
@@ -16260,7 +16261,7 @@ final class FileData extends protobuf.ProtoMessage {
 }
 
 /// Metadata describes the input video content.
-final class VideoMetadata extends protobuf.ProtoMessage {
+final class VideoMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VideoMetadata';
 
@@ -16288,7 +16289,7 @@ final class VideoMetadata extends protobuf.ProtoMessage {
 }
 
 /// The configuration for the prebuilt speaker to use.
-final class PrebuiltVoiceConfig extends protobuf.ProtoMessage {
+final class PrebuiltVoiceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PrebuiltVoiceConfig';
 
@@ -16311,7 +16312,7 @@ final class PrebuiltVoiceConfig extends protobuf.ProtoMessage {
 }
 
 /// The configuration for the voice to use.
-final class VoiceConfig extends protobuf.ProtoMessage {
+final class VoiceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VoiceConfig';
 
@@ -16338,7 +16339,7 @@ final class VoiceConfig extends protobuf.ProtoMessage {
 }
 
 /// The speech generation config.
-final class SpeechConfig extends protobuf.ProtoMessage {
+final class SpeechConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SpeechConfig';
 
@@ -16361,7 +16362,7 @@ final class SpeechConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for image generation features.
-final class ImageConfig extends protobuf.ProtoMessage {
+final class ImageConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImageConfig';
 
@@ -16394,7 +16395,7 @@ final class ImageConfig extends protobuf.ProtoMessage {
 }
 
 /// Generation config.
-final class GenerationConfig extends protobuf.ProtoMessage {
+final class GenerationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerationConfig';
 
@@ -16637,7 +16638,7 @@ final class GenerationConfig extends protobuf.ProtoMessage {
 }
 
 /// The configuration for routing the request to a specific model.
-final class GenerationConfig_RoutingConfig extends protobuf.ProtoMessage {
+final class GenerationConfig_RoutingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerationConfig.RoutingConfig';
 
@@ -16676,7 +16677,7 @@ final class GenerationConfig_RoutingConfig extends protobuf.ProtoMessage {
 /// the pretrained routing model and customer provided model routing
 /// preference.
 final class GenerationConfig_RoutingConfig_AutoRoutingMode
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerationConfig.RoutingConfig.AutoRoutingMode';
 
@@ -16715,7 +16716,7 @@ final class GenerationConfig_RoutingConfig_AutoRoutingMode
 
 /// The model routing preference.
 final class GenerationConfig_RoutingConfig_AutoRoutingMode_ModelRoutingPreference
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Unspecified model routing preference.
   static const unknown =
       GenerationConfig_RoutingConfig_AutoRoutingMode_ModelRoutingPreference(
@@ -16761,7 +16762,7 @@ final class GenerationConfig_RoutingConfig_AutoRoutingMode_ModelRoutingPreferenc
 
 /// When manual routing is set, the specified model will be used directly.
 final class GenerationConfig_RoutingConfig_ManualRoutingMode
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerationConfig.RoutingConfig.ManualRoutingMode';
 
@@ -16789,7 +16790,7 @@ final class GenerationConfig_RoutingConfig_ManualRoutingMode
 }
 
 /// Config for thinking features.
-final class GenerationConfig_ThinkingConfig extends protobuf.ProtoMessage {
+final class GenerationConfig_ThinkingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerationConfig.ThinkingConfig';
 
@@ -16827,7 +16828,7 @@ final class GenerationConfig_ThinkingConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for model selection.
-final class GenerationConfig_ModelConfig extends protobuf.ProtoMessage {
+final class GenerationConfig_ModelConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerationConfig.ModelConfig';
 
@@ -16864,7 +16865,7 @@ final class GenerationConfig_ModelConfig extends protobuf.ProtoMessage {
 
 /// Options for feature selection preference.
 final class GenerationConfig_ModelConfig_FeatureSelectionPreference
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Unspecified feature selection preference.
   static const featureSelectionPreferenceUnspecified =
       GenerationConfig_ModelConfig_FeatureSelectionPreference(
@@ -16903,7 +16904,7 @@ final class GenerationConfig_ModelConfig_FeatureSelectionPreference
 }
 
 /// The modalities of the response.
-final class GenerationConfig_Modality extends protobuf.ProtoEnum {
+final class GenerationConfig_Modality extends ProtoEnum {
   /// Unspecified modality. Will be processed as text.
   static const modalityUnspecified = GenerationConfig_Modality(
     'MODALITY_UNSPECIFIED',
@@ -16933,7 +16934,7 @@ final class GenerationConfig_Modality extends protobuf.ProtoEnum {
 }
 
 /// Media resolution for the input media.
-final class GenerationConfig_MediaResolution extends protobuf.ProtoEnum {
+final class GenerationConfig_MediaResolution extends ProtoEnum {
   /// Media resolution has not been set.
   static const mediaResolutionUnspecified = GenerationConfig_MediaResolution(
     'MEDIA_RESOLUTION_UNSPECIFIED',
@@ -16969,7 +16970,7 @@ final class GenerationConfig_MediaResolution extends protobuf.ProtoEnum {
 }
 
 /// Safety settings.
-final class SafetySetting extends protobuf.ProtoMessage {
+final class SafetySetting extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SafetySetting';
 
@@ -17023,7 +17024,7 @@ final class SafetySetting extends protobuf.ProtoMessage {
 }
 
 /// Probability based thresholds levels for blocking.
-final class SafetySetting_HarmBlockThreshold extends protobuf.ProtoEnum {
+final class SafetySetting_HarmBlockThreshold extends ProtoEnum {
   /// Unspecified harm block threshold.
   static const harmBlockThresholdUnspecified = SafetySetting_HarmBlockThreshold(
     'HARM_BLOCK_THRESHOLD_UNSPECIFIED',
@@ -17065,7 +17066,7 @@ final class SafetySetting_HarmBlockThreshold extends protobuf.ProtoEnum {
 }
 
 /// Probability vs severity.
-final class SafetySetting_HarmBlockMethod extends protobuf.ProtoEnum {
+final class SafetySetting_HarmBlockMethod extends ProtoEnum {
   /// The harm block method is unspecified.
   static const harmBlockMethodUnspecified = SafetySetting_HarmBlockMethod(
     'HARM_BLOCK_METHOD_UNSPECIFIED',
@@ -17092,7 +17093,7 @@ final class SafetySetting_HarmBlockMethod extends protobuf.ProtoEnum {
 }
 
 /// Safety rating corresponding to the generated content.
-final class SafetyRating extends protobuf.ProtoMessage {
+final class SafetyRating extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SafetyRating';
 
@@ -17169,7 +17170,7 @@ final class SafetyRating extends protobuf.ProtoMessage {
 }
 
 /// Harm probability levels in the content.
-final class SafetyRating_HarmProbability extends protobuf.ProtoEnum {
+final class SafetyRating_HarmProbability extends ProtoEnum {
   /// Harm probability unspecified.
   static const harmProbabilityUnspecified = SafetyRating_HarmProbability(
     'HARM_PROBABILITY_UNSPECIFIED',
@@ -17202,7 +17203,7 @@ final class SafetyRating_HarmProbability extends protobuf.ProtoEnum {
 }
 
 /// Harm severity levels.
-final class SafetyRating_HarmSeverity extends protobuf.ProtoEnum {
+final class SafetyRating_HarmSeverity extends ProtoEnum {
   /// Harm severity unspecified.
   static const harmSeverityUnspecified = SafetyRating_HarmSeverity(
     'HARM_SEVERITY_UNSPECIFIED',
@@ -17241,7 +17242,7 @@ final class SafetyRating_HarmSeverity extends protobuf.ProtoEnum {
 }
 
 /// A collection of source attributions for a piece of content.
-final class CitationMetadata extends protobuf.ProtoMessage {
+final class CitationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CitationMetadata';
 
@@ -17266,7 +17267,7 @@ final class CitationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Source attributions for content.
-final class Citation extends protobuf.ProtoMessage {
+final class Citation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Citation';
 
@@ -17330,7 +17331,7 @@ final class Citation extends protobuf.ProtoMessage {
 }
 
 /// A response candidate generated from the model.
-final class Candidate extends protobuf.ProtoMessage {
+final class Candidate extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Candidate';
 
@@ -17437,7 +17438,7 @@ final class Candidate extends protobuf.ProtoMessage {
 
 /// The reason why the model stopped generating tokens.
 /// If empty, the model has not stopped generating the tokens.
-final class Candidate_FinishReason extends protobuf.ProtoEnum {
+final class Candidate_FinishReason extends ProtoEnum {
   /// The finish reason is unspecified.
   static const finishReasonUnspecified = Candidate_FinishReason(
     'FINISH_REASON_UNSPECIFIED',
@@ -17496,7 +17497,7 @@ final class Candidate_FinishReason extends protobuf.ProtoEnum {
 }
 
 /// Metadata related to url context retrieval tool.
-final class UrlContextMetadata extends protobuf.ProtoMessage {
+final class UrlContextMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UrlContextMetadata';
 
@@ -17521,7 +17522,7 @@ final class UrlContextMetadata extends protobuf.ProtoMessage {
 }
 
 /// Context of the a single url retrieval.
-final class UrlMetadata extends protobuf.ProtoMessage {
+final class UrlMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UrlMetadata';
 
@@ -17564,7 +17565,7 @@ final class UrlMetadata extends protobuf.ProtoMessage {
 }
 
 /// Status of the url retrieval.
-final class UrlMetadata_UrlRetrievalStatus extends protobuf.ProtoEnum {
+final class UrlMetadata_UrlRetrievalStatus extends ProtoEnum {
   /// Default value. This value is unused.
   static const urlRetrievalStatusUnspecified = UrlMetadata_UrlRetrievalStatus(
     'URL_RETRIEVAL_STATUS_UNSPECIFIED',
@@ -17595,7 +17596,7 @@ final class UrlMetadata_UrlRetrievalStatus extends protobuf.ProtoEnum {
 }
 
 /// Logprobs Result
-final class LogprobsResult extends protobuf.ProtoMessage {
+final class LogprobsResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.LogprobsResult';
 
@@ -17638,7 +17639,7 @@ final class LogprobsResult extends protobuf.ProtoMessage {
 }
 
 /// Candidate for the logprobs token and score.
-final class LogprobsResult_Candidate extends protobuf.ProtoMessage {
+final class LogprobsResult_Candidate extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.LogprobsResult.Candidate';
 
@@ -17680,7 +17681,7 @@ final class LogprobsResult_Candidate extends protobuf.ProtoMessage {
 }
 
 /// Candidates with top log probabilities at each decoding step.
-final class LogprobsResult_TopCandidates extends protobuf.ProtoMessage {
+final class LogprobsResult_TopCandidates extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.LogprobsResult.TopCandidates';
 
@@ -17710,7 +17711,7 @@ final class LogprobsResult_TopCandidates extends protobuf.ProtoMessage {
 }
 
 /// Segment of the content.
-final class Segment extends protobuf.ProtoMessage {
+final class Segment extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Segment';
 
@@ -17763,7 +17764,7 @@ final class Segment extends protobuf.ProtoMessage {
 }
 
 /// Grounding chunk.
-final class GroundingChunk extends protobuf.ProtoMessage {
+final class GroundingChunk extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk';
 
@@ -17801,7 +17802,7 @@ final class GroundingChunk extends protobuf.ProtoMessage {
 }
 
 /// Chunk from the web.
-final class GroundingChunk_Web extends protobuf.ProtoMessage {
+final class GroundingChunk_Web extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk.Web';
 
@@ -17833,7 +17834,7 @@ final class GroundingChunk_Web extends protobuf.ProtoMessage {
 }
 
 /// Chunk from context retrieved by the retrieval tools.
-final class GroundingChunk_RetrievedContext extends protobuf.ProtoMessage {
+final class GroundingChunk_RetrievedContext extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk.RetrievedContext';
 
@@ -17893,7 +17894,7 @@ final class GroundingChunk_RetrievedContext extends protobuf.ProtoMessage {
 }
 
 /// Chunk from Google Maps.
-final class GroundingChunk_Maps extends protobuf.ProtoMessage {
+final class GroundingChunk_Maps extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk.Maps';
 
@@ -17957,8 +17958,7 @@ final class GroundingChunk_Maps extends protobuf.ProtoMessage {
   }
 }
 
-final class GroundingChunk_Maps_PlaceAnswerSources
-    extends protobuf.ProtoMessage {
+final class GroundingChunk_Maps_PlaceAnswerSources extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk.Maps.PlaceAnswerSources';
 
@@ -17992,7 +17992,7 @@ final class GroundingChunk_Maps_PlaceAnswerSources
 
 /// Encapsulates a review snippet.
 final class GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingChunk.Maps.PlaceAnswerSources.ReviewSnippet';
 
@@ -18038,7 +18038,7 @@ final class GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet
 }
 
 /// Grounding support.
-final class GroundingSupport extends protobuf.ProtoMessage {
+final class GroundingSupport extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingSupport';
 
@@ -18082,7 +18082,7 @@ final class GroundingSupport extends protobuf.ProtoMessage {
 }
 
 /// Metadata returned to client when grounding is enabled.
-final class GroundingMetadata extends protobuf.ProtoMessage {
+final class GroundingMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingMetadata';
 
@@ -18187,7 +18187,7 @@ final class GroundingMetadata extends protobuf.ProtoMessage {
 
 /// Source content flagging uri for a place or review. This is currently
 /// populated only for Google Maps grounding.
-final class GroundingMetadata_SourceFlaggingUri extends protobuf.ProtoMessage {
+final class GroundingMetadata_SourceFlaggingUri extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundingMetadata.SourceFlaggingUri';
 
@@ -18229,7 +18229,7 @@ final class GroundingMetadata_SourceFlaggingUri extends protobuf.ProtoMessage {
 }
 
 /// Google search entry point.
-final class SearchEntryPoint extends protobuf.ProtoMessage {
+final class SearchEntryPoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchEntryPoint';
 
@@ -18267,7 +18267,7 @@ final class SearchEntryPoint extends protobuf.ProtoMessage {
 }
 
 /// Metadata related to retrieval in the grounding flow.
-final class RetrievalMetadata extends protobuf.ProtoMessage {
+final class RetrievalMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrievalMetadata';
 
@@ -18305,7 +18305,7 @@ final class RetrievalMetadata extends protobuf.ProtoMessage {
 }
 
 /// Configuration for Model Armor integrations of prompt and responses.
-final class ModelArmorConfig extends protobuf.ProtoMessage {
+final class ModelArmorConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelArmorConfig';
 
@@ -18347,7 +18347,7 @@ final class ModelArmorConfig extends protobuf.ProtoMessage {
 }
 
 /// Represents token counting info for a single modality.
-final class ModalityTokenCount extends protobuf.ProtoMessage {
+final class ModalityTokenCount extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModalityTokenCount';
 
@@ -18382,7 +18382,7 @@ final class ModalityTokenCount extends protobuf.ProtoMessage {
 }
 
 /// Instance of a general context.
-final class Context extends protobuf.ProtoMessage {
+final class Context extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Context';
 
@@ -18499,7 +18499,7 @@ final class Context extends protobuf.ProtoMessage {
 /// Python package. A CustomJob can have multiple worker pools and each worker
 /// pool can have its own machine and input spec. A CustomJob will be cleaned up
 /// once the job enters terminal state (failed or succeeded).
-final class CustomJob extends protobuf.ProtoMessage {
+final class CustomJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CustomJob';
 
@@ -18635,7 +18635,7 @@ final class CustomJob extends protobuf.ProtoMessage {
 }
 
 /// Represents the spec of a CustomJob.
-final class CustomJobSpec extends protobuf.ProtoMessage {
+final class CustomJobSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CustomJobSpec';
 
@@ -18862,7 +18862,7 @@ final class CustomJobSpec extends protobuf.ProtoMessage {
 }
 
 /// Represents the spec of a worker pool in a job.
-final class WorkerPoolSpec extends protobuf.ProtoMessage {
+final class WorkerPoolSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WorkerPoolSpec';
 
@@ -18924,7 +18924,7 @@ final class WorkerPoolSpec extends protobuf.ProtoMessage {
 }
 
 /// The spec of a Container.
-final class ContainerSpec extends protobuf.ProtoMessage {
+final class ContainerSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ContainerSpec';
 
@@ -18973,7 +18973,7 @@ final class ContainerSpec extends protobuf.ProtoMessage {
 }
 
 /// The spec of a Python packaged code.
-final class PythonPackageSpec extends protobuf.ProtoMessage {
+final class PythonPackageSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PythonPackageSpec';
 
@@ -19037,7 +19037,7 @@ final class PythonPackageSpec extends protobuf.ProtoMessage {
 }
 
 /// All parameters related to queuing and scheduling of custom jobs.
-final class Scheduling extends protobuf.ProtoMessage {
+final class Scheduling extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Scheduling';
 
@@ -19110,7 +19110,7 @@ final class Scheduling extends protobuf.ProtoMessage {
 /// demand resources to schedule the job, the other is SPOT which would
 /// leverage spot resources alongwith regular resources to schedule
 /// the job.
-final class Scheduling_Strategy extends protobuf.ProtoEnum {
+final class Scheduling_Strategy extends ProtoEnum {
   /// Strategy will default to STANDARD.
   static const strategyUnspecified = Scheduling_Strategy(
     'STRATEGY_UNSPECIFIED',
@@ -19147,7 +19147,7 @@ final class Scheduling_Strategy extends protobuf.ProtoEnum {
 
 /// A piece of data in a Dataset. Could be an image, a video, a document or plain
 /// text.
-final class DataItem extends protobuf.ProtoMessage {
+final class DataItem extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DataItem';
 
@@ -19238,7 +19238,7 @@ final class DataItem extends protobuf.ProtoMessage {
 
 /// DataLabelingJob is used to trigger a human labeling job on unlabeled data
 /// from the following Dataset:
-final class DataLabelingJob extends protobuf.ProtoMessage {
+final class DataLabelingJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DataLabelingJob';
 
@@ -19423,7 +19423,7 @@ final class DataLabelingJob extends protobuf.ProtoMessage {
 /// Parameters that configure the active learning pipeline. Active learning will
 ///  label the data incrementally by several iterations. For every iteration, it
 ///  will select a batch of data based on the sampling strategy.
-final class ActiveLearningConfig extends protobuf.ProtoMessage {
+final class ActiveLearningConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ActiveLearningConfig';
 
@@ -19480,7 +19480,7 @@ final class ActiveLearningConfig extends protobuf.ProtoMessage {
 
 /// Active learning data sampling config. For every active learning labeling
 /// iteration, it will select a batch of data based on the sampling strategy.
-final class SampleConfig extends protobuf.ProtoMessage {
+final class SampleConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SampleConfig';
 
@@ -19536,7 +19536,7 @@ final class SampleConfig extends protobuf.ProtoMessage {
 
 /// Sample strategy decides which subset of DataItems should be selected for
 /// human labeling in every batch.
-final class SampleConfig_SampleStrategy extends protobuf.ProtoEnum {
+final class SampleConfig_SampleStrategy extends ProtoEnum {
   /// Default will be treated as UNCERTAINTY.
   static const sampleStrategyUnspecified = SampleConfig_SampleStrategy(
     'SAMPLE_STRATEGY_UNSPECIFIED',
@@ -19562,7 +19562,7 @@ final class SampleConfig_SampleStrategy extends protobuf.ProtoEnum {
 /// CMLE training config. For every active learning labeling iteration, system
 /// will train a machine learning model on CMLE. The trained model will be used
 /// by data sampling algorithm to select DataItems.
-final class TrainingConfig extends protobuf.ProtoMessage {
+final class TrainingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrainingConfig';
 
@@ -19594,7 +19594,7 @@ final class TrainingConfig extends protobuf.ProtoMessage {
 }
 
 /// A collection of DataItems and Annotations on them.
-final class Dataset extends protobuf.ProtoMessage {
+final class Dataset extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Dataset';
 
@@ -19758,7 +19758,7 @@ final class Dataset extends protobuf.ProtoMessage {
 
 /// Describes the location from where we import data into a Dataset, together
 /// with the labels that will be applied to the DataItems and the Annotations.
-final class ImportDataConfig extends protobuf.ProtoMessage {
+final class ImportDataConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportDataConfig';
 
@@ -19831,7 +19831,7 @@ final class ImportDataConfig extends protobuf.ProtoMessage {
 
 /// Describes what part of the Dataset is to be exported, the destination of
 /// the export and how to export.
-final class ExportDataConfig extends protobuf.ProtoMessage {
+final class ExportDataConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportDataConfig';
 
@@ -19891,7 +19891,7 @@ final class ExportDataConfig extends protobuf.ProtoMessage {
 /// provided ones sum to less than 1, the remainder is assigned to sets as
 /// decided by Vertex AI. If none of the fractions are set, by default roughly
 /// 80% of data is used for training, 10% for validation, and 10% for test.
-final class ExportFractionSplit extends protobuf.ProtoMessage {
+final class ExportFractionSplit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportFractionSplit';
 
@@ -19939,7 +19939,7 @@ final class ExportFractionSplit extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.CreateDataset`.
-final class CreateDatasetRequest extends protobuf.ProtoMessage {
+final class CreateDatasetRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDatasetRequest';
 
@@ -19974,7 +19974,7 @@ final class CreateDatasetRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `DatasetService.CreateDataset`.
-final class CreateDatasetOperationMetadata extends protobuf.ProtoMessage {
+final class CreateDatasetOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDatasetOperationMetadata';
 
@@ -20003,7 +20003,7 @@ final class CreateDatasetOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.GetDataset`.
-final class GetDatasetRequest extends protobuf.ProtoMessage {
+final class GetDatasetRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetDatasetRequest';
 
@@ -20037,7 +20037,7 @@ final class GetDatasetRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.UpdateDataset`.
-final class UpdateDatasetRequest extends protobuf.ProtoMessage {
+final class UpdateDatasetRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateDatasetRequest';
 
@@ -20077,7 +20077,7 @@ final class UpdateDatasetRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.UpdateDatasetVersion`.
-final class UpdateDatasetVersionRequest extends protobuf.ProtoMessage {
+final class UpdateDatasetVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateDatasetVersionRequest';
 
@@ -20117,7 +20117,7 @@ final class UpdateDatasetVersionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.ListDatasets`.
-final class ListDatasetsRequest extends protobuf.ProtoMessage {
+final class ListDatasetsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDatasetsRequest';
 
@@ -20203,7 +20203,7 @@ final class ListDatasetsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ListDatasets`.
-final class ListDatasetsResponse extends protobuf.ProtoMessage {
+final class ListDatasetsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDatasetsResponse';
 
@@ -20237,7 +20237,7 @@ final class ListDatasetsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.DeleteDataset`.
-final class DeleteDatasetRequest extends protobuf.ProtoMessage {
+final class DeleteDatasetRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteDatasetRequest';
 
@@ -20263,7 +20263,7 @@ final class DeleteDatasetRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.ImportData`.
-final class ImportDataRequest extends protobuf.ProtoMessage {
+final class ImportDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportDataRequest';
 
@@ -20302,7 +20302,7 @@ final class ImportDataRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ImportData`.
-final class ImportDataResponse extends protobuf.ProtoMessage {
+final class ImportDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportDataResponse';
 
@@ -20320,7 +20320,7 @@ final class ImportDataResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `DatasetService.ImportData`.
-final class ImportDataOperationMetadata extends protobuf.ProtoMessage {
+final class ImportDataOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportDataOperationMetadata';
 
@@ -20349,7 +20349,7 @@ final class ImportDataOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.ExportData`.
-final class ExportDataRequest extends protobuf.ProtoMessage {
+final class ExportDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportDataRequest';
 
@@ -20385,7 +20385,7 @@ final class ExportDataRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ExportData`.
-final class ExportDataResponse extends protobuf.ProtoMessage {
+final class ExportDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportDataResponse';
 
@@ -20414,7 +20414,7 @@ final class ExportDataResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `DatasetService.ExportData`.
-final class ExportDataOperationMetadata extends protobuf.ProtoMessage {
+final class ExportDataOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportDataOperationMetadata';
 
@@ -20455,7 +20455,7 @@ final class ExportDataOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.CreateDatasetVersion`.
-final class CreateDatasetVersionRequest extends protobuf.ProtoMessage {
+final class CreateDatasetVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDatasetVersionRequest';
 
@@ -20495,8 +20495,7 @@ final class CreateDatasetVersionRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `DatasetService.CreateDatasetVersion`.
-final class CreateDatasetVersionOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateDatasetVersionOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDatasetVersionOperationMetadata';
 
@@ -20526,7 +20525,7 @@ final class CreateDatasetVersionOperationMetadata
 
 /// Request message for
 /// `DatasetService.DeleteDatasetVersion`.
-final class DeleteDatasetVersionRequest extends protobuf.ProtoMessage {
+final class DeleteDatasetVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteDatasetVersionRequest';
 
@@ -20552,7 +20551,7 @@ final class DeleteDatasetVersionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.GetDatasetVersion`.
-final class GetDatasetVersionRequest extends protobuf.ProtoMessage {
+final class GetDatasetVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetDatasetVersionRequest';
 
@@ -20588,7 +20587,7 @@ final class GetDatasetVersionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.ListDatasetVersions`.
-final class ListDatasetVersionsRequest extends protobuf.ProtoMessage {
+final class ListDatasetVersionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDatasetVersionsRequest';
 
@@ -20657,7 +20656,7 @@ final class ListDatasetVersionsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ListDatasetVersions`.
-final class ListDatasetVersionsResponse extends protobuf.ProtoMessage {
+final class ListDatasetVersionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDatasetVersionsResponse';
 
@@ -20699,7 +20698,7 @@ final class ListDatasetVersionsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.RestoreDatasetVersion`.
-final class RestoreDatasetVersionRequest extends protobuf.ProtoMessage {
+final class RestoreDatasetVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RestoreDatasetVersionRequest';
 
@@ -20726,8 +20725,7 @@ final class RestoreDatasetVersionRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `DatasetService.RestoreDatasetVersion`.
-final class RestoreDatasetVersionOperationMetadata
-    extends protobuf.ProtoMessage {
+final class RestoreDatasetVersionOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RestoreDatasetVersionOperationMetadata';
 
@@ -20757,7 +20755,7 @@ final class RestoreDatasetVersionOperationMetadata
 
 /// Request message for
 /// `DatasetService.ListDataItems`.
-final class ListDataItemsRequest extends protobuf.ProtoMessage {
+final class ListDataItemsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDataItemsRequest';
 
@@ -20826,7 +20824,7 @@ final class ListDataItemsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ListDataItems`.
-final class ListDataItemsResponse extends protobuf.ProtoMessage {
+final class ListDataItemsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDataItemsResponse';
 
@@ -20861,7 +20859,7 @@ final class ListDataItemsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.SearchDataItems`.
-final class SearchDataItemsRequest extends protobuf.ProtoMessage {
+final class SearchDataItemsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchDataItemsRequest';
 
@@ -21014,8 +21012,7 @@ final class SearchDataItemsRequest extends protobuf.ProtoMessage {
 }
 
 /// Expression that allows ranking results based on annotation's property.
-final class SearchDataItemsRequest_OrderByAnnotation
-    extends protobuf.ProtoMessage {
+final class SearchDataItemsRequest_OrderByAnnotation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchDataItemsRequest.OrderByAnnotation';
 
@@ -21055,7 +21052,7 @@ final class SearchDataItemsRequest_OrderByAnnotation
 
 /// Response message for
 /// `DatasetService.SearchDataItems`.
-final class SearchDataItemsResponse extends protobuf.ProtoMessage {
+final class SearchDataItemsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchDataItemsResponse';
 
@@ -21095,7 +21092,7 @@ final class SearchDataItemsResponse extends protobuf.ProtoMessage {
 }
 
 /// A container for a single DataItem and Annotations on it.
-final class DataItemView extends protobuf.ProtoMessage {
+final class DataItemView extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DataItemView';
 
@@ -21147,7 +21144,7 @@ final class DataItemView extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.ListSavedQueries`.
-final class ListSavedQueriesRequest extends protobuf.ProtoMessage {
+final class ListSavedQueriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSavedQueriesRequest';
 
@@ -21216,7 +21213,7 @@ final class ListSavedQueriesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ListSavedQueries`.
-final class ListSavedQueriesResponse extends protobuf.ProtoMessage {
+final class ListSavedQueriesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSavedQueriesResponse';
 
@@ -21253,7 +21250,7 @@ final class ListSavedQueriesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.DeleteSavedQuery`.
-final class DeleteSavedQueryRequest extends protobuf.ProtoMessage {
+final class DeleteSavedQueryRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteSavedQueryRequest';
 
@@ -21279,7 +21276,7 @@ final class DeleteSavedQueryRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.GetAnnotationSpec`.
-final class GetAnnotationSpecRequest extends protobuf.ProtoMessage {
+final class GetAnnotationSpecRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetAnnotationSpecRequest';
 
@@ -21315,7 +21312,7 @@ final class GetAnnotationSpecRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `DatasetService.ListAnnotations`.
-final class ListAnnotationsRequest extends protobuf.ProtoMessage {
+final class ListAnnotationsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListAnnotationsRequest';
 
@@ -21384,7 +21381,7 @@ final class ListAnnotationsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.ListAnnotations`.
-final class ListAnnotationsResponse extends protobuf.ProtoMessage {
+final class ListAnnotationsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListAnnotationsResponse';
 
@@ -21422,7 +21419,7 @@ final class ListAnnotationsResponse extends protobuf.ProtoMessage {
 /// Request message for
 /// `DatasetService.AssessData`.
 /// Used only for MULTIMODAL datasets.
-final class AssessDataRequest extends protobuf.ProtoMessage {
+final class AssessDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataRequest';
 
@@ -21514,7 +21511,7 @@ final class AssessDataRequest extends protobuf.ProtoMessage {
 
 /// Configuration for the tuning validation assessment.
 final class AssessDataRequest_TuningValidationAssessmentConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataRequest.TuningValidationAssessmentConfig';
 
@@ -21562,7 +21559,7 @@ final class AssessDataRequest_TuningValidationAssessmentConfig
 
 /// The dataset usage (e.g. training/validation).
 final class AssessDataRequest_TuningValidationAssessmentConfig_DatasetUsage
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Default value. Should not be used.
   static const datasetUsageUnspecified =
       AssessDataRequest_TuningValidationAssessmentConfig_DatasetUsage(
@@ -21600,7 +21597,7 @@ final class AssessDataRequest_TuningValidationAssessmentConfig_DatasetUsage
 
 /// Configuration for the tuning resource usage assessment.
 final class AssessDataRequest_TuningResourceUsageAssessmentConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataRequest.TuningResourceUsageAssessmentConfig';
 
@@ -21629,7 +21626,7 @@ final class AssessDataRequest_TuningResourceUsageAssessmentConfig
 
 /// Configuration for the batch prediction validation assessment.
 final class AssessDataRequest_BatchPredictionValidationAssessmentConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataRequest.BatchPredictionValidationAssessmentConfig';
 
@@ -21658,7 +21655,7 @@ final class AssessDataRequest_BatchPredictionValidationAssessmentConfig
 
 /// Configuration for the batch prediction resource usage assessment.
 final class AssessDataRequest_BatchPredictionResourceUsageAssessmentConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataRequest.BatchPredictionResourceUsageAssessmentConfig';
 
@@ -21687,7 +21684,7 @@ final class AssessDataRequest_BatchPredictionResourceUsageAssessmentConfig
 
 /// Response message for
 /// `DatasetService.AssessData`.
-final class AssessDataResponse extends protobuf.ProtoMessage {
+final class AssessDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataResponse';
 
@@ -21757,7 +21754,7 @@ final class AssessDataResponse extends protobuf.ProtoMessage {
 
 /// The result of the tuning validation assessment.
 final class AssessDataResponse_TuningValidationAssessmentResult
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataResponse.TuningValidationAssessmentResult';
 
@@ -21782,7 +21779,7 @@ final class AssessDataResponse_TuningValidationAssessmentResult
 
 /// The result of the tuning resource usage assessment.
 final class AssessDataResponse_TuningResourceUsageAssessmentResult
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataResponse.TuningResourceUsageAssessmentResult';
 
@@ -21823,7 +21820,7 @@ final class AssessDataResponse_TuningResourceUsageAssessmentResult
 
 /// The result of the batch prediction validation assessment.
 final class AssessDataResponse_BatchPredictionValidationAssessmentResult
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataResponse.BatchPredictionValidationAssessmentResult';
 
@@ -21843,7 +21840,7 @@ final class AssessDataResponse_BatchPredictionValidationAssessmentResult
 
 /// The result of the batch prediction resource usage assessment.
 final class AssessDataResponse_BatchPredictionResourceUsageAssessmentResult
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataResponse.BatchPredictionResourceUsageAssessmentResult';
 
@@ -21884,7 +21881,7 @@ final class AssessDataResponse_BatchPredictionResourceUsageAssessmentResult
 
 /// Runtime operation information for
 /// `DatasetService.AssessData`.
-final class AssessDataOperationMetadata extends protobuf.ProtoMessage {
+final class AssessDataOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssessDataOperationMetadata';
 
@@ -21912,7 +21909,7 @@ final class AssessDataOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Template configuration to create Gemini examples from a multimodal dataset.
-final class GeminiTemplateConfig extends protobuf.ProtoMessage {
+final class GeminiTemplateConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GeminiTemplateConfig';
 
@@ -21945,7 +21942,7 @@ final class GeminiTemplateConfig extends protobuf.ProtoMessage {
 }
 
 /// Configuration for how to read Gemini requests from a multimodal dataset.
-final class GeminiRequestReadConfig extends protobuf.ProtoMessage {
+final class GeminiRequestReadConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GeminiRequestReadConfig';
 
@@ -21988,7 +21985,7 @@ final class GeminiRequestReadConfig extends protobuf.ProtoMessage {
 }
 
 /// Format for Gemini examples used for Vertex Multimodal datasets.
-final class GeminiExample extends protobuf.ProtoMessage {
+final class GeminiExample extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GeminiExample';
 
@@ -22103,7 +22100,7 @@ final class GeminiExample extends protobuf.ProtoMessage {
 /// Request message for
 /// `DatasetService.AssembleData`.
 /// Used only for MULTIMODAL datasets.
-final class AssembleDataRequest extends protobuf.ProtoMessage {
+final class AssembleDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssembleDataRequest';
 
@@ -22143,7 +22140,7 @@ final class AssembleDataRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `DatasetService.AssembleData`.
-final class AssembleDataResponse extends protobuf.ProtoMessage {
+final class AssembleDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssembleDataResponse';
 
@@ -22174,7 +22171,7 @@ final class AssembleDataResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `DatasetService.AssembleData`.
-final class AssembleDataOperationMetadata extends protobuf.ProtoMessage {
+final class AssembleDataOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssembleDataOperationMetadata';
 
@@ -22202,7 +22199,7 @@ final class AssembleDataOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Describes the dataset version.
-final class DatasetVersion extends protobuf.ProtoMessage {
+final class DatasetVersion extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DatasetVersion';
 
@@ -22297,7 +22294,7 @@ final class DatasetVersion extends protobuf.ProtoMessage {
 }
 
 /// Points to a DeployedIndex.
-final class DeployedIndexRef extends protobuf.ProtoMessage {
+final class DeployedIndexRef extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedIndexRef';
 
@@ -22342,7 +22339,7 @@ final class DeployedIndexRef extends protobuf.ProtoMessage {
 }
 
 /// Points to a DeployedModel.
-final class DeployedModelRef extends protobuf.ProtoMessage {
+final class DeployedModelRef extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedModelRef';
 
@@ -22379,7 +22376,7 @@ final class DeployedModelRef extends protobuf.ProtoMessage {
 
 /// A description of resources that can be shared by multiple DeployedModels,
 /// whose underlying specification consists of a DedicatedResources.
-final class DeploymentResourcePool extends protobuf.ProtoMessage {
+final class DeploymentResourcePool extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeploymentResourcePool';
 
@@ -22481,7 +22478,7 @@ final class DeploymentResourcePool extends protobuf.ProtoMessage {
 }
 
 /// Request message for CreateDeploymentResourcePool method.
-final class CreateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
+final class CreateDeploymentResourcePoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDeploymentResourcePoolRequest';
 
@@ -22536,8 +22533,7 @@ final class CreateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
 }
 
 /// Runtime operation information for CreateDeploymentResourcePool method.
-final class CreateDeploymentResourcePoolOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateDeploymentResourcePoolOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDeploymentResourcePoolOperationMetadata';
 
@@ -22566,7 +22562,7 @@ final class CreateDeploymentResourcePoolOperationMetadata
 }
 
 /// Request message for GetDeploymentResourcePool method.
-final class GetDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
+final class GetDeploymentResourcePoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetDeploymentResourcePoolRequest';
 
@@ -22593,7 +22589,7 @@ final class GetDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for ListDeploymentResourcePools method.
-final class ListDeploymentResourcePoolsRequest extends protobuf.ProtoMessage {
+final class ListDeploymentResourcePoolsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDeploymentResourcePoolsRequest';
 
@@ -22646,7 +22642,7 @@ final class ListDeploymentResourcePoolsRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for ListDeploymentResourcePools method.
-final class ListDeploymentResourcePoolsResponse extends protobuf.ProtoMessage {
+final class ListDeploymentResourcePoolsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDeploymentResourcePoolsResponse';
 
@@ -22689,7 +22685,7 @@ final class ListDeploymentResourcePoolsResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for UpdateDeploymentResourcePool method.
-final class UpdateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
+final class UpdateDeploymentResourcePoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateDeploymentResourcePoolRequest';
 
@@ -22731,8 +22727,7 @@ final class UpdateDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
 }
 
 /// Runtime operation information for UpdateDeploymentResourcePool method.
-final class UpdateDeploymentResourcePoolOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateDeploymentResourcePoolOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateDeploymentResourcePoolOperationMetadata';
 
@@ -22761,7 +22756,7 @@ final class UpdateDeploymentResourcePoolOperationMetadata
 }
 
 /// Request message for DeleteDeploymentResourcePool method.
-final class DeleteDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
+final class DeleteDeploymentResourcePoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteDeploymentResourcePoolRequest';
 
@@ -22788,7 +22783,7 @@ final class DeleteDeploymentResourcePoolRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for QueryDeployedModels method.
-final class QueryDeployedModelsRequest extends protobuf.ProtoMessage {
+final class QueryDeployedModelsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryDeployedModelsRequest';
 
@@ -22841,7 +22836,7 @@ final class QueryDeployedModelsRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for QueryDeployedModels method.
-final class QueryDeployedModelsResponse extends protobuf.ProtoMessage {
+final class QueryDeployedModelsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryDeployedModelsResponse';
 
@@ -22913,7 +22908,7 @@ final class QueryDeployedModelsResponse extends protobuf.ProtoMessage {
 
 /// Represents a customer-managed encryption key spec that can be applied to
 /// a top-level resource.
-final class EncryptionSpec extends protobuf.ProtoMessage {
+final class EncryptionSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EncryptionSpec';
 
@@ -22941,7 +22936,7 @@ final class EncryptionSpec extends protobuf.ProtoMessage {
 
 /// Models are deployed into it, and afterwards Endpoint is called to obtain
 /// predictions and explanations.
-final class Endpoint extends protobuf.ProtoMessage {
+final class Endpoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Endpoint';
 
@@ -23196,7 +23191,7 @@ final class Endpoint extends protobuf.ProtoMessage {
 }
 
 /// A deployment of a Model. Endpoints contain one or more DeployedModels.
-final class DeployedModel extends protobuf.ProtoMessage {
+final class DeployedModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedModel';
 
@@ -23442,7 +23437,7 @@ final class DeployedModel extends protobuf.ProtoMessage {
 }
 
 /// Runtime status of the deployed model.
-final class DeployedModel_Status extends protobuf.ProtoMessage {
+final class DeployedModel_Status extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedModel.Status';
 
@@ -23494,7 +23489,7 @@ final class DeployedModel_Status extends protobuf.ProtoMessage {
 /// To send request via private service access, use predict_http_uri,
 /// explain_http_uri or health_http_uri. To send request via private service
 /// connect, use service_attachment.
-final class PrivateEndpoints extends protobuf.ProtoMessage {
+final class PrivateEndpoints extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PrivateEndpoints';
 
@@ -23547,7 +23542,7 @@ final class PrivateEndpoints extends protobuf.ProtoMessage {
 }
 
 /// Configuration for logging request-response to a BigQuery table.
-final class PredictRequestResponseLoggingConfig extends protobuf.ProtoMessage {
+final class PredictRequestResponseLoggingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredictRequestResponseLoggingConfig';
 
@@ -23623,7 +23618,7 @@ final class PredictRequestResponseLoggingConfig extends protobuf.ProtoMessage {
 }
 
 /// This message contains configs of a publisher model.
-final class PublisherModelConfig extends protobuf.ProtoMessage {
+final class PublisherModelConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModelConfig';
 
@@ -23650,7 +23645,7 @@ final class PublisherModelConfig extends protobuf.ProtoMessage {
 }
 
 /// Configurations (e.g. inference timeout) that are applied on your endpoints.
-final class ClientConnectionConfig extends protobuf.ProtoMessage {
+final class ClientConnectionConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ClientConnectionConfig';
 
@@ -23678,7 +23673,7 @@ final class ClientConnectionConfig extends protobuf.ProtoMessage {
 }
 
 /// Configuration for faster model deployment.
-final class FasterDeploymentConfig extends protobuf.ProtoMessage {
+final class FasterDeploymentConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FasterDeploymentConfig';
 
@@ -23706,7 +23701,7 @@ final class FasterDeploymentConfig extends protobuf.ProtoMessage {
 }
 
 /// Configuration for rolling deployments.
-final class RolloutOptions extends protobuf.ProtoMessage {
+final class RolloutOptions extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RolloutOptions';
 
@@ -23780,7 +23775,7 @@ final class RolloutOptions extends protobuf.ProtoMessage {
 }
 
 /// Configuration for GenAiAdvancedFeatures.
-final class GenAiAdvancedFeaturesConfig extends protobuf.ProtoMessage {
+final class GenAiAdvancedFeaturesConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenAiAdvancedFeaturesConfig';
 
@@ -23805,8 +23800,7 @@ final class GenAiAdvancedFeaturesConfig extends protobuf.ProtoMessage {
 }
 
 /// Configuration for Retrieval Augmented Generation feature.
-final class GenAiAdvancedFeaturesConfig_RagConfig
-    extends protobuf.ProtoMessage {
+final class GenAiAdvancedFeaturesConfig_RagConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenAiAdvancedFeaturesConfig.RagConfig';
 
@@ -23835,7 +23829,7 @@ final class GenAiAdvancedFeaturesConfig_RagConfig
 }
 
 /// Configuration for Speculative Decoding.
-final class SpeculativeDecodingSpec extends protobuf.ProtoMessage {
+final class SpeculativeDecodingSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SpeculativeDecodingSpec';
 
@@ -23886,8 +23880,7 @@ final class SpeculativeDecodingSpec extends protobuf.ProtoMessage {
 
 /// Draft model speculation works by using the smaller model to generate
 /// candidate tokens for speculative decoding.
-final class SpeculativeDecodingSpec_DraftModelSpeculation
-    extends protobuf.ProtoMessage {
+final class SpeculativeDecodingSpec_DraftModelSpeculation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SpeculativeDecodingSpec.DraftModelSpeculation';
 
@@ -23916,8 +23909,7 @@ final class SpeculativeDecodingSpec_DraftModelSpeculation
 /// N-Gram speculation works by trying to find matching tokens in the
 /// previous prompt sequence and use those as speculation for generating
 /// new tokens.
-final class SpeculativeDecodingSpec_NgramSpeculation
-    extends protobuf.ProtoMessage {
+final class SpeculativeDecodingSpec_NgramSpeculation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SpeculativeDecodingSpec.NgramSpeculation';
 
@@ -23948,7 +23940,7 @@ final class SpeculativeDecodingSpec_NgramSpeculation
 
 /// Request message for
 /// `EndpointService.CreateEndpoint`.
-final class CreateEndpointRequest extends protobuf.ProtoMessage {
+final class CreateEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateEndpointRequest';
 
@@ -24004,7 +23996,7 @@ final class CreateEndpointRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `EndpointService.CreateEndpoint`.
-final class CreateEndpointOperationMetadata extends protobuf.ProtoMessage {
+final class CreateEndpointOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateEndpointOperationMetadata';
 
@@ -24047,7 +24039,7 @@ final class CreateEndpointOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.GetEndpoint`
-final class GetEndpointRequest extends protobuf.ProtoMessage {
+final class GetEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetEndpointRequest';
 
@@ -24073,7 +24065,7 @@ final class GetEndpointRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.ListEndpoints`.
-final class ListEndpointsRequest extends protobuf.ProtoMessage {
+final class ListEndpointsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListEndpointsRequest';
 
@@ -24156,7 +24148,7 @@ final class ListEndpointsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `EndpointService.ListEndpoints`.
-final class ListEndpointsResponse extends protobuf.ProtoMessage {
+final class ListEndpointsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListEndpointsResponse';
 
@@ -24194,7 +24186,7 @@ final class ListEndpointsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.UpdateEndpoint`.
-final class UpdateEndpointRequest extends protobuf.ProtoMessage {
+final class UpdateEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateEndpointRequest';
 
@@ -24229,7 +24221,7 @@ final class UpdateEndpointRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.UpdateEndpointLongRunning`.
-final class UpdateEndpointLongRunningRequest extends protobuf.ProtoMessage {
+final class UpdateEndpointLongRunningRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateEndpointLongRunningRequest';
 
@@ -24256,7 +24248,7 @@ final class UpdateEndpointLongRunningRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `EndpointService.UpdateEndpointLongRunning`.
-final class UpdateEndpointOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateEndpointOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateEndpointOperationMetadata';
 
@@ -24285,7 +24277,7 @@ final class UpdateEndpointOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.DeleteEndpoint`.
-final class DeleteEndpointRequest extends protobuf.ProtoMessage {
+final class DeleteEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteEndpointRequest';
 
@@ -24311,7 +24303,7 @@ final class DeleteEndpointRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.DeployModel`.
-final class DeployModelRequest extends protobuf.ProtoMessage {
+final class DeployModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployModelRequest';
 
@@ -24371,7 +24363,7 @@ final class DeployModelRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `EndpointService.DeployModel`.
-final class DeployModelResponse extends protobuf.ProtoMessage {
+final class DeployModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployModelResponse';
 
@@ -24396,7 +24388,7 @@ final class DeployModelResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `EndpointService.DeployModel`.
-final class DeployModelOperationMetadata extends protobuf.ProtoMessage {
+final class DeployModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployModelOperationMetadata';
 
@@ -24438,7 +24430,7 @@ final class DeployModelOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.UndeployModel`.
-final class UndeployModelRequest extends protobuf.ProtoMessage {
+final class UndeployModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UndeployModelRequest';
 
@@ -24491,7 +24483,7 @@ final class UndeployModelRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `EndpointService.UndeployModel`.
-final class UndeployModelResponse extends protobuf.ProtoMessage {
+final class UndeployModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UndeployModelResponse';
 
@@ -24509,7 +24501,7 @@ final class UndeployModelResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.SetPublisherModelConfig`.
-final class SetPublisherModelConfigRequest extends protobuf.ProtoMessage {
+final class SetPublisherModelConfigRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SetPublisherModelConfigRequest';
 
@@ -24550,8 +24542,7 @@ final class SetPublisherModelConfigRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `EndpointService.SetPublisherModelConfig`.
-final class SetPublisherModelConfigOperationMetadata
-    extends protobuf.ProtoMessage {
+final class SetPublisherModelConfigOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SetPublisherModelConfigOperationMetadata';
 
@@ -24581,7 +24572,7 @@ final class SetPublisherModelConfigOperationMetadata
 
 /// Request message for
 /// `EndpointService.FetchPublisherModelConfig`.
-final class FetchPublisherModelConfigRequest extends protobuf.ProtoMessage {
+final class FetchPublisherModelConfigRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchPublisherModelConfigRequest';
 
@@ -24608,7 +24599,7 @@ final class FetchPublisherModelConfigRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `EndpointService.UndeployModel`.
-final class UndeployModelOperationMetadata extends protobuf.ProtoMessage {
+final class UndeployModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UndeployModelOperationMetadata';
 
@@ -24637,7 +24628,7 @@ final class UndeployModelOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `EndpointService.MutateDeployedModel`.
-final class MutateDeployedModelRequest extends protobuf.ProtoMessage {
+final class MutateDeployedModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MutateDeployedModelRequest';
 
@@ -24698,7 +24689,7 @@ final class MutateDeployedModelRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `EndpointService.MutateDeployedModel`.
-final class MutateDeployedModelResponse extends protobuf.ProtoMessage {
+final class MutateDeployedModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MutateDeployedModelResponse';
 
@@ -24723,7 +24714,7 @@ final class MutateDeployedModelResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `EndpointService.MutateDeployedModel`.
-final class MutateDeployedModelOperationMetadata extends protobuf.ProtoMessage {
+final class MutateDeployedModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MutateDeployedModelOperationMetadata';
 
@@ -24754,7 +24745,7 @@ final class MutateDeployedModelOperationMetadata extends protobuf.ProtoMessage {
 /// An entity type is a type of object in a system that needs to be modeled and
 /// have stored information about. For example, driver is an entity type, and
 /// driver0 is an instance of an entity type driver.
-final class EntityType extends protobuf.ProtoMessage {
+final class EntityType extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EntityType';
 
@@ -24879,7 +24870,7 @@ final class EntityType extends protobuf.ProtoMessage {
 }
 
 /// Represents an environment variable present in a Container or Python Module.
-final class EnvVar extends protobuf.ProtoMessage {
+final class EnvVar extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EnvVar';
 
@@ -24912,7 +24903,7 @@ final class EnvVar extends protobuf.ProtoMessage {
 
 /// Reference to a secret stored in the Cloud Secret Manager that will
 /// provide the value for this environment variable.
-final class SecretRef extends protobuf.ProtoMessage {
+final class SecretRef extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SecretRef';
 
@@ -24946,7 +24937,7 @@ final class SecretRef extends protobuf.ProtoMessage {
 
 /// Represents an environment variable where the value is a secret in Cloud
 /// Secret Manager.
-final class SecretEnvVar extends protobuf.ProtoMessage {
+final class SecretEnvVar extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SecretEnvVar';
 
@@ -24982,7 +24973,7 @@ final class SecretEnvVar extends protobuf.ProtoMessage {
 ///
 /// EvaluatedAnnotation is only available under ModelEvaluationSlice with slice
 /// of `annotationSpec` dimension.
-final class EvaluatedAnnotation extends protobuf.ProtoMessage {
+final class EvaluatedAnnotation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluatedAnnotation';
 
@@ -25126,8 +25117,7 @@ final class EvaluatedAnnotation extends protobuf.ProtoMessage {
 }
 
 /// Describes the type of the EvaluatedAnnotation. The type is determined
-final class EvaluatedAnnotation_EvaluatedAnnotationType
-    extends protobuf.ProtoEnum {
+final class EvaluatedAnnotation_EvaluatedAnnotationType extends ProtoEnum {
   /// Invalid value.
   static const evaluatedAnnotationTypeUnspecified =
       EvaluatedAnnotation_EvaluatedAnnotationType(
@@ -25167,7 +25157,7 @@ final class EvaluatedAnnotation_EvaluatedAnnotationType
 }
 
 /// Explanation result of the prediction produced by the Model.
-final class EvaluatedAnnotationExplanation extends protobuf.ProtoMessage {
+final class EvaluatedAnnotationExplanation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluatedAnnotationExplanation';
 
@@ -25205,7 +25195,7 @@ final class EvaluatedAnnotationExplanation extends protobuf.ProtoMessage {
 }
 
 /// Model error analysis for each annotation.
-final class ErrorAnalysisAnnotation extends protobuf.ProtoMessage {
+final class ErrorAnalysisAnnotation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation';
 
@@ -25271,8 +25261,7 @@ final class ErrorAnalysisAnnotation extends protobuf.ProtoMessage {
 
 /// Attributed items for a given annotation, typically representing neighbors
 /// from the training sets constrained by the query type.
-final class ErrorAnalysisAnnotation_AttributedItem
-    extends protobuf.ProtoMessage {
+final class ErrorAnalysisAnnotation_AttributedItem extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ErrorAnalysisAnnotation.AttributedItem';
 
@@ -25313,7 +25302,7 @@ final class ErrorAnalysisAnnotation_AttributedItem
 }
 
 /// The query type used for finding the attributed items.
-final class ErrorAnalysisAnnotation_QueryType extends protobuf.ProtoEnum {
+final class ErrorAnalysisAnnotation_QueryType extends ProtoEnum {
   /// Unspecified query type for model error analysis.
   static const queryTypeUnspecified = ErrorAnalysisAnnotation_QueryType(
     'QUERY_TYPE_UNSPECIFIED',
@@ -25347,7 +25336,7 @@ final class ErrorAnalysisAnnotation_QueryType extends protobuf.ProtoEnum {
 }
 
 /// Operation metadata for Dataset Evaluation.
-final class EvaluateDatasetOperationMetadata extends protobuf.ProtoMessage {
+final class EvaluateDatasetOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateDatasetOperationMetadata';
 
@@ -25376,7 +25365,7 @@ final class EvaluateDatasetOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Response in LRO for EvaluationService.EvaluateDataset.
-final class EvaluateDatasetResponse extends protobuf.ProtoMessage {
+final class EvaluateDatasetResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateDatasetResponse';
 
@@ -25411,7 +25400,7 @@ final class EvaluateDatasetResponse extends protobuf.ProtoMessage {
 }
 
 /// Describes the info for output of EvaluationService.EvaluateDataset.
-final class OutputInfo extends protobuf.ProtoMessage {
+final class OutputInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.OutputInfo';
 
@@ -25439,7 +25428,7 @@ final class OutputInfo extends protobuf.ProtoMessage {
 }
 
 /// The aggregation result for the entire dataset and all metrics.
-final class AggregationOutput extends protobuf.ProtoMessage {
+final class AggregationOutput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AggregationOutput';
 
@@ -25475,7 +25464,7 @@ final class AggregationOutput extends protobuf.ProtoMessage {
 }
 
 /// The aggregation result for a single metric.
-final class AggregationResult extends protobuf.ProtoMessage {
+final class AggregationResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AggregationResult';
 
@@ -25559,7 +25548,7 @@ final class AggregationResult extends protobuf.ProtoMessage {
 }
 
 /// Request message for EvaluationService.EvaluateDataset.
-final class EvaluateDatasetRequest extends protobuf.ProtoMessage {
+final class EvaluateDatasetRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateDatasetRequest';
 
@@ -25618,7 +25607,7 @@ final class EvaluateDatasetRequest extends protobuf.ProtoMessage {
 }
 
 /// Config for evaluation output.
-final class OutputConfig extends protobuf.ProtoMessage {
+final class OutputConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.OutputConfig';
 
@@ -25641,7 +25630,7 @@ final class OutputConfig extends protobuf.ProtoMessage {
 }
 
 /// The metric used for dataset level evaluation.
-final class Metric extends protobuf.ProtoMessage {
+final class Metric extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Metric';
 
@@ -25710,7 +25699,7 @@ final class Metric extends protobuf.ProtoMessage {
 }
 
 /// The aggregation metrics supported by EvaluationService.EvaluateDataset.
-final class Metric_AggregationMetric extends protobuf.ProtoEnum {
+final class Metric_AggregationMetric extends ProtoEnum {
   /// Unspecified aggregation metric.
   static const aggregationMetricUnspecified = Metric_AggregationMetric(
     'AGGREGATION_METRIC_UNSPECIFIED',
@@ -25763,7 +25752,7 @@ final class Metric_AggregationMetric extends protobuf.ProtoEnum {
 }
 
 /// The dataset used for evaluation.
-final class EvaluationDataset extends protobuf.ProtoMessage {
+final class EvaluationDataset extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluationDataset';
 
@@ -25795,7 +25784,7 @@ final class EvaluationDataset extends protobuf.ProtoMessage {
 
 /// The configs for autorater. This is applicable to both EvaluateInstances and
 /// EvaluateDataset.
-final class AutoraterConfig extends protobuf.ProtoMessage {
+final class AutoraterConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AutoraterConfig';
 
@@ -25854,7 +25843,7 @@ final class AutoraterConfig extends protobuf.ProtoMessage {
 }
 
 /// Request message for EvaluationService.EvaluateInstances.
-final class EvaluateInstancesRequest extends protobuf.ProtoMessage {
+final class EvaluateInstancesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateInstancesRequest';
 
@@ -26194,7 +26183,7 @@ final class EvaluateInstancesRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for EvaluationService.EvaluateInstances.
-final class EvaluateInstancesResponse extends protobuf.ProtoMessage {
+final class EvaluateInstancesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateInstancesResponse';
 
@@ -26529,7 +26518,7 @@ final class EvaluateInstancesResponse extends protobuf.ProtoMessage {
 }
 
 /// Input for exact match metric.
-final class ExactMatchInput extends protobuf.ProtoMessage {
+final class ExactMatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExactMatchInput';
 
@@ -26561,7 +26550,7 @@ final class ExactMatchInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for exact match instance.
-final class ExactMatchInstance extends protobuf.ProtoMessage {
+final class ExactMatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExactMatchInstance';
 
@@ -26598,7 +26587,7 @@ final class ExactMatchInstance extends protobuf.ProtoMessage {
 
 /// Spec for exact match metric - returns 1 if prediction and reference exactly
 /// matches, otherwise 0.
-final class ExactMatchSpec extends protobuf.ProtoMessage {
+final class ExactMatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExactMatchSpec';
 
@@ -26615,7 +26604,7 @@ final class ExactMatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Results for exact match metric.
-final class ExactMatchResults extends protobuf.ProtoMessage {
+final class ExactMatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExactMatchResults';
 
@@ -26646,7 +26635,7 @@ final class ExactMatchResults extends protobuf.ProtoMessage {
 }
 
 /// Exact match metric value for an instance.
-final class ExactMatchMetricValue extends protobuf.ProtoMessage {
+final class ExactMatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExactMatchMetricValue';
 
@@ -26669,7 +26658,7 @@ final class ExactMatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for bleu metric.
-final class BleuInput extends protobuf.ProtoMessage {
+final class BleuInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BleuInput';
 
@@ -26699,7 +26688,7 @@ final class BleuInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for bleu instance.
-final class BleuInstance extends protobuf.ProtoMessage {
+final class BleuInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BleuInstance';
 
@@ -26735,7 +26724,7 @@ final class BleuInstance extends protobuf.ProtoMessage {
 
 /// Spec for bleu score metric - calculates the precision of n-grams in the
 /// prediction as compared to reference - returns a score ranging between 0 to 1.
-final class BleuSpec extends protobuf.ProtoMessage {
+final class BleuSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BleuSpec';
 
@@ -26760,7 +26749,7 @@ final class BleuSpec extends protobuf.ProtoMessage {
 }
 
 /// Results for bleu metric.
-final class BleuResults extends protobuf.ProtoMessage {
+final class BleuResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BleuResults';
 
@@ -26786,7 +26775,7 @@ final class BleuResults extends protobuf.ProtoMessage {
 }
 
 /// Bleu metric value for an instance.
-final class BleuMetricValue extends protobuf.ProtoMessage {
+final class BleuMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BleuMetricValue';
 
@@ -26809,7 +26798,7 @@ final class BleuMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for rouge metric.
-final class RougeInput extends protobuf.ProtoMessage {
+final class RougeInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RougeInput';
 
@@ -26839,7 +26828,7 @@ final class RougeInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for rouge instance.
-final class RougeInstance extends protobuf.ProtoMessage {
+final class RougeInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RougeInstance';
 
@@ -26875,7 +26864,7 @@ final class RougeInstance extends protobuf.ProtoMessage {
 
 /// Spec for rouge score metric - calculates the recall of n-grams in prediction
 /// as compared to reference - returns a score ranging between 0 and 1.
-final class RougeSpec extends protobuf.ProtoMessage {
+final class RougeSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RougeSpec';
 
@@ -26919,7 +26908,7 @@ final class RougeSpec extends protobuf.ProtoMessage {
 }
 
 /// Results for rouge metric.
-final class RougeResults extends protobuf.ProtoMessage {
+final class RougeResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RougeResults';
 
@@ -26948,7 +26937,7 @@ final class RougeResults extends protobuf.ProtoMessage {
 }
 
 /// Rouge metric value for an instance.
-final class RougeMetricValue extends protobuf.ProtoMessage {
+final class RougeMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RougeMetricValue';
 
@@ -26971,7 +26960,7 @@ final class RougeMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for coherence metric.
-final class CoherenceInput extends protobuf.ProtoMessage {
+final class CoherenceInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CoherenceInput';
 
@@ -27000,7 +26989,7 @@ final class CoherenceInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for coherence instance.
-final class CoherenceInstance extends protobuf.ProtoMessage {
+final class CoherenceInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CoherenceInstance';
 
@@ -27025,7 +27014,7 @@ final class CoherenceInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for coherence score metric.
-final class CoherenceSpec extends protobuf.ProtoMessage {
+final class CoherenceSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CoherenceSpec';
 
@@ -27048,7 +27037,7 @@ final class CoherenceSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for coherence result.
-final class CoherenceResult extends protobuf.ProtoMessage {
+final class CoherenceResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CoherenceResult';
 
@@ -27090,7 +27079,7 @@ final class CoherenceResult extends protobuf.ProtoMessage {
 }
 
 /// Input for fluency metric.
-final class FluencyInput extends protobuf.ProtoMessage {
+final class FluencyInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FluencyInput';
 
@@ -27119,7 +27108,7 @@ final class FluencyInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for fluency instance.
-final class FluencyInstance extends protobuf.ProtoMessage {
+final class FluencyInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FluencyInstance';
 
@@ -27144,7 +27133,7 @@ final class FluencyInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for fluency score metric.
-final class FluencySpec extends protobuf.ProtoMessage {
+final class FluencySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FluencySpec';
 
@@ -27167,7 +27156,7 @@ final class FluencySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for fluency result.
-final class FluencyResult extends protobuf.ProtoMessage {
+final class FluencyResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FluencyResult';
 
@@ -27208,7 +27197,7 @@ final class FluencyResult extends protobuf.ProtoMessage {
 }
 
 /// Input for safety metric.
-final class SafetyInput extends protobuf.ProtoMessage {
+final class SafetyInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SafetyInput';
 
@@ -27237,7 +27226,7 @@ final class SafetyInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for safety instance.
-final class SafetyInstance extends protobuf.ProtoMessage {
+final class SafetyInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SafetyInstance';
 
@@ -27262,7 +27251,7 @@ final class SafetyInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for safety metric.
-final class SafetySpec extends protobuf.ProtoMessage {
+final class SafetySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SafetySpec';
 
@@ -27285,7 +27274,7 @@ final class SafetySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for safety result.
-final class SafetyResult extends protobuf.ProtoMessage {
+final class SafetyResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SafetyResult';
 
@@ -27326,7 +27315,7 @@ final class SafetyResult extends protobuf.ProtoMessage {
 }
 
 /// Input for groundedness metric.
-final class GroundednessInput extends protobuf.ProtoMessage {
+final class GroundednessInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundednessInput';
 
@@ -27356,7 +27345,7 @@ final class GroundednessInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for groundedness instance.
-final class GroundednessInstance extends protobuf.ProtoMessage {
+final class GroundednessInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundednessInstance';
 
@@ -27393,7 +27382,7 @@ final class GroundednessInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for groundedness metric.
-final class GroundednessSpec extends protobuf.ProtoMessage {
+final class GroundednessSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundednessSpec';
 
@@ -27416,7 +27405,7 @@ final class GroundednessSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for groundedness result.
-final class GroundednessResult extends protobuf.ProtoMessage {
+final class GroundednessResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GroundednessResult';
 
@@ -27458,7 +27447,7 @@ final class GroundednessResult extends protobuf.ProtoMessage {
 }
 
 /// Input for fulfillment metric.
-final class FulfillmentInput extends protobuf.ProtoMessage {
+final class FulfillmentInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FulfillmentInput';
 
@@ -27488,7 +27477,7 @@ final class FulfillmentInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for fulfillment instance.
-final class FulfillmentInstance extends protobuf.ProtoMessage {
+final class FulfillmentInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FulfillmentInstance';
 
@@ -27524,7 +27513,7 @@ final class FulfillmentInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for fulfillment metric.
-final class FulfillmentSpec extends protobuf.ProtoMessage {
+final class FulfillmentSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FulfillmentSpec';
 
@@ -27547,7 +27536,7 @@ final class FulfillmentSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for fulfillment result.
-final class FulfillmentResult extends protobuf.ProtoMessage {
+final class FulfillmentResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FulfillmentResult';
 
@@ -27589,7 +27578,7 @@ final class FulfillmentResult extends protobuf.ProtoMessage {
 }
 
 /// Input for summarization quality metric.
-final class SummarizationQualityInput extends protobuf.ProtoMessage {
+final class SummarizationQualityInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationQualityInput';
 
@@ -27620,7 +27609,7 @@ final class SummarizationQualityInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization quality instance.
-final class SummarizationQualityInstance extends protobuf.ProtoMessage {
+final class SummarizationQualityInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationQualityInstance';
 
@@ -27672,7 +27661,7 @@ final class SummarizationQualityInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization quality score metric.
-final class SummarizationQualitySpec extends protobuf.ProtoMessage {
+final class SummarizationQualitySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationQualitySpec';
 
@@ -27709,7 +27698,7 @@ final class SummarizationQualitySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization quality result.
-final class SummarizationQualityResult extends protobuf.ProtoMessage {
+final class SummarizationQualityResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationQualityResult';
 
@@ -27754,7 +27743,7 @@ final class SummarizationQualityResult extends protobuf.ProtoMessage {
 }
 
 /// Input for pairwise summarization quality metric.
-final class PairwiseSummarizationQualityInput extends protobuf.ProtoMessage {
+final class PairwiseSummarizationQualityInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseSummarizationQualityInput';
 
@@ -27793,7 +27782,7 @@ final class PairwiseSummarizationQualityInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for pairwise summarization quality instance.
-final class PairwiseSummarizationQualityInstance extends protobuf.ProtoMessage {
+final class PairwiseSummarizationQualityInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseSummarizationQualityInstance';
 
@@ -27853,7 +27842,7 @@ final class PairwiseSummarizationQualityInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for pairwise summarization quality score metric.
-final class PairwiseSummarizationQualitySpec extends protobuf.ProtoMessage {
+final class PairwiseSummarizationQualitySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseSummarizationQualitySpec';
 
@@ -27893,7 +27882,7 @@ final class PairwiseSummarizationQualitySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for pairwise summarization quality result.
-final class PairwiseSummarizationQualityResult extends protobuf.ProtoMessage {
+final class PairwiseSummarizationQualityResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseSummarizationQualityResult';
 
@@ -27941,7 +27930,7 @@ final class PairwiseSummarizationQualityResult extends protobuf.ProtoMessage {
 }
 
 /// Input for summarization helpfulness metric.
-final class SummarizationHelpfulnessInput extends protobuf.ProtoMessage {
+final class SummarizationHelpfulnessInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationHelpfulnessInput';
 
@@ -27979,7 +27968,7 @@ final class SummarizationHelpfulnessInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization helpfulness instance.
-final class SummarizationHelpfulnessInstance extends protobuf.ProtoMessage {
+final class SummarizationHelpfulnessInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationHelpfulnessInstance';
 
@@ -28032,7 +28021,7 @@ final class SummarizationHelpfulnessInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization helpfulness score metric.
-final class SummarizationHelpfulnessSpec extends protobuf.ProtoMessage {
+final class SummarizationHelpfulnessSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationHelpfulnessSpec';
 
@@ -28069,7 +28058,7 @@ final class SummarizationHelpfulnessSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization helpfulness result.
-final class SummarizationHelpfulnessResult extends protobuf.ProtoMessage {
+final class SummarizationHelpfulnessResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationHelpfulnessResult';
 
@@ -28114,7 +28103,7 @@ final class SummarizationHelpfulnessResult extends protobuf.ProtoMessage {
 }
 
 /// Input for summarization verbosity metric.
-final class SummarizationVerbosityInput extends protobuf.ProtoMessage {
+final class SummarizationVerbosityInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationVerbosityInput';
 
@@ -28147,7 +28136,7 @@ final class SummarizationVerbosityInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization verbosity instance.
-final class SummarizationVerbosityInstance extends protobuf.ProtoMessage {
+final class SummarizationVerbosityInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationVerbosityInstance';
 
@@ -28199,7 +28188,7 @@ final class SummarizationVerbosityInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization verbosity score metric.
-final class SummarizationVerbositySpec extends protobuf.ProtoMessage {
+final class SummarizationVerbositySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationVerbositySpec';
 
@@ -28236,7 +28225,7 @@ final class SummarizationVerbositySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for summarization verbosity result.
-final class SummarizationVerbosityResult extends protobuf.ProtoMessage {
+final class SummarizationVerbosityResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SummarizationVerbosityResult';
 
@@ -28281,7 +28270,7 @@ final class SummarizationVerbosityResult extends protobuf.ProtoMessage {
 }
 
 /// Input for question answering quality metric.
-final class QuestionAnsweringQualityInput extends protobuf.ProtoMessage {
+final class QuestionAnsweringQualityInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringQualityInput';
 
@@ -28319,7 +28308,7 @@ final class QuestionAnsweringQualityInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering quality instance.
-final class QuestionAnsweringQualityInstance extends protobuf.ProtoMessage {
+final class QuestionAnsweringQualityInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringQualityInstance';
 
@@ -28372,7 +28361,7 @@ final class QuestionAnsweringQualityInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering quality score metric.
-final class QuestionAnsweringQualitySpec extends protobuf.ProtoMessage {
+final class QuestionAnsweringQualitySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringQualitySpec';
 
@@ -28409,7 +28398,7 @@ final class QuestionAnsweringQualitySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering quality result.
-final class QuestionAnsweringQualityResult extends protobuf.ProtoMessage {
+final class QuestionAnsweringQualityResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringQualityResult';
 
@@ -28454,8 +28443,7 @@ final class QuestionAnsweringQualityResult extends protobuf.ProtoMessage {
 }
 
 /// Input for pairwise question answering quality metric.
-final class PairwiseQuestionAnsweringQualityInput
-    extends protobuf.ProtoMessage {
+final class PairwiseQuestionAnsweringQualityInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseQuestionAnsweringQualityInput';
 
@@ -28494,8 +28482,7 @@ final class PairwiseQuestionAnsweringQualityInput
 }
 
 /// Spec for pairwise question answering quality instance.
-final class PairwiseQuestionAnsweringQualityInstance
-    extends protobuf.ProtoMessage {
+final class PairwiseQuestionAnsweringQualityInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseQuestionAnsweringQualityInstance';
 
@@ -28555,7 +28542,7 @@ final class PairwiseQuestionAnsweringQualityInstance
 }
 
 /// Spec for pairwise question answering quality score metric.
-final class PairwiseQuestionAnsweringQualitySpec extends protobuf.ProtoMessage {
+final class PairwiseQuestionAnsweringQualitySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseQuestionAnsweringQualitySpec';
 
@@ -28595,8 +28582,7 @@ final class PairwiseQuestionAnsweringQualitySpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for pairwise question answering quality result.
-final class PairwiseQuestionAnsweringQualityResult
-    extends protobuf.ProtoMessage {
+final class PairwiseQuestionAnsweringQualityResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseQuestionAnsweringQualityResult';
 
@@ -28644,7 +28630,7 @@ final class PairwiseQuestionAnsweringQualityResult
 }
 
 /// Input for question answering relevance metric.
-final class QuestionAnsweringRelevanceInput extends protobuf.ProtoMessage {
+final class QuestionAnsweringRelevanceInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringRelevanceInput';
 
@@ -28682,7 +28668,7 @@ final class QuestionAnsweringRelevanceInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering relevance instance.
-final class QuestionAnsweringRelevanceInstance extends protobuf.ProtoMessage {
+final class QuestionAnsweringRelevanceInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringRelevanceInstance';
 
@@ -28735,7 +28721,7 @@ final class QuestionAnsweringRelevanceInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering relevance metric.
-final class QuestionAnsweringRelevanceSpec extends protobuf.ProtoMessage {
+final class QuestionAnsweringRelevanceSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringRelevanceSpec';
 
@@ -28772,7 +28758,7 @@ final class QuestionAnsweringRelevanceSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering relevance result.
-final class QuestionAnsweringRelevanceResult extends protobuf.ProtoMessage {
+final class QuestionAnsweringRelevanceResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringRelevanceResult';
 
@@ -28818,7 +28804,7 @@ final class QuestionAnsweringRelevanceResult extends protobuf.ProtoMessage {
 }
 
 /// Input for question answering helpfulness metric.
-final class QuestionAnsweringHelpfulnessInput extends protobuf.ProtoMessage {
+final class QuestionAnsweringHelpfulnessInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringHelpfulnessInput';
 
@@ -28857,7 +28843,7 @@ final class QuestionAnsweringHelpfulnessInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering helpfulness instance.
-final class QuestionAnsweringHelpfulnessInstance extends protobuf.ProtoMessage {
+final class QuestionAnsweringHelpfulnessInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringHelpfulnessInstance';
 
@@ -28910,7 +28896,7 @@ final class QuestionAnsweringHelpfulnessInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering helpfulness metric.
-final class QuestionAnsweringHelpfulnessSpec extends protobuf.ProtoMessage {
+final class QuestionAnsweringHelpfulnessSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringHelpfulnessSpec';
 
@@ -28950,7 +28936,7 @@ final class QuestionAnsweringHelpfulnessSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering helpfulness result.
-final class QuestionAnsweringHelpfulnessResult extends protobuf.ProtoMessage {
+final class QuestionAnsweringHelpfulnessResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringHelpfulnessResult';
 
@@ -28996,7 +28982,7 @@ final class QuestionAnsweringHelpfulnessResult extends protobuf.ProtoMessage {
 }
 
 /// Input for question answering correctness metric.
-final class QuestionAnsweringCorrectnessInput extends protobuf.ProtoMessage {
+final class QuestionAnsweringCorrectnessInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringCorrectnessInput';
 
@@ -29035,7 +29021,7 @@ final class QuestionAnsweringCorrectnessInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering correctness instance.
-final class QuestionAnsweringCorrectnessInstance extends protobuf.ProtoMessage {
+final class QuestionAnsweringCorrectnessInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringCorrectnessInstance';
 
@@ -29088,7 +29074,7 @@ final class QuestionAnsweringCorrectnessInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering correctness metric.
-final class QuestionAnsweringCorrectnessSpec extends protobuf.ProtoMessage {
+final class QuestionAnsweringCorrectnessSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringCorrectnessSpec';
 
@@ -29128,7 +29114,7 @@ final class QuestionAnsweringCorrectnessSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for question answering correctness result.
-final class QuestionAnsweringCorrectnessResult extends protobuf.ProtoMessage {
+final class QuestionAnsweringCorrectnessResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QuestionAnsweringCorrectnessResult';
 
@@ -29174,7 +29160,7 @@ final class QuestionAnsweringCorrectnessResult extends protobuf.ProtoMessage {
 }
 
 /// Input for pointwise metric.
-final class PointwiseMetricInput extends protobuf.ProtoMessage {
+final class PointwiseMetricInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PointwiseMetricInput';
 
@@ -29205,7 +29191,7 @@ final class PointwiseMetricInput extends protobuf.ProtoMessage {
 
 /// Pointwise metric instance. Usually one instance corresponds to one row in an
 /// evaluation dataset.
-final class PointwiseMetricInstance extends protobuf.ProtoMessage {
+final class PointwiseMetricInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PointwiseMetricInstance';
 
@@ -29248,7 +29234,7 @@ final class PointwiseMetricInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for pointwise metric.
-final class PointwiseMetricSpec extends protobuf.ProtoMessage {
+final class PointwiseMetricSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PointwiseMetricSpec';
 
@@ -29304,7 +29290,7 @@ final class PointwiseMetricSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for custom output format configuration.
-final class CustomOutputFormatConfig extends protobuf.ProtoMessage {
+final class CustomOutputFormatConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CustomOutputFormatConfig';
 
@@ -29331,7 +29317,7 @@ final class CustomOutputFormatConfig extends protobuf.ProtoMessage {
 }
 
 /// Spec for pointwise metric result.
-final class PointwiseMetricResult extends protobuf.ProtoMessage {
+final class PointwiseMetricResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PointwiseMetricResult';
 
@@ -29372,7 +29358,7 @@ final class PointwiseMetricResult extends protobuf.ProtoMessage {
 }
 
 /// Spec for custom output.
-final class CustomOutput extends protobuf.ProtoMessage {
+final class CustomOutput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CustomOutput';
 
@@ -29394,7 +29380,7 @@ final class CustomOutput extends protobuf.ProtoMessage {
 }
 
 /// Raw output.
-final class RawOutput extends protobuf.ProtoMessage {
+final class RawOutput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RawOutput';
 
@@ -29414,7 +29400,7 @@ final class RawOutput extends protobuf.ProtoMessage {
 }
 
 /// Input for pairwise metric.
-final class PairwiseMetricInput extends protobuf.ProtoMessage {
+final class PairwiseMetricInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseMetricInput';
 
@@ -29445,7 +29431,7 @@ final class PairwiseMetricInput extends protobuf.ProtoMessage {
 
 /// Pairwise metric instance. Usually one instance corresponds to one row in an
 /// evaluation dataset.
-final class PairwiseMetricInstance extends protobuf.ProtoMessage {
+final class PairwiseMetricInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseMetricInstance';
 
@@ -29488,7 +29474,7 @@ final class PairwiseMetricInstance extends protobuf.ProtoMessage {
 }
 
 /// Spec for pairwise metric.
-final class PairwiseMetricSpec extends protobuf.ProtoMessage {
+final class PairwiseMetricSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseMetricSpec';
 
@@ -29558,7 +29544,7 @@ final class PairwiseMetricSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for pairwise metric result.
-final class PairwiseMetricResult extends protobuf.ProtoMessage {
+final class PairwiseMetricResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PairwiseMetricResult';
 
@@ -29604,7 +29590,7 @@ final class PairwiseMetricResult extends protobuf.ProtoMessage {
 }
 
 /// Input for tool call valid metric.
-final class ToolCallValidInput extends protobuf.ProtoMessage {
+final class ToolCallValidInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolCallValidInput';
 
@@ -29639,7 +29625,7 @@ final class ToolCallValidInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool call valid metric.
-final class ToolCallValidSpec extends protobuf.ProtoMessage {
+final class ToolCallValidSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolCallValidSpec';
 
@@ -29656,7 +29642,7 @@ final class ToolCallValidSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool call valid instance.
-final class ToolCallValidInstance extends protobuf.ProtoMessage {
+final class ToolCallValidInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolCallValidInstance';
 
@@ -29692,7 +29678,7 @@ final class ToolCallValidInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for tool call valid metric.
-final class ToolCallValidResults extends protobuf.ProtoMessage {
+final class ToolCallValidResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolCallValidResults';
 
@@ -29723,7 +29709,7 @@ final class ToolCallValidResults extends protobuf.ProtoMessage {
 }
 
 /// Tool call valid metric value for an instance.
-final class ToolCallValidMetricValue extends protobuf.ProtoMessage {
+final class ToolCallValidMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolCallValidMetricValue';
 
@@ -29746,7 +29732,7 @@ final class ToolCallValidMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for tool name match metric.
-final class ToolNameMatchInput extends protobuf.ProtoMessage {
+final class ToolNameMatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolNameMatchInput';
 
@@ -29781,7 +29767,7 @@ final class ToolNameMatchInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool name match metric.
-final class ToolNameMatchSpec extends protobuf.ProtoMessage {
+final class ToolNameMatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolNameMatchSpec';
 
@@ -29798,7 +29784,7 @@ final class ToolNameMatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool name match instance.
-final class ToolNameMatchInstance extends protobuf.ProtoMessage {
+final class ToolNameMatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolNameMatchInstance';
 
@@ -29834,7 +29820,7 @@ final class ToolNameMatchInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for tool name match metric.
-final class ToolNameMatchResults extends protobuf.ProtoMessage {
+final class ToolNameMatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolNameMatchResults';
 
@@ -29865,7 +29851,7 @@ final class ToolNameMatchResults extends protobuf.ProtoMessage {
 }
 
 /// Tool name match metric value for an instance.
-final class ToolNameMatchMetricValue extends protobuf.ProtoMessage {
+final class ToolNameMatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolNameMatchMetricValue';
 
@@ -29888,7 +29874,7 @@ final class ToolNameMatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for tool parameter key match metric.
-final class ToolParameterKeyMatchInput extends protobuf.ProtoMessage {
+final class ToolParameterKeyMatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKeyMatchInput';
 
@@ -29928,7 +29914,7 @@ final class ToolParameterKeyMatchInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool parameter key match metric.
-final class ToolParameterKeyMatchSpec extends protobuf.ProtoMessage {
+final class ToolParameterKeyMatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKeyMatchSpec';
 
@@ -29945,7 +29931,7 @@ final class ToolParameterKeyMatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool parameter key match instance.
-final class ToolParameterKeyMatchInstance extends protobuf.ProtoMessage {
+final class ToolParameterKeyMatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKeyMatchInstance';
 
@@ -29983,7 +29969,7 @@ final class ToolParameterKeyMatchInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for tool parameter key match metric.
-final class ToolParameterKeyMatchResults extends protobuf.ProtoMessage {
+final class ToolParameterKeyMatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKeyMatchResults';
 
@@ -30018,7 +30004,7 @@ final class ToolParameterKeyMatchResults extends protobuf.ProtoMessage {
 }
 
 /// Tool parameter key match metric value for an instance.
-final class ToolParameterKeyMatchMetricValue extends protobuf.ProtoMessage {
+final class ToolParameterKeyMatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKeyMatchMetricValue';
 
@@ -30042,7 +30028,7 @@ final class ToolParameterKeyMatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for tool parameter key value match metric.
-final class ToolParameterKvmatchInput extends protobuf.ProtoMessage {
+final class ToolParameterKvmatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKVMatchInput';
 
@@ -30080,7 +30066,7 @@ final class ToolParameterKvmatchInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool parameter key value match metric.
-final class ToolParameterKvmatchSpec extends protobuf.ProtoMessage {
+final class ToolParameterKvmatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKVMatchSpec';
 
@@ -30109,7 +30095,7 @@ final class ToolParameterKvmatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool parameter key value match instance.
-final class ToolParameterKvmatchInstance extends protobuf.ProtoMessage {
+final class ToolParameterKvmatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKVMatchInstance';
 
@@ -30147,7 +30133,7 @@ final class ToolParameterKvmatchInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for tool parameter key value match metric.
-final class ToolParameterKvmatchResults extends protobuf.ProtoMessage {
+final class ToolParameterKvmatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKVMatchResults';
 
@@ -30181,7 +30167,7 @@ final class ToolParameterKvmatchResults extends protobuf.ProtoMessage {
 }
 
 /// Tool parameter key value match metric value for an instance.
-final class ToolParameterKvmatchMetricValue extends protobuf.ProtoMessage {
+final class ToolParameterKvmatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolParameterKVMatchMetricValue';
 
@@ -30204,7 +30190,7 @@ final class ToolParameterKvmatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Input for Comet metric.
-final class CometInput extends protobuf.ProtoMessage {
+final class CometInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CometInput';
 
@@ -30233,7 +30219,7 @@ final class CometInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for Comet metric.
-final class CometSpec extends protobuf.ProtoMessage {
+final class CometSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CometSpec';
 
@@ -30278,7 +30264,7 @@ final class CometSpec extends protobuf.ProtoMessage {
 }
 
 /// Comet version options.
-final class CometSpec_CometVersion extends protobuf.ProtoEnum {
+final class CometSpec_CometVersion extends ProtoEnum {
   /// Comet version unspecified.
   static const cometVersionUnspecified = CometSpec_CometVersion(
     'COMET_VERSION_UNSPECIFIED',
@@ -30304,7 +30290,7 @@ final class CometSpec_CometVersion extends protobuf.ProtoEnum {
 
 /// Spec for Comet instance - The fields used for evaluation are dependent on the
 /// comet version.
-final class CometInstance extends protobuf.ProtoMessage {
+final class CometInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CometInstance';
 
@@ -30346,7 +30332,7 @@ final class CometInstance extends protobuf.ProtoMessage {
 
 /// Spec for Comet result - calculates the comet score for the given instance
 /// using the version specified in the spec.
-final class CometResult extends protobuf.ProtoMessage {
+final class CometResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CometResult';
 
@@ -30369,7 +30355,7 @@ final class CometResult extends protobuf.ProtoMessage {
 }
 
 /// Input for MetricX metric.
-final class MetricxInput extends protobuf.ProtoMessage {
+final class MetricxInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetricxInput';
 
@@ -30398,7 +30384,7 @@ final class MetricxInput extends protobuf.ProtoMessage {
 }
 
 /// Spec for MetricX metric.
-final class MetricxSpec extends protobuf.ProtoMessage {
+final class MetricxSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetricxSpec';
 
@@ -30443,7 +30429,7 @@ final class MetricxSpec extends protobuf.ProtoMessage {
 }
 
 /// MetricX Version options.
-final class MetricxSpec_MetricxVersion extends protobuf.ProtoEnum {
+final class MetricxSpec_MetricxVersion extends ProtoEnum {
   /// MetricX version unspecified.
   static const metricxVersionUnspecified = MetricxSpec_MetricxVersion(
     'METRICX_VERSION_UNSPECIFIED',
@@ -30477,7 +30463,7 @@ final class MetricxSpec_MetricxVersion extends protobuf.ProtoEnum {
 
 /// Spec for MetricX instance - The fields used for evaluation are dependent on
 /// the MetricX version.
-final class MetricxInstance extends protobuf.ProtoMessage {
+final class MetricxInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetricxInstance';
 
@@ -30520,7 +30506,7 @@ final class MetricxInstance extends protobuf.ProtoMessage {
 
 /// Spec for MetricX result - calculates the MetricX score for the given instance
 /// using the version specified in the spec.
-final class MetricxResult extends protobuf.ProtoMessage {
+final class MetricxResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetricxResult';
 
@@ -30543,7 +30529,7 @@ final class MetricxResult extends protobuf.ProtoMessage {
 }
 
 /// Instance and metric spec for RubricBasedInstructionFollowing metric.
-final class RubricBasedInstructionFollowingInput extends protobuf.ProtoMessage {
+final class RubricBasedInstructionFollowingInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RubricBasedInstructionFollowingInput';
 
@@ -30583,8 +30569,7 @@ final class RubricBasedInstructionFollowingInput extends protobuf.ProtoMessage {
 
 /// Instance for RubricBasedInstructionFollowing metric - one instance
 /// corresponds to one row in an evaluation dataset.
-final class RubricBasedInstructionFollowingInstance
-    extends protobuf.ProtoMessage {
+final class RubricBasedInstructionFollowingInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RubricBasedInstructionFollowingInstance';
 
@@ -30616,7 +30601,7 @@ final class RubricBasedInstructionFollowingInstance
 
 /// Spec for RubricBasedInstructionFollowing metric - returns rubrics
 /// and verdicts corresponding to rubrics along with overall score.
-final class RubricBasedInstructionFollowingSpec extends protobuf.ProtoMessage {
+final class RubricBasedInstructionFollowingSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RubricBasedInstructionFollowingSpec';
 
@@ -30634,8 +30619,7 @@ final class RubricBasedInstructionFollowingSpec extends protobuf.ProtoMessage {
 }
 
 /// Result for RubricBasedInstructionFollowing metric.
-final class RubricBasedInstructionFollowingResult
-    extends protobuf.ProtoMessage {
+final class RubricBasedInstructionFollowingResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RubricBasedInstructionFollowingResult';
 
@@ -30677,7 +30661,7 @@ final class RubricBasedInstructionFollowingResult
 }
 
 /// Rubric critique result.
-final class RubricCritiqueResult extends protobuf.ProtoMessage {
+final class RubricCritiqueResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RubricCritiqueResult';
 
@@ -30711,7 +30695,7 @@ final class RubricCritiqueResult extends protobuf.ProtoMessage {
 }
 
 /// Instances and metric spec for TrajectoryExactMatch metric.
-final class TrajectoryExactMatchInput extends protobuf.ProtoMessage {
+final class TrajectoryExactMatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryExactMatchInput';
 
@@ -30750,7 +30734,7 @@ final class TrajectoryExactMatchInput extends protobuf.ProtoMessage {
 
 /// Spec for TrajectoryExactMatch metric - returns 1 if tool calls in the
 /// reference trajectory exactly match the predicted trajectory, else 0.
-final class TrajectoryExactMatchSpec extends protobuf.ProtoMessage {
+final class TrajectoryExactMatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryExactMatchSpec';
 
@@ -30767,7 +30751,7 @@ final class TrajectoryExactMatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for TrajectoryExactMatch instance.
-final class TrajectoryExactMatchInstance extends protobuf.ProtoMessage {
+final class TrajectoryExactMatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryExactMatchInstance';
 
@@ -30807,7 +30791,7 @@ final class TrajectoryExactMatchInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for TrajectoryExactMatch metric.
-final class TrajectoryExactMatchResults extends protobuf.ProtoMessage {
+final class TrajectoryExactMatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryExactMatchResults';
 
@@ -30841,7 +30825,7 @@ final class TrajectoryExactMatchResults extends protobuf.ProtoMessage {
 }
 
 /// TrajectoryExactMatch metric value for an instance.
-final class TrajectoryExactMatchMetricValue extends protobuf.ProtoMessage {
+final class TrajectoryExactMatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryExactMatchMetricValue';
 
@@ -30864,7 +30848,7 @@ final class TrajectoryExactMatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Instances and metric spec for TrajectoryInOrderMatch metric.
-final class TrajectoryInOrderMatchInput extends protobuf.ProtoMessage {
+final class TrajectoryInOrderMatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryInOrderMatchInput';
 
@@ -30906,7 +30890,7 @@ final class TrajectoryInOrderMatchInput extends protobuf.ProtoMessage {
 /// Spec for TrajectoryInOrderMatch metric - returns 1 if tool calls in the
 /// reference trajectory appear in the predicted trajectory in the same order,
 /// else 0.
-final class TrajectoryInOrderMatchSpec extends protobuf.ProtoMessage {
+final class TrajectoryInOrderMatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryInOrderMatchSpec';
 
@@ -30923,7 +30907,7 @@ final class TrajectoryInOrderMatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for TrajectoryInOrderMatch instance.
-final class TrajectoryInOrderMatchInstance extends protobuf.ProtoMessage {
+final class TrajectoryInOrderMatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryInOrderMatchInstance';
 
@@ -30963,7 +30947,7 @@ final class TrajectoryInOrderMatchInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for TrajectoryInOrderMatch metric.
-final class TrajectoryInOrderMatchResults extends protobuf.ProtoMessage {
+final class TrajectoryInOrderMatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryInOrderMatchResults';
 
@@ -30998,7 +30982,7 @@ final class TrajectoryInOrderMatchResults extends protobuf.ProtoMessage {
 }
 
 /// TrajectoryInOrderMatch metric value for an instance.
-final class TrajectoryInOrderMatchMetricValue extends protobuf.ProtoMessage {
+final class TrajectoryInOrderMatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryInOrderMatchMetricValue';
 
@@ -31022,7 +31006,7 @@ final class TrajectoryInOrderMatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Instances and metric spec for TrajectoryAnyOrderMatch metric.
-final class TrajectoryAnyOrderMatchInput extends protobuf.ProtoMessage {
+final class TrajectoryAnyOrderMatchInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryAnyOrderMatchInput';
 
@@ -31064,7 +31048,7 @@ final class TrajectoryAnyOrderMatchInput extends protobuf.ProtoMessage {
 /// Spec for TrajectoryAnyOrderMatch metric - returns 1 if all tool calls in the
 /// reference trajectory appear in the predicted trajectory in any order, else
 /// 0.
-final class TrajectoryAnyOrderMatchSpec extends protobuf.ProtoMessage {
+final class TrajectoryAnyOrderMatchSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryAnyOrderMatchSpec';
 
@@ -31081,7 +31065,7 @@ final class TrajectoryAnyOrderMatchSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for TrajectoryAnyOrderMatch instance.
-final class TrajectoryAnyOrderMatchInstance extends protobuf.ProtoMessage {
+final class TrajectoryAnyOrderMatchInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryAnyOrderMatchInstance';
 
@@ -31121,7 +31105,7 @@ final class TrajectoryAnyOrderMatchInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for TrajectoryAnyOrderMatch metric.
-final class TrajectoryAnyOrderMatchResults extends protobuf.ProtoMessage {
+final class TrajectoryAnyOrderMatchResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryAnyOrderMatchResults';
 
@@ -31156,7 +31140,7 @@ final class TrajectoryAnyOrderMatchResults extends protobuf.ProtoMessage {
 }
 
 /// TrajectoryAnyOrderMatch metric value for an instance.
-final class TrajectoryAnyOrderMatchMetricValue extends protobuf.ProtoMessage {
+final class TrajectoryAnyOrderMatchMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryAnyOrderMatchMetricValue';
 
@@ -31180,7 +31164,7 @@ final class TrajectoryAnyOrderMatchMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Instances and metric spec for TrajectoryPrecision metric.
-final class TrajectoryPrecisionInput extends protobuf.ProtoMessage {
+final class TrajectoryPrecisionInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryPrecisionInput';
 
@@ -31219,7 +31203,7 @@ final class TrajectoryPrecisionInput extends protobuf.ProtoMessage {
 
 /// Spec for TrajectoryPrecision metric - returns a float score based on average
 /// precision of individual tool calls.
-final class TrajectoryPrecisionSpec extends protobuf.ProtoMessage {
+final class TrajectoryPrecisionSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryPrecisionSpec';
 
@@ -31236,7 +31220,7 @@ final class TrajectoryPrecisionSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for TrajectoryPrecision instance.
-final class TrajectoryPrecisionInstance extends protobuf.ProtoMessage {
+final class TrajectoryPrecisionInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryPrecisionInstance';
 
@@ -31276,7 +31260,7 @@ final class TrajectoryPrecisionInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for TrajectoryPrecision metric.
-final class TrajectoryPrecisionResults extends protobuf.ProtoMessage {
+final class TrajectoryPrecisionResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryPrecisionResults';
 
@@ -31309,7 +31293,7 @@ final class TrajectoryPrecisionResults extends protobuf.ProtoMessage {
 }
 
 /// TrajectoryPrecision metric value for an instance.
-final class TrajectoryPrecisionMetricValue extends protobuf.ProtoMessage {
+final class TrajectoryPrecisionMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryPrecisionMetricValue';
 
@@ -31332,7 +31316,7 @@ final class TrajectoryPrecisionMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Instances and metric spec for TrajectoryRecall metric.
-final class TrajectoryRecallInput extends protobuf.ProtoMessage {
+final class TrajectoryRecallInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryRecallInput';
 
@@ -31368,7 +31352,7 @@ final class TrajectoryRecallInput extends protobuf.ProtoMessage {
 
 /// Spec for TrajectoryRecall metric - returns a float score based on average
 /// recall of individual tool calls.
-final class TrajectoryRecallSpec extends protobuf.ProtoMessage {
+final class TrajectoryRecallSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryRecallSpec';
 
@@ -31385,7 +31369,7 @@ final class TrajectoryRecallSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for TrajectoryRecall instance.
-final class TrajectoryRecallInstance extends protobuf.ProtoMessage {
+final class TrajectoryRecallInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryRecallInstance';
 
@@ -31425,7 +31409,7 @@ final class TrajectoryRecallInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for TrajectoryRecall metric.
-final class TrajectoryRecallResults extends protobuf.ProtoMessage {
+final class TrajectoryRecallResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryRecallResults';
 
@@ -31456,7 +31440,7 @@ final class TrajectoryRecallResults extends protobuf.ProtoMessage {
 }
 
 /// TrajectoryRecall metric value for an instance.
-final class TrajectoryRecallMetricValue extends protobuf.ProtoMessage {
+final class TrajectoryRecallMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectoryRecallMetricValue';
 
@@ -31479,7 +31463,7 @@ final class TrajectoryRecallMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Instances and metric spec for TrajectorySingleToolUse metric.
-final class TrajectorySingleToolUseInput extends protobuf.ProtoMessage {
+final class TrajectorySingleToolUseInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectorySingleToolUseInput';
 
@@ -31520,7 +31504,7 @@ final class TrajectorySingleToolUseInput extends protobuf.ProtoMessage {
 
 /// Spec for TrajectorySingleToolUse metric - returns 1 if tool is present in the
 /// predicted trajectory, else 0.
-final class TrajectorySingleToolUseSpec extends protobuf.ProtoMessage {
+final class TrajectorySingleToolUseSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectorySingleToolUseSpec';
 
@@ -31544,7 +31528,7 @@ final class TrajectorySingleToolUseSpec extends protobuf.ProtoMessage {
 }
 
 /// Spec for TrajectorySingleToolUse instance.
-final class TrajectorySingleToolUseInstance extends protobuf.ProtoMessage {
+final class TrajectorySingleToolUseInstance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectorySingleToolUseInstance';
 
@@ -31573,7 +31557,7 @@ final class TrajectorySingleToolUseInstance extends protobuf.ProtoMessage {
 }
 
 /// Results for TrajectorySingleToolUse metric.
-final class TrajectorySingleToolUseResults extends protobuf.ProtoMessage {
+final class TrajectorySingleToolUseResults extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectorySingleToolUseResults';
 
@@ -31608,7 +31592,7 @@ final class TrajectorySingleToolUseResults extends protobuf.ProtoMessage {
 }
 
 /// TrajectorySingleToolUse metric value for an instance.
-final class TrajectorySingleToolUseMetricValue extends protobuf.ProtoMessage {
+final class TrajectorySingleToolUseMetricValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrajectorySingleToolUseMetricValue';
 
@@ -31632,7 +31616,7 @@ final class TrajectorySingleToolUseMetricValue extends protobuf.ProtoMessage {
 }
 
 /// Spec for trajectory.
-final class Trajectory extends protobuf.ProtoMessage {
+final class Trajectory extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Trajectory';
 
@@ -31653,7 +31637,7 @@ final class Trajectory extends protobuf.ProtoMessage {
 }
 
 /// Spec for tool call.
-final class ToolCall extends protobuf.ProtoMessage {
+final class ToolCall extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolCall';
 
@@ -31686,7 +31670,7 @@ final class ToolCall extends protobuf.ProtoMessage {
 }
 
 /// Map of placeholder in metric prompt template to contents of model input.
-final class ContentMap extends protobuf.ProtoMessage {
+final class ContentMap extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ContentMap';
 
@@ -31708,7 +31692,7 @@ final class ContentMap extends protobuf.ProtoMessage {
 }
 
 /// Repeated Content type.
-final class ContentMap_Contents extends protobuf.ProtoMessage {
+final class ContentMap_Contents extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ContentMap.Contents';
 
@@ -31733,7 +31717,7 @@ final class ContentMap_Contents extends protobuf.ProtoMessage {
 
 /// An edge describing the relationship between an Artifact and an Execution in
 /// a lineage graph.
-final class Event extends protobuf.ProtoMessage {
+final class Event extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Event';
 
@@ -31799,7 +31783,7 @@ final class Event extends protobuf.ProtoMessage {
 }
 
 /// Describes whether an Event's Artifact is the Execution's input or output.
-final class Event_Type extends protobuf.ProtoEnum {
+final class Event_Type extends ProtoEnum {
   /// Unspecified whether input or output of the Execution.
   static const typeUnspecified = Event_Type('TYPE_UNSPECIFIED');
 
@@ -31823,7 +31807,7 @@ final class Event_Type extends protobuf.ProtoEnum {
 }
 
 /// A single example of a conversation with the model.
-final class ContentsExample extends protobuf.ProtoMessage {
+final class ContentsExample extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ContentsExample';
 
@@ -31861,7 +31845,7 @@ final class ContentsExample extends protobuf.ProtoMessage {
 }
 
 /// A single step of the expected output.
-final class ContentsExample_ExpectedContent extends protobuf.ProtoMessage {
+final class ContentsExample_ExpectedContent extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ContentsExample.ExpectedContent';
 
@@ -31885,7 +31869,7 @@ final class ContentsExample_ExpectedContent extends protobuf.ProtoMessage {
 
 /// A ContentsExample to be used with GenerateContent alongside information
 /// required for storage and retrieval with Example Store.
-final class StoredContentsExample extends protobuf.ProtoMessage {
+final class StoredContentsExample extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StoredContentsExample';
 
@@ -31941,7 +31925,7 @@ final class StoredContentsExample extends protobuf.ProtoMessage {
 
 /// Options for generating the search key from the conversation history.
 final class StoredContentsExample_SearchKeyGenerationMethod
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StoredContentsExample.SearchKeyGenerationMethod';
 
@@ -31971,7 +31955,7 @@ final class StoredContentsExample_SearchKeyGenerationMethod
 /// Configuration for using only the last entry of the conversation history
 /// as the search key.
 final class StoredContentsExample_SearchKeyGenerationMethod_LastEntry
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StoredContentsExample.SearchKeyGenerationMethod.LastEntry';
 
@@ -31990,7 +31974,7 @@ final class StoredContentsExample_SearchKeyGenerationMethod_LastEntry
 }
 
 /// Represents an executable service to manage and retrieve examples.
-final class ExampleStore extends protobuf.ProtoMessage {
+final class ExampleStore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExampleStore';
 
@@ -32058,7 +32042,7 @@ final class ExampleStore extends protobuf.ProtoMessage {
 }
 
 /// Configuration for the Example Store.
-final class ExampleStoreConfig extends protobuf.ProtoMessage {
+final class ExampleStoreConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExampleStoreConfig';
 
@@ -32092,7 +32076,7 @@ final class ExampleStoreConfig extends protobuf.ProtoMessage {
 /// The metadata filters that will be used to remove or fetch
 /// StoredContentsExamples. If a field is unspecified, then no filtering for that
 /// field will be applied.
-final class StoredContentsExampleFilter extends protobuf.ProtoMessage {
+final class StoredContentsExampleFilter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StoredContentsExampleFilter';
 
@@ -32129,7 +32113,7 @@ final class StoredContentsExampleFilter extends protobuf.ProtoMessage {
 
 /// The metadata filters that will be used to search StoredContentsExamples.
 /// If a field is unspecified, then no filtering for that field will be applied
-final class StoredContentsExampleParameters extends protobuf.ProtoMessage {
+final class StoredContentsExampleParameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StoredContentsExampleParameters';
 
@@ -32178,7 +32162,7 @@ final class StoredContentsExampleParameters extends protobuf.ProtoMessage {
 
 /// The chat history to use to generate the search key for retrieval.
 final class StoredContentsExampleParameters_ContentSearchKey
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StoredContentsExampleParameters.ContentSearchKey';
 
@@ -32217,7 +32201,7 @@ final class StoredContentsExampleParameters_ContentSearchKey
 
 /// Filters for examples' array metadata fields. An array field is example
 /// metadata where multiple values are attributed to a single example.
-final class ExamplesArrayFilter extends protobuf.ProtoMessage {
+final class ExamplesArrayFilter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExamplesArrayFilter';
 
@@ -32255,7 +32239,7 @@ final class ExamplesArrayFilter extends protobuf.ProtoMessage {
 }
 
 /// The logic to use for filtering.
-final class ExamplesArrayFilter_ArrayOperator extends protobuf.ProtoEnum {
+final class ExamplesArrayFilter_ArrayOperator extends ProtoEnum {
   /// Not specified. This value should not be used.
   static const arrayOperatorUnspecified = ExamplesArrayFilter_ArrayOperator(
     'ARRAY_OPERATOR_UNSPECIFIED',
@@ -32284,7 +32268,7 @@ final class ExamplesArrayFilter_ArrayOperator extends protobuf.ProtoEnum {
 
 /// Request message for
 /// `ExampleStoreService.CreateExampleStore`.
-final class CreateExampleStoreRequest extends protobuf.ProtoMessage {
+final class CreateExampleStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateExampleStoreRequest';
 
@@ -32321,7 +32305,7 @@ final class CreateExampleStoreRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ExampleStoreService.CreateExampleStore`
 /// operation.
-final class CreateExampleStoreOperationMetadata extends protobuf.ProtoMessage {
+final class CreateExampleStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateExampleStoreOperationMetadata';
 
@@ -32351,7 +32335,7 @@ final class CreateExampleStoreOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.GetExampleStore`.
-final class GetExampleStoreRequest extends protobuf.ProtoMessage {
+final class GetExampleStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetExampleStoreRequest';
 
@@ -32377,7 +32361,7 @@ final class GetExampleStoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.UpdateExampleStore`.
-final class UpdateExampleStoreRequest extends protobuf.ProtoMessage {
+final class UpdateExampleStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExampleStoreRequest';
 
@@ -32416,7 +32400,7 @@ final class UpdateExampleStoreRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ExampleStoreService.UpdateExampleStore`
 /// operation.
-final class UpdateExampleStoreOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateExampleStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExampleStoreOperationMetadata';
 
@@ -32446,7 +32430,7 @@ final class UpdateExampleStoreOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.DeleteExampleStore`.
-final class DeleteExampleStoreRequest extends protobuf.ProtoMessage {
+final class DeleteExampleStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteExampleStoreRequest';
 
@@ -32473,7 +32457,7 @@ final class DeleteExampleStoreRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ExampleStoreService.DeleteExampleStore`
 /// operation.
-final class DeleteExampleStoreOperationMetadata extends protobuf.ProtoMessage {
+final class DeleteExampleStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteExampleStoreOperationMetadata';
 
@@ -32503,7 +32487,7 @@ final class DeleteExampleStoreOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.ListExampleStores`.
-final class ListExampleStoresRequest extends protobuf.ProtoMessage {
+final class ListExampleStoresRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListExampleStoresRequest';
 
@@ -32559,7 +32543,7 @@ final class ListExampleStoresRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExampleStoreService.ListExampleStores`.
-final class ListExampleStoresResponse extends protobuf.ProtoMessage {
+final class ListExampleStoresResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListExampleStoresResponse';
 
@@ -32599,7 +32583,7 @@ final class ListExampleStoresResponse extends protobuf.ProtoMessage {
 }
 
 /// A single example to upload or read from the Example Store.
-final class Example extends protobuf.ProtoMessage {
+final class Example extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Example';
 
@@ -32655,7 +32639,7 @@ final class Example extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.UpsertExamples`.
-final class UpsertExamplesRequest extends protobuf.ProtoMessage {
+final class UpsertExamplesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpsertExamplesRequest';
 
@@ -32705,7 +32689,7 @@ final class UpsertExamplesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExampleStoreService.UpsertExamples`.
-final class UpsertExamplesResponse extends protobuf.ProtoMessage {
+final class UpsertExamplesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpsertExamplesResponse';
 
@@ -32733,7 +32717,7 @@ final class UpsertExamplesResponse extends protobuf.ProtoMessage {
 }
 
 /// The result for creating/updating a single example.
-final class UpsertExamplesResponse_UpsertResult extends protobuf.ProtoMessage {
+final class UpsertExamplesResponse_UpsertResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpsertExamplesResponse.UpsertResult';
 
@@ -32766,7 +32750,7 @@ final class UpsertExamplesResponse_UpsertResult extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.RemoveExamples`.
-final class RemoveExamplesRequest extends protobuf.ProtoMessage {
+final class RemoveExamplesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RemoveExamplesRequest';
 
@@ -32816,7 +32800,7 @@ final class RemoveExamplesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExampleStoreService.RemoveExamples`.
-final class RemoveExamplesResponse extends protobuf.ProtoMessage {
+final class RemoveExamplesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RemoveExamplesResponse';
 
@@ -32838,7 +32822,7 @@ final class RemoveExamplesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExampleStoreService.SearchExamples`.
-final class SearchExamplesRequest extends protobuf.ProtoMessage {
+final class SearchExamplesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchExamplesRequest';
 
@@ -32887,7 +32871,7 @@ final class SearchExamplesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExampleStoreService.SearchExamples`.
-final class SearchExamplesResponse extends protobuf.ProtoMessage {
+final class SearchExamplesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchExamplesResponse';
 
@@ -32914,8 +32898,7 @@ final class SearchExamplesResponse extends protobuf.ProtoMessage {
 }
 
 /// The result of the similar example.
-final class SearchExamplesResponse_SimilarExample
-    extends protobuf.ProtoMessage {
+final class SearchExamplesResponse_SimilarExample extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchExamplesResponse.SimilarExample';
 
@@ -32953,7 +32936,7 @@ final class SearchExamplesResponse_SimilarExample
 
 /// Request message for
 /// `ExampleStoreService.FetchExamples`.
-final class FetchExamplesRequest extends protobuf.ProtoMessage {
+final class FetchExamplesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchExamplesRequest';
 
@@ -33023,7 +33006,7 @@ final class FetchExamplesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExampleStoreService.FetchExamples`.
-final class FetchExamplesResponse extends protobuf.ProtoMessage {
+final class FetchExamplesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchExamplesResponse';
 
@@ -33058,7 +33041,7 @@ final class FetchExamplesResponse extends protobuf.ProtoMessage {
 }
 
 /// Instance of a general execution.
-final class Execution extends protobuf.ProtoMessage {
+final class Execution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Execution';
 
@@ -33177,7 +33160,7 @@ final class Execution extends protobuf.ProtoMessage {
 }
 
 /// Describes the state of the Execution.
-final class Execution_State extends protobuf.ProtoEnum {
+final class Execution_State extends ProtoEnum {
   /// Unspecified Execution state
   static const stateUnspecified = Execution_State('STATE_UNSPECIFIED');
 
@@ -33216,7 +33199,7 @@ final class Execution_State extends protobuf.ProtoEnum {
 /// `PredictResponse.predictions`)
 /// produced by the Model on a given
 /// `instance`.
-final class Explanation extends protobuf.ProtoMessage {
+final class Explanation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Explanation';
 
@@ -33275,7 +33258,7 @@ final class Explanation extends protobuf.ProtoMessage {
 }
 
 /// Aggregated explanation metrics for a Model over a set of instances.
-final class ModelExplanation extends protobuf.ProtoMessage {
+final class ModelExplanation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelExplanation';
 
@@ -33324,7 +33307,7 @@ final class ModelExplanation extends protobuf.ProtoMessage {
 }
 
 /// Attribution that explains a particular prediction output.
-final class Attribution extends protobuf.ProtoMessage {
+final class Attribution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Attribution';
 
@@ -33486,7 +33469,7 @@ final class Attribution extends protobuf.ProtoMessage {
 }
 
 /// Neighbors for example-based explanations.
-final class Neighbor extends protobuf.ProtoMessage {
+final class Neighbor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Neighbor';
 
@@ -33522,7 +33505,7 @@ final class Neighbor extends protobuf.ProtoMessage {
 }
 
 /// Specification of Model explanation.
-final class ExplanationSpec extends protobuf.ProtoMessage {
+final class ExplanationSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationSpec';
 
@@ -33552,7 +33535,7 @@ final class ExplanationSpec extends protobuf.ProtoMessage {
 }
 
 /// Parameters to configure explaining for Model's predictions.
-final class ExplanationParameters extends protobuf.ProtoMessage {
+final class ExplanationParameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationParameters';
 
@@ -33656,7 +33639,7 @@ final class ExplanationParameters extends protobuf.ProtoMessage {
 /// An attribution method that approximates Shapley values for features that
 /// contribute to the label being predicted. A sampling strategy is used to
 /// approximate the value rather than considering all subsets of features.
-final class SampledShapleyAttribution extends protobuf.ProtoMessage {
+final class SampledShapleyAttribution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SampledShapleyAttribution';
 
@@ -33685,7 +33668,7 @@ final class SampledShapleyAttribution extends protobuf.ProtoMessage {
 /// An attribution method that computes the Aumann-Shapley value taking advantage
 /// of the model's fully differentiable structure. Refer to this paper for
 /// more details: https://arxiv.org/abs/1703.01365
-final class IntegratedGradientsAttribution extends protobuf.ProtoMessage {
+final class IntegratedGradientsAttribution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IntegratedGradientsAttribution';
 
@@ -33753,7 +33736,7 @@ final class IntegratedGradientsAttribution extends protobuf.ProtoMessage {
 /// https://arxiv.org/abs/1906.02825
 ///
 /// Supported only by image Models.
-final class XraiAttribution extends protobuf.ProtoMessage {
+final class XraiAttribution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.XraiAttribution';
 
@@ -33821,7 +33804,7 @@ final class XraiAttribution extends protobuf.ProtoMessage {
 /// noisy samples in the vicinity of the inputs. Adding noise can help improve
 /// the computed gradients. Refer to this paper for more details:
 /// https://arxiv.org/pdf/1706.03825.pdf
-final class SmoothGradConfig extends protobuf.ProtoMessage {
+final class SmoothGradConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SmoothGradConfig';
 
@@ -33893,7 +33876,7 @@ final class SmoothGradConfig extends protobuf.ProtoMessage {
 /// Noise sigma by features. Noise sigma represents the standard deviation of the
 /// gaussian kernel that will be used to add noise to interpolated inputs prior
 /// to computing gradients.
-final class FeatureNoiseSigma extends protobuf.ProtoMessage {
+final class FeatureNoiseSigma extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureNoiseSigma';
 
@@ -33922,8 +33905,7 @@ final class FeatureNoiseSigma extends protobuf.ProtoMessage {
 }
 
 /// Noise sigma for a single feature.
-final class FeatureNoiseSigma_NoiseSigmaForFeature
-    extends protobuf.ProtoMessage {
+final class FeatureNoiseSigma_NoiseSigmaForFeature extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureNoiseSigma.NoiseSigmaForFeature';
 
@@ -33969,7 +33951,7 @@ final class FeatureNoiseSigma_NoiseSigmaForFeature
 /// image is created. Using a blurred baseline instead of zero (black image) is
 /// motivated by the BlurIG approach explained here:
 /// https://arxiv.org/abs/2004.03383
-final class BlurBaselineConfig extends protobuf.ProtoMessage {
+final class BlurBaselineConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BlurBaselineConfig';
 
@@ -33998,7 +33980,7 @@ final class BlurBaselineConfig extends protobuf.ProtoMessage {
 
 /// Example-based explainability that returns the nearest neighbors from the
 /// provided dataset.
-final class Examples extends protobuf.ProtoMessage {
+final class Examples extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Examples';
 
@@ -34063,7 +34045,7 @@ final class Examples extends protobuf.ProtoMessage {
 }
 
 /// The Cloud Storage input instances.
-final class Examples_ExampleGcsSource extends protobuf.ProtoMessage {
+final class Examples_ExampleGcsSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Examples.ExampleGcsSource';
 
@@ -34104,7 +34086,7 @@ final class Examples_ExampleGcsSource extends protobuf.ProtoMessage {
 }
 
 /// The format of the input example instances.
-final class Examples_ExampleGcsSource_DataFormat extends protobuf.ProtoEnum {
+final class Examples_ExampleGcsSource_DataFormat extends ProtoEnum {
   /// Format unspecified, used when unset.
   static const dataFormatUnspecified = Examples_ExampleGcsSource_DataFormat(
     'DATA_FORMAT_UNSPECIFIED',
@@ -34128,7 +34110,7 @@ final class Examples_ExampleGcsSource_DataFormat extends protobuf.ProtoEnum {
 }
 
 /// Preset configuration for example-based explanations
-final class Presets extends protobuf.ProtoMessage {
+final class Presets extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Presets';
 
@@ -34169,7 +34151,7 @@ final class Presets extends protobuf.ProtoMessage {
 }
 
 /// Preset option controlling parameters for query speed-precision trade-off
-final class Presets_Query extends protobuf.ProtoEnum {
+final class Presets_Query extends ProtoEnum {
   /// More precise neighbors as a trade-off against slower response.
   static const precise = Presets_Query('PRECISE');
 
@@ -34190,7 +34172,7 @@ final class Presets_Query extends protobuf.ProtoEnum {
 }
 
 /// Preset option controlling parameters for different modalities
-final class Presets_Modality extends protobuf.ProtoEnum {
+final class Presets_Modality extends ProtoEnum {
   /// Should not be set. Added as a recommended best practice for enums
   static const modalityUnspecified = Presets_Modality('MODALITY_UNSPECIFIED');
 
@@ -34219,7 +34201,7 @@ final class Presets_Modality extends protobuf.ProtoEnum {
 /// The `ExplanationSpec`
 /// entries that can be overridden at [online
 /// explanation][google.cloud.aiplatform.v1beta1.PredictionService.Explain] time.
-final class ExplanationSpecOverride extends protobuf.ProtoMessage {
+final class ExplanationSpecOverride extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationSpecOverride';
 
@@ -34269,7 +34251,7 @@ final class ExplanationSpecOverride extends protobuf.ProtoMessage {
 /// `ExplanationMetadata`
 /// entries that can be overridden at [online
 /// explanation][google.cloud.aiplatform.v1beta1.PredictionService.Explain] time.
-final class ExplanationMetadataOverride extends protobuf.ProtoMessage {
+final class ExplanationMetadataOverride extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride';
 
@@ -34305,7 +34287,7 @@ final class ExplanationMetadataOverride extends protobuf.ProtoMessage {
 /// metadata][google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata]
 /// entries to be overridden.
 final class ExplanationMetadataOverride_InputMetadataOverride
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadataOverride.InputMetadataOverride';
 
@@ -34343,7 +34325,7 @@ final class ExplanationMetadataOverride_InputMetadataOverride
 }
 
 /// Overrides for example-based explanations.
-final class ExamplesOverride extends protobuf.ProtoMessage {
+final class ExamplesOverride extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExamplesOverride';
 
@@ -34411,7 +34393,7 @@ final class ExamplesOverride extends protobuf.ProtoMessage {
 }
 
 /// Data format enum.
-final class ExamplesOverride_DataFormat extends protobuf.ProtoEnum {
+final class ExamplesOverride_DataFormat extends ProtoEnum {
   /// Unspecified format. Must not be used.
   static const dataFormatUnspecified = ExamplesOverride_DataFormat(
     'DATA_FORMAT_UNSPECIFIED',
@@ -34438,7 +34420,7 @@ final class ExamplesOverride_DataFormat extends protobuf.ProtoEnum {
 }
 
 /// Restrictions namespace for example-based explanations overrides.
-final class ExamplesRestrictionsNamespace extends protobuf.ProtoMessage {
+final class ExamplesRestrictionsNamespace extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExamplesRestrictionsNamespace';
 
@@ -34479,7 +34461,7 @@ final class ExamplesRestrictionsNamespace extends protobuf.ProtoMessage {
 }
 
 /// Metadata describing the Model's input and output for explanation.
-final class ExplanationMetadata extends protobuf.ProtoMessage {
+final class ExplanationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadata';
 
@@ -34576,7 +34558,7 @@ final class ExplanationMetadata extends protobuf.ProtoMessage {
 /// `InputMetadata.input_baselines`
 /// are applicable only for Models that are using Vertex AI-provided images for
 /// Tensorflow.
-final class ExplanationMetadata_InputMetadata extends protobuf.ProtoMessage {
+final class ExplanationMetadata_InputMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata';
 
@@ -34763,7 +34745,7 @@ final class ExplanationMetadata_InputMetadata extends protobuf.ProtoMessage {
 /// mean and stddev of the original feature (e.g. image tensor) from which
 /// input feature (with mean = 0 and stddev = 1) was obtained.
 final class ExplanationMetadata_InputMetadata_FeatureValueDomain
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.FeatureValueDomain';
 
@@ -34822,7 +34804,7 @@ final class ExplanationMetadata_InputMetadata_FeatureValueDomain
 
 /// Visualization configurations for image explanation.
 final class ExplanationMetadata_InputMetadata_Visualization
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadata.InputMetadata.Visualization';
 
@@ -34940,7 +34922,7 @@ final class ExplanationMetadata_InputMetadata_Visualization
 /// [Integrated Gradients
 /// attribution][google.cloud.aiplatform.v1beta1.ExplanationParameters.integrated_gradients_attribution].
 final class ExplanationMetadata_InputMetadata_Visualization_Type
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be used.
   static const typeUnspecified =
       ExplanationMetadata_InputMetadata_Visualization_Type('TYPE_UNSPECIFIED');
@@ -34974,7 +34956,7 @@ final class ExplanationMetadata_InputMetadata_Visualization_Type
 /// Whether to only highlight pixels with positive contributions, negative
 /// or both. Defaults to POSITIVE.
 final class ExplanationMetadata_InputMetadata_Visualization_Polarity
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Default value. This is the same as POSITIVE.
   static const polarityUnspecified =
       ExplanationMetadata_InputMetadata_Visualization_Polarity(
@@ -35013,7 +34995,7 @@ final class ExplanationMetadata_InputMetadata_Visualization_Polarity
 
 /// The color scheme used for highlighting areas.
 final class ExplanationMetadata_InputMetadata_Visualization_ColorMap
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be used.
   static const colorMapUnspecified =
       ExplanationMetadata_InputMetadata_Visualization_ColorMap(
@@ -35067,7 +35049,7 @@ final class ExplanationMetadata_InputMetadata_Visualization_ColorMap
 
 /// How the original image is displayed in the visualization.
 final class ExplanationMetadata_InputMetadata_Visualization_OverlayType
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Default value. This is the same as NONE.
   static const overlayTypeUnspecified =
       ExplanationMetadata_InputMetadata_Visualization_OverlayType(
@@ -35110,8 +35092,7 @@ final class ExplanationMetadata_InputMetadata_Visualization_OverlayType
 }
 
 /// Defines how a feature is encoded. Defaults to IDENTITY.
-final class ExplanationMetadata_InputMetadata_Encoding
-    extends protobuf.ProtoEnum {
+final class ExplanationMetadata_InputMetadata_Encoding extends ProtoEnum {
   /// Default value. This is the same as IDENTITY.
   static const encodingUnspecified = ExplanationMetadata_InputMetadata_Encoding(
     'ENCODING_UNSPECIFIED',
@@ -35203,7 +35184,7 @@ final class ExplanationMetadata_InputMetadata_Encoding
 }
 
 /// Metadata of the prediction output to be explained.
-final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
+final class ExplanationMetadata_OutputMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplanationMetadata.OutputMetadata';
 
@@ -35276,7 +35257,7 @@ final class ExplanationMetadata_OutputMetadata extends protobuf.ProtoMessage {
 
 /// Extensions are tools for large language models to access external data, run
 /// computations, etc.
-final class Extension extends protobuf.ProtoMessage {
+final class Extension extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Extension';
 
@@ -35394,7 +35375,7 @@ final class Extension extends protobuf.ProtoMessage {
 }
 
 /// Manifest spec of an Extension needed for runtime execution.
-final class ExtensionManifest extends protobuf.ProtoMessage {
+final class ExtensionManifest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExtensionManifest';
 
@@ -35445,7 +35426,7 @@ final class ExtensionManifest extends protobuf.ProtoMessage {
 }
 
 /// The API specification shown to the LLM.
-final class ExtensionManifest_ApiSpec extends protobuf.ProtoMessage {
+final class ExtensionManifest_ApiSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExtensionManifest.ApiSpec';
 
@@ -35481,7 +35462,7 @@ final class ExtensionManifest_ApiSpec extends protobuf.ProtoMessage {
 }
 
 /// Operation of an extension.
-final class ExtensionOperation extends protobuf.ProtoMessage {
+final class ExtensionOperation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExtensionOperation';
 
@@ -35523,7 +35504,7 @@ final class ExtensionOperation extends protobuf.ProtoMessage {
 }
 
 /// Auth configuration to run the extension.
-final class AuthConfig extends protobuf.ProtoMessage {
+final class AuthConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AuthConfig';
 
@@ -35593,7 +35574,7 @@ final class AuthConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for authentication with API key.
-final class AuthConfig_ApiKeyConfig extends protobuf.ProtoMessage {
+final class AuthConfig_ApiKeyConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AuthConfig.ApiKeyConfig';
 
@@ -35652,7 +35633,7 @@ final class AuthConfig_ApiKeyConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for HTTP Basic Authentication.
-final class AuthConfig_HttpBasicAuthConfig extends protobuf.ProtoMessage {
+final class AuthConfig_HttpBasicAuthConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AuthConfig.HttpBasicAuthConfig';
 
@@ -35685,8 +35666,7 @@ final class AuthConfig_HttpBasicAuthConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for Google Service Account Authentication.
-final class AuthConfig_GoogleServiceAccountConfig
-    extends protobuf.ProtoMessage {
+final class AuthConfig_GoogleServiceAccountConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AuthConfig.GoogleServiceAccountConfig';
 
@@ -35725,7 +35705,7 @@ final class AuthConfig_GoogleServiceAccountConfig
 }
 
 /// Config for user oauth.
-final class AuthConfig_OauthConfig extends protobuf.ProtoMessage {
+final class AuthConfig_OauthConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AuthConfig.OauthConfig';
 
@@ -35770,7 +35750,7 @@ final class AuthConfig_OauthConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for user OIDC auth.
-final class AuthConfig_OidcConfig extends protobuf.ProtoMessage {
+final class AuthConfig_OidcConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AuthConfig.OidcConfig';
 
@@ -35819,7 +35799,7 @@ final class AuthConfig_OidcConfig extends protobuf.ProtoMessage {
 }
 
 /// Runtime configuration to run the extension.
-final class RuntimeConfig extends protobuf.ProtoMessage {
+final class RuntimeConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RuntimeConfig';
 
@@ -35874,8 +35854,7 @@ final class RuntimeConfig extends protobuf.ProtoMessage {
   String toString() => 'RuntimeConfig()';
 }
 
-final class RuntimeConfig_CodeInterpreterRuntimeConfig
-    extends protobuf.ProtoMessage {
+final class RuntimeConfig_CodeInterpreterRuntimeConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RuntimeConfig.CodeInterpreterRuntimeConfig';
 
@@ -35924,8 +35903,7 @@ final class RuntimeConfig_CodeInterpreterRuntimeConfig
   }
 }
 
-final class RuntimeConfig_VertexAisearchRuntimeConfig
-    extends protobuf.ProtoMessage {
+final class RuntimeConfig_VertexAisearchRuntimeConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RuntimeConfig.VertexAISearchRuntimeConfig';
 
@@ -35968,7 +35946,7 @@ final class RuntimeConfig_VertexAisearchRuntimeConfig
 }
 
 /// PrivateExtensionConfig configuration for the extension.
-final class ExtensionPrivateServiceConnectConfig extends protobuf.ProtoMessage {
+final class ExtensionPrivateServiceConnectConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExtensionPrivateServiceConnectConfig';
 
@@ -36003,7 +35981,7 @@ final class ExtensionPrivateServiceConnectConfig extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionExecutionService.ExecuteExtension`.
-final class ExecuteExtensionRequest extends protobuf.ProtoMessage {
+final class ExecuteExtensionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExecuteExtensionRequest';
 
@@ -36071,7 +36049,7 @@ final class ExecuteExtensionRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExtensionExecutionService.ExecuteExtension`.
-final class ExecuteExtensionResponse extends protobuf.ProtoMessage {
+final class ExecuteExtensionResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExecuteExtensionResponse';
 
@@ -36096,7 +36074,7 @@ final class ExecuteExtensionResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionExecutionService.QueryExtension`.
-final class QueryExtensionRequest extends protobuf.ProtoMessage {
+final class QueryExtensionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryExtensionRequest';
 
@@ -36133,7 +36111,7 @@ final class QueryExtensionRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExtensionExecutionService.QueryExtension`.
-final class QueryExtensionResponse extends protobuf.ProtoMessage {
+final class QueryExtensionResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryExtensionResponse';
 
@@ -36169,7 +36147,7 @@ final class QueryExtensionResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionRegistryService.ImportExtension`.
-final class ImportExtensionRequest extends protobuf.ProtoMessage {
+final class ImportExtensionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportExtensionRequest';
 
@@ -36205,7 +36183,7 @@ final class ImportExtensionRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ExtensionRegistryService.ImportExtension`
 /// operation.
-final class ImportExtensionOperationMetadata extends protobuf.ProtoMessage {
+final class ImportExtensionOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportExtensionOperationMetadata';
 
@@ -36235,7 +36213,7 @@ final class ImportExtensionOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionRegistryService.GetExtension`.
-final class GetExtensionRequest extends protobuf.ProtoMessage {
+final class GetExtensionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetExtensionRequest';
 
@@ -36261,7 +36239,7 @@ final class GetExtensionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionRegistryService.UpdateExtension`.
-final class UpdateExtensionRequest extends protobuf.ProtoMessage {
+final class UpdateExtensionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExtensionRequest';
 
@@ -36302,7 +36280,7 @@ final class UpdateExtensionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionRegistryService.ListExtensions`.
-final class ListExtensionsRequest extends protobuf.ProtoMessage {
+final class ListExtensionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListExtensionsRequest';
 
@@ -36375,7 +36353,7 @@ final class ListExtensionsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ExtensionRegistryService.ListExtensions`
-final class ListExtensionsResponse extends protobuf.ProtoMessage {
+final class ListExtensionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListExtensionsResponse';
 
@@ -36413,7 +36391,7 @@ final class ListExtensionsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ExtensionRegistryService.DeleteExtension`.
-final class DeleteExtensionRequest extends protobuf.ProtoMessage {
+final class DeleteExtensionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteExtensionRequest';
 
@@ -36439,7 +36417,7 @@ final class DeleteExtensionRequest extends protobuf.ProtoMessage {
 
 /// Feature Metadata information.
 /// For example, color is a feature that describes an apple.
-final class Feature extends protobuf.ProtoMessage {
+final class Feature extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Feature';
 
@@ -36636,7 +36614,7 @@ final class Feature extends protobuf.ProtoMessage {
 /// stats requested by user, sorted by
 /// `FeatureStatsAnomaly.start_time`
 /// descending.
-final class Feature_MonitoringStatsAnomaly extends protobuf.ProtoMessage {
+final class Feature_MonitoringStatsAnomaly extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Feature.MonitoringStatsAnomaly';
 
@@ -36683,8 +36661,7 @@ final class Feature_MonitoringStatsAnomaly extends protobuf.ProtoMessage {
 /// Import Feature Analysis and Snapshot Analysis, this objective could be
 /// one of them. Otherwise, this objective should be the same as the
 /// objective in the request.
-final class Feature_MonitoringStatsAnomaly_Objective
-    extends protobuf.ProtoEnum {
+final class Feature_MonitoringStatsAnomaly_Objective extends ProtoEnum {
   /// If it's OBJECTIVE_UNSPECIFIED, monitoring_stats will be empty.
   static const objectiveUnspecified = Feature_MonitoringStatsAnomaly_Objective(
     'OBJECTIVE_UNSPECIFIED',
@@ -36716,7 +36693,7 @@ final class Feature_MonitoringStatsAnomaly_Objective
 
 /// Only applicable for Vertex AI Legacy Feature Store.
 /// An enum representing the value type of a feature.
-final class Feature_ValueType extends protobuf.ProtoEnum {
+final class Feature_ValueType extends ProtoEnum {
   /// The value type is unspecified.
   static const valueTypeUnspecified = Feature_ValueType(
     'VALUE_TYPE_UNSPECIFIED',
@@ -36766,7 +36743,7 @@ final class Feature_ValueType extends protobuf.ProtoEnum {
 }
 
 /// Vertex AI Feature Group.
-final class FeatureGroup extends protobuf.ProtoMessage {
+final class FeatureGroup extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureGroup';
 
@@ -36878,7 +36855,7 @@ final class FeatureGroup extends protobuf.ProtoMessage {
 }
 
 /// Input source type for BigQuery Tables and Views.
-final class FeatureGroup_BigQuery extends protobuf.ProtoMessage {
+final class FeatureGroup_BigQuery extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureGroup.BigQuery';
 
@@ -36952,7 +36929,7 @@ final class FeatureGroup_BigQuery extends protobuf.ProtoMessage {
   }
 }
 
-final class FeatureGroup_BigQuery_TimeSeries extends protobuf.ProtoMessage {
+final class FeatureGroup_BigQuery_TimeSeries extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureGroup.BigQuery.TimeSeries';
 
@@ -36984,7 +36961,7 @@ final class FeatureGroup_BigQuery_TimeSeries extends protobuf.ProtoMessage {
 }
 
 /// Service agent type used during jobs under a FeatureGroup.
-final class FeatureGroup_ServiceAgentType extends protobuf.ProtoEnum {
+final class FeatureGroup_ServiceAgentType extends ProtoEnum {
   /// By default, the project-level Vertex AI Service Agent is enabled.
   static const serviceAgentTypeUnspecified = FeatureGroup_ServiceAgentType(
     'SERVICE_AGENT_TYPE_UNSPECIFIED',
@@ -37019,7 +36996,7 @@ final class FeatureGroup_ServiceAgentType extends protobuf.ProtoEnum {
 }
 
 /// Vertex AI Feature Monitor.
-final class FeatureMonitor extends protobuf.ProtoMessage {
+final class FeatureMonitor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureMonitor';
 
@@ -37109,7 +37086,7 @@ final class FeatureMonitor extends protobuf.ProtoMessage {
 }
 
 /// Schedule configuration for the FeatureMonitor.
-final class ScheduleConfig extends protobuf.ProtoMessage {
+final class ScheduleConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ScheduleConfig';
 
@@ -37137,7 +37114,7 @@ final class ScheduleConfig extends protobuf.ProtoMessage {
 }
 
 /// Feature selection configuration for the FeatureMonitor.
-final class FeatureSelectionConfig extends protobuf.ProtoMessage {
+final class FeatureSelectionConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureSelectionConfig';
 
@@ -37169,7 +37146,7 @@ final class FeatureSelectionConfig extends protobuf.ProtoMessage {
 }
 
 /// Feature configuration.
-final class FeatureSelectionConfig_FeatureConfig extends protobuf.ProtoMessage {
+final class FeatureSelectionConfig_FeatureConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureSelectionConfig.FeatureConfig';
 
@@ -37213,7 +37190,7 @@ final class FeatureSelectionConfig_FeatureConfig extends protobuf.ProtoMessage {
 
 /// Stats and Anomaly generated by FeatureMonitorJobs. Anomaly only includes
 /// Drift.
-final class FeatureStatsAndAnomaly extends protobuf.ProtoMessage {
+final class FeatureStatsAndAnomaly extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureStatsAndAnomaly';
 
@@ -37305,7 +37282,7 @@ final class FeatureStatsAndAnomaly extends protobuf.ProtoMessage {
 /// Defines how to select FeatureStatsAndAnomaly to be populated in response.
 /// If set, retrieves FeatureStatsAndAnomaly generated by FeatureMonitors based
 /// on this spec.
-final class FeatureStatsAndAnomalySpec extends protobuf.ProtoMessage {
+final class FeatureStatsAndAnomalySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureStatsAndAnomalySpec';
 
@@ -37344,7 +37321,7 @@ final class FeatureStatsAndAnomalySpec extends protobuf.ProtoMessage {
 }
 
 /// Vertex AI Feature Monitor Job.
-final class FeatureMonitorJob extends protobuf.ProtoMessage {
+final class FeatureMonitorJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureMonitorJob';
 
@@ -37467,7 +37444,7 @@ final class FeatureMonitorJob extends protobuf.ProtoMessage {
 }
 
 /// Summary from the FeatureMonitorJob.
-final class FeatureMonitorJob_JobSummary extends protobuf.ProtoMessage {
+final class FeatureMonitorJob_JobSummary extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureMonitorJob.JobSummary';
 
@@ -37508,8 +37485,7 @@ final class FeatureMonitorJob_JobSummary extends protobuf.ProtoMessage {
 }
 
 /// Choices of the trigger type.
-final class FeatureMonitorJob_FeatureMonitorJobTrigger
-    extends protobuf.ProtoEnum {
+final class FeatureMonitorJob_FeatureMonitorJobTrigger extends ProtoEnum {
   /// Trigger type unspecified.
   static const featureMonitorJobTriggerUnspecified =
       FeatureMonitorJob_FeatureMonitorJobTrigger(
@@ -37551,7 +37527,7 @@ final class FeatureMonitorJob_FeatureMonitorJobTrigger
 /// anomaly_uri in the tensorflow defined protos. Field data_stats contains
 /// almost identical information with the raw stats in Vertex AI
 /// defined proto, for UI to display.
-final class FeatureStatsAnomaly extends protobuf.ProtoMessage {
+final class FeatureStatsAnomaly extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureStatsAnomaly';
 
@@ -37655,7 +37631,7 @@ final class FeatureStatsAnomaly extends protobuf.ProtoMessage {
 /// Vertex AI Feature Online Store provides a centralized repository for serving
 /// ML features and embedding indexes at low latency. The Feature Online Store is
 /// a top-level container.
-final class FeatureOnlineStore extends protobuf.ProtoMessage {
+final class FeatureOnlineStore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore';
 
@@ -37793,7 +37769,7 @@ final class FeatureOnlineStore extends protobuf.ProtoMessage {
   }
 }
 
-final class FeatureOnlineStore_Bigtable extends protobuf.ProtoMessage {
+final class FeatureOnlineStore_Bigtable extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore.Bigtable';
 
@@ -37843,8 +37819,7 @@ final class FeatureOnlineStore_Bigtable extends protobuf.ProtoMessage {
   }
 }
 
-final class FeatureOnlineStore_Bigtable_AutoScaling
-    extends protobuf.ProtoMessage {
+final class FeatureOnlineStore_Bigtable_AutoScaling extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore.Bigtable.AutoScaling';
 
@@ -37899,8 +37874,7 @@ final class FeatureOnlineStore_Bigtable_AutoScaling
 
 /// Metadata of the Bigtable instance. This is used by direct read access to
 /// the Bigtable in tenant project.
-final class FeatureOnlineStore_Bigtable_BigtableMetadata
-    extends protobuf.ProtoMessage {
+final class FeatureOnlineStore_Bigtable_BigtableMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore.Bigtable.BigtableMetadata';
 
@@ -37946,7 +37920,7 @@ final class FeatureOnlineStore_Bigtable_BigtableMetadata
 }
 
 /// Optimized storage type
-final class FeatureOnlineStore_Optimized extends protobuf.ProtoMessage {
+final class FeatureOnlineStore_Optimized extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore.Optimized';
 
@@ -37965,8 +37939,7 @@ final class FeatureOnlineStore_Optimized extends protobuf.ProtoMessage {
 /// The dedicated serving endpoint for this FeatureOnlineStore. Only need to
 /// set when you choose Optimized storage type. Public endpoint is provisioned
 /// by default.
-final class FeatureOnlineStore_DedicatedServingEndpoint
-    extends protobuf.ProtoMessage {
+final class FeatureOnlineStore_DedicatedServingEndpoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore.DedicatedServingEndpoint';
 
@@ -38025,8 +37998,7 @@ final class FeatureOnlineStore_DedicatedServingEndpoint
 /// Deprecated: This sub message is no longer needed anymore and embedding
 /// management is automatically enabled when specifying Optimized storage type.
 /// Contains settings for embedding management.
-final class FeatureOnlineStore_EmbeddingManagement
-    extends protobuf.ProtoMessage {
+final class FeatureOnlineStore_EmbeddingManagement extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureOnlineStore.EmbeddingManagement';
 
@@ -38054,7 +38026,7 @@ final class FeatureOnlineStore_EmbeddingManagement
 }
 
 /// Possible states a featureOnlineStore can have.
-final class FeatureOnlineStore_State extends protobuf.ProtoEnum {
+final class FeatureOnlineStore_State extends ProtoEnum {
   /// Default value. This value is unused.
   static const stateUnspecified = FeatureOnlineStore_State('STATE_UNSPECIFIED');
 
@@ -38085,7 +38057,7 @@ final class FeatureOnlineStore_State extends protobuf.ProtoEnum {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.CreateFeatureOnlineStore`.
-final class CreateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
+final class CreateFeatureOnlineStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureOnlineStoreRequest';
 
@@ -38142,7 +38114,7 @@ final class CreateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.GetFeatureOnlineStore`.
-final class GetFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
+final class GetFeatureOnlineStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureOnlineStoreRequest';
 
@@ -38167,7 +38139,7 @@ final class GetFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.ListFeatureOnlineStores`.
-final class ListFeatureOnlineStoresRequest extends protobuf.ProtoMessage {
+final class ListFeatureOnlineStoresRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureOnlineStoresRequest';
 
@@ -38259,7 +38231,7 @@ final class ListFeatureOnlineStoresRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureOnlineStoreAdminService.ListFeatureOnlineStores`.
-final class ListFeatureOnlineStoresResponse extends protobuf.ProtoMessage {
+final class ListFeatureOnlineStoresResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureOnlineStoresResponse';
 
@@ -38304,7 +38276,7 @@ final class ListFeatureOnlineStoresResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.UpdateFeatureOnlineStore`.
-final class UpdateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
+final class UpdateFeatureOnlineStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureOnlineStoreRequest';
 
@@ -38360,7 +38332,7 @@ final class UpdateFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.DeleteFeatureOnlineStore`.
-final class DeleteFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
+final class DeleteFeatureOnlineStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureOnlineStoreRequest';
 
@@ -38395,7 +38367,7 @@ final class DeleteFeatureOnlineStoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.CreateFeatureView`.
-final class CreateFeatureViewRequest extends protobuf.ProtoMessage {
+final class CreateFeatureViewRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureViewRequest';
 
@@ -38459,7 +38431,7 @@ final class CreateFeatureViewRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.GetFeatureView`.
-final class GetFeatureViewRequest extends protobuf.ProtoMessage {
+final class GetFeatureViewRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureViewRequest';
 
@@ -38485,7 +38457,7 @@ final class GetFeatureViewRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.ListFeatureViews`.
-final class ListFeatureViewsRequest extends protobuf.ProtoMessage {
+final class ListFeatureViewsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureViewsRequest';
 
@@ -38580,7 +38552,7 @@ final class ListFeatureViewsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureOnlineStoreAdminService.ListFeatureViews`.
-final class ListFeatureViewsResponse extends protobuf.ProtoMessage {
+final class ListFeatureViewsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureViewsResponse';
 
@@ -38620,7 +38592,7 @@ final class ListFeatureViewsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.UpdateFeatureView`.
-final class UpdateFeatureViewRequest extends protobuf.ProtoMessage {
+final class UpdateFeatureViewRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureViewRequest';
 
@@ -38673,7 +38645,7 @@ final class UpdateFeatureViewRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for `FeatureOnlineStoreAdminService.DeleteFeatureViews`.
-final class DeleteFeatureViewRequest extends protobuf.ProtoMessage {
+final class DeleteFeatureViewRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureViewRequest';
 
@@ -38698,8 +38670,7 @@ final class DeleteFeatureViewRequest extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create FeatureOnlineStore.
-final class CreateFeatureOnlineStoreOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateFeatureOnlineStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureOnlineStoreOperationMetadata';
 
@@ -38728,8 +38699,7 @@ final class CreateFeatureOnlineStoreOperationMetadata
 }
 
 /// Details of operations that perform update FeatureOnlineStore.
-final class UpdateFeatureOnlineStoreOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateFeatureOnlineStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureOnlineStoreOperationMetadata';
 
@@ -38758,7 +38728,7 @@ final class UpdateFeatureOnlineStoreOperationMetadata
 }
 
 /// Details of operations that perform create FeatureView.
-final class CreateFeatureViewOperationMetadata extends protobuf.ProtoMessage {
+final class CreateFeatureViewOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureViewOperationMetadata';
 
@@ -38787,7 +38757,7 @@ final class CreateFeatureViewOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform update FeatureView.
-final class UpdateFeatureViewOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateFeatureViewOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureViewOperationMetadata';
 
@@ -38817,7 +38787,7 @@ final class UpdateFeatureViewOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.SyncFeatureView`.
-final class SyncFeatureViewRequest extends protobuf.ProtoMessage {
+final class SyncFeatureViewRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SyncFeatureViewRequest';
 
@@ -38843,7 +38813,7 @@ final class SyncFeatureViewRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureOnlineStoreAdminService.SyncFeatureView`.
-final class SyncFeatureViewResponse extends protobuf.ProtoMessage {
+final class SyncFeatureViewResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SyncFeatureViewResponse';
 
@@ -38871,7 +38841,7 @@ final class SyncFeatureViewResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.GetFeatureViewSync`.
-final class GetFeatureViewSyncRequest extends protobuf.ProtoMessage {
+final class GetFeatureViewSyncRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureViewSyncRequest';
 
@@ -38897,7 +38867,7 @@ final class GetFeatureViewSyncRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreAdminService.ListFeatureViewSyncs`.
-final class ListFeatureViewSyncsRequest extends protobuf.ProtoMessage {
+final class ListFeatureViewSyncsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureViewSyncsRequest';
 
@@ -38982,7 +38952,7 @@ final class ListFeatureViewSyncsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureOnlineStoreAdminService.ListFeatureViewSyncs`.
-final class ListFeatureViewSyncsResponse extends protobuf.ProtoMessage {
+final class ListFeatureViewSyncsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureViewSyncsResponse';
 
@@ -39026,7 +38996,7 @@ final class ListFeatureViewSyncsResponse extends protobuf.ProtoMessage {
 }
 
 /// Lookup key for a feature view.
-final class FeatureViewDataKey extends protobuf.ProtoMessage {
+final class FeatureViewDataKey extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDataKey';
 
@@ -39062,7 +39032,7 @@ final class FeatureViewDataKey extends protobuf.ProtoMessage {
 }
 
 /// ID that is comprised from several parts (columns).
-final class FeatureViewDataKey_CompositeKey extends protobuf.ProtoMessage {
+final class FeatureViewDataKey_CompositeKey extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDataKey.CompositeKey';
 
@@ -39086,7 +39056,7 @@ final class FeatureViewDataKey_CompositeKey extends protobuf.ProtoMessage {
 /// Request message for
 /// `FeatureOnlineStoreService.FetchFeatureValues`.
 /// All the features under the requested feature view will be returned.
-final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
+final class FetchFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchFeatureValuesRequest';
 
@@ -39157,7 +39127,7 @@ final class FetchFeatureValuesRequest extends protobuf.ProtoMessage {
 }
 
 /// Format of the response data.
-final class FetchFeatureValuesRequest_Format extends protobuf.ProtoEnum {
+final class FetchFeatureValuesRequest_Format extends ProtoEnum {
   /// Not set. Will be treated as the KeyValue format.
   static const formatUnspecified = FetchFeatureValuesRequest_Format(
     'FORMAT_UNSPECIFIED',
@@ -39185,7 +39155,7 @@ final class FetchFeatureValuesRequest_Format extends protobuf.ProtoEnum {
 
 /// Response message for
 /// `FeatureOnlineStoreService.FetchFeatureValues`
-final class FetchFeatureValuesResponse extends protobuf.ProtoMessage {
+final class FetchFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchFeatureValuesResponse';
 
@@ -39231,7 +39201,7 @@ final class FetchFeatureValuesResponse extends protobuf.ProtoMessage {
 /// Response structure in the format of key (feature name) and (feature) value
 /// pair.
 final class FetchFeatureValuesResponse_FeatureNameValuePairList
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchFeatureValuesResponse.FeatureNameValuePairList';
 
@@ -39268,7 +39238,7 @@ final class FetchFeatureValuesResponse_FeatureNameValuePairList
 
 /// Feature name & value pair.
 final class FetchFeatureValuesResponse_FeatureNameValuePairList_FeatureNameValuePair
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FetchFeatureValuesResponse.FeatureNameValuePairList.FeatureNameValuePair';
 
@@ -39307,7 +39277,7 @@ final class FetchFeatureValuesResponse_FeatureNameValuePairList_FeatureNameValue
 /// `FeatureOnlineStoreService.StreamingFetchFeatureValues`.
 /// For the entities requested, all features under the requested feature view
 /// will be returned.
-final class StreamingFetchFeatureValuesRequest extends protobuf.ProtoMessage {
+final class StreamingFetchFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingFetchFeatureValuesRequest';
 
@@ -39356,7 +39326,7 @@ final class StreamingFetchFeatureValuesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureOnlineStoreService.StreamingFetchFeatureValues`.
-final class StreamingFetchFeatureValuesResponse extends protobuf.ProtoMessage {
+final class StreamingFetchFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingFetchFeatureValuesResponse';
 
@@ -39408,7 +39378,7 @@ final class StreamingFetchFeatureValuesResponse extends protobuf.ProtoMessage {
 }
 
 /// A query to find a number of similar entities.
-final class NearestNeighborQuery extends protobuf.ProtoMessage {
+final class NearestNeighborQuery extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborQuery';
 
@@ -39502,7 +39472,7 @@ final class NearestNeighborQuery extends protobuf.ProtoMessage {
 }
 
 /// The embedding vector.
-final class NearestNeighborQuery_Embedding extends protobuf.ProtoMessage {
+final class NearestNeighborQuery_Embedding extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborQuery.Embedding';
 
@@ -39530,7 +39500,7 @@ final class NearestNeighborQuery_Embedding extends protobuf.ProtoMessage {
 /// points are also purple, then they will be excluded even if they are
 /// red/blue. Only string filter is supported for now, numeric filter will be
 /// supported in the near future.
-final class NearestNeighborQuery_StringFilter extends protobuf.ProtoMessage {
+final class NearestNeighborQuery_StringFilter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborQuery.StringFilter';
 
@@ -39579,7 +39549,7 @@ final class NearestNeighborQuery_StringFilter extends protobuf.ProtoMessage {
 /// Database Point 2: {name: “a” value_int: -1} {name: “b” value_float: 3.0}
 /// Query: {name: “a” value_int: 12 operator: LESS}    // Matches Point 1, 2
 /// {name: “b” value_float: 2.0 operator: EQUAL} // Matches Point 1
-final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
+final class NearestNeighborQuery_NumericFilter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborQuery.NumericFilter';
 
@@ -39644,8 +39614,7 @@ final class NearestNeighborQuery_NumericFilter extends protobuf.ProtoMessage {
 
 /// Datapoints for which Operator is true relative to the query’s Value
 /// field will be allowlisted.
-final class NearestNeighborQuery_NumericFilter_Operator
-    extends protobuf.ProtoEnum {
+final class NearestNeighborQuery_NumericFilter_Operator extends ProtoEnum {
   /// Unspecified operator.
   static const operatorUnspecified =
       NearestNeighborQuery_NumericFilter_Operator('OPERATOR_UNSPECIFIED');
@@ -39690,7 +39659,7 @@ final class NearestNeighborQuery_NumericFilter_Operator
 
 /// Parameters that can be overrided in each query to tune query latency and
 /// recall.
-final class NearestNeighborQuery_Parameters extends protobuf.ProtoMessage {
+final class NearestNeighborQuery_Parameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborQuery.Parameters';
 
@@ -39737,7 +39706,7 @@ final class NearestNeighborQuery_Parameters extends protobuf.ProtoMessage {
 
 /// The request message for
 /// `FeatureOnlineStoreService.SearchNearestEntities`.
-final class SearchNearestEntitiesRequest extends protobuf.ProtoMessage {
+final class SearchNearestEntitiesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchNearestEntitiesRequest';
 
@@ -39785,7 +39754,7 @@ final class SearchNearestEntitiesRequest extends protobuf.ProtoMessage {
 }
 
 /// Nearest neighbors for one query.
-final class NearestNeighbors extends protobuf.ProtoMessage {
+final class NearestNeighbors extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighbors';
 
@@ -39814,7 +39783,7 @@ final class NearestNeighbors extends protobuf.ProtoMessage {
 }
 
 /// A neighbor of the query vector.
-final class NearestNeighbors_Neighbor extends protobuf.ProtoMessage {
+final class NearestNeighbors_Neighbor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighbors.Neighbor';
 
@@ -39862,7 +39831,7 @@ final class NearestNeighbors_Neighbor extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureOnlineStoreService.SearchNearestEntities`
-final class SearchNearestEntitiesResponse extends protobuf.ProtoMessage {
+final class SearchNearestEntitiesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchNearestEntitiesResponse';
 
@@ -39892,7 +39861,7 @@ final class SearchNearestEntitiesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureOnlineStoreService.FeatureViewDirectWrite`.
-final class FeatureViewDirectWriteRequest extends protobuf.ProtoMessage {
+final class FeatureViewDirectWriteRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDirectWriteRequest';
 
@@ -39935,7 +39904,7 @@ final class FeatureViewDirectWriteRequest extends protobuf.ProtoMessage {
 
 /// A data key and associated feature values to write to the feature view.
 final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDirectWriteRequest.DataKeyAndFeatureValues';
 
@@ -39976,7 +39945,7 @@ final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues
 
 /// Feature name & value pair.
 final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDirectWriteRequest.DataKeyAndFeatureValues.Feature';
 
@@ -40026,7 +39995,7 @@ final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature
 
 /// Feature value and timestamp.
 final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature_FeatureValueAndTimestamp
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDirectWriteRequest.DataKeyAndFeatureValues.Feature.FeatureValueAndTimestamp';
 
@@ -40063,7 +40032,7 @@ final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature_Featur
 
 /// Response message for
 /// `FeatureOnlineStoreService.FeatureViewDirectWrite`.
-final class FeatureViewDirectWriteResponse extends protobuf.ProtoMessage {
+final class FeatureViewDirectWriteResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDirectWriteResponse';
 
@@ -40113,8 +40082,7 @@ final class FeatureViewDirectWriteResponse extends protobuf.ProtoMessage {
 }
 
 /// Details about the write for each key.
-final class FeatureViewDirectWriteResponse_WriteResponse
-    extends protobuf.ProtoMessage {
+final class FeatureViewDirectWriteResponse_WriteResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewDirectWriteResponse.WriteResponse';
 
@@ -40154,7 +40122,7 @@ final class FeatureViewDirectWriteResponse_WriteResponse
 }
 
 /// Request message for `FeatureOnlineStoreService.GenerateFetchAccessToken`.
-final class GenerateFetchAccessTokenRequest extends protobuf.ProtoMessage {
+final class GenerateFetchAccessTokenRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateFetchAccessTokenRequest';
 
@@ -40179,7 +40147,7 @@ final class GenerateFetchAccessTokenRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for `FeatureOnlineStoreService.GenerateFetchAccessToken`.
-final class GenerateFetchAccessTokenResponse extends protobuf.ProtoMessage {
+final class GenerateFetchAccessTokenResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateFetchAccessTokenResponse';
 
@@ -40214,7 +40182,7 @@ final class GenerateFetchAccessTokenResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.CreateFeatureGroup`.
-final class CreateFeatureGroupRequest extends protobuf.ProtoMessage {
+final class CreateFeatureGroupRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureGroupRequest';
 
@@ -40267,7 +40235,7 @@ final class CreateFeatureGroupRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.GetFeatureGroup`.
-final class GetFeatureGroupRequest extends protobuf.ProtoMessage {
+final class GetFeatureGroupRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureGroupRequest';
 
@@ -40291,7 +40259,7 @@ final class GetFeatureGroupRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.ListFeatureGroups`.
-final class ListFeatureGroupsRequest extends protobuf.ProtoMessage {
+final class ListFeatureGroupsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureGroupsRequest';
 
@@ -40383,7 +40351,7 @@ final class ListFeatureGroupsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureRegistryService.ListFeatureGroups`.
-final class ListFeatureGroupsResponse extends protobuf.ProtoMessage {
+final class ListFeatureGroupsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureGroupsResponse';
 
@@ -40424,7 +40392,7 @@ final class ListFeatureGroupsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.UpdateFeatureGroup`.
-final class UpdateFeatureGroupRequest extends protobuf.ProtoMessage {
+final class UpdateFeatureGroupRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureGroupRequest';
 
@@ -40473,7 +40441,7 @@ final class UpdateFeatureGroupRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.DeleteFeatureGroup`.
-final class DeleteFeatureGroupRequest extends protobuf.ProtoMessage {
+final class DeleteFeatureGroupRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureGroupRequest';
 
@@ -40508,7 +40476,7 @@ final class DeleteFeatureGroupRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.CreateFeatureMonitorRequest`.
-final class CreateFeatureMonitorRequest extends protobuf.ProtoMessage {
+final class CreateFeatureMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureMonitorRequest';
 
@@ -40561,7 +40529,7 @@ final class CreateFeatureMonitorRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.GetFeatureMonitor`.
-final class GetFeatureMonitorRequest extends protobuf.ProtoMessage {
+final class GetFeatureMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureMonitorRequest';
 
@@ -40585,7 +40553,7 @@ final class GetFeatureMonitorRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.ListFeatureMonitors`.
-final class ListFeatureMonitorsRequest extends protobuf.ProtoMessage {
+final class ListFeatureMonitorsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureMonitorsRequest';
 
@@ -40676,7 +40644,7 @@ final class ListFeatureMonitorsRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.UpdateFeatureMonitor`.
-final class UpdateFeatureMonitorRequest extends protobuf.ProtoMessage {
+final class UpdateFeatureMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureMonitorRequest';
 
@@ -40722,7 +40690,7 @@ final class UpdateFeatureMonitorRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.DeleteFeatureMonitor`.
-final class DeleteFeatureMonitorRequest extends protobuf.ProtoMessage {
+final class DeleteFeatureMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureMonitorRequest';
 
@@ -40748,7 +40716,7 @@ final class DeleteFeatureMonitorRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureRegistryService.ListFeatureMonitors`.
-final class ListFeatureMonitorsResponse extends protobuf.ProtoMessage {
+final class ListFeatureMonitorsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureMonitorsResponse';
 
@@ -40792,7 +40760,7 @@ final class ListFeatureMonitorsResponse extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create FeatureGroup.
-final class CreateFeatureGroupOperationMetadata extends protobuf.ProtoMessage {
+final class CreateFeatureGroupOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureGroupOperationMetadata';
 
@@ -40821,7 +40789,7 @@ final class CreateFeatureGroupOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform update FeatureGroup.
-final class UpdateFeatureGroupOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateFeatureGroupOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureGroupOperationMetadata';
 
@@ -40850,8 +40818,7 @@ final class UpdateFeatureGroupOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create FeatureGroup.
-final class CreateRegistryFeatureOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateRegistryFeatureOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateRegistryFeatureOperationMetadata';
 
@@ -40880,7 +40847,7 @@ final class CreateRegistryFeatureOperationMetadata
 }
 
 /// Details of operations that perform update Feature.
-final class UpdateFeatureOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateFeatureOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureOperationMetadata';
 
@@ -40908,8 +40875,7 @@ final class UpdateFeatureOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create FeatureMonitor.
-final class CreateFeatureMonitorOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateFeatureMonitorOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureMonitorOperationMetadata';
 
@@ -40938,8 +40904,7 @@ final class CreateFeatureMonitorOperationMetadata
 }
 
 /// Details of operations that perform update FeatureMonitor.
-final class UpdateFeatureMonitorOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateFeatureMonitorOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureMonitorOperationMetadata';
 
@@ -40969,7 +40934,7 @@ final class UpdateFeatureMonitorOperationMetadata
 
 /// Request message for
 /// `FeatureRegistryService.CreateFeatureMonitorJobRequest`.
-final class CreateFeatureMonitorJobRequest extends protobuf.ProtoMessage {
+final class CreateFeatureMonitorJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureMonitorJobRequest';
 
@@ -41021,7 +40986,7 @@ final class CreateFeatureMonitorJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.GetFeatureMonitorJob`.
-final class GetFeatureMonitorJobRequest extends protobuf.ProtoMessage {
+final class GetFeatureMonitorJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureMonitorJobRequest';
 
@@ -41047,7 +41012,7 @@ final class GetFeatureMonitorJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeatureRegistryService.ListFeatureMonitorJobs`.
-final class ListFeatureMonitorJobsRequest extends protobuf.ProtoMessage {
+final class ListFeatureMonitorJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureMonitorJobsRequest';
 
@@ -41130,7 +41095,7 @@ final class ListFeatureMonitorJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeatureRegistryService.ListFeatureMonitorJobs`.
-final class ListFeatureMonitorJobsResponse extends protobuf.ProtoMessage {
+final class ListFeatureMonitorJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeatureMonitorJobsResponse';
 
@@ -41174,7 +41139,7 @@ final class ListFeatureMonitorJobsResponse extends protobuf.ProtoMessage {
 }
 
 /// Matcher for Features of an EntityType by Feature ID.
-final class IdMatcher extends protobuf.ProtoMessage {
+final class IdMatcher extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IdMatcher';
 
@@ -41199,7 +41164,7 @@ final class IdMatcher extends protobuf.ProtoMessage {
 }
 
 /// Selector for Features of an EntityType.
-final class FeatureSelector extends protobuf.ProtoMessage {
+final class FeatureSelector extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureSelector';
 
@@ -41220,7 +41185,7 @@ final class FeatureSelector extends protobuf.ProtoMessage {
 
 /// FeatureView is representation of values that the FeatureOnlineStore will
 /// serve based on its syncConfig.
-final class FeatureView extends protobuf.ProtoMessage {
+final class FeatureView extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView';
 
@@ -41407,7 +41372,7 @@ final class FeatureView extends protobuf.ProtoMessage {
   }
 }
 
-final class FeatureView_BigQuerySource extends protobuf.ProtoMessage {
+final class FeatureView_BigQuerySource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.BigQuerySource';
 
@@ -41438,7 +41403,7 @@ final class FeatureView_BigQuerySource extends protobuf.ProtoMessage {
 }
 
 /// Configuration for Sync. Only one option is set.
-final class FeatureView_SyncConfig extends protobuf.ProtoMessage {
+final class FeatureView_SyncConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.SyncConfig';
 
@@ -41468,7 +41433,7 @@ final class FeatureView_SyncConfig extends protobuf.ProtoMessage {
 /// Deprecated. Use
 /// `IndexConfig`
 /// instead.
-final class FeatureView_VectorSearchConfig extends protobuf.ProtoMessage {
+final class FeatureView_VectorSearchConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.VectorSearchConfig';
 
@@ -41568,7 +41533,7 @@ final class FeatureView_VectorSearchConfig extends protobuf.ProtoMessage {
 }
 
 final class FeatureView_VectorSearchConfig_BruteForceConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.VectorSearchConfig.BruteForceConfig';
 
@@ -41585,8 +41550,7 @@ final class FeatureView_VectorSearchConfig_BruteForceConfig
   String toString() => 'BruteForceConfig()';
 }
 
-final class FeatureView_VectorSearchConfig_TreeAhconfig
-    extends protobuf.ProtoMessage {
+final class FeatureView_VectorSearchConfig_TreeAhconfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.VectorSearchConfig.TreeAHConfig';
 
@@ -41620,7 +41584,7 @@ final class FeatureView_VectorSearchConfig_TreeAhconfig
 }
 
 final class FeatureView_VectorSearchConfig_DistanceMeasureType
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be set.
   static const distanceMeasureTypeUnspecified =
       FeatureView_VectorSearchConfig_DistanceMeasureType(
@@ -41663,7 +41627,7 @@ final class FeatureView_VectorSearchConfig_DistanceMeasureType
 }
 
 /// Configuration for vector indexing.
-final class FeatureView_IndexConfig extends protobuf.ProtoMessage {
+final class FeatureView_IndexConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.IndexConfig';
 
@@ -41763,8 +41727,7 @@ final class FeatureView_IndexConfig extends protobuf.ProtoMessage {
 }
 
 /// Configuration options for using brute force search.
-final class FeatureView_IndexConfig_BruteForceConfig
-    extends protobuf.ProtoMessage {
+final class FeatureView_IndexConfig_BruteForceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.IndexConfig.BruteForceConfig';
 
@@ -41782,7 +41745,7 @@ final class FeatureView_IndexConfig_BruteForceConfig
 }
 
 /// Configuration options for the tree-AH algorithm.
-final class FeatureView_IndexConfig_TreeAhconfig extends protobuf.ProtoMessage {
+final class FeatureView_IndexConfig_TreeAhconfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.IndexConfig.TreeAHConfig';
 
@@ -41816,8 +41779,7 @@ final class FeatureView_IndexConfig_TreeAhconfig extends protobuf.ProtoMessage {
 }
 
 /// The distance measure used in nearest neighbor search.
-final class FeatureView_IndexConfig_DistanceMeasureType
-    extends protobuf.ProtoEnum {
+final class FeatureView_IndexConfig_DistanceMeasureType extends ProtoEnum {
   /// Should not be set.
   static const distanceMeasureTypeUnspecified =
       FeatureView_IndexConfig_DistanceMeasureType(
@@ -41861,7 +41823,7 @@ final class FeatureView_IndexConfig_DistanceMeasureType
 
 /// A Feature Registry source for features that need to be synced to Online
 /// Store.
-final class FeatureView_FeatureRegistrySource extends protobuf.ProtoMessage {
+final class FeatureView_FeatureRegistrySource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.FeatureRegistrySource';
 
@@ -41906,7 +41868,7 @@ final class FeatureView_FeatureRegistrySource extends protobuf.ProtoMessage {
 /// Features belonging to a single feature group that will be
 /// synced to Online Store.
 final class FeatureView_FeatureRegistrySource_FeatureGroup
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.FeatureRegistrySource.FeatureGroup';
 
@@ -41943,7 +41905,7 @@ final class FeatureView_FeatureRegistrySource_FeatureGroup
 
 /// A Vertex Rag source for features that need to be synced to Online
 /// Store.
-final class FeatureView_VertexRagSource extends protobuf.ProtoMessage {
+final class FeatureView_VertexRagSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.VertexRagSource';
 
@@ -41985,7 +41947,7 @@ final class FeatureView_VertexRagSource extends protobuf.ProtoMessage {
 }
 
 /// Configuration for FeatureViews created in Optimized FeatureOnlineStore.
-final class FeatureView_OptimizedConfig extends protobuf.ProtoMessage {
+final class FeatureView_OptimizedConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.OptimizedConfig';
 
@@ -42019,7 +41981,7 @@ final class FeatureView_OptimizedConfig extends protobuf.ProtoMessage {
 
 /// Metadata for the Cloud Bigtable that supports directly interacting Bigtable
 /// instances.
-final class FeatureView_BigtableMetadata extends protobuf.ProtoMessage {
+final class FeatureView_BigtableMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureView.BigtableMetadata';
 
@@ -42047,7 +42009,7 @@ final class FeatureView_BigtableMetadata extends protobuf.ProtoMessage {
 }
 
 /// Service agent type used during data sync.
-final class FeatureView_ServiceAgentType extends protobuf.ProtoEnum {
+final class FeatureView_ServiceAgentType extends ProtoEnum {
   /// By default, the project-level Vertex AI Service Agent is enabled.
   static const serviceAgentTypeUnspecified = FeatureView_ServiceAgentType(
     'SERVICE_AGENT_TYPE_UNSPECIFIED',
@@ -42083,7 +42045,7 @@ final class FeatureView_ServiceAgentType extends protobuf.ProtoEnum {
 
 /// FeatureViewSync is a representation of sync operation which copies data from
 /// data source to Feature View in Online Store.
-final class FeatureViewSync extends protobuf.ProtoMessage {
+final class FeatureViewSync extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewSync';
 
@@ -42162,7 +42124,7 @@ final class FeatureViewSync extends protobuf.ProtoMessage {
 
 /// Summary from the Sync job. For continuous syncs, the summary is updated
 /// periodically. For batch syncs, it gets updated on completion of the sync.
-final class FeatureViewSync_SyncSummary extends protobuf.ProtoMessage {
+final class FeatureViewSync_SyncSummary extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureViewSync.SyncSummary';
 
@@ -42210,7 +42172,7 @@ final class FeatureViewSync_SyncSummary extends protobuf.ProtoMessage {
 /// Vertex AI Feature Store provides a centralized repository for organizing,
 /// storing, and serving ML features. The Featurestore is a top-level container
 /// for your features and their values.
-final class Featurestore extends protobuf.ProtoMessage {
+final class Featurestore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Featurestore';
 
@@ -42335,7 +42297,7 @@ final class Featurestore extends protobuf.ProtoMessage {
 
 /// OnlineServingConfig specifies the details for provisioning online serving
 /// resources.
-final class Featurestore_OnlineServingConfig extends protobuf.ProtoMessage {
+final class Featurestore_OnlineServingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Featurestore.OnlineServingConfig';
 
@@ -42379,8 +42341,7 @@ final class Featurestore_OnlineServingConfig extends protobuf.ProtoMessage {
 /// Online serving scaling configuration. If min_node_count and
 /// max_node_count are set to the same value, the cluster will be configured
 /// with the fixed number of node (no auto-scaling).
-final class Featurestore_OnlineServingConfig_Scaling
-    extends protobuf.ProtoMessage {
+final class Featurestore_OnlineServingConfig_Scaling extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Featurestore.OnlineServingConfig.Scaling';
 
@@ -42435,7 +42396,7 @@ final class Featurestore_OnlineServingConfig_Scaling
 }
 
 /// Possible states a featurestore can have.
-final class Featurestore_State extends protobuf.ProtoEnum {
+final class Featurestore_State extends ProtoEnum {
   /// Default value. This value is unused.
   static const stateUnspecified = Featurestore_State('STATE_UNSPECIFIED');
 
@@ -42470,7 +42431,7 @@ final class Featurestore_State extends protobuf.ProtoEnum {
 }
 
 /// Configuration of how features in Featurestore are monitored.
-final class FeaturestoreMonitoringConfig extends protobuf.ProtoMessage {
+final class FeaturestoreMonitoringConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeaturestoreMonitoringConfig';
 
@@ -42543,8 +42504,7 @@ final class FeaturestoreMonitoringConfig extends protobuf.ProtoMessage {
 /// This type of analysis generates statistics for each Feature based on a
 /// snapshot of the latest feature value of each entities every
 /// monitoring_interval.
-final class FeaturestoreMonitoringConfig_SnapshotAnalysis
-    extends protobuf.ProtoMessage {
+final class FeaturestoreMonitoringConfig_SnapshotAnalysis extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeaturestoreMonitoringConfig.SnapshotAnalysis';
 
@@ -42626,7 +42586,7 @@ final class FeaturestoreMonitoringConfig_SnapshotAnalysis
 /// `ImportFeatureValues`
 /// operation.
 final class FeaturestoreMonitoringConfig_ImportFeaturesAnalysis
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeaturestoreMonitoringConfig.ImportFeaturesAnalysis';
 
@@ -42682,7 +42642,7 @@ final class FeaturestoreMonitoringConfig_ImportFeaturesAnalysis
 
 /// The state defines whether to enable ImportFeature analysis.
 final class FeaturestoreMonitoringConfig_ImportFeaturesAnalysis_State
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be used.
   static const stateUnspecified =
       FeaturestoreMonitoringConfig_ImportFeaturesAnalysis_State(
@@ -42730,7 +42690,7 @@ final class FeaturestoreMonitoringConfig_ImportFeaturesAnalysis_State
 /// `ImportFeatureValues`
 /// operation.
 final class FeaturestoreMonitoringConfig_ImportFeaturesAnalysis_Baseline
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be used.
   static const baselineUnspecified =
       FeaturestoreMonitoringConfig_ImportFeaturesAnalysis_Baseline(
@@ -42777,8 +42737,7 @@ final class FeaturestoreMonitoringConfig_ImportFeaturesAnalysis_Baseline
 }
 
 /// The config for Featurestore Monitoring threshold.
-final class FeaturestoreMonitoringConfig_ThresholdConfig
-    extends protobuf.ProtoMessage {
+final class FeaturestoreMonitoringConfig_ThresholdConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeaturestoreMonitoringConfig.ThresholdConfig';
 
@@ -42812,7 +42771,7 @@ final class FeaturestoreMonitoringConfig_ThresholdConfig
 
 /// Request message for
 /// `FeaturestoreOnlineServingService.WriteFeatureValues`.
-final class WriteFeatureValuesRequest extends protobuf.ProtoMessage {
+final class WriteFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteFeatureValuesRequest';
 
@@ -42856,7 +42815,7 @@ final class WriteFeatureValuesRequest extends protobuf.ProtoMessage {
 }
 
 /// Contains Feature values to be written for a specific entity.
-final class WriteFeatureValuesPayload extends protobuf.ProtoMessage {
+final class WriteFeatureValuesPayload extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteFeatureValuesPayload';
 
@@ -42897,7 +42856,7 @@ final class WriteFeatureValuesPayload extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreOnlineServingService.WriteFeatureValues`.
-final class WriteFeatureValuesResponse extends protobuf.ProtoMessage {
+final class WriteFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteFeatureValuesResponse';
 
@@ -42915,7 +42874,7 @@ final class WriteFeatureValuesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreOnlineServingService.ReadFeatureValues`.
-final class ReadFeatureValuesRequest extends protobuf.ProtoMessage {
+final class ReadFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadFeatureValuesRequest';
 
@@ -42966,7 +42925,7 @@ final class ReadFeatureValuesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreOnlineServingService.ReadFeatureValues`.
-final class ReadFeatureValuesResponse extends protobuf.ProtoMessage {
+final class ReadFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadFeatureValuesResponse';
 
@@ -43005,8 +42964,7 @@ final class ReadFeatureValuesResponse extends protobuf.ProtoMessage {
 }
 
 /// Metadata for requested Features.
-final class ReadFeatureValuesResponse_FeatureDescriptor
-    extends protobuf.ProtoMessage {
+final class ReadFeatureValuesResponse_FeatureDescriptor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadFeatureValuesResponse.FeatureDescriptor';
 
@@ -43033,7 +42991,7 @@ final class ReadFeatureValuesResponse_FeatureDescriptor
 /// Response header with metadata for the requested
 /// `ReadFeatureValuesRequest.entity_type`
 /// and Features.
-final class ReadFeatureValuesResponse_Header extends protobuf.ProtoMessage {
+final class ReadFeatureValuesResponse_Header extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadFeatureValuesResponse.Header';
 
@@ -43079,7 +43037,7 @@ final class ReadFeatureValuesResponse_Header extends protobuf.ProtoMessage {
 }
 
 /// Entity view with Feature values.
-final class ReadFeatureValuesResponse_EntityView extends protobuf.ProtoMessage {
+final class ReadFeatureValuesResponse_EntityView extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadFeatureValuesResponse.EntityView';
 
@@ -43126,8 +43084,7 @@ final class ReadFeatureValuesResponse_EntityView extends protobuf.ProtoMessage {
 
 /// Container to hold value(s), successive in time, for one Feature from the
 /// request.
-final class ReadFeatureValuesResponse_EntityView_Data
-    extends protobuf.ProtoMessage {
+final class ReadFeatureValuesResponse_EntityView_Data extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadFeatureValuesResponse.EntityView.Data';
 
@@ -43162,7 +43119,7 @@ final class ReadFeatureValuesResponse_EntityView_Data
 
 /// Request message for
 /// `FeaturestoreOnlineServingService.StreamingReadFeatureValues`.
-final class StreamingReadFeatureValuesRequest extends protobuf.ProtoMessage {
+final class StreamingReadFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingReadFeatureValuesRequest';
 
@@ -43212,7 +43169,7 @@ final class StreamingReadFeatureValuesRequest extends protobuf.ProtoMessage {
 }
 
 /// Value for a feature.
-final class FeatureValue extends protobuf.ProtoMessage {
+final class FeatureValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureValue';
 
@@ -43308,7 +43265,7 @@ final class FeatureValue extends protobuf.ProtoMessage {
 }
 
 /// Metadata of feature value.
-final class FeatureValue_Metadata extends protobuf.ProtoMessage {
+final class FeatureValue_Metadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureValue.Metadata';
 
@@ -43342,7 +43299,7 @@ final class FeatureValue_Metadata extends protobuf.ProtoMessage {
 }
 
 /// Struct (or object) type feature value.
-final class StructValue extends protobuf.ProtoMessage {
+final class StructValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StructValue';
 
@@ -43363,7 +43320,7 @@ final class StructValue extends protobuf.ProtoMessage {
 }
 
 /// One field of a Struct (or object) type feature value.
-final class StructFieldValue extends protobuf.ProtoMessage {
+final class StructFieldValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StructFieldValue';
 
@@ -43395,7 +43352,7 @@ final class StructFieldValue extends protobuf.ProtoMessage {
 }
 
 /// Container for list of values.
-final class FeatureValueList extends protobuf.ProtoMessage {
+final class FeatureValueList extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureValueList';
 
@@ -43418,7 +43375,7 @@ final class FeatureValueList extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.CreateFeaturestore`.
-final class CreateFeaturestoreRequest extends protobuf.ProtoMessage {
+final class CreateFeaturestoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeaturestoreRequest';
 
@@ -43471,7 +43428,7 @@ final class CreateFeaturestoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.GetFeaturestore`.
-final class GetFeaturestoreRequest extends protobuf.ProtoMessage {
+final class GetFeaturestoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeaturestoreRequest';
 
@@ -43495,7 +43452,7 @@ final class GetFeaturestoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.ListFeaturestores`.
-final class ListFeaturestoresRequest extends protobuf.ProtoMessage {
+final class ListFeaturestoresRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeaturestoresRequest';
 
@@ -43596,7 +43553,7 @@ final class ListFeaturestoresRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreService.ListFeaturestores`.
-final class ListFeaturestoresResponse extends protobuf.ProtoMessage {
+final class ListFeaturestoresResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeaturestoresResponse';
 
@@ -43637,7 +43594,7 @@ final class ListFeaturestoresResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.UpdateFeaturestore`.
-final class UpdateFeaturestoreRequest extends protobuf.ProtoMessage {
+final class UpdateFeaturestoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeaturestoreRequest';
 
@@ -43686,7 +43643,7 @@ final class UpdateFeaturestoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.DeleteFeaturestore`.
-final class DeleteFeaturestoreRequest extends protobuf.ProtoMessage {
+final class DeleteFeaturestoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeaturestoreRequest';
 
@@ -43721,7 +43678,7 @@ final class DeleteFeaturestoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.ImportFeatureValues`.
-final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
+final class ImportFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportFeatureValuesRequest';
 
@@ -43838,8 +43795,7 @@ final class ImportFeatureValuesRequest extends protobuf.ProtoMessage {
 }
 
 /// Defines the Feature value(s) to import.
-final class ImportFeatureValuesRequest_FeatureSpec
-    extends protobuf.ProtoMessage {
+final class ImportFeatureValuesRequest_FeatureSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportFeatureValuesRequest.FeatureSpec';
 
@@ -43878,7 +43834,7 @@ final class ImportFeatureValuesRequest_FeatureSpec
 
 /// Response message for
 /// `FeaturestoreService.ImportFeatureValues`.
-final class ImportFeatureValuesResponse extends protobuf.ProtoMessage {
+final class ImportFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportFeatureValuesResponse';
 
@@ -43944,7 +43900,7 @@ final class ImportFeatureValuesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.BatchReadFeatureValues`.
-final class BatchReadFeatureValuesRequest extends protobuf.ProtoMessage {
+final class BatchReadFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadFeatureValuesRequest';
 
@@ -44063,7 +44019,7 @@ final class BatchReadFeatureValuesRequest extends protobuf.ProtoMessage {
 
 /// Describe pass-through fields in read_instance source.
 final class BatchReadFeatureValuesRequest_PassThroughField
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadFeatureValuesRequest.PassThroughField';
 
@@ -44093,8 +44049,7 @@ final class BatchReadFeatureValuesRequest_PassThroughField
 
 /// Selects Features of an EntityType to read values of and specifies read
 /// settings.
-final class BatchReadFeatureValuesRequest_EntityTypeSpec
-    extends protobuf.ProtoMessage {
+final class BatchReadFeatureValuesRequest_EntityTypeSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadFeatureValuesRequest.EntityTypeSpec';
 
@@ -44146,7 +44101,7 @@ final class BatchReadFeatureValuesRequest_EntityTypeSpec
 
 /// Request message for
 /// `FeaturestoreService.ExportFeatureValues`.
-final class ExportFeatureValuesRequest extends protobuf.ProtoMessage {
+final class ExportFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportFeatureValuesRequest';
 
@@ -44222,8 +44177,7 @@ final class ExportFeatureValuesRequest extends protobuf.ProtoMessage {
 
 /// Describes exporting the latest Feature values of all entities of the
 /// EntityType between [start_time, snapshot_time].
-final class ExportFeatureValuesRequest_SnapshotExport
-    extends protobuf.ProtoMessage {
+final class ExportFeatureValuesRequest_SnapshotExport extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportFeatureValuesRequest.SnapshotExport';
 
@@ -44262,8 +44216,7 @@ final class ExportFeatureValuesRequest_SnapshotExport
 
 /// Describes exporting all historical Feature values of all entities of the
 /// EntityType between [start_time, end_time].
-final class ExportFeatureValuesRequest_FullExport
-    extends protobuf.ProtoMessage {
+final class ExportFeatureValuesRequest_FullExport extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportFeatureValuesRequest.FullExport';
 
@@ -44297,7 +44250,7 @@ final class ExportFeatureValuesRequest_FullExport
   String toString() => 'FullExport()';
 }
 
-final class DestinationFeatureSetting extends protobuf.ProtoMessage {
+final class DestinationFeatureSetting extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DestinationFeatureSetting';
 
@@ -44336,7 +44289,7 @@ final class DestinationFeatureSetting extends protobuf.ProtoMessage {
 }
 
 /// A destination location for Feature values and format.
-final class FeatureValueDestination extends protobuf.ProtoMessage {
+final class FeatureValueDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FeatureValueDestination';
 
@@ -44398,7 +44351,7 @@ final class FeatureValueDestination extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreService.ExportFeatureValues`.
-final class ExportFeatureValuesResponse extends protobuf.ProtoMessage {
+final class ExportFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportFeatureValuesResponse';
 
@@ -44416,7 +44369,7 @@ final class ExportFeatureValuesResponse extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreService.BatchReadFeatureValues`.
-final class BatchReadFeatureValuesResponse extends protobuf.ProtoMessage {
+final class BatchReadFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadFeatureValuesResponse';
 
@@ -44434,7 +44387,7 @@ final class BatchReadFeatureValuesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.CreateEntityType`.
-final class CreateEntityTypeRequest extends protobuf.ProtoMessage {
+final class CreateEntityTypeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateEntityTypeRequest';
 
@@ -44484,7 +44437,7 @@ final class CreateEntityTypeRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.GetEntityType`.
-final class GetEntityTypeRequest extends protobuf.ProtoMessage {
+final class GetEntityTypeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetEntityTypeRequest';
 
@@ -44510,7 +44463,7 @@ final class GetEntityTypeRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.ListEntityTypes`.
-final class ListEntityTypesRequest extends protobuf.ProtoMessage {
+final class ListEntityTypesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListEntityTypesRequest';
 
@@ -44611,7 +44564,7 @@ final class ListEntityTypesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreService.ListEntityTypes`.
-final class ListEntityTypesResponse extends protobuf.ProtoMessage {
+final class ListEntityTypesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListEntityTypesResponse';
 
@@ -44651,7 +44604,7 @@ final class ListEntityTypesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.UpdateEntityType`.
-final class UpdateEntityTypeRequest extends protobuf.ProtoMessage {
+final class UpdateEntityTypeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateEntityTypeRequest';
 
@@ -44705,7 +44658,7 @@ final class UpdateEntityTypeRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for `FeaturestoreService.DeleteEntityTypes`.
-final class DeleteEntityTypeRequest extends protobuf.ProtoMessage {
+final class DeleteEntityTypeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteEntityTypeRequest';
 
@@ -44741,7 +44694,7 @@ final class DeleteEntityTypeRequest extends protobuf.ProtoMessage {
 /// `FeaturestoreService.CreateFeature`.
 /// Request message for
 /// `FeatureRegistryService.CreateFeature`.
-final class CreateFeatureRequest extends protobuf.ProtoMessage {
+final class CreateFeatureRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureRequest';
 
@@ -44795,7 +44748,7 @@ final class CreateFeatureRequest extends protobuf.ProtoMessage {
 /// `FeaturestoreService.BatchCreateFeatures`.
 /// Request message for
 /// `FeatureRegistryService.BatchCreateFeatures`.
-final class BatchCreateFeaturesRequest extends protobuf.ProtoMessage {
+final class BatchCreateFeaturesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateFeaturesRequest';
 
@@ -44838,7 +44791,7 @@ final class BatchCreateFeaturesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreService.BatchCreateFeatures`.
-final class BatchCreateFeaturesResponse extends protobuf.ProtoMessage {
+final class BatchCreateFeaturesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateFeaturesResponse';
 
@@ -44866,7 +44819,7 @@ final class BatchCreateFeaturesResponse extends protobuf.ProtoMessage {
 /// `FeaturestoreService.GetFeature`.
 /// Request message for
 /// `FeatureRegistryService.GetFeature`.
-final class GetFeatureRequest extends protobuf.ProtoMessage {
+final class GetFeatureRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetFeatureRequest';
 
@@ -44912,7 +44865,7 @@ final class GetFeatureRequest extends protobuf.ProtoMessage {
 /// `FeaturestoreService.ListFeatures`.
 /// Request message for
 /// `FeatureRegistryService.ListFeatures`.
-final class ListFeaturesRequest extends protobuf.ProtoMessage {
+final class ListFeaturesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeaturesRequest';
 
@@ -45036,7 +44989,7 @@ final class ListFeaturesRequest extends protobuf.ProtoMessage {
 /// `FeaturestoreService.ListFeatures`.
 /// Response message for
 /// `FeatureRegistryService.ListFeatures`.
-final class ListFeaturesResponse extends protobuf.ProtoMessage {
+final class ListFeaturesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListFeaturesResponse';
 
@@ -45073,7 +45026,7 @@ final class ListFeaturesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.SearchFeatures`.
-final class SearchFeaturesRequest extends protobuf.ProtoMessage {
+final class SearchFeaturesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchFeaturesRequest';
 
@@ -45196,7 +45149,7 @@ final class SearchFeaturesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `FeaturestoreService.SearchFeatures`.
-final class SearchFeaturesResponse extends protobuf.ProtoMessage {
+final class SearchFeaturesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchFeaturesResponse';
 
@@ -45243,7 +45196,7 @@ final class SearchFeaturesResponse extends protobuf.ProtoMessage {
 /// `FeaturestoreService.UpdateFeature`.
 /// Request message for
 /// `FeatureRegistryService.UpdateFeature`.
-final class UpdateFeatureRequest extends protobuf.ProtoMessage {
+final class UpdateFeatureRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeatureRequest';
 
@@ -45296,7 +45249,7 @@ final class UpdateFeatureRequest extends protobuf.ProtoMessage {
 /// `FeaturestoreService.DeleteFeature`.
 /// Request message for
 /// `FeatureRegistryService.DeleteFeature`.
-final class DeleteFeatureRequest extends protobuf.ProtoMessage {
+final class DeleteFeatureRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureRequest';
 
@@ -45322,7 +45275,7 @@ final class DeleteFeatureRequest extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create Featurestore.
-final class CreateFeaturestoreOperationMetadata extends protobuf.ProtoMessage {
+final class CreateFeaturestoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeaturestoreOperationMetadata';
 
@@ -45351,7 +45304,7 @@ final class CreateFeaturestoreOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform update Featurestore.
-final class UpdateFeaturestoreOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateFeaturestoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateFeaturestoreOperationMetadata';
 
@@ -45380,7 +45333,7 @@ final class UpdateFeaturestoreOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform import Feature values.
-final class ImportFeatureValuesOperationMetadata extends protobuf.ProtoMessage {
+final class ImportFeatureValuesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportFeatureValuesOperationMetadata';
 
@@ -45469,7 +45422,7 @@ final class ImportFeatureValuesOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that exports Features values.
-final class ExportFeatureValuesOperationMetadata extends protobuf.ProtoMessage {
+final class ExportFeatureValuesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportFeatureValuesOperationMetadata';
 
@@ -45498,8 +45451,7 @@ final class ExportFeatureValuesOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that batch reads Feature values.
-final class BatchReadFeatureValuesOperationMetadata
-    extends protobuf.ProtoMessage {
+final class BatchReadFeatureValuesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadFeatureValuesOperationMetadata';
 
@@ -45528,7 +45480,7 @@ final class BatchReadFeatureValuesOperationMetadata
 }
 
 /// Details of operations that delete Feature values.
-final class DeleteFeatureValuesOperationMetadata extends protobuf.ProtoMessage {
+final class DeleteFeatureValuesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesOperationMetadata';
 
@@ -45557,7 +45509,7 @@ final class DeleteFeatureValuesOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create EntityType.
-final class CreateEntityTypeOperationMetadata extends protobuf.ProtoMessage {
+final class CreateEntityTypeOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateEntityTypeOperationMetadata';
 
@@ -45586,7 +45538,7 @@ final class CreateEntityTypeOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create Feature.
-final class CreateFeatureOperationMetadata extends protobuf.ProtoMessage {
+final class CreateFeatureOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateFeatureOperationMetadata';
 
@@ -45614,7 +45566,7 @@ final class CreateFeatureOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform batch create Features.
-final class BatchCreateFeaturesOperationMetadata extends protobuf.ProtoMessage {
+final class BatchCreateFeaturesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateFeaturesOperationMetadata';
 
@@ -45644,7 +45596,7 @@ final class BatchCreateFeaturesOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `FeaturestoreService.DeleteFeatureValues`.
-final class DeleteFeatureValuesRequest extends protobuf.ProtoMessage {
+final class DeleteFeatureValuesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesRequest';
 
@@ -45698,8 +45650,7 @@ final class DeleteFeatureValuesRequest extends protobuf.ProtoMessage {
 /// Message to select entity.
 /// If an entity id is selected, all the feature values corresponding to the
 /// entity id will be deleted, including the entityId.
-final class DeleteFeatureValuesRequest_SelectEntity
-    extends protobuf.ProtoMessage {
+final class DeleteFeatureValuesRequest_SelectEntity extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesRequest.SelectEntity';
 
@@ -45736,7 +45687,7 @@ final class DeleteFeatureValuesRequest_SelectEntity
 /// This might include data from the online storage. If you want to retain
 /// any deleted historical data in the online storage, you must re-ingest it.
 final class DeleteFeatureValuesRequest_SelectTimeRangeAndFeature
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesRequest.SelectTimeRangeAndFeature';
 
@@ -45786,7 +45737,7 @@ final class DeleteFeatureValuesRequest_SelectTimeRangeAndFeature
 
 /// Response message for
 /// `FeaturestoreService.DeleteFeatureValues`.
-final class DeleteFeatureValuesResponse extends protobuf.ProtoMessage {
+final class DeleteFeatureValuesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesResponse';
 
@@ -45826,8 +45777,7 @@ final class DeleteFeatureValuesResponse extends protobuf.ProtoMessage {
 }
 
 /// Response message if the request uses the SelectEntity option.
-final class DeleteFeatureValuesResponse_SelectEntity
-    extends protobuf.ProtoMessage {
+final class DeleteFeatureValuesResponse_SelectEntity extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesResponse.SelectEntity';
 
@@ -45878,7 +45828,7 @@ final class DeleteFeatureValuesResponse_SelectEntity
 
 /// Response message if the request uses the SelectTimeRangeAndFeature option.
 final class DeleteFeatureValuesResponse_SelectTimeRangeAndFeature
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteFeatureValuesResponse.SelectTimeRangeAndFeature';
 
@@ -45941,7 +45891,7 @@ final class DeleteFeatureValuesResponse_SelectTimeRangeAndFeature
 }
 
 /// Selector for entityId. Getting ids from the given source.
-final class EntityIdSelector extends protobuf.ProtoMessage {
+final class EntityIdSelector extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EntityIdSelector';
 
@@ -45976,7 +45926,7 @@ final class EntityIdSelector extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiCacheService.CreateCachedContent`.
-final class CreateCachedContentRequest extends protobuf.ProtoMessage {
+final class CreateCachedContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateCachedContentRequest';
 
@@ -46012,7 +45962,7 @@ final class CreateCachedContentRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiCacheService.GetCachedContent`.
-final class GetCachedContentRequest extends protobuf.ProtoMessage {
+final class GetCachedContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetCachedContentRequest';
 
@@ -46037,7 +45987,7 @@ final class GetCachedContentRequest extends protobuf.ProtoMessage {
 /// Request message for
 /// `GenAiCacheService.UpdateCachedContent`.
 /// Only expire_time or ttl can be updated.
-final class UpdateCachedContentRequest extends protobuf.ProtoMessage {
+final class UpdateCachedContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateCachedContentRequest';
 
@@ -46073,7 +46023,7 @@ final class UpdateCachedContentRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiCacheService.DeleteCachedContent`.
-final class DeleteCachedContentRequest extends protobuf.ProtoMessage {
+final class DeleteCachedContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteCachedContentRequest';
 
@@ -46096,7 +46046,7 @@ final class DeleteCachedContentRequest extends protobuf.ProtoMessage {
 }
 
 /// Request to list CachedContents.
-final class ListCachedContentsRequest extends protobuf.ProtoMessage {
+final class ListCachedContentsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListCachedContentsRequest';
 
@@ -46148,7 +46098,7 @@ final class ListCachedContentsRequest extends protobuf.ProtoMessage {
 }
 
 /// Response with a list of CachedContents.
-final class ListCachedContentsResponse extends protobuf.ProtoMessage {
+final class ListCachedContentsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListCachedContentsResponse';
 
@@ -46188,7 +46138,7 @@ final class ListCachedContentsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiTuningService.CreateTuningJob`.
-final class CreateTuningJobRequest extends protobuf.ProtoMessage {
+final class CreateTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTuningJobRequest';
 
@@ -46223,7 +46173,7 @@ final class CreateTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiTuningService.GetTuningJob`.
-final class GetTuningJobRequest extends protobuf.ProtoMessage {
+final class GetTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTuningJobRequest';
 
@@ -46248,7 +46198,7 @@ final class GetTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiTuningService.ListTuningJobs`.
-final class ListTuningJobsRequest extends protobuf.ProtoMessage {
+final class ListTuningJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTuningJobsRequest';
 
@@ -46304,7 +46254,7 @@ final class ListTuningJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `GenAiTuningService.ListTuningJobs`
-final class ListTuningJobsResponse extends protobuf.ProtoMessage {
+final class ListTuningJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTuningJobsResponse';
 
@@ -46342,7 +46292,7 @@ final class ListTuningJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiTuningService.CancelTuningJob`.
-final class CancelTuningJobRequest extends protobuf.ProtoMessage {
+final class CancelTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelTuningJobRequest';
 
@@ -46367,7 +46317,7 @@ final class CancelTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `GenAiTuningService.RebaseTunedModel`.
-final class RebaseTunedModelRequest extends protobuf.ProtoMessage {
+final class RebaseTunedModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RebaseTunedModelRequest';
 
@@ -46433,7 +46383,7 @@ final class RebaseTunedModelRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `GenAiTuningService.RebaseTunedModel`.
-final class RebaseTunedModelOperationMetadata extends protobuf.ProtoMessage {
+final class RebaseTunedModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RebaseTunedModelOperationMetadata';
 
@@ -46464,7 +46414,7 @@ final class RebaseTunedModelOperationMetadata extends protobuf.ProtoMessage {
 /// Represents a HyperparameterTuningJob. A HyperparameterTuningJob
 /// has a Study specification and multiple CustomJobs with identical
 /// CustomJob specification.
-final class HyperparameterTuningJob extends protobuf.ProtoMessage {
+final class HyperparameterTuningJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.HyperparameterTuningJob';
 
@@ -46627,7 +46577,7 @@ final class HyperparameterTuningJob extends protobuf.ProtoMessage {
 
 /// A representation of a collection of database items organized in a way that
 /// allows for approximate nearest neighbor (a.k.a ANN) algorithms search.
-final class Index extends protobuf.ProtoMessage {
+final class Index extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Index';
 
@@ -46786,7 +46736,7 @@ final class Index extends protobuf.ProtoMessage {
 }
 
 /// The update method of an Index.
-final class Index_IndexUpdateMethod extends protobuf.ProtoEnum {
+final class Index_IndexUpdateMethod extends ProtoEnum {
   /// Should not be used.
   static const indexUpdateMethodUnspecified = Index_IndexUpdateMethod(
     'INDEX_UPDATE_METHOD_UNSPECIFIED',
@@ -46816,7 +46766,7 @@ final class Index_IndexUpdateMethod extends protobuf.ProtoEnum {
 }
 
 /// A datapoint of Index.
-final class IndexDatapoint extends protobuf.ProtoMessage {
+final class IndexDatapoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexDatapoint';
 
@@ -46909,7 +46859,7 @@ final class IndexDatapoint extends protobuf.ProtoMessage {
 
 /// Feature embedding vector for sparse index. An array of numbers whose values
 /// are located in the specified dimensions.
-final class IndexDatapoint_SparseEmbedding extends protobuf.ProtoMessage {
+final class IndexDatapoint_SparseEmbedding extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexDatapoint.SparseEmbedding';
 
@@ -46940,7 +46890,7 @@ final class IndexDatapoint_SparseEmbedding extends protobuf.ProtoMessage {
 
 /// Restriction of a datapoint which describe its attributes(tokens) from each
 /// of several attribute categories(namespaces).
-final class IndexDatapoint_Restriction extends protobuf.ProtoMessage {
+final class IndexDatapoint_Restriction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexDatapoint.Restriction';
 
@@ -46982,7 +46932,7 @@ final class IndexDatapoint_Restriction extends protobuf.ProtoMessage {
 
 /// This field allows restricts to be based on numeric comparisons rather
 /// than categorical tokens.
-final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
+final class IndexDatapoint_NumericRestriction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexDatapoint.NumericRestriction';
 
@@ -47052,8 +47002,7 @@ final class IndexDatapoint_NumericRestriction extends protobuf.ProtoMessage {
 ///
 /// Datapoints for which Operator is true relative to the query's Value
 /// field will be allowlisted.
-final class IndexDatapoint_NumericRestriction_Operator
-    extends protobuf.ProtoEnum {
+final class IndexDatapoint_NumericRestriction_Operator extends ProtoEnum {
   /// Default value of the enum.
   static const operatorUnspecified = IndexDatapoint_NumericRestriction_Operator(
     'OPERATOR_UNSPECIFIED',
@@ -47100,7 +47049,7 @@ final class IndexDatapoint_NumericRestriction_Operator
 /// Crowding tag is a constraint on a neighbor list produced by nearest
 /// neighbor search requiring that no more than some value k' of the k
 /// neighbors returned have the same value of crowding_attribute.
-final class IndexDatapoint_CrowdingTag extends protobuf.ProtoMessage {
+final class IndexDatapoint_CrowdingTag extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexDatapoint.CrowdingTag';
 
@@ -47132,7 +47081,7 @@ final class IndexDatapoint_CrowdingTag extends protobuf.ProtoMessage {
 }
 
 /// Stats of the Index.
-final class IndexStats extends protobuf.ProtoMessage {
+final class IndexStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexStats';
 
@@ -47178,7 +47127,7 @@ final class IndexStats extends protobuf.ProtoMessage {
 
 /// Indexes are deployed into it. An IndexEndpoint can have multiple
 /// DeployedIndexes.
-final class IndexEndpoint extends protobuf.ProtoMessage {
+final class IndexEndpoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexEndpoint';
 
@@ -47359,7 +47308,7 @@ final class IndexEndpoint extends protobuf.ProtoMessage {
 }
 
 /// A deployment of an Index. IndexEndpoints contain one or more DeployedIndexes.
-final class DeployedIndex extends protobuf.ProtoMessage {
+final class DeployedIndex extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedIndex';
 
@@ -47586,7 +47535,7 @@ final class DeployedIndex extends protobuf.ProtoMessage {
 }
 
 /// Used to set up the auth on the DeployedIndex's private endpoint.
-final class DeployedIndexAuthConfig extends protobuf.ProtoMessage {
+final class DeployedIndexAuthConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedIndexAuthConfig';
 
@@ -47615,7 +47564,7 @@ final class DeployedIndexAuthConfig extends protobuf.ProtoMessage {
 /// Configuration for an authentication provider, including support for
 /// [JSON Web Token
 /// (JWT)](https://tools.ietf.org/html/draft-ietf-oauth-json-web-token-32).
-final class DeployedIndexAuthConfig_AuthProvider extends protobuf.ProtoMessage {
+final class DeployedIndexAuthConfig_AuthProvider extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployedIndexAuthConfig.AuthProvider';
 
@@ -47658,7 +47607,7 @@ final class DeployedIndexAuthConfig_AuthProvider extends protobuf.ProtoMessage {
 /// connect).
 /// To send request via private service access, use match_grpc_address.
 /// To send request via private service connect, use service_attachment.
-final class IndexPrivateEndpoints extends protobuf.ProtoMessage {
+final class IndexPrivateEndpoints extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.IndexPrivateEndpoints';
 
@@ -47711,7 +47660,7 @@ final class IndexPrivateEndpoints extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.CreateIndexEndpoint`.
-final class CreateIndexEndpointRequest extends protobuf.ProtoMessage {
+final class CreateIndexEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateIndexEndpointRequest';
 
@@ -47748,7 +47697,7 @@ final class CreateIndexEndpointRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `IndexEndpointService.CreateIndexEndpoint`.
-final class CreateIndexEndpointOperationMetadata extends protobuf.ProtoMessage {
+final class CreateIndexEndpointOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateIndexEndpointOperationMetadata';
 
@@ -47778,7 +47727,7 @@ final class CreateIndexEndpointOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.GetIndexEndpoint`
-final class GetIndexEndpointRequest extends protobuf.ProtoMessage {
+final class GetIndexEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetIndexEndpointRequest';
 
@@ -47804,7 +47753,7 @@ final class GetIndexEndpointRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.ListIndexEndpoints`.
-final class ListIndexEndpointsRequest extends protobuf.ProtoMessage {
+final class ListIndexEndpointsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListIndexEndpointsRequest';
 
@@ -47886,7 +47835,7 @@ final class ListIndexEndpointsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexEndpointService.ListIndexEndpoints`.
-final class ListIndexEndpointsResponse extends protobuf.ProtoMessage {
+final class ListIndexEndpointsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListIndexEndpointsResponse';
 
@@ -47928,7 +47877,7 @@ final class ListIndexEndpointsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.UpdateIndexEndpoint`.
-final class UpdateIndexEndpointRequest extends protobuf.ProtoMessage {
+final class UpdateIndexEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateIndexEndpointRequest';
 
@@ -47965,7 +47914,7 @@ final class UpdateIndexEndpointRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.DeleteIndexEndpoint`.
-final class DeleteIndexEndpointRequest extends protobuf.ProtoMessage {
+final class DeleteIndexEndpointRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteIndexEndpointRequest';
 
@@ -47991,7 +47940,7 @@ final class DeleteIndexEndpointRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.DeployIndex`.
-final class DeployIndexRequest extends protobuf.ProtoMessage {
+final class DeployIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployIndexRequest';
 
@@ -48027,7 +47976,7 @@ final class DeployIndexRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexEndpointService.DeployIndex`.
-final class DeployIndexResponse extends protobuf.ProtoMessage {
+final class DeployIndexResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployIndexResponse';
 
@@ -48052,7 +48001,7 @@ final class DeployIndexResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `IndexEndpointService.DeployIndex`.
-final class DeployIndexOperationMetadata extends protobuf.ProtoMessage {
+final class DeployIndexOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployIndexOperationMetadata';
 
@@ -48091,7 +48040,7 @@ final class DeployIndexOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.UndeployIndex`.
-final class UndeployIndexRequest extends protobuf.ProtoMessage {
+final class UndeployIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UndeployIndexRequest';
 
@@ -48133,7 +48082,7 @@ final class UndeployIndexRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexEndpointService.UndeployIndex`.
-final class UndeployIndexResponse extends protobuf.ProtoMessage {
+final class UndeployIndexResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UndeployIndexResponse';
 
@@ -48151,7 +48100,7 @@ final class UndeployIndexResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `IndexEndpointService.UndeployIndex`.
-final class UndeployIndexOperationMetadata extends protobuf.ProtoMessage {
+final class UndeployIndexOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UndeployIndexOperationMetadata';
 
@@ -48180,7 +48129,7 @@ final class UndeployIndexOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexEndpointService.MutateDeployedIndex`.
-final class MutateDeployedIndexRequest extends protobuf.ProtoMessage {
+final class MutateDeployedIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MutateDeployedIndexRequest';
 
@@ -48220,7 +48169,7 @@ final class MutateDeployedIndexRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexEndpointService.MutateDeployedIndex`.
-final class MutateDeployedIndexResponse extends protobuf.ProtoMessage {
+final class MutateDeployedIndexResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MutateDeployedIndexResponse';
 
@@ -48245,7 +48194,7 @@ final class MutateDeployedIndexResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `IndexEndpointService.MutateDeployedIndex`.
-final class MutateDeployedIndexOperationMetadata extends protobuf.ProtoMessage {
+final class MutateDeployedIndexOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MutateDeployedIndexOperationMetadata';
 
@@ -48285,7 +48234,7 @@ final class MutateDeployedIndexOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.CreateIndex`.
-final class CreateIndexRequest extends protobuf.ProtoMessage {
+final class CreateIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateIndexRequest';
 
@@ -48320,7 +48269,7 @@ final class CreateIndexRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `IndexService.CreateIndex`.
-final class CreateIndexOperationMetadata extends protobuf.ProtoMessage {
+final class CreateIndexOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateIndexOperationMetadata';
 
@@ -48362,7 +48311,7 @@ final class CreateIndexOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.GetIndex`
-final class GetIndexRequest extends protobuf.ProtoMessage {
+final class GetIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetIndexRequest';
 
@@ -48388,7 +48337,7 @@ final class GetIndexRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.ListIndexes`.
-final class ListIndexesRequest extends protobuf.ProtoMessage {
+final class ListIndexesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListIndexesRequest';
 
@@ -48453,7 +48402,7 @@ final class ListIndexesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexService.ListIndexes`.
-final class ListIndexesResponse extends protobuf.ProtoMessage {
+final class ListIndexesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListIndexesResponse';
 
@@ -48490,7 +48439,7 @@ final class ListIndexesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.UpdateIndex`.
-final class UpdateIndexRequest extends protobuf.ProtoMessage {
+final class UpdateIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateIndexRequest';
 
@@ -48526,7 +48475,7 @@ final class UpdateIndexRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `IndexService.UpdateIndex`.
-final class UpdateIndexOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateIndexOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateIndexOperationMetadata';
 
@@ -48568,7 +48517,7 @@ final class UpdateIndexOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.ImportIndex`.
-final class ImportIndexRequest extends protobuf.ProtoMessage {
+final class ImportIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexRequest';
 
@@ -48619,7 +48568,7 @@ final class ImportIndexRequest extends protobuf.ProtoMessage {
 }
 
 /// Configuration for importing data from an external source.
-final class ImportIndexRequest_ConnectorConfig extends protobuf.ProtoMessage {
+final class ImportIndexRequest_ConnectorConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexRequest.ConnectorConfig';
 
@@ -48651,7 +48600,7 @@ final class ImportIndexRequest_ConnectorConfig extends protobuf.ProtoMessage {
 
 /// Mapping of datapoint fields to column names for columnar data sources.
 final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexRequest.ConnectorConfig.DatapointFieldMapping';
 
@@ -48727,7 +48676,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
 
 /// Restrictions on string values.
 final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexRequest.ConnectorConfig.DatapointFieldMapping.Restrict';
 
@@ -48770,7 +48719,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict
 
 /// Restrictions on numeric values.
 final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexRequest.ConnectorConfig.DatapointFieldMapping.NumericRestrict';
 
@@ -48826,7 +48775,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRest
 
 /// The type of numeric value for the restrict.
 final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict_ValueType
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be used.
   static const valueTypeUnspecified =
       ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict_ValueType(
@@ -48873,7 +48822,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRest
 
 /// Configuration for importing data from a BigQuery table.
 final class ImportIndexRequest_ConnectorConfig_BigQuerySourceConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexRequest.ConnectorConfig.BigQuerySourceConfig';
 
@@ -48916,7 +48865,7 @@ final class ImportIndexRequest_ConnectorConfig_BigQuerySourceConfig
 
 /// Runtime operation information for
 /// `IndexService.ImportIndex`.
-final class ImportIndexOperationMetadata extends protobuf.ProtoMessage {
+final class ImportIndexOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportIndexOperationMetadata';
 
@@ -48945,7 +48894,7 @@ final class ImportIndexOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.DeleteIndex`.
-final class DeleteIndexRequest extends protobuf.ProtoMessage {
+final class DeleteIndexRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteIndexRequest';
 
@@ -48971,7 +48920,7 @@ final class DeleteIndexRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.UpsertDatapoints`
-final class UpsertDatapointsRequest extends protobuf.ProtoMessage {
+final class UpsertDatapointsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpsertDatapointsRequest';
 
@@ -49023,7 +48972,7 @@ final class UpsertDatapointsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexService.UpsertDatapoints`
-final class UpsertDatapointsResponse extends protobuf.ProtoMessage {
+final class UpsertDatapointsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpsertDatapointsResponse';
 
@@ -49041,7 +48990,7 @@ final class UpsertDatapointsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `IndexService.RemoveDatapoints`
-final class RemoveDatapointsRequest extends protobuf.ProtoMessage {
+final class RemoveDatapointsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RemoveDatapointsRequest';
 
@@ -49077,7 +49026,7 @@ final class RemoveDatapointsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `IndexService.RemoveDatapoints`
-final class RemoveDatapointsResponse extends protobuf.ProtoMessage {
+final class RemoveDatapointsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RemoveDatapointsResponse';
 
@@ -49094,8 +49043,7 @@ final class RemoveDatapointsResponse extends protobuf.ProtoMessage {
 }
 
 /// Runtime operation metadata with regard to Matching Engine Index.
-final class NearestNeighborSearchOperationMetadata
-    extends protobuf.ProtoMessage {
+final class NearestNeighborSearchOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborSearchOperationMetadata';
 
@@ -49145,7 +49093,7 @@ final class NearestNeighborSearchOperationMetadata
 }
 
 final class NearestNeighborSearchOperationMetadata_RecordError
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborSearchOperationMetadata.RecordError';
 
@@ -49217,7 +49165,7 @@ final class NearestNeighborSearchOperationMetadata_RecordError
 }
 
 final class NearestNeighborSearchOperationMetadata_RecordError_RecordErrorType
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Default, shall not be used.
   static const errorTypeUnspecified =
       NearestNeighborSearchOperationMetadata_RecordError_RecordErrorType(
@@ -49358,7 +49306,7 @@ final class NearestNeighborSearchOperationMetadata_RecordError_RecordErrorType
 }
 
 final class NearestNeighborSearchOperationMetadata_ContentValidationStats
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NearestNeighborSearchOperationMetadata.ContentValidationStats';
 
@@ -49436,7 +49384,7 @@ final class NearestNeighborSearchOperationMetadata_ContentValidationStats
 }
 
 /// The storage details for Avro input content.
-final class AvroSource extends protobuf.ProtoMessage {
+final class AvroSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AvroSource';
 
@@ -49456,7 +49404,7 @@ final class AvroSource extends protobuf.ProtoMessage {
 }
 
 /// The storage details for CSV input content.
-final class CsvSource extends protobuf.ProtoMessage {
+final class CsvSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CsvSource';
 
@@ -49476,7 +49424,7 @@ final class CsvSource extends protobuf.ProtoMessage {
 }
 
 /// The Google Cloud Storage location for the input content.
-final class GcsSource extends protobuf.ProtoMessage {
+final class GcsSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GcsSource';
 
@@ -49498,7 +49446,7 @@ final class GcsSource extends protobuf.ProtoMessage {
 }
 
 /// The Google Cloud Storage location where the output is to be written to.
-final class GcsDestination extends protobuf.ProtoMessage {
+final class GcsDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GcsDestination';
 
@@ -49524,7 +49472,7 @@ final class GcsDestination extends protobuf.ProtoMessage {
 }
 
 /// The BigQuery location for the input content.
-final class BigQuerySource extends protobuf.ProtoMessage {
+final class BigQuerySource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BigQuerySource';
 
@@ -49550,7 +49498,7 @@ final class BigQuerySource extends protobuf.ProtoMessage {
 }
 
 /// The BigQuery location for the output content.
-final class BigQueryDestination extends protobuf.ProtoMessage {
+final class BigQueryDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BigQueryDestination';
 
@@ -49583,7 +49531,7 @@ final class BigQueryDestination extends protobuf.ProtoMessage {
 }
 
 /// The storage details for CSV output content.
-final class CsvDestination extends protobuf.ProtoMessage {
+final class CsvDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CsvDestination';
 
@@ -49606,7 +49554,7 @@ final class CsvDestination extends protobuf.ProtoMessage {
 }
 
 /// The storage details for TFRecord output content.
-final class TfrecordDestination extends protobuf.ProtoMessage {
+final class TfrecordDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TFRecordDestination';
 
@@ -49631,7 +49579,7 @@ final class TfrecordDestination extends protobuf.ProtoMessage {
 }
 
 /// The Container Registry location for the container image.
-final class ContainerRegistryDestination extends protobuf.ProtoMessage {
+final class ContainerRegistryDestination extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ContainerRegistryDestination';
 
@@ -49665,7 +49613,7 @@ final class ContainerRegistryDestination extends protobuf.ProtoMessage {
 }
 
 /// The Google Drive location for the input content.
-final class GoogleDriveSource extends protobuf.ProtoMessage {
+final class GoogleDriveSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GoogleDriveSource';
 
@@ -49692,7 +49640,7 @@ final class GoogleDriveSource extends protobuf.ProtoMessage {
 }
 
 /// The type and ID of the Google Drive resource.
-final class GoogleDriveSource_ResourceId extends protobuf.ProtoMessage {
+final class GoogleDriveSource_ResourceId extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GoogleDriveSource.ResourceId';
 
@@ -49735,8 +49683,7 @@ final class GoogleDriveSource_ResourceId extends protobuf.ProtoMessage {
 }
 
 /// The type of the Google Drive resource.
-final class GoogleDriveSource_ResourceId_ResourceType
-    extends protobuf.ProtoEnum {
+final class GoogleDriveSource_ResourceId_ResourceType extends ProtoEnum {
   /// Unspecified resource type.
   static const resourceTypeUnspecified =
       GoogleDriveSource_ResourceId_ResourceType('RESOURCE_TYPE_UNSPECIFIED');
@@ -49766,7 +49713,7 @@ final class GoogleDriveSource_ResourceId_ResourceType
 }
 
 /// The input content is encapsulated and uploaded in the request.
-final class DirectUploadSource extends protobuf.ProtoMessage {
+final class DirectUploadSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DirectUploadSource';
 
@@ -49783,7 +49730,7 @@ final class DirectUploadSource extends protobuf.ProtoMessage {
 }
 
 /// The Slack source for the ImportRagFilesRequest.
-final class SlackSource extends protobuf.ProtoMessage {
+final class SlackSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SlackSource';
 
@@ -49809,7 +49756,7 @@ final class SlackSource extends protobuf.ProtoMessage {
 }
 
 /// SlackChannels contains the Slack channels and corresponding access token.
-final class SlackSource_SlackChannels extends protobuf.ProtoMessage {
+final class SlackSource_SlackChannels extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SlackSource.SlackChannels';
 
@@ -49852,8 +49799,7 @@ final class SlackSource_SlackChannels extends protobuf.ProtoMessage {
 }
 
 /// SlackChannel contains the Slack channel ID and the time range to import.
-final class SlackSource_SlackChannels_SlackChannel
-    extends protobuf.ProtoMessage {
+final class SlackSource_SlackChannels_SlackChannel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SlackSource.SlackChannels.SlackChannel';
 
@@ -49895,7 +49841,7 @@ final class SlackSource_SlackChannels_SlackChannel
 }
 
 /// The Jira source for the ImportRagFilesRequest.
-final class JiraSource extends protobuf.ProtoMessage {
+final class JiraSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.JiraSource';
 
@@ -49921,7 +49867,7 @@ final class JiraSource extends protobuf.ProtoMessage {
 }
 
 /// JiraQueries contains the Jira queries and corresponding authentication.
-final class JiraSource_JiraQueries extends protobuf.ProtoMessage {
+final class JiraSource_JiraQueries extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.JiraSource.JiraQueries';
 
@@ -49982,7 +49928,7 @@ final class JiraSource_JiraQueries extends protobuf.ProtoMessage {
 }
 
 /// The SharePointSources to pass to ImportRagFiles.
-final class SharePointSources extends protobuf.ProtoMessage {
+final class SharePointSources extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SharePointSources';
 
@@ -50013,7 +49959,7 @@ final class SharePointSources extends protobuf.ProtoMessage {
 }
 
 /// An individual SharePointSource.
-final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
+final class SharePointSources_SharePointSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SharePointSources.SharePointSource';
 
@@ -50107,7 +50053,7 @@ final class SharePointSources_SharePointSource extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CreateCustomJob`.
-final class CreateCustomJobRequest extends protobuf.ProtoMessage {
+final class CreateCustomJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateCustomJobRequest';
 
@@ -50142,7 +50088,7 @@ final class CreateCustomJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.GetCustomJob`.
-final class GetCustomJobRequest extends protobuf.ProtoMessage {
+final class GetCustomJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetCustomJobRequest';
 
@@ -50168,7 +50114,7 @@ final class GetCustomJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.ListCustomJobs`.
-final class ListCustomJobsRequest extends protobuf.ProtoMessage {
+final class ListCustomJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListCustomJobsRequest';
 
@@ -50252,7 +50198,7 @@ final class ListCustomJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `JobService.ListCustomJobs`
-final class ListCustomJobsResponse extends protobuf.ProtoMessage {
+final class ListCustomJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListCustomJobsResponse';
 
@@ -50290,7 +50236,7 @@ final class ListCustomJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.DeleteCustomJob`.
-final class DeleteCustomJobRequest extends protobuf.ProtoMessage {
+final class DeleteCustomJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteCustomJobRequest';
 
@@ -50316,7 +50262,7 @@ final class DeleteCustomJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CancelCustomJob`.
-final class CancelCustomJobRequest extends protobuf.ProtoMessage {
+final class CancelCustomJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelCustomJobRequest';
 
@@ -50342,7 +50288,7 @@ final class CancelCustomJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CreateDataLabelingJob`.
-final class CreateDataLabelingJobRequest extends protobuf.ProtoMessage {
+final class CreateDataLabelingJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateDataLabelingJobRequest';
 
@@ -50382,7 +50328,7 @@ final class CreateDataLabelingJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.GetDataLabelingJob`.
-final class GetDataLabelingJobRequest extends protobuf.ProtoMessage {
+final class GetDataLabelingJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetDataLabelingJobRequest';
 
@@ -50408,7 +50354,7 @@ final class GetDataLabelingJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.ListDataLabelingJobs`.
-final class ListDataLabelingJobsRequest extends protobuf.ProtoMessage {
+final class ListDataLabelingJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDataLabelingJobsRequest';
 
@@ -50499,7 +50445,7 @@ final class ListDataLabelingJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `JobService.ListDataLabelingJobs`.
-final class ListDataLabelingJobsResponse extends protobuf.ProtoMessage {
+final class ListDataLabelingJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListDataLabelingJobsResponse';
 
@@ -50542,7 +50488,7 @@ final class ListDataLabelingJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.DeleteDataLabelingJob`.
-final class DeleteDataLabelingJobRequest extends protobuf.ProtoMessage {
+final class DeleteDataLabelingJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteDataLabelingJobRequest';
 
@@ -50569,7 +50515,7 @@ final class DeleteDataLabelingJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CancelDataLabelingJob`.
-final class CancelDataLabelingJobRequest extends protobuf.ProtoMessage {
+final class CancelDataLabelingJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelDataLabelingJobRequest';
 
@@ -50596,7 +50542,7 @@ final class CancelDataLabelingJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CreateHyperparameterTuningJob`.
-final class CreateHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
+final class CreateHyperparameterTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateHyperparameterTuningJobRequest';
 
@@ -50639,7 +50585,7 @@ final class CreateHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.GetHyperparameterTuningJob`.
-final class GetHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
+final class GetHyperparameterTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetHyperparameterTuningJobRequest';
 
@@ -50667,7 +50613,7 @@ final class GetHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.ListHyperparameterTuningJobs`.
-final class ListHyperparameterTuningJobsRequest extends protobuf.ProtoMessage {
+final class ListHyperparameterTuningJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListHyperparameterTuningJobsRequest';
 
@@ -50753,7 +50699,7 @@ final class ListHyperparameterTuningJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `JobService.ListHyperparameterTuningJobs`
-final class ListHyperparameterTuningJobsResponse extends protobuf.ProtoMessage {
+final class ListHyperparameterTuningJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListHyperparameterTuningJobsResponse';
 
@@ -50801,7 +50747,7 @@ final class ListHyperparameterTuningJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.DeleteHyperparameterTuningJob`.
-final class DeleteHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
+final class DeleteHyperparameterTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteHyperparameterTuningJobRequest';
 
@@ -50829,7 +50775,7 @@ final class DeleteHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CancelHyperparameterTuningJob`.
-final class CancelHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
+final class CancelHyperparameterTuningJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelHyperparameterTuningJobRequest';
 
@@ -50857,7 +50803,7 @@ final class CancelHyperparameterTuningJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CreateNasJob`.
-final class CreateNasJobRequest extends protobuf.ProtoMessage {
+final class CreateNasJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateNasJobRequest';
 
@@ -50892,7 +50838,7 @@ final class CreateNasJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.GetNasJob`.
-final class GetNasJobRequest extends protobuf.ProtoMessage {
+final class GetNasJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetNasJobRequest';
 
@@ -50918,7 +50864,7 @@ final class GetNasJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.ListNasJobs`.
-final class ListNasJobsRequest extends protobuf.ProtoMessage {
+final class ListNasJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNasJobsRequest';
 
@@ -51002,7 +50948,7 @@ final class ListNasJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `JobService.ListNasJobs`
-final class ListNasJobsResponse extends protobuf.ProtoMessage {
+final class ListNasJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNasJobsResponse';
 
@@ -51041,7 +50987,7 @@ final class ListNasJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.DeleteNasJob`.
-final class DeleteNasJobRequest extends protobuf.ProtoMessage {
+final class DeleteNasJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteNasJobRequest';
 
@@ -51067,7 +51013,7 @@ final class DeleteNasJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CancelNasJob`.
-final class CancelNasJobRequest extends protobuf.ProtoMessage {
+final class CancelNasJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelNasJobRequest';
 
@@ -51093,7 +51039,7 @@ final class CancelNasJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.GetNasTrialDetail`.
-final class GetNasTrialDetailRequest extends protobuf.ProtoMessage {
+final class GetNasTrialDetailRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetNasTrialDetailRequest';
 
@@ -51119,7 +51065,7 @@ final class GetNasTrialDetailRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.ListNasTrialDetails`.
-final class ListNasTrialDetailsRequest extends protobuf.ProtoMessage {
+final class ListNasTrialDetailsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNasTrialDetailsRequest';
 
@@ -51172,7 +51118,7 @@ final class ListNasTrialDetailsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `JobService.ListNasTrialDetails`
-final class ListNasTrialDetailsResponse extends protobuf.ProtoMessage {
+final class ListNasTrialDetailsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNasTrialDetailsResponse';
 
@@ -51217,7 +51163,7 @@ final class ListNasTrialDetailsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CreateBatchPredictionJob`.
-final class CreateBatchPredictionJobRequest extends protobuf.ProtoMessage {
+final class CreateBatchPredictionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateBatchPredictionJobRequest';
 
@@ -51258,7 +51204,7 @@ final class CreateBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.GetBatchPredictionJob`.
-final class GetBatchPredictionJobRequest extends protobuf.ProtoMessage {
+final class GetBatchPredictionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetBatchPredictionJobRequest';
 
@@ -51285,7 +51231,7 @@ final class GetBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.ListBatchPredictionJobs`.
-final class ListBatchPredictionJobsRequest extends protobuf.ProtoMessage {
+final class ListBatchPredictionJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListBatchPredictionJobsRequest';
 
@@ -51370,7 +51316,7 @@ final class ListBatchPredictionJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `JobService.ListBatchPredictionJobs`
-final class ListBatchPredictionJobsResponse extends protobuf.ProtoMessage {
+final class ListBatchPredictionJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListBatchPredictionJobsResponse';
 
@@ -51415,7 +51361,7 @@ final class ListBatchPredictionJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.DeleteBatchPredictionJob`.
-final class DeleteBatchPredictionJobRequest extends protobuf.ProtoMessage {
+final class DeleteBatchPredictionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteBatchPredictionJobRequest';
 
@@ -51442,7 +51388,7 @@ final class DeleteBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CancelBatchPredictionJob`.
-final class CancelBatchPredictionJobRequest extends protobuf.ProtoMessage {
+final class CancelBatchPredictionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelBatchPredictionJobRequest';
 
@@ -51469,8 +51415,7 @@ final class CancelBatchPredictionJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `JobService.CreateModelDeploymentMonitoringJob`.
-final class CreateModelDeploymentMonitoringJobRequest
-    extends protobuf.ProtoMessage {
+final class CreateModelDeploymentMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateModelDeploymentMonitoringJobRequest';
 
@@ -51513,7 +51458,7 @@ final class CreateModelDeploymentMonitoringJobRequest
 /// Request message for
 /// `JobService.SearchModelDeploymentMonitoringStatsAnomalies`.
 final class SearchModelDeploymentMonitoringStatsAnomaliesRequest
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelDeploymentMonitoringStatsAnomaliesRequest';
 
@@ -51612,7 +51557,7 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest
 
 /// Stats requested for specific objective.
 final class SearchModelDeploymentMonitoringStatsAnomaliesRequest_StatsAnomaliesObjective
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelDeploymentMonitoringStatsAnomaliesRequest.StatsAnomaliesObjective';
 
@@ -51664,7 +51609,7 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest_StatsAnomaliesO
 /// Response message for
 /// `JobService.SearchModelDeploymentMonitoringStatsAnomalies`.
 final class SearchModelDeploymentMonitoringStatsAnomaliesResponse
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelDeploymentMonitoringStatsAnomaliesResponse';
 
@@ -51712,8 +51657,7 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesResponse
 
 /// Request message for
 /// `JobService.GetModelDeploymentMonitoringJob`.
-final class GetModelDeploymentMonitoringJobRequest
-    extends protobuf.ProtoMessage {
+final class GetModelDeploymentMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetModelDeploymentMonitoringJobRequest';
 
@@ -51741,8 +51685,7 @@ final class GetModelDeploymentMonitoringJobRequest
 
 /// Request message for
 /// `JobService.ListModelDeploymentMonitoringJobs`.
-final class ListModelDeploymentMonitoringJobsRequest
-    extends protobuf.ProtoMessage {
+final class ListModelDeploymentMonitoringJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelDeploymentMonitoringJobsRequest';
 
@@ -51822,8 +51765,7 @@ final class ListModelDeploymentMonitoringJobsRequest
 
 /// Response message for
 /// `JobService.ListModelDeploymentMonitoringJobs`.
-final class ListModelDeploymentMonitoringJobsResponse
-    extends protobuf.ProtoMessage {
+final class ListModelDeploymentMonitoringJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelDeploymentMonitoringJobsResponse';
 
@@ -51869,8 +51811,7 @@ final class ListModelDeploymentMonitoringJobsResponse
 
 /// Request message for
 /// `JobService.UpdateModelDeploymentMonitoringJob`.
-final class UpdateModelDeploymentMonitoringJobRequest
-    extends protobuf.ProtoMessage {
+final class UpdateModelDeploymentMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateModelDeploymentMonitoringJobRequest';
 
@@ -51934,8 +51875,7 @@ final class UpdateModelDeploymentMonitoringJobRequest
 
 /// Request message for
 /// `JobService.DeleteModelDeploymentMonitoringJob`.
-final class DeleteModelDeploymentMonitoringJobRequest
-    extends protobuf.ProtoMessage {
+final class DeleteModelDeploymentMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteModelDeploymentMonitoringJobRequest';
 
@@ -51963,8 +51903,7 @@ final class DeleteModelDeploymentMonitoringJobRequest
 
 /// Request message for
 /// `JobService.PauseModelDeploymentMonitoringJob`.
-final class PauseModelDeploymentMonitoringJobRequest
-    extends protobuf.ProtoMessage {
+final class PauseModelDeploymentMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PauseModelDeploymentMonitoringJobRequest';
 
@@ -51992,8 +51931,7 @@ final class PauseModelDeploymentMonitoringJobRequest
 
 /// Request message for
 /// `JobService.ResumeModelDeploymentMonitoringJob`.
-final class ResumeModelDeploymentMonitoringJobRequest
-    extends protobuf.ProtoMessage {
+final class ResumeModelDeploymentMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResumeModelDeploymentMonitoringJobRequest';
 
@@ -52022,7 +51960,7 @@ final class ResumeModelDeploymentMonitoringJobRequest
 /// Runtime operation information for
 /// `JobService.UpdateModelDeploymentMonitoringJob`.
 final class UpdateModelDeploymentMonitoringJobOperationMetadata
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateModelDeploymentMonitoringJobOperationMetadata';
 
@@ -52052,7 +51990,7 @@ final class UpdateModelDeploymentMonitoringJobOperationMetadata
 
 /// A subgraph of the overall lineage graph. Event edges connect Artifact and
 /// Execution nodes.
-final class LineageSubgraph extends protobuf.ProtoMessage {
+final class LineageSubgraph extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.LineageSubgraph';
 
@@ -52091,7 +52029,7 @@ final class LineageSubgraph extends protobuf.ProtoMessage {
 }
 
 /// Request message for ComputeTokens RPC call.
-final class ComputeTokensRequest extends protobuf.ProtoMessage {
+final class ComputeTokensRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ComputeTokensRequest';
 
@@ -52148,7 +52086,7 @@ final class ComputeTokensRequest extends protobuf.ProtoMessage {
 }
 
 /// Tokens info with a list of tokens and the corresponding list of token ids.
-final class TokensInfo extends protobuf.ProtoMessage {
+final class TokensInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TokensInfo';
 
@@ -52185,7 +52123,7 @@ final class TokensInfo extends protobuf.ProtoMessage {
 }
 
 /// Response message for ComputeTokens RPC call.
-final class ComputeTokensResponse extends protobuf.ProtoMessage {
+final class ComputeTokensResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ComputeTokensResponse';
 
@@ -52213,7 +52151,7 @@ final class ComputeTokensResponse extends protobuf.ProtoMessage {
 }
 
 /// Specification of a single machine.
-final class MachineSpec extends protobuf.ProtoMessage {
+final class MachineSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MachineSpec';
 
@@ -52323,7 +52261,7 @@ final class MachineSpec extends protobuf.ProtoMessage {
 
 /// A description of resources that are dedicated to a DeployedModel or
 /// DeployedIndex, and that need a higher degree of manual configuration.
-final class DedicatedResources extends protobuf.ProtoMessage {
+final class DedicatedResources extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DedicatedResources';
 
@@ -52475,7 +52413,7 @@ final class DedicatedResources extends protobuf.ProtoMessage {
 }
 
 /// Specification for scale-to-zero feature.
-final class DedicatedResources_ScaleToZeroSpec extends protobuf.ProtoMessage {
+final class DedicatedResources_ScaleToZeroSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DedicatedResources.ScaleToZeroSpec';
 
@@ -52522,7 +52460,7 @@ final class DedicatedResources_ScaleToZeroSpec extends protobuf.ProtoMessage {
 /// A description of resources that to large degree are decided by Vertex AI,
 /// and require only a modest additional configuration.
 /// Each Model supporting these resources documents its specific guidelines.
-final class AutomaticResources extends protobuf.ProtoMessage {
+final class AutomaticResources extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AutomaticResources';
 
@@ -52571,7 +52509,7 @@ final class AutomaticResources extends protobuf.ProtoMessage {
 
 /// A description of resources that are used for performing batch operations, are
 /// dedicated to a Model, and need manual configuration.
-final class BatchDedicatedResources extends protobuf.ProtoMessage {
+final class BatchDedicatedResources extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchDedicatedResources';
 
@@ -52635,7 +52573,7 @@ final class BatchDedicatedResources extends protobuf.ProtoMessage {
 }
 
 /// Statistics information about resource consumption.
-final class ResourcesConsumed extends protobuf.ProtoMessage {
+final class ResourcesConsumed extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResourcesConsumed';
 
@@ -52662,7 +52600,7 @@ final class ResourcesConsumed extends protobuf.ProtoMessage {
 }
 
 /// Represents the spec of disk options.
-final class DiskSpec extends protobuf.ProtoMessage {
+final class DiskSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DiskSpec';
 
@@ -52701,7 +52639,7 @@ final class DiskSpec extends protobuf.ProtoMessage {
 
 /// Represents the spec of [persistent
 /// disk][https://cloud.google.com/compute/docs/disks/persistent-disks] options.
-final class PersistentDiskSpec extends protobuf.ProtoMessage {
+final class PersistentDiskSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PersistentDiskSpec';
 
@@ -52738,7 +52676,7 @@ final class PersistentDiskSpec extends protobuf.ProtoMessage {
 }
 
 /// Represents a mount configuration for Network File System (NFS) to mount.
-final class NfsMount extends protobuf.ProtoMessage {
+final class NfsMount extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NfsMount';
 
@@ -52780,7 +52718,7 @@ final class NfsMount extends protobuf.ProtoMessage {
 /// The metric specification that defines the target resource utilization
 /// (CPU utilization, accelerator's duty cycle, and so on) for calculating the
 /// desired replica count.
-final class AutoscalingMetricSpec extends protobuf.ProtoMessage {
+final class AutoscalingMetricSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AutoscalingMetricSpec';
 
@@ -52836,7 +52774,7 @@ final class AutoscalingMetricSpec extends protobuf.ProtoMessage {
 /// A set of Shielded Instance options.
 /// See [Images using supported Shielded VM
 /// features](https://cloud.google.com/compute/docs/instances/modifying-shielded-vm).
-final class ShieldedVmConfig extends protobuf.ProtoMessage {
+final class ShieldedVmConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ShieldedVmConfig';
 
@@ -52868,7 +52806,7 @@ final class ShieldedVmConfig extends protobuf.ProtoMessage {
 
 /// FlexStart is used to schedule the deployment workload on DWS resource. It
 /// contains the max duration of the deployment.
-final class FlexStart extends protobuf.ProtoMessage {
+final class FlexStart extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FlexStart';
 
@@ -52897,7 +52835,7 @@ final class FlexStart extends protobuf.ProtoMessage {
 }
 
 /// Manual batch tuning parameters.
-final class ManualBatchTuningParameters extends protobuf.ProtoMessage {
+final class ManualBatchTuningParameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ManualBatchTuningParameters';
 
@@ -52927,7 +52865,7 @@ final class ManualBatchTuningParameters extends protobuf.ProtoMessage {
 
 /// The request message for
 /// `MatchService.FindNeighbors`.
-final class FindNeighborsRequest extends protobuf.ProtoMessage {
+final class FindNeighborsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FindNeighborsRequest';
 
@@ -52995,7 +52933,7 @@ final class FindNeighborsRequest extends protobuf.ProtoMessage {
 
 /// A query to find a number of the nearest neighbors (most similar vectors)
 /// of a vector.
-final class FindNeighborsRequest_Query extends protobuf.ProtoMessage {
+final class FindNeighborsRequest_Query extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FindNeighborsRequest.Query';
 
@@ -53080,7 +53018,7 @@ final class FindNeighborsRequest_Query extends protobuf.ProtoMessage {
 }
 
 /// Parameters for RRF algorithm that combines search results.
-final class FindNeighborsRequest_Query_Rrf extends protobuf.ProtoMessage {
+final class FindNeighborsRequest_Query_Rrf extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FindNeighborsRequest.Query.RRF';
 
@@ -53107,7 +53045,7 @@ final class FindNeighborsRequest_Query_Rrf extends protobuf.ProtoMessage {
 
 /// The response message for
 /// `MatchService.FindNeighbors`.
-final class FindNeighborsResponse extends protobuf.ProtoMessage {
+final class FindNeighborsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FindNeighborsResponse';
 
@@ -53138,7 +53076,7 @@ final class FindNeighborsResponse extends protobuf.ProtoMessage {
 }
 
 /// A neighbor of the query vector.
-final class FindNeighborsResponse_Neighbor extends protobuf.ProtoMessage {
+final class FindNeighborsResponse_Neighbor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FindNeighborsResponse.Neighbor';
 
@@ -53186,8 +53124,7 @@ final class FindNeighborsResponse_Neighbor extends protobuf.ProtoMessage {
 }
 
 /// Nearest neighbors for one query.
-final class FindNeighborsResponse_NearestNeighbors
-    extends protobuf.ProtoMessage {
+final class FindNeighborsResponse_NearestNeighbors extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FindNeighborsResponse.NearestNeighbors';
 
@@ -53229,7 +53166,7 @@ final class FindNeighborsResponse_NearestNeighbors
 
 /// The request message for
 /// `MatchService.ReadIndexDatapoints`.
-final class ReadIndexDatapointsRequest extends protobuf.ProtoMessage {
+final class ReadIndexDatapointsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadIndexDatapointsRequest';
 
@@ -53276,7 +53213,7 @@ final class ReadIndexDatapointsRequest extends protobuf.ProtoMessage {
 
 /// The response message for
 /// `MatchService.ReadIndexDatapoints`.
-final class ReadIndexDatapointsResponse extends protobuf.ProtoMessage {
+final class ReadIndexDatapointsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadIndexDatapointsResponse';
 
@@ -53303,7 +53240,7 @@ final class ReadIndexDatapointsResponse extends protobuf.ProtoMessage {
 }
 
 /// A memory.
-final class Memory extends protobuf.ProtoMessage {
+final class Memory extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Memory';
 
@@ -53392,7 +53329,7 @@ final class Memory extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.CreateMemory`.
-final class CreateMemoryRequest extends protobuf.ProtoMessage {
+final class CreateMemoryRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateMemoryRequest';
 
@@ -53429,7 +53366,7 @@ final class CreateMemoryRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `MemoryBankService.CreateMemory`
 /// operation.
-final class CreateMemoryOperationMetadata extends protobuf.ProtoMessage {
+final class CreateMemoryOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateMemoryOperationMetadata';
 
@@ -53458,7 +53395,7 @@ final class CreateMemoryOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.GetMemory`.
-final class GetMemoryRequest extends protobuf.ProtoMessage {
+final class GetMemoryRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetMemoryRequest';
 
@@ -53484,7 +53421,7 @@ final class GetMemoryRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.UpdateMemory`.
-final class UpdateMemoryRequest extends protobuf.ProtoMessage {
+final class UpdateMemoryRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateMemoryRequest';
 
@@ -53524,7 +53461,7 @@ final class UpdateMemoryRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `MemoryBankService.UpdateMemory`
 /// operation.
-final class UpdateMemoryOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateMemoryOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateMemoryOperationMetadata';
 
@@ -53553,7 +53490,7 @@ final class UpdateMemoryOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.ListMemories`.
-final class ListMemoriesRequest extends protobuf.ProtoMessage {
+final class ListMemoriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListMemoriesRequest';
 
@@ -53612,7 +53549,7 @@ final class ListMemoriesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MemoryBankService.ListMemories`.
-final class ListMemoriesResponse extends protobuf.ProtoMessage {
+final class ListMemoriesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListMemoriesResponse';
 
@@ -53649,7 +53586,7 @@ final class ListMemoriesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.DeleteMemory`.
-final class DeleteMemoryRequest extends protobuf.ProtoMessage {
+final class DeleteMemoryRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteMemoryRequest';
 
@@ -53676,7 +53613,7 @@ final class DeleteMemoryRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `MemoryBankService.DeleteMemory`
 /// operation.
-final class DeleteMemoryOperationMetadata extends protobuf.ProtoMessage {
+final class DeleteMemoryOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteMemoryOperationMetadata';
 
@@ -53705,7 +53642,7 @@ final class DeleteMemoryOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.GenerateMemories`.
-final class GenerateMemoriesRequest extends protobuf.ProtoMessage {
+final class GenerateMemoriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesRequest';
 
@@ -53795,8 +53732,7 @@ final class GenerateMemoriesRequest extends protobuf.ProtoMessage {
 /// Defines an Agent Engine Session from which to generate the memories. If
 /// `scope` is not provided, the scope will be extracted from the Session
 /// (i.e. {"user_id": sesison.user_id}).
-final class GenerateMemoriesRequest_VertexSessionSource
-    extends protobuf.ProtoMessage {
+final class GenerateMemoriesRequest_VertexSessionSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesRequest.VertexSessionSource';
 
@@ -53843,8 +53779,7 @@ final class GenerateMemoriesRequest_VertexSessionSource
 }
 
 /// Defines a direct source of content from which to generate the memories.
-final class GenerateMemoriesRequest_DirectContentsSource
-    extends protobuf.ProtoMessage {
+final class GenerateMemoriesRequest_DirectContentsSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesRequest.DirectContentsSource';
 
@@ -53875,7 +53810,7 @@ final class GenerateMemoriesRequest_DirectContentsSource
 
 /// A single piece of conversation from which to generate memories.
 final class GenerateMemoriesRequest_DirectContentsSource_Event
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesRequest.DirectContentsSource.Event';
 
@@ -53900,8 +53835,7 @@ final class GenerateMemoriesRequest_DirectContentsSource_Event
 
 /// Defines a direct source of memories that should be uploaded to Memory Bank
 /// with consolidation.
-final class GenerateMemoriesRequest_DirectMemoriesSource
-    extends protobuf.ProtoMessage {
+final class GenerateMemoriesRequest_DirectMemoriesSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesRequest.DirectMemoriesSource';
 
@@ -53933,7 +53867,7 @@ final class GenerateMemoriesRequest_DirectMemoriesSource
 
 /// A direct memory to upload to Memory Bank.
 final class GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesRequest.DirectMemoriesSource.DirectMemory';
 
@@ -53962,7 +53896,7 @@ final class GenerateMemoriesRequest_DirectMemoriesSource_DirectMemory
 
 /// Response message for
 /// `MemoryBankService.GenerateMemories`.
-final class GenerateMemoriesResponse extends protobuf.ProtoMessage {
+final class GenerateMemoriesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesResponse';
 
@@ -53993,8 +53927,7 @@ final class GenerateMemoriesResponse extends protobuf.ProtoMessage {
 }
 
 /// A memory generated by the operation.
-final class GenerateMemoriesResponse_GeneratedMemory
-    extends protobuf.ProtoMessage {
+final class GenerateMemoriesResponse_GeneratedMemory extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesResponse.GeneratedMemory';
 
@@ -54035,8 +53968,7 @@ final class GenerateMemoriesResponse_GeneratedMemory
 }
 
 /// Actions that can be performed on a Memory.
-final class GenerateMemoriesResponse_GeneratedMemory_Action
-    extends protobuf.ProtoEnum {
+final class GenerateMemoriesResponse_GeneratedMemory_Action extends ProtoEnum {
   /// Action is unspecified.
   static const actionUnspecified =
       GenerateMemoriesResponse_GeneratedMemory_Action('ACTION_UNSPECIFIED');
@@ -54075,7 +54007,7 @@ final class GenerateMemoriesResponse_GeneratedMemory_Action
 /// Details of
 /// `MemoryBankService.GenerateMemories`
 /// operation.
-final class GenerateMemoriesOperationMetadata extends protobuf.ProtoMessage {
+final class GenerateMemoriesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateMemoriesOperationMetadata';
 
@@ -54105,7 +54037,7 @@ final class GenerateMemoriesOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MemoryBankService.RetrieveMemories`.
-final class RetrieveMemoriesRequest extends protobuf.ProtoMessage {
+final class RetrieveMemoriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveMemoriesRequest';
 
@@ -54166,7 +54098,7 @@ final class RetrieveMemoriesRequest extends protobuf.ProtoMessage {
 
 /// Parameters for semantic similarity search based retrieval.
 final class RetrieveMemoriesRequest_SimilaritySearchParams
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveMemoriesRequest.SimilaritySearchParams';
 
@@ -54208,8 +54140,7 @@ final class RetrieveMemoriesRequest_SimilaritySearchParams
 }
 
 /// Parameters for simple (non-similarity search) retrieval.
-final class RetrieveMemoriesRequest_SimpleRetrievalParams
-    extends protobuf.ProtoMessage {
+final class RetrieveMemoriesRequest_SimpleRetrievalParams extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveMemoriesRequest.SimpleRetrievalParams';
 
@@ -54250,7 +54181,7 @@ final class RetrieveMemoriesRequest_SimpleRetrievalParams
 
 /// Response message for
 /// `MemoryBankService.RetrieveMemories`.
-final class RetrieveMemoriesResponse extends protobuf.ProtoMessage {
+final class RetrieveMemoriesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveMemoriesResponse';
 
@@ -54293,8 +54224,7 @@ final class RetrieveMemoriesResponse extends protobuf.ProtoMessage {
 }
 
 /// A retrieved memory.
-final class RetrieveMemoriesResponse_RetrievedMemory
-    extends protobuf.ProtoMessage {
+final class RetrieveMemoriesResponse_RetrievedMemory extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveMemoriesResponse.RetrievedMemory';
 
@@ -54330,7 +54260,7 @@ final class RetrieveMemoriesResponse_RetrievedMemory
 }
 
 /// Instance of a general MetadataSchema.
-final class MetadataSchema extends protobuf.ProtoMessage {
+final class MetadataSchema extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetadataSchema';
 
@@ -54408,7 +54338,7 @@ final class MetadataSchema extends protobuf.ProtoMessage {
 }
 
 /// Describes the type of the MetadataSchema.
-final class MetadataSchema_MetadataSchemaType extends protobuf.ProtoEnum {
+final class MetadataSchema_MetadataSchemaType extends ProtoEnum {
   /// Unspecified type for the MetadataSchema.
   static const metadataSchemaTypeUnspecified =
       MetadataSchema_MetadataSchemaType('METADATA_SCHEMA_TYPE_UNSPECIFIED');
@@ -54442,7 +54372,7 @@ final class MetadataSchema_MetadataSchemaType extends protobuf.ProtoEnum {
 
 /// Request message for
 /// `MetadataService.CreateMetadataStore`.
-final class CreateMetadataStoreRequest extends protobuf.ProtoMessage {
+final class CreateMetadataStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateMetadataStoreRequest';
 
@@ -54496,7 +54426,7 @@ final class CreateMetadataStoreRequest extends protobuf.ProtoMessage {
 
 /// Details of operations that perform
 /// `MetadataService.CreateMetadataStore`.
-final class CreateMetadataStoreOperationMetadata extends protobuf.ProtoMessage {
+final class CreateMetadataStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateMetadataStoreOperationMetadata';
 
@@ -54526,7 +54456,7 @@ final class CreateMetadataStoreOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.GetMetadataStore`.
-final class GetMetadataStoreRequest extends protobuf.ProtoMessage {
+final class GetMetadataStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetMetadataStoreRequest';
 
@@ -54552,7 +54482,7 @@ final class GetMetadataStoreRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.ListMetadataStores`.
-final class ListMetadataStoresRequest extends protobuf.ProtoMessage {
+final class ListMetadataStoresRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListMetadataStoresRequest';
 
@@ -54608,7 +54538,7 @@ final class ListMetadataStoresRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.ListMetadataStores`.
-final class ListMetadataStoresResponse extends protobuf.ProtoMessage {
+final class ListMetadataStoresResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListMetadataStoresResponse';
 
@@ -54650,7 +54580,7 @@ final class ListMetadataStoresResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.DeleteMetadataStore`.
-final class DeleteMetadataStoreRequest extends protobuf.ProtoMessage {
+final class DeleteMetadataStoreRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteMetadataStoreRequest';
 
@@ -54683,7 +54613,7 @@ final class DeleteMetadataStoreRequest extends protobuf.ProtoMessage {
 
 /// Details of operations that perform
 /// `MetadataService.DeleteMetadataStore`.
-final class DeleteMetadataStoreOperationMetadata extends protobuf.ProtoMessage {
+final class DeleteMetadataStoreOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteMetadataStoreOperationMetadata';
 
@@ -54713,7 +54643,7 @@ final class DeleteMetadataStoreOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.CreateArtifact`.
-final class CreateArtifactRequest extends protobuf.ProtoMessage {
+final class CreateArtifactRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateArtifactRequest';
 
@@ -54764,7 +54694,7 @@ final class CreateArtifactRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.GetArtifact`.
-final class GetArtifactRequest extends protobuf.ProtoMessage {
+final class GetArtifactRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetArtifactRequest';
 
@@ -54790,7 +54720,7 @@ final class GetArtifactRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.ListArtifacts`.
-final class ListArtifactsRequest extends protobuf.ProtoMessage {
+final class ListArtifactsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListArtifactsRequest';
 
@@ -54894,7 +54824,7 @@ final class ListArtifactsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.ListArtifacts`.
-final class ListArtifactsResponse extends protobuf.ProtoMessage {
+final class ListArtifactsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListArtifactsResponse';
 
@@ -54932,7 +54862,7 @@ final class ListArtifactsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.UpdateArtifact`.
-final class UpdateArtifactRequest extends protobuf.ProtoMessage {
+final class UpdateArtifactRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateArtifactRequest';
 
@@ -54983,7 +54913,7 @@ final class UpdateArtifactRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.DeleteArtifact`.
-final class DeleteArtifactRequest extends protobuf.ProtoMessage {
+final class DeleteArtifactRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteArtifactRequest';
 
@@ -55015,7 +54945,7 @@ final class DeleteArtifactRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.PurgeArtifacts`.
-final class PurgeArtifactsRequest extends protobuf.ProtoMessage {
+final class PurgeArtifactsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeArtifactsRequest';
 
@@ -55066,7 +54996,7 @@ final class PurgeArtifactsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.PurgeArtifacts`.
-final class PurgeArtifactsResponse extends protobuf.ProtoMessage {
+final class PurgeArtifactsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeArtifactsResponse';
 
@@ -55103,7 +55033,7 @@ final class PurgeArtifactsResponse extends protobuf.ProtoMessage {
 
 /// Details of operations that perform
 /// `MetadataService.PurgeArtifacts`.
-final class PurgeArtifactsMetadata extends protobuf.ProtoMessage {
+final class PurgeArtifactsMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeArtifactsMetadata';
 
@@ -55131,7 +55061,7 @@ final class PurgeArtifactsMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.CreateContext`.
-final class CreateContextRequest extends protobuf.ProtoMessage {
+final class CreateContextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateContextRequest';
 
@@ -55181,7 +55111,7 @@ final class CreateContextRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.GetContext`.
-final class GetContextRequest extends protobuf.ProtoMessage {
+final class GetContextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetContextRequest';
 
@@ -55207,7 +55137,7 @@ final class GetContextRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.ListContexts`
-final class ListContextsRequest extends protobuf.ProtoMessage {
+final class ListContextsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListContextsRequest';
 
@@ -55315,7 +55245,7 @@ final class ListContextsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.ListContexts`.
-final class ListContextsResponse extends protobuf.ProtoMessage {
+final class ListContextsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListContextsResponse';
 
@@ -55352,7 +55282,7 @@ final class ListContextsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.UpdateContext`.
-final class UpdateContextRequest extends protobuf.ProtoMessage {
+final class UpdateContextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateContextRequest';
 
@@ -55402,7 +55332,7 @@ final class UpdateContextRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.DeleteContext`.
-final class DeleteContextRequest extends protobuf.ProtoMessage {
+final class DeleteContextRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteContextRequest';
 
@@ -55446,7 +55376,7 @@ final class DeleteContextRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.PurgeContexts`.
-final class PurgeContextsRequest extends protobuf.ProtoMessage {
+final class PurgeContextsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeContextsRequest';
 
@@ -55497,7 +55427,7 @@ final class PurgeContextsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.PurgeContexts`.
-final class PurgeContextsResponse extends protobuf.ProtoMessage {
+final class PurgeContextsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeContextsResponse';
 
@@ -55534,7 +55464,7 @@ final class PurgeContextsResponse extends protobuf.ProtoMessage {
 
 /// Details of operations that perform
 /// `MetadataService.PurgeContexts`.
-final class PurgeContextsMetadata extends protobuf.ProtoMessage {
+final class PurgeContextsMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeContextsMetadata';
 
@@ -55562,8 +55492,7 @@ final class PurgeContextsMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.AddContextArtifactsAndExecutions`.
-final class AddContextArtifactsAndExecutionsRequest
-    extends protobuf.ProtoMessage {
+final class AddContextArtifactsAndExecutionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddContextArtifactsAndExecutionsRequest';
 
@@ -55615,8 +55544,7 @@ final class AddContextArtifactsAndExecutionsRequest
 
 /// Response message for
 /// `MetadataService.AddContextArtifactsAndExecutions`.
-final class AddContextArtifactsAndExecutionsResponse
-    extends protobuf.ProtoMessage {
+final class AddContextArtifactsAndExecutionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddContextArtifactsAndExecutionsResponse';
 
@@ -55635,7 +55563,7 @@ final class AddContextArtifactsAndExecutionsResponse
 
 /// Request message for
 /// `MetadataService.AddContextChildren`.
-final class AddContextChildrenRequest extends protobuf.ProtoMessage {
+final class AddContextChildrenRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddContextChildrenRequest';
 
@@ -55674,7 +55602,7 @@ final class AddContextChildrenRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.AddContextChildren`.
-final class AddContextChildrenResponse extends protobuf.ProtoMessage {
+final class AddContextChildrenResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddContextChildrenResponse';
 
@@ -55692,7 +55620,7 @@ final class AddContextChildrenResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.DeleteContextChildrenRequest`.
-final class RemoveContextChildrenRequest extends protobuf.ProtoMessage {
+final class RemoveContextChildrenRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RemoveContextChildrenRequest';
 
@@ -55731,7 +55659,7 @@ final class RemoveContextChildrenRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.RemoveContextChildren`.
-final class RemoveContextChildrenResponse extends protobuf.ProtoMessage {
+final class RemoveContextChildrenResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RemoveContextChildrenResponse';
 
@@ -55749,7 +55677,7 @@ final class RemoveContextChildrenResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.QueryContextLineageSubgraph`.
-final class QueryContextLineageSubgraphRequest extends protobuf.ProtoMessage {
+final class QueryContextLineageSubgraphRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryContextLineageSubgraphRequest';
 
@@ -55782,7 +55710,7 @@ final class QueryContextLineageSubgraphRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.CreateExecution`.
-final class CreateExecutionRequest extends protobuf.ProtoMessage {
+final class CreateExecutionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateExecutionRequest';
 
@@ -55834,7 +55762,7 @@ final class CreateExecutionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.GetExecution`.
-final class GetExecutionRequest extends protobuf.ProtoMessage {
+final class GetExecutionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetExecutionRequest';
 
@@ -55860,7 +55788,7 @@ final class GetExecutionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.ListExecutions`.
-final class ListExecutionsRequest extends protobuf.ProtoMessage {
+final class ListExecutionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListExecutionsRequest';
 
@@ -55964,7 +55892,7 @@ final class ListExecutionsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.ListExecutions`.
-final class ListExecutionsResponse extends protobuf.ProtoMessage {
+final class ListExecutionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListExecutionsResponse';
 
@@ -56002,7 +55930,7 @@ final class ListExecutionsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.UpdateExecution`.
-final class UpdateExecutionRequest extends protobuf.ProtoMessage {
+final class UpdateExecutionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExecutionRequest';
 
@@ -56053,7 +55981,7 @@ final class UpdateExecutionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.DeleteExecution`.
-final class DeleteExecutionRequest extends protobuf.ProtoMessage {
+final class DeleteExecutionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteExecutionRequest';
 
@@ -56088,7 +56016,7 @@ final class DeleteExecutionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.PurgeExecutions`.
-final class PurgeExecutionsRequest extends protobuf.ProtoMessage {
+final class PurgeExecutionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeExecutionsRequest';
 
@@ -56139,7 +56067,7 @@ final class PurgeExecutionsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.PurgeExecutions`.
-final class PurgeExecutionsResponse extends protobuf.ProtoMessage {
+final class PurgeExecutionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeExecutionsResponse';
 
@@ -56177,7 +56105,7 @@ final class PurgeExecutionsResponse extends protobuf.ProtoMessage {
 
 /// Details of operations that perform
 /// `MetadataService.PurgeExecutions`.
-final class PurgeExecutionsMetadata extends protobuf.ProtoMessage {
+final class PurgeExecutionsMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PurgeExecutionsMetadata';
 
@@ -56205,7 +56133,7 @@ final class PurgeExecutionsMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.AddExecutionEvents`.
-final class AddExecutionEventsRequest extends protobuf.ProtoMessage {
+final class AddExecutionEventsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddExecutionEventsRequest';
 
@@ -56242,7 +56170,7 @@ final class AddExecutionEventsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.AddExecutionEvents`.
-final class AddExecutionEventsResponse extends protobuf.ProtoMessage {
+final class AddExecutionEventsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddExecutionEventsResponse';
 
@@ -56260,8 +56188,7 @@ final class AddExecutionEventsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.QueryExecutionInputsAndOutputs`.
-final class QueryExecutionInputsAndOutputsRequest
-    extends protobuf.ProtoMessage {
+final class QueryExecutionInputsAndOutputsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryExecutionInputsAndOutputsRequest';
 
@@ -56290,7 +56217,7 @@ final class QueryExecutionInputsAndOutputsRequest
 
 /// Request message for
 /// `MetadataService.CreateMetadataSchema`.
-final class CreateMetadataSchemaRequest extends protobuf.ProtoMessage {
+final class CreateMetadataSchemaRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateMetadataSchemaRequest';
 
@@ -56344,7 +56271,7 @@ final class CreateMetadataSchemaRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.GetMetadataSchema`.
-final class GetMetadataSchemaRequest extends protobuf.ProtoMessage {
+final class GetMetadataSchemaRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetMetadataSchemaRequest';
 
@@ -56370,7 +56297,7 @@ final class GetMetadataSchemaRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.ListMetadataSchemas`.
-final class ListMetadataSchemasRequest extends protobuf.ProtoMessage {
+final class ListMetadataSchemasRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListMetadataSchemasRequest';
 
@@ -56433,7 +56360,7 @@ final class ListMetadataSchemasRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MetadataService.ListMetadataSchemas`.
-final class ListMetadataSchemasResponse extends protobuf.ProtoMessage {
+final class ListMetadataSchemasResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListMetadataSchemasResponse';
 
@@ -56478,7 +56405,7 @@ final class ListMetadataSchemasResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MetadataService.QueryArtifactLineageSubgraph`.
-final class QueryArtifactLineageSubgraphRequest extends protobuf.ProtoMessage {
+final class QueryArtifactLineageSubgraphRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryArtifactLineageSubgraphRequest';
 
@@ -56559,7 +56486,7 @@ final class QueryArtifactLineageSubgraphRequest extends protobuf.ProtoMessage {
 
 /// Instance of a metadata store. Contains a set of metadata that can be
 /// queried.
-final class MetadataStore extends protobuf.ProtoMessage {
+final class MetadataStore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetadataStore';
 
@@ -56628,7 +56555,7 @@ final class MetadataStore extends protobuf.ProtoMessage {
 }
 
 /// Represents state information for a MetadataStore.
-final class MetadataStore_MetadataStoreState extends protobuf.ProtoMessage {
+final class MetadataStore_MetadataStoreState extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetadataStore.MetadataStoreState';
 
@@ -56658,7 +56585,7 @@ final class MetadataStore_MetadataStoreState extends protobuf.ProtoMessage {
 }
 
 /// Represents Dataplex integration settings.
-final class MetadataStore_DataplexConfig extends protobuf.ProtoMessage {
+final class MetadataStore_DataplexConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MetadataStore.DataplexConfig';
 
@@ -56691,7 +56618,7 @@ final class MetadataStore_DataplexConfig extends protobuf.ProtoMessage {
 
 /// Represents one resource that exists in automl.googleapis.com,
 /// datalabeling.googleapis.com or ml.googleapis.com.
-final class MigratableResource extends protobuf.ProtoMessage {
+final class MigratableResource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigratableResource';
 
@@ -56769,8 +56696,7 @@ final class MigratableResource extends protobuf.ProtoMessage {
 }
 
 /// Represents one model Version in ml.googleapis.com.
-final class MigratableResource_MlEngineModelVersion
-    extends protobuf.ProtoMessage {
+final class MigratableResource_MlEngineModelVersion extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigratableResource.MlEngineModelVersion';
 
@@ -56814,7 +56740,7 @@ final class MigratableResource_MlEngineModelVersion
 }
 
 /// Represents one Model in automl.googleapis.com.
-final class MigratableResource_AutomlModel extends protobuf.ProtoMessage {
+final class MigratableResource_AutomlModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigratableResource.AutomlModel';
 
@@ -56852,7 +56778,7 @@ final class MigratableResource_AutomlModel extends protobuf.ProtoMessage {
 }
 
 /// Represents one Dataset in automl.googleapis.com.
-final class MigratableResource_AutomlDataset extends protobuf.ProtoMessage {
+final class MigratableResource_AutomlDataset extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigratableResource.AutomlDataset';
 
@@ -56894,8 +56820,7 @@ final class MigratableResource_AutomlDataset extends protobuf.ProtoMessage {
 }
 
 /// Represents one Dataset in datalabeling.googleapis.com.
-final class MigratableResource_DataLabelingDataset
-    extends protobuf.ProtoMessage {
+final class MigratableResource_DataLabelingDataset extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigratableResource.DataLabelingDataset';
 
@@ -56957,7 +56882,7 @@ final class MigratableResource_DataLabelingDataset
 
 /// Represents one AnnotatedDataset in datalabeling.googleapis.com.
 final class MigratableResource_DataLabelingDataset_DataLabelingAnnotatedDataset
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigratableResource.DataLabelingDataset.DataLabelingAnnotatedDataset';
 
@@ -57000,7 +56925,7 @@ final class MigratableResource_DataLabelingDataset_DataLabelingAnnotatedDataset
 
 /// Request message for
 /// `MigrationService.SearchMigratableResources`.
-final class SearchMigratableResourcesRequest extends protobuf.ProtoMessage {
+final class SearchMigratableResourcesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchMigratableResourcesRequest';
 
@@ -57070,7 +56995,7 @@ final class SearchMigratableResourcesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `MigrationService.SearchMigratableResources`.
-final class SearchMigratableResourcesResponse extends protobuf.ProtoMessage {
+final class SearchMigratableResourcesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchMigratableResourcesResponse';
 
@@ -57116,7 +57041,7 @@ final class SearchMigratableResourcesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `MigrationService.BatchMigrateResources`.
-final class BatchMigrateResourcesRequest extends protobuf.ProtoMessage {
+final class BatchMigrateResourcesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchMigrateResourcesRequest';
 
@@ -57160,7 +57085,7 @@ final class BatchMigrateResourcesRequest extends protobuf.ProtoMessage {
 
 /// Config of migrating one resource from automl.googleapis.com,
 /// datalabeling.googleapis.com and ml.googleapis.com to Vertex AI.
-final class MigrateResourceRequest extends protobuf.ProtoMessage {
+final class MigrateResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceRequest';
 
@@ -57230,7 +57155,7 @@ final class MigrateResourceRequest extends protobuf.ProtoMessage {
 
 /// Config for migrating version in ml.googleapis.com to Vertex AI's Model.
 final class MigrateResourceRequest_MigrateMlEngineModelVersionConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceRequest.MigrateMlEngineModelVersionConfig';
 
@@ -57288,7 +57213,7 @@ final class MigrateResourceRequest_MigrateMlEngineModelVersionConfig
 
 /// Config for migrating Model in automl.googleapis.com to Vertex AI's Model.
 final class MigrateResourceRequest_MigrateAutomlModelConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceRequest.MigrateAutomlModelConfig';
 
@@ -57332,7 +57257,7 @@ final class MigrateResourceRequest_MigrateAutomlModelConfig
 /// Config for migrating Dataset in automl.googleapis.com to Vertex AI's
 /// Dataset.
 final class MigrateResourceRequest_MigrateAutomlDatasetConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceRequest.MigrateAutomlDatasetConfig';
 
@@ -57376,7 +57301,7 @@ final class MigrateResourceRequest_MigrateAutomlDatasetConfig
 /// Config for migrating Dataset in datalabeling.googleapis.com to Vertex
 /// AI's Dataset.
 final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceRequest.MigrateDataLabelingDatasetConfig';
 
@@ -57441,7 +57366,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig
 /// Config for migrating AnnotatedDataset in datalabeling.googleapis.com to
 /// Vertex AI's SavedQuery.
 final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig_MigrateDataLabelingAnnotatedDatasetConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceRequest.MigrateDataLabelingDatasetConfig.MigrateDataLabelingAnnotatedDatasetConfig';
 
@@ -57473,7 +57398,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig_MigrateDataL
 
 /// Response message for
 /// `MigrationService.BatchMigrateResources`.
-final class BatchMigrateResourcesResponse extends protobuf.ProtoMessage {
+final class BatchMigrateResourcesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchMigrateResourcesResponse';
 
@@ -57504,7 +57429,7 @@ final class BatchMigrateResourcesResponse extends protobuf.ProtoMessage {
 }
 
 /// Describes a successfully migrated resource.
-final class MigrateResourceResponse extends protobuf.ProtoMessage {
+final class MigrateResourceResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MigrateResourceResponse';
 
@@ -57551,8 +57476,7 @@ final class MigrateResourceResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `MigrationService.BatchMigrateResources`.
-final class BatchMigrateResourcesOperationMetadata
-    extends protobuf.ProtoMessage {
+final class BatchMigrateResourcesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchMigrateResourcesOperationMetadata';
 
@@ -57597,7 +57521,7 @@ final class BatchMigrateResourcesOperationMetadata
 /// Represents a partial result in batch migration operation for one
 /// `MigrateResourceRequest`.
 final class BatchMigrateResourcesOperationMetadata_PartialResult
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchMigrateResourcesOperationMetadata.PartialResult';
 
@@ -57649,7 +57573,7 @@ final class BatchMigrateResourcesOperationMetadata_PartialResult
 }
 
 /// A trained machine learning Model.
-final class Model extends protobuf.ProtoMessage {
+final class Model extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Model';
 
@@ -58106,7 +58030,7 @@ final class Model extends protobuf.ProtoMessage {
 
 /// Represents export format supported by the Model.
 /// All formats export to Google Cloud Storage.
-final class Model_ExportFormat extends protobuf.ProtoMessage {
+final class Model_ExportFormat extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Model.ExportFormat';
 
@@ -58165,7 +58089,7 @@ final class Model_ExportFormat extends protobuf.ProtoMessage {
 }
 
 /// The Model content that can be exported.
-final class Model_ExportFormat_ExportableContent extends protobuf.ProtoEnum {
+final class Model_ExportFormat_ExportableContent extends ProtoEnum {
   /// Should not be used.
   static const exportableContentUnspecified =
       Model_ExportFormat_ExportableContent('EXPORTABLE_CONTENT_UNSPECIFIED');
@@ -58198,7 +58122,7 @@ final class Model_ExportFormat_ExportableContent extends protobuf.ProtoEnum {
 }
 
 /// Contains information about the original Model if this Model is a copy.
-final class Model_OriginalModelInfo extends protobuf.ProtoMessage {
+final class Model_OriginalModelInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Model.OriginalModelInfo';
 
@@ -58224,7 +58148,7 @@ final class Model_OriginalModelInfo extends protobuf.ProtoMessage {
 
 /// User input field to specify the base model source. Currently it only
 /// supports specifing the Model Garden models and Genie models.
-final class Model_BaseModelSource extends protobuf.ProtoMessage {
+final class Model_BaseModelSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Model.BaseModelSource';
 
@@ -58258,7 +58182,7 @@ final class Model_BaseModelSource extends protobuf.ProtoMessage {
 }
 
 /// Identifies a type of Model's prediction resources.
-final class Model_DeploymentResourcesType extends protobuf.ProtoEnum {
+final class Model_DeploymentResourcesType extends ProtoEnum {
   /// Should not be used.
   static const deploymentResourcesTypeUnspecified =
       Model_DeploymentResourcesType('DEPLOYMENT_RESOURCES_TYPE_UNSPECIFIED');
@@ -58300,7 +58224,7 @@ final class Model_DeploymentResourcesType extends protobuf.ProtoEnum {
 }
 
 /// Contains information about the Large Model.
-final class LargeModelReference extends protobuf.ProtoMessage {
+final class LargeModelReference extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.LargeModelReference';
 
@@ -58326,7 +58250,7 @@ final class LargeModelReference extends protobuf.ProtoMessage {
 
 /// Contains information about the source of the models generated from Model
 /// Garden.
-final class ModelGardenSource extends protobuf.ProtoMessage {
+final class ModelGardenSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelGardenSource';
 
@@ -58372,7 +58296,7 @@ final class ModelGardenSource extends protobuf.ProtoMessage {
 
 /// Contains information about the source of the models generated from Generative
 /// AI Studio.
-final class GenieSource extends protobuf.ProtoMessage {
+final class GenieSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenieSource';
 
@@ -58398,7 +58322,7 @@ final class GenieSource extends protobuf.ProtoMessage {
 /// `PredictionService.Predict`,
 /// `PredictionService.Explain`
 /// and `BatchPredictionJob`.
-final class PredictSchemata extends protobuf.ProtoMessage {
+final class PredictSchemata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredictSchemata';
 
@@ -58482,7 +58406,7 @@ final class PredictSchemata extends protobuf.ProtoMessage {
 /// Specification of a container for serving predictions. Some fields in this
 /// message correspond to fields in the [Kubernetes Container v1 core
 /// specification](https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#container-v1-core).
-final class ModelContainerSpec extends protobuf.ProtoMessage {
+final class ModelContainerSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelContainerSpec';
 
@@ -58814,7 +58738,7 @@ final class ModelContainerSpec extends protobuf.ProtoMessage {
 }
 
 /// Represents a network port in a container.
-final class Port extends protobuf.ProtoMessage {
+final class Port extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Port';
 
@@ -58840,7 +58764,7 @@ final class Port extends protobuf.ProtoMessage {
 }
 
 /// Detail description of the source information of the model.
-final class ModelSourceInfo extends protobuf.ProtoMessage {
+final class ModelSourceInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelSourceInfo';
 
@@ -58886,7 +58810,7 @@ final class ModelSourceInfo extends protobuf.ProtoMessage {
 /// indicates the source from which the model was accessed or obtained,
 /// whereas the `objective` indicates the overall aim or function of this
 /// model.
-final class ModelSourceInfo_ModelSourceType extends protobuf.ProtoEnum {
+final class ModelSourceInfo_ModelSourceType extends ProtoEnum {
   /// Should not be used.
   static const modelSourceTypeUnspecified = ModelSourceInfo_ModelSourceType(
     'MODEL_SOURCE_TYPE_UNSPECIFIED',
@@ -58931,7 +58855,7 @@ final class ModelSourceInfo_ModelSourceType extends protobuf.ProtoEnum {
 
 /// Probe describes a health check to be performed against a container to
 /// determine whether it is alive or ready to receive traffic.
-final class Probe extends protobuf.ProtoMessage {
+final class Probe extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Probe';
 
@@ -59031,7 +58955,7 @@ final class Probe extends protobuf.ProtoMessage {
 }
 
 /// ExecAction specifies a command to execute.
-final class Probe_ExecAction extends protobuf.ProtoMessage {
+final class Probe_ExecAction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Probe.ExecAction';
 
@@ -59056,7 +58980,7 @@ final class Probe_ExecAction extends protobuf.ProtoMessage {
 }
 
 /// HttpGetAction describes an action based on HTTP Get requests.
-final class Probe_HttpGetAction extends protobuf.ProtoMessage {
+final class Probe_HttpGetAction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Probe.HttpGetAction';
 
@@ -59119,7 +59043,7 @@ final class Probe_HttpGetAction extends protobuf.ProtoMessage {
 }
 
 /// GrpcAction checks the health of a container using a gRPC service.
-final class Probe_GrpcAction extends protobuf.ProtoMessage {
+final class Probe_GrpcAction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Probe.GrpcAction';
 
@@ -59154,7 +59078,7 @@ final class Probe_GrpcAction extends protobuf.ProtoMessage {
 
 /// TcpSocketAction probes the health of a container by opening a TCP socket
 /// connection.
-final class Probe_TcpSocketAction extends protobuf.ProtoMessage {
+final class Probe_TcpSocketAction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Probe.TcpSocketAction';
 
@@ -59186,7 +59110,7 @@ final class Probe_TcpSocketAction extends protobuf.ProtoMessage {
 }
 
 /// HttpHeader describes a custom header to be used in HTTP probes
-final class Probe_HttpHeader extends protobuf.ProtoMessage {
+final class Probe_HttpHeader extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Probe.HttpHeader';
 
@@ -59218,7 +59142,7 @@ final class Probe_HttpHeader extends protobuf.ProtoMessage {
 }
 
 /// Describes the machine learning model version checkpoint.
-final class Checkpoint extends protobuf.ProtoMessage {
+final class Checkpoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Checkpoint';
 
@@ -59261,7 +59185,7 @@ final class Checkpoint extends protobuf.ProtoMessage {
 /// Represents a job that runs periodically to monitor the deployed models in an
 /// endpoint. It will analyze the logged training & prediction data to detect any
 /// abnormal behaviors.
-final class ModelDeploymentMonitoringJob extends protobuf.ProtoMessage {
+final class ModelDeploymentMonitoringJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelDeploymentMonitoringJob';
 
@@ -59550,7 +59474,7 @@ final class ModelDeploymentMonitoringJob extends protobuf.ProtoMessage {
 
 /// All metadata of most recent monitoring pipelines.
 final class ModelDeploymentMonitoringJob_LatestMonitoringPipelineMetadata
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelDeploymentMonitoringJob.LatestMonitoringPipelineMetadata';
 
@@ -59585,7 +59509,7 @@ final class ModelDeploymentMonitoringJob_LatestMonitoringPipelineMetadata
 
 /// The state to Specify the monitoring pipeline.
 final class ModelDeploymentMonitoringJob_MonitoringScheduleState
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Unspecified state.
   static const monitoringScheduleStateUnspecified =
       ModelDeploymentMonitoringJob_MonitoringScheduleState(
@@ -59624,8 +59548,7 @@ final class ModelDeploymentMonitoringJob_MonitoringScheduleState
 
 /// ModelDeploymentMonitoringBigQueryTable specifies the BigQuery table name
 /// as well as some information of the logs stored in this table.
-final class ModelDeploymentMonitoringBigQueryTable
-    extends protobuf.ProtoMessage {
+final class ModelDeploymentMonitoringBigQueryTable extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelDeploymentMonitoringBigQueryTable';
 
@@ -59694,8 +59617,7 @@ final class ModelDeploymentMonitoringBigQueryTable
 }
 
 /// Indicates where does the log come from.
-final class ModelDeploymentMonitoringBigQueryTable_LogSource
-    extends protobuf.ProtoEnum {
+final class ModelDeploymentMonitoringBigQueryTable_LogSource extends ProtoEnum {
   /// Unspecified source.
   static const logSourceUnspecified =
       ModelDeploymentMonitoringBigQueryTable_LogSource(
@@ -59728,8 +59650,7 @@ final class ModelDeploymentMonitoringBigQueryTable_LogSource
 }
 
 /// Indicates what type of traffic does the log belong to.
-final class ModelDeploymentMonitoringBigQueryTable_LogType
-    extends protobuf.ProtoEnum {
+final class ModelDeploymentMonitoringBigQueryTable_LogType extends ProtoEnum {
   /// Unspecified type.
   static const logTypeUnspecified =
       ModelDeploymentMonitoringBigQueryTable_LogType('LOG_TYPE_UNSPECIFIED');
@@ -59761,8 +59682,7 @@ final class ModelDeploymentMonitoringBigQueryTable_LogType
 
 /// ModelDeploymentMonitoringObjectiveConfig contains the pair of
 /// deployed_model_id to ModelMonitoringObjectiveConfig.
-final class ModelDeploymentMonitoringObjectiveConfig
-    extends protobuf.ProtoMessage {
+final class ModelDeploymentMonitoringObjectiveConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelDeploymentMonitoringObjectiveConfig';
 
@@ -59801,8 +59721,7 @@ final class ModelDeploymentMonitoringObjectiveConfig
 }
 
 /// The config for scheduling monitoring job.
-final class ModelDeploymentMonitoringScheduleConfig
-    extends protobuf.ProtoMessage {
+final class ModelDeploymentMonitoringScheduleConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelDeploymentMonitoringScheduleConfig';
 
@@ -59850,7 +59769,7 @@ final class ModelDeploymentMonitoringScheduleConfig
 }
 
 /// Statistics and anomalies generated by Model Monitoring.
-final class ModelMonitoringStatsAnomalies extends protobuf.ProtoMessage {
+final class ModelMonitoringStatsAnomalies extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStatsAnomalies';
 
@@ -59914,7 +59833,7 @@ final class ModelMonitoringStatsAnomalies extends protobuf.ProtoMessage {
 
 /// Historical Stats (and Anomalies) for a specific Feature.
 final class ModelMonitoringStatsAnomalies_FeatureHistoricStatsAnomalies
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStatsAnomalies.FeatureHistoricStatsAnomalies';
 
@@ -59971,7 +59890,7 @@ final class ModelMonitoringStatsAnomalies_FeatureHistoricStatsAnomalies
 
 /// A collection of metrics calculated by comparing Model's predictions on all of
 /// the test data against annotations from the test data.
-final class ModelEvaluation extends protobuf.ProtoMessage {
+final class ModelEvaluation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluation';
 
@@ -60089,7 +60008,7 @@ final class ModelEvaluation extends protobuf.ProtoMessage {
 }
 
 final class ModelEvaluation_ModelEvaluationExplanationSpec
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluation.ModelEvaluationExplanationSpec';
 
@@ -60130,7 +60049,7 @@ final class ModelEvaluation_ModelEvaluationExplanationSpec
 }
 
 /// Configuration for bias detection.
-final class ModelEvaluation_BiasConfig extends protobuf.ProtoMessage {
+final class ModelEvaluation_BiasConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluation.BiasConfig';
 
@@ -60187,7 +60106,7 @@ final class ModelEvaluation_BiasConfig extends protobuf.ProtoMessage {
 
 /// A collection of metrics calculated by comparing Model's predictions on a
 /// slice of the test data against ground truth annotations.
-final class ModelEvaluationSlice extends protobuf.ProtoMessage {
+final class ModelEvaluationSlice extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice';
 
@@ -60266,7 +60185,7 @@ final class ModelEvaluationSlice extends protobuf.ProtoMessage {
 }
 
 /// Definition of a slice.
-final class ModelEvaluationSlice_Slice extends protobuf.ProtoMessage {
+final class ModelEvaluationSlice_Slice extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice.Slice';
 
@@ -60318,7 +60237,7 @@ final class ModelEvaluationSlice_Slice extends protobuf.ProtoMessage {
 }
 
 /// Specification for how the data should be sliced.
-final class ModelEvaluationSlice_Slice_SliceSpec extends protobuf.ProtoMessage {
+final class ModelEvaluationSlice_Slice_SliceSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice.Slice.SliceSpec';
 
@@ -60405,7 +60324,7 @@ final class ModelEvaluationSlice_Slice_SliceSpec extends protobuf.ProtoMessage {
 /// "Canada" in another slice, and zip_code 12345 and country "Mexico" in
 /// another slice, totaling 3 slices.
 final class ModelEvaluationSlice_Slice_SliceSpec_SliceConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice.Slice.SliceSpec.SliceConfig';
 
@@ -60456,8 +60375,7 @@ final class ModelEvaluationSlice_Slice_SliceSpec_SliceConfig
 
 /// A range of values for slice(s).
 /// `low` is inclusive, `high` is exclusive.
-final class ModelEvaluationSlice_Slice_SliceSpec_Range
-    extends protobuf.ProtoMessage {
+final class ModelEvaluationSlice_Slice_SliceSpec_Range extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice.Slice.SliceSpec.Range';
 
@@ -60491,8 +60409,7 @@ final class ModelEvaluationSlice_Slice_SliceSpec_Range
 }
 
 /// Single value that supports strings and floats.
-final class ModelEvaluationSlice_Slice_SliceSpec_Value
-    extends protobuf.ProtoMessage {
+final class ModelEvaluationSlice_Slice_SliceSpec_Value extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelEvaluationSlice.Slice.SliceSpec.Value';
 
@@ -60532,7 +60449,7 @@ final class ModelEvaluationSlice_Slice_SliceSpec_Value
 
 /// Request message for
 /// `ModelGardenService.GetPublisherModel`
-final class GetPublisherModelRequest extends protobuf.ProtoMessage {
+final class GetPublisherModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetPublisherModelRequest';
 
@@ -60610,7 +60527,7 @@ final class GetPublisherModelRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelGardenService.ListPublisherModels`.
-final class ListPublisherModelsRequest extends protobuf.ProtoMessage {
+final class ListPublisherModelsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListPublisherModelsRequest';
 
@@ -60702,7 +60619,7 @@ final class ListPublisherModelsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelGardenService.ListPublisherModels`.
-final class ListPublisherModelsResponse extends protobuf.ProtoMessage {
+final class ListPublisherModelsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListPublisherModelsResponse';
 
@@ -60745,7 +60662,7 @@ final class ListPublisherModelsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelGardenService.Deploy`.
-final class DeployRequest extends protobuf.ProtoMessage {
+final class DeployRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployRequest';
 
@@ -60834,7 +60751,7 @@ final class DeployRequest extends protobuf.ProtoMessage {
 
 /// The custom model to deploy from model weights in a Google Cloud Storage URI
 /// or Model Registry model.
-final class DeployRequest_CustomModel extends protobuf.ProtoMessage {
+final class DeployRequest_CustomModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployRequest.CustomModel';
 
@@ -60858,7 +60775,7 @@ final class DeployRequest_CustomModel extends protobuf.ProtoMessage {
 }
 
 /// The model config to use for the deployment.
-final class DeployRequest_ModelConfig extends protobuf.ProtoMessage {
+final class DeployRequest_ModelConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployRequest.ModelConfig';
 
@@ -60940,7 +60857,7 @@ final class DeployRequest_ModelConfig extends protobuf.ProtoMessage {
 }
 
 /// The endpoint config to use for the deployment.
-final class DeployRequest_EndpointConfig extends protobuf.ProtoMessage {
+final class DeployRequest_EndpointConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployRequest.EndpointConfig';
 
@@ -61039,7 +60956,7 @@ final class DeployRequest_EndpointConfig extends protobuf.ProtoMessage {
 }
 
 /// The deploy config to use for the deployment.
-final class DeployRequest_DeployConfig extends protobuf.ProtoMessage {
+final class DeployRequest_DeployConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployRequest.DeployConfig';
 
@@ -61088,7 +61005,7 @@ final class DeployRequest_DeployConfig extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelGardenService.DeployPublisherModel`.
-final class DeployPublisherModelRequest extends protobuf.ProtoMessage {
+final class DeployPublisherModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployPublisherModelRequest';
 
@@ -61179,7 +61096,7 @@ final class DeployPublisherModelRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelGardenService.Deploy`.
-final class DeployResponse extends protobuf.ProtoMessage {
+final class DeployResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployResponse';
 
@@ -61229,7 +61146,7 @@ final class DeployResponse extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelGardenService.DeployPublisherModel`.
-final class DeployPublisherModelResponse extends protobuf.ProtoMessage {
+final class DeployPublisherModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployPublisherModelResponse';
 
@@ -61280,7 +61197,7 @@ final class DeployPublisherModelResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `ModelGardenService.Deploy`.
-final class DeployOperationMetadata extends protobuf.ProtoMessage {
+final class DeployOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployOperationMetadata';
 
@@ -61343,8 +61260,7 @@ final class DeployOperationMetadata extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `ModelGardenService.DeployPublisherModel`.
-final class DeployPublisherModelOperationMetadata
-    extends protobuf.ProtoMessage {
+final class DeployPublisherModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeployPublisherModelOperationMetadata';
 
@@ -61404,7 +61320,7 @@ final class DeployPublisherModelOperationMetadata
 
 /// Response message for
 /// `ModelGardenService.ExportPublisherModel`.
-final class ExportPublisherModelResponse extends protobuf.ProtoMessage {
+final class ExportPublisherModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportPublisherModelResponse';
 
@@ -61445,8 +61361,7 @@ final class ExportPublisherModelResponse extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `ModelGardenService.ExportPublisherModel`.
-final class ExportPublisherModelOperationMetadata
-    extends protobuf.ProtoMessage {
+final class ExportPublisherModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportPublisherModelOperationMetadata';
 
@@ -61476,7 +61391,7 @@ final class ExportPublisherModelOperationMetadata
 
 /// Request message for
 /// `ModelGardenService.ExportPublisherModel`.
-final class ExportPublisherModelRequest extends protobuf.ProtoMessage {
+final class ExportPublisherModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportPublisherModelRequest';
 
@@ -61522,8 +61437,7 @@ final class ExportPublisherModelRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelGardenService.CheckPublisherModelEula`.
-final class CheckPublisherModelEulaAcceptanceRequest
-    extends protobuf.ProtoMessage {
+final class CheckPublisherModelEulaAcceptanceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CheckPublisherModelEulaAcceptanceRequest';
 
@@ -61564,7 +61478,7 @@ final class CheckPublisherModelEulaAcceptanceRequest
 
 /// Request message for
 /// `ModelGardenService.AcceptPublisherModelEula`.
-final class AcceptPublisherModelEulaRequest extends protobuf.ProtoMessage {
+final class AcceptPublisherModelEulaRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AcceptPublisherModelEulaRequest';
 
@@ -61604,7 +61518,7 @@ final class AcceptPublisherModelEulaRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelGardenService.UpdatePublisherModelEula`.
-final class PublisherModelEulaAcceptance extends protobuf.ProtoMessage {
+final class PublisherModelEulaAcceptance extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModelEulaAcceptance';
 
@@ -61653,7 +61567,7 @@ final class PublisherModelEulaAcceptance extends protobuf.ProtoMessage {
 /// and visualization of data quality and performance related to models.
 /// ModelMonitor stands as a top level resource for overseeing your model
 /// monitoring tasks.
-final class ModelMonitor extends protobuf.ProtoMessage {
+final class ModelMonitor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitor';
 
@@ -61803,7 +61717,7 @@ final class ModelMonitor extends protobuf.ProtoMessage {
 
 /// The monitoring target refers to the entity that is subject to analysis.
 /// e.g. Vertex AI Model version.
-final class ModelMonitor_ModelMonitoringTarget extends protobuf.ProtoMessage {
+final class ModelMonitor_ModelMonitoringTarget extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitor.ModelMonitoringTarget';
 
@@ -61833,7 +61747,7 @@ final class ModelMonitor_ModelMonitoringTarget extends protobuf.ProtoMessage {
 
 /// Model in Vertex AI Model Registry.
 final class ModelMonitor_ModelMonitoringTarget_VertexModelSource
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitor.ModelMonitoringTarget.VertexModelSource';
 
@@ -61873,7 +61787,7 @@ final class ModelMonitor_ModelMonitoringTarget_VertexModelSource
 }
 
 /// The Model Monitoring Schema definition.
-final class ModelMonitoringSchema extends protobuf.ProtoMessage {
+final class ModelMonitoringSchema extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringSchema';
 
@@ -61958,7 +61872,7 @@ final class ModelMonitoringSchema extends protobuf.ProtoMessage {
 }
 
 /// Schema field definition.
-final class ModelMonitoringSchema_FieldSchema extends protobuf.ProtoMessage {
+final class ModelMonitoringSchema_FieldSchema extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringSchema.FieldSchema';
 
@@ -62009,7 +61923,7 @@ final class ModelMonitoringSchema_FieldSchema extends protobuf.ProtoMessage {
 }
 
 /// The model monitoring configuration used for Batch Prediction Job.
-final class ModelMonitoringConfig extends protobuf.ProtoMessage {
+final class ModelMonitoringConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringConfig';
 
@@ -62082,7 +61996,7 @@ final class ModelMonitoringConfig extends protobuf.ProtoMessage {
 
 /// The objective configuration for model monitoring, including the information
 /// needed to detect anomalies for one particular model.
-final class ModelMonitoringObjectiveConfig extends protobuf.ProtoMessage {
+final class ModelMonitoringObjectiveConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig';
 
@@ -62149,7 +62063,7 @@ final class ModelMonitoringObjectiveConfig extends protobuf.ProtoMessage {
 
 /// Training Dataset information.
 final class ModelMonitoringObjectiveConfig_TrainingDataset
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig.TrainingDataset';
 
@@ -62234,7 +62148,7 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
 /// The config for Training & Prediction data skew detection. It specifies the
 /// training dataset sources and the skew detection parameters.
 final class ModelMonitoringObjectiveConfig_TrainingPredictionSkewDetectionConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig.TrainingPredictionSkewDetectionConfig';
 
@@ -62296,7 +62210,7 @@ final class ModelMonitoringObjectiveConfig_TrainingPredictionSkewDetectionConfig
 
 /// The config for Prediction data drift detection.
 final class ModelMonitoringObjectiveConfig_PredictionDriftDetectionConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig.PredictionDriftDetectionConfig';
 
@@ -62358,7 +62272,7 @@ final class ModelMonitoringObjectiveConfig_PredictionDriftDetectionConfig
 /// The config for integrating with Vertex Explainable AI. Only applicable if
 /// the Model has explanation_spec populated.
 final class ModelMonitoringObjectiveConfig_ExplanationConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig.ExplanationConfig';
 
@@ -62409,7 +62323,7 @@ final class ModelMonitoringObjectiveConfig_ExplanationConfig
 /// for Model Monitoring baseline dataset, which can be used to generate
 /// baseline attribution scores.
 final class ModelMonitoringObjectiveConfig_ExplanationConfig_ExplanationBaseline
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveConfig.ExplanationConfig.ExplanationBaseline';
 
@@ -62463,7 +62377,7 @@ final class ModelMonitoringObjectiveConfig_ExplanationConfig_ExplanationBaseline
 
 /// The storage format of the predictions generated BatchPrediction job.
 final class ModelMonitoringObjectiveConfig_ExplanationConfig_ExplanationBaseline_PredictionFormat
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Should not be set.
   static const predictionFormatUnspecified =
       ModelMonitoringObjectiveConfig_ExplanationConfig_ExplanationBaseline_PredictionFormat(
@@ -62503,7 +62417,7 @@ final class ModelMonitoringObjectiveConfig_ExplanationConfig_ExplanationBaseline
 }
 
 /// The alert config for model monitoring.
-final class ModelMonitoringAlertConfig extends protobuf.ProtoMessage {
+final class ModelMonitoringAlertConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringAlertConfig';
 
@@ -62555,8 +62469,7 @@ final class ModelMonitoringAlertConfig extends protobuf.ProtoMessage {
 }
 
 /// The config for email alert.
-final class ModelMonitoringAlertConfig_EmailAlertConfig
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringAlertConfig_EmailAlertConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringAlertConfig.EmailAlertConfig';
 
@@ -62580,7 +62493,7 @@ final class ModelMonitoringAlertConfig_EmailAlertConfig
 }
 
 /// The config for feature monitoring threshold.
-final class ThresholdConfig extends protobuf.ProtoMessage {
+final class ThresholdConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ThresholdConfig';
 
@@ -62611,7 +62524,7 @@ final class ThresholdConfig extends protobuf.ProtoMessage {
 
 /// Sampling Strategy for logging, can be for both training and prediction
 /// dataset.
-final class SamplingStrategy extends protobuf.ProtoMessage {
+final class SamplingStrategy extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SamplingStrategy';
 
@@ -62639,7 +62552,7 @@ final class SamplingStrategy extends protobuf.ProtoMessage {
 }
 
 /// Requests are randomly selected.
-final class SamplingStrategy_RandomSampleConfig extends protobuf.ProtoMessage {
+final class SamplingStrategy_RandomSampleConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SamplingStrategy.RandomSampleConfig';
 
@@ -62668,7 +62581,7 @@ final class SamplingStrategy_RandomSampleConfig extends protobuf.ProtoMessage {
 }
 
 /// Monitoring alert triggered condition.
-final class ModelMonitoringAlertCondition extends protobuf.ProtoMessage {
+final class ModelMonitoringAlertCondition extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringAlertCondition';
 
@@ -62694,7 +62607,7 @@ final class ModelMonitoringAlertCondition extends protobuf.ProtoMessage {
 }
 
 /// Represents a single model monitoring anomaly.
-final class ModelMonitoringAnomaly extends protobuf.ProtoMessage {
+final class ModelMonitoringAnomaly extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringAnomaly';
 
@@ -62743,8 +62656,7 @@ final class ModelMonitoringAnomaly extends protobuf.ProtoMessage {
 }
 
 /// Tabular anomaly details.
-final class ModelMonitoringAnomaly_TabularAnomaly
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringAnomaly_TabularAnomaly extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringAnomaly.TabularAnomaly';
 
@@ -62803,7 +62715,7 @@ final class ModelMonitoringAnomaly_TabularAnomaly
 /// Represents a single monitoring alert. This is currently used in the
 /// SearchModelMonitoringAlerts api, thus the alert wrapped in this message
 /// belongs to the resource asked in the request.
-final class ModelMonitoringAlert extends protobuf.ProtoMessage {
+final class ModelMonitoringAlert extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringAlert';
 
@@ -62857,7 +62769,7 @@ final class ModelMonitoringAlert extends protobuf.ProtoMessage {
 
 /// Represents a model monitoring job that analyze dataset using different
 /// monitoring algorithm.
-final class ModelMonitoringJob extends protobuf.ProtoMessage {
+final class ModelMonitoringJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringJob';
 
@@ -62966,7 +62878,7 @@ final class ModelMonitoringJob extends protobuf.ProtoMessage {
 }
 
 /// Represent the execution details of the job.
-final class ModelMonitoringJobExecutionDetail extends protobuf.ProtoMessage {
+final class ModelMonitoringJobExecutionDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringJobExecutionDetail';
 
@@ -63028,7 +62940,7 @@ final class ModelMonitoringJobExecutionDetail extends protobuf.ProtoMessage {
 
 /// Processed dataset information.
 final class ModelMonitoringJobExecutionDetail_ProcessedDataset
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringJobExecutionDetail.ProcessedDataset';
 
@@ -63065,7 +62977,7 @@ final class ModelMonitoringJobExecutionDetail_ProcessedDataset
 
 /// Request message for
 /// `ModelMonitoringService.CreateModelMonitor`.
-final class CreateModelMonitorRequest extends protobuf.ProtoMessage {
+final class CreateModelMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateModelMonitorRequest';
 
@@ -63115,7 +63027,7 @@ final class CreateModelMonitorRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `ModelMonitoringService.CreateModelMonitor`.
-final class CreateModelMonitorOperationMetadata extends protobuf.ProtoMessage {
+final class CreateModelMonitorOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateModelMonitorOperationMetadata';
 
@@ -63145,7 +63057,7 @@ final class CreateModelMonitorOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.UpdateModelMonitor`.
-final class UpdateModelMonitorRequest extends protobuf.ProtoMessage {
+final class UpdateModelMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateModelMonitorRequest';
 
@@ -63182,7 +63094,7 @@ final class UpdateModelMonitorRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `ModelMonitoringService.UpdateModelMonitor`.
-final class UpdateModelMonitorOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateModelMonitorOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateModelMonitorOperationMetadata';
 
@@ -63212,7 +63124,7 @@ final class UpdateModelMonitorOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.GetModelMonitor`.
-final class GetModelMonitorRequest extends protobuf.ProtoMessage {
+final class GetModelMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetModelMonitorRequest';
 
@@ -63238,7 +63150,7 @@ final class GetModelMonitorRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.ListModelMonitors`.
-final class ListModelMonitorsRequest extends protobuf.ProtoMessage {
+final class ListModelMonitorsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelMonitorsRequest';
 
@@ -63299,7 +63211,7 @@ final class ListModelMonitorsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelMonitoringService.ListModelMonitors`
-final class ListModelMonitorsResponse extends protobuf.ProtoMessage {
+final class ListModelMonitorsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelMonitorsResponse';
 
@@ -63340,7 +63252,7 @@ final class ListModelMonitorsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.DeleteModelMonitor`.
-final class DeleteModelMonitorRequest extends protobuf.ProtoMessage {
+final class DeleteModelMonitorRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteModelMonitorRequest';
 
@@ -63373,7 +63285,7 @@ final class DeleteModelMonitorRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.CreateModelMonitoringJob`.
-final class CreateModelMonitoringJobRequest extends protobuf.ProtoMessage {
+final class CreateModelMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateModelMonitoringJobRequest';
 
@@ -63429,7 +63341,7 @@ final class CreateModelMonitoringJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.GetModelMonitoringJob`.
-final class GetModelMonitoringJobRequest extends protobuf.ProtoMessage {
+final class GetModelMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetModelMonitoringJobRequest';
 
@@ -63456,7 +63368,7 @@ final class GetModelMonitoringJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.ListModelMonitoringJobs`.
-final class ListModelMonitoringJobsRequest extends protobuf.ProtoMessage {
+final class ListModelMonitoringJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelMonitoringJobsRequest';
 
@@ -63518,7 +63430,7 @@ final class ListModelMonitoringJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelMonitoringService.ListModelMonitoringJobs`.
-final class ListModelMonitoringJobsResponse extends protobuf.ProtoMessage {
+final class ListModelMonitoringJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelMonitoringJobsResponse';
 
@@ -63561,7 +63473,7 @@ final class ListModelMonitoringJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.DeleteModelMonitoringJob`.
-final class DeleteModelMonitoringJobRequest extends protobuf.ProtoMessage {
+final class DeleteModelMonitoringJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteModelMonitoringJobRequest';
 
@@ -63588,7 +63500,7 @@ final class DeleteModelMonitoringJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.SearchModelMonitoringStats`.
-final class SearchModelMonitoringStatsRequest extends protobuf.ProtoMessage {
+final class SearchModelMonitoringStatsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelMonitoringStatsRequest';
 
@@ -63654,7 +63566,7 @@ final class SearchModelMonitoringStatsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelMonitoringService.SearchModelMonitoringStats`.
-final class SearchModelMonitoringStatsResponse extends protobuf.ProtoMessage {
+final class SearchModelMonitoringStatsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelMonitoringStatsResponse';
 
@@ -63699,7 +63611,7 @@ final class SearchModelMonitoringStatsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelMonitoringService.SearchModelMonitoringAlerts`.
-final class SearchModelMonitoringAlertsRequest extends protobuf.ProtoMessage {
+final class SearchModelMonitoringAlertsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelMonitoringAlertsRequest';
 
@@ -63783,7 +63695,7 @@ final class SearchModelMonitoringAlertsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelMonitoringService.SearchModelMonitoringAlerts`.
-final class SearchModelMonitoringAlertsResponse extends protobuf.ProtoMessage {
+final class SearchModelMonitoringAlertsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelMonitoringAlertsResponse';
 
@@ -63839,7 +63751,7 @@ final class SearchModelMonitoringAlertsResponse extends protobuf.ProtoMessage {
 
 /// Monitoring monitoring job spec. It outlines the specifications for monitoring
 /// objectives, notifications, and result exports.
-final class ModelMonitoringSpec extends protobuf.ProtoMessage {
+final class ModelMonitoringSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringSpec';
 
@@ -63887,7 +63799,7 @@ final class ModelMonitoringSpec extends protobuf.ProtoMessage {
 }
 
 /// Monitoring objectives spec.
-final class ModelMonitoringObjectiveSpec extends protobuf.ProtoMessage {
+final class ModelMonitoringObjectiveSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveSpec';
 
@@ -63948,8 +63860,7 @@ final class ModelMonitoringObjectiveSpec extends protobuf.ProtoMessage {
 /// the recent production serving dataset and the training dataset, or to
 /// compare the recent production dataset with a dataset from a previous
 /// period.
-final class ModelMonitoringObjectiveSpec_DataDriftSpec
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringObjectiveSpec_DataDriftSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveSpec.DataDriftSpec';
 
@@ -64036,7 +63947,7 @@ final class ModelMonitoringObjectiveSpec_DataDriftSpec
 
 /// Feature attribution monitoring spec.
 final class ModelMonitoringObjectiveSpec_FeatureAttributionSpec
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveSpec.FeatureAttributionSpec';
 
@@ -64101,8 +64012,7 @@ final class ModelMonitoringObjectiveSpec_FeatureAttributionSpec
 }
 
 /// Tabular monitoring objective.
-final class ModelMonitoringObjectiveSpec_TabularObjective
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringObjectiveSpec_TabularObjective extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringObjectiveSpec.TabularObjective';
 
@@ -64155,7 +64065,7 @@ final class ModelMonitoringObjectiveSpec_TabularObjective
 
 /// Specification for the export destination of monitoring results, including
 /// metrics, logs, etc.
-final class ModelMonitoringOutputSpec extends protobuf.ProtoMessage {
+final class ModelMonitoringOutputSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringOutputSpec';
 
@@ -64184,7 +64094,7 @@ final class ModelMonitoringOutputSpec extends protobuf.ProtoMessage {
 }
 
 /// Model monitoring data input spec.
-final class ModelMonitoringInput extends protobuf.ProtoMessage {
+final class ModelMonitoringInput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput';
 
@@ -64250,8 +64160,7 @@ final class ModelMonitoringInput extends protobuf.ProtoMessage {
 }
 
 /// Input dataset spec.
-final class ModelMonitoringInput_ModelMonitoringDataset
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringInput_ModelMonitoringDataset extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.ModelMonitoringDataset';
 
@@ -64313,7 +64222,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset
 
 /// Dataset spec for data stored in Google Cloud Storage.
 final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.ModelMonitoringDataset.ModelMonitoringGcsSource';
 
@@ -64362,7 +64271,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource
 
 /// Supported data format.
 final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource_DataFormat
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Data format unspecified, used when this field is unset.
   static const dataFormatUnspecified =
       ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource_DataFormat(
@@ -64409,7 +64318,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource
 
 /// Dataset spec for data sotred in BigQuery.
 final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringBigQuerySource
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.ModelMonitoringDataset.ModelMonitoringBigQuerySource';
 
@@ -64453,8 +64362,7 @@ final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringBigQueryS
 }
 
 /// Data from Vertex AI Batch prediction job output.
-final class ModelMonitoringInput_BatchPredictionOutput
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringInput_BatchPredictionOutput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.BatchPredictionOutput';
 
@@ -64485,8 +64393,7 @@ final class ModelMonitoringInput_BatchPredictionOutput
 }
 
 /// Data from Vertex AI Endpoint request response logging.
-final class ModelMonitoringInput_VertexEndpointLogs
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringInput_VertexEndpointLogs extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.VertexEndpointLogs';
 
@@ -64513,7 +64420,7 @@ final class ModelMonitoringInput_VertexEndpointLogs
 }
 
 /// Time offset setting.
-final class ModelMonitoringInput_TimeOffset extends protobuf.ProtoMessage {
+final class ModelMonitoringInput_TimeOffset extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringInput.TimeOffset';
 
@@ -64556,7 +64463,7 @@ final class ModelMonitoringInput_TimeOffset extends protobuf.ProtoMessage {
 
 /// Notification spec(email, notification channel) for model monitoring
 /// statistics/alerts.
-final class ModelMonitoringNotificationSpec extends protobuf.ProtoMessage {
+final class ModelMonitoringNotificationSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringNotificationSpec';
 
@@ -64613,8 +64520,7 @@ final class ModelMonitoringNotificationSpec extends protobuf.ProtoMessage {
 }
 
 /// The config for email alerts.
-final class ModelMonitoringNotificationSpec_EmailConfig
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringNotificationSpec_EmailConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringNotificationSpec.EmailConfig';
 
@@ -64639,7 +64545,7 @@ final class ModelMonitoringNotificationSpec_EmailConfig
 
 /// Google Cloud Notification Channel config.
 final class ModelMonitoringNotificationSpec_NotificationChannelConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringNotificationSpec.NotificationChannelConfig';
 
@@ -64672,7 +64578,7 @@ final class ModelMonitoringNotificationSpec_NotificationChannelConfig
 }
 
 /// Represents the collection of statistics for a metric.
-final class ModelMonitoringStats extends protobuf.ProtoMessage {
+final class ModelMonitoringStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStats';
 
@@ -64699,7 +64605,7 @@ final class ModelMonitoringStats extends protobuf.ProtoMessage {
 }
 
 /// Represents a single statistics data point.
-final class ModelMonitoringStatsDataPoint extends protobuf.ProtoMessage {
+final class ModelMonitoringStatsDataPoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStatsDataPoint';
 
@@ -64788,8 +64694,7 @@ final class ModelMonitoringStatsDataPoint extends protobuf.ProtoMessage {
 }
 
 /// Typed value of the statistics.
-final class ModelMonitoringStatsDataPoint_TypedValue
-    extends protobuf.ProtoMessage {
+final class ModelMonitoringStatsDataPoint_TypedValue extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStatsDataPoint.TypedValue';
 
@@ -64833,7 +64738,7 @@ final class ModelMonitoringStatsDataPoint_TypedValue
 
 /// Summary statistics for a population of values.
 final class ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringStatsDataPoint.TypedValue.DistributionDataValue';
 
@@ -64877,7 +64782,7 @@ final class ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue
 
 /// A collection of data points that describes the time-varying values of a
 /// tabular metric.
-final class ModelMonitoringTabularStats extends protobuf.ProtoMessage {
+final class ModelMonitoringTabularStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelMonitoringTabularStats';
 
@@ -64930,7 +64835,7 @@ final class ModelMonitoringTabularStats extends protobuf.ProtoMessage {
 }
 
 /// Filter for searching ModelMonitoringStats.
-final class SearchModelMonitoringStatsFilter extends protobuf.ProtoMessage {
+final class SearchModelMonitoringStatsFilter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelMonitoringStatsFilter';
 
@@ -64961,7 +64866,7 @@ final class SearchModelMonitoringStatsFilter extends protobuf.ProtoMessage {
 
 /// Tabular statistics filter.
 final class SearchModelMonitoringStatsFilter_TabularStatsFilter
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SearchModelMonitoringStatsFilter.TabularStatsFilter';
 
@@ -65028,7 +64933,7 @@ final class SearchModelMonitoringStatsFilter_TabularStatsFilter
 
 /// Request message for
 /// `ModelService.UploadModel`.
-final class UploadModelRequest extends protobuf.ProtoMessage {
+final class UploadModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UploadModelRequest';
 
@@ -65100,7 +65005,7 @@ final class UploadModelRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ModelService.UploadModel`
 /// operation.
-final class UploadModelOperationMetadata extends protobuf.ProtoMessage {
+final class UploadModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UploadModelOperationMetadata';
 
@@ -65130,7 +65035,7 @@ final class UploadModelOperationMetadata extends protobuf.ProtoMessage {
 /// Response message of
 /// `ModelService.UploadModel`
 /// operation.
-final class UploadModelResponse extends protobuf.ProtoMessage {
+final class UploadModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UploadModelResponse';
 
@@ -65168,7 +65073,7 @@ final class UploadModelResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.GetModel`.
-final class GetModelRequest extends protobuf.ProtoMessage {
+final class GetModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetModelRequest';
 
@@ -65203,7 +65108,7 @@ final class GetModelRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ListModels`.
-final class ListModelsRequest extends protobuf.ProtoMessage {
+final class ListModelsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelsRequest';
 
@@ -65286,7 +65191,7 @@ final class ListModelsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelService.ListModels`
-final class ListModelsResponse extends protobuf.ProtoMessage {
+final class ListModelsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelsResponse';
 
@@ -65323,7 +65228,7 @@ final class ListModelsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ListModelVersions`.
-final class ListModelVersionsRequest extends protobuf.ProtoMessage {
+final class ListModelVersionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelVersionsRequest';
 
@@ -65411,7 +65316,7 @@ final class ListModelVersionsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelService.ListModelVersions`
-final class ListModelVersionsResponse extends protobuf.ProtoMessage {
+final class ListModelVersionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelVersionsResponse';
 
@@ -65450,7 +65355,7 @@ final class ListModelVersionsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ListModelVersionCheckpoints`.
-final class ListModelVersionCheckpointsRequest extends protobuf.ProtoMessage {
+final class ListModelVersionCheckpointsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelVersionCheckpointsRequest';
 
@@ -65508,7 +65413,7 @@ final class ListModelVersionCheckpointsRequest extends protobuf.ProtoMessage {
 
 /// A proto representation of a Spanner-stored ModelVersionCheckpoint.
 /// The meaning of the fields is equivalent to their in-Spanner counterparts.
-final class ModelVersionCheckpoint extends protobuf.ProtoMessage {
+final class ModelVersionCheckpoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ModelVersionCheckpoint';
 
@@ -65554,7 +65459,7 @@ final class ModelVersionCheckpoint extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelService.ListModelVersionCheckpoints`
-final class ListModelVersionCheckpointsResponse extends protobuf.ProtoMessage {
+final class ListModelVersionCheckpointsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelVersionCheckpointsResponse';
 
@@ -65599,7 +65504,7 @@ final class ListModelVersionCheckpointsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.UpdateModel`.
-final class UpdateModelRequest extends protobuf.ProtoMessage {
+final class UpdateModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateModelRequest';
 
@@ -65652,7 +65557,7 @@ final class UpdateModelRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.UpdateExplanationDataset`.
-final class UpdateExplanationDatasetRequest extends protobuf.ProtoMessage {
+final class UpdateExplanationDatasetRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExplanationDatasetRequest';
 
@@ -65687,8 +65592,7 @@ final class UpdateExplanationDatasetRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `ModelService.UpdateExplanationDataset`.
-final class UpdateExplanationDatasetOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateExplanationDatasetOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExplanationDatasetOperationMetadata';
 
@@ -65718,7 +65622,7 @@ final class UpdateExplanationDatasetOperationMetadata
 
 /// Request message for
 /// `ModelService.DeleteModel`.
-final class DeleteModelRequest extends protobuf.ProtoMessage {
+final class DeleteModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteModelRequest';
 
@@ -65743,7 +65647,7 @@ final class DeleteModelRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.DeleteModelVersion`.
-final class DeleteModelVersionRequest extends protobuf.ProtoMessage {
+final class DeleteModelVersionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteModelVersionRequest';
 
@@ -65770,7 +65674,7 @@ final class DeleteModelVersionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.MergeVersionAliases`.
-final class MergeVersionAliasesRequest extends protobuf.ProtoMessage {
+final class MergeVersionAliasesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.MergeVersionAliasesRequest';
 
@@ -65815,7 +65719,7 @@ final class MergeVersionAliasesRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ExportModel`.
-final class ExportModelRequest extends protobuf.ProtoMessage {
+final class ExportModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportModelRequest';
 
@@ -65853,7 +65757,7 @@ final class ExportModelRequest extends protobuf.ProtoMessage {
 }
 
 /// Output configuration for the Model export.
-final class ExportModelRequest_OutputConfig extends protobuf.ProtoMessage {
+final class ExportModelRequest_OutputConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportModelRequest.OutputConfig';
 
@@ -65918,7 +65822,7 @@ final class ExportModelRequest_OutputConfig extends protobuf.ProtoMessage {
 /// Details of
 /// `ModelService.ExportModel`
 /// operation.
-final class ExportModelOperationMetadata extends protobuf.ProtoMessage {
+final class ExportModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportModelOperationMetadata';
 
@@ -65956,8 +65860,7 @@ final class ExportModelOperationMetadata extends protobuf.ProtoMessage {
 
 /// Further describes the output of the ExportModel. Supplements
 /// `ExportModelRequest.OutputConfig`.
-final class ExportModelOperationMetadata_OutputInfo
-    extends protobuf.ProtoMessage {
+final class ExportModelOperationMetadata_OutputInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportModelOperationMetadata.OutputInfo';
 
@@ -66001,7 +65904,7 @@ final class ExportModelOperationMetadata_OutputInfo
 /// Response message of
 /// `ModelService.UpdateExplanationDataset`
 /// operation.
-final class UpdateExplanationDatasetResponse extends protobuf.ProtoMessage {
+final class UpdateExplanationDatasetResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateExplanationDatasetResponse';
 
@@ -66021,7 +65924,7 @@ final class UpdateExplanationDatasetResponse extends protobuf.ProtoMessage {
 /// Response message of
 /// `ModelService.ExportModel`
 /// operation.
-final class ExportModelResponse extends protobuf.ProtoMessage {
+final class ExportModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportModelResponse';
 
@@ -66039,7 +65942,7 @@ final class ExportModelResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.CopyModel`.
-final class CopyModelRequest extends protobuf.ProtoMessage {
+final class CopyModelRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CopyModelRequest';
 
@@ -66109,7 +66012,7 @@ final class CopyModelRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ModelService.CopyModel`
 /// operation.
-final class CopyModelOperationMetadata extends protobuf.ProtoMessage {
+final class CopyModelOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CopyModelOperationMetadata';
 
@@ -66139,7 +66042,7 @@ final class CopyModelOperationMetadata extends protobuf.ProtoMessage {
 /// Response message of
 /// `ModelService.CopyModel`
 /// operation.
-final class CopyModelResponse extends protobuf.ProtoMessage {
+final class CopyModelResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CopyModelResponse';
 
@@ -66177,7 +66080,7 @@ final class CopyModelResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ImportModelEvaluation`
-final class ImportModelEvaluationRequest extends protobuf.ProtoMessage {
+final class ImportModelEvaluationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportModelEvaluationRequest';
 
@@ -66217,8 +66120,7 @@ final class ImportModelEvaluationRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.BatchImportModelEvaluationSlices`
-final class BatchImportModelEvaluationSlicesRequest
-    extends protobuf.ProtoMessage {
+final class BatchImportModelEvaluationSlicesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchImportModelEvaluationSlicesRequest';
 
@@ -66262,8 +66164,7 @@ final class BatchImportModelEvaluationSlicesRequest
 
 /// Response message for
 /// `ModelService.BatchImportModelEvaluationSlices`
-final class BatchImportModelEvaluationSlicesResponse
-    extends protobuf.ProtoMessage {
+final class BatchImportModelEvaluationSlicesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchImportModelEvaluationSlicesResponse';
 
@@ -66294,8 +66195,7 @@ final class BatchImportModelEvaluationSlicesResponse
 
 /// Request message for
 /// `ModelService.BatchImportEvaluatedAnnotations`
-final class BatchImportEvaluatedAnnotationsRequest
-    extends protobuf.ProtoMessage {
+final class BatchImportEvaluatedAnnotationsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchImportEvaluatedAnnotationsRequest';
 
@@ -66339,8 +66239,7 @@ final class BatchImportEvaluatedAnnotationsRequest
 
 /// Response message for
 /// `ModelService.BatchImportEvaluatedAnnotations`
-final class BatchImportEvaluatedAnnotationsResponse
-    extends protobuf.ProtoMessage {
+final class BatchImportEvaluatedAnnotationsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchImportEvaluatedAnnotationsResponse';
 
@@ -66375,7 +66274,7 @@ final class BatchImportEvaluatedAnnotationsResponse
 
 /// Request message for
 /// `ModelService.GetModelEvaluation`.
-final class GetModelEvaluationRequest extends protobuf.ProtoMessage {
+final class GetModelEvaluationRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetModelEvaluationRequest';
 
@@ -66401,7 +66300,7 @@ final class GetModelEvaluationRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ListModelEvaluations`.
-final class ListModelEvaluationsRequest extends protobuf.ProtoMessage {
+final class ListModelEvaluationsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelEvaluationsRequest';
 
@@ -66466,7 +66365,7 @@ final class ListModelEvaluationsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelService.ListModelEvaluations`.
-final class ListModelEvaluationsResponse extends protobuf.ProtoMessage {
+final class ListModelEvaluationsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelEvaluationsResponse';
 
@@ -66511,7 +66410,7 @@ final class ListModelEvaluationsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.GetModelEvaluationSlice`.
-final class GetModelEvaluationSliceRequest extends protobuf.ProtoMessage {
+final class GetModelEvaluationSliceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetModelEvaluationSliceRequest';
 
@@ -66538,7 +66437,7 @@ final class GetModelEvaluationSliceRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.ListModelEvaluationSlices`.
-final class ListModelEvaluationSlicesRequest extends protobuf.ProtoMessage {
+final class ListModelEvaluationSlicesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelEvaluationSlicesRequest';
 
@@ -66607,7 +66506,7 @@ final class ListModelEvaluationSlicesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelService.ListModelEvaluationSlices`.
-final class ListModelEvaluationSlicesResponse extends protobuf.ProtoMessage {
+final class ListModelEvaluationSlicesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListModelEvaluationSlicesResponse';
 
@@ -66653,7 +66552,7 @@ final class ListModelEvaluationSlicesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ModelService.RecommendSpec`.
-final class RecommendSpecRequest extends protobuf.ProtoMessage {
+final class RecommendSpecRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RecommendSpecRequest';
 
@@ -66714,7 +66613,7 @@ final class RecommendSpecRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ModelService.RecommendSpec`.
-final class RecommendSpecResponse extends protobuf.ProtoMessage {
+final class RecommendSpecResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RecommendSpecResponse';
 
@@ -66768,7 +66667,7 @@ final class RecommendSpecResponse extends protobuf.ProtoMessage {
 
 /// A machine and model container spec.
 final class RecommendSpecResponse_MachineAndModelContainerSpec
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RecommendSpecResponse.MachineAndModelContainerSpec';
 
@@ -66803,7 +66702,7 @@ final class RecommendSpecResponse_MachineAndModelContainerSpec
 /// Recommendation of one deployment option for the given custom weights model
 /// in one region.
 /// Contains the machine and container spec, and user accelerator quota state.
-final class RecommendSpecResponse_Recommendation extends protobuf.ProtoMessage {
+final class RecommendSpecResponse_Recommendation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RecommendSpecResponse.Recommendation';
 
@@ -66857,8 +66756,7 @@ final class RecommendSpecResponse_Recommendation extends protobuf.ProtoMessage {
 }
 
 /// The user accelerator quota state.
-final class RecommendSpecResponse_Recommendation_QuotaState
-    extends protobuf.ProtoEnum {
+final class RecommendSpecResponse_Recommendation_QuotaState extends ProtoEnum {
   /// Unspecified quota state. Quota information not available.
   static const quotaStateUnspecified =
       RecommendSpecResponse_Recommendation_QuotaState(
@@ -66893,7 +66791,7 @@ final class RecommendSpecResponse_Recommendation_QuotaState
 }
 
 /// Represents a Neural Architecture Search (NAS) job.
-final class NasJob extends protobuf.ProtoMessage {
+final class NasJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJob';
 
@@ -67029,7 +66927,7 @@ final class NasJob extends protobuf.ProtoMessage {
 
 /// Represents a NasTrial details along with its parameters. If there is a
 /// corresponding train NasTrial, the train NasTrial is also returned.
-final class NasTrialDetail extends protobuf.ProtoMessage {
+final class NasTrialDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasTrialDetail';
 
@@ -67079,7 +66977,7 @@ final class NasTrialDetail extends protobuf.ProtoMessage {
 }
 
 /// Represents the spec of a NasJob.
-final class NasJobSpec extends protobuf.ProtoMessage {
+final class NasJobSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobSpec';
 
@@ -67129,7 +67027,7 @@ final class NasJobSpec extends protobuf.ProtoMessage {
 }
 
 /// The spec of multi-trial Neural Architecture Search (NAS).
-final class NasJobSpec_MultiTrialAlgorithmSpec extends protobuf.ProtoMessage {
+final class NasJobSpec_MultiTrialAlgorithmSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobSpec.MultiTrialAlgorithmSpec';
 
@@ -67198,8 +67096,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec extends protobuf.ProtoMessage {
 }
 
 /// Represents a metric to optimize.
-final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec
-    extends protobuf.ProtoMessage {
+final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobSpec.MultiTrialAlgorithmSpec.MetricSpec';
 
@@ -67238,7 +67135,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec
 
 /// The available types of optimization goals.
 final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec_GoalType
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Goal Type will default to maximize.
   static const goalTypeUnspecified =
       NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec_GoalType(
@@ -67270,7 +67167,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_MetricSpec_GoalType
 
 /// Represent spec for search trials.
 final class NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobSpec.MultiTrialAlgorithmSpec.SearchTrialSpec';
 
@@ -67334,7 +67231,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec
 
 /// Represent spec for train trials.
 final class NasJobSpec_MultiTrialAlgorithmSpec_TrainTrialSpec
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobSpec.MultiTrialAlgorithmSpec.TrainTrialSpec';
 
@@ -67388,7 +67285,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_TrainTrialSpec
 
 /// The available types of multi-trial algorithms.
 final class NasJobSpec_MultiTrialAlgorithmSpec_MultiTrialAlgorithm
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Defaults to `REINFORCEMENT_LEARNING`.
   static const multiTrialAlgorithmUnspecified =
       NasJobSpec_MultiTrialAlgorithmSpec_MultiTrialAlgorithm(
@@ -67423,7 +67320,7 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_MultiTrialAlgorithm
 }
 
 /// Represents a uCAIP NasJob output.
-final class NasJobOutput extends protobuf.ProtoMessage {
+final class NasJobOutput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobOutput';
 
@@ -67451,7 +67348,7 @@ final class NasJobOutput extends protobuf.ProtoMessage {
 }
 
 /// The output of a multi-trial Neural Architecture Search (NAS) jobs.
-final class NasJobOutput_MultiTrialJobOutput extends protobuf.ProtoMessage {
+final class NasJobOutput_MultiTrialJobOutput extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasJobOutput.MultiTrialJobOutput';
 
@@ -67486,7 +67383,7 @@ final class NasJobOutput_MultiTrialJobOutput extends protobuf.ProtoMessage {
 }
 
 /// Represents a uCAIP NasJob trial.
-final class NasTrial extends protobuf.ProtoMessage {
+final class NasTrial extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NasTrial';
 
@@ -67542,7 +67439,7 @@ final class NasTrial extends protobuf.ProtoMessage {
 }
 
 /// Describes a NasTrial state.
-final class NasTrial_State extends protobuf.ProtoEnum {
+final class NasTrial_State extends ProtoEnum {
   /// The NasTrial state is unspecified.
   static const stateUnspecified = NasTrial_State('STATE_UNSPECIFIED');
 
@@ -67578,7 +67475,7 @@ final class NasTrial_State extends protobuf.ProtoEnum {
 }
 
 /// Network spec.
-final class NetworkSpec extends protobuf.ProtoMessage {
+final class NetworkSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NetworkSpec';
 
@@ -67626,7 +67523,7 @@ final class NetworkSpec extends protobuf.ProtoMessage {
 }
 
 /// The euc configuration of NotebookRuntimeTemplate.
-final class NotebookEucConfig extends protobuf.ProtoMessage {
+final class NotebookEucConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookEucConfig';
 
@@ -67670,7 +67567,7 @@ final class NotebookEucConfig extends protobuf.ProtoMessage {
 }
 
 /// NotebookExecutionJob represents an instance of a notebook execution.
-final class NotebookExecutionJob extends protobuf.ProtoMessage {
+final class NotebookExecutionJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob';
 
@@ -67874,8 +67771,7 @@ final class NotebookExecutionJob extends protobuf.ProtoMessage {
 }
 
 /// The Dataform Repository containing the input notebook.
-final class NotebookExecutionJob_DataformRepositorySource
-    extends protobuf.ProtoMessage {
+final class NotebookExecutionJob_DataformRepositorySource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob.DataformRepositorySource';
 
@@ -67918,8 +67814,7 @@ final class NotebookExecutionJob_DataformRepositorySource
 }
 
 /// The Cloud Storage uri for the input notebook.
-final class NotebookExecutionJob_GcsNotebookSource
-    extends protobuf.ProtoMessage {
+final class NotebookExecutionJob_GcsNotebookSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob.GcsNotebookSource';
 
@@ -67956,8 +67851,7 @@ final class NotebookExecutionJob_GcsNotebookSource
 }
 
 /// The content of the input notebook in ipynb format.
-final class NotebookExecutionJob_DirectNotebookSource
-    extends protobuf.ProtoMessage {
+final class NotebookExecutionJob_DirectNotebookSource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob.DirectNotebookSource';
 
@@ -67984,8 +67878,7 @@ final class NotebookExecutionJob_DirectNotebookSource
 }
 
 /// Compute configuration to use for an execution job.
-final class NotebookExecutionJob_CustomEnvironmentSpec
-    extends protobuf.ProtoMessage {
+final class NotebookExecutionJob_CustomEnvironmentSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob.CustomEnvironmentSpec';
 
@@ -68028,8 +67921,7 @@ final class NotebookExecutionJob_CustomEnvironmentSpec
 }
 
 /// Configuration for a Workbench Instances-based environment.
-final class NotebookExecutionJob_WorkbenchRuntime
-    extends protobuf.ProtoMessage {
+final class NotebookExecutionJob_WorkbenchRuntime extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob.WorkbenchRuntime';
 
@@ -68048,7 +67940,7 @@ final class NotebookExecutionJob_WorkbenchRuntime
 
 /// The idle shutdown configuration of NotebookRuntimeTemplate, which contains
 /// the idle_timeout as required field.
-final class NotebookIdleShutdownConfig extends protobuf.ProtoMessage {
+final class NotebookIdleShutdownConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookIdleShutdownConfig';
 
@@ -68091,7 +67983,7 @@ final class NotebookIdleShutdownConfig extends protobuf.ProtoMessage {
 /// A template that specifies runtime configurations such as machine type,
 /// runtime version, network configurations, etc.
 /// Multiple runtimes can be created from a runtime template.
-final class NotebookRuntimeTemplate extends protobuf.ProtoMessage {
+final class NotebookRuntimeTemplate extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookRuntimeTemplate';
 
@@ -68292,7 +68184,7 @@ final class NotebookRuntimeTemplate extends protobuf.ProtoMessage {
 /// particular Notebook file on temporary basis with lifetime. Default runtimes
 /// have a lifetime of 18 hours, while custom runtimes last for 6 months from
 /// their creation or last upgrade.
-final class NotebookRuntime extends protobuf.ProtoMessage {
+final class NotebookRuntime extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookRuntime';
 
@@ -68560,7 +68452,7 @@ final class NotebookRuntime extends protobuf.ProtoMessage {
 }
 
 /// The substate of the NotebookRuntime to display health information.
-final class NotebookRuntime_HealthState extends protobuf.ProtoEnum {
+final class NotebookRuntime_HealthState extends ProtoEnum {
   /// Unspecified health state.
   static const healthStateUnspecified = NotebookRuntime_HealthState(
     'HEALTH_STATE_UNSPECIFIED',
@@ -68588,7 +68480,7 @@ final class NotebookRuntime_HealthState extends protobuf.ProtoEnum {
 
 /// The substate of the NotebookRuntime to display state of runtime.
 /// The resource of NotebookRuntime is in ACTIVE state for these sub state.
-final class NotebookRuntime_RuntimeState extends protobuf.ProtoEnum {
+final class NotebookRuntime_RuntimeState extends ProtoEnum {
   /// Unspecified runtime state.
   static const runtimeStateUnspecified = NotebookRuntime_RuntimeState(
     'RUNTIME_STATE_UNSPECIFIED',
@@ -68632,7 +68524,7 @@ final class NotebookRuntime_RuntimeState extends protobuf.ProtoEnum {
 }
 
 /// Points to a NotebookRuntimeTemplateRef.
-final class NotebookRuntimeTemplateRef extends protobuf.ProtoMessage {
+final class NotebookRuntimeTemplateRef extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookRuntimeTemplateRef';
 
@@ -68664,7 +68556,7 @@ final class NotebookRuntimeTemplateRef extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.CreateNotebookRuntimeTemplate`.
-final class CreateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
+final class CreateNotebookRuntimeTemplateRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateNotebookRuntimeTemplateRequest';
 
@@ -68717,7 +68609,7 @@ final class CreateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
 /// Metadata information for
 /// `NotebookService.CreateNotebookRuntimeTemplate`.
 final class CreateNotebookRuntimeTemplateOperationMetadata
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateNotebookRuntimeTemplateOperationMetadata';
 
@@ -68747,7 +68639,7 @@ final class CreateNotebookRuntimeTemplateOperationMetadata
 
 /// Request message for
 /// `NotebookService.GetNotebookRuntimeTemplate`
-final class GetNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
+final class GetNotebookRuntimeTemplateRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetNotebookRuntimeTemplateRequest';
 
@@ -68775,7 +68667,7 @@ final class GetNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.ListNotebookRuntimeTemplates`.
-final class ListNotebookRuntimeTemplatesRequest extends protobuf.ProtoMessage {
+final class ListNotebookRuntimeTemplatesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNotebookRuntimeTemplatesRequest';
 
@@ -68880,7 +68772,7 @@ final class ListNotebookRuntimeTemplatesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `NotebookService.ListNotebookRuntimeTemplates`.
-final class ListNotebookRuntimeTemplatesResponse extends protobuf.ProtoMessage {
+final class ListNotebookRuntimeTemplatesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNotebookRuntimeTemplatesResponse';
 
@@ -68926,7 +68818,7 @@ final class ListNotebookRuntimeTemplatesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.DeleteNotebookRuntimeTemplate`.
-final class DeleteNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
+final class DeleteNotebookRuntimeTemplateRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteNotebookRuntimeTemplateRequest';
 
@@ -68954,7 +68846,7 @@ final class DeleteNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.UpdateNotebookRuntimeTemplate`.
-final class UpdateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
+final class UpdateNotebookRuntimeTemplateRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateNotebookRuntimeTemplateRequest';
 
@@ -68997,7 +68889,7 @@ final class UpdateNotebookRuntimeTemplateRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.AssignNotebookRuntime`.
-final class AssignNotebookRuntimeRequest extends protobuf.ProtoMessage {
+final class AssignNotebookRuntimeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssignNotebookRuntimeRequest';
 
@@ -69055,8 +68947,7 @@ final class AssignNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
 /// Metadata information for
 /// `NotebookService.AssignNotebookRuntime`.
-final class AssignNotebookRuntimeOperationMetadata
-    extends protobuf.ProtoMessage {
+final class AssignNotebookRuntimeOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AssignNotebookRuntimeOperationMetadata';
 
@@ -69097,7 +68988,7 @@ final class AssignNotebookRuntimeOperationMetadata
 
 /// Request message for
 /// `NotebookService.GetNotebookRuntime`
-final class GetNotebookRuntimeRequest extends protobuf.ProtoMessage {
+final class GetNotebookRuntimeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetNotebookRuntimeRequest';
 
@@ -69124,7 +69015,7 @@ final class GetNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.ListNotebookRuntimes`.
-final class ListNotebookRuntimesRequest extends protobuf.ProtoMessage {
+final class ListNotebookRuntimesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNotebookRuntimesRequest';
 
@@ -69242,7 +69133,7 @@ final class ListNotebookRuntimesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `NotebookService.ListNotebookRuntimes`.
-final class ListNotebookRuntimesResponse extends protobuf.ProtoMessage {
+final class ListNotebookRuntimesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNotebookRuntimesResponse';
 
@@ -69287,7 +69178,7 @@ final class ListNotebookRuntimesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.DeleteNotebookRuntime`.
-final class DeleteNotebookRuntimeRequest extends protobuf.ProtoMessage {
+final class DeleteNotebookRuntimeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteNotebookRuntimeRequest';
 
@@ -69315,7 +69206,7 @@ final class DeleteNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.UpgradeNotebookRuntime`.
-final class UpgradeNotebookRuntimeRequest extends protobuf.ProtoMessage {
+final class UpgradeNotebookRuntimeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpgradeNotebookRuntimeRequest';
 
@@ -69343,8 +69234,7 @@ final class UpgradeNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
 /// Metadata information for
 /// `NotebookService.UpgradeNotebookRuntime`.
-final class UpgradeNotebookRuntimeOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpgradeNotebookRuntimeOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpgradeNotebookRuntimeOperationMetadata';
 
@@ -69385,7 +69275,7 @@ final class UpgradeNotebookRuntimeOperationMetadata
 
 /// Response message for
 /// `NotebookService.UpgradeNotebookRuntime`.
-final class UpgradeNotebookRuntimeResponse extends protobuf.ProtoMessage {
+final class UpgradeNotebookRuntimeResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpgradeNotebookRuntimeResponse';
 
@@ -69403,7 +69293,7 @@ final class UpgradeNotebookRuntimeResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.StartNotebookRuntime`.
-final class StartNotebookRuntimeRequest extends protobuf.ProtoMessage {
+final class StartNotebookRuntimeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StartNotebookRuntimeRequest';
 
@@ -69430,8 +69320,7 @@ final class StartNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
 /// Metadata information for
 /// `NotebookService.StartNotebookRuntime`.
-final class StartNotebookRuntimeOperationMetadata
-    extends protobuf.ProtoMessage {
+final class StartNotebookRuntimeOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StartNotebookRuntimeOperationMetadata';
 
@@ -69472,7 +69361,7 @@ final class StartNotebookRuntimeOperationMetadata
 
 /// Response message for
 /// `NotebookService.StartNotebookRuntime`.
-final class StartNotebookRuntimeResponse extends protobuf.ProtoMessage {
+final class StartNotebookRuntimeResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StartNotebookRuntimeResponse';
 
@@ -69490,7 +69379,7 @@ final class StartNotebookRuntimeResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `NotebookService.StopNotebookRuntime`.
-final class StopNotebookRuntimeRequest extends protobuf.ProtoMessage {
+final class StopNotebookRuntimeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StopNotebookRuntimeRequest';
 
@@ -69517,7 +69406,7 @@ final class StopNotebookRuntimeRequest extends protobuf.ProtoMessage {
 
 /// Metadata information for
 /// `NotebookService.StopNotebookRuntime`.
-final class StopNotebookRuntimeOperationMetadata extends protobuf.ProtoMessage {
+final class StopNotebookRuntimeOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StopNotebookRuntimeOperationMetadata';
 
@@ -69547,7 +69436,7 @@ final class StopNotebookRuntimeOperationMetadata extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `NotebookService.StopNotebookRuntime`.
-final class StopNotebookRuntimeResponse extends protobuf.ProtoMessage {
+final class StopNotebookRuntimeResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StopNotebookRuntimeResponse';
 
@@ -69564,7 +69453,7 @@ final class StopNotebookRuntimeResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for [NotebookService.CreateNotebookExecutionJob]
-final class CreateNotebookExecutionJobRequest extends protobuf.ProtoMessage {
+final class CreateNotebookExecutionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateNotebookExecutionJobRequest';
 
@@ -69616,8 +69505,7 @@ final class CreateNotebookExecutionJobRequest extends protobuf.ProtoMessage {
 
 /// Metadata information for
 /// `NotebookService.CreateNotebookExecutionJob`.
-final class CreateNotebookExecutionJobOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateNotebookExecutionJobOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateNotebookExecutionJobOperationMetadata';
 
@@ -69657,7 +69545,7 @@ final class CreateNotebookExecutionJobOperationMetadata
 }
 
 /// Request message for [NotebookService.GetNotebookExecutionJob]
-final class GetNotebookExecutionJobRequest extends protobuf.ProtoMessage {
+final class GetNotebookExecutionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetNotebookExecutionJobRequest';
 
@@ -69694,7 +69582,7 @@ final class GetNotebookExecutionJobRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for [NotebookService.ListNotebookExecutionJobs]
-final class ListNotebookExecutionJobsRequest extends protobuf.ProtoMessage {
+final class ListNotebookExecutionJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNotebookExecutionJobsRequest';
 
@@ -69788,7 +69676,7 @@ final class ListNotebookExecutionJobsRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for [NotebookService.CreateNotebookExecutionJob]
-final class ListNotebookExecutionJobsResponse extends protobuf.ProtoMessage {
+final class ListNotebookExecutionJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListNotebookExecutionJobsResponse';
 
@@ -69833,7 +69721,7 @@ final class ListNotebookExecutionJobsResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for [NotebookService.DeleteNotebookExecutionJob]
-final class DeleteNotebookExecutionJobRequest extends protobuf.ProtoMessage {
+final class DeleteNotebookExecutionJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteNotebookExecutionJobRequest';
 
@@ -69857,7 +69745,7 @@ final class DeleteNotebookExecutionJobRequest extends protobuf.ProtoMessage {
   }
 }
 
-final class PostStartupScriptConfig extends protobuf.ProtoMessage {
+final class PostStartupScriptConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PostStartupScriptConfig';
 
@@ -69908,7 +69796,7 @@ final class PostStartupScriptConfig extends protobuf.ProtoMessage {
 }
 
 final class PostStartupScriptConfig_PostStartupScriptBehavior
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   static const postStartupScriptBehaviorUnspecified =
       PostStartupScriptConfig_PostStartupScriptBehavior(
         'POST_STARTUP_SCRIPT_BEHAVIOR_UNSPECIFIED',
@@ -69942,7 +69830,7 @@ final class PostStartupScriptConfig_PostStartupScriptBehavior
 }
 
 /// Colab image of the runtime.
-final class ColabImage extends protobuf.ProtoMessage {
+final class ColabImage extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ColabImage';
 
@@ -69981,7 +69869,7 @@ final class ColabImage extends protobuf.ProtoMessage {
 
 /// Notebook Software Config. This is passed to the backend when user
 /// makes software configurations in UI.
-final class NotebookSoftwareConfig extends protobuf.ProtoMessage {
+final class NotebookSoftwareConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.NotebookSoftwareConfig';
 
@@ -70026,7 +69914,7 @@ final class NotebookSoftwareConfig extends protobuf.ProtoMessage {
 /// subset of an [OpenAPI 3.0 schema
 /// object](https://spec.openapis.org/oas/v3.0.3#schema-object). More fields may
 /// be added in the future as needed.
-final class Schema extends protobuf.ProtoMessage {
+final class Schema extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Schema';
 
@@ -70255,7 +70143,7 @@ final class Schema extends protobuf.ProtoMessage {
 }
 
 /// Generic Metadata shared by all operations.
-final class GenericOperationMetadata extends protobuf.ProtoMessage {
+final class GenericOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenericOperationMetadata';
 
@@ -70301,7 +70189,7 @@ final class GenericOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform deletes of any entities.
-final class DeleteOperationMetadata extends protobuf.ProtoMessage {
+final class DeleteOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteOperationMetadata';
 
@@ -70331,7 +70219,7 @@ final class DeleteOperationMetadata extends protobuf.ProtoMessage {
 /// workloads.
 /// A PersistentResource can have multiple node pools and each node
 /// pool can have its own machine spec.
-final class PersistentResource extends protobuf.ProtoMessage {
+final class PersistentResource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PersistentResource';
 
@@ -70510,7 +70398,7 @@ final class PersistentResource extends protobuf.ProtoMessage {
 }
 
 /// Describes the PersistentResource state.
-final class PersistentResource_State extends protobuf.ProtoEnum {
+final class PersistentResource_State extends ProtoEnum {
   /// Not set.
   static const stateUnspecified = PersistentResource_State('STATE_UNSPECIFIED');
 
@@ -70552,7 +70440,7 @@ final class PersistentResource_State extends protobuf.ProtoEnum {
 
 /// Represents the spec of a group of resources of the same type,
 /// for example machine type, disk, and accelerators, in a PersistentResource.
-final class ResourcePool extends protobuf.ProtoMessage {
+final class ResourcePool extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResourcePool';
 
@@ -70621,7 +70509,7 @@ final class ResourcePool extends protobuf.ProtoMessage {
 }
 
 /// The min/max number of replicas allowed if enabling autoscaling
-final class ResourcePool_AutoscalingSpec extends protobuf.ProtoMessage {
+final class ResourcePool_AutoscalingSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResourcePool.AutoscalingSpec';
 
@@ -70671,7 +70559,7 @@ final class ResourcePool_AutoscalingSpec extends protobuf.ProtoMessage {
 ///
 /// * Service accounts used to run the workloads.
 /// * Whether to make it a dedicated Ray Cluster.
-final class ResourceRuntimeSpec extends protobuf.ProtoMessage {
+final class ResourceRuntimeSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResourceRuntimeSpec';
 
@@ -70709,7 +70597,7 @@ final class ResourceRuntimeSpec extends protobuf.ProtoMessage {
 /// For experimental launch, Ray cluster creation and Persistent
 /// cluster creation are 1:1 mapping: We will provision all the nodes within the
 /// Persistent cluster as Ray nodes.
-final class RaySpec extends protobuf.ProtoMessage {
+final class RaySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RaySpec';
 
@@ -70788,7 +70676,7 @@ final class RaySpec extends protobuf.ProtoMessage {
 }
 
 /// Persistent Cluster runtime information as output
-final class ResourceRuntime extends protobuf.ProtoMessage {
+final class ResourceRuntime extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResourceRuntime';
 
@@ -70835,7 +70723,7 @@ final class ResourceRuntime extends protobuf.ProtoMessage {
 }
 
 /// Configuration for the use of custom service account to run the workloads.
-final class ServiceAccountSpec extends protobuf.ProtoMessage {
+final class ServiceAccountSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ServiceAccountSpec';
 
@@ -70886,7 +70774,7 @@ final class ServiceAccountSpec extends protobuf.ProtoMessage {
 }
 
 /// Configuration for the Ray metrics.
-final class RayMetricSpec extends protobuf.ProtoMessage {
+final class RayMetricSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RayMetricSpec';
 
@@ -70909,7 +70797,7 @@ final class RayMetricSpec extends protobuf.ProtoMessage {
 }
 
 /// Configuration for the Ray OSS Logs.
-final class RayLogsSpec extends protobuf.ProtoMessage {
+final class RayLogsSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RayLogsSpec';
 
@@ -70933,7 +70821,7 @@ final class RayLogsSpec extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PersistentResourceService.CreatePersistentResource`.
-final class CreatePersistentResourceRequest extends protobuf.ProtoMessage {
+final class CreatePersistentResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreatePersistentResourceRequest';
 
@@ -70986,8 +70874,7 @@ final class CreatePersistentResourceRequest extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform create PersistentResource.
-final class CreatePersistentResourceOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreatePersistentResourceOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreatePersistentResourceOperationMetadata';
 
@@ -71026,8 +70913,7 @@ final class CreatePersistentResourceOperationMetadata
 }
 
 /// Details of operations that perform update PersistentResource.
-final class UpdatePersistentResourceOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdatePersistentResourceOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdatePersistentResourceOperationMetadata';
 
@@ -71066,8 +70952,7 @@ final class UpdatePersistentResourceOperationMetadata
 }
 
 /// Details of operations that perform reboot PersistentResource.
-final class RebootPersistentResourceOperationMetadata
-    extends protobuf.ProtoMessage {
+final class RebootPersistentResourceOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RebootPersistentResourceOperationMetadata';
 
@@ -71107,7 +70992,7 @@ final class RebootPersistentResourceOperationMetadata
 
 /// Request message for
 /// `PersistentResourceService.GetPersistentResource`.
-final class GetPersistentResourceRequest extends protobuf.ProtoMessage {
+final class GetPersistentResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetPersistentResourceRequest';
 
@@ -71133,7 +71018,7 @@ final class GetPersistentResourceRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for `PersistentResourceService.ListPersistentResource`.
-final class ListPersistentResourcesRequest extends protobuf.ProtoMessage {
+final class ListPersistentResourcesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListPersistentResourcesRequest';
 
@@ -71183,7 +71068,7 @@ final class ListPersistentResourcesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PersistentResourceService.ListPersistentResources`
-final class ListPersistentResourcesResponse extends protobuf.ProtoMessage {
+final class ListPersistentResourcesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListPersistentResourcesResponse';
 
@@ -71227,7 +71112,7 @@ final class ListPersistentResourcesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PersistentResourceService.DeletePersistentResource`.
-final class DeletePersistentResourceRequest extends protobuf.ProtoMessage {
+final class DeletePersistentResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeletePersistentResourceRequest';
 
@@ -71253,7 +71138,7 @@ final class DeletePersistentResourceRequest extends protobuf.ProtoMessage {
 }
 
 /// Request message for UpdatePersistentResource method.
-final class UpdatePersistentResourceRequest extends protobuf.ProtoMessage {
+final class UpdatePersistentResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdatePersistentResourceRequest';
 
@@ -71298,7 +71183,7 @@ final class UpdatePersistentResourceRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PersistentResourceService.RebootPersistentResource`.
-final class RebootPersistentResourceRequest extends protobuf.ProtoMessage {
+final class RebootPersistentResourceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RebootPersistentResourceRequest';
 
@@ -71324,7 +71209,7 @@ final class RebootPersistentResourceRequest extends protobuf.ProtoMessage {
 }
 
 /// An instance of a machine learning PipelineJob.
-final class PipelineJob extends protobuf.ProtoMessage {
+final class PipelineJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineJob';
 
@@ -71584,7 +71469,7 @@ final class PipelineJob extends protobuf.ProtoMessage {
 }
 
 /// The runtime config of a PipelineJob.
-final class PipelineJob_RuntimeConfig extends protobuf.ProtoMessage {
+final class PipelineJob_RuntimeConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineJob.RuntimeConfig';
 
@@ -71691,8 +71576,7 @@ final class PipelineJob_RuntimeConfig extends protobuf.ProtoMessage {
 }
 
 /// The type of an input artifact.
-final class PipelineJob_RuntimeConfig_InputArtifact
-    extends protobuf.ProtoMessage {
+final class PipelineJob_RuntimeConfig_InputArtifact extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineJob.RuntimeConfig.InputArtifact';
 
@@ -71725,7 +71609,7 @@ final class PipelineJob_RuntimeConfig_InputArtifact
 /// Persistent resource based runtime detail. For more information, refer to
 /// https://cloud.google.com/vertex-ai/docs/training/persistent-resource-overview
 final class PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineJob.RuntimeConfig.PersistentResourceRuntimeDetail';
 
@@ -71793,7 +71677,7 @@ final class PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail
 
 /// An enum that specifies the behavior to take if the timeout is reached.
 final class PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail_TaskResourceUnavailableTimeoutBehavior
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Unspecified. Behavior is same as `FAIL`.
   static const taskResourceUnavailableTimeoutBehaviorUnspecified =
       PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail_TaskResourceUnavailableTimeoutBehavior(
@@ -71833,8 +71717,7 @@ final class PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail_TaskResour
 }
 
 /// The default runtime for the PipelineJob.
-final class PipelineJob_RuntimeConfig_DefaultRuntime
-    extends protobuf.ProtoMessage {
+final class PipelineJob_RuntimeConfig_DefaultRuntime extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineJob.RuntimeConfig.DefaultRuntime';
 
@@ -71870,7 +71753,7 @@ final class PipelineJob_RuntimeConfig_DefaultRuntime
 /// `PipelineJob.template_uri`
 /// is from supported template registry. Currently, the only supported registry
 /// is Artifact Registry.
-final class PipelineTemplateMetadata extends protobuf.ProtoMessage {
+final class PipelineTemplateMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTemplateMetadata';
 
@@ -71899,7 +71782,7 @@ final class PipelineTemplateMetadata extends protobuf.ProtoMessage {
 }
 
 /// The runtime detail of PipelineJob.
-final class PipelineJobDetail extends protobuf.ProtoMessage {
+final class PipelineJobDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineJobDetail';
 
@@ -71941,7 +71824,7 @@ final class PipelineJobDetail extends protobuf.ProtoMessage {
 }
 
 /// The runtime detail of a task execution.
-final class PipelineTaskDetail extends protobuf.ProtoMessage {
+final class PipelineTaskDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskDetail';
 
@@ -72089,8 +71972,7 @@ final class PipelineTaskDetail extends protobuf.ProtoMessage {
 }
 
 /// A single record of the task status.
-final class PipelineTaskDetail_PipelineTaskStatus
-    extends protobuf.ProtoMessage {
+final class PipelineTaskDetail_PipelineTaskStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskDetail.PipelineTaskStatus';
 
@@ -72138,7 +72020,7 @@ final class PipelineTaskDetail_PipelineTaskStatus
 }
 
 /// A list of artifact metadata.
-final class PipelineTaskDetail_ArtifactList extends protobuf.ProtoMessage {
+final class PipelineTaskDetail_ArtifactList extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskDetail.ArtifactList';
 
@@ -72164,7 +72046,7 @@ final class PipelineTaskDetail_ArtifactList extends protobuf.ProtoMessage {
 }
 
 /// Specifies state of TaskExecution
-final class PipelineTaskDetail_State extends protobuf.ProtoEnum {
+final class PipelineTaskDetail_State extends ProtoEnum {
   /// Unspecified.
   static const stateUnspecified = PipelineTaskDetail_State('STATE_UNSPECIFIED');
 
@@ -72213,7 +72095,7 @@ final class PipelineTaskDetail_State extends protobuf.ProtoEnum {
 }
 
 /// The runtime detail of a pipeline executor.
-final class PipelineTaskExecutorDetail extends protobuf.ProtoMessage {
+final class PipelineTaskExecutorDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskExecutorDetail';
 
@@ -72250,8 +72132,7 @@ final class PipelineTaskExecutorDetail extends protobuf.ProtoMessage {
 
 /// The detail of a container execution. It contains the job names of the
 /// lifecycle of a container execution.
-final class PipelineTaskExecutorDetail_ContainerDetail
-    extends protobuf.ProtoMessage {
+final class PipelineTaskExecutorDetail_ContainerDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskExecutorDetail.ContainerDetail';
 
@@ -72319,8 +72200,7 @@ final class PipelineTaskExecutorDetail_ContainerDetail
 }
 
 /// The detailed info for a custom job executor.
-final class PipelineTaskExecutorDetail_CustomJobDetail
-    extends protobuf.ProtoMessage {
+final class PipelineTaskExecutorDetail_CustomJobDetail extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskExecutorDetail.CustomJobDetail';
 
@@ -72361,7 +72241,7 @@ final class PipelineTaskExecutorDetail_CustomJobDetail
 /// User provided rerun config to submit a rerun pipelinejob. This includes
 /// 1. Which task to rerun
 /// 2. User override input parameters and artifacts.
-final class PipelineTaskRerunConfig extends protobuf.ProtoMessage {
+final class PipelineTaskRerunConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskRerunConfig';
 
@@ -72420,7 +72300,7 @@ final class PipelineTaskRerunConfig extends protobuf.ProtoMessage {
 }
 
 /// A list of artifact metadata.
-final class PipelineTaskRerunConfig_ArtifactList extends protobuf.ProtoMessage {
+final class PipelineTaskRerunConfig_ArtifactList extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskRerunConfig.ArtifactList';
 
@@ -72447,7 +72327,7 @@ final class PipelineTaskRerunConfig_ArtifactList extends protobuf.ProtoMessage {
 }
 
 /// Runtime inputs data of the task.
-final class PipelineTaskRerunConfig_Inputs extends protobuf.ProtoMessage {
+final class PipelineTaskRerunConfig_Inputs extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PipelineTaskRerunConfig.Inputs';
 
@@ -72491,8 +72371,7 @@ final class PipelineTaskRerunConfig_Inputs extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `PipelineService.BatchCancelPipelineJobs`.
-final class BatchCancelPipelineJobsOperationMetadata
-    extends protobuf.ProtoMessage {
+final class BatchCancelPipelineJobsOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCancelPipelineJobsOperationMetadata';
 
@@ -72522,7 +72401,7 @@ final class BatchCancelPipelineJobsOperationMetadata
 
 /// Request message for
 /// `PipelineService.CreateTrainingPipeline`.
-final class CreateTrainingPipelineRequest extends protobuf.ProtoMessage {
+final class CreateTrainingPipelineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTrainingPipelineRequest';
 
@@ -72563,7 +72442,7 @@ final class CreateTrainingPipelineRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.GetTrainingPipeline`.
-final class GetTrainingPipelineRequest extends protobuf.ProtoMessage {
+final class GetTrainingPipelineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTrainingPipelineRequest';
 
@@ -72589,7 +72468,7 @@ final class GetTrainingPipelineRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.ListTrainingPipelines`.
-final class ListTrainingPipelinesRequest extends protobuf.ProtoMessage {
+final class ListTrainingPipelinesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTrainingPipelinesRequest';
 
@@ -72673,7 +72552,7 @@ final class ListTrainingPipelinesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PipelineService.ListTrainingPipelines`
-final class ListTrainingPipelinesResponse extends protobuf.ProtoMessage {
+final class ListTrainingPipelinesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTrainingPipelinesResponse';
 
@@ -72718,7 +72597,7 @@ final class ListTrainingPipelinesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.DeleteTrainingPipeline`.
-final class DeleteTrainingPipelineRequest extends protobuf.ProtoMessage {
+final class DeleteTrainingPipelineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteTrainingPipelineRequest';
 
@@ -72745,7 +72624,7 @@ final class DeleteTrainingPipelineRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.CancelTrainingPipeline`.
-final class CancelTrainingPipelineRequest extends protobuf.ProtoMessage {
+final class CancelTrainingPipelineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelTrainingPipelineRequest';
 
@@ -72772,7 +72651,7 @@ final class CancelTrainingPipelineRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.CreatePipelineJob`.
-final class CreatePipelineJobRequest extends protobuf.ProtoMessage {
+final class CreatePipelineJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreatePipelineJobRequest';
 
@@ -72823,7 +72702,7 @@ final class CreatePipelineJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.GetPipelineJob`.
-final class GetPipelineJobRequest extends protobuf.ProtoMessage {
+final class GetPipelineJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetPipelineJobRequest';
 
@@ -72849,7 +72728,7 @@ final class GetPipelineJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.ListPipelineJobs`.
-final class ListPipelineJobsRequest extends protobuf.ProtoMessage {
+final class ListPipelineJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListPipelineJobsRequest';
 
@@ -72966,7 +72845,7 @@ final class ListPipelineJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PipelineService.ListPipelineJobs`
-final class ListPipelineJobsResponse extends protobuf.ProtoMessage {
+final class ListPipelineJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListPipelineJobsResponse';
 
@@ -73006,7 +72885,7 @@ final class ListPipelineJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.DeletePipelineJob`.
-final class DeletePipelineJobRequest extends protobuf.ProtoMessage {
+final class DeletePipelineJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeletePipelineJobRequest';
 
@@ -73032,7 +72911,7 @@ final class DeletePipelineJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.BatchDeletePipelineJobs`.
-final class BatchDeletePipelineJobsRequest extends protobuf.ProtoMessage {
+final class BatchDeletePipelineJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchDeletePipelineJobsRequest';
 
@@ -73067,7 +72946,7 @@ final class BatchDeletePipelineJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PipelineService.BatchDeletePipelineJobs`.
-final class BatchDeletePipelineJobsResponse extends protobuf.ProtoMessage {
+final class BatchDeletePipelineJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchDeletePipelineJobsResponse';
 
@@ -73094,7 +72973,7 @@ final class BatchDeletePipelineJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.CancelPipelineJob`.
-final class CancelPipelineJobRequest extends protobuf.ProtoMessage {
+final class CancelPipelineJobRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CancelPipelineJobRequest';
 
@@ -73120,7 +72999,7 @@ final class CancelPipelineJobRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PipelineService.BatchCancelPipelineJobs`.
-final class BatchCancelPipelineJobsRequest extends protobuf.ProtoMessage {
+final class BatchCancelPipelineJobsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCancelPipelineJobsRequest';
 
@@ -73155,7 +73034,7 @@ final class BatchCancelPipelineJobsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PipelineService.BatchCancelPipelineJobs`.
-final class BatchCancelPipelineJobsResponse extends protobuf.ProtoMessage {
+final class BatchCancelPipelineJobsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCancelPipelineJobsResponse';
 
@@ -73182,7 +73061,7 @@ final class BatchCancelPipelineJobsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PredictionService.Predict`.
-final class PredictRequest extends protobuf.ProtoMessage {
+final class PredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredictRequest';
 
@@ -73247,7 +73126,7 @@ final class PredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.Predict`.
-final class PredictResponse extends protobuf.ProtoMessage {
+final class PredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredictResponse';
 
@@ -73327,7 +73206,7 @@ final class PredictResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PredictionService.RawPredict`.
-final class RawPredictRequest extends protobuf.ProtoMessage {
+final class RawPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RawPredictRequest';
 
@@ -73377,7 +73256,7 @@ final class RawPredictRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PredictionService.StreamRawPredict`.
-final class StreamRawPredictRequest extends protobuf.ProtoMessage {
+final class StreamRawPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamRawPredictRequest';
 
@@ -73413,7 +73292,7 @@ final class StreamRawPredictRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PredictionService.DirectPredict`.
-final class DirectPredictRequest extends protobuf.ProtoMessage {
+final class DirectPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DirectPredictRequest';
 
@@ -73457,7 +73336,7 @@ final class DirectPredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.DirectPredict`.
-final class DirectPredictResponse extends protobuf.ProtoMessage {
+final class DirectPredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DirectPredictResponse';
 
@@ -73488,7 +73367,7 @@ final class DirectPredictResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PredictionService.DirectRawPredict`.
-final class DirectRawPredictRequest extends protobuf.ProtoMessage {
+final class DirectRawPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DirectRawPredictRequest';
 
@@ -73542,7 +73421,7 @@ final class DirectRawPredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.DirectRawPredict`.
-final class DirectRawPredictResponse extends protobuf.ProtoMessage {
+final class DirectRawPredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DirectRawPredictResponse';
 
@@ -73571,7 +73450,7 @@ final class DirectRawPredictResponse extends protobuf.ProtoMessage {
 /// `endpoint`
 /// field and optionally `input`. The subsequent messages must contain
 /// `input`.
-final class StreamDirectPredictRequest extends protobuf.ProtoMessage {
+final class StreamDirectPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamDirectPredictRequest';
 
@@ -73615,7 +73494,7 @@ final class StreamDirectPredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.StreamDirectPredict`.
-final class StreamDirectPredictResponse extends protobuf.ProtoMessage {
+final class StreamDirectPredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamDirectPredictResponse';
 
@@ -73657,7 +73536,7 @@ final class StreamDirectPredictResponse extends protobuf.ProtoMessage {
 /// `input`.
 /// `method_name`
 /// in the subsequent messages have no effect.
-final class StreamDirectRawPredictRequest extends protobuf.ProtoMessage {
+final class StreamDirectRawPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamDirectRawPredictRequest';
 
@@ -73711,7 +73590,7 @@ final class StreamDirectRawPredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.StreamDirectRawPredict`.
-final class StreamDirectRawPredictResponse extends protobuf.ProtoMessage {
+final class StreamDirectRawPredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamDirectRawPredictResponse';
 
@@ -73740,7 +73619,7 @@ final class StreamDirectRawPredictResponse extends protobuf.ProtoMessage {
 /// `endpoint`
 /// field and optionally `input`. The subsequent messages must contain
 /// `input`.
-final class StreamingPredictRequest extends protobuf.ProtoMessage {
+final class StreamingPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingPredictRequest';
 
@@ -73784,7 +73663,7 @@ final class StreamingPredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.StreamingPredict`.
-final class StreamingPredictResponse extends protobuf.ProtoMessage {
+final class StreamingPredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingPredictResponse';
 
@@ -73826,7 +73705,7 @@ final class StreamingPredictResponse extends protobuf.ProtoMessage {
 /// `input`.
 /// `method_name`
 /// in the subsequent messages have no effect.
-final class StreamingRawPredictRequest extends protobuf.ProtoMessage {
+final class StreamingRawPredictRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingRawPredictRequest';
 
@@ -73880,7 +73759,7 @@ final class StreamingRawPredictRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.StreamingRawPredict`.
-final class StreamingRawPredictResponse extends protobuf.ProtoMessage {
+final class StreamingRawPredictResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamingRawPredictResponse';
 
@@ -73904,7 +73783,7 @@ final class StreamingRawPredictResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `PredictionService.Explain`.
-final class ExplainRequest extends protobuf.ProtoMessage {
+final class ExplainRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplainRequest';
 
@@ -74010,7 +73889,7 @@ final class ExplainRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.Explain`.
-final class ExplainResponse extends protobuf.ProtoMessage {
+final class ExplainResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplainResponse';
 
@@ -74078,8 +73957,7 @@ final class ExplainResponse extends protobuf.ProtoMessage {
 }
 
 /// This message is a wrapper grouping Concurrent Explanations.
-final class ExplainResponse_ConcurrentExplanation
-    extends protobuf.ProtoMessage {
+final class ExplainResponse_ConcurrentExplanation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExplainResponse.ConcurrentExplanation';
 
@@ -74112,7 +73990,7 @@ final class ExplainResponse_ConcurrentExplanation
 
 /// Request message for
 /// `PredictionService.CountTokens`.
-final class CountTokensRequest extends protobuf.ProtoMessage {
+final class CountTokensRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CountTokensRequest';
 
@@ -74201,7 +74079,7 @@ final class CountTokensRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `PredictionService.CountTokens`.
-final class CountTokensResponse extends protobuf.ProtoMessage {
+final class CountTokensResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CountTokensResponse';
 
@@ -74253,7 +74131,7 @@ final class CountTokensResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for [PredictionService.GenerateContent].
-final class GenerateContentRequest extends protobuf.ProtoMessage {
+final class GenerateContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateContentRequest';
 
@@ -74379,7 +74257,7 @@ final class GenerateContentRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for [PredictionService.GenerateContent].
-final class GenerateContentResponse extends protobuf.ProtoMessage {
+final class GenerateContentResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateContentResponse';
 
@@ -74451,8 +74329,7 @@ final class GenerateContentResponse extends protobuf.ProtoMessage {
 }
 
 /// Content filter results for a prompt sent in the request.
-final class GenerateContentResponse_PromptFeedback
-    extends protobuf.ProtoMessage {
+final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateContentResponse.PromptFeedback';
 
@@ -74506,7 +74383,7 @@ final class GenerateContentResponse_PromptFeedback
 
 /// Blocked reason enumeration.
 final class GenerateContentResponse_PromptFeedback_BlockedReason
-    extends protobuf.ProtoEnum {
+    extends ProtoEnum {
   /// Unspecified blocked reason.
   static const blockedReasonUnspecified =
       GenerateContentResponse_PromptFeedback_BlockedReason(
@@ -74555,8 +74432,7 @@ final class GenerateContentResponse_PromptFeedback_BlockedReason
 }
 
 /// Usage metadata about response(s).
-final class GenerateContentResponse_UsageMetadata
-    extends protobuf.ProtoMessage {
+final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateContentResponse.UsageMetadata';
 
@@ -74659,7 +74535,7 @@ final class GenerateContentResponse_UsageMetadata
 }
 
 /// Request message for [PredictionService.ChatCompletions]
-final class ChatCompletionsRequest extends protobuf.ProtoMessage {
+final class ChatCompletionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ChatCompletionsRequest';
 
@@ -74695,7 +74571,7 @@ final class ChatCompletionsRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for [PredictionService.PredictLongRunning]
-final class PredictLongRunningResponse extends protobuf.ProtoMessage {
+final class PredictLongRunningResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredictLongRunningResponse';
 
@@ -74724,7 +74600,7 @@ final class PredictLongRunningResponse extends protobuf.ProtoMessage {
 }
 
 /// Metadata for PredictLongRunning long running operations.
-final class PredictLongRunningMetadata extends protobuf.ProtoMessage {
+final class PredictLongRunningMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredictLongRunningMetadata';
 
@@ -74741,7 +74617,7 @@ final class PredictLongRunningMetadata extends protobuf.ProtoMessage {
 }
 
 /// Generate video response.
-final class GenerateVideoResponse extends protobuf.ProtoMessage {
+final class GenerateVideoResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GenerateVideoResponse';
 
@@ -74788,7 +74664,7 @@ final class GenerateVideoResponse extends protobuf.ProtoMessage {
 }
 
 /// A Model Garden Publisher Model.
-final class PublisherModel extends protobuf.ProtoMessage {
+final class PublisherModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel';
 
@@ -74902,7 +74778,7 @@ final class PublisherModel extends protobuf.ProtoMessage {
 }
 
 /// Reference to a resource.
-final class PublisherModel_ResourceReference extends protobuf.ProtoMessage {
+final class PublisherModel_ResourceReference extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.ResourceReference';
 
@@ -74955,7 +74831,7 @@ final class PublisherModel_ResourceReference extends protobuf.ProtoMessage {
 }
 
 /// The information about the parent of a model.
-final class PublisherModel_Parent extends protobuf.ProtoMessage {
+final class PublisherModel_Parent extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.Parent';
 
@@ -74992,7 +74868,7 @@ final class PublisherModel_Parent extends protobuf.ProtoMessage {
 }
 
 /// A named piece of documentation.
-final class PublisherModel_Documentation extends protobuf.ProtoMessage {
+final class PublisherModel_Documentation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.Documentation';
 
@@ -75023,7 +74899,7 @@ final class PublisherModel_Documentation extends protobuf.ProtoMessage {
 }
 
 /// Actions could take on this Publisher Model.
-final class PublisherModel_CallToAction extends protobuf.ProtoMessage {
+final class PublisherModel_CallToAction extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction';
 
@@ -75185,7 +75061,7 @@ final class PublisherModel_CallToAction extends protobuf.ProtoMessage {
 /// The regional resource name or the URI. Key is region, e.g.,
 /// us-central1, europe-west2, global, etc..
 final class PublisherModel_CallToAction_RegionalResourceReferences
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.RegionalResourceReferences';
 
@@ -75250,8 +75126,7 @@ final class PublisherModel_CallToAction_RegionalResourceReferences
 }
 
 /// Rest API docs.
-final class PublisherModel_CallToAction_ViewRestApi
-    extends protobuf.ProtoMessage {
+final class PublisherModel_CallToAction_ViewRestApi extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.ViewRestApi';
 
@@ -75292,8 +75167,7 @@ final class PublisherModel_CallToAction_ViewRestApi
 }
 
 /// Open notebooks.
-final class PublisherModel_CallToAction_OpenNotebooks
-    extends protobuf.ProtoMessage {
+final class PublisherModel_CallToAction_OpenNotebooks extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.OpenNotebooks';
 
@@ -75323,7 +75197,7 @@ final class PublisherModel_CallToAction_OpenNotebooks
 
 /// Open fine tuning pipelines.
 final class PublisherModel_CallToAction_OpenFineTuningPipelines
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.OpenFineTuningPipelines';
 
@@ -75354,8 +75228,7 @@ final class PublisherModel_CallToAction_OpenFineTuningPipelines
 }
 
 /// Multiple setups to deploy the PublisherModel.
-final class PublisherModel_CallToAction_DeployVertex
-    extends protobuf.ProtoMessage {
+final class PublisherModel_CallToAction_DeployVertex extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.DeployVertex';
 
@@ -75388,7 +75261,7 @@ final class PublisherModel_CallToAction_DeployVertex
 
 /// Model metadata that is needed for UploadModel or
 /// DeployModel/CreateEndpoint requests.
-final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
+final class PublisherModel_CallToAction_Deploy extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.Deploy';
 
@@ -75511,7 +75384,7 @@ final class PublisherModel_CallToAction_Deploy extends protobuf.ProtoMessage {
 /// Metadata information about the deployment for managing deployment
 /// config.
 final class PublisherModel_CallToAction_Deploy_DeployMetadata
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.Deploy.DeployMetadata';
 
@@ -75548,8 +75421,7 @@ final class PublisherModel_CallToAction_Deploy_DeployMetadata
 }
 
 /// Configurations for PublisherModel GKE deployment
-final class PublisherModel_CallToAction_DeployGke
-    extends protobuf.ProtoMessage {
+final class PublisherModel_CallToAction_DeployGke extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PublisherModel.CallToAction.DeployGke';
 
@@ -75575,7 +75447,7 @@ final class PublisherModel_CallToAction_DeployGke
 }
 
 /// An enum representing the open source category of a PublisherModel.
-final class PublisherModel_OpenSourceCategory extends protobuf.ProtoEnum {
+final class PublisherModel_OpenSourceCategory extends ProtoEnum {
   /// The open source category is unspecified, which should not be used.
   static const openSourceCategoryUnspecified =
       PublisherModel_OpenSourceCategory('OPEN_SOURCE_CATEGORY_UNSPECIFIED');
@@ -75623,7 +75495,7 @@ final class PublisherModel_OpenSourceCategory extends protobuf.ProtoEnum {
 }
 
 /// An enum representing the launch stage of a PublisherModel.
-final class PublisherModel_LaunchStage extends protobuf.ProtoEnum {
+final class PublisherModel_LaunchStage extends ProtoEnum {
   /// The model launch stage is unspecified.
   static const launchStageUnspecified = PublisherModel_LaunchStage(
     'LAUNCH_STAGE_UNSPECIFIED',
@@ -75663,7 +75535,7 @@ final class PublisherModel_LaunchStage extends protobuf.ProtoEnum {
 }
 
 /// An enum representing the state of the PublicModelVersion.
-final class PublisherModel_VersionState extends protobuf.ProtoEnum {
+final class PublisherModel_VersionState extends ProtoEnum {
   /// The version state is unspecified.
   static const versionStateUnspecified = PublisherModel_VersionState(
     'VERSION_STATE_UNSPECIFIED',
@@ -75694,7 +75566,7 @@ final class PublisherModel_VersionState extends protobuf.ProtoEnum {
 }
 
 /// ReasoningEngine configurations
-final class ReasoningEngineSpec extends protobuf.ProtoMessage {
+final class ReasoningEngineSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec';
 
@@ -75783,7 +75655,7 @@ final class ReasoningEngineSpec extends protobuf.ProtoMessage {
 
 /// User-provided package specification, containing pickled object and package
 /// requirements.
-final class ReasoningEngineSpec_PackageSpec extends protobuf.ProtoMessage {
+final class ReasoningEngineSpec_PackageSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.PackageSpec';
 
@@ -75839,7 +75711,7 @@ final class ReasoningEngineSpec_PackageSpec extends protobuf.ProtoMessage {
 }
 
 /// The specification of a Reasoning Engine deployment.
-final class ReasoningEngineSpec_DeploymentSpec extends protobuf.ProtoMessage {
+final class ReasoningEngineSpec_DeploymentSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.DeploymentSpec';
 
@@ -75935,7 +75807,7 @@ final class ReasoningEngineSpec_DeploymentSpec extends protobuf.ProtoMessage {
 }
 
 /// Specification for deploying from source code.
-final class ReasoningEngineSpec_SourceCodeSpec extends protobuf.ProtoMessage {
+final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.SourceCodeSpec';
 
@@ -75973,7 +75845,7 @@ final class ReasoningEngineSpec_SourceCodeSpec extends protobuf.ProtoMessage {
 
 /// Specifies source code provided as a byte stream.
 final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.SourceCodeSpec.InlineSource';
 
@@ -76006,8 +75878,7 @@ final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
 }
 
 /// Specification for running a Python application from source.
-final class ReasoningEngineSpec_SourceCodeSpec_PythonSpec
-    extends protobuf.ProtoMessage {
+final class ReasoningEngineSpec_SourceCodeSpec_PythonSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.SourceCodeSpec.PythonSpec';
 
@@ -76071,7 +75942,7 @@ final class ReasoningEngineSpec_SourceCodeSpec_PythonSpec
 
 /// ReasoningEngine provides a customizable runtime for models to determine
 /// which actions to take and in which order.
-final class ReasoningEngine extends protobuf.ProtoMessage {
+final class ReasoningEngine extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngine';
 
@@ -76169,7 +76040,7 @@ final class ReasoningEngine extends protobuf.ProtoMessage {
 }
 
 /// Configuration for how Agent Engine sub-resources should manage context.
-final class ReasoningEngineContextSpec extends protobuf.ProtoMessage {
+final class ReasoningEngineContextSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineContextSpec';
 
@@ -76199,8 +76070,7 @@ final class ReasoningEngineContextSpec extends protobuf.ProtoMessage {
 }
 
 /// Specification for a Memory Bank.
-final class ReasoningEngineContextSpec_MemoryBankConfig
-    extends protobuf.ProtoMessage {
+final class ReasoningEngineContextSpec_MemoryBankConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineContextSpec.MemoryBankConfig';
 
@@ -76260,7 +76130,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig
 /// Configuration for automatically setting the TTL ("time-to-live") of the
 /// memories in the Memory Bank.
 final class ReasoningEngineContextSpec_MemoryBankConfig_TtlConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineContextSpec.MemoryBankConfig.TtlConfig';
 
@@ -76303,7 +76173,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_TtlConfig
 /// Configuration for TTL of the memories in the Memory Bank based on the
 /// action that created or updated the memory.
 final class ReasoningEngineContextSpec_MemoryBankConfig_TtlConfig_GranularTtlConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineContextSpec.MemoryBankConfig.TtlConfig.GranularTtlConfig';
 
@@ -76356,7 +76226,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_TtlConfig_GranularTtlCon
 
 /// Configuration for how to generate memories.
 final class ReasoningEngineContextSpec_MemoryBankConfig_GenerationConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineContextSpec.MemoryBankConfig.GenerationConfig';
 
@@ -76387,7 +76257,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_GenerationConfig
 
 /// Configuration for how to perform similarity search on memories.
 final class ReasoningEngineContextSpec_MemoryBankConfig_SimilaritySearchConfig
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReasoningEngineContextSpec.MemoryBankConfig.SimilaritySearchConfig';
 
@@ -76417,7 +76287,7 @@ final class ReasoningEngineContextSpec_MemoryBankConfig_SimilaritySearchConfig
 }
 
 /// Request message for `ReasoningEngineExecutionService.Query`.
-final class QueryReasoningEngineRequest extends protobuf.ProtoMessage {
+final class QueryReasoningEngineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryReasoningEngineRequest';
 
@@ -76462,7 +76332,7 @@ final class QueryReasoningEngineRequest extends protobuf.ProtoMessage {
 }
 
 /// Response message for `ReasoningEngineExecutionService.Query`
-final class QueryReasoningEngineResponse extends protobuf.ProtoMessage {
+final class QueryReasoningEngineResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.QueryReasoningEngineResponse';
 
@@ -76484,7 +76354,7 @@ final class QueryReasoningEngineResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for `ReasoningEngineExecutionService.StreamQuery`.
-final class StreamQueryReasoningEngineRequest extends protobuf.ProtoMessage {
+final class StreamQueryReasoningEngineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StreamQueryReasoningEngineRequest';
 
@@ -76531,7 +76401,7 @@ final class StreamQueryReasoningEngineRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ReasoningEngineService.CreateReasoningEngine`.
-final class CreateReasoningEngineRequest extends protobuf.ProtoMessage {
+final class CreateReasoningEngineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateReasoningEngineRequest';
 
@@ -76572,8 +76442,7 @@ final class CreateReasoningEngineRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ReasoningEngineService.CreateReasoningEngine`
 /// operation.
-final class CreateReasoningEngineOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateReasoningEngineOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateReasoningEngineOperationMetadata';
 
@@ -76603,7 +76472,7 @@ final class CreateReasoningEngineOperationMetadata
 
 /// Request message for
 /// `ReasoningEngineService.GetReasoningEngine`.
-final class GetReasoningEngineRequest extends protobuf.ProtoMessage {
+final class GetReasoningEngineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetReasoningEngineRequest';
 
@@ -76629,7 +76498,7 @@ final class GetReasoningEngineRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ReasoningEngineService.UpdateReasoningEngine`.
-final class UpdateReasoningEngineRequest extends protobuf.ProtoMessage {
+final class UpdateReasoningEngineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateReasoningEngineRequest';
 
@@ -76662,8 +76531,7 @@ final class UpdateReasoningEngineRequest extends protobuf.ProtoMessage {
 /// Details of
 /// `ReasoningEngineService.UpdateReasoningEngine`
 /// operation.
-final class UpdateReasoningEngineOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateReasoningEngineOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateReasoningEngineOperationMetadata';
 
@@ -76693,7 +76561,7 @@ final class UpdateReasoningEngineOperationMetadata
 
 /// Request message for
 /// `ReasoningEngineService.ListReasoningEngines`.
-final class ListReasoningEnginesRequest extends protobuf.ProtoMessage {
+final class ListReasoningEnginesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListReasoningEnginesRequest';
 
@@ -76748,7 +76616,7 @@ final class ListReasoningEnginesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ReasoningEngineService.ListReasoningEngines`
-final class ListReasoningEnginesResponse extends protobuf.ProtoMessage {
+final class ListReasoningEnginesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListReasoningEnginesResponse';
 
@@ -76793,7 +76661,7 @@ final class ListReasoningEnginesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ReasoningEngineService.DeleteReasoningEngine`.
-final class DeleteReasoningEngineRequest extends protobuf.ProtoMessage {
+final class DeleteReasoningEngineRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteReasoningEngineRequest';
 
@@ -76829,7 +76697,7 @@ final class DeleteReasoningEngineRequest extends protobuf.ProtoMessage {
 /// A ReservationAffinity can be used to configure a Vertex AI resource (e.g., a
 /// DeployedModel) to draw its Compute Engine resources from a Shared
 /// Reservation, or exclusively from on-demand capacity.
-final class ReservationAffinity extends protobuf.ProtoMessage {
+final class ReservationAffinity extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReservationAffinity';
 
@@ -76882,7 +76750,7 @@ final class ReservationAffinity extends protobuf.ProtoMessage {
 }
 
 /// Identifies a type of reservation affinity.
-final class ReservationAffinity_Type extends protobuf.ProtoEnum {
+final class ReservationAffinity_Type extends ProtoEnum {
   /// Default value. This should not be used.
   static const typeUnspecified = ReservationAffinity_Type('TYPE_UNSPECIFIED');
 
@@ -76914,7 +76782,7 @@ final class ReservationAffinity_Type extends protobuf.ProtoEnum {
 
 /// A SavedQuery is a view of the dataset. It references a subset of annotations
 /// by problem type and filters.
-final class SavedQuery extends protobuf.ProtoMessage {
+final class SavedQuery extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SavedQuery';
 
@@ -77023,7 +76891,7 @@ final class SavedQuery extends protobuf.ProtoMessage {
 
 /// An instance of a Schedule periodically schedules runs to make API calls based
 /// on user specified time specification and API request type.
-final class Schedule extends protobuf.ProtoMessage {
+final class Schedule extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Schedule';
 
@@ -77238,7 +77106,7 @@ final class Schedule extends protobuf.ProtoMessage {
 }
 
 /// Status of a scheduled run.
-final class Schedule_RunResponse extends protobuf.ProtoMessage {
+final class Schedule_RunResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Schedule.RunResponse';
 
@@ -77275,7 +77143,7 @@ final class Schedule_RunResponse extends protobuf.ProtoMessage {
 }
 
 /// Possible state of the schedule.
-final class Schedule_State extends protobuf.ProtoEnum {
+final class Schedule_State extends ProtoEnum {
   /// Unspecified.
   static const stateUnspecified = Schedule_State('STATE_UNSPECIFIED');
 
@@ -77307,7 +77175,7 @@ final class Schedule_State extends protobuf.ProtoEnum {
 
 /// Request message for
 /// `ScheduleService.CreateSchedule`.
-final class CreateScheduleRequest extends protobuf.ProtoMessage {
+final class CreateScheduleRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateScheduleRequest';
 
@@ -77342,7 +77210,7 @@ final class CreateScheduleRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ScheduleService.GetSchedule`.
-final class GetScheduleRequest extends protobuf.ProtoMessage {
+final class GetScheduleRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetScheduleRequest';
 
@@ -77368,7 +77236,7 @@ final class GetScheduleRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ScheduleService.ListSchedules`.
-final class ListSchedulesRequest extends protobuf.ProtoMessage {
+final class ListSchedulesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSchedulesRequest';
 
@@ -77480,7 +77348,7 @@ final class ListSchedulesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `ScheduleService.ListSchedules`
-final class ListSchedulesResponse extends protobuf.ProtoMessage {
+final class ListSchedulesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSchedulesResponse';
 
@@ -77518,7 +77386,7 @@ final class ListSchedulesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ScheduleService.DeleteSchedule`.
-final class DeleteScheduleRequest extends protobuf.ProtoMessage {
+final class DeleteScheduleRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteScheduleRequest';
 
@@ -77544,7 +77412,7 @@ final class DeleteScheduleRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ScheduleService.PauseSchedule`.
-final class PauseScheduleRequest extends protobuf.ProtoMessage {
+final class PauseScheduleRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PauseScheduleRequest';
 
@@ -77570,7 +77438,7 @@ final class PauseScheduleRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ScheduleService.ResumeSchedule`.
-final class ResumeScheduleRequest extends protobuf.ProtoMessage {
+final class ResumeScheduleRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ResumeScheduleRequest';
 
@@ -77610,7 +77478,7 @@ final class ResumeScheduleRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `ScheduleService.UpdateSchedule`.
-final class UpdateScheduleRequest extends protobuf.ProtoMessage {
+final class UpdateScheduleRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateScheduleRequest';
 
@@ -77650,7 +77518,7 @@ final class UpdateScheduleRequest extends protobuf.ProtoMessage {
 
 /// PSC config that is used to automatically create PSC endpoints in the user
 /// projects.
-final class PscautomationConfig extends protobuf.ProtoMessage {
+final class PscautomationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PSCAutomationConfig';
 
@@ -77721,7 +77589,7 @@ final class PscautomationConfig extends protobuf.ProtoMessage {
 }
 
 /// Represents configuration for private service connect.
-final class PrivateServiceConnectConfig extends protobuf.ProtoMessage {
+final class PrivateServiceConnectConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PrivateServiceConnectConfig';
 
@@ -77795,7 +77663,7 @@ final class PrivateServiceConnectConfig extends protobuf.ProtoMessage {
 
 /// PscAutomatedEndpoints defines the output of the forwarding rule
 /// automatically created by each PscAutomationConfig.
-final class PscAutomatedEndpoints extends protobuf.ProtoMessage {
+final class PscAutomatedEndpoints extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PscAutomatedEndpoints';
 
@@ -77840,7 +77708,7 @@ final class PscAutomatedEndpoints extends protobuf.ProtoMessage {
 }
 
 /// Configuration for PSC-I.
-final class PscInterfaceConfig extends protobuf.ProtoMessage {
+final class PscInterfaceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PscInterfaceConfig';
 
@@ -77894,7 +77762,7 @@ final class PscInterfaceConfig extends protobuf.ProtoMessage {
 /// DNS peering zones in the Vertex tenant project VPC, enabling resolution
 /// of records within the specified domain hosted in the target network's
 /// Cloud DNS.
-final class DnsPeeringConfig extends protobuf.ProtoMessage {
+final class DnsPeeringConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DnsPeeringConfig';
 
@@ -77944,7 +77812,7 @@ final class DnsPeeringConfig extends protobuf.ProtoMessage {
 }
 
 /// A session contains a set of actions between users and Vertex agents.
-final class Session extends protobuf.ProtoMessage {
+final class Session extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Session';
 
@@ -78022,7 +77890,7 @@ final class Session extends protobuf.ProtoMessage {
 }
 
 /// An event represents a message from either the user or agent.
-final class SessionEvent extends protobuf.ProtoMessage {
+final class SessionEvent extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SessionEvent';
 
@@ -78106,7 +77974,7 @@ final class SessionEvent extends protobuf.ProtoMessage {
 }
 
 /// Metadata relating to a LLM response event.
-final class EventMetadata extends protobuf.ProtoMessage {
+final class EventMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EventMetadata';
 
@@ -78192,7 +78060,7 @@ final class EventMetadata extends protobuf.ProtoMessage {
 }
 
 /// Actions are parts of events that are executed by the agent.
-final class EventActions extends protobuf.ProtoMessage {
+final class EventActions extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EventActions';
 
@@ -78272,7 +78140,7 @@ final class EventActions extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.CreateSession`.
-final class CreateSessionRequest extends protobuf.ProtoMessage {
+final class CreateSessionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateSessionRequest';
 
@@ -78309,7 +78177,7 @@ final class CreateSessionRequest extends protobuf.ProtoMessage {
 /// Metadata associated with the
 /// `SessionService.CreateSession`
 /// operation.
-final class CreateSessionOperationMetadata extends protobuf.ProtoMessage {
+final class CreateSessionOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateSessionOperationMetadata';
 
@@ -78338,7 +78206,7 @@ final class CreateSessionOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.GetSession`.
-final class GetSessionRequest extends protobuf.ProtoMessage {
+final class GetSessionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetSessionRequest';
 
@@ -78364,7 +78232,7 @@ final class GetSessionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.ListSessions`.
-final class ListSessionsRequest extends protobuf.ProtoMessage {
+final class ListSessionsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSessionsRequest';
 
@@ -78441,7 +78309,7 @@ final class ListSessionsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `SessionService.ListSessions`.
-final class ListSessionsResponse extends protobuf.ProtoMessage {
+final class ListSessionsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSessionsResponse';
 
@@ -78478,7 +78346,7 @@ final class ListSessionsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.UpdateSession`.
-final class UpdateSessionRequest extends protobuf.ProtoMessage {
+final class UpdateSessionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateSessionRequest';
 
@@ -78515,7 +78383,7 @@ final class UpdateSessionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.DeleteSession`.
-final class DeleteSessionRequest extends protobuf.ProtoMessage {
+final class DeleteSessionRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteSessionRequest';
 
@@ -78541,7 +78409,7 @@ final class DeleteSessionRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.ListEvents`.
-final class ListEventsRequest extends protobuf.ProtoMessage {
+final class ListEventsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListEventsRequest';
 
@@ -78607,7 +78475,7 @@ final class ListEventsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `SessionService.ListEvents`.
-final class ListEventsResponse extends protobuf.ProtoMessage {
+final class ListEventsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListEventsResponse';
 
@@ -78647,7 +78515,7 @@ final class ListEventsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SessionService.AppendEvent`.
-final class AppendEventRequest extends protobuf.ProtoMessage {
+final class AppendEventRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AppendEventRequest';
 
@@ -78683,7 +78551,7 @@ final class AppendEventRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `SessionService.AppendEvent`.
-final class AppendEventResponse extends protobuf.ProtoMessage {
+final class AppendEventResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AppendEventResponse';
 
@@ -78705,7 +78573,7 @@ final class AppendEventResponse extends protobuf.ProtoMessage {
 /// customers' data labeling jobs associated with this pool. Customers create
 /// specialist pool as well as start data labeling jobs on Cloud, managers and
 /// workers handle the jobs using CrowdCompute console.
-final class SpecialistPool extends protobuf.ProtoMessage {
+final class SpecialistPool extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SpecialistPool';
 
@@ -78775,7 +78643,7 @@ final class SpecialistPool extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SpecialistPoolService.CreateSpecialistPool`.
-final class CreateSpecialistPoolRequest extends protobuf.ProtoMessage {
+final class CreateSpecialistPoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateSpecialistPoolRequest';
 
@@ -78812,8 +78680,7 @@ final class CreateSpecialistPoolRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `SpecialistPoolService.CreateSpecialistPool`.
-final class CreateSpecialistPoolOperationMetadata
-    extends protobuf.ProtoMessage {
+final class CreateSpecialistPoolOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateSpecialistPoolOperationMetadata';
 
@@ -78843,7 +78710,7 @@ final class CreateSpecialistPoolOperationMetadata
 
 /// Request message for
 /// `SpecialistPoolService.GetSpecialistPool`.
-final class GetSpecialistPoolRequest extends protobuf.ProtoMessage {
+final class GetSpecialistPoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetSpecialistPoolRequest';
 
@@ -78869,7 +78736,7 @@ final class GetSpecialistPoolRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SpecialistPoolService.ListSpecialistPools`.
-final class ListSpecialistPoolsRequest extends protobuf.ProtoMessage {
+final class ListSpecialistPoolsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSpecialistPoolsRequest';
 
@@ -78927,7 +78794,7 @@ final class ListSpecialistPoolsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `SpecialistPoolService.ListSpecialistPools`.
-final class ListSpecialistPoolsResponse extends protobuf.ProtoMessage {
+final class ListSpecialistPoolsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListSpecialistPoolsResponse';
 
@@ -78969,7 +78836,7 @@ final class ListSpecialistPoolsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SpecialistPoolService.DeleteSpecialistPool`.
-final class DeleteSpecialistPoolRequest extends protobuf.ProtoMessage {
+final class DeleteSpecialistPoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteSpecialistPoolRequest';
 
@@ -79003,7 +78870,7 @@ final class DeleteSpecialistPoolRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `SpecialistPoolService.UpdateSpecialistPool`.
-final class UpdateSpecialistPoolRequest extends protobuf.ProtoMessage {
+final class UpdateSpecialistPoolRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateSpecialistPoolRequest';
 
@@ -79039,8 +78906,7 @@ final class UpdateSpecialistPoolRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation metadata for
 /// `SpecialistPoolService.UpdateSpecialistPool`.
-final class UpdateSpecialistPoolOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateSpecialistPoolOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateSpecialistPoolOperationMetadata';
 
@@ -79081,7 +78947,7 @@ final class UpdateSpecialistPoolOperationMetadata
 }
 
 /// A message representing a Study.
-final class Study extends protobuf.ProtoMessage {
+final class Study extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Study';
 
@@ -79147,7 +79013,7 @@ final class Study extends protobuf.ProtoMessage {
 }
 
 /// Describes the Study state.
-final class Study_State extends protobuf.ProtoEnum {
+final class Study_State extends ProtoEnum {
   /// The study state is unspecified.
   static const stateUnspecified = Study_State('STATE_UNSPECIFIED');
 
@@ -79177,7 +79043,7 @@ final class Study_State extends protobuf.ProtoEnum {
 /// A message representing a Trial. A Trial contains a unique set of Parameters
 /// that has been or will be evaluated, along with the objective metrics got by
 /// running the Trial.
-final class Trial extends protobuf.ProtoMessage {
+final class Trial extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Trial';
 
@@ -79308,7 +79174,7 @@ final class Trial extends protobuf.ProtoMessage {
 }
 
 /// A message representing a parameter to be tuned.
-final class Trial_Parameter extends protobuf.ProtoMessage {
+final class Trial_Parameter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Trial.Parameter';
 
@@ -79347,7 +79213,7 @@ final class Trial_Parameter extends protobuf.ProtoMessage {
 }
 
 /// Describes a Trial state.
-final class Trial_State extends protobuf.ProtoEnum {
+final class Trial_State extends ProtoEnum {
   /// The Trial state is unspecified.
   static const stateUnspecified = Trial_State('STATE_UNSPECIFIED');
 
@@ -79382,7 +79248,7 @@ final class Trial_State extends protobuf.ProtoEnum {
   String toString() => 'State.$value';
 }
 
-final class TrialContext extends protobuf.ProtoMessage {
+final class TrialContext extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrialContext';
 
@@ -79424,7 +79290,7 @@ final class TrialContext extends protobuf.ProtoMessage {
 }
 
 /// Time-based Constraint for Study
-final class StudyTimeConstraint extends protobuf.ProtoMessage {
+final class StudyTimeConstraint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudyTimeConstraint';
 
@@ -79457,7 +79323,7 @@ final class StudyTimeConstraint extends protobuf.ProtoMessage {
 }
 
 /// Represents specification of a Study.
-final class StudySpec extends protobuf.ProtoMessage {
+final class StudySpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec';
 
@@ -79598,7 +79464,7 @@ final class StudySpec extends protobuf.ProtoMessage {
 }
 
 /// Represents a metric to optimize.
-final class StudySpec_MetricSpec extends protobuf.ProtoMessage {
+final class StudySpec_MetricSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.MetricSpec';
 
@@ -79646,8 +79512,7 @@ final class StudySpec_MetricSpec extends protobuf.ProtoMessage {
 }
 
 /// Used in safe optimization to specify threshold levels and risk tolerance.
-final class StudySpec_MetricSpec_SafetyMetricConfig
-    extends protobuf.ProtoMessage {
+final class StudySpec_MetricSpec_SafetyMetricConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.MetricSpec.SafetyMetricConfig';
 
@@ -79699,7 +79564,7 @@ final class StudySpec_MetricSpec_SafetyMetricConfig
 }
 
 /// The available types of optimization goals.
-final class StudySpec_MetricSpec_GoalType extends protobuf.ProtoEnum {
+final class StudySpec_MetricSpec_GoalType extends ProtoEnum {
   /// Goal Type will default to maximize.
   static const goalTypeUnspecified = StudySpec_MetricSpec_GoalType(
     'GOAL_TYPE_UNSPECIFIED',
@@ -79726,7 +79591,7 @@ final class StudySpec_MetricSpec_GoalType extends protobuf.ProtoEnum {
 }
 
 /// Represents a single parameter to optimize.
-final class StudySpec_ParameterSpec extends protobuf.ProtoMessage {
+final class StudySpec_ParameterSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec';
 
@@ -79827,8 +79692,7 @@ final class StudySpec_ParameterSpec extends protobuf.ProtoMessage {
 }
 
 /// Value specification for a parameter in `DOUBLE` type.
-final class StudySpec_ParameterSpec_DoubleValueSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_ParameterSpec_DoubleValueSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.DoubleValueSpec';
 
@@ -79879,8 +79743,7 @@ final class StudySpec_ParameterSpec_DoubleValueSpec
 }
 
 /// Value specification for a parameter in `INTEGER` type.
-final class StudySpec_ParameterSpec_IntegerValueSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_ParameterSpec_IntegerValueSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.IntegerValueSpec';
 
@@ -79931,8 +79794,7 @@ final class StudySpec_ParameterSpec_IntegerValueSpec
 }
 
 /// Value specification for a parameter in `CATEGORICAL` type.
-final class StudySpec_ParameterSpec_CategoricalValueSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_ParameterSpec_CategoricalValueSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.CategoricalValueSpec';
 
@@ -79975,8 +79837,7 @@ final class StudySpec_ParameterSpec_CategoricalValueSpec
 }
 
 /// Value specification for a parameter in `DISCRETE` type.
-final class StudySpec_ParameterSpec_DiscreteValueSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_ParameterSpec_DiscreteValueSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.DiscreteValueSpec';
 
@@ -80024,7 +79885,7 @@ final class StudySpec_ParameterSpec_DiscreteValueSpec
 
 /// Represents a parameter spec with condition from its parent parameter.
 final class StudySpec_ParameterSpec_ConditionalParameterSpec
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.ConditionalParameterSpec';
 
@@ -80093,7 +79954,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec
 
 /// Represents the spec to match discrete values from parent parameter.
 final class StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondition
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.ConditionalParameterSpec.DiscreteValueCondition';
 
@@ -80122,7 +79983,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondit
 
 /// Represents the spec to match integer values from parent parameter.
 final class StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.ConditionalParameterSpec.IntValueCondition';
 
@@ -80149,7 +80010,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition
 
 /// Represents the spec to match categorical values from parent parameter.
 final class StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCondition
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ParameterSpec.ConditionalParameterSpec.CategoricalValueCondition';
 
@@ -80177,7 +80038,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCon
 }
 
 /// The type of scaling that should be applied to this parameter.
-final class StudySpec_ParameterSpec_ScaleType extends protobuf.ProtoEnum {
+final class StudySpec_ParameterSpec_ScaleType extends ProtoEnum {
   /// By default, no scaling is applied.
   static const scaleTypeUnspecified = StudySpec_ParameterSpec_ScaleType(
     'SCALE_TYPE_UNSPECIFIED',
@@ -80221,8 +80082,7 @@ final class StudySpec_ParameterSpec_ScaleType extends protobuf.ProtoEnum {
 /// already completed Trials and the intermediate measurements of the current
 /// Trial. Early stopping is requested for the current Trial if there is very
 /// low probability to exceed the optimal value found so far.
-final class StudySpec_DecayCurveAutomatedStoppingSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_DecayCurveAutomatedStoppingSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.DecayCurveAutomatedStoppingSpec';
 
@@ -80260,8 +80120,7 @@ final class StudySpec_DecayCurveAutomatedStoppingSpec
 /// completed Trials reported up to the Trial's last measurement.
 /// Currently, 'performance' refers to the running average of the objective
 /// values reported by the Trial in each measurement.
-final class StudySpec_MedianAutomatedStoppingSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_MedianAutomatedStoppingSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.MedianAutomatedStoppingSpec';
 
@@ -80304,8 +80163,7 @@ final class StudySpec_MedianAutomatedStoppingSpec
 /// trials, this pending trial will be early-stopped, but a last measurement
 /// will be added to the pending trial with max_num_steps and predicted
 /// objective value from the autoregression model.
-final class StudySpec_ConvexAutomatedStoppingSpec
-    extends protobuf.ProtoMessage {
+final class StudySpec_ConvexAutomatedStoppingSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ConvexAutomatedStoppingSpec';
 
@@ -80404,7 +80262,7 @@ final class StudySpec_ConvexAutomatedStoppingSpec
 }
 
 /// Configuration for ConvexStopPolicy.
-final class StudySpec_ConvexStopConfig extends protobuf.ProtoMessage {
+final class StudySpec_ConvexStopConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.ConvexStopConfig';
 
@@ -80486,7 +80344,7 @@ final class StudySpec_ConvexStopConfig extends protobuf.ProtoMessage {
 /// This contains flag for manually disabling transfer learning for a study.
 /// The names of prior studies being used for transfer learning (if any)
 /// are also listed here.
-final class StudySpec_TransferLearningConfig extends protobuf.ProtoMessage {
+final class StudySpec_TransferLearningConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.TransferLearningConfig';
 
@@ -80528,7 +80386,7 @@ final class StudySpec_TransferLearningConfig extends protobuf.ProtoMessage {
 
 /// The configuration (stopping conditions) for automated stopping of a Study.
 /// Conditions include trial budgets, time budgets, and convergence detection.
-final class StudySpec_StudyStoppingConfig extends protobuf.ProtoMessage {
+final class StudySpec_StudyStoppingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StudySpec.StudyStoppingConfig';
 
@@ -80646,7 +80504,7 @@ final class StudySpec_StudyStoppingConfig extends protobuf.ProtoMessage {
 }
 
 /// The available search algorithms for the Study.
-final class StudySpec_Algorithm extends protobuf.ProtoEnum {
+final class StudySpec_Algorithm extends ProtoEnum {
   /// The default algorithm used by Vertex AI for [hyperparameter
   /// tuning](https://cloud.google.com/vertex-ai/docs/training/hyperparameter-tuning-overview)
   /// and [Vertex AI Vizier](https://cloud.google.com/vertex-ai/docs/vizier).
@@ -80679,7 +80537,7 @@ final class StudySpec_Algorithm extends protobuf.ProtoEnum {
 ///
 /// "Noisy" means that the repeated observations with the same Trial parameters
 /// may lead to different metric evaluations.
-final class StudySpec_ObservationNoise extends protobuf.ProtoEnum {
+final class StudySpec_ObservationNoise extends ProtoEnum {
   /// The default noise level chosen by Vertex AI.
   static const observationNoiseUnspecified = StudySpec_ObservationNoise(
     'OBSERVATION_NOISE_UNSPECIFIED',
@@ -80721,7 +80579,7 @@ final class StudySpec_ObservationNoise extends protobuf.ProtoEnum {
 ///     may be better to choose LAST_MEASUREMENT.
 ///  If both or neither of (A) and (B) apply, it doesn't matter which
 ///  selection type is chosen.
-final class StudySpec_MeasurementSelectionType extends protobuf.ProtoEnum {
+final class StudySpec_MeasurementSelectionType extends ProtoEnum {
   /// Will be treated as LAST_MEASUREMENT.
   static const measurementSelectionTypeUnspecified =
       StudySpec_MeasurementSelectionType(
@@ -80755,7 +80613,7 @@ final class StudySpec_MeasurementSelectionType extends protobuf.ProtoEnum {
 /// A message representing a Measurement of a Trial. A Measurement contains
 /// the Metrics got by executing a Trial using suggested hyperparameter
 /// values.
-final class Measurement extends protobuf.ProtoMessage {
+final class Measurement extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Measurement';
 
@@ -80802,7 +80660,7 @@ final class Measurement extends protobuf.ProtoMessage {
 }
 
 /// A message representing a metric in the measurement.
-final class Measurement_Metric extends protobuf.ProtoMessage {
+final class Measurement_Metric extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Measurement.Metric';
 
@@ -80838,7 +80696,7 @@ final class Measurement_Metric extends protobuf.ProtoMessage {
 /// Tensorboard is a physical database that stores users' training metrics.
 /// A default Tensorboard is provided in each region of a Google Cloud project.
 /// If needed users can also create extra Tensorboards in their projects.
-final class Tensorboard extends protobuf.ProtoMessage {
+final class Tensorboard extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Tensorboard';
 
@@ -80969,7 +80827,7 @@ final class Tensorboard extends protobuf.ProtoMessage {
 }
 
 /// All the data stored in a TensorboardTimeSeries.
-final class TimeSeriesData extends protobuf.ProtoMessage {
+final class TimeSeriesData extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TimeSeriesData';
 
@@ -81020,7 +80878,7 @@ final class TimeSeriesData extends protobuf.ProtoMessage {
 }
 
 /// A TensorboardTimeSeries data point.
-final class TimeSeriesDataPoint extends protobuf.ProtoMessage {
+final class TimeSeriesDataPoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TimeSeriesDataPoint';
 
@@ -81073,7 +80931,7 @@ final class TimeSeriesDataPoint extends protobuf.ProtoMessage {
 }
 
 /// One point viewable on a scalar metric plot.
-final class Scalar extends protobuf.ProtoMessage {
+final class Scalar extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Scalar';
 
@@ -81096,7 +80954,7 @@ final class Scalar extends protobuf.ProtoMessage {
 }
 
 /// One point viewable on a tensor metric plot.
-final class TensorboardTensor extends protobuf.ProtoMessage {
+final class TensorboardTensor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardTensor';
 
@@ -81135,7 +80993,7 @@ final class TensorboardTensor extends protobuf.ProtoMessage {
 
 /// One point viewable on a blob metric plot, but mostly just a wrapper message
 /// to work around repeated fields can't be used directly within `oneof` fields.
-final class TensorboardBlobSequence extends protobuf.ProtoMessage {
+final class TensorboardBlobSequence extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardBlobSequence';
 
@@ -81158,7 +81016,7 @@ final class TensorboardBlobSequence extends protobuf.ProtoMessage {
 }
 
 /// One blob (e.g, image, graph) viewable on a blob metric plot.
-final class TensorboardBlob extends protobuf.ProtoMessage {
+final class TensorboardBlob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardBlob';
 
@@ -81190,7 +81048,7 @@ final class TensorboardBlob extends protobuf.ProtoMessage {
 
 /// A TensorboardExperiment is a group of TensorboardRuns, that are typically the
 /// results of a training job run, in a Tensorboard.
-final class TensorboardExperiment extends protobuf.ProtoMessage {
+final class TensorboardExperiment extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardExperiment';
 
@@ -81289,7 +81147,7 @@ final class TensorboardExperiment extends protobuf.ProtoMessage {
 
 /// TensorboardRun maps to a specific execution of a training job with a given
 /// set of hyperparameter values, model definition, dataset, etc
-final class TensorboardRun extends protobuf.ProtoMessage {
+final class TensorboardRun extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardRun';
 
@@ -81381,7 +81239,7 @@ final class TensorboardRun extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.CreateTensorboard`.
-final class CreateTensorboardRequest extends protobuf.ProtoMessage {
+final class CreateTensorboardRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTensorboardRequest';
 
@@ -81416,7 +81274,7 @@ final class CreateTensorboardRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.GetTensorboard`.
-final class GetTensorboardRequest extends protobuf.ProtoMessage {
+final class GetTensorboardRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTensorboardRequest';
 
@@ -81442,7 +81300,7 @@ final class GetTensorboardRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ListTensorboards`.
-final class ListTensorboardsRequest extends protobuf.ProtoMessage {
+final class ListTensorboardsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardsRequest';
 
@@ -81519,7 +81377,7 @@ final class ListTensorboardsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ListTensorboards`.
-final class ListTensorboardsResponse extends protobuf.ProtoMessage {
+final class ListTensorboardsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardsResponse';
 
@@ -81559,7 +81417,7 @@ final class ListTensorboardsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.UpdateTensorboard`.
-final class UpdateTensorboardRequest extends protobuf.ProtoMessage {
+final class UpdateTensorboardRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateTensorboardRequest';
 
@@ -81602,7 +81460,7 @@ final class UpdateTensorboardRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.DeleteTensorboard`.
-final class DeleteTensorboardRequest extends protobuf.ProtoMessage {
+final class DeleteTensorboardRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteTensorboardRequest';
 
@@ -81628,7 +81486,7 @@ final class DeleteTensorboardRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ReadTensorboardUsage`.
-final class ReadTensorboardUsageRequest extends protobuf.ProtoMessage {
+final class ReadTensorboardUsageRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardUsageRequest';
 
@@ -81655,7 +81513,7 @@ final class ReadTensorboardUsageRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ReadTensorboardUsage`.
-final class ReadTensorboardUsageResponse extends protobuf.ProtoMessage {
+final class ReadTensorboardUsageResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardUsageResponse';
 
@@ -81687,8 +81545,7 @@ final class ReadTensorboardUsageResponse extends protobuf.ProtoMessage {
 }
 
 /// Per user usage data.
-final class ReadTensorboardUsageResponse_PerUserUsageData
-    extends protobuf.ProtoMessage {
+final class ReadTensorboardUsageResponse_PerUserUsageData extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardUsageResponse.PerUserUsageData';
 
@@ -81725,7 +81582,7 @@ final class ReadTensorboardUsageResponse_PerUserUsageData
 
 /// Per month usage data
 final class ReadTensorboardUsageResponse_PerMonthUsageData
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardUsageResponse.PerMonthUsageData';
 
@@ -81758,7 +81615,7 @@ final class ReadTensorboardUsageResponse_PerMonthUsageData
 
 /// Request message for
 /// `TensorboardService.ReadTensorboardSize`.
-final class ReadTensorboardSizeRequest extends protobuf.ProtoMessage {
+final class ReadTensorboardSizeRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardSizeRequest';
 
@@ -81785,7 +81642,7 @@ final class ReadTensorboardSizeRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ReadTensorboardSize`.
-final class ReadTensorboardSizeResponse extends protobuf.ProtoMessage {
+final class ReadTensorboardSizeResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardSizeResponse';
 
@@ -81815,7 +81672,7 @@ final class ReadTensorboardSizeResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.CreateTensorboardExperiment`.
-final class CreateTensorboardExperimentRequest extends protobuf.ProtoMessage {
+final class CreateTensorboardExperimentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTensorboardExperimentRequest';
 
@@ -81871,7 +81728,7 @@ final class CreateTensorboardExperimentRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.GetTensorboardExperiment`.
-final class GetTensorboardExperimentRequest extends protobuf.ProtoMessage {
+final class GetTensorboardExperimentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTensorboardExperimentRequest';
 
@@ -81898,7 +81755,7 @@ final class GetTensorboardExperimentRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ListTensorboardExperiments`.
-final class ListTensorboardExperimentsRequest extends protobuf.ProtoMessage {
+final class ListTensorboardExperimentsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardExperimentsRequest';
 
@@ -81976,7 +81833,7 @@ final class ListTensorboardExperimentsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ListTensorboardExperiments`.
-final class ListTensorboardExperimentsResponse extends protobuf.ProtoMessage {
+final class ListTensorboardExperimentsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardExperimentsResponse';
 
@@ -82022,7 +81879,7 @@ final class ListTensorboardExperimentsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.UpdateTensorboardExperiment`.
-final class UpdateTensorboardExperimentRequest extends protobuf.ProtoMessage {
+final class UpdateTensorboardExperimentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateTensorboardExperimentRequest';
 
@@ -82067,7 +81924,7 @@ final class UpdateTensorboardExperimentRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.DeleteTensorboardExperiment`.
-final class DeleteTensorboardExperimentRequest extends protobuf.ProtoMessage {
+final class DeleteTensorboardExperimentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteTensorboardExperimentRequest';
 
@@ -82095,7 +81952,7 @@ final class DeleteTensorboardExperimentRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.BatchCreateTensorboardRuns`.
-final class BatchCreateTensorboardRunsRequest extends protobuf.ProtoMessage {
+final class BatchCreateTensorboardRunsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateTensorboardRunsRequest';
 
@@ -82139,7 +81996,7 @@ final class BatchCreateTensorboardRunsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.BatchCreateTensorboardRuns`.
-final class BatchCreateTensorboardRunsResponse extends protobuf.ProtoMessage {
+final class BatchCreateTensorboardRunsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateTensorboardRunsResponse';
 
@@ -82169,7 +82026,7 @@ final class BatchCreateTensorboardRunsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.CreateTensorboardRun`.
-final class CreateTensorboardRunRequest extends protobuf.ProtoMessage {
+final class CreateTensorboardRunRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTensorboardRunRequest';
 
@@ -82220,7 +82077,7 @@ final class CreateTensorboardRunRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.GetTensorboardRun`.
-final class GetTensorboardRunRequest extends protobuf.ProtoMessage {
+final class GetTensorboardRunRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTensorboardRunRequest';
 
@@ -82246,7 +82103,7 @@ final class GetTensorboardRunRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ReadTensorboardBlobData`.
-final class ReadTensorboardBlobDataRequest extends protobuf.ProtoMessage {
+final class ReadTensorboardBlobDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardBlobDataRequest';
 
@@ -82284,7 +82141,7 @@ final class ReadTensorboardBlobDataRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ReadTensorboardBlobData`.
-final class ReadTensorboardBlobDataResponse extends protobuf.ProtoMessage {
+final class ReadTensorboardBlobDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardBlobDataResponse';
 
@@ -82308,7 +82165,7 @@ final class ReadTensorboardBlobDataResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ListTensorboardRuns`.
-final class ListTensorboardRunsRequest extends protobuf.ProtoMessage {
+final class ListTensorboardRunsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardRunsRequest';
 
@@ -82385,7 +82242,7 @@ final class ListTensorboardRunsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ListTensorboardRuns`.
-final class ListTensorboardRunsResponse extends protobuf.ProtoMessage {
+final class ListTensorboardRunsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardRunsResponse';
 
@@ -82430,7 +82287,7 @@ final class ListTensorboardRunsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.UpdateTensorboardRun`.
-final class UpdateTensorboardRunRequest extends protobuf.ProtoMessage {
+final class UpdateTensorboardRunRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateTensorboardRunRequest';
 
@@ -82473,7 +82330,7 @@ final class UpdateTensorboardRunRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.DeleteTensorboardRun`.
-final class DeleteTensorboardRunRequest extends protobuf.ProtoMessage {
+final class DeleteTensorboardRunRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteTensorboardRunRequest';
 
@@ -82499,8 +82356,7 @@ final class DeleteTensorboardRunRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.BatchCreateTensorboardTimeSeries`.
-final class BatchCreateTensorboardTimeSeriesRequest
-    extends protobuf.ProtoMessage {
+final class BatchCreateTensorboardTimeSeriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateTensorboardTimeSeriesRequest';
 
@@ -82546,8 +82402,7 @@ final class BatchCreateTensorboardTimeSeriesRequest
 
 /// Response message for
 /// `TensorboardService.BatchCreateTensorboardTimeSeries`.
-final class BatchCreateTensorboardTimeSeriesResponse
-    extends protobuf.ProtoMessage {
+final class BatchCreateTensorboardTimeSeriesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchCreateTensorboardTimeSeriesResponse';
 
@@ -82581,7 +82436,7 @@ final class BatchCreateTensorboardTimeSeriesResponse
 
 /// Request message for
 /// `TensorboardService.CreateTensorboardTimeSeries`.
-final class CreateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
+final class CreateTensorboardTimeSeriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTensorboardTimeSeriesRequest';
 
@@ -82638,7 +82493,7 @@ final class CreateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.GetTensorboardTimeSeries`.
-final class GetTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
+final class GetTensorboardTimeSeriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTensorboardTimeSeriesRequest';
 
@@ -82665,7 +82520,7 @@ final class GetTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ListTensorboardTimeSeries`.
-final class ListTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
+final class ListTensorboardTimeSeriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardTimeSeriesRequest';
 
@@ -82743,7 +82598,7 @@ final class ListTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ListTensorboardTimeSeries`.
-final class ListTensorboardTimeSeriesResponse extends protobuf.ProtoMessage {
+final class ListTensorboardTimeSeriesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTensorboardTimeSeriesResponse';
 
@@ -82789,7 +82644,7 @@ final class ListTensorboardTimeSeriesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.UpdateTensorboardTimeSeries`.
-final class UpdateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
+final class UpdateTensorboardTimeSeriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateTensorboardTimeSeriesRequest';
 
@@ -82835,7 +82690,7 @@ final class UpdateTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.DeleteTensorboardTimeSeries`.
-final class DeleteTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
+final class DeleteTensorboardTimeSeriesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteTensorboardTimeSeriesRequest';
 
@@ -82863,8 +82718,7 @@ final class DeleteTensorboardTimeSeriesRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.BatchReadTensorboardTimeSeriesData`.
-final class BatchReadTensorboardTimeSeriesDataRequest
-    extends protobuf.ProtoMessage {
+final class BatchReadTensorboardTimeSeriesDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadTensorboardTimeSeriesDataRequest';
 
@@ -82905,8 +82759,7 @@ final class BatchReadTensorboardTimeSeriesDataRequest
 
 /// Response message for
 /// `TensorboardService.BatchReadTensorboardTimeSeriesData`.
-final class BatchReadTensorboardTimeSeriesDataResponse
-    extends protobuf.ProtoMessage {
+final class BatchReadTensorboardTimeSeriesDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BatchReadTensorboardTimeSeriesDataResponse';
 
@@ -82936,7 +82789,7 @@ final class BatchReadTensorboardTimeSeriesDataResponse
 
 /// Request message for
 /// `TensorboardService.ReadTensorboardTimeSeriesData`.
-final class ReadTensorboardTimeSeriesDataRequest extends protobuf.ProtoMessage {
+final class ReadTensorboardTimeSeriesDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardTimeSeriesDataRequest';
 
@@ -82988,8 +82841,7 @@ final class ReadTensorboardTimeSeriesDataRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.ReadTensorboardTimeSeriesData`.
-final class ReadTensorboardTimeSeriesDataResponse
-    extends protobuf.ProtoMessage {
+final class ReadTensorboardTimeSeriesDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ReadTensorboardTimeSeriesDataResponse';
 
@@ -83016,8 +82868,7 @@ final class ReadTensorboardTimeSeriesDataResponse
 
 /// Request message for
 /// `TensorboardService.WriteTensorboardExperimentData`.
-final class WriteTensorboardExperimentDataRequest
-    extends protobuf.ProtoMessage {
+final class WriteTensorboardExperimentDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteTensorboardExperimentDataRequest';
 
@@ -83061,8 +82912,7 @@ final class WriteTensorboardExperimentDataRequest
 
 /// Response message for
 /// `TensorboardService.WriteTensorboardExperimentData`.
-final class WriteTensorboardExperimentDataResponse
-    extends protobuf.ProtoMessage {
+final class WriteTensorboardExperimentDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteTensorboardExperimentDataResponse';
 
@@ -83081,7 +82931,7 @@ final class WriteTensorboardExperimentDataResponse
 
 /// Request message for
 /// `TensorboardService.WriteTensorboardRunData`.
-final class WriteTensorboardRunDataRequest extends protobuf.ProtoMessage {
+final class WriteTensorboardRunDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteTensorboardRunDataRequest';
 
@@ -83128,7 +82978,7 @@ final class WriteTensorboardRunDataRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `TensorboardService.WriteTensorboardRunData`.
-final class WriteTensorboardRunDataResponse extends protobuf.ProtoMessage {
+final class WriteTensorboardRunDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.WriteTensorboardRunDataResponse';
 
@@ -83146,8 +82996,7 @@ final class WriteTensorboardRunDataResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `TensorboardService.ExportTensorboardTimeSeriesData`.
-final class ExportTensorboardTimeSeriesDataRequest
-    extends protobuf.ProtoMessage {
+final class ExportTensorboardTimeSeriesDataRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportTensorboardTimeSeriesDataRequest';
 
@@ -83220,8 +83069,7 @@ final class ExportTensorboardTimeSeriesDataRequest
 
 /// Response message for
 /// `TensorboardService.ExportTensorboardTimeSeriesData`.
-final class ExportTensorboardTimeSeriesDataResponse
-    extends protobuf.ProtoMessage {
+final class ExportTensorboardTimeSeriesDataResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExportTensorboardTimeSeriesDataResponse';
 
@@ -83266,7 +83114,7 @@ final class ExportTensorboardTimeSeriesDataResponse
 }
 
 /// Details of operations that perform create Tensorboard.
-final class CreateTensorboardOperationMetadata extends protobuf.ProtoMessage {
+final class CreateTensorboardOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTensorboardOperationMetadata';
 
@@ -83295,7 +83143,7 @@ final class CreateTensorboardOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform update Tensorboard.
-final class UpdateTensorboardOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateTensorboardOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateTensorboardOperationMetadata';
 
@@ -83324,7 +83172,7 @@ final class UpdateTensorboardOperationMetadata extends protobuf.ProtoMessage {
 }
 
 /// TensorboardTimeSeries maps to times series produced in training runs
-final class TensorboardTimeSeries extends protobuf.ProtoMessage {
+final class TensorboardTimeSeries extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardTimeSeries';
 
@@ -83426,7 +83274,7 @@ final class TensorboardTimeSeries extends protobuf.ProtoMessage {
 }
 
 /// Describes metadata for a TensorboardTimeSeries.
-final class TensorboardTimeSeries_Metadata extends protobuf.ProtoMessage {
+final class TensorboardTimeSeries_Metadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TensorboardTimeSeries.Metadata';
 
@@ -83477,7 +83325,7 @@ final class TensorboardTimeSeries_Metadata extends protobuf.ProtoMessage {
 }
 
 /// An enum representing the value type of a TensorboardTimeSeries.
-final class TensorboardTimeSeries_ValueType extends protobuf.ProtoEnum {
+final class TensorboardTimeSeries_ValueType extends ProtoEnum {
   /// The value type is unspecified.
   static const valueTypeUnspecified = TensorboardTimeSeries_ValueType(
     'VALUE_TYPE_UNSPECIFIED',
@@ -83516,7 +83364,7 @@ final class TensorboardTimeSeries_ValueType extends protobuf.ProtoEnum {
 /// knowledge and scope of the model. A Tool object should contain exactly
 /// one type of Tool (e.g FunctionDeclaration, Retrieval or
 /// GoogleSearchRetrieval).
-final class Tool extends protobuf.ProtoMessage {
+final class Tool extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Tool';
 
@@ -83623,7 +83471,7 @@ final class Tool extends protobuf.ProtoMessage {
 
 /// GoogleSearch tool type.
 /// Tool to support Google Search in Model. Powered by Google.
-final class Tool_GoogleSearch extends protobuf.ProtoMessage {
+final class Tool_GoogleSearch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Tool.GoogleSearch';
 
@@ -83669,7 +83517,7 @@ final class Tool_GoogleSearch extends protobuf.ProtoMessage {
 ///
 /// See also [ExecutableCode]and [CodeExecutionResult] which are input and
 /// output to this tool.
-final class Tool_CodeExecution extends protobuf.ProtoMessage {
+final class Tool_CodeExecution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Tool.CodeExecution';
 
@@ -83686,7 +83534,7 @@ final class Tool_CodeExecution extends protobuf.ProtoMessage {
 }
 
 /// Tool to support computer use.
-final class Tool_ComputerUse extends protobuf.ProtoMessage {
+final class Tool_ComputerUse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Tool.ComputerUse';
 
@@ -83716,7 +83564,7 @@ final class Tool_ComputerUse extends protobuf.ProtoMessage {
 }
 
 /// Represents the environment being operated, such as a web browser.
-final class Tool_ComputerUse_Environment extends protobuf.ProtoEnum {
+final class Tool_ComputerUse_Environment extends ProtoEnum {
   /// Defaults to browser.
   static const environmentUnspecified = Tool_ComputerUse_Environment(
     'ENVIRONMENT_UNSPECIFIED',
@@ -83745,7 +83593,7 @@ final class Tool_ComputerUse_Environment extends protobuf.ProtoEnum {
 /// with chosen confidence and above. For understanding different confidence of
 /// webrisk, please refer to
 /// https://cloud.google.com/web-risk/docs/reference/rpc/google.cloud.webrisk.v1eap1#confidencelevel
-final class Tool_PhishBlockThreshold extends protobuf.ProtoEnum {
+final class Tool_PhishBlockThreshold extends ProtoEnum {
   /// Defaults to unspecified.
   static const phishBlockThresholdUnspecified = Tool_PhishBlockThreshold(
     'PHISH_BLOCK_THRESHOLD_UNSPECIFIED',
@@ -83796,7 +83644,7 @@ final class Tool_PhishBlockThreshold extends protobuf.ProtoEnum {
 }
 
 /// Tool to support URL context.
-final class UrlContext extends protobuf.ProtoMessage {
+final class UrlContext extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UrlContext';
 
@@ -83812,7 +83660,7 @@ final class UrlContext extends protobuf.ProtoMessage {
 }
 
 /// A single example of the tool usage.
-final class ToolUseExample extends protobuf.ProtoMessage {
+final class ToolUseExample extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolUseExample';
 
@@ -83891,7 +83739,7 @@ final class ToolUseExample extends protobuf.ProtoMessage {
 }
 
 /// Identifies one operation of the extension.
-final class ToolUseExample_ExtensionOperation extends protobuf.ProtoMessage {
+final class ToolUseExample_ExtensionOperation extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolUseExample.ExtensionOperation';
 
@@ -83934,7 +83782,7 @@ final class ToolUseExample_ExtensionOperation extends protobuf.ProtoMessage {
 /// in this declaration are the function name, description, parameters and
 /// response type. This FunctionDeclaration is a representation of a block of
 /// code that can be used as a `Tool` by the model and executed by the client.
-final class FunctionDeclaration extends protobuf.ProtoMessage {
+final class FunctionDeclaration extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FunctionDeclaration';
 
@@ -84042,7 +83890,7 @@ final class FunctionDeclaration extends protobuf.ProtoMessage {
 /// A predicted [FunctionCall] returned from the model that contains a string
 /// representing the [FunctionDeclaration.name] and a structured JSON object
 /// containing the parameters and their values.
-final class FunctionCall extends protobuf.ProtoMessage {
+final class FunctionCall extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FunctionCall';
 
@@ -84085,7 +83933,7 @@ final class FunctionCall extends protobuf.ProtoMessage {
 /// the [FunctionDeclaration.name] and a structured JSON object containing any
 /// output from the function is used as context to the model. This should contain
 /// the result of a [FunctionCall] made based on model prediction.
-final class FunctionResponse extends protobuf.ProtoMessage {
+final class FunctionResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FunctionResponse';
 
@@ -84132,7 +83980,7 @@ final class FunctionResponse extends protobuf.ProtoMessage {
 ///
 /// Generated when using the [FunctionDeclaration] tool and
 /// [FunctionCallingConfig] mode is set to [Mode.CODE].
-final class ExecutableCode extends protobuf.ProtoMessage {
+final class ExecutableCode extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ExecutableCode';
 
@@ -84163,7 +84011,7 @@ final class ExecutableCode extends protobuf.ProtoMessage {
 }
 
 /// Supported programming languages for the generated code.
-final class ExecutableCode_Language extends protobuf.ProtoEnum {
+final class ExecutableCode_Language extends ProtoEnum {
   /// Unspecified language. This value should not be used.
   static const languageUnspecified = ExecutableCode_Language(
     'LANGUAGE_UNSPECIFIED',
@@ -84189,7 +84037,7 @@ final class ExecutableCode_Language extends protobuf.ProtoEnum {
 /// Result of executing the [ExecutableCode].
 ///
 /// Always follows a `part` containing the [ExecutableCode].
-final class CodeExecutionResult extends protobuf.ProtoMessage {
+final class CodeExecutionResult extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CodeExecutionResult';
 
@@ -84225,7 +84073,7 @@ final class CodeExecutionResult extends protobuf.ProtoMessage {
 }
 
 /// Enumeration of possible outcomes of the code execution.
-final class CodeExecutionResult_Outcome extends protobuf.ProtoEnum {
+final class CodeExecutionResult_Outcome extends ProtoEnum {
   /// Unspecified status. This value should not be used.
   static const outcomeUnspecified = CodeExecutionResult_Outcome(
     'OUTCOME_UNSPECIFIED',
@@ -84259,7 +84107,7 @@ final class CodeExecutionResult_Outcome extends protobuf.ProtoEnum {
 }
 
 /// Defines a retrieval tool that model can call to access external knowledge.
-final class Retrieval extends protobuf.ProtoMessage {
+final class Retrieval extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Retrieval';
 
@@ -84301,7 +84149,7 @@ final class Retrieval extends protobuf.ProtoMessage {
 }
 
 /// Retrieve from Vertex RAG Store for grounding.
-final class VertexRagStore extends protobuf.ProtoMessage {
+final class VertexRagStore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VertexRagStore';
 
@@ -84384,7 +84232,7 @@ final class VertexRagStore extends protobuf.ProtoMessage {
 }
 
 /// The definition of the Rag resource.
-final class VertexRagStore_RagResource extends protobuf.ProtoMessage {
+final class VertexRagStore_RagResource extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VertexRagStore.RagResource';
 
@@ -84422,7 +84270,7 @@ final class VertexRagStore_RagResource extends protobuf.ProtoMessage {
 /// Retrieve from Vertex AI Search datastore or engine for grounding.
 /// datastore and engine are mutually exclusive.
 /// See https://cloud.google.com/products/agent-builder
-final class VertexAisearch extends protobuf.ProtoMessage {
+final class VertexAisearch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VertexAISearch';
 
@@ -84496,7 +84344,7 @@ final class VertexAisearch extends protobuf.ProtoMessage {
 /// Define data stores within engine to filter on in a search call and
 /// configurations for those data stores. For more information, see
 /// https://cloud.google.com/generative-ai-app-builder/docs/reference/rpc/google.cloud.discoveryengine.v1#datastorespec
-final class VertexAisearch_DataStoreSpec extends protobuf.ProtoMessage {
+final class VertexAisearch_DataStoreSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VertexAISearch.DataStoreSpec';
 
@@ -84533,7 +84381,7 @@ final class VertexAisearch_DataStoreSpec extends protobuf.ProtoMessage {
 }
 
 /// Tool to retrieve public web data for grounding, powered by Google.
-final class GoogleSearchRetrieval extends protobuf.ProtoMessage {
+final class GoogleSearchRetrieval extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GoogleSearchRetrieval';
 
@@ -84562,7 +84410,7 @@ final class GoogleSearchRetrieval extends protobuf.ProtoMessage {
 }
 
 /// Tool to retrieve public maps data for grounding, powered by Google.
-final class GoogleMaps extends protobuf.ProtoMessage {
+final class GoogleMaps extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GoogleMaps';
 
@@ -84588,7 +84436,7 @@ final class GoogleMaps extends protobuf.ProtoMessage {
 
 /// Tool to search public web data, powered by Vertex AI Search and Sec4
 /// compliance.
-final class EnterpriseWebSearch extends protobuf.ProtoMessage {
+final class EnterpriseWebSearch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EnterpriseWebSearch';
 
@@ -84629,7 +84477,7 @@ final class EnterpriseWebSearch extends protobuf.ProtoMessage {
 }
 
 /// Describes the options to customize dynamic retrieval.
-final class DynamicRetrievalConfig extends protobuf.ProtoMessage {
+final class DynamicRetrievalConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DynamicRetrievalConfig';
 
@@ -84671,7 +84519,7 @@ final class DynamicRetrievalConfig extends protobuf.ProtoMessage {
 }
 
 /// The mode of the predictor to be used in dynamic retrieval.
-final class DynamicRetrievalConfig_Mode extends protobuf.ProtoEnum {
+final class DynamicRetrievalConfig_Mode extends ProtoEnum {
   /// Always trigger retrieval.
   static const modeUnspecified = DynamicRetrievalConfig_Mode(
     'MODE_UNSPECIFIED',
@@ -84695,7 +84543,7 @@ final class DynamicRetrievalConfig_Mode extends protobuf.ProtoEnum {
 }
 
 /// Tool config. This config is shared for all tools provided in the request.
-final class ToolConfig extends protobuf.ProtoMessage {
+final class ToolConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ToolConfig';
 
@@ -84728,7 +84576,7 @@ final class ToolConfig extends protobuf.ProtoMessage {
 }
 
 /// Function calling config.
-final class FunctionCallingConfig extends protobuf.ProtoMessage {
+final class FunctionCallingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FunctionCallingConfig';
 
@@ -84768,7 +84616,7 @@ final class FunctionCallingConfig extends protobuf.ProtoMessage {
 }
 
 /// Function calling mode.
-final class FunctionCallingConfig_Mode extends protobuf.ProtoEnum {
+final class FunctionCallingConfig_Mode extends ProtoEnum {
   /// Unspecified function calling mode. This value should not be used.
   static const modeUnspecified = FunctionCallingConfig_Mode('MODE_UNSPECIFIED');
 
@@ -84810,7 +84658,7 @@ final class FunctionCallingConfig_Mode extends protobuf.ProtoEnum {
 }
 
 /// Retrieval config.
-final class RetrievalConfig extends protobuf.ProtoMessage {
+final class RetrievalConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrievalConfig';
 
@@ -84844,7 +84692,7 @@ final class RetrievalConfig extends protobuf.ProtoMessage {
 }
 
 /// Specifies the context retrieval config.
-final class RagRetrievalConfig extends protobuf.ProtoMessage {
+final class RagRetrievalConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagRetrievalConfig';
 
@@ -84894,7 +84742,7 @@ final class RagRetrievalConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for Hybrid Search.
-final class RagRetrievalConfig_HybridSearch extends protobuf.ProtoMessage {
+final class RagRetrievalConfig_HybridSearch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagRetrievalConfig.HybridSearch';
 
@@ -84920,7 +84768,7 @@ final class RagRetrievalConfig_HybridSearch extends protobuf.ProtoMessage {
 }
 
 /// Config for filters.
-final class RagRetrievalConfig_Filter extends protobuf.ProtoMessage {
+final class RagRetrievalConfig_Filter extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagRetrievalConfig.Filter';
 
@@ -84973,7 +84821,7 @@ final class RagRetrievalConfig_Filter extends protobuf.ProtoMessage {
 }
 
 /// Config for ranking and reranking.
-final class RagRetrievalConfig_Ranking extends protobuf.ProtoMessage {
+final class RagRetrievalConfig_Ranking extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagRetrievalConfig.Ranking';
 
@@ -85009,8 +84857,7 @@ final class RagRetrievalConfig_Ranking extends protobuf.ProtoMessage {
 }
 
 /// Config for Rank Service.
-final class RagRetrievalConfig_Ranking_RankService
-    extends protobuf.ProtoMessage {
+final class RagRetrievalConfig_Ranking_RankService extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagRetrievalConfig.Ranking.RankService';
 
@@ -85036,7 +84883,7 @@ final class RagRetrievalConfig_Ranking_RankService
 }
 
 /// Config for LlmRanker.
-final class RagRetrievalConfig_Ranking_LlmRanker extends protobuf.ProtoMessage {
+final class RagRetrievalConfig_Ranking_LlmRanker extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagRetrievalConfig.Ranking.LlmRanker';
 
@@ -85066,7 +84913,7 @@ final class RagRetrievalConfig_Ranking_LlmRanker extends protobuf.ProtoMessage {
 /// export data from Vertex AI's Dataset which becomes the training input,
 /// `upload` the Model
 /// to Vertex AI, and evaluate the Model.
-final class TrainingPipeline extends protobuf.ProtoMessage {
+final class TrainingPipeline extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TrainingPipeline';
 
@@ -85271,7 +85118,7 @@ final class TrainingPipeline extends protobuf.ProtoMessage {
 
 /// Specifies Vertex AI owned input data to be used for training, and
 /// possibly evaluating, the Model.
-final class InputDataConfig extends protobuf.ProtoMessage {
+final class InputDataConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.InputDataConfig';
 
@@ -85482,7 +85329,7 @@ final class InputDataConfig extends protobuf.ProtoMessage {
 /// provided ones sum to less than 1, the remainder is assigned to sets as
 /// decided by Vertex AI. If none of the fractions are set, by default roughly
 /// 80% of data is used for training, 10% for validation, and 10% for test.
-final class FractionSplit extends protobuf.ProtoMessage {
+final class FractionSplit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FractionSplit';
 
@@ -85534,7 +85381,7 @@ final class FractionSplit extends protobuf.ProtoMessage {
 /// set as '-' (the minus sign).
 ///
 /// Supported only for unstructured Datasets.
-final class FilterSplit extends protobuf.ProtoMessage {
+final class FilterSplit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FilterSplit';
 
@@ -85599,7 +85446,7 @@ final class FilterSplit extends protobuf.ProtoMessage {
 /// value of a provided key.
 ///
 /// Supported only for tabular Datasets.
-final class PredefinedSplit extends protobuf.ProtoMessage {
+final class PredefinedSplit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PredefinedSplit';
 
@@ -85631,7 +85478,7 @@ final class PredefinedSplit extends protobuf.ProtoMessage {
 /// next to validation set, and the oldest to the test set.
 ///
 /// Supported only for tabular Datasets.
-final class TimestampSplit extends protobuf.ProtoMessage {
+final class TimestampSplit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TimestampSplit';
 
@@ -85704,7 +85551,7 @@ final class TimestampSplit extends protobuf.ProtoMessage {
 /// a specific value, those rows are randomly assigned.
 ///
 /// Supported only for tabular Datasets.
-final class StratifiedSplit extends protobuf.ProtoMessage {
+final class StratifiedSplit extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StratifiedSplit';
 
@@ -85759,7 +85606,7 @@ final class StratifiedSplit extends protobuf.ProtoMessage {
 }
 
 /// Represents a TuningJob that runs with Google owned models.
-final class TuningJob extends protobuf.ProtoMessage {
+final class TuningJob extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TuningJob';
 
@@ -86004,7 +85851,7 @@ final class TuningJob extends protobuf.ProtoMessage {
 
 /// The Model Registry Model and Online Prediction Endpoint associated with
 /// this `TuningJob`.
-final class TunedModel extends protobuf.ProtoMessage {
+final class TunedModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TunedModel';
 
@@ -86055,7 +85902,7 @@ final class TunedModel extends protobuf.ProtoMessage {
 }
 
 /// Dataset distribution for Supervised Tuning.
-final class SupervisedTuningDatasetDistribution extends protobuf.ProtoMessage {
+final class SupervisedTuningDatasetDistribution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SupervisedTuningDatasetDistribution';
 
@@ -86149,7 +85996,7 @@ final class SupervisedTuningDatasetDistribution extends protobuf.ProtoMessage {
 /// Dataset bucket used to create a histogram for the distribution given a
 /// population of values.
 final class SupervisedTuningDatasetDistribution_DatasetBucket
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SupervisedTuningDatasetDistribution.DatasetBucket';
 
@@ -86191,7 +86038,7 @@ final class SupervisedTuningDatasetDistribution_DatasetBucket
 }
 
 /// Tuning data statistics for Supervised Tuning.
-final class SupervisedTuningDataStats extends protobuf.ProtoMessage {
+final class SupervisedTuningDataStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SupervisedTuningDataStats';
 
@@ -86325,7 +86172,7 @@ final class SupervisedTuningDataStats extends protobuf.ProtoMessage {
 }
 
 /// Distribution computed over a tuning dataset.
-final class DatasetDistribution extends protobuf.ProtoMessage {
+final class DatasetDistribution extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DatasetDistribution';
 
@@ -86410,8 +86257,7 @@ final class DatasetDistribution extends protobuf.ProtoMessage {
 
 /// Dataset bucket used to create a histogram for the distribution given a
 /// population of values.
-final class DatasetDistribution_DistributionBucket
-    extends protobuf.ProtoMessage {
+final class DatasetDistribution_DistributionBucket extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DatasetDistribution.DistributionBucket';
 
@@ -86453,7 +86299,7 @@ final class DatasetDistribution_DistributionBucket
 }
 
 /// Statistics computed over a tuning dataset.
-final class DatasetStats extends protobuf.ProtoMessage {
+final class DatasetStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DatasetStats';
 
@@ -86550,7 +86396,7 @@ final class DatasetStats extends protobuf.ProtoMessage {
 }
 
 /// Statistics computed for datasets used for distillation.
-final class DistillationDataStats extends protobuf.ProtoMessage {
+final class DistillationDataStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DistillationDataStats';
 
@@ -86580,7 +86426,7 @@ final class DistillationDataStats extends protobuf.ProtoMessage {
 
 /// The tuning data statistic values for
 /// `TuningJob`.
-final class TuningDataStats extends protobuf.ProtoMessage {
+final class TuningDataStats extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TuningDataStats';
 
@@ -86618,7 +86464,7 @@ final class TuningDataStats extends protobuf.ProtoMessage {
 }
 
 /// Hyperparameters for SFT.
-final class SupervisedHyperParameters extends protobuf.ProtoMessage {
+final class SupervisedHyperParameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SupervisedHyperParameters';
 
@@ -86689,7 +86535,7 @@ final class SupervisedHyperParameters extends protobuf.ProtoMessage {
 }
 
 /// Supported adapter sizes for tuning.
-final class SupervisedHyperParameters_AdapterSize extends protobuf.ProtoEnum {
+final class SupervisedHyperParameters_AdapterSize extends ProtoEnum {
   /// Adapter size is unspecified.
   static const adapterSizeUnspecified = SupervisedHyperParameters_AdapterSize(
     'ADAPTER_SIZE_UNSPECIFIED',
@@ -86740,7 +86586,7 @@ final class SupervisedHyperParameters_AdapterSize extends protobuf.ProtoEnum {
 }
 
 /// Tuning Spec for Supervised Tuning for first party models.
-final class SupervisedTuningSpec extends protobuf.ProtoMessage {
+final class SupervisedTuningSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SupervisedTuningSpec';
 
@@ -86824,7 +86670,7 @@ final class SupervisedTuningSpec extends protobuf.ProtoMessage {
 }
 
 /// Supported tuning modes.
-final class SupervisedTuningSpec_TuningMode extends protobuf.ProtoEnum {
+final class SupervisedTuningSpec_TuningMode extends ProtoEnum {
   /// Tuning mode is unspecified.
   static const tuningModeUnspecified = SupervisedTuningSpec_TuningMode(
     'TUNING_MODE_UNSPECIFIED',
@@ -86855,7 +86701,7 @@ final class SupervisedTuningSpec_TuningMode extends protobuf.ProtoEnum {
 }
 
 /// Tuning Spec for Distillation.
-final class DistillationSpec extends protobuf.ProtoMessage {
+final class DistillationSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DistillationSpec';
 
@@ -86940,7 +86786,7 @@ final class DistillationSpec extends protobuf.ProtoMessage {
 }
 
 /// Hyperparameters for Distillation.
-final class DistillationHyperParameters extends protobuf.ProtoMessage {
+final class DistillationHyperParameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DistillationHyperParameters';
 
@@ -86993,7 +86839,7 @@ final class DistillationHyperParameters extends protobuf.ProtoMessage {
 }
 
 /// Tuning spec for Partner models.
-final class PartnerModelTuningSpec extends protobuf.ProtoMessage {
+final class PartnerModelTuningSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PartnerModelTuningSpec';
 
@@ -87047,7 +86893,7 @@ final class PartnerModelTuningSpec extends protobuf.ProtoMessage {
 }
 
 /// TunedModel Reference for legacy model migration.
-final class TunedModelRef extends protobuf.ProtoMessage {
+final class TunedModelRef extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TunedModelRef';
 
@@ -87090,7 +86936,7 @@ final class TunedModelRef extends protobuf.ProtoMessage {
 }
 
 /// Hyperparameters for Veo.
-final class VeoHyperParameters extends protobuf.ProtoMessage {
+final class VeoHyperParameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VeoHyperParameters';
 
@@ -87143,7 +86989,7 @@ final class VeoHyperParameters extends protobuf.ProtoMessage {
 }
 
 /// An enum defining the tuning task used for Veo.
-final class VeoHyperParameters_TuningTask extends protobuf.ProtoEnum {
+final class VeoHyperParameters_TuningTask extends ProtoEnum {
   /// Default value. This value is unused.
   static const tuningTaskUnspecified = VeoHyperParameters_TuningTask(
     'TUNING_TASK_UNSPECIFIED',
@@ -87170,7 +87016,7 @@ final class VeoHyperParameters_TuningTask extends protobuf.ProtoEnum {
 }
 
 /// Tuning Spec for Veo Model Tuning.
-final class VeoTuningSpec extends protobuf.ProtoMessage {
+final class VeoTuningSpec extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VeoTuningSpec';
 
@@ -87221,7 +87067,7 @@ final class VeoTuningSpec extends protobuf.ProtoMessage {
 }
 
 /// Evaluation Config for Tuning Job.
-final class EvaluationConfig extends protobuf.ProtoMessage {
+final class EvaluationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluationConfig';
 
@@ -87262,7 +87108,7 @@ final class EvaluationConfig extends protobuf.ProtoMessage {
 }
 
 /// Evaluate Dataset Run Result for Tuning Job.
-final class EvaluateDatasetRun extends protobuf.ProtoMessage {
+final class EvaluateDatasetRun extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateDatasetRun';
 
@@ -87318,7 +87164,7 @@ final class EvaluateDatasetRun extends protobuf.ProtoMessage {
 }
 
 /// TunedModelCheckpoint for the Tuned Model of a Tuning Job.
-final class TunedModelCheckpoint extends protobuf.ProtoMessage {
+final class TunedModelCheckpoint extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.TunedModelCheckpoint';
 
@@ -87371,7 +87217,7 @@ final class TunedModelCheckpoint extends protobuf.ProtoMessage {
 }
 
 /// A pre-tuned model for continuous tuning.
-final class PreTunedModel extends protobuf.ProtoMessage {
+final class PreTunedModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PreTunedModel';
 
@@ -87427,7 +87273,7 @@ final class PreTunedModel extends protobuf.ProtoMessage {
 }
 
 /// A list of boolean values.
-final class BoolArray extends protobuf.ProtoMessage {
+final class BoolArray extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.BoolArray';
 
@@ -87447,7 +87293,7 @@ final class BoolArray extends protobuf.ProtoMessage {
 }
 
 /// A list of double values.
-final class DoubleArray extends protobuf.ProtoMessage {
+final class DoubleArray extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DoubleArray';
 
@@ -87467,7 +87313,7 @@ final class DoubleArray extends protobuf.ProtoMessage {
 }
 
 /// A list of int64 values.
-final class Int64Array extends protobuf.ProtoMessage {
+final class Int64Array extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Int64Array';
 
@@ -87487,7 +87333,7 @@ final class Int64Array extends protobuf.ProtoMessage {
 }
 
 /// A list of string values.
-final class StringArray extends protobuf.ProtoMessage {
+final class StringArray extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StringArray';
 
@@ -87507,7 +87353,7 @@ final class StringArray extends protobuf.ProtoMessage {
 }
 
 /// A tensor value type.
-final class Tensor extends protobuf.ProtoMessage {
+final class Tensor extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Tensor';
 
@@ -87627,7 +87473,7 @@ final class Tensor extends protobuf.ProtoMessage {
 }
 
 /// Data type of the tensor.
-final class Tensor_DataType extends protobuf.ProtoEnum {
+final class Tensor_DataType extends ProtoEnum {
   /// Not a legal value for DataType. Used to indicate a DataType field has not
   /// been set.
   static const dataTypeUnspecified = Tensor_DataType('DATA_TYPE_UNSPECIFIED');
@@ -87672,7 +87518,7 @@ final class Tensor_DataType extends protobuf.ProtoEnum {
 }
 
 /// The definition of a artifact type in MLMD.
-final class ArtifactTypeSchema extends protobuf.ProtoMessage {
+final class ArtifactTypeSchema extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ArtifactTypeSchema';
 
@@ -87735,7 +87581,7 @@ final class ArtifactTypeSchema extends protobuf.ProtoMessage {
 }
 
 /// The definition of a runtime artifact.
-final class RuntimeArtifact extends protobuf.ProtoMessage {
+final class RuntimeArtifact extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RuntimeArtifact';
 
@@ -87803,7 +87649,7 @@ final class RuntimeArtifact extends protobuf.ProtoMessage {
 
 /// Contains model information necessary to perform batch prediction without
 /// requiring a full model import.
-final class UnmanagedContainerModel extends protobuf.ProtoMessage {
+final class UnmanagedContainerModel extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UnmanagedContainerModel';
 
@@ -87848,7 +87694,7 @@ final class UnmanagedContainerModel extends protobuf.ProtoMessage {
 
 /// References an API call. It contains more information about long running
 /// operation and Jobs that are triggered by the API call.
-final class UserActionReference extends protobuf.ProtoMessage {
+final class UserActionReference extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UserActionReference';
 
@@ -87897,7 +87743,7 @@ final class UserActionReference extends protobuf.ProtoMessage {
 }
 
 /// Value is the value of the field.
-final class Value extends protobuf.ProtoMessage {
+final class Value extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Value';
 
@@ -87938,7 +87784,7 @@ final class Value extends protobuf.ProtoMessage {
 }
 
 /// Config for the embedding model to use for RAG.
-final class RagEmbeddingModelConfig extends protobuf.ProtoMessage {
+final class RagEmbeddingModelConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagEmbeddingModelConfig';
 
@@ -87984,7 +87830,7 @@ final class RagEmbeddingModelConfig extends protobuf.ProtoMessage {
 
 /// Config representing a model hosted on Vertex Prediction Endpoint.
 final class RagEmbeddingModelConfig_VertexPredictionEndpoint
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagEmbeddingModelConfig.VertexPredictionEndpoint';
 
@@ -88038,8 +87884,7 @@ final class RagEmbeddingModelConfig_VertexPredictionEndpoint
 }
 
 /// Configuration for sparse emebdding generation.
-final class RagEmbeddingModelConfig_SparseEmbeddingConfig
-    extends protobuf.ProtoMessage {
+final class RagEmbeddingModelConfig_SparseEmbeddingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig';
 
@@ -88067,7 +87912,7 @@ final class RagEmbeddingModelConfig_SparseEmbeddingConfig
 
 /// Message for BM25 parameters.
 final class RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagEmbeddingModelConfig.SparseEmbeddingConfig.Bm25';
 
@@ -88117,8 +87962,7 @@ final class RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25
 }
 
 /// Config for hybrid search.
-final class RagEmbeddingModelConfig_HybridSearchConfig
-    extends protobuf.ProtoMessage {
+final class RagEmbeddingModelConfig_HybridSearchConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagEmbeddingModelConfig.HybridSearchConfig';
 
@@ -88164,7 +88008,7 @@ final class RagEmbeddingModelConfig_HybridSearchConfig
 }
 
 /// Config for the Vector DB to use for RAG.
-final class RagVectorDbConfig extends protobuf.ProtoMessage {
+final class RagVectorDbConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig';
 
@@ -88241,7 +88085,7 @@ final class RagVectorDbConfig extends protobuf.ProtoMessage {
 }
 
 /// The config for the default RAG-managed Vector DB.
-final class RagVectorDbConfig_RagManagedDb extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_RagManagedDb extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb';
 
@@ -88273,7 +88117,7 @@ final class RagVectorDbConfig_RagManagedDb extends protobuf.ProtoMessage {
 }
 
 /// Config for KNN search.
-final class RagVectorDbConfig_RagManagedDb_Knn extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_RagManagedDb_Knn extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.KNN';
 
@@ -88296,7 +88140,7 @@ final class RagVectorDbConfig_RagManagedDb_Knn extends protobuf.ProtoMessage {
 /// facilitate faster searches. As a tradeoff, it requires longer indexing
 /// time and manual triggering of index rebuild via the ImportRagFiles and
 /// UpdateRagCorpus API.
-final class RagVectorDbConfig_RagManagedDb_Ann extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_RagManagedDb_Ann extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.RagManagedDb.ANN';
 
@@ -88342,7 +88186,7 @@ final class RagVectorDbConfig_RagManagedDb_Ann extends protobuf.ProtoMessage {
 }
 
 /// The config for the Weaviate.
-final class RagVectorDbConfig_Weaviate extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_Weaviate extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.Weaviate';
 
@@ -88381,7 +88225,7 @@ final class RagVectorDbConfig_Weaviate extends protobuf.ProtoMessage {
 }
 
 /// The config for the Pinecone.
-final class RagVectorDbConfig_Pinecone extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_Pinecone extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.Pinecone';
 
@@ -88405,7 +88249,7 @@ final class RagVectorDbConfig_Pinecone extends protobuf.ProtoMessage {
 }
 
 /// The config for the Vertex Feature Store.
-final class RagVectorDbConfig_VertexFeatureStore extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_VertexFeatureStore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.VertexFeatureStore';
 
@@ -88439,7 +88283,7 @@ final class RagVectorDbConfig_VertexFeatureStore extends protobuf.ProtoMessage {
 }
 
 /// The config for the Vertex Vector Search.
-final class RagVectorDbConfig_VertexVectorSearch extends protobuf.ProtoMessage {
+final class RagVectorDbConfig_VertexVectorSearch extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.VertexVectorSearch';
 
@@ -88479,7 +88323,7 @@ final class RagVectorDbConfig_VertexVectorSearch extends protobuf.ProtoMessage {
 }
 
 /// RagFile status.
-final class FileStatus extends protobuf.ProtoMessage {
+final class FileStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.FileStatus';
 
@@ -88513,7 +88357,7 @@ final class FileStatus extends protobuf.ProtoMessage {
 }
 
 /// RagFile state.
-final class FileStatus_State extends protobuf.ProtoEnum {
+final class FileStatus_State extends ProtoEnum {
   /// RagFile state is unspecified.
   static const stateUnspecified = FileStatus_State('STATE_UNSPECIFIED');
 
@@ -88538,7 +88382,7 @@ final class FileStatus_State extends protobuf.ProtoEnum {
 }
 
 /// Config for the Vertex AI Search.
-final class VertexAiSearchConfig extends protobuf.ProtoMessage {
+final class VertexAiSearchConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VertexAiSearchConfig';
 
@@ -88566,7 +88410,7 @@ final class VertexAiSearchConfig extends protobuf.ProtoMessage {
 }
 
 /// RagCorpus status.
-final class CorpusStatus extends protobuf.ProtoMessage {
+final class CorpusStatus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CorpusStatus';
 
@@ -88602,7 +88446,7 @@ final class CorpusStatus extends protobuf.ProtoMessage {
 }
 
 /// RagCorpus life state.
-final class CorpusStatus_State extends protobuf.ProtoEnum {
+final class CorpusStatus_State extends ProtoEnum {
   /// This state is not supposed to happen.
   static const unknown = CorpusStatus_State('UNKNOWN');
 
@@ -88631,7 +88475,7 @@ final class CorpusStatus_State extends protobuf.ProtoEnum {
 
 /// A RagCorpus is a RagFile container and a project can have multiple
 /// RagCorpora.
-final class RagCorpus extends protobuf.ProtoMessage {
+final class RagCorpus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagCorpus';
 
@@ -88757,7 +88601,7 @@ final class RagCorpus extends protobuf.ProtoMessage {
 }
 
 /// The config for the corpus type of the RagCorpus.
-final class RagCorpus_CorpusTypeConfig extends protobuf.ProtoMessage {
+final class RagCorpus_CorpusTypeConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig';
 
@@ -88793,8 +88637,7 @@ final class RagCorpus_CorpusTypeConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for the document corpus.
-final class RagCorpus_CorpusTypeConfig_DocumentCorpus
-    extends protobuf.ProtoMessage {
+final class RagCorpus_CorpusTypeConfig_DocumentCorpus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.DocumentCorpus';
 
@@ -88812,8 +88655,7 @@ final class RagCorpus_CorpusTypeConfig_DocumentCorpus
 }
 
 /// Config for the memory corpus.
-final class RagCorpus_CorpusTypeConfig_MemoryCorpus
-    extends protobuf.ProtoMessage {
+final class RagCorpus_CorpusTypeConfig_MemoryCorpus extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagCorpus.CorpusTypeConfig.MemoryCorpus';
 
@@ -88840,7 +88682,7 @@ final class RagCorpus_CorpusTypeConfig_MemoryCorpus
 }
 
 /// A RagFile contains user data for chunking, embedding and indexing.
-final class RagFile extends protobuf.ProtoMessage {
+final class RagFile extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFile';
 
@@ -88979,7 +88821,7 @@ final class RagFile extends protobuf.ProtoMessage {
 }
 
 /// The type of the RagFile.
-final class RagFile_RagFileType extends protobuf.ProtoEnum {
+final class RagFile_RagFileType extends ProtoEnum {
   /// RagFile type is unspecified.
   static const ragFileTypeUnspecified = RagFile_RagFileType(
     'RAG_FILE_TYPE_UNSPECIFIED',
@@ -89007,7 +88849,7 @@ final class RagFile_RagFileType extends protobuf.ProtoEnum {
 
 /// A RagChunk includes the content of a chunk of a RagFile, and associated
 /// metadata.
-final class RagChunk extends protobuf.ProtoMessage {
+final class RagChunk extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagChunk';
 
@@ -89038,7 +88880,7 @@ final class RagChunk extends protobuf.ProtoMessage {
 }
 
 /// Represents where the chunk starts and ends in the document.
-final class RagChunk_PageSpan extends protobuf.ProtoMessage {
+final class RagChunk_PageSpan extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagChunk.PageSpan';
 
@@ -89071,7 +88913,7 @@ final class RagChunk_PageSpan extends protobuf.ProtoMessage {
 }
 
 /// Specifies the size and overlap of chunks for RagFiles.
-final class RagFileChunkingConfig extends protobuf.ProtoMessage {
+final class RagFileChunkingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileChunkingConfig';
 
@@ -89119,8 +88961,7 @@ final class RagFileChunkingConfig extends protobuf.ProtoMessage {
 }
 
 /// Specifies the fixed length chunking config.
-final class RagFileChunkingConfig_FixedLengthChunking
-    extends protobuf.ProtoMessage {
+final class RagFileChunkingConfig_FixedLengthChunking extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileChunkingConfig.FixedLengthChunking';
 
@@ -89159,7 +89000,7 @@ final class RagFileChunkingConfig_FixedLengthChunking
 }
 
 /// Specifies the transformation config for RagFiles.
-final class RagFileTransformationConfig extends protobuf.ProtoMessage {
+final class RagFileTransformationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileTransformationConfig';
 
@@ -89188,7 +89029,7 @@ final class RagFileTransformationConfig extends protobuf.ProtoMessage {
 }
 
 /// Specifies the parsing config for RagFiles.
-final class RagFileParsingConfig extends protobuf.ProtoMessage {
+final class RagFileParsingConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileParsingConfig';
 
@@ -89245,7 +89086,7 @@ final class RagFileParsingConfig extends protobuf.ProtoMessage {
 }
 
 /// Specifies the advanced parsing for RagFiles.
-final class RagFileParsingConfig_AdvancedParser extends protobuf.ProtoMessage {
+final class RagFileParsingConfig_AdvancedParser extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileParsingConfig.AdvancedParser';
 
@@ -89275,7 +89116,7 @@ final class RagFileParsingConfig_AdvancedParser extends protobuf.ProtoMessage {
 }
 
 /// Document AI Layout Parser config.
-final class RagFileParsingConfig_LayoutParser extends protobuf.ProtoMessage {
+final class RagFileParsingConfig_LayoutParser extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileParsingConfig.LayoutParser';
 
@@ -89338,7 +89179,7 @@ final class RagFileParsingConfig_LayoutParser extends protobuf.ProtoMessage {
 }
 
 /// Specifies the LLM parsing for RagFiles.
-final class RagFileParsingConfig_LlmParser extends protobuf.ProtoMessage {
+final class RagFileParsingConfig_LlmParser extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileParsingConfig.LlmParser';
 
@@ -89407,7 +89248,7 @@ final class RagFileParsingConfig_LlmParser extends protobuf.ProtoMessage {
 }
 
 /// Metadata config for RagFile.
-final class RagFileMetadataConfig extends protobuf.ProtoMessage {
+final class RagFileMetadataConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagFileMetadataConfig';
 
@@ -89506,7 +89347,7 @@ final class RagFileMetadataConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for uploading RagFile.
-final class UploadRagFileConfig extends protobuf.ProtoMessage {
+final class UploadRagFileConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UploadRagFileConfig';
 
@@ -89569,7 +89410,7 @@ final class UploadRagFileConfig extends protobuf.ProtoMessage {
 }
 
 /// Config for importing RagFiles.
-final class ImportRagFilesConfig extends protobuf.ProtoMessage {
+final class ImportRagFilesConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportRagFilesConfig';
 
@@ -89768,7 +89609,7 @@ final class ImportRagFilesConfig extends protobuf.ProtoMessage {
 }
 
 /// Configuration message for RagManagedDb used by RagEngine.
-final class RagManagedDbConfig extends protobuf.ProtoMessage {
+final class RagManagedDbConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig';
 
@@ -89823,7 +89664,7 @@ final class RagManagedDbConfig extends protobuf.ProtoMessage {
 /// Enterprise tier offers production grade performance along with
 /// autoscaling functionality. It is suitable for customers with large
 /// amounts of data or performance sensitive workloads.
-final class RagManagedDbConfig_Enterprise extends protobuf.ProtoMessage {
+final class RagManagedDbConfig_Enterprise extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Enterprise';
 
@@ -89842,7 +89683,7 @@ final class RagManagedDbConfig_Enterprise extends protobuf.ProtoMessage {
 /// Scaled tier offers production grade performance along with
 /// autoscaling functionality. It is suitable for customers with large
 /// amounts of data or performance sensitive workloads.
-final class RagManagedDbConfig_Scaled extends protobuf.ProtoMessage {
+final class RagManagedDbConfig_Scaled extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Scaled';
 
@@ -89866,7 +89707,7 @@ final class RagManagedDbConfig_Scaled extends protobuf.ProtoMessage {
 /// * Only using RAG Engine with external vector DBs.
 ///
 /// NOTE: This is the default tier if not explicitly chosen.
-final class RagManagedDbConfig_Basic extends protobuf.ProtoMessage {
+final class RagManagedDbConfig_Basic extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Basic';
 
@@ -89888,7 +89729,7 @@ final class RagManagedDbConfig_Basic extends protobuf.ProtoMessage {
 /// NOTE: Once deleted the data cannot be recovered. To start using
 /// RAG Engine again, you will need to update the tier by calling the
 /// UpdateRagEngineConfig API.
-final class RagManagedDbConfig_Unprovisioned extends protobuf.ProtoMessage {
+final class RagManagedDbConfig_Unprovisioned extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Unprovisioned';
 
@@ -89906,7 +89747,7 @@ final class RagManagedDbConfig_Unprovisioned extends protobuf.ProtoMessage {
 }
 
 /// Config for RagEngine.
-final class RagEngineConfig extends protobuf.ProtoMessage {
+final class RagEngineConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagEngineConfig';
 
@@ -89946,7 +89787,7 @@ final class RagEngineConfig extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.CreateRagCorpus`.
-final class CreateRagCorpusRequest extends protobuf.ProtoMessage {
+final class CreateRagCorpusRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateRagCorpusRequest';
 
@@ -89981,7 +89822,7 @@ final class CreateRagCorpusRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.GetRagCorpus`
-final class GetRagCorpusRequest extends protobuf.ProtoMessage {
+final class GetRagCorpusRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetRagCorpusRequest';
 
@@ -90007,7 +89848,7 @@ final class GetRagCorpusRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.ListRagCorpora`.
-final class ListRagCorporaRequest extends protobuf.ProtoMessage {
+final class ListRagCorporaRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListRagCorporaRequest';
 
@@ -90059,7 +89900,7 @@ final class ListRagCorporaRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VertexRagDataService.ListRagCorpora`.
-final class ListRagCorporaResponse extends protobuf.ProtoMessage {
+final class ListRagCorporaResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListRagCorporaResponse';
 
@@ -90097,7 +89938,7 @@ final class ListRagCorporaResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.DeleteRagCorpus`.
-final class DeleteRagCorpusRequest extends protobuf.ProtoMessage {
+final class DeleteRagCorpusRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteRagCorpusRequest';
 
@@ -90132,7 +89973,7 @@ final class DeleteRagCorpusRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.UploadRagFile`.
-final class UploadRagFileRequest extends protobuf.ProtoMessage {
+final class UploadRagFileRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UploadRagFileRequest';
 
@@ -90181,7 +90022,7 @@ final class UploadRagFileRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VertexRagDataService.UploadRagFile`.
-final class UploadRagFileResponse extends protobuf.ProtoMessage {
+final class UploadRagFileResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UploadRagFileResponse';
 
@@ -90211,7 +90052,7 @@ final class UploadRagFileResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.ImportRagFiles`.
-final class ImportRagFilesRequest extends protobuf.ProtoMessage {
+final class ImportRagFilesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportRagFilesRequest';
 
@@ -90255,7 +90096,7 @@ final class ImportRagFilesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VertexRagDataService.ImportRagFiles`.
-final class ImportRagFilesResponse extends protobuf.ProtoMessage {
+final class ImportRagFilesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportRagFilesResponse';
 
@@ -90323,7 +90164,7 @@ final class ImportRagFilesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.GetRagFile`
-final class GetRagFileRequest extends protobuf.ProtoMessage {
+final class GetRagFileRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetRagFileRequest';
 
@@ -90349,7 +90190,7 @@ final class GetRagFileRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.ListRagFiles`.
-final class ListRagFilesRequest extends protobuf.ProtoMessage {
+final class ListRagFilesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListRagFilesRequest';
 
@@ -90402,7 +90243,7 @@ final class ListRagFilesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VertexRagDataService.ListRagFiles`.
-final class ListRagFilesResponse extends protobuf.ProtoMessage {
+final class ListRagFilesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListRagFilesResponse';
 
@@ -90439,7 +90280,7 @@ final class ListRagFilesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.DeleteRagFile`.
-final class DeleteRagFileRequest extends protobuf.ProtoMessage {
+final class DeleteRagFileRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteRagFileRequest';
 
@@ -90476,7 +90317,7 @@ final class DeleteRagFileRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `VertexRagDataService.CreateRagCorpus`.
-final class CreateRagCorpusOperationMetadata extends protobuf.ProtoMessage {
+final class CreateRagCorpusOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateRagCorpusOperationMetadata';
 
@@ -90506,7 +90347,7 @@ final class CreateRagCorpusOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.GetRagEngineConfig`
-final class GetRagEngineConfigRequest extends protobuf.ProtoMessage {
+final class GetRagEngineConfigRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetRagEngineConfigRequest';
 
@@ -90532,7 +90373,7 @@ final class GetRagEngineConfigRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.UpdateRagCorpus`.
-final class UpdateRagCorpusRequest extends protobuf.ProtoMessage {
+final class UpdateRagCorpusRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateRagCorpusRequest';
 
@@ -90555,7 +90396,7 @@ final class UpdateRagCorpusRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `VertexRagDataService.UpdateRagCorpus`.
-final class UpdateRagCorpusOperationMetadata extends protobuf.ProtoMessage {
+final class UpdateRagCorpusOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateRagCorpusOperationMetadata';
 
@@ -90585,7 +90426,7 @@ final class UpdateRagCorpusOperationMetadata extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `VertexRagDataService.ImportRagFiles`.
-final class ImportRagFilesOperationMetadata extends protobuf.ProtoMessage {
+final class ImportRagFilesOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ImportRagFilesOperationMetadata';
 
@@ -90646,7 +90487,7 @@ final class ImportRagFilesOperationMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagDataService.UpdateRagEngineConfig`.
-final class UpdateRagEngineConfigRequest extends protobuf.ProtoMessage {
+final class UpdateRagEngineConfigRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateRagEngineConfigRequest';
 
@@ -90678,8 +90519,7 @@ final class UpdateRagEngineConfigRequest extends protobuf.ProtoMessage {
 
 /// Runtime operation information for
 /// `VertexRagDataService.UpdateRagEngineConfig`.
-final class UpdateRagEngineConfigOperationMetadata
-    extends protobuf.ProtoMessage {
+final class UpdateRagEngineConfigOperationMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.UpdateRagEngineConfigOperationMetadata';
 
@@ -90708,7 +90548,7 @@ final class UpdateRagEngineConfigOperationMetadata
 }
 
 /// A query to retrieve relevant contexts.
-final class RagQuery extends protobuf.ProtoMessage {
+final class RagQuery extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagQuery';
 
@@ -90761,7 +90601,7 @@ final class RagQuery extends protobuf.ProtoMessage {
 }
 
 /// Configurations for hybrid search results ranking.
-final class RagQuery_Ranking extends protobuf.ProtoMessage {
+final class RagQuery_Ranking extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagQuery.Ranking';
 
@@ -90788,7 +90628,7 @@ final class RagQuery_Ranking extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VertexRagService.RetrieveContexts`.
-final class RetrieveContextsRequest extends protobuf.ProtoMessage {
+final class RetrieveContextsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveContextsRequest';
 
@@ -90835,8 +90675,7 @@ final class RetrieveContextsRequest extends protobuf.ProtoMessage {
 }
 
 /// The data source for Vertex RagStore.
-final class RetrieveContextsRequest_VertexRagStore
-    extends protobuf.ProtoMessage {
+final class RetrieveContextsRequest_VertexRagStore extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveContextsRequest.VertexRagStore';
 
@@ -90893,7 +90732,7 @@ final class RetrieveContextsRequest_VertexRagStore
 
 /// The definition of the Rag resource.
 final class RetrieveContextsRequest_VertexRagStore_RagResource
-    extends protobuf.ProtoMessage {
+    extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveContextsRequest.VertexRagStore.RagResource';
 
@@ -90932,7 +90771,7 @@ final class RetrieveContextsRequest_VertexRagStore_RagResource
 }
 
 /// Relevant contexts for one query.
-final class RagContexts extends protobuf.ProtoMessage {
+final class RagContexts extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagContexts';
 
@@ -90956,7 +90795,7 @@ final class RagContexts extends protobuf.ProtoMessage {
 }
 
 /// A context of the query.
-final class RagContexts_Context extends protobuf.ProtoMessage {
+final class RagContexts_Context extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagContexts.Context';
 
@@ -91041,7 +90880,7 @@ final class RagContexts_Context extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VertexRagService.RetrieveContexts`.
-final class RetrieveContextsResponse extends protobuf.ProtoMessage {
+final class RetrieveContextsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RetrieveContextsResponse';
 
@@ -91063,7 +90902,7 @@ final class RetrieveContextsResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for AugmentPrompt.
-final class AugmentPromptRequest extends protobuf.ProtoMessage {
+final class AugmentPromptRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AugmentPromptRequest';
 
@@ -91113,7 +90952,7 @@ final class AugmentPromptRequest extends protobuf.ProtoMessage {
 }
 
 /// Metadata of the backend deployed model.
-final class AugmentPromptRequest_Model extends protobuf.ProtoMessage {
+final class AugmentPromptRequest_Model extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AugmentPromptRequest.Model';
 
@@ -91147,7 +90986,7 @@ final class AugmentPromptRequest_Model extends protobuf.ProtoMessage {
 }
 
 /// Response message for AugmentPrompt.
-final class AugmentPromptResponse extends protobuf.ProtoMessage {
+final class AugmentPromptResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AugmentPromptResponse';
 
@@ -91181,7 +91020,7 @@ final class AugmentPromptResponse extends protobuf.ProtoMessage {
 }
 
 /// Request message for CorroborateContent.
-final class CorroborateContentRequest extends protobuf.ProtoMessage {
+final class CorroborateContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CorroborateContentRequest';
 
@@ -91237,7 +91076,7 @@ final class CorroborateContentRequest extends protobuf.ProtoMessage {
 }
 
 /// Parameters that can be overrided per request.
-final class CorroborateContentRequest_Parameters extends protobuf.ProtoMessage {
+final class CorroborateContentRequest_Parameters extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CorroborateContentRequest.Parameters';
 
@@ -91268,7 +91107,7 @@ final class CorroborateContentRequest_Parameters extends protobuf.ProtoMessage {
 }
 
 /// Response message for CorroborateContent.
-final class CorroborateContentResponse extends protobuf.ProtoMessage {
+final class CorroborateContentResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CorroborateContentResponse';
 
@@ -91306,7 +91145,7 @@ final class CorroborateContentResponse extends protobuf.ProtoMessage {
 }
 
 /// The fact used in grounding.
-final class Fact extends protobuf.ProtoMessage {
+final class Fact extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Fact';
 
@@ -91384,7 +91223,7 @@ final class Fact extends protobuf.ProtoMessage {
 }
 
 /// Claim that is extracted from the input text and facts that support it.
-final class Claim extends protobuf.ProtoMessage {
+final class Claim extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Claim';
 
@@ -91435,7 +91274,7 @@ final class Claim extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.GetStudy`.
-final class GetStudyRequest extends protobuf.ProtoMessage {
+final class GetStudyRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetStudyRequest';
 
@@ -91460,7 +91299,7 @@ final class GetStudyRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.CreateStudy`.
-final class CreateStudyRequest extends protobuf.ProtoMessage {
+final class CreateStudyRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateStudyRequest';
 
@@ -91495,7 +91334,7 @@ final class CreateStudyRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.ListStudies`.
-final class ListStudiesRequest extends protobuf.ProtoMessage {
+final class ListStudiesRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListStudiesRequest';
 
@@ -91544,7 +91383,7 @@ final class ListStudiesRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VizierService.ListStudies`.
-final class ListStudiesResponse extends protobuf.ProtoMessage {
+final class ListStudiesResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListStudiesResponse';
 
@@ -91580,7 +91419,7 @@ final class ListStudiesResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.DeleteStudy`.
-final class DeleteStudyRequest extends protobuf.ProtoMessage {
+final class DeleteStudyRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteStudyRequest';
 
@@ -91605,7 +91444,7 @@ final class DeleteStudyRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.LookupStudy`.
-final class LookupStudyRequest extends protobuf.ProtoMessage {
+final class LookupStudyRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.LookupStudyRequest';
 
@@ -91637,7 +91476,7 @@ final class LookupStudyRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.SuggestTrials`.
-final class SuggestTrialsRequest extends protobuf.ProtoMessage {
+final class SuggestTrialsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SuggestTrialsRequest';
 
@@ -91730,7 +91569,7 @@ final class SuggestTrialsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VizierService.SuggestTrials`.
-final class SuggestTrialsResponse extends protobuf.ProtoMessage {
+final class SuggestTrialsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SuggestTrialsResponse';
 
@@ -91779,7 +91618,7 @@ final class SuggestTrialsResponse extends protobuf.ProtoMessage {
 }
 
 /// Details of operations that perform Trials suggestion.
-final class SuggestTrialsMetadata extends protobuf.ProtoMessage {
+final class SuggestTrialsMetadata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.SuggestTrialsMetadata';
 
@@ -91820,7 +91659,7 @@ final class SuggestTrialsMetadata extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.CreateTrial`.
-final class CreateTrialRequest extends protobuf.ProtoMessage {
+final class CreateTrialRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CreateTrialRequest';
 
@@ -91855,7 +91694,7 @@ final class CreateTrialRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.GetTrial`.
-final class GetTrialRequest extends protobuf.ProtoMessage {
+final class GetTrialRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.GetTrialRequest';
 
@@ -91881,7 +91720,7 @@ final class GetTrialRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.ListTrials`.
-final class ListTrialsRequest extends protobuf.ProtoMessage {
+final class ListTrialsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTrialsRequest';
 
@@ -91930,7 +91769,7 @@ final class ListTrialsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VizierService.ListTrials`.
-final class ListTrialsResponse extends protobuf.ProtoMessage {
+final class ListTrialsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListTrialsResponse';
 
@@ -91966,7 +91805,7 @@ final class ListTrialsResponse extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.AddTrialMeasurement`.
-final class AddTrialMeasurementRequest extends protobuf.ProtoMessage {
+final class AddTrialMeasurementRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.AddTrialMeasurementRequest';
 
@@ -92004,7 +91843,7 @@ final class AddTrialMeasurementRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.CompleteTrial`.
-final class CompleteTrialRequest extends protobuf.ProtoMessage {
+final class CompleteTrialRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CompleteTrialRequest';
 
@@ -92066,7 +91905,7 @@ final class CompleteTrialRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.DeleteTrial`.
-final class DeleteTrialRequest extends protobuf.ProtoMessage {
+final class DeleteTrialRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.DeleteTrialRequest';
 
@@ -92092,7 +91931,7 @@ final class DeleteTrialRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.CheckTrialEarlyStoppingState`.
-final class CheckTrialEarlyStoppingStateRequest extends protobuf.ProtoMessage {
+final class CheckTrialEarlyStoppingStateRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CheckTrialEarlyStoppingStateRequest';
 
@@ -92120,7 +91959,7 @@ final class CheckTrialEarlyStoppingStateRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VizierService.CheckTrialEarlyStoppingState`.
-final class CheckTrialEarlyStoppingStateResponse extends protobuf.ProtoMessage {
+final class CheckTrialEarlyStoppingStateResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CheckTrialEarlyStoppingStateResponse';
 
@@ -92149,8 +91988,7 @@ final class CheckTrialEarlyStoppingStateResponse extends protobuf.ProtoMessage {
 /// This message will be placed in the metadata field of a
 /// google.longrunning.Operation associated with a CheckTrialEarlyStoppingState
 /// request.
-final class CheckTrialEarlyStoppingStateMetatdata
-    extends protobuf.ProtoMessage {
+final class CheckTrialEarlyStoppingStateMetatdata extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.CheckTrialEarlyStoppingStateMetatdata';
 
@@ -92196,7 +92034,7 @@ final class CheckTrialEarlyStoppingStateMetatdata
 
 /// Request message for
 /// `VizierService.StopTrial`.
-final class StopTrialRequest extends protobuf.ProtoMessage {
+final class StopTrialRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.StopTrialRequest';
 
@@ -92222,7 +92060,7 @@ final class StopTrialRequest extends protobuf.ProtoMessage {
 
 /// Request message for
 /// `VizierService.ListOptimalTrials`.
-final class ListOptimalTrialsRequest extends protobuf.ProtoMessage {
+final class ListOptimalTrialsRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListOptimalTrialsRequest';
 
@@ -92246,7 +92084,7 @@ final class ListOptimalTrialsRequest extends protobuf.ProtoMessage {
 
 /// Response message for
 /// `VizierService.ListOptimalTrials`.
-final class ListOptimalTrialsResponse extends protobuf.ProtoMessage {
+final class ListOptimalTrialsResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.ListOptimalTrialsResponse';
 
@@ -92275,7 +92113,7 @@ final class ListOptimalTrialsResponse extends protobuf.ProtoMessage {
 }
 
 /// Represents a hardware accelerator type.
-final class AcceleratorType extends protobuf.ProtoEnum {
+final class AcceleratorType extends ProtoEnum {
   /// Unspecified accelerator type, which means no accelerator.
   static const acceleratorTypeUnspecified = AcceleratorType(
     'ACCELERATOR_TYPE_UNSPECIFIED',
@@ -92350,7 +92188,7 @@ final class AcceleratorType extends protobuf.ProtoEnum {
 }
 
 /// Harm categories that will block the content.
-final class HarmCategory extends protobuf.ProtoEnum {
+final class HarmCategory extends ProtoEnum {
   /// The harm category is unspecified.
   static const harmCategoryUnspecified = HarmCategory(
     'HARM_CATEGORY_UNSPECIFIED',
@@ -92399,7 +92237,7 @@ final class HarmCategory extends protobuf.ProtoEnum {
 }
 
 /// Content Part modality
-final class Modality extends protobuf.ProtoEnum {
+final class Modality extends ProtoEnum {
   /// Unspecified modality.
   static const modalityUnspecified = Modality('MODALITY_UNSPECIFIED');
 
@@ -92432,7 +92270,7 @@ final class Modality extends protobuf.ProtoEnum {
 }
 
 /// Stage field indicating the current progress of a deployment.
-final class DeploymentStage extends protobuf.ProtoEnum {
+final class DeploymentStage extends ProtoEnum {
   /// Default value. This value is unused.
   static const deploymentStageUnspecified = DeploymentStage(
     'DEPLOYMENT_STAGE_UNSPECIFIED',
@@ -92482,7 +92320,7 @@ final class DeploymentStage extends protobuf.ProtoEnum {
 }
 
 /// Pairwise prediction autorater preference.
-final class PairwiseChoice extends protobuf.ProtoEnum {
+final class PairwiseChoice extends ProtoEnum {
   /// Unspecified prediction choice.
   static const pairwiseChoiceUnspecified = PairwiseChoice(
     'PAIRWISE_CHOICE_UNSPECIFIED',
@@ -92511,7 +92349,7 @@ final class PairwiseChoice extends protobuf.ProtoEnum {
 }
 
 /// Enum of location an HTTP element can be.
-final class HttpElementLocation extends protobuf.ProtoEnum {
+final class HttpElementLocation extends ProtoEnum {
   static const httpInUnspecified = HttpElementLocation('HTTP_IN_UNSPECIFIED');
 
   /// Element is in the HTTP request query.
@@ -92544,7 +92382,7 @@ final class HttpElementLocation extends protobuf.ProtoEnum {
 }
 
 /// Type of Auth.
-final class AuthType extends protobuf.ProtoEnum {
+final class AuthType extends ProtoEnum {
   static const authTypeUnspecified = AuthType('AUTH_TYPE_UNSPECIFIED');
 
   /// No Auth.
@@ -92581,7 +92419,7 @@ final class AuthType extends protobuf.ProtoEnum {
 }
 
 /// Format of the data in the Feature View.
-final class FeatureViewDataFormat extends protobuf.ProtoEnum {
+final class FeatureViewDataFormat extends ProtoEnum {
   /// Not set. Will be treated as the KeyValue format.
   static const featureViewDataFormatUnspecified = FeatureViewDataFormat(
     'FEATURE_VIEW_DATA_FORMAT_UNSPECIFIED',
@@ -92608,7 +92446,7 @@ final class FeatureViewDataFormat extends protobuf.ProtoEnum {
 }
 
 /// Describes the state of a job.
-final class JobState extends protobuf.ProtoEnum {
+final class JobState extends ProtoEnum {
   /// The job state is unspecified.
   static const jobStateUnspecified = JobState('JOB_STATE_UNSPECIFIED');
 
@@ -92663,7 +92501,7 @@ final class JobState extends protobuf.ProtoEnum {
 }
 
 /// The Model Monitoring Objective types.
-final class ModelDeploymentMonitoringObjectiveType extends protobuf.ProtoEnum {
+final class ModelDeploymentMonitoringObjectiveType extends ProtoEnum {
   /// Default value, should not be set.
   static const modelDeploymentMonitoringObjectiveTypeUnspecified =
       ModelDeploymentMonitoringObjectiveType(
@@ -92709,7 +92547,7 @@ final class ModelDeploymentMonitoringObjectiveType extends protobuf.ProtoEnum {
 }
 
 /// View enumeration of PublisherModel.
-final class PublisherModelView extends protobuf.ProtoEnum {
+final class PublisherModelView extends ProtoEnum {
   /// The default / unset value. The API will default to the BASIC view.
   static const publisherModelViewUnspecified = PublisherModelView(
     'PUBLISHER_MODEL_VIEW_UNSPECIFIED',
@@ -92745,7 +92583,7 @@ final class PublisherModelView extends protobuf.ProtoEnum {
 }
 
 /// Represents a notebook runtime type.
-final class NotebookRuntimeType extends protobuf.ProtoEnum {
+final class NotebookRuntimeType extends ProtoEnum {
   /// Unspecified notebook runtime type, NotebookRuntimeType will default to
   /// USER_DEFINED.
   static const notebookRuntimeTypeUnspecified = NotebookRuntimeType(
@@ -92773,7 +92611,7 @@ final class NotebookRuntimeType extends protobuf.ProtoEnum {
 }
 
 /// Views for Get/List NotebookExecutionJob
-final class NotebookExecutionJobView extends protobuf.ProtoEnum {
+final class NotebookExecutionJobView extends ProtoEnum {
   /// When unspecified, the API defaults to the BASIC view.
   static const notebookExecutionJobViewUnspecified = NotebookExecutionJobView(
     'NOTEBOOK_EXECUTION_JOB_VIEW_UNSPECIFIED',
@@ -92805,7 +92643,7 @@ final class NotebookExecutionJobView extends protobuf.ProtoEnum {
 
 /// Type contains the list of OpenAPI data types as defined by
 /// https://swagger.io/docs/specification/data-models/data-types/
-final class Type extends protobuf.ProtoEnum {
+final class Type extends ProtoEnum {
   /// Not specified, should not be used.
   static const typeUnspecified = Type('TYPE_UNSPECIFIED');
 
@@ -92846,7 +92684,7 @@ final class Type extends protobuf.ProtoEnum {
 /// pipeline is set to PIPELINE_FAILURE_POLICY_FAIL_FAST, it will stop scheduling
 /// any new tasks when a task has failed. Any scheduled tasks will continue to
 /// completion.
-final class PipelineFailurePolicy extends protobuf.ProtoEnum {
+final class PipelineFailurePolicy extends ProtoEnum {
   /// Default value, and follows fail slow behavior.
   static const pipelineFailurePolicyUnspecified = PipelineFailurePolicy(
     'PIPELINE_FAILURE_POLICY_UNSPECIFIED',
@@ -92879,7 +92717,7 @@ final class PipelineFailurePolicy extends protobuf.ProtoEnum {
 }
 
 /// Describes the state of a pipeline.
-final class PipelineState extends protobuf.ProtoEnum {
+final class PipelineState extends ProtoEnum {
   /// The pipeline state is unspecified.
   static const pipelineStateUnspecified = PipelineState(
     'PIPELINE_STATE_UNSPECIFIED',
@@ -92932,7 +92770,7 @@ final class PipelineState extends protobuf.ProtoEnum {
 }
 
 /// The state of the PSC service automation.
-final class PscautomationState extends protobuf.ProtoEnum {
+final class PscautomationState extends ProtoEnum {
   /// Should not be used.
   static const pscAutomationStateUnspecified = PscautomationState(
     'PSC_AUTOMATION_STATE_UNSPECIFIED',

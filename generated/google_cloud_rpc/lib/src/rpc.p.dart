@@ -14,10 +14,8 @@
 
 part of '../rpc.dart';
 
-typedef _MessageDecoder = ProtoMessage Function(Map<String, dynamic> json);
-
 // A map from message IDs to decoder functions.
-const Map<String, _MessageDecoder> _decoders = {
+const Map<String, ProtoMessage Function(Map<String, dynamic>)> _decoders = {
   BadRequest.fullyQualifiedName: BadRequest.fromJson,
   DebugInfo.fullyQualifiedName: DebugInfo.fromJson,
   ErrorInfo.fullyQualifiedName: ErrorInfo.fromJson,

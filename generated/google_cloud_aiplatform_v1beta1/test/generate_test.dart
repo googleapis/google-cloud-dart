@@ -62,7 +62,7 @@ void main() async {
       await for (final result in results) {
         final parts = result.candidates.firstOrNull?.content?.parts;
         if (parts != null) {
-          for (var p in parts) {
+          for (final p in parts) {
             text.write(p.text ?? '');
           }
         }

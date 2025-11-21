@@ -27,8 +27,7 @@ library;
 // ignore_for_file: comment_references
 // ignore_for_file: avoid_unused_constructor_parameters
 
-import 'package:google_cloud_protobuf/protobuf.dart';
-import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'src/encoding.dart';
 
 part 'src/protobuf.p.dart';
 
