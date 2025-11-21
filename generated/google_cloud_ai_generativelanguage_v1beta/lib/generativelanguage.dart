@@ -85,8 +85,9 @@ final class CacheService {
     ListCachedContentsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/cachedContents', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListCachedContentsResponse.fromJson(response);
@@ -127,8 +128,7 @@ final class CacheService {
     UpdateCachedContentRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.cachedContent!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.cachedContent);
     return CachedContent.fromJson(response);
@@ -153,11 +153,12 @@ final class CacheService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -274,11 +275,12 @@ final class DiscussService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -375,8 +377,9 @@ final class FileService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListFilesResponse> listFiles(ListFilesRequest request) async {
     final url = Uri.https(_host, '/v1beta/files', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListFilesResponse.fromJson(response);
@@ -423,11 +426,12 @@ final class FileService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -609,11 +613,12 @@ final class GenerativeService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -716,8 +721,9 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListModelsResponse> listModels(ListModelsRequest request) async {
     final url = Uri.https(_host, '/v1beta/models', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListModelsResponse.fromJson(response);
@@ -743,9 +749,10 @@ final class ModelService {
     ListTunedModelsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListTunedModelsResponse.fromJson(response);
@@ -772,7 +779,7 @@ final class ModelService {
     CreateTunedModelRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.tunedModelId != null) 'tunedModelId': request.tunedModelId!,
+      if (request.tunedModelId case final $1?) 'tunedModelId': $1,
     });
     final response = await _client.post(url, body: request.tunedModel);
     return Operation.fromJson(
@@ -788,8 +795,7 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<TunedModel> updateTunedModel(UpdateTunedModelRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.tunedModel!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.tunedModel);
     return TunedModel.fromJson(response);
@@ -814,11 +820,12 @@ final class ModelService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -928,8 +935,9 @@ final class PermissionService {
     ListPermissionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/permissions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListPermissionsResponse.fromJson(response);
@@ -942,8 +950,7 @@ final class PermissionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Permission> updatePermission(UpdatePermissionRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.permission!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.permission);
     return Permission.fromJson(response);
@@ -983,11 +990,12 @@ final class PermissionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1110,11 +1118,12 @@ final class PredictionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1222,8 +1231,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Corpus> updateCorpus(UpdateCorpusRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.corpus!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.corpus);
     return Corpus.fromJson(response);
@@ -1236,7 +1244,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteCorpus(DeleteCorpusRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force.isNotDefault) 'force': '${request.force}',
+      if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
     });
     await _client.delete(url);
   }
@@ -1248,8 +1256,9 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListCorporaResponse> listCorpora(ListCorporaRequest request) async {
     final url = Uri.https(_host, '/v1beta/corpora', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListCorporaResponse.fromJson(response);
@@ -1295,8 +1304,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Document> updateDocument(UpdateDocumentRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.document!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.document);
     return Document.fromJson(response);
@@ -1309,7 +1317,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteDocument(DeleteDocumentRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force.isNotDefault) 'force': '${request.force}',
+      if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
     });
     await _client.delete(url);
   }
@@ -1323,8 +1331,9 @@ final class RetrieverService {
     ListDocumentsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/documents', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListDocumentsResponse.fromJson(response);
@@ -1388,8 +1397,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Chunk> updateChunk(UpdateChunkRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.chunk!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.chunk);
     return Chunk.fromJson(response);
@@ -1441,8 +1449,9 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListChunksResponse> listChunks(ListChunksRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/chunks', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListChunksResponse.fromJson(response);
@@ -1457,11 +1466,12 @@ final class RetrieverService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1601,11 +1611,12 @@ final class TextService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);

@@ -80,7 +80,7 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Function$> getFunction(GetFunctionRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.revision.isNotDefault) 'revision': request.revision,
+      if (request.revision case final $1 when $1.isNotDefault) 'revision': $1,
     });
     final response = await _client.get(url);
     return Function$.fromJson(response);
@@ -95,10 +95,11 @@ final class FunctionService {
     ListFunctionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
     });
     final response = await _client.get(url);
     return ListFunctionsResponse.fromJson(response);
@@ -121,7 +122,8 @@ final class FunctionService {
     CreateFunctionRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.functionId.isNotDefault) 'functionId': request.functionId,
+      if (request.functionId case final $1 when $1.isNotDefault)
+        'functionId': $1,
     });
     final response = await _client.post(url, body: request.function);
     return Operation.fromJson(
@@ -145,8 +147,7 @@ final class FunctionService {
     UpdateFunctionRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.function!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.function);
     return Operation.fromJson(
@@ -241,7 +242,7 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/runtimes', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListRuntimesResponse.fromJson(response);
@@ -256,9 +257,10 @@ final class FunctionService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -287,9 +289,9 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v2/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -323,11 +325,12 @@ final class FunctionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);

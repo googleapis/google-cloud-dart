@@ -91,17 +91,17 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodyinfo', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.serverVerify.isNotDefault)
-        'serverVerify': '${request.serverVerify}',
-      if (request.intendedBindingUri != null)
-        'intendedBindingUri': request.intendedBindingUri!,
-      if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-      if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-      if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-      if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-      if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-      if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.serverVerify case final $1 when $1.isNotDefault)
+        'serverVerify': '${$1}',
+      if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+      if (request.fInt32 case final $1 when $1.isNotDefault) 'fInt32': '${$1}',
+      if (request.fInt64 case final $1 when $1.isNotDefault) 'fInt64': '${$1}',
+      if (request.fDouble case final $1 when $1.isNotDefault)
+        'fDouble': '${$1}',
+      if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+      if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+      if (request.pDouble case final $1?) 'pDouble': '${$1}',
     });
     final response = await _client.post(url, body: request.info);
     return RepeatResponse.fromJson(response);
@@ -115,125 +115,129 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:query', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.info!.fString.isNotDefault)
-        'info.fString': request.info!.fString,
-      if (request.info!.fInt32.isNotDefault)
-        'info.fInt32': '${request.info!.fInt32}',
-      if (request.info!.fSint32.isNotDefault)
-        'info.fSint32': '${request.info!.fSint32}',
-      if (request.info!.fSfixed32.isNotDefault)
-        'info.fSfixed32': '${request.info!.fSfixed32}',
-      if (request.info!.fUint32.isNotDefault)
-        'info.fUint32': '${request.info!.fUint32}',
-      if (request.info!.fFixed32.isNotDefault)
-        'info.fFixed32': '${request.info!.fFixed32}',
-      if (request.info!.fInt64.isNotDefault)
-        'info.fInt64': '${request.info!.fInt64}',
-      if (request.info!.fSint64.isNotDefault)
-        'info.fSint64': '${request.info!.fSint64}',
-      if (request.info!.fSfixed64.isNotDefault)
-        'info.fSfixed64': '${request.info!.fSfixed64}',
-      if (request.info!.fUint64.isNotDefault)
-        'info.fUint64': '${request.info!.fUint64}',
-      if (request.info!.fFixed64.isNotDefault)
-        'info.fFixed64': '${request.info!.fFixed64}',
-      if (request.info!.fDouble.isNotDefault)
-        'info.fDouble': '${request.info!.fDouble}',
-      if (request.info!.fFloat.isNotDefault)
-        'info.fFloat': '${request.info!.fFloat}',
-      if (request.info!.fBool.isNotDefault)
-        'info.fBool': '${request.info!.fBool}',
-      if (request.info!.fBytes != null)
-        'info.fBytes': encodeBytes(request.info!.fBytes)!,
-      if (request.info!.fKingdom.isNotDefault)
-        'info.fKingdom': request.info!.fKingdom.value,
-      if (request.info!.fChild!.fString.isNotDefault)
-        'info.fChild.fString': request.info!.fChild!.fString,
-      if (request.info!.fChild!.fFloat.isNotDefault)
-        'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-      if (request.info!.fChild!.fDouble.isNotDefault)
-        'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-      if (request.info!.fChild!.fBool.isNotDefault)
-        'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-      if (request.info!.fChild!.fContinent.isNotDefault)
-        'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-      if (request.info!.fChild!.fChild!.fString.isNotDefault)
-        'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-      if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-        'info.fChild.fChild.fDouble':
-            '${request.info!.fChild!.fChild!.fDouble}',
-      if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-        'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-      if (request.info!.fChild!.pString != null)
-        'info.fChild.pString': request.info!.fChild!.pString!,
-      if (request.info!.fChild!.pFloat != null)
-        'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-      if (request.info!.fChild!.pDouble != null)
-        'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-      if (request.info!.fChild!.pBool != null)
-        'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-      if (request.info!.fChild!.pContinent.isNotDefault)
-        'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-      if (request.info!.fChild!.pChild!.fString.isNotDefault)
-        'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-      if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-        'info.fChild.pChild.fDouble':
-            '${request.info!.fChild!.pChild!.fDouble}',
-      if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-        'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-      if (request.info!.pString != null) 'info.pString': request.info!.pString!,
-      if (request.info!.pInt32 != null)
-        'info.pInt32': '${request.info!.pInt32}',
-      if (request.info!.pDouble != null)
-        'info.pDouble': '${request.info!.pDouble}',
-      if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-      if (request.info!.pKingdom != null)
-        'info.pKingdom': request.info!.pKingdom!.value,
-      if (request.info!.pChild!.fString.isNotDefault)
-        'info.pChild.fString': request.info!.pChild!.fString,
-      if (request.info!.pChild!.fFloat.isNotDefault)
-        'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-      if (request.info!.pChild!.fDouble.isNotDefault)
-        'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-      if (request.info!.pChild!.fBool.isNotDefault)
-        'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-      if (request.info!.pChild!.fContinent.isNotDefault)
-        'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-      if (request.info!.pChild!.fChild!.fString.isNotDefault)
-        'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-      if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-        'info.pChild.fChild.fDouble':
-            '${request.info!.pChild!.fChild!.fDouble}',
-      if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-        'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-      if (request.info!.pChild!.pString != null)
-        'info.pChild.pString': request.info!.pChild!.pString!,
-      if (request.info!.pChild!.pFloat != null)
-        'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-      if (request.info!.pChild!.pDouble != null)
-        'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-      if (request.info!.pChild!.pBool != null)
-        'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-      if (request.info!.pChild!.pContinent.isNotDefault)
-        'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-      if (request.info!.pChild!.pChild!.fString.isNotDefault)
-        'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-      if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-        'info.pChild.pChild.fDouble':
-            '${request.info!.pChild!.pChild!.fDouble}',
-      if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-        'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-      if (request.serverVerify.isNotDefault)
-        'serverVerify': '${request.serverVerify}',
-      if (request.intendedBindingUri != null)
-        'intendedBindingUri': request.intendedBindingUri!,
-      if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-      if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-      if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-      if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-      if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-      if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.info!.fString case final $1 when $1.isNotDefault)
+        'info.fString': $1,
+      if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+        'info.fInt32': '${$1}',
+      if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+        'info.fSint32': '${$1}',
+      if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+        'info.fSfixed32': '${$1}',
+      if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+        'info.fUint32': '${$1}',
+      if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+        'info.fFixed32': '${$1}',
+      if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+        'info.fInt64': '${$1}',
+      if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+        'info.fSint64': '${$1}',
+      if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+        'info.fSfixed64': '${$1}',
+      if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+        'info.fUint64': '${$1}',
+      if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+        'info.fFixed64': '${$1}',
+      if (request.info!.fDouble case final $1 when $1.isNotDefault)
+        'info.fDouble': '${$1}',
+      if (request.info!.fFloat case final $1 when $1.isNotDefault)
+        'info.fFloat': '${$1}',
+      if (request.info!.fBool case final $1 when $1.isNotDefault)
+        'info.fBool': '${$1}',
+      if (request.info!.fBytes case final $1?) 'info.fBytes': encodeBytes($1)!,
+      if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+        'info.fKingdom': $1.value,
+      if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+        'info.fChild.fString': $1,
+      if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+        'info.fChild.fFloat': '${$1}',
+      if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+        'info.fChild.fDouble': '${$1}',
+      if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+        'info.fChild.fBool': '${$1}',
+      if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+        'info.fChild.fContinent': $1.value,
+      if (request.info!.fChild!.fChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.fChild.fChild.fString': $1,
+      if (request.info!.fChild!.fChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.fChild.fChild.fDouble': '${$1}',
+      if (request.info!.fChild!.fChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.fChild.fChild.fBool': '${$1}',
+      if (request.info!.fChild!.pString case final $1?)
+        'info.fChild.pString': $1,
+      if (request.info!.fChild!.pFloat case final $1?)
+        'info.fChild.pFloat': '${$1}',
+      if (request.info!.fChild!.pDouble case final $1?)
+        'info.fChild.pDouble': '${$1}',
+      if (request.info!.fChild!.pBool case final $1?)
+        'info.fChild.pBool': '${$1}',
+      if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+        'info.fChild.pContinent': $1.value,
+      if (request.info!.fChild!.pChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.fChild.pChild.fString': $1,
+      if (request.info!.fChild!.pChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.fChild.pChild.fDouble': '${$1}',
+      if (request.info!.fChild!.pChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.fChild.pChild.fBool': '${$1}',
+      if (request.info!.pString case final $1?) 'info.pString': $1,
+      if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+      if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+      if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+      if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+      if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+        'info.pChild.fString': $1,
+      if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+        'info.pChild.fFloat': '${$1}',
+      if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+        'info.pChild.fDouble': '${$1}',
+      if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+        'info.pChild.fBool': '${$1}',
+      if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+        'info.pChild.fContinent': $1.value,
+      if (request.info!.pChild!.fChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.pChild.fChild.fString': $1,
+      if (request.info!.pChild!.fChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.pChild.fChild.fDouble': '${$1}',
+      if (request.info!.pChild!.fChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.pChild.fChild.fBool': '${$1}',
+      if (request.info!.pChild!.pString case final $1?)
+        'info.pChild.pString': $1,
+      if (request.info!.pChild!.pFloat case final $1?)
+        'info.pChild.pFloat': '${$1}',
+      if (request.info!.pChild!.pDouble case final $1?)
+        'info.pChild.pDouble': '${$1}',
+      if (request.info!.pChild!.pBool case final $1?)
+        'info.pChild.pBool': '${$1}',
+      if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+        'info.pChild.pContinent': $1.value,
+      if (request.info!.pChild!.pChild!.fString case final $1
+          when $1.isNotDefault)
+        'info.pChild.pChild.fString': $1,
+      if (request.info!.pChild!.pChild!.fDouble case final $1
+          when $1.isNotDefault)
+        'info.pChild.pChild.fDouble': '${$1}',
+      if (request.info!.pChild!.pChild!.fBool case final $1
+          when $1.isNotDefault)
+        'info.pChild.pChild.fBool': '${$1}',
+      if (request.serverVerify case final $1 when $1.isNotDefault)
+        'serverVerify': '${$1}',
+      if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+      if (request.fInt32 case final $1 when $1.isNotDefault) 'fInt32': '${$1}',
+      if (request.fInt64 case final $1 when $1.isNotDefault) 'fInt64': '${$1}',
+      if (request.fDouble case final $1 when $1.isNotDefault)
+        'fDouble': '${$1}',
+      if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+      if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+      if (request.pDouble case final $1?) 'pDouble': '${$1}',
     });
     final response = await _client.get(url);
     return RepeatResponse.fromJson(response);
@@ -251,126 +255,132 @@ final class Compliance {
       _host,
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fInt32}/${request.info!.fDouble}/${request.info!.fBool}/${request.info!.fKingdom}:simplepath',
       {
-        if (request.name.isNotDefault) 'name': request.name,
-        if (request.info!.fString.isNotDefault)
-          'info.fString': request.info!.fString,
-        if (request.info!.fInt32.isNotDefault)
-          'info.fInt32': '${request.info!.fInt32}',
-        if (request.info!.fSint32.isNotDefault)
-          'info.fSint32': '${request.info!.fSint32}',
-        if (request.info!.fSfixed32.isNotDefault)
-          'info.fSfixed32': '${request.info!.fSfixed32}',
-        if (request.info!.fUint32.isNotDefault)
-          'info.fUint32': '${request.info!.fUint32}',
-        if (request.info!.fFixed32.isNotDefault)
-          'info.fFixed32': '${request.info!.fFixed32}',
-        if (request.info!.fInt64.isNotDefault)
-          'info.fInt64': '${request.info!.fInt64}',
-        if (request.info!.fSint64.isNotDefault)
-          'info.fSint64': '${request.info!.fSint64}',
-        if (request.info!.fSfixed64.isNotDefault)
-          'info.fSfixed64': '${request.info!.fSfixed64}',
-        if (request.info!.fUint64.isNotDefault)
-          'info.fUint64': '${request.info!.fUint64}',
-        if (request.info!.fFixed64.isNotDefault)
-          'info.fFixed64': '${request.info!.fFixed64}',
-        if (request.info!.fDouble.isNotDefault)
-          'info.fDouble': '${request.info!.fDouble}',
-        if (request.info!.fFloat.isNotDefault)
-          'info.fFloat': '${request.info!.fFloat}',
-        if (request.info!.fBool.isNotDefault)
-          'info.fBool': '${request.info!.fBool}',
-        if (request.info!.fBytes != null)
-          'info.fBytes': encodeBytes(request.info!.fBytes)!,
-        if (request.info!.fKingdom.isNotDefault)
-          'info.fKingdom': request.info!.fKingdom.value,
-        if (request.info!.fChild!.fString.isNotDefault)
-          'info.fChild.fString': request.info!.fChild!.fString,
-        if (request.info!.fChild!.fFloat.isNotDefault)
-          'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-        if (request.info!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-        if (request.info!.fChild!.fBool.isNotDefault)
-          'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-        if (request.info!.fChild!.fContinent.isNotDefault)
-          'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-        if (request.info!.fChild!.fChild!.fString.isNotDefault)
-          'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-        if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fChild.fDouble':
-              '${request.info!.fChild!.fChild!.fDouble}',
-        if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-          'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-        if (request.info!.fChild!.pString != null)
-          'info.fChild.pString': request.info!.fChild!.pString!,
-        if (request.info!.fChild!.pFloat != null)
-          'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-        if (request.info!.fChild!.pDouble != null)
-          'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-        if (request.info!.fChild!.pBool != null)
-          'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-        if (request.info!.fChild!.pContinent.isNotDefault)
-          'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-        if (request.info!.fChild!.pChild!.fString.isNotDefault)
-          'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-        if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-          'info.fChild.pChild.fDouble':
-              '${request.info!.fChild!.pChild!.fDouble}',
-        if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-          'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-        if (request.info!.pString != null)
-          'info.pString': request.info!.pString!,
-        if (request.info!.pInt32 != null)
-          'info.pInt32': '${request.info!.pInt32}',
-        if (request.info!.pDouble != null)
-          'info.pDouble': '${request.info!.pDouble}',
-        if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-        if (request.info!.pKingdom != null)
-          'info.pKingdom': request.info!.pKingdom!.value,
-        if (request.info!.pChild!.fString.isNotDefault)
-          'info.pChild.fString': request.info!.pChild!.fString,
-        if (request.info!.pChild!.fFloat.isNotDefault)
-          'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-        if (request.info!.pChild!.fDouble.isNotDefault)
-          'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-        if (request.info!.pChild!.fBool.isNotDefault)
-          'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-        if (request.info!.pChild!.fContinent.isNotDefault)
-          'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-        if (request.info!.pChild!.fChild!.fString.isNotDefault)
-          'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-        if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-          'info.pChild.fChild.fDouble':
-              '${request.info!.pChild!.fChild!.fDouble}',
-        if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-          'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-        if (request.info!.pChild!.pString != null)
-          'info.pChild.pString': request.info!.pChild!.pString!,
-        if (request.info!.pChild!.pFloat != null)
-          'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-        if (request.info!.pChild!.pDouble != null)
-          'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-        if (request.info!.pChild!.pBool != null)
-          'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-        if (request.info!.pChild!.pContinent.isNotDefault)
-          'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-        if (request.info!.pChild!.pChild!.fString.isNotDefault)
-          'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-        if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-          'info.pChild.pChild.fDouble':
-              '${request.info!.pChild!.pChild!.fDouble}',
-        if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-          'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-        if (request.serverVerify.isNotDefault)
-          'serverVerify': '${request.serverVerify}',
-        if (request.intendedBindingUri != null)
-          'intendedBindingUri': request.intendedBindingUri!,
-        if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-        if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-        if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-        if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-        if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-        if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info!.fString case final $1 when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info!.fBool case final $1 when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info!.fBytes case final $1?)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info!.fChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info!.fChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info!.fChild!.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info!.fChild!.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info!.fChild!.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info!.fChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info!.fChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info!.fChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info!.pString case final $1?) 'info.pString': $1,
+        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info!.pChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info!.pChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info!.pChild!.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info!.pChild!.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info!.pChild!.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info!.pChild!.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info!.pChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info!.pChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
       },
     );
     final response = await _client.get(url);
@@ -387,126 +397,132 @@ final class Compliance {
       _host,
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}/bool/${request.info!.fBool}:pathresource',
       {
-        if (request.name.isNotDefault) 'name': request.name,
-        if (request.info!.fString.isNotDefault)
-          'info.fString': request.info!.fString,
-        if (request.info!.fInt32.isNotDefault)
-          'info.fInt32': '${request.info!.fInt32}',
-        if (request.info!.fSint32.isNotDefault)
-          'info.fSint32': '${request.info!.fSint32}',
-        if (request.info!.fSfixed32.isNotDefault)
-          'info.fSfixed32': '${request.info!.fSfixed32}',
-        if (request.info!.fUint32.isNotDefault)
-          'info.fUint32': '${request.info!.fUint32}',
-        if (request.info!.fFixed32.isNotDefault)
-          'info.fFixed32': '${request.info!.fFixed32}',
-        if (request.info!.fInt64.isNotDefault)
-          'info.fInt64': '${request.info!.fInt64}',
-        if (request.info!.fSint64.isNotDefault)
-          'info.fSint64': '${request.info!.fSint64}',
-        if (request.info!.fSfixed64.isNotDefault)
-          'info.fSfixed64': '${request.info!.fSfixed64}',
-        if (request.info!.fUint64.isNotDefault)
-          'info.fUint64': '${request.info!.fUint64}',
-        if (request.info!.fFixed64.isNotDefault)
-          'info.fFixed64': '${request.info!.fFixed64}',
-        if (request.info!.fDouble.isNotDefault)
-          'info.fDouble': '${request.info!.fDouble}',
-        if (request.info!.fFloat.isNotDefault)
-          'info.fFloat': '${request.info!.fFloat}',
-        if (request.info!.fBool.isNotDefault)
-          'info.fBool': '${request.info!.fBool}',
-        if (request.info!.fBytes != null)
-          'info.fBytes': encodeBytes(request.info!.fBytes)!,
-        if (request.info!.fKingdom.isNotDefault)
-          'info.fKingdom': request.info!.fKingdom.value,
-        if (request.info!.fChild!.fString.isNotDefault)
-          'info.fChild.fString': request.info!.fChild!.fString,
-        if (request.info!.fChild!.fFloat.isNotDefault)
-          'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-        if (request.info!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-        if (request.info!.fChild!.fBool.isNotDefault)
-          'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-        if (request.info!.fChild!.fContinent.isNotDefault)
-          'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-        if (request.info!.fChild!.fChild!.fString.isNotDefault)
-          'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-        if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fChild.fDouble':
-              '${request.info!.fChild!.fChild!.fDouble}',
-        if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-          'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-        if (request.info!.fChild!.pString != null)
-          'info.fChild.pString': request.info!.fChild!.pString!,
-        if (request.info!.fChild!.pFloat != null)
-          'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-        if (request.info!.fChild!.pDouble != null)
-          'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-        if (request.info!.fChild!.pBool != null)
-          'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-        if (request.info!.fChild!.pContinent.isNotDefault)
-          'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-        if (request.info!.fChild!.pChild!.fString.isNotDefault)
-          'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-        if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-          'info.fChild.pChild.fDouble':
-              '${request.info!.fChild!.pChild!.fDouble}',
-        if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-          'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-        if (request.info!.pString != null)
-          'info.pString': request.info!.pString!,
-        if (request.info!.pInt32 != null)
-          'info.pInt32': '${request.info!.pInt32}',
-        if (request.info!.pDouble != null)
-          'info.pDouble': '${request.info!.pDouble}',
-        if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-        if (request.info!.pKingdom != null)
-          'info.pKingdom': request.info!.pKingdom!.value,
-        if (request.info!.pChild!.fString.isNotDefault)
-          'info.pChild.fString': request.info!.pChild!.fString,
-        if (request.info!.pChild!.fFloat.isNotDefault)
-          'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-        if (request.info!.pChild!.fDouble.isNotDefault)
-          'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-        if (request.info!.pChild!.fBool.isNotDefault)
-          'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-        if (request.info!.pChild!.fContinent.isNotDefault)
-          'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-        if (request.info!.pChild!.fChild!.fString.isNotDefault)
-          'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-        if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-          'info.pChild.fChild.fDouble':
-              '${request.info!.pChild!.fChild!.fDouble}',
-        if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-          'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-        if (request.info!.pChild!.pString != null)
-          'info.pChild.pString': request.info!.pChild!.pString!,
-        if (request.info!.pChild!.pFloat != null)
-          'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-        if (request.info!.pChild!.pDouble != null)
-          'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-        if (request.info!.pChild!.pBool != null)
-          'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-        if (request.info!.pChild!.pContinent.isNotDefault)
-          'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-        if (request.info!.pChild!.pChild!.fString.isNotDefault)
-          'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-        if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-          'info.pChild.pChild.fDouble':
-              '${request.info!.pChild!.pChild!.fDouble}',
-        if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-          'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-        if (request.serverVerify.isNotDefault)
-          'serverVerify': '${request.serverVerify}',
-        if (request.intendedBindingUri != null)
-          'intendedBindingUri': request.intendedBindingUri!,
-        if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-        if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-        if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-        if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-        if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-        if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info!.fString case final $1 when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info!.fBool case final $1 when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info!.fBytes case final $1?)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info!.fChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info!.fChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info!.fChild!.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info!.fChild!.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info!.fChild!.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info!.fChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info!.fChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info!.fChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info!.pString case final $1?) 'info.pString': $1,
+        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info!.pChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info!.pChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info!.pChild!.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info!.pChild!.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info!.pChild!.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info!.pChild!.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info!.pChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info!.pChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
       },
     );
     final response = await _client.get(url);
@@ -525,126 +541,132 @@ final class Compliance {
       _host,
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}:pathtrailingresource',
       {
-        if (request.name.isNotDefault) 'name': request.name,
-        if (request.info!.fString.isNotDefault)
-          'info.fString': request.info!.fString,
-        if (request.info!.fInt32.isNotDefault)
-          'info.fInt32': '${request.info!.fInt32}',
-        if (request.info!.fSint32.isNotDefault)
-          'info.fSint32': '${request.info!.fSint32}',
-        if (request.info!.fSfixed32.isNotDefault)
-          'info.fSfixed32': '${request.info!.fSfixed32}',
-        if (request.info!.fUint32.isNotDefault)
-          'info.fUint32': '${request.info!.fUint32}',
-        if (request.info!.fFixed32.isNotDefault)
-          'info.fFixed32': '${request.info!.fFixed32}',
-        if (request.info!.fInt64.isNotDefault)
-          'info.fInt64': '${request.info!.fInt64}',
-        if (request.info!.fSint64.isNotDefault)
-          'info.fSint64': '${request.info!.fSint64}',
-        if (request.info!.fSfixed64.isNotDefault)
-          'info.fSfixed64': '${request.info!.fSfixed64}',
-        if (request.info!.fUint64.isNotDefault)
-          'info.fUint64': '${request.info!.fUint64}',
-        if (request.info!.fFixed64.isNotDefault)
-          'info.fFixed64': '${request.info!.fFixed64}',
-        if (request.info!.fDouble.isNotDefault)
-          'info.fDouble': '${request.info!.fDouble}',
-        if (request.info!.fFloat.isNotDefault)
-          'info.fFloat': '${request.info!.fFloat}',
-        if (request.info!.fBool.isNotDefault)
-          'info.fBool': '${request.info!.fBool}',
-        if (request.info!.fBytes != null)
-          'info.fBytes': encodeBytes(request.info!.fBytes)!,
-        if (request.info!.fKingdom.isNotDefault)
-          'info.fKingdom': request.info!.fKingdom.value,
-        if (request.info!.fChild!.fString.isNotDefault)
-          'info.fChild.fString': request.info!.fChild!.fString,
-        if (request.info!.fChild!.fFloat.isNotDefault)
-          'info.fChild.fFloat': '${request.info!.fChild!.fFloat}',
-        if (request.info!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fDouble': '${request.info!.fChild!.fDouble}',
-        if (request.info!.fChild!.fBool.isNotDefault)
-          'info.fChild.fBool': '${request.info!.fChild!.fBool}',
-        if (request.info!.fChild!.fContinent.isNotDefault)
-          'info.fChild.fContinent': request.info!.fChild!.fContinent.value,
-        if (request.info!.fChild!.fChild!.fString.isNotDefault)
-          'info.fChild.fChild.fString': request.info!.fChild!.fChild!.fString,
-        if (request.info!.fChild!.fChild!.fDouble.isNotDefault)
-          'info.fChild.fChild.fDouble':
-              '${request.info!.fChild!.fChild!.fDouble}',
-        if (request.info!.fChild!.fChild!.fBool.isNotDefault)
-          'info.fChild.fChild.fBool': '${request.info!.fChild!.fChild!.fBool}',
-        if (request.info!.fChild!.pString != null)
-          'info.fChild.pString': request.info!.fChild!.pString!,
-        if (request.info!.fChild!.pFloat != null)
-          'info.fChild.pFloat': '${request.info!.fChild!.pFloat}',
-        if (request.info!.fChild!.pDouble != null)
-          'info.fChild.pDouble': '${request.info!.fChild!.pDouble}',
-        if (request.info!.fChild!.pBool != null)
-          'info.fChild.pBool': '${request.info!.fChild!.pBool}',
-        if (request.info!.fChild!.pContinent.isNotDefault)
-          'info.fChild.pContinent': request.info!.fChild!.pContinent.value,
-        if (request.info!.fChild!.pChild!.fString.isNotDefault)
-          'info.fChild.pChild.fString': request.info!.fChild!.pChild!.fString,
-        if (request.info!.fChild!.pChild!.fDouble.isNotDefault)
-          'info.fChild.pChild.fDouble':
-              '${request.info!.fChild!.pChild!.fDouble}',
-        if (request.info!.fChild!.pChild!.fBool.isNotDefault)
-          'info.fChild.pChild.fBool': '${request.info!.fChild!.pChild!.fBool}',
-        if (request.info!.pString != null)
-          'info.pString': request.info!.pString!,
-        if (request.info!.pInt32 != null)
-          'info.pInt32': '${request.info!.pInt32}',
-        if (request.info!.pDouble != null)
-          'info.pDouble': '${request.info!.pDouble}',
-        if (request.info!.pBool != null) 'info.pBool': '${request.info!.pBool}',
-        if (request.info!.pKingdom != null)
-          'info.pKingdom': request.info!.pKingdom!.value,
-        if (request.info!.pChild!.fString.isNotDefault)
-          'info.pChild.fString': request.info!.pChild!.fString,
-        if (request.info!.pChild!.fFloat.isNotDefault)
-          'info.pChild.fFloat': '${request.info!.pChild!.fFloat}',
-        if (request.info!.pChild!.fDouble.isNotDefault)
-          'info.pChild.fDouble': '${request.info!.pChild!.fDouble}',
-        if (request.info!.pChild!.fBool.isNotDefault)
-          'info.pChild.fBool': '${request.info!.pChild!.fBool}',
-        if (request.info!.pChild!.fContinent.isNotDefault)
-          'info.pChild.fContinent': request.info!.pChild!.fContinent.value,
-        if (request.info!.pChild!.fChild!.fString.isNotDefault)
-          'info.pChild.fChild.fString': request.info!.pChild!.fChild!.fString,
-        if (request.info!.pChild!.fChild!.fDouble.isNotDefault)
-          'info.pChild.fChild.fDouble':
-              '${request.info!.pChild!.fChild!.fDouble}',
-        if (request.info!.pChild!.fChild!.fBool.isNotDefault)
-          'info.pChild.fChild.fBool': '${request.info!.pChild!.fChild!.fBool}',
-        if (request.info!.pChild!.pString != null)
-          'info.pChild.pString': request.info!.pChild!.pString!,
-        if (request.info!.pChild!.pFloat != null)
-          'info.pChild.pFloat': '${request.info!.pChild!.pFloat}',
-        if (request.info!.pChild!.pDouble != null)
-          'info.pChild.pDouble': '${request.info!.pChild!.pDouble}',
-        if (request.info!.pChild!.pBool != null)
-          'info.pChild.pBool': '${request.info!.pChild!.pBool}',
-        if (request.info!.pChild!.pContinent.isNotDefault)
-          'info.pChild.pContinent': request.info!.pChild!.pContinent.value,
-        if (request.info!.pChild!.pChild!.fString.isNotDefault)
-          'info.pChild.pChild.fString': request.info!.pChild!.pChild!.fString,
-        if (request.info!.pChild!.pChild!.fDouble.isNotDefault)
-          'info.pChild.pChild.fDouble':
-              '${request.info!.pChild!.pChild!.fDouble}',
-        if (request.info!.pChild!.pChild!.fBool.isNotDefault)
-          'info.pChild.pChild.fBool': '${request.info!.pChild!.pChild!.fBool}',
-        if (request.serverVerify.isNotDefault)
-          'serverVerify': '${request.serverVerify}',
-        if (request.intendedBindingUri != null)
-          'intendedBindingUri': request.intendedBindingUri!,
-        if (request.fInt32.isNotDefault) 'fInt32': '${request.fInt32}',
-        if (request.fInt64.isNotDefault) 'fInt64': '${request.fInt64}',
-        if (request.fDouble.isNotDefault) 'fDouble': '${request.fDouble}',
-        if (request.pInt32 != null) 'pInt32': '${request.pInt32}',
-        if (request.pInt64 != null) 'pInt64': '${request.pInt64}',
-        if (request.pDouble != null) 'pDouble': '${request.pDouble}',
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info!.fString case final $1 when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info!.fBool case final $1 when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info!.fBytes case final $1?)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info!.fChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info!.fChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info!.fChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info!.fChild!.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info!.fChild!.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info!.fChild!.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info!.fChild!.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info!.fChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info!.fChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info!.fChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info!.pString case final $1?) 'info.pString': $1,
+        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info!.pChild!.fChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info!.pChild!.fChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info!.pChild!.fChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info!.pChild!.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info!.pChild!.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info!.pChild!.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info!.pChild!.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info!.pChild!.pChild!.fString case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info!.pChild!.pChild!.fDouble case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info!.pChild!.pChild!.fBool case final $1
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
       },
     );
     final response = await _client.get(url);
@@ -685,8 +707,8 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<EnumResponse> getEnum(EnumRequest request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.unknownEnum.isNotDefault)
-        'unknownEnum': '${request.unknownEnum}',
+      if (request.unknownEnum case final $1 when $1.isNotDefault)
+        'unknownEnum': '${$1}',
     });
     final response = await _client.get(url);
     return EnumResponse.fromJson(response);
@@ -704,9 +726,10 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.request!.unknownEnum.isNotDefault)
-        'request.unknownEnum': '${request.request!.unknownEnum}',
-      if (request.continent.isNotDefault) 'continent': request.continent.value,
+      if (request.request!.unknownEnum case final $1 when $1.isNotDefault)
+        'request.unknownEnum': '${$1}',
+      if (request.continent case final $1 when $1.isNotDefault)
+        'continent': $1.value,
     });
     final response = await _client.post(url);
     return EnumResponse.fromJson(response);
@@ -721,9 +744,10 @@ final class Compliance {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -758,9 +782,9 @@ final class Compliance {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -791,12 +815,13 @@ final class Compliance {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1027,9 +1052,10 @@ final class Echo {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1064,9 +1090,9 @@ final class Echo {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1097,12 +1123,13 @@ final class Echo {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1209,8 +1236,7 @@ final class Identity {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<User> updateUser(UpdateUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.user!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.user);
     return User.fromJson(response);
@@ -1233,8 +1259,9 @@ final class Identity {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
     final url = Uri.https(_host, '/v1beta1/users', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListUsersResponse.fromJson(response);
@@ -1249,9 +1276,10 @@ final class Identity {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1286,9 +1314,9 @@ final class Identity {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1319,12 +1347,13 @@ final class Identity {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1434,8 +1463,7 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Room> updateRoom(UpdateRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.room!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.room);
     return Room.fromJson(response);
@@ -1458,8 +1486,9 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/rooms', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListRoomsResponse.fromJson(response);
@@ -1496,8 +1525,7 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.blurb!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.blurb);
     return Blurb.fromJson(response);
@@ -1521,8 +1549,9 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListBlurbsResponse.fromJson(response);
@@ -1577,9 +1606,10 @@ final class Messaging {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1614,9 +1644,9 @@ final class Messaging {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1647,12 +1677,13 @@ final class Messaging {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1814,9 +1845,10 @@ final class SequenceService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -1851,9 +1883,9 @@ final class SequenceService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -1884,12 +1916,13 @@ final class SequenceService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -2003,8 +2036,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sessions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListSessionsResponse.fromJson(response);
@@ -2042,8 +2076,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListTestsResponse> listTests(ListTestsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/tests', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListTestsResponse.fromJson(response);
@@ -2074,9 +2109,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:check', {
-      if (request.answer != null) 'answer': encodeBytes(request.answer)!,
-      if (request.answers != null)
-        'answers': request.answers!.map((e) => encodeBytes(e)!),
+      if (request.answer case final $1?) 'answer': encodeBytes($1)!,
+      if (request.answers case final $1?)
+        'answers': $1.map((e) => encodeBytes(e)!),
     });
     final response = await _client.post(url);
     return VerifyTestResponse.fromJson(response);
@@ -2091,9 +2126,10 @@ final class Testing {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -2128,9 +2164,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -2161,12 +2197,13 @@ final class Testing {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name.isNotDefault) 'name': request.name,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);

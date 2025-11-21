@@ -76,9 +76,10 @@ final class Locations {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);

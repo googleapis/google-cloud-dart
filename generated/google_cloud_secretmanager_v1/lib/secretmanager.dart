@@ -79,9 +79,10 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListSecretsResponse.fromJson(response);
@@ -95,7 +96,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> createSecret(CreateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.secretId.isNotDefault) 'secretId': request.secretId,
+      if (request.secretId case final $1 when $1.isNotDefault) 'secretId': $1,
     });
     final response = await _client.post(url, body: request.secret);
     return Secret.fromJson(response);
@@ -135,8 +136,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.secret!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.secret);
     return Secret.fromJson(response);
@@ -149,7 +149,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteSecret(DeleteSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.etag.isNotDefault) 'etag': request.etag,
+      if (request.etag case final $1 when $1.isNotDefault) 'etag': $1,
     });
     await _client.delete(url);
   }
@@ -164,9 +164,10 @@ final class SecretManagerService {
     ListSecretVersionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.parent}/versions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListSecretVersionsResponse.fromJson(response);
@@ -283,9 +284,9 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -319,9 +320,10 @@ final class SecretManagerService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);

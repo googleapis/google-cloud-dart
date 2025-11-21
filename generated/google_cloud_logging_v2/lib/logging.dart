@@ -125,8 +125,9 @@ final class LoggingServiceV2 {
     ListMonitoredResourceDescriptorsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/monitoredResourceDescriptors', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListMonitoredResourceDescriptorsResponse.fromJson(response);
@@ -140,10 +141,11 @@ final class LoggingServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListLogsResponse> listLogs(ListLogsRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/logs', {
-      if (request.resourceNames.isNotDefault)
-        'resourceNames': request.resourceNames,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.resourceNames case final $1 when $1.isNotDefault)
+        'resourceNames': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLogsResponse.fromJson(response);
@@ -158,11 +160,12 @@ final class LoggingServiceV2 {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -237,8 +240,9 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListBucketsResponse> listBuckets(ListBucketsRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/buckets', {
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
     });
     final response = await _client.get(url);
     return ListBucketsResponse.fromJson(response);
@@ -272,7 +276,7 @@ final class ConfigServiceV2 {
     CreateBucketRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/buckets:createAsync', {
-      if (request.bucketId.isNotDefault) 'bucketId': request.bucketId,
+      if (request.bucketId case final $1 when $1.isNotDefault) 'bucketId': $1,
     });
     final response = await _client.post(url, body: request.bucket);
     return Operation.fromJson(
@@ -301,8 +305,7 @@ final class ConfigServiceV2 {
     UpdateBucketRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}:updateAsync', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.post(url, body: request.bucket);
     return Operation.fromJson(
@@ -319,7 +322,7 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogBucket> createBucket(CreateBucketRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/buckets', {
-      if (request.bucketId.isNotDefault) 'bucketId': request.bucketId,
+      if (request.bucketId case final $1 when $1.isNotDefault) 'bucketId': $1,
     });
     final response = await _client.post(url, body: request.bucket);
     return LogBucket.fromJson(response);
@@ -337,8 +340,7 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogBucket> updateBucket(UpdateBucketRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.bucket);
     return LogBucket.fromJson(response);
@@ -376,8 +378,9 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListViewsResponse> listViews(ListViewsRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/views', {
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
     });
     final response = await _client.get(url);
     return ListViewsResponse.fromJson(response);
@@ -402,7 +405,7 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogView> createView(CreateViewRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/views', {
-      if (request.viewId.isNotDefault) 'viewId': request.viewId,
+      if (request.viewId case final $1 when $1.isNotDefault) 'viewId': $1,
     });
     final response = await _client.post(url, body: request.view);
     return LogView.fromJson(response);
@@ -419,8 +422,7 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogView> updateView(UpdateViewRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.view);
     return LogView.fromJson(response);
@@ -446,8 +448,9 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListSinksResponse> listSinks(ListSinksRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/sinks', {
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
     });
     final response = await _client.get(url);
     return ListSinksResponse.fromJson(response);
@@ -474,8 +477,8 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogSink> createSink(CreateSinkRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/sinks', {
-      if (request.uniqueWriterIdentity.isNotDefault)
-        'uniqueWriterIdentity': '${request.uniqueWriterIdentity}',
+      if (request.uniqueWriterIdentity case final $1 when $1.isNotDefault)
+        'uniqueWriterIdentity': '${$1}',
     });
     final response = await _client.post(url, body: request.sink);
     return LogSink.fromJson(response);
@@ -492,10 +495,9 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogSink> updateSink(UpdateSinkRequest request) async {
     final url = Uri.https(_host, '/v2/${request.sinkName}', {
-      if (request.uniqueWriterIdentity.isNotDefault)
-        'uniqueWriterIdentity': '${request.uniqueWriterIdentity}',
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.uniqueWriterIdentity case final $1 when $1.isNotDefault)
+        'uniqueWriterIdentity': '${$1}',
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.put(url, body: request.sink);
     return LogSink.fromJson(response);
@@ -529,7 +531,7 @@ final class ConfigServiceV2 {
     CreateLinkRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/links', {
-      if (request.linkId.isNotDefault) 'linkId': request.linkId,
+      if (request.linkId case final $1 when $1.isNotDefault) 'linkId': $1,
     });
     final response = await _client.post(url, body: request.link);
     return Operation.fromJson(
@@ -568,8 +570,9 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListLinksResponse> listLinks(ListLinksRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/links', {
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
     });
     final response = await _client.get(url);
     return ListLinksResponse.fromJson(response);
@@ -595,8 +598,9 @@ final class ConfigServiceV2 {
     ListExclusionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/exclusions', {
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
     });
     final response = await _client.get(url);
     return ListExclusionsResponse.fromJson(response);
@@ -634,8 +638,7 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<LogExclusion> updateExclusion(UpdateExclusionRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.exclusion);
     return LogExclusion.fromJson(response);
@@ -694,8 +697,7 @@ final class ConfigServiceV2 {
     UpdateCmekSettingsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/cmekSettings', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.cmekSettings);
     return CmekSettings.fromJson(response);
@@ -743,8 +745,7 @@ final class ConfigServiceV2 {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Settings> updateSettings(UpdateSettingsRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}/settings', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.settings);
     return Settings.fromJson(response);
@@ -783,11 +784,12 @@ final class ConfigServiceV2 {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -864,8 +866,9 @@ final class MetricsServiceV2 {
     ListLogMetricsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/metrics', {
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
     });
     final response = await _client.get(url);
     return ListLogMetricsResponse.fromJson(response);
@@ -923,11 +926,12 @@ final class MetricsServiceV2 {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
