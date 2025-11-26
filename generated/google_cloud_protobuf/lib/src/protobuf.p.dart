@@ -24,6 +24,8 @@ abstract class JsonEncodable {
   Object? toJson();
 }
 
+const _deepCollectionEquality = DeepCollectionEquality();
+
 /// The abstract common superclass of all messages.
 abstract class ProtoMessage implements JsonEncodable {
   /// The fully qualified name of this message, i.e., `google.protobuf.Duration`
@@ -31,6 +33,17 @@ abstract class ProtoMessage implements JsonEncodable {
   final String qualifiedName;
 
   ProtoMessage(this.qualifiedName);
+
+  @override
+  bool operator ==(Object other) =>
+      other is ProtoMessage &&
+      other.runtimeType == runtimeType &&
+      qualifiedName == other.qualifiedName &&
+      _deepCollectionEquality.equals(toJson(), other.toJson());
+
+  @override
+  int get hashCode =>
+      Object.hash(qualifiedName, _deepCollectionEquality.hash(toJson()));
 }
 
 /// The abstract common superclass of all enum values.

@@ -34,15 +34,6 @@ import 'package:test_utils/insecure_proxy_http_client.dart';
 Matcher anyTypeName(dynamic matcher) => const TypeMatcher<protobuf.Any>()
     .having((a) => a.typeName, 'typeName', matcher);
 
-// TODO(https://github.com/googleapis/google-cloud-dart/issues/81):
-// Remove when `ProtoMessage` equality is supported
-Matcher pageWords(dynamic matcher) =>
-    const TypeMatcher<PagedExpandResponseList>().having(
-      (a) => a.words,
-      'words',
-      matcher,
-    );
-
 class ShowcaseServer {
   final Process _process;
 
@@ -268,12 +259,14 @@ void main() async {
       expect(
         response.alphabetized,
         equals({
-          'b': pageWords(['best']),
-          'I': pageWords(['It']),
-          'i': pageWords(['it']),
-          'o': pageWords(['of', 'of']),
-          't': pageWords(['the', 'times,', 'the', 'times']),
-          'w': pageWords(['was', 'was', 'worst']),
+          'b': PagedExpandResponseList(words: ['best']),
+          'I': PagedExpandResponseList(words: ['It']),
+          'i': PagedExpandResponseList(words: ['it']),
+          'o': PagedExpandResponseList(words: ['of', 'of']),
+          't': PagedExpandResponseList(
+            words: ['the', 'times,', 'the', 'times'],
+          ),
+          'w': PagedExpandResponseList(words: ['was', 'was', 'worst']),
         }),
       );
     });
