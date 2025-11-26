@@ -26,11 +26,17 @@ import '../protobuf.dart';
 export 'dart:typed_data' show Uint8List;
 
 /// Decode an `int64` value.
-int? decodeInt64(Object? value) =>
-    value is String ? int.parse(value) : value as int?;
+int decodeInt64(Object value) =>
+    value is String ? int.parse(value) : value as int;
+
+int decodeInt(Object value) => value as int;
+
+bool decodeBool(Object value) => value as bool;
+
+String decodeString(Object value) => value as String;
 
 /// Decode a `double` value.
-double? decodeDouble(Object? value) {
+double decodeDouble(Object value) {
   if (value is String) {
     if (value == 'NaN' || value == 'Infinity' || value == '-Infinity') {
       return double.parse(value);
@@ -40,89 +46,28 @@ double? decodeDouble(Object? value) {
       );
     }
   } else {
-    return (value as num?)?.toDouble();
+    return (value as num).toDouble();
   }
 }
 
 /// Decode a `bytes` value.
-Uint8List? decodeBytes(String? value) =>
-    value == null ? null : base64Decode(value);
+Uint8List decodeBytes(Object value) => base64Decode(value as String);
 
 /// Decode an [ProtoEnum].
-T? decodeEnum<T extends ProtoEnum>(String? value, T Function(String) decoder) =>
-    value == null ? null : decoder(value);
+T decodeEnum<T extends ProtoEnum>(String value, T Function(String) decoder) =>
+    decoder(value);
 
 /// Decode a [ProtoMessage].
-T? decode<T extends ProtoMessage>(
-  Map<String, dynamic>? value,
-  T Function(Map<String, dynamic>) decoder,
-) => value != null ? decoder(value) : null;
+T decodeMessage<T extends ProtoMessage>(
+  Map<String, dynamic> value,
+  T Function(Object) decoder,
+) => decoder(value);
 
 /// Decode a [ProtoMessage] which uses a custom JSON encoding.
-T? decodeCustom<T extends ProtoMessage>(
-  Object? value,
+T decodeCustomMessage<T extends ProtoMessage>(
+  Object value,
   T Function(Object) decoder,
-) => value == null ? null : decoder(value);
-
-/// Decode a list of primitives types.
-List<T>? decodeList<T>(Object? value) => (value as List?)?.cast();
-
-/// Decode a list of `bytes`.
-List<Uint8List>? decodeListBytes(Object? value) =>
-    (value as List?)?.cast<String>().map(base64Decode).toList();
-
-/// Decode a list of [ProtoEnum]s.
-List<T>? decodeListEnum<T extends ProtoEnum>(
-  Object? value,
-  T Function(String) decoder,
-) => (value as List?)?.map((item) => decoder(item as String)).toList();
-
-/// Decode a list of [ProtoMessage]s.
-List<T>? decodeListMessage<T extends ProtoMessage>(
-  Object? value,
-  T Function(Map<String, dynamic>) decoder,
-) => (value as List?)
-    ?.cast<Map<String, dynamic>>()
-    .map((item) => decoder(item))
-    .toList();
-
-/// Decode a list of [ProtoMessage]s which use custom JSON encodings.
-List<T>? decodeListMessageCustom<T extends ProtoMessage>(
-  Object? value,
-  T Function(Object) decoder,
-) => (value as List?)?.map((item) => decoder(item as Object)).toList();
-
-/// Decode a map of primitives types.
-Map<K, V>? decodeMap<K, V>(Object? value) => (value as Map?)?.cast();
-
-/// Decode a map of [ProtoEnum]s.
-Map<K, V>? decodeMapEnum<K, V extends ProtoEnum>(
-  Object? value,
-  V Function(String) decoder,
-) => (value as Map?)
-    ?.map((key, value) => MapEntry(key, decoder(value as String)))
-    .cast();
-
-/// Decode a map of `bytes`.
-Map<K, Uint8List>? decodeMapBytes<K>(Object? value) => (value as Map?)
-    ?.map((key, value) => MapEntry(key, base64Decode(value as String)))
-    .cast();
-
-/// Decode a map of [ProtoMessage]s.
-Map<K, V>? decodeMapMessage<K, V extends ProtoMessage>(
-  Object? value,
-  V Function(Map<String, dynamic>) decoder,
-) => (value as Map?)
-    ?.map((key, value) => MapEntry(key, decoder(value as Map<String, dynamic>)))
-    .cast();
-
-/// Decode a map of [ProtoMessage]s which use custom JSON encodings.
-Map<K, V>? decodeMapMessageCustom<K, V extends ProtoMessage>(
-  Object? value,
-  V Function(Object) decoder,
-) => (value as Map?)
-    ?.map((key, value) => MapEntry(key, decoder(value as Object)))
-    .cast();
+) => decoder(value);
 
 /// Encode an `int64` value into JSON.
 String? encodeInt64(int? value) => value == null ? null : '$value';
@@ -155,6 +100,10 @@ Map<T, Object?>? encodeMap<T>(Map<T, JsonEncodable>? value) =>
 /// Encode a list of `bytes` values into JSON.
 Map<T, String>? encodeMapBytes<T>(Map<T, Uint8List>? value) =>
     value?.map((key, value) => MapEntry(key, base64Encode(value)));
+
+/// Encode a map of `double` values into JSON.
+Map<T, Object?>? encodeMapDouble<T>(Map<T, double>? value) =>
+    value?.map((key, value) => MapEntry(key, encodeDouble(value)));
 
 /// Extensions methods used for comparing to proto default values.
 extension BoolProtoDefault on bool {

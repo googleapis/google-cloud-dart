@@ -479,28 +479,80 @@ final class Secret extends ProtoMessage {
     this.tags = const {},
   }) : super(fullyQualifiedName);
 
-  factory Secret.fromJson(Map<String, dynamic> json) => Secret(
-    name: json['name'] ?? '',
-    replication: decode(json['replication'], Replication.fromJson),
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    labels: decodeMap(json['labels']) ?? {},
-    topics: decodeListMessage(json['topics'], Topic.fromJson) ?? [],
-    expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
-    ttl: decodeCustom(json['ttl'], Duration.fromJson),
-    etag: json['etag'] ?? '',
-    rotation: decode(json['rotation'], Rotation.fromJson),
-    versionAliases: decodeMap(json['versionAliases']) ?? {},
-    annotations: decodeMap(json['annotations']) ?? {},
-    versionDestroyTtl: decodeCustom(
-      json['versionDestroyTtl'],
-      Duration.fromJson,
-    ),
-    customerManagedEncryption: decode(
-      json['customerManagedEncryption'],
-      CustomerManagedEncryption.fromJson,
-    ),
-    tags: decodeMap(json['tags']) ?? {},
-  );
+  factory Secret.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Secret(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      replication: switch (json['replication']) {
+        null => null,
+        Object $1 => Replication.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => $1.map(
+          (k, v) => MapEntry(k, decodeString(v)),
+        ),
+        _ => throw TypeError(),
+      },
+      topics: switch (json['topics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Topic.fromJson(i)],
+        _ => throw TypeError(),
+      },
+      expireTime: switch (json['expireTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      ttl: switch (json['ttl']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      etag: switch (json['etag']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      rotation: switch (json['rotation']) {
+        null => null,
+        Object $1 => Rotation.fromJson($1),
+      },
+      versionAliases: switch (json['versionAliases']) {
+        null => {},
+        Map<String, Object?> $1 => $1.map(
+          (k, v) => MapEntry(k, decodeInt64(v)),
+        ),
+        _ => throw TypeError(),
+      },
+      annotations: switch (json['annotations']) {
+        null => {},
+        Map<String, Object?> $1 => $1.map(
+          (k, v) => MapEntry(k, decodeString(v)),
+        ),
+        _ => throw TypeError(),
+      },
+      versionDestroyTtl: switch (json['versionDestroyTtl']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      customerManagedEncryption: switch (json['customerManagedEncryption']) {
+        null => null,
+        Object $1 => CustomerManagedEncryption.fromJson($1),
+      },
+      tags: switch (json['tags']) {
+        null => {},
+        Map<String, Object?> $1 => $1.map(
+          (k, v) => MapEntry(k, decodeString(v)),
+        ),
+        _ => throw TypeError(),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -599,29 +651,48 @@ final class SecretVersion extends ProtoMessage {
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
-  factory SecretVersion.fromJson(Map<String, dynamic> json) => SecretVersion(
-    name: json['name'] ?? '',
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    destroyTime: decodeCustom(json['destroyTime'], Timestamp.fromJson),
-    state:
-        decodeEnum(json['state'], SecretVersion_State.fromJson) ??
-        SecretVersion_State.$default,
-    replicationStatus: decode(
-      json['replicationStatus'],
-      ReplicationStatus.fromJson,
-    ),
-    etag: json['etag'] ?? '',
-    clientSpecifiedPayloadChecksum:
-        json['clientSpecifiedPayloadChecksum'] ?? false,
-    scheduledDestroyTime: decodeCustom(
-      json['scheduledDestroyTime'],
-      Timestamp.fromJson,
-    ),
-    customerManagedEncryption: decode(
-      json['customerManagedEncryption'],
-      CustomerManagedEncryptionStatus.fromJson,
-    ),
-  );
+  factory SecretVersion.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SecretVersion(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      destroyTime: switch (json['destroyTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => SecretVersion_State.$default,
+        Object $1 => SecretVersion_State.fromJson($1),
+      },
+      replicationStatus: switch (json['replicationStatus']) {
+        null => null,
+        Object $1 => ReplicationStatus.fromJson($1),
+      },
+      etag: switch (json['etag']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      clientSpecifiedPayloadChecksum:
+          switch (json['clientSpecifiedPayloadChecksum']) {
+            null => false,
+            Object $1 => decodeBool($1),
+          },
+      scheduledDestroyTime: switch (json['scheduledDestroyTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      customerManagedEncryption: switch (json['customerManagedEncryption']) {
+        null => null,
+        Object $1 => CustomerManagedEncryptionStatus.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -680,8 +751,8 @@ final class SecretVersion_State extends ProtoEnum {
 
   const SecretVersion_State(super.value);
 
-  factory SecretVersion_State.fromJson(String json) =>
-      SecretVersion_State(json);
+  factory SecretVersion_State.fromJson(Object? json) =>
+      SecretVersion_State(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -704,10 +775,19 @@ final class Replication extends ProtoMessage {
 
   Replication({this.automatic, this.userManaged}) : super(fullyQualifiedName);
 
-  factory Replication.fromJson(Map<String, dynamic> json) => Replication(
-    automatic: decode(json['automatic'], Replication_Automatic.fromJson),
-    userManaged: decode(json['userManaged'], Replication_UserManaged.fromJson),
-  );
+  factory Replication.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Replication(
+      automatic: switch (json['automatic']) {
+        null => null,
+        Object $1 => Replication_Automatic.fromJson($1),
+      },
+      userManaged: switch (json['userManaged']) {
+        null => null,
+        Object $1 => Replication_UserManaged.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -740,13 +820,15 @@ final class Replication_Automatic extends ProtoMessage {
   Replication_Automatic({this.customerManagedEncryption})
     : super(fullyQualifiedName);
 
-  factory Replication_Automatic.fromJson(Map<String, dynamic> json) =>
-      Replication_Automatic(
-        customerManagedEncryption: decode(
-          json['customerManagedEncryption'],
-          CustomerManagedEncryption.fromJson,
-        ),
-      );
+  factory Replication_Automatic.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Replication_Automatic(
+      customerManagedEncryption: switch (json['customerManagedEncryption']) {
+        null => null,
+        Object $1 => CustomerManagedEncryption.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -774,15 +856,18 @@ final class Replication_UserManaged extends ProtoMessage {
 
   Replication_UserManaged({required this.replicas}) : super(fullyQualifiedName);
 
-  factory Replication_UserManaged.fromJson(Map<String, dynamic> json) =>
-      Replication_UserManaged(
-        replicas:
-            decodeListMessage(
-              json['replicas'],
-              Replication_UserManaged_Replica.fromJson,
-            ) ??
-            [],
-      );
+  factory Replication_UserManaged.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Replication_UserManaged(
+      replicas: switch (json['replicas']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Replication_UserManaged_Replica.fromJson(i),
+        ],
+        _ => throw TypeError(),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'replicas': encodeList(replicas)};
@@ -817,14 +902,19 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
-  factory Replication_UserManaged_Replica.fromJson(Map<String, dynamic> json) =>
-      Replication_UserManaged_Replica(
-        location: json['location'] ?? '',
-        customerManagedEncryption: decode(
-          json['customerManagedEncryption'],
-          CustomerManagedEncryption.fromJson,
-        ),
-      );
+  factory Replication_UserManaged_Replica.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Replication_UserManaged_Replica(
+      location: switch (json['location']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      customerManagedEncryption: switch (json['customerManagedEncryption']) {
+        null => null,
+        Object $1 => CustomerManagedEncryption.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -864,8 +954,15 @@ final class CustomerManagedEncryption extends ProtoMessage {
   CustomerManagedEncryption({required this.kmsKeyName})
     : super(fullyQualifiedName);
 
-  factory CustomerManagedEncryption.fromJson(Map<String, dynamic> json) =>
-      CustomerManagedEncryption(kmsKeyName: json['kmsKeyName'] ?? '');
+  factory CustomerManagedEncryption.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CustomerManagedEncryption(
+      kmsKeyName: switch (json['kmsKeyName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'kmsKeyName': kmsKeyName};
@@ -904,17 +1001,19 @@ final class ReplicationStatus extends ProtoMessage {
   ReplicationStatus({this.automatic, this.userManaged})
     : super(fullyQualifiedName);
 
-  factory ReplicationStatus.fromJson(Map<String, dynamic> json) =>
-      ReplicationStatus(
-        automatic: decode(
-          json['automatic'],
-          ReplicationStatus_AutomaticStatus.fromJson,
-        ),
-        userManaged: decode(
-          json['userManaged'],
-          ReplicationStatus_UserManagedStatus.fromJson,
-        ),
-      );
+  factory ReplicationStatus.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReplicationStatus(
+      automatic: switch (json['automatic']) {
+        null => null,
+        Object $1 => ReplicationStatus_AutomaticStatus.fromJson($1),
+      },
+      userManaged: switch (json['userManaged']) {
+        null => null,
+        Object $1 => ReplicationStatus_UserManagedStatus.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -944,14 +1043,15 @@ final class ReplicationStatus_AutomaticStatus extends ProtoMessage {
   ReplicationStatus_AutomaticStatus({this.customerManagedEncryption})
     : super(fullyQualifiedName);
 
-  factory ReplicationStatus_AutomaticStatus.fromJson(
-    Map<String, dynamic> json,
-  ) => ReplicationStatus_AutomaticStatus(
-    customerManagedEncryption: decode(
-      json['customerManagedEncryption'],
-      CustomerManagedEncryptionStatus.fromJson,
-    ),
-  );
+  factory ReplicationStatus_AutomaticStatus.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReplicationStatus_AutomaticStatus(
+      customerManagedEncryption: switch (json['customerManagedEncryption']) {
+        null => null,
+        Object $1 => CustomerManagedEncryptionStatus.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -980,16 +1080,19 @@ final class ReplicationStatus_UserManagedStatus extends ProtoMessage {
   ReplicationStatus_UserManagedStatus({this.replicas = const []})
     : super(fullyQualifiedName);
 
-  factory ReplicationStatus_UserManagedStatus.fromJson(
-    Map<String, dynamic> json,
-  ) => ReplicationStatus_UserManagedStatus(
-    replicas:
-        decodeListMessage(
-          json['replicas'],
-          ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson,
-        ) ??
-        [],
-  );
+  factory ReplicationStatus_UserManagedStatus.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReplicationStatus_UserManagedStatus(
+      replicas: switch (json['replicas']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson(i),
+        ],
+        _ => throw TypeError(),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1022,14 +1125,20 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
   }) : super(fullyQualifiedName);
 
   factory ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson(
-    Map<String, dynamic> json,
-  ) => ReplicationStatus_UserManagedStatus_ReplicaStatus(
-    location: json['location'] ?? '',
-    customerManagedEncryption: decode(
-      json['customerManagedEncryption'],
-      CustomerManagedEncryptionStatus.fromJson,
-    ),
-  );
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return ReplicationStatus_UserManagedStatus_ReplicaStatus(
+      location: switch (json['location']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      customerManagedEncryption: switch (json['customerManagedEncryption']) {
+        null => null,
+        Object $1 => CustomerManagedEncryptionStatus.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1058,10 +1167,15 @@ final class CustomerManagedEncryptionStatus extends ProtoMessage {
   CustomerManagedEncryptionStatus({required this.kmsKeyVersionName})
     : super(fullyQualifiedName);
 
-  factory CustomerManagedEncryptionStatus.fromJson(Map<String, dynamic> json) =>
-      CustomerManagedEncryptionStatus(
-        kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
-      );
+  factory CustomerManagedEncryptionStatus.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CustomerManagedEncryptionStatus(
+      kmsKeyVersionName: switch (json['kmsKeyVersionName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'kmsKeyVersionName': kmsKeyVersionName};
@@ -1088,8 +1202,15 @@ final class Topic extends ProtoMessage {
 
   Topic({this.name = ''}) : super(fullyQualifiedName);
 
-  factory Topic.fromJson(Map<String, dynamic> json) =>
-      Topic(name: json['name'] ?? '');
+  factory Topic.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Topic(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (name.isNotDefault) 'name': name};
@@ -1137,13 +1258,19 @@ final class Rotation extends ProtoMessage {
   Rotation({this.nextRotationTime, this.rotationPeriod})
     : super(fullyQualifiedName);
 
-  factory Rotation.fromJson(Map<String, dynamic> json) => Rotation(
-    nextRotationTime: decodeCustom(
-      json['nextRotationTime'],
-      Timestamp.fromJson,
-    ),
-    rotationPeriod: decodeCustom(json['rotationPeriod'], Duration.fromJson),
-  );
+  factory Rotation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Rotation(
+      nextRotationTime: switch (json['nextRotationTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      rotationPeriod: switch (json['rotationPeriod']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1186,10 +1313,19 @@ final class SecretPayload extends ProtoMessage {
 
   SecretPayload({this.data, this.dataCrc32C}) : super(fullyQualifiedName);
 
-  factory SecretPayload.fromJson(Map<String, dynamic> json) => SecretPayload(
-    data: decodeBytes(json['data']),
-    dataCrc32C: decodeInt64(json['dataCrc32c']),
-  );
+  factory SecretPayload.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SecretPayload(
+      data: switch (json['data']) {
+        null => null,
+        Object $1 => decodeBytes($1),
+      },
+      dataCrc32C: switch (json['dataCrc32c']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1241,13 +1377,27 @@ final class ListSecretsRequest extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory ListSecretsRequest.fromJson(Map<String, dynamic> json) =>
-      ListSecretsRequest(
-        parent: json['parent'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-        filter: json['filter'] ?? '',
-      );
+  factory ListSecretsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListSecretsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1296,12 +1446,24 @@ final class ListSecretsResponse extends ProtoMessage {
     this.totalSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListSecretsResponse.fromJson(Map<String, dynamic> json) =>
-      ListSecretsResponse(
-        secrets: decodeListMessage(json['secrets'], Secret.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-        totalSize: json['totalSize'] ?? 0,
-      );
+  factory ListSecretsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListSecretsResponse(
+      secrets: switch (json['secrets']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Secret.fromJson(i)],
+        _ => throw TypeError(),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      totalSize: switch (json['totalSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1348,12 +1510,23 @@ final class CreateSecretRequest extends ProtoMessage {
     required this.secret,
   }) : super(fullyQualifiedName);
 
-  factory CreateSecretRequest.fromJson(Map<String, dynamic> json) =>
-      CreateSecretRequest(
-        parent: json['parent'] ?? '',
-        secretId: json['secretId'] ?? '',
-        secret: decode(json['secret'], Secret.fromJson),
-      );
+  factory CreateSecretRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateSecretRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      secretId: switch (json['secretId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      secret: switch (json['secret']) {
+        null => null,
+        Object $1 => Secret.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1388,11 +1561,19 @@ final class AddSecretVersionRequest extends ProtoMessage {
   AddSecretVersionRequest({required this.parent, required this.payload})
     : super(fullyQualifiedName);
 
-  factory AddSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
-      AddSecretVersionRequest(
-        parent: json['parent'] ?? '',
-        payload: decode(json['payload'], SecretPayload.fromJson),
-      );
+  factory AddSecretVersionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AddSecretVersionRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      payload: switch (json['payload']) {
+        null => null,
+        Object $1 => SecretPayload.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1420,8 +1601,15 @@ final class GetSecretRequest extends ProtoMessage {
 
   GetSecretRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSecretRequest.fromJson(Map<String, dynamic> json) =>
-      GetSecretRequest(name: json['name'] ?? '');
+  factory GetSecretRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetSecretRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -1468,13 +1656,27 @@ final class ListSecretVersionsRequest extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory ListSecretVersionsRequest.fromJson(Map<String, dynamic> json) =>
-      ListSecretVersionsRequest(
-        parent: json['parent'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-        filter: json['filter'] ?? '',
-      );
+  factory ListSecretVersionsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListSecretVersionsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1524,13 +1726,24 @@ final class ListSecretVersionsResponse extends ProtoMessage {
     this.totalSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListSecretVersionsResponse.fromJson(Map<String, dynamic> json) =>
-      ListSecretVersionsResponse(
-        versions:
-            decodeListMessage(json['versions'], SecretVersion.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-        totalSize: json['totalSize'] ?? 0,
-      );
+  factory ListSecretVersionsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListSecretVersionsResponse(
+      versions: switch (json['versions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SecretVersion.fromJson(i)],
+        _ => throw TypeError(),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      totalSize: switch (json['totalSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1568,8 +1781,15 @@ final class GetSecretVersionRequest extends ProtoMessage {
 
   GetSecretVersionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
-      GetSecretVersionRequest(name: json['name'] ?? '');
+  factory GetSecretVersionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetSecretVersionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -1597,11 +1817,19 @@ final class UpdateSecretRequest extends ProtoMessage {
   UpdateSecretRequest({required this.secret, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateSecretRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateSecretRequest(
-        secret: decode(json['secret'], Secret.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateSecretRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateSecretRequest(
+      secret: switch (json['secret']) {
+        null => null,
+        Object $1 => Secret.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1632,8 +1860,15 @@ final class AccessSecretVersionRequest extends ProtoMessage {
 
   AccessSecretVersionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory AccessSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
-      AccessSecretVersionRequest(name: json['name'] ?? '');
+  factory AccessSecretVersionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AccessSecretVersionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -1663,11 +1898,19 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   AccessSecretVersionResponse({this.name = '', this.payload})
     : super(fullyQualifiedName);
 
-  factory AccessSecretVersionResponse.fromJson(Map<String, dynamic> json) =>
-      AccessSecretVersionResponse(
-        name: json['name'] ?? '',
-        payload: decode(json['payload'], SecretPayload.fromJson),
-      );
+  factory AccessSecretVersionResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AccessSecretVersionResponse(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      payload: switch (json['payload']) {
+        null => null,
+        Object $1 => SecretPayload.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1701,8 +1944,19 @@ final class DeleteSecretRequest extends ProtoMessage {
   DeleteSecretRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory DeleteSecretRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteSecretRequest(name: json['name'] ?? '', etag: json['etag'] ?? '');
+  factory DeleteSecretRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteSecretRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      etag: switch (json['etag']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
@@ -1735,11 +1989,19 @@ final class DisableSecretVersionRequest extends ProtoMessage {
   DisableSecretVersionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory DisableSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
-      DisableSecretVersionRequest(
-        name: json['name'] ?? '',
-        etag: json['etag'] ?? '',
-      );
+  factory DisableSecretVersionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DisableSecretVersionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      etag: switch (json['etag']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
@@ -1772,11 +2034,19 @@ final class EnableSecretVersionRequest extends ProtoMessage {
   EnableSecretVersionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory EnableSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
-      EnableSecretVersionRequest(
-        name: json['name'] ?? '',
-        etag: json['etag'] ?? '',
-      );
+  factory EnableSecretVersionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EnableSecretVersionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      etag: switch (json['etag']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
@@ -1809,11 +2079,19 @@ final class DestroySecretVersionRequest extends ProtoMessage {
   DestroySecretVersionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory DestroySecretVersionRequest.fromJson(Map<String, dynamic> json) =>
-      DestroySecretVersionRequest(
-        name: json['name'] ?? '',
-        etag: json['etag'] ?? '',
-      );
+  factory DestroySecretVersionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DestroySecretVersionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      etag: switch (json['etag']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};

@@ -88,7 +88,7 @@ class Any extends ProtoMessage {
     packInto(message);
   }
 
-  factory Any.fromJson(Map<String, dynamic> json) => Any(json: json);
+  factory Any.fromJson(Object? json) => Any(json: json as Map<String, dynamic>);
 
   /// '@type' will be something like
   /// `type.googleapis.com/google.protobuf.Duration`, or
