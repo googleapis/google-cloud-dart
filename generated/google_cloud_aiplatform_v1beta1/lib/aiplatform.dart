@@ -14909,9 +14909,10 @@ final class Annotation extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -15178,9 +15179,10 @@ final class Artifact extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -15626,9 +15628,10 @@ final class BatchPredictionJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
@@ -19247,9 +19250,10 @@ final class Context extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -19445,9 +19449,10 @@ final class CustomJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
@@ -19456,9 +19461,10 @@ final class CustomJob extends ProtoMessage {
       },
       webAccessUris: switch (json['webAccessUris']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       satisfiesPzs: switch (json['satisfiesPzs']) {
@@ -20201,9 +20207,10 @@ final class DataItem extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       payload: switch (json['payload']) {
@@ -20387,9 +20394,10 @@ final class DataLabelingJob extends ProtoMessage {
       },
       annotationLabels: switch (json['annotationLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       labelerCount: switch (json['labelerCount']) {
@@ -20434,9 +20442,10 @@ final class DataLabelingJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       specialistPools: switch (json['specialistPools']) {
@@ -20840,9 +20849,10 @@ final class Dataset extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       savedQueries: switch (json['savedQueries']) {
@@ -20970,16 +20980,18 @@ final class ImportDataConfig extends ProtoMessage {
       },
       dataItemLabels: switch (json['dataItemLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       annotationLabels: switch (json['annotationLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       importSchemaUri: switch (json['importSchemaUri']) {
@@ -21571,7 +21583,6 @@ final class ImportDataResponse extends ProtoMessage {
   ImportDataResponse() : super(fullyQualifiedName);
 
   factory ImportDataResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ImportDataResponse();
   }
 
@@ -23411,7 +23422,6 @@ final class AssessDataResponse_BatchPredictionValidationAssessmentResult
   factory AssessDataResponse_BatchPredictionValidationAssessmentResult.fromJson(
     Object? j,
   ) {
-    final json = j as Map<String, Object?>;
     return AssessDataResponse_BatchPredictionValidationAssessmentResult();
   }
 
@@ -23529,9 +23539,10 @@ final class GeminiTemplateConfig extends ProtoMessage {
       },
       fieldMapping: switch (json['fieldMapping']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -23700,9 +23711,10 @@ final class GeminiExample extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       safetySettings: switch (json['safetySettings']) {
@@ -24914,7 +24926,9 @@ final class Endpoint extends ProtoMessage {
       },
       trafficSplit: switch (json['trafficSplit']) {
         null => {},
-        Map<String, Object?> $1 => $1.map((k, v) => MapEntry(k, decodeInt(v))),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
+        },
         _ => throw TypeError(),
       },
       etag: switch (json['etag']) {
@@ -24923,9 +24937,10 @@ final class Endpoint extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -25284,9 +25299,10 @@ final class DeployedModel extends ProtoMessage {
       },
       systemLabels: switch (json['systemLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       checkpointId: switch (json['checkpointId']) {
@@ -26418,7 +26434,9 @@ final class DeployModelRequest extends ProtoMessage {
       },
       trafficSplit: switch (json['trafficSplit']) {
         null => {},
-        Map<String, Object?> $1 => $1.map((k, v) => MapEntry(k, decodeInt(v))),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -26555,7 +26573,9 @@ final class UndeployModelRequest extends ProtoMessage {
       },
       trafficSplit: switch (json['trafficSplit']) {
         null => {},
-        Map<String, Object?> $1 => $1.map((k, v) => MapEntry(k, decodeInt(v))),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -26587,7 +26607,6 @@ final class UndeployModelResponse extends ProtoMessage {
   UndeployModelResponse() : super(fullyQualifiedName);
 
   factory UndeployModelResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UndeployModelResponse();
   }
 
@@ -26971,9 +26990,10 @@ final class EntityType extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       etag: switch (json['etag']) {
@@ -28976,7 +28996,6 @@ final class ExactMatchSpec extends ProtoMessage {
   ExactMatchSpec() : super(fullyQualifiedName);
 
   factory ExactMatchSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ExactMatchSpec();
   }
 
@@ -32677,7 +32696,6 @@ final class ToolCallValidSpec extends ProtoMessage {
   ToolCallValidSpec() : super(fullyQualifiedName);
 
   factory ToolCallValidSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ToolCallValidSpec();
   }
 
@@ -32845,7 +32863,6 @@ final class ToolNameMatchSpec extends ProtoMessage {
   ToolNameMatchSpec() : super(fullyQualifiedName);
 
   factory ToolNameMatchSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ToolNameMatchSpec();
   }
 
@@ -33015,7 +33032,6 @@ final class ToolParameterKeyMatchSpec extends ProtoMessage {
   ToolParameterKeyMatchSpec() : super(fullyQualifiedName);
 
   factory ToolParameterKeyMatchSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ToolParameterKeyMatchSpec();
   }
 
@@ -33833,7 +33849,6 @@ final class RubricBasedInstructionFollowingSpec extends ProtoMessage {
   RubricBasedInstructionFollowingSpec() : super(fullyQualifiedName);
 
   factory RubricBasedInstructionFollowingSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RubricBasedInstructionFollowingSpec();
   }
 
@@ -33983,7 +33998,6 @@ final class TrajectoryExactMatchSpec extends ProtoMessage {
   TrajectoryExactMatchSpec() : super(fullyQualifiedName);
 
   factory TrajectoryExactMatchSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return TrajectoryExactMatchSpec();
   }
 
@@ -34157,7 +34171,6 @@ final class TrajectoryInOrderMatchSpec extends ProtoMessage {
   TrajectoryInOrderMatchSpec() : super(fullyQualifiedName);
 
   factory TrajectoryInOrderMatchSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return TrajectoryInOrderMatchSpec();
   }
 
@@ -34332,7 +34345,6 @@ final class TrajectoryAnyOrderMatchSpec extends ProtoMessage {
   TrajectoryAnyOrderMatchSpec() : super(fullyQualifiedName);
 
   factory TrajectoryAnyOrderMatchSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return TrajectoryAnyOrderMatchSpec();
   }
 
@@ -34505,7 +34517,6 @@ final class TrajectoryPrecisionSpec extends ProtoMessage {
   TrajectoryPrecisionSpec() : super(fullyQualifiedName);
 
   factory TrajectoryPrecisionSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return TrajectoryPrecisionSpec();
   }
 
@@ -34675,7 +34686,6 @@ final class TrajectoryRecallSpec extends ProtoMessage {
   TrajectoryRecallSpec() : super(fullyQualifiedName);
 
   factory TrajectoryRecallSpec.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return TrajectoryRecallSpec();
   }
 
@@ -35056,9 +35066,10 @@ final class ContentMap extends ProtoMessage {
     return ContentMap(
       values: switch (json['values']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ContentMap_Contents.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ContentMap_Contents.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -35161,9 +35172,10 @@ final class Event extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -35395,7 +35407,6 @@ final class StoredContentsExample_SearchKeyGenerationMethod_LastEntry
   factory StoredContentsExample_SearchKeyGenerationMethod_LastEntry.fromJson(
     Object? j,
   ) {
-    final json = j as Map<String, Object?>;
     return StoredContentsExample_SearchKeyGenerationMethod_LastEntry();
   }
 
@@ -36761,9 +36772,10 @@ final class Execution extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -38070,12 +38082,14 @@ final class ExplanationMetadataOverride extends ProtoMessage {
     return ExplanationMetadataOverride(
       inputs: switch (json['inputs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(
-            k,
-            ExplanationMetadataOverride_InputMetadataOverride.fromJson(v),
-          ),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(
+              e.key,
+            ): ExplanationMetadataOverride_InputMetadataOverride.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
     );
@@ -38349,16 +38363,22 @@ final class ExplanationMetadata extends ProtoMessage {
     return ExplanationMetadata(
       inputs: switch (json['inputs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ExplanationMetadata_InputMetadata.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ExplanationMetadata_InputMetadata.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       outputs: switch (json['outputs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ExplanationMetadata_OutputMetadata.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ExplanationMetadata_OutputMetadata.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       featureAttributionsSchemaUri:
@@ -40663,9 +40683,10 @@ final class Feature extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       etag: switch (json['etag']) {
@@ -40977,9 +40998,10 @@ final class FeatureGroup extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       description: switch (json['description']) {
@@ -41258,9 +41280,10 @@ final class FeatureMonitor extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       description: switch (json['description']) {
@@ -41670,9 +41693,10 @@ final class FeatureMonitorJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       description: switch (json['description']) {
@@ -42053,9 +42077,10 @@ final class FeatureOnlineStore extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       state: switch (json['state']) {
@@ -42300,7 +42325,6 @@ final class FeatureOnlineStore_Optimized extends ProtoMessage {
   FeatureOnlineStore_Optimized() : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_Optimized.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return FeatureOnlineStore_Optimized();
   }
 
@@ -46227,9 +46251,10 @@ final class FeatureView extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       syncConfig: switch (json['syncConfig']) {
@@ -46511,7 +46536,6 @@ final class FeatureView_VectorSearchConfig_BruteForceConfig
   FeatureView_VectorSearchConfig_BruteForceConfig() : super(fullyQualifiedName);
 
   factory FeatureView_VectorSearchConfig_BruteForceConfig.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return FeatureView_VectorSearchConfig_BruteForceConfig();
   }
 
@@ -46723,7 +46747,6 @@ final class FeatureView_IndexConfig_BruteForceConfig extends ProtoMessage {
   FeatureView_IndexConfig_BruteForceConfig() : super(fullyQualifiedName);
 
   factory FeatureView_IndexConfig_BruteForceConfig.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return FeatureView_IndexConfig_BruteForceConfig();
   }
 
@@ -47314,9 +47337,10 @@ final class Featurestore extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       onlineServingConfig: switch (json['onlineServingConfig']) {
@@ -47972,9 +47996,10 @@ final class WriteFeatureValuesPayload extends ProtoMessage {
       },
       featureValues: switch (json['featureValues']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, FeatureValue.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): FeatureValue.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -48002,7 +48027,6 @@ final class WriteFeatureValuesResponse extends ProtoMessage {
   WriteFeatureValuesResponse() : super(fullyQualifiedName);
 
   factory WriteFeatureValuesResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return WriteFeatureValuesResponse();
   }
 
@@ -49775,7 +49799,6 @@ final class ExportFeatureValuesResponse extends ProtoMessage {
   ExportFeatureValuesResponse() : super(fullyQualifiedName);
 
   factory ExportFeatureValuesResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ExportFeatureValuesResponse();
   }
 
@@ -49795,7 +49818,6 @@ final class BatchReadFeatureValuesResponse extends ProtoMessage {
   BatchReadFeatureValuesResponse() : super(fullyQualifiedName);
 
   factory BatchReadFeatureValuesResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return BatchReadFeatureValuesResponse();
   }
 
@@ -52332,9 +52354,10 @@ final class HyperparameterTuningJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
@@ -52523,9 +52546,10 @@ final class Index extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -53190,9 +53214,10 @@ final class IndexEndpoint extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -54193,7 +54218,6 @@ final class UndeployIndexResponse extends ProtoMessage {
   UndeployIndexResponse() : super(fullyQualifiedName);
 
   factory UndeployIndexResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UndeployIndexResponse();
   }
 
@@ -55235,7 +55259,6 @@ final class UpsertDatapointsResponse extends ProtoMessage {
   UpsertDatapointsResponse() : super(fullyQualifiedName);
 
   factory UpsertDatapointsResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UpsertDatapointsResponse();
   }
 
@@ -55300,7 +55323,6 @@ final class RemoveDatapointsResponse extends ProtoMessage {
   RemoveDatapointsResponse() : super(fullyQualifiedName);
 
   factory RemoveDatapointsResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RemoveDatapointsResponse();
   }
 
@@ -56100,7 +56122,6 @@ final class DirectUploadSource extends ProtoMessage {
   DirectUploadSource() : super(fullyQualifiedName);
 
   factory DirectUploadSource.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return DirectUploadSource();
   }
 
@@ -59730,9 +59751,10 @@ final class AutoscalingMetricSpec extends ProtoMessage {
       },
       monitoredResourceLabels: switch (json['monitoredResourceLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -60401,9 +60423,10 @@ final class Memory extends ProtoMessage {
       },
       scope: switch (json['scope']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -60874,9 +60897,10 @@ final class GenerateMemoriesRequest extends ProtoMessage {
       },
       scope: switch (json['scope']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -61300,9 +61324,10 @@ final class RetrieveMemoriesRequest extends ProtoMessage {
       },
       scope: switch (json['scope']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -63051,7 +63076,6 @@ final class AddContextArtifactsAndExecutionsResponse extends ProtoMessage {
   AddContextArtifactsAndExecutionsResponse() : super(fullyQualifiedName);
 
   factory AddContextArtifactsAndExecutionsResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return AddContextArtifactsAndExecutionsResponse();
   }
 
@@ -63119,7 +63143,6 @@ final class AddContextChildrenResponse extends ProtoMessage {
   AddContextChildrenResponse() : super(fullyQualifiedName);
 
   factory AddContextChildrenResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return AddContextChildrenResponse();
   }
 
@@ -63187,7 +63210,6 @@ final class RemoveContextChildrenResponse extends ProtoMessage {
   RemoveContextChildrenResponse() : super(fullyQualifiedName);
 
   factory RemoveContextChildrenResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RemoveContextChildrenResponse();
   }
 
@@ -63796,7 +63818,6 @@ final class AddExecutionEventsResponse extends ProtoMessage {
   AddExecutionEventsResponse() : super(fullyQualifiedName);
 
   factory AddExecutionEventsResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return AddExecutionEventsResponse();
   }
 
@@ -65869,9 +65890,10 @@ final class Model extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
@@ -67585,9 +67607,10 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       createTime: switch (json['createTime']) {
@@ -68577,12 +68600,14 @@ final class ModelEvaluationSlice_Slice_SliceSpec extends ProtoMessage {
     return ModelEvaluationSlice_Slice_SliceSpec(
       configs: switch (json['configs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(
-            k,
-            ModelEvaluationSlice_Slice_SliceSpec_SliceConfig.fromJson(v),
-          ),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(
+              e.key,
+            ): ModelEvaluationSlice_Slice_SliceSpec_SliceConfig.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
     );
@@ -69433,9 +69458,10 @@ final class DeployRequest_DeployConfig extends ProtoMessage {
       },
       systemLabels: switch (json['systemLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -70838,17 +70864,19 @@ final class ModelMonitoringObjectiveConfig_TrainingPredictionSkewDetectionConfig
     return ModelMonitoringObjectiveConfig_TrainingPredictionSkewDetectionConfig(
       skewThresholds: switch (json['skewThresholds']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ThresholdConfig.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ThresholdConfig.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       attributionScoreSkewThresholds:
           switch (json['attributionScoreSkewThresholds']) {
             null => {},
-            Map<String, Object?> $1 => $1.map(
-              (k, v) => MapEntry(k, ThresholdConfig.fromJson(v)),
-            ),
+            Map<String, Object?> $1 => {
+              for (final e in $1.entries)
+                decodeString(e.key): ThresholdConfig.fromJson(e.value),
+            },
             _ => throw TypeError(),
           },
       defaultSkewThreshold: switch (json['defaultSkewThreshold']) {
@@ -70908,17 +70936,19 @@ final class ModelMonitoringObjectiveConfig_PredictionDriftDetectionConfig
     return ModelMonitoringObjectiveConfig_PredictionDriftDetectionConfig(
       driftThresholds: switch (json['driftThresholds']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ThresholdConfig.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ThresholdConfig.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       attributionScoreDriftThresholds:
           switch (json['attributionScoreDriftThresholds']) {
             null => {},
-            Map<String, Object?> $1 => $1.map(
-              (k, v) => MapEntry(k, ThresholdConfig.fromJson(v)),
-            ),
+            Map<String, Object?> $1 => {
+              for (final e in $1.entries)
+                decodeString(e.key): ThresholdConfig.fromJson(e.value),
+            },
             _ => throw TypeError(),
           },
       defaultDriftThreshold: switch (json['defaultDriftThreshold']) {
@@ -71703,9 +71733,10 @@ final class ModelMonitoringJobExecutionDetail extends ProtoMessage {
       },
       objectiveStatus: switch (json['objectiveStatus']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Status.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Status.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       error: switch (json['error']) {
@@ -72886,9 +72917,12 @@ final class ModelMonitoringObjectiveSpec_DataDriftSpec extends ProtoMessage {
           },
       featureAlertConditions: switch (json['featureAlertConditions']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ModelMonitoringAlertCondition.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ModelMonitoringAlertCondition.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
     );
@@ -72965,9 +72999,12 @@ final class ModelMonitoringObjectiveSpec_FeatureAttributionSpec
       },
       featureAlertConditions: switch (json['featureAlertConditions']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, ModelMonitoringAlertCondition.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ModelMonitoringAlertCondition.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       batchExplanationDedicatedResources:
@@ -75200,7 +75237,6 @@ final class UpdateExplanationDatasetResponse extends ProtoMessage {
   UpdateExplanationDatasetResponse() : super(fullyQualifiedName);
 
   factory UpdateExplanationDatasetResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UpdateExplanationDatasetResponse();
   }
 
@@ -75221,7 +75257,6 @@ final class ExportModelResponse extends ProtoMessage {
   ExportModelResponse() : super(fullyQualifiedName);
 
   factory ExportModelResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return ExportModelResponse();
   }
 
@@ -76352,9 +76387,10 @@ final class NasJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
@@ -77332,9 +77368,10 @@ final class NotebookExecutionJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       kernelName: switch (json['kernelName']) {
@@ -77582,7 +77619,6 @@ final class NotebookExecutionJob_WorkbenchRuntime extends ProtoMessage {
   NotebookExecutionJob_WorkbenchRuntime() : super(fullyQualifiedName);
 
   factory NotebookExecutionJob_WorkbenchRuntime.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return NotebookExecutionJob_WorkbenchRuntime();
   }
 
@@ -77801,9 +77837,10 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       idleShutdownConfig: switch (json['idleShutdownConfig']) {
@@ -78096,9 +78133,10 @@ final class NotebookRuntime extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       expirationTime: switch (json['expirationTime']) {
@@ -79166,7 +79204,6 @@ final class UpgradeNotebookRuntimeResponse extends ProtoMessage {
   UpgradeNotebookRuntimeResponse() : super(fullyQualifiedName);
 
   factory UpgradeNotebookRuntimeResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UpgradeNotebookRuntimeResponse();
   }
 
@@ -79265,7 +79302,6 @@ final class StartNotebookRuntimeResponse extends ProtoMessage {
   StartNotebookRuntimeResponse() : super(fullyQualifiedName);
 
   factory StartNotebookRuntimeResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return StartNotebookRuntimeResponse();
   }
 
@@ -79350,7 +79386,6 @@ final class StopNotebookRuntimeResponse extends ProtoMessage {
   StopNotebookRuntimeResponse() : super(fullyQualifiedName);
 
   factory StopNotebookRuntimeResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return StopNotebookRuntimeResponse();
   }
 
@@ -80084,9 +80119,10 @@ final class Schema extends ProtoMessage {
       },
       properties: switch (json['properties']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Schema.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Schema.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       propertyOrdering: switch (json['propertyOrdering']) {
@@ -80146,9 +80182,10 @@ final class Schema extends ProtoMessage {
       },
       defs: switch (json['defs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Schema.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Schema.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -80444,9 +80481,10 @@ final class PersistentResource extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       network: switch (json['network']) {
@@ -80814,9 +80852,10 @@ final class RaySpec extends ProtoMessage {
       },
       resourcePoolImages: switch (json['resourcePoolImages']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       headNodeResourcePoolId: switch (json['headNodeResourcePoolId']) {
@@ -80886,9 +80925,10 @@ final class ResourceRuntime extends ProtoMessage {
     return ResourceRuntime(
       accessUris: switch (json['accessUris']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       notebookRuntimeTemplate: switch (json['notebookRuntimeTemplate']) {
@@ -81690,9 +81730,10 @@ final class PipelineJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       runtimeConfig: switch (json['runtimeConfig']) {
@@ -81876,9 +81917,10 @@ final class PipelineJob_RuntimeConfig extends ProtoMessage {
     return PipelineJob_RuntimeConfig(
       parameters: switch (json['parameters']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Value.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Value.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       gcsOutputDirectory: switch (json['gcsOutputDirectory']) {
@@ -81887,9 +81929,10 @@ final class PipelineJob_RuntimeConfig extends ProtoMessage {
       },
       parameterValues: switch (json['parameterValues']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, protobuf.Value.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): protobuf.Value.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       failurePolicy: switch (json['failurePolicy']) {
@@ -81898,10 +81941,11 @@ final class PipelineJob_RuntimeConfig extends ProtoMessage {
       },
       inputArtifacts: switch (json['inputArtifacts']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) =>
-              MapEntry(k, PipelineJob_RuntimeConfig_InputArtifact.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key):
+                PipelineJob_RuntimeConfig_InputArtifact.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       defaultRuntime: switch (json['defaultRuntime']) {
@@ -82348,16 +82392,22 @@ final class PipelineTaskDetail extends ProtoMessage {
       },
       inputs: switch (json['inputs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, PipelineTaskDetail_ArtifactList.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): PipelineTaskDetail_ArtifactList.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       outputs: switch (json['outputs']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, PipelineTaskDetail_ArtifactList.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): PipelineTaskDetail_ArtifactList.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       taskUniqueName: switch (json['taskUniqueName']) {
@@ -82833,17 +82883,20 @@ final class PipelineTaskRerunConfig_Inputs extends ProtoMessage {
     return PipelineTaskRerunConfig_Inputs(
       artifacts: switch (json['artifacts']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) =>
-              MapEntry(k, PipelineTaskRerunConfig_ArtifactList.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): PipelineTaskRerunConfig_ArtifactList.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       parameterValues: switch (json['parameterValues']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, protobuf.Value.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): protobuf.Value.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -83745,9 +83798,10 @@ final class PredictRequest extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -84660,9 +84714,10 @@ final class ExplainRequest extends ProtoMessage {
       concurrentExplanationSpecOverride:
           switch (json['concurrentExplanationSpecOverride']) {
             null => {},
-            Map<String, Object?> $1 => $1.map(
-              (k, v) => MapEntry(k, ExplanationSpecOverride.fromJson(v)),
-            ),
+            Map<String, Object?> $1 => {
+              for (final e in $1.entries)
+                decodeString(e.key): ExplanationSpecOverride.fromJson(e.value),
+            },
             _ => throw TypeError(),
           },
       deployedModelId: switch (json['deployedModelId']) {
@@ -84740,10 +84795,12 @@ final class ExplainResponse extends ProtoMessage {
       },
       concurrentExplanations: switch (json['concurrentExplanations']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) =>
-              MapEntry(k, ExplainResponse_ConcurrentExplanation.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ExplainResponse_ConcurrentExplanation.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       deployedModelId: switch (json['deployedModelId']) {
@@ -85089,9 +85146,10 @@ final class GenerateContentRequest extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       safetySettings: switch (json['safetySettings']) {
@@ -85535,7 +85593,6 @@ final class PredictLongRunningMetadata extends ProtoMessage {
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
   factory PredictLongRunningMetadata.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return PredictLongRunningMetadata();
   }
 
@@ -86093,9 +86150,12 @@ final class PublisherModel_CallToAction_RegionalResourceReferences
     return PublisherModel_CallToAction_RegionalResourceReferences(
       references: switch (json['references']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, PublisherModel_ResourceReference.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): PublisherModel_ResourceReference.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
       title: switch (json['title']) {
@@ -86460,9 +86520,10 @@ final class PublisherModel_CallToAction_Deploy_DeployMetadata
     return PublisherModel_CallToAction_Deploy_DeployMetadata(
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       sampleRequest: switch (json['sampleRequest']) {
@@ -86883,9 +86944,10 @@ final class ReasoningEngineSpec_DeploymentSpec extends ProtoMessage {
       },
       resourceLimits: switch (json['resourceLimits']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       containerConcurrency: switch (json['containerConcurrency']) {
@@ -87170,9 +87232,10 @@ final class ReasoningEngine extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -89681,7 +89744,9 @@ final class EventActions extends ProtoMessage {
       },
       artifactDelta: switch (json['artifactDelta']) {
         null => {},
-        Map<String, Object?> $1 => $1.map((k, v) => MapEntry(k, decodeInt(v))),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
+        },
         _ => throw TypeError(),
       },
       transferToAgent: switch (json['transferToAgent']) {
@@ -90231,7 +90296,6 @@ final class AppendEventResponse extends ProtoMessage {
   AppendEventResponse() : super(fullyQualifiedName);
 
   factory AppendEventResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return AppendEventResponse();
   }
 
@@ -90945,9 +91009,10 @@ final class Trial extends ProtoMessage {
       },
       webAccessUris: switch (json['webAccessUris']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -92806,9 +92871,10 @@ final class Tensorboard extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       etag: switch (json['etag']) {
@@ -93228,9 +93294,10 @@ final class TensorboardExperiment extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       etag: switch (json['etag']) {
@@ -93353,9 +93420,10 @@ final class TensorboardRun extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       etag: switch (json['etag']) {
@@ -93742,12 +93810,14 @@ final class ReadTensorboardUsageResponse extends ProtoMessage {
     return ReadTensorboardUsageResponse(
       monthlyUsageData: switch (json['monthlyUsageData']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(
-            k,
-            ReadTensorboardUsageResponse_PerMonthUsageData.fromJson(v),
-          ),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(
+              e.key,
+            ): ReadTensorboardUsageResponse_PerMonthUsageData.fromJson(
+              e.value,
+            ),
+        },
         _ => throw TypeError(),
       },
     );
@@ -95370,7 +95440,6 @@ final class WriteTensorboardExperimentDataResponse extends ProtoMessage {
   WriteTensorboardExperimentDataResponse() : super(fullyQualifiedName);
 
   factory WriteTensorboardExperimentDataResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return WriteTensorboardExperimentDataResponse();
   }
 
@@ -95441,7 +95510,6 @@ final class WriteTensorboardRunDataResponse extends ProtoMessage {
   WriteTensorboardRunDataResponse() : super(fullyQualifiedName);
 
   factory WriteTensorboardRunDataResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return WriteTensorboardRunDataResponse();
   }
 
@@ -96067,7 +96135,6 @@ final class Tool_CodeExecution extends ProtoMessage {
   Tool_CodeExecution() : super(fullyQualifiedName);
 
   factory Tool_CodeExecution.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return Tool_CodeExecution();
   }
 
@@ -96196,7 +96263,6 @@ final class UrlContext extends ProtoMessage {
   UrlContext() : super(fullyQualifiedName);
 
   factory UrlContext.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UrlContext();
   }
 
@@ -97879,9 +97945,10 @@ final class TrainingPipeline extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
@@ -98730,9 +98797,10 @@ final class TuningJob extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       experiment: switch (json['experiment']) {
@@ -100034,9 +100102,10 @@ final class PartnerModelTuningSpec extends ProtoMessage {
       },
       hyperParameters: switch (json['hyperParameters']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, protobuf.Value.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): protobuf.Value.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -100762,9 +100831,10 @@ final class Tensor extends ProtoMessage {
       },
       structVal: switch (json['structVal']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Tensor.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Tensor.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       tensorVal: switch (json['tensorVal']) {
@@ -100980,16 +101050,18 @@ final class RuntimeArtifact extends ProtoMessage {
       },
       properties: switch (json['properties']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Value.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Value.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       customProperties: switch (json['customProperties']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Value.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Value.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       metadata: switch (json['metadata']) {
@@ -101577,7 +101649,6 @@ final class RagVectorDbConfig_RagManagedDb_Knn extends ProtoMessage {
   RagVectorDbConfig_RagManagedDb_Knn() : super(fullyQualifiedName);
 
   factory RagVectorDbConfig_RagManagedDb_Knn.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RagVectorDbConfig_RagManagedDb_Knn();
   }
 
@@ -102186,7 +102257,6 @@ final class RagCorpus_CorpusTypeConfig_DocumentCorpus extends ProtoMessage {
   RagCorpus_CorpusTypeConfig_DocumentCorpus() : super(fullyQualifiedName);
 
   factory RagCorpus_CorpusTypeConfig_DocumentCorpus.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RagCorpus_CorpusTypeConfig_DocumentCorpus();
   }
 
@@ -103361,7 +103431,6 @@ final class RagManagedDbConfig_Enterprise extends ProtoMessage {
   RagManagedDbConfig_Enterprise() : super(fullyQualifiedName);
 
   factory RagManagedDbConfig_Enterprise.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RagManagedDbConfig_Enterprise();
   }
 
@@ -103382,7 +103451,6 @@ final class RagManagedDbConfig_Scaled extends ProtoMessage {
   RagManagedDbConfig_Scaled() : super(fullyQualifiedName);
 
   factory RagManagedDbConfig_Scaled.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RagManagedDbConfig_Scaled();
   }
 
@@ -103408,7 +103476,6 @@ final class RagManagedDbConfig_Basic extends ProtoMessage {
   RagManagedDbConfig_Basic() : super(fullyQualifiedName);
 
   factory RagManagedDbConfig_Basic.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RagManagedDbConfig_Basic();
   }
 
@@ -103432,7 +103499,6 @@ final class RagManagedDbConfig_Unprovisioned extends ProtoMessage {
   RagManagedDbConfig_Unprovisioned() : super(fullyQualifiedName);
 
   factory RagManagedDbConfig_Unprovisioned.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return RagManagedDbConfig_Unprovisioned();
   }
 

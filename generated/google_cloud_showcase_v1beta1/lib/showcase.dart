@@ -3428,7 +3428,6 @@ final class FailEchoWithDetailsResponse extends ProtoMessage {
   FailEchoWithDetailsResponse() : super(fullyQualifiedName);
 
   factory FailEchoWithDetailsResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return FailEchoWithDetailsResponse();
   }
 
@@ -3695,9 +3694,10 @@ final class PagedExpandLegacyMappedResponse extends ProtoMessage {
     return PagedExpandLegacyMappedResponse(
       alphabetized: switch (json['alphabetized']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, PagedExpandResponseList.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): PagedExpandResponseList.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       nextPageToken: switch (json['nextPageToken']) {

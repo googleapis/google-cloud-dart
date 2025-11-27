@@ -468,7 +468,6 @@ final class Empty extends ProtoMessage {
   Empty() : super(fullyQualifiedName);
 
   factory Empty.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return Empty();
   }
 
@@ -742,7 +741,7 @@ final class Struct extends ProtoMessage {
 
   Struct({this.fields = const {}}) : super(fullyQualifiedName);
 
-  factory Struct.fromJson(Object json) => _StructHelper.decode(json);
+  factory Struct.fromJson(Object? json) => _StructHelper.decode(json);
 
   @override
   Object toJson() => _StructHelper.encode(this);

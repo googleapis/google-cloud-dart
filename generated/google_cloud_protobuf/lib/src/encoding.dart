@@ -26,17 +26,17 @@ import '../protobuf.dart';
 export 'dart:typed_data' show Uint8List;
 
 /// Decode an `int64` value.
-int decodeInt64(Object value) =>
+int decodeInt64(Object? value) =>
     value is String ? int.parse(value) : value as int;
 
-int decodeInt(Object value) => value as int;
+int decodeInt(Object? value) => value as int;
 
-bool decodeBool(Object value) => value as bool;
+bool decodeBool(Object? value) => value as bool;
 
-String decodeString(Object value) => value as String;
+String decodeString(Object? value) => value as String;
 
 /// Decode a `double` value.
-double decodeDouble(Object value) {
+double decodeDouble(Object? value) {
   if (value is String) {
     if (value == 'NaN' || value == 'Infinity' || value == '-Infinity') {
       return double.parse(value);
@@ -51,7 +51,7 @@ double decodeDouble(Object value) {
 }
 
 /// Decode a `bytes` value.
-Uint8List decodeBytes(Object value) => base64Decode(value as String);
+Uint8List decodeBytes(Object? value) => base64Decode(value as String);
 
 /// Decode an [ProtoEnum].
 T decodeEnum<T extends ProtoEnum>(String value, T Function(String) decoder) =>

@@ -289,9 +289,10 @@ final class Location extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       metadata: switch (json['metadata']) {

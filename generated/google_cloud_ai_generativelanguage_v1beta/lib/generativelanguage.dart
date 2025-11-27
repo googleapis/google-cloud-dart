@@ -25,6 +25,7 @@
 /// agents, summarization and classification systems, and more.
 library;
 
+// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -2964,7 +2965,6 @@ final class UrlContext extends ProtoMessage {
   UrlContext() : super(fullyQualifiedName);
 
   factory UrlContext.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return UrlContext();
   }
 
@@ -3090,7 +3090,6 @@ final class CodeExecution extends ProtoMessage {
   CodeExecution() : super(fullyQualifiedName);
 
   factory CodeExecution.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return CodeExecution();
   }
 
@@ -3730,9 +3729,10 @@ final class Schema extends ProtoMessage {
       },
       properties: switch (json['properties']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Schema.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Schema.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
       required: switch (json['required']) {
@@ -4886,7 +4886,6 @@ final class DownloadFileResponse extends ProtoMessage {
   DownloadFileResponse() : super(fullyQualifiedName);
 
   factory DownloadFileResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return DownloadFileResponse();
   }
 
@@ -8349,7 +8348,6 @@ final class AudioTranscriptionConfig extends ProtoMessage {
   AudioTranscriptionConfig() : super(fullyQualifiedName);
 
   factory AudioTranscriptionConfig.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return AudioTranscriptionConfig();
   }
 
@@ -8696,7 +8694,6 @@ final class BidiGenerateContentRealtimeInput_ActivityStart
   BidiGenerateContentRealtimeInput_ActivityStart() : super(fullyQualifiedName);
 
   factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return BidiGenerateContentRealtimeInput_ActivityStart();
   }
 
@@ -8715,7 +8712,6 @@ final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
   BidiGenerateContentRealtimeInput_ActivityEnd() : super(fullyQualifiedName);
 
   factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return BidiGenerateContentRealtimeInput_ActivityEnd();
   }
 
@@ -8832,7 +8828,6 @@ final class BidiGenerateContentSetupComplete extends ProtoMessage {
   BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
 
   factory BidiGenerateContentSetupComplete.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return BidiGenerateContentSetupComplete();
   }
 
@@ -10536,7 +10531,6 @@ final class TransferOwnershipResponse extends ProtoMessage {
   TransferOwnershipResponse() : super(fullyQualifiedName);
 
   factory TransferOwnershipResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return TransferOwnershipResponse();
   }
 
@@ -10725,7 +10719,6 @@ final class PredictLongRunningMetadata extends ProtoMessage {
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
   factory PredictLongRunningMetadata.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return PredictLongRunningMetadata();
   }
 

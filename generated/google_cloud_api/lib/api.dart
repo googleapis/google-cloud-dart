@@ -658,9 +658,10 @@ final class BackendRule extends ProtoMessage {
       },
       overridesByRequestProtocol: switch (json['overridesByRequestProtocol']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, BackendRule.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): BackendRule.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -1285,9 +1286,10 @@ final class JavaSettings extends ProtoMessage {
       },
       serviceClassNames: switch (json['serviceClassNames']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       common: switch (json['common']) {
@@ -1553,16 +1555,18 @@ final class DotnetSettings extends ProtoMessage {
       },
       renamedServices: switch (json['renamedServices']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       renamedResources: switch (json['renamedResources']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       ignoredResources: switch (json['ignoredResources']) {
@@ -1654,9 +1658,10 @@ final class GoSettings extends ProtoMessage {
       },
       renamedServices: switch (json['renamedServices']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -4709,9 +4714,10 @@ final class Metric extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -4886,9 +4892,10 @@ final class MonitoredResource extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -4944,9 +4951,10 @@ final class MonitoredResourceMetadata extends ProtoMessage {
       },
       userLabels: switch (json['userLabels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -5362,9 +5370,9 @@ final class MetricRule extends ProtoMessage {
       },
       metricCosts: switch (json['metricCosts']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeInt64(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt64(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -5517,9 +5525,9 @@ final class QuotaLimit extends ProtoMessage {
       },
       values: switch (json['values']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeInt64(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt64(e.value),
+        },
         _ => throw TypeError(),
       },
       displayName: switch (json['displayName']) {

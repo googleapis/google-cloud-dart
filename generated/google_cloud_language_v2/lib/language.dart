@@ -321,9 +321,10 @@ final class Entity extends ProtoMessage {
       },
       metadata: switch (json['metadata']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       mentions: switch (json['mentions']) {

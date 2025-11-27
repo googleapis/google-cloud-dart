@@ -496,9 +496,10 @@ final class Secret extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       topics: switch (json['topics']) {
@@ -524,16 +525,17 @@ final class Secret extends ProtoMessage {
       },
       versionAliases: switch (json['versionAliases']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeInt64(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt64(e.value),
+        },
         _ => throw TypeError(),
       },
       annotations: switch (json['annotations']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       versionDestroyTtl: switch (json['versionDestroyTtl']) {
@@ -546,9 +548,10 @@ final class Secret extends ProtoMessage {
       },
       tags: switch (json['tags']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
     );

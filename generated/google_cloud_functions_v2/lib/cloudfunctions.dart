@@ -465,9 +465,10 @@ final class Function$ extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       stateMessages: switch (json['stateMessages']) {
@@ -1075,9 +1076,10 @@ final class BuildConfig extends ProtoMessage {
       },
       environmentVariables: switch (json['environmentVariables']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       dockerRegistry: switch (json['dockerRegistry']) {
@@ -1318,9 +1320,10 @@ final class ServiceConfig extends ProtoMessage {
       },
       environmentVariables: switch (json['environmentVariables']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       maxInstanceCount: switch (json['maxInstanceCount']) {
@@ -2709,7 +2712,6 @@ final class AutomaticUpdatePolicy extends ProtoMessage {
   AutomaticUpdatePolicy() : super(fullyQualifiedName);
 
   factory AutomaticUpdatePolicy.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return AutomaticUpdatePolicy();
   }
 

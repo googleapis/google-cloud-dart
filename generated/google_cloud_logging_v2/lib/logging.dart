@@ -1206,9 +1206,10 @@ final class LogEntry extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       operation: switch (json['operation']) {
@@ -1607,9 +1608,10 @@ final class WriteLogEntriesRequest extends ProtoMessage {
       },
       labels: switch (json['labels']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       entries: switch (json['entries']) {
@@ -1657,7 +1659,6 @@ final class WriteLogEntriesResponse extends ProtoMessage {
   WriteLogEntriesResponse() : super(fullyQualifiedName);
 
   factory WriteLogEntriesResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
     return WriteLogEntriesResponse();
   }
 
@@ -1689,9 +1690,10 @@ final class WriteLogEntriesPartialErrors extends ProtoMessage {
     return WriteLogEntriesPartialErrors(
       logEntryErrors: switch (json['logEntryErrors']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, Status.fromJson(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeInt(e.key): Status.fromJson(e.value),
+        },
         _ => throw TypeError(),
       },
     );
@@ -5769,9 +5771,10 @@ final class LogMetric extends ProtoMessage {
       },
       labelExtractors: switch (json['labelExtractors']) {
         null => {},
-        Map<String, Object?> $1 => $1.map(
-          (k, v) => MapEntry(k, decodeString(v)),
-        ),
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
         _ => throw TypeError(),
       },
       bucketOptions: switch (json['bucketOptions']) {
