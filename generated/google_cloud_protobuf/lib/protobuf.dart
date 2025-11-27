@@ -19,7 +19,6 @@
 /// Core Protobuf types used by most services.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -443,7 +442,7 @@ final class Duration extends ProtoMessage {
     _validate();
   }
 
-  factory Duration.fromJson(Object json) => _DurationHelper.decode(json);
+  factory Duration.fromJson(Object? json) => _DurationHelper.decode(json);
 
   @override
   Object toJson() => _DurationHelper.encode(this);
@@ -467,9 +466,7 @@ final class Empty extends ProtoMessage {
 
   Empty() : super(fullyQualifiedName);
 
-  factory Empty.fromJson(Object? j) {
-    return Empty();
-  }
+  factory Empty.fromJson(Object? j) => Empty();
 
   @override
   Object toJson() => {};
@@ -685,7 +682,7 @@ final class FieldMask extends ProtoMessage {
 
   FieldMask({this.paths = const []}) : super(fullyQualifiedName);
 
-  factory FieldMask.fromJson(Object json) => _FieldMaskHelper.decode(json);
+  factory FieldMask.fromJson(Object? json) => _FieldMaskHelper.decode(json);
 
   @override
   Object toJson() => _FieldMaskHelper.encode(this);
@@ -761,7 +758,7 @@ final class ListValue extends ProtoMessage {
 
   ListValue({this.values = const []}) : super(fullyQualifiedName);
 
-  factory ListValue.fromJson(Object json) => _ListValueHelper.decode(json);
+  factory ListValue.fromJson(Object? json) => _ListValueHelper.decode(json);
 
   @override
   Object toJson() => _ListValueHelper.encode(this);
@@ -877,7 +874,7 @@ final class Timestamp extends ProtoMessage {
     _validate();
   }
 
-  factory Timestamp.fromJson(Object json) => _TimestampHelper.decode(json);
+  factory Timestamp.fromJson(Object? json) => _TimestampHelper.decode(json);
 
   @override
   Object toJson() => _TimestampHelper.encode(this);
@@ -1400,7 +1397,7 @@ final class DoubleValue extends ProtoMessage {
 
   DoubleValue({this.value = 0}) : super(fullyQualifiedName);
 
-  factory DoubleValue.fromJson(Object json) => _DoubleValueHelper.decode(json);
+  factory DoubleValue.fromJson(Object? json) => _DoubleValueHelper.decode(json);
 
   @override
   Object toJson() => _DoubleValueHelper.encode(this);
@@ -1423,7 +1420,7 @@ final class FloatValue extends ProtoMessage {
 
   FloatValue({this.value = 0}) : super(fullyQualifiedName);
 
-  factory FloatValue.fromJson(Object json) => _FloatValueHelper.decode(json);
+  factory FloatValue.fromJson(Object? json) => _FloatValueHelper.decode(json);
 
   @override
   Object toJson() => _FloatValueHelper.encode(this);
@@ -1446,7 +1443,7 @@ final class Int64Value extends ProtoMessage {
 
   Int64Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Int64Value.fromJson(Object json) => _Int64ValueHelper.decode(json);
+  factory Int64Value.fromJson(Object? json) => _Int64ValueHelper.decode(json);
 
   @override
   Object toJson() => _Int64ValueHelper.encode(this);
@@ -1469,7 +1466,7 @@ final class Uint64Value extends ProtoMessage {
 
   Uint64Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Uint64Value.fromJson(Object json) => _Uint64ValueHelper.decode(json);
+  factory Uint64Value.fromJson(Object? json) => _Uint64ValueHelper.decode(json);
 
   @override
   Object toJson() => _Uint64ValueHelper.encode(this);
@@ -1492,7 +1489,7 @@ final class Int32Value extends ProtoMessage {
 
   Int32Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Int32Value.fromJson(Object json) => _Int32ValueHelper.decode(json);
+  factory Int32Value.fromJson(Object? json) => _Int32ValueHelper.decode(json);
 
   @override
   Object toJson() => _Int32ValueHelper.encode(this);
@@ -1515,7 +1512,7 @@ final class Uint32Value extends ProtoMessage {
 
   Uint32Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Uint32Value.fromJson(Object json) => _Uint32ValueHelper.decode(json);
+  factory Uint32Value.fromJson(Object? json) => _Uint32ValueHelper.decode(json);
 
   @override
   Object toJson() => _Uint32ValueHelper.encode(this);
@@ -1538,7 +1535,7 @@ final class BoolValue extends ProtoMessage {
 
   BoolValue({this.value = false}) : super(fullyQualifiedName);
 
-  factory BoolValue.fromJson(Object json) => _BoolValueHelper.decode(json);
+  factory BoolValue.fromJson(Object? json) => _BoolValueHelper.decode(json);
 
   @override
   Object toJson() => _BoolValueHelper.encode(this);
@@ -1561,7 +1558,7 @@ final class StringValue extends ProtoMessage {
 
   StringValue({this.value = ''}) : super(fullyQualifiedName);
 
-  factory StringValue.fromJson(Object json) => _StringValueHelper.decode(json);
+  factory StringValue.fromJson(Object? json) => _StringValueHelper.decode(json);
 
   @override
   Object toJson() => _StringValueHelper.encode(this);
@@ -1584,7 +1581,7 @@ final class BytesValue extends ProtoMessage {
 
   BytesValue({this.value}) : super(fullyQualifiedName);
 
-  factory BytesValue.fromJson(Object json) => _BytesValueHelper.decode(json);
+  factory BytesValue.fromJson(Object? json) => _BytesValueHelper.decode(json);
 
   @override
   Object toJson() => _BytesValueHelper.encode(this);

@@ -25,7 +25,6 @@
 /// agents, summarization and classification systems, and more.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -2964,9 +2963,7 @@ final class UrlContext extends ProtoMessage {
 
   UrlContext() : super(fullyQualifiedName);
 
-  factory UrlContext.fromJson(Object? j) {
-    return UrlContext();
-  }
+  factory UrlContext.fromJson(Object? j) => UrlContext();
 
   @override
   Object toJson() => {};
@@ -3089,9 +3086,7 @@ final class CodeExecution extends ProtoMessage {
 
   CodeExecution() : super(fullyQualifiedName);
 
-  factory CodeExecution.fromJson(Object? j) {
-    return CodeExecution();
-  }
+  factory CodeExecution.fromJson(Object? j) => CodeExecution();
 
   @override
   Object toJson() => {};
@@ -4885,9 +4880,7 @@ final class DownloadFileResponse extends ProtoMessage {
 
   DownloadFileResponse() : super(fullyQualifiedName);
 
-  factory DownloadFileResponse.fromJson(Object? j) {
-    return DownloadFileResponse();
-  }
+  factory DownloadFileResponse.fromJson(Object? j) => DownloadFileResponse();
 
   @override
   Object toJson() => {};
@@ -8347,9 +8340,8 @@ final class AudioTranscriptionConfig extends ProtoMessage {
 
   AudioTranscriptionConfig() : super(fullyQualifiedName);
 
-  factory AudioTranscriptionConfig.fromJson(Object? j) {
-    return AudioTranscriptionConfig();
-  }
+  factory AudioTranscriptionConfig.fromJson(Object? j) =>
+      AudioTranscriptionConfig();
 
   @override
   Object toJson() => {};
@@ -8693,9 +8685,8 @@ final class BidiGenerateContentRealtimeInput_ActivityStart
 
   BidiGenerateContentRealtimeInput_ActivityStart() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? j) {
-    return BidiGenerateContentRealtimeInput_ActivityStart();
-  }
+  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? j) =>
+      BidiGenerateContentRealtimeInput_ActivityStart();
 
   @override
   Object toJson() => {};
@@ -8711,9 +8702,8 @@ final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
 
   BidiGenerateContentRealtimeInput_ActivityEnd() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? j) {
-    return BidiGenerateContentRealtimeInput_ActivityEnd();
-  }
+  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? j) =>
+      BidiGenerateContentRealtimeInput_ActivityEnd();
 
   @override
   Object toJson() => {};
@@ -8827,9 +8817,8 @@ final class BidiGenerateContentSetupComplete extends ProtoMessage {
 
   BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetupComplete.fromJson(Object? j) {
-    return BidiGenerateContentSetupComplete();
-  }
+  factory BidiGenerateContentSetupComplete.fromJson(Object? j) =>
+      BidiGenerateContentSetupComplete();
 
   @override
   Object toJson() => {};
@@ -10530,9 +10519,8 @@ final class TransferOwnershipResponse extends ProtoMessage {
 
   TransferOwnershipResponse() : super(fullyQualifiedName);
 
-  factory TransferOwnershipResponse.fromJson(Object? j) {
-    return TransferOwnershipResponse();
-  }
+  factory TransferOwnershipResponse.fromJson(Object? j) =>
+      TransferOwnershipResponse();
 
   @override
   Object toJson() => {};
@@ -10718,9 +10706,8 @@ final class PredictLongRunningMetadata extends ProtoMessage {
 
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
-  factory PredictLongRunningMetadata.fromJson(Object? j) {
-    return PredictLongRunningMetadata();
-  }
+  factory PredictLongRunningMetadata.fromJson(Object? j) =>
+      PredictLongRunningMetadata();
 
   @override
   Object toJson() => {};

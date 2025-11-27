@@ -19,7 +19,6 @@
 /// Manages lightweight user-provided functions executed in response to events.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -2711,9 +2710,7 @@ final class AutomaticUpdatePolicy extends ProtoMessage {
 
   AutomaticUpdatePolicy() : super(fullyQualifiedName);
 
-  factory AutomaticUpdatePolicy.fromJson(Object? j) {
-    return AutomaticUpdatePolicy();
-  }
+  factory AutomaticUpdatePolicy.fromJson(Object? j) => AutomaticUpdatePolicy();
 
   @override
   Object toJson() => {};

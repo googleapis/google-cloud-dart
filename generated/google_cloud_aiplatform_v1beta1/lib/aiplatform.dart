@@ -20,7 +20,6 @@
 /// learning expertise and effort.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -21582,9 +21581,7 @@ final class ImportDataResponse extends ProtoMessage {
 
   ImportDataResponse() : super(fullyQualifiedName);
 
-  factory ImportDataResponse.fromJson(Object? j) {
-    return ImportDataResponse();
-  }
+  factory ImportDataResponse.fromJson(Object? j) => ImportDataResponse();
 
   @override
   Object toJson() => {};
@@ -23421,9 +23418,7 @@ final class AssessDataResponse_BatchPredictionValidationAssessmentResult
 
   factory AssessDataResponse_BatchPredictionValidationAssessmentResult.fromJson(
     Object? j,
-  ) {
-    return AssessDataResponse_BatchPredictionValidationAssessmentResult();
-  }
+  ) => AssessDataResponse_BatchPredictionValidationAssessmentResult();
 
   @override
   Object toJson() => {};
@@ -26606,9 +26601,7 @@ final class UndeployModelResponse extends ProtoMessage {
 
   UndeployModelResponse() : super(fullyQualifiedName);
 
-  factory UndeployModelResponse.fromJson(Object? j) {
-    return UndeployModelResponse();
-  }
+  factory UndeployModelResponse.fromJson(Object? j) => UndeployModelResponse();
 
   @override
   Object toJson() => {};
@@ -28995,9 +28988,7 @@ final class ExactMatchSpec extends ProtoMessage {
 
   ExactMatchSpec() : super(fullyQualifiedName);
 
-  factory ExactMatchSpec.fromJson(Object? j) {
-    return ExactMatchSpec();
-  }
+  factory ExactMatchSpec.fromJson(Object? j) => ExactMatchSpec();
 
   @override
   Object toJson() => {};
@@ -32695,9 +32686,7 @@ final class ToolCallValidSpec extends ProtoMessage {
 
   ToolCallValidSpec() : super(fullyQualifiedName);
 
-  factory ToolCallValidSpec.fromJson(Object? j) {
-    return ToolCallValidSpec();
-  }
+  factory ToolCallValidSpec.fromJson(Object? j) => ToolCallValidSpec();
 
   @override
   Object toJson() => {};
@@ -32862,9 +32851,7 @@ final class ToolNameMatchSpec extends ProtoMessage {
 
   ToolNameMatchSpec() : super(fullyQualifiedName);
 
-  factory ToolNameMatchSpec.fromJson(Object? j) {
-    return ToolNameMatchSpec();
-  }
+  factory ToolNameMatchSpec.fromJson(Object? j) => ToolNameMatchSpec();
 
   @override
   Object toJson() => {};
@@ -33031,9 +33018,8 @@ final class ToolParameterKeyMatchSpec extends ProtoMessage {
 
   ToolParameterKeyMatchSpec() : super(fullyQualifiedName);
 
-  factory ToolParameterKeyMatchSpec.fromJson(Object? j) {
-    return ToolParameterKeyMatchSpec();
-  }
+  factory ToolParameterKeyMatchSpec.fromJson(Object? j) =>
+      ToolParameterKeyMatchSpec();
 
   @override
   Object toJson() => {};
@@ -33848,9 +33834,8 @@ final class RubricBasedInstructionFollowingSpec extends ProtoMessage {
 
   RubricBasedInstructionFollowingSpec() : super(fullyQualifiedName);
 
-  factory RubricBasedInstructionFollowingSpec.fromJson(Object? j) {
-    return RubricBasedInstructionFollowingSpec();
-  }
+  factory RubricBasedInstructionFollowingSpec.fromJson(Object? j) =>
+      RubricBasedInstructionFollowingSpec();
 
   @override
   Object toJson() => {};
@@ -33997,9 +33982,8 @@ final class TrajectoryExactMatchSpec extends ProtoMessage {
 
   TrajectoryExactMatchSpec() : super(fullyQualifiedName);
 
-  factory TrajectoryExactMatchSpec.fromJson(Object? j) {
-    return TrajectoryExactMatchSpec();
-  }
+  factory TrajectoryExactMatchSpec.fromJson(Object? j) =>
+      TrajectoryExactMatchSpec();
 
   @override
   Object toJson() => {};
@@ -34170,9 +34154,8 @@ final class TrajectoryInOrderMatchSpec extends ProtoMessage {
 
   TrajectoryInOrderMatchSpec() : super(fullyQualifiedName);
 
-  factory TrajectoryInOrderMatchSpec.fromJson(Object? j) {
-    return TrajectoryInOrderMatchSpec();
-  }
+  factory TrajectoryInOrderMatchSpec.fromJson(Object? j) =>
+      TrajectoryInOrderMatchSpec();
 
   @override
   Object toJson() => {};
@@ -34344,9 +34327,8 @@ final class TrajectoryAnyOrderMatchSpec extends ProtoMessage {
 
   TrajectoryAnyOrderMatchSpec() : super(fullyQualifiedName);
 
-  factory TrajectoryAnyOrderMatchSpec.fromJson(Object? j) {
-    return TrajectoryAnyOrderMatchSpec();
-  }
+  factory TrajectoryAnyOrderMatchSpec.fromJson(Object? j) =>
+      TrajectoryAnyOrderMatchSpec();
 
   @override
   Object toJson() => {};
@@ -34516,9 +34498,8 @@ final class TrajectoryPrecisionSpec extends ProtoMessage {
 
   TrajectoryPrecisionSpec() : super(fullyQualifiedName);
 
-  factory TrajectoryPrecisionSpec.fromJson(Object? j) {
-    return TrajectoryPrecisionSpec();
-  }
+  factory TrajectoryPrecisionSpec.fromJson(Object? j) =>
+      TrajectoryPrecisionSpec();
 
   @override
   Object toJson() => {};
@@ -34685,9 +34666,7 @@ final class TrajectoryRecallSpec extends ProtoMessage {
 
   TrajectoryRecallSpec() : super(fullyQualifiedName);
 
-  factory TrajectoryRecallSpec.fromJson(Object? j) {
-    return TrajectoryRecallSpec();
-  }
+  factory TrajectoryRecallSpec.fromJson(Object? j) => TrajectoryRecallSpec();
 
   @override
   Object toJson() => {};
@@ -35406,9 +35385,7 @@ final class StoredContentsExample_SearchKeyGenerationMethod_LastEntry
 
   factory StoredContentsExample_SearchKeyGenerationMethod_LastEntry.fromJson(
     Object? j,
-  ) {
-    return StoredContentsExample_SearchKeyGenerationMethod_LastEntry();
-  }
+  ) => StoredContentsExample_SearchKeyGenerationMethod_LastEntry();
 
   @override
   Object toJson() => {};
@@ -42324,9 +42301,8 @@ final class FeatureOnlineStore_Optimized extends ProtoMessage {
 
   FeatureOnlineStore_Optimized() : super(fullyQualifiedName);
 
-  factory FeatureOnlineStore_Optimized.fromJson(Object? j) {
-    return FeatureOnlineStore_Optimized();
-  }
+  factory FeatureOnlineStore_Optimized.fromJson(Object? j) =>
+      FeatureOnlineStore_Optimized();
 
   @override
   Object toJson() => {};
@@ -46535,9 +46511,8 @@ final class FeatureView_VectorSearchConfig_BruteForceConfig
 
   FeatureView_VectorSearchConfig_BruteForceConfig() : super(fullyQualifiedName);
 
-  factory FeatureView_VectorSearchConfig_BruteForceConfig.fromJson(Object? j) {
-    return FeatureView_VectorSearchConfig_BruteForceConfig();
-  }
+  factory FeatureView_VectorSearchConfig_BruteForceConfig.fromJson(Object? j) =>
+      FeatureView_VectorSearchConfig_BruteForceConfig();
 
   @override
   Object toJson() => {};
@@ -46746,9 +46721,8 @@ final class FeatureView_IndexConfig_BruteForceConfig extends ProtoMessage {
 
   FeatureView_IndexConfig_BruteForceConfig() : super(fullyQualifiedName);
 
-  factory FeatureView_IndexConfig_BruteForceConfig.fromJson(Object? j) {
-    return FeatureView_IndexConfig_BruteForceConfig();
-  }
+  factory FeatureView_IndexConfig_BruteForceConfig.fromJson(Object? j) =>
+      FeatureView_IndexConfig_BruteForceConfig();
 
   @override
   Object toJson() => {};
@@ -48026,9 +48000,8 @@ final class WriteFeatureValuesResponse extends ProtoMessage {
 
   WriteFeatureValuesResponse() : super(fullyQualifiedName);
 
-  factory WriteFeatureValuesResponse.fromJson(Object? j) {
-    return WriteFeatureValuesResponse();
-  }
+  factory WriteFeatureValuesResponse.fromJson(Object? j) =>
+      WriteFeatureValuesResponse();
 
   @override
   Object toJson() => {};
@@ -49798,9 +49771,8 @@ final class ExportFeatureValuesResponse extends ProtoMessage {
 
   ExportFeatureValuesResponse() : super(fullyQualifiedName);
 
-  factory ExportFeatureValuesResponse.fromJson(Object? j) {
-    return ExportFeatureValuesResponse();
-  }
+  factory ExportFeatureValuesResponse.fromJson(Object? j) =>
+      ExportFeatureValuesResponse();
 
   @override
   Object toJson() => {};
@@ -49817,9 +49789,8 @@ final class BatchReadFeatureValuesResponse extends ProtoMessage {
 
   BatchReadFeatureValuesResponse() : super(fullyQualifiedName);
 
-  factory BatchReadFeatureValuesResponse.fromJson(Object? j) {
-    return BatchReadFeatureValuesResponse();
-  }
+  factory BatchReadFeatureValuesResponse.fromJson(Object? j) =>
+      BatchReadFeatureValuesResponse();
 
   @override
   Object toJson() => {};
@@ -54217,9 +54188,7 @@ final class UndeployIndexResponse extends ProtoMessage {
 
   UndeployIndexResponse() : super(fullyQualifiedName);
 
-  factory UndeployIndexResponse.fromJson(Object? j) {
-    return UndeployIndexResponse();
-  }
+  factory UndeployIndexResponse.fromJson(Object? j) => UndeployIndexResponse();
 
   @override
   Object toJson() => {};
@@ -55258,9 +55227,8 @@ final class UpsertDatapointsResponse extends ProtoMessage {
 
   UpsertDatapointsResponse() : super(fullyQualifiedName);
 
-  factory UpsertDatapointsResponse.fromJson(Object? j) {
-    return UpsertDatapointsResponse();
-  }
+  factory UpsertDatapointsResponse.fromJson(Object? j) =>
+      UpsertDatapointsResponse();
 
   @override
   Object toJson() => {};
@@ -55322,9 +55290,8 @@ final class RemoveDatapointsResponse extends ProtoMessage {
 
   RemoveDatapointsResponse() : super(fullyQualifiedName);
 
-  factory RemoveDatapointsResponse.fromJson(Object? j) {
-    return RemoveDatapointsResponse();
-  }
+  factory RemoveDatapointsResponse.fromJson(Object? j) =>
+      RemoveDatapointsResponse();
 
   @override
   Object toJson() => {};
@@ -56121,9 +56088,7 @@ final class DirectUploadSource extends ProtoMessage {
 
   DirectUploadSource() : super(fullyQualifiedName);
 
-  factory DirectUploadSource.fromJson(Object? j) {
-    return DirectUploadSource();
-  }
+  factory DirectUploadSource.fromJson(Object? j) => DirectUploadSource();
 
   @override
   Object toJson() => {};
@@ -63075,9 +63040,8 @@ final class AddContextArtifactsAndExecutionsResponse extends ProtoMessage {
 
   AddContextArtifactsAndExecutionsResponse() : super(fullyQualifiedName);
 
-  factory AddContextArtifactsAndExecutionsResponse.fromJson(Object? j) {
-    return AddContextArtifactsAndExecutionsResponse();
-  }
+  factory AddContextArtifactsAndExecutionsResponse.fromJson(Object? j) =>
+      AddContextArtifactsAndExecutionsResponse();
 
   @override
   Object toJson() => {};
@@ -63142,9 +63106,8 @@ final class AddContextChildrenResponse extends ProtoMessage {
 
   AddContextChildrenResponse() : super(fullyQualifiedName);
 
-  factory AddContextChildrenResponse.fromJson(Object? j) {
-    return AddContextChildrenResponse();
-  }
+  factory AddContextChildrenResponse.fromJson(Object? j) =>
+      AddContextChildrenResponse();
 
   @override
   Object toJson() => {};
@@ -63209,9 +63172,8 @@ final class RemoveContextChildrenResponse extends ProtoMessage {
 
   RemoveContextChildrenResponse() : super(fullyQualifiedName);
 
-  factory RemoveContextChildrenResponse.fromJson(Object? j) {
-    return RemoveContextChildrenResponse();
-  }
+  factory RemoveContextChildrenResponse.fromJson(Object? j) =>
+      RemoveContextChildrenResponse();
 
   @override
   Object toJson() => {};
@@ -63817,9 +63779,8 @@ final class AddExecutionEventsResponse extends ProtoMessage {
 
   AddExecutionEventsResponse() : super(fullyQualifiedName);
 
-  factory AddExecutionEventsResponse.fromJson(Object? j) {
-    return AddExecutionEventsResponse();
-  }
+  factory AddExecutionEventsResponse.fromJson(Object? j) =>
+      AddExecutionEventsResponse();
 
   @override
   Object toJson() => {};
@@ -75236,9 +75197,8 @@ final class UpdateExplanationDatasetResponse extends ProtoMessage {
 
   UpdateExplanationDatasetResponse() : super(fullyQualifiedName);
 
-  factory UpdateExplanationDatasetResponse.fromJson(Object? j) {
-    return UpdateExplanationDatasetResponse();
-  }
+  factory UpdateExplanationDatasetResponse.fromJson(Object? j) =>
+      UpdateExplanationDatasetResponse();
 
   @override
   Object toJson() => {};
@@ -75256,9 +75216,7 @@ final class ExportModelResponse extends ProtoMessage {
 
   ExportModelResponse() : super(fullyQualifiedName);
 
-  factory ExportModelResponse.fromJson(Object? j) {
-    return ExportModelResponse();
-  }
+  factory ExportModelResponse.fromJson(Object? j) => ExportModelResponse();
 
   @override
   Object toJson() => {};
@@ -77618,9 +77576,8 @@ final class NotebookExecutionJob_WorkbenchRuntime extends ProtoMessage {
 
   NotebookExecutionJob_WorkbenchRuntime() : super(fullyQualifiedName);
 
-  factory NotebookExecutionJob_WorkbenchRuntime.fromJson(Object? j) {
-    return NotebookExecutionJob_WorkbenchRuntime();
-  }
+  factory NotebookExecutionJob_WorkbenchRuntime.fromJson(Object? j) =>
+      NotebookExecutionJob_WorkbenchRuntime();
 
   @override
   Object toJson() => {};
@@ -79203,9 +79160,8 @@ final class UpgradeNotebookRuntimeResponse extends ProtoMessage {
 
   UpgradeNotebookRuntimeResponse() : super(fullyQualifiedName);
 
-  factory UpgradeNotebookRuntimeResponse.fromJson(Object? j) {
-    return UpgradeNotebookRuntimeResponse();
-  }
+  factory UpgradeNotebookRuntimeResponse.fromJson(Object? j) =>
+      UpgradeNotebookRuntimeResponse();
 
   @override
   Object toJson() => {};
@@ -79301,9 +79257,8 @@ final class StartNotebookRuntimeResponse extends ProtoMessage {
 
   StartNotebookRuntimeResponse() : super(fullyQualifiedName);
 
-  factory StartNotebookRuntimeResponse.fromJson(Object? j) {
-    return StartNotebookRuntimeResponse();
-  }
+  factory StartNotebookRuntimeResponse.fromJson(Object? j) =>
+      StartNotebookRuntimeResponse();
 
   @override
   Object toJson() => {};
@@ -79385,9 +79340,8 @@ final class StopNotebookRuntimeResponse extends ProtoMessage {
 
   StopNotebookRuntimeResponse() : super(fullyQualifiedName);
 
-  factory StopNotebookRuntimeResponse.fromJson(Object? j) {
-    return StopNotebookRuntimeResponse();
-  }
+  factory StopNotebookRuntimeResponse.fromJson(Object? j) =>
+      StopNotebookRuntimeResponse();
 
   @override
   Object toJson() => {};
@@ -85592,9 +85546,8 @@ final class PredictLongRunningMetadata extends ProtoMessage {
 
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
-  factory PredictLongRunningMetadata.fromJson(Object? j) {
-    return PredictLongRunningMetadata();
-  }
+  factory PredictLongRunningMetadata.fromJson(Object? j) =>
+      PredictLongRunningMetadata();
 
   @override
   Object toJson() => {};
@@ -90295,9 +90248,7 @@ final class AppendEventResponse extends ProtoMessage {
 
   AppendEventResponse() : super(fullyQualifiedName);
 
-  factory AppendEventResponse.fromJson(Object? j) {
-    return AppendEventResponse();
-  }
+  factory AppendEventResponse.fromJson(Object? j) => AppendEventResponse();
 
   @override
   Object toJson() => {};
@@ -95439,9 +95390,8 @@ final class WriteTensorboardExperimentDataResponse extends ProtoMessage {
 
   WriteTensorboardExperimentDataResponse() : super(fullyQualifiedName);
 
-  factory WriteTensorboardExperimentDataResponse.fromJson(Object? j) {
-    return WriteTensorboardExperimentDataResponse();
-  }
+  factory WriteTensorboardExperimentDataResponse.fromJson(Object? j) =>
+      WriteTensorboardExperimentDataResponse();
 
   @override
   Object toJson() => {};
@@ -95509,9 +95459,8 @@ final class WriteTensorboardRunDataResponse extends ProtoMessage {
 
   WriteTensorboardRunDataResponse() : super(fullyQualifiedName);
 
-  factory WriteTensorboardRunDataResponse.fromJson(Object? j) {
-    return WriteTensorboardRunDataResponse();
-  }
+  factory WriteTensorboardRunDataResponse.fromJson(Object? j) =>
+      WriteTensorboardRunDataResponse();
 
   @override
   Object toJson() => {};
@@ -96134,9 +96083,7 @@ final class Tool_CodeExecution extends ProtoMessage {
 
   Tool_CodeExecution() : super(fullyQualifiedName);
 
-  factory Tool_CodeExecution.fromJson(Object? j) {
-    return Tool_CodeExecution();
-  }
+  factory Tool_CodeExecution.fromJson(Object? j) => Tool_CodeExecution();
 
   @override
   Object toJson() => {};
@@ -96262,9 +96209,7 @@ final class UrlContext extends ProtoMessage {
 
   UrlContext() : super(fullyQualifiedName);
 
-  factory UrlContext.fromJson(Object? j) {
-    return UrlContext();
-  }
+  factory UrlContext.fromJson(Object? j) => UrlContext();
 
   @override
   Object toJson() => {};
@@ -101648,9 +101593,8 @@ final class RagVectorDbConfig_RagManagedDb_Knn extends ProtoMessage {
 
   RagVectorDbConfig_RagManagedDb_Knn() : super(fullyQualifiedName);
 
-  factory RagVectorDbConfig_RagManagedDb_Knn.fromJson(Object? j) {
-    return RagVectorDbConfig_RagManagedDb_Knn();
-  }
+  factory RagVectorDbConfig_RagManagedDb_Knn.fromJson(Object? j) =>
+      RagVectorDbConfig_RagManagedDb_Knn();
 
   @override
   Object toJson() => {};
@@ -102256,9 +102200,8 @@ final class RagCorpus_CorpusTypeConfig_DocumentCorpus extends ProtoMessage {
 
   RagCorpus_CorpusTypeConfig_DocumentCorpus() : super(fullyQualifiedName);
 
-  factory RagCorpus_CorpusTypeConfig_DocumentCorpus.fromJson(Object? j) {
-    return RagCorpus_CorpusTypeConfig_DocumentCorpus();
-  }
+  factory RagCorpus_CorpusTypeConfig_DocumentCorpus.fromJson(Object? j) =>
+      RagCorpus_CorpusTypeConfig_DocumentCorpus();
 
   @override
   Object toJson() => {};
@@ -103430,9 +103373,8 @@ final class RagManagedDbConfig_Enterprise extends ProtoMessage {
 
   RagManagedDbConfig_Enterprise() : super(fullyQualifiedName);
 
-  factory RagManagedDbConfig_Enterprise.fromJson(Object? j) {
-    return RagManagedDbConfig_Enterprise();
-  }
+  factory RagManagedDbConfig_Enterprise.fromJson(Object? j) =>
+      RagManagedDbConfig_Enterprise();
 
   @override
   Object toJson() => {};
@@ -103450,9 +103392,8 @@ final class RagManagedDbConfig_Scaled extends ProtoMessage {
 
   RagManagedDbConfig_Scaled() : super(fullyQualifiedName);
 
-  factory RagManagedDbConfig_Scaled.fromJson(Object? j) {
-    return RagManagedDbConfig_Scaled();
-  }
+  factory RagManagedDbConfig_Scaled.fromJson(Object? j) =>
+      RagManagedDbConfig_Scaled();
 
   @override
   Object toJson() => {};
@@ -103475,9 +103416,8 @@ final class RagManagedDbConfig_Basic extends ProtoMessage {
 
   RagManagedDbConfig_Basic() : super(fullyQualifiedName);
 
-  factory RagManagedDbConfig_Basic.fromJson(Object? j) {
-    return RagManagedDbConfig_Basic();
-  }
+  factory RagManagedDbConfig_Basic.fromJson(Object? j) =>
+      RagManagedDbConfig_Basic();
 
   @override
   Object toJson() => {};
@@ -103498,9 +103438,8 @@ final class RagManagedDbConfig_Unprovisioned extends ProtoMessage {
 
   RagManagedDbConfig_Unprovisioned() : super(fullyQualifiedName);
 
-  factory RagManagedDbConfig_Unprovisioned.fromJson(Object? j) {
-    return RagManagedDbConfig_Unprovisioned();
-  }
+  factory RagManagedDbConfig_Unprovisioned.fromJson(Object? j) =>
+      RagManagedDbConfig_Unprovisioned();
 
   @override
   Object toJson() => {};

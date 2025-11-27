@@ -28,7 +28,6 @@
 /// [Long-running operations]: https://google.aip.dev/151
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
