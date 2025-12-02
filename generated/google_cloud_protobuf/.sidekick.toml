@@ -34,7 +34,10 @@ include-list = """\
 """
 
 [codec]
-copyright-year   = '2025'
-part-file        = "src/protobuf.p.dart"
-dev-dependencies = "test"
-repository-url   = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protobuf"
+copyright-year       = '2025'
+part-file            = 'src/protobuf.p.dart'
+dev-dependencies     = 'test'
+repository-url       = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protobuf'
+dependencies         = 'collection'
+'package:collection' = '^1.19.1'
+imports              = 'package:collection/collection.dart' 

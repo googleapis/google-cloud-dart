@@ -25,5 +25,8 @@ environment:
 
 resolution: workspace
 
+dependencies:
+  collection: ^1.19.1
+
 dev_dependencies:
   test: any
