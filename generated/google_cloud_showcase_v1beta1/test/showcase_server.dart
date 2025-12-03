@@ -91,7 +91,7 @@ class ShowcaseServer {
     for (var i = 0; ; ++i) {
       try {
         return await _run();
-      } on PortInUseException catch (e) {
+      } on PortInUseException {
         if (i == 10) {
           rethrow;
         } else {
