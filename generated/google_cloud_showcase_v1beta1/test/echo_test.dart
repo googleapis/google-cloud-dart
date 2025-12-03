@@ -204,14 +204,12 @@ void main() async {
       expect(
         response.alphabetized,
         equals({
-          'b': PagedExpandResponseList(words: ['best']),
-          'I': PagedExpandResponseList(words: ['It']),
-          'i': PagedExpandResponseList(words: ['it']),
-          'o': PagedExpandResponseList(words: ['of', 'of']),
-          't': PagedExpandResponseList(
-            words: ['the', 'times,', 'the', 'times'],
-          ),
-          'w': PagedExpandResponseList(words: ['was', 'was', 'worst']),
+          'b': pageWords(['best']),
+          'I': pageWords(['It']),
+          'i': pageWords(['it']),
+          'o': pageWords(['of', 'of']),
+          't': pageWords(['the', 'times,', 'the', 'times']),
+          'w': pageWords(['was', 'was', 'worst']),
         }),
       );
     });

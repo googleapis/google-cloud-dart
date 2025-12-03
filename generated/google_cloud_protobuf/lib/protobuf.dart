@@ -27,8 +27,6 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
 
-import 'package:collection/collection.dart';
-
 import 'src/encoding.dart';
 
 part 'src/protobuf.p.dart';
