@@ -752,20 +752,21 @@ final class HttpRequest extends ProtoMessage {
   final List<HttpHeader> headers;
 
   /// The HTTP request body. If the body is not expected, it should be empty.
-  final Uint8List? body;
+  final Uint8List body;
 
   HttpRequest({
     this.method = '',
     this.uri = '',
     this.headers = const [],
-    this.body,
-  }) : super(fullyQualifiedName);
+    Uint8List? body,
+  }) : body = body ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory HttpRequest.fromJson(Map<String, dynamic> json) => HttpRequest(
     method: json['method'] ?? '',
     uri: json['uri'] ?? '',
     headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
-    body: decodeBytes(json['body']),
+    body: decodeBytes(json['body']) ?? Uint8List(0),
   );
 
   @override
@@ -773,16 +774,12 @@ final class HttpRequest extends ProtoMessage {
     if (method.isNotDefault) 'method': method,
     if (uri.isNotDefault) 'uri': uri,
     if (headers.isNotDefault) 'headers': encodeList(headers),
-    if (body != null) 'body': encodeBytes(body),
+    if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
   String toString() {
-    final contents = [
-      'method=$method',
-      'uri=$uri',
-      if (body != null) 'body=$body',
-    ].join(',');
+    final contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
     return 'HttpRequest($contents)';
   }
 }
@@ -802,20 +799,21 @@ final class HttpResponse extends ProtoMessage {
   final List<HttpHeader> headers;
 
   /// The HTTP response body. If the body is not expected, it should be empty.
-  final Uint8List? body;
+  final Uint8List body;
 
   HttpResponse({
     this.status = 0,
     this.reason = '',
     this.headers = const [],
-    this.body,
-  }) : super(fullyQualifiedName);
+    Uint8List? body,
+  }) : body = body ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory HttpResponse.fromJson(Map<String, dynamic> json) => HttpResponse(
     status: json['status'] ?? 0,
     reason: json['reason'] ?? '',
     headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
-    body: decodeBytes(json['body']),
+    body: decodeBytes(json['body']) ?? Uint8List(0),
   );
 
   @override
@@ -823,7 +821,7 @@ final class HttpResponse extends ProtoMessage {
     if (status.isNotDefault) 'status': status,
     if (reason.isNotDefault) 'reason': reason,
     if (headers.isNotDefault) 'headers': encodeList(headers),
-    if (body != null) 'body': encodeBytes(body),
+    if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
@@ -831,7 +829,7 @@ final class HttpResponse extends ProtoMessage {
     final contents = [
       'status=$status',
       'reason=$reason',
-      if (body != null) 'body=$body',
+      'body=$body',
     ].join(',');
     return 'HttpResponse($contents)';
   }

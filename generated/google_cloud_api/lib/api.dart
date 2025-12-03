@@ -3283,34 +3283,32 @@ final class HttpBody extends ProtoMessage {
   final String contentType;
 
   /// The HTTP request/response body as raw binary.
-  final Uint8List? data;
+  final Uint8List data;
 
   /// Application specific response metadata. Must be set in the first response
   /// for streaming APIs.
   final List<Any> extensions;
 
-  HttpBody({this.contentType = '', this.data, this.extensions = const []})
-    : super(fullyQualifiedName);
+  HttpBody({this.contentType = '', Uint8List? data, this.extensions = const []})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory HttpBody.fromJson(Map<String, dynamic> json) => HttpBody(
     contentType: json['contentType'] ?? '',
-    data: decodeBytes(json['data']),
+    data: decodeBytes(json['data']) ?? Uint8List(0),
     extensions: decodeListMessage(json['extensions'], Any.fromJson) ?? [],
   );
 
   @override
   Object toJson() => {
     if (contentType.isNotDefault) 'contentType': contentType,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
     if (extensions.isNotDefault) 'extensions': encodeList(extensions),
   };
 
   @override
   String toString() {
-    final contents = [
-      'contentType=$contentType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['contentType=$contentType', 'data=$data'].join(',');
     return 'HttpBody($contents)';
   }
 }

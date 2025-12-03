@@ -144,7 +144,8 @@ final class Compliance {
         'info.fFloat': '${$1}',
       if (request.info!.fBool case final $1 when $1.isNotDefault)
         'info.fBool': '${$1}',
-      if (request.info!.fBytes case final $1?) 'info.fBytes': encodeBytes($1)!,
+      if (request.info!.fBytes case final $1 when $1.isNotDefault)
+        'info.fBytes': encodeBytes($1)!,
       if (request.info!.fKingdom case final $1 when $1.isNotDefault)
         'info.fKingdom': $1.value,
       if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
@@ -284,7 +285,7 @@ final class Compliance {
           'info.fFloat': '${$1}',
         if (request.info!.fBool case final $1 when $1.isNotDefault)
           'info.fBool': '${$1}',
-        if (request.info!.fBytes case final $1?)
+        if (request.info!.fBytes case final $1 when $1.isNotDefault)
           'info.fBytes': encodeBytes($1)!,
         if (request.info!.fKingdom case final $1 when $1.isNotDefault)
           'info.fKingdom': $1.value,
@@ -426,7 +427,7 @@ final class Compliance {
           'info.fFloat': '${$1}',
         if (request.info!.fBool case final $1 when $1.isNotDefault)
           'info.fBool': '${$1}',
-        if (request.info!.fBytes case final $1?)
+        if (request.info!.fBytes case final $1 when $1.isNotDefault)
           'info.fBytes': encodeBytes($1)!,
         if (request.info!.fKingdom case final $1 when $1.isNotDefault)
           'info.fKingdom': $1.value,
@@ -570,7 +571,7 @@ final class Compliance {
           'info.fFloat': '${$1}',
         if (request.info!.fBool case final $1 when $1.isNotDefault)
           'info.fBool': '${$1}',
-        if (request.info!.fBytes case final $1?)
+        if (request.info!.fBytes case final $1 when $1.isNotDefault)
           'info.fBytes': encodeBytes($1)!,
         if (request.info!.fKingdom case final $1 when $1.isNotDefault)
           'info.fKingdom': $1.value,
@@ -2109,8 +2110,9 @@ final class Testing {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:check', {
-      if (request.answer case final $1?) 'answer': encodeBytes($1)!,
-      if (request.answers case final $1?)
+      if (request.answer case final $1 when $1.isNotDefault)
+        'answer': encodeBytes($1)!,
+      if (request.answers case final $1 when $1.isNotDefault)
         'answers': $1.map((e) => encodeBytes(e)!),
     });
     final response = await _client.post(url);
@@ -2466,7 +2468,7 @@ final class ComplianceData extends ProtoMessage {
 
   final bool fBool;
 
-  final Uint8List? fBytes;
+  final Uint8List fBytes;
 
   final ComplianceData_LifeKingdom fKingdom;
 
@@ -2499,7 +2501,7 @@ final class ComplianceData extends ProtoMessage {
     this.fDouble = 0,
     this.fFloat = 0,
     this.fBool = false,
-    this.fBytes,
+    Uint8List? fBytes,
     this.fKingdom = ComplianceData_LifeKingdom.$default,
     this.fChild,
     this.pString,
@@ -2508,7 +2510,8 @@ final class ComplianceData extends ProtoMessage {
     this.pBool,
     this.pKingdom,
     this.pChild,
-  }) : super(fullyQualifiedName);
+  }) : fBytes = fBytes ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory ComplianceData.fromJson(Map<String, dynamic> json) => ComplianceData(
     fString: json['fString'] ?? '',
@@ -2525,7 +2528,7 @@ final class ComplianceData extends ProtoMessage {
     fDouble: decodeDouble(json['fDouble']) ?? 0,
     fFloat: decodeDouble(json['fFloat']) ?? 0,
     fBool: json['fBool'] ?? false,
-    fBytes: decodeBytes(json['fBytes']),
+    fBytes: decodeBytes(json['fBytes']) ?? Uint8List(0),
     fKingdom:
         decodeEnum(json['fKingdom'], ComplianceData_LifeKingdom.fromJson) ??
         ComplianceData_LifeKingdom.$default,
@@ -2554,7 +2557,7 @@ final class ComplianceData extends ProtoMessage {
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
     if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
     if (fBool.isNotDefault) 'fBool': fBool,
-    if (fBytes != null) 'fBytes': encodeBytes(fBytes),
+    if (fBytes.isNotDefault) 'fBytes': encodeBytes(fBytes),
     if (fKingdom.isNotDefault) 'fKingdom': fKingdom.toJson(),
     if (fChild != null) 'fChild': fChild!.toJson(),
     if (pString != null) 'pString': pString,
@@ -2582,7 +2585,7 @@ final class ComplianceData extends ProtoMessage {
       'fDouble=$fDouble',
       'fFloat=$fFloat',
       'fBool=$fBool',
-      if (fBytes != null) 'fBytes=$fBytes',
+      'fBytes=$fBytes',
       'fKingdom=$fKingdom',
       if (pString != null) 'pString=$pString',
       if (pInt32 != null) 'pInt32=$pInt32',
@@ -5574,21 +5577,23 @@ final class Test_Blueprint_Invocation extends ProtoMessage {
   final String method;
 
   /// The request to be made if a specific request is necessary.
-  final Uint8List? serializedRequest;
+  final Uint8List serializedRequest;
 
-  Test_Blueprint_Invocation({this.method = '', this.serializedRequest})
-    : super(fullyQualifiedName);
+  Test_Blueprint_Invocation({this.method = '', Uint8List? serializedRequest})
+    : serializedRequest = serializedRequest ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory Test_Blueprint_Invocation.fromJson(Map<String, dynamic> json) =>
       Test_Blueprint_Invocation(
         method: json['method'] ?? '',
-        serializedRequest: decodeBytes(json['serializedRequest']),
+        serializedRequest:
+            decodeBytes(json['serializedRequest']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     if (method.isNotDefault) 'method': method,
-    if (serializedRequest != null)
+    if (serializedRequest.isNotDefault)
       'serializedRequest': encodeBytes(serializedRequest),
   };
 
@@ -5596,7 +5601,7 @@ final class Test_Blueprint_Invocation extends ProtoMessage {
   String toString() {
     final contents = [
       'method=$method',
-      if (serializedRequest != null) 'serializedRequest=$serializedRequest',
+      'serializedRequest=$serializedRequest',
     ].join(',');
     return 'Invocation($contents)';
   }
@@ -5878,34 +5883,35 @@ final class VerifyTestRequest extends ProtoMessage {
   final String name;
 
   /// The answer from the test.
-  final Uint8List? answer;
+  final Uint8List answer;
 
   /// The answers from the test if multiple are to be checked
-  final List<Uint8List>? answers;
+  final List<Uint8List> answers;
 
-  VerifyTestRequest({this.name = '', this.answer, this.answers})
-    : super(fullyQualifiedName);
+  VerifyTestRequest({
+    this.name = '',
+    Uint8List? answer,
+    this.answers = const [],
+  }) : answer = answer ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory VerifyTestRequest.fromJson(Map<String, dynamic> json) =>
       VerifyTestRequest(
         name: json['name'] ?? '',
-        answer: decodeBytes(json['answer']),
-        answers: decodeListBytes(json['answers']),
+        answer: decodeBytes(json['answer']) ?? Uint8List(0),
+        answers: decodeListBytes(json['answers']) ?? [],
       );
 
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (answer != null) 'answer': encodeBytes(answer),
-    if (answers != null) 'answers': encodeListBytes(answers),
+    if (answer.isNotDefault) 'answer': encodeBytes(answer),
+    if (answers.isNotDefault) 'answers': encodeListBytes(answers),
   };
 
   @override
   String toString() {
-    final contents = [
-      'name=$name',
-      if (answer != null) 'answer=$answer',
-    ].join(',');
+    final contents = ['name=$name', 'answer=$answer'].join(',');
     return 'VerifyTestRequest($contents)';
   }
 }

@@ -191,3 +191,7 @@ extension MapProtoDefault on Map<dynamic, dynamic> {
   /// Whether this is the proto default value for [Map] (an empty map).
   bool get isNotDefault => isNotEmpty;
 }
+
+extension Uint8ListDefault on Uint8List {
+  bool get isNotDefault => isNotEmpty;
+}

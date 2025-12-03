@@ -16234,7 +16234,7 @@ final class Part extends ProtoMessage {
 
   /// An opaque signature for the thought so it can be reused in subsequent
   /// requests.
-  final Uint8List? thoughtSignature;
+  final Uint8List thoughtSignature;
 
   Part({
     this.text,
@@ -16246,8 +16246,9 @@ final class Part extends ProtoMessage {
     this.codeExecutionResult,
     this.videoMetadata,
     this.thought = false,
-    this.thoughtSignature,
-  }) : super(fullyQualifiedName);
+    Uint8List? thoughtSignature,
+  }) : thoughtSignature = thoughtSignature ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory Part.fromJson(Map<String, dynamic> json) => Part(
     text: json['text'],
@@ -16265,7 +16266,7 @@ final class Part extends ProtoMessage {
     ),
     videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
     thought: json['thought'] ?? false,
-    thoughtSignature: decodeBytes(json['thoughtSignature']),
+    thoughtSignature: decodeBytes(json['thoughtSignature']) ?? Uint8List(0),
   );
 
   @override
@@ -16281,7 +16282,7 @@ final class Part extends ProtoMessage {
       'codeExecutionResult': codeExecutionResult!.toJson(),
     if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
     if (thought.isNotDefault) 'thought': thought,
-    if (thoughtSignature != null)
+    if (thoughtSignature.isNotDefault)
       'thoughtSignature': encodeBytes(thoughtSignature),
   };
 
@@ -16290,7 +16291,7 @@ final class Part extends ProtoMessage {
     final contents = [
       if (text != null) 'text=$text',
       'thought=$thought',
-      if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
+      'thoughtSignature=$thoughtSignature',
     ].join(',');
     return 'Part($contents)';
   }
@@ -16308,26 +16309,22 @@ final class Blob extends ProtoMessage {
   final String mimeType;
 
   /// Required. Raw bytes.
-  final Uint8List? data;
+  final Uint8List data;
 
   Blob({required this.mimeType, required this.data})
     : super(fullyQualifiedName);
 
-  factory Blob.fromJson(Map<String, dynamic> json) =>
-      Blob(mimeType: json['mimeType'] ?? '', data: decodeBytes(json['data']));
+  factory Blob.fromJson(Map<String, dynamic> json) => Blob(
+    mimeType: json['mimeType'] ?? '',
+    data: decodeBytes(json['data']) ?? Uint8List(0),
+  );
 
   @override
-  Object toJson() => {
-    'mimeType': mimeType,
-    if (data != null) 'data': encodeBytes(data),
-  };
+  Object toJson() => {'mimeType': mimeType, 'data': encodeBytes(data)};
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'Blob($contents)';
   }
 }
@@ -18340,28 +18337,29 @@ final class SearchEntryPoint extends ProtoMessage {
 
   /// Optional. Base64 encoded JSON representing array of <search term, search
   /// url> tuple.
-  final Uint8List? sdkBlob;
+  final Uint8List sdkBlob;
 
-  SearchEntryPoint({this.renderedContent = '', this.sdkBlob})
-    : super(fullyQualifiedName);
+  SearchEntryPoint({this.renderedContent = '', Uint8List? sdkBlob})
+    : sdkBlob = sdkBlob ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory SearchEntryPoint.fromJson(Map<String, dynamic> json) =>
       SearchEntryPoint(
         renderedContent: json['renderedContent'] ?? '',
-        sdkBlob: decodeBytes(json['sdkBlob']),
+        sdkBlob: decodeBytes(json['sdkBlob']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     if (renderedContent.isNotDefault) 'renderedContent': renderedContent,
-    if (sdkBlob != null) 'sdkBlob': encodeBytes(sdkBlob),
+    if (sdkBlob.isNotDefault) 'sdkBlob': encodeBytes(sdkBlob),
   };
 
   @override
   String toString() {
     final contents = [
       'renderedContent=$renderedContent',
-      if (sdkBlob != null) 'sdkBlob=$sdkBlob',
+      'sdkBlob=$sdkBlob',
     ].join(',');
     return 'SearchEntryPoint($contents)';
   }
@@ -52192,7 +52190,7 @@ final class TokensInfo extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.TokensInfo';
 
   /// A list of tokens from the input.
-  final List<Uint8List>? tokens;
+  final List<Uint8List> tokens;
 
   /// A list of token ids from the input.
   final List<int> tokenIds;
@@ -52200,18 +52198,18 @@ final class TokensInfo extends ProtoMessage {
   /// Optional. Optional fields for the role from the corresponding Content.
   final String role;
 
-  TokensInfo({this.tokens, this.tokenIds = const [], this.role = ''})
+  TokensInfo({this.tokens = const [], this.tokenIds = const [], this.role = ''})
     : super(fullyQualifiedName);
 
   factory TokensInfo.fromJson(Map<String, dynamic> json) => TokensInfo(
-    tokens: decodeListBytes(json['tokens']),
+    tokens: decodeListBytes(json['tokens']) ?? [],
     tokenIds: decodeList(json['tokenIds']) ?? [],
     role: json['role'] ?? '',
   );
 
   @override
   Object toJson() => {
-    if (tokens != null) 'tokens': encodeListBytes(tokens),
+    if (tokens.isNotDefault) 'tokens': encodeListBytes(tokens),
     if (tokenIds.isNotDefault) 'tokenIds': tokenIds,
     if (role.isNotDefault) 'role': role,
   };
@@ -67957,23 +67955,26 @@ final class NotebookExecutionJob_DirectNotebookSource extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.NotebookExecutionJob.DirectNotebookSource';
 
   /// The base64-encoded contents of the input notebook file.
-  final Uint8List? content;
+  final Uint8List content;
 
-  NotebookExecutionJob_DirectNotebookSource({this.content})
-    : super(fullyQualifiedName);
+  NotebookExecutionJob_DirectNotebookSource({Uint8List? content})
+    : content = content ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory NotebookExecutionJob_DirectNotebookSource.fromJson(
     Map<String, dynamic> json,
   ) => NotebookExecutionJob_DirectNotebookSource(
-    content: decodeBytes(json['content']),
+    content: decodeBytes(json['content']) ?? Uint8List(0),
   );
 
   @override
-  Object toJson() => {if (content != null) 'content': encodeBytes(content)};
+  Object toJson() => {
+    if (content.isNotDefault) 'content': encodeBytes(content),
+  };
 
   @override
   String toString() {
-    final contents = [if (content != null) 'content=$content'].join(',');
+    final contents = ['content=$content'].join(',');
     return 'DirectNotebookSource($contents)';
   }
 }
@@ -73487,26 +73488,27 @@ final class DirectRawPredictRequest extends ProtoMessage {
   final String methodName;
 
   /// The prediction input.
-  final Uint8List? input;
+  final Uint8List input;
 
   DirectRawPredictRequest({
     required this.endpoint,
     this.methodName = '',
-    this.input,
-  }) : super(fullyQualifiedName);
+    Uint8List? input,
+  }) : input = input ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory DirectRawPredictRequest.fromJson(Map<String, dynamic> json) =>
       DirectRawPredictRequest(
         endpoint: json['endpoint'] ?? '',
         methodName: json['methodName'] ?? '',
-        input: decodeBytes(json['input']),
+        input: decodeBytes(json['input']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     'endpoint': endpoint,
     if (methodName.isNotDefault) 'methodName': methodName,
-    if (input != null) 'input': encodeBytes(input),
+    if (input.isNotDefault) 'input': encodeBytes(input),
   };
 
   @override
@@ -73514,7 +73516,7 @@ final class DirectRawPredictRequest extends ProtoMessage {
     final contents = [
       'endpoint=$endpoint',
       'methodName=$methodName',
-      if (input != null) 'input=$input',
+      'input=$input',
     ].join(',');
     return 'DirectRawPredictRequest($contents)';
   }
@@ -73527,19 +73529,23 @@ final class DirectRawPredictResponse extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.DirectRawPredictResponse';
 
   /// The prediction output.
-  final Uint8List? output;
+  final Uint8List output;
 
-  DirectRawPredictResponse({this.output}) : super(fullyQualifiedName);
+  DirectRawPredictResponse({Uint8List? output})
+    : output = output ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory DirectRawPredictResponse.fromJson(Map<String, dynamic> json) =>
-      DirectRawPredictResponse(output: decodeBytes(json['output']));
+      DirectRawPredictResponse(
+        output: decodeBytes(json['output']) ?? Uint8List(0),
+      );
 
   @override
-  Object toJson() => {if (output != null) 'output': encodeBytes(output)};
+  Object toJson() => {if (output.isNotDefault) 'output': encodeBytes(output)};
 
   @override
   String toString() {
-    final contents = [if (output != null) 'output=$output'].join(',');
+    final contents = ['output=$output'].join(',');
     return 'DirectRawPredictResponse($contents)';
   }
 }
@@ -73656,26 +73662,27 @@ final class StreamDirectRawPredictRequest extends ProtoMessage {
   final String methodName;
 
   /// Optional. The prediction input.
-  final Uint8List? input;
+  final Uint8List input;
 
   StreamDirectRawPredictRequest({
     required this.endpoint,
     this.methodName = '',
-    this.input,
-  }) : super(fullyQualifiedName);
+    Uint8List? input,
+  }) : input = input ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory StreamDirectRawPredictRequest.fromJson(Map<String, dynamic> json) =>
       StreamDirectRawPredictRequest(
         endpoint: json['endpoint'] ?? '',
         methodName: json['methodName'] ?? '',
-        input: decodeBytes(json['input']),
+        input: decodeBytes(json['input']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     'endpoint': endpoint,
     if (methodName.isNotDefault) 'methodName': methodName,
-    if (input != null) 'input': encodeBytes(input),
+    if (input.isNotDefault) 'input': encodeBytes(input),
   };
 
   @override
@@ -73683,7 +73690,7 @@ final class StreamDirectRawPredictRequest extends ProtoMessage {
     final contents = [
       'endpoint=$endpoint',
       'methodName=$methodName',
-      if (input != null) 'input=$input',
+      'input=$input',
     ].join(',');
     return 'StreamDirectRawPredictRequest($contents)';
   }
@@ -73696,19 +73703,23 @@ final class StreamDirectRawPredictResponse extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.StreamDirectRawPredictResponse';
 
   /// The prediction output.
-  final Uint8List? output;
+  final Uint8List output;
 
-  StreamDirectRawPredictResponse({this.output}) : super(fullyQualifiedName);
+  StreamDirectRawPredictResponse({Uint8List? output})
+    : output = output ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory StreamDirectRawPredictResponse.fromJson(Map<String, dynamic> json) =>
-      StreamDirectRawPredictResponse(output: decodeBytes(json['output']));
+      StreamDirectRawPredictResponse(
+        output: decodeBytes(json['output']) ?? Uint8List(0),
+      );
 
   @override
-  Object toJson() => {if (output != null) 'output': encodeBytes(output)};
+  Object toJson() => {if (output.isNotDefault) 'output': encodeBytes(output)};
 
   @override
   String toString() {
-    final contents = [if (output != null) 'output=$output'].join(',');
+    final contents = ['output=$output'].join(',');
     return 'StreamDirectRawPredictResponse($contents)';
   }
 }
@@ -73825,26 +73836,27 @@ final class StreamingRawPredictRequest extends ProtoMessage {
   final String methodName;
 
   /// The prediction input.
-  final Uint8List? input;
+  final Uint8List input;
 
   StreamingRawPredictRequest({
     required this.endpoint,
     this.methodName = '',
-    this.input,
-  }) : super(fullyQualifiedName);
+    Uint8List? input,
+  }) : input = input ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory StreamingRawPredictRequest.fromJson(Map<String, dynamic> json) =>
       StreamingRawPredictRequest(
         endpoint: json['endpoint'] ?? '',
         methodName: json['methodName'] ?? '',
-        input: decodeBytes(json['input']),
+        input: decodeBytes(json['input']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     'endpoint': endpoint,
     if (methodName.isNotDefault) 'methodName': methodName,
-    if (input != null) 'input': encodeBytes(input),
+    if (input.isNotDefault) 'input': encodeBytes(input),
   };
 
   @override
@@ -73852,7 +73864,7 @@ final class StreamingRawPredictRequest extends ProtoMessage {
     final contents = [
       'endpoint=$endpoint',
       'methodName=$methodName',
-      if (input != null) 'input=$input',
+      'input=$input',
     ].join(',');
     return 'StreamingRawPredictRequest($contents)';
   }
@@ -73865,19 +73877,23 @@ final class StreamingRawPredictResponse extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.StreamingRawPredictResponse';
 
   /// The prediction output.
-  final Uint8List? output;
+  final Uint8List output;
 
-  StreamingRawPredictResponse({this.output}) : super(fullyQualifiedName);
+  StreamingRawPredictResponse({Uint8List? output})
+    : output = output ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory StreamingRawPredictResponse.fromJson(Map<String, dynamic> json) =>
-      StreamingRawPredictResponse(output: decodeBytes(json['output']));
+      StreamingRawPredictResponse(
+        output: decodeBytes(json['output']) ?? Uint8List(0),
+      );
 
   @override
-  Object toJson() => {if (output != null) 'output': encodeBytes(output)};
+  Object toJson() => {if (output.isNotDefault) 'output': encodeBytes(output)};
 
   @override
   String toString() {
-    final contents = [if (output != null) 'output=$output'].join(',');
+    final contents = ['output=$output'].join(',');
     return 'StreamingRawPredictResponse($contents)';
   }
 }
@@ -75953,7 +75969,7 @@ final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
   /// Required. Input only. The application source code archive, provided as
   /// a compressed tarball
   /// (.tar.gz) file.
-  final Uint8List? sourceArchive;
+  final Uint8List sourceArchive;
 
   ReasoningEngineSpec_SourceCodeSpec_InlineSource({required this.sourceArchive})
     : super(fullyQualifiedName);
@@ -75961,19 +75977,15 @@ final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
   factory ReasoningEngineSpec_SourceCodeSpec_InlineSource.fromJson(
     Map<String, dynamic> json,
   ) => ReasoningEngineSpec_SourceCodeSpec_InlineSource(
-    sourceArchive: decodeBytes(json['sourceArchive']),
+    sourceArchive: decodeBytes(json['sourceArchive']) ?? Uint8List(0),
   );
 
   @override
-  Object toJson() => {
-    if (sourceArchive != null) 'sourceArchive': encodeBytes(sourceArchive),
-  };
+  Object toJson() => {'sourceArchive': encodeBytes(sourceArchive)};
 
   @override
   String toString() {
-    final contents = [
-      if (sourceArchive != null) 'sourceArchive=$sourceArchive',
-    ].join(',');
+    final contents = ['sourceArchive=$sourceArchive'].join(',');
     return 'InlineSource($contents)';
   }
 }
@@ -81061,7 +81073,7 @@ final class TensorboardTensor extends ProtoMessage {
 
   /// Required. Serialized form of
   /// https://github.com/tensorflow/tensorflow/blob/master/tensorflow/core/framework/tensor.proto
-  final Uint8List? value;
+  final Uint8List value;
 
   /// Optional. Version number of TensorProto used to serialize
   /// `value`.
@@ -81072,22 +81084,19 @@ final class TensorboardTensor extends ProtoMessage {
 
   factory TensorboardTensor.fromJson(Map<String, dynamic> json) =>
       TensorboardTensor(
-        value: decodeBytes(json['value']),
+        value: decodeBytes(json['value']) ?? Uint8List(0),
         versionNumber: json['versionNumber'] ?? 0,
       );
 
   @override
   Object toJson() => {
-    if (value != null) 'value': encodeBytes(value),
+    'value': encodeBytes(value),
     if (versionNumber.isNotDefault) 'versionNumber': versionNumber,
   };
 
   @override
   String toString() {
-    final contents = [
-      if (value != null) 'value=$value',
-      'versionNumber=$versionNumber',
-    ].join(',');
+    final contents = ['value=$value', 'versionNumber=$versionNumber'].join(',');
     return 'TensorboardTensor($contents)';
   }
 }
@@ -81127,22 +81136,27 @@ final class TensorboardBlob extends ProtoMessage {
 
   /// Optional. The bytes of the blob is not present unless it's returned by the
   /// ReadTensorboardBlobData endpoint.
-  final Uint8List? data;
+  final Uint8List data;
 
-  TensorboardBlob({this.id = '', this.data}) : super(fullyQualifiedName);
+  TensorboardBlob({this.id = '', Uint8List? data})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory TensorboardBlob.fromJson(Map<String, dynamic> json) =>
-      TensorboardBlob(id: json['id'] ?? '', data: decodeBytes(json['data']));
+      TensorboardBlob(
+        id: json['id'] ?? '',
+        data: decodeBytes(json['data']) ?? Uint8List(0),
+      );
 
   @override
   Object toJson() => {
     if (id.isNotDefault) 'id': id,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
   };
 
   @override
   String toString() {
-    final contents = ['id=$id', if (data != null) 'data=$data'].join(',');
+    final contents = ['id=$id', 'data=$data'].join(',');
     return 'TensorboardBlob($contents)';
   }
 }
@@ -83306,7 +83320,7 @@ final class TensorboardTimeSeries extends ProtoMessage {
   final String pluginName;
 
   /// Data of the current plugin, with the size limited to 65KB.
-  final Uint8List? pluginData;
+  final Uint8List pluginData;
 
   /// Output only. Scalar, Tensor, or Blob metadata for this
   /// TensorboardTimeSeries.
@@ -83321,9 +83335,10 @@ final class TensorboardTimeSeries extends ProtoMessage {
     this.updateTime,
     this.etag = '',
     this.pluginName = '',
-    this.pluginData,
+    Uint8List? pluginData,
     this.metadata,
-  }) : super(fullyQualifiedName);
+  }) : pluginData = pluginData ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory TensorboardTimeSeries.fromJson(
     Map<String, dynamic> json,
@@ -83341,7 +83356,7 @@ final class TensorboardTimeSeries extends ProtoMessage {
     updateTime: decodeCustom(json['updateTime'], protobuf.Timestamp.fromJson),
     etag: json['etag'] ?? '',
     pluginName: json['pluginName'] ?? '',
-    pluginData: decodeBytes(json['pluginData']),
+    pluginData: decodeBytes(json['pluginData']) ?? Uint8List(0),
     metadata: decode(json['metadata'], TensorboardTimeSeries_Metadata.fromJson),
   );
 
@@ -83355,7 +83370,7 @@ final class TensorboardTimeSeries extends ProtoMessage {
     if (updateTime != null) 'updateTime': updateTime!.toJson(),
     if (etag.isNotDefault) 'etag': etag,
     if (pluginName.isNotDefault) 'pluginName': pluginName,
-    if (pluginData != null) 'pluginData': encodeBytes(pluginData),
+    if (pluginData.isNotDefault) 'pluginData': encodeBytes(pluginData),
     if (metadata != null) 'metadata': metadata!.toJson(),
   };
 
@@ -83368,7 +83383,7 @@ final class TensorboardTimeSeries extends ProtoMessage {
       'valueType=$valueType',
       'etag=$etag',
       'pluginName=$pluginName',
-      if (pluginData != null) 'pluginData=$pluginData',
+      'pluginData=$pluginData',
     ].join(',');
     return 'TensorboardTimeSeries($contents)';
   }
@@ -87476,7 +87491,7 @@ final class Tensor extends ProtoMessage {
   final List<String> stringVal;
 
   /// `STRING`
-  final List<Uint8List>? bytesVal;
+  final List<Uint8List> bytesVal;
 
   /// `FLOAT`
   final List<double> floatVal;
@@ -87507,14 +87522,14 @@ final class Tensor extends ProtoMessage {
   final Map<String, Tensor> structVal;
 
   /// Serialized raw tensor content.
-  final Uint8List? tensorVal;
+  final Uint8List tensorVal;
 
   Tensor({
     this.dtype = Tensor_DataType.$default,
     this.shape = const [],
     this.boolVal = const [],
     this.stringVal = const [],
-    this.bytesVal,
+    this.bytesVal = const [],
     this.floatVal = const [],
     this.doubleVal = const [],
     this.intVal = const [],
@@ -87523,8 +87538,9 @@ final class Tensor extends ProtoMessage {
     this.uint64Val = const [],
     this.listVal = const [],
     this.structVal = const {},
-    this.tensorVal,
-  }) : super(fullyQualifiedName);
+    Uint8List? tensorVal,
+  }) : tensorVal = tensorVal ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory Tensor.fromJson(Map<String, dynamic> json) => Tensor(
     dtype:
@@ -87533,7 +87549,7 @@ final class Tensor extends ProtoMessage {
     shape: decodeList(json['shape']) ?? [],
     boolVal: decodeList(json['boolVal']) ?? [],
     stringVal: decodeList(json['stringVal']) ?? [],
-    bytesVal: decodeListBytes(json['bytesVal']),
+    bytesVal: decodeListBytes(json['bytesVal']) ?? [],
     floatVal: decodeList(json['floatVal']) ?? [],
     doubleVal: decodeList(json['doubleVal']) ?? [],
     intVal: decodeList(json['intVal']) ?? [],
@@ -87542,7 +87558,7 @@ final class Tensor extends ProtoMessage {
     uint64Val: decodeList(json['uint64Val']) ?? [],
     listVal: decodeListMessage(json['listVal'], Tensor.fromJson) ?? [],
     structVal: decodeMapMessage(json['structVal'], Tensor.fromJson) ?? {},
-    tensorVal: decodeBytes(json['tensorVal']),
+    tensorVal: decodeBytes(json['tensorVal']) ?? Uint8List(0),
   );
 
   @override
@@ -87551,7 +87567,7 @@ final class Tensor extends ProtoMessage {
     if (shape.isNotDefault) 'shape': shape,
     if (boolVal.isNotDefault) 'boolVal': boolVal,
     if (stringVal.isNotDefault) 'stringVal': stringVal,
-    if (bytesVal != null) 'bytesVal': encodeListBytes(bytesVal),
+    if (bytesVal.isNotDefault) 'bytesVal': encodeListBytes(bytesVal),
     if (floatVal.isNotDefault) 'floatVal': floatVal,
     if (doubleVal.isNotDefault) 'doubleVal': doubleVal,
     if (intVal.isNotDefault) 'intVal': intVal,
@@ -87560,15 +87576,12 @@ final class Tensor extends ProtoMessage {
     if (uint64Val.isNotDefault) 'uint64Val': uint64Val,
     if (listVal.isNotDefault) 'listVal': encodeList(listVal),
     if (structVal.isNotDefault) 'structVal': encodeMap(structVal),
-    if (tensorVal != null) 'tensorVal': encodeBytes(tensorVal),
+    if (tensorVal.isNotDefault) 'tensorVal': encodeBytes(tensorVal),
   };
 
   @override
   String toString() {
-    final contents = [
-      'dtype=$dtype',
-      if (tensorVal != null) 'tensorVal=$tensorVal',
-    ].join(',');
+    final contents = ['dtype=$dtype', 'tensorVal=$tensorVal'].join(',');
     return 'Tensor($contents)';
   }
 }

@@ -457,7 +457,7 @@ class _StringValueHelper {
 }
 
 class _BytesValueHelper {
-  static String encode(BytesValue value) => encodeBytes(value.value!)!;
+  static String encode(BytesValue value) => encodeBytes(value.value)!;
 
   static BytesValue decode(Object value) =>
       BytesValue(value: decodeBytes(value as String));

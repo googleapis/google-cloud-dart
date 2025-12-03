@@ -457,21 +457,22 @@ final class Policy extends ProtoMessage {
   /// whenever you call `setIamPolicy`. If you omit this field, then IAM allows
   /// you to overwrite a version `3` policy with a version `1` policy, and all of
   /// the conditions in the version `3` policy are lost.
-  final Uint8List? etag;
+  final Uint8List etag;
 
   Policy({
     this.version = 0,
     this.bindings = const [],
     this.auditConfigs = const [],
-    this.etag,
-  }) : super(fullyQualifiedName);
+    Uint8List? etag,
+  }) : etag = etag ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory Policy.fromJson(Map<String, dynamic> json) => Policy(
     version: json['version'] ?? 0,
     bindings: decodeListMessage(json['bindings'], Binding.fromJson) ?? [],
     auditConfigs:
         decodeListMessage(json['auditConfigs'], AuditConfig.fromJson) ?? [],
-    etag: decodeBytes(json['etag']),
+    etag: decodeBytes(json['etag']) ?? Uint8List(0),
   );
 
   @override
@@ -479,15 +480,12 @@ final class Policy extends ProtoMessage {
     if (version.isNotDefault) 'version': version,
     if (bindings.isNotDefault) 'bindings': encodeList(bindings),
     if (auditConfigs.isNotDefault) 'auditConfigs': encodeList(auditConfigs),
-    if (etag != null) 'etag': encodeBytes(etag),
+    if (etag.isNotDefault) 'etag': encodeBytes(etag),
   };
 
   @override
   String toString() {
-    final contents = [
-      'version=$version',
-      if (etag != null) 'etag=$etag',
-    ].join(',');
+    final contents = ['version=$version', 'etag=$etag'].join(',');
     return 'Policy($contents)';
   }
 }

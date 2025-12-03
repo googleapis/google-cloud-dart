@@ -2157,7 +2157,7 @@ final class Part extends ProtoMessage {
 
   /// Optional. An opaque signature for the thought so it can be reused in
   /// subsequent requests.
-  final Uint8List? thoughtSignature;
+  final Uint8List thoughtSignature;
 
   /// Custom metadata associated with the Part.
   /// Agents using genai.Part as content representation may need to keep track
@@ -2175,9 +2175,10 @@ final class Part extends ProtoMessage {
     this.codeExecutionResult,
     this.videoMetadata,
     this.thought = false,
-    this.thoughtSignature,
+    Uint8List? thoughtSignature,
     this.partMetadata,
-  }) : super(fullyQualifiedName);
+  }) : thoughtSignature = thoughtSignature ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory Part.fromJson(Map<String, dynamic> json) => Part(
     text: json['text'],
@@ -2195,7 +2196,7 @@ final class Part extends ProtoMessage {
     ),
     videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
     thought: json['thought'] ?? false,
-    thoughtSignature: decodeBytes(json['thoughtSignature']),
+    thoughtSignature: decodeBytes(json['thoughtSignature']) ?? Uint8List(0),
     partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
   );
 
@@ -2212,7 +2213,7 @@ final class Part extends ProtoMessage {
       'codeExecutionResult': codeExecutionResult!.toJson(),
     if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
     if (thought.isNotDefault) 'thought': thought,
-    if (thoughtSignature != null)
+    if (thoughtSignature.isNotDefault)
       'thoughtSignature': encodeBytes(thoughtSignature),
     if (partMetadata != null) 'partMetadata': partMetadata!.toJson(),
   };
@@ -2222,7 +2223,7 @@ final class Part extends ProtoMessage {
     final contents = [
       if (text != null) 'text=$text',
       'thought=$thought',
-      if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
+      'thoughtSignature=$thoughtSignature',
     ].join(',');
     return 'Part($contents)';
   }
@@ -2277,25 +2278,26 @@ final class Blob extends ProtoMessage {
   final String mimeType;
 
   /// Raw bytes for media formats.
-  final Uint8List? data;
+  final Uint8List data;
 
-  Blob({this.mimeType = '', this.data}) : super(fullyQualifiedName);
+  Blob({this.mimeType = '', Uint8List? data})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
-  factory Blob.fromJson(Map<String, dynamic> json) =>
-      Blob(mimeType: json['mimeType'] ?? '', data: decodeBytes(json['data']));
+  factory Blob.fromJson(Map<String, dynamic> json) => Blob(
+    mimeType: json['mimeType'] ?? '',
+    data: decodeBytes(json['data']) ?? Uint8List(0),
+  );
 
   @override
   Object toJson() => {
     if (mimeType.isNotDefault) 'mimeType': mimeType,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
   };
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'Blob($contents)';
   }
 }
@@ -2318,29 +2320,27 @@ final class FunctionResponseBlob extends ProtoMessage {
   final String mimeType;
 
   /// Raw bytes for media formats.
-  final Uint8List? data;
+  final Uint8List data;
 
-  FunctionResponseBlob({this.mimeType = '', this.data})
-    : super(fullyQualifiedName);
+  FunctionResponseBlob({this.mimeType = '', Uint8List? data})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) =>
       FunctionResponseBlob(
         mimeType: json['mimeType'] ?? '',
-        data: decodeBytes(json['data']),
+        data: decodeBytes(json['data']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     if (mimeType.isNotDefault) 'mimeType': mimeType,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
   };
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'FunctionResponseBlob($contents)';
   }
 }
@@ -3970,7 +3970,7 @@ final class File extends ProtoMessage {
   final Timestamp? expirationTime;
 
   /// Output only. SHA-256 hash of the uploaded bytes.
-  final Uint8List? sha256Hash;
+  final Uint8List sha256Hash;
 
   /// Output only. The uri of the `File`.
   final String uri;
@@ -3996,13 +3996,14 @@ final class File extends ProtoMessage {
     this.createTime,
     this.updateTime,
     this.expirationTime,
-    this.sha256Hash,
+    Uint8List? sha256Hash,
     this.uri = '',
     this.downloadUri = '',
     this.state = File_State.$default,
     this.source = File_Source.$default,
     this.error,
-  }) : super(fullyQualifiedName);
+  }) : sha256Hash = sha256Hash ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory File.fromJson(Map<String, dynamic> json) => File(
     videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
@@ -4013,7 +4014,7 @@ final class File extends ProtoMessage {
     createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
     updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
     expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
-    sha256Hash: decodeBytes(json['sha256Hash']),
+    sha256Hash: decodeBytes(json['sha256Hash']) ?? Uint8List(0),
     uri: json['uri'] ?? '',
     downloadUri: json['downloadUri'] ?? '',
     state:
@@ -4034,7 +4035,7 @@ final class File extends ProtoMessage {
     if (createTime != null) 'createTime': createTime!.toJson(),
     if (updateTime != null) 'updateTime': updateTime!.toJson(),
     if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
-    if (sha256Hash != null) 'sha256Hash': encodeBytes(sha256Hash),
+    if (sha256Hash.isNotDefault) 'sha256Hash': encodeBytes(sha256Hash),
     if (uri.isNotDefault) 'uri': uri,
     if (downloadUri.isNotDefault) 'downloadUri': downloadUri,
     if (state.isNotDefault) 'state': state.toJson(),
@@ -4049,7 +4050,7 @@ final class File extends ProtoMessage {
       'displayName=$displayName',
       'mimeType=$mimeType',
       'sizeBytes=$sizeBytes',
-      if (sha256Hash != null) 'sha256Hash=$sha256Hash',
+      'sha256Hash=$sha256Hash',
       'uri=$uri',
       'downloadUri=$downloadUri',
       'state=$state',
@@ -6146,28 +6147,29 @@ final class SearchEntryPoint extends ProtoMessage {
 
   /// Optional. Base64 encoded JSON representing array of <search term, search
   /// url> tuple.
-  final Uint8List? sdkBlob;
+  final Uint8List sdkBlob;
 
-  SearchEntryPoint({this.renderedContent = '', this.sdkBlob})
-    : super(fullyQualifiedName);
+  SearchEntryPoint({this.renderedContent = '', Uint8List? sdkBlob})
+    : sdkBlob = sdkBlob ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory SearchEntryPoint.fromJson(Map<String, dynamic> json) =>
       SearchEntryPoint(
         renderedContent: json['renderedContent'] ?? '',
-        sdkBlob: decodeBytes(json['sdkBlob']),
+        sdkBlob: decodeBytes(json['sdkBlob']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     if (renderedContent.isNotDefault) 'renderedContent': renderedContent,
-    if (sdkBlob != null) 'sdkBlob': encodeBytes(sdkBlob),
+    if (sdkBlob.isNotDefault) 'sdkBlob': encodeBytes(sdkBlob),
   };
 
   @override
   String toString() {
     final contents = [
       'renderedContent=$renderedContent',
-      if (sdkBlob != null) 'sdkBlob=$sdkBlob',
+      'sdkBlob=$sdkBlob',
     ].join(',');
     return 'SearchEntryPoint($contents)';
   }

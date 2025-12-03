@@ -1164,7 +1164,7 @@ final class SecretPayload extends ProtoMessage {
       'google.cloud.secretmanager.v1.SecretPayload';
 
   /// The secret data. Must be no larger than 64KiB.
-  final Uint8List? data;
+  final Uint8List data;
 
   /// Optional. If specified,
   /// `SecretManagerService`
@@ -1184,23 +1184,25 @@ final class SecretPayload extends ProtoMessage {
   /// https://cloud.google.com/apis/design/design_patterns#integer_types
   final int? dataCrc32C;
 
-  SecretPayload({this.data, this.dataCrc32C}) : super(fullyQualifiedName);
+  SecretPayload({Uint8List? data, this.dataCrc32C})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory SecretPayload.fromJson(Map<String, dynamic> json) => SecretPayload(
-    data: decodeBytes(json['data']),
+    data: decodeBytes(json['data']) ?? Uint8List(0),
     dataCrc32C: decodeInt64(json['dataCrc32c']),
   );
 
   @override
   Object toJson() => {
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
     if (dataCrc32C != null) 'dataCrc32c': encodeInt64(dataCrc32C),
   };
 
   @override
   String toString() {
     final contents = [
-      if (data != null) 'data=$data',
+      'data=$data',
       if (dataCrc32C != null) 'dataCrc32c=$dataCrc32C',
     ].join(',');
     return 'SecretPayload($contents)';

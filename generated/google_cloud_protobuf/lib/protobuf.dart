@@ -1403,9 +1403,11 @@ final class BytesValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BytesValue';
 
   /// The bytes value.
-  final Uint8List? value;
+  final Uint8List value;
 
-  BytesValue({this.value}) : super(fullyQualifiedName);
+  BytesValue({Uint8List? value})
+    : value = value ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory BytesValue.fromJson(Object json) => _BytesValueHelper.decode(json);
 
@@ -1414,7 +1416,7 @@ final class BytesValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'BytesValue($contents)';
   }
 }
