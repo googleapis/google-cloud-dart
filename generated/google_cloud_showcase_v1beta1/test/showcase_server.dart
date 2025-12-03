@@ -62,17 +62,29 @@ class ShowcaseServer {
 
     await process.stdin.close();
 
+    unawaited(
+      process.exitCode.then((exitCode) {
+        if (exitCode != 0 && !serverStarted.isCompleted) {
+          serverStarted.completeError(
+            Exception(
+              'Showcase server exited with code $exitCode before starting.',
+            ),
+          );
+        }
+      }),
+    );
+
     process.stderr
         .transform(utf8.decoder)
         .transform(const LineSplitter())
         .listen((line) {
+          stderr.writeln(line);
           if (line.contains('Showcase failed to listen on port')) {
             process.kill(ProcessSignal.sigkill);
             serverStarted.completeError(
               PortInUseException('Showcase port already in use: $line'),
             );
           }
-          if (serverStarted.isCompleted) stderr.writeln(line);
         });
 
     process.stdout
@@ -92,12 +104,12 @@ class ShowcaseServer {
       try {
         return await _run();
       } on PortInUseException {
-        if (i == 10) {
+        if (i >= 9) {
           rethrow;
         } else {
           stderr.writeln(
-            'Showcase port already is use (maybe it is being used by '
-            'another test?), will try again in 2s.',
+            'Showcase port already is already in use (maybe it is being used '
+            'by another test?), will try again in 2s.',
           );
           await Future<void>.delayed(const Duration(seconds: 2));
         }

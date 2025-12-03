@@ -12,5 +12,5 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# Only one instance of the Showcase server can be running oat once.
+# Only one instance of the Showcase server can be running at once.
 concurrency: 1

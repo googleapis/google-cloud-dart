@@ -14,7 +14,7 @@
 
 @TestOn('vm')
 /// Test using the Showcase
-/// [`Compliance` service].(https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto)
+/// [`Compliance` service](https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto).
 library;
 
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
