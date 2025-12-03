@@ -34,7 +34,7 @@ void main() {
       expect(response.headers, isEmpty);
       expect(response.body, isNotEmpty);
 
-      final body = response.body!;
+      final body = response.body;
       final bodyText = utf8.decode(body);
       expect(bodyText, expectedText);
 

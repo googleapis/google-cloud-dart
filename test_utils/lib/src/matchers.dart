@@ -1,4 +1,3 @@
-import 'package:collection/collection.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:test/test.dart';
 
