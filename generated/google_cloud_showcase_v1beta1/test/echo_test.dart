@@ -25,6 +25,7 @@ import 'package:google_cloud_showcase_v1beta1/showcase.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/insecure_proxy_http_client.dart';
+import 'package:test_utils/matchers.dart';
 
 import 'showcase_server.dart';
 
@@ -204,12 +205,16 @@ void main() async {
       expect(
         response.alphabetized,
         equals({
-          'b': pageWords(['best']),
-          'I': pageWords(['It']),
-          'i': pageWords(['it']),
-          'o': pageWords(['of', 'of']),
-          't': pageWords(['the', 'times,', 'the', 'times']),
-          'w': pageWords(['was', 'was', 'worst']),
+          'b': messageEquals(PagedExpandResponseList(words: ['best'])),
+          'I': messageEquals(PagedExpandResponseList(words: ['It'])),
+          'i': messageEquals(PagedExpandResponseList(words: ['it'])),
+          'o': messageEquals(PagedExpandResponseList(words: ['of', 'of'])),
+          't': messageEquals(
+            PagedExpandResponseList(words: ['the', 'times,', 'the', 'times']),
+          ),
+          'w': messageEquals(
+            PagedExpandResponseList(words: ['was', 'was', 'worst']),
+          ),
         }),
       );
     });
