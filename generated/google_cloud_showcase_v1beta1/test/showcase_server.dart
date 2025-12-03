@@ -18,6 +18,15 @@ import 'dart:io';
 
 import 'package:path/path.dart' as p;
 
+class PortInUseException implements Exception {
+  final String message;
+
+  PortInUseException(this.message);
+
+  @override
+  String toString() => 'PortInUseException: $message';
+}
+
 class ShowcaseServer {
   final Process _process;
 
@@ -47,8 +56,7 @@ class ShowcaseServer {
 
   ShowcaseServer._(this._process);
 
-  static Future<ShowcaseServer> start() async {
-    await _install();
+  static Future<ShowcaseServer> _run() async {
     final process = await Process.start(await _showcasePath(), ['run']);
     final serverStarted = Completer<ShowcaseServer>();
 
@@ -59,11 +67,12 @@ class ShowcaseServer {
         .transform(const LineSplitter())
         .listen((line) {
           if (line.contains('Showcase failed to listen on port')) {
+            process.kill(ProcessSignal.sigkill);
             serverStarted.completeError(
-              StateError('Showcase port already in use: $line'),
+              PortInUseException('Showcase port already in use: $line'),
             );
           }
-          stderr.writeln(line);
+          if (serverStarted.isCompleted) stderr.writeln(line);
         });
 
     process.stdout
@@ -75,6 +84,25 @@ class ShowcaseServer {
           }
         });
     return serverStarted.future;
+  }
+
+  static Future<ShowcaseServer> start() async {
+    await _install();
+    for (var i = 0; ; ++i) {
+      try {
+        return await _run();
+      } on PortInUseException catch (e) {
+        if (i == 10) {
+          rethrow;
+        } else {
+          stderr.writeln(
+            'Showcase port already is use (maybe it is being used by '
+            'another test?), will try again in 2s.',
+          );
+          await Future<void>.delayed(const Duration(seconds: 2));
+        }
+      }
+    }
   }
 
   Future<void> stop() async {
