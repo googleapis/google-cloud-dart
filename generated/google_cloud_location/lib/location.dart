@@ -120,11 +120,15 @@ final class ListLocationsRequest extends ProtoMessage {
   final String pageToken;
 
   ListLocationsRequest({
-    this.name = '',
-    this.filter = '',
-    this.pageSize = 0,
-    this.pageToken = '',
-  }) : super(fullyQualifiedName);
+    String? name,
+    String? filter,
+    int? pageSize,
+    String? pageToken,
+  }) : name = name ?? '',
+       filter = filter ?? '',
+       pageSize = pageSize ?? 0,
+       pageToken = pageToken ?? '',
+       super(fullyQualifiedName);
 
   factory ListLocationsRequest.fromJson(Map<String, dynamic> json) =>
       ListLocationsRequest(
@@ -165,8 +169,9 @@ final class ListLocationsResponse extends ProtoMessage {
   /// The standard List next-page token.
   final String nextPageToken;
 
-  ListLocationsResponse({this.locations = const [], this.nextPageToken = ''})
-    : super(fullyQualifiedName);
+  ListLocationsResponse({this.locations = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListLocationsResponse.fromJson(Map<String, dynamic> json) =>
       ListLocationsResponse(
@@ -196,7 +201,9 @@ final class GetLocationRequest extends ProtoMessage {
   /// Resource name for the location.
   final String name;
 
-  GetLocationRequest({this.name = ''}) : super(fullyQualifiedName);
+  GetLocationRequest({String? name})
+    : name = name ?? '',
+      super(fullyQualifiedName);
 
   factory GetLocationRequest.fromJson(Map<String, dynamic> json) =>
       GetLocationRequest(name: json['name'] ?? '');
@@ -236,12 +243,15 @@ final class Location extends ProtoMessage {
   final Any? metadata;
 
   Location({
-    this.name = '',
-    this.locationId = '',
-    this.displayName = '',
+    String? name,
+    String? locationId,
+    String? displayName,
     this.labels = const {},
     this.metadata,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       locationId = locationId ?? '',
+       displayName = displayName ?? '',
+       super(fullyQualifiedName);
 
   factory Location.fromJson(Map<String, dynamic> json) => Location(
     name: json['name'] ?? '',

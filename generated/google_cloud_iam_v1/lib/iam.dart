@@ -304,8 +304,9 @@ final class GetPolicyOptions extends ProtoMessage {
   /// documentation](https://cloud.google.com/iam/help/conditions/resource-policies).
   final int requestedPolicyVersion;
 
-  GetPolicyOptions({this.requestedPolicyVersion = 0})
-    : super(fullyQualifiedName);
+  GetPolicyOptions({int? requestedPolicyVersion})
+    : requestedPolicyVersion = requestedPolicyVersion ?? 0,
+      super(fullyQualifiedName);
 
   factory GetPolicyOptions.fromJson(Map<String, dynamic> json) =>
       GetPolicyOptions(
@@ -457,21 +458,22 @@ final class Policy extends ProtoMessage {
   /// whenever you call `setIamPolicy`. If you omit this field, then IAM allows
   /// you to overwrite a version `3` policy with a version `1` policy, and all of
   /// the conditions in the version `3` policy are lost.
-  final Uint8List? etag;
+  final Uint8List etag;
 
   Policy({
-    this.version = 0,
+    int? version,
     this.bindings = const [],
     this.auditConfigs = const [],
-    this.etag,
-  }) : super(fullyQualifiedName);
+    this.etag = Uint8List(0),
+  }) : version = version ?? 0,
+       super(fullyQualifiedName);
 
   factory Policy.fromJson(Map<String, dynamic> json) => Policy(
     version: json['version'] ?? 0,
     bindings: decodeListMessage(json['bindings'], Binding.fromJson) ?? [],
     auditConfigs:
         decodeListMessage(json['auditConfigs'], AuditConfig.fromJson) ?? [],
-    etag: decodeBytes(json['etag']),
+    etag: decodeBytes(json['etag']) ?? Uint8List(0),
   );
 
   @override
@@ -479,15 +481,12 @@ final class Policy extends ProtoMessage {
     if (version.isNotDefault) 'version': version,
     if (bindings.isNotDefault) 'bindings': encodeList(bindings),
     if (auditConfigs.isNotDefault) 'auditConfigs': encodeList(auditConfigs),
-    if (etag != null) 'etag': encodeBytes(etag),
+    if (etag.isNotDefault) 'etag': encodeBytes(etag),
   };
 
   @override
   String toString() {
-    final contents = [
-      'version=$version',
-      if (etag != null) 'etag=$etag',
-    ].join(',');
+    final contents = ['version=$version', 'etag=$etag'].join(',');
     return 'Policy($contents)';
   }
 }
@@ -558,8 +557,9 @@ final class Binding extends ProtoMessage {
   /// documentation](https://cloud.google.com/iam/help/conditions/resource-policies).
   final Expr? condition;
 
-  Binding({this.role = '', this.members = const [], this.condition})
-    : super(fullyQualifiedName);
+  Binding({String? role, this.members = const [], this.condition})
+    : role = role ?? '',
+      super(fullyQualifiedName);
 
   factory Binding.fromJson(Map<String, dynamic> json) => Binding(
     role: json['role'] ?? '',
@@ -643,8 +643,9 @@ final class AuditConfig extends ProtoMessage {
   /// The configuration for logging of each type of permission.
   final List<AuditLogConfig> auditLogConfigs;
 
-  AuditConfig({this.service = '', this.auditLogConfigs = const []})
-    : super(fullyQualifiedName);
+  AuditConfig({String? service, this.auditLogConfigs = const []})
+    : service = service ?? '',
+      super(fullyQualifiedName);
 
   factory AuditConfig.fromJson(Map<String, dynamic> json) => AuditConfig(
     service: json['service'] ?? '',
@@ -815,10 +816,12 @@ final class BindingDelta extends ProtoMessage {
 
   BindingDelta({
     this.action = BindingDelta_Action.$default,
-    this.role = '',
-    this.member = '',
+    String? role,
+    String? member,
     this.condition,
-  }) : super(fullyQualifiedName);
+  }) : role = role ?? '',
+       member = member ?? '',
+       super(fullyQualifiedName);
 
   factory BindingDelta.fromJson(Map<String, dynamic> json) => BindingDelta(
     action:
@@ -900,10 +903,13 @@ final class AuditConfigDelta extends ProtoMessage {
 
   AuditConfigDelta({
     this.action = AuditConfigDelta_Action.$default,
-    this.service = '',
-    this.exemptedMember = '',
-    this.logType = '',
-  }) : super(fullyQualifiedName);
+    String? service,
+    String? exemptedMember,
+    String? logType,
+  }) : service = service ?? '',
+       exemptedMember = exemptedMember ?? '',
+       logType = logType ?? '',
+       super(fullyQualifiedName);
 
   factory AuditConfigDelta.fromJson(Map<String, dynamic> json) =>
       AuditConfigDelta(
@@ -986,9 +992,11 @@ final class ResourcePolicyMember extends ProtoMessage {
   final String iamPolicyUidPrincipal;
 
   ResourcePolicyMember({
-    this.iamPolicyNamePrincipal = '',
-    this.iamPolicyUidPrincipal = '',
-  }) : super(fullyQualifiedName);
+    String? iamPolicyNamePrincipal,
+    String? iamPolicyUidPrincipal,
+  }) : iamPolicyNamePrincipal = iamPolicyNamePrincipal ?? '',
+       iamPolicyUidPrincipal = iamPolicyUidPrincipal ?? '',
+       super(fullyQualifiedName);
 
   factory ResourcePolicyMember.fromJson(Map<String, dynamic> json) =>
       ResourcePolicyMember(

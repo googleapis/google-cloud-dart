@@ -112,7 +112,7 @@ void main() {
   test('BytesValue', () {
     var expected = BytesValue(value: Uint8List.fromList([1, 2, 3]));
     var actual = BytesValue.fromJson(encodeDecode(expected.toJson()) as Object);
-    var encoded = actual.value!.map((item) => '$item').join(',');
+    var encoded = actual.value.map((item) => '$item').join(',');
     expect(encoded, '1,2,3');
   });
 

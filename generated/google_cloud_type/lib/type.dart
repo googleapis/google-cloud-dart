@@ -179,8 +179,11 @@ final class Color extends ProtoMessage {
   /// (as if the alpha value had been explicitly given a value of 1.0).
   final FloatValue? alpha;
 
-  Color({this.red = 0, this.green = 0, this.blue = 0, this.alpha})
-    : super(fullyQualifiedName);
+  Color({double? red, double? green, double? blue, this.alpha})
+    : red = red ?? 0,
+      green = green ?? 0,
+      blue = blue ?? 0,
+      super(fullyQualifiedName);
 
   factory Color.fromJson(Map<String, dynamic> json) => Color(
     red: decodeDouble(json['red']) ?? 0,
@@ -233,8 +236,11 @@ final class Date extends ProtoMessage {
   /// significant.
   final int day;
 
-  Date({this.year = 0, this.month = 0, this.day = 0})
-    : super(fullyQualifiedName);
+  Date({int? year, int? month, int? day})
+    : year = year ?? 0,
+      month = month ?? 0,
+      day = day ?? 0,
+      super(fullyQualifiedName);
 
   factory Date.fromJson(Map<String, dynamic> json) => Date(
     year: json['year'] ?? 0,
@@ -319,16 +325,23 @@ final class DateTime extends ProtoMessage {
   final TimeZone? timeZone;
 
   DateTime({
-    this.year = 0,
-    this.month = 0,
-    this.day = 0,
-    this.hours = 0,
-    this.minutes = 0,
-    this.seconds = 0,
-    this.nanos = 0,
+    int? year,
+    int? month,
+    int? day,
+    int? hours,
+    int? minutes,
+    int? seconds,
+    int? nanos,
     this.utcOffset,
     this.timeZone,
-  }) : super(fullyQualifiedName);
+  }) : year = year ?? 0,
+       month = month ?? 0,
+       day = day ?? 0,
+       hours = hours ?? 0,
+       minutes = minutes ?? 0,
+       seconds = seconds ?? 0,
+       nanos = nanos ?? 0,
+       super(fullyQualifiedName);
 
   factory DateTime.fromJson(Map<String, dynamic> json) => DateTime(
     year: json['year'] ?? 0,
@@ -381,7 +394,10 @@ final class TimeZone extends ProtoMessage {
   /// Optional. IANA Time Zone Database version number, e.g. "2019a".
   final String version;
 
-  TimeZone({this.id = '', this.version = ''}) : super(fullyQualifiedName);
+  TimeZone({String? id, String? version})
+    : id = id ?? '',
+      version = version ?? '',
+      super(fullyQualifiedName);
 
   factory TimeZone.fromJson(Map<String, dynamic> json) =>
       TimeZone(id: json['id'] ?? '', version: json['version'] ?? '');
@@ -471,7 +487,7 @@ final class Decimal extends ProtoMessage {
   /// gRPC) if the service receives a value outside of the supported range.
   final String value;
 
-  Decimal({this.value = ''}) : super(fullyQualifiedName);
+  Decimal({String? value}) : value = value ?? '', super(fullyQualifiedName);
 
   factory Decimal.fromJson(Map<String, dynamic> json) =>
       Decimal(value: json['value'] ?? '');
@@ -538,11 +554,15 @@ final class Expr extends ProtoMessage {
   final String location;
 
   Expr({
-    this.expression = '',
-    this.title = '',
-    this.description = '',
-    this.location = '',
-  }) : super(fullyQualifiedName);
+    String? expression,
+    String? title,
+    String? description,
+    String? location,
+  }) : expression = expression ?? '',
+       title = title ?? '',
+       description = description ?? '',
+       location = location ?? '',
+       super(fullyQualifiedName);
 
   factory Expr.fromJson(Map<String, dynamic> json) => Expr(
     expression: json['expression'] ?? '',
@@ -582,8 +602,10 @@ final class Fraction extends ProtoMessage {
   /// positive.
   final int denominator;
 
-  Fraction({this.numerator = 0, this.denominator = 0})
-    : super(fullyQualifiedName);
+  Fraction({int? numerator, int? denominator})
+    : numerator = numerator ?? 0,
+      denominator = denominator ?? 0,
+      super(fullyQualifiedName);
 
   factory Fraction.fromJson(Map<String, dynamic> json) => Fraction(
     numerator: decodeInt64(json['numerator']) ?? 0,
@@ -658,7 +680,10 @@ final class LatLng extends ProtoMessage {
   /// The longitude in degrees. It must be in the range [-180.0, +180.0].
   final double longitude;
 
-  LatLng({this.latitude = 0, this.longitude = 0}) : super(fullyQualifiedName);
+  LatLng({double? latitude, double? longitude})
+    : latitude = latitude ?? 0,
+      longitude = longitude ?? 0,
+      super(fullyQualifiedName);
 
   factory LatLng.fromJson(Map<String, dynamic> json) => LatLng(
     latitude: decodeDouble(json['latitude']) ?? 0,
@@ -691,8 +716,10 @@ final class LocalizedText extends ProtoMessage {
   /// http://www.unicode.org/reports/tr35/#Unicode_locale_identifier.
   final String languageCode;
 
-  LocalizedText({this.text = '', this.languageCode = ''})
-    : super(fullyQualifiedName);
+  LocalizedText({String? text, String? languageCode})
+    : text = text ?? '',
+      languageCode = languageCode ?? '',
+      super(fullyQualifiedName);
 
   factory LocalizedText.fromJson(Map<String, dynamic> json) => LocalizedText(
     text: json['text'] ?? '',
@@ -731,8 +758,11 @@ final class Money extends ProtoMessage {
   /// For example $-1.75 is represented as `units`=-1 and `nanos`=-750,000,000.
   final int nanos;
 
-  Money({this.currencyCode = '', this.units = 0, this.nanos = 0})
-    : super(fullyQualifiedName);
+  Money({String? currencyCode, int? units, int? nanos})
+    : currencyCode = currencyCode ?? '',
+      units = units ?? 0,
+      nanos = nanos ?? 0,
+      super(fullyQualifiedName);
 
   factory Money.fromJson(Map<String, dynamic> json) => Money(
     currencyCode: json['currencyCode'] ?? '',
@@ -821,8 +851,9 @@ final class PhoneNumber extends ProtoMessage {
   /// future.
   final String extension;
 
-  PhoneNumber({this.e164Number, this.shortCode, this.extension = ''})
-    : super(fullyQualifiedName);
+  PhoneNumber({this.e164Number, this.shortCode, String? extension})
+    : extension = extension ?? '',
+      super(fullyQualifiedName);
 
   factory PhoneNumber.fromJson(Map<String, dynamic> json) => PhoneNumber(
     e164Number: json['e164Number'],
@@ -870,8 +901,10 @@ final class PhoneNumber_ShortCode extends ProtoMessage {
   /// calling code, e.g. "611".
   final String number;
 
-  PhoneNumber_ShortCode({this.regionCode = '', this.number = ''})
-    : super(fullyQualifiedName);
+  PhoneNumber_ShortCode({String? regionCode, String? number})
+    : regionCode = regionCode ?? '',
+      number = number ?? '',
+      super(fullyQualifiedName);
 
   factory PhoneNumber_ShortCode.fromJson(Map<String, dynamic> json) =>
       PhoneNumber_ShortCode(
@@ -1004,18 +1037,27 @@ final class PostalAddress extends ProtoMessage {
   final String organization;
 
   PostalAddress({
-    this.revision = 0,
-    this.regionCode = '',
-    this.languageCode = '',
-    this.postalCode = '',
-    this.sortingCode = '',
-    this.administrativeArea = '',
-    this.locality = '',
-    this.sublocality = '',
+    int? revision,
+    String? regionCode,
+    String? languageCode,
+    String? postalCode,
+    String? sortingCode,
+    String? administrativeArea,
+    String? locality,
+    String? sublocality,
     this.addressLines = const [],
     this.recipients = const [],
-    this.organization = '',
-  }) : super(fullyQualifiedName);
+    String? organization,
+  }) : revision = revision ?? 0,
+       regionCode = regionCode ?? '',
+       languageCode = languageCode ?? '',
+       postalCode = postalCode ?? '',
+       sortingCode = sortingCode ?? '',
+       administrativeArea = administrativeArea ?? '',
+       locality = locality ?? '',
+       sublocality = sublocality ?? '',
+       organization = organization ?? '',
+       super(fullyQualifiedName);
 
   factory PostalAddress.fromJson(Map<String, dynamic> json) => PostalAddress(
     revision: json['revision'] ?? 0,
@@ -1134,8 +1176,12 @@ final class Quaternion extends ProtoMessage {
   /// The scalar component.
   final double w;
 
-  Quaternion({this.x = 0, this.y = 0, this.z = 0, this.w = 0})
-    : super(fullyQualifiedName);
+  Quaternion({double? x, double? y, double? z, double? w})
+    : x = x ?? 0,
+      y = y ?? 0,
+      z = z ?? 0,
+      w = w ?? 0,
+      super(fullyQualifiedName);
 
   factory Quaternion.fromJson(Map<String, dynamic> json) => Quaternion(
     x: decodeDouble(json['x']) ?? 0,
@@ -1180,12 +1226,12 @@ final class TimeOfDay extends ProtoMessage {
   /// Fractions of seconds in nanoseconds. Must be from 0 to 999,999,999.
   final int nanos;
 
-  TimeOfDay({
-    this.hours = 0,
-    this.minutes = 0,
-    this.seconds = 0,
-    this.nanos = 0,
-  }) : super(fullyQualifiedName);
+  TimeOfDay({int? hours, int? minutes, int? seconds, int? nanos})
+    : hours = hours ?? 0,
+      minutes = minutes ?? 0,
+      seconds = seconds ?? 0,
+      nanos = nanos ?? 0,
+      super(fullyQualifiedName);
 
   factory TimeOfDay.fromJson(Map<String, dynamic> json) => TimeOfDay(
     hours: json['hours'] ?? 0,

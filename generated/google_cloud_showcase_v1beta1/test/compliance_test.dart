@@ -19,12 +19,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
-import 'package:google_cloud_rpc/rpc.dart';
-import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as p;
 import 'package:test/test.dart';
 import 'package:test_utils/insecure_proxy_http_client.dart';
 
@@ -50,36 +46,37 @@ void main() async {
     });
 
     test('compliance content', () async {
+      final complianceData = ComplianceData(
+        fString: 'Hello',
+        fInt32: -1,
+        fSint32: -2,
+        fSfixed32: -3,
+        fUint32: 5,
+        fFixed32: 7,
+        fInt64: -11,
+        fSint64: -13,
+        fSfixed64: -17,
+        fUint64: 19,
+        fFixed64: 23,
+        fDouble: -29e4,
+        fFloat: -31,
+        fBool: true,
+        fKingdom: ComplianceData_LifeKingdom.animalia,
+        fChild: ComplianceDataChild(fString: 'second/bool/salutation'),
+        pString: 'Goodbye',
+        pInt32: -37,
+        pDouble: -41.43,
+        pBool: true,
+        pKingdom: ComplianceData_LifeKingdom.plantae,
+      );
       final response = await complianceService.repeatDataBody(
         RepeatRequest(
           name: 'Basic data types',
-          info: ComplianceData(
-            fString: 'Hello',
-            fInt32: -1,
-            fSint32: -2,
-            fSfixed32: -3,
-            fUint32: 5,
-            fFixed32: 7,
-            fInt64: -11,
-            fSint64: -13,
-            fSfixed64: -17,
-            fUint64: 19,
-            fFixed64: 23,
-            fDouble: -29e4,
-            fFloat: -31,
-            fBool: true,
-            fKingdom: ComplianceData_LifeKingdom.animalia,
-            fChild: ComplianceDataChild(fString: 'second/bool/salutation'),
-            pString: 'Goodbye',
-            pInt32: -37,
-            pDouble: -41.43,
-            pBool: true,
-            pKingdom: ComplianceData_LifeKingdom.plantae,
-          ),
+          info: complianceData,
           serverVerify: true,
         ),
       );
-      expect(response.request!.info!.fString, 'Hello');
+      expect(response.request!.info, complianceData);
     });
   });
 }

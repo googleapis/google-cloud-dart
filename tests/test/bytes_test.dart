@@ -32,7 +32,7 @@ void main() {
       expect(response.status, 200);
       expect(response.reason, 'OK');
       expect(response.headers, isEmpty);
-      expect(response.body!, isNotEmpty);
+      expect(response.body, isNotEmpty);
 
       final body = response.body!;
       final bodyText = utf8.decode(body);

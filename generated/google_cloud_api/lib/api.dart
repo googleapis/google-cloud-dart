@@ -107,11 +107,13 @@ final class AuthenticationRule extends ProtoMessage {
   final List<AuthRequirement> requirements;
 
   AuthenticationRule({
-    this.selector = '',
+    String? selector,
     this.oauth,
-    this.allowWithoutCredential = false,
+    bool? allowWithoutCredential,
     this.requirements = const [],
-  }) : super(fullyQualifiedName);
+  }) : selector = selector ?? '',
+       allowWithoutCredential = allowWithoutCredential ?? false,
+       super(fullyQualifiedName);
 
   factory AuthenticationRule.fromJson(Map<String, dynamic> json) =>
       AuthenticationRule(
@@ -165,8 +167,9 @@ final class JwtLocation extends ProtoMessage {
   /// value_prefix="Bearer " with a space at the end.
   final String valuePrefix;
 
-  JwtLocation({this.header, this.query, this.cookie, this.valuePrefix = ''})
-    : super(fullyQualifiedName);
+  JwtLocation({this.header, this.query, this.cookie, String? valuePrefix})
+    : valuePrefix = valuePrefix ?? '',
+      super(fullyQualifiedName);
 
   factory JwtLocation.fromJson(Map<String, dynamic> json) => JwtLocation(
     header: json['header'],
@@ -273,13 +276,18 @@ final class AuthProvider extends ProtoMessage {
   final List<JwtLocation> jwtLocations;
 
   AuthProvider({
-    this.id = '',
-    this.issuer = '',
-    this.jwksUri = '',
-    this.audiences = '',
-    this.authorizationUrl = '',
+    String? id,
+    String? issuer,
+    String? jwksUri,
+    String? audiences,
+    String? authorizationUrl,
     this.jwtLocations = const [],
-  }) : super(fullyQualifiedName);
+  }) : id = id ?? '',
+       issuer = issuer ?? '',
+       jwksUri = jwksUri ?? '',
+       audiences = audiences ?? '',
+       authorizationUrl = authorizationUrl ?? '',
+       super(fullyQualifiedName);
 
   factory AuthProvider.fromJson(Map<String, dynamic> json) => AuthProvider(
     id: json['id'] ?? '',
@@ -344,7 +352,9 @@ final class OauthRequirements extends ProtoMessage {
   ///                        https://www.googleapis.com/auth/calendar.read
   final String canonicalScopes;
 
-  OauthRequirements({this.canonicalScopes = ''}) : super(fullyQualifiedName);
+  OauthRequirements({String? canonicalScopes})
+    : canonicalScopes = canonicalScopes ?? '',
+      super(fullyQualifiedName);
 
   factory OauthRequirements.fromJson(Map<String, dynamic> json) =>
       OauthRequirements(canonicalScopes: json['canonicalScopes'] ?? '');
@@ -392,8 +402,10 @@ final class AuthRequirement extends ProtoMessage {
   ///                bookstore_web.apps.googleusercontent.com
   final String audiences;
 
-  AuthRequirement({this.providerId = '', this.audiences = ''})
-    : super(fullyQualifiedName);
+  AuthRequirement({String? providerId, String? audiences})
+    : providerId = providerId ?? '',
+      audiences = audiences ?? '',
+      super(fullyQualifiedName);
 
   factory AuthRequirement.fromJson(Map<String, dynamic> json) =>
       AuthRequirement(
@@ -522,17 +534,23 @@ final class BackendRule extends ProtoMessage {
   final Map<String, BackendRule> overridesByRequestProtocol;
 
   BackendRule({
-    this.selector = '',
-    this.address = '',
-    this.deadline = 0,
-    this.minDeadline = 0,
-    this.operationDeadline = 0,
+    String? selector,
+    String? address,
+    double? deadline,
+    double? minDeadline,
+    double? operationDeadline,
     this.pathTranslation = BackendRule_PathTranslation.$default,
     this.jwtAudience,
     this.disableAuth,
-    this.protocol = '',
+    String? protocol,
     this.overridesByRequestProtocol = const {},
-  }) : super(fullyQualifiedName);
+  }) : selector = selector ?? '',
+       address = address ?? '',
+       deadline = deadline ?? 0,
+       minDeadline = minDeadline ?? 0,
+       operationDeadline = operationDeadline ?? 0,
+       protocol = protocol ?? '',
+       super(fullyQualifiedName);
 
   factory BackendRule.fromJson(Map<String, dynamic> json) => BackendRule(
     selector: json['selector'] ?? '',
@@ -746,9 +764,10 @@ final class Billing_BillingDestination extends ProtoMessage {
   final List<String> metrics;
 
   Billing_BillingDestination({
-    this.monitoredResource = '',
+    String? monitoredResource,
     this.metrics = const [],
-  }) : super(fullyQualifiedName);
+  }) : monitoredResource = monitoredResource ?? '',
+       super(fullyQualifiedName);
 
   factory Billing_BillingDestination.fromJson(Map<String, dynamic> json) =>
       Billing_BillingDestination(
@@ -784,10 +803,11 @@ final class CommonLanguageSettings extends ProtoMessage {
   final SelectiveGapicGeneration? selectiveGapicGeneration;
 
   CommonLanguageSettings({
-    this.referenceDocsUri = '',
+    String? referenceDocsUri,
     this.destinations = const [],
     this.selectiveGapicGeneration,
-  }) : super(fullyQualifiedName);
+  }) : referenceDocsUri = referenceDocsUri ?? '',
+       super(fullyQualifiedName);
 
   factory CommonLanguageSettings.fromJson(Map<String, dynamic> json) =>
       CommonLanguageSettings(
@@ -860,9 +880,9 @@ final class ClientLibrarySettings extends ProtoMessage {
   final GoSettings? goSettings;
 
   ClientLibrarySettings({
-    this.version = '',
+    String? version,
     this.launchStage = LaunchStage.$default,
-    this.restNumericEnums = false,
+    bool? restNumericEnums,
     this.javaSettings,
     this.cppSettings,
     this.phpSettings,
@@ -871,7 +891,9 @@ final class ClientLibrarySettings extends ProtoMessage {
     this.dotnetSettings,
     this.rubySettings,
     this.goSettings,
-  }) : super(fullyQualifiedName);
+  }) : version = version ?? '',
+       restNumericEnums = restNumericEnums ?? false,
+       super(fullyQualifiedName);
 
   factory ClientLibrarySettings.fromJson(Map<String, dynamic> json) =>
       ClientLibrarySettings(
@@ -968,17 +990,24 @@ final class Publishing extends ProtoMessage {
 
   Publishing({
     this.methodSettings = const [],
-    this.newIssueUri = '',
-    this.documentationUri = '',
-    this.apiShortName = '',
-    this.githubLabel = '',
+    String? newIssueUri,
+    String? documentationUri,
+    String? apiShortName,
+    String? githubLabel,
     this.codeownerGithubTeams = const [],
-    this.docTagPrefix = '',
+    String? docTagPrefix,
     this.organization = ClientLibraryOrganization.$default,
     this.librarySettings = const [],
-    this.protoReferenceDocumentationUri = '',
-    this.restReferenceDocumentationUri = '',
-  }) : super(fullyQualifiedName);
+    String? protoReferenceDocumentationUri,
+    String? restReferenceDocumentationUri,
+  }) : newIssueUri = newIssueUri ?? '',
+       documentationUri = documentationUri ?? '',
+       apiShortName = apiShortName ?? '',
+       githubLabel = githubLabel ?? '',
+       docTagPrefix = docTagPrefix ?? '',
+       protoReferenceDocumentationUri = protoReferenceDocumentationUri ?? '',
+       restReferenceDocumentationUri = restReferenceDocumentationUri ?? '',
+       super(fullyQualifiedName);
 
   factory Publishing.fromJson(Map<String, dynamic> json) => Publishing(
     methodSettings:
@@ -1077,10 +1106,11 @@ final class JavaSettings extends ProtoMessage {
   final CommonLanguageSettings? common;
 
   JavaSettings({
-    this.libraryPackage = '',
+    String? libraryPackage,
     this.serviceClassNames = const {},
     this.common,
-  }) : super(fullyQualifiedName);
+  }) : libraryPackage = libraryPackage ?? '',
+       super(fullyQualifiedName);
 
   factory JavaSettings.fromJson(Map<String, dynamic> json) => JavaSettings(
     libraryPackage: json['libraryPackage'] ?? '',
@@ -1200,10 +1230,13 @@ final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
   final bool unversionedPackageDisabled;
 
   PythonSettings_ExperimentalFeatures({
-    this.restAsyncIoEnabled = false,
-    this.protobufPythonicTypesEnabled = false,
-    this.unversionedPackageDisabled = false,
-  }) : super(fullyQualifiedName);
+    bool? restAsyncIoEnabled,
+    bool? protobufPythonicTypesEnabled,
+    bool? unversionedPackageDisabled,
+  }) : restAsyncIoEnabled = restAsyncIoEnabled ?? false,
+       protobufPythonicTypesEnabled = protobufPythonicTypesEnabled ?? false,
+       unversionedPackageDisabled = unversionedPackageDisabled ?? false,
+       super(fullyQualifiedName);
 
   factory PythonSettings_ExperimentalFeatures.fromJson(
     Map<String, dynamic> json,
@@ -1425,10 +1458,11 @@ final class MethodSettings extends ProtoMessage {
   final List<String> autoPopulatedFields;
 
   MethodSettings({
-    this.selector = '',
+    String? selector,
     this.longRunning,
     this.autoPopulatedFields = const [],
-  }) : super(fullyQualifiedName);
+  }) : selector = selector ?? '',
+       super(fullyQualifiedName);
 
   factory MethodSettings.fromJson(Map<String, dynamic> json) => MethodSettings(
     selector: json['selector'] ?? '',
@@ -1482,10 +1516,11 @@ final class MethodSettings_LongRunning extends ProtoMessage {
 
   MethodSettings_LongRunning({
     this.initialPollDelay,
-    this.pollDelayMultiplier = 0,
+    double? pollDelayMultiplier,
     this.maxPollDelay,
     this.totalPollTimeout,
-  }) : super(fullyQualifiedName);
+  }) : pollDelayMultiplier = pollDelayMultiplier ?? 0,
+       super(fullyQualifiedName);
 
   factory MethodSettings_LongRunning.fromJson(
     Map<String, dynamic> json,
@@ -1534,8 +1569,9 @@ final class SelectiveGapicGeneration extends ProtoMessage {
 
   SelectiveGapicGeneration({
     this.methods = const [],
-    this.generateOmittedAsInternal = false,
-  }) : super(fullyQualifiedName);
+    bool? generateOmittedAsInternal,
+  }) : generateOmittedAsInternal = generateOmittedAsInternal ?? false,
+       super(fullyQualifiedName);
 
   factory SelectiveGapicGeneration.fromJson(Map<String, dynamic> json) =>
       SelectiveGapicGeneration(
@@ -1595,12 +1631,15 @@ final class ConfigChange extends ProtoMessage {
   final List<Advice> advices;
 
   ConfigChange({
-    this.element = '',
-    this.oldValue = '',
-    this.newValue = '',
+    String? element,
+    String? oldValue,
+    String? newValue,
     this.changeType = ChangeType.$default,
     this.advices = const [],
-  }) : super(fullyQualifiedName);
+  }) : element = element ?? '',
+       oldValue = oldValue ?? '',
+       newValue = newValue ?? '',
+       super(fullyQualifiedName);
 
   factory ConfigChange.fromJson(Map<String, dynamic> json) => ConfigChange(
     element: json['element'] ?? '',
@@ -1642,7 +1681,9 @@ final class Advice extends ProtoMessage {
   /// be taken to mitigate any implied risks.
   final String description;
 
-  Advice({this.description = ''}) : super(fullyQualifiedName);
+  Advice({String? description})
+    : description = description ?? '',
+      super(fullyQualifiedName);
 
   factory Advice.fromJson(Map<String, dynamic> json) =>
       Advice(description: json['description'] ?? '');
@@ -1719,10 +1760,12 @@ final class Property extends ProtoMessage {
   final String description;
 
   Property({
-    this.name = '',
+    String? name,
     this.type = Property_PropertyType.$default,
-    this.description = '',
-  }) : super(fullyQualifiedName);
+    String? description,
+  }) : name = name ?? '',
+       description = description ?? '',
+       super(fullyQualifiedName);
 
   factory Property.fromJson(Map<String, dynamic> json) => Property(
     name: json['name'] ?? '',
@@ -1866,12 +1909,13 @@ final class ContextRule extends ProtoMessage {
   final List<String> allowedResponseExtensions;
 
   ContextRule({
-    this.selector = '',
+    String? selector,
     this.requested = const [],
     this.provided = const [],
     this.allowedRequestExtensions = const [],
     this.allowedResponseExtensions = const [],
-  }) : super(fullyQualifiedName);
+  }) : selector = selector ?? '',
+       super(fullyQualifiedName);
 
   factory ContextRule.fromJson(Map<String, dynamic> json) => ContextRule(
     selector: json['selector'] ?? '',
@@ -1918,8 +1962,9 @@ final class Control extends ProtoMessage {
   /// Defines policies applying to the API methods of the service.
   final List<MethodPolicy> methodPolicies;
 
-  Control({this.environment = '', this.methodPolicies = const []})
-    : super(fullyQualifiedName);
+  Control({String? environment, this.methodPolicies = const []})
+    : environment = environment ?? '',
+      super(fullyQualifiedName);
 
   factory Control.fromJson(Map<String, dynamic> json) => Control(
     environment: json['environment'] ?? '',
@@ -2007,14 +2052,17 @@ final class Distribution extends ProtoMessage {
   final List<Distribution_Exemplar> exemplars;
 
   Distribution({
-    this.count = 0,
-    this.mean = 0,
-    this.sumOfSquaredDeviation = 0,
+    int? count,
+    double? mean,
+    double? sumOfSquaredDeviation,
     this.range,
     this.bucketOptions,
     this.bucketCounts = const [],
     this.exemplars = const [],
-  }) : super(fullyQualifiedName);
+  }) : count = count ?? 0,
+       mean = mean ?? 0,
+       sumOfSquaredDeviation = sumOfSquaredDeviation ?? 0,
+       super(fullyQualifiedName);
 
   factory Distribution.fromJson(Map<String, dynamic> json) => Distribution(
     count: decodeInt64(json['count']) ?? 0,
@@ -2064,7 +2112,10 @@ final class Distribution_Range extends ProtoMessage {
   /// The maximum of the population values.
   final double max;
 
-  Distribution_Range({this.min = 0, this.max = 0}) : super(fullyQualifiedName);
+  Distribution_Range({double? min, double? max})
+    : min = min ?? 0,
+      max = max ?? 0,
+      super(fullyQualifiedName);
 
   factory Distribution_Range.fromJson(Map<String, dynamic> json) =>
       Distribution_Range(
@@ -2171,10 +2222,13 @@ final class Distribution_BucketOptions_Linear extends ProtoMessage {
   final double offset;
 
   Distribution_BucketOptions_Linear({
-    this.numFiniteBuckets = 0,
-    this.width = 0,
-    this.offset = 0,
-  }) : super(fullyQualifiedName);
+    int? numFiniteBuckets,
+    double? width,
+    double? offset,
+  }) : numFiniteBuckets = numFiniteBuckets ?? 0,
+       width = width ?? 0,
+       offset = offset ?? 0,
+       super(fullyQualifiedName);
 
   factory Distribution_BucketOptions_Linear.fromJson(
     Map<String, dynamic> json,
@@ -2226,10 +2280,13 @@ final class Distribution_BucketOptions_Exponential extends ProtoMessage {
   final double scale;
 
   Distribution_BucketOptions_Exponential({
-    this.numFiniteBuckets = 0,
-    this.growthFactor = 0,
-    this.scale = 0,
-  }) : super(fullyQualifiedName);
+    int? numFiniteBuckets,
+    double? growthFactor,
+    double? scale,
+  }) : numFiniteBuckets = numFiniteBuckets ?? 0,
+       growthFactor = growthFactor ?? 0,
+       scale = scale ?? 0,
+       super(fullyQualifiedName);
 
   factory Distribution_BucketOptions_Exponential.fromJson(
     Map<String, dynamic> json,
@@ -2320,10 +2377,11 @@ final class Distribution_Exemplar extends ProtoMessage {
   final List<Any> attachments;
 
   Distribution_Exemplar({
-    this.value = 0,
+    double? value,
     this.timestamp,
     this.attachments = const [],
-  }) : super(fullyQualifiedName);
+  }) : value = value ?? 0,
+       super(fullyQualifiedName);
 
   factory Distribution_Exemplar.fromJson(Map<String, dynamic> json) =>
       Distribution_Exemplar(
@@ -2443,13 +2501,17 @@ final class Documentation extends ProtoMessage {
   final String overview;
 
   Documentation({
-    this.summary = '',
+    String? summary,
     this.pages = const [],
     this.rules = const [],
-    this.documentationRootUrl = '',
-    this.serviceRootUrl = '',
-    this.overview = '',
-  }) : super(fullyQualifiedName);
+    String? documentationRootUrl,
+    String? serviceRootUrl,
+    String? overview,
+  }) : summary = summary ?? '',
+       documentationRootUrl = documentationRootUrl ?? '',
+       serviceRootUrl = serviceRootUrl ?? '',
+       overview = overview ?? '',
+       super(fullyQualifiedName);
 
   factory Documentation.fromJson(Map<String, dynamic> json) => Documentation(
     summary: json['summary'] ?? '',
@@ -2506,10 +2568,13 @@ final class DocumentationRule extends ProtoMessage {
   final String deprecationDescription;
 
   DocumentationRule({
-    this.selector = '',
-    this.description = '',
-    this.deprecationDescription = '',
-  }) : super(fullyQualifiedName);
+    String? selector,
+    String? description,
+    String? deprecationDescription,
+  }) : selector = selector ?? '',
+       description = description ?? '',
+       deprecationDescription = deprecationDescription ?? '',
+       super(fullyQualifiedName);
 
   factory DocumentationRule.fromJson(Map<String, dynamic> json) =>
       DocumentationRule(
@@ -2567,8 +2632,10 @@ final class Page extends ProtoMessage {
   /// honored in the generated docset.
   final List<Page> subpages;
 
-  Page({this.name = '', this.content = '', this.subpages = const []})
-    : super(fullyQualifiedName);
+  Page({String? name, String? content, this.subpages = const []})
+    : name = name ?? '',
+      content = content ?? '',
+      super(fullyQualifiedName);
 
   factory Page.fromJson(Map<String, dynamic> json) => Page(
     name: json['name'] ?? '',
@@ -2638,11 +2705,14 @@ final class Endpoint extends ProtoMessage {
   final bool allowCors;
 
   Endpoint({
-    this.name = '',
+    String? name,
     this.aliases = const [],
-    this.target = '',
-    this.allowCors = false,
-  }) : super(fullyQualifiedName);
+    String? target,
+    bool? allowCors,
+  }) : name = name ?? '',
+       target = target ?? '',
+       allowCors = allowCors ?? false,
+       super(fullyQualifiedName);
 
   factory Endpoint.fromJson(Map<String, dynamic> json) => Endpoint(
     name: json['name'] ?? '',
@@ -2772,7 +2842,9 @@ final class TypeReference extends ProtoMessage {
   /// See [AIP-202](https://google.aip.dev/202#type-references) for more details.
   final String typeName;
 
-  TypeReference({this.typeName = ''}) : super(fullyQualifiedName);
+  TypeReference({String? typeName})
+    : typeName = typeName ?? '',
+      super(fullyQualifiedName);
 
   factory TypeReference.fromJson(Map<String, dynamic> json) =>
       TypeReference(typeName: json['typeName'] ?? '');
@@ -2806,8 +2878,9 @@ final class Http extends ProtoMessage {
   /// segment matches.
   final bool fullyDecodeReservedExpansion;
 
-  Http({this.rules = const [], this.fullyDecodeReservedExpansion = false})
-    : super(fullyQualifiedName);
+  Http({this.rules = const [], bool? fullyDecodeReservedExpansion})
+    : fullyDecodeReservedExpansion = fullyDecodeReservedExpansion ?? false,
+      super(fullyQualifiedName);
 
   factory Http.fromJson(Map<String, dynamic> json) => Http(
     rules: decodeListMessage(json['rules'], HttpRule.fromJson) ?? [],
@@ -3147,17 +3220,20 @@ final class HttpRule extends ProtoMessage {
   final List<HttpRule> additionalBindings;
 
   HttpRule({
-    this.selector = '',
+    String? selector,
     this.get,
     this.put,
     this.post,
     this.delete,
     this.patch,
     this.custom,
-    this.body = '',
-    this.responseBody = '',
+    String? body,
+    String? responseBody,
     this.additionalBindings = const [],
-  }) : super(fullyQualifiedName);
+  }) : selector = selector ?? '',
+       body = body ?? '',
+       responseBody = responseBody ?? '',
+       super(fullyQualifiedName);
 
   factory HttpRule.fromJson(Map<String, dynamic> json) => HttpRule(
     selector: json['selector'] ?? '',
@@ -3214,8 +3290,10 @@ final class CustomHttpPattern extends ProtoMessage {
   /// The path matched by this custom verb.
   final String path;
 
-  CustomHttpPattern({this.kind = '', this.path = ''})
-    : super(fullyQualifiedName);
+  CustomHttpPattern({String? kind, String? path})
+    : kind = kind ?? '',
+      path = path ?? '',
+      super(fullyQualifiedName);
 
   factory CustomHttpPattern.fromJson(Map<String, dynamic> json) =>
       CustomHttpPattern(kind: json['kind'] ?? '', path: json['path'] ?? '');
@@ -3283,34 +3361,35 @@ final class HttpBody extends ProtoMessage {
   final String contentType;
 
   /// The HTTP request/response body as raw binary.
-  final Uint8List? data;
+  final Uint8List data;
 
   /// Application specific response metadata. Must be set in the first response
   /// for streaming APIs.
   final List<Any> extensions;
 
-  HttpBody({this.contentType = '', this.data, this.extensions = const []})
-    : super(fullyQualifiedName);
+  HttpBody({
+    String? contentType,
+    this.data = Uint8List(0),
+    this.extensions = const [],
+  }) : contentType = contentType ?? '',
+       super(fullyQualifiedName);
 
   factory HttpBody.fromJson(Map<String, dynamic> json) => HttpBody(
     contentType: json['contentType'] ?? '',
-    data: decodeBytes(json['data']),
+    data: decodeBytes(json['data']) ?? Uint8List(0),
     extensions: decodeListMessage(json['extensions'], Any.fromJson) ?? [],
   );
 
   @override
   Object toJson() => {
     if (contentType.isNotDefault) 'contentType': contentType,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
     if (extensions.isNotDefault) 'extensions': encodeList(extensions),
   };
 
   @override
   String toString() {
-    final contents = [
-      'contentType=$contentType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['contentType=$contentType', 'data=$data'].join(',');
     return 'HttpBody($contents)';
   }
 }
@@ -3329,10 +3408,12 @@ final class LabelDescriptor extends ProtoMessage {
   final String description;
 
   LabelDescriptor({
-    this.key = '',
+    String? key,
     this.valueType = LabelDescriptor_ValueType.$default,
-    this.description = '',
-  }) : super(fullyQualifiedName);
+    String? description,
+  }) : key = key ?? '',
+       description = description ?? '',
+       super(fullyQualifiedName);
 
   factory LabelDescriptor.fromJson(Map<String, dynamic> json) =>
       LabelDescriptor(
@@ -3417,11 +3498,14 @@ final class LogDescriptor extends ProtoMessage {
   final String displayName;
 
   LogDescriptor({
-    this.name = '',
+    String? name,
     this.labels = const [],
-    this.description = '',
-    this.displayName = '',
-  }) : super(fullyQualifiedName);
+    String? description,
+    String? displayName,
+  }) : name = name ?? '',
+       description = description ?? '',
+       displayName = displayName ?? '',
+       super(fullyQualifiedName);
 
   factory LogDescriptor.fromJson(Map<String, dynamic> json) => LogDescriptor(
     name: json['name'] ?? '',
@@ -3542,10 +3626,9 @@ final class Logging_LoggingDestination extends ProtoMessage {
   /// with the service name followed by "/".
   final List<String> logs;
 
-  Logging_LoggingDestination({
-    this.monitoredResource = '',
-    this.logs = const [],
-  }) : super(fullyQualifiedName);
+  Logging_LoggingDestination({String? monitoredResource, this.logs = const []})
+    : monitoredResource = monitoredResource ?? '',
+      super(fullyQualifiedName);
 
   factory Logging_LoggingDestination.fromJson(Map<String, dynamic> json) =>
       Logging_LoggingDestination(
@@ -3729,18 +3812,23 @@ final class MetricDescriptor extends ProtoMessage {
   final List<String> monitoredResourceTypes;
 
   MetricDescriptor({
-    this.name = '',
-    this.type = '',
+    String? name,
+    String? type,
     this.labels = const [],
     this.metricKind = MetricDescriptor_MetricKind.$default,
     this.valueType = MetricDescriptor_ValueType.$default,
-    this.unit = '',
-    this.description = '',
-    this.displayName = '',
+    String? unit,
+    String? description,
+    String? displayName,
     this.metadata,
     this.launchStage = LaunchStage.$default,
     this.monitoredResourceTypes = const [],
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       type = type ?? '',
+       unit = unit ?? '',
+       description = description ?? '',
+       displayName = displayName ?? '',
+       super(fullyQualifiedName);
 
   factory MetricDescriptor.fromJson(
     Map<String, dynamic> json,
@@ -4006,7 +4094,9 @@ final class Metric extends ProtoMessage {
   /// labels listed in the `MetricDescriptor` must be assigned values.
   final Map<String, String> labels;
 
-  Metric({this.type = '', this.labels = const {}}) : super(fullyQualifiedName);
+  Metric({String? type, this.labels = const {}})
+    : type = type ?? '',
+      super(fullyQualifiedName);
 
   factory Metric.fromJson(Map<String, dynamic> json) =>
       Metric(type: json['type'] ?? '', labels: decodeMap(json['labels']) ?? {});
@@ -4073,13 +4163,17 @@ final class MonitoredResourceDescriptor extends ProtoMessage {
   final LaunchStage launchStage;
 
   MonitoredResourceDescriptor({
-    this.name = '',
-    this.type = '',
-    this.displayName = '',
-    this.description = '',
+    String? name,
+    String? type,
+    String? displayName,
+    String? description,
     this.labels = const [],
     this.launchStage = LaunchStage.$default,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       type = type ?? '',
+       displayName = displayName ?? '',
+       description = description ?? '',
+       super(fullyQualifiedName);
 
   factory MonitoredResourceDescriptor.fromJson(Map<String, dynamic> json) =>
       MonitoredResourceDescriptor(
@@ -4150,8 +4244,9 @@ final class MonitoredResource extends ProtoMessage {
   /// labels `"project_id"`, `"instance_id"`, and `"zone"`.
   final Map<String, String> labels;
 
-  MonitoredResource({this.type = '', this.labels = const {}})
-    : super(fullyQualifiedName);
+  MonitoredResource({String? type, this.labels = const {}})
+    : type = type ?? '',
+      super(fullyQualifiedName);
 
   factory MonitoredResource.fromJson(Map<String, dynamic> json) =>
       MonitoredResource(
@@ -4336,9 +4431,10 @@ final class Monitoring_MonitoringDestination extends ProtoMessage {
   final List<String> metrics;
 
   Monitoring_MonitoringDestination({
-    this.monitoredResource = '',
+    String? monitoredResource,
     this.metrics = const [],
-  }) : super(fullyQualifiedName);
+  }) : monitoredResource = monitoredResource ?? '',
+       super(fullyQualifiedName);
 
   factory Monitoring_MonitoringDestination.fromJson(
     Map<String, dynamic> json,
@@ -4393,10 +4489,13 @@ final class FieldPolicy extends ProtoMessage {
   final String resourceType;
 
   FieldPolicy({
-    this.selector = '',
-    this.resourcePermission = '',
-    this.resourceType = '',
-  }) : super(fullyQualifiedName);
+    String? selector,
+    String? resourcePermission,
+    String? resourceType,
+  }) : selector = selector ?? '',
+       resourcePermission = resourcePermission ?? '',
+       resourceType = resourceType ?? '',
+       super(fullyQualifiedName);
 
   factory FieldPolicy.fromJson(Map<String, dynamic> json) => FieldPolicy(
     selector: json['selector'] ?? '',
@@ -4440,8 +4539,9 @@ final class MethodPolicy extends ProtoMessage {
   /// Policies that are applicable to the request message.
   final List<FieldPolicy> requestPolicies;
 
-  MethodPolicy({this.selector = '', this.requestPolicies = const []})
-    : super(fullyQualifiedName);
+  MethodPolicy({String? selector, this.requestPolicies = const []})
+    : selector = selector ?? '',
+      super(fullyQualifiedName);
 
   factory MethodPolicy.fromJson(Map<String, dynamic> json) => MethodPolicy(
     selector: json['selector'] ?? '',
@@ -4560,8 +4660,9 @@ final class MetricRule extends ProtoMessage {
   /// The value must not be negative.
   final Map<String, int> metricCosts;
 
-  MetricRule({this.selector = '', this.metricCosts = const {}})
-    : super(fullyQualifiedName);
+  MetricRule({String? selector, this.metricCosts = const {}})
+    : selector = selector ?? '',
+      super(fullyQualifiedName);
 
   factory MetricRule.fromJson(Map<String, dynamic> json) => MetricRule(
     selector: json['selector'] ?? '',
@@ -4666,17 +4767,26 @@ final class QuotaLimit extends ProtoMessage {
   final String displayName;
 
   QuotaLimit({
-    this.name = '',
-    this.description = '',
-    this.defaultLimit = 0,
-    this.maxLimit = 0,
-    this.freeTier = 0,
-    this.duration = '',
-    this.metric = '',
-    this.unit = '',
+    String? name,
+    String? description,
+    int? defaultLimit,
+    int? maxLimit,
+    int? freeTier,
+    String? duration,
+    String? metric,
+    String? unit,
     this.values = const {},
-    this.displayName = '',
-  }) : super(fullyQualifiedName);
+    String? displayName,
+  }) : name = name ?? '',
+       description = description ?? '',
+       defaultLimit = defaultLimit ?? 0,
+       maxLimit = maxLimit ?? 0,
+       freeTier = freeTier ?? 0,
+       duration = duration ?? '',
+       metric = metric ?? '',
+       unit = unit ?? '',
+       displayName = displayName ?? '',
+       super(fullyQualifiedName);
 
   factory QuotaLimit.fromJson(Map<String, dynamic> json) => QuotaLimit(
     name: json['name'] ?? '',
@@ -4852,14 +4962,18 @@ final class ResourceDescriptor extends ProtoMessage {
   final List<ResourceDescriptor_Style> style;
 
   ResourceDescriptor({
-    this.type = '',
+    String? type,
     this.pattern = const [],
-    this.nameField = '',
+    String? nameField,
     this.history = ResourceDescriptor_History.$default,
-    this.plural = '',
-    this.singular = '',
+    String? plural,
+    String? singular,
     this.style = const [],
-  }) : super(fullyQualifiedName);
+  }) : type = type ?? '',
+       nameField = nameField ?? '',
+       plural = plural ?? '',
+       singular = singular ?? '',
+       super(fullyQualifiedName);
 
   factory ResourceDescriptor.fromJson(Map<String, dynamic> json) =>
       ResourceDescriptor(
@@ -5006,8 +5120,10 @@ final class ResourceReference extends ProtoMessage {
   ///     }
   final String childType;
 
-  ResourceReference({this.type = '', this.childType = ''})
-    : super(fullyQualifiedName);
+  ResourceReference({String? type, String? childType})
+    : type = type ?? '',
+      childType = childType ?? '',
+      super(fullyQualifiedName);
 
   factory ResourceReference.fromJson(Map<String, dynamic> json) =>
       ResourceReference(
@@ -5482,8 +5598,10 @@ final class RoutingParameter extends ProtoMessage {
   /// See Example 1 for more details.
   final String pathTemplate;
 
-  RoutingParameter({this.field = '', this.pathTemplate = ''})
-    : super(fullyQualifiedName);
+  RoutingParameter({String? field, String? pathTemplate})
+    : field = field ?? '',
+      pathTemplate = pathTemplate ?? '',
+      super(fullyQualifiedName);
 
   factory RoutingParameter.fromJson(Map<String, dynamic> json) =>
       RoutingParameter(
@@ -5652,10 +5770,10 @@ final class Service extends ProtoMessage {
   final Uint32Value? configVersion;
 
   Service({
-    this.name = '',
-    this.title = '',
-    this.producerProjectId = '',
-    this.id = '',
+    String? name,
+    String? title,
+    String? producerProjectId,
+    String? id,
     this.apis = const [],
     this.types = const [],
     this.enums = const [],
@@ -5678,7 +5796,11 @@ final class Service extends ProtoMessage {
     this.sourceInfo,
     this.publishing,
     this.configVersion,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       title = title ?? '',
+       producerProjectId = producerProjectId ?? '',
+       id = id ?? '',
+       super(fullyQualifiedName);
 
   factory Service.fromJson(Map<String, dynamic> json) => Service(
     name: json['name'] ?? '',
@@ -5858,8 +5980,9 @@ final class SystemParameterRule extends ProtoMessage {
   /// parameter-dependent.
   final List<SystemParameter> parameters;
 
-  SystemParameterRule({this.selector = '', this.parameters = const []})
-    : super(fullyQualifiedName);
+  SystemParameterRule({String? selector, this.parameters = const []})
+    : selector = selector ?? '',
+      super(fullyQualifiedName);
 
   factory SystemParameterRule.fromJson(Map<String, dynamic> json) =>
       SystemParameterRule(
@@ -5899,11 +6022,11 @@ final class SystemParameter extends ProtoMessage {
   /// sensitive.
   final String urlQueryParameter;
 
-  SystemParameter({
-    this.name = '',
-    this.httpHeader = '',
-    this.urlQueryParameter = '',
-  }) : super(fullyQualifiedName);
+  SystemParameter({String? name, String? httpHeader, String? urlQueryParameter})
+    : name = name ?? '',
+      httpHeader = httpHeader ?? '',
+      urlQueryParameter = urlQueryParameter ?? '',
+      super(fullyQualifiedName);
 
   factory SystemParameter.fromJson(Map<String, dynamic> json) =>
       SystemParameter(
@@ -5963,8 +6086,9 @@ final class Usage extends ProtoMessage {
   Usage({
     this.requirements = const [],
     this.rules = const [],
-    this.producerNotificationChannel = '',
-  }) : super(fullyQualifiedName);
+    String? producerNotificationChannel,
+  }) : producerNotificationChannel = producerNotificationChannel ?? '',
+       super(fullyQualifiedName);
 
   factory Usage.fromJson(Map<String, dynamic> json) => Usage(
     requirements: decodeList(json['requirements']) ?? [],
@@ -6035,10 +6159,13 @@ final class UsageRule extends ProtoMessage {
   final bool skipServiceControl;
 
   UsageRule({
-    this.selector = '',
-    this.allowUnregisteredCalls = false,
-    this.skipServiceControl = false,
-  }) : super(fullyQualifiedName);
+    String? selector,
+    bool? allowUnregisteredCalls,
+    bool? skipServiceControl,
+  }) : selector = selector ?? '',
+       allowUnregisteredCalls = allowUnregisteredCalls ?? false,
+       skipServiceControl = skipServiceControl ?? false,
+       super(fullyQualifiedName);
 
   factory UsageRule.fromJson(Map<String, dynamic> json) => UsageRule(
     selector: json['selector'] ?? '',
@@ -6138,8 +6265,10 @@ final class VisibilityRule extends ProtoMessage {
   /// this method and only had access to it through INTERNAL.
   final String restriction;
 
-  VisibilityRule({this.selector = '', this.restriction = ''})
-    : super(fullyQualifiedName);
+  VisibilityRule({String? selector, String? restriction})
+    : selector = selector ?? '',
+      restriction = restriction ?? '',
+      super(fullyQualifiedName);
 
   factory VisibilityRule.fromJson(Map<String, dynamic> json) => VisibilityRule(
     selector: json['selector'] ?? '',

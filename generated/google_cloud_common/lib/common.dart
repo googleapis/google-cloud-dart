@@ -62,12 +62,17 @@ final class OperationMetadata extends ProtoMessage {
   OperationMetadata({
     this.createTime,
     this.endTime,
-    this.target = '',
-    this.verb = '',
-    this.statusDetail = '',
-    this.cancelRequested = false,
-    this.apiVersion = '',
-  }) : super(fullyQualifiedName);
+    String? target,
+    String? verb,
+    String? statusDetail,
+    bool? cancelRequested,
+    String? apiVersion,
+  }) : target = target ?? '',
+       verb = verb ?? '',
+       statusDetail = statusDetail ?? '',
+       cancelRequested = cancelRequested ?? false,
+       apiVersion = apiVersion ?? '',
+       super(fullyQualifiedName);
 
   factory OperationMetadata.fromJson(Map<String, dynamic> json) =>
       OperationMetadata(

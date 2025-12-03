@@ -85,8 +85,10 @@ final class ErrorInfo extends ProtoMessage {
   /// instances that can be created in a single (batch) request.
   final Map<String, String> metadata;
 
-  ErrorInfo({this.reason = '', this.domain = '', this.metadata = const {}})
-    : super(fullyQualifiedName);
+  ErrorInfo({String? reason, String? domain, this.metadata = const {}})
+    : reason = reason ?? '',
+      domain = domain ?? '',
+      super(fullyQualifiedName);
 
   factory ErrorInfo.fromJson(Map<String, dynamic> json) => ErrorInfo(
     reason: json['reason'] ?? '',
@@ -152,8 +154,9 @@ final class DebugInfo extends ProtoMessage {
   /// Additional debugging information provided by the server.
   final String detail;
 
-  DebugInfo({this.stackEntries = const [], this.detail = ''})
-    : super(fullyQualifiedName);
+  DebugInfo({this.stackEntries = const [], String? detail})
+    : detail = detail ?? '',
+      super(fullyQualifiedName);
 
   factory DebugInfo.fromJson(Map<String, dynamic> json) => DebugInfo(
     stackEntries: decodeList(json['stackEntries']) ?? [],
@@ -295,15 +298,21 @@ final class QuotaFailure_Violation extends ProtoMessage {
   final int? futureQuotaValue;
 
   QuotaFailure_Violation({
-    this.subject = '',
-    this.description = '',
-    this.apiService = '',
-    this.quotaMetric = '',
-    this.quotaId = '',
+    String? subject,
+    String? description,
+    String? apiService,
+    String? quotaMetric,
+    String? quotaId,
     this.quotaDimensions = const {},
-    this.quotaValue = 0,
+    int? quotaValue,
     this.futureQuotaValue,
-  }) : super(fullyQualifiedName);
+  }) : subject = subject ?? '',
+       description = description ?? '',
+       apiService = apiService ?? '',
+       quotaMetric = quotaMetric ?? '',
+       quotaId = quotaId ?? '',
+       quotaValue = quotaValue ?? 0,
+       super(fullyQualifiedName);
 
   factory QuotaFailure_Violation.fromJson(Map<String, dynamic> json) =>
       QuotaFailure_Violation(
@@ -399,10 +408,13 @@ final class PreconditionFailure_Violation extends ProtoMessage {
   final String description;
 
   PreconditionFailure_Violation({
-    this.type = '',
-    this.subject = '',
-    this.description = '',
-  }) : super(fullyQualifiedName);
+    String? type,
+    String? subject,
+    String? description,
+  }) : type = type ?? '',
+       subject = subject ?? '',
+       description = description ?? '',
+       super(fullyQualifiedName);
 
   factory PreconditionFailure_Violation.fromJson(Map<String, dynamic> json) =>
       PreconditionFailure_Violation(
@@ -518,11 +530,14 @@ final class BadRequest_FieldViolation extends ProtoMessage {
   final LocalizedMessage? localizedMessage;
 
   BadRequest_FieldViolation({
-    this.field = '',
-    this.description = '',
-    this.reason = '',
+    String? field,
+    String? description,
+    String? reason,
     this.localizedMessage,
-  }) : super(fullyQualifiedName);
+  }) : field = field ?? '',
+       description = description ?? '',
+       reason = reason ?? '',
+       super(fullyQualifiedName);
 
   factory BadRequest_FieldViolation.fromJson(Map<String, dynamic> json) =>
       BadRequest_FieldViolation(
@@ -568,8 +583,10 @@ final class RequestInfo extends ProtoMessage {
   /// stack trace that can be sent back to the service provider for debugging.
   final String servingData;
 
-  RequestInfo({this.requestId = '', this.servingData = ''})
-    : super(fullyQualifiedName);
+  RequestInfo({String? requestId, String? servingData})
+    : requestId = requestId ?? '',
+      servingData = servingData ?? '',
+      super(fullyQualifiedName);
 
   factory RequestInfo.fromJson(Map<String, dynamic> json) => RequestInfo(
     requestId: json['requestId'] ?? '',
@@ -618,11 +635,15 @@ final class ResourceInfo extends ProtoMessage {
   final String description;
 
   ResourceInfo({
-    this.resourceType = '',
-    this.resourceName = '',
-    this.owner = '',
-    this.description = '',
-  }) : super(fullyQualifiedName);
+    String? resourceType,
+    String? resourceName,
+    String? owner,
+    String? description,
+  }) : resourceType = resourceType ?? '',
+       resourceName = resourceName ?? '',
+       owner = owner ?? '',
+       description = description ?? '',
+       super(fullyQualifiedName);
 
   factory ResourceInfo.fromJson(Map<String, dynamic> json) => ResourceInfo(
     resourceType: json['resourceType'] ?? '',
@@ -684,7 +705,10 @@ final class Help_Link extends ProtoMessage {
   /// The URL of the link.
   final String url;
 
-  Help_Link({this.description = '', this.url = ''}) : super(fullyQualifiedName);
+  Help_Link({String? description, String? url})
+    : description = description ?? '',
+      url = url ?? '',
+      super(fullyQualifiedName);
 
   factory Help_Link.fromJson(Map<String, dynamic> json) =>
       Help_Link(description: json['description'] ?? '', url: json['url'] ?? '');
@@ -715,8 +739,10 @@ final class LocalizedMessage extends ProtoMessage {
   /// The localized error message in the above locale.
   final String message;
 
-  LocalizedMessage({this.locale = '', this.message = ''})
-    : super(fullyQualifiedName);
+  LocalizedMessage({String? locale, String? message})
+    : locale = locale ?? '',
+      message = message ?? '',
+      super(fullyQualifiedName);
 
   factory LocalizedMessage.fromJson(Map<String, dynamic> json) =>
       LocalizedMessage(
@@ -752,20 +778,22 @@ final class HttpRequest extends ProtoMessage {
   final List<HttpHeader> headers;
 
   /// The HTTP request body. If the body is not expected, it should be empty.
-  final Uint8List? body;
+  final Uint8List body;
 
   HttpRequest({
-    this.method = '',
-    this.uri = '',
+    String? method,
+    String? uri,
     this.headers = const [],
-    this.body,
-  }) : super(fullyQualifiedName);
+    this.body = Uint8List(0),
+  }) : method = method ?? '',
+       uri = uri ?? '',
+       super(fullyQualifiedName);
 
   factory HttpRequest.fromJson(Map<String, dynamic> json) => HttpRequest(
     method: json['method'] ?? '',
     uri: json['uri'] ?? '',
     headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
-    body: decodeBytes(json['body']),
+    body: decodeBytes(json['body']) ?? Uint8List(0),
   );
 
   @override
@@ -773,16 +801,12 @@ final class HttpRequest extends ProtoMessage {
     if (method.isNotDefault) 'method': method,
     if (uri.isNotDefault) 'uri': uri,
     if (headers.isNotDefault) 'headers': encodeList(headers),
-    if (body != null) 'body': encodeBytes(body),
+    if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
   String toString() {
-    final contents = [
-      'method=$method',
-      'uri=$uri',
-      if (body != null) 'body=$body',
-    ].join(',');
+    final contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
     return 'HttpRequest($contents)';
   }
 }
@@ -802,20 +826,22 @@ final class HttpResponse extends ProtoMessage {
   final List<HttpHeader> headers;
 
   /// The HTTP response body. If the body is not expected, it should be empty.
-  final Uint8List? body;
+  final Uint8List body;
 
   HttpResponse({
-    this.status = 0,
-    this.reason = '',
+    int? status,
+    String? reason,
     this.headers = const [],
-    this.body,
-  }) : super(fullyQualifiedName);
+    this.body = Uint8List(0),
+  }) : status = status ?? 0,
+       reason = reason ?? '',
+       super(fullyQualifiedName);
 
   factory HttpResponse.fromJson(Map<String, dynamic> json) => HttpResponse(
     status: json['status'] ?? 0,
     reason: json['reason'] ?? '',
     headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
-    body: decodeBytes(json['body']),
+    body: decodeBytes(json['body']) ?? Uint8List(0),
   );
 
   @override
@@ -823,7 +849,7 @@ final class HttpResponse extends ProtoMessage {
     if (status.isNotDefault) 'status': status,
     if (reason.isNotDefault) 'reason': reason,
     if (headers.isNotDefault) 'headers': encodeList(headers),
-    if (body != null) 'body': encodeBytes(body),
+    if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
@@ -831,7 +857,7 @@ final class HttpResponse extends ProtoMessage {
     final contents = [
       'status=$status',
       'reason=$reason',
-      if (body != null) 'body=$body',
+      'body=$body',
     ].join(',');
     return 'HttpResponse($contents)';
   }
@@ -847,7 +873,10 @@ final class HttpHeader extends ProtoMessage {
   /// The HTTP header value.
   final String value;
 
-  HttpHeader({this.key = '', this.value = ''}) : super(fullyQualifiedName);
+  HttpHeader({String? key, String? value})
+    : key = key ?? '',
+      value = value ?? '',
+      super(fullyQualifiedName);
 
   factory HttpHeader.fromJson(Map<String, dynamic> json) =>
       HttpHeader(key: json['key'] ?? '', value: json['value'] ?? '');
@@ -889,8 +918,10 @@ final class Status extends ProtoMessage {
   /// message types for APIs to use.
   final List<Any> details;
 
-  Status({this.code = 0, this.message = '', this.details = const []})
-    : super(fullyQualifiedName);
+  Status({int? code, String? message, this.details = const []})
+    : code = code ?? 0,
+      message = message ?? '',
+      super(fullyQualifiedName);
 
   factory Status.fromJson(Map<String, dynamic> json) => Status(
     code: json['code'] ?? 0,

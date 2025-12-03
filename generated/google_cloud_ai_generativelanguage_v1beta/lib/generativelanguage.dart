@@ -1683,8 +1683,10 @@ final class ListCachedContentsRequest extends ProtoMessage {
   /// match the call that provided the page token.
   final String pageToken;
 
-  ListCachedContentsRequest({this.pageSize = 0, this.pageToken = ''})
-    : super(fullyQualifiedName);
+  ListCachedContentsRequest({int? pageSize, String? pageToken})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) =>
       ListCachedContentsRequest(
@@ -1719,8 +1721,9 @@ final class ListCachedContentsResponse extends ProtoMessage {
 
   ListCachedContentsResponse({
     this.cachedContents = const [],
-    this.nextPageToken = '',
-  }) : super(fullyQualifiedName);
+    String? nextPageToken,
+  }) : nextPageToken = nextPageToken ?? '',
+       super(fullyQualifiedName);
 
   factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) =>
       ListCachedContentsResponse(
@@ -1968,8 +1971,9 @@ final class CachedContent_UsageMetadata extends ProtoMessage {
   /// Total number of tokens that the cached content consumes.
   final int totalTokenCount;
 
-  CachedContent_UsageMetadata({this.totalTokenCount = 0})
-    : super(fullyQualifiedName);
+  CachedContent_UsageMetadata({int? totalTokenCount})
+    : totalTokenCount = totalTokenCount ?? 0,
+      super(fullyQualifiedName);
 
   factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) =>
       CachedContent_UsageMetadata(
@@ -2091,7 +2095,9 @@ final class Content extends ProtoMessage {
   /// or unset.
   final String role;
 
-  Content({this.parts = const [], this.role = ''}) : super(fullyQualifiedName);
+  Content({this.parts = const [], String? role})
+    : role = role ?? '',
+      super(fullyQualifiedName);
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
     parts: decodeListMessage(json['parts'], Part.fromJson) ?? [],
@@ -2157,7 +2163,7 @@ final class Part extends ProtoMessage {
 
   /// Optional. An opaque signature for the thought so it can be reused in
   /// subsequent requests.
-  final Uint8List? thoughtSignature;
+  final Uint8List thoughtSignature;
 
   /// Custom metadata associated with the Part.
   /// Agents using genai.Part as content representation may need to keep track
@@ -2174,10 +2180,11 @@ final class Part extends ProtoMessage {
     this.executableCode,
     this.codeExecutionResult,
     this.videoMetadata,
-    this.thought = false,
-    this.thoughtSignature,
+    bool? thought,
+    this.thoughtSignature = Uint8List(0),
     this.partMetadata,
-  }) : super(fullyQualifiedName);
+  }) : thought = thought ?? false,
+       super(fullyQualifiedName);
 
   factory Part.fromJson(Map<String, dynamic> json) => Part(
     text: json['text'],
@@ -2195,7 +2202,7 @@ final class Part extends ProtoMessage {
     ),
     videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
     thought: json['thought'] ?? false,
-    thoughtSignature: decodeBytes(json['thoughtSignature']),
+    thoughtSignature: decodeBytes(json['thoughtSignature']) ?? Uint8List(0),
     partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
   );
 
@@ -2212,7 +2219,7 @@ final class Part extends ProtoMessage {
       'codeExecutionResult': codeExecutionResult!.toJson(),
     if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
     if (thought.isNotDefault) 'thought': thought,
-    if (thoughtSignature != null)
+    if (thoughtSignature.isNotDefault)
       'thoughtSignature': encodeBytes(thoughtSignature),
     if (partMetadata != null) 'partMetadata': partMetadata!.toJson(),
   };
@@ -2222,7 +2229,7 @@ final class Part extends ProtoMessage {
     final contents = [
       if (text != null) 'text=$text',
       'thought=$thought',
-      if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
+      'thoughtSignature=$thoughtSignature',
     ].join(',');
     return 'Part($contents)';
   }
@@ -2277,25 +2284,26 @@ final class Blob extends ProtoMessage {
   final String mimeType;
 
   /// Raw bytes for media formats.
-  final Uint8List? data;
+  final Uint8List data;
 
-  Blob({this.mimeType = '', this.data}) : super(fullyQualifiedName);
+  Blob({String? mimeType, this.data = Uint8List(0)})
+    : mimeType = mimeType ?? '',
+      super(fullyQualifiedName);
 
-  factory Blob.fromJson(Map<String, dynamic> json) =>
-      Blob(mimeType: json['mimeType'] ?? '', data: decodeBytes(json['data']));
+  factory Blob.fromJson(Map<String, dynamic> json) => Blob(
+    mimeType: json['mimeType'] ?? '',
+    data: decodeBytes(json['data']) ?? Uint8List(0),
+  );
 
   @override
   Object toJson() => {
     if (mimeType.isNotDefault) 'mimeType': mimeType,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
   };
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'Blob($contents)';
   }
 }
@@ -2318,29 +2326,27 @@ final class FunctionResponseBlob extends ProtoMessage {
   final String mimeType;
 
   /// Raw bytes for media formats.
-  final Uint8List? data;
+  final Uint8List data;
 
-  FunctionResponseBlob({this.mimeType = '', this.data})
-    : super(fullyQualifiedName);
+  FunctionResponseBlob({String? mimeType, this.data = Uint8List(0)})
+    : mimeType = mimeType ?? '',
+      super(fullyQualifiedName);
 
   factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) =>
       FunctionResponseBlob(
         mimeType: json['mimeType'] ?? '',
-        data: decodeBytes(json['data']),
+        data: decodeBytes(json['data']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     if (mimeType.isNotDefault) 'mimeType': mimeType,
-    if (data != null) 'data': encodeBytes(data),
+    if (data.isNotDefault) 'data': encodeBytes(data),
   };
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'FunctionResponseBlob($contents)';
   }
 }
@@ -2356,8 +2362,9 @@ final class FileData extends ProtoMessage {
   /// Required. URI.
   final String fileUri;
 
-  FileData({this.mimeType = '', required this.fileUri})
-    : super(fullyQualifiedName);
+  FileData({String? mimeType, required this.fileUri})
+    : mimeType = mimeType ?? '',
+      super(fullyQualifiedName);
 
   factory FileData.fromJson(Map<String, dynamic> json) => FileData(
     mimeType: json['mimeType'] ?? '',
@@ -2392,8 +2399,9 @@ final class VideoMetadata extends ProtoMessage {
   /// the default value will be 1.0. The fps range is (0.0, 24.0].
   final double fps;
 
-  VideoMetadata({this.startOffset, this.endOffset, this.fps = 0})
-    : super(fullyQualifiedName);
+  VideoMetadata({this.startOffset, this.endOffset, double? fps})
+    : fps = fps ?? 0,
+      super(fullyQualifiedName);
 
   factory VideoMetadata.fromJson(Map<String, dynamic> json) => VideoMetadata(
     startOffset: decodeCustom(json['startOffset'], Duration.fromJson),
@@ -2490,8 +2498,9 @@ final class CodeExecutionResult extends ProtoMessage {
   /// other description otherwise.
   final String output;
 
-  CodeExecutionResult({required this.outcome, this.output = ''})
-    : super(fullyQualifiedName);
+  CodeExecutionResult({required this.outcome, String? output})
+    : output = output ?? '',
+      super(fullyQualifiedName);
 
   factory CodeExecutionResult.fromJson(Map<String, dynamic> json) =>
       CodeExecutionResult(
@@ -3140,8 +3149,9 @@ final class FunctionCall extends ProtoMessage {
   /// Optional. The function parameters and values in JSON object format.
   final Struct? args;
 
-  FunctionCall({this.id = '', required this.name, this.args})
-    : super(fullyQualifiedName);
+  FunctionCall({String? id, required this.name, this.args})
+    : id = id ?? '',
+      super(fullyQualifiedName);
 
   factory FunctionCall.fromJson(Map<String, dynamic> json) => FunctionCall(
     id: json['id'] ?? '',
@@ -3208,13 +3218,15 @@ final class FunctionResponse extends ProtoMessage {
   final FunctionResponse_Scheduling? scheduling;
 
   FunctionResponse({
-    this.id = '',
+    String? id,
     required this.name,
     required this.response,
     this.parts = const [],
-    this.willContinue = false,
+    bool? willContinue,
     this.scheduling,
-  }) : super(fullyQualifiedName);
+  }) : id = id ?? '',
+       willContinue = willContinue ?? false,
+       super(fullyQualifiedName);
 
   factory FunctionResponse.fromJson(Map<String, dynamic> json) =>
       FunctionResponse(
@@ -3376,28 +3388,39 @@ final class Schema extends ProtoMessage {
 
   Schema({
     required this.type,
-    this.format = '',
-    this.title = '',
-    this.description = '',
-    this.nullable = false,
+    String? format,
+    String? title,
+    String? description,
+    bool? nullable,
     this.enum$ = const [],
     this.items,
-    this.maxItems = 0,
-    this.minItems = 0,
+    int? maxItems,
+    int? minItems,
     this.properties = const {},
     this.required = const [],
-    this.minProperties = 0,
-    this.maxProperties = 0,
+    int? minProperties,
+    int? maxProperties,
     this.minimum,
     this.maximum,
-    this.minLength = 0,
-    this.maxLength = 0,
-    this.pattern = '',
+    int? minLength,
+    int? maxLength,
+    String? pattern,
     this.example,
     this.anyOf = const [],
     this.propertyOrdering = const [],
     this.default$,
-  }) : super(fullyQualifiedName);
+  }) : format = format ?? '',
+       title = title ?? '',
+       description = description ?? '',
+       nullable = nullable ?? false,
+       maxItems = maxItems ?? 0,
+       minItems = minItems ?? 0,
+       minProperties = minProperties ?? 0,
+       maxProperties = maxProperties ?? 0,
+       minLength = minLength ?? 0,
+       maxLength = maxLength ?? 0,
+       pattern = pattern ?? '',
+       super(fullyQualifiedName);
 
   factory Schema.fromJson(Map<String, dynamic> json) => Schema(
     type: decodeEnum(json['type'], Type.fromJson) ?? Type.$default,
@@ -3484,7 +3507,9 @@ final class GroundingPassage extends ProtoMessage {
   /// Content of the passage.
   final Content? content;
 
-  GroundingPassage({this.id = '', this.content}) : super(fullyQualifiedName);
+  GroundingPassage({String? id, this.content})
+    : id = id ?? '',
+      super(fullyQualifiedName);
 
   factory GroundingPassage.fromJson(Map<String, dynamic> json) =>
       GroundingPassage(
@@ -3542,8 +3567,9 @@ final class ModalityTokenCount extends ProtoMessage {
   /// Number of tokens.
   final int tokenCount;
 
-  ModalityTokenCount({this.modality = Modality.$default, this.tokenCount = 0})
-    : super(fullyQualifiedName);
+  ModalityTokenCount({this.modality = Modality.$default, int? tokenCount})
+    : tokenCount = tokenCount ?? 0,
+      super(fullyQualifiedName);
 
   factory ModalityTokenCount.fromJson(Map<String, dynamic> json) =>
       ModalityTokenCount(
@@ -3732,8 +3758,9 @@ final class Message extends ProtoMessage {
   /// `content`. This field is used only on output.
   final CitationMetadata? citationMetadata;
 
-  Message({this.author = '', required this.content, this.citationMetadata})
-    : super(fullyQualifiedName);
+  Message({String? author, required this.content, this.citationMetadata})
+    : author = author ?? '',
+      super(fullyQualifiedName);
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
     author: json['author'] ?? '',
@@ -3808,10 +3835,11 @@ final class MessagePrompt extends ProtoMessage {
   final List<Message> messages;
 
   MessagePrompt({
-    this.context = '',
+    String? context,
     this.examples = const [],
     required this.messages,
-  }) : super(fullyQualifiedName);
+  }) : context = context ?? '',
+       super(fullyQualifiedName);
 
   factory MessagePrompt.fromJson(Map<String, dynamic> json) => MessagePrompt(
     context: json['context'] ?? '',
@@ -3917,7 +3945,9 @@ final class CountMessageTokensResponse extends ProtoMessage {
   /// Always non-negative.
   final int tokenCount;
 
-  CountMessageTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
+  CountMessageTokensResponse({int? tokenCount})
+    : tokenCount = tokenCount ?? 0,
+      super(fullyQualifiedName);
 
   factory CountMessageTokensResponse.fromJson(Map<String, dynamic> json) =>
       CountMessageTokensResponse(tokenCount: json['tokenCount'] ?? 0);
@@ -3970,7 +4000,7 @@ final class File extends ProtoMessage {
   final Timestamp? expirationTime;
 
   /// Output only. SHA-256 hash of the uploaded bytes.
-  final Uint8List? sha256Hash;
+  final Uint8List sha256Hash;
 
   /// Output only. The uri of the `File`.
   final String uri;
@@ -3989,20 +4019,26 @@ final class File extends ProtoMessage {
 
   File({
     this.videoMetadata,
-    this.name = '',
-    this.displayName = '',
-    this.mimeType = '',
-    this.sizeBytes = 0,
+    String? name,
+    String? displayName,
+    String? mimeType,
+    int? sizeBytes,
     this.createTime,
     this.updateTime,
     this.expirationTime,
-    this.sha256Hash,
-    this.uri = '',
-    this.downloadUri = '',
+    this.sha256Hash = Uint8List(0),
+    String? uri,
+    String? downloadUri,
     this.state = File_State.$default,
     this.source = File_Source.$default,
     this.error,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       displayName = displayName ?? '',
+       mimeType = mimeType ?? '',
+       sizeBytes = sizeBytes ?? 0,
+       uri = uri ?? '',
+       downloadUri = downloadUri ?? '',
+       super(fullyQualifiedName);
 
   factory File.fromJson(Map<String, dynamic> json) => File(
     videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
@@ -4013,7 +4049,7 @@ final class File extends ProtoMessage {
     createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
     updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
     expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
-    sha256Hash: decodeBytes(json['sha256Hash']),
+    sha256Hash: decodeBytes(json['sha256Hash']) ?? Uint8List(0),
     uri: json['uri'] ?? '',
     downloadUri: json['downloadUri'] ?? '',
     state:
@@ -4034,7 +4070,7 @@ final class File extends ProtoMessage {
     if (createTime != null) 'createTime': createTime!.toJson(),
     if (updateTime != null) 'updateTime': updateTime!.toJson(),
     if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
-    if (sha256Hash != null) 'sha256Hash': encodeBytes(sha256Hash),
+    if (sha256Hash.isNotDefault) 'sha256Hash': encodeBytes(sha256Hash),
     if (uri.isNotDefault) 'uri': uri,
     if (downloadUri.isNotDefault) 'downloadUri': downloadUri,
     if (state.isNotDefault) 'state': state.toJson(),
@@ -4049,7 +4085,7 @@ final class File extends ProtoMessage {
       'displayName=$displayName',
       'mimeType=$mimeType',
       'sizeBytes=$sizeBytes',
-      if (sha256Hash != null) 'sha256Hash=$sha256Hash',
+      'sha256Hash=$sha256Hash',
       'uri=$uri',
       'downloadUri=$downloadUri',
       'state=$state',
@@ -4188,8 +4224,10 @@ final class ListFilesRequest extends ProtoMessage {
   /// Optional. A page token from a previous `ListFiles` call.
   final String pageToken;
 
-  ListFilesRequest({this.pageSize = 0, this.pageToken = ''})
-    : super(fullyQualifiedName);
+  ListFilesRequest({int? pageSize, String? pageToken})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListFilesRequest.fromJson(Map<String, dynamic> json) =>
       ListFilesRequest(
@@ -4222,8 +4260,9 @@ final class ListFilesResponse extends ProtoMessage {
   /// call.
   final String nextPageToken;
 
-  ListFilesResponse({this.files = const [], this.nextPageToken = ''})
-    : super(fullyQualifiedName);
+  ListFilesResponse({this.files = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListFilesResponse.fromJson(Map<String, dynamic> json) =>
       ListFilesResponse(
@@ -4591,8 +4630,9 @@ final class SpeechConfig extends ProtoMessage {
   SpeechConfig({
     this.voiceConfig,
     this.multiSpeakerVoiceConfig,
-    this.languageCode = '',
-  }) : super(fullyQualifiedName);
+    String? languageCode,
+  }) : languageCode = languageCode ?? '',
+       super(fullyQualifiedName);
 
   factory SpeechConfig.fromJson(Map<String, dynamic> json) => SpeechConfig(
     voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
@@ -4892,7 +4932,7 @@ final class GenerationConfig extends ProtoMessage {
     this.topP,
     this.topK,
     this.seed,
-    this.responseMimeType = '',
+    String? responseMimeType,
     this.responseSchema,
     this.responseJsonSchema,
     this.responseJsonSchemaOrdered,
@@ -4906,7 +4946,8 @@ final class GenerationConfig extends ProtoMessage {
     this.thinkingConfig,
     this.imageConfig,
     this.mediaResolution,
-  }) : super(fullyQualifiedName);
+  }) : responseMimeType = responseMimeType ?? '',
+       super(fullyQualifiedName);
 
   factory GenerationConfig.fromJson(Map<String, dynamic> json) =>
       GenerationConfig(
@@ -5168,9 +5209,11 @@ final class GenerateContentResponse extends ProtoMessage {
     this.candidates = const [],
     this.promptFeedback,
     this.usageMetadata,
-    this.modelVersion = '',
-    this.responseId = '',
-  }) : super(fullyQualifiedName);
+    String? modelVersion,
+    String? responseId,
+  }) : modelVersion = modelVersion ?? '',
+       responseId = responseId ?? '',
+       super(fullyQualifiedName);
 
   factory GenerateContentResponse.fromJson(Map<String, dynamic> json) =>
       GenerateContentResponse(
@@ -5344,17 +5387,23 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   final List<ModalityTokenCount> toolUsePromptTokensDetails;
 
   GenerateContentResponse_UsageMetadata({
-    this.promptTokenCount = 0,
-    this.cachedContentTokenCount = 0,
-    this.candidatesTokenCount = 0,
-    this.toolUsePromptTokenCount = 0,
-    this.thoughtsTokenCount = 0,
-    this.totalTokenCount = 0,
+    int? promptTokenCount,
+    int? cachedContentTokenCount,
+    int? candidatesTokenCount,
+    int? toolUsePromptTokenCount,
+    int? thoughtsTokenCount,
+    int? totalTokenCount,
     this.promptTokensDetails = const [],
     this.cacheTokensDetails = const [],
     this.candidatesTokensDetails = const [],
     this.toolUsePromptTokensDetails = const [],
-  }) : super(fullyQualifiedName);
+  }) : promptTokenCount = promptTokenCount ?? 0,
+       cachedContentTokenCount = cachedContentTokenCount ?? 0,
+       candidatesTokenCount = candidatesTokenCount ?? 0,
+       toolUsePromptTokenCount = toolUsePromptTokenCount ?? 0,
+       thoughtsTokenCount = thoughtsTokenCount ?? 0,
+       totalTokenCount = totalTokenCount ?? 0,
+       super(fullyQualifiedName);
 
   factory GenerateContentResponse_UsageMetadata.fromJson(
     Map<String, dynamic> json,
@@ -5489,13 +5538,15 @@ final class Candidate extends ProtoMessage {
     this.finishMessage,
     this.safetyRatings = const [],
     this.citationMetadata,
-    this.tokenCount = 0,
+    int? tokenCount,
     this.groundingAttributions = const [],
     this.groundingMetadata,
-    this.avgLogprobs = 0,
+    double? avgLogprobs,
     this.logprobsResult,
     this.urlContextMetadata,
-  }) : super(fullyQualifiedName);
+  }) : tokenCount = tokenCount ?? 0,
+       avgLogprobs = avgLogprobs ?? 0,
+       super(fullyQualifiedName);
 
   factory Candidate.fromJson(Map<String, dynamic> json) => Candidate(
     index: json['index'],
@@ -5682,9 +5733,10 @@ final class UrlMetadata extends ProtoMessage {
   final UrlMetadata_UrlRetrievalStatus urlRetrievalStatus;
 
   UrlMetadata({
-    this.retrievedUrl = '',
+    String? retrievedUrl,
     this.urlRetrievalStatus = UrlMetadata_UrlRetrievalStatus.$default,
-  }) : super(fullyQualifiedName);
+  }) : retrievedUrl = retrievedUrl ?? '',
+       super(fullyQualifiedName);
 
   factory UrlMetadata.fromJson(Map<String, dynamic> json) => UrlMetadata(
     retrievedUrl: json['retrievedUrl'] ?? '',
@@ -5932,10 +5984,10 @@ final class AttributionSourceId_GroundingPassageId extends ProtoMessage {
   /// `GroundingPassage.content`.
   final int partIndex;
 
-  AttributionSourceId_GroundingPassageId({
-    this.passageId = '',
-    this.partIndex = 0,
-  }) : super(fullyQualifiedName);
+  AttributionSourceId_GroundingPassageId({String? passageId, int? partIndex})
+    : passageId = passageId ?? '',
+      partIndex = partIndex ?? 0,
+      super(fullyQualifiedName);
 
   factory AttributionSourceId_GroundingPassageId.fromJson(
     Map<String, dynamic> json,
@@ -5972,10 +6024,10 @@ final class AttributionSourceId_SemanticRetrieverChunk extends ProtoMessage {
   /// Example: `corpora/123/documents/abc/chunks/xyz`
   final String chunk;
 
-  AttributionSourceId_SemanticRetrieverChunk({
-    this.source = '',
-    this.chunk = '',
-  }) : super(fullyQualifiedName);
+  AttributionSourceId_SemanticRetrieverChunk({String? source, String? chunk})
+    : source = source ?? '',
+      chunk = chunk ?? '',
+      super(fullyQualifiedName);
 
   factory AttributionSourceId_SemanticRetrieverChunk.fromJson(
     Map<String, dynamic> json,
@@ -6039,8 +6091,10 @@ final class RetrievalMetadata extends ProtoMessage {
   /// compared to the threshold to determine whether to trigger google search.
   final double googleSearchDynamicRetrievalScore;
 
-  RetrievalMetadata({this.googleSearchDynamicRetrievalScore = 0})
-    : super(fullyQualifiedName);
+  RetrievalMetadata({double? googleSearchDynamicRetrievalScore})
+    : googleSearchDynamicRetrievalScore =
+          googleSearchDynamicRetrievalScore ?? 0,
+      super(fullyQualifiedName);
 
   factory RetrievalMetadata.fromJson(Map<String, dynamic> json) =>
       RetrievalMetadata(
@@ -6146,28 +6200,29 @@ final class SearchEntryPoint extends ProtoMessage {
 
   /// Optional. Base64 encoded JSON representing array of <search term, search
   /// url> tuple.
-  final Uint8List? sdkBlob;
+  final Uint8List sdkBlob;
 
-  SearchEntryPoint({this.renderedContent = '', this.sdkBlob})
-    : super(fullyQualifiedName);
+  SearchEntryPoint({String? renderedContent, this.sdkBlob = Uint8List(0)})
+    : renderedContent = renderedContent ?? '',
+      super(fullyQualifiedName);
 
   factory SearchEntryPoint.fromJson(Map<String, dynamic> json) =>
       SearchEntryPoint(
         renderedContent: json['renderedContent'] ?? '',
-        sdkBlob: decodeBytes(json['sdkBlob']),
+        sdkBlob: decodeBytes(json['sdkBlob']) ?? Uint8List(0),
       );
 
   @override
   Object toJson() => {
     if (renderedContent.isNotDefault) 'renderedContent': renderedContent,
-    if (sdkBlob != null) 'sdkBlob': encodeBytes(sdkBlob),
+    if (sdkBlob.isNotDefault) 'sdkBlob': encodeBytes(sdkBlob),
   };
 
   @override
   String toString() {
     final contents = [
       'renderedContent=$renderedContent',
-      if (sdkBlob != null) 'sdkBlob=$sdkBlob',
+      'sdkBlob=$sdkBlob',
     ].join(',');
     return 'SearchEntryPoint($contents)';
   }
@@ -6244,12 +6299,12 @@ final class Segment extends ProtoMessage {
   /// Output only. The text corresponding to the segment from the response.
   final String text;
 
-  Segment({
-    this.partIndex = 0,
-    this.startIndex = 0,
-    this.endIndex = 0,
-    this.text = '',
-  }) : super(fullyQualifiedName);
+  Segment({int? partIndex, int? startIndex, int? endIndex, String? text})
+    : partIndex = partIndex ?? 0,
+      startIndex = startIndex ?? 0,
+      endIndex = endIndex ?? 0,
+      text = text ?? '',
+      super(fullyQualifiedName);
 
   factory Segment.fromJson(Map<String, dynamic> json) => Segment(
     partIndex: json['partIndex'] ?? 0,
@@ -6883,11 +6938,13 @@ final class CountTokensResponse extends ProtoMessage {
   final List<ModalityTokenCount> cacheTokensDetails;
 
   CountTokensResponse({
-    this.totalTokens = 0,
-    this.cachedContentTokenCount = 0,
+    int? totalTokens,
+    int? cachedContentTokenCount,
     this.promptTokensDetails = const [],
     this.cacheTokensDetails = const [],
-  }) : super(fullyQualifiedName);
+  }) : totalTokens = totalTokens ?? 0,
+       cachedContentTokenCount = cachedContentTokenCount ?? 0,
+       super(fullyQualifiedName);
 
   factory CountTokensResponse.fromJson(Map<String, dynamic> json) =>
       CountTokensResponse(
@@ -7502,10 +7559,9 @@ final class BidiGenerateContentClientContent extends ProtoMessage {
   /// additional messages before starting generation.
   final bool turnComplete;
 
-  BidiGenerateContentClientContent({
-    this.turns = const [],
-    this.turnComplete = false,
-  }) : super(fullyQualifiedName);
+  BidiGenerateContentClientContent({this.turns = const [], bool? turnComplete})
+    : turnComplete = turnComplete ?? false,
+      super(fullyQualifiedName);
 
   factory BidiGenerateContentClientContent.fromJson(
     Map<String, dynamic> json,
@@ -7838,15 +7894,19 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
 
   BidiGenerateContentServerContent({
     this.modelTurn,
-    this.generationComplete = false,
-    this.turnComplete = false,
-    this.interrupted = false,
+    bool? generationComplete,
+    bool? turnComplete,
+    bool? interrupted,
     this.groundingMetadata,
     this.inputTranscription,
     this.outputTranscription,
     this.urlContextMetadata,
-    this.waitingForInput = false,
-  }) : super(fullyQualifiedName);
+    bool? waitingForInput,
+  }) : generationComplete = generationComplete ?? false,
+       turnComplete = turnComplete ?? false,
+       interrupted = interrupted ?? false,
+       waitingForInput = waitingForInput ?? false,
+       super(fullyQualifiedName);
 
   factory BidiGenerateContentServerContent.fromJson(
     Map<String, dynamic> json,
@@ -8003,8 +8063,10 @@ final class SessionResumptionUpdate extends ProtoMessage {
   /// false.
   final bool resumable;
 
-  SessionResumptionUpdate({this.newHandle = '', this.resumable = false})
-    : super(fullyQualifiedName);
+  SessionResumptionUpdate({String? newHandle, bool? resumable})
+    : newHandle = newHandle ?? '',
+      resumable = resumable ?? false,
+      super(fullyQualifiedName);
 
   factory SessionResumptionUpdate.fromJson(Map<String, dynamic> json) =>
       SessionResumptionUpdate(
@@ -8033,8 +8095,9 @@ final class BidiGenerateContentTranscription extends ProtoMessage {
   /// Transcription text.
   final String text;
 
-  BidiGenerateContentTranscription({this.text = ''})
-    : super(fullyQualifiedName);
+  BidiGenerateContentTranscription({String? text})
+    : text = text ?? '',
+      super(fullyQualifiedName);
 
   factory BidiGenerateContentTranscription.fromJson(
     Map<String, dynamic> json,
@@ -8172,17 +8235,23 @@ final class UsageMetadata extends ProtoMessage {
   final List<ModalityTokenCount> toolUsePromptTokensDetails;
 
   UsageMetadata({
-    this.promptTokenCount = 0,
-    this.cachedContentTokenCount = 0,
-    this.responseTokenCount = 0,
-    this.toolUsePromptTokenCount = 0,
-    this.thoughtsTokenCount = 0,
-    this.totalTokenCount = 0,
+    int? promptTokenCount,
+    int? cachedContentTokenCount,
+    int? responseTokenCount,
+    int? toolUsePromptTokenCount,
+    int? thoughtsTokenCount,
+    int? totalTokenCount,
     this.promptTokensDetails = const [],
     this.cacheTokensDetails = const [],
     this.responseTokensDetails = const [],
     this.toolUsePromptTokensDetails = const [],
-  }) : super(fullyQualifiedName);
+  }) : promptTokenCount = promptTokenCount ?? 0,
+       cachedContentTokenCount = cachedContentTokenCount ?? 0,
+       responseTokenCount = responseTokenCount ?? 0,
+       toolUsePromptTokenCount = toolUsePromptTokenCount ?? 0,
+       thoughtsTokenCount = thoughtsTokenCount ?? 0,
+       totalTokenCount = totalTokenCount ?? 0,
+       super(fullyQualifiedName);
 
   factory UsageMetadata.fromJson(Map<String, dynamic> json) => UsageMetadata(
     promptTokenCount: json['promptTokenCount'] ?? 0,
@@ -8341,17 +8410,22 @@ final class Model extends ProtoMessage {
     required this.name,
     required this.baseModelId,
     required this.version,
-    this.displayName = '',
-    this.description = '',
-    this.inputTokenLimit = 0,
-    this.outputTokenLimit = 0,
+    String? displayName,
+    String? description,
+    int? inputTokenLimit,
+    int? outputTokenLimit,
     this.supportedGenerationMethods = const [],
     this.temperature,
     this.maxTemperature,
     this.topP,
     this.topK,
-    this.thinking = false,
-  }) : super(fullyQualifiedName);
+    bool? thinking,
+  }) : displayName = displayName ?? '',
+       description = description ?? '',
+       inputTokenLimit = inputTokenLimit ?? 0,
+       outputTokenLimit = outputTokenLimit ?? 0,
+       thinking = thinking ?? false,
+       super(fullyQualifiedName);
 
   factory Model.fromJson(Map<String, dynamic> json) => Model(
     name: json['name'] ?? '',
@@ -8456,8 +8530,10 @@ final class ListModelsRequest extends ProtoMessage {
   /// the call that provided the page token.
   final String pageToken;
 
-  ListModelsRequest({this.pageSize = 0, this.pageToken = ''})
-    : super(fullyQualifiedName);
+  ListModelsRequest({int? pageSize, String? pageToken})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListModelsRequest.fromJson(Map<String, dynamic> json) =>
       ListModelsRequest(
@@ -8491,8 +8567,9 @@ final class ListModelsResponse extends ProtoMessage {
   /// If this field is omitted, there are no more pages.
   final String nextPageToken;
 
-  ListModelsResponse({this.models = const [], this.nextPageToken = ''})
-    : super(fullyQualifiedName);
+  ListModelsResponse({this.models = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListModelsResponse.fromJson(Map<String, dynamic> json) =>
       ListModelsResponse(
@@ -8576,11 +8653,11 @@ final class ListTunedModelsRequest extends ProtoMessage {
   ///   "readers:everyone" returns all tuned models that are shared with everyone
   final String filter;
 
-  ListTunedModelsRequest({
-    this.pageSize = 0,
-    this.pageToken = '',
-    this.filter = '',
-  }) : super(fullyQualifiedName);
+  ListTunedModelsRequest({int? pageSize, String? pageToken, String? filter})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      filter = filter ?? '',
+      super(fullyQualifiedName);
 
   factory ListTunedModelsRequest.fromJson(Map<String, dynamic> json) =>
       ListTunedModelsRequest(
@@ -8620,10 +8697,9 @@ final class ListTunedModelsResponse extends ProtoMessage {
   /// If this field is omitted, there are no more pages.
   final String nextPageToken;
 
-  ListTunedModelsResponse({
-    this.tunedModels = const [],
-    this.nextPageToken = '',
-  }) : super(fullyQualifiedName);
+  ListTunedModelsResponse({this.tunedModels = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListTunedModelsResponse.fromJson(Map<String, dynamic> json) =>
       ListTunedModelsResponse(
@@ -8705,12 +8781,16 @@ final class CreateTunedModelMetadata extends ProtoMessage {
   final List<TuningSnapshot> snapshots;
 
   CreateTunedModelMetadata({
-    this.tunedModel = '',
-    this.totalSteps = 0,
-    this.completedSteps = 0,
-    this.completedPercent = 0,
+    String? tunedModel,
+    int? totalSteps,
+    int? completedSteps,
+    double? completedPercent,
     this.snapshots = const [],
-  }) : super(fullyQualifiedName);
+  }) : tunedModel = tunedModel ?? '',
+       totalSteps = totalSteps ?? 0,
+       completedSteps = completedSteps ?? 0,
+       completedPercent = completedPercent ?? 0,
+       super(fullyQualifiedName);
 
   factory CreateTunedModelMetadata.fromJson(Map<String, dynamic> json) =>
       CreateTunedModelMetadata(
@@ -8835,11 +8915,12 @@ final class Permission extends ProtoMessage {
   final Permission_Role? role;
 
   Permission({
-    this.name = '',
+    String? name,
     this.granteeType,
     this.emailAddress,
     required this.role,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       super(fullyQualifiedName);
 
   factory Permission.fromJson(Map<String, dynamic> json) => Permission(
     name: json['name'] ?? '',
@@ -9022,9 +9103,11 @@ final class ListPermissionsRequest extends ProtoMessage {
 
   ListPermissionsRequest({
     required this.parent,
-    this.pageSize = 0,
-    this.pageToken = '',
-  }) : super(fullyQualifiedName);
+    int? pageSize,
+    String? pageToken,
+  }) : pageSize = pageSize ?? 0,
+       pageToken = pageToken ?? '',
+       super(fullyQualifiedName);
 
   factory ListPermissionsRequest.fromJson(Map<String, dynamic> json) =>
       ListPermissionsRequest(
@@ -9065,10 +9148,9 @@ final class ListPermissionsResponse extends ProtoMessage {
   /// If this field is omitted, there are no more pages.
   final String nextPageToken;
 
-  ListPermissionsResponse({
-    this.permissions = const [],
-    this.nextPageToken = '',
-  }) : super(fullyQualifiedName);
+  ListPermissionsResponse({this.permissions = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListPermissionsResponse.fromJson(Map<String, dynamic> json) =>
       ListPermissionsResponse(
@@ -9423,9 +9505,10 @@ final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
 
   PredictLongRunningGeneratedVideoResponse({
     this.generatedSamples = const [],
-    this.raiMediaFilteredCount = 0,
+    int? raiMediaFilteredCount,
     this.raiMediaFilteredReasons = const [],
-  }) : super(fullyQualifiedName);
+  }) : raiMediaFilteredCount = raiMediaFilteredCount ?? 0,
+       super(fullyQualifiedName);
 
   factory PredictLongRunningGeneratedVideoResponse.fromJson(
     Map<String, dynamic> json,
@@ -9479,12 +9562,10 @@ final class Corpus extends ProtoMessage {
   /// Output only. The Timestamp of when the `Corpus` was last updated.
   final Timestamp? updateTime;
 
-  Corpus({
-    this.name = '',
-    this.displayName = '',
-    this.createTime,
-    this.updateTime,
-  }) : super(fullyQualifiedName);
+  Corpus({String? name, String? displayName, this.createTime, this.updateTime})
+    : name = name ?? '',
+      displayName = displayName ?? '',
+      super(fullyQualifiedName);
 
   factory Corpus.fromJson(Map<String, dynamic> json) => Corpus(
     name: json['name'] ?? '',
@@ -9538,12 +9619,14 @@ final class Document extends ProtoMessage {
   final Timestamp? createTime;
 
   Document({
-    this.name = '',
-    this.displayName = '',
+    String? name,
+    String? displayName,
     this.customMetadata = const [],
     this.updateTime,
     this.createTime,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       displayName = displayName ?? '',
+       super(fullyQualifiedName);
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
     name: json['name'] ?? '',
@@ -9798,13 +9881,14 @@ final class Chunk extends ProtoMessage {
   final Chunk_State state;
 
   Chunk({
-    this.name = '',
+    String? name,
     required this.data,
     this.customMetadata = const [],
     this.createTime,
     this.updateTime,
     this.state = Chunk_State.$default,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       super(fullyQualifiedName);
 
   factory Chunk.fromJson(Map<String, dynamic> json) => Chunk(
     name: json['name'] ?? '',
@@ -9980,8 +10064,9 @@ final class DeleteCorpusRequest extends ProtoMessage {
   /// `Corpus` contains any `Document`s.
   final bool force;
 
-  DeleteCorpusRequest({required this.name, this.force = false})
-    : super(fullyQualifiedName);
+  DeleteCorpusRequest({required this.name, bool? force})
+    : force = force ?? false,
+      super(fullyQualifiedName);
 
   factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) =>
       DeleteCorpusRequest(
@@ -10020,8 +10105,10 @@ final class ListCorporaRequest extends ProtoMessage {
   /// must match the call that provided the page token.
   final String pageToken;
 
-  ListCorporaRequest({this.pageSize = 0, this.pageToken = ''})
-    : super(fullyQualifiedName);
+  ListCorporaRequest({int? pageSize, String? pageToken})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListCorporaRequest.fromJson(Map<String, dynamic> json) =>
       ListCorporaRequest(
@@ -10055,8 +10142,9 @@ final class ListCorporaResponse extends ProtoMessage {
   /// If this field is omitted, there are no more pages.
   final String nextPageToken;
 
-  ListCorporaResponse({this.corpora = const [], this.nextPageToken = ''})
-    : super(fullyQualifiedName);
+  ListCorporaResponse({this.corpora = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListCorporaResponse.fromJson(Map<String, dynamic> json) =>
       ListCorporaResponse(
@@ -10133,8 +10221,9 @@ final class QueryCorpusRequest extends ProtoMessage {
     required this.name,
     required this.query,
     this.metadataFilters = const [],
-    this.resultsCount = 0,
-  }) : super(fullyQualifiedName);
+    int? resultsCount,
+  }) : resultsCount = resultsCount ?? 0,
+       super(fullyQualifiedName);
 
   factory QueryCorpusRequest.fromJson(Map<String, dynamic> json) =>
       QueryCorpusRequest(
@@ -10211,8 +10300,9 @@ final class RelevantChunk extends ProtoMessage {
   /// `Document` associated with the chunk.
   final Document? document;
 
-  RelevantChunk({this.chunkRelevanceScore = 0, this.chunk, this.document})
-    : super(fullyQualifiedName);
+  RelevantChunk({double? chunkRelevanceScore, this.chunk, this.document})
+    : chunkRelevanceScore = chunkRelevanceScore ?? 0,
+      super(fullyQualifiedName);
 
   factory RelevantChunk.fromJson(Map<String, dynamic> json) => RelevantChunk(
     chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']) ?? 0,
@@ -10341,8 +10431,9 @@ final class DeleteDocumentRequest extends ProtoMessage {
   /// `Document` contains any `Chunk`s.
   final bool force;
 
-  DeleteDocumentRequest({required this.name, this.force = false})
-    : super(fullyQualifiedName);
+  DeleteDocumentRequest({required this.name, bool? force})
+    : force = force ?? false,
+      super(fullyQualifiedName);
 
   factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) =>
       DeleteDocumentRequest(
@@ -10385,11 +10476,10 @@ final class ListDocumentsRequest extends ProtoMessage {
   /// must match the call that provided the page token.
   final String pageToken;
 
-  ListDocumentsRequest({
-    required this.parent,
-    this.pageSize = 0,
-    this.pageToken = '',
-  }) : super(fullyQualifiedName);
+  ListDocumentsRequest({required this.parent, int? pageSize, String? pageToken})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListDocumentsRequest.fromJson(Map<String, dynamic> json) =>
       ListDocumentsRequest(
@@ -10429,8 +10519,9 @@ final class ListDocumentsResponse extends ProtoMessage {
   /// If this field is omitted, there are no more pages.
   final String nextPageToken;
 
-  ListDocumentsResponse({this.documents = const [], this.nextPageToken = ''})
-    : super(fullyQualifiedName);
+  ListDocumentsResponse({this.documents = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListDocumentsResponse.fromJson(Map<String, dynamic> json) =>
       ListDocumentsResponse(
@@ -10507,9 +10598,10 @@ final class QueryDocumentRequest extends ProtoMessage {
   QueryDocumentRequest({
     required this.name,
     required this.query,
-    this.resultsCount = 0,
+    int? resultsCount,
     this.metadataFilters = const [],
-  }) : super(fullyQualifiedName);
+  }) : resultsCount = resultsCount ?? 0,
+       super(fullyQualifiedName);
 
   factory QueryDocumentRequest.fromJson(Map<String, dynamic> json) =>
       QueryDocumentRequest(
@@ -10620,8 +10712,9 @@ final class BatchCreateChunksRequest extends ProtoMessage {
   /// A maximum of 100 `Chunk`s can be created in a batch.
   final List<CreateChunkRequest> requests;
 
-  BatchCreateChunksRequest({this.parent = '', required this.requests})
-    : super(fullyQualifiedName);
+  BatchCreateChunksRequest({String? parent, required this.requests})
+    : parent = parent ?? '',
+      super(fullyQualifiedName);
 
   factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) =>
       BatchCreateChunksRequest(
@@ -10736,8 +10829,9 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
   /// A maximum of 100 `Chunk`s can be updated in a batch.
   final List<UpdateChunkRequest> requests;
 
-  BatchUpdateChunksRequest({this.parent = '', required this.requests})
-    : super(fullyQualifiedName);
+  BatchUpdateChunksRequest({String? parent, required this.requests})
+    : parent = parent ?? '',
+      super(fullyQualifiedName);
 
   factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) =>
       BatchUpdateChunksRequest(
@@ -10820,8 +10914,9 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
   /// Required. The request messages specifying the `Chunk`s to delete.
   final List<DeleteChunkRequest> requests;
 
-  BatchDeleteChunksRequest({this.parent = '', required this.requests})
-    : super(fullyQualifiedName);
+  BatchDeleteChunksRequest({String? parent, required this.requests})
+    : parent = parent ?? '',
+      super(fullyQualifiedName);
 
   factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) =>
       BatchDeleteChunksRequest(
@@ -10869,11 +10964,10 @@ final class ListChunksRequest extends ProtoMessage {
   /// must match the call that provided the page token.
   final String pageToken;
 
-  ListChunksRequest({
-    required this.parent,
-    this.pageSize = 0,
-    this.pageToken = '',
-  }) : super(fullyQualifiedName);
+  ListChunksRequest({required this.parent, int? pageSize, String? pageToken})
+    : pageSize = pageSize ?? 0,
+      pageToken = pageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListChunksRequest.fromJson(Map<String, dynamic> json) =>
       ListChunksRequest(
@@ -10913,8 +11007,9 @@ final class ListChunksResponse extends ProtoMessage {
   /// If this field is omitted, there are no more pages.
   final String nextPageToken;
 
-  ListChunksResponse({this.chunks = const [], this.nextPageToken = ''})
-    : super(fullyQualifiedName);
+  ListChunksResponse({this.chunks = const [], String? nextPageToken})
+    : nextPageToken = nextPageToken ?? '',
+      super(fullyQualifiedName);
 
   factory ListChunksResponse.fromJson(Map<String, dynamic> json) =>
       ListChunksResponse(
@@ -11061,8 +11156,9 @@ final class SafetyRating extends ProtoMessage {
   SafetyRating({
     required this.category,
     required this.probability,
-    this.blocked = false,
-  }) : super(fullyQualifiedName);
+    bool? blocked,
+  }) : blocked = blocked ?? false,
+       super(fullyQualifiedName);
 
   factory SafetyRating.fromJson(Map<String, dynamic> json) => SafetyRating(
     category:
@@ -11455,10 +11551,11 @@ final class TextCompletion extends ProtoMessage {
   final CitationMetadata? citationMetadata;
 
   TextCompletion({
-    this.output = '',
+    String? output,
     this.safetyRatings = const [],
     this.citationMetadata,
-  }) : super(fullyQualifiedName);
+  }) : output = output ?? '',
+       super(fullyQualifiedName);
 
   factory TextCompletion.fromJson(Map<String, dynamic> json) => TextCompletion(
     output: json['output'] ?? '',
@@ -11497,8 +11594,9 @@ final class EmbedTextRequest extends ProtoMessage {
   /// embedding.
   final String text;
 
-  EmbedTextRequest({required this.model, this.text = ''})
-    : super(fullyQualifiedName);
+  EmbedTextRequest({required this.model, String? text})
+    : text = text ?? '',
+      super(fullyQualifiedName);
 
   factory EmbedTextRequest.fromJson(Map<String, dynamic> json) =>
       EmbedTextRequest(model: json['model'] ?? '', text: json['text'] ?? '');
@@ -11682,7 +11780,9 @@ final class CountTextTokensResponse extends ProtoMessage {
   /// Always non-negative.
   final int tokenCount;
 
-  CountTextTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
+  CountTextTokensResponse({int? tokenCount})
+    : tokenCount = tokenCount ?? 0,
+      super(fullyQualifiedName);
 
   factory CountTextTokensResponse.fromJson(Map<String, dynamic> json) =>
       CountTextTokensResponse(tokenCount: json['tokenCount'] ?? 0);
@@ -11776,9 +11876,9 @@ final class TunedModel extends ProtoMessage {
   TunedModel({
     this.tunedModelSource,
     this.baseModel,
-    this.name = '',
-    this.displayName = '',
-    this.description = '',
+    String? name,
+    String? displayName,
+    String? description,
     this.temperature,
     this.topP,
     this.topK,
@@ -11787,7 +11887,10 @@ final class TunedModel extends ProtoMessage {
     this.updateTime,
     required this.tuningTask,
     this.readerProjectNumbers = const [],
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       displayName = displayName ?? '',
+       description = description ?? '',
+       super(fullyQualifiedName);
 
   factory TunedModel.fromJson(Map<String, dynamic> json) => TunedModel(
     tunedModelSource: decode(
@@ -11886,8 +11989,10 @@ final class TunedModelSource extends ProtoMessage {
   /// Example: `models/gemini-1.5-flash-001`
   final String baseModel;
 
-  TunedModelSource({this.tunedModel = '', this.baseModel = ''})
-    : super(fullyQualifiedName);
+  TunedModelSource({String? tunedModel, String? baseModel})
+    : tunedModel = tunedModel ?? '',
+      baseModel = baseModel ?? '',
+      super(fullyQualifiedName);
 
   factory TunedModelSource.fromJson(Map<String, dynamic> json) =>
       TunedModelSource(
@@ -12120,12 +12225,11 @@ final class TuningSnapshot extends ProtoMessage {
   /// Output only. The timestamp when this metric was computed.
   final Timestamp? computeTime;
 
-  TuningSnapshot({
-    this.step = 0,
-    this.epoch = 0,
-    this.meanLoss = 0,
-    this.computeTime,
-  }) : super(fullyQualifiedName);
+  TuningSnapshot({int? step, int? epoch, double? meanLoss, this.computeTime})
+    : step = step ?? 0,
+      epoch = epoch ?? 0,
+      meanLoss = meanLoss ?? 0,
+      super(fullyQualifiedName);
 
   factory TuningSnapshot.fromJson(Map<String, dynamic> json) => TuningSnapshot(
     step: json['step'] ?? 0,

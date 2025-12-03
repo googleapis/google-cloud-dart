@@ -416,8 +416,8 @@ final class Function$ extends ProtoMessage {
   final Timestamp? createTime;
 
   Function$({
-    this.name = '',
-    this.description = '',
+    String? name,
+    String? description,
     this.buildConfig,
     this.serviceConfig,
     this.eventTrigger,
@@ -426,11 +426,16 @@ final class Function$ extends ProtoMessage {
     this.labels = const {},
     this.stateMessages = const [],
     this.environment = Environment.$default,
-    this.url = '',
-    this.kmsKeyName = '',
-    this.satisfiesPzs = false,
+    String? url,
+    String? kmsKeyName,
+    bool? satisfiesPzs,
     this.createTime,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       description = description ?? '',
+       url = url ?? '',
+       kmsKeyName = kmsKeyName ?? '',
+       satisfiesPzs = satisfiesPzs ?? false,
+       super(fullyQualifiedName);
 
   factory Function$.fromJson(Map<String, dynamic> json) => Function$(
     name: json['name'] ?? '',
@@ -537,9 +542,11 @@ final class StateMessage extends ProtoMessage {
 
   StateMessage({
     this.severity = StateMessage_Severity.$default,
-    this.type = '',
-    this.message = '',
-  }) : super(fullyQualifiedName);
+    String? type,
+    String? message,
+  }) : type = type ?? '',
+       message = message ?? '',
+       super(fullyQualifiedName);
 
   factory StateMessage.fromJson(Map<String, dynamic> json) => StateMessage(
     severity:
@@ -623,11 +630,15 @@ final class StorageSource extends ProtoMessage {
   final String sourceUploadUrl;
 
   StorageSource({
-    this.bucket = '',
-    this.object = '',
-    this.generation = 0,
-    this.sourceUploadUrl = '',
-  }) : super(fullyQualifiedName);
+    String? bucket,
+    String? object,
+    int? generation,
+    String? sourceUploadUrl,
+  }) : bucket = bucket ?? '',
+       object = object ?? '',
+       generation = generation ?? 0,
+       sourceUploadUrl = sourceUploadUrl ?? '',
+       super(fullyQualifiedName);
 
   factory StorageSource.fromJson(Map<String, dynamic> json) => StorageSource(
     bucket: json['bucket'] ?? '',
@@ -698,11 +709,15 @@ final class RepoSource extends ProtoMessage {
     this.branchName,
     this.tagName,
     this.commitSha,
-    this.projectId = '',
-    this.repoName = '',
-    this.dir = '',
-    this.invertRegex = false,
-  }) : super(fullyQualifiedName);
+    String? projectId,
+    String? repoName,
+    String? dir,
+    bool? invertRegex,
+  }) : projectId = projectId ?? '',
+       repoName = repoName ?? '',
+       dir = dir ?? '',
+       invertRegex = invertRegex ?? false,
+       super(fullyQualifiedName);
 
   factory RepoSource.fromJson(Map<String, dynamic> json) => RepoSource(
     branchName: json['branchName'],
@@ -800,8 +815,9 @@ final class SourceProvenance extends ProtoMessage {
   SourceProvenance({
     this.resolvedStorageSource,
     this.resolvedRepoSource,
-    this.gitUri = '',
-  }) : super(fullyQualifiedName);
+    String? gitUri,
+  }) : gitUri = gitUri ?? '',
+       super(fullyQualifiedName);
 
   factory SourceProvenance.fromJson(Map<String, dynamic> json) =>
       SourceProvenance(
@@ -915,17 +931,23 @@ final class BuildConfig extends ProtoMessage {
   BuildConfig({
     this.automaticUpdatePolicy,
     this.onDeployUpdatePolicy,
-    this.build = '',
-    this.runtime = '',
-    this.entryPoint = '',
+    String? build,
+    String? runtime,
+    String? entryPoint,
     this.source,
     this.sourceProvenance,
-    this.workerPool = '',
+    String? workerPool,
     this.environmentVariables = const {},
     this.dockerRegistry = BuildConfig_DockerRegistry.$default,
-    this.dockerRepository = '',
-    this.serviceAccount = '',
-  }) : super(fullyQualifiedName);
+    String? dockerRepository,
+    String? serviceAccount,
+  }) : build = build ?? '',
+       runtime = runtime ?? '',
+       entryPoint = entryPoint ?? '',
+       workerPool = workerPool ?? '',
+       dockerRepository = dockerRepository ?? '',
+       serviceAccount = serviceAccount ?? '',
+       super(fullyQualifiedName);
 
   factory BuildConfig.fromJson(Map<String, dynamic> json) => BuildConfig(
     automaticUpdatePolicy: decode(
@@ -1136,27 +1158,40 @@ final class ServiceConfig extends ProtoMessage {
   final String binaryAuthorizationPolicy;
 
   ServiceConfig({
-    this.service = '',
-    this.timeoutSeconds = 0,
-    this.availableMemory = '',
-    this.availableCpu = '',
+    String? service,
+    int? timeoutSeconds,
+    String? availableMemory,
+    String? availableCpu,
     this.environmentVariables = const {},
-    this.maxInstanceCount = 0,
-    this.minInstanceCount = 0,
-    this.vpcConnector = '',
+    int? maxInstanceCount,
+    int? minInstanceCount,
+    String? vpcConnector,
     this.vpcConnectorEgressSettings =
         ServiceConfig_VpcConnectorEgressSettings.$default,
     this.ingressSettings = ServiceConfig_IngressSettings.$default,
-    this.uri = '',
-    this.serviceAccountEmail = '',
-    this.allTrafficOnLatestRevision = false,
+    String? uri,
+    String? serviceAccountEmail,
+    bool? allTrafficOnLatestRevision,
     this.secretEnvironmentVariables = const [],
     this.secretVolumes = const [],
-    this.revision = '',
-    this.maxInstanceRequestConcurrency = 0,
+    String? revision,
+    int? maxInstanceRequestConcurrency,
     this.securityLevel = ServiceConfig_SecurityLevel.$default,
-    this.binaryAuthorizationPolicy = '',
-  }) : super(fullyQualifiedName);
+    String? binaryAuthorizationPolicy,
+  }) : service = service ?? '',
+       timeoutSeconds = timeoutSeconds ?? 0,
+       availableMemory = availableMemory ?? '',
+       availableCpu = availableCpu ?? '',
+       maxInstanceCount = maxInstanceCount ?? 0,
+       minInstanceCount = minInstanceCount ?? 0,
+       vpcConnector = vpcConnector ?? '',
+       uri = uri ?? '',
+       serviceAccountEmail = serviceAccountEmail ?? '',
+       allTrafficOnLatestRevision = allTrafficOnLatestRevision ?? false,
+       revision = revision ?? '',
+       maxInstanceRequestConcurrency = maxInstanceRequestConcurrency ?? 0,
+       binaryAuthorizationPolicy = binaryAuthorizationPolicy ?? '',
+       super(fullyQualifiedName);
 
   factory ServiceConfig.fromJson(Map<String, dynamic> json) => ServiceConfig(
     service: json['service'] ?? '',
@@ -1391,11 +1426,15 @@ final class SecretEnvVar extends ProtoMessage {
   final String version;
 
   SecretEnvVar({
-    this.key = '',
-    this.projectId = '',
-    this.secret = '',
-    this.version = '',
-  }) : super(fullyQualifiedName);
+    String? key,
+    String? projectId,
+    String? secret,
+    String? version,
+  }) : key = key ?? '',
+       projectId = projectId ?? '',
+       secret = secret ?? '',
+       version = version ?? '',
+       super(fullyQualifiedName);
 
   factory SecretEnvVar.fromJson(Map<String, dynamic> json) => SecretEnvVar(
     key: json['key'] ?? '',
@@ -1452,11 +1491,14 @@ final class SecretVolume extends ProtoMessage {
   final List<SecretVolume_SecretVersion> versions;
 
   SecretVolume({
-    this.mountPath = '',
-    this.projectId = '',
-    this.secret = '',
+    String? mountPath,
+    String? projectId,
+    String? secret,
     this.versions = const [],
-  }) : super(fullyQualifiedName);
+  }) : mountPath = mountPath ?? '',
+       projectId = projectId ?? '',
+       secret = secret ?? '',
+       super(fullyQualifiedName);
 
   factory SecretVolume.fromJson(Map<String, dynamic> json) => SecretVolume(
     mountPath: json['mountPath'] ?? '',
@@ -1505,8 +1547,10 @@ final class SecretVolume_SecretVersion extends ProtoMessage {
   /// secret value file at `/etc/secrets/secret_foo`.
   final String path;
 
-  SecretVolume_SecretVersion({this.version = '', this.path = ''})
-    : super(fullyQualifiedName);
+  SecretVolume_SecretVersion({String? version, String? path})
+    : version = version ?? '',
+      path = path ?? '',
+      super(fullyQualifiedName);
 
   factory SecretVolume_SecretVersion.fromJson(Map<String, dynamic> json) =>
       SecretVolume_SecretVersion(
@@ -1587,16 +1631,22 @@ final class EventTrigger extends ProtoMessage {
   final String service;
 
   EventTrigger({
-    this.trigger = '',
-    this.triggerRegion = '',
+    String? trigger,
+    String? triggerRegion,
     required this.eventType,
     this.eventFilters = const [],
-    this.pubsubTopic = '',
-    this.serviceAccountEmail = '',
+    String? pubsubTopic,
+    String? serviceAccountEmail,
     this.retryPolicy = EventTrigger_RetryPolicy.$default,
-    this.channel = '',
-    this.service = '',
-  }) : super(fullyQualifiedName);
+    String? channel,
+    String? service,
+  }) : trigger = trigger ?? '',
+       triggerRegion = triggerRegion ?? '',
+       pubsubTopic = pubsubTopic ?? '',
+       serviceAccountEmail = serviceAccountEmail ?? '',
+       channel = channel ?? '',
+       service = service ?? '',
+       super(fullyQualifiedName);
 
   factory EventTrigger.fromJson(Map<String, dynamic> json) => EventTrigger(
     trigger: json['trigger'] ?? '',
@@ -1693,11 +1743,9 @@ final class EventFilter extends ProtoMessage {
   /// `match-path-pattern`.
   final String operator;
 
-  EventFilter({
-    required this.attribute,
-    required this.value,
-    this.operator = '',
-  }) : super(fullyQualifiedName);
+  EventFilter({required this.attribute, required this.value, String? operator})
+    : operator = operator ?? '',
+      super(fullyQualifiedName);
 
   factory EventFilter.fromJson(Map<String, dynamic> json) => EventFilter(
     attribute: json['attribute'] ?? '',
@@ -1739,8 +1787,9 @@ final class GetFunctionRequest extends ProtoMessage {
   /// function.
   final String revision;
 
-  GetFunctionRequest({required this.name, this.revision = ''})
-    : super(fullyQualifiedName);
+  GetFunctionRequest({required this.name, String? revision})
+    : revision = revision ?? '',
+      super(fullyQualifiedName);
 
   factory GetFunctionRequest.fromJson(Map<String, dynamic> json) =>
       GetFunctionRequest(
@@ -1797,11 +1846,15 @@ final class ListFunctionsRequest extends ProtoMessage {
 
   ListFunctionsRequest({
     required this.parent,
-    this.pageSize = 0,
-    this.pageToken = '',
-    this.filter = '',
-    this.orderBy = '',
-  }) : super(fullyQualifiedName);
+    int? pageSize,
+    String? pageToken,
+    String? filter,
+    String? orderBy,
+  }) : pageSize = pageSize ?? 0,
+       pageToken = pageToken ?? '',
+       filter = filter ?? '',
+       orderBy = orderBy ?? '',
+       super(fullyQualifiedName);
 
   factory ListFunctionsRequest.fromJson(Map<String, dynamic> json) =>
       ListFunctionsRequest(
@@ -1852,9 +1905,10 @@ final class ListFunctionsResponse extends ProtoMessage {
 
   ListFunctionsResponse({
     this.functions = const [],
-    this.nextPageToken = '',
+    String? nextPageToken,
     this.unreachable = const [],
-  }) : super(fullyQualifiedName);
+  }) : nextPageToken = nextPageToken ?? '',
+       super(fullyQualifiedName);
 
   factory ListFunctionsResponse.fromJson(Map<String, dynamic> json) =>
       ListFunctionsResponse(
@@ -1900,8 +1954,9 @@ final class CreateFunctionRequest extends ProtoMessage {
   CreateFunctionRequest({
     required this.parent,
     required this.function,
-    this.functionId = '',
-  }) : super(fullyQualifiedName);
+    String? functionId,
+  }) : functionId = functionId ?? '',
+       super(fullyQualifiedName);
 
   factory CreateFunctionRequest.fromJson(Map<String, dynamic> json) =>
       CreateFunctionRequest(
@@ -2012,9 +2067,10 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
 
   GenerateUploadUrlRequest({
     required this.parent,
-    this.kmsKeyName = '',
+    String? kmsKeyName,
     this.environment = Environment.$default,
-  }) : super(fullyQualifiedName);
+  }) : kmsKeyName = kmsKeyName ?? '',
+       super(fullyQualifiedName);
 
   factory GenerateUploadUrlRequest.fromJson(Map<String, dynamic> json) =>
       GenerateUploadUrlRequest(
@@ -2063,8 +2119,9 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   /// upon uploading a new object or version of an object.
   final StorageSource? storageSource;
 
-  GenerateUploadUrlResponse({this.uploadUrl = '', this.storageSource})
-    : super(fullyQualifiedName);
+  GenerateUploadUrlResponse({String? uploadUrl, this.storageSource})
+    : uploadUrl = uploadUrl ?? '',
+      super(fullyQualifiedName);
 
   factory GenerateUploadUrlResponse.fromJson(Map<String, dynamic> json) =>
       GenerateUploadUrlResponse(
@@ -2118,8 +2175,9 @@ final class GenerateDownloadUrlResponse extends ProtoMessage {
   /// function source code download.
   final String downloadUrl;
 
-  GenerateDownloadUrlResponse({this.downloadUrl = ''})
-    : super(fullyQualifiedName);
+  GenerateDownloadUrlResponse({String? downloadUrl})
+    : downloadUrl = downloadUrl ?? '',
+      super(fullyQualifiedName);
 
   factory GenerateDownloadUrlResponse.fromJson(Map<String, dynamic> json) =>
       GenerateDownloadUrlResponse(downloadUrl: json['downloadUrl'] ?? '');
@@ -2147,8 +2205,9 @@ final class ListRuntimesRequest extends ProtoMessage {
   /// following the syntax outlined in https://google.aip.dev/160.
   final String filter;
 
-  ListRuntimesRequest({required this.parent, this.filter = ''})
-    : super(fullyQualifiedName);
+  ListRuntimesRequest({required this.parent, String? filter})
+    : filter = filter ?? '',
+      super(fullyQualifiedName);
 
   factory ListRuntimesRequest.fromJson(Map<String, dynamic> json) =>
       ListRuntimesRequest(
@@ -2226,14 +2285,16 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
   final Date? decommissionDate;
 
   ListRuntimesResponse_Runtime({
-    this.name = '',
-    this.displayName = '',
+    String? name,
+    String? displayName,
     this.stage = ListRuntimesResponse_RuntimeStage.$default,
     this.warnings = const [],
     this.environment = Environment.$default,
     this.deprecationDate,
     this.decommissionDate,
-  }) : super(fullyQualifiedName);
+  }) : name = name ?? '',
+       displayName = displayName ?? '',
+       super(fullyQualifiedName);
 
   factory ListRuntimesResponse_Runtime.fromJson(Map<String, dynamic> json) =>
       ListRuntimesResponse_Runtime(
@@ -2345,7 +2406,9 @@ final class OnDeployUpdatePolicy extends ProtoMessage {
   /// function deployment.
   final String runtimeVersion;
 
-  OnDeployUpdatePolicy({this.runtimeVersion = ''}) : super(fullyQualifiedName);
+  OnDeployUpdatePolicy({String? runtimeVersion})
+    : runtimeVersion = runtimeVersion ?? '',
+      super(fullyQualifiedName);
 
   factory OnDeployUpdatePolicy.fromJson(Map<String, dynamic> json) =>
       OnDeployUpdatePolicy(runtimeVersion: json['runtimeVersion'] ?? '');
@@ -2412,17 +2475,24 @@ final class OperationMetadata extends ProtoMessage {
   OperationMetadata({
     this.createTime,
     this.endTime,
-    this.target = '',
-    this.verb = '',
-    this.statusDetail = '',
-    this.cancelRequested = false,
-    this.apiVersion = '',
+    String? target,
+    String? verb,
+    String? statusDetail,
+    bool? cancelRequested,
+    String? apiVersion,
     this.requestResource,
     this.stages = const [],
-    this.sourceToken = '',
-    this.buildName = '',
+    String? sourceToken,
+    String? buildName,
     this.operationType = OperationType.$default,
-  }) : super(fullyQualifiedName);
+  }) : target = target ?? '',
+       verb = verb ?? '',
+       statusDetail = statusDetail ?? '',
+       cancelRequested = cancelRequested ?? false,
+       apiVersion = apiVersion ?? '',
+       sourceToken = sourceToken ?? '',
+       buildName = buildName ?? '',
+       super(fullyQualifiedName);
 
   factory OperationMetadata.fromJson(Map<String, dynamic> json) =>
       OperationMetadata(
@@ -2523,12 +2593,15 @@ final class Stage extends ProtoMessage {
 
   Stage({
     this.name = Stage_Name.$default,
-    this.message = '',
+    String? message,
     this.state = Stage_State.$default,
-    this.resource = '',
-    this.resourceUri = '',
+    String? resource,
+    String? resourceUri,
     this.stateMessages = const [],
-  }) : super(fullyQualifiedName);
+  }) : message = message ?? '',
+       resource = resource ?? '',
+       resourceUri = resourceUri ?? '',
+       super(fullyQualifiedName);
 
   factory Stage.fromJson(Map<String, dynamic> json) => Stage(
     name: decodeEnum(json['name'], Stage_Name.fromJson) ?? Stage_Name.$default,
