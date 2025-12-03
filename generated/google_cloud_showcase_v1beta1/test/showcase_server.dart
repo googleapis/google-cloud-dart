@@ -32,7 +32,7 @@ class ShowcaseServer {
 
   static Future<void> _install() async {
     // Install showcase rather than running it using `go run` because `go run`
-    // will then spawn showcase as a subprocess, which means that we don't be
+    // will then spawn showcase as a subprocess, which means that we won't be
     // able to kill it.
     final result = await Process.run('go', [
       'install',
