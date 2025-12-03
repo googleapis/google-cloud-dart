@@ -19,6 +19,7 @@
 /// Defines RPC types.
 library;
 
+// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -87,27 +88,11 @@ final class ErrorInfo extends ProtoMessage {
   ErrorInfo({this.reason = '', this.domain = '', this.metadata = const {}})
     : super(fullyQualifiedName);
 
-  factory ErrorInfo.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return ErrorInfo(
-      reason: switch (json['reason']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      domain: switch (json['domain']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      metadata: switch (json['metadata']) {
-        null => {},
-        Map<String, Object?> $1 => {
-          for (final e in $1.entries)
-            decodeString(e.key): decodeString(e.value),
-        },
-        _ => throw TypeError(),
-      },
-    );
-  }
+  factory ErrorInfo.fromJson(Map<String, dynamic> json) => ErrorInfo(
+    reason: json['reason'] ?? '',
+    domain: json['domain'] ?? '',
+    metadata: decodeMap(json['metadata']) ?? {},
+  );
 
   @override
   Object toJson() => {
@@ -144,15 +129,9 @@ final class RetryInfo extends ProtoMessage {
 
   RetryInfo({this.retryDelay}) : super(fullyQualifiedName);
 
-  factory RetryInfo.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return RetryInfo(
-      retryDelay: switch (json['retryDelay']) {
-        null => null,
-        Object $1 => Duration.fromJson($1),
-      },
-    );
-  }
+  factory RetryInfo.fromJson(Map<String, dynamic> json) => RetryInfo(
+    retryDelay: decodeCustom(json['retryDelay'], Duration.fromJson),
+  );
 
   @override
   Object toJson() => {
@@ -176,20 +155,10 @@ final class DebugInfo extends ProtoMessage {
   DebugInfo({this.stackEntries = const [], this.detail = ''})
     : super(fullyQualifiedName);
 
-  factory DebugInfo.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return DebugInfo(
-      stackEntries: switch (json['stackEntries']) {
-        null => [],
-        List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
-      },
-      detail: switch (json['detail']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory DebugInfo.fromJson(Map<String, dynamic> json) => DebugInfo(
+    stackEntries: decodeList(json['stackEntries']) ?? [],
+    detail: json['detail'] ?? '',
+  );
 
   @override
   Object toJson() => {
@@ -223,18 +192,14 @@ final class QuotaFailure extends ProtoMessage {
 
   QuotaFailure({this.violations = const []}) : super(fullyQualifiedName);
 
-  factory QuotaFailure.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return QuotaFailure(
-      violations: switch (json['violations']) {
-        null => [],
-        List<Object?> $1 => [
-          for (final i in $1) QuotaFailure_Violation.fromJson(i),
-        ],
-        _ => throw TypeError(),
-      },
-    );
-  }
+  factory QuotaFailure.fromJson(Map<String, dynamic> json) => QuotaFailure(
+    violations:
+        decodeListMessage(
+          json['violations'],
+          QuotaFailure_Violation.fromJson,
+        ) ??
+        [],
+  );
 
   @override
   Object toJson() => {
@@ -340,47 +305,17 @@ final class QuotaFailure_Violation extends ProtoMessage {
     this.futureQuotaValue,
   }) : super(fullyQualifiedName);
 
-  factory QuotaFailure_Violation.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return QuotaFailure_Violation(
-      subject: switch (json['subject']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      description: switch (json['description']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      apiService: switch (json['apiService']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      quotaMetric: switch (json['quotaMetric']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      quotaId: switch (json['quotaId']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      quotaDimensions: switch (json['quotaDimensions']) {
-        null => {},
-        Map<String, Object?> $1 => {
-          for (final e in $1.entries)
-            decodeString(e.key): decodeString(e.value),
-        },
-        _ => throw TypeError(),
-      },
-      quotaValue: switch (json['quotaValue']) {
-        null => 0,
-        Object $1 => decodeInt64($1),
-      },
-      futureQuotaValue: switch (json['futureQuotaValue']) {
-        null => null,
-        Object $1 => decodeInt64($1),
-      },
-    );
-  }
+  factory QuotaFailure_Violation.fromJson(Map<String, dynamic> json) =>
+      QuotaFailure_Violation(
+        subject: json['subject'] ?? '',
+        description: json['description'] ?? '',
+        apiService: json['apiService'] ?? '',
+        quotaMetric: json['quotaMetric'] ?? '',
+        quotaId: json['quotaId'] ?? '',
+        quotaDimensions: decodeMap(json['quotaDimensions']) ?? {},
+        quotaValue: decodeInt64(json['quotaValue']) ?? 0,
+        futureQuotaValue: decodeInt64(json['futureQuotaValue']),
+      );
 
   @override
   Object toJson() => {
@@ -423,18 +358,15 @@ final class PreconditionFailure extends ProtoMessage {
 
   PreconditionFailure({this.violations = const []}) : super(fullyQualifiedName);
 
-  factory PreconditionFailure.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return PreconditionFailure(
-      violations: switch (json['violations']) {
-        null => [],
-        List<Object?> $1 => [
-          for (final i in $1) PreconditionFailure_Violation.fromJson(i),
-        ],
-        _ => throw TypeError(),
-      },
-    );
-  }
+  factory PreconditionFailure.fromJson(Map<String, dynamic> json) =>
+      PreconditionFailure(
+        violations:
+            decodeListMessage(
+              json['violations'],
+              PreconditionFailure_Violation.fromJson,
+            ) ??
+            [],
+      );
 
   @override
   Object toJson() => {
@@ -472,23 +404,12 @@ final class PreconditionFailure_Violation extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory PreconditionFailure_Violation.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return PreconditionFailure_Violation(
-      type: switch (json['type']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      subject: switch (json['subject']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      description: switch (json['description']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory PreconditionFailure_Violation.fromJson(Map<String, dynamic> json) =>
+      PreconditionFailure_Violation(
+        type: json['type'] ?? '',
+        subject: json['subject'] ?? '',
+        description: json['description'] ?? '',
+      );
 
   @override
   Object toJson() => {
@@ -518,18 +439,14 @@ final class BadRequest extends ProtoMessage {
 
   BadRequest({this.fieldViolations = const []}) : super(fullyQualifiedName);
 
-  factory BadRequest.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return BadRequest(
-      fieldViolations: switch (json['fieldViolations']) {
-        null => [],
-        List<Object?> $1 => [
-          for (final i in $1) BadRequest_FieldViolation.fromJson(i),
-        ],
-        _ => throw TypeError(),
-      },
-    );
-  }
+  factory BadRequest.fromJson(Map<String, dynamic> json) => BadRequest(
+    fieldViolations:
+        decodeListMessage(
+          json['fieldViolations'],
+          BadRequest_FieldViolation.fromJson,
+        ) ??
+        [],
+  );
 
   @override
   Object toJson() => {
@@ -607,27 +524,16 @@ final class BadRequest_FieldViolation extends ProtoMessage {
     this.localizedMessage,
   }) : super(fullyQualifiedName);
 
-  factory BadRequest_FieldViolation.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return BadRequest_FieldViolation(
-      field: switch (json['field']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      description: switch (json['description']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      reason: switch (json['reason']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      localizedMessage: switch (json['localizedMessage']) {
-        null => null,
-        Object $1 => LocalizedMessage.fromJson($1),
-      },
-    );
-  }
+  factory BadRequest_FieldViolation.fromJson(Map<String, dynamic> json) =>
+      BadRequest_FieldViolation(
+        field: json['field'] ?? '',
+        description: json['description'] ?? '',
+        reason: json['reason'] ?? '',
+        localizedMessage: decode(
+          json['localizedMessage'],
+          LocalizedMessage.fromJson,
+        ),
+      );
 
   @override
   Object toJson() => {
@@ -665,19 +571,10 @@ final class RequestInfo extends ProtoMessage {
   RequestInfo({this.requestId = '', this.servingData = ''})
     : super(fullyQualifiedName);
 
-  factory RequestInfo.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return RequestInfo(
-      requestId: switch (json['requestId']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      servingData: switch (json['servingData']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory RequestInfo.fromJson(Map<String, dynamic> json) => RequestInfo(
+    requestId: json['requestId'] ?? '',
+    servingData: json['servingData'] ?? '',
+  );
 
   @override
   Object toJson() => {
@@ -727,27 +624,12 @@ final class ResourceInfo extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory ResourceInfo.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return ResourceInfo(
-      resourceType: switch (json['resourceType']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      resourceName: switch (json['resourceName']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      owner: switch (json['owner']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      description: switch (json['description']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory ResourceInfo.fromJson(Map<String, dynamic> json) => ResourceInfo(
+    resourceType: json['resourceType'] ?? '',
+    resourceName: json['resourceName'] ?? '',
+    owner: json['owner'] ?? '',
+    description: json['description'] ?? '',
+  );
 
   @override
   Object toJson() => {
@@ -782,16 +664,8 @@ final class Help extends ProtoMessage {
 
   Help({this.links = const []}) : super(fullyQualifiedName);
 
-  factory Help.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return Help(
-      links: switch (json['links']) {
-        null => [],
-        List<Object?> $1 => [for (final i in $1) Help_Link.fromJson(i)],
-        _ => throw TypeError(),
-      },
-    );
-  }
+  factory Help.fromJson(Map<String, dynamic> json) =>
+      Help(links: decodeListMessage(json['links'], Help_Link.fromJson) ?? []);
 
   @override
   Object toJson() => {if (links.isNotDefault) 'links': encodeList(links)};
@@ -812,19 +686,8 @@ final class Help_Link extends ProtoMessage {
 
   Help_Link({this.description = '', this.url = ''}) : super(fullyQualifiedName);
 
-  factory Help_Link.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return Help_Link(
-      description: switch (json['description']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      url: switch (json['url']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory Help_Link.fromJson(Map<String, dynamic> json) =>
+      Help_Link(description: json['description'] ?? '', url: json['url'] ?? '');
 
   @override
   Object toJson() => {
@@ -855,19 +718,11 @@ final class LocalizedMessage extends ProtoMessage {
   LocalizedMessage({this.locale = '', this.message = ''})
     : super(fullyQualifiedName);
 
-  factory LocalizedMessage.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return LocalizedMessage(
-      locale: switch (json['locale']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      message: switch (json['message']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory LocalizedMessage.fromJson(Map<String, dynamic> json) =>
+      LocalizedMessage(
+        locale: json['locale'] ?? '',
+        message: json['message'] ?? '',
+      );
 
   @override
   Object toJson() => {
@@ -897,53 +752,34 @@ final class HttpRequest extends ProtoMessage {
   final List<HttpHeader> headers;
 
   /// The HTTP request body. If the body is not expected, it should be empty.
-  final Uint8List? body;
+  final Uint8List body;
 
   HttpRequest({
     this.method = '',
     this.uri = '',
     this.headers = const [],
-    this.body,
-  }) : super(fullyQualifiedName);
+    Uint8List? body,
+  }) : body = body ?? Uint8List(0),
+       super(fullyQualifiedName);
 
-  factory HttpRequest.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return HttpRequest(
-      method: switch (json['method']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      uri: switch (json['uri']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      headers: switch (json['headers']) {
-        null => [],
-        List<Object?> $1 => [for (final i in $1) HttpHeader.fromJson(i)],
-        _ => throw TypeError(),
-      },
-      body: switch (json['body']) {
-        null => null,
-        Object $1 => decodeBytes($1),
-      },
-    );
-  }
+  factory HttpRequest.fromJson(Map<String, dynamic> json) => HttpRequest(
+    method: json['method'] ?? '',
+    uri: json['uri'] ?? '',
+    headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
+    body: decodeBytes(json['body']) ?? Uint8List(0),
+  );
 
   @override
   Object toJson() => {
     if (method.isNotDefault) 'method': method,
     if (uri.isNotDefault) 'uri': uri,
     if (headers.isNotDefault) 'headers': encodeList(headers),
-    if (body != null) 'body': encodeBytes(body),
+    if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
   String toString() {
-    final contents = [
-      'method=$method',
-      'uri=$uri',
-      if (body != null) 'body=$body',
-    ].join(',');
+    final contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
     return 'HttpRequest($contents)';
   }
 }
@@ -963,44 +799,29 @@ final class HttpResponse extends ProtoMessage {
   final List<HttpHeader> headers;
 
   /// The HTTP response body. If the body is not expected, it should be empty.
-  final Uint8List? body;
+  final Uint8List body;
 
   HttpResponse({
     this.status = 0,
     this.reason = '',
     this.headers = const [],
-    this.body,
-  }) : super(fullyQualifiedName);
+    Uint8List? body,
+  }) : body = body ?? Uint8List(0),
+       super(fullyQualifiedName);
 
-  factory HttpResponse.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return HttpResponse(
-      status: switch (json['status']) {
-        null => 0,
-        Object $1 => decodeInt($1),
-      },
-      reason: switch (json['reason']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      headers: switch (json['headers']) {
-        null => [],
-        List<Object?> $1 => [for (final i in $1) HttpHeader.fromJson(i)],
-        _ => throw TypeError(),
-      },
-      body: switch (json['body']) {
-        null => null,
-        Object $1 => decodeBytes($1),
-      },
-    );
-  }
+  factory HttpResponse.fromJson(Map<String, dynamic> json) => HttpResponse(
+    status: json['status'] ?? 0,
+    reason: json['reason'] ?? '',
+    headers: decodeListMessage(json['headers'], HttpHeader.fromJson) ?? [],
+    body: decodeBytes(json['body']) ?? Uint8List(0),
+  );
 
   @override
   Object toJson() => {
     if (status.isNotDefault) 'status': status,
     if (reason.isNotDefault) 'reason': reason,
     if (headers.isNotDefault) 'headers': encodeList(headers),
-    if (body != null) 'body': encodeBytes(body),
+    if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
@@ -1008,7 +829,7 @@ final class HttpResponse extends ProtoMessage {
     final contents = [
       'status=$status',
       'reason=$reason',
-      if (body != null) 'body=$body',
+      'body=$body',
     ].join(',');
     return 'HttpResponse($contents)';
   }
@@ -1026,19 +847,8 @@ final class HttpHeader extends ProtoMessage {
 
   HttpHeader({this.key = '', this.value = ''}) : super(fullyQualifiedName);
 
-  factory HttpHeader.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return HttpHeader(
-      key: switch (json['key']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      value: switch (json['value']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-    );
-  }
+  factory HttpHeader.fromJson(Map<String, dynamic> json) =>
+      HttpHeader(key: json['key'] ?? '', value: json['value'] ?? '');
 
   @override
   Object toJson() => {
@@ -1080,24 +890,11 @@ final class Status extends ProtoMessage {
   Status({this.code = 0, this.message = '', this.details = const []})
     : super(fullyQualifiedName);
 
-  factory Status.fromJson(Object? j) {
-    final json = j as Map<String, Object?>;
-    return Status(
-      code: switch (json['code']) {
-        null => 0,
-        Object $1 => decodeInt($1),
-      },
-      message: switch (json['message']) {
-        null => '',
-        Object $1 => decodeString($1),
-      },
-      details: switch (json['details']) {
-        null => [],
-        List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
-        _ => throw TypeError(),
-      },
-    );
-  }
+  factory Status.fromJson(Map<String, dynamic> json) => Status(
+    code: json['code'] ?? 0,
+    message: json['message'] ?? '',
+    details: decodeListMessage(json['details'], Any.fromJson) ?? [],
+  );
 
   @override
   Object toJson() => {
@@ -1280,7 +1077,7 @@ final class Code extends ProtoEnum {
 
   const Code(super.value);
 
-  factory Code.fromJson(Object? json) => Code(json as String);
+  factory Code.fromJson(String json) => Code(json);
 
   bool get isNotDefault => this != $default;
 
