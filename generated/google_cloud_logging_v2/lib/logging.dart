@@ -1150,20 +1150,16 @@ final class LogEntry extends ProtoMessage {
     this.timestamp,
     this.receiveTimestamp,
     this.severity = logging_type.LogSeverity.$default,
-    String? insertId,
+    this.insertId = '',
     this.httpRequest,
     this.labels = const {},
     this.operation,
-    String? trace,
-    String? spanId,
-    bool? traceSampled,
+    this.trace = '',
+    this.spanId = '',
+    this.traceSampled = false,
     this.sourceLocation,
     this.split,
-  }) : insertId = insertId ?? '',
-       trace = trace ?? '',
-       spanId = spanId ?? '',
-       traceSampled = traceSampled ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
     logName: json['logName'] ?? '',
@@ -1251,12 +1247,12 @@ final class LogEntryOperation extends ProtoMessage {
   /// Optional. Set this to True if this is the last log entry in the operation.
   final bool last;
 
-  LogEntryOperation({String? id, String? producer, bool? first, bool? last})
-    : id = id ?? '',
-      producer = producer ?? '',
-      first = first ?? false,
-      last = last ?? false,
-      super(fullyQualifiedName);
+  LogEntryOperation({
+    this.id = '',
+    this.producer = '',
+    this.first = false,
+    this.last = false,
+  }) : super(fullyQualifiedName);
 
   factory LogEntryOperation.fromJson(Map<String, dynamic> json) =>
       LogEntryOperation(
@@ -1308,11 +1304,8 @@ final class LogEntrySourceLocation extends ProtoMessage {
   /// (Python).
   final String function;
 
-  LogEntrySourceLocation({String? file, int? line, String? function})
-    : file = file ?? '',
-      line = line ?? 0,
-      function = function ?? '',
-      super(fullyQualifiedName);
+  LogEntrySourceLocation({this.file = '', this.line = 0, this.function = ''})
+    : super(fullyQualifiedName);
 
   factory LogEntrySourceLocation.fromJson(Map<String, dynamic> json) =>
       LogEntrySourceLocation(
@@ -1358,11 +1351,8 @@ final class LogSplit extends ProtoMessage {
   /// The total number of log entries that the original LogEntry was split into.
   final int totalSplits;
 
-  LogSplit({String? uid, int? index, int? totalSplits})
-    : uid = uid ?? '',
-      index = index ?? 0,
-      totalSplits = totalSplits ?? 0,
-      super(fullyQualifiedName);
+  LogSplit({this.uid = '', this.index = 0, this.totalSplits = 0})
+    : super(fullyQualifiedName);
 
   factory LogSplit.fromJson(Map<String, dynamic> json) => LogSplit(
     uid: json['uid'] ?? '',
@@ -1503,16 +1493,13 @@ final class WriteLogEntriesRequest extends ProtoMessage {
   final bool dryRun;
 
   WriteLogEntriesRequest({
-    String? logName,
+    this.logName = '',
     this.resource,
     this.labels = const {},
     required this.entries,
-    bool? partialSuccess,
-    bool? dryRun,
-  }) : logName = logName ?? '',
-       partialSuccess = partialSuccess ?? false,
-       dryRun = dryRun ?? false,
-       super(fullyQualifiedName);
+    this.partialSuccess = false,
+    this.dryRun = false,
+  }) : super(fullyQualifiedName);
 
   factory WriteLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
       WriteLogEntriesRequest(
@@ -1647,15 +1634,11 @@ final class ListLogEntriesRequest extends ProtoMessage {
 
   ListLogEntriesRequest({
     required this.resourceNames,
-    String? filter,
-    String? orderBy,
-    int? pageSize,
-    String? pageToken,
-  }) : filter = filter ?? '',
-       orderBy = orderBy ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.orderBy = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
       ListLogEntriesRequest(
@@ -1709,9 +1692,8 @@ final class ListLogEntriesResponse extends ProtoMessage {
   /// or resource type, or to narrow the time range of the search.
   final String nextPageToken;
 
-  ListLogEntriesResponse({this.entries = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListLogEntriesResponse({this.entries = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
       ListLogEntriesResponse(
@@ -1748,10 +1730,10 @@ final class ListMonitoredResourceDescriptorsRequest extends ProtoMessage {
   /// parameters should be identical to those in the previous call.
   final String pageToken;
 
-  ListMonitoredResourceDescriptorsRequest({int? pageSize, String? pageToken})
-    : pageSize = pageSize ?? 0,
-      pageToken = pageToken ?? '',
-      super(fullyQualifiedName);
+  ListMonitoredResourceDescriptorsRequest({
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMonitoredResourceDescriptorsRequest.fromJson(
     Map<String, dynamic> json,
@@ -1788,9 +1770,8 @@ final class ListMonitoredResourceDescriptorsResponse extends ProtoMessage {
 
   ListMonitoredResourceDescriptorsResponse({
     this.resourceDescriptors = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMonitoredResourceDescriptorsResponse.fromJson(
     Map<String, dynamic> json,
@@ -1861,11 +1842,9 @@ final class ListLogsRequest extends ProtoMessage {
   ListLogsRequest({
     required this.parent,
     this.resourceNames = const [],
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListLogsRequest.fromJson(Map<String, dynamic> json) =>
       ListLogsRequest(
@@ -1908,9 +1887,8 @@ final class ListLogsResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListLogsResponse({this.logNames = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListLogsResponse({this.logNames = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListLogsResponse.fromJson(Map<String, dynamic> json) =>
       ListLogsResponse(
@@ -1966,10 +1944,9 @@ final class TailLogEntriesRequest extends ProtoMessage {
 
   TailLogEntriesRequest({
     required this.resourceNames,
-    String? filter,
+    this.filter = '',
     this.bufferWindow,
-  }) : filter = filter ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory TailLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
       TailLogEntriesRequest(
@@ -2049,9 +2026,8 @@ final class TailLogEntriesResponse_SuppressionInfo extends ProtoMessage {
 
   TailLogEntriesResponse_SuppressionInfo({
     this.reason = TailLogEntriesResponse_SuppressionInfo_Reason.$default,
-    int? suppressedCount,
-  }) : suppressedCount = suppressedCount ?? 0,
-       super(fullyQualifiedName);
+    this.suppressedCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory TailLogEntriesResponse_SuppressionInfo.fromJson(
     Map<String, dynamic> json,
@@ -2230,23 +2206,18 @@ final class LogBucket extends ProtoMessage {
   final CmekSettings? cmekSettings;
 
   LogBucket({
-    String? name,
-    String? description,
+    this.name = '',
+    this.description = '',
     this.createTime,
     this.updateTime,
-    int? retentionDays,
-    bool? locked,
+    this.retentionDays = 0,
+    this.locked = false,
     this.lifecycleState = LifecycleState.$default,
-    bool? analyticsEnabled,
+    this.analyticsEnabled = false,
     this.restrictedFields = const [],
     this.indexConfigs = const [],
     this.cmekSettings,
-  }) : name = name ?? '',
-       description = description ?? '',
-       retentionDays = retentionDays ?? 0,
-       locked = locked ?? false,
-       analyticsEnabled = analyticsEnabled ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory LogBucket.fromJson(Map<String, dynamic> json) => LogBucket(
     name: json['name'] ?? '',
@@ -2331,15 +2302,12 @@ final class LogView extends ProtoMessage {
   final String filter;
 
   LogView({
-    String? name,
-    String? description,
+    this.name = '',
+    this.description = '',
     this.createTime,
     this.updateTime,
-    String? filter,
-  }) : name = name ?? '',
-       description = description ?? '',
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory LogView.fromJson(Map<String, dynamic> json) => LogView(
     name: json['name'] ?? '',
@@ -2482,22 +2450,17 @@ final class LogSink extends ProtoMessage {
   LogSink({
     required this.name,
     required this.destination,
-    String? filter,
-    String? description,
-    bool? disabled,
+    this.filter = '',
+    this.description = '',
+    this.disabled = false,
     this.exclusions = const [],
     this.outputVersionFormat = LogSink_VersionFormat.$default,
-    String? writerIdentity,
-    bool? includeChildren,
+    this.writerIdentity = '',
+    this.includeChildren = false,
     this.bigqueryOptions,
     this.createTime,
     this.updateTime,
-  }) : filter = filter ?? '',
-       description = description ?? '',
-       disabled = disabled ?? false,
-       writerIdentity = writerIdentity ?? '',
-       includeChildren = includeChildren ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory LogSink.fromJson(Map<String, dynamic> json) => LogSink(
     name: json['name'] ?? '',
@@ -2593,9 +2556,7 @@ final class BigQueryDataset extends ProtoMessage {
   ///   "bigquery.googleapis.com/projects/[PROJECT_ID]/datasets/[DATASET_ID]"
   final String datasetId;
 
-  BigQueryDataset({String? datasetId})
-    : datasetId = datasetId ?? '',
-      super(fullyQualifiedName);
+  BigQueryDataset({this.datasetId = ''}) : super(fullyQualifiedName);
 
   factory BigQueryDataset.fromJson(Map<String, dynamic> json) =>
       BigQueryDataset(datasetId: json['datasetId'] ?? '');
@@ -2646,14 +2607,12 @@ final class Link extends ProtoMessage {
   final BigQueryDataset? bigqueryDataset;
 
   Link({
-    String? name,
-    String? description,
+    this.name = '',
+    this.description = '',
     this.createTime,
     this.lifecycleState = LifecycleState.$default,
     this.bigqueryDataset,
-  }) : name = name ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Link.fromJson(Map<String, dynamic> json) => Link(
     name: json['name'] ?? '',
@@ -2709,12 +2668,9 @@ final class BigQueryOptions extends ProtoMessage {
   final bool usesTimestampColumnPartitioning;
 
   BigQueryOptions({
-    bool? usePartitionedTables,
-    bool? usesTimestampColumnPartitioning,
-  }) : usePartitionedTables = usePartitionedTables ?? false,
-       usesTimestampColumnPartitioning =
-           usesTimestampColumnPartitioning ?? false,
-       super(fullyQualifiedName);
+    this.usePartitionedTables = false,
+    this.usesTimestampColumnPartitioning = false,
+  }) : super(fullyQualifiedName);
 
   factory BigQueryOptions.fromJson(Map<String, dynamic> json) =>
       BigQueryOptions(
@@ -2769,10 +2725,11 @@ final class ListBucketsRequest extends ProtoMessage {
   /// response indicates that more results might be available.
   final int pageSize;
 
-  ListBucketsRequest({required this.parent, String? pageToken, int? pageSize})
-    : pageToken = pageToken ?? '',
-      pageSize = pageSize ?? 0,
-      super(fullyQualifiedName);
+  ListBucketsRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListBucketsRequest.fromJson(Map<String, dynamic> json) =>
       ListBucketsRequest(
@@ -2812,9 +2769,8 @@ final class ListBucketsResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListBucketsResponse({this.buckets = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListBucketsResponse({this.buckets = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListBucketsResponse.fromJson(Map<String, dynamic> json) =>
       ListBucketsResponse(
@@ -3059,10 +3015,11 @@ final class ListViewsRequest extends ProtoMessage {
   /// response indicates that more results might be available.
   final int pageSize;
 
-  ListViewsRequest({required this.parent, String? pageToken, int? pageSize})
-    : pageToken = pageToken ?? '',
-      pageSize = pageSize ?? 0,
-      super(fullyQualifiedName);
+  ListViewsRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListViewsRequest.fromJson(Map<String, dynamic> json) =>
       ListViewsRequest(
@@ -3102,9 +3059,8 @@ final class ListViewsResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListViewsResponse({this.views = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListViewsResponse({this.views = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListViewsResponse.fromJson(Map<String, dynamic> json) =>
       ListViewsResponse(
@@ -3305,10 +3261,11 @@ final class ListSinksRequest extends ProtoMessage {
   /// response indicates that more results might be available.
   final int pageSize;
 
-  ListSinksRequest({required this.parent, String? pageToken, int? pageSize})
-    : pageToken = pageToken ?? '',
-      pageSize = pageSize ?? 0,
-      super(fullyQualifiedName);
+  ListSinksRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListSinksRequest.fromJson(Map<String, dynamic> json) =>
       ListSinksRequest(
@@ -3348,9 +3305,8 @@ final class ListSinksResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListSinksResponse({this.sinks = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListSinksResponse({this.sinks = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListSinksResponse.fromJson(Map<String, dynamic> json) =>
       ListSinksResponse(
@@ -3441,9 +3397,8 @@ final class CreateSinkRequest extends ProtoMessage {
   CreateSinkRequest({
     required this.parent,
     required this.sink,
-    bool? uniqueWriterIdentity,
-  }) : uniqueWriterIdentity = uniqueWriterIdentity ?? false,
-       super(fullyQualifiedName);
+    this.uniqueWriterIdentity = false,
+  }) : super(fullyQualifiedName);
 
   factory CreateSinkRequest.fromJson(Map<String, dynamic> json) =>
       CreateSinkRequest(
@@ -3526,10 +3481,9 @@ final class UpdateSinkRequest extends ProtoMessage {
   UpdateSinkRequest({
     required this.sinkName,
     required this.sink,
-    bool? uniqueWriterIdentity,
+    this.uniqueWriterIdentity = false,
     this.updateMask,
-  }) : uniqueWriterIdentity = uniqueWriterIdentity ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory UpdateSinkRequest.fromJson(Map<String, dynamic> json) =>
       UpdateSinkRequest(
@@ -3687,10 +3641,11 @@ final class ListLinksRequest extends ProtoMessage {
   /// Optional. The maximum number of results to return from this request.
   final int pageSize;
 
-  ListLinksRequest({required this.parent, String? pageToken, int? pageSize})
-    : pageToken = pageToken ?? '',
-      pageSize = pageSize ?? 0,
-      super(fullyQualifiedName);
+  ListLinksRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListLinksRequest.fromJson(Map<String, dynamic> json) =>
       ListLinksRequest(
@@ -3730,9 +3685,8 @@ final class ListLinksResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListLinksResponse({this.links = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListLinksResponse({this.links = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListLinksResponse.fromJson(Map<String, dynamic> json) =>
       ListLinksResponse(
@@ -3827,14 +3781,12 @@ final class LogExclusion extends ProtoMessage {
 
   LogExclusion({
     required this.name,
-    String? description,
+    this.description = '',
     required this.filter,
-    bool? disabled,
+    this.disabled = false,
     this.createTime,
     this.updateTime,
-  }) : description = description ?? '',
-       disabled = disabled ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory LogExclusion.fromJson(Map<String, dynamic> json) => LogExclusion(
     name: json['name'] ?? '',
@@ -3893,11 +3845,9 @@ final class ListExclusionsRequest extends ProtoMessage {
 
   ListExclusionsRequest({
     required this.parent,
-    String? pageToken,
-    int? pageSize,
-  }) : pageToken = pageToken ?? '',
-       pageSize = pageSize ?? 0,
-       super(fullyQualifiedName);
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListExclusionsRequest.fromJson(Map<String, dynamic> json) =>
       ListExclusionsRequest(
@@ -3937,9 +3887,8 @@ final class ListExclusionsResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListExclusionsResponse({this.exclusions = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListExclusionsResponse({this.exclusions = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListExclusionsResponse.fromJson(Map<String, dynamic> json) =>
       ListExclusionsResponse(
@@ -4318,15 +4267,11 @@ final class CmekSettings extends ProtoMessage {
   final String serviceAccountId;
 
   CmekSettings({
-    String? name,
-    String? kmsKeyName,
-    String? kmsKeyVersionName,
-    String? serviceAccountId,
-  }) : name = name ?? '',
-       kmsKeyName = kmsKeyName ?? '',
-       kmsKeyVersionName = kmsKeyVersionName ?? '',
-       serviceAccountId = serviceAccountId ?? '',
-       super(fullyQualifiedName);
+    this.name = '',
+    this.kmsKeyName = '',
+    this.kmsKeyVersionName = '',
+    this.serviceAccountId = '',
+  }) : super(fullyQualifiedName);
 
   factory CmekSettings.fromJson(Map<String, dynamic> json) => CmekSettings(
     name: json['name'] ?? '',
@@ -4526,17 +4471,12 @@ final class Settings extends ProtoMessage {
   final bool disableDefaultSink;
 
   Settings({
-    String? name,
-    String? kmsKeyName,
-    String? kmsServiceAccountId,
-    String? storageLocation,
-    bool? disableDefaultSink,
-  }) : name = name ?? '',
-       kmsKeyName = kmsKeyName ?? '',
-       kmsServiceAccountId = kmsServiceAccountId ?? '',
-       storageLocation = storageLocation ?? '',
-       disableDefaultSink = disableDefaultSink ?? false,
-       super(fullyQualifiedName);
+    this.name = '',
+    this.kmsKeyName = '',
+    this.kmsServiceAccountId = '',
+    this.storageLocation = '',
+    this.disableDefaultSink = false,
+  }) : super(fullyQualifiedName);
 
   factory Settings.fromJson(Map<String, dynamic> json) => Settings(
     name: json['name'] ?? '',
@@ -4591,10 +4531,9 @@ final class CopyLogEntriesRequest extends ProtoMessage {
 
   CopyLogEntriesRequest({
     required this.name,
-    String? filter,
+    this.filter = '',
     required this.destination,
-  }) : filter = filter ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory CopyLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
       CopyLogEntriesRequest(
@@ -4657,14 +4596,11 @@ final class CopyLogEntriesMetadata extends ProtoMessage {
     this.startTime,
     this.endTime,
     this.state = OperationState.$default,
-    bool? cancellationRequested,
+    this.cancellationRequested = false,
     this.request,
-    int? progress,
-    String? writerIdentity,
-  }) : cancellationRequested = cancellationRequested ?? false,
-       progress = progress ?? 0,
-       writerIdentity = writerIdentity ?? '',
-       super(fullyQualifiedName);
+    this.progress = 0,
+    this.writerIdentity = '',
+  }) : super(fullyQualifiedName);
 
   factory CopyLogEntriesMetadata.fromJson(Map<String, dynamic> json) =>
       CopyLogEntriesMetadata(
@@ -4711,9 +4647,8 @@ final class CopyLogEntriesResponse extends ProtoMessage {
   /// Number of log entries copied.
   final int logEntriesCopiedCount;
 
-  CopyLogEntriesResponse({int? logEntriesCopiedCount})
-    : logEntriesCopiedCount = logEntriesCopiedCount ?? 0,
-      super(fullyQualifiedName);
+  CopyLogEntriesResponse({this.logEntriesCopiedCount = 0})
+    : super(fullyQualifiedName);
 
   factory CopyLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
       CopyLogEntriesResponse(
@@ -4863,9 +4798,8 @@ final class LocationMetadata extends ProtoMessage {
   /// location.
   final bool logAnalyticsEnabled;
 
-  LocationMetadata({bool? logAnalyticsEnabled})
-    : logAnalyticsEnabled = logAnalyticsEnabled ?? false,
-      super(fullyQualifiedName);
+  LocationMetadata({this.logAnalyticsEnabled = false})
+    : super(fullyQualifiedName);
 
   factory LocationMetadata.fromJson(Map<String, dynamic> json) =>
       LocationMetadata(
@@ -5020,22 +4954,18 @@ final class LogMetric extends ProtoMessage {
 
   LogMetric({
     required this.name,
-    String? description,
+    this.description = '',
     required this.filter,
-    String? bucketName,
-    bool? disabled,
+    this.bucketName = '',
+    this.disabled = false,
     this.metricDescriptor,
-    String? valueExtractor,
+    this.valueExtractor = '',
     this.labelExtractors = const {},
     this.bucketOptions,
     this.createTime,
     this.updateTime,
     this.version = LogMetric_ApiVersion.$default,
-  }) : description = description ?? '',
-       bucketName = bucketName ?? '',
-       disabled = disabled ?? false,
-       valueExtractor = valueExtractor ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory LogMetric.fromJson(Map<String, dynamic> json) => LogMetric(
     name: json['name'] ?? '',
@@ -5137,11 +5067,9 @@ final class ListLogMetricsRequest extends ProtoMessage {
 
   ListLogMetricsRequest({
     required this.parent,
-    String? pageToken,
-    int? pageSize,
-  }) : pageToken = pageToken ?? '',
-       pageSize = pageSize ?? 0,
-       super(fullyQualifiedName);
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListLogMetricsRequest.fromJson(Map<String, dynamic> json) =>
       ListLogMetricsRequest(
@@ -5181,9 +5109,8 @@ final class ListLogMetricsResponse extends ProtoMessage {
   /// method again using the value of `nextPageToken` as `pageToken`.
   final String nextPageToken;
 
-  ListLogMetricsResponse({this.metrics = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListLogMetricsResponse({this.metrics = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListLogMetricsResponse.fromJson(Map<String, dynamic> json) =>
       ListLogMetricsResponse(

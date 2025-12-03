@@ -19,8 +19,6 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 class ShowcaseServer {
-  static var _server = Completer<ShowcaseServer>();
-  static var _startCount = 0;
   final Process _process;
 
   static Future<void> _install() async {
@@ -50,29 +48,36 @@ class ShowcaseServer {
   ShowcaseServer._(this._process);
 
   static Future<ShowcaseServer> start() async {
-    if (_startCount == 0) {
-      ++_startCount;
-      await _install();
-      final process = await Process.start(await _showcasePath(), ['run']);
-      unawaited(stderr.addStream(process.stderr));
-      await process.stdin.close();
-      process.stdout
-          .transform(utf8.decoder)
-          .transform(const LineSplitter())
-          .listen((line) {
-            if (line.contains('Listening for REST connections')) {
-              _server.complete(ShowcaseServer._(process));
-            }
-          });
-    }
-    return _server.future;
+    await _install();
+    final process = await Process.start(await _showcasePath(), ['run']);
+    final serverStarted = Completer<ShowcaseServer>();
+
+    await process.stdin.close();
+
+    process.stderr
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen((line) {
+          if (line.contains('Showcase failed to listen on port')) {
+            serverStarted.completeError(
+              StateError('Showcase port already in use: $line'),
+            );
+          }
+          stderr.writeln(line);
+        });
+
+    process.stdout
+        .transform(utf8.decoder)
+        .transform(const LineSplitter())
+        .listen((line) {
+          if (line.contains('Listening for REST connections')) {
+            serverStarted.complete(ShowcaseServer._(process));
+          }
+        });
+    return serverStarted.future;
   }
 
   Future<void> stop() async {
-    --_startCount;
-    if (_startCount == 0) {
-      _process.kill(ProcessSignal.sigkill);
-      _server = Completer<ShowcaseServer>();
-    }
+    _process.kill(ProcessSignal.sigkill);
   }
 }

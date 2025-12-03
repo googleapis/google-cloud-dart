@@ -14866,17 +14866,15 @@ final class Annotation extends ProtoMessage {
   final Map<String, String> labels;
 
   Annotation({
-    String? name,
+    this.name = '',
     required this.payloadSchemaUri,
     required this.payload,
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.annotationSource,
     this.labels = const {},
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Annotation.fromJson(Map<String, dynamic> json) => Annotation(
     name: json['name'] ?? '',
@@ -14940,14 +14938,12 @@ final class AnnotationSpec extends ProtoMessage {
   final String etag;
 
   AnnotationSpec({
-    String? name,
+    this.name = '',
     required this.displayName,
     this.createTime,
     this.updateTime,
-    String? etag,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+    this.etag = '',
+  }) : super(fullyQualifiedName);
 
   factory AnnotationSpec.fromJson(Map<String, dynamic> json) => AnnotationSpec(
     name: json['name'] ?? '',
@@ -15091,26 +15087,19 @@ final class Artifact extends ProtoMessage {
   final String description;
 
   Artifact({
-    String? name,
-    String? displayName,
-    String? uri,
-    String? etag,
+    this.name = '',
+    this.displayName = '',
+    this.uri = '',
+    this.etag = '',
     this.labels = const {},
     this.createTime,
     this.updateTime,
     this.state = Artifact_State.$default,
-    String? schemaTitle,
-    String? schemaVersion,
+    this.schemaTitle = '',
+    this.schemaVersion = '',
     this.metadata,
-    String? description,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       uri = uri ?? '',
-       etag = etag ?? '',
-       schemaTitle = schemaTitle ?? '',
-       schemaVersion = schemaVersion ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+    this.description = '',
+  }) : super(fullyQualifiedName);
 
   factory Artifact.fromJson(Map<String, dynamic> json) => Artifact(
     name: json['name'] ?? '',
@@ -15403,19 +15392,19 @@ final class BatchPredictionJob extends ProtoMessage {
   final bool satisfiesPzi;
 
   BatchPredictionJob({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? model,
-    String? modelVersionId,
+    this.model = '',
+    this.modelVersionId = '',
     this.unmanagedContainerModel,
     required this.inputConfig,
     this.instanceConfig,
     this.modelParameters,
     required this.outputConfig,
     this.dedicatedResources,
-    String? serviceAccount,
+    this.serviceAccount = '',
     this.manualBatchTuningParameters,
-    bool? generateExplanation,
+    this.generateExplanation = false,
     this.explanationSpec,
     this.outputInfo,
     this.state = JobState.$default,
@@ -15432,18 +15421,10 @@ final class BatchPredictionJob extends ProtoMessage {
     this.modelMonitoringConfig,
     this.modelMonitoringStatsAnomalies = const [],
     this.modelMonitoringStatus,
-    bool? disableContainerLogging,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       model = model ?? '',
-       modelVersionId = modelVersionId ?? '',
-       serviceAccount = serviceAccount ?? '',
-       generateExplanation = generateExplanation ?? false,
-       disableContainerLogging = disableContainerLogging ?? false,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.disableContainerLogging = false,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory BatchPredictionJob.fromJson(
     Map<String, dynamic> json,
@@ -15740,13 +15721,11 @@ final class BatchPredictionJob_InstanceConfig extends ProtoMessage {
   final List<String> excludedFields;
 
   BatchPredictionJob_InstanceConfig({
-    String? instanceType,
-    String? keyField,
+    this.instanceType = '',
+    this.keyField = '',
     this.includedFields = const [],
     this.excludedFields = const [],
-  }) : instanceType = instanceType ?? '',
-       keyField = keyField ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory BatchPredictionJob_InstanceConfig.fromJson(
     Map<String, dynamic> json,
@@ -15893,9 +15872,8 @@ final class BatchPredictionJob_OutputInfo extends ProtoMessage {
   BatchPredictionJob_OutputInfo({
     this.gcsOutputDirectory,
     this.bigqueryOutputDataset,
-    String? bigqueryOutputTable,
-  }) : bigqueryOutputTable = bigqueryOutputTable ?? '',
-       super(fullyQualifiedName);
+    this.bigqueryOutputTable = '',
+  }) : super(fullyQualifiedName);
 
   factory BatchPredictionJob_OutputInfo.fromJson(Map<String, dynamic> json) =>
       BatchPredictionJob_OutputInfo(
@@ -15986,9 +15964,9 @@ final class CachedContent extends ProtoMessage {
   CachedContent({
     this.expireTime,
     this.ttl,
-    String? name,
-    String? displayName,
-    String? model,
+    this.name = '',
+    this.displayName = '',
+    this.model = '',
     this.systemInstruction,
     this.contents = const [],
     this.tools = const [],
@@ -15997,10 +15975,7 @@ final class CachedContent extends ProtoMessage {
     this.updateTime,
     this.usageMetadata,
     this.encryptionSpec,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       model = model ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory CachedContent.fromJson(Map<String, dynamic> json) => CachedContent(
     expireTime: decodeCustom(json['expireTime'], protobuf.Timestamp.fromJson),
@@ -16071,17 +16046,12 @@ final class CachedContent_UsageMetadata extends ProtoMessage {
   final int audioDurationSeconds;
 
   CachedContent_UsageMetadata({
-    int? totalTokenCount,
-    int? textCount,
-    int? imageCount,
-    int? videoDurationSeconds,
-    int? audioDurationSeconds,
-  }) : totalTokenCount = totalTokenCount ?? 0,
-       textCount = textCount ?? 0,
-       imageCount = imageCount ?? 0,
-       videoDurationSeconds = videoDurationSeconds ?? 0,
-       audioDurationSeconds = audioDurationSeconds ?? 0,
-       super(fullyQualifiedName);
+    this.totalTokenCount = 0,
+    this.textCount = 0,
+    this.imageCount = 0,
+    this.videoDurationSeconds = 0,
+    this.audioDurationSeconds = 0,
+  }) : super(fullyQualifiedName);
 
   factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) =>
       CachedContent_UsageMetadata(
@@ -16141,15 +16111,11 @@ final class CompletionStats extends ProtoMessage {
   final int successfulForecastPointCount;
 
   CompletionStats({
-    int? successfulCount,
-    int? failedCount,
-    int? incompleteCount,
-    int? successfulForecastPointCount,
-  }) : successfulCount = successfulCount ?? 0,
-       failedCount = failedCount ?? 0,
-       incompleteCount = incompleteCount ?? 0,
-       successfulForecastPointCount = successfulForecastPointCount ?? 0,
-       super(fullyQualifiedName);
+    this.successfulCount = 0,
+    this.failedCount = 0,
+    this.incompleteCount = 0,
+    this.successfulForecastPointCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory CompletionStats.fromJson(Map<String, dynamic> json) =>
       CompletionStats(
@@ -16202,9 +16168,7 @@ final class Content extends ProtoMessage {
   /// different IANA MIME types.
   final List<Part> parts;
 
-  Content({String? role, required this.parts})
-    : role = role ?? '',
-      super(fullyQualifiedName);
+  Content({this.role = '', required this.parts}) : super(fullyQualifiedName);
 
   factory Content.fromJson(Map<String, dynamic> json) => Content(
     role: json['role'] ?? '',
@@ -16281,9 +16245,9 @@ final class Part extends ProtoMessage {
     this.executableCode,
     this.codeExecutionResult,
     this.videoMetadata,
-    bool? thought,
-    this.thoughtSignature = Uint8List(0),
-  }) : thought = thought ?? false,
+    this.thought = false,
+    Uint8List? thoughtSignature,
+  }) : thoughtSignature = thoughtSignature ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory Part.fromJson(Map<String, dynamic> json) => Part(
@@ -16661,7 +16625,7 @@ final class GenerationConfig extends ProtoMessage {
     this.presencePenalty,
     this.frequencyPenalty,
     this.seed,
-    String? responseMimeType,
+    this.responseMimeType = '',
     this.responseSchema,
     this.responseJsonSchema,
     this.routingConfig,
@@ -16672,8 +16636,7 @@ final class GenerationConfig extends ProtoMessage {
     this.thinkingConfig,
     this.modelConfig,
     this.imageConfig,
-  }) : responseMimeType = responseMimeType ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory GenerationConfig.fromJson(Map<String, dynamic> json) =>
       GenerationConfig(
@@ -17254,14 +17217,11 @@ final class SafetyRating extends ProtoMessage {
   SafetyRating({
     this.category = HarmCategory.$default,
     this.probability = SafetyRating_HarmProbability.$default,
-    double? probabilityScore,
+    this.probabilityScore = 0,
     this.severity = SafetyRating_HarmSeverity.$default,
-    double? severityScore,
-    bool? blocked,
-  }) : probabilityScore = probabilityScore ?? 0,
-       severityScore = severityScore ?? 0,
-       blocked = blocked ?? false,
-       super(fullyQualifiedName);
+    this.severityScore = 0,
+    this.blocked = false,
+  }) : super(fullyQualifiedName);
 
   factory SafetyRating.fromJson(Map<String, dynamic> json) => SafetyRating(
     category:
@@ -17428,18 +17388,13 @@ final class Citation extends ProtoMessage {
   final Date? publicationDate;
 
   Citation({
-    int? startIndex,
-    int? endIndex,
-    String? uri,
-    String? title,
-    String? license,
+    this.startIndex = 0,
+    this.endIndex = 0,
+    this.uri = '',
+    this.title = '',
+    this.license = '',
     this.publicationDate,
-  }) : startIndex = startIndex ?? 0,
-       endIndex = endIndex ?? 0,
-       uri = uri ?? '',
-       title = title ?? '',
-       license = license ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Citation.fromJson(Map<String, dynamic> json) => Citation(
     startIndex: json['startIndex'] ?? 0,
@@ -17513,9 +17468,9 @@ final class Candidate extends ProtoMessage {
   final UrlContextMetadata? urlContextMetadata;
 
   Candidate({
-    int? index,
+    this.index = 0,
     this.content,
-    double? avgLogprobs,
+    this.avgLogprobs = 0,
     this.logprobsResult,
     this.finishReason = Candidate_FinishReason.$default,
     this.safetyRatings = const [],
@@ -17523,9 +17478,7 @@ final class Candidate extends ProtoMessage {
     this.citationMetadata,
     this.groundingMetadata,
     this.urlContextMetadata,
-  }) : index = index ?? 0,
-       avgLogprobs = avgLogprobs ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Candidate.fromJson(Map<String, dynamic> json) => Candidate(
     index: json['index'] ?? 0,
@@ -17678,10 +17631,9 @@ final class UrlMetadata extends ProtoMessage {
   final UrlMetadata_UrlRetrievalStatus urlRetrievalStatus;
 
   UrlMetadata({
-    String? retrievedUrl,
+    this.retrievedUrl = '',
     this.urlRetrievalStatus = UrlMetadata_UrlRetrievalStatus.$default,
-  }) : retrievedUrl = retrievedUrl ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory UrlMetadata.fromJson(Map<String, dynamic> json) => UrlMetadata(
     retrievedUrl: json['retrievedUrl'] ?? '',
@@ -17875,12 +17827,12 @@ final class Segment extends ProtoMessage {
   /// Output only. The text corresponding to the segment from the response.
   final String text;
 
-  Segment({int? partIndex, int? startIndex, int? endIndex, String? text})
-    : partIndex = partIndex ?? 0,
-      startIndex = startIndex ?? 0,
-      endIndex = endIndex ?? 0,
-      text = text ?? '',
-      super(fullyQualifiedName);
+  Segment({
+    this.partIndex = 0,
+    this.startIndex = 0,
+    this.endIndex = 0,
+    this.text = '',
+  }) : super(fullyQualifiedName);
 
   factory Segment.fromJson(Map<String, dynamic> json) => Segment(
     partIndex: json['partIndex'] ?? 0,
@@ -18152,13 +18104,10 @@ final class GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet
   final String title;
 
   GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet({
-    String? reviewId,
-    String? googleMapsUri,
-    String? title,
-  }) : reviewId = reviewId ?? '',
-       googleMapsUri = googleMapsUri ?? '',
-       title = title ?? '',
-       super(fullyQualifiedName);
+    this.reviewId = '',
+    this.googleMapsUri = '',
+    this.title = '',
+  }) : super(fullyQualifiedName);
 
   factory GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet.fromJson(
     Map<String, dynamic> json,
@@ -18350,11 +18299,9 @@ final class GroundingMetadata_SourceFlaggingUri extends ProtoMessage {
   final String flagContentUri;
 
   GroundingMetadata_SourceFlaggingUri({
-    String? sourceId,
-    String? flagContentUri,
-  }) : sourceId = sourceId ?? '',
-       flagContentUri = flagContentUri ?? '',
-       super(fullyQualifiedName);
+    this.sourceId = '',
+    this.flagContentUri = '',
+  }) : super(fullyQualifiedName);
 
   factory GroundingMetadata_SourceFlaggingUri.fromJson(
     Map<String, dynamic> json,
@@ -18392,8 +18339,8 @@ final class SearchEntryPoint extends ProtoMessage {
   /// url> tuple.
   final Uint8List sdkBlob;
 
-  SearchEntryPoint({String? renderedContent, this.sdkBlob = Uint8List(0)})
-    : renderedContent = renderedContent ?? '',
+  SearchEntryPoint({this.renderedContent = '', Uint8List? sdkBlob})
+    : sdkBlob = sdkBlob ?? Uint8List(0),
       super(fullyQualifiedName);
 
   factory SearchEntryPoint.fromJson(Map<String, dynamic> json) =>
@@ -18430,10 +18377,8 @@ final class RetrievalMetadata extends ProtoMessage {
   /// compared to the threshold to determine whether to trigger Google Search.
   final double googleSearchDynamicRetrievalScore;
 
-  RetrievalMetadata({double? googleSearchDynamicRetrievalScore})
-    : googleSearchDynamicRetrievalScore =
-          googleSearchDynamicRetrievalScore ?? 0,
-      super(fullyQualifiedName);
+  RetrievalMetadata({this.googleSearchDynamicRetrievalScore = 0})
+    : super(fullyQualifiedName);
 
   factory RetrievalMetadata.fromJson(Map<String, dynamic> json) =>
       RetrievalMetadata(
@@ -18471,10 +18416,10 @@ final class ModelArmorConfig extends ProtoMessage {
   /// sanitization.
   final String responseTemplateName;
 
-  ModelArmorConfig({String? promptTemplateName, String? responseTemplateName})
-    : promptTemplateName = promptTemplateName ?? '',
-      responseTemplateName = responseTemplateName ?? '',
-      super(fullyQualifiedName);
+  ModelArmorConfig({
+    this.promptTemplateName = '',
+    this.responseTemplateName = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelArmorConfig.fromJson(Map<String, dynamic> json) =>
       ModelArmorConfig(
@@ -18511,9 +18456,8 @@ final class ModalityTokenCount extends ProtoMessage {
   /// Number of tokens.
   final int tokenCount;
 
-  ModalityTokenCount({this.modality = Modality.$default, int? tokenCount})
-    : tokenCount = tokenCount ?? 0,
-      super(fullyQualifiedName);
+  ModalityTokenCount({this.modality = Modality.$default, this.tokenCount = 0})
+    : super(fullyQualifiedName);
 
   factory ModalityTokenCount.fromJson(Map<String, dynamic> json) =>
       ModalityTokenCount(
@@ -18594,24 +18538,18 @@ final class Context extends ProtoMessage {
   final String description;
 
   Context({
-    String? name,
-    String? displayName,
-    String? etag,
+    this.name = '',
+    this.displayName = '',
+    this.etag = '',
     this.labels = const {},
     this.createTime,
     this.updateTime,
     this.parentContexts = const [],
-    String? schemaTitle,
-    String? schemaVersion,
+    this.schemaTitle = '',
+    this.schemaVersion = '',
     this.metadata,
-    String? description,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       etag = etag ?? '',
-       schemaTitle = schemaTitle ?? '',
-       schemaVersion = schemaVersion ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+    this.description = '',
+  }) : super(fullyQualifiedName);
 
   factory Context.fromJson(Map<String, dynamic> json) => Context(
     name: json['name'] ?? '',
@@ -18731,7 +18669,7 @@ final class CustomJob extends ProtoMessage {
   final bool satisfiesPzi;
 
   CustomJob({
-    String? name,
+    this.name = '',
     required this.displayName,
     required this.jobSpec,
     this.state = JobState.$default,
@@ -18743,12 +18681,9 @@ final class CustomJob extends ProtoMessage {
     this.labels = const {},
     this.encryptionSpec,
     this.webAccessUris = const {},
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory CustomJob.fromJson(Map<String, dynamic> json) => CustomJob(
     name: json['name'] ?? '',
@@ -18941,31 +18876,22 @@ final class CustomJobSpec extends ProtoMessage {
   final List<String> models;
 
   CustomJobSpec({
-    String? persistentResourceId,
+    this.persistentResourceId = '',
     required this.workerPoolSpecs,
     this.scheduling,
-    String? serviceAccount,
-    String? network,
+    this.serviceAccount = '',
+    this.network = '',
     this.reservedIpRanges = const [],
     this.pscInterfaceConfig,
     this.baseOutputDirectory,
-    String? protectedArtifactLocationId,
-    String? tensorboard,
-    bool? enableWebAccess,
-    bool? enableDashboardAccess,
-    String? experiment,
-    String? experimentRun,
+    this.protectedArtifactLocationId = '',
+    this.tensorboard = '',
+    this.enableWebAccess = false,
+    this.enableDashboardAccess = false,
+    this.experiment = '',
+    this.experimentRun = '',
     this.models = const [],
-  }) : persistentResourceId = persistentResourceId ?? '',
-       serviceAccount = serviceAccount ?? '',
-       network = network ?? '',
-       protectedArtifactLocationId = protectedArtifactLocationId ?? '',
-       tensorboard = tensorboard ?? '',
-       enableWebAccess = enableWebAccess ?? false,
-       enableDashboardAccess = enableDashboardAccess ?? false,
-       experiment = experiment ?? '',
-       experimentRun = experimentRun ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory CustomJobSpec.fromJson(Map<String, dynamic> json) => CustomJobSpec(
     persistentResourceId: json['persistentResourceId'] ?? '',
@@ -19061,11 +18987,10 @@ final class WorkerPoolSpec extends ProtoMessage {
     this.containerSpec,
     this.pythonPackageSpec,
     this.machineSpec,
-    int? replicaCount,
+    this.replicaCount = 0,
     this.nfsMounts = const [],
     this.diskSpec,
-  }) : replicaCount = replicaCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory WorkerPoolSpec.fromJson(Map<String, dynamic> json) => WorkerPoolSpec(
     containerSpec: decode(json['containerSpec'], ContainerSpec.fromJson),
@@ -19239,13 +19164,11 @@ final class Scheduling extends ProtoMessage {
 
   Scheduling({
     this.timeout,
-    bool? restartJobOnWorkerRestart,
+    this.restartJobOnWorkerRestart = false,
     this.strategy = Scheduling_Strategy.$default,
-    bool? disableRetries,
+    this.disableRetries = false,
     this.maxWaitDuration,
-  }) : restartJobOnWorkerRestart = restartJobOnWorkerRestart ?? false,
-       disableRetries = disableRetries ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Scheduling.fromJson(Map<String, dynamic> json) => Scheduling(
     timeout: decodeCustom(json['timeout'], protobuf.Duration.fromJson),
@@ -19367,19 +19290,15 @@ final class DataItem extends ProtoMessage {
   final bool satisfiesPzi;
 
   DataItem({
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
     this.labels = const {},
     required this.payload,
-    String? etag,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.etag = '',
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory DataItem.fromJson(Map<String, dynamic> json) => DataItem(
     name: json['name'] ?? '',
@@ -19516,7 +19435,7 @@ final class DataLabelingJob extends ProtoMessage {
   final ActiveLearningConfig? activeLearningConfig;
 
   DataLabelingJob({
-    String? name,
+    this.name = '',
     required this.displayName,
     required this.datasets,
     this.annotationLabels = const {},
@@ -19525,7 +19444,7 @@ final class DataLabelingJob extends ProtoMessage {
     required this.inputsSchemaUri,
     required this.inputs,
     this.state = JobState.$default,
-    int? labelingProgress,
+    this.labelingProgress = 0,
     this.currentSpend,
     this.createTime,
     this.updateTime,
@@ -19534,9 +19453,7 @@ final class DataLabelingJob extends ProtoMessage {
     this.specialistPools = const [],
     this.encryptionSpec,
     this.activeLearningConfig,
-  }) : name = name ?? '',
-       labelingProgress = labelingProgress ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DataLabelingJob.fromJson(
     Map<String, dynamic> json,
@@ -19752,9 +19669,8 @@ final class TrainingConfig extends ProtoMessage {
   /// i.e. 1,000 value in this field means 1 hour.
   final int timeoutTrainingMilliHours;
 
-  TrainingConfig({int? timeoutTrainingMilliHours})
-    : timeoutTrainingMilliHours = timeoutTrainingMilliHours ?? 0,
-      super(fullyQualifiedName);
+  TrainingConfig({this.timeoutTrainingMilliHours = 0})
+    : super(fullyQualifiedName);
 
   factory TrainingConfig.fromJson(Map<String, dynamic> json) => TrainingConfig(
     timeoutTrainingMilliHours:
@@ -19863,31 +19779,23 @@ final class Dataset extends ProtoMessage {
   final bool satisfiesPzi;
 
   Dataset({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     required this.metadataSchemaUri,
     required this.metadata,
-    int? dataItemCount,
+    this.dataItemCount = 0,
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.savedQueries = const [],
     this.encryptionSpec,
-    String? metadataArtifact,
-    String? modelReference,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       description = description ?? '',
-       dataItemCount = dataItemCount ?? 0,
-       etag = etag ?? '',
-       metadataArtifact = metadataArtifact ?? '',
-       modelReference = modelReference ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.metadataArtifact = '',
+    this.modelReference = '',
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory Dataset.fromJson(Map<String, dynamic> json) => Dataset(
     name: json['name'] ?? '',
@@ -20049,9 +19957,8 @@ final class ExportDataConfig extends ProtoMessage {
   ExportDataConfig({
     this.gcsDestination,
     this.fractionSplit,
-    String? annotationsFilter,
-  }) : annotationsFilter = annotationsFilter ?? '',
-       super(fullyQualifiedName);
+    this.annotationsFilter = '',
+  }) : super(fullyQualifiedName);
 
   factory ExportDataConfig.fromJson(Map<String, dynamic> json) =>
       ExportDataConfig(
@@ -20097,13 +20004,10 @@ final class ExportFractionSplit extends ProtoMessage {
   final double testFraction;
 
   ExportFractionSplit({
-    double? trainingFraction,
-    double? validationFraction,
-    double? testFraction,
-  }) : trainingFraction = trainingFraction ?? 0,
-       validationFraction = validationFraction ?? 0,
-       testFraction = testFraction ?? 0,
-       super(fullyQualifiedName);
+    this.trainingFraction = 0,
+    this.validationFraction = 0,
+    this.testFraction = 0,
+  }) : super(fullyQualifiedName);
 
   factory ExportFractionSplit.fromJson(Map<String, dynamic> json) =>
       ExportFractionSplit(
@@ -20356,16 +20260,12 @@ final class ListDatasetsRequest extends ProtoMessage {
 
   ListDatasetsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDatasetsRequest.fromJson(Map<String, dynamic> json) =>
       ListDatasetsRequest(
@@ -20412,9 +20312,8 @@ final class ListDatasetsResponse extends ProtoMessage {
   /// The standard List next-page token.
   final String nextPageToken;
 
-  ListDatasetsResponse({this.datasets = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListDatasetsResponse({this.datasets = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListDatasetsResponse.fromJson(Map<String, dynamic> json) =>
       ListDatasetsResponse(
@@ -20627,9 +20526,8 @@ final class ExportDataOperationMetadata extends ProtoMessage {
 
   ExportDataOperationMetadata({
     this.genericMetadata,
-    String? gcsOutputDirectory,
-  }) : gcsOutputDirectory = gcsOutputDirectory ?? '',
-       super(fullyQualifiedName);
+    this.gcsOutputDirectory = '',
+  }) : super(fullyQualifiedName);
 
   factory ExportDataOperationMetadata.fromJson(Map<String, dynamic> json) =>
       ExportDataOperationMetadata(
@@ -20815,16 +20713,12 @@ final class ListDatasetVersionsRequest extends ProtoMessage {
 
   ListDatasetVersionsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDatasetVersionsRequest.fromJson(Map<String, dynamic> json) =>
       ListDatasetVersionsRequest(
@@ -20873,9 +20767,8 @@ final class ListDatasetVersionsResponse extends ProtoMessage {
 
   ListDatasetVersionsResponse({
     this.datasetVersions = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDatasetVersionsResponse.fromJson(Map<String, dynamic> json) =>
       ListDatasetVersionsResponse(
@@ -20988,16 +20881,12 @@ final class ListDataItemsRequest extends ProtoMessage {
 
   ListDataItemsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDataItemsRequest.fromJson(Map<String, dynamic> json) =>
       ListDataItemsRequest(
@@ -21044,9 +20933,8 @@ final class ListDataItemsResponse extends ProtoMessage {
   /// The standard List next-page token.
   final String nextPageToken;
 
-  ListDataItemsResponse({this.dataItems = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListDataItemsResponse({this.dataItems = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListDataItemsResponse.fromJson(Map<String, dynamic> json) =>
       ListDataItemsResponse(
@@ -21154,25 +21042,17 @@ final class SearchDataItemsRequest extends ProtoMessage {
     this.orderByDataItem,
     this.orderByAnnotation,
     required this.dataset,
-    String? savedQuery,
-    String? dataLabelingJob,
-    String? dataItemFilter,
-    String? annotationsFilter,
+    this.savedQuery = '',
+    this.dataLabelingJob = '',
+    this.dataItemFilter = '',
+    this.annotationsFilter = '',
     this.annotationFilters = const [],
     this.fieldMask,
-    int? annotationsLimit,
-    int? pageSize,
-    String? orderBy,
-    String? pageToken,
-  }) : savedQuery = savedQuery ?? '',
-       dataLabelingJob = dataLabelingJob ?? '',
-       dataItemFilter = dataItemFilter ?? '',
-       annotationsFilter = annotationsFilter ?? '',
-       annotationsLimit = annotationsLimit ?? 0,
-       pageSize = pageSize ?? 0,
-       orderBy = orderBy ?? '',
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.annotationsLimit = 0,
+    this.pageSize = 0,
+    this.orderBy = '',
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchDataItemsRequest.fromJson(Map<String, dynamic> json) =>
       SearchDataItemsRequest(
@@ -21246,9 +21126,8 @@ final class SearchDataItemsRequest_OrderByAnnotation extends ProtoMessage {
 
   SearchDataItemsRequest_OrderByAnnotation({
     required this.savedQuery,
-    String? orderBy,
-  }) : orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchDataItemsRequest_OrderByAnnotation.fromJson(
     Map<String, dynamic> json,
@@ -21287,9 +21166,8 @@ final class SearchDataItemsResponse extends ProtoMessage {
 
   SearchDataItemsResponse({
     this.dataItemViews = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchDataItemsResponse.fromJson(Map<String, dynamic> json) =>
       SearchDataItemsResponse(
@@ -21336,9 +21214,8 @@ final class DataItemView extends ProtoMessage {
   DataItemView({
     this.dataItem,
     this.annotations = const [],
-    bool? hasTruncatedAnnotations,
-  }) : hasTruncatedAnnotations = hasTruncatedAnnotations ?? false,
-       super(fullyQualifiedName);
+    this.hasTruncatedAnnotations = false,
+  }) : super(fullyQualifiedName);
 
   factory DataItemView.fromJson(Map<String, dynamic> json) => DataItemView(
     dataItem: decode(json['dataItem'], DataItem.fromJson),
@@ -21393,16 +21270,12 @@ final class ListSavedQueriesRequest extends ProtoMessage {
 
   ListSavedQueriesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSavedQueriesRequest.fromJson(Map<String, dynamic> json) =>
       ListSavedQueriesRequest(
@@ -21451,9 +21324,8 @@ final class ListSavedQueriesResponse extends ProtoMessage {
 
   ListSavedQueriesResponse({
     this.savedQueries = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSavedQueriesResponse.fromJson(Map<String, dynamic> json) =>
       ListSavedQueriesResponse(
@@ -21566,16 +21438,12 @@ final class ListAnnotationsRequest extends ProtoMessage {
 
   ListAnnotationsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListAnnotationsRequest.fromJson(Map<String, dynamic> json) =>
       ListAnnotationsRequest(
@@ -21622,9 +21490,10 @@ final class ListAnnotationsResponse extends ProtoMessage {
   /// The standard List next-page token.
   final String nextPageToken;
 
-  ListAnnotationsResponse({this.annotations = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListAnnotationsResponse({
+    this.annotations = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListAnnotationsResponse.fromJson(Map<String, dynamic> json) =>
       ListAnnotationsResponse(
@@ -22020,11 +21889,9 @@ final class AssessDataResponse_TuningResourceUsageAssessmentResult
   final int billableCharacterCount;
 
   AssessDataResponse_TuningResourceUsageAssessmentResult({
-    int? tokenCount,
-    int? billableCharacterCount,
-  }) : tokenCount = tokenCount ?? 0,
-       billableCharacterCount = billableCharacterCount ?? 0,
-       super(fullyQualifiedName);
+    this.tokenCount = 0,
+    this.billableCharacterCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory AssessDataResponse_TuningResourceUsageAssessmentResult.fromJson(
     Map<String, dynamic> json,
@@ -22083,11 +21950,9 @@ final class AssessDataResponse_BatchPredictionResourceUsageAssessmentResult
   final int audioTokenCount;
 
   AssessDataResponse_BatchPredictionResourceUsageAssessmentResult({
-    int? tokenCount,
-    int? audioTokenCount,
-  }) : tokenCount = tokenCount ?? 0,
-       audioTokenCount = audioTokenCount ?? 0,
-       super(fullyQualifiedName);
+    this.tokenCount = 0,
+    this.audioTokenCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory AssessDataResponse_BatchPredictionResourceUsageAssessmentResult.fromJson(
     Map<String, dynamic> json,
@@ -22281,18 +22146,16 @@ final class GeminiExample extends ProtoMessage {
   final GenerationConfig? generationConfig;
 
   GeminiExample({
-    String? model,
+    this.model = '',
     required this.contents,
     this.systemInstruction,
-    String? cachedContent,
+    this.cachedContent = '',
     this.tools = const [],
     this.toolConfig,
     this.labels = const {},
     this.safetySettings = const [],
     this.generationConfig,
-  }) : model = model ?? '',
-       cachedContent = cachedContent ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory GeminiExample.fromJson(Map<String, dynamic> json) => GeminiExample(
     model: json['model'] ?? '',
@@ -22384,9 +22247,8 @@ final class AssembleDataResponse extends ProtoMessage {
   /// column.
   final String bigqueryDestination;
 
-  AssembleDataResponse({String? bigqueryDestination})
-    : bigqueryDestination = bigqueryDestination ?? '',
-      super(fullyQualifiedName);
+  AssembleDataResponse({this.bigqueryDestination = ''})
+    : super(fullyQualifiedName);
 
   factory AssembleDataResponse.fromJson(Map<String, dynamic> json) =>
       AssembleDataResponse(
@@ -22475,24 +22337,17 @@ final class DatasetVersion extends ProtoMessage {
   final bool satisfiesPzi;
 
   DatasetVersion({
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? etag,
-    String? bigQueryDatasetName,
-    String? displayName,
+    this.etag = '',
+    this.bigQueryDatasetName = '',
+    this.displayName = '',
     required this.metadata,
-    String? modelReference,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       bigQueryDatasetName = bigQueryDatasetName ?? '',
-       displayName = displayName ?? '',
-       modelReference = modelReference ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.modelReference = '',
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory DatasetVersion.fromJson(Map<String, dynamic> json) => DatasetVersion(
     name: json['name'] ?? '',
@@ -22552,13 +22407,10 @@ final class DeployedIndexRef extends ProtoMessage {
   final String displayName;
 
   DeployedIndexRef({
-    String? indexEndpoint,
-    String? deployedIndexId,
-    String? displayName,
-  }) : indexEndpoint = indexEndpoint ?? '',
-       deployedIndexId = deployedIndexId ?? '',
-       displayName = displayName ?? '',
-       super(fullyQualifiedName);
+    this.indexEndpoint = '',
+    this.deployedIndexId = '',
+    this.displayName = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployedIndexRef.fromJson(Map<String, dynamic> json) =>
       DeployedIndexRef(
@@ -22596,10 +22448,8 @@ final class DeployedModelRef extends ProtoMessage {
   /// Immutable. An ID of a DeployedModel in the above Endpoint.
   final String deployedModelId;
 
-  DeployedModelRef({String? endpoint, String? deployedModelId})
-    : endpoint = endpoint ?? '',
-      deployedModelId = deployedModelId ?? '',
-      super(fullyQualifiedName);
+  DeployedModelRef({this.endpoint = '', this.deployedModelId = ''})
+    : super(fullyQualifiedName);
 
   factory DeployedModelRef.fromJson(Map<String, dynamic> json) =>
       DeployedModelRef(
@@ -22671,20 +22521,15 @@ final class DeploymentResourcePool extends ProtoMessage {
   final bool satisfiesPzi;
 
   DeploymentResourcePool({
-    String? name,
+    this.name = '',
     required this.dedicatedResources,
     this.encryptionSpec,
-    String? serviceAccount,
-    bool? disableContainerLogging,
+    this.serviceAccount = '',
+    this.disableContainerLogging = false,
     this.createTime,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       serviceAccount = serviceAccount ?? '',
-       disableContainerLogging = disableContainerLogging ?? false,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory DeploymentResourcePool.fromJson(Map<String, dynamic> json) =>
       DeploymentResourcePool(
@@ -22865,11 +22710,9 @@ final class ListDeploymentResourcePoolsRequest extends ProtoMessage {
 
   ListDeploymentResourcePoolsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDeploymentResourcePoolsRequest.fromJson(
     Map<String, dynamic> json,
@@ -22911,9 +22754,8 @@ final class ListDeploymentResourcePoolsResponse extends ProtoMessage {
 
   ListDeploymentResourcePoolsResponse({
     this.deploymentResourcePools = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDeploymentResourcePoolsResponse.fromJson(
     Map<String, dynamic> json,
@@ -23063,11 +22905,9 @@ final class QueryDeployedModelsRequest extends ProtoMessage {
 
   QueryDeployedModelsRequest({
     required this.deploymentResourcePool,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory QueryDeployedModelsRequest.fromJson(Map<String, dynamic> json) =>
       QueryDeployedModelsRequest(
@@ -23119,14 +22959,11 @@ final class QueryDeployedModelsResponse extends ProtoMessage {
 
   QueryDeployedModelsResponse({
     this.deployedModels = const [],
-    String? nextPageToken,
+    this.nextPageToken = '',
     this.deployedModelRefs = const [],
-    int? totalDeployedModelCount,
-    int? totalEndpointCount,
-  }) : nextPageToken = nextPageToken ?? '',
-       totalDeployedModelCount = totalDeployedModelCount ?? 0,
-       totalEndpointCount = totalEndpointCount ?? 0,
-       super(fullyQualifiedName);
+    this.totalDeployedModelCount = 0,
+    this.totalEndpointCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory QueryDeployedModelsResponse.fromJson(Map<String, dynamic> json) =>
       QueryDeployedModelsResponse(
@@ -23333,40 +23170,29 @@ final class Endpoint extends ProtoMessage {
   final bool privateModelServerEnabled;
 
   Endpoint({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.deployedModels = const [],
     this.trafficSplit = const {},
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.createTime,
     this.updateTime,
     this.encryptionSpec,
-    String? network,
-    bool? enablePrivateServiceConnect,
+    this.network = '',
+    this.enablePrivateServiceConnect = false,
     this.privateServiceConnectConfig,
-    String? modelDeploymentMonitoringJob,
+    this.modelDeploymentMonitoringJob = '',
     this.predictRequestResponseLoggingConfig,
-    bool? dedicatedEndpointEnabled,
-    String? dedicatedEndpointDns,
+    this.dedicatedEndpointEnabled = false,
+    this.dedicatedEndpointDns = '',
     this.clientConnectionConfig,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
     this.genAiAdvancedFeaturesConfig,
-    bool? privateModelServerEnabled,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       network = network ?? '',
-       enablePrivateServiceConnect = enablePrivateServiceConnect ?? false,
-       modelDeploymentMonitoringJob = modelDeploymentMonitoringJob ?? '',
-       dedicatedEndpointEnabled = dedicatedEndpointEnabled ?? false,
-       dedicatedEndpointDns = dedicatedEndpointDns ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       privateModelServerEnabled = privateModelServerEnabled ?? false,
-       super(fullyQualifiedName);
+    this.privateModelServerEnabled = false,
+  }) : super(fullyQualifiedName);
 
   factory Endpoint.fromJson(Map<String, dynamic> json) => Endpoint(
     name: json['name'] ?? '',
@@ -23597,35 +23423,25 @@ final class DeployedModel extends ProtoMessage {
     this.dedicatedResources,
     this.automaticResources,
     this.sharedResources,
-    String? id,
-    String? model,
-    String? modelVersionId,
-    String? displayName,
+    this.id = '',
+    this.model = '',
+    this.modelVersionId = '',
+    this.displayName = '',
     this.createTime,
     this.explanationSpec,
-    bool? disableExplanations,
-    String? serviceAccount,
-    bool? enableContainerLogging,
-    bool? disableContainerLogging,
-    bool? enableAccessLogging,
+    this.disableExplanations = false,
+    this.serviceAccount = '',
+    this.enableContainerLogging = false,
+    this.disableContainerLogging = false,
+    this.enableAccessLogging = false,
     this.privateEndpoints,
     this.fasterDeploymentConfig,
     this.rolloutOptions,
     this.status,
     this.systemLabels = const {},
-    String? checkpointId,
+    this.checkpointId = '',
     this.speculativeDecodingSpec,
-  }) : id = id ?? '',
-       model = model ?? '',
-       modelVersionId = modelVersionId ?? '',
-       displayName = displayName ?? '',
-       disableExplanations = disableExplanations ?? false,
-       serviceAccount = serviceAccount ?? '',
-       enableContainerLogging = enableContainerLogging ?? false,
-       disableContainerLogging = disableContainerLogging ?? false,
-       enableAccessLogging = enableAccessLogging ?? false,
-       checkpointId = checkpointId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DeployedModel.fromJson(Map<String, dynamic> json) => DeployedModel(
     dedicatedResources: decode(
@@ -23734,12 +23550,10 @@ final class DeployedModel_Status extends ProtoMessage {
   final int availableReplicaCount;
 
   DeployedModel_Status({
-    String? message,
+    this.message = '',
     this.lastUpdateTime,
-    int? availableReplicaCount,
-  }) : message = message ?? '',
-       availableReplicaCount = availableReplicaCount ?? 0,
-       super(fullyQualifiedName);
+    this.availableReplicaCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory DeployedModel_Status.fromJson(Map<String, dynamic> json) =>
       DeployedModel_Status(
@@ -23792,15 +23606,11 @@ final class PrivateEndpoints extends ProtoMessage {
   final String serviceAttachment;
 
   PrivateEndpoints({
-    String? predictHttpUri,
-    String? explainHttpUri,
-    String? healthHttpUri,
-    String? serviceAttachment,
-  }) : predictHttpUri = predictHttpUri ?? '',
-       explainHttpUri = explainHttpUri ?? '',
-       healthHttpUri = healthHttpUri ?? '',
-       serviceAttachment = serviceAttachment ?? '',
-       super(fullyQualifiedName);
+    this.predictHttpUri = '',
+    this.explainHttpUri = '',
+    this.healthHttpUri = '',
+    this.serviceAttachment = '',
+  }) : super(fullyQualifiedName);
 
   factory PrivateEndpoints.fromJson(Map<String, dynamic> json) =>
       PrivateEndpoints(
@@ -23861,17 +23671,12 @@ final class PredictRequestResponseLoggingConfig extends ProtoMessage {
   final bool enableOtelLogging;
 
   PredictRequestResponseLoggingConfig({
-    bool? enabled,
-    double? samplingRate,
+    this.enabled = false,
+    this.samplingRate = 0,
     this.bigqueryDestination,
-    String? requestResponseLoggingSchemaVersion,
-    bool? enableOtelLogging,
-  }) : enabled = enabled ?? false,
-       samplingRate = samplingRate ?? 0,
-       requestResponseLoggingSchemaVersion =
-           requestResponseLoggingSchemaVersion ?? '',
-       enableOtelLogging = enableOtelLogging ?? false,
-       super(fullyQualifiedName);
+    this.requestResponseLoggingSchemaVersion = '',
+    this.enableOtelLogging = false,
+  }) : super(fullyQualifiedName);
 
   factory PredictRequestResponseLoggingConfig.fromJson(
     Map<String, dynamic> json,
@@ -23974,9 +23779,8 @@ final class FasterDeploymentConfig extends ProtoMessage {
   /// If true, enable fast tryout feature for this deployed model.
   final bool fastTryoutEnabled;
 
-  FasterDeploymentConfig({bool? fastTryoutEnabled})
-    : fastTryoutEnabled = fastTryoutEnabled ?? false,
-      super(fullyQualifiedName);
+  FasterDeploymentConfig({this.fastTryoutEnabled = false})
+    : super(fullyQualifiedName);
 
   factory FasterDeploymentConfig.fromJson(Map<String, dynamic> json) =>
       FasterDeploymentConfig(
@@ -24027,11 +23831,9 @@ final class RolloutOptions extends ProtoMessage {
     this.maxUnavailablePercentage,
     this.maxSurgeReplicas,
     this.maxSurgePercentage,
-    String? previousDeployedModel,
-    int? revisionNumber,
-  }) : previousDeployedModel = previousDeployedModel ?? '',
-       revisionNumber = revisionNumber ?? 0,
-       super(fullyQualifiedName);
+    this.previousDeployedModel = '',
+    this.revisionNumber = 0,
+  }) : super(fullyQualifiedName);
 
   factory RolloutOptions.fromJson(Map<String, dynamic> json) => RolloutOptions(
     maxUnavailableReplicas: json['maxUnavailableReplicas'],
@@ -24106,9 +23908,8 @@ final class GenAiAdvancedFeaturesConfig_RagConfig extends ProtoMessage {
   /// Arthedain router will be used.
   final bool enableRag;
 
-  GenAiAdvancedFeaturesConfig_RagConfig({bool? enableRag})
-    : enableRag = enableRag ?? false,
-      super(fullyQualifiedName);
+  GenAiAdvancedFeaturesConfig_RagConfig({this.enableRag = false})
+    : super(fullyQualifiedName);
 
   factory GenAiAdvancedFeaturesConfig_RagConfig.fromJson(
     Map<String, dynamic> json,
@@ -24143,9 +23944,8 @@ final class SpeculativeDecodingSpec extends ProtoMessage {
   SpeculativeDecodingSpec({
     this.draftModelSpeculation,
     this.ngramSpeculation,
-    int? speculativeTokenCount,
-  }) : speculativeTokenCount = speculativeTokenCount ?? 0,
-       super(fullyQualifiedName);
+    this.speculativeTokenCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory SpeculativeDecodingSpec.fromJson(Map<String, dynamic> json) =>
       SpeculativeDecodingSpec(
@@ -24218,9 +24018,8 @@ final class SpeculativeDecodingSpec_NgramSpeculation extends ProtoMessage {
   /// The default value is 3 if not specified.
   final int ngramSize;
 
-  SpeculativeDecodingSpec_NgramSpeculation({int? ngramSize})
-    : ngramSize = ngramSize ?? 0,
-      super(fullyQualifiedName);
+  SpeculativeDecodingSpec_NgramSpeculation({this.ngramSize = 0})
+    : super(fullyQualifiedName);
 
   factory SpeculativeDecodingSpec_NgramSpeculation.fromJson(
     Map<String, dynamic> json,
@@ -24270,9 +24069,8 @@ final class CreateEndpointRequest extends ProtoMessage {
   CreateEndpointRequest({
     required this.parent,
     required this.endpoint,
-    String? endpointId,
-  }) : endpointId = endpointId ?? '',
-       super(fullyQualifiedName);
+    this.endpointId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateEndpointRequest.fromJson(Map<String, dynamic> json) =>
       CreateEndpointRequest(
@@ -24411,14 +24209,11 @@ final class ListEndpointsRequest extends ProtoMessage {
 
   ListEndpointsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListEndpointsRequest.fromJson(Map<String, dynamic> json) =>
       ListEndpointsRequest(
@@ -24465,9 +24260,8 @@ final class ListEndpointsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListEndpointsResponse({this.endpoints = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListEndpointsResponse({this.endpoints = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListEndpointsResponse.fromJson(Map<String, dynamic> json) =>
       ListEndpointsResponse(
@@ -25116,23 +24910,17 @@ final class EntityType extends ProtoMessage {
   final bool satisfiesPzi;
 
   EntityType({
-    String? name,
-    String? description,
+    this.name = '',
+    this.description = '',
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    String? etag,
+    this.etag = '',
     this.monitoringConfig,
-    int? offlineStorageTtlDays,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       offlineStorageTtlDays = offlineStorageTtlDays ?? 0,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.offlineStorageTtlDays = 0,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory EntityType.fromJson(Map<String, dynamic> json) => EntityType(
     name: json['name'] ?? '',
@@ -25227,9 +25015,8 @@ final class SecretRef extends ProtoMessage {
   /// version, or a version alias.
   final String version;
 
-  SecretRef({required this.secret, String? version})
-    : version = version ?? '',
-      super(fullyQualifiedName);
+  SecretRef({required this.secret, this.version = ''})
+    : super(fullyQualifiedName);
 
   factory SecretRef.fromJson(Map<String, dynamic> json) =>
       SecretRef(secret: json['secret'] ?? '', version: json['version'] ?? '');
@@ -25361,11 +25148,10 @@ final class EvaluatedAnnotation extends ProtoMessage {
     this.predictions = const [],
     this.groundTruths = const [],
     this.dataItemPayload,
-    String? evaluatedDataItemViewId,
+    this.evaluatedDataItemViewId = '',
     this.explanations = const [],
     this.errorAnalysisAnnotations = const [],
-  }) : evaluatedDataItemViewId = evaluatedDataItemViewId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory EvaluatedAnnotation.fromJson(Map<String, dynamic> json) =>
       EvaluatedAnnotation(
@@ -25485,9 +25271,8 @@ final class EvaluatedAnnotationExplanation extends ProtoMessage {
   /// Explanation attribution response details.
   final Explanation? explanation;
 
-  EvaluatedAnnotationExplanation({String? explanationType, this.explanation})
-    : explanationType = explanationType ?? '',
-      super(fullyQualifiedName);
+  EvaluatedAnnotationExplanation({this.explanationType = '', this.explanation})
+    : super(fullyQualifiedName);
 
   factory EvaluatedAnnotationExplanation.fromJson(Map<String, dynamic> json) =>
       EvaluatedAnnotationExplanation(
@@ -25530,11 +25315,9 @@ final class ErrorAnalysisAnnotation extends ProtoMessage {
   ErrorAnalysisAnnotation({
     this.attributedItems = const [],
     this.queryType = ErrorAnalysisAnnotation_QueryType.$default,
-    double? outlierScore,
-    double? outlierThreshold,
-  }) : outlierScore = outlierScore ?? 0,
-       outlierThreshold = outlierThreshold ?? 0,
-       super(fullyQualifiedName);
+    this.outlierScore = 0,
+    this.outlierThreshold = 0,
+  }) : super(fullyQualifiedName);
 
   factory ErrorAnalysisAnnotation.fromJson(Map<String, dynamic> json) =>
       ErrorAnalysisAnnotation(
@@ -25589,11 +25372,9 @@ final class ErrorAnalysisAnnotation_AttributedItem extends ProtoMessage {
   final double distance;
 
   ErrorAnalysisAnnotation_AttributedItem({
-    String? annotationResourceName,
-    double? distance,
-  }) : annotationResourceName = annotationResourceName ?? '',
-       distance = distance ?? 0,
-       super(fullyQualifiedName);
+    this.annotationResourceName = '',
+    this.distance = 0,
+  }) : super(fullyQualifiedName);
 
   factory ErrorAnalysisAnnotation_AttributedItem.fromJson(
     Map<String, dynamic> json,
@@ -26132,9 +25913,8 @@ final class AutoraterConfig extends ProtoMessage {
   AutoraterConfig({
     this.samplingCount,
     this.flipEnabled,
-    String? autoraterModel,
-  }) : autoraterModel = autoraterModel ?? '',
-       super(fullyQualifiedName);
+    this.autoraterModel = '',
+  }) : super(fullyQualifiedName);
 
   factory AutoraterConfig.fromJson(Map<String, dynamic> json) =>
       AutoraterConfig(
@@ -27050,9 +26830,7 @@ final class BleuSpec extends ProtoMessage {
   /// Optional. Whether to use_effective_order to compute bleu score.
   final bool useEffectiveOrder;
 
-  BleuSpec({bool? useEffectiveOrder})
-    : useEffectiveOrder = useEffectiveOrder ?? false,
-      super(fullyQualifiedName);
+  BleuSpec({this.useEffectiveOrder = false}) : super(fullyQualifiedName);
 
   factory BleuSpec.fromJson(Map<String, dynamic> json) =>
       BleuSpec(useEffectiveOrder: json['useEffectiveOrder'] ?? false);
@@ -27198,11 +26976,11 @@ final class RougeSpec extends ProtoMessage {
   /// Optional. Whether to split summaries while using rougeLsum.
   final bool splitSummaries;
 
-  RougeSpec({String? rougeType, bool? useStemmer, bool? splitSummaries})
-    : rougeType = rougeType ?? '',
-      useStemmer = useStemmer ?? false,
-      splitSummaries = splitSummaries ?? false,
-      super(fullyQualifiedName);
+  RougeSpec({
+    this.rougeType = '',
+    this.useStemmer = false,
+    this.splitSummaries = false,
+  }) : super(fullyQualifiedName);
 
   factory RougeSpec.fromJson(Map<String, dynamic> json) => RougeSpec(
     rougeType: json['rougeType'] ?? '',
@@ -27342,9 +27120,7 @@ final class CoherenceSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  CoherenceSpec({int? version})
-    : version = version ?? 0,
-      super(fullyQualifiedName);
+  CoherenceSpec({this.version = 0}) : super(fullyQualifiedName);
 
   factory CoherenceSpec.fromJson(Map<String, dynamic> json) =>
       CoherenceSpec(version: json['version'] ?? 0);
@@ -27373,9 +27149,8 @@ final class CoherenceResult extends ProtoMessage {
   /// Output only. Confidence for coherence score.
   final double? confidence;
 
-  CoherenceResult({this.score, String? explanation, this.confidence})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  CoherenceResult({this.score, this.explanation = '', this.confidence})
+    : super(fullyQualifiedName);
 
   factory CoherenceResult.fromJson(Map<String, dynamic> json) =>
       CoherenceResult(
@@ -27464,9 +27239,7 @@ final class FluencySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  FluencySpec({int? version})
-    : version = version ?? 0,
-      super(fullyQualifiedName);
+  FluencySpec({this.version = 0}) : super(fullyQualifiedName);
 
   factory FluencySpec.fromJson(Map<String, dynamic> json) =>
       FluencySpec(version: json['version'] ?? 0);
@@ -27495,9 +27268,8 @@ final class FluencyResult extends ProtoMessage {
   /// Output only. Confidence for fluency score.
   final double? confidence;
 
-  FluencyResult({this.score, String? explanation, this.confidence})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  FluencyResult({this.score, this.explanation = '', this.confidence})
+    : super(fullyQualifiedName);
 
   factory FluencyResult.fromJson(Map<String, dynamic> json) => FluencyResult(
     score: decodeDouble(json['score']),
@@ -27585,9 +27357,7 @@ final class SafetySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  SafetySpec({int? version})
-    : version = version ?? 0,
-      super(fullyQualifiedName);
+  SafetySpec({this.version = 0}) : super(fullyQualifiedName);
 
   factory SafetySpec.fromJson(Map<String, dynamic> json) =>
       SafetySpec(version: json['version'] ?? 0);
@@ -27616,9 +27386,8 @@ final class SafetyResult extends ProtoMessage {
   /// Output only. Confidence for safety score.
   final double? confidence;
 
-  SafetyResult({this.score, String? explanation, this.confidence})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  SafetyResult({this.score, this.explanation = '', this.confidence})
+    : super(fullyQualifiedName);
 
   factory SafetyResult.fromJson(Map<String, dynamic> json) => SafetyResult(
     score: decodeDouble(json['score']),
@@ -27719,9 +27488,7 @@ final class GroundednessSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  GroundednessSpec({int? version})
-    : version = version ?? 0,
-      super(fullyQualifiedName);
+  GroundednessSpec({this.version = 0}) : super(fullyQualifiedName);
 
   factory GroundednessSpec.fromJson(Map<String, dynamic> json) =>
       GroundednessSpec(version: json['version'] ?? 0);
@@ -27750,9 +27517,8 @@ final class GroundednessResult extends ProtoMessage {
   /// Output only. Confidence for groundedness score.
   final double? confidence;
 
-  GroundednessResult({this.score, String? explanation, this.confidence})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  GroundednessResult({this.score, this.explanation = '', this.confidence})
+    : super(fullyQualifiedName);
 
   factory GroundednessResult.fromJson(Map<String, dynamic> json) =>
       GroundednessResult(
@@ -27853,9 +27619,7 @@ final class FulfillmentSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  FulfillmentSpec({int? version})
-    : version = version ?? 0,
-      super(fullyQualifiedName);
+  FulfillmentSpec({this.version = 0}) : super(fullyQualifiedName);
 
   factory FulfillmentSpec.fromJson(Map<String, dynamic> json) =>
       FulfillmentSpec(version: json['version'] ?? 0);
@@ -27884,9 +27648,8 @@ final class FulfillmentResult extends ProtoMessage {
   /// Output only. Confidence for fulfillment score.
   final double? confidence;
 
-  FulfillmentResult({this.score, String? explanation, this.confidence})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  FulfillmentResult({this.score, this.explanation = '', this.confidence})
+    : super(fullyQualifiedName);
 
   factory FulfillmentResult.fromJson(Map<String, dynamic> json) =>
       FulfillmentResult(
@@ -28008,10 +27771,8 @@ final class SummarizationQualitySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  SummarizationQualitySpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  SummarizationQualitySpec({this.useReference = false, this.version = 0})
+    : super(fullyQualifiedName);
 
   factory SummarizationQualitySpec.fromJson(Map<String, dynamic> json) =>
       SummarizationQualitySpec(
@@ -28049,9 +27810,11 @@ final class SummarizationQualityResult extends ProtoMessage {
   /// Output only. Confidence for summarization quality score.
   final double? confidence;
 
-  SummarizationQualityResult({this.score, String? explanation, this.confidence})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  SummarizationQualityResult({
+    this.score,
+    this.explanation = '',
+    this.confidence,
+  }) : super(fullyQualifiedName);
 
   factory SummarizationQualityResult.fromJson(Map<String, dynamic> json) =>
       SummarizationQualityResult(
@@ -28189,10 +27952,10 @@ final class PairwiseSummarizationQualitySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  PairwiseSummarizationQualitySpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  PairwiseSummarizationQualitySpec({
+    this.useReference = false,
+    this.version = 0,
+  }) : super(fullyQualifiedName);
 
   factory PairwiseSummarizationQualitySpec.fromJson(
     Map<String, dynamic> json,
@@ -28233,10 +27996,9 @@ final class PairwiseSummarizationQualityResult extends ProtoMessage {
 
   PairwiseSummarizationQualityResult({
     this.pairwiseChoice = PairwiseChoice.$default,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PairwiseSummarizationQualityResult.fromJson(
     Map<String, dynamic> json,
@@ -28369,10 +28131,8 @@ final class SummarizationHelpfulnessSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  SummarizationHelpfulnessSpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  SummarizationHelpfulnessSpec({this.useReference = false, this.version = 0})
+    : super(fullyQualifiedName);
 
   factory SummarizationHelpfulnessSpec.fromJson(Map<String, dynamic> json) =>
       SummarizationHelpfulnessSpec(
@@ -28412,10 +28172,9 @@ final class SummarizationHelpfulnessResult extends ProtoMessage {
 
   SummarizationHelpfulnessResult({
     this.score,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SummarizationHelpfulnessResult.fromJson(Map<String, dynamic> json) =>
       SummarizationHelpfulnessResult(
@@ -28539,10 +28298,8 @@ final class SummarizationVerbositySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  SummarizationVerbositySpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  SummarizationVerbositySpec({this.useReference = false, this.version = 0})
+    : super(fullyQualifiedName);
 
   factory SummarizationVerbositySpec.fromJson(Map<String, dynamic> json) =>
       SummarizationVerbositySpec(
@@ -28582,10 +28339,9 @@ final class SummarizationVerbosityResult extends ProtoMessage {
 
   SummarizationVerbosityResult({
     this.score,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SummarizationVerbosityResult.fromJson(Map<String, dynamic> json) =>
       SummarizationVerbosityResult(
@@ -28715,10 +28471,8 @@ final class QuestionAnsweringQualitySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  QuestionAnsweringQualitySpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  QuestionAnsweringQualitySpec({this.useReference = false, this.version = 0})
+    : super(fullyQualifiedName);
 
   factory QuestionAnsweringQualitySpec.fromJson(Map<String, dynamic> json) =>
       QuestionAnsweringQualitySpec(
@@ -28758,10 +28512,9 @@ final class QuestionAnsweringQualityResult extends ProtoMessage {
 
   QuestionAnsweringQualityResult({
     this.score,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringQualityResult.fromJson(Map<String, dynamic> json) =>
       QuestionAnsweringQualityResult(
@@ -28899,10 +28652,10 @@ final class PairwiseQuestionAnsweringQualitySpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  PairwiseQuestionAnsweringQualitySpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  PairwiseQuestionAnsweringQualitySpec({
+    this.useReference = false,
+    this.version = 0,
+  }) : super(fullyQualifiedName);
 
   factory PairwiseQuestionAnsweringQualitySpec.fromJson(
     Map<String, dynamic> json,
@@ -28943,10 +28696,9 @@ final class PairwiseQuestionAnsweringQualityResult extends ProtoMessage {
 
   PairwiseQuestionAnsweringQualityResult({
     this.pairwiseChoice = PairwiseChoice.$default,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PairwiseQuestionAnsweringQualityResult.fromJson(
     Map<String, dynamic> json,
@@ -29079,10 +28831,8 @@ final class QuestionAnsweringRelevanceSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  QuestionAnsweringRelevanceSpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  QuestionAnsweringRelevanceSpec({this.useReference = false, this.version = 0})
+    : super(fullyQualifiedName);
 
   factory QuestionAnsweringRelevanceSpec.fromJson(Map<String, dynamic> json) =>
       QuestionAnsweringRelevanceSpec(
@@ -29122,10 +28872,9 @@ final class QuestionAnsweringRelevanceResult extends ProtoMessage {
 
   QuestionAnsweringRelevanceResult({
     this.score,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringRelevanceResult.fromJson(
     Map<String, dynamic> json,
@@ -29257,10 +29006,10 @@ final class QuestionAnsweringHelpfulnessSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  QuestionAnsweringHelpfulnessSpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  QuestionAnsweringHelpfulnessSpec({
+    this.useReference = false,
+    this.version = 0,
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringHelpfulnessSpec.fromJson(
     Map<String, dynamic> json,
@@ -29301,10 +29050,9 @@ final class QuestionAnsweringHelpfulnessResult extends ProtoMessage {
 
   QuestionAnsweringHelpfulnessResult({
     this.score,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringHelpfulnessResult.fromJson(
     Map<String, dynamic> json,
@@ -29436,10 +29184,10 @@ final class QuestionAnsweringCorrectnessSpec extends ProtoMessage {
   /// Optional. Which version to use for evaluation.
   final int version;
 
-  QuestionAnsweringCorrectnessSpec({bool? useReference, int? version})
-    : useReference = useReference ?? false,
-      version = version ?? 0,
-      super(fullyQualifiedName);
+  QuestionAnsweringCorrectnessSpec({
+    this.useReference = false,
+    this.version = 0,
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringCorrectnessSpec.fromJson(
     Map<String, dynamic> json,
@@ -29480,10 +29228,9 @@ final class QuestionAnsweringCorrectnessResult extends ProtoMessage {
 
   QuestionAnsweringCorrectnessResult({
     this.score,
-    String? explanation,
+    this.explanation = '',
     this.confidence,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory QuestionAnsweringCorrectnessResult.fromJson(
     Map<String, dynamic> json,
@@ -29682,9 +29429,8 @@ final class PointwiseMetricResult extends ProtoMessage {
   /// Output only. Spec for custom output.
   final CustomOutput? customOutput;
 
-  PointwiseMetricResult({this.score, String? explanation, this.customOutput})
-    : explanation = explanation ?? '',
-      super(fullyQualifiedName);
+  PointwiseMetricResult({this.score, this.explanation = '', this.customOutput})
+    : super(fullyQualifiedName);
 
   factory PointwiseMetricResult.fromJson(Map<String, dynamic> json) =>
       PointwiseMetricResult(
@@ -29852,13 +29598,11 @@ final class PairwiseMetricSpec extends ProtoMessage {
 
   PairwiseMetricSpec({
     required this.metricPromptTemplate,
-    String? candidateResponseFieldName,
-    String? baselineResponseFieldName,
+    this.candidateResponseFieldName = '',
+    this.baselineResponseFieldName = '',
     this.systemInstruction,
     this.customOutputFormatConfig,
-  }) : candidateResponseFieldName = candidateResponseFieldName ?? '',
-       baselineResponseFieldName = baselineResponseFieldName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PairwiseMetricSpec.fromJson(Map<String, dynamic> json) =>
       PairwiseMetricSpec(
@@ -29914,10 +29658,9 @@ final class PairwiseMetricResult extends ProtoMessage {
 
   PairwiseMetricResult({
     this.pairwiseChoice = PairwiseChoice.$default,
-    String? explanation,
+    this.explanation = '',
     this.customOutput,
-  }) : explanation = explanation ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PairwiseMetricResult.fromJson(Map<String, dynamic> json) =>
       PairwiseMetricResult(
@@ -30429,9 +30172,8 @@ final class ToolParameterKvmatchSpec extends ProtoMessage {
   /// Optional. Whether to use STRICT string match on parameter values.
   final bool useStrictStringMatch;
 
-  ToolParameterKvmatchSpec({bool? useStrictStringMatch})
-    : useStrictStringMatch = useStrictStringMatch ?? false,
-      super(fullyQualifiedName);
+  ToolParameterKvmatchSpec({this.useStrictStringMatch = false})
+    : super(fullyQualifiedName);
 
   factory ToolParameterKvmatchSpec.fromJson(Map<String, dynamic> json) =>
       ToolParameterKvmatchSpec(
@@ -30592,11 +30334,9 @@ final class CometSpec extends ProtoMessage {
 
   CometSpec({
     required this.version,
-    String? sourceLanguage,
-    String? targetLanguage,
-  }) : sourceLanguage = sourceLanguage ?? '',
-       targetLanguage = targetLanguage ?? '',
-       super(fullyQualifiedName);
+    this.sourceLanguage = '',
+    this.targetLanguage = '',
+  }) : super(fullyQualifiedName);
 
   factory CometSpec.fromJson(Map<String, dynamic> json) => CometSpec(
     version: decodeEnum(json['version'], CometSpec_CometVersion.fromJson),
@@ -30759,11 +30499,9 @@ final class MetricxSpec extends ProtoMessage {
 
   MetricxSpec({
     required this.version,
-    String? sourceLanguage,
-    String? targetLanguage,
-  }) : sourceLanguage = sourceLanguage ?? '',
-       targetLanguage = targetLanguage ?? '',
-       super(fullyQualifiedName);
+    this.sourceLanguage = '',
+    this.targetLanguage = '',
+  }) : super(fullyQualifiedName);
 
   factory MetricxSpec.fromJson(Map<String, dynamic> json) => MetricxSpec(
     version: decodeEnum(json['version'], MetricxSpec_MetricxVersion.fromJson),
@@ -31033,10 +30771,8 @@ final class RubricCritiqueResult extends ProtoMessage {
   /// otherwise.
   final bool verdict;
 
-  RubricCritiqueResult({String? rubric, bool? verdict})
-    : rubric = rubric ?? '',
-      verdict = verdict ?? false,
-      super(fullyQualifiedName);
+  RubricCritiqueResult({this.rubric = '', this.verdict = false})
+    : super(fullyQualifiedName);
 
   factory RubricCritiqueResult.fromJson(Map<String, dynamic> json) =>
       RubricCritiqueResult(
@@ -32111,12 +31847,11 @@ final class Event extends ProtoMessage {
 
   Event({
     required this.artifact,
-    String? execution,
+    this.execution = '',
     this.eventTime,
     required this.type,
     this.labels = const {},
-  }) : execution = execution ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Event.fromJson(Map<String, dynamic> json) => Event(
     artifact: json['artifact'] ?? '',
@@ -32254,11 +31989,10 @@ final class StoredContentsExample extends ProtoMessage {
   searchKeyGenerationMethod;
 
   StoredContentsExample({
-    String? searchKey,
+    this.searchKey = '',
     required this.contentsExample,
     this.searchKeyGenerationMethod,
-  }) : searchKey = searchKey ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory StoredContentsExample.fromJson(Map<String, dynamic> json) =>
       StoredContentsExample(
@@ -32364,15 +32098,13 @@ final class ExampleStore extends ProtoMessage {
   final ExampleStoreConfig? exampleStoreConfig;
 
   ExampleStore({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.createTime,
     this.updateTime,
     required this.exampleStoreConfig,
-  }) : name = name ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExampleStore.fromJson(Map<String, dynamic> json) => ExampleStore(
     name: json['name'] ?? '',
@@ -32875,13 +32607,10 @@ final class ListExampleStoresRequest extends ProtoMessage {
 
   ListExampleStoresRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListExampleStoresRequest.fromJson(Map<String, dynamic> json) =>
       ListExampleStoresRequest(
@@ -32928,9 +32657,8 @@ final class ListExampleStoresResponse extends ProtoMessage {
 
   ListExampleStoresResponse({
     this.exampleStores = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListExampleStoresResponse.fromJson(Map<String, dynamic> json) =>
       ListExampleStoresResponse(
@@ -32974,12 +32702,10 @@ final class Example extends ProtoMessage {
 
   Example({
     this.storedContentsExample,
-    String? displayName,
-    String? exampleId,
+    this.displayName = '',
+    this.exampleId = '',
     this.createTime,
-  }) : displayName = displayName ?? '',
-       exampleId = exampleId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Example.fromJson(Map<String, dynamic> json) => Example(
     storedContentsExample: decode(
@@ -33033,9 +32759,8 @@ final class UpsertExamplesRequest extends ProtoMessage {
   UpsertExamplesRequest({
     required this.exampleStore,
     required this.examples,
-    bool? overwrite,
-  }) : overwrite = overwrite ?? false,
-       super(fullyQualifiedName);
+    this.overwrite = false,
+  }) : super(fullyQualifiedName);
 
   factory UpsertExamplesRequest.fromJson(Map<String, dynamic> json) =>
       UpsertExamplesRequest(
@@ -33214,9 +32939,8 @@ final class SearchExamplesRequest extends ProtoMessage {
   SearchExamplesRequest({
     this.storedContentsExampleParameters,
     required this.exampleStore,
-    int? topK,
-  }) : topK = topK ?? 0,
-       super(fullyQualifiedName);
+    this.topK = 0,
+  }) : super(fullyQualifiedName);
 
   factory SearchExamplesRequest.fromJson(Map<String, dynamic> json) =>
       SearchExamplesRequest(
@@ -33283,9 +33007,10 @@ final class SearchExamplesResponse_SimilarExample extends ProtoMessage {
   /// The similarity score of this example.
   final double similarityScore;
 
-  SearchExamplesResponse_SimilarExample({this.example, double? similarityScore})
-    : similarityScore = similarityScore ?? 0,
-      super(fullyQualifiedName);
+  SearchExamplesResponse_SimilarExample({
+    this.example,
+    this.similarityScore = 0,
+  }) : super(fullyQualifiedName);
 
   factory SearchExamplesResponse_SimilarExample.fromJson(
     Map<String, dynamic> json,
@@ -33340,12 +33065,10 @@ final class FetchExamplesRequest extends ProtoMessage {
   FetchExamplesRequest({
     this.storedContentsExampleFilter,
     required this.exampleStore,
-    int? pageSize,
-    String? pageToken,
+    this.pageSize = 0,
+    this.pageToken = '',
     this.exampleIds = const [],
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FetchExamplesRequest.fromJson(Map<String, dynamic> json) =>
       FetchExamplesRequest(
@@ -33394,9 +33117,8 @@ final class FetchExamplesResponse extends ProtoMessage {
   /// subsequent pages.
   final String nextPageToken;
 
-  FetchExamplesResponse({this.examples = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  FetchExamplesResponse({this.examples = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory FetchExamplesResponse.fromJson(Map<String, dynamic> json) =>
       FetchExamplesResponse(
@@ -33477,24 +33199,18 @@ final class Execution extends ProtoMessage {
   final String description;
 
   Execution({
-    String? name,
-    String? displayName,
+    this.name = '',
+    this.displayName = '',
     this.state = Execution_State.$default,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.createTime,
     this.updateTime,
-    String? schemaTitle,
-    String? schemaVersion,
+    this.schemaTitle = '',
+    this.schemaVersion = '',
     this.metadata,
-    String? description,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       etag = etag ?? '',
-       schemaTitle = schemaTitle ?? '',
-       schemaVersion = schemaVersion ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+    this.description = '',
+  }) : super(fullyQualifiedName);
 
   factory Execution.fromJson(Map<String, dynamic> json) => Execution(
     name: json['name'] ?? '',
@@ -33801,19 +33517,14 @@ final class Attribution extends ProtoMessage {
   final String outputName;
 
   Attribution({
-    double? baselineOutputValue,
-    double? instanceOutputValue,
+    this.baselineOutputValue = 0,
+    this.instanceOutputValue = 0,
     this.featureAttributions,
     this.outputIndex = const [],
-    String? outputDisplayName,
-    double? approximationError,
-    String? outputName,
-  }) : baselineOutputValue = baselineOutputValue ?? 0,
-       instanceOutputValue = instanceOutputValue ?? 0,
-       outputDisplayName = outputDisplayName ?? '',
-       approximationError = approximationError ?? 0,
-       outputName = outputName ?? '',
-       super(fullyQualifiedName);
+    this.outputDisplayName = '',
+    this.approximationError = 0,
+    this.outputName = '',
+  }) : super(fullyQualifiedName);
 
   factory Attribution.fromJson(Map<String, dynamic> json) => Attribution(
     baselineOutputValue: decodeDouble(json['baselineOutputValue']) ?? 0,
@@ -33867,10 +33578,8 @@ final class Neighbor extends ProtoMessage {
   /// Output only. The neighbor distance.
   final double neighborDistance;
 
-  Neighbor({String? neighborId, double? neighborDistance})
-    : neighborId = neighborId ?? '',
-      neighborDistance = neighborDistance ?? 0,
-      super(fullyQualifiedName);
+  Neighbor({this.neighborId = '', this.neighborDistance = 0})
+    : super(fullyQualifiedName);
 
   factory Neighbor.fromJson(Map<String, dynamic> json) => Neighbor(
     neighborId: json['neighborId'] ?? '',
@@ -33980,10 +33689,9 @@ final class ExplanationParameters extends ProtoMessage {
     this.integratedGradientsAttribution,
     this.xraiAttribution,
     this.examples,
-    int? topK,
+    this.topK = 0,
     this.outputIndices,
-  }) : topK = topK ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExplanationParameters.fromJson(Map<String, dynamic> json) =>
       ExplanationParameters(
@@ -34233,9 +33941,8 @@ final class SmoothGradConfig extends ProtoMessage {
   SmoothGradConfig({
     this.noiseSigma,
     this.featureNoiseSigma,
-    int? noisySampleCount,
-  }) : noisySampleCount = noisySampleCount ?? 0,
-       super(fullyQualifiedName);
+    this.noisySampleCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory SmoothGradConfig.fromJson(Map<String, dynamic> json) =>
       SmoothGradConfig(
@@ -34314,10 +34021,8 @@ final class FeatureNoiseSigma_NoiseSigmaForFeature extends ProtoMessage {
   /// but represents the noise added to the current feature. Defaults to 0.1.
   final double sigma;
 
-  FeatureNoiseSigma_NoiseSigmaForFeature({String? name, double? sigma})
-    : name = name ?? '',
-      sigma = sigma ?? 0,
-      super(fullyQualifiedName);
+  FeatureNoiseSigma_NoiseSigmaForFeature({this.name = '', this.sigma = 0})
+    : super(fullyQualifiedName);
 
   factory FeatureNoiseSigma_NoiseSigmaForFeature.fromJson(
     Map<String, dynamic> json,
@@ -34355,9 +34060,7 @@ final class BlurBaselineConfig extends ProtoMessage {
   /// images) baseline.
   final double maxBlurSigma;
 
-  BlurBaselineConfig({double? maxBlurSigma})
-    : maxBlurSigma = maxBlurSigma ?? 0,
-      super(fullyQualifiedName);
+  BlurBaselineConfig({this.maxBlurSigma = 0}) : super(fullyQualifiedName);
 
   factory BlurBaselineConfig.fromJson(Map<String, dynamic> json) =>
       BlurBaselineConfig(maxBlurSigma: decodeDouble(json['maxBlurSigma']) ?? 0);
@@ -34405,9 +34108,8 @@ final class Examples extends ProtoMessage {
     this.nearestNeighborSearchConfig,
     this.presets,
     this.gcsSource,
-    int? neighborCount,
-  }) : neighborCount = neighborCount ?? 0,
-       super(fullyQualifiedName);
+    this.neighborCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory Examples.fromJson(Map<String, dynamic> json) => Examples(
     exampleGcsSource: decode(
@@ -34742,15 +34444,12 @@ final class ExamplesOverride extends ProtoMessage {
   final ExamplesOverride_DataFormat dataFormat;
 
   ExamplesOverride({
-    int? neighborCount,
-    int? crowdingCount,
+    this.neighborCount = 0,
+    this.crowdingCount = 0,
     this.restrictions = const [],
-    bool? returnEmbeddings,
+    this.returnEmbeddings = false,
     this.dataFormat = ExamplesOverride_DataFormat.$default,
-  }) : neighborCount = neighborCount ?? 0,
-       crowdingCount = crowdingCount ?? 0,
-       returnEmbeddings = returnEmbeddings ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExamplesOverride.fromJson(Map<String, dynamic> json) =>
       ExamplesOverride(
@@ -34834,11 +34533,10 @@ final class ExamplesRestrictionsNamespace extends ProtoMessage {
   final List<String> deny;
 
   ExamplesRestrictionsNamespace({
-    String? namespaceName,
+    this.namespaceName = '',
     this.allow = const [],
     this.deny = const [],
-  }) : namespaceName = namespaceName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExamplesRestrictionsNamespace.fromJson(Map<String, dynamic> json) =>
       ExamplesRestrictionsNamespace(
@@ -34911,11 +34609,9 @@ final class ExplanationMetadata extends ProtoMessage {
   ExplanationMetadata({
     required this.inputs,
     required this.outputs,
-    String? featureAttributionsSchemaUri,
-    String? latentSpaceSource,
-  }) : featureAttributionsSchemaUri = featureAttributionsSchemaUri ?? '',
-       latentSpaceSource = latentSpaceSource ?? '',
-       super(fullyQualifiedName);
+    this.featureAttributionsSchemaUri = '',
+    this.latentSpaceSource = '',
+  }) : super(fullyQualifiedName);
 
   factory ExplanationMetadata.fromJson(Map<String, dynamic> json) =>
       ExplanationMetadata(
@@ -35052,24 +34748,18 @@ final class ExplanationMetadata_InputMetadata extends ProtoMessage {
 
   ExplanationMetadata_InputMetadata({
     this.inputBaselines = const [],
-    String? inputTensorName,
+    this.inputTensorName = '',
     this.encoding = ExplanationMetadata_InputMetadata_Encoding.$default,
-    String? modality,
+    this.modality = '',
     this.featureValueDomain,
-    String? indicesTensorName,
-    String? denseShapeTensorName,
+    this.indicesTensorName = '',
+    this.denseShapeTensorName = '',
     this.indexFeatureMapping = const [],
-    String? encodedTensorName,
+    this.encodedTensorName = '',
     this.encodedBaselines = const [],
     this.visualization,
-    String? groupName,
-  }) : inputTensorName = inputTensorName ?? '',
-       modality = modality ?? '',
-       indicesTensorName = indicesTensorName ?? '',
-       denseShapeTensorName = denseShapeTensorName ?? '',
-       encodedTensorName = encodedTensorName ?? '',
-       groupName = groupName ?? '',
-       super(fullyQualifiedName);
+    this.groupName = '',
+  }) : super(fullyQualifiedName);
 
   factory ExplanationMetadata_InputMetadata.fromJson(
     Map<String, dynamic> json,
@@ -35175,15 +34865,11 @@ final class ExplanationMetadata_InputMetadata_FeatureValueDomain
   final double originalStddev;
 
   ExplanationMetadata_InputMetadata_FeatureValueDomain({
-    double? minValue,
-    double? maxValue,
-    double? originalMean,
-    double? originalStddev,
-  }) : minValue = minValue ?? 0,
-       maxValue = maxValue ?? 0,
-       originalMean = originalMean ?? 0,
-       originalStddev = originalStddev ?? 0,
-       super(fullyQualifiedName);
+    this.minValue = 0,
+    this.maxValue = 0,
+    this.originalMean = 0,
+    this.originalStddev = 0,
+  }) : super(fullyQualifiedName);
 
   factory ExplanationMetadata_InputMetadata_FeatureValueDomain.fromJson(
     Map<String, dynamic> json,
@@ -35268,13 +34954,11 @@ final class ExplanationMetadata_InputMetadata_Visualization
         ExplanationMetadata_InputMetadata_Visualization_Polarity.$default,
     this.colorMap =
         ExplanationMetadata_InputMetadata_Visualization_ColorMap.$default,
-    double? clipPercentUpperbound,
-    double? clipPercentLowerbound,
+    this.clipPercentUpperbound = 0,
+    this.clipPercentLowerbound = 0,
     this.overlayType =
         ExplanationMetadata_InputMetadata_Visualization_OverlayType.$default,
-  }) : clipPercentUpperbound = clipPercentUpperbound ?? 0,
-       clipPercentLowerbound = clipPercentLowerbound ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExplanationMetadata_InputMetadata_Visualization.fromJson(
     Map<String, dynamic> json,
@@ -35636,9 +35320,8 @@ final class ExplanationMetadata_OutputMetadata extends ProtoMessage {
   ExplanationMetadata_OutputMetadata({
     this.indexDisplayNameMapping,
     this.displayNameMappingKey,
-    String? outputTensorName,
-  }) : outputTensorName = outputTensorName ?? '',
-       super(fullyQualifiedName);
+    this.outputTensorName = '',
+  }) : super(fullyQualifiedName);
 
   factory ExplanationMetadata_OutputMetadata.fromJson(
     Map<String, dynamic> json,
@@ -35723,21 +35406,18 @@ final class Extension extends ProtoMessage {
   final ExtensionPrivateServiceConnectConfig? privateServiceConnectConfig;
 
   Extension({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     required this.manifest,
     this.extensionOperations = const [],
     this.runtimeConfig,
     this.toolUseExamples = const [],
     this.privateServiceConnectConfig,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Extension.fromJson(Map<String, dynamic> json) => Extension(
     name: json['name'] ?? '',
@@ -35896,9 +35576,8 @@ final class ExtensionOperation extends ProtoMessage {
   /// by the OpenAPI Spec.
   final FunctionDeclaration? functionDeclaration;
 
-  ExtensionOperation({String? operationId, this.functionDeclaration})
-    : operationId = operationId ?? '',
-      super(fullyQualifiedName);
+  ExtensionOperation({this.operationId = '', this.functionDeclaration})
+    : super(fullyQualifiedName);
 
   factory ExtensionOperation.fromJson(Map<String, dynamic> json) =>
       ExtensionOperation(
@@ -36103,9 +35782,8 @@ final class AuthConfig_GoogleServiceAccountConfig extends ProtoMessage {
   /// will be used to execute the Extension.
   final String serviceAccount;
 
-  AuthConfig_GoogleServiceAccountConfig({String? serviceAccount})
-    : serviceAccount = serviceAccount ?? '',
-      super(fullyQualifiedName);
+  AuthConfig_GoogleServiceAccountConfig({this.serviceAccount = ''})
+    : super(fullyQualifiedName);
 
   factory AuthConfig_GoogleServiceAccountConfig.fromJson(
     Map<String, dynamic> json,
@@ -36295,11 +35973,9 @@ final class RuntimeConfig_CodeInterpreterRuntimeConfig extends ProtoMessage {
   final String fileOutputGcsBucket;
 
   RuntimeConfig_CodeInterpreterRuntimeConfig({
-    String? fileInputGcsBucket,
-    String? fileOutputGcsBucket,
-  }) : fileInputGcsBucket = fileInputGcsBucket ?? '',
-       fileOutputGcsBucket = fileOutputGcsBucket ?? '',
-       super(fullyQualifiedName);
+    this.fileInputGcsBucket = '',
+    this.fileOutputGcsBucket = '',
+  }) : super(fullyQualifiedName);
 
   factory RuntimeConfig_CodeInterpreterRuntimeConfig.fromJson(
     Map<String, dynamic> json,
@@ -36341,11 +36017,9 @@ final class RuntimeConfig_VertexAisearchRuntimeConfig extends ProtoMessage {
   final String engineId;
 
   RuntimeConfig_VertexAisearchRuntimeConfig({
-    String? servingConfigName,
-    String? engineId,
-  }) : servingConfigName = servingConfigName ?? '',
-       engineId = engineId ?? '',
-       super(fullyQualifiedName);
+    this.servingConfigName = '',
+    this.engineId = '',
+  }) : super(fullyQualifiedName);
 
   factory RuntimeConfig_VertexAisearchRuntimeConfig.fromJson(
     Map<String, dynamic> json,
@@ -36482,9 +36156,7 @@ final class ExecuteExtensionResponse extends ProtoMessage {
   /// the response.content schema in the extension's manifest/OpenAPI spec.
   final String content;
 
-  ExecuteExtensionResponse({String? content})
-    : content = content ?? '',
-      super(fullyQualifiedName);
+  ExecuteExtensionResponse({this.content = ''}) : super(fullyQualifiedName);
 
   factory ExecuteExtensionResponse.fromJson(Map<String, dynamic> json) =>
       ExecuteExtensionResponse(content: json['content'] ?? '');
@@ -36550,9 +36222,8 @@ final class QueryExtensionResponse extends ProtoMessage {
   /// Failure message if any.
   final String failureMessage;
 
-  QueryExtensionResponse({this.steps = const [], String? failureMessage})
-    : failureMessage = failureMessage ?? '',
-      super(fullyQualifiedName);
+  QueryExtensionResponse({this.steps = const [], this.failureMessage = ''})
+    : super(fullyQualifiedName);
 
   factory QueryExtensionResponse.fromJson(Map<String, dynamic> json) =>
       QueryExtensionResponse(
@@ -36742,15 +36413,11 @@ final class ListExtensionsRequest extends ProtoMessage {
 
   ListExtensionsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListExtensionsRequest.fromJson(Map<String, dynamic> json) =>
       ListExtensionsRequest(
@@ -36798,9 +36465,8 @@ final class ListExtensionsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListExtensionsResponse({this.extensions = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListExtensionsResponse({this.extensions = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListExtensionsResponse.fromJson(Map<String, dynamic> json) =>
       ListExtensionsResponse(
@@ -36950,27 +36616,21 @@ final class Feature extends ProtoMessage {
   final String pointOfContact;
 
   Feature({
-    String? name,
-    String? description,
+    this.name = '',
+    this.description = '',
     this.valueType = Feature_ValueType.$default,
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    String? etag,
+    this.etag = '',
     this.monitoringConfig,
-    bool? disableMonitoring,
+    this.disableMonitoring = false,
     this.monitoringStats = const [],
     this.monitoringStatsAnomalies = const [],
     this.featureStatsAndAnomaly = const [],
-    String? versionColumnName,
-    String? pointOfContact,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       disableMonitoring = disableMonitoring ?? false,
-       versionColumnName = versionColumnName ?? '',
-       pointOfContact = pointOfContact ?? '',
-       super(fullyQualifiedName);
+    this.versionColumnName = '',
+    this.pointOfContact = '',
+  }) : super(fullyQualifiedName);
 
   factory Feature.fromJson(Map<String, dynamic> json) => Feature(
     name: json['name'] ?? '',
@@ -37238,19 +36898,15 @@ final class FeatureGroup extends ProtoMessage {
 
   FeatureGroup({
     this.bigQuery,
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
-    String? description,
+    this.description = '',
     this.serviceAgentType = FeatureGroup_ServiceAgentType.$default,
-    String? serviceAccountEmail,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       description = description ?? '',
-       serviceAccountEmail = serviceAccountEmail ?? '',
-       super(fullyQualifiedName);
+    this.serviceAccountEmail = '',
+  }) : super(fullyQualifiedName);
 
   factory FeatureGroup.fromJson(Map<String, dynamic> json) => FeatureGroup(
     bigQuery: decode(json['bigQuery'], FeatureGroup_BigQuery.fromJson),
@@ -37336,12 +36992,10 @@ final class FeatureGroup_BigQuery extends ProtoMessage {
   FeatureGroup_BigQuery({
     required this.bigQuerySource,
     this.entityIdColumns = const [],
-    bool? staticDataSource,
+    this.staticDataSource = false,
     this.timeSeries,
-    bool? dense,
-  }) : staticDataSource = staticDataSource ?? false,
-       dense = dense ?? false,
-       super(fullyQualifiedName);
+    this.dense = false,
+  }) : super(fullyQualifiedName);
 
   factory FeatureGroup_BigQuery.fromJson(Map<String, dynamic> json) =>
       FeatureGroup_BigQuery(
@@ -37384,9 +37038,8 @@ final class FeatureGroup_BigQuery_TimeSeries extends ProtoMessage {
   /// type `TIMESTAMP` will be used.
   final String timestampColumn;
 
-  FeatureGroup_BigQuery_TimeSeries({String? timestampColumn})
-    : timestampColumn = timestampColumn ?? '',
-      super(fullyQualifiedName);
+  FeatureGroup_BigQuery_TimeSeries({this.timestampColumn = ''})
+    : super(fullyQualifiedName);
 
   factory FeatureGroup_BigQuery_TimeSeries.fromJson(
     Map<String, dynamic> json,
@@ -37483,18 +37136,15 @@ final class FeatureMonitor extends ProtoMessage {
   final FeatureSelectionConfig? featureSelectionConfig;
 
   FeatureMonitor({
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
-    String? description,
+    this.description = '',
     required this.scheduleConfig,
     required this.featureSelectionConfig,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureMonitor.fromJson(Map<String, dynamic> json) => FeatureMonitor(
     name: json['name'] ?? '',
@@ -37547,7 +37197,7 @@ final class ScheduleConfig extends ProtoMessage {
   /// "TZ=America/New_York 1 * * * *".
   final String cron;
 
-  ScheduleConfig({String? cron}) : cron = cron ?? '', super(fullyQualifiedName);
+  ScheduleConfig({this.cron = ''}) : super(fullyQualifiedName);
 
   factory ScheduleConfig.fromJson(Map<String, dynamic> json) =>
       ScheduleConfig(cron: json['cron'] ?? '');
@@ -37610,9 +37260,8 @@ final class FeatureSelectionConfig_FeatureConfig extends ProtoMessage {
 
   FeatureSelectionConfig_FeatureConfig({
     required this.featureId,
-    double? driftThreshold,
-  }) : driftThreshold = driftThreshold ?? 0,
-       super(fullyQualifiedName);
+    this.driftThreshold = 0,
+  }) : super(fullyQualifiedName);
 
   factory FeatureSelectionConfig_FeatureConfig.fromJson(
     Map<String, dynamic> json,
@@ -37677,21 +37326,15 @@ final class FeatureStatsAndAnomaly extends ProtoMessage {
   final String featureMonitorId;
 
   FeatureStatsAndAnomaly({
-    String? featureId,
+    this.featureId = '',
     this.featureStats,
-    double? distributionDeviation,
-    double? driftDetectionThreshold,
-    bool? driftDetected,
+    this.distributionDeviation = 0,
+    this.driftDetectionThreshold = 0,
+    this.driftDetected = false,
     this.statsTime,
-    int? featureMonitorJobId,
-    String? featureMonitorId,
-  }) : featureId = featureId ?? '',
-       distributionDeviation = distributionDeviation ?? 0,
-       driftDetectionThreshold = driftDetectionThreshold ?? 0,
-       driftDetected = driftDetected ?? false,
-       featureMonitorJobId = featureMonitorJobId ?? 0,
-       featureMonitorId = featureMonitorId ?? '',
-       super(fullyQualifiedName);
+    this.featureMonitorJobId = 0,
+    this.featureMonitorId = '',
+  }) : super(fullyQualifiedName);
 
   factory FeatureStatsAndAnomaly.fromJson(
     Map<String, dynamic> json,
@@ -37826,20 +37469,17 @@ final class FeatureMonitorJob extends ProtoMessage {
   final FeatureMonitorJob_FeatureMonitorJobTrigger triggerType;
 
   FeatureMonitorJob({
-    String? name,
+    this.name = '',
     this.createTime,
     this.finalStatus,
     this.jobSummary,
     this.labels = const {},
-    String? description,
-    int? driftBaseFeatureMonitorJobId,
+    this.description = '',
+    this.driftBaseFeatureMonitorJobId = 0,
     this.driftBaseSnapshotTime,
     this.featureSelectionConfig,
     this.triggerType = FeatureMonitorJob_FeatureMonitorJobTrigger.$default,
-  }) : name = name ?? '',
-       description = description ?? '',
-       driftBaseFeatureMonitorJobId = driftBaseFeatureMonitorJobId ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureMonitorJob.fromJson(Map<String, dynamic> json) =>
       FeatureMonitorJob(
@@ -37914,10 +37554,9 @@ final class FeatureMonitorJob_JobSummary extends ProtoMessage {
   final List<FeatureStatsAndAnomaly> featureStatsAndAnomalies;
 
   FeatureMonitorJob_JobSummary({
-    int? totalSlotMs,
+    this.totalSlotMs = 0,
     this.featureStatsAndAnomalies = const [],
-  }) : totalSlotMs = totalSlotMs ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureMonitorJob_JobSummary.fromJson(Map<String, dynamic> json) =>
       FeatureMonitorJob_JobSummary(
@@ -38041,19 +37680,14 @@ final class FeatureStatsAnomaly extends ProtoMessage {
   final protobuf.Timestamp? endTime;
 
   FeatureStatsAnomaly({
-    double? score,
-    String? statsUri,
-    String? anomalyUri,
-    double? distributionDeviation,
-    double? anomalyDetectionThreshold,
+    this.score = 0,
+    this.statsUri = '',
+    this.anomalyUri = '',
+    this.distributionDeviation = 0,
+    this.anomalyDetectionThreshold = 0,
     this.startTime,
     this.endTime,
-  }) : score = score ?? 0,
-       statsUri = statsUri ?? '',
-       anomalyUri = anomalyUri ?? '',
-       distributionDeviation = distributionDeviation ?? 0,
-       anomalyDetectionThreshold = anomalyDetectionThreshold ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureStatsAnomaly.fromJson(Map<String, dynamic> json) =>
       FeatureStatsAnomaly(
@@ -38163,22 +37797,18 @@ final class FeatureOnlineStore extends ProtoMessage {
   FeatureOnlineStore({
     this.bigtable,
     this.optimized,
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.state = FeatureOnlineStore_State.$default,
     this.dedicatedServingEndpoint,
     this.embeddingManagement,
     this.encryptionSpec,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory FeatureOnlineStore.fromJson(
     Map<String, dynamic> json,
@@ -38253,10 +37883,9 @@ final class FeatureOnlineStore_Bigtable extends ProtoMessage {
 
   FeatureOnlineStore_Bigtable({
     required this.autoScaling,
-    bool? enableDirectBigtableAccess,
+    this.enableDirectBigtableAccess = false,
     this.bigtableMetadata,
-  }) : enableDirectBigtableAccess = enableDirectBigtableAccess ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_Bigtable.fromJson(Map<String, dynamic> json) =>
       FeatureOnlineStore_Bigtable(
@@ -38312,9 +37941,8 @@ final class FeatureOnlineStore_Bigtable_AutoScaling extends ProtoMessage {
   FeatureOnlineStore_Bigtable_AutoScaling({
     required this.minNodeCount,
     required this.maxNodeCount,
-    int? cpuUtilizationTarget,
-  }) : cpuUtilizationTarget = cpuUtilizationTarget ?? 0,
-       super(fullyQualifiedName);
+    this.cpuUtilizationTarget = 0,
+  }) : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_Bigtable_AutoScaling.fromJson(
     Map<String, dynamic> json,
@@ -38359,13 +37987,10 @@ final class FeatureOnlineStore_Bigtable_BigtableMetadata extends ProtoMessage {
   final String tableId;
 
   FeatureOnlineStore_Bigtable_BigtableMetadata({
-    String? tenantProjectId,
-    String? instanceId,
-    String? tableId,
-  }) : tenantProjectId = tenantProjectId ?? '',
-       instanceId = instanceId ?? '',
-       tableId = tableId ?? '',
-       super(fullyQualifiedName);
+    this.tenantProjectId = '',
+    this.instanceId = '',
+    this.tableId = '',
+  }) : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_Bigtable_BigtableMetadata.fromJson(
     Map<String, dynamic> json,
@@ -38434,12 +38059,10 @@ final class FeatureOnlineStore_DedicatedServingEndpoint extends ProtoMessage {
   final String serviceAttachment;
 
   FeatureOnlineStore_DedicatedServingEndpoint({
-    String? publicEndpointDomainName,
+    this.publicEndpointDomainName = '',
     this.privateServiceConnectConfig,
-    String? serviceAttachment,
-  }) : publicEndpointDomainName = publicEndpointDomainName ?? '',
-       serviceAttachment = serviceAttachment ?? '',
-       super(fullyQualifiedName);
+    this.serviceAttachment = '',
+  }) : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_DedicatedServingEndpoint.fromJson(
     Map<String, dynamic> json,
@@ -38483,9 +38106,8 @@ final class FeatureOnlineStore_EmbeddingManagement extends ProtoMessage {
   /// FeatureOnlineStore availability.
   final bool enabled;
 
-  FeatureOnlineStore_EmbeddingManagement({bool? enabled})
-    : enabled = enabled ?? false,
-      super(fullyQualifiedName);
+  FeatureOnlineStore_EmbeddingManagement({this.enabled = false})
+    : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_EmbeddingManagement.fromJson(
     Map<String, dynamic> json,
@@ -38669,15 +38291,11 @@ final class ListFeatureOnlineStoresRequest extends ProtoMessage {
 
   ListFeatureOnlineStoresRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureOnlineStoresRequest.fromJson(Map<String, dynamic> json) =>
       ListFeatureOnlineStoresRequest(
@@ -38727,9 +38345,8 @@ final class ListFeatureOnlineStoresResponse extends ProtoMessage {
 
   ListFeatureOnlineStoresResponse({
     this.featureOnlineStores = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureOnlineStoresResponse.fromJson(Map<String, dynamic> json) =>
       ListFeatureOnlineStoresResponse(
@@ -38828,9 +38445,8 @@ final class DeleteFeatureOnlineStoreRequest extends ProtoMessage {
   /// FeatureOnlineStore has no FeatureViews.)
   final bool force;
 
-  DeleteFeatureOnlineStoreRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteFeatureOnlineStoreRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteFeatureOnlineStoreRequest.fromJson(Map<String, dynamic> json) =>
       DeleteFeatureOnlineStoreRequest(
@@ -38881,9 +38497,8 @@ final class CreateFeatureViewRequest extends ProtoMessage {
     required this.parent,
     required this.featureView,
     required this.featureViewId,
-    bool? runSyncImmediately,
-  }) : runSyncImmediately = runSyncImmediately ?? false,
-       super(fullyQualifiedName);
+    this.runSyncImmediately = false,
+  }) : super(fullyQualifiedName);
 
   factory CreateFeatureViewRequest.fromJson(Map<String, dynamic> json) =>
       CreateFeatureViewRequest(
@@ -38997,15 +38612,11 @@ final class ListFeatureViewsRequest extends ProtoMessage {
 
   ListFeatureViewsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureViewsRequest.fromJson(Map<String, dynamic> json) =>
       ListFeatureViewsRequest(
@@ -39055,9 +38666,8 @@ final class ListFeatureViewsResponse extends ProtoMessage {
 
   ListFeatureViewsResponse({
     this.featureViews = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureViewsResponse.fromJson(Map<String, dynamic> json) =>
       ListFeatureViewsResponse(
@@ -39310,9 +38920,8 @@ final class SyncFeatureViewResponse extends ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{feature_online_store}/featureViews/{feature_view}/featureViewSyncs/{feature_view_sync}`
   final String featureViewSync;
 
-  SyncFeatureViewResponse({String? featureViewSync})
-    : featureViewSync = featureViewSync ?? '',
-      super(fullyQualifiedName);
+  SyncFeatureViewResponse({this.featureViewSync = ''})
+    : super(fullyQualifiedName);
 
   factory SyncFeatureViewResponse.fromJson(Map<String, dynamic> json) =>
       SyncFeatureViewResponse(featureViewSync: json['featureViewSync'] ?? '');
@@ -39403,15 +39012,11 @@ final class ListFeatureViewSyncsRequest extends ProtoMessage {
 
   ListFeatureViewSyncsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureViewSyncsRequest.fromJson(Map<String, dynamic> json) =>
       ListFeatureViewSyncsRequest(
@@ -39461,9 +39066,8 @@ final class ListFeatureViewSyncsResponse extends ProtoMessage {
 
   ListFeatureViewSyncsResponse({
     this.featureViewSyncs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureViewSyncsResponse.fromJson(Map<String, dynamic> json) =>
       ListFeatureViewSyncsResponse(
@@ -39745,9 +39349,8 @@ final class FetchFeatureValuesResponse_FeatureNameValuePairList_FeatureNameValue
 
   FetchFeatureValuesResponse_FeatureNameValuePairList_FeatureNameValuePair({
     this.value,
-    String? name,
-  }) : name = name ?? '',
-       super(fullyQualifiedName);
+    this.name = '',
+  }) : super(fullyQualifiedName);
 
   factory FetchFeatureValuesResponse_FeatureNameValuePairList_FeatureNameValuePair.fromJson(
     Map<String, dynamic> json,
@@ -39908,15 +39511,12 @@ final class NearestNeighborQuery extends ProtoMessage {
   NearestNeighborQuery({
     this.entityId,
     this.embedding,
-    int? neighborCount,
+    this.neighborCount = 0,
     this.stringFilters = const [],
     this.numericFilters = const [],
-    int? perCrowdingAttributeNeighborCount,
+    this.perCrowdingAttributeNeighborCount = 0,
     this.parameters,
-  }) : neighborCount = neighborCount ?? 0,
-       perCrowdingAttributeNeighborCount =
-           perCrowdingAttributeNeighborCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory NearestNeighborQuery.fromJson(Map<String, dynamic> json) =>
       NearestNeighborQuery(
@@ -40174,11 +39774,9 @@ final class NearestNeighborQuery_Parameters extends ProtoMessage {
   final double leafNodesSearchFraction;
 
   NearestNeighborQuery_Parameters({
-    int? approximateNeighborCandidates,
-    double? leafNodesSearchFraction,
-  }) : approximateNeighborCandidates = approximateNeighborCandidates ?? 0,
-       leafNodesSearchFraction = leafNodesSearchFraction ?? 0,
-       super(fullyQualifiedName);
+    this.approximateNeighborCandidates = 0,
+    this.leafNodesSearchFraction = 0,
+  }) : super(fullyQualifiedName);
 
   factory NearestNeighborQuery_Parameters.fromJson(
     Map<String, dynamic> json,
@@ -40227,9 +39825,8 @@ final class SearchNearestEntitiesRequest extends ProtoMessage {
   SearchNearestEntitiesRequest({
     required this.featureView,
     required this.query,
-    bool? returnFullEntity,
-  }) : returnFullEntity = returnFullEntity ?? false,
-       super(fullyQualifiedName);
+    this.returnFullEntity = false,
+  }) : super(fullyQualifiedName);
 
   factory SearchNearestEntitiesRequest.fromJson(Map<String, dynamic> json) =>
       SearchNearestEntitiesRequest(
@@ -40302,12 +39899,10 @@ final class NearestNeighbors_Neighbor extends ProtoMessage {
   final FetchFeatureValuesResponse? entityKeyValues;
 
   NearestNeighbors_Neighbor({
-    String? entityId,
-    double? distance,
+    this.entityId = '',
+    this.distance = 0,
     this.entityKeyValues,
-  }) : entityId = entityId ?? '',
-       distance = distance ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory NearestNeighbors_Neighbor.fromJson(Map<String, dynamic> json) =>
       NearestNeighbors_Neighbor(
@@ -40378,10 +39973,9 @@ final class FeatureViewDirectWriteRequest extends ProtoMessage {
   dataKeyAndFeatureValues;
 
   FeatureViewDirectWriteRequest({
-    String? featureView,
+    this.featureView = '',
     required this.dataKeyAndFeatureValues,
-  }) : featureView = featureView ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureViewDirectWriteRequest.fromJson(Map<String, dynamic> json) =>
       FeatureViewDirectWriteRequest(
@@ -40468,9 +40062,8 @@ final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature
   FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature({
     this.value,
     this.valueAndTimestamp,
-    String? name,
-  }) : name = name ?? '',
-       super(fullyQualifiedName);
+    this.name = '',
+  }) : super(fullyQualifiedName);
 
   factory FeatureViewDirectWriteRequest_DataKeyAndFeatureValues_Feature.fromJson(
     Map<String, dynamic> json,
@@ -40636,9 +40229,8 @@ final class GenerateFetchAccessTokenRequest extends ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{featureOnlineStore}/featureViews/{featureView}`
   final String featureView;
 
-  GenerateFetchAccessTokenRequest({String? featureView})
-    : featureView = featureView ?? '',
-      super(fullyQualifiedName);
+  GenerateFetchAccessTokenRequest({this.featureView = ''})
+    : super(fullyQualifiedName);
 
   factory GenerateFetchAccessTokenRequest.fromJson(Map<String, dynamic> json) =>
       GenerateFetchAccessTokenRequest(featureView: json['featureView'] ?? '');
@@ -40664,9 +40256,8 @@ final class GenerateFetchAccessTokenResponse extends ProtoMessage {
   /// Token expiration time. This is always set
   final protobuf.Timestamp? expireTime;
 
-  GenerateFetchAccessTokenResponse({String? accessToken, this.expireTime})
-    : accessToken = accessToken ?? '',
-      super(fullyQualifiedName);
+  GenerateFetchAccessTokenResponse({this.accessToken = '', this.expireTime})
+    : super(fullyQualifiedName);
 
   factory GenerateFetchAccessTokenResponse.fromJson(
     Map<String, dynamic> json,
@@ -40820,15 +40411,11 @@ final class ListFeatureGroupsRequest extends ProtoMessage {
 
   ListFeatureGroupsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureGroupsRequest.fromJson(Map<String, dynamic> json) =>
       ListFeatureGroupsRequest(
@@ -40878,9 +40465,8 @@ final class ListFeatureGroupsResponse extends ProtoMessage {
 
   ListFeatureGroupsResponse({
     this.featureGroups = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureGroupsResponse.fromJson(Map<String, dynamic> json) =>
       ListFeatureGroupsResponse(
@@ -40968,9 +40554,8 @@ final class DeleteFeatureGroupRequest extends ProtoMessage {
   /// FeatureGroup has no Features.)
   final bool force;
 
-  DeleteFeatureGroupRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteFeatureGroupRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteFeatureGroupRequest.fromJson(Map<String, dynamic> json) =>
       DeleteFeatureGroupRequest(
@@ -41119,15 +40704,11 @@ final class ListFeatureMonitorsRequest extends ProtoMessage {
 
   ListFeatureMonitorsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureMonitorsRequest.fromJson(Map<String, dynamic> json) =>
       ListFeatureMonitorsRequest(
@@ -41249,9 +40830,8 @@ final class ListFeatureMonitorsResponse extends ProtoMessage {
 
   ListFeatureMonitorsResponse({
     this.featureMonitors = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureMonitorsResponse.fromJson(Map<String, dynamic> json) =>
       ListFeatureMonitorsResponse(
@@ -41471,9 +41051,8 @@ final class CreateFeatureMonitorJobRequest extends ProtoMessage {
   CreateFeatureMonitorJobRequest({
     required this.parent,
     required this.featureMonitorJob,
-    int? featureMonitorJobId,
-  }) : featureMonitorJobId = featureMonitorJobId ?? 0,
-       super(fullyQualifiedName);
+    this.featureMonitorJobId = 0,
+  }) : super(fullyQualifiedName);
 
   factory CreateFeatureMonitorJobRequest.fromJson(Map<String, dynamic> json) =>
       CreateFeatureMonitorJobRequest(
@@ -41576,15 +41155,11 @@ final class ListFeatureMonitorJobsRequest extends ProtoMessage {
 
   ListFeatureMonitorJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureMonitorJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListFeatureMonitorJobsRequest(
@@ -41634,9 +41209,8 @@ final class ListFeatureMonitorJobsResponse extends ProtoMessage {
 
   ListFeatureMonitorJobsResponse({
     this.featureMonitorJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeatureMonitorJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListFeatureMonitorJobsResponse(
@@ -41798,26 +41372,21 @@ final class FeatureView extends ProtoMessage {
     this.bigQuerySource,
     this.featureRegistrySource,
     this.vertexRagSource,
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.syncConfig,
     this.vectorSearchConfig,
     this.indexConfig,
     this.optimizedConfig,
     this.serviceAgentType = FeatureView_ServiceAgentType.$default,
-    String? serviceAccountEmail,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
+    this.serviceAccountEmail = '',
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
     this.bigtableMetadata,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       serviceAccountEmail = serviceAccountEmail ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureView.fromJson(Map<String, dynamic> json) => FeatureView(
     bigQuerySource: decode(
@@ -41945,9 +41514,7 @@ final class FeatureView_SyncConfig extends ProtoMessage {
   /// "TZ=America/New_York 1 * * * *".
   final String cron;
 
-  FeatureView_SyncConfig({String? cron})
-    : cron = cron ?? '',
-      super(fullyQualifiedName);
+  FeatureView_SyncConfig({this.cron = ''}) : super(fullyQualifiedName);
 
   factory FeatureView_SyncConfig.fromJson(Map<String, dynamic> json) =>
       FeatureView_SyncConfig(cron: json['cron'] ?? '');
@@ -42009,15 +41576,13 @@ final class FeatureView_VectorSearchConfig extends ProtoMessage {
   FeatureView_VectorSearchConfig({
     this.treeAhConfig,
     this.bruteForceConfig,
-    String? embeddingColumn,
+    this.embeddingColumn = '',
     this.filterColumns = const [],
-    String? crowdingColumn,
+    this.crowdingColumn = '',
     this.embeddingDimension,
     this.distanceMeasureType =
         FeatureView_VectorSearchConfig_DistanceMeasureType.$default,
-  }) : embeddingColumn = embeddingColumn ?? '',
-       crowdingColumn = crowdingColumn ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureView_VectorSearchConfig.fromJson(Map<String, dynamic> json) =>
       FeatureView_VectorSearchConfig(
@@ -42205,15 +41770,13 @@ final class FeatureView_IndexConfig extends ProtoMessage {
   FeatureView_IndexConfig({
     this.treeAhConfig,
     this.bruteForceConfig,
-    String? embeddingColumn,
+    this.embeddingColumn = '',
     this.filterColumns = const [],
-    String? crowdingColumn,
+    this.crowdingColumn = '',
     this.embeddingDimension,
     this.distanceMeasureType =
         FeatureView_IndexConfig_DistanceMeasureType.$default,
-  }) : embeddingColumn = embeddingColumn ?? '',
-       crowdingColumn = crowdingColumn ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureView_IndexConfig.fromJson(Map<String, dynamic> json) =>
       FeatureView_IndexConfig(
@@ -42460,9 +42023,8 @@ final class FeatureView_VertexRagSource extends ProtoMessage {
   /// Optional. The RAG corpus id corresponding to this FeatureView.
   final int ragCorpusId;
 
-  FeatureView_VertexRagSource({required this.uri, int? ragCorpusId})
-    : ragCorpusId = ragCorpusId ?? 0,
-      super(fullyQualifiedName);
+  FeatureView_VertexRagSource({required this.uri, this.ragCorpusId = 0})
+    : super(fullyQualifiedName);
 
   factory FeatureView_VertexRagSource.fromJson(Map<String, dynamic> json) =>
       FeatureView_VertexRagSource(
@@ -42525,9 +42087,8 @@ final class FeatureView_BigtableMetadata extends ProtoMessage {
   /// The Bigtable App Profile to use for reading from Bigtable.
   final String readAppProfile;
 
-  FeatureView_BigtableMetadata({String? readAppProfile})
-    : readAppProfile = readAppProfile ?? '',
-      super(fullyQualifiedName);
+  FeatureView_BigtableMetadata({this.readAppProfile = ''})
+    : super(fullyQualifiedName);
 
   factory FeatureView_BigtableMetadata.fromJson(Map<String, dynamic> json) =>
       FeatureView_BigtableMetadata(
@@ -42612,17 +42173,14 @@ final class FeatureViewSync extends ProtoMessage {
   final bool satisfiesPzi;
 
   FeatureViewSync({
-    String? name,
+    this.name = '',
     this.createTime,
     this.runTime,
     this.finalStatus,
     this.syncSummary,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory FeatureViewSync.fromJson(Map<String, dynamic> json) =>
       FeatureViewSync(
@@ -42680,12 +42238,10 @@ final class FeatureViewSync_SyncSummary extends ProtoMessage {
   final protobuf.Timestamp? systemWatermarkTime;
 
   FeatureViewSync_SyncSummary({
-    int? rowSynced,
-    int? totalSlot,
+    this.rowSynced = 0,
+    this.totalSlot = 0,
     this.systemWatermarkTime,
-  }) : rowSynced = rowSynced ?? 0,
-       totalSlot = totalSlot ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FeatureViewSync_SyncSummary.fromJson(Map<String, dynamic> json) =>
       FeatureViewSync_SyncSummary(
@@ -42775,23 +42331,18 @@ final class Featurestore extends ProtoMessage {
   final bool satisfiesPzi;
 
   Featurestore({
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.onlineServingConfig,
     this.state = Featurestore_State.$default,
-    int? onlineStorageTtlDays,
+    this.onlineStorageTtlDays = 0,
     this.encryptionSpec,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       onlineStorageTtlDays = onlineStorageTtlDays ?? 0,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory Featurestore.fromJson(Map<String, dynamic> json) => Featurestore(
     name: json['name'] ?? '',
@@ -42860,9 +42411,8 @@ final class Featurestore_OnlineServingConfig extends ProtoMessage {
   /// reset the other.
   final Featurestore_OnlineServingConfig_Scaling? scaling;
 
-  Featurestore_OnlineServingConfig({int? fixedNodeCount, this.scaling})
-    : fixedNodeCount = fixedNodeCount ?? 0,
-      super(fullyQualifiedName);
+  Featurestore_OnlineServingConfig({this.fixedNodeCount = 0, this.scaling})
+    : super(fullyQualifiedName);
 
   factory Featurestore_OnlineServingConfig.fromJson(
     Map<String, dynamic> json,
@@ -42913,11 +42463,9 @@ final class Featurestore_OnlineServingConfig_Scaling extends ProtoMessage {
 
   Featurestore_OnlineServingConfig_Scaling({
     required this.minNodeCount,
-    int? maxNodeCount,
-    int? cpuUtilizationTarget,
-  }) : maxNodeCount = maxNodeCount ?? 0,
-       cpuUtilizationTarget = cpuUtilizationTarget ?? 0,
-       super(fullyQualifiedName);
+    this.maxNodeCount = 0,
+    this.cpuUtilizationTarget = 0,
+  }) : super(fullyQualifiedName);
 
   factory Featurestore_OnlineServingConfig_Scaling.fromJson(
     Map<String, dynamic> json,
@@ -43092,14 +42640,11 @@ final class FeaturestoreMonitoringConfig_SnapshotAnalysis extends ProtoMessage {
   final int stalenessDays;
 
   FeaturestoreMonitoringConfig_SnapshotAnalysis({
-    bool? disabled,
+    this.disabled = false,
     this.monitoringInterval,
-    int? monitoringIntervalDays,
-    int? stalenessDays,
-  }) : disabled = disabled ?? false,
-       monitoringIntervalDays = monitoringIntervalDays ?? 0,
-       stalenessDays = stalenessDays ?? 0,
-       super(fullyQualifiedName);
+    this.monitoringIntervalDays = 0,
+    this.stalenessDays = 0,
+  }) : super(fullyQualifiedName);
 
   factory FeaturestoreMonitoringConfig_SnapshotAnalysis.fromJson(
     Map<String, dynamic> json,
@@ -43525,9 +43070,8 @@ final class ReadFeatureValuesResponse_FeatureDescriptor extends ProtoMessage {
   /// Feature ID.
   final String id;
 
-  ReadFeatureValuesResponse_FeatureDescriptor({String? id})
-    : id = id ?? '',
-      super(fullyQualifiedName);
+  ReadFeatureValuesResponse_FeatureDescriptor({this.id = ''})
+    : super(fullyQualifiedName);
 
   factory ReadFeatureValuesResponse_FeatureDescriptor.fromJson(
     Map<String, dynamic> json,
@@ -43561,10 +43105,9 @@ final class ReadFeatureValuesResponse_Header extends ProtoMessage {
   final List<ReadFeatureValuesResponse_FeatureDescriptor> featureDescriptors;
 
   ReadFeatureValuesResponse_Header({
-    String? entityType,
+    this.entityType = '',
     this.featureDescriptors = const [],
-  }) : entityType = entityType ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ReadFeatureValuesResponse_Header.fromJson(
     Map<String, dynamic> json,
@@ -43608,9 +43151,10 @@ final class ReadFeatureValuesResponse_EntityView extends ProtoMessage {
   /// `ReadFeatureValuesResponse.header`.
   final List<ReadFeatureValuesResponse_EntityView_Data> data;
 
-  ReadFeatureValuesResponse_EntityView({String? entityId, this.data = const []})
-    : entityId = entityId ?? '',
-      super(fullyQualifiedName);
+  ReadFeatureValuesResponse_EntityView({
+    this.entityId = '',
+    this.data = const [],
+  }) : super(fullyQualifiedName);
 
   factory ReadFeatureValuesResponse_EntityView.fromJson(
     Map<String, dynamic> json,
@@ -43885,9 +43429,7 @@ final class StructFieldValue extends ProtoMessage {
   /// The value for this field.
   final FeatureValue? value;
 
-  StructFieldValue({String? name, this.value})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  StructFieldValue({this.name = '', this.value}) : super(fullyQualifiedName);
 
   factory StructFieldValue.fromJson(Map<String, dynamic> json) =>
       StructFieldValue(
@@ -44068,16 +43610,12 @@ final class ListFeaturestoresRequest extends ProtoMessage {
 
   ListFeaturestoresRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListFeaturestoresRequest.fromJson(Map<String, dynamic> json) =>
       ListFeaturestoresRequest(
@@ -44129,9 +43667,8 @@ final class ListFeaturestoresResponse extends ProtoMessage {
 
   ListFeaturestoresResponse({
     this.featurestores = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListFeaturestoresResponse.fromJson(Map<String, dynamic> json) =>
       ListFeaturestoresResponse(
@@ -44219,9 +43756,8 @@ final class DeleteFeaturestoreRequest extends ProtoMessage {
   /// has no EntityTypes.)
   final bool force;
 
-  DeleteFeaturestoreRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteFeaturestoreRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteFeaturestoreRequest.fromJson(Map<String, dynamic> json) =>
       DeleteFeaturestoreRequest(
@@ -44296,16 +43832,12 @@ final class ImportFeatureValuesRequest extends ProtoMessage {
     this.featureTimeField,
     this.featureTime,
     required this.entityType,
-    String? entityIdField,
+    this.entityIdField = '',
     required this.featureSpecs,
-    bool? disableOnlineServing,
-    int? workerCount,
-    bool? disableIngestionAnalysis,
-  }) : entityIdField = entityIdField ?? '',
-       disableOnlineServing = disableOnlineServing ?? false,
-       workerCount = workerCount ?? 0,
-       disableIngestionAnalysis = disableIngestionAnalysis ?? false,
-       super(fullyQualifiedName);
+    this.disableOnlineServing = false,
+    this.workerCount = 0,
+    this.disableIngestionAnalysis = false,
+  }) : super(fullyQualifiedName);
 
   factory ImportFeatureValuesRequest.fromJson(Map<String, dynamic> json) =>
       ImportFeatureValuesRequest(
@@ -44376,9 +43908,8 @@ final class ImportFeatureValuesRequest_FeatureSpec extends ProtoMessage {
 
   ImportFeatureValuesRequest_FeatureSpec({
     required this.id,
-    String? sourceField,
-  }) : sourceField = sourceField ?? '',
-       super(fullyQualifiedName);
+    this.sourceField = '',
+  }) : super(fullyQualifiedName);
 
   factory ImportFeatureValuesRequest_FeatureSpec.fromJson(
     Map<String, dynamic> json,
@@ -44424,16 +43955,11 @@ final class ImportFeatureValuesResponse extends ProtoMessage {
   final int timestampOutsideRetentionRowsCount;
 
   ImportFeatureValuesResponse({
-    int? importedEntityCount,
-    int? importedFeatureValueCount,
-    int? invalidRowCount,
-    int? timestampOutsideRetentionRowsCount,
-  }) : importedEntityCount = importedEntityCount ?? 0,
-       importedFeatureValueCount = importedFeatureValueCount ?? 0,
-       invalidRowCount = invalidRowCount ?? 0,
-       timestampOutsideRetentionRowsCount =
-           timestampOutsideRetentionRowsCount ?? 0,
-       super(fullyQualifiedName);
+    this.importedEntityCount = 0,
+    this.importedFeatureValueCount = 0,
+    this.invalidRowCount = 0,
+    this.timestampOutsideRetentionRowsCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory ImportFeatureValuesResponse.fromJson(Map<String, dynamic> json) =>
       ImportFeatureValuesResponse(
@@ -44834,9 +44360,10 @@ final class DestinationFeatureSetting extends ProtoMessage {
   /// Feature ID is used.
   final String destinationField;
 
-  DestinationFeatureSetting({required this.featureId, String? destinationField})
-    : destinationField = destinationField ?? '',
-      super(fullyQualifiedName);
+  DestinationFeatureSetting({
+    required this.featureId,
+    this.destinationField = '',
+  }) : super(fullyQualifiedName);
 
   factory DestinationFeatureSetting.fromJson(Map<String, dynamic> json) =>
       DestinationFeatureSetting(
@@ -45094,16 +44621,12 @@ final class ListEntityTypesRequest extends ProtoMessage {
 
   ListEntityTypesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListEntityTypesRequest.fromJson(Map<String, dynamic> json) =>
       ListEntityTypesRequest(
@@ -45153,9 +44676,10 @@ final class ListEntityTypesResponse extends ProtoMessage {
   /// subsequent pages.
   final String nextPageToken;
 
-  ListEntityTypesResponse({this.entityTypes = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListEntityTypesResponse({
+    this.entityTypes = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListEntityTypesResponse.fromJson(Map<String, dynamic> json) =>
       ListEntityTypesResponse(
@@ -45246,9 +44770,8 @@ final class DeleteEntityTypeRequest extends ProtoMessage {
   /// (Otherwise, the request will only work if the EntityType has no Features.)
   final bool force;
 
-  DeleteEntityTypeRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteEntityTypeRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteEntityTypeRequest.fromJson(Map<String, dynamic> json) =>
       DeleteEntityTypeRequest(
@@ -45517,18 +45040,13 @@ final class ListFeaturesRequest extends ProtoMessage {
 
   ListFeaturesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-    int? latestStatsCount,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       latestStatsCount = latestStatsCount ?? 0,
-       super(fullyQualifiedName);
+    this.latestStatsCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListFeaturesRequest.fromJson(Map<String, dynamic> json) =>
       ListFeaturesRequest(
@@ -45583,9 +45101,8 @@ final class ListFeaturesResponse extends ProtoMessage {
   /// subsequent pages.
   final String nextPageToken;
 
-  ListFeaturesResponse({this.features = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListFeaturesResponse({this.features = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListFeaturesResponse.fromJson(Map<String, dynamic> json) =>
       ListFeaturesResponse(
@@ -45696,13 +45213,10 @@ final class SearchFeaturesRequest extends ProtoMessage {
 
   SearchFeaturesRequest({
     required this.location,
-    String? query,
-    int? pageSize,
-    String? pageToken,
-  }) : query = query ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.query = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchFeaturesRequest.fromJson(Map<String, dynamic> json) =>
       SearchFeaturesRequest(
@@ -45755,9 +45269,8 @@ final class SearchFeaturesResponse extends ProtoMessage {
   /// subsequent pages.
   final String nextPageToken;
 
-  SearchFeaturesResponse({this.features = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  SearchFeaturesResponse({this.features = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory SearchFeaturesResponse.fromJson(Map<String, dynamic> json) =>
       SearchFeaturesResponse(
@@ -45952,18 +45465,13 @@ final class ImportFeatureValuesOperationMetadata extends ProtoMessage {
 
   ImportFeatureValuesOperationMetadata({
     this.genericMetadata,
-    int? importedEntityCount,
-    int? importedFeatureValueCount,
+    this.importedEntityCount = 0,
+    this.importedFeatureValueCount = 0,
     this.sourceUris = const [],
-    int? invalidRowCount,
-    int? timestampOutsideRetentionRowsCount,
+    this.invalidRowCount = 0,
+    this.timestampOutsideRetentionRowsCount = 0,
     this.blockingOperationIds = const [],
-  }) : importedEntityCount = importedEntityCount ?? 0,
-       importedFeatureValueCount = importedFeatureValueCount ?? 0,
-       invalidRowCount = invalidRowCount ?? 0,
-       timestampOutsideRetentionRowsCount =
-           timestampOutsideRetentionRowsCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ImportFeatureValuesOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -46298,9 +45806,8 @@ final class DeleteFeatureValuesRequest_SelectTimeRangeAndFeature
   DeleteFeatureValuesRequest_SelectTimeRangeAndFeature({
     required this.timeRange,
     required this.featureSelector,
-    bool? skipOnlineStorageDelete,
-  }) : skipOnlineStorageDelete = skipOnlineStorageDelete ?? false,
-       super(fullyQualifiedName);
+    this.skipOnlineStorageDelete = false,
+  }) : super(fullyQualifiedName);
 
   factory DeleteFeatureValuesRequest_SelectTimeRangeAndFeature.fromJson(
     Map<String, dynamic> json,
@@ -46383,12 +45890,9 @@ final class DeleteFeatureValuesResponse_SelectEntity extends ProtoMessage {
   final int onlineStorageDeletedEntityCount;
 
   DeleteFeatureValuesResponse_SelectEntity({
-    int? offlineStorageDeletedEntityRowCount,
-    int? onlineStorageDeletedEntityCount,
-  }) : offlineStorageDeletedEntityRowCount =
-           offlineStorageDeletedEntityRowCount ?? 0,
-       onlineStorageDeletedEntityCount = onlineStorageDeletedEntityCount ?? 0,
-       super(fullyQualifiedName);
+    this.offlineStorageDeletedEntityRowCount = 0,
+    this.onlineStorageDeletedEntityCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory DeleteFeatureValuesResponse_SelectEntity.fromJson(
     Map<String, dynamic> json,
@@ -46445,14 +45949,10 @@ final class DeleteFeatureValuesResponse_SelectTimeRangeAndFeature
   final int onlineStorageModifiedEntityCount;
 
   DeleteFeatureValuesResponse_SelectTimeRangeAndFeature({
-    int? impactedFeatureCount,
-    int? offlineStorageModifiedEntityRowCount,
-    int? onlineStorageModifiedEntityCount,
-  }) : impactedFeatureCount = impactedFeatureCount ?? 0,
-       offlineStorageModifiedEntityRowCount =
-           offlineStorageModifiedEntityRowCount ?? 0,
-       onlineStorageModifiedEntityCount = onlineStorageModifiedEntityCount ?? 0,
-       super(fullyQualifiedName);
+    this.impactedFeatureCount = 0,
+    this.offlineStorageModifiedEntityRowCount = 0,
+    this.onlineStorageModifiedEntityCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory DeleteFeatureValuesResponse_SelectTimeRangeAndFeature.fromJson(
     Map<String, dynamic> json,
@@ -46501,9 +46001,8 @@ final class EntityIdSelector extends ProtoMessage {
   /// extracted from the column named entity_id.
   final String entityIdField;
 
-  EntityIdSelector({this.csvSource, String? entityIdField})
-    : entityIdField = entityIdField ?? '',
-      super(fullyQualifiedName);
+  EntityIdSelector({this.csvSource, this.entityIdField = ''})
+    : super(fullyQualifiedName);
 
   factory EntityIdSelector.fromJson(Map<String, dynamic> json) =>
       EntityIdSelector(
@@ -46668,11 +46167,9 @@ final class ListCachedContentsRequest extends ProtoMessage {
 
   ListCachedContentsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) =>
       ListCachedContentsRequest(
@@ -46713,9 +46210,8 @@ final class ListCachedContentsResponse extends ProtoMessage {
 
   ListCachedContentsResponse({
     this.cachedContents = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) =>
       ListCachedContentsResponse(
@@ -46822,13 +46318,10 @@ final class ListTuningJobsRequest extends ProtoMessage {
 
   ListTuningJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTuningJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListTuningJobsRequest(
@@ -46873,9 +46366,8 @@ final class ListTuningJobsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListTuningJobsResponse({this.tuningJobs = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListTuningJobsResponse({this.tuningJobs = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListTuningJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListTuningJobsResponse(
@@ -46952,9 +46444,8 @@ final class RebaseTunedModelRequest extends ProtoMessage {
     required this.tunedModelRef,
     this.tuningJob,
     this.artifactDestination,
-    bool? deployToSameEndpoint,
-  }) : deployToSameEndpoint = deployToSameEndpoint ?? false,
-       super(fullyQualifiedName);
+    this.deployToSameEndpoint = false,
+  }) : super(fullyQualifiedName);
 
   factory RebaseTunedModelRequest.fromJson(Map<String, dynamic> json) =>
       RebaseTunedModelRequest(
@@ -47101,12 +46592,12 @@ final class HyperparameterTuningJob extends ProtoMessage {
   final bool satisfiesPzi;
 
   HyperparameterTuningJob({
-    String? name,
+    this.name = '',
     required this.displayName,
     required this.studySpec,
     required this.maxTrialCount,
     required this.parallelTrialCount,
-    int? maxFailedTrialCount,
+    this.maxFailedTrialCount = 0,
     required this.trialJobSpec,
     this.trials = const [],
     this.state = JobState.$default,
@@ -47117,13 +46608,9 @@ final class HyperparameterTuningJob extends ProtoMessage {
     this.error,
     this.labels = const {},
     this.encryptionSpec,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       maxFailedTrialCount = maxFailedTrialCount ?? 0,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory HyperparameterTuningJob.fromJson(
     Map<String, dynamic> json,
@@ -47268,28 +46755,22 @@ final class Index extends ProtoMessage {
   final bool satisfiesPzi;
 
   Index({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
-    String? metadataSchemaUri,
+    this.description = '',
+    this.metadataSchemaUri = '',
     this.metadata,
     this.deployedIndexes = const [],
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.createTime,
     this.updateTime,
     this.indexStats,
     this.indexUpdateMethod = Index_IndexUpdateMethod.$default,
     this.encryptionSpec,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       description = description ?? '',
-       metadataSchemaUri = metadataSchemaUri ?? '',
-       etag = etag ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory Index.fromJson(Map<String, dynamic> json) => Index(
     name: json['name'] ?? '',
@@ -47522,11 +47003,10 @@ final class IndexDatapoint_Restriction extends ProtoMessage {
   final List<String> denyList;
 
   IndexDatapoint_Restriction({
-    String? namespace,
+    this.namespace = '',
     this.allowList = const [],
     this.denyList = const [],
-  }) : namespace = namespace ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory IndexDatapoint_Restriction.fromJson(Map<String, dynamic> json) =>
       IndexDatapoint_Restriction(
@@ -47575,10 +47055,9 @@ final class IndexDatapoint_NumericRestriction extends ProtoMessage {
     this.valueInt,
     this.valueFloat,
     this.valueDouble,
-    String? namespace,
+    this.namespace = '',
     this.op = IndexDatapoint_NumericRestriction_Operator.$default,
-  }) : namespace = namespace ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory IndexDatapoint_NumericRestriction.fromJson(
     Map<String, dynamic> json,
@@ -47680,9 +47159,8 @@ final class IndexDatapoint_CrowdingTag extends ProtoMessage {
   /// the total number of neighbors to return for a given query.
   final String crowdingAttribute;
 
-  IndexDatapoint_CrowdingTag({String? crowdingAttribute})
-    : crowdingAttribute = crowdingAttribute ?? '',
-      super(fullyQualifiedName);
+  IndexDatapoint_CrowdingTag({this.crowdingAttribute = ''})
+    : super(fullyQualifiedName);
 
   factory IndexDatapoint_CrowdingTag.fromJson(Map<String, dynamic> json) =>
       IndexDatapoint_CrowdingTag(
@@ -47715,11 +47193,11 @@ final class IndexStats extends ProtoMessage {
   /// Output only. The number of shards in the Index.
   final int shardsCount;
 
-  IndexStats({int? vectorsCount, int? sparseVectorsCount, int? shardsCount})
-    : vectorsCount = vectorsCount ?? 0,
-      sparseVectorsCount = sparseVectorsCount ?? 0,
-      shardsCount = shardsCount ?? 0,
-      super(fullyQualifiedName);
+  IndexStats({
+    this.vectorsCount = 0,
+    this.sparseVectorsCount = 0,
+    this.shardsCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory IndexStats.fromJson(Map<String, dynamic> json) => IndexStats(
     vectorsCount: decodeInt64(json['vectorsCount']) ?? 0,
@@ -47843,32 +47321,23 @@ final class IndexEndpoint extends ProtoMessage {
   final bool satisfiesPzi;
 
   IndexEndpoint({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.deployedIndexes = const [],
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.createTime,
     this.updateTime,
-    String? network,
-    bool? enablePrivateServiceConnect,
+    this.network = '',
+    this.enablePrivateServiceConnect = false,
     this.privateServiceConnectConfig,
-    bool? publicEndpointEnabled,
-    String? publicEndpointDomainName,
+    this.publicEndpointEnabled = false,
+    this.publicEndpointDomainName = '',
     this.encryptionSpec,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       network = network ?? '',
-       enablePrivateServiceConnect = enablePrivateServiceConnect ?? false,
-       publicEndpointEnabled = publicEndpointEnabled ?? false,
-       publicEndpointDomainName = publicEndpointDomainName ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory IndexEndpoint.fromJson(Map<String, dynamic> json) => IndexEndpoint(
     name: json['name'] ?? '',
@@ -48074,23 +47543,19 @@ final class DeployedIndex extends ProtoMessage {
   DeployedIndex({
     required this.id,
     required this.index,
-    String? displayName,
+    this.displayName = '',
     this.createTime,
     this.privateEndpoints,
     this.indexSyncTime,
     this.automaticResources,
     this.dedicatedResources,
-    bool? enableAccessLogging,
-    bool? enableDatapointUpsertLogging,
+    this.enableAccessLogging = false,
+    this.enableDatapointUpsertLogging = false,
     this.deployedIndexAuthConfig,
     this.reservedIpRanges = const [],
-    String? deploymentGroup,
+    this.deploymentGroup = '',
     this.pscAutomationConfigs = const [],
-  }) : displayName = displayName ?? '',
-       enableAccessLogging = enableAccessLogging ?? false,
-       enableDatapointUpsertLogging = enableDatapointUpsertLogging ?? false,
-       deploymentGroup = deploymentGroup ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DeployedIndex.fromJson(Map<String, dynamic> json) => DeployedIndex(
     id: json['id'] ?? '',
@@ -48257,12 +47722,10 @@ final class IndexPrivateEndpoints extends ProtoMessage {
   final List<PscAutomatedEndpoints> pscAutomatedEndpoints;
 
   IndexPrivateEndpoints({
-    String? matchGrpcAddress,
-    String? serviceAttachment,
+    this.matchGrpcAddress = '',
+    this.serviceAttachment = '',
     this.pscAutomatedEndpoints = const [],
-  }) : matchGrpcAddress = matchGrpcAddress ?? '',
-       serviceAttachment = serviceAttachment ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory IndexPrivateEndpoints.fromJson(Map<String, dynamic> json) =>
       IndexPrivateEndpoints(
@@ -48433,14 +47896,11 @@ final class ListIndexEndpointsRequest extends ProtoMessage {
 
   ListIndexEndpointsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListIndexEndpointsRequest.fromJson(Map<String, dynamic> json) =>
       ListIndexEndpointsRequest(
@@ -48489,9 +47949,8 @@ final class ListIndexEndpointsResponse extends ProtoMessage {
 
   ListIndexEndpointsResponse({
     this.indexEndpoints = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListIndexEndpointsResponse.fromJson(Map<String, dynamic> json) =>
       ListIndexEndpointsResponse(
@@ -48651,9 +48110,10 @@ final class DeployIndexOperationMetadata extends ProtoMessage {
   /// The unique index id specified by user
   final String deployedIndexId;
 
-  DeployIndexOperationMetadata({this.genericMetadata, String? deployedIndexId})
-    : deployedIndexId = deployedIndexId ?? '',
-      super(fullyQualifiedName);
+  DeployIndexOperationMetadata({
+    this.genericMetadata,
+    this.deployedIndexId = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployIndexOperationMetadata.fromJson(Map<String, dynamic> json) =>
       DeployIndexOperationMetadata(
@@ -48845,9 +48305,8 @@ final class MutateDeployedIndexOperationMetadata extends ProtoMessage {
 
   MutateDeployedIndexOperationMetadata({
     this.genericMetadata,
-    String? deployedIndexId,
-  }) : deployedIndexId = deployedIndexId ?? '',
-       super(fullyQualifiedName);
+    this.deployedIndexId = '',
+  }) : super(fullyQualifiedName);
 
   factory MutateDeployedIndexOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -49004,14 +48463,11 @@ final class ListIndexesRequest extends ProtoMessage {
 
   ListIndexesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListIndexesRequest.fromJson(Map<String, dynamic> json) =>
       ListIndexesRequest(
@@ -49058,9 +48514,8 @@ final class ListIndexesResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListIndexesResponse({this.indexes = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListIndexesResponse({this.indexes = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListIndexesResponse.fromJson(Map<String, dynamic> json) =>
       ListIndexesResponse(
@@ -49179,10 +48634,9 @@ final class ImportIndexRequest extends ProtoMessage {
 
   ImportIndexRequest({
     required this.name,
-    bool? isCompleteOverwrite,
+    this.isCompleteOverwrite = false,
     required this.config,
-  }) : isCompleteOverwrite = isCompleteOverwrite ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ImportIndexRequest.fromJson(Map<String, dynamic> json) =>
       ImportIndexRequest(
@@ -49381,10 +48835,9 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRest
 
   ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict({
     required this.namespace,
-    String? valueColumn,
+    this.valueColumn = '',
     required this.valueType,
-  }) : valueColumn = valueColumn ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_NumericRestrict.fromJson(
     Map<String, dynamic> json,
@@ -49707,9 +49160,8 @@ final class NearestNeighborSearchOperationMetadata extends ProtoMessage {
 
   NearestNeighborSearchOperationMetadata({
     this.contentValidationStats = const [],
-    int? dataBytesCount,
-  }) : dataBytesCount = dataBytesCount ?? 0,
-       super(fullyQualifiedName);
+    this.dataBytesCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory NearestNeighborSearchOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -49766,15 +49218,11 @@ final class NearestNeighborSearchOperationMetadata_RecordError
     this.errorType =
         NearestNeighborSearchOperationMetadata_RecordError_RecordErrorType
             .$default,
-    String? errorMessage,
-    String? sourceGcsUri,
-    String? embeddingId,
-    String? rawRecord,
-  }) : errorMessage = errorMessage ?? '',
-       sourceGcsUri = sourceGcsUri ?? '',
-       embeddingId = embeddingId ?? '',
-       rawRecord = rawRecord ?? '',
-       super(fullyQualifiedName);
+    this.errorMessage = '',
+    this.sourceGcsUri = '',
+    this.embeddingId = '',
+    this.rawRecord = '',
+  }) : super(fullyQualifiedName);
 
   factory NearestNeighborSearchOperationMetadata_RecordError.fromJson(
     Map<String, dynamic> json,
@@ -49982,18 +49430,13 @@ final class NearestNeighborSearchOperationMetadata_ContentValidationStats
   final int invalidSparseRecordCount;
 
   NearestNeighborSearchOperationMetadata_ContentValidationStats({
-    String? sourceGcsUri,
-    int? validRecordCount,
-    int? invalidRecordCount,
+    this.sourceGcsUri = '',
+    this.validRecordCount = 0,
+    this.invalidRecordCount = 0,
     this.partialErrors = const [],
-    int? validSparseRecordCount,
-    int? invalidSparseRecordCount,
-  }) : sourceGcsUri = sourceGcsUri ?? '',
-       validRecordCount = validRecordCount ?? 0,
-       invalidRecordCount = invalidRecordCount ?? 0,
-       validSparseRecordCount = validSparseRecordCount ?? 0,
-       invalidSparseRecordCount = invalidSparseRecordCount ?? 0,
-       super(fullyQualifiedName);
+    this.validSparseRecordCount = 0,
+    this.invalidSparseRecordCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory NearestNeighborSearchOperationMetadata_ContentValidationStats.fromJson(
     Map<String, dynamic> json,
@@ -50654,16 +50097,12 @@ final class SharePointSources_SharePointSource extends ProtoMessage {
     this.sharepointFolderId,
     this.driveName,
     this.driveId,
-    String? clientId,
+    this.clientId = '',
     this.clientSecret,
-    String? tenantId,
-    String? sharepointSiteName,
-    String? fileId,
-  }) : clientId = clientId ?? '',
-       tenantId = tenantId ?? '',
-       sharepointSiteName = sharepointSiteName ?? '',
-       fileId = fileId ?? '',
-       super(fullyQualifiedName);
+    this.tenantId = '',
+    this.sharepointSiteName = '',
+    this.fileId = '',
+  }) : super(fullyQualifiedName);
 
   factory SharePointSources_SharePointSource.fromJson(
     Map<String, dynamic> json,
@@ -50820,14 +50259,11 @@ final class ListCustomJobsRequest extends ProtoMessage {
 
   ListCustomJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListCustomJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListCustomJobsRequest(
@@ -50874,9 +50310,8 @@ final class ListCustomJobsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListCustomJobsResponse({this.customJobs = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListCustomJobsResponse({this.customJobs = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListCustomJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListCustomJobsResponse(
@@ -51067,16 +50502,12 @@ final class ListDataLabelingJobsRequest extends ProtoMessage {
 
   ListDataLabelingJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDataLabelingJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListDataLabelingJobsRequest(
@@ -51126,9 +50557,8 @@ final class ListDataLabelingJobsResponse extends ProtoMessage {
 
   ListDataLabelingJobsResponse({
     this.dataLabelingJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListDataLabelingJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListDataLabelingJobsResponse(
@@ -51329,14 +50759,11 @@ final class ListHyperparameterTuningJobsRequest extends ProtoMessage {
 
   ListHyperparameterTuningJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListHyperparameterTuningJobsRequest.fromJson(
     Map<String, dynamic> json,
@@ -51388,9 +50815,8 @@ final class ListHyperparameterTuningJobsResponse extends ProtoMessage {
 
   ListHyperparameterTuningJobsResponse({
     this.hyperparameterTuningJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListHyperparameterTuningJobsResponse.fromJson(
     Map<String, dynamic> json,
@@ -51583,14 +51009,11 @@ final class ListNasJobsRequest extends ProtoMessage {
 
   ListNasJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListNasJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListNasJobsRequest(
@@ -51639,9 +51062,8 @@ final class ListNasJobsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListNasJobsResponse({this.nasJobs = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListNasJobsResponse({this.nasJobs = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListNasJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListNasJobsResponse(
@@ -51764,11 +51186,9 @@ final class ListNasTrialDetailsRequest extends ProtoMessage {
 
   ListNasTrialDetailsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNasTrialDetailsRequest.fromJson(Map<String, dynamic> json) =>
       ListNasTrialDetailsRequest(
@@ -51812,9 +51232,8 @@ final class ListNasTrialDetailsResponse extends ProtoMessage {
 
   ListNasTrialDetailsResponse({
     this.nasTrialDetails = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNasTrialDetailsResponse.fromJson(Map<String, dynamic> json) =>
       ListNasTrialDetailsResponse(
@@ -51958,14 +51377,11 @@ final class ListBatchPredictionJobsRequest extends ProtoMessage {
 
   ListBatchPredictionJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListBatchPredictionJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListBatchPredictionJobsRequest(
@@ -52014,9 +51430,8 @@ final class ListBatchPredictionJobsResponse extends ProtoMessage {
 
   ListBatchPredictionJobsResponse({
     this.batchPredictionJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListBatchPredictionJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListBatchPredictionJobsResponse(
@@ -52186,16 +51601,13 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest
   SearchModelDeploymentMonitoringStatsAnomaliesRequest({
     required this.modelDeploymentMonitoringJob,
     required this.deployedModelId,
-    String? featureDisplayName,
+    this.featureDisplayName = '',
     required this.objectives,
-    int? pageSize,
-    String? pageToken,
+    this.pageSize = 0,
+    this.pageToken = '',
     this.startTime,
     this.endTime,
-  }) : featureDisplayName = featureDisplayName ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SearchModelDeploymentMonitoringStatsAnomaliesRequest.fromJson(
     Map<String, dynamic> json,
@@ -52261,9 +51673,8 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest_StatsAnomaliesO
 
   SearchModelDeploymentMonitoringStatsAnomaliesRequest_StatsAnomaliesObjective({
     this.type = ModelDeploymentMonitoringObjectiveType.$default,
-    int? topFeatureCount,
-  }) : topFeatureCount = topFeatureCount ?? 0,
-       super(fullyQualifiedName);
+    this.topFeatureCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory SearchModelDeploymentMonitoringStatsAnomaliesRequest_StatsAnomaliesObjective.fromJson(
     Map<String, dynamic> json,
@@ -52314,9 +51725,8 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesResponse
 
   SearchModelDeploymentMonitoringStatsAnomaliesResponse({
     this.monitoringStats = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchModelDeploymentMonitoringStatsAnomaliesResponse.fromJson(
     Map<String, dynamic> json,
@@ -52415,14 +51825,11 @@ final class ListModelDeploymentMonitoringJobsRequest extends ProtoMessage {
 
   ListModelDeploymentMonitoringJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListModelDeploymentMonitoringJobsRequest.fromJson(
     Map<String, dynamic> json,
@@ -52470,9 +51877,8 @@ final class ListModelDeploymentMonitoringJobsResponse extends ProtoMessage {
 
   ListModelDeploymentMonitoringJobsResponse({
     this.modelDeploymentMonitoringJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelDeploymentMonitoringJobsResponse.fromJson(
     Map<String, dynamic> json,
@@ -52746,10 +52152,9 @@ final class ComputeTokensRequest extends ProtoMessage {
   ComputeTokensRequest({
     required this.endpoint,
     this.instances = const [],
-    String? model,
+    this.model = '',
     this.contents = const [],
-  }) : model = model ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ComputeTokensRequest.fromJson(Map<String, dynamic> json) =>
       ComputeTokensRequest(
@@ -52793,9 +52198,8 @@ final class TokensInfo extends ProtoMessage {
   /// Optional. Optional fields for the role from the corresponding Content.
   final String role;
 
-  TokensInfo({this.tokens = const [], this.tokenIds = const [], String? role})
-    : role = role ?? '',
-      super(fullyQualifiedName);
+  TokensInfo({this.tokens = const [], this.tokenIds = const [], this.role = ''})
+    : super(fullyQualifiedName);
 
   factory TokensInfo.fromJson(Map<String, dynamic> json) => TokensInfo(
     tokens: decodeListBytes(json['tokens']) ?? [],
@@ -52902,19 +52306,14 @@ final class MachineSpec extends ProtoMessage {
   final ReservationAffinity? reservationAffinity;
 
   MachineSpec({
-    String? machineType,
+    this.machineType = '',
     this.acceleratorType = AcceleratorType.$default,
-    int? acceleratorCount,
-    String? gpuPartitionSize,
-    String? tpuTopology,
-    int? multihostGpuNodeCount,
+    this.acceleratorCount = 0,
+    this.gpuPartitionSize = '',
+    this.tpuTopology = '',
+    this.multihostGpuNodeCount = 0,
     this.reservationAffinity,
-  }) : machineType = machineType ?? '',
-       acceleratorCount = acceleratorCount ?? 0,
-       gpuPartitionSize = gpuPartitionSize ?? '',
-       tpuTopology = tpuTopology ?? '',
-       multihostGpuNodeCount = multihostGpuNodeCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory MachineSpec.fromJson(Map<String, dynamic> json) => MachineSpec(
     machineType: json['machineType'] ?? '',
@@ -53053,18 +52452,14 @@ final class DedicatedResources extends ProtoMessage {
   DedicatedResources({
     required this.machineSpec,
     required this.minReplicaCount,
-    int? maxReplicaCount,
-    int? requiredReplicaCount,
-    int? initialReplicaCount,
+    this.maxReplicaCount = 0,
+    this.requiredReplicaCount = 0,
+    this.initialReplicaCount = 0,
     this.autoscalingMetricSpecs = const [],
-    bool? spot,
+    this.spot = false,
     this.flexStart,
     this.scaleToZeroSpec,
-  }) : maxReplicaCount = maxReplicaCount ?? 0,
-       requiredReplicaCount = requiredReplicaCount ?? 0,
-       initialReplicaCount = initialReplicaCount ?? 0,
-       spot = spot ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DedicatedResources.fromJson(Map<String, dynamic> json) =>
       DedicatedResources(
@@ -53186,10 +52581,8 @@ final class AutomaticResources extends ProtoMessage {
   /// unable to scale beyond certain replica number.
   final int maxReplicaCount;
 
-  AutomaticResources({int? minReplicaCount, int? maxReplicaCount})
-    : minReplicaCount = minReplicaCount ?? 0,
-      maxReplicaCount = maxReplicaCount ?? 0,
-      super(fullyQualifiedName);
+  AutomaticResources({this.minReplicaCount = 0, this.maxReplicaCount = 0})
+    : super(fullyQualifiedName);
 
   factory AutomaticResources.fromJson(Map<String, dynamic> json) =>
       AutomaticResources(
@@ -53242,14 +52635,11 @@ final class BatchDedicatedResources extends ProtoMessage {
 
   BatchDedicatedResources({
     required this.machineSpec,
-    int? startingReplicaCount,
-    int? maxReplicaCount,
+    this.startingReplicaCount = 0,
+    this.maxReplicaCount = 0,
     this.flexStart,
-    bool? spot,
-  }) : startingReplicaCount = startingReplicaCount ?? 0,
-       maxReplicaCount = maxReplicaCount ?? 0,
-       spot = spot ?? false,
-       super(fullyQualifiedName);
+    this.spot = false,
+  }) : super(fullyQualifiedName);
 
   factory BatchDedicatedResources.fromJson(Map<String, dynamic> json) =>
       BatchDedicatedResources(
@@ -53291,9 +52681,7 @@ final class ResourcesConsumed extends ProtoMessage {
   /// time. Therefore this value is not strictly related to wall time.
   final double replicaHours;
 
-  ResourcesConsumed({double? replicaHours})
-    : replicaHours = replicaHours ?? 0,
-      super(fullyQualifiedName);
+  ResourcesConsumed({this.replicaHours = 0}) : super(fullyQualifiedName);
 
   factory ResourcesConsumed.fromJson(Map<String, dynamic> json) =>
       ResourcesConsumed(replicaHours: decodeDouble(json['replicaHours']) ?? 0);
@@ -53324,10 +52712,8 @@ final class DiskSpec extends ProtoMessage {
   /// Size in GB of the boot disk (default is 100GB).
   final int bootDiskSizeGb;
 
-  DiskSpec({String? bootDiskType, int? bootDiskSizeGb})
-    : bootDiskType = bootDiskType ?? '',
-      bootDiskSizeGb = bootDiskSizeGb ?? 0,
-      super(fullyQualifiedName);
+  DiskSpec({this.bootDiskType = '', this.bootDiskSizeGb = 0})
+    : super(fullyQualifiedName);
 
   factory DiskSpec.fromJson(Map<String, dynamic> json) => DiskSpec(
     bootDiskType: json['bootDiskType'] ?? '',
@@ -53366,10 +52752,8 @@ final class PersistentDiskSpec extends ProtoMessage {
   /// Size in GB of the disk (default is 100GB).
   final int diskSizeGb;
 
-  PersistentDiskSpec({String? diskType, int? diskSizeGb})
-    : diskType = diskType ?? '',
-      diskSizeGb = diskSizeGb ?? 0,
-      super(fullyQualifiedName);
+  PersistentDiskSpec({this.diskType = '', this.diskSizeGb = 0})
+    : super(fullyQualifiedName);
 
   factory PersistentDiskSpec.fromJson(Map<String, dynamic> json) =>
       PersistentDiskSpec(
@@ -53459,10 +52843,9 @@ final class AutoscalingMetricSpec extends ProtoMessage {
 
   AutoscalingMetricSpec({
     required this.metricName,
-    int? target,
+    this.target = 0,
     this.monitoredResourceLabels = const {},
-  }) : target = target ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory AutoscalingMetricSpec.fromJson(Map<String, dynamic> json) =>
       AutoscalingMetricSpec(
@@ -53503,9 +52886,7 @@ final class ShieldedVmConfig extends ProtoMessage {
   /// boot process if signature verification fails.
   final bool enableSecureBoot;
 
-  ShieldedVmConfig({bool? enableSecureBoot})
-    : enableSecureBoot = enableSecureBoot ?? false,
-      super(fullyQualifiedName);
+  ShieldedVmConfig({this.enableSecureBoot = false}) : super(fullyQualifiedName);
 
   factory ShieldedVmConfig.fromJson(Map<String, dynamic> json) =>
       ShieldedVmConfig(enableSecureBoot: json['enableSecureBoot'] ?? false);
@@ -53566,9 +52947,7 @@ final class ManualBatchTuningParameters extends ProtoMessage {
   /// The default value is 64.
   final int batchSize;
 
-  ManualBatchTuningParameters({int? batchSize})
-    : batchSize = batchSize ?? 0,
-      super(fullyQualifiedName);
+  ManualBatchTuningParameters({this.batchSize = 0}) : super(fullyQualifiedName);
 
   factory ManualBatchTuningParameters.fromJson(Map<String, dynamic> json) =>
       ManualBatchTuningParameters(batchSize: json['batchSize'] ?? 0);
@@ -53613,12 +52992,10 @@ final class FindNeighborsRequest extends ProtoMessage {
 
   FindNeighborsRequest({
     required this.indexEndpoint,
-    String? deployedIndexId,
+    this.deployedIndexId = '',
     this.queries = const [],
-    bool? returnFullDatapoint,
-  }) : deployedIndexId = deployedIndexId ?? '',
-       returnFullDatapoint = returnFullDatapoint ?? false,
-       super(fullyQualifiedName);
+    this.returnFullDatapoint = false,
+  }) : super(fullyQualifiedName);
 
   factory FindNeighborsRequest.fromJson(Map<String, dynamic> json) =>
       FindNeighborsRequest(
@@ -53694,17 +53071,11 @@ final class FindNeighborsRequest_Query extends ProtoMessage {
   FindNeighborsRequest_Query({
     this.rrf,
     required this.datapoint,
-    int? neighborCount,
-    int? perCrowdingAttributeNeighborCount,
-    int? approximateNeighborCount,
-    double? fractionLeafNodesToSearchOverride,
-  }) : neighborCount = neighborCount ?? 0,
-       perCrowdingAttributeNeighborCount =
-           perCrowdingAttributeNeighborCount ?? 0,
-       approximateNeighborCount = approximateNeighborCount ?? 0,
-       fractionLeafNodesToSearchOverride =
-           fractionLeafNodesToSearchOverride ?? 0,
-       super(fullyQualifiedName);
+    this.neighborCount = 0,
+    this.perCrowdingAttributeNeighborCount = 0,
+    this.approximateNeighborCount = 0,
+    this.fractionLeafNodesToSearchOverride = 0,
+  }) : super(fullyQualifiedName);
 
   factory FindNeighborsRequest_Query.fromJson(Map<String, dynamic> json) =>
       FindNeighborsRequest_Query(
@@ -53822,11 +53193,9 @@ final class FindNeighborsResponse_Neighbor extends ProtoMessage {
 
   FindNeighborsResponse_Neighbor({
     this.datapoint,
-    double? distance,
-    double? sparseDistance,
-  }) : distance = distance ?? 0,
-       sparseDistance = sparseDistance ?? 0,
-       super(fullyQualifiedName);
+    this.distance = 0,
+    this.sparseDistance = 0,
+  }) : super(fullyQualifiedName);
 
   factory FindNeighborsResponse_Neighbor.fromJson(Map<String, dynamic> json) =>
       FindNeighborsResponse_Neighbor(
@@ -53865,10 +53234,9 @@ final class FindNeighborsResponse_NearestNeighbors extends ProtoMessage {
   final List<FindNeighborsResponse_Neighbor> neighbors;
 
   FindNeighborsResponse_NearestNeighbors({
-    String? id,
+    this.id = '',
     this.neighbors = const [],
-  }) : id = id ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FindNeighborsResponse_NearestNeighbors.fromJson(
     Map<String, dynamic> json,
@@ -53914,10 +53282,9 @@ final class ReadIndexDatapointsRequest extends ProtoMessage {
 
   ReadIndexDatapointsRequest({
     required this.indexEndpoint,
-    String? deployedIndexId,
+    this.deployedIndexId = '',
     this.ids = const [],
-  }) : deployedIndexId = deployedIndexId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ReadIndexDatapointsRequest.fromJson(Map<String, dynamic> json) =>
       ReadIndexDatapointsRequest(
@@ -54013,17 +53380,14 @@ final class Memory extends ProtoMessage {
   Memory({
     this.expireTime,
     this.ttl,
-    String? name,
-    String? displayName,
-    String? description,
+    this.name = '',
+    this.displayName = '',
+    this.description = '',
     this.createTime,
     this.updateTime,
     required this.fact,
     required this.scope,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Memory.fromJson(Map<String, dynamic> json) => Memory(
     expireTime: decodeCustom(json['expireTime'], protobuf.Timestamp.fromJson),
@@ -54249,13 +53613,10 @@ final class ListMemoriesRequest extends ProtoMessage {
 
   ListMemoriesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMemoriesRequest.fromJson(Map<String, dynamic> json) =>
       ListMemoriesRequest(
@@ -54300,9 +53661,8 @@ final class ListMemoriesResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListMemoriesResponse({this.memories = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListMemoriesResponse({this.memories = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListMemoriesResponse.fromJson(Map<String, dynamic> json) =>
       ListMemoriesResponse(
@@ -54421,10 +53781,9 @@ final class GenerateMemoriesRequest extends ProtoMessage {
     this.directContentsSource,
     this.directMemoriesSource,
     required this.parent,
-    bool? disableConsolidation,
+    this.disableConsolidation = false,
     this.scope = const {},
-  }) : disableConsolidation = disableConsolidation ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory GenerateMemoriesRequest.fromJson(Map<String, dynamic> json) =>
       GenerateMemoriesRequest(
@@ -54856,9 +54215,8 @@ final class RetrieveMemoriesRequest_SimilaritySearchParams
 
   RetrieveMemoriesRequest_SimilaritySearchParams({
     required this.searchQuery,
-    int? topK,
-  }) : topK = topK ?? 0,
-       super(fullyQualifiedName);
+    this.topK = 0,
+  }) : super(fullyQualifiedName);
 
   factory RetrieveMemoriesRequest_SimilaritySearchParams.fromJson(
     Map<String, dynamic> json,
@@ -54896,11 +54254,9 @@ final class RetrieveMemoriesRequest_SimpleRetrievalParams extends ProtoMessage {
   final String pageToken;
 
   RetrieveMemoriesRequest_SimpleRetrievalParams({
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory RetrieveMemoriesRequest_SimpleRetrievalParams.fromJson(
     Map<String, dynamic> json,
@@ -54938,9 +54294,8 @@ final class RetrieveMemoriesResponse extends ProtoMessage {
 
   RetrieveMemoriesResponse({
     this.retrievedMemories = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory RetrieveMemoriesResponse.fromJson(Map<String, dynamic> json) =>
       RetrieveMemoriesResponse(
@@ -54980,9 +54335,8 @@ final class RetrieveMemoriesResponse_RetrievedMemory extends ProtoMessage {
   /// used for retrieval.
   final double distance;
 
-  RetrieveMemoriesResponse_RetrievedMemory({this.memory, double? distance})
-    : distance = distance ?? 0,
-      super(fullyQualifiedName);
+  RetrieveMemoriesResponse_RetrievedMemory({this.memory, this.distance = 0})
+    : super(fullyQualifiedName);
 
   factory RetrieveMemoriesResponse_RetrievedMemory.fromJson(
     Map<String, dynamic> json,
@@ -55037,16 +54391,13 @@ final class MetadataSchema extends ProtoMessage {
   final String description;
 
   MetadataSchema({
-    String? name,
-    String? schemaVersion,
+    this.name = '',
+    this.schemaVersion = '',
     required this.schema,
     this.schemaType = MetadataSchema_MetadataSchemaType.$default,
     this.createTime,
-    String? description,
-  }) : name = name ?? '',
-       schemaVersion = schemaVersion ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+    this.description = '',
+  }) : super(fullyQualifiedName);
 
   factory MetadataSchema.fromJson(Map<String, dynamic> json) => MetadataSchema(
     name: json['name'] ?? '',
@@ -55145,9 +54496,8 @@ final class CreateMetadataStoreRequest extends ProtoMessage {
   CreateMetadataStoreRequest({
     required this.parent,
     required this.metadataStore,
-    String? metadataStoreId,
-  }) : metadataStoreId = metadataStoreId ?? '',
-       super(fullyQualifiedName);
+    this.metadataStoreId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateMetadataStoreRequest.fromJson(Map<String, dynamic> json) =>
       CreateMetadataStoreRequest(
@@ -55256,11 +54606,9 @@ final class ListMetadataStoresRequest extends ProtoMessage {
 
   ListMetadataStoresRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMetadataStoresRequest.fromJson(Map<String, dynamic> json) =>
       ListMetadataStoresRequest(
@@ -55304,9 +54652,8 @@ final class ListMetadataStoresResponse extends ProtoMessage {
 
   ListMetadataStoresResponse({
     this.metadataStores = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMetadataStoresResponse.fromJson(Map<String, dynamic> json) =>
       ListMetadataStoresResponse(
@@ -55344,9 +54691,8 @@ final class DeleteMetadataStoreRequest extends ProtoMessage {
   /// Deprecated: Field is no longer supported.
   final bool force;
 
-  DeleteMetadataStoreRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteMetadataStoreRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteMetadataStoreRequest.fromJson(Map<String, dynamic> json) =>
       DeleteMetadataStoreRequest(
@@ -55421,9 +54767,8 @@ final class CreateArtifactRequest extends ProtoMessage {
   CreateArtifactRequest({
     required this.parent,
     required this.artifact,
-    String? artifactId,
-  }) : artifactId = artifactId ?? '',
-       super(fullyQualifiedName);
+    this.artifactId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateArtifactRequest.fromJson(Map<String, dynamic> json) =>
       CreateArtifactRequest(
@@ -55539,15 +54884,11 @@ final class ListArtifactsRequest extends ProtoMessage {
 
   ListArtifactsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-    String? orderBy,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListArtifactsRequest.fromJson(Map<String, dynamic> json) =>
       ListArtifactsRequest(
@@ -55595,9 +54936,8 @@ final class ListArtifactsResponse extends ProtoMessage {
   /// If this field is not populated, there are no subsequent pages.
   final String nextPageToken;
 
-  ListArtifactsResponse({this.artifacts = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListArtifactsResponse({this.artifacts = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListArtifactsResponse.fromJson(Map<String, dynamic> json) =>
       ListArtifactsResponse(
@@ -55643,9 +54983,8 @@ final class UpdateArtifactRequest extends ProtoMessage {
   UpdateArtifactRequest({
     required this.artifact,
     this.updateMask,
-    bool? allowMissing,
-  }) : allowMissing = allowMissing ?? false,
-       super(fullyQualifiedName);
+    this.allowMissing = false,
+  }) : super(fullyQualifiedName);
 
   factory UpdateArtifactRequest.fromJson(Map<String, dynamic> json) =>
       UpdateArtifactRequest(
@@ -55687,9 +55026,8 @@ final class DeleteArtifactRequest extends ProtoMessage {
   /// request will fail with a FAILED_PRECONDITION.
   final String etag;
 
-  DeleteArtifactRequest({required this.name, String? etag})
-    : etag = etag ?? '',
-      super(fullyQualifiedName);
+  DeleteArtifactRequest({required this.name, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory DeleteArtifactRequest.fromJson(Map<String, dynamic> json) =>
       DeleteArtifactRequest(name: json['name'] ?? '', etag: json['etag'] ?? '');
@@ -55727,9 +55065,8 @@ final class PurgeArtifactsRequest extends ProtoMessage {
   PurgeArtifactsRequest({
     required this.parent,
     required this.filter,
-    bool? force,
-  }) : force = force ?? false,
-       super(fullyQualifiedName);
+    this.force = false,
+  }) : super(fullyQualifiedName);
 
   factory PurgeArtifactsRequest.fromJson(Map<String, dynamic> json) =>
       PurgeArtifactsRequest(
@@ -55771,9 +55108,8 @@ final class PurgeArtifactsResponse extends ProtoMessage {
   /// 100 (it is possible to return fewer).
   final List<String> purgeSample;
 
-  PurgeArtifactsResponse({int? purgeCount, this.purgeSample = const []})
-    : purgeCount = purgeCount ?? 0,
-      super(fullyQualifiedName);
+  PurgeArtifactsResponse({this.purgeCount = 0, this.purgeSample = const []})
+    : super(fullyQualifiedName);
 
   factory PurgeArtifactsResponse.fromJson(Map<String, dynamic> json) =>
       PurgeArtifactsResponse(
@@ -55848,9 +55184,8 @@ final class CreateContextRequest extends ProtoMessage {
   CreateContextRequest({
     required this.parent,
     required this.context,
-    String? contextId,
-  }) : contextId = contextId ?? '',
-       super(fullyQualifiedName);
+    this.contextId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateContextRequest.fromJson(Map<String, dynamic> json) =>
       CreateContextRequest(
@@ -55970,15 +55305,11 @@ final class ListContextsRequest extends ProtoMessage {
 
   ListContextsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-    String? orderBy,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListContextsRequest.fromJson(Map<String, dynamic> json) =>
       ListContextsRequest(
@@ -56026,9 +55357,8 @@ final class ListContextsResponse extends ProtoMessage {
   /// If this field is not populated, there are no subsequent pages.
   final String nextPageToken;
 
-  ListContextsResponse({this.contexts = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListContextsResponse({this.contexts = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListContextsResponse.fromJson(Map<String, dynamic> json) =>
       ListContextsResponse(
@@ -56072,9 +55402,8 @@ final class UpdateContextRequest extends ProtoMessage {
   UpdateContextRequest({
     required this.context,
     this.updateMask,
-    bool? allowMissing,
-  }) : allowMissing = allowMissing ?? false,
-       super(fullyQualifiedName);
+    this.allowMissing = false,
+  }) : super(fullyQualifiedName);
 
   factory UpdateContextRequest.fromJson(Map<String, dynamic> json) =>
       UpdateContextRequest(
@@ -56120,10 +55449,8 @@ final class DeleteContextRequest extends ProtoMessage {
   /// request will fail with a FAILED_PRECONDITION.
   final String etag;
 
-  DeleteContextRequest({required this.name, bool? force, String? etag})
-    : force = force ?? false,
-      etag = etag ?? '',
-      super(fullyQualifiedName);
+  DeleteContextRequest({required this.name, this.force = false, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory DeleteContextRequest.fromJson(Map<String, dynamic> json) =>
       DeleteContextRequest(
@@ -56169,9 +55496,8 @@ final class PurgeContextsRequest extends ProtoMessage {
   PurgeContextsRequest({
     required this.parent,
     required this.filter,
-    bool? force,
-  }) : force = force ?? false,
-       super(fullyQualifiedName);
+    this.force = false,
+  }) : super(fullyQualifiedName);
 
   factory PurgeContextsRequest.fromJson(Map<String, dynamic> json) =>
       PurgeContextsRequest(
@@ -56213,9 +55539,8 @@ final class PurgeContextsResponse extends ProtoMessage {
   /// 100 (it is possible to return fewer).
   final List<String> purgeSample;
 
-  PurgeContextsResponse({int? purgeCount, this.purgeSample = const []})
-    : purgeCount = purgeCount ?? 0,
-      super(fullyQualifiedName);
+  PurgeContextsResponse({this.purgeCount = 0, this.purgeSample = const []})
+    : super(fullyQualifiedName);
 
   factory PurgeContextsResponse.fromJson(Map<String, dynamic> json) =>
       PurgeContextsResponse(
@@ -56510,9 +55835,8 @@ final class CreateExecutionRequest extends ProtoMessage {
   CreateExecutionRequest({
     required this.parent,
     required this.execution,
-    String? executionId,
-  }) : executionId = executionId ?? '',
-       super(fullyQualifiedName);
+    this.executionId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateExecutionRequest.fromJson(Map<String, dynamic> json) =>
       CreateExecutionRequest(
@@ -56628,15 +55952,11 @@ final class ListExecutionsRequest extends ProtoMessage {
 
   ListExecutionsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-    String? orderBy,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListExecutionsRequest.fromJson(Map<String, dynamic> json) =>
       ListExecutionsRequest(
@@ -56684,9 +56004,8 @@ final class ListExecutionsResponse extends ProtoMessage {
   /// If this field is not populated, there are no subsequent pages.
   final String nextPageToken;
 
-  ListExecutionsResponse({this.executions = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListExecutionsResponse({this.executions = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListExecutionsResponse.fromJson(Map<String, dynamic> json) =>
       ListExecutionsResponse(
@@ -56732,9 +56051,8 @@ final class UpdateExecutionRequest extends ProtoMessage {
   UpdateExecutionRequest({
     required this.execution,
     this.updateMask,
-    bool? allowMissing,
-  }) : allowMissing = allowMissing ?? false,
-       super(fullyQualifiedName);
+    this.allowMissing = false,
+  }) : super(fullyQualifiedName);
 
   factory UpdateExecutionRequest.fromJson(Map<String, dynamic> json) =>
       UpdateExecutionRequest(
@@ -56776,9 +56094,8 @@ final class DeleteExecutionRequest extends ProtoMessage {
   /// request will fail with a FAILED_PRECONDITION.
   final String etag;
 
-  DeleteExecutionRequest({required this.name, String? etag})
-    : etag = etag ?? '',
-      super(fullyQualifiedName);
+  DeleteExecutionRequest({required this.name, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory DeleteExecutionRequest.fromJson(Map<String, dynamic> json) =>
       DeleteExecutionRequest(
@@ -56819,9 +56136,8 @@ final class PurgeExecutionsRequest extends ProtoMessage {
   PurgeExecutionsRequest({
     required this.parent,
     required this.filter,
-    bool? force,
-  }) : force = force ?? false,
-       super(fullyQualifiedName);
+    this.force = false,
+  }) : super(fullyQualifiedName);
 
   factory PurgeExecutionsRequest.fromJson(Map<String, dynamic> json) =>
       PurgeExecutionsRequest(
@@ -56864,9 +56180,8 @@ final class PurgeExecutionsResponse extends ProtoMessage {
   /// 100 (it is possible to return fewer).
   final List<String> purgeSample;
 
-  PurgeExecutionsResponse({int? purgeCount, this.purgeSample = const []})
-    : purgeCount = purgeCount ?? 0,
-      super(fullyQualifiedName);
+  PurgeExecutionsResponse({this.purgeCount = 0, this.purgeSample = const []})
+    : super(fullyQualifiedName);
 
   factory PurgeExecutionsResponse.fromJson(Map<String, dynamic> json) =>
       PurgeExecutionsResponse(
@@ -57026,9 +56341,8 @@ final class CreateMetadataSchemaRequest extends ProtoMessage {
   CreateMetadataSchemaRequest({
     required this.parent,
     required this.metadataSchema,
-    String? metadataSchemaId,
-  }) : metadataSchemaId = metadataSchemaId ?? '',
-       super(fullyQualifiedName);
+    this.metadataSchemaId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateMetadataSchemaRequest.fromJson(Map<String, dynamic> json) =>
       CreateMetadataSchemaRequest(
@@ -57110,13 +56424,10 @@ final class ListMetadataSchemasRequest extends ProtoMessage {
 
   ListMetadataSchemasRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMetadataSchemasRequest.fromJson(Map<String, dynamic> json) =>
       ListMetadataSchemasRequest(
@@ -57163,9 +56474,8 @@ final class ListMetadataSchemasResponse extends ProtoMessage {
 
   ListMetadataSchemasResponse({
     this.metadataSchemas = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListMetadataSchemasResponse.fromJson(Map<String, dynamic> json) =>
       ListMetadataSchemasResponse(
@@ -57243,11 +56553,9 @@ final class QueryArtifactLineageSubgraphRequest extends ProtoMessage {
 
   QueryArtifactLineageSubgraphRequest({
     required this.artifact,
-    int? maxHops,
-    String? filter,
-  }) : maxHops = maxHops ?? 0,
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.maxHops = 0,
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory QueryArtifactLineageSubgraphRequest.fromJson(
     Map<String, dynamic> json,
@@ -57305,16 +56613,14 @@ final class MetadataStore extends ProtoMessage {
   final MetadataStore_DataplexConfig? dataplexConfig;
 
   MetadataStore({
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
     this.encryptionSpec,
-    String? description,
+    this.description = '',
     this.state,
     this.dataplexConfig,
-  }) : name = name ?? '',
-       description = description ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory MetadataStore.fromJson(Map<String, dynamic> json) => MetadataStore(
     name: json['name'] ?? '',
@@ -57355,9 +56661,8 @@ final class MetadataStore_MetadataStoreState extends ProtoMessage {
   /// The disk utilization of the MetadataStore in bytes.
   final int diskUtilizationBytes;
 
-  MetadataStore_MetadataStoreState({int? diskUtilizationBytes})
-    : diskUtilizationBytes = diskUtilizationBytes ?? 0,
-      super(fullyQualifiedName);
+  MetadataStore_MetadataStoreState({this.diskUtilizationBytes = 0})
+    : super(fullyQualifiedName);
 
   factory MetadataStore_MetadataStoreState.fromJson(
     Map<String, dynamic> json,
@@ -57387,9 +56692,8 @@ final class MetadataStore_DataplexConfig extends ProtoMessage {
   /// Vertex Pipelines.
   final bool enabledPipelinesLineage;
 
-  MetadataStore_DataplexConfig({bool? enabledPipelinesLineage})
-    : enabledPipelinesLineage = enabledPipelinesLineage ?? false,
-      super(fullyQualifiedName);
+  MetadataStore_DataplexConfig({this.enabledPipelinesLineage = false})
+    : super(fullyQualifiedName);
 
   factory MetadataStore_DataplexConfig.fromJson(Map<String, dynamic> json) =>
       MetadataStore_DataplexConfig(
@@ -57509,10 +56813,10 @@ final class MigratableResource_MlEngineModelVersion extends ProtoMessage {
   /// Format: `projects/{project}/models/{model}/versions/{version}`.
   final String version;
 
-  MigratableResource_MlEngineModelVersion({String? endpoint, String? version})
-    : endpoint = endpoint ?? '',
-      version = version ?? '',
-      super(fullyQualifiedName);
+  MigratableResource_MlEngineModelVersion({
+    this.endpoint = '',
+    this.version = '',
+  }) : super(fullyQualifiedName);
 
   factory MigratableResource_MlEngineModelVersion.fromJson(
     Map<String, dynamic> json,
@@ -57547,10 +56851,8 @@ final class MigratableResource_AutomlModel extends ProtoMessage {
   /// The Model's display name in automl.googleapis.com.
   final String modelDisplayName;
 
-  MigratableResource_AutomlModel({String? model, String? modelDisplayName})
-    : model = model ?? '',
-      modelDisplayName = modelDisplayName ?? '',
-      super(fullyQualifiedName);
+  MigratableResource_AutomlModel({this.model = '', this.modelDisplayName = ''})
+    : super(fullyQualifiedName);
 
   factory MigratableResource_AutomlModel.fromJson(Map<String, dynamic> json) =>
       MigratableResource_AutomlModel(
@@ -57588,11 +56890,9 @@ final class MigratableResource_AutomlDataset extends ProtoMessage {
   final String datasetDisplayName;
 
   MigratableResource_AutomlDataset({
-    String? dataset,
-    String? datasetDisplayName,
-  }) : dataset = dataset ?? '',
-       datasetDisplayName = datasetDisplayName ?? '',
-       super(fullyQualifiedName);
+    this.dataset = '',
+    this.datasetDisplayName = '',
+  }) : super(fullyQualifiedName);
 
   factory MigratableResource_AutomlDataset.fromJson(
     Map<String, dynamic> json,
@@ -57639,12 +56939,10 @@ final class MigratableResource_DataLabelingDataset extends ProtoMessage {
   dataLabelingAnnotatedDatasets;
 
   MigratableResource_DataLabelingDataset({
-    String? dataset,
-    String? datasetDisplayName,
+    this.dataset = '',
+    this.datasetDisplayName = '',
     this.dataLabelingAnnotatedDatasets = const [],
-  }) : dataset = dataset ?? '',
-       datasetDisplayName = datasetDisplayName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory MigratableResource_DataLabelingDataset.fromJson(
     Map<String, dynamic> json,
@@ -57696,11 +56994,9 @@ final class MigratableResource_DataLabelingDataset_DataLabelingAnnotatedDataset
   final String annotatedDatasetDisplayName;
 
   MigratableResource_DataLabelingDataset_DataLabelingAnnotatedDataset({
-    String? annotatedDataset,
-    String? annotatedDatasetDisplayName,
-  }) : annotatedDataset = annotatedDataset ?? '',
-       annotatedDatasetDisplayName = annotatedDatasetDisplayName ?? '',
-       super(fullyQualifiedName);
+    this.annotatedDataset = '',
+    this.annotatedDatasetDisplayName = '',
+  }) : super(fullyQualifiedName);
 
   factory MigratableResource_DataLabelingDataset_DataLabelingAnnotatedDataset.fromJson(
     Map<String, dynamic> json,
@@ -57762,13 +57058,10 @@ final class SearchMigratableResourcesRequest extends ProtoMessage {
 
   SearchMigratableResourcesRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchMigratableResourcesRequest.fromJson(
     Map<String, dynamic> json,
@@ -57816,9 +57109,8 @@ final class SearchMigratableResourcesResponse extends ProtoMessage {
 
   SearchMigratableResourcesResponse({
     this.migratableResources = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchMigratableResourcesResponse.fromJson(
     Map<String, dynamic> json,
@@ -58035,9 +57327,8 @@ final class MigrateResourceRequest_MigrateAutomlModelConfig
 
   MigrateResourceRequest_MigrateAutomlModelConfig({
     required this.model,
-    String? modelDisplayName,
-  }) : modelDisplayName = modelDisplayName ?? '',
-       super(fullyQualifiedName);
+    this.modelDisplayName = '',
+  }) : super(fullyQualifiedName);
 
   factory MigrateResourceRequest_MigrateAutomlModelConfig.fromJson(
     Map<String, dynamic> json,
@@ -58132,10 +57423,9 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig
 
   MigrateResourceRequest_MigrateDataLabelingDatasetConfig({
     required this.dataset,
-    String? datasetDisplayName,
+    this.datasetDisplayName = '',
     this.migrateDataLabelingAnnotatedDatasetConfigs = const [],
-  }) : datasetDisplayName = datasetDisplayName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory MigrateResourceRequest_MigrateDataLabelingDatasetConfig.fromJson(
     Map<String, dynamic> json,
@@ -58669,22 +57959,22 @@ final class Model extends ProtoMessage {
   final List<Checkpoint> checkpoints;
 
   Model({
-    String? name,
-    String? versionId,
+    this.name = '',
+    this.versionId = '',
     this.versionAliases = const [],
     this.versionCreateTime,
     this.versionUpdateTime,
     required this.displayName,
-    String? description,
-    String? versionDescription,
-    String? defaultCheckpointId,
+    this.description = '',
+    this.versionDescription = '',
+    this.defaultCheckpointId = '',
     this.predictSchemata,
-    String? metadataSchemaUri,
+    this.metadataSchemaUri = '',
     this.metadata,
     this.supportedExportFormats = const [],
-    String? trainingPipeline,
+    this.trainingPipeline = '',
     this.containerSpec,
-    String? artifactUri,
+    this.artifactUri = '',
     this.supportedDeploymentResourcesTypes = const [],
     this.supportedInputStorageFormats = const [],
     this.supportedOutputStorageFormats = const [],
@@ -58692,29 +57982,17 @@ final class Model extends ProtoMessage {
     this.updateTime,
     this.deployedModels = const [],
     this.explanationSpec,
-    String? etag,
+    this.etag = '',
     this.labels = const {},
     this.encryptionSpec,
     this.modelSourceInfo,
     this.originalModelInfo,
-    String? metadataArtifact,
+    this.metadataArtifact = '',
     this.baseModelSource,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
     this.checkpoints = const [],
-  }) : name = name ?? '',
-       versionId = versionId ?? '',
-       description = description ?? '',
-       versionDescription = versionDescription ?? '',
-       defaultCheckpointId = defaultCheckpointId ?? '',
-       metadataSchemaUri = metadataSchemaUri ?? '',
-       trainingPipeline = trainingPipeline ?? '',
-       artifactUri = artifactUri ?? '',
-       etag = etag ?? '',
-       metadataArtifact = metadataArtifact ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Model.fromJson(Map<String, dynamic> json) => Model(
     name: json['name'] ?? '',
@@ -58881,9 +58159,8 @@ final class Model_ExportFormat extends ProtoMessage {
   /// Output only. The content of this Model that may be exported.
   final List<Model_ExportFormat_ExportableContent> exportableContents;
 
-  Model_ExportFormat({String? id, this.exportableContents = const []})
-    : id = id ?? '',
-      super(fullyQualifiedName);
+  Model_ExportFormat({this.id = '', this.exportableContents = const []})
+    : super(fullyQualifiedName);
 
   factory Model_ExportFormat.fromJson(Map<String, dynamic> json) =>
       Model_ExportFormat(
@@ -58953,9 +58230,7 @@ final class Model_OriginalModelInfo extends ProtoMessage {
   /// `projects/{project}/locations/{location}/models/{model_id}@{version_id}`
   final String model;
 
-  Model_OriginalModelInfo({String? model})
-    : model = model ?? '',
-      super(fullyQualifiedName);
+  Model_OriginalModelInfo({this.model = ''}) : super(fullyQualifiedName);
 
   factory Model_OriginalModelInfo.fromJson(Map<String, dynamic> json) =>
       Model_OriginalModelInfo(model: json['model'] ?? '');
@@ -59089,11 +58364,9 @@ final class ModelGardenSource extends ProtoMessage {
 
   ModelGardenSource({
     required this.publicModelName,
-    String? versionId,
-    bool? skipHfModelCache,
-  }) : versionId = versionId ?? '',
-       skipHfModelCache = skipHfModelCache ?? false,
-       super(fullyQualifiedName);
+    this.versionId = '',
+    this.skipHfModelCache = false,
+  }) : super(fullyQualifiedName);
 
   factory ModelGardenSource.fromJson(Map<String, dynamic> json) =>
       ModelGardenSource(
@@ -59197,13 +58470,10 @@ final class PredictSchemata extends ProtoMessage {
   final String predictionSchemaUri;
 
   PredictSchemata({
-    String? instanceSchemaUri,
-    String? parametersSchemaUri,
-    String? predictionSchemaUri,
-  }) : instanceSchemaUri = instanceSchemaUri ?? '',
-       parametersSchemaUri = parametersSchemaUri ?? '',
-       predictionSchemaUri = predictionSchemaUri ?? '',
-       super(fullyQualifiedName);
+    this.instanceSchemaUri = '',
+    this.parametersSchemaUri = '',
+    this.predictionSchemaUri = '',
+  }) : super(fullyQualifiedName);
 
   factory PredictSchemata.fromJson(Map<String, dynamic> json) =>
       PredictSchemata(
@@ -59501,20 +58771,16 @@ final class ModelContainerSpec extends ProtoMessage {
     this.args = const [],
     this.env = const [],
     this.ports = const [],
-    String? predictRoute,
-    String? healthRoute,
-    String? invokeRoutePrefix,
+    this.predictRoute = '',
+    this.healthRoute = '',
+    this.invokeRoutePrefix = '',
     this.grpcPorts = const [],
     this.deploymentTimeout,
-    int? sharedMemorySizeMb,
+    this.sharedMemorySizeMb = 0,
     this.startupProbe,
     this.healthProbe,
     this.livenessProbe,
-  }) : predictRoute = predictRoute ?? '',
-       healthRoute = healthRoute ?? '',
-       invokeRoutePrefix = invokeRoutePrefix ?? '',
-       sharedMemorySizeMb = sharedMemorySizeMb ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelContainerSpec.fromJson(Map<String, dynamic> json) =>
       ModelContainerSpec(
@@ -59579,9 +58845,7 @@ final class Port extends ProtoMessage {
   /// Must be a valid port number, between 1 and 65535 inclusive.
   final int containerPort;
 
-  Port({int? containerPort})
-    : containerPort = containerPort ?? 0,
-      super(fullyQualifiedName);
+  Port({this.containerPort = 0}) : super(fullyQualifiedName);
 
   factory Port.fromJson(Map<String, dynamic> json) =>
       Port(containerPort: json['containerPort'] ?? 0);
@@ -59613,9 +58877,8 @@ final class ModelSourceInfo extends ProtoMessage {
 
   ModelSourceInfo({
     this.sourceType = ModelSourceInfo_ModelSourceType.$default,
-    bool? copy,
-  }) : copy = copy ?? false,
-       super(fullyQualifiedName);
+    this.copy = false,
+  }) : super(fullyQualifiedName);
 
   factory ModelSourceInfo.fromJson(Map<String, dynamic> json) =>
       ModelSourceInfo(
@@ -59744,17 +59007,12 @@ final class Probe extends ProtoMessage {
     this.httpGet,
     this.grpc,
     this.tcpSocket,
-    int? periodSeconds,
-    int? timeoutSeconds,
-    int? failureThreshold,
-    int? successThreshold,
-    int? initialDelaySeconds,
-  }) : periodSeconds = periodSeconds ?? 0,
-       timeoutSeconds = timeoutSeconds ?? 0,
-       failureThreshold = failureThreshold ?? 0,
-       successThreshold = successThreshold ?? 0,
-       initialDelaySeconds = initialDelaySeconds ?? 0,
-       super(fullyQualifiedName);
+    this.periodSeconds = 0,
+    this.timeoutSeconds = 0,
+    this.failureThreshold = 0,
+    this.successThreshold = 0,
+    this.initialDelaySeconds = 0,
+  }) : super(fullyQualifiedName);
 
   factory Probe.fromJson(Map<String, dynamic> json) => Probe(
     exec: decode(json['exec'], Probe_ExecAction.fromJson),
@@ -59844,16 +59102,12 @@ final class Probe_HttpGetAction extends ProtoMessage {
   final List<Probe_HttpHeader> httpHeaders;
 
   Probe_HttpGetAction({
-    String? path,
-    int? port,
-    String? host,
-    String? scheme,
+    this.path = '',
+    this.port = 0,
+    this.host = '',
+    this.scheme = '',
     this.httpHeaders = const [],
-  }) : path = path ?? '',
-       port = port ?? 0,
-       host = host ?? '',
-       scheme = scheme ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Probe_HttpGetAction.fromJson(Map<String, dynamic> json) =>
       Probe_HttpGetAction(
@@ -59902,10 +59156,8 @@ final class Probe_GrpcAction extends ProtoMessage {
   /// If this is not specified, the default behavior is defined by gRPC.
   final String service;
 
-  Probe_GrpcAction({int? port, String? service})
-    : port = port ?? 0,
-      service = service ?? '',
-      super(fullyQualifiedName);
+  Probe_GrpcAction({this.port = 0, this.service = ''})
+    : super(fullyQualifiedName);
 
   factory Probe_GrpcAction.fromJson(Map<String, dynamic> json) =>
       Probe_GrpcAction(port: json['port'] ?? 0, service: json['service'] ?? '');
@@ -59937,10 +59189,8 @@ final class Probe_TcpSocketAction extends ProtoMessage {
   /// container's IP.
   final String host;
 
-  Probe_TcpSocketAction({int? port, String? host})
-    : port = port ?? 0,
-      host = host ?? '',
-      super(fullyQualifiedName);
+  Probe_TcpSocketAction({this.port = 0, this.host = ''})
+    : super(fullyQualifiedName);
 
   factory Probe_TcpSocketAction.fromJson(Map<String, dynamic> json) =>
       Probe_TcpSocketAction(port: json['port'] ?? 0, host: json['host'] ?? '');
@@ -59971,10 +59221,8 @@ final class Probe_HttpHeader extends ProtoMessage {
   /// The header field value
   final String value;
 
-  Probe_HttpHeader({String? name, String? value})
-    : name = name ?? '',
-      value = value ?? '',
-      super(fullyQualifiedName);
+  Probe_HttpHeader({this.name = '', this.value = ''})
+    : super(fullyQualifiedName);
 
   factory Probe_HttpHeader.fromJson(Map<String, dynamic> json) =>
       Probe_HttpHeader(name: json['name'] ?? '', value: json['value'] ?? '');
@@ -60006,11 +59254,8 @@ final class Checkpoint extends ProtoMessage {
   /// The step of the checkpoint.
   final int step;
 
-  Checkpoint({String? checkpointId, int? epoch, int? step})
-    : checkpointId = checkpointId ?? '',
-      epoch = epoch ?? 0,
-      step = step ?? 0,
-      super(fullyQualifiedName);
+  Checkpoint({this.checkpointId = '', this.epoch = 0, this.step = 0})
+    : super(fullyQualifiedName);
 
   factory Checkpoint.fromJson(Map<String, dynamic> json) => Checkpoint(
     checkpointId: json['checkpointId'] ?? '',
@@ -60170,7 +59415,7 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
   final bool satisfiesPzi;
 
   ModelDeploymentMonitoringJob({
-    String? name,
+    this.name = '',
     required this.displayName,
     required this.endpoint,
     this.state = JobState.$default,
@@ -60181,9 +59426,9 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
     required this.modelDeploymentMonitoringScheduleConfig,
     required this.loggingSamplingStrategy,
     this.modelMonitoringAlertConfig,
-    String? predictInstanceSchemaUri,
+    this.predictInstanceSchemaUri = '',
     this.samplePredictInstance,
-    String? analysisInstanceSchemaUri,
+    this.analysisInstanceSchemaUri = '',
     this.bigqueryTables = const [],
     this.logTtl,
     this.labels = const {},
@@ -60192,17 +59437,11 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
     this.nextScheduleTime,
     this.statsAnomaliesBaseDirectory,
     this.encryptionSpec,
-    bool? enableMonitoringPipelineLogs,
+    this.enableMonitoringPipelineLogs = false,
     this.error,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       predictInstanceSchemaUri = predictInstanceSchemaUri ?? '',
-       analysisInstanceSchemaUri = analysisInstanceSchemaUri ?? '',
-       enableMonitoringPipelineLogs = enableMonitoringPipelineLogs ?? false,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory ModelDeploymentMonitoringJob.fromJson(
     Map<String, dynamic> json,
@@ -60430,12 +59669,9 @@ final class ModelDeploymentMonitoringBigQueryTable extends ProtoMessage {
   ModelDeploymentMonitoringBigQueryTable({
     this.logSource = ModelDeploymentMonitoringBigQueryTable_LogSource.$default,
     this.logType = ModelDeploymentMonitoringBigQueryTable_LogType.$default,
-    String? bigqueryTablePath,
-    String? requestResponseLoggingSchemaVersion,
-  }) : bigqueryTablePath = bigqueryTablePath ?? '',
-       requestResponseLoggingSchemaVersion =
-           requestResponseLoggingSchemaVersion ?? '',
-       super(fullyQualifiedName);
+    this.bigqueryTablePath = '',
+    this.requestResponseLoggingSchemaVersion = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelDeploymentMonitoringBigQueryTable.fromJson(
     Map<String, dynamic> json,
@@ -60556,10 +59792,9 @@ final class ModelDeploymentMonitoringObjectiveConfig extends ProtoMessage {
   final ModelMonitoringObjectiveConfig? objectiveConfig;
 
   ModelDeploymentMonitoringObjectiveConfig({
-    String? deployedModelId,
+    this.deployedModelId = '',
     this.objectiveConfig,
-  }) : deployedModelId = deployedModelId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelDeploymentMonitoringObjectiveConfig.fromJson(
     Map<String, dynamic> json,
@@ -60652,12 +59887,10 @@ final class ModelMonitoringStatsAnomalies extends ProtoMessage {
 
   ModelMonitoringStatsAnomalies({
     this.objective = ModelDeploymentMonitoringObjectiveType.$default,
-    String? deployedModelId,
-    int? anomalyCount,
+    this.deployedModelId = '',
+    this.anomalyCount = 0,
     this.featureStats = const [],
-  }) : deployedModelId = deployedModelId ?? '',
-       anomalyCount = anomalyCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringStatsAnomalies.fromJson(
     Map<String, dynamic> json,
@@ -60717,12 +59950,11 @@ final class ModelMonitoringStatsAnomalies_FeatureHistoricStatsAnomalies
   final List<FeatureStatsAnomaly> predictionStats;
 
   ModelMonitoringStatsAnomalies_FeatureHistoricStatsAnomalies({
-    String? featureDisplayName,
+    this.featureDisplayName = '',
     this.threshold,
     this.trainingStats,
     this.predictionStats = const [],
-  }) : featureDisplayName = featureDisplayName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringStatsAnomalies_FeatureHistoricStatsAnomalies.fromJson(
     Map<String, dynamic> json,
@@ -60807,9 +60039,9 @@ final class ModelEvaluation extends ProtoMessage {
   final ModelEvaluation_BiasConfig? biasConfigs;
 
   ModelEvaluation({
-    String? name,
-    String? displayName,
-    String? metricsSchemaUri,
+    this.name = '',
+    this.displayName = '',
+    this.metricsSchemaUri = '',
     this.metrics,
     this.createTime,
     this.sliceDimensions = const [],
@@ -60817,10 +60049,7 @@ final class ModelEvaluation extends ProtoMessage {
     this.explanationSpecs = const [],
     this.metadata,
     this.biasConfigs,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       metricsSchemaUri = metricsSchemaUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelEvaluation.fromJson(Map<String, dynamic> json) =>
       ModelEvaluation(
@@ -60894,10 +60123,9 @@ final class ModelEvaluation_ModelEvaluationExplanationSpec
   final ExplanationSpec? explanationSpec;
 
   ModelEvaluation_ModelEvaluationExplanationSpec({
-    String? explanationType,
+    this.explanationType = '',
     this.explanationSpec,
-  }) : explanationType = explanationType ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelEvaluation_ModelEvaluationExplanationSpec.fromJson(
     Map<String, dynamic> json,
@@ -61010,15 +60238,13 @@ final class ModelEvaluationSlice extends ProtoMessage {
   final ModelExplanation? modelExplanation;
 
   ModelEvaluationSlice({
-    String? name,
+    this.name = '',
     this.slice,
-    String? metricsSchemaUri,
+    this.metricsSchemaUri = '',
     this.metrics,
     this.createTime,
     this.modelExplanation,
-  }) : name = name ?? '',
-       metricsSchemaUri = metricsSchemaUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelEvaluationSlice.fromJson(Map<String, dynamic> json) =>
       ModelEvaluationSlice(
@@ -61079,10 +60305,11 @@ final class ModelEvaluationSlice_Slice extends ProtoMessage {
   /// Output only. Specification for how the data was sliced.
   final ModelEvaluationSlice_Slice_SliceSpec? sliceSpec;
 
-  ModelEvaluationSlice_Slice({String? dimension, String? value, this.sliceSpec})
-    : dimension = dimension ?? '',
-      value = value ?? '',
-      super(fullyQualifiedName);
+  ModelEvaluationSlice_Slice({
+    this.dimension = '',
+    this.value = '',
+    this.sliceSpec,
+  }) : super(fullyQualifiedName);
 
   factory ModelEvaluationSlice_Slice.fromJson(Map<String, dynamic> json) =>
       ModelEvaluationSlice_Slice(
@@ -61257,10 +60484,8 @@ final class ModelEvaluationSlice_Slice_SliceSpec_Range extends ProtoMessage {
   /// Exclusive high value for the range.
   final double high;
 
-  ModelEvaluationSlice_Slice_SliceSpec_Range({double? low, double? high})
-    : low = low ?? 0,
-      high = high ?? 0,
-      super(fullyQualifiedName);
+  ModelEvaluationSlice_Slice_SliceSpec_Range({this.low = 0, this.high = 0})
+    : super(fullyQualifiedName);
 
   factory ModelEvaluationSlice_Slice_SliceSpec_Range.fromJson(
     Map<String, dynamic> json,
@@ -61352,17 +60577,12 @@ final class GetPublisherModelRequest extends ProtoMessage {
 
   GetPublisherModelRequest({
     required this.name,
-    String? languageCode,
+    this.languageCode = '',
     this.view = PublisherModelView.$default,
-    bool? isHuggingFaceModel,
-    String? huggingFaceToken,
-    bool? includeEquivalentModelGardenModelDeploymentConfigs,
-  }) : languageCode = languageCode ?? '',
-       isHuggingFaceModel = isHuggingFaceModel ?? false,
-       huggingFaceToken = huggingFaceToken ?? '',
-       includeEquivalentModelGardenModelDeploymentConfigs =
-           includeEquivalentModelGardenModelDeploymentConfigs ?? false,
-       super(fullyQualifiedName);
+    this.isHuggingFaceModel = false,
+    this.huggingFaceToken = '',
+    this.includeEquivalentModelGardenModelDeploymentConfigs = false,
+  }) : super(fullyQualifiedName);
 
   factory GetPublisherModelRequest.fromJson(Map<String, dynamic> json) =>
       GetPublisherModelRequest(
@@ -61445,20 +60665,14 @@ final class ListPublisherModelsRequest extends ProtoMessage {
 
   ListPublisherModelsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.view = PublisherModelView.$default,
-    String? orderBy,
-    String? languageCode,
-    bool? listAllVersions,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       languageCode = languageCode ?? '',
-       listAllVersions = listAllVersions ?? false,
-       super(fullyQualifiedName);
+    this.orderBy = '',
+    this.languageCode = '',
+    this.listAllVersions = false,
+  }) : super(fullyQualifiedName);
 
   factory ListPublisherModelsRequest.fromJson(Map<String, dynamic> json) =>
       ListPublisherModelsRequest(
@@ -61517,9 +60731,8 @@ final class ListPublisherModelsResponse extends ProtoMessage {
 
   ListPublisherModelsResponse({
     this.publisherModels = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListPublisherModelsResponse.fromJson(Map<String, dynamic> json) =>
       ListPublisherModelsResponse(
@@ -61696,18 +60909,13 @@ final class DeployRequest_ModelConfig extends ProtoMessage {
   final String modelUserId;
 
   DeployRequest_ModelConfig({
-    bool? acceptEula,
-    String? huggingFaceAccessToken,
-    bool? huggingFaceCacheEnabled,
-    String? modelDisplayName,
+    this.acceptEula = false,
+    this.huggingFaceAccessToken = '',
+    this.huggingFaceCacheEnabled = false,
+    this.modelDisplayName = '',
     this.containerSpec,
-    String? modelUserId,
-  }) : acceptEula = acceptEula ?? false,
-       huggingFaceAccessToken = huggingFaceAccessToken ?? '',
-       huggingFaceCacheEnabled = huggingFaceCacheEnabled ?? false,
-       modelDisplayName = modelDisplayName ?? '',
-       modelUserId = modelUserId ?? '',
-       super(fullyQualifiedName);
+    this.modelUserId = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployRequest_ModelConfig.fromJson(Map<String, dynamic> json) =>
       DeployRequest_ModelConfig(
@@ -61802,16 +61010,12 @@ final class DeployRequest_EndpointConfig extends ProtoMessage {
   final String endpointUserId;
 
   DeployRequest_EndpointConfig({
-    String? endpointDisplayName,
-    bool? dedicatedEndpointEnabled,
-    bool? dedicatedEndpointDisabled,
+    this.endpointDisplayName = '',
+    this.dedicatedEndpointEnabled = false,
+    this.dedicatedEndpointDisabled = false,
     this.privateServiceConnectConfig,
-    String? endpointUserId,
-  }) : endpointDisplayName = endpointDisplayName ?? '',
-       dedicatedEndpointEnabled = dedicatedEndpointEnabled ?? false,
-       dedicatedEndpointDisabled = dedicatedEndpointDisabled ?? false,
-       endpointUserId = endpointUserId ?? '',
-       super(fullyQualifiedName);
+    this.endpointUserId = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployRequest_EndpointConfig.fromJson(Map<String, dynamic> json) =>
       DeployRequest_EndpointConfig(
@@ -61869,10 +61073,9 @@ final class DeployRequest_DeployConfig extends ProtoMessage {
 
   DeployRequest_DeployConfig({
     this.dedicatedResources,
-    bool? fastTryoutEnabled,
+    this.fastTryoutEnabled = false,
     this.systemLabels = const {},
-  }) : fastTryoutEnabled = fastTryoutEnabled ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DeployRequest_DeployConfig.fromJson(Map<String, dynamic> json) =>
       DeployRequest_DeployConfig(
@@ -61941,16 +61144,12 @@ final class DeployPublisherModelRequest extends ProtoMessage {
   DeployPublisherModelRequest({
     required this.model,
     required this.destination,
-    String? endpointDisplayName,
+    this.endpointDisplayName = '',
     this.dedicatedResources,
-    String? modelDisplayName,
-    String? huggingFaceAccessToken,
-    bool? acceptEula,
-  }) : endpointDisplayName = endpointDisplayName ?? '',
-       modelDisplayName = modelDisplayName ?? '',
-       huggingFaceAccessToken = huggingFaceAccessToken ?? '',
-       acceptEula = acceptEula ?? false,
-       super(fullyQualifiedName);
+    this.modelDisplayName = '',
+    this.huggingFaceAccessToken = '',
+    this.acceptEula = false,
+  }) : super(fullyQualifiedName);
 
   factory DeployPublisherModelRequest.fromJson(Map<String, dynamic> json) =>
       DeployPublisherModelRequest(
@@ -62014,11 +61213,11 @@ final class DeployResponse extends ProtoMessage {
   /// Format: `projects/{project}/locations/{location}/models/{model}`
   final String model;
 
-  DeployResponse({String? publisherModel, String? endpoint, String? model})
-    : publisherModel = publisherModel ?? '',
-      endpoint = endpoint ?? '',
-      model = model ?? '',
-      super(fullyQualifiedName);
+  DeployResponse({
+    this.publisherModel = '',
+    this.endpoint = '',
+    this.model = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployResponse.fromJson(Map<String, dynamic> json) => DeployResponse(
     publisherModel: json['publisherModel'] ?? '',
@@ -62065,13 +61264,10 @@ final class DeployPublisherModelResponse extends ProtoMessage {
   final String model;
 
   DeployPublisherModelResponse({
-    String? publisherModel,
-    String? endpoint,
-    String? model,
-  }) : publisherModel = publisherModel ?? '',
-       endpoint = endpoint ?? '',
-       model = model ?? '',
-       super(fullyQualifiedName);
+    this.publisherModel = '',
+    this.endpoint = '',
+    this.model = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployPublisherModelResponse.fromJson(Map<String, dynamic> json) =>
       DeployPublisherModelResponse(
@@ -62122,15 +61318,11 @@ final class DeployOperationMetadata extends ProtoMessage {
 
   DeployOperationMetadata({
     this.genericMetadata,
-    String? publisherModel,
-    String? destination,
-    int? projectNumber,
-    String? modelId,
-  }) : publisherModel = publisherModel ?? '',
-       destination = destination ?? '',
-       projectNumber = projectNumber ?? 0,
-       modelId = modelId ?? '',
-       super(fullyQualifiedName);
+    this.publisherModel = '',
+    this.destination = '',
+    this.projectNumber = 0,
+    this.modelId = '',
+  }) : super(fullyQualifiedName);
 
   factory DeployOperationMetadata.fromJson(Map<String, dynamic> json) =>
       DeployOperationMetadata(
@@ -62189,13 +61381,10 @@ final class DeployPublisherModelOperationMetadata extends ProtoMessage {
 
   DeployPublisherModelOperationMetadata({
     this.genericMetadata,
-    String? publisherModel,
-    String? destination,
-    int? projectNumber,
-  }) : publisherModel = publisherModel ?? '',
-       destination = destination ?? '',
-       projectNumber = projectNumber ?? 0,
-       super(fullyQualifiedName);
+    this.publisherModel = '',
+    this.destination = '',
+    this.projectNumber = 0,
+  }) : super(fullyQualifiedName);
 
   factory DeployPublisherModelOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -62242,10 +61431,10 @@ final class ExportPublisherModelResponse extends ProtoMessage {
   /// The destination uri of the model weights.
   final String destinationUri;
 
-  ExportPublisherModelResponse({String? publisherModel, String? destinationUri})
-    : publisherModel = publisherModel ?? '',
-      destinationUri = destinationUri ?? '',
-      super(fullyQualifiedName);
+  ExportPublisherModelResponse({
+    this.publisherModel = '',
+    this.destinationUri = '',
+  }) : super(fullyQualifiedName);
 
   factory ExportPublisherModelResponse.fromJson(Map<String, dynamic> json) =>
       ExportPublisherModelResponse(
@@ -62442,13 +61631,10 @@ final class PublisherModelEulaAcceptance extends ProtoMessage {
   final bool publisherModelEulaAcked;
 
   PublisherModelEulaAcceptance({
-    int? projectNumber,
-    String? publisherModel,
-    bool? publisherModelEulaAcked,
-  }) : projectNumber = projectNumber ?? 0,
-       publisherModel = publisherModel ?? '',
-       publisherModelEulaAcked = publisherModelEulaAcked ?? false,
-       super(fullyQualifiedName);
+    this.projectNumber = 0,
+    this.publisherModel = '',
+    this.publisherModelEulaAcked = false,
+  }) : super(fullyQualifiedName);
 
   factory PublisherModelEulaAcceptance.fromJson(Map<String, dynamic> json) =>
       PublisherModelEulaAcceptance(
@@ -62547,8 +61733,8 @@ final class ModelMonitor extends ProtoMessage {
 
   ModelMonitor({
     this.tabularObjective,
-    String? name,
-    String? displayName,
+    this.name = '',
+    this.displayName = '',
     this.modelMonitoringTarget,
     this.trainingDataset,
     this.notificationSpec,
@@ -62558,13 +61744,9 @@ final class ModelMonitor extends ProtoMessage {
     this.encryptionSpec,
     this.createTime,
     this.updateTime,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitor.fromJson(Map<String, dynamic> json) => ModelMonitor(
     tabularObjective: decode(
@@ -62676,11 +61858,9 @@ final class ModelMonitor_ModelMonitoringTarget_VertexModelSource
   final String modelVersionId;
 
   ModelMonitor_ModelMonitoringTarget_VertexModelSource({
-    String? model,
-    String? modelVersionId,
-  }) : model = model ?? '',
-       modelVersionId = modelVersionId ?? '',
-       super(fullyQualifiedName);
+    this.model = '',
+    this.modelVersionId = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitor_ModelMonitoringTarget_VertexModelSource.fromJson(
     Map<String, dynamic> json,
@@ -62810,13 +61990,10 @@ final class ModelMonitoringSchema_FieldSchema extends ProtoMessage {
   final bool repeated;
 
   ModelMonitoringSchema_FieldSchema({
-    String? name,
-    String? dataType,
-    bool? repeated,
-  }) : name = name ?? '',
-       dataType = dataType ?? '',
-       repeated = repeated ?? false,
-       super(fullyQualifiedName);
+    this.name = '',
+    this.dataType = '',
+    this.repeated = false,
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringSchema_FieldSchema.fromJson(
     Map<String, dynamic> json,
@@ -62873,10 +62050,9 @@ final class ModelMonitoringConfig extends ProtoMessage {
   ModelMonitoringConfig({
     this.objectiveConfigs = const [],
     this.alertConfig,
-    String? analysisInstanceSchemaUri,
+    this.analysisInstanceSchemaUri = '',
     this.statsAnomaliesBaseDirectory,
-  }) : analysisInstanceSchemaUri = analysisInstanceSchemaUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringConfig.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringConfig(
@@ -63027,12 +62203,10 @@ final class ModelMonitoringObjectiveConfig_TrainingDataset
     this.dataset,
     this.gcsSource,
     this.bigquerySource,
-    String? dataFormat,
-    String? targetField,
+    this.dataFormat = '',
+    this.targetField = '',
     this.loggingSamplingStrategy,
-  }) : dataFormat = dataFormat ?? '',
-       targetField = targetField ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringObjectiveConfig_TrainingDataset.fromJson(
     Map<String, dynamic> json,
@@ -63211,10 +62385,9 @@ final class ModelMonitoringObjectiveConfig_ExplanationConfig
   explanationBaseline;
 
   ModelMonitoringObjectiveConfig_ExplanationConfig({
-    bool? enableFeatureAttributes,
+    this.enableFeatureAttributes = false,
     this.explanationBaseline,
-  }) : enableFeatureAttributes = enableFeatureAttributes ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringObjectiveConfig_ExplanationConfig.fromJson(
     Map<String, dynamic> json,
@@ -63364,10 +62537,9 @@ final class ModelMonitoringAlertConfig extends ProtoMessage {
 
   ModelMonitoringAlertConfig({
     this.emailAlertConfig,
-    bool? enableLogging,
+    this.enableLogging = false,
     this.notificationChannels = const [],
-  }) : enableLogging = enableLogging ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringAlertConfig.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringAlertConfig(
@@ -63486,9 +62658,8 @@ final class SamplingStrategy_RandomSampleConfig extends ProtoMessage {
   /// Sample rate (0, 1]
   final double sampleRate;
 
-  SamplingStrategy_RandomSampleConfig({double? sampleRate})
-    : sampleRate = sampleRate ?? 0,
-      super(fullyQualifiedName);
+  SamplingStrategy_RandomSampleConfig({this.sampleRate = 0})
+    : super(fullyQualifiedName);
 
   factory SamplingStrategy_RandomSampleConfig.fromJson(
     Map<String, dynamic> json,
@@ -63551,11 +62722,9 @@ final class ModelMonitoringAnomaly extends ProtoMessage {
 
   ModelMonitoringAnomaly({
     this.tabularAnomaly,
-    String? modelMonitoringJob,
-    String? algorithm,
-  }) : modelMonitoringJob = modelMonitoringJob ?? '',
-       algorithm = algorithm ?? '',
-       super(fullyQualifiedName);
+    this.modelMonitoringJob = '',
+    this.algorithm = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringAnomaly.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringAnomaly(
@@ -63606,14 +62775,12 @@ final class ModelMonitoringAnomaly_TabularAnomaly extends ProtoMessage {
   final ModelMonitoringAlertCondition? condition;
 
   ModelMonitoringAnomaly_TabularAnomaly({
-    String? anomalyUri,
-    String? summary,
+    this.anomalyUri = '',
+    this.summary = '',
     this.anomaly,
     this.triggerTime,
     this.condition,
-  }) : anomalyUri = anomalyUri ?? '',
-       summary = summary ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringAnomaly_TabularAnomaly.fromJson(
     Map<String, dynamic> json,
@@ -63667,13 +62834,11 @@ final class ModelMonitoringAlert extends ProtoMessage {
   final ModelMonitoringAnomaly? anomaly;
 
   ModelMonitoringAlert({
-    String? statsName,
-    String? objectiveType,
+    this.statsName = '',
+    this.objectiveType = '',
     this.alertTime,
     this.anomaly,
-  }) : statsName = statsName ?? '',
-       objectiveType = objectiveType ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringAlert.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringAlert(
@@ -63750,19 +62915,16 @@ final class ModelMonitoringJob extends ProtoMessage {
   final protobuf.Timestamp? scheduleTime;
 
   ModelMonitoringJob({
-    String? name,
-    String? displayName,
+    this.name = '',
+    this.displayName = '',
     this.modelMonitoringSpec,
     this.createTime,
     this.updateTime,
     this.state = JobState.$default,
-    String? schedule,
+    this.schedule = '',
     this.jobExecutionDetail,
     this.scheduleTime,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       schedule = schedule ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringJob.fromJson(
     Map<String, dynamic> json,
@@ -63888,10 +63050,9 @@ final class ModelMonitoringJobExecutionDetail_ProcessedDataset
   final Interval? timeRange;
 
   ModelMonitoringJobExecutionDetail_ProcessedDataset({
-    String? location,
+    this.location = '',
     this.timeRange,
-  }) : location = location ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringJobExecutionDetail_ProcessedDataset.fromJson(
     Map<String, dynamic> json,
@@ -63936,9 +63097,8 @@ final class CreateModelMonitorRequest extends ProtoMessage {
   CreateModelMonitorRequest({
     required this.parent,
     required this.modelMonitor,
-    String? modelMonitorId,
-  }) : modelMonitorId = modelMonitorId ?? '',
-       super(fullyQualifiedName);
+    this.modelMonitorId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateModelMonitorRequest.fromJson(Map<String, dynamic> json) =>
       CreateModelMonitorRequest(
@@ -64112,14 +63272,11 @@ final class ListModelMonitorsRequest extends ProtoMessage {
 
   ListModelMonitorsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListModelMonitorsRequest.fromJson(Map<String, dynamic> json) =>
       ListModelMonitorsRequest(
@@ -64168,9 +63325,8 @@ final class ListModelMonitorsResponse extends ProtoMessage {
 
   ListModelMonitorsResponse({
     this.modelMonitors = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelMonitorsResponse.fromJson(Map<String, dynamic> json) =>
       ListModelMonitorsResponse(
@@ -64207,9 +63363,8 @@ final class DeleteModelMonitorRequest extends ProtoMessage {
   /// Optional. Force delete the model monitor with schedules.
   final bool force;
 
-  DeleteModelMonitorRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteModelMonitorRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteModelMonitorRequest.fromJson(Map<String, dynamic> json) =>
       DeleteModelMonitorRequest(
@@ -64251,9 +63406,8 @@ final class CreateModelMonitoringJobRequest extends ProtoMessage {
   CreateModelMonitoringJobRequest({
     required this.parent,
     required this.modelMonitoringJob,
-    String? modelMonitoringJobId,
-  }) : modelMonitoringJobId = modelMonitoringJobId ?? '',
-       super(fullyQualifiedName);
+    this.modelMonitoringJobId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateModelMonitoringJobRequest.fromJson(Map<String, dynamic> json) =>
       CreateModelMonitoringJobRequest(
@@ -64337,14 +63491,11 @@ final class ListModelMonitoringJobsRequest extends ProtoMessage {
 
   ListModelMonitoringJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListModelMonitoringJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListModelMonitoringJobsRequest(
@@ -64391,9 +63542,8 @@ final class ListModelMonitoringJobsResponse extends ProtoMessage {
 
   ListModelMonitoringJobsResponse({
     this.modelMonitoringJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelMonitoringJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListModelMonitoringJobsResponse(
@@ -64476,11 +63626,9 @@ final class SearchModelMonitoringStatsRequest extends ProtoMessage {
     required this.modelMonitor,
     this.statsFilter,
     this.timeInterval,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchModelMonitoringStatsRequest.fromJson(
     Map<String, dynamic> json,
@@ -64531,9 +63679,8 @@ final class SearchModelMonitoringStatsResponse extends ProtoMessage {
 
   SearchModelMonitoringStatsResponse({
     this.monitoringStats = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchModelMonitoringStatsResponse.fromJson(
     Map<String, dynamic> json,
@@ -64598,18 +63745,13 @@ final class SearchModelMonitoringAlertsRequest extends ProtoMessage {
 
   SearchModelMonitoringAlertsRequest({
     required this.modelMonitor,
-    String? modelMonitoringJob,
+    this.modelMonitoringJob = '',
     this.alertTimeInterval,
-    String? statsName,
-    String? objectiveType,
-    int? pageSize,
-    String? pageToken,
-  }) : modelMonitoringJob = modelMonitoringJob ?? '',
-       statsName = statsName ?? '',
-       objectiveType = objectiveType ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.statsName = '',
+    this.objectiveType = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchModelMonitoringAlertsRequest.fromJson(
     Map<String, dynamic> json,
@@ -64670,11 +63812,9 @@ final class SearchModelMonitoringAlertsResponse extends ProtoMessage {
 
   SearchModelMonitoringAlertsResponse({
     this.modelMonitoringAlerts = const [],
-    int? totalNumberAlerts,
-    String? nextPageToken,
-  }) : totalNumberAlerts = totalNumberAlerts ?? 0,
-       nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.totalNumberAlerts = 0,
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchModelMonitoringAlertsResponse.fromJson(
     Map<String, dynamic> json,
@@ -64850,14 +63990,12 @@ final class ModelMonitoringObjectiveSpec_DataDriftSpec extends ProtoMessage {
 
   ModelMonitoringObjectiveSpec_DataDriftSpec({
     this.features = const [],
-    String? categoricalMetricType,
-    String? numericMetricType,
+    this.categoricalMetricType = '',
+    this.numericMetricType = '',
     this.defaultCategoricalAlertCondition,
     this.defaultNumericAlertCondition,
     this.featureAlertConditions = const {},
-  }) : categoricalMetricType = categoricalMetricType ?? '',
-       numericMetricType = numericMetricType ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringObjectiveSpec_DataDriftSpec.fromJson(
     Map<String, dynamic> json,
@@ -65143,9 +64281,8 @@ final class ModelMonitoringInput_ModelMonitoringDataset extends ProtoMessage {
     this.vertexDataset,
     this.gcsSource,
     this.bigquerySource,
-    String? timestampField,
-  }) : timestampField = timestampField ?? '',
-       super(fullyQualifiedName);
+    this.timestampField = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringInput_ModelMonitoringDataset.fromJson(
     Map<String, dynamic> json,
@@ -65198,12 +64335,11 @@ final class ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource
   format;
 
   ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource({
-    String? gcsUri,
+    this.gcsUri = '',
     this.format =
         ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource_DataFormat
             .$default,
-  }) : gcsUri = gcsUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringInput_ModelMonitoringDataset_ModelMonitoringGcsSource.fromJson(
     Map<String, dynamic> json,
@@ -65333,9 +64469,8 @@ final class ModelMonitoringInput_BatchPredictionOutput extends ProtoMessage {
   /// model version specified in [ModelMonitor].[model_monitoring_target].
   final String batchPredictionJob;
 
-  ModelMonitoringInput_BatchPredictionOutput({String? batchPredictionJob})
-    : batchPredictionJob = batchPredictionJob ?? '',
-      super(fullyQualifiedName);
+  ModelMonitoringInput_BatchPredictionOutput({this.batchPredictionJob = ''})
+    : super(fullyQualifiedName);
 
   factory ModelMonitoringInput_BatchPredictionOutput.fromJson(
     Map<String, dynamic> json,
@@ -65403,10 +64538,8 @@ final class ModelMonitoringInput_TimeOffset extends ProtoMessage {
   /// E.g. '1h' stands for 1 hour, '2d' stands for 2 days.
   final String window;
 
-  ModelMonitoringInput_TimeOffset({String? offset, String? window})
-    : offset = offset ?? '',
-      window = window ?? '',
-      super(fullyQualifiedName);
+  ModelMonitoringInput_TimeOffset({this.offset = '', this.window = ''})
+    : super(fullyQualifiedName);
 
   factory ModelMonitoringInput_TimeOffset.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringInput_TimeOffset(
@@ -65449,10 +64582,9 @@ final class ModelMonitoringNotificationSpec extends ProtoMessage {
 
   ModelMonitoringNotificationSpec({
     this.emailConfig,
-    bool? enableCloudLogging,
+    this.enableCloudLogging = false,
     this.notificationChannelConfigs = const [],
-  }) : enableCloudLogging = enableCloudLogging ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringNotificationSpec.fromJson(
     Map<String, dynamic> json,
@@ -65522,9 +64654,8 @@ final class ModelMonitoringNotificationSpec_NotificationChannelConfig
   final String notificationChannel;
 
   ModelMonitoringNotificationSpec_NotificationChannelConfig({
-    String? notificationChannel,
-  }) : notificationChannel = notificationChannel ?? '',
-       super(fullyQualifiedName);
+    this.notificationChannel = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringNotificationSpec_NotificationChannelConfig.fromJson(
     Map<String, dynamic> json,
@@ -65605,18 +64736,13 @@ final class ModelMonitoringStatsDataPoint extends ProtoMessage {
   ModelMonitoringStatsDataPoint({
     this.currentStats,
     this.baselineStats,
-    double? thresholdValue,
-    bool? hasAnomaly,
-    String? modelMonitoringJob,
-    String? schedule,
+    this.thresholdValue = 0,
+    this.hasAnomaly = false,
+    this.modelMonitoringJob = '',
+    this.schedule = '',
     this.createTime,
-    String? algorithm,
-  }) : thresholdValue = thresholdValue ?? 0,
-       hasAnomaly = hasAnomaly ?? false,
-       modelMonitoringJob = modelMonitoringJob ?? '',
-       schedule = schedule ?? '',
-       algorithm = algorithm ?? '',
-       super(fullyQualifiedName);
+    this.algorithm = '',
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringStatsDataPoint.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringStatsDataPoint(
@@ -65729,9 +64855,8 @@ final class ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue
 
   ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue({
     this.distribution,
-    double? distributionDeviation,
-  }) : distributionDeviation = distributionDeviation ?? 0,
-       super(fullyQualifiedName);
+    this.distributionDeviation = 0,
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringStatsDataPoint_TypedValue_DistributionDataValue.fromJson(
     Map<String, dynamic> json,
@@ -65774,12 +64899,10 @@ final class ModelMonitoringTabularStats extends ProtoMessage {
   final List<ModelMonitoringStatsDataPoint> dataPoints;
 
   ModelMonitoringTabularStats({
-    String? statsName,
-    String? objectiveType,
+    this.statsName = '',
+    this.objectiveType = '',
     this.dataPoints = const [],
-  }) : statsName = statsName ?? '',
-       objectiveType = objectiveType ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ModelMonitoringTabularStats.fromJson(Map<String, dynamic> json) =>
       ModelMonitoringTabularStats(
@@ -65866,17 +64989,12 @@ final class SearchModelMonitoringStatsFilter_TabularStatsFilter
   final String algorithm;
 
   SearchModelMonitoringStatsFilter_TabularStatsFilter({
-    String? statsName,
-    String? objectiveType,
-    String? modelMonitoringJob,
-    String? modelMonitoringSchedule,
-    String? algorithm,
-  }) : statsName = statsName ?? '',
-       objectiveType = objectiveType ?? '',
-       modelMonitoringJob = modelMonitoringJob ?? '',
-       modelMonitoringSchedule = modelMonitoringSchedule ?? '',
-       algorithm = algorithm ?? '',
-       super(fullyQualifiedName);
+    this.statsName = '',
+    this.objectiveType = '',
+    this.modelMonitoringJob = '',
+    this.modelMonitoringSchedule = '',
+    this.algorithm = '',
+  }) : super(fullyQualifiedName);
 
   factory SearchModelMonitoringStatsFilter_TabularStatsFilter.fromJson(
     Map<String, dynamic> json,
@@ -65947,14 +65065,11 @@ final class UploadModelRequest extends ProtoMessage {
 
   UploadModelRequest({
     required this.parent,
-    String? parentModel,
-    String? modelId,
+    this.parentModel = '',
+    this.modelId = '',
     required this.model,
-    String? serviceAccount,
-  }) : parentModel = parentModel ?? '',
-       modelId = modelId ?? '',
-       serviceAccount = serviceAccount ?? '',
-       super(fullyQualifiedName);
+    this.serviceAccount = '',
+  }) : super(fullyQualifiedName);
 
   factory UploadModelRequest.fromJson(Map<String, dynamic> json) =>
       UploadModelRequest(
@@ -66030,10 +65145,8 @@ final class UploadModelResponse extends ProtoMessage {
   /// Output only. The version ID of the model that is uploaded.
   final String modelVersionId;
 
-  UploadModelResponse({String? model, String? modelVersionId})
-    : model = model ?? '',
-      modelVersionId = modelVersionId ?? '',
-      super(fullyQualifiedName);
+  UploadModelResponse({this.model = '', this.modelVersionId = ''})
+    : super(fullyQualifiedName);
 
   factory UploadModelResponse.fromJson(Map<String, dynamic> json) =>
       UploadModelResponse(
@@ -66139,14 +65252,11 @@ final class ListModelsRequest extends ProtoMessage {
 
   ListModelsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListModelsRequest.fromJson(Map<String, dynamic> json) =>
       ListModelsRequest(
@@ -66193,9 +65303,8 @@ final class ListModelsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListModelsResponse({this.models = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListModelsResponse({this.models = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListModelsResponse.fromJson(Map<String, dynamic> json) =>
       ListModelsResponse(
@@ -66264,16 +65373,12 @@ final class ListModelVersionsRequest extends ProtoMessage {
 
   ListModelVersionsRequest({
     required this.name,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
     this.readMask,
-    String? orderBy,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelVersionsRequest.fromJson(Map<String, dynamic> json) =>
       ListModelVersionsRequest(
@@ -66325,9 +65430,8 @@ final class ListModelVersionsResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListModelVersionsResponse({this.models = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListModelVersionsResponse({this.models = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListModelVersionsResponse.fromJson(Map<String, dynamic> json) =>
       ListModelVersionsResponse(
@@ -66376,11 +65480,9 @@ final class ListModelVersionCheckpointsRequest extends ProtoMessage {
 
   ListModelVersionCheckpointsRequest({
     required this.name,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelVersionCheckpointsRequest.fromJson(
     Map<String, dynamic> json,
@@ -66423,11 +65525,11 @@ final class ModelVersionCheckpoint extends ProtoMessage {
   /// The step of the checkpoint.
   final int step;
 
-  ModelVersionCheckpoint({String? checkpointId, int? epoch, int? step})
-    : checkpointId = checkpointId ?? '',
-      epoch = epoch ?? 0,
-      step = step ?? 0,
-      super(fullyQualifiedName);
+  ModelVersionCheckpoint({
+    this.checkpointId = '',
+    this.epoch = 0,
+    this.step = 0,
+  }) : super(fullyQualifiedName);
 
   factory ModelVersionCheckpoint.fromJson(Map<String, dynamic> json) =>
       ModelVersionCheckpoint(
@@ -66471,9 +65573,8 @@ final class ListModelVersionCheckpointsResponse extends ProtoMessage {
 
   ListModelVersionCheckpointsResponse({
     this.checkpoints = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelVersionCheckpointsResponse.fromJson(
     Map<String, dynamic> json,
@@ -66783,11 +65884,10 @@ final class ExportModelRequest_OutputConfig extends ProtoMessage {
   final ContainerRegistryDestination? imageDestination;
 
   ExportModelRequest_OutputConfig({
-    String? exportFormatId,
+    this.exportFormatId = '',
     this.artifactDestination,
     this.imageDestination,
-  }) : exportFormatId = exportFormatId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExportModelRequest_OutputConfig.fromJson(Map<String, dynamic> json) =>
       ExportModelRequest_OutputConfig(
@@ -66873,11 +65973,9 @@ final class ExportModelOperationMetadata_OutputInfo extends ProtoMessage {
   final String imageOutputUri;
 
   ExportModelOperationMetadata_OutputInfo({
-    String? artifactOutputUri,
-    String? imageOutputUri,
-  }) : artifactOutputUri = artifactOutputUri ?? '',
-       imageOutputUri = imageOutputUri ?? '',
-       super(fullyQualifiedName);
+    this.artifactOutputUri = '',
+    this.imageOutputUri = '',
+  }) : super(fullyQualifiedName);
 
   factory ExportModelOperationMetadata_OutputInfo.fromJson(
     Map<String, dynamic> json,
@@ -67054,10 +66152,8 @@ final class CopyModelResponse extends ProtoMessage {
   /// Output only. The version ID of the model that is copied.
   final String modelVersionId;
 
-  CopyModelResponse({String? model, String? modelVersionId})
-    : model = model ?? '',
-      modelVersionId = modelVersionId ?? '',
-      super(fullyQualifiedName);
+  CopyModelResponse({this.model = '', this.modelVersionId = ''})
+    : super(fullyQualifiedName);
 
   factory CopyModelResponse.fromJson(Map<String, dynamic> json) =>
       CopyModelResponse(
@@ -67250,10 +66346,8 @@ final class BatchImportEvaluatedAnnotationsResponse extends ProtoMessage {
   final int importedEvaluatedAnnotationsCount;
 
   BatchImportEvaluatedAnnotationsResponse({
-    int? importedEvaluatedAnnotationsCount,
-  }) : importedEvaluatedAnnotationsCount =
-           importedEvaluatedAnnotationsCount ?? 0,
-       super(fullyQualifiedName);
+    this.importedEvaluatedAnnotationsCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory BatchImportEvaluatedAnnotationsResponse.fromJson(
     Map<String, dynamic> json,
@@ -67332,14 +66426,11 @@ final class ListModelEvaluationsRequest extends ProtoMessage {
 
   ListModelEvaluationsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListModelEvaluationsRequest.fromJson(Map<String, dynamic> json) =>
       ListModelEvaluationsRequest(
@@ -67388,9 +66479,8 @@ final class ListModelEvaluationsResponse extends ProtoMessage {
 
   ListModelEvaluationsResponse({
     this.modelEvaluations = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelEvaluationsResponse.fromJson(Map<String, dynamic> json) =>
       ListModelEvaluationsResponse(
@@ -67476,14 +66566,11 @@ final class ListModelEvaluationSlicesRequest extends ProtoMessage {
 
   ListModelEvaluationSlicesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListModelEvaluationSlicesRequest.fromJson(
     Map<String, dynamic> json,
@@ -67533,9 +66620,8 @@ final class ListModelEvaluationSlicesResponse extends ProtoMessage {
 
   ListModelEvaluationSlicesResponse({
     this.modelEvaluationSlices = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListModelEvaluationSlicesResponse.fromJson(
     Map<String, dynamic> json,
@@ -67591,11 +66677,9 @@ final class RecommendSpecRequest extends ProtoMessage {
   RecommendSpecRequest({
     required this.parent,
     required this.gcsUri,
-    bool? checkMachineAvailability,
-    bool? checkUserQuota,
-  }) : checkMachineAvailability = checkMachineAvailability ?? false,
-       checkUserQuota = checkUserQuota ?? false,
-       super(fullyQualifiedName);
+    this.checkMachineAvailability = false,
+    this.checkUserQuota = false,
+  }) : super(fullyQualifiedName);
 
   factory RecommendSpecRequest.fromJson(Map<String, dynamic> json) =>
       RecommendSpecRequest(
@@ -67643,11 +66727,10 @@ final class RecommendSpecResponse extends ProtoMessage {
   final List<RecommendSpecResponse_MachineAndModelContainerSpec> specs;
 
   RecommendSpecResponse({
-    String? baseModel,
+    this.baseModel = '',
     this.recommendations = const [],
     this.specs = const [],
-  }) : baseModel = baseModel ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RecommendSpecResponse.fromJson(Map<String, dynamic> json) =>
       RecommendSpecResponse(
@@ -67732,12 +66815,11 @@ final class RecommendSpecResponse_Recommendation extends ProtoMessage {
   final RecommendSpecResponse_Recommendation_QuotaState userQuotaState;
 
   RecommendSpecResponse_Recommendation({
-    String? region,
+    this.region = '',
     this.spec,
     this.userQuotaState =
         RecommendSpecResponse_Recommendation_QuotaState.$default,
-  }) : region = region ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RecommendSpecResponse_Recommendation.fromJson(
     Map<String, dynamic> json,
@@ -67872,7 +66954,7 @@ final class NasJob extends ProtoMessage {
   final bool satisfiesPzi;
 
   NasJob({
-    String? name,
+    this.name = '',
     required this.displayName,
     required this.nasJobSpec,
     this.nasJobOutput,
@@ -67884,14 +66966,10 @@ final class NasJob extends ProtoMessage {
     this.error,
     this.labels = const {},
     this.encryptionSpec,
-    bool? enableRestrictedImageTraining,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       enableRestrictedImageTraining = enableRestrictedImageTraining ?? false,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.enableRestrictedImageTraining = false,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory NasJob.fromJson(Map<String, dynamic> json) => NasJob(
     name: json['name'] ?? '',
@@ -67969,13 +67047,11 @@ final class NasTrialDetail extends ProtoMessage {
   final NasTrial? trainTrial;
 
   NasTrialDetail({
-    String? name,
-    String? parameters,
+    this.name = '',
+    this.parameters = '',
     this.searchTrial,
     this.trainTrial,
-  }) : name = name ?? '',
-       parameters = parameters ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory NasTrialDetail.fromJson(Map<String, dynamic> json) => NasTrialDetail(
     name: json['name'] ?? '',
@@ -68018,11 +67094,9 @@ final class NasJobSpec extends ProtoMessage {
 
   NasJobSpec({
     this.multiTrialAlgorithmSpec,
-    String? resumeNasJobId,
-    String? searchSpaceSpec,
-  }) : resumeNasJobId = resumeNasJobId ?? '',
-       searchSpaceSpec = searchSpaceSpec ?? '',
-       super(fullyQualifiedName);
+    this.resumeNasJobId = '',
+    this.searchSpaceSpec = '',
+  }) : super(fullyQualifiedName);
 
   factory NasJobSpec.fromJson(Map<String, dynamic> json) => NasJobSpec(
     multiTrialAlgorithmSpec: decode(
@@ -68218,9 +67292,8 @@ final class NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec
     required this.searchTrialJobSpec,
     required this.maxTrialCount,
     required this.maxParallelTrialCount,
-    int? maxFailedTrialCount,
-  }) : maxFailedTrialCount = maxFailedTrialCount ?? 0,
-       super(fullyQualifiedName);
+    this.maxFailedTrialCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory NasJobSpec_MultiTrialAlgorithmSpec_SearchTrialSpec.fromJson(
     Map<String, dynamic> json,
@@ -68430,13 +67503,12 @@ final class NasTrial extends ProtoMessage {
   final protobuf.Timestamp? endTime;
 
   NasTrial({
-    String? id,
+    this.id = '',
     this.state = NasTrial_State.$default,
     this.finalMeasurement,
     this.startTime,
     this.endTime,
-  }) : id = id ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory NasTrial.fromJson(Map<String, dynamic> json) => NasTrial(
     id: json['id'] ?? '',
@@ -68518,11 +67590,11 @@ final class NetworkSpec extends ProtoMessage {
   /// `projects/{project_id_or_number}/regions/{region}/subnetworks/{subnetwork_id}`
   final String subnetwork;
 
-  NetworkSpec({bool? enableInternetAccess, String? network, String? subnetwork})
-    : enableInternetAccess = enableInternetAccess ?? false,
-      network = network ?? '',
-      subnetwork = subnetwork ?? '',
-      super(fullyQualifiedName);
+  NetworkSpec({
+    this.enableInternetAccess = false,
+    this.network = '',
+    this.subnetwork = '',
+  }) : super(fullyQualifiedName);
 
   factory NetworkSpec.fromJson(Map<String, dynamic> json) => NetworkSpec(
     enableInternetAccess: json['enableInternetAccess'] ?? false,
@@ -68568,10 +67640,8 @@ final class NotebookEucConfig extends ProtoMessage {
   /// no longer use default Compute Engine SA, but a P4SA.
   final bool bypassActasCheck;
 
-  NotebookEucConfig({bool? eucDisabled, bool? bypassActasCheck})
-    : eucDisabled = eucDisabled ?? false,
-      bypassActasCheck = bypassActasCheck ?? false,
-      super(fullyQualifiedName);
+  NotebookEucConfig({this.eucDisabled = false, this.bypassActasCheck = false})
+    : super(fullyQualifiedName);
 
   factory NotebookEucConfig.fromJson(Map<String, dynamic> json) =>
       NotebookEucConfig(
@@ -68690,22 +67760,18 @@ final class NotebookExecutionJob extends ProtoMessage {
     this.executionUser,
     this.serviceAccount,
     this.workbenchRuntime,
-    String? name,
-    String? displayName,
+    this.name = '',
+    this.displayName = '',
     this.executionTimeout,
-    String? scheduleResourceName,
+    this.scheduleResourceName = '',
     this.jobState = JobState.$default,
     this.status,
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    String? kernelName,
+    this.kernelName = '',
     this.encryptionSpec,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       scheduleResourceName = scheduleResourceName ?? '',
-       kernelName = kernelName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory NotebookExecutionJob.fromJson(
     Map<String, dynamic> json,
@@ -68817,11 +67883,9 @@ final class NotebookExecutionJob_DataformRepositorySource extends ProtoMessage {
   final String commitSha;
 
   NotebookExecutionJob_DataformRepositorySource({
-    String? dataformRepositoryResourceName,
-    String? commitSha,
-  }) : dataformRepositoryResourceName = dataformRepositoryResourceName ?? '',
-       commitSha = commitSha ?? '',
-       super(fullyQualifiedName);
+    this.dataformRepositoryResourceName = '',
+    this.commitSha = '',
+  }) : super(fullyQualifiedName);
 
   factory NotebookExecutionJob_DataformRepositorySource.fromJson(
     Map<String, dynamic> json,
@@ -68862,10 +67926,8 @@ final class NotebookExecutionJob_GcsNotebookSource extends ProtoMessage {
   /// https://cloud.google.com/storage/docs/metadata#generation-number.
   final String generation;
 
-  NotebookExecutionJob_GcsNotebookSource({String? uri, String? generation})
-    : uri = uri ?? '',
-      generation = generation ?? '',
-      super(fullyQualifiedName);
+  NotebookExecutionJob_GcsNotebookSource({this.uri = '', this.generation = ''})
+    : super(fullyQualifiedName);
 
   factory NotebookExecutionJob_GcsNotebookSource.fromJson(
     Map<String, dynamic> json,
@@ -68895,8 +67957,9 @@ final class NotebookExecutionJob_DirectNotebookSource extends ProtoMessage {
   /// The base64-encoded contents of the input notebook file.
   final Uint8List content;
 
-  NotebookExecutionJob_DirectNotebookSource({this.content = Uint8List(0)})
-    : super(fullyQualifiedName);
+  NotebookExecutionJob_DirectNotebookSource({Uint8List? content})
+    : content = content ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory NotebookExecutionJob_DirectNotebookSource.fromJson(
     Map<String, dynamic> json,
@@ -68993,9 +68056,8 @@ final class NotebookIdleShutdownConfig extends ProtoMessage {
 
   NotebookIdleShutdownConfig({
     required this.idleTimeout,
-    bool? idleShutdownDisabled,
-  }) : idleShutdownDisabled = idleShutdownDisabled ?? false,
-       super(fullyQualifiedName);
+    this.idleShutdownDisabled = false,
+  }) : super(fullyQualifiedName);
 
   factory NotebookIdleShutdownConfig.fromJson(Map<String, dynamic> json) =>
       NotebookIdleShutdownConfig(
@@ -69119,15 +68181,15 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
   final NotebookSoftwareConfig? softwareConfig;
 
   NotebookRuntimeTemplate({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
-    bool? isDefault,
+    this.description = '',
+    this.isDefault = false,
     this.machineSpec,
     this.dataPersistentDiskSpec,
     this.networkSpec,
-    String? serviceAccount,
-    String? etag,
+    this.serviceAccount = '',
+    this.etag = '',
     this.labels = const {},
     this.idleShutdownConfig,
     this.eucConfig,
@@ -69138,12 +68200,7 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
     this.networkTags = const [],
     this.encryptionSpec,
     this.softwareConfig,
-  }) : name = name ?? '',
-       description = description ?? '',
-       isDefault = isDefault ?? false,
-       serviceAccount = serviceAccount ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory NotebookRuntimeTemplate.fromJson(
     Map<String, dynamic> json,
@@ -69351,21 +68408,21 @@ final class NotebookRuntime extends ProtoMessage {
   final bool satisfiesPzi;
 
   NotebookRuntime({
-    String? name,
+    this.name = '',
     required this.runtimeUser,
     this.notebookRuntimeTemplateRef,
-    String? proxyUri,
+    this.proxyUri = '',
     this.createTime,
     this.updateTime,
     this.healthState = NotebookRuntime_HealthState.$default,
     required this.displayName,
-    String? description,
-    String? serviceAccount,
+    this.description = '',
+    this.serviceAccount = '',
     this.runtimeState = NotebookRuntime_RuntimeState.$default,
-    bool? isUpgradable,
+    this.isUpgradable = false,
     this.labels = const {},
     this.expirationTime,
-    String? version,
+    this.version = '',
     this.notebookRuntimeType = NotebookRuntimeType.$default,
     this.machineSpec,
     this.dataPersistentDiskSpec,
@@ -69376,17 +68433,9 @@ final class NotebookRuntime extends ProtoMessage {
     this.networkTags = const [],
     this.softwareConfig,
     this.encryptionSpec,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       proxyUri = proxyUri ?? '',
-       description = description ?? '',
-       serviceAccount = serviceAccount ?? '',
-       isUpgradable = isUpgradable ?? false,
-       version = version ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory NotebookRuntime.fromJson(
     Map<String, dynamic> json,
@@ -69584,9 +68633,8 @@ final class NotebookRuntimeTemplateRef extends ProtoMessage {
   /// Immutable. A resource name of the NotebookRuntimeTemplate.
   final String notebookRuntimeTemplate;
 
-  NotebookRuntimeTemplateRef({String? notebookRuntimeTemplate})
-    : notebookRuntimeTemplate = notebookRuntimeTemplate ?? '',
-      super(fullyQualifiedName);
+  NotebookRuntimeTemplateRef({this.notebookRuntimeTemplate = ''})
+    : super(fullyQualifiedName);
 
   factory NotebookRuntimeTemplateRef.fromJson(Map<String, dynamic> json) =>
       NotebookRuntimeTemplateRef(
@@ -69627,9 +68675,8 @@ final class CreateNotebookRuntimeTemplateRequest extends ProtoMessage {
   CreateNotebookRuntimeTemplateRequest({
     required this.parent,
     required this.notebookRuntimeTemplate,
-    String? notebookRuntimeTemplateId,
-  }) : notebookRuntimeTemplateId = notebookRuntimeTemplateId ?? '',
-       super(fullyQualifiedName);
+    this.notebookRuntimeTemplateId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateNotebookRuntimeTemplateRequest.fromJson(
     Map<String, dynamic> json,
@@ -69784,16 +68831,12 @@ final class ListNotebookRuntimeTemplatesRequest extends ProtoMessage {
 
   ListNotebookRuntimeTemplatesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNotebookRuntimeTemplatesRequest.fromJson(
     Map<String, dynamic> json,
@@ -69846,9 +68889,8 @@ final class ListNotebookRuntimeTemplatesResponse extends ProtoMessage {
 
   ListNotebookRuntimeTemplatesResponse({
     this.notebookRuntimeTemplates = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNotebookRuntimeTemplatesResponse.fromJson(
     Map<String, dynamic> json,
@@ -69972,9 +69014,8 @@ final class AssignNotebookRuntimeRequest extends ProtoMessage {
     required this.parent,
     required this.notebookRuntimeTemplate,
     required this.notebookRuntime,
-    String? notebookRuntimeId,
-  }) : notebookRuntimeId = notebookRuntimeId ?? '',
-       super(fullyQualifiedName);
+    this.notebookRuntimeId = '',
+  }) : super(fullyQualifiedName);
 
   factory AssignNotebookRuntimeRequest.fromJson(Map<String, dynamic> json) =>
       AssignNotebookRuntimeRequest(
@@ -70021,9 +69062,8 @@ final class AssignNotebookRuntimeOperationMetadata extends ProtoMessage {
 
   AssignNotebookRuntimeOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory AssignNotebookRuntimeOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -70153,16 +69193,12 @@ final class ListNotebookRuntimesRequest extends ProtoMessage {
 
   ListNotebookRuntimesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNotebookRuntimesRequest.fromJson(Map<String, dynamic> json) =>
       ListNotebookRuntimesRequest(
@@ -70214,9 +69250,8 @@ final class ListNotebookRuntimesResponse extends ProtoMessage {
 
   ListNotebookRuntimesResponse({
     this.notebookRuntimes = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNotebookRuntimesResponse.fromJson(Map<String, dynamic> json) =>
       ListNotebookRuntimesResponse(
@@ -70314,9 +69349,8 @@ final class UpgradeNotebookRuntimeOperationMetadata extends ProtoMessage {
 
   UpgradeNotebookRuntimeOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory UpgradeNotebookRuntimeOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -70401,9 +69435,8 @@ final class StartNotebookRuntimeOperationMetadata extends ProtoMessage {
 
   StartNotebookRuntimeOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory StartNotebookRuntimeOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -70539,9 +69572,8 @@ final class CreateNotebookExecutionJobRequest extends ProtoMessage {
   CreateNotebookExecutionJobRequest({
     required this.parent,
     required this.notebookExecutionJob,
-    String? notebookExecutionJobId,
-  }) : notebookExecutionJobId = notebookExecutionJobId ?? '',
-       super(fullyQualifiedName);
+    this.notebookExecutionJobId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateNotebookExecutionJobRequest.fromJson(
     Map<String, dynamic> json,
@@ -70588,9 +69620,8 @@ final class CreateNotebookExecutionJobOperationMetadata extends ProtoMessage {
 
   CreateNotebookExecutionJobOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateNotebookExecutionJobOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -70702,16 +69733,12 @@ final class ListNotebookExecutionJobsRequest extends ProtoMessage {
 
   ListNotebookExecutionJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.view = NotebookExecutionJobView.$default,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListNotebookExecutionJobsRequest.fromJson(
     Map<String, dynamic> json,
@@ -70766,9 +69793,8 @@ final class ListNotebookExecutionJobsResponse extends ProtoMessage {
 
   ListNotebookExecutionJobsResponse({
     this.notebookExecutionJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListNotebookExecutionJobsResponse.fromJson(
     Map<String, dynamic> json,
@@ -70833,13 +69859,11 @@ final class PostStartupScriptConfig extends ProtoMessage {
   postStartupScriptBehavior;
 
   PostStartupScriptConfig({
-    String? postStartupScript,
-    String? postStartupScriptUrl,
+    this.postStartupScript = '',
+    this.postStartupScriptUrl = '',
     this.postStartupScriptBehavior =
         PostStartupScriptConfig_PostStartupScriptBehavior.$default,
-  }) : postStartupScript = postStartupScript ?? '',
-       postStartupScriptUrl = postStartupScriptUrl ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PostStartupScriptConfig.fromJson(Map<String, dynamic> json) =>
       PostStartupScriptConfig(
@@ -70921,10 +69945,8 @@ final class ColabImage extends ProtoMessage {
   /// Python 3.11"
   final String description;
 
-  ColabImage({String? releaseName, String? description})
-    : releaseName = releaseName ?? '',
-      description = description ?? '',
-      super(fullyQualifiedName);
+  ColabImage({this.releaseName = '', this.description = ''})
+    : super(fullyQualifiedName);
 
   factory ColabImage.fromJson(Map<String, dynamic> json) => ColabImage(
     releaseName: json['releaseName'] ?? '',
@@ -71112,45 +70134,31 @@ final class Schema extends ProtoMessage {
 
   Schema({
     this.type = Type.$default,
-    String? format,
-    String? title,
-    String? description,
-    bool? nullable,
+    this.format = '',
+    this.title = '',
+    this.description = '',
+    this.nullable = false,
     this.default$,
     this.items,
-    int? minItems,
-    int? maxItems,
+    this.minItems = 0,
+    this.maxItems = 0,
     this.enum$ = const [],
     this.properties = const {},
     this.propertyOrdering = const [],
     this.required = const [],
-    int? minProperties,
-    int? maxProperties,
-    double? minimum,
-    double? maximum,
-    int? minLength,
-    int? maxLength,
-    String? pattern,
+    this.minProperties = 0,
+    this.maxProperties = 0,
+    this.minimum = 0,
+    this.maximum = 0,
+    this.minLength = 0,
+    this.maxLength = 0,
+    this.pattern = '',
     this.example,
     this.anyOf = const [],
     this.additionalProperties,
-    String? ref,
+    this.ref = '',
     this.defs = const {},
-  }) : format = format ?? '',
-       title = title ?? '',
-       description = description ?? '',
-       nullable = nullable ?? false,
-       minItems = minItems ?? 0,
-       maxItems = maxItems ?? 0,
-       minProperties = minProperties ?? 0,
-       maxProperties = maxProperties ?? 0,
-       minimum = minimum ?? 0,
-       maximum = maximum ?? 0,
-       minLength = minLength ?? 0,
-       maxLength = maxLength ?? 0,
-       pattern = pattern ?? '',
-       ref = ref ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Schema.fromJson(Map<String, dynamic> json) => Schema(
     type: decodeEnum(json['type'], Type.fromJson) ?? Type.$default,
@@ -71404,8 +70412,8 @@ final class PersistentResource extends ProtoMessage {
   final bool satisfiesPzi;
 
   PersistentResource({
-    String? name,
-    String? displayName,
+    this.name = '',
+    this.displayName = '',
     required this.resourcePools,
     this.state = PersistentResource_State.$default,
     this.error,
@@ -71413,20 +70421,15 @@ final class PersistentResource extends ProtoMessage {
     this.startTime,
     this.updateTime,
     this.labels = const {},
-    String? network,
+    this.network = '',
     this.pscInterfaceConfig,
     this.encryptionSpec,
     this.resourceRuntimeSpec,
     this.resourceRuntime,
     this.reservedIpRanges = const [],
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       network = network ?? '',
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory PersistentResource.fromJson(
     Map<String, dynamic> json,
@@ -71565,15 +70568,13 @@ final class ResourcePool extends ProtoMessage {
   final ResourcePool_AutoscalingSpec? autoscalingSpec;
 
   ResourcePool({
-    String? id,
+    this.id = '',
     required this.machineSpec,
     this.replicaCount,
     this.diskSpec,
-    int? usedReplicaCount,
+    this.usedReplicaCount = 0,
     this.autoscalingSpec,
-  }) : id = id ?? '',
-       usedReplicaCount = usedReplicaCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ResourcePool.fromJson(Map<String, dynamic> json) => ResourcePool(
     id: json['id'] ?? '',
@@ -71737,15 +70738,13 @@ final class RaySpec extends ProtoMessage {
   final RayLogsSpec? rayLogsSpec;
 
   RaySpec({
-    String? imageUri,
+    this.imageUri = '',
     this.nfsMounts = const [],
     this.resourcePoolImages = const {},
-    String? headNodeResourcePoolId,
+    this.headNodeResourcePoolId = '',
     this.rayMetricSpec,
     this.rayLogsSpec,
-  }) : imageUri = imageUri ?? '',
-       headNodeResourcePoolId = headNodeResourcePoolId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RaySpec.fromJson(Map<String, dynamic> json) => RaySpec(
     imageUri: json['imageUri'] ?? '',
@@ -71798,9 +70797,10 @@ final class ResourceRuntime extends ProtoMessage {
   ///   "projects/1000/locations/us-central1/notebookRuntimeTemplates/abc123"
   final String notebookRuntimeTemplate;
 
-  ResourceRuntime({this.accessUris = const {}, String? notebookRuntimeTemplate})
-    : notebookRuntimeTemplate = notebookRuntimeTemplate ?? '',
-      super(fullyQualifiedName);
+  ResourceRuntime({
+    this.accessUris = const {},
+    this.notebookRuntimeTemplate = '',
+  }) : super(fullyQualifiedName);
 
   factory ResourceRuntime.fromJson(Map<String, dynamic> json) =>
       ResourceRuntime(
@@ -71850,9 +70850,8 @@ final class ServiceAccountSpec extends ProtoMessage {
 
   ServiceAccountSpec({
     required this.enableCustomServiceAccount,
-    String? serviceAccount,
-  }) : serviceAccount = serviceAccount ?? '',
-       super(fullyQualifiedName);
+    this.serviceAccount = '',
+  }) : super(fullyQualifiedName);
 
   factory ServiceAccountSpec.fromJson(Map<String, dynamic> json) =>
       ServiceAccountSpec(
@@ -71884,9 +70883,7 @@ final class RayMetricSpec extends ProtoMessage {
   /// Optional. Flag to disable the Ray metrics collection.
   final bool disabled;
 
-  RayMetricSpec({bool? disabled})
-    : disabled = disabled ?? false,
-      super(fullyQualifiedName);
+  RayMetricSpec({this.disabled = false}) : super(fullyQualifiedName);
 
   factory RayMetricSpec.fromJson(Map<String, dynamic> json) =>
       RayMetricSpec(disabled: json['disabled'] ?? false);
@@ -71909,9 +70906,7 @@ final class RayLogsSpec extends ProtoMessage {
   /// Optional. Flag to disable the export of Ray OSS logs to Cloud Logging.
   final bool disabled;
 
-  RayLogsSpec({bool? disabled})
-    : disabled = disabled ?? false,
-      super(fullyQualifiedName);
+  RayLogsSpec({this.disabled = false}) : super(fullyQualifiedName);
 
   factory RayLogsSpec.fromJson(Map<String, dynamic> json) =>
       RayLogsSpec(disabled: json['disabled'] ?? false);
@@ -71993,9 +70988,8 @@ final class CreatePersistentResourceOperationMetadata extends ProtoMessage {
 
   CreatePersistentResourceOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory CreatePersistentResourceOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -72033,9 +71027,8 @@ final class UpdatePersistentResourceOperationMetadata extends ProtoMessage {
 
   UpdatePersistentResourceOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory UpdatePersistentResourceOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -72073,9 +71066,8 @@ final class RebootPersistentResourceOperationMetadata extends ProtoMessage {
 
   RebootPersistentResourceOperationMetadata({
     this.genericMetadata,
-    String? progressMessage,
-  }) : progressMessage = progressMessage ?? '',
-       super(fullyQualifiedName);
+    this.progressMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory RebootPersistentResourceOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -72147,11 +71139,9 @@ final class ListPersistentResourcesRequest extends ProtoMessage {
 
   ListPersistentResourcesRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListPersistentResourcesRequest.fromJson(Map<String, dynamic> json) =>
       ListPersistentResourcesRequest(
@@ -72194,9 +71184,8 @@ final class ListPersistentResourcesResponse extends ProtoMessage {
 
   ListPersistentResourcesResponse({
     this.persistentResources = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListPersistentResourcesResponse.fromJson(Map<String, dynamic> json) =>
       ListPersistentResourcesResponse(
@@ -72457,8 +71446,8 @@ final class PipelineJob extends ProtoMessage {
   final List<PipelineTaskRerunConfig> pipelineTaskRerunConfigs;
 
   PipelineJob({
-    String? name,
-    String? displayName,
+    this.name = '',
+    this.displayName = '',
     this.createTime,
     this.startTime,
     this.endTime,
@@ -72470,29 +71459,19 @@ final class PipelineJob extends ProtoMessage {
     this.labels = const {},
     this.runtimeConfig,
     this.encryptionSpec,
-    String? serviceAccount,
-    String? network,
+    this.serviceAccount = '',
+    this.network = '',
     this.reservedIpRanges = const [],
     this.pscInterfaceConfig,
-    String? templateUri,
+    this.templateUri = '',
     this.templateMetadata,
-    String? scheduleName,
-    bool? preflightValidations,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-    int? originalPipelineJobId,
+    this.scheduleName = '',
+    this.preflightValidations = false,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+    this.originalPipelineJobId = 0,
     this.pipelineTaskRerunConfigs = const [],
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       serviceAccount = serviceAccount ?? '',
-       network = network ?? '',
-       templateUri = templateUri ?? '',
-       scheduleName = scheduleName ?? '',
-       preflightValidations = preflightValidations ?? false,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       originalPipelineJobId = originalPipelineJobId ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PipelineJob.fromJson(Map<String, dynamic> json) => PipelineJob(
     name: json['name'] ?? '',
@@ -72751,15 +71730,12 @@ final class PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail
   taskResourceUnavailableTimeoutBehavior;
 
   PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail({
-    String? persistentResourceName,
-    int? taskResourceUnavailableWaitTimeMs,
+    this.persistentResourceName = '',
+    this.taskResourceUnavailableWaitTimeMs = 0,
     this.taskResourceUnavailableTimeoutBehavior =
         PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail_TaskResourceUnavailableTimeoutBehavior
             .$default,
-  }) : persistentResourceName = persistentResourceName ?? '',
-       taskResourceUnavailableWaitTimeMs =
-           taskResourceUnavailableWaitTimeMs ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PipelineJob_RuntimeConfig_PersistentResourceRuntimeDetail.fromJson(
     Map<String, dynamic> json,
@@ -72892,9 +71868,7 @@ final class PipelineTemplateMetadata extends ProtoMessage {
   /// Format is "sha256:abcdef123456...".
   final String version;
 
-  PipelineTemplateMetadata({String? version})
-    : version = version ?? '',
-      super(fullyQualifiedName);
+  PipelineTemplateMetadata({this.version = ''}) : super(fullyQualifiedName);
 
   factory PipelineTemplateMetadata.fromJson(Map<String, dynamic> json) =>
       PipelineTemplateMetadata(version: json['version'] ?? '');
@@ -73010,9 +71984,9 @@ final class PipelineTaskDetail extends ProtoMessage {
   final String taskUniqueName;
 
   PipelineTaskDetail({
-    int? taskId,
-    int? parentTaskId,
-    String? taskName,
+    this.taskId = 0,
+    this.parentTaskId = 0,
+    this.taskName = '',
     this.createTime,
     this.startTime,
     this.endTime,
@@ -73023,12 +71997,8 @@ final class PipelineTaskDetail extends ProtoMessage {
     this.pipelineTaskStatus = const [],
     this.inputs = const {},
     this.outputs = const {},
-    String? taskUniqueName,
-  }) : taskId = taskId ?? 0,
-       parentTaskId = parentTaskId ?? 0,
-       taskName = taskName ?? '',
-       taskUniqueName = taskUniqueName ?? '',
-       super(fullyQualifiedName);
+    this.taskUniqueName = '',
+  }) : super(fullyQualifiedName);
 
   factory PipelineTaskDetail.fromJson(Map<String, dynamic> json) =>
       PipelineTaskDetail(
@@ -73295,13 +72265,11 @@ final class PipelineTaskExecutorDetail_ContainerDetail extends ProtoMessage {
   final List<String> failedPreCachingCheckJobs;
 
   PipelineTaskExecutorDetail_ContainerDetail({
-    String? mainJob,
-    String? preCachingCheckJob,
+    this.mainJob = '',
+    this.preCachingCheckJob = '',
     this.failedMainJobs = const [],
     this.failedPreCachingCheckJobs = const [],
-  }) : mainJob = mainJob ?? '',
-       preCachingCheckJob = preCachingCheckJob ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PipelineTaskExecutorDetail_ContainerDetail.fromJson(
     Map<String, dynamic> json,
@@ -73348,10 +72316,9 @@ final class PipelineTaskExecutorDetail_CustomJobDetail extends ProtoMessage {
   final List<String> failedJobs;
 
   PipelineTaskExecutorDetail_CustomJobDetail({
-    String? job,
+    this.job = '',
     this.failedJobs = const [],
-  }) : job = job ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PipelineTaskExecutorDetail_CustomJobDetail.fromJson(
     Map<String, dynamic> json,
@@ -73396,16 +72363,12 @@ final class PipelineTaskRerunConfig extends ProtoMessage {
   final bool skipDownstreamTasks;
 
   PipelineTaskRerunConfig({
-    int? taskId,
-    String? taskName,
+    this.taskId = 0,
+    this.taskName = '',
     this.inputs,
-    bool? skipTask,
-    bool? skipDownstreamTasks,
-  }) : taskId = taskId ?? 0,
-       taskName = taskName ?? '',
-       skipTask = skipTask ?? false,
-       skipDownstreamTasks = skipDownstreamTasks ?? false,
-       super(fullyQualifiedName);
+    this.skipTask = false,
+    this.skipDownstreamTasks = false,
+  }) : super(fullyQualifiedName);
 
   factory PipelineTaskRerunConfig.fromJson(Map<String, dynamic> json) =>
       PipelineTaskRerunConfig(
@@ -73653,14 +72616,11 @@ final class ListTrainingPipelinesRequest extends ProtoMessage {
 
   ListTrainingPipelinesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListTrainingPipelinesRequest.fromJson(Map<String, dynamic> json) =>
       ListTrainingPipelinesRequest(
@@ -73709,9 +72669,8 @@ final class ListTrainingPipelinesResponse extends ProtoMessage {
 
   ListTrainingPipelinesResponse({
     this.trainingPipelines = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTrainingPipelinesResponse.fromJson(Map<String, dynamic> json) =>
       ListTrainingPipelinesResponse(
@@ -73816,9 +72775,8 @@ final class CreatePipelineJobRequest extends ProtoMessage {
   CreatePipelineJobRequest({
     required this.parent,
     required this.pipelineJob,
-    String? pipelineJobId,
-  }) : pipelineJobId = pipelineJobId ?? '',
-       super(fullyQualifiedName);
+    this.pipelineJobId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreatePipelineJobRequest.fromJson(Map<String, dynamic> json) =>
       CreatePipelineJobRequest(
@@ -73947,16 +72905,12 @@ final class ListPipelineJobsRequest extends ProtoMessage {
 
   ListPipelineJobsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListPipelineJobsRequest.fromJson(Map<String, dynamic> json) =>
       ListPipelineJobsRequest(
@@ -74008,9 +72962,8 @@ final class ListPipelineJobsResponse extends ProtoMessage {
 
   ListPipelineJobsResponse({
     this.pipelineJobs = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListPipelineJobsResponse.fromJson(Map<String, dynamic> json) =>
       ListPipelineJobsResponse(
@@ -74309,16 +73262,12 @@ final class PredictResponse extends ProtoMessage {
 
   PredictResponse({
     this.predictions = const [],
-    String? deployedModelId,
-    String? model,
-    String? modelVersionId,
-    String? modelDisplayName,
+    this.deployedModelId = '',
+    this.model = '',
+    this.modelVersionId = '',
+    this.modelDisplayName = '',
     this.metadata,
-  }) : deployedModelId = deployedModelId ?? '',
-       model = model ?? '',
-       modelVersionId = modelVersionId ?? '',
-       modelDisplayName = modelDisplayName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PredictResponse.fromJson(Map<String, dynamic> json) =>
       PredictResponse(
@@ -74543,9 +73492,9 @@ final class DirectRawPredictRequest extends ProtoMessage {
 
   DirectRawPredictRequest({
     required this.endpoint,
-    String? methodName,
-    this.input = Uint8List(0),
-  }) : methodName = methodName ?? '',
+    this.methodName = '',
+    Uint8List? input,
+  }) : input = input ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory DirectRawPredictRequest.fromJson(Map<String, dynamic> json) =>
@@ -74582,8 +73531,9 @@ final class DirectRawPredictResponse extends ProtoMessage {
   /// The prediction output.
   final Uint8List output;
 
-  DirectRawPredictResponse({this.output = Uint8List(0)})
-    : super(fullyQualifiedName);
+  DirectRawPredictResponse({Uint8List? output})
+    : output = output ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory DirectRawPredictResponse.fromJson(Map<String, dynamic> json) =>
       DirectRawPredictResponse(
@@ -74716,9 +73666,9 @@ final class StreamDirectRawPredictRequest extends ProtoMessage {
 
   StreamDirectRawPredictRequest({
     required this.endpoint,
-    String? methodName,
-    this.input = Uint8List(0),
-  }) : methodName = methodName ?? '',
+    this.methodName = '',
+    Uint8List? input,
+  }) : input = input ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory StreamDirectRawPredictRequest.fromJson(Map<String, dynamic> json) =>
@@ -74755,8 +73705,9 @@ final class StreamDirectRawPredictResponse extends ProtoMessage {
   /// The prediction output.
   final Uint8List output;
 
-  StreamDirectRawPredictResponse({this.output = Uint8List(0)})
-    : super(fullyQualifiedName);
+  StreamDirectRawPredictResponse({Uint8List? output})
+    : output = output ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory StreamDirectRawPredictResponse.fromJson(Map<String, dynamic> json) =>
       StreamDirectRawPredictResponse(
@@ -74889,9 +73840,9 @@ final class StreamingRawPredictRequest extends ProtoMessage {
 
   StreamingRawPredictRequest({
     required this.endpoint,
-    String? methodName,
-    this.input = Uint8List(0),
-  }) : methodName = methodName ?? '',
+    this.methodName = '',
+    Uint8List? input,
+  }) : input = input ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory StreamingRawPredictRequest.fromJson(Map<String, dynamic> json) =>
@@ -74928,8 +73879,9 @@ final class StreamingRawPredictResponse extends ProtoMessage {
   /// The prediction output.
   final Uint8List output;
 
-  StreamingRawPredictResponse({this.output = Uint8List(0)})
-    : super(fullyQualifiedName);
+  StreamingRawPredictResponse({Uint8List? output})
+    : output = output ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory StreamingRawPredictResponse.fromJson(Map<String, dynamic> json) =>
       StreamingRawPredictResponse(
@@ -75006,9 +73958,8 @@ final class ExplainRequest extends ProtoMessage {
     this.parameters,
     this.explanationSpecOverride,
     this.concurrentExplanationSpecOverride = const {},
-    String? deployedModelId,
-  }) : deployedModelId = deployedModelId ?? '',
-       super(fullyQualifiedName);
+    this.deployedModelId = '',
+  }) : super(fullyQualifiedName);
 
   factory ExplainRequest.fromJson(Map<String, dynamic> json) => ExplainRequest(
     endpoint: json['endpoint'] ?? '',
@@ -75083,10 +74034,9 @@ final class ExplainResponse extends ProtoMessage {
   ExplainResponse({
     this.explanations = const [],
     this.concurrentExplanations = const {},
-    String? deployedModelId,
+    this.deployedModelId = '',
     this.predictions = const [],
-  }) : deployedModelId = deployedModelId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ExplainResponse.fromJson(Map<String, dynamic> json) =>
       ExplainResponse(
@@ -75197,14 +74147,13 @@ final class CountTokensRequest extends ProtoMessage {
 
   CountTokensRequest({
     required this.endpoint,
-    String? model,
+    this.model = '',
     this.instances = const [],
     this.contents = const [],
     this.systemInstruction,
     this.tools = const [],
     this.generationConfig,
-  }) : model = model ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory CountTokensRequest.fromJson(Map<String, dynamic> json) =>
       CountTokensRequest(
@@ -75262,12 +74211,10 @@ final class CountTokensResponse extends ProtoMessage {
   final List<ModalityTokenCount> promptTokensDetails;
 
   CountTokensResponse({
-    int? totalTokens,
-    int? totalBillableCharacters,
+    this.totalTokens = 0,
+    this.totalBillableCharacters = 0,
     this.promptTokensDetails = const [],
-  }) : totalTokens = totalTokens ?? 0,
-       totalBillableCharacters = totalBillableCharacters ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory CountTokensResponse.fromJson(Map<String, dynamic> json) =>
       CountTokensResponse(
@@ -75370,15 +74317,14 @@ final class GenerateContentRequest extends ProtoMessage {
     required this.model,
     required this.contents,
     this.systemInstruction,
-    String? cachedContent,
+    this.cachedContent = '',
     this.tools = const [],
     this.toolConfig,
     this.labels = const {},
     this.safetySettings = const [],
     this.modelArmorConfig,
     this.generationConfig,
-  }) : cachedContent = cachedContent ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory GenerateContentRequest.fromJson(Map<String, dynamic> json) =>
       GenerateContentRequest(
@@ -75455,14 +74401,12 @@ final class GenerateContentResponse extends ProtoMessage {
 
   GenerateContentResponse({
     this.candidates = const [],
-    String? modelVersion,
+    this.modelVersion = '',
     this.createTime,
-    String? responseId,
+    this.responseId = '',
     this.promptFeedback,
     this.usageMetadata,
-  }) : modelVersion = modelVersion ?? '',
-       responseId = responseId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse.fromJson(
     Map<String, dynamic> json,
@@ -75519,9 +74463,8 @@ final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
     this.blockReason =
         GenerateContentResponse_PromptFeedback_BlockedReason.$default,
     this.safetyRatings = const [],
-    String? blockReasonMessage,
-  }) : blockReasonMessage = blockReasonMessage ?? '',
-       super(fullyQualifiedName);
+    this.blockReasonMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse_PromptFeedback.fromJson(
     Map<String, dynamic> json,
@@ -75639,20 +74582,15 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
   final List<ModalityTokenCount> candidatesTokensDetails;
 
   GenerateContentResponse_UsageMetadata({
-    int? promptTokenCount,
-    int? candidatesTokenCount,
-    int? thoughtsTokenCount,
-    int? totalTokenCount,
-    int? cachedContentTokenCount,
+    this.promptTokenCount = 0,
+    this.candidatesTokenCount = 0,
+    this.thoughtsTokenCount = 0,
+    this.totalTokenCount = 0,
+    this.cachedContentTokenCount = 0,
     this.promptTokensDetails = const [],
     this.cacheTokensDetails = const [],
     this.candidatesTokensDetails = const [],
-  }) : promptTokenCount = promptTokenCount ?? 0,
-       candidatesTokenCount = candidatesTokenCount ?? 0,
-       thoughtsTokenCount = thoughtsTokenCount ?? 0,
-       totalTokenCount = totalTokenCount ?? 0,
-       cachedContentTokenCount = cachedContentTokenCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory GenerateContentResponse_UsageMetadata.fromJson(
     Map<String, dynamic> json,
@@ -75886,20 +74824,17 @@ final class PublisherModel extends ProtoMessage {
   final PredictSchemata? predictSchemata;
 
   PublisherModel({
-    String? name,
-    String? versionId,
+    this.name = '',
+    this.versionId = '',
     required this.openSourceCategory,
     this.parent,
     this.supportedActions,
     this.frameworks = const [],
     this.launchStage = PublisherModel_LaunchStage.$default,
     this.versionState = PublisherModel_VersionState.$default,
-    String? publisherModelTemplate,
+    this.publisherModelTemplate = '',
     this.predictSchemata,
-  }) : name = name ?? '',
-       versionId = versionId ?? '',
-       publisherModelTemplate = publisherModelTemplate ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PublisherModel.fromJson(Map<String, dynamic> json) => PublisherModel(
     name: json['name'] ?? '',
@@ -76493,18 +75428,15 @@ final class PublisherModel_CallToAction_Deploy extends ProtoMessage {
     this.dedicatedResources,
     this.automaticResources,
     this.sharedResources,
-    String? modelDisplayName,
+    this.modelDisplayName = '',
     this.largeModelReference,
     this.containerSpec,
-    String? artifactUri,
+    this.artifactUri = '',
     this.deployTaskName,
     this.deployMetadata,
     required this.title,
-    String? publicArtifactUri,
-  }) : modelDisplayName = modelDisplayName ?? '',
-       artifactUri = artifactUri ?? '',
-       publicArtifactUri = publicArtifactUri ?? '',
-       super(fullyQualifiedName);
+    this.publicArtifactUri = '',
+  }) : super(fullyQualifiedName);
 
   factory PublisherModel_CallToAction_Deploy.fromJson(
     Map<String, dynamic> json,
@@ -76582,9 +75514,8 @@ final class PublisherModel_CallToAction_Deploy_DeployMetadata
 
   PublisherModel_CallToAction_Deploy_DeployMetadata({
     this.labels = const {},
-    String? sampleRequest,
-  }) : sampleRequest = sampleRequest ?? '',
-       super(fullyQualifiedName);
+    this.sampleRequest = '',
+  }) : super(fullyQualifiedName);
 
   factory PublisherModel_CallToAction_Deploy_DeployMetadata.fromJson(
     Map<String, dynamic> json,
@@ -76792,9 +75723,8 @@ final class ReasoningEngineSpec extends ProtoMessage {
     this.packageSpec,
     this.deploymentSpec,
     this.classMethods = const [],
-    String? agentFramework,
-  }) : agentFramework = agentFramework ?? '',
-       super(fullyQualifiedName);
+    this.agentFramework = '',
+  }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec.fromJson(Map<String, dynamic> json) =>
       ReasoningEngineSpec(
@@ -76860,15 +75790,11 @@ final class ReasoningEngineSpec_PackageSpec extends ProtoMessage {
   final String pythonVersion;
 
   ReasoningEngineSpec_PackageSpec({
-    String? pickleObjectGcsUri,
-    String? dependencyFilesGcsUri,
-    String? requirementsGcsUri,
-    String? pythonVersion,
-  }) : pickleObjectGcsUri = pickleObjectGcsUri ?? '',
-       dependencyFilesGcsUri = dependencyFilesGcsUri ?? '',
-       requirementsGcsUri = requirementsGcsUri ?? '',
-       pythonVersion = pythonVersion ?? '',
-       super(fullyQualifiedName);
+    this.pickleObjectGcsUri = '',
+    this.dependencyFilesGcsUri = '',
+    this.requirementsGcsUri = '',
+    this.pythonVersion = '',
+  }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec_PackageSpec.fromJson(Map<String, dynamic> json) =>
       ReasoningEngineSpec_PackageSpec(
@@ -77092,15 +76018,11 @@ final class ReasoningEngineSpec_SourceCodeSpec_PythonSpec extends ProtoMessage {
   final String requirementsFile;
 
   ReasoningEngineSpec_SourceCodeSpec_PythonSpec({
-    String? version,
-    String? entrypointModule,
-    String? entrypointObject,
-    String? requirementsFile,
-  }) : version = version ?? '',
-       entrypointModule = entrypointModule ?? '',
-       entrypointObject = entrypointObject ?? '',
-       requirementsFile = requirementsFile ?? '',
-       super(fullyQualifiedName);
+    this.version = '',
+    this.entrypointModule = '',
+    this.entrypointObject = '',
+    this.requirementsFile = '',
+  }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec_SourceCodeSpec_PythonSpec.fromJson(
     Map<String, dynamic> json,
@@ -77174,20 +76096,17 @@ final class ReasoningEngine extends ProtoMessage {
   final Map<String, String> labels;
 
   ReasoningEngine({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.spec,
     this.createTime,
     this.updateTime,
-    String? etag,
+    this.etag = '',
     this.contextSpec,
     this.encryptionSpec,
     this.labels = const {},
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ReasoningEngine.fromJson(
     Map<String, dynamic> json,
@@ -77501,9 +76420,8 @@ final class QueryReasoningEngineRequest extends ProtoMessage {
   QueryReasoningEngineRequest({
     required this.name,
     this.input,
-    String? classMethod,
-  }) : classMethod = classMethod ?? '',
-       super(fullyQualifiedName);
+    this.classMethod = '',
+  }) : super(fullyQualifiedName);
 
   factory QueryReasoningEngineRequest.fromJson(Map<String, dynamic> json) =>
       QueryReasoningEngineRequest(
@@ -77569,9 +76487,8 @@ final class StreamQueryReasoningEngineRequest extends ProtoMessage {
   StreamQueryReasoningEngineRequest({
     required this.name,
     this.input,
-    String? classMethod,
-  }) : classMethod = classMethod ?? '',
-       super(fullyQualifiedName);
+    this.classMethod = '',
+  }) : super(fullyQualifiedName);
 
   factory StreamQueryReasoningEngineRequest.fromJson(
     Map<String, dynamic> json,
@@ -77777,13 +76694,10 @@ final class ListReasoningEnginesRequest extends ProtoMessage {
 
   ListReasoningEnginesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListReasoningEnginesRequest.fromJson(Map<String, dynamic> json) =>
       ListReasoningEnginesRequest(
@@ -77830,9 +76744,8 @@ final class ListReasoningEnginesResponse extends ProtoMessage {
 
   ListReasoningEnginesResponse({
     this.reasoningEngines = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListReasoningEnginesResponse.fromJson(Map<String, dynamic> json) =>
       ListReasoningEnginesResponse(
@@ -77875,9 +76788,8 @@ final class DeleteReasoningEngineRequest extends ProtoMessage {
   /// error when the reasoning engine has undeleted child resources.
   final bool force;
 
-  DeleteReasoningEngineRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteReasoningEngineRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteReasoningEngineRequest.fromJson(Map<String, dynamic> json) =>
       DeleteReasoningEngineRequest(
@@ -77917,10 +76829,9 @@ final class ReservationAffinity extends ProtoMessage {
 
   ReservationAffinity({
     required this.reservationAffinityType,
-    String? key,
+    this.key = '',
     this.values = const [],
-  }) : key = key ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ReservationAffinity.fromJson(Map<String, dynamic> json) =>
       ReservationAffinity(
@@ -78035,22 +76946,17 @@ final class SavedQuery extends ProtoMessage {
   final bool supportAutomlTraining;
 
   SavedQuery({
-    String? name,
+    this.name = '',
     required this.displayName,
     this.metadata,
     this.createTime,
     this.updateTime,
-    String? annotationFilter,
+    this.annotationFilter = '',
     required this.problemType,
-    int? annotationSpecCount,
-    String? etag,
-    bool? supportAutomlTraining,
-  }) : name = name ?? '',
-       annotationFilter = annotationFilter ?? '',
-       annotationSpecCount = annotationSpecCount ?? 0,
-       etag = etag ?? '',
-       supportAutomlTraining = supportAutomlTraining ?? false,
-       super(fullyQualifiedName);
+    this.annotationSpecCount = 0,
+    this.etag = '',
+    this.supportAutomlTraining = false,
+  }) : super(fullyQualifiedName);
 
   factory SavedQuery.fromJson(Map<String, dynamic> json) => SavedQuery(
     name: json['name'] ?? '',
@@ -78203,12 +77109,12 @@ final class Schedule extends ProtoMessage {
     this.createPipelineJobRequest,
     this.createModelMonitoringJobRequest,
     this.createNotebookExecutionJobRequest,
-    String? name,
+    this.name = '',
     required this.displayName,
     this.startTime,
     this.endTime,
-    int? maxRunCount,
-    int? startedRunCount,
+    this.maxRunCount = 0,
+    this.startedRunCount = 0,
     this.state = Schedule_State.$default,
     this.createTime,
     this.updateTime,
@@ -78216,15 +77122,10 @@ final class Schedule extends ProtoMessage {
     this.lastPauseTime,
     this.lastResumeTime,
     required this.maxConcurrentRunCount,
-    bool? allowQueueing,
-    bool? catchUp,
+    this.allowQueueing = false,
+    this.catchUp = false,
     this.lastScheduledRunResponse,
-  }) : name = name ?? '',
-       maxRunCount = maxRunCount ?? 0,
-       startedRunCount = startedRunCount ?? 0,
-       allowQueueing = allowQueueing ?? false,
-       catchUp = catchUp ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Schedule.fromJson(Map<String, dynamic> json) => Schedule(
     cron: json['cron'],
@@ -78328,9 +77229,8 @@ final class Schedule_RunResponse extends ProtoMessage {
   /// The response of the scheduled run.
   final String runResponse;
 
-  Schedule_RunResponse({this.scheduledRunTime, String? runResponse})
-    : runResponse = runResponse ?? '',
-      super(fullyQualifiedName);
+  Schedule_RunResponse({this.scheduledRunTime, this.runResponse = ''})
+    : super(fullyQualifiedName);
 
   factory Schedule_RunResponse.fromJson(Map<String, dynamic> json) =>
       Schedule_RunResponse(
@@ -78522,15 +77422,11 @@ final class ListSchedulesRequest extends ProtoMessage {
 
   ListSchedulesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSchedulesRequest.fromJson(Map<String, dynamic> json) =>
       ListSchedulesRequest(
@@ -78578,9 +77474,8 @@ final class ListSchedulesResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListSchedulesResponse({this.schedules = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListSchedulesResponse({this.schedules = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListSchedulesResponse.fromJson(Map<String, dynamic> json) =>
       ListSchedulesResponse(
@@ -78672,9 +77567,8 @@ final class ResumeScheduleRequest extends ProtoMessage {
   /// field. Default to false.
   final bool catchUp;
 
-  ResumeScheduleRequest({required this.name, bool? catchUp})
-    : catchUp = catchUp ?? false,
-      super(fullyQualifiedName);
+  ResumeScheduleRequest({required this.name, this.catchUp = false})
+    : super(fullyQualifiedName);
 
   factory ResumeScheduleRequest.fromJson(Map<String, dynamic> json) =>
       ResumeScheduleRequest(
@@ -78765,14 +77659,11 @@ final class PscautomationConfig extends ProtoMessage {
   PscautomationConfig({
     required this.projectId,
     required this.network,
-    String? ipAddress,
-    String? forwardingRule,
+    this.ipAddress = '',
+    this.forwardingRule = '',
     this.state = PscautomationState.$default,
-    String? errorMessage,
-  }) : ipAddress = ipAddress ?? '',
-       forwardingRule = forwardingRule ?? '',
-       errorMessage = errorMessage ?? '',
-       super(fullyQualifiedName);
+    this.errorMessage = '',
+  }) : super(fullyQualifiedName);
 
   factory PscautomationConfig.fromJson(Map<String, dynamic> json) =>
       PscautomationConfig(
@@ -78841,12 +77732,9 @@ final class PrivateServiceConnectConfig extends ProtoMessage {
     required this.enablePrivateServiceConnect,
     this.projectAllowlist = const [],
     this.pscAutomationConfigs = const [],
-    bool? enableSecurePrivateServiceConnect,
-    String? serviceAttachment,
-  }) : enableSecurePrivateServiceConnect =
-           enableSecurePrivateServiceConnect ?? false,
-       serviceAttachment = serviceAttachment ?? '',
-       super(fullyQualifiedName);
+    this.enableSecurePrivateServiceConnect = false,
+    this.serviceAttachment = '',
+  }) : super(fullyQualifiedName);
 
   factory PrivateServiceConnectConfig.fromJson(Map<String, dynamic> json) =>
       PrivateServiceConnectConfig(
@@ -78902,13 +77790,10 @@ final class PscAutomatedEndpoints extends ProtoMessage {
   final String matchAddress;
 
   PscAutomatedEndpoints({
-    String? projectId,
-    String? network,
-    String? matchAddress,
-  }) : projectId = projectId ?? '',
-       network = network ?? '',
-       matchAddress = matchAddress ?? '',
-       super(fullyQualifiedName);
+    this.projectId = '',
+    this.network = '',
+    this.matchAddress = '',
+  }) : super(fullyQualifiedName);
 
   factory PscAutomatedEndpoints.fromJson(Map<String, dynamic> json) =>
       PscAutomatedEndpoints(
@@ -78957,10 +77842,9 @@ final class PscInterfaceConfig extends ProtoMessage {
   final List<DnsPeeringConfig> dnsPeeringConfigs;
 
   PscInterfaceConfig({
-    String? networkAttachment,
+    this.networkAttachment = '',
     this.dnsPeeringConfigs = const [],
-  }) : networkAttachment = networkAttachment ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PscInterfaceConfig.fromJson(Map<String, dynamic> json) =>
       PscInterfaceConfig(
@@ -79076,15 +77960,13 @@ final class Session extends ProtoMessage {
   Session({
     this.expireTime,
     this.ttl,
-    String? name,
+    this.name = '',
     this.createTime,
     this.updateTime,
-    String? displayName,
+    this.displayName = '',
     this.sessionState,
     required this.userId,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Session.fromJson(Map<String, dynamic> json) => Session(
     expireTime: decodeCustom(json['expireTime'], protobuf.Timestamp.fromJson),
@@ -79155,19 +78037,16 @@ final class SessionEvent extends ProtoMessage {
   final EventMetadata? eventMetadata;
 
   SessionEvent({
-    String? name,
+    this.name = '',
     required this.author,
     this.content,
     required this.invocationId,
     this.actions,
     required this.timestamp,
-    String? errorCode,
-    String? errorMessage,
+    this.errorCode = '',
+    this.errorMessage = '',
     this.eventMetadata,
-  }) : name = name ?? '',
-       errorCode = errorCode ?? '',
-       errorMessage = errorMessage ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SessionEvent.fromJson(Map<String, dynamic> json) => SessionEvent(
     name: json['name'] ?? '',
@@ -79244,17 +78123,13 @@ final class EventMetadata extends ProtoMessage {
 
   EventMetadata({
     this.groundingMetadata,
-    bool? partial,
-    bool? turnComplete,
-    bool? interrupted,
+    this.partial = false,
+    this.turnComplete = false,
+    this.interrupted = false,
     this.longRunningToolIds = const [],
-    String? branch,
+    this.branch = '',
     this.customMetadata,
-  }) : partial = partial ?? false,
-       turnComplete = turnComplete ?? false,
-       interrupted = interrupted ?? false,
-       branch = branch ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory EventMetadata.fromJson(Map<String, dynamic> json) => EventMetadata(
     groundingMetadata: decode(
@@ -79330,18 +78205,14 @@ final class EventActions extends ProtoMessage {
   final String transferAgent;
 
   EventActions({
-    bool? skipSummarization,
+    this.skipSummarization = false,
     this.stateDelta,
     this.artifactDelta = const {},
-    bool? transferToAgent,
-    bool? escalate,
+    this.transferToAgent = false,
+    this.escalate = false,
     this.requestedAuthConfigs,
-    String? transferAgent,
-  }) : skipSummarization = skipSummarization ?? false,
-       transferToAgent = transferToAgent ?? false,
-       escalate = escalate ?? false,
-       transferAgent = transferAgent ?? '',
-       super(fullyQualifiedName);
+    this.transferAgent = '',
+  }) : super(fullyQualifiedName);
 
   factory EventActions.fromJson(Map<String, dynamic> json) => EventActions(
     skipSummarization: json['skipSummarization'] ?? false,
@@ -79512,15 +78383,11 @@ final class ListSessionsRequest extends ProtoMessage {
 
   ListSessionsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-    String? orderBy,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSessionsRequest.fromJson(Map<String, dynamic> json) =>
       ListSessionsRequest(
@@ -79568,9 +78435,8 @@ final class ListSessionsResponse extends ProtoMessage {
   /// subsequent pages.
   final String nextPageToken;
 
-  ListSessionsResponse({this.sessions = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListSessionsResponse({this.sessions = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListSessionsResponse.fromJson(Map<String, dynamic> json) =>
       ListSessionsResponse(
@@ -79687,13 +78553,10 @@ final class ListEventsRequest extends ProtoMessage {
 
   ListEventsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory ListEventsRequest.fromJson(Map<String, dynamic> json) =>
       ListEventsRequest(
@@ -79739,9 +78602,8 @@ final class ListEventsResponse extends ProtoMessage {
   /// subsequent pages.
   final String nextPageToken;
 
-  ListEventsResponse({this.sessionEvents = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListEventsResponse({this.sessionEvents = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListEventsResponse.fromJson(Map<String, dynamic> json) =>
       ListEventsResponse(
@@ -79852,12 +78714,11 @@ final class SpecialistPool extends ProtoMessage {
   SpecialistPool({
     required this.name,
     required this.displayName,
-    int? specialistManagersCount,
+    this.specialistManagersCount = 0,
     this.specialistManagerEmails = const [],
     this.pendingDataLabelingJobs = const [],
     this.specialistWorkerEmails = const [],
-  }) : specialistManagersCount = specialistManagersCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SpecialistPool.fromJson(Map<String, dynamic> json) => SpecialistPool(
     name: json['name'] ?? '',
@@ -80012,12 +78873,10 @@ final class ListSpecialistPoolsRequest extends ProtoMessage {
 
   ListSpecialistPoolsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
+    this.pageSize = 0,
+    this.pageToken = '',
     this.readMask,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListSpecialistPoolsRequest.fromJson(Map<String, dynamic> json) =>
       ListSpecialistPoolsRequest(
@@ -80060,9 +78919,8 @@ final class ListSpecialistPoolsResponse extends ProtoMessage {
 
   ListSpecialistPoolsResponse({
     this.specialistPools = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSpecialistPoolsResponse.fromJson(Map<String, dynamic> json) =>
       ListSpecialistPoolsResponse(
@@ -80104,9 +78962,8 @@ final class DeleteSpecialistPoolRequest extends ProtoMessage {
   /// no specialist managers.)
   final bool force;
 
-  DeleteSpecialistPoolRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteSpecialistPoolRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteSpecialistPoolRequest.fromJson(Map<String, dynamic> json) =>
       DeleteSpecialistPoolRequest(
@@ -80175,10 +79032,9 @@ final class UpdateSpecialistPoolOperationMetadata extends ProtoMessage {
   final GenericOperationMetadata? genericMetadata;
 
   UpdateSpecialistPoolOperationMetadata({
-    String? specialistPool,
+    this.specialistPool = '',
     this.genericMetadata,
-  }) : specialistPool = specialistPool ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory UpdateSpecialistPoolOperationMetadata.fromJson(
     Map<String, dynamic> json,
@@ -80229,15 +79085,13 @@ final class Study extends ProtoMessage {
   final String inactiveReason;
 
   Study({
-    String? name,
+    this.name = '',
     required this.displayName,
     required this.studySpec,
     this.state = Study_State.$default,
     this.createTime,
-    String? inactiveReason,
-  }) : name = name ?? '',
-       inactiveReason = inactiveReason ?? '',
-       super(fullyQualifiedName);
+    this.inactiveReason = '',
+  }) : super(fullyQualifiedName);
 
   factory Study.fromJson(Map<String, dynamic> json) => Study(
     name: json['name'] ?? '',
@@ -80369,24 +79223,19 @@ final class Trial extends ProtoMessage {
   final Map<String, String> webAccessUris;
 
   Trial({
-    String? name,
-    String? id,
+    this.name = '',
+    this.id = '',
     this.state = Trial_State.$default,
     this.parameters = const [],
     this.finalMeasurement,
     this.measurements = const [],
     this.startTime,
     this.endTime,
-    String? clientId,
-    String? infeasibleReason,
-    String? customJob,
+    this.clientId = '',
+    this.infeasibleReason = '',
+    this.customJob = '',
     this.webAccessUris = const {},
-  }) : name = name ?? '',
-       id = id ?? '',
-       clientId = clientId ?? '',
-       infeasibleReason = infeasibleReason ?? '',
-       customJob = customJob ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Trial.fromJson(Map<String, dynamic> json) => Trial(
     name: json['name'] ?? '',
@@ -80454,9 +79303,8 @@ final class Trial_Parameter extends ProtoMessage {
   /// in type 'CATEGORICAL'.
   final protobuf.Value? value;
 
-  Trial_Parameter({String? parameterId, this.value})
-    : parameterId = parameterId ?? '',
-      super(fullyQualifiedName);
+  Trial_Parameter({this.parameterId = '', this.value})
+    : super(fullyQualifiedName);
 
   factory Trial_Parameter.fromJson(Map<String, dynamic> json) =>
       Trial_Parameter(
@@ -80532,9 +79380,8 @@ final class TrialContext extends ProtoMessage {
   ///   space.
   final List<Trial_Parameter> parameters;
 
-  TrialContext({String? description, this.parameters = const []})
-    : description = description ?? '',
-      super(fullyQualifiedName);
+  TrialContext({this.description = '', this.parameters = const []})
+    : super(fullyQualifiedName);
 
   factory TrialContext.fromJson(Map<String, dynamic> json) => TrialContext(
     description: json['description'] ?? '',
@@ -80795,10 +79642,9 @@ final class StudySpec_MetricSpec_SafetyMetricConfig extends ProtoMessage {
   final double? desiredMinSafeTrialsFraction;
 
   StudySpec_MetricSpec_SafetyMetricConfig({
-    double? safetyThreshold,
+    this.safetyThreshold = 0,
     this.desiredMinSafeTrialsFraction,
-  }) : safetyThreshold = safetyThreshold ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory StudySpec_MetricSpec_SafetyMetricConfig.fromJson(
     Map<String, dynamic> json,
@@ -81360,9 +80206,8 @@ final class StudySpec_DecayCurveAutomatedStoppingSpec extends ProtoMessage {
   /// will be used as the x-axis.
   final bool useElapsedDuration;
 
-  StudySpec_DecayCurveAutomatedStoppingSpec({bool? useElapsedDuration})
-    : useElapsedDuration = useElapsedDuration ?? false,
-      super(fullyQualifiedName);
+  StudySpec_DecayCurveAutomatedStoppingSpec({this.useElapsedDuration = false})
+    : super(fullyQualifiedName);
 
   factory StudySpec_DecayCurveAutomatedStoppingSpec.fromJson(
     Map<String, dynamic> json,
@@ -81399,9 +80244,8 @@ final class StudySpec_MedianAutomatedStoppingSpec extends ProtoMessage {
   /// Trials.
   final bool useElapsedDuration;
 
-  StudySpec_MedianAutomatedStoppingSpec({bool? useElapsedDuration})
-    : useElapsedDuration = useElapsedDuration ?? false,
-      super(fullyQualifiedName);
+  StudySpec_MedianAutomatedStoppingSpec({this.useElapsedDuration = false})
+    : super(fullyQualifiedName);
 
   factory StudySpec_MedianAutomatedStoppingSpec.fromJson(
     Map<String, dynamic> json,
@@ -81482,18 +80326,13 @@ final class StudySpec_ConvexAutomatedStoppingSpec extends ProtoMessage {
   final bool? updateAllStoppedTrials;
 
   StudySpec_ConvexAutomatedStoppingSpec({
-    int? maxStepCount,
-    int? minStepCount,
-    int? minMeasurementCount,
-    String? learningRateParameterName,
-    bool? useElapsedDuration,
+    this.maxStepCount = 0,
+    this.minStepCount = 0,
+    this.minMeasurementCount = 0,
+    this.learningRateParameterName = '',
+    this.useElapsedDuration = false,
     this.updateAllStoppedTrials,
-  }) : maxStepCount = maxStepCount ?? 0,
-       minStepCount = minStepCount ?? 0,
-       minMeasurementCount = minMeasurementCount ?? 0,
-       learningRateParameterName = learningRateParameterName ?? '',
-       useElapsedDuration = useElapsedDuration ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory StudySpec_ConvexAutomatedStoppingSpec.fromJson(
     Map<String, dynamic> json,
@@ -81575,17 +80414,12 @@ final class StudySpec_ConvexStopConfig extends ProtoMessage {
   final bool useSeconds;
 
   StudySpec_ConvexStopConfig({
-    int? maxNumSteps,
-    int? minNumSteps,
-    int? autoregressiveOrder,
-    String? learningRateParameterName,
-    bool? useSeconds,
-  }) : maxNumSteps = maxNumSteps ?? 0,
-       minNumSteps = minNumSteps ?? 0,
-       autoregressiveOrder = autoregressiveOrder ?? 0,
-       learningRateParameterName = learningRateParameterName ?? '',
-       useSeconds = useSeconds ?? false,
-       super(fullyQualifiedName);
+    this.maxNumSteps = 0,
+    this.minNumSteps = 0,
+    this.autoregressiveOrder = 0,
+    this.learningRateParameterName = '',
+    this.useSeconds = false,
+  }) : super(fullyQualifiedName);
 
   factory StudySpec_ConvexStopConfig.fromJson(Map<String, dynamic> json) =>
       StudySpec_ConvexStopConfig(
@@ -81636,10 +80470,9 @@ final class StudySpec_TransferLearningConfig extends ProtoMessage {
   final List<String> priorStudyNames;
 
   StudySpec_TransferLearningConfig({
-    bool? disableTransferLearning,
+    this.disableTransferLearning = false,
     this.priorStudyNames = const [],
-  }) : disableTransferLearning = disableTransferLearning ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory StudySpec_TransferLearningConfig.fromJson(
     Map<String, dynamic> json,
@@ -81909,9 +80742,11 @@ final class Measurement extends ProtoMessage {
   /// using suggested Parameter values.
   final List<Measurement_Metric> metrics;
 
-  Measurement({this.elapsedDuration, int? stepCount, this.metrics = const []})
-    : stepCount = stepCount ?? 0,
-      super(fullyQualifiedName);
+  Measurement({
+    this.elapsedDuration,
+    this.stepCount = 0,
+    this.metrics = const [],
+  }) : super(fullyQualifiedName);
 
   factory Measurement.fromJson(Map<String, dynamic> json) => Measurement(
     elapsedDuration: decodeCustom(
@@ -81949,10 +80784,8 @@ final class Measurement_Metric extends ProtoMessage {
   /// Output only. The value for this metric.
   final double value;
 
-  Measurement_Metric({String? metricId, double? value})
-    : metricId = metricId ?? '',
-      value = value ?? 0,
-      super(fullyQualifiedName);
+  Measurement_Metric({this.metricId = '', this.value = 0})
+    : super(fullyQualifiedName);
 
   factory Measurement_Metric.fromJson(Map<String, dynamic> json) =>
       Measurement_Metric(
@@ -82040,28 +80873,20 @@ final class Tensorboard extends ProtoMessage {
   final bool satisfiesPzi;
 
   Tensorboard({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.encryptionSpec,
-    String? blobStoragePathPrefix,
-    int? runCount,
+    this.blobStoragePathPrefix = '',
+    this.runCount = 0,
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    String? etag,
-    bool? isDefault,
-    bool? satisfiesPzs,
-    bool? satisfiesPzi,
-  }) : name = name ?? '',
-       description = description ?? '',
-       blobStoragePathPrefix = blobStoragePathPrefix ?? '',
-       runCount = runCount ?? 0,
-       etag = etag ?? '',
-       isDefault = isDefault ?? false,
-       satisfiesPzs = satisfiesPzs ?? false,
-       satisfiesPzi = satisfiesPzi ?? false,
-       super(fullyQualifiedName);
+    this.etag = '',
+    this.isDefault = false,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
+  }) : super(fullyQualifiedName);
 
   factory Tensorboard.fromJson(Map<String, dynamic> json) => Tensorboard(
     name: json['name'] ?? '',
@@ -82190,9 +81015,8 @@ final class TimeSeriesDataPoint extends ProtoMessage {
     this.tensor,
     this.blobs,
     this.wallTime,
-    int? step,
-  }) : step = step ?? 0,
-       super(fullyQualifiedName);
+    this.step = 0,
+  }) : super(fullyQualifiedName);
 
   factory TimeSeriesDataPoint.fromJson(Map<String, dynamic> json) =>
       TimeSeriesDataPoint(
@@ -82227,7 +81051,7 @@ final class Scalar extends ProtoMessage {
   /// Value of the point at this step / timestamp.
   final double value;
 
-  Scalar({double? value}) : value = value ?? 0, super(fullyQualifiedName);
+  Scalar({this.value = 0}) : super(fullyQualifiedName);
 
   factory Scalar.fromJson(Map<String, dynamic> json) =>
       Scalar(value: decodeDouble(json['value']) ?? 0);
@@ -82255,9 +81079,8 @@ final class TensorboardTensor extends ProtoMessage {
   /// `value`.
   final int versionNumber;
 
-  TensorboardTensor({required this.value, int? versionNumber})
-    : versionNumber = versionNumber ?? 0,
-      super(fullyQualifiedName);
+  TensorboardTensor({required this.value, this.versionNumber = 0})
+    : super(fullyQualifiedName);
 
   factory TensorboardTensor.fromJson(Map<String, dynamic> json) =>
       TensorboardTensor(
@@ -82315,8 +81138,8 @@ final class TensorboardBlob extends ProtoMessage {
   /// ReadTensorboardBlobData endpoint.
   final Uint8List data;
 
-  TensorboardBlob({String? id, this.data = Uint8List(0)})
-    : id = id ?? '',
+  TensorboardBlob({this.id = '', Uint8List? data})
+    : data = data ?? Uint8List(0),
       super(fullyQualifiedName);
 
   factory TensorboardBlob.fromJson(Map<String, dynamic> json) =>
@@ -82389,20 +81212,15 @@ final class TensorboardExperiment extends ProtoMessage {
   final String source;
 
   TensorboardExperiment({
-    String? name,
-    String? displayName,
-    String? description,
+    this.name = '',
+    this.displayName = '',
+    this.description = '',
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    String? etag,
-    String? source,
-  }) : name = name ?? '',
-       displayName = displayName ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       source = source ?? '',
-       super(fullyQualifiedName);
+    this.etag = '',
+    this.source = '',
+  }) : super(fullyQualifiedName);
 
   factory TensorboardExperiment.fromJson(
     Map<String, dynamic> json,
@@ -82492,17 +81310,14 @@ final class TensorboardRun extends ProtoMessage {
   final String etag;
 
   TensorboardRun({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.createTime,
     this.updateTime,
     this.labels = const {},
-    String? etag,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+    this.etag = '',
+  }) : super(fullyQualifiedName);
 
   factory TensorboardRun.fromJson(Map<String, dynamic> json) => TensorboardRun(
     name: json['name'] ?? '',
@@ -82635,16 +81450,12 @@ final class ListTensorboardsRequest extends ProtoMessage {
 
   ListTensorboardsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardsRequest.fromJson(Map<String, dynamic> json) =>
       ListTensorboardsRequest(
@@ -82696,9 +81507,8 @@ final class ListTensorboardsResponse extends ProtoMessage {
 
   ListTensorboardsResponse({
     this.tensorboards = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardsResponse.fromJson(Map<String, dynamic> json) =>
       ListTensorboardsResponse(
@@ -82861,11 +81671,9 @@ final class ReadTensorboardUsageResponse_PerUserUsageData extends ProtoMessage {
   final int viewCount;
 
   ReadTensorboardUsageResponse_PerUserUsageData({
-    String? username,
-    int? viewCount,
-  }) : username = username ?? '',
-       viewCount = viewCount ?? 0,
-       super(fullyQualifiedName);
+    this.username = '',
+    this.viewCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory ReadTensorboardUsageResponse_PerUserUsageData.fromJson(
     Map<String, dynamic> json,
@@ -82956,9 +81764,8 @@ final class ReadTensorboardSizeResponse extends ProtoMessage {
   /// Payload storage size for the TensorBoard
   final int storageSizeByte;
 
-  ReadTensorboardSizeResponse({int? storageSizeByte})
-    : storageSizeByte = storageSizeByte ?? 0,
-      super(fullyQualifiedName);
+  ReadTensorboardSizeResponse({this.storageSizeByte = 0})
+    : super(fullyQualifiedName);
 
   factory ReadTensorboardSizeResponse.fromJson(Map<String, dynamic> json) =>
       ReadTensorboardSizeResponse(
@@ -83098,16 +81905,12 @@ final class ListTensorboardExperimentsRequest extends ProtoMessage {
 
   ListTensorboardExperimentsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardExperimentsRequest.fromJson(
     Map<String, dynamic> json,
@@ -83160,9 +81963,8 @@ final class ListTensorboardExperimentsResponse extends ProtoMessage {
 
   ListTensorboardExperimentsResponse({
     this.tensorboardExperiments = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardExperimentsResponse.fromJson(
     Map<String, dynamic> json,
@@ -83513,16 +82315,12 @@ final class ListTensorboardRunsRequest extends ProtoMessage {
 
   ListTensorboardRunsRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardRunsRequest.fromJson(Map<String, dynamic> json) =>
       ListTensorboardRunsRequest(
@@ -83574,9 +82372,8 @@ final class ListTensorboardRunsResponse extends ProtoMessage {
 
   ListTensorboardRunsResponse({
     this.tensorboardRuns = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardRunsResponse.fromJson(Map<String, dynamic> json) =>
       ListTensorboardRunsResponse(
@@ -83775,10 +82572,9 @@ final class CreateTensorboardTimeSeriesRequest extends ProtoMessage {
 
   CreateTensorboardTimeSeriesRequest({
     required this.parent,
-    String? tensorboardTimeSeriesId,
+    this.tensorboardTimeSeriesId = '',
     required this.tensorboardTimeSeries,
-  }) : tensorboardTimeSeriesId = tensorboardTimeSeriesId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory CreateTensorboardTimeSeriesRequest.fromJson(
     Map<String, dynamic> json,
@@ -83874,16 +82670,12 @@ final class ListTensorboardTimeSeriesRequest extends ProtoMessage {
 
   ListTensorboardTimeSeriesRequest({
     required this.parent,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
     this.readMask,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardTimeSeriesRequest.fromJson(
     Map<String, dynamic> json,
@@ -83936,9 +82728,8 @@ final class ListTensorboardTimeSeriesResponse extends ProtoMessage {
 
   ListTensorboardTimeSeriesResponse({
     this.tensorboardTimeSeries = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListTensorboardTimeSeriesResponse.fromJson(
     Map<String, dynamic> json,
@@ -84133,11 +82924,9 @@ final class ReadTensorboardTimeSeriesDataRequest extends ProtoMessage {
 
   ReadTensorboardTimeSeriesDataRequest({
     required this.tensorboardTimeSeries,
-    int? maxDataPoints,
-    String? filter,
-  }) : maxDataPoints = maxDataPoints ?? 0,
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.maxDataPoints = 0,
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory ReadTensorboardTimeSeriesDataRequest.fromJson(
     Map<String, dynamic> json,
@@ -84355,15 +83144,11 @@ final class ExportTensorboardTimeSeriesDataRequest extends ProtoMessage {
 
   ExportTensorboardTimeSeriesDataRequest({
     required this.tensorboardTimeSeries,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    String? orderBy,
-  }) : filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       orderBy = orderBy ?? '',
-       super(fullyQualifiedName);
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.orderBy = '',
+  }) : super(fullyQualifiedName);
 
   factory ExportTensorboardTimeSeriesDataRequest.fromJson(
     Map<String, dynamic> json,
@@ -84414,9 +83199,8 @@ final class ExportTensorboardTimeSeriesDataResponse extends ProtoMessage {
 
   ExportTensorboardTimeSeriesDataResponse({
     this.timeSeriesDataPoints = const [],
-    String? nextPageToken,
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ExportTensorboardTimeSeriesDataResponse.fromJson(
     Map<String, dynamic> json,
@@ -84543,20 +83327,17 @@ final class TensorboardTimeSeries extends ProtoMessage {
   final TensorboardTimeSeries_Metadata? metadata;
 
   TensorboardTimeSeries({
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     required this.valueType,
     this.createTime,
     this.updateTime,
-    String? etag,
-    String? pluginName,
-    this.pluginData = Uint8List(0),
+    this.etag = '',
+    this.pluginName = '',
+    Uint8List? pluginData,
     this.metadata,
-  }) : name = name ?? '',
-       description = description ?? '',
-       etag = etag ?? '',
-       pluginName = pluginName ?? '',
+  }) : pluginData = pluginData ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory TensorboardTimeSeries.fromJson(
@@ -84626,12 +83407,10 @@ final class TensorboardTimeSeries_Metadata extends ProtoMessage {
   final int maxBlobSequenceLength;
 
   TensorboardTimeSeries_Metadata({
-    int? maxStep,
+    this.maxStep = 0,
     this.maxWallTime,
-    int? maxBlobSequenceLength,
-  }) : maxStep = maxStep ?? 0,
-       maxBlobSequenceLength = maxBlobSequenceLength ?? 0,
-       super(fullyQualifiedName);
+    this.maxBlobSequenceLength = 0,
+  }) : super(fullyQualifiedName);
 
   factory TensorboardTimeSeries_Metadata.fromJson(Map<String, dynamic> json) =>
       TensorboardTimeSeries_Metadata(
@@ -85029,9 +83808,8 @@ final class ToolUseExample extends ProtoMessage {
     required this.query,
     this.requestParams,
     this.responseParams,
-    String? responseSummary,
-  }) : responseSummary = responseSummary ?? '',
-       super(fullyQualifiedName);
+    this.responseSummary = '',
+  }) : super(fullyQualifiedName);
 
   factory ToolUseExample.fromJson(Map<String, dynamic> json) => ToolUseExample(
     extensionOperation: decode(
@@ -85088,10 +83866,9 @@ final class ToolUseExample_ExtensionOperation extends ProtoMessage {
   final String operationId;
 
   ToolUseExample_ExtensionOperation({
-    String? extension,
+    this.extension = '',
     required this.operationId,
-  }) : extension = extension ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ToolUseExample_ExtensionOperation.fromJson(
     Map<String, dynamic> json,
@@ -85184,13 +83961,12 @@ final class FunctionDeclaration extends ProtoMessage {
 
   FunctionDeclaration({
     required this.name,
-    String? description,
+    this.description = '',
     this.parameters,
     this.parametersJsonSchema,
     this.response,
     this.responseJsonSchema,
-  }) : description = description ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory FunctionDeclaration.fromJson(Map<String, dynamic> json) =>
       FunctionDeclaration(
@@ -85246,9 +84022,8 @@ final class FunctionCall extends ProtoMessage {
   /// format. See [FunctionDeclaration.parameters] for parameter details.
   final protobuf.Struct? args;
 
-  FunctionCall({String? id, required this.name, this.args})
-    : id = id ?? '',
-      super(fullyQualifiedName);
+  FunctionCall({this.id = '', required this.name, this.args})
+    : super(fullyQualifiedName);
 
   factory FunctionCall.fromJson(Map<String, dynamic> json) => FunctionCall(
     id: json['id'] ?? '',
@@ -85292,9 +84067,8 @@ final class FunctionResponse extends ProtoMessage {
   /// then whole "response" is treated as function output.
   final protobuf.Struct? response;
 
-  FunctionResponse({String? id, required this.name, required this.response})
-    : id = id ?? '',
-      super(fullyQualifiedName);
+  FunctionResponse({this.id = '', required this.name, required this.response})
+    : super(fullyQualifiedName);
 
   factory FunctionResponse.fromJson(Map<String, dynamic> json) =>
       FunctionResponse(
@@ -85390,9 +84164,8 @@ final class CodeExecutionResult extends ProtoMessage {
   /// other description otherwise.
   final String output;
 
-  CodeExecutionResult({required this.outcome, String? output})
-    : output = output ?? '',
-      super(fullyQualifiedName);
+  CodeExecutionResult({required this.outcome, this.output = ''})
+    : super(fullyQualifiedName);
 
   factory CodeExecutionResult.fromJson(Map<String, dynamic> json) =>
       CodeExecutionResult(
@@ -85467,9 +84240,8 @@ final class Retrieval extends ProtoMessage {
   Retrieval({
     this.vertexAiSearch,
     this.vertexRagStore,
-    bool? disableAttribution,
-  }) : disableAttribution = disableAttribution ?? false,
-       super(fullyQualifiedName);
+    this.disableAttribution = false,
+  }) : super(fullyQualifiedName);
 
   factory Retrieval.fromJson(Map<String, dynamic> json) => Retrieval(
     vertexAiSearch: decode(json['vertexAiSearch'], VertexAisearch.fromJson),
@@ -85531,9 +84303,8 @@ final class VertexRagStore extends ProtoMessage {
     this.similarityTopK,
     this.vectorDistanceThreshold,
     this.ragRetrievalConfig,
-    bool? storeContext,
-  }) : storeContext = storeContext ?? false,
-       super(fullyQualifiedName);
+    this.storeContext = false,
+  }) : super(fullyQualifiedName);
 
   factory VertexRagStore.fromJson(Map<String, dynamic> json) => VertexRagStore(
     ragCorpora: decodeList(json['ragCorpora']) ?? [],
@@ -85590,9 +84361,8 @@ final class VertexRagStore_RagResource extends ProtoMessage {
   /// rag_corpus field.
   final List<String> ragFileIds;
 
-  VertexRagStore_RagResource({String? ragCorpus, this.ragFileIds = const []})
-    : ragCorpus = ragCorpus ?? '',
-      super(fullyQualifiedName);
+  VertexRagStore_RagResource({this.ragCorpus = '', this.ragFileIds = const []})
+    : super(fullyQualifiedName);
 
   factory VertexRagStore_RagResource.fromJson(Map<String, dynamic> json) =>
       VertexRagStore_RagResource(
@@ -85645,16 +84415,12 @@ final class VertexAisearch extends ProtoMessage {
   final List<VertexAisearch_DataStoreSpec> dataStoreSpecs;
 
   VertexAisearch({
-    String? datastore,
-    String? engine,
-    int? maxResults,
-    String? filter,
+    this.datastore = '',
+    this.engine = '',
+    this.maxResults = 0,
+    this.filter = '',
     this.dataStoreSpecs = const [],
-  }) : datastore = datastore ?? '',
-       engine = engine ?? '',
-       maxResults = maxResults ?? 0,
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory VertexAisearch.fromJson(Map<String, dynamic> json) => VertexAisearch(
     datastore: json['datastore'] ?? '',
@@ -85708,10 +84474,8 @@ final class VertexAisearch_DataStoreSpec extends ProtoMessage {
   /// [Filtering](https://cloud.google.com/generative-ai-app-builder/docs/filter-search-metadata)
   final String filter;
 
-  VertexAisearch_DataStoreSpec({String? dataStore, String? filter})
-    : dataStore = dataStore ?? '',
-      filter = filter ?? '',
-      super(fullyQualifiedName);
+  VertexAisearch_DataStoreSpec({this.dataStore = '', this.filter = ''})
+    : super(fullyQualifiedName);
 
   factory VertexAisearch_DataStoreSpec.fromJson(Map<String, dynamic> json) =>
       VertexAisearch_DataStoreSpec(
@@ -85769,9 +84533,7 @@ final class GoogleMaps extends ProtoMessage {
   /// If true, include the widget context token in the response.
   final bool enableWidget;
 
-  GoogleMaps({bool? enableWidget})
-    : enableWidget = enableWidget ?? false,
-      super(fullyQualifiedName);
+  GoogleMaps({this.enableWidget = false}) : super(fullyQualifiedName);
 
   factory GoogleMaps.fromJson(Map<String, dynamic> json) =>
       GoogleMaps(enableWidget: json['enableWidget'] ?? false);
@@ -86062,9 +84824,12 @@ final class RagRetrievalConfig extends ProtoMessage {
   /// Optional. Config for ranking and reranking.
   final RagRetrievalConfig_Ranking? ranking;
 
-  RagRetrievalConfig({int? topK, this.hybridSearch, this.filter, this.ranking})
-    : topK = topK ?? 0,
-      super(fullyQualifiedName);
+  RagRetrievalConfig({
+    this.topK = 0,
+    this.hybridSearch,
+    this.filter,
+    this.ranking,
+  }) : super(fullyQualifiedName);
 
   factory RagRetrievalConfig.fromJson(Map<String, dynamic> json) =>
       RagRetrievalConfig(
@@ -86137,9 +84902,8 @@ final class RagRetrievalConfig_Filter extends ProtoMessage {
   RagRetrievalConfig_Filter({
     this.vectorDistanceThreshold,
     this.vectorSimilarityThreshold,
-    String? metadataFilter,
-  }) : metadataFilter = metadataFilter ?? '',
-       super(fullyQualifiedName);
+    this.metadataFilter = '',
+  }) : super(fullyQualifiedName);
 
   factory RagRetrievalConfig_Filter.fromJson(Map<String, dynamic> json) =>
       RagRetrievalConfig_Filter(
@@ -86382,15 +85146,15 @@ final class TrainingPipeline extends ProtoMessage {
   final EncryptionSpec? encryptionSpec;
 
   TrainingPipeline({
-    String? name,
+    this.name = '',
     required this.displayName,
     this.inputDataConfig,
     required this.trainingTaskDefinition,
     required this.trainingTaskInputs,
     this.trainingTaskMetadata,
     this.modelToUpload,
-    String? modelId,
-    String? parentModel,
+    this.modelId = '',
+    this.parentModel = '',
     this.state = PipelineState.$default,
     this.error,
     this.createTime,
@@ -86399,10 +85163,7 @@ final class TrainingPipeline extends ProtoMessage {
     this.updateTime,
     this.labels = const {},
     this.encryptionSpec,
-  }) : name = name ?? '',
-       modelId = modelId ?? '',
-       parentModel = parentModel ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory TrainingPipeline.fromJson(
     Map<String, dynamic> json,
@@ -86620,15 +85381,11 @@ final class InputDataConfig extends ProtoMessage {
     this.gcsDestination,
     this.bigqueryDestination,
     required this.datasetId,
-    String? annotationsFilter,
-    String? annotationSchemaUri,
-    String? savedQueryId,
-    bool? persistMlUseAssignment,
-  }) : annotationsFilter = annotationsFilter ?? '',
-       annotationSchemaUri = annotationSchemaUri ?? '',
-       savedQueryId = savedQueryId ?? '',
-       persistMlUseAssignment = persistMlUseAssignment ?? false,
-       super(fullyQualifiedName);
+    this.annotationsFilter = '',
+    this.annotationSchemaUri = '',
+    this.savedQueryId = '',
+    this.persistMlUseAssignment = false,
+  }) : super(fullyQualifiedName);
 
   factory InputDataConfig.fromJson(
     Map<String, dynamic> json,
@@ -86702,13 +85459,10 @@ final class FractionSplit extends ProtoMessage {
   final double testFraction;
 
   FractionSplit({
-    double? trainingFraction,
-    double? validationFraction,
-    double? testFraction,
-  }) : trainingFraction = trainingFraction ?? 0,
-       validationFraction = validationFraction ?? 0,
-       testFraction = testFraction ?? 0,
-       super(fullyQualifiedName);
+    this.trainingFraction = 0,
+    this.validationFraction = 0,
+    this.testFraction = 0,
+  }) : super(fullyQualifiedName);
 
   factory FractionSplit.fromJson(Map<String, dynamic> json) => FractionSplit(
     trainingFraction: decodeDouble(json['trainingFraction']) ?? 0,
@@ -86861,14 +85615,11 @@ final class TimestampSplit extends ProtoMessage {
   final String key;
 
   TimestampSplit({
-    double? trainingFraction,
-    double? validationFraction,
-    double? testFraction,
+    this.trainingFraction = 0,
+    this.validationFraction = 0,
+    this.testFraction = 0,
     required this.key,
-  }) : trainingFraction = trainingFraction ?? 0,
-       validationFraction = validationFraction ?? 0,
-       testFraction = testFraction ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory TimestampSplit.fromJson(Map<String, dynamic> json) => TimestampSplit(
     trainingFraction: decodeDouble(json['trainingFraction']) ?? 0,
@@ -86934,14 +85685,11 @@ final class StratifiedSplit extends ProtoMessage {
   final String key;
 
   StratifiedSplit({
-    double? trainingFraction,
-    double? validationFraction,
-    double? testFraction,
+    this.trainingFraction = 0,
+    this.validationFraction = 0,
+    this.testFraction = 0,
     required this.key,
-  }) : trainingFraction = trainingFraction ?? 0,
-       validationFraction = validationFraction ?? 0,
-       testFraction = testFraction ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory StratifiedSplit.fromJson(Map<String, dynamic> json) =>
       StratifiedSplit(
@@ -87102,10 +85850,10 @@ final class TuningJob extends ProtoMessage {
     this.distillationSpec,
     this.partnerModelTuningSpec,
     this.veoTuningSpec,
-    String? name,
-    String? tunedModelDisplayName,
-    String? description,
-    String? customBaseModel,
+    this.name = '',
+    this.tunedModelDisplayName = '',
+    this.description = '',
+    this.customBaseModel = '',
     this.state = JobState.$default,
     this.createTime,
     this.startTime,
@@ -87113,23 +85861,15 @@ final class TuningJob extends ProtoMessage {
     this.updateTime,
     this.error,
     this.labels = const {},
-    String? experiment,
+    this.experiment = '',
     this.tunedModel,
     this.tuningDataStats,
-    String? pipelineJob,
+    this.pipelineJob = '',
     this.encryptionSpec,
-    String? serviceAccount,
-    String? outputUri,
+    this.serviceAccount = '',
+    this.outputUri = '',
     this.evaluateDatasetRuns = const [],
-  }) : name = name ?? '',
-       tunedModelDisplayName = tunedModelDisplayName ?? '',
-       description = description ?? '',
-       customBaseModel = customBaseModel ?? '',
-       experiment = experiment ?? '',
-       pipelineJob = pipelineJob ?? '',
-       serviceAccount = serviceAccount ?? '',
-       outputUri = outputUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory TuningJob.fromJson(Map<String, dynamic> json) => TuningJob(
     baseModel: json['baseModel'],
@@ -87252,10 +85992,8 @@ final class TunedModel extends ProtoMessage {
   /// checkpoints.
   final List<TunedModelCheckpoint> checkpoints;
 
-  TunedModel({String? model, String? endpoint, this.checkpoints = const []})
-    : model = model ?? '',
-      endpoint = endpoint ?? '',
-      super(fullyQualifiedName);
+  TunedModel({this.model = '', this.endpoint = '', this.checkpoints = const []})
+    : super(fullyQualifiedName);
 
   factory TunedModel.fromJson(Map<String, dynamic> json) => TunedModel(
     model: json['model'] ?? '',
@@ -87312,24 +86050,16 @@ final class SupervisedTuningDatasetDistribution extends ProtoMessage {
   final List<SupervisedTuningDatasetDistribution_DatasetBucket> buckets;
 
   SupervisedTuningDatasetDistribution({
-    int? sum,
-    int? billableSum,
-    double? min,
-    double? max,
-    double? mean,
-    double? median,
-    double? p5,
-    double? p95,
+    this.sum = 0,
+    this.billableSum = 0,
+    this.min = 0,
+    this.max = 0,
+    this.mean = 0,
+    this.median = 0,
+    this.p5 = 0,
+    this.p95 = 0,
     this.buckets = const [],
-  }) : sum = sum ?? 0,
-       billableSum = billableSum ?? 0,
-       min = min ?? 0,
-       max = max ?? 0,
-       mean = mean ?? 0,
-       median = median ?? 0,
-       p5 = p5 ?? 0,
-       p95 = p95 ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SupervisedTuningDatasetDistribution.fromJson(
     Map<String, dynamic> json,
@@ -87396,13 +86126,10 @@ final class SupervisedTuningDatasetDistribution_DatasetBucket
   final double right;
 
   SupervisedTuningDatasetDistribution_DatasetBucket({
-    double? count,
-    double? left,
-    double? right,
-  }) : count = count ?? 0,
-       left = left ?? 0,
-       right = right ?? 0,
-       super(fullyQualifiedName);
+    this.count = 0,
+    this.left = 0,
+    this.right = 0,
+  }) : super(fullyQualifiedName);
 
   factory SupervisedTuningDatasetDistribution_DatasetBucket.fromJson(
     Map<String, dynamic> json,
@@ -87472,25 +86199,19 @@ final class SupervisedTuningDataStats extends ProtoMessage {
   final List<String> droppedExampleReasons;
 
   SupervisedTuningDataStats({
-    int? tuningDatasetExampleCount,
-    int? totalTuningCharacterCount,
-    int? totalBillableCharacterCount,
-    int? totalBillableTokenCount,
-    int? tuningStepCount,
+    this.tuningDatasetExampleCount = 0,
+    this.totalTuningCharacterCount = 0,
+    this.totalBillableCharacterCount = 0,
+    this.totalBillableTokenCount = 0,
+    this.tuningStepCount = 0,
     this.userInputTokenDistribution,
     this.userOutputTokenDistribution,
     this.userMessagePerExampleDistribution,
     this.userDatasetExamples = const [],
-    int? totalTruncatedExampleCount,
+    this.totalTruncatedExampleCount = 0,
     this.truncatedExampleIndices = const [],
     this.droppedExampleReasons = const [],
-  }) : tuningDatasetExampleCount = tuningDatasetExampleCount ?? 0,
-       totalTuningCharacterCount = totalTuningCharacterCount ?? 0,
-       totalBillableCharacterCount = totalBillableCharacterCount ?? 0,
-       totalBillableTokenCount = totalBillableTokenCount ?? 0,
-       tuningStepCount = tuningStepCount ?? 0,
-       totalTruncatedExampleCount = totalTruncatedExampleCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SupervisedTuningDataStats.fromJson(
     Map<String, dynamic> json,
@@ -87596,22 +86317,15 @@ final class DatasetDistribution extends ProtoMessage {
   final List<DatasetDistribution_DistributionBucket> buckets;
 
   DatasetDistribution({
-    double? sum,
-    double? min,
-    double? max,
-    double? mean,
-    double? median,
-    double? p5,
-    double? p95,
+    this.sum = 0,
+    this.min = 0,
+    this.max = 0,
+    this.mean = 0,
+    this.median = 0,
+    this.p5 = 0,
+    this.p95 = 0,
     this.buckets = const [],
-  }) : sum = sum ?? 0,
-       min = min ?? 0,
-       max = max ?? 0,
-       mean = mean ?? 0,
-       median = median ?? 0,
-       p5 = p5 ?? 0,
-       p95 = p95 ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DatasetDistribution.fromJson(Map<String, dynamic> json) =>
       DatasetDistribution(
@@ -87673,13 +86387,10 @@ final class DatasetDistribution_DistributionBucket extends ProtoMessage {
   final double right;
 
   DatasetDistribution_DistributionBucket({
-    int? count,
-    double? left,
-    double? right,
-  }) : count = count ?? 0,
-       left = left ?? 0,
-       right = right ?? 0,
-       super(fullyQualifiedName);
+    this.count = 0,
+    this.left = 0,
+    this.right = 0,
+  }) : super(fullyQualifiedName);
 
   factory DatasetDistribution_DistributionBucket.fromJson(
     Map<String, dynamic> json,
@@ -87733,19 +86444,15 @@ final class DatasetStats extends ProtoMessage {
   final List<Content> userDatasetExamples;
 
   DatasetStats({
-    int? tuningDatasetExampleCount,
-    int? totalTuningCharacterCount,
-    int? totalBillableCharacterCount,
-    int? tuningStepCount,
+    this.tuningDatasetExampleCount = 0,
+    this.totalTuningCharacterCount = 0,
+    this.totalBillableCharacterCount = 0,
+    this.tuningStepCount = 0,
     this.userInputTokenDistribution,
     this.userOutputTokenDistribution,
     this.userMessagePerExampleDistribution,
     this.userDatasetExamples = const [],
-  }) : tuningDatasetExampleCount = tuningDatasetExampleCount ?? 0,
-       totalTuningCharacterCount = totalTuningCharacterCount ?? 0,
-       totalBillableCharacterCount = totalBillableCharacterCount ?? 0,
-       tuningStepCount = tuningStepCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DatasetStats.fromJson(Map<String, dynamic> json) => DatasetStats(
     tuningDatasetExampleCount:
@@ -87898,16 +86605,12 @@ final class SupervisedHyperParameters extends ProtoMessage {
   final int batchSize;
 
   SupervisedHyperParameters({
-    int? epochCount,
-    double? learningRateMultiplier,
-    double? learningRate,
+    this.epochCount = 0,
+    this.learningRateMultiplier = 0,
+    this.learningRate = 0,
     this.adapterSize = SupervisedHyperParameters_AdapterSize.$default,
-    int? batchSize,
-  }) : epochCount = epochCount ?? 0,
-       learningRateMultiplier = learningRateMultiplier ?? 0,
-       learningRate = learningRate ?? 0,
-       batchSize = batchSize ?? 0,
-       super(fullyQualifiedName);
+    this.batchSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory SupervisedHyperParameters.fromJson(Map<String, dynamic> json) =>
       SupervisedHyperParameters(
@@ -88029,14 +86732,12 @@ final class SupervisedTuningSpec extends ProtoMessage {
 
   SupervisedTuningSpec({
     required this.trainingDatasetUri,
-    String? validationDatasetUri,
+    this.validationDatasetUri = '',
     this.hyperParameters,
-    bool? exportLastCheckpointOnly,
+    this.exportLastCheckpointOnly = false,
     this.evaluationConfig,
     this.tuningMode = SupervisedTuningSpec_TuningMode.$default,
-  }) : validationDatasetUri = validationDatasetUri ?? '',
-       exportLastCheckpointOnly = exportLastCheckpointOnly ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SupervisedTuningSpec.fromJson(Map<String, dynamic> json) =>
       SupervisedTuningSpec(
@@ -88153,10 +86854,9 @@ final class DistillationSpec extends ProtoMessage {
     required this.trainingDatasetUri,
     this.validationDatasetUri,
     this.hyperParameters,
-    String? studentModel,
+    this.studentModel = '',
     required this.pipelineRootDirectory,
-  }) : studentModel = studentModel ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory DistillationSpec.fromJson(Map<String, dynamic> json) =>
       DistillationSpec(
@@ -88273,10 +86973,9 @@ final class PartnerModelTuningSpec extends ProtoMessage {
 
   PartnerModelTuningSpec({
     required this.trainingDatasetUri,
-    String? validationDatasetUri,
+    this.validationDatasetUri = '',
     this.hyperParameters = const {},
-  }) : validationDatasetUri = validationDatasetUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory PartnerModelTuningSpec.fromJson(Map<String, dynamic> json) =>
       PartnerModelTuningSpec(
@@ -88368,12 +87067,10 @@ final class VeoHyperParameters extends ProtoMessage {
   final VeoHyperParameters_TuningTask tuningTask;
 
   VeoHyperParameters({
-    int? epochCount,
-    double? learningRateMultiplier,
+    this.epochCount = 0,
+    this.learningRateMultiplier = 0,
     this.tuningTask = VeoHyperParameters_TuningTask.$default,
-  }) : epochCount = epochCount ?? 0,
-       learningRateMultiplier = learningRateMultiplier ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory VeoHyperParameters.fromJson(Map<String, dynamic> json) =>
       VeoHyperParameters(
@@ -88454,10 +87151,9 @@ final class VeoTuningSpec extends ProtoMessage {
 
   VeoTuningSpec({
     required this.trainingDatasetUri,
-    String? validationDatasetUri,
+    this.validationDatasetUri = '',
     this.hyperParameters,
-  }) : validationDatasetUri = validationDatasetUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory VeoTuningSpec.fromJson(Map<String, dynamic> json) => VeoTuningSpec(
     trainingDatasetUri: json['trainingDatasetUri'] ?? '',
@@ -88547,13 +87243,11 @@ final class EvaluateDatasetRun extends ProtoMessage {
   final Status? error;
 
   EvaluateDatasetRun({
-    String? operationName,
-    String? checkpointId,
+    this.operationName = '',
+    this.checkpointId = '',
     this.evaluateDatasetResponse,
     this.error,
-  }) : operationName = operationName ?? '',
-       checkpointId = checkpointId ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory EvaluateDatasetRun.fromJson(Map<String, dynamic> json) =>
       EvaluateDatasetRun(
@@ -88604,15 +87298,11 @@ final class TunedModelCheckpoint extends ProtoMessage {
   final String endpoint;
 
   TunedModelCheckpoint({
-    String? checkpointId,
-    int? epoch,
-    int? step,
-    String? endpoint,
-  }) : checkpointId = checkpointId ?? '',
-       epoch = epoch ?? 0,
-       step = step ?? 0,
-       endpoint = endpoint ?? '',
-       super(fullyQualifiedName);
+    this.checkpointId = '',
+    this.epoch = 0,
+    this.step = 0,
+    this.endpoint = '',
+  }) : super(fullyQualifiedName);
 
   factory TunedModelCheckpoint.fromJson(Map<String, dynamic> json) =>
       TunedModelCheckpoint(
@@ -88669,13 +87359,10 @@ final class PreTunedModel extends ProtoMessage {
   final String baseModel;
 
   PreTunedModel({
-    String? tunedModelName,
-    String? checkpointId,
-    String? baseModel,
-  }) : tunedModelName = tunedModelName ?? '',
-       checkpointId = checkpointId ?? '',
-       baseModel = baseModel ?? '',
-       super(fullyQualifiedName);
+    this.tunedModelName = '',
+    this.checkpointId = '',
+    this.baseModel = '',
+  }) : super(fullyQualifiedName);
 
   factory PreTunedModel.fromJson(Map<String, dynamic> json) => PreTunedModel(
     tunedModelName: json['tunedModelName'] ?? '',
@@ -88851,8 +87538,9 @@ final class Tensor extends ProtoMessage {
     this.uint64Val = const [],
     this.listVal = const [],
     this.structVal = const {},
-    this.tensorVal = Uint8List(0),
-  }) : super(fullyQualifiedName);
+    Uint8List? tensorVal,
+  }) : tensorVal = tensorVal ?? Uint8List(0),
+       super(fullyQualifiedName);
 
   factory Tensor.fromJson(Map<String, dynamic> json) => Tensor(
     dtype:
@@ -88975,9 +87663,8 @@ final class ArtifactTypeSchema extends ProtoMessage {
     this.schemaTitle,
     this.schemaUri,
     this.instanceSchema,
-    String? schemaVersion,
-  }) : schemaVersion = schemaVersion ?? '',
-       super(fullyQualifiedName);
+    this.schemaVersion = '',
+  }) : super(fullyQualifiedName);
 
   factory ArtifactTypeSchema.fromJson(Map<String, dynamic> json) =>
       ArtifactTypeSchema(
@@ -89037,15 +87724,13 @@ final class RuntimeArtifact extends ProtoMessage {
   final protobuf.Struct? metadata;
 
   RuntimeArtifact({
-    String? name,
+    this.name = '',
     this.type,
-    String? uri,
+    this.uri = '',
     this.properties = const {},
     this.customProperties = const {},
     this.metadata,
-  }) : name = name ?? '',
-       uri = uri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RuntimeArtifact.fromJson(Map<String, dynamic> json) =>
       RuntimeArtifact(
@@ -89094,11 +87779,10 @@ final class UnmanagedContainerModel extends ProtoMessage {
   final ModelContainerSpec? containerSpec;
 
   UnmanagedContainerModel({
-    String? artifactUri,
+    this.artifactUri = '',
     this.predictSchemata,
     this.containerSpec,
-  }) : artifactUri = artifactUri ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory UnmanagedContainerModel.fromJson(
     Map<String, dynamic> json,
@@ -89144,9 +87828,8 @@ final class UserActionReference extends ProtoMessage {
   /// "/google.cloud.aiplatform.{apiVersion}.DatasetService.CreateDataset"
   final String method;
 
-  UserActionReference({this.operation, this.dataLabelingJob, String? method})
-    : method = method ?? '',
-      super(fullyQualifiedName);
+  UserActionReference({this.operation, this.dataLabelingJob, this.method = ''})
+    : super(fullyQualifiedName);
 
   factory UserActionReference.fromJson(Map<String, dynamic> json) =>
       UserActionReference(
@@ -89284,11 +87967,9 @@ final class RagEmbeddingModelConfig_VertexPredictionEndpoint
 
   RagEmbeddingModelConfig_VertexPredictionEndpoint({
     required this.endpoint,
-    String? model,
-    String? modelVersionId,
-  }) : model = model ?? '',
-       modelVersionId = modelVersionId ?? '',
-       super(fullyQualifiedName);
+    this.model = '',
+    this.modelVersionId = '',
+  }) : super(fullyQualifiedName);
 
   factory RagEmbeddingModelConfig_VertexPredictionEndpoint.fromJson(
     Map<String, dynamic> json,
@@ -89363,11 +88044,10 @@ final class RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25
   final double? b;
 
   RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25({
-    bool? multilingual,
+    this.multilingual = false,
     this.k1,
     this.b,
-  }) : multilingual = multilingual ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RagEmbeddingModelConfig_SparseEmbeddingConfig_Bm25.fromJson(
     Map<String, dynamic> json,
@@ -89596,10 +88276,8 @@ final class RagVectorDbConfig_RagManagedDb_Ann extends ProtoMessage {
   /// Default value is 500.
   final int leafCount;
 
-  RagVectorDbConfig_RagManagedDb_Ann({int? treeDepth, int? leafCount})
-    : treeDepth = treeDepth ?? 0,
-      leafCount = leafCount ?? 0,
-      super(fullyQualifiedName);
+  RagVectorDbConfig_RagManagedDb_Ann({this.treeDepth = 0, this.leafCount = 0})
+    : super(fullyQualifiedName);
 
   factory RagVectorDbConfig_RagManagedDb_Ann.fromJson(
     Map<String, dynamic> json,
@@ -89635,10 +88313,8 @@ final class RagVectorDbConfig_Weaviate extends ProtoMessage {
   /// This value cannot be changed after it's set.
   final String collectionName;
 
-  RagVectorDbConfig_Weaviate({String? httpEndpoint, String? collectionName})
-    : httpEndpoint = httpEndpoint ?? '',
-      collectionName = collectionName ?? '',
-      super(fullyQualifiedName);
+  RagVectorDbConfig_Weaviate({this.httpEndpoint = '', this.collectionName = ''})
+    : super(fullyQualifiedName);
 
   factory RagVectorDbConfig_Weaviate.fromJson(Map<String, dynamic> json) =>
       RagVectorDbConfig_Weaviate(
@@ -89671,9 +88347,7 @@ final class RagVectorDbConfig_Pinecone extends ProtoMessage {
   /// This value cannot be changed after it's set.
   final String indexName;
 
-  RagVectorDbConfig_Pinecone({String? indexName})
-    : indexName = indexName ?? '',
-      super(fullyQualifiedName);
+  RagVectorDbConfig_Pinecone({this.indexName = ''}) : super(fullyQualifiedName);
 
   factory RagVectorDbConfig_Pinecone.fromJson(Map<String, dynamic> json) =>
       RagVectorDbConfig_Pinecone(indexName: json['indexName'] ?? '');
@@ -89698,9 +88372,8 @@ final class RagVectorDbConfig_VertexFeatureStore extends ProtoMessage {
   /// `projects/{project}/locations/{location}/featureOnlineStores/{feature_online_store}/featureViews/{feature_view}`
   final String featureViewResourceName;
 
-  RagVectorDbConfig_VertexFeatureStore({String? featureViewResourceName})
-    : featureViewResourceName = featureViewResourceName ?? '',
-      super(fullyQualifiedName);
+  RagVectorDbConfig_VertexFeatureStore({this.featureViewResourceName = ''})
+    : super(fullyQualifiedName);
 
   factory RagVectorDbConfig_VertexFeatureStore.fromJson(
     Map<String, dynamic> json,
@@ -89738,10 +88411,10 @@ final class RagVectorDbConfig_VertexVectorSearch extends ProtoMessage {
   /// `projects/{project}/locations/{location}/indexes/{index}`
   final String index;
 
-  RagVectorDbConfig_VertexVectorSearch({String? indexEndpoint, String? index})
-    : indexEndpoint = indexEndpoint ?? '',
-      index = index ?? '',
-      super(fullyQualifiedName);
+  RagVectorDbConfig_VertexVectorSearch({
+    this.indexEndpoint = '',
+    this.index = '',
+  }) : super(fullyQualifiedName);
 
   factory RagVectorDbConfig_VertexVectorSearch.fromJson(
     Map<String, dynamic> json,
@@ -89774,9 +88447,8 @@ final class FileStatus extends ProtoMessage {
   /// Output only. Only when the `state` field is ERROR.
   final String errorStatus;
 
-  FileStatus({this.state = FileStatus_State.$default, String? errorStatus})
-    : errorStatus = errorStatus ?? '',
-      super(fullyQualifiedName);
+  FileStatus({this.state = FileStatus_State.$default, this.errorStatus = ''})
+    : super(fullyQualifiedName);
 
   factory FileStatus.fromJson(Map<String, dynamic> json) => FileStatus(
     state:
@@ -89834,9 +88506,7 @@ final class VertexAiSearchConfig extends ProtoMessage {
   /// `projects/{project}/locations/{location}/collections/{collection}/dataStores/{data_store}/servingConfigs/{serving_config}`.
   final String servingConfig;
 
-  VertexAiSearchConfig({String? servingConfig})
-    : servingConfig = servingConfig ?? '',
-      super(fullyQualifiedName);
+  VertexAiSearchConfig({this.servingConfig = ''}) : super(fullyQualifiedName);
 
   factory VertexAiSearchConfig.fromJson(Map<String, dynamic> json) =>
       VertexAiSearchConfig(servingConfig: json['servingConfig'] ?? '');
@@ -89864,9 +88534,10 @@ final class CorpusStatus extends ProtoMessage {
   /// Output only. Only when the `state` field is ERROR.
   final String errorStatus;
 
-  CorpusStatus({this.state = CorpusStatus_State.$default, String? errorStatus})
-    : errorStatus = errorStatus ?? '',
-      super(fullyQualifiedName);
+  CorpusStatus({
+    this.state = CorpusStatus_State.$default,
+    this.errorStatus = '',
+  }) : super(fullyQualifiedName);
 
   factory CorpusStatus.fromJson(Map<String, dynamic> json) => CorpusStatus(
     state:
@@ -89969,21 +88640,18 @@ final class RagCorpus extends ProtoMessage {
   RagCorpus({
     this.vectorDbConfig,
     this.vertexAiSearchConfig,
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
+    this.description = '',
     this.ragEmbeddingModelConfig,
     this.ragVectorDbConfig,
     this.createTime,
     this.updateTime,
     this.corpusStatus,
-    int? ragFilesCount,
+    this.ragFilesCount = 0,
     this.encryptionSpec,
     this.corpusTypeConfig,
-  }) : name = name ?? '',
-       description = description ?? '',
-       ragFilesCount = ragFilesCount ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RagCorpus.fromJson(Map<String, dynamic> json) => RagCorpus(
     vectorDbConfig: decode(json['vectorDbConfig'], RagVectorDbConfig.fromJson),
@@ -90190,20 +88858,16 @@ final class RagFile extends ProtoMessage {
     this.slackSource,
     this.jiraSource,
     this.sharePointSources,
-    String? name,
+    this.name = '',
     required this.displayName,
-    String? description,
-    int? sizeBytes,
+    this.description = '',
+    this.sizeBytes = 0,
     this.ragFileType = RagFile_RagFileType.$default,
     this.createTime,
     this.updateTime,
     this.fileStatus,
-    String? userMetadata,
-  }) : name = name ?? '',
-       description = description ?? '',
-       sizeBytes = sizeBytes ?? 0,
-       userMetadata = userMetadata ?? '',
-       super(fullyQualifiedName);
+    this.userMetadata = '',
+  }) : super(fullyQualifiedName);
 
   factory RagFile.fromJson(Map<String, dynamic> json) => RagFile(
     gcsSource: decode(json['gcsSource'], GcsSource.fromJson),
@@ -90309,9 +88973,7 @@ final class RagChunk extends ProtoMessage {
   /// If populated, represents where the chunk starts and ends in the document.
   final RagChunk_PageSpan? pageSpan;
 
-  RagChunk({String? text, this.pageSpan})
-    : text = text ?? '',
-      super(fullyQualifiedName);
+  RagChunk({this.text = '', this.pageSpan}) : super(fullyQualifiedName);
 
   factory RagChunk.fromJson(Map<String, dynamic> json) => RagChunk(
     text: json['text'] ?? '',
@@ -90342,10 +89004,8 @@ final class RagChunk_PageSpan extends ProtoMessage {
   /// Page where chunk ends in the document. Inclusive. 1-indexed.
   final int lastPage;
 
-  RagChunk_PageSpan({int? firstPage, int? lastPage})
-    : firstPage = firstPage ?? 0,
-      lastPage = lastPage ?? 0,
-      super(fullyQualifiedName);
+  RagChunk_PageSpan({this.firstPage = 0, this.lastPage = 0})
+    : super(fullyQualifiedName);
 
   factory RagChunk_PageSpan.fromJson(Map<String, dynamic> json) =>
       RagChunk_PageSpan(
@@ -90382,11 +89042,9 @@ final class RagFileChunkingConfig extends ProtoMessage {
 
   RagFileChunkingConfig({
     this.fixedLengthChunking,
-    int? chunkSize,
-    int? chunkOverlap,
-  }) : chunkSize = chunkSize ?? 0,
-       chunkOverlap = chunkOverlap ?? 0,
-       super(fullyQualifiedName);
+    this.chunkSize = 0,
+    this.chunkOverlap = 0,
+  }) : super(fullyQualifiedName);
 
   factory RagFileChunkingConfig.fromJson(Map<String, dynamic> json) =>
       RagFileChunkingConfig(
@@ -90427,10 +89085,10 @@ final class RagFileChunkingConfig_FixedLengthChunking extends ProtoMessage {
   /// The overlap between chunks.
   final int chunkOverlap;
 
-  RagFileChunkingConfig_FixedLengthChunking({int? chunkSize, int? chunkOverlap})
-    : chunkSize = chunkSize ?? 0,
-      chunkOverlap = chunkOverlap ?? 0,
-      super(fullyQualifiedName);
+  RagFileChunkingConfig_FixedLengthChunking({
+    this.chunkSize = 0,
+    this.chunkOverlap = 0,
+  }) : super(fullyQualifiedName);
 
   factory RagFileChunkingConfig_FixedLengthChunking.fromJson(
     Map<String, dynamic> json,
@@ -90505,9 +89163,8 @@ final class RagFileParsingConfig extends ProtoMessage {
     this.advancedParser,
     this.layoutParser,
     this.llmParser,
-    bool? useAdvancedPdfParsing,
-  }) : useAdvancedPdfParsing = useAdvancedPdfParsing ?? false,
-       super(fullyQualifiedName);
+    this.useAdvancedPdfParsing = false,
+  }) : super(fullyQualifiedName);
 
   factory RagFileParsingConfig.fromJson(Map<String, dynamic> json) =>
       RagFileParsingConfig(
@@ -90550,9 +89207,8 @@ final class RagFileParsingConfig_AdvancedParser extends ProtoMessage {
   /// Whether to use advanced PDF parsing.
   final bool useAdvancedPdfParsing;
 
-  RagFileParsingConfig_AdvancedParser({bool? useAdvancedPdfParsing})
-    : useAdvancedPdfParsing = useAdvancedPdfParsing ?? false,
-      super(fullyQualifiedName);
+  RagFileParsingConfig_AdvancedParser({this.useAdvancedPdfParsing = false})
+    : super(fullyQualifiedName);
 
   factory RagFileParsingConfig_AdvancedParser.fromJson(
     Map<String, dynamic> json,
@@ -90603,13 +89259,10 @@ final class RagFileParsingConfig_LayoutParser extends ProtoMessage {
   final int globalMaxParsingRequestsPerMin;
 
   RagFileParsingConfig_LayoutParser({
-    String? processorName,
-    int? maxParsingRequestsPerMin,
-    int? globalMaxParsingRequestsPerMin,
-  }) : processorName = processorName ?? '',
-       maxParsingRequestsPerMin = maxParsingRequestsPerMin ?? 0,
-       globalMaxParsingRequestsPerMin = globalMaxParsingRequestsPerMin ?? 0,
-       super(fullyQualifiedName);
+    this.processorName = '',
+    this.maxParsingRequestsPerMin = 0,
+    this.globalMaxParsingRequestsPerMin = 0,
+  }) : super(fullyQualifiedName);
 
   factory RagFileParsingConfig_LayoutParser.fromJson(
     Map<String, dynamic> json,
@@ -90670,15 +89323,11 @@ final class RagFileParsingConfig_LlmParser extends ProtoMessage {
   final String customParsingPrompt;
 
   RagFileParsingConfig_LlmParser({
-    String? modelName,
-    int? maxParsingRequestsPerMin,
-    int? globalMaxParsingRequestsPerMin,
-    String? customParsingPrompt,
-  }) : modelName = modelName ?? '',
-       maxParsingRequestsPerMin = maxParsingRequestsPerMin ?? 0,
-       globalMaxParsingRequestsPerMin = globalMaxParsingRequestsPerMin ?? 0,
-       customParsingPrompt = customParsingPrompt ?? '',
-       super(fullyQualifiedName);
+    this.modelName = '',
+    this.maxParsingRequestsPerMin = 0,
+    this.globalMaxParsingRequestsPerMin = 0,
+    this.customParsingPrompt = '',
+  }) : super(fullyQualifiedName);
 
   factory RagFileParsingConfig_LlmParser.fromJson(Map<String, dynamic> json) =>
       RagFileParsingConfig_LlmParser(
@@ -90974,13 +89623,10 @@ final class ImportRagFilesConfig extends ProtoMessage {
     this.ragFileTransformationConfig,
     this.ragFileParsingConfig,
     this.ragFileMetadataConfig,
-    int? maxEmbeddingRequestsPerMin,
-    int? globalMaxEmbeddingRequestsPerMin,
-    bool? rebuildAnnIndex,
-  }) : maxEmbeddingRequestsPerMin = maxEmbeddingRequestsPerMin ?? 0,
-       globalMaxEmbeddingRequestsPerMin = globalMaxEmbeddingRequestsPerMin ?? 0,
-       rebuildAnnIndex = rebuildAnnIndex ?? false,
-       super(fullyQualifiedName);
+    this.maxEmbeddingRequestsPerMin = 0,
+    this.globalMaxEmbeddingRequestsPerMin = 0,
+    this.rebuildAnnIndex = false,
+  }) : super(fullyQualifiedName);
 
   factory ImportRagFilesConfig.fromJson(Map<String, dynamic> json) =>
       ImportRagFilesConfig(
@@ -91227,9 +89873,8 @@ final class RagEngineConfig extends ProtoMessage {
   /// The config of the RagManagedDb used by RagEngine.
   final RagManagedDbConfig? ragManagedDbConfig;
 
-  RagEngineConfig({String? name, this.ragManagedDbConfig})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  RagEngineConfig({this.name = '', this.ragManagedDbConfig})
+    : super(fullyQualifiedName);
 
   factory RagEngineConfig.fromJson(Map<String, dynamic> json) =>
       RagEngineConfig(
@@ -91338,11 +89983,9 @@ final class ListRagCorporaRequest extends ProtoMessage {
 
   ListRagCorporaRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListRagCorporaRequest.fromJson(Map<String, dynamic> json) =>
       ListRagCorporaRequest(
@@ -91384,9 +90027,8 @@ final class ListRagCorporaResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListRagCorporaResponse({this.ragCorpora = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListRagCorporaResponse({this.ragCorpora = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListRagCorporaResponse.fromJson(Map<String, dynamic> json) =>
       ListRagCorporaResponse(
@@ -91424,9 +90066,8 @@ final class DeleteRagCorpusRequest extends ProtoMessage {
   /// RagFiles.
   final bool force;
 
-  DeleteRagCorpusRequest({required this.name, bool? force})
-    : force = force ?? false,
-      super(fullyQualifiedName);
+  DeleteRagCorpusRequest({required this.name, this.force = false})
+    : super(fullyQualifiedName);
 
   factory DeleteRagCorpusRequest.fromJson(Map<String, dynamic> json) =>
       DeleteRagCorpusRequest(
@@ -91592,13 +90233,10 @@ final class ImportRagFilesResponse extends ProtoMessage {
   ImportRagFilesResponse({
     this.partialFailuresGcsPath,
     this.partialFailuresBigqueryTable,
-    int? importedRagFilesCount,
-    int? failedRagFilesCount,
-    int? skippedRagFilesCount,
-  }) : importedRagFilesCount = importedRagFilesCount ?? 0,
-       failedRagFilesCount = failedRagFilesCount ?? 0,
-       skippedRagFilesCount = skippedRagFilesCount ?? 0,
-       super(fullyQualifiedName);
+    this.importedRagFilesCount = 0,
+    this.failedRagFilesCount = 0,
+    this.skippedRagFilesCount = 0,
+  }) : super(fullyQualifiedName);
 
   factory ImportRagFilesResponse.fromJson(Map<String, dynamic> json) =>
       ImportRagFilesResponse(
@@ -91686,10 +90324,11 @@ final class ListRagFilesRequest extends ProtoMessage {
   /// call.
   final String pageToken;
 
-  ListRagFilesRequest({required this.parent, int? pageSize, String? pageToken})
-    : pageSize = pageSize ?? 0,
-      pageToken = pageToken ?? '',
-      super(fullyQualifiedName);
+  ListRagFilesRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
 
   factory ListRagFilesRequest.fromJson(Map<String, dynamic> json) =>
       ListRagFilesRequest(
@@ -91731,9 +90370,8 @@ final class ListRagFilesResponse extends ProtoMessage {
   /// to obtain that page.
   final String nextPageToken;
 
-  ListRagFilesResponse({this.ragFiles = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListRagFilesResponse({this.ragFiles = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListRagFilesResponse.fromJson(Map<String, dynamic> json) =>
       ListRagFilesResponse(
@@ -91769,9 +90407,8 @@ final class DeleteRagFileRequest extends ProtoMessage {
   /// during the deletion will be ignored. The default value is false.
   final bool forceDelete;
 
-  DeleteRagFileRequest({required this.name, bool? forceDelete})
-    : forceDelete = forceDelete ?? false,
-      super(fullyQualifiedName);
+  DeleteRagFileRequest({required this.name, this.forceDelete = false})
+    : super(fullyQualifiedName);
 
   factory DeleteRagFileRequest.fromJson(Map<String, dynamic> json) =>
       DeleteRagFileRequest(
@@ -91923,12 +90560,10 @@ final class ImportRagFilesOperationMetadata extends ProtoMessage {
 
   ImportRagFilesOperationMetadata({
     this.genericMetadata,
-    int? ragCorpusId,
+    this.ragCorpusId = 0,
     this.importRagFilesConfig,
-    int? progressPercentage,
-  }) : ragCorpusId = ragCorpusId ?? 0,
-       progressPercentage = progressPercentage ?? 0,
-       super(fullyQualifiedName);
+    this.progressPercentage = 0,
+  }) : super(fullyQualifiedName);
 
   factory ImportRagFilesOperationMetadata.fromJson(Map<String, dynamic> json) =>
       ImportRagFilesOperationMetadata(
@@ -92045,11 +90680,10 @@ final class RagQuery extends ProtoMessage {
 
   RagQuery({
     this.text,
-    int? similarityTopK,
+    this.similarityTopK = 0,
     this.ranking,
     this.ragRetrievalConfig,
-  }) : similarityTopK = similarityTopK ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RagQuery.fromJson(Map<String, dynamic> json) => RagQuery(
     text: json['text'],
@@ -92226,10 +90860,9 @@ final class RetrieveContextsRequest_VertexRagStore_RagResource
   final List<String> ragFileIds;
 
   RetrieveContextsRequest_VertexRagStore_RagResource({
-    String? ragCorpus,
+    this.ragCorpus = '',
     this.ragFileIds = const [],
-  }) : ragCorpus = ragCorpus ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RetrieveContextsRequest_VertexRagStore_RagResource.fromJson(
     Map<String, dynamic> json,
@@ -92313,19 +90946,14 @@ final class RagContexts_Context extends ProtoMessage {
   final RagChunk? chunk;
 
   RagContexts_Context({
-    String? sourceUri,
-    String? sourceDisplayName,
-    String? text,
-    double? distance,
-    double? sparseDistance,
+    this.sourceUri = '',
+    this.sourceDisplayName = '',
+    this.text = '',
+    this.distance = 0,
+    this.sparseDistance = 0,
     this.score,
     this.chunk,
-  }) : sourceUri = sourceUri ?? '',
-       sourceDisplayName = sourceDisplayName ?? '',
-       text = text ?? '',
-       distance = distance ?? 0,
-       sparseDistance = sparseDistance ?? 0,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory RagContexts_Context.fromJson(Map<String, dynamic> json) =>
       RagContexts_Context(
@@ -92449,10 +91077,8 @@ final class AugmentPromptRequest_Model extends ProtoMessage {
   /// Optional. The model version of the backend deployed model.
   final String modelVersion;
 
-  AugmentPromptRequest_Model({String? model, String? modelVersion})
-    : model = model ?? '',
-      modelVersion = modelVersion ?? '',
-      super(fullyQualifiedName);
+  AugmentPromptRequest_Model({this.model = '', this.modelVersion = ''})
+    : super(fullyQualifiedName);
 
   factory AugmentPromptRequest_Model.fromJson(Map<String, dynamic> json) =>
       AugmentPromptRequest_Model(
@@ -92572,9 +91198,8 @@ final class CorroborateContentRequest_Parameters extends ProtoMessage {
   /// threshold.
   final double citationThreshold;
 
-  CorroborateContentRequest_Parameters({double? citationThreshold})
-    : citationThreshold = citationThreshold ?? 0,
-      super(fullyQualifiedName);
+  CorroborateContentRequest_Parameters({this.citationThreshold = 0})
+    : super(fullyQualifiedName);
 
   factory CorroborateContentRequest_Parameters.fromJson(
     Map<String, dynamic> json,
@@ -92839,10 +91464,11 @@ final class ListStudiesRequest extends ProtoMessage {
   /// If unspecified, service will pick an appropriate default.
   final int pageSize;
 
-  ListStudiesRequest({required this.parent, String? pageToken, int? pageSize})
-    : pageToken = pageToken ?? '',
-      pageSize = pageSize ?? 0,
-      super(fullyQualifiedName);
+  ListStudiesRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListStudiesRequest.fromJson(Map<String, dynamic> json) =>
       ListStudiesRequest(
@@ -92883,9 +91509,8 @@ final class ListStudiesResponse extends ProtoMessage {
   /// If this field is omitted, there are no subsequent pages.
   final String nextPageToken;
 
-  ListStudiesResponse({this.studies = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListStudiesResponse({this.studies = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListStudiesResponse.fromJson(Map<String, dynamic> json) =>
       ListStudiesResponse(
@@ -93121,9 +91746,8 @@ final class SuggestTrialsMetadata extends ProtoMessage {
   /// pending, and provide a new Trial if the last suggested Trial was completed.
   final String clientId;
 
-  SuggestTrialsMetadata({this.genericMetadata, String? clientId})
-    : clientId = clientId ?? '',
-      super(fullyQualifiedName);
+  SuggestTrialsMetadata({this.genericMetadata, this.clientId = ''})
+    : super(fullyQualifiedName);
 
   factory SuggestTrialsMetadata.fromJson(Map<String, dynamic> json) =>
       SuggestTrialsMetadata(
@@ -93226,10 +91850,11 @@ final class ListTrialsRequest extends ProtoMessage {
   /// If unspecified, the service will pick an appropriate default.
   final int pageSize;
 
-  ListTrialsRequest({required this.parent, String? pageToken, int? pageSize})
-    : pageToken = pageToken ?? '',
-      pageSize = pageSize ?? 0,
-      super(fullyQualifiedName);
+  ListTrialsRequest({
+    required this.parent,
+    this.pageToken = '',
+    this.pageSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListTrialsRequest.fromJson(Map<String, dynamic> json) =>
       ListTrialsRequest(
@@ -93270,9 +91895,8 @@ final class ListTrialsResponse extends ProtoMessage {
   /// If this field is omitted, there are no subsequent pages.
   final String nextPageToken;
 
-  ListTrialsResponse({this.trials = const [], String? nextPageToken})
-    : nextPageToken = nextPageToken ?? '',
-      super(fullyQualifiedName);
+  ListTrialsResponse({this.trials = const [], this.nextPageToken = ''})
+    : super(fullyQualifiedName);
 
   factory ListTrialsResponse.fromJson(Map<String, dynamic> json) =>
       ListTrialsResponse(
@@ -93358,11 +91982,9 @@ final class CompleteTrialRequest extends ProtoMessage {
   CompleteTrialRequest({
     required this.name,
     this.finalMeasurement,
-    bool? trialInfeasible,
-    String? infeasibleReason,
-  }) : trialInfeasible = trialInfeasible ?? false,
-       infeasibleReason = infeasibleReason ?? '',
-       super(fullyQualifiedName);
+    this.trialInfeasible = false,
+    this.infeasibleReason = '',
+  }) : super(fullyQualifiedName);
 
   factory CompleteTrialRequest.fromJson(Map<String, dynamic> json) =>
       CompleteTrialRequest(
@@ -93458,9 +92080,8 @@ final class CheckTrialEarlyStoppingStateResponse extends ProtoMessage {
   /// True if the Trial should stop.
   final bool shouldStop;
 
-  CheckTrialEarlyStoppingStateResponse({bool? shouldStop})
-    : shouldStop = shouldStop ?? false,
-      super(fullyQualifiedName);
+  CheckTrialEarlyStoppingStateResponse({this.shouldStop = false})
+    : super(fullyQualifiedName);
 
   factory CheckTrialEarlyStoppingStateResponse.fromJson(
     Map<String, dynamic> json,
@@ -93496,11 +92117,9 @@ final class CheckTrialEarlyStoppingStateMetatdata extends ProtoMessage {
 
   CheckTrialEarlyStoppingStateMetatdata({
     this.genericMetadata,
-    String? study,
-    String? trial,
-  }) : study = study ?? '',
-       trial = trial ?? '',
-       super(fullyQualifiedName);
+    this.study = '',
+    this.trial = '',
+  }) : super(fullyQualifiedName);
 
   factory CheckTrialEarlyStoppingStateMetatdata.fromJson(
     Map<String, dynamic> json,

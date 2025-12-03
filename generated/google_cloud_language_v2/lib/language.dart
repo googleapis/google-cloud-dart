@@ -165,9 +165,8 @@ final class Document extends ProtoMessage {
     this.type = Document_Type.$default,
     this.content,
     this.gcsContentUri,
-    String? languageCode,
-  }) : languageCode = languageCode ?? '',
-       super(fullyQualifiedName);
+    this.languageCode = '',
+  }) : super(fullyQualifiedName);
 
   factory Document.fromJson(Map<String, dynamic> json) => Document(
     type:
@@ -280,13 +279,12 @@ final class Entity extends ProtoMessage {
   final Sentiment? sentiment;
 
   Entity({
-    String? name,
+    this.name = '',
     this.type = Entity_Type.$default,
     this.metadata = const {},
     this.mentions = const [],
     this.sentiment,
-  }) : name = name ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Entity.fromJson(Map<String, dynamic> json) => Entity(
     name: json['name'] ?? '',
@@ -417,10 +415,7 @@ final class Sentiment extends ProtoMessage {
   /// (positive sentiment).
   final double score;
 
-  Sentiment({double? magnitude, double? score})
-    : magnitude = magnitude ?? 0,
-      score = score ?? 0,
-      super(fullyQualifiedName);
+  Sentiment({this.magnitude = 0, this.score = 0}) : super(fullyQualifiedName);
 
   factory Sentiment.fromJson(Map<String, dynamic> json) => Sentiment(
     magnitude: decodeDouble(json['magnitude']) ?? 0,
@@ -468,9 +463,8 @@ final class EntityMention extends ProtoMessage {
     this.text,
     this.type = EntityMention_Type.$default,
     this.sentiment,
-    double? probability,
-  }) : probability = probability ?? 0,
-       super(fullyQualifiedName);
+    this.probability = 0,
+  }) : super(fullyQualifiedName);
 
   factory EntityMention.fromJson(Map<String, dynamic> json) => EntityMention(
     text: decode(json['text'], TextSpan.fromJson),
@@ -533,10 +527,8 @@ final class TextSpan extends ProtoMessage {
   /// request.
   final int beginOffset;
 
-  TextSpan({String? content, int? beginOffset})
-    : content = content ?? '',
-      beginOffset = beginOffset ?? 0,
-      super(fullyQualifiedName);
+  TextSpan({this.content = '', this.beginOffset = 0})
+    : super(fullyQualifiedName);
 
   factory TextSpan.fromJson(Map<String, dynamic> json) => TextSpan(
     content: json['content'] ?? '',
@@ -573,11 +565,11 @@ final class ClassificationCategory extends ProtoMessage {
   /// the corresponding category has a severity score.
   final double severity;
 
-  ClassificationCategory({String? name, double? confidence, double? severity})
-    : name = name ?? '',
-      confidence = confidence ?? 0,
-      severity = severity ?? 0,
-      super(fullyQualifiedName);
+  ClassificationCategory({
+    this.name = '',
+    this.confidence = 0,
+    this.severity = 0,
+  }) : super(fullyQualifiedName);
 
   factory ClassificationCategory.fromJson(Map<String, dynamic> json) =>
       ClassificationCategory(
@@ -664,12 +656,10 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
 
   AnalyzeSentimentResponse({
     this.documentSentiment,
-    String? languageCode,
+    this.languageCode = '',
     this.sentences = const [],
-    bool? languageSupported,
-  }) : languageCode = languageCode ?? '',
-       languageSupported = languageSupported ?? false,
-       super(fullyQualifiedName);
+    this.languageSupported = false,
+  }) : super(fullyQualifiedName);
 
   factory AnalyzeSentimentResponse.fromJson(
     Map<String, dynamic> json,
@@ -756,11 +746,9 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
 
   AnalyzeEntitiesResponse({
     this.entities = const [],
-    String? languageCode,
-    bool? languageSupported,
-  }) : languageCode = languageCode ?? '',
-       languageSupported = languageSupported ?? false,
-       super(fullyQualifiedName);
+    this.languageCode = '',
+    this.languageSupported = false,
+  }) : super(fullyQualifiedName);
 
   factory AnalyzeEntitiesResponse.fromJson(Map<String, dynamic> json) =>
       AnalyzeEntitiesResponse(
@@ -828,11 +816,9 @@ final class ClassifyTextResponse extends ProtoMessage {
 
   ClassifyTextResponse({
     this.categories = const [],
-    String? languageCode,
-    bool? languageSupported,
-  }) : languageCode = languageCode ?? '',
-       languageSupported = languageSupported ?? false,
-       super(fullyQualifiedName);
+    this.languageCode = '',
+    this.languageSupported = false,
+  }) : super(fullyQualifiedName);
 
   factory ClassifyTextResponse.fromJson(Map<String, dynamic> json) =>
       ClassifyTextResponse(
@@ -958,11 +944,9 @@ final class ModerateTextResponse extends ProtoMessage {
 
   ModerateTextResponse({
     this.moderationCategories = const [],
-    String? languageCode,
-    bool? languageSupported,
-  }) : languageCode = languageCode ?? '',
-       languageSupported = languageSupported ?? false,
-       super(fullyQualifiedName);
+    this.languageCode = '',
+    this.languageSupported = false,
+  }) : super(fullyQualifiedName);
 
   factory ModerateTextResponse.fromJson(Map<String, dynamic> json) =>
       ModerateTextResponse(
@@ -1060,15 +1044,11 @@ final class AnnotateTextRequest_Features extends ProtoMessage {
   final bool moderateText;
 
   AnnotateTextRequest_Features({
-    bool? extractEntities,
-    bool? extractDocumentSentiment,
-    bool? classifyText,
-    bool? moderateText,
-  }) : extractEntities = extractEntities ?? false,
-       extractDocumentSentiment = extractDocumentSentiment ?? false,
-       classifyText = classifyText ?? false,
-       moderateText = moderateText ?? false,
-       super(fullyQualifiedName);
+    this.extractEntities = false,
+    this.extractDocumentSentiment = false,
+    this.classifyText = false,
+    this.moderateText = false,
+  }) : super(fullyQualifiedName);
 
   factory AnnotateTextRequest_Features.fromJson(Map<String, dynamic> json) =>
       AnnotateTextRequest_Features(
@@ -1139,13 +1119,11 @@ final class AnnotateTextResponse extends ProtoMessage {
     this.sentences = const [],
     this.entities = const [],
     this.documentSentiment,
-    String? languageCode,
+    this.languageCode = '',
     this.categories = const [],
     this.moderationCategories = const [],
-    bool? languageSupported,
-  }) : languageCode = languageCode ?? '',
-       languageSupported = languageSupported ?? false,
-       super(fullyQualifiedName);
+    this.languageSupported = false,
+  }) : super(fullyQualifiedName);
 
   factory AnnotateTextResponse.fromJson(
     Map<String, dynamic> json,

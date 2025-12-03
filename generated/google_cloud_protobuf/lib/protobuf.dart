@@ -87,16 +87,14 @@ final class Api extends ProtoMessage {
   final Syntax syntax;
 
   Api({
-    String? name,
+    this.name = '',
     this.methods = const [],
     this.options = const [],
-    String? version,
+    this.version = '',
     this.sourceContext,
     this.mixins = const [],
     this.syntax = Syntax.$default,
-  }) : name = name ?? '',
-       version = version ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Api.fromJson(Map<String, dynamic> json) => Api(
     name: json['name'] ?? '',
@@ -156,19 +154,14 @@ final class Method extends ProtoMessage {
   final Syntax syntax;
 
   Method({
-    String? name,
-    String? requestTypeUrl,
-    bool? requestStreaming,
-    String? responseTypeUrl,
-    bool? responseStreaming,
+    this.name = '',
+    this.requestTypeUrl = '',
+    this.requestStreaming = false,
+    this.responseTypeUrl = '',
+    this.responseStreaming = false,
     this.options = const [],
     this.syntax = Syntax.$default,
-  }) : name = name ?? '',
-       requestTypeUrl = requestTypeUrl ?? '',
-       requestStreaming = requestStreaming ?? false,
-       responseTypeUrl = responseTypeUrl ?? '',
-       responseStreaming = responseStreaming ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Method.fromJson(Map<String, dynamic> json) => Method(
     name: json['name'] ?? '',
@@ -293,10 +286,7 @@ final class Mixin extends ProtoMessage {
   /// are rooted.
   final String root;
 
-  Mixin({String? name, String? root})
-    : name = name ?? '',
-      root = root ?? '',
-      super(fullyQualifiedName);
+  Mixin({this.name = '', this.root = ''}) : super(fullyQualifiedName);
 
   factory Mixin.fromJson(Map<String, dynamic> json) =>
       Mixin(name: json['name'] ?? '', root: json['root'] ?? '');
@@ -388,10 +378,7 @@ final class Duration extends ProtoMessage {
   /// to +999,999,999 inclusive.
   final int nanos;
 
-  Duration({int? seconds, int? nanos})
-    : seconds = seconds ?? 0,
-      nanos = nanos ?? 0,
-      super(fullyQualifiedName) {
+  Duration({this.seconds = 0, this.nanos = 0}) : super(fullyQualifiedName) {
     _validate();
   }
 
@@ -653,9 +640,7 @@ final class SourceContext extends ProtoMessage {
   /// protobuf element.  For example: `"google/protobuf/source_context.proto"`.
   final String fileName;
 
-  SourceContext({String? fileName})
-    : fileName = fileName ?? '',
-      super(fullyQualifiedName);
+  SourceContext({this.fileName = ''}) : super(fullyQualifiedName);
 
   factory SourceContext.fromJson(Map<String, dynamic> json) =>
       SourceContext(fileName: json['fileName'] ?? '');
@@ -818,10 +803,7 @@ final class Timestamp extends ProtoMessage {
   /// inclusive.
   final int nanos;
 
-  Timestamp({int? seconds, int? nanos})
-    : seconds = seconds ?? 0,
-      nanos = nanos ?? 0,
-      super(fullyQualifiedName) {
+  Timestamp({this.seconds = 0, this.nanos = 0}) : super(fullyQualifiedName) {
     _validate();
   }
 
@@ -863,16 +845,14 @@ final class Type extends ProtoMessage {
   final String edition;
 
   Type({
-    String? name,
+    this.name = '',
     this.fields = const [],
     this.oneofs = const [],
     this.options = const [],
     this.sourceContext,
     this.syntax = Syntax.$default,
-    String? edition,
-  }) : name = name ?? '',
-       edition = edition ?? '',
-       super(fullyQualifiedName);
+    this.edition = '',
+  }) : super(fullyQualifiedName);
 
   factory Type.fromJson(Map<String, dynamic> json) => Type(
     name: json['name'] ?? '',
@@ -945,22 +925,15 @@ final class Field extends ProtoMessage {
   Field({
     this.kind = Field_Kind.$default,
     this.cardinality = Field_Cardinality.$default,
-    int? number,
-    String? name,
-    String? typeUrl,
-    int? oneofIndex,
-    bool? packed,
+    this.number = 0,
+    this.name = '',
+    this.typeUrl = '',
+    this.oneofIndex = 0,
+    this.packed = false,
     this.options = const [],
-    String? jsonName,
-    String? defaultValue,
-  }) : number = number ?? 0,
-       name = name ?? '',
-       typeUrl = typeUrl ?? '',
-       oneofIndex = oneofIndex ?? 0,
-       packed = packed ?? false,
-       jsonName = jsonName ?? '',
-       defaultValue = defaultValue ?? '',
-       super(fullyQualifiedName);
+    this.jsonName = '',
+    this.defaultValue = '',
+  }) : super(fullyQualifiedName);
 
   factory Field.fromJson(Map<String, dynamic> json) => Field(
     kind: decodeEnum(json['kind'], Field_Kind.fromJson) ?? Field_Kind.$default,
@@ -1130,15 +1103,13 @@ final class Enum extends ProtoMessage {
   final String edition;
 
   Enum({
-    String? name,
+    this.name = '',
     this.enumvalue = const [],
     this.options = const [],
     this.sourceContext,
     this.syntax = Syntax.$default,
-    String? edition,
-  }) : name = name ?? '',
-       edition = edition ?? '',
-       super(fullyQualifiedName);
+    this.edition = '',
+  }) : super(fullyQualifiedName);
 
   factory Enum.fromJson(Map<String, dynamic> json) => Enum(
     name: json['name'] ?? '',
@@ -1183,10 +1154,8 @@ final class EnumValue extends ProtoMessage {
   /// Protocol buffer options.
   final List<Option> options;
 
-  EnumValue({String? name, int? number, this.options = const []})
-    : name = name ?? '',
-      number = number ?? 0,
-      super(fullyQualifiedName);
+  EnumValue({this.name = '', this.number = 0, this.options = const []})
+    : super(fullyQualifiedName);
 
   factory EnumValue.fromJson(Map<String, dynamic> json) => EnumValue(
     name: json['name'] ?? '',
@@ -1225,9 +1194,7 @@ final class Option extends ProtoMessage {
   /// value using the google.protobuf.Int32Value type.
   final Any? value;
 
-  Option({String? name, this.value})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  Option({this.name = '', this.value}) : super(fullyQualifiedName);
 
   factory Option.fromJson(Map<String, dynamic> json) => Option(
     name: json['name'] ?? '',
@@ -1256,7 +1223,7 @@ final class DoubleValue extends ProtoMessage {
   /// The double value.
   final double value;
 
-  DoubleValue({double? value}) : value = value ?? 0, super(fullyQualifiedName);
+  DoubleValue({this.value = 0}) : super(fullyQualifiedName);
 
   factory DoubleValue.fromJson(Object json) => _DoubleValueHelper.decode(json);
 
@@ -1279,7 +1246,7 @@ final class FloatValue extends ProtoMessage {
   /// The float value.
   final double value;
 
-  FloatValue({double? value}) : value = value ?? 0, super(fullyQualifiedName);
+  FloatValue({this.value = 0}) : super(fullyQualifiedName);
 
   factory FloatValue.fromJson(Object json) => _FloatValueHelper.decode(json);
 
@@ -1302,7 +1269,7 @@ final class Int64Value extends ProtoMessage {
   /// The int64 value.
   final int value;
 
-  Int64Value({int? value}) : value = value ?? 0, super(fullyQualifiedName);
+  Int64Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Int64Value.fromJson(Object json) => _Int64ValueHelper.decode(json);
 
@@ -1325,7 +1292,7 @@ final class Uint64Value extends ProtoMessage {
   /// The uint64 value.
   final int value;
 
-  Uint64Value({int? value}) : value = value ?? 0, super(fullyQualifiedName);
+  Uint64Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Uint64Value.fromJson(Object json) => _Uint64ValueHelper.decode(json);
 
@@ -1348,7 +1315,7 @@ final class Int32Value extends ProtoMessage {
   /// The int32 value.
   final int value;
 
-  Int32Value({int? value}) : value = value ?? 0, super(fullyQualifiedName);
+  Int32Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Int32Value.fromJson(Object json) => _Int32ValueHelper.decode(json);
 
@@ -1371,7 +1338,7 @@ final class Uint32Value extends ProtoMessage {
   /// The uint32 value.
   final int value;
 
-  Uint32Value({int? value}) : value = value ?? 0, super(fullyQualifiedName);
+  Uint32Value({this.value = 0}) : super(fullyQualifiedName);
 
   factory Uint32Value.fromJson(Object json) => _Uint32ValueHelper.decode(json);
 
@@ -1394,7 +1361,7 @@ final class BoolValue extends ProtoMessage {
   /// The bool value.
   final bool value;
 
-  BoolValue({bool? value}) : value = value ?? false, super(fullyQualifiedName);
+  BoolValue({this.value = false}) : super(fullyQualifiedName);
 
   factory BoolValue.fromJson(Object json) => _BoolValueHelper.decode(json);
 
@@ -1417,7 +1384,7 @@ final class StringValue extends ProtoMessage {
   /// The string value.
   final String value;
 
-  StringValue({String? value}) : value = value ?? '', super(fullyQualifiedName);
+  StringValue({this.value = ''}) : super(fullyQualifiedName);
 
   factory StringValue.fromJson(Object json) => _StringValueHelper.decode(json);
 
@@ -1440,7 +1407,9 @@ final class BytesValue extends ProtoMessage {
   /// The bytes value.
   final Uint8List value;
 
-  BytesValue({this.value = Uint8List(0)}) : super(fullyQualifiedName);
+  BytesValue({Uint8List? value})
+    : value = value ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory BytesValue.fromJson(Object json) => _BytesValueHelper.decode(json);
 

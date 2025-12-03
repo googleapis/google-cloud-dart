@@ -165,9 +165,7 @@ final class GetOperationRequest extends ProtoMessage {
   /// The name of the operation resource.
   final String name;
 
-  GetOperationRequest({String? name})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  GetOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory GetOperationRequest.fromJson(Map<String, dynamic> json) =>
       GetOperationRequest(name: json['name'] ?? '');
@@ -213,17 +211,12 @@ final class ListOperationsRequest extends ProtoMessage {
   final bool returnPartialSuccess;
 
   ListOperationsRequest({
-    String? name,
-    String? filter,
-    int? pageSize,
-    String? pageToken,
-    bool? returnPartialSuccess,
-  }) : name = name ?? '',
-       filter = filter ?? '',
-       pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       returnPartialSuccess = returnPartialSuccess ?? false,
-       super(fullyQualifiedName);
+    this.name = '',
+    this.filter = '',
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.returnPartialSuccess = false,
+  }) : super(fullyQualifiedName);
 
   factory ListOperationsRequest.fromJson(Map<String, dynamic> json) =>
       ListOperationsRequest(
@@ -277,10 +270,9 @@ final class ListOperationsResponse extends ProtoMessage {
 
   ListOperationsResponse({
     this.operations = const [],
-    String? nextPageToken,
+    this.nextPageToken = '',
     this.unreachable = const [],
-  }) : nextPageToken = nextPageToken ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ListOperationsResponse.fromJson(Map<String, dynamic> json) =>
       ListOperationsResponse(
@@ -313,9 +305,7 @@ final class CancelOperationRequest extends ProtoMessage {
   /// The name of the operation resource to be cancelled.
   final String name;
 
-  CancelOperationRequest({String? name})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  CancelOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory CancelOperationRequest.fromJson(Map<String, dynamic> json) =>
       CancelOperationRequest(name: json['name'] ?? '');
@@ -339,9 +329,7 @@ final class DeleteOperationRequest extends ProtoMessage {
   /// The name of the operation resource to be deleted.
   final String name;
 
-  DeleteOperationRequest({String? name})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  DeleteOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
   factory DeleteOperationRequest.fromJson(Map<String, dynamic> json) =>
       DeleteOperationRequest(name: json['name'] ?? '');
@@ -370,9 +358,8 @@ final class WaitOperationRequest extends ProtoMessage {
   /// If RPC context deadline is also specified, the shorter one will be used.
   final Duration? timeout;
 
-  WaitOperationRequest({String? name, this.timeout})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  WaitOperationRequest({this.name = '', this.timeout})
+    : super(fullyQualifiedName);
 
   factory WaitOperationRequest.fromJson(Map<String, dynamic> json) =>
       WaitOperationRequest(
@@ -425,10 +412,8 @@ final class OperationInfo extends ProtoMessage {
   /// Note: Altering this value constitutes a breaking change.
   final String metadataType;
 
-  OperationInfo({String? responseType, String? metadataType})
-    : responseType = responseType ?? '',
-      metadataType = metadataType ?? '',
-      super(fullyQualifiedName);
+  OperationInfo({this.responseType = '', this.metadataType = ''})
+    : super(fullyQualifiedName);
 
   factory OperationInfo.fromJson(Map<String, dynamic> json) => OperationInfo(
     responseType: json['responseType'] ?? '',

@@ -304,9 +304,8 @@ final class GetPolicyOptions extends ProtoMessage {
   /// documentation](https://cloud.google.com/iam/help/conditions/resource-policies).
   final int requestedPolicyVersion;
 
-  GetPolicyOptions({int? requestedPolicyVersion})
-    : requestedPolicyVersion = requestedPolicyVersion ?? 0,
-      super(fullyQualifiedName);
+  GetPolicyOptions({this.requestedPolicyVersion = 0})
+    : super(fullyQualifiedName);
 
   factory GetPolicyOptions.fromJson(Map<String, dynamic> json) =>
       GetPolicyOptions(
@@ -461,11 +460,11 @@ final class Policy extends ProtoMessage {
   final Uint8List etag;
 
   Policy({
-    int? version,
+    this.version = 0,
     this.bindings = const [],
     this.auditConfigs = const [],
-    this.etag = Uint8List(0),
-  }) : version = version ?? 0,
+    Uint8List? etag,
+  }) : etag = etag ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory Policy.fromJson(Map<String, dynamic> json) => Policy(
@@ -557,9 +556,8 @@ final class Binding extends ProtoMessage {
   /// documentation](https://cloud.google.com/iam/help/conditions/resource-policies).
   final Expr? condition;
 
-  Binding({String? role, this.members = const [], this.condition})
-    : role = role ?? '',
-      super(fullyQualifiedName);
+  Binding({this.role = '', this.members = const [], this.condition})
+    : super(fullyQualifiedName);
 
   factory Binding.fromJson(Map<String, dynamic> json) => Binding(
     role: json['role'] ?? '',
@@ -643,9 +641,8 @@ final class AuditConfig extends ProtoMessage {
   /// The configuration for logging of each type of permission.
   final List<AuditLogConfig> auditLogConfigs;
 
-  AuditConfig({String? service, this.auditLogConfigs = const []})
-    : service = service ?? '',
-      super(fullyQualifiedName);
+  AuditConfig({this.service = '', this.auditLogConfigs = const []})
+    : super(fullyQualifiedName);
 
   factory AuditConfig.fromJson(Map<String, dynamic> json) => AuditConfig(
     service: json['service'] ?? '',
@@ -816,12 +813,10 @@ final class BindingDelta extends ProtoMessage {
 
   BindingDelta({
     this.action = BindingDelta_Action.$default,
-    String? role,
-    String? member,
+    this.role = '',
+    this.member = '',
     this.condition,
-  }) : role = role ?? '',
-       member = member ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory BindingDelta.fromJson(Map<String, dynamic> json) => BindingDelta(
     action:
@@ -903,13 +898,10 @@ final class AuditConfigDelta extends ProtoMessage {
 
   AuditConfigDelta({
     this.action = AuditConfigDelta_Action.$default,
-    String? service,
-    String? exemptedMember,
-    String? logType,
-  }) : service = service ?? '',
-       exemptedMember = exemptedMember ?? '',
-       logType = logType ?? '',
-       super(fullyQualifiedName);
+    this.service = '',
+    this.exemptedMember = '',
+    this.logType = '',
+  }) : super(fullyQualifiedName);
 
   factory AuditConfigDelta.fromJson(Map<String, dynamic> json) =>
       AuditConfigDelta(
@@ -992,11 +984,9 @@ final class ResourcePolicyMember extends ProtoMessage {
   final String iamPolicyUidPrincipal;
 
   ResourcePolicyMember({
-    String? iamPolicyNamePrincipal,
-    String? iamPolicyUidPrincipal,
-  }) : iamPolicyNamePrincipal = iamPolicyNamePrincipal ?? '',
-       iamPolicyUidPrincipal = iamPolicyUidPrincipal ?? '',
-       super(fullyQualifiedName);
+    this.iamPolicyNamePrincipal = '',
+    this.iamPolicyUidPrincipal = '',
+  }) : super(fullyQualifiedName);
 
   factory ResourcePolicyMember.fromJson(Map<String, dynamic> json) =>
       ResourcePolicyMember(

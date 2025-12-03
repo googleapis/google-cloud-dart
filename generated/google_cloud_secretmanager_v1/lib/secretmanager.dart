@@ -463,23 +463,21 @@ final class Secret extends ProtoMessage {
   final Map<String, String> tags;
 
   Secret({
-    String? name,
+    this.name = '',
     this.replication,
     this.createTime,
     this.labels = const {},
     this.topics = const [],
     this.expireTime,
     this.ttl,
-    String? etag,
+    this.etag = '',
     this.rotation,
     this.versionAliases = const {},
     this.annotations = const {},
     this.versionDestroyTtl,
     this.customerManagedEncryption,
     this.tags = const {},
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Secret.fromJson(Map<String, dynamic> json) => Secret(
     name: json['name'] ?? '',
@@ -590,19 +588,16 @@ final class SecretVersion extends ProtoMessage {
   final CustomerManagedEncryptionStatus? customerManagedEncryption;
 
   SecretVersion({
-    String? name,
+    this.name = '',
     this.createTime,
     this.destroyTime,
     this.state = SecretVersion_State.$default,
     this.replicationStatus,
-    String? etag,
-    bool? clientSpecifiedPayloadChecksum,
+    this.etag = '',
+    this.clientSpecifiedPayloadChecksum = false,
     this.scheduledDestroyTime,
     this.customerManagedEncryption,
-  }) : name = name ?? '',
-       etag = etag ?? '',
-       clientSpecifiedPayloadChecksum = clientSpecifiedPayloadChecksum ?? false,
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory SecretVersion.fromJson(Map<String, dynamic> json) => SecretVersion(
     name: json['name'] ?? '',
@@ -818,10 +813,9 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
   final CustomerManagedEncryption? customerManagedEncryption;
 
   Replication_UserManaged_Replica({
-    String? location,
+    this.location = '',
     this.customerManagedEncryption,
-  }) : location = location ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory Replication_UserManaged_Replica.fromJson(Map<String, dynamic> json) =>
       Replication_UserManaged_Replica(
@@ -1023,10 +1017,9 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
   final CustomerManagedEncryptionStatus? customerManagedEncryption;
 
   ReplicationStatus_UserManagedStatus_ReplicaStatus({
-    String? location,
+    this.location = '',
     this.customerManagedEncryption,
-  }) : location = location ?? '',
-       super(fullyQualifiedName);
+  }) : super(fullyQualifiedName);
 
   factory ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson(
     Map<String, dynamic> json,
@@ -1093,7 +1086,7 @@ final class Topic extends ProtoMessage {
   /// (`roles/pubsub.publisher`) includes this permission.
   final String name;
 
-  Topic({String? name}) : name = name ?? '', super(fullyQualifiedName);
+  Topic({this.name = ''}) : super(fullyQualifiedName);
 
   factory Topic.fromJson(Map<String, dynamic> json) =>
       Topic(name: json['name'] ?? '');
@@ -1191,8 +1184,9 @@ final class SecretPayload extends ProtoMessage {
   /// https://cloud.google.com/apis/design/design_patterns#integer_types
   final int? dataCrc32C;
 
-  SecretPayload({this.data = Uint8List(0), this.dataCrc32C})
-    : super(fullyQualifiedName);
+  SecretPayload({Uint8List? data, this.dataCrc32C})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory SecretPayload.fromJson(Map<String, dynamic> json) => SecretPayload(
     data: decodeBytes(json['data']) ?? Uint8List(0),
@@ -1244,13 +1238,10 @@ final class ListSecretsRequest extends ProtoMessage {
 
   ListSecretsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSecretsRequest.fromJson(Map<String, dynamic> json) =>
       ListSecretsRequest(
@@ -1303,11 +1294,9 @@ final class ListSecretsResponse extends ProtoMessage {
 
   ListSecretsResponse({
     this.secrets = const [],
-    String? nextPageToken,
-    int? totalSize,
-  }) : nextPageToken = nextPageToken ?? '',
-       totalSize = totalSize ?? 0,
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+    this.totalSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListSecretsResponse.fromJson(Map<String, dynamic> json) =>
       ListSecretsResponse(
@@ -1476,13 +1465,10 @@ final class ListSecretVersionsRequest extends ProtoMessage {
 
   ListSecretVersionsRequest({
     required this.parent,
-    int? pageSize,
-    String? pageToken,
-    String? filter,
-  }) : pageSize = pageSize ?? 0,
-       pageToken = pageToken ?? '',
-       filter = filter ?? '',
-       super(fullyQualifiedName);
+    this.pageSize = 0,
+    this.pageToken = '',
+    this.filter = '',
+  }) : super(fullyQualifiedName);
 
   factory ListSecretVersionsRequest.fromJson(Map<String, dynamic> json) =>
       ListSecretVersionsRequest(
@@ -1536,11 +1522,9 @@ final class ListSecretVersionsResponse extends ProtoMessage {
 
   ListSecretVersionsResponse({
     this.versions = const [],
-    String? nextPageToken,
-    int? totalSize,
-  }) : nextPageToken = nextPageToken ?? '',
-       totalSize = totalSize ?? 0,
-       super(fullyQualifiedName);
+    this.nextPageToken = '',
+    this.totalSize = 0,
+  }) : super(fullyQualifiedName);
 
   factory ListSecretVersionsResponse.fromJson(Map<String, dynamic> json) =>
       ListSecretVersionsResponse(
@@ -1678,9 +1662,8 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   /// Secret payload
   final SecretPayload? payload;
 
-  AccessSecretVersionResponse({String? name, this.payload})
-    : name = name ?? '',
-      super(fullyQualifiedName);
+  AccessSecretVersionResponse({this.name = '', this.payload})
+    : super(fullyQualifiedName);
 
   factory AccessSecretVersionResponse.fromJson(Map<String, dynamic> json) =>
       AccessSecretVersionResponse(
@@ -1717,9 +1700,8 @@ final class DeleteSecretRequest extends ProtoMessage {
   /// object. If the etag is omitted, the request succeeds.
   final String etag;
 
-  DeleteSecretRequest({required this.name, String? etag})
-    : etag = etag ?? '',
-      super(fullyQualifiedName);
+  DeleteSecretRequest({required this.name, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory DeleteSecretRequest.fromJson(Map<String, dynamic> json) =>
       DeleteSecretRequest(name: json['name'] ?? '', etag: json['etag'] ?? '');
@@ -1752,9 +1734,8 @@ final class DisableSecretVersionRequest extends ProtoMessage {
   /// object. If the etag is omitted, the request succeeds.
   final String etag;
 
-  DisableSecretVersionRequest({required this.name, String? etag})
-    : etag = etag ?? '',
-      super(fullyQualifiedName);
+  DisableSecretVersionRequest({required this.name, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory DisableSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
       DisableSecretVersionRequest(
@@ -1790,9 +1771,8 @@ final class EnableSecretVersionRequest extends ProtoMessage {
   /// object. If the etag is omitted, the request succeeds.
   final String etag;
 
-  EnableSecretVersionRequest({required this.name, String? etag})
-    : etag = etag ?? '',
-      super(fullyQualifiedName);
+  EnableSecretVersionRequest({required this.name, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory EnableSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
       EnableSecretVersionRequest(
@@ -1828,9 +1808,8 @@ final class DestroySecretVersionRequest extends ProtoMessage {
   /// object. If the etag is omitted, the request succeeds.
   final String etag;
 
-  DestroySecretVersionRequest({required this.name, String? etag})
-    : etag = etag ?? '',
-      super(fullyQualifiedName);
+  DestroySecretVersionRequest({required this.name, this.etag = ''})
+    : super(fullyQualifiedName);
 
   factory DestroySecretVersionRequest.fromJson(Map<String, dynamic> json) =>
       DestroySecretVersionRequest(
