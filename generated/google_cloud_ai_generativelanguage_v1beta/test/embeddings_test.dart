@@ -39,10 +39,10 @@ void main() async {
     });
 
     tearDown(() => generativeService.close());
-    test('create', () async {
+    test('embedContent', () async {
       await testClient.startTest(
         'google_cloud_ai_generativelanguage_v1beta',
-        'embed_content',
+        'embeddings_embed_content',
       );
 
       final request = EmbedContentRequest(
@@ -57,7 +57,7 @@ void main() async {
       );
 
       final response = await generativeService.embedContent(request);
-      print(response.embedding?.values);
+      expect(response.embedding?.values, hasLength(greaterThan(1000)));
 
       await testClient.endTest();
     }, timeout: const Timeout(Duration(seconds: 60)));
