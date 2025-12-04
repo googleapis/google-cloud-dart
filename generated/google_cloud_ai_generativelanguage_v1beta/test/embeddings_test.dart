@@ -47,7 +47,13 @@ void main() async {
 
       final request = EmbedContentRequest(
         model: 'models/gemini-embedding-001',
-        content: Content(parts: [Part(text: 'What is the meaning of life?')]),
+        content: Content(
+          parts: [
+            Part(text: 'What is the meaning of life?'),
+            Part(text: 'What is the purpose of existence?'),
+            Part(text: 'How do I bake a cake?'),
+          ],
+        ),
       );
 
       final response = await generativeService.embedContent(request);

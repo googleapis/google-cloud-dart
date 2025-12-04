@@ -60,14 +60,14 @@ class RecordedResponse {
         statusCode: json['statusCode'] as int,
         headers: (json['headers'] as Map<String, dynamic>)
             .cast<String, String>(),
-        body: base64.decode(json['body'] as String),
+        body: utf8.encode(json['body'] as String),
         reasonPhrase: json['reasonPhrase'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
     'statusCode': statusCode,
     'headers': headers,
-    'body': base64.encode(body),
+    'body': utf8.decode(body),
     'reasonPhrase': reasonPhrase,
   };
 }
