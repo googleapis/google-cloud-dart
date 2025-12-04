@@ -53,22 +53,6 @@ double decodeDouble(Object? value) {
 /// Decode a `bytes` value.
 Uint8List decodeBytes(Object? value) => base64Decode(value as String);
 
-/// Decode an [ProtoEnum].
-T decodeEnum<T extends ProtoEnum>(String value, T Function(String) decoder) =>
-    decoder(value);
-
-/// Decode a [ProtoMessage].
-T decodeMessage<T extends ProtoMessage>(
-  Map<String, dynamic> value,
-  T Function(Object) decoder,
-) => decoder(value);
-
-/// Decode a [ProtoMessage] which uses a custom JSON encoding.
-T decodeCustomMessage<T extends ProtoMessage>(
-  Object value,
-  T Function(Object) decoder,
-) => decoder(value);
-
 /// Encode an `int64` value into JSON.
 String? encodeInt64(int? value) => value == null ? null : '$value';
 

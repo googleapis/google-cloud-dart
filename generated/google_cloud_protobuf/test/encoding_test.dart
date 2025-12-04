@@ -12,39 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:test/test.dart';
-
-final class TestEnum extends ProtoEnum {
-  static const one = TestEnum('ONE');
-  static const two = TestEnum('TWO');
-
-  const TestEnum(super.value);
-
-  factory TestEnum.fromJson(String json) => TestEnum(json);
-
-  @override
-  String toString() => 'TestEnum.$value';
-}
-
-final class TestMessage extends ProtoMessage {
-  static const String fullyQualifiedName = 'testMessage';
-
-  final String? message;
-
-  TestMessage({this.message}) : super(fullyQualifiedName);
-
-  factory TestMessage.fromJson(Map<String, dynamic> json) =>
-      TestMessage(message: json['message'] as String?);
-
-  @override
-  Object toJson() => {if (message != null) 'message': message};
-
-  @override
-  String toString() =>
-      'TestMessage(${[if (message != null) 'message=$message'].join(",")})';
-}
 
 void main() {
   test('int64', () {
@@ -70,14 +39,6 @@ void main() {
     expect(encodeDouble(double.nan), 'NaN');
     expect(encodeDouble(double.infinity), 'Infinity');
     expect(encodeDouble(double.negativeInfinity), '-Infinity');
-  });
-
-  test('enum', () {
-    final actual = decodeEnum(
-      const TestEnum('ONE').toJson(),
-      TestEnum.fromJson,
-    );
-    expect(actual, TestEnum.one);
   });
 
   group('bytes', () {
