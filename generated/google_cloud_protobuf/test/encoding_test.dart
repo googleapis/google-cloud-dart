@@ -92,24 +92,22 @@ void main() {
     });
 
     test('decode empty', () {
-      final bytes = decodeBytes('AQID')!;
+      final bytes = decodeBytes('AQID');
       final actual = bytes.map((item) => '$item').join(',');
       expect(actual, '1,2,3');
     });
 
     test('decode simple', () {
-      final bytes = decodeBytes('bG9yZW0gaXBzdW0=')!;
+      final bytes = decodeBytes('bG9yZW0gaXBzdW0=');
       final actual = bytes.map((item) => '$item').join(',');
       // "lorem ipsum"
       expect(actual, '108,111,114,101,109,32,105,112,115,117,109');
     });
 
     test('decode simple', () {
-      final bytes = decodeBytes('YWJjMTIzIT8kKiYoKSctPUB+')!;
+      final bytes = decodeBytes('YWJjMTIzIT8kKiYoKSctPUB+');
       final actual = bytes.map((item) => '$item').join(',');
       expect(actual, '97,98,99,49,50,51,33,63,36,42,38,40,41,39,45,61,64,126');
     });
   });
 }
-
-String stringify(Uint8List list) => list.map((i) => '$i').join(',');
