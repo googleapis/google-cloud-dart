@@ -18,79 +18,19 @@
 @TestOn('vm')
 library;
 
-import 'dart:async';
-import 'dart:convert';
-import 'dart:io';
-
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as p;
-import 'package:test_utils/insecure_proxy_http_client.dart';
 import 'package:test/test.dart';
+import 'package:test_utils/insecure_proxy_http_client.dart';
+import 'package:test_utils/matchers.dart';
 
-Matcher anyTypeName(dynamic matcher) =>
-    TypeMatcher<protobuf.Any>().having((a) => a.typeName, 'typeName', matcher);
+import 'showcase_server.dart';
 
-// TODO(https://github.com/googleapis/google-cloud-dart/issues/81):
-// Remove when `ProtoMessage` equality is supported
-Matcher pageWords(dynamic matcher) => TypeMatcher<PagedExpandResponseList>()
-    .having((a) => a.words, 'words', matcher);
-
-class ShowcaseServer {
-  final Process _process;
-
-  static Future<void> _install() async {
-    // Install showcase rather than running it using `go run` because `go run`
-    // will then spawn showcase as a subprocess, which means that we don't be
-    // able to kill it.
-    final result = await Process.run('go', [
-      'install',
-      'github.com/googleapis/gapic-showcase/cmd/gapic-showcase@latest',
-    ]);
-    if (result.exitCode != 0) {
-      throw Exception('showcase installation failed ${result.stderr}');
-    }
-  }
-
-  static Future<String> _goBinaryPath() async {
-    final result = await Process.run('go', ['env', 'GOPATH']);
-    if (result.exitCode != 0) {
-      throw Exception('go env GOPATH failed ${result.stderr}');
-    }
-    return (result.stdout as String).trim();
-  }
-
-  static Future<String> _showcasePath() async {
-    return p.join(await _goBinaryPath(), 'bin', 'gapic-showcase');
-  }
-
-  ShowcaseServer._(this._process);
-
-  static Future<ShowcaseServer> start() async {
-    await _install();
-    final process = await Process.start(await _showcasePath(), ['run']);
-    stderr.addStream(process.stderr);
-    process.stdin.close();
-    final serverStarted = Completer<void>();
-    process.stdout
-        .transform(utf8.decoder)
-        .transform(const LineSplitter())
-        .listen((line) {
-          if (line.contains('Listening for REST connections')) {
-            serverStarted.complete();
-          }
-        });
-    await serverStarted.future;
-    return ShowcaseServer._(process);
-  }
-
-  Future<void> stop() async {
-    _process.kill(ProcessSignal.sigkill);
-  }
-}
+Matcher anyTypeName(dynamic matcher) => const TypeMatcher<protobuf.Any>()
+    .having((a) => a.typeName, 'typeName', matcher);
 
 void main() async {
   late Echo echoService;
@@ -103,7 +43,7 @@ void main() async {
 
     tearDownAll(() async {
       echoService.close();
-      showcaseServer.stop();
+      await showcaseServer.stop();
     });
 
     test('echo content', () async {
@@ -265,12 +205,16 @@ void main() async {
       expect(
         response.alphabetized,
         equals({
-          'b': pageWords(['best']),
-          'I': pageWords(['It']),
-          'i': pageWords(['it']),
-          'o': pageWords(['of', 'of']),
-          't': pageWords(['the', 'times,', 'the', 'times']),
-          'w': pageWords(['was', 'was', 'worst']),
+          'b': messageEquals(PagedExpandResponseList(words: ['best'])),
+          'I': messageEquals(PagedExpandResponseList(words: ['It'])),
+          'i': messageEquals(PagedExpandResponseList(words: ['it'])),
+          'o': messageEquals(PagedExpandResponseList(words: ['of', 'of'])),
+          't': messageEquals(
+            PagedExpandResponseList(words: ['the', 'times,', 'the', 'times']),
+          ),
+          'w': messageEquals(
+            PagedExpandResponseList(words: ['was', 'was', 'worst']),
+          ),
         }),
       );
     });

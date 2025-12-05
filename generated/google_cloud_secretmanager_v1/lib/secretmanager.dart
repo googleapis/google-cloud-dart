@@ -20,6 +20,14 @@
 /// Provides convenience while improving security.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -61,9 +69,8 @@ final class SecretManagerService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory SecretManagerService.fromApiKey([String? apiKey]) {
-    return SecretManagerService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory SecretManagerService.fromApiKey([String? apiKey]) =>
+      SecretManagerService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Lists `Secrets`.
   ///
@@ -72,9 +79,10 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListSecretsResponse.fromJson(response);
@@ -88,7 +96,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> createSecret(CreateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.secretId.isNotDefault) 'secretId': request.secretId,
+      if (request.secretId case final $1 when $1.isNotDefault) 'secretId': $1,
     });
     final response = await _client.post(url, body: request.secret);
     return Secret.fromJson(response);
@@ -128,8 +136,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.secret!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.secret);
     return Secret.fromJson(response);
@@ -142,7 +149,7 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteSecret(DeleteSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.etag.isNotDefault) 'etag': request.etag,
+      if (request.etag case final $1 when $1.isNotDefault) 'etag': $1,
     });
     await _client.delete(url);
   }
@@ -157,9 +164,10 @@ final class SecretManagerService {
     ListSecretVersionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.parent}/versions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListSecretVersionsResponse.fromJson(response);
@@ -276,9 +284,9 @@ final class SecretManagerService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -312,9 +320,10 @@ final class SecretManagerService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -470,52 +479,48 @@ final class Secret extends ProtoMessage {
     this.tags = const {},
   }) : super(fullyQualifiedName);
 
-  factory Secret.fromJson(Map<String, dynamic> json) {
-    return Secret(
-      name: json['name'] ?? '',
-      replication: decode(json['replication'], Replication.fromJson),
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      labels: decodeMap(json['labels']) ?? {},
-      topics: decodeListMessage(json['topics'], Topic.fromJson) ?? [],
-      expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
-      ttl: decodeCustom(json['ttl'], Duration.fromJson),
-      etag: json['etag'] ?? '',
-      rotation: decode(json['rotation'], Rotation.fromJson),
-      versionAliases: decodeMap(json['versionAliases']) ?? {},
-      annotations: decodeMap(json['annotations']) ?? {},
-      versionDestroyTtl: decodeCustom(
-        json['versionDestroyTtl'],
-        Duration.fromJson,
-      ),
-      customerManagedEncryption: decode(
-        json['customerManagedEncryption'],
-        CustomerManagedEncryption.fromJson,
-      ),
-      tags: decodeMap(json['tags']) ?? {},
-    );
-  }
+  factory Secret.fromJson(Map<String, dynamic> json) => Secret(
+    name: json['name'] ?? '',
+    replication: decode(json['replication'], Replication.fromJson),
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    labels: decodeMap(json['labels']) ?? {},
+    topics: decodeListMessage(json['topics'], Topic.fromJson) ?? [],
+    expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
+    ttl: decodeCustom(json['ttl'], Duration.fromJson),
+    etag: json['etag'] ?? '',
+    rotation: decode(json['rotation'], Rotation.fromJson),
+    versionAliases: decodeMap(json['versionAliases']) ?? {},
+    annotations: decodeMap(json['annotations']) ?? {},
+    versionDestroyTtl: decodeCustom(
+      json['versionDestroyTtl'],
+      Duration.fromJson,
+    ),
+    customerManagedEncryption: decode(
+      json['customerManagedEncryption'],
+      CustomerManagedEncryption.fromJson,
+    ),
+    tags: decodeMap(json['tags']) ?? {},
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (replication != null) 'replication': replication!.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (labels.isNotDefault) 'labels': labels,
-      if (topics.isNotDefault) 'topics': encodeList(topics),
-      if (expireTime != null) 'expireTime': expireTime!.toJson(),
-      if (ttl != null) 'ttl': ttl!.toJson(),
-      if (etag.isNotDefault) 'etag': etag,
-      if (rotation != null) 'rotation': rotation!.toJson(),
-      if (versionAliases.isNotDefault) 'versionAliases': versionAliases,
-      if (annotations.isNotDefault) 'annotations': annotations,
-      if (versionDestroyTtl != null)
-        'versionDestroyTtl': versionDestroyTtl!.toJson(),
-      if (customerManagedEncryption != null)
-        'customerManagedEncryption': customerManagedEncryption!.toJson(),
-      if (tags.isNotDefault) 'tags': tags,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (replication != null) 'replication': replication!.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (labels.isNotDefault) 'labels': labels,
+    if (topics.isNotDefault) 'topics': encodeList(topics),
+    if (expireTime != null) 'expireTime': expireTime!.toJson(),
+    if (ttl != null) 'ttl': ttl!.toJson(),
+    if (etag.isNotDefault) 'etag': etag,
+    if (rotation != null) 'rotation': rotation!.toJson(),
+    if (versionAliases.isNotDefault) 'versionAliases': versionAliases,
+    if (annotations.isNotDefault) 'annotations': annotations,
+    if (versionDestroyTtl != null)
+      'versionDestroyTtl': versionDestroyTtl!.toJson(),
+    if (customerManagedEncryption != null)
+      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (tags.isNotDefault) 'tags': tags,
+  };
 
   @override
   String toString() {
@@ -594,50 +599,46 @@ final class SecretVersion extends ProtoMessage {
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
-  factory SecretVersion.fromJson(Map<String, dynamic> json) {
-    return SecretVersion(
-      name: json['name'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      destroyTime: decodeCustom(json['destroyTime'], Timestamp.fromJson),
-      state:
-          decodeEnum(json['state'], SecretVersion_State.fromJson) ??
-          SecretVersion_State.$default,
-      replicationStatus: decode(
-        json['replicationStatus'],
-        ReplicationStatus.fromJson,
-      ),
-      etag: json['etag'] ?? '',
-      clientSpecifiedPayloadChecksum:
-          json['clientSpecifiedPayloadChecksum'] ?? false,
-      scheduledDestroyTime: decodeCustom(
-        json['scheduledDestroyTime'],
-        Timestamp.fromJson,
-      ),
-      customerManagedEncryption: decode(
-        json['customerManagedEncryption'],
-        CustomerManagedEncryptionStatus.fromJson,
-      ),
-    );
-  }
+  factory SecretVersion.fromJson(Map<String, dynamic> json) => SecretVersion(
+    name: json['name'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    destroyTime: decodeCustom(json['destroyTime'], Timestamp.fromJson),
+    state:
+        decodeEnum(json['state'], SecretVersion_State.fromJson) ??
+        SecretVersion_State.$default,
+    replicationStatus: decode(
+      json['replicationStatus'],
+      ReplicationStatus.fromJson,
+    ),
+    etag: json['etag'] ?? '',
+    clientSpecifiedPayloadChecksum:
+        json['clientSpecifiedPayloadChecksum'] ?? false,
+    scheduledDestroyTime: decodeCustom(
+      json['scheduledDestroyTime'],
+      Timestamp.fromJson,
+    ),
+    customerManagedEncryption: decode(
+      json['customerManagedEncryption'],
+      CustomerManagedEncryptionStatus.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (destroyTime != null) 'destroyTime': destroyTime!.toJson(),
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (replicationStatus != null)
-        'replicationStatus': replicationStatus!.toJson(),
-      if (etag.isNotDefault) 'etag': etag,
-      if (clientSpecifiedPayloadChecksum.isNotDefault)
-        'clientSpecifiedPayloadChecksum': clientSpecifiedPayloadChecksum,
-      if (scheduledDestroyTime != null)
-        'scheduledDestroyTime': scheduledDestroyTime!.toJson(),
-      if (customerManagedEncryption != null)
-        'customerManagedEncryption': customerManagedEncryption!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (destroyTime != null) 'destroyTime': destroyTime!.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (replicationStatus != null)
+      'replicationStatus': replicationStatus!.toJson(),
+    if (etag.isNotDefault) 'etag': etag,
+    if (clientSpecifiedPayloadChecksum.isNotDefault)
+      'clientSpecifiedPayloadChecksum': clientSpecifiedPayloadChecksum,
+    if (scheduledDestroyTime != null)
+      'scheduledDestroyTime': scheduledDestroyTime!.toJson(),
+    if (customerManagedEncryption != null)
+      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+  };
 
   @override
   String toString() {
@@ -703,23 +704,16 @@ final class Replication extends ProtoMessage {
 
   Replication({this.automatic, this.userManaged}) : super(fullyQualifiedName);
 
-  factory Replication.fromJson(Map<String, dynamic> json) {
-    return Replication(
-      automatic: decode(json['automatic'], Replication_Automatic.fromJson),
-      userManaged: decode(
-        json['userManaged'],
-        Replication_UserManaged.fromJson,
-      ),
-    );
-  }
+  factory Replication.fromJson(Map<String, dynamic> json) => Replication(
+    automatic: decode(json['automatic'], Replication_Automatic.fromJson),
+    userManaged: decode(json['userManaged'], Replication_UserManaged.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (automatic != null) 'automatic': automatic!.toJson(),
-      if (userManaged != null) 'userManaged': userManaged!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (automatic != null) 'automatic': automatic!.toJson(),
+    if (userManaged != null) 'userManaged': userManaged!.toJson(),
+  };
 
   @override
   String toString() => 'Replication()';
@@ -746,22 +740,19 @@ final class Replication_Automatic extends ProtoMessage {
   Replication_Automatic({this.customerManagedEncryption})
     : super(fullyQualifiedName);
 
-  factory Replication_Automatic.fromJson(Map<String, dynamic> json) {
-    return Replication_Automatic(
-      customerManagedEncryption: decode(
-        json['customerManagedEncryption'],
-        CustomerManagedEncryption.fromJson,
-      ),
-    );
-  }
+  factory Replication_Automatic.fromJson(Map<String, dynamic> json) =>
+      Replication_Automatic(
+        customerManagedEncryption: decode(
+          json['customerManagedEncryption'],
+          CustomerManagedEncryption.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (customerManagedEncryption != null)
-        'customerManagedEncryption': customerManagedEncryption!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (customerManagedEncryption != null)
+      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+  };
 
   @override
   String toString() => 'Automatic()';
@@ -783,21 +774,18 @@ final class Replication_UserManaged extends ProtoMessage {
 
   Replication_UserManaged({required this.replicas}) : super(fullyQualifiedName);
 
-  factory Replication_UserManaged.fromJson(Map<String, dynamic> json) {
-    return Replication_UserManaged(
-      replicas:
-          decodeListMessage(
-            json['replicas'],
-            Replication_UserManaged_Replica.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory Replication_UserManaged.fromJson(Map<String, dynamic> json) =>
+      Replication_UserManaged(
+        replicas:
+            decodeListMessage(
+              json['replicas'],
+              Replication_UserManaged_Replica.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {'replicas': encodeList(replicas)};
-  }
+  Object toJson() => {'replicas': encodeList(replicas)};
 
   @override
   String toString() => 'UserManaged()';
@@ -829,24 +817,21 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
     this.customerManagedEncryption,
   }) : super(fullyQualifiedName);
 
-  factory Replication_UserManaged_Replica.fromJson(Map<String, dynamic> json) {
-    return Replication_UserManaged_Replica(
-      location: json['location'] ?? '',
-      customerManagedEncryption: decode(
-        json['customerManagedEncryption'],
-        CustomerManagedEncryption.fromJson,
-      ),
-    );
-  }
+  factory Replication_UserManaged_Replica.fromJson(Map<String, dynamic> json) =>
+      Replication_UserManaged_Replica(
+        location: json['location'] ?? '',
+        customerManagedEncryption: decode(
+          json['customerManagedEncryption'],
+          CustomerManagedEncryption.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (location.isNotDefault) 'location': location,
-      if (customerManagedEncryption != null)
-        'customerManagedEncryption': customerManagedEncryption!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (location.isNotDefault) 'location': location,
+    if (customerManagedEncryption != null)
+      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+  };
 
   @override
   String toString() {
@@ -879,14 +864,11 @@ final class CustomerManagedEncryption extends ProtoMessage {
   CustomerManagedEncryption({required this.kmsKeyName})
     : super(fullyQualifiedName);
 
-  factory CustomerManagedEncryption.fromJson(Map<String, dynamic> json) {
-    return CustomerManagedEncryption(kmsKeyName: json['kmsKeyName'] ?? '');
-  }
+  factory CustomerManagedEncryption.fromJson(Map<String, dynamic> json) =>
+      CustomerManagedEncryption(kmsKeyName: json['kmsKeyName'] ?? '');
 
   @override
-  Object toJson() {
-    return {'kmsKeyName': kmsKeyName};
-  }
+  Object toJson() => {'kmsKeyName': kmsKeyName};
 
   @override
   String toString() {
@@ -922,26 +904,23 @@ final class ReplicationStatus extends ProtoMessage {
   ReplicationStatus({this.automatic, this.userManaged})
     : super(fullyQualifiedName);
 
-  factory ReplicationStatus.fromJson(Map<String, dynamic> json) {
-    return ReplicationStatus(
-      automatic: decode(
-        json['automatic'],
-        ReplicationStatus_AutomaticStatus.fromJson,
-      ),
-      userManaged: decode(
-        json['userManaged'],
-        ReplicationStatus_UserManagedStatus.fromJson,
-      ),
-    );
-  }
+  factory ReplicationStatus.fromJson(Map<String, dynamic> json) =>
+      ReplicationStatus(
+        automatic: decode(
+          json['automatic'],
+          ReplicationStatus_AutomaticStatus.fromJson,
+        ),
+        userManaged: decode(
+          json['userManaged'],
+          ReplicationStatus_UserManagedStatus.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (automatic != null) 'automatic': automatic!.toJson(),
-      if (userManaged != null) 'userManaged': userManaged!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (automatic != null) 'automatic': automatic!.toJson(),
+    if (userManaged != null) 'userManaged': userManaged!.toJson(),
+  };
 
   @override
   String toString() => 'ReplicationStatus()';
@@ -967,22 +946,18 @@ final class ReplicationStatus_AutomaticStatus extends ProtoMessage {
 
   factory ReplicationStatus_AutomaticStatus.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return ReplicationStatus_AutomaticStatus(
-      customerManagedEncryption: decode(
-        json['customerManagedEncryption'],
-        CustomerManagedEncryptionStatus.fromJson,
-      ),
-    );
-  }
+  ) => ReplicationStatus_AutomaticStatus(
+    customerManagedEncryption: decode(
+      json['customerManagedEncryption'],
+      CustomerManagedEncryptionStatus.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (customerManagedEncryption != null)
-        'customerManagedEncryption': customerManagedEncryption!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (customerManagedEncryption != null)
+      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+  };
 
   @override
   String toString() => 'AutomaticStatus()';
@@ -1007,21 +982,19 @@ final class ReplicationStatus_UserManagedStatus extends ProtoMessage {
 
   factory ReplicationStatus_UserManagedStatus.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return ReplicationStatus_UserManagedStatus(
-      replicas:
-          decodeListMessage(
-            json['replicas'],
-            ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson,
-          ) ??
-          [],
-    );
-  }
+  ) => ReplicationStatus_UserManagedStatus(
+    replicas:
+        decodeListMessage(
+          json['replicas'],
+          ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {if (replicas.isNotDefault) 'replicas': encodeList(replicas)};
-  }
+  Object toJson() => {
+    if (replicas.isNotDefault) 'replicas': encodeList(replicas),
+  };
 
   @override
   String toString() => 'UserManagedStatus()';
@@ -1050,24 +1023,20 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
 
   factory ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return ReplicationStatus_UserManagedStatus_ReplicaStatus(
-      location: json['location'] ?? '',
-      customerManagedEncryption: decode(
-        json['customerManagedEncryption'],
-        CustomerManagedEncryptionStatus.fromJson,
-      ),
-    );
-  }
+  ) => ReplicationStatus_UserManagedStatus_ReplicaStatus(
+    location: json['location'] ?? '',
+    customerManagedEncryption: decode(
+      json['customerManagedEncryption'],
+      CustomerManagedEncryptionStatus.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (location.isNotDefault) 'location': location,
-      if (customerManagedEncryption != null)
-        'customerManagedEncryption': customerManagedEncryption!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (location.isNotDefault) 'location': location,
+    if (customerManagedEncryption != null)
+      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1089,16 +1058,13 @@ final class CustomerManagedEncryptionStatus extends ProtoMessage {
   CustomerManagedEncryptionStatus({required this.kmsKeyVersionName})
     : super(fullyQualifiedName);
 
-  factory CustomerManagedEncryptionStatus.fromJson(Map<String, dynamic> json) {
-    return CustomerManagedEncryptionStatus(
-      kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
-    );
-  }
+  factory CustomerManagedEncryptionStatus.fromJson(Map<String, dynamic> json) =>
+      CustomerManagedEncryptionStatus(
+        kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'kmsKeyVersionName': kmsKeyVersionName};
-  }
+  Object toJson() => {'kmsKeyVersionName': kmsKeyVersionName};
 
   @override
   String toString() {
@@ -1122,14 +1088,11 @@ final class Topic extends ProtoMessage {
 
   Topic({this.name = ''}) : super(fullyQualifiedName);
 
-  factory Topic.fromJson(Map<String, dynamic> json) {
-    return Topic(name: json['name'] ?? '');
-  }
+  factory Topic.fromJson(Map<String, dynamic> json) =>
+      Topic(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -1174,24 +1137,20 @@ final class Rotation extends ProtoMessage {
   Rotation({this.nextRotationTime, this.rotationPeriod})
     : super(fullyQualifiedName);
 
-  factory Rotation.fromJson(Map<String, dynamic> json) {
-    return Rotation(
-      nextRotationTime: decodeCustom(
-        json['nextRotationTime'],
-        Timestamp.fromJson,
-      ),
-      rotationPeriod: decodeCustom(json['rotationPeriod'], Duration.fromJson),
-    );
-  }
+  factory Rotation.fromJson(Map<String, dynamic> json) => Rotation(
+    nextRotationTime: decodeCustom(
+      json['nextRotationTime'],
+      Timestamp.fromJson,
+    ),
+    rotationPeriod: decodeCustom(json['rotationPeriod'], Duration.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (nextRotationTime != null)
-        'nextRotationTime': nextRotationTime!.toJson(),
-      if (rotationPeriod != null) 'rotationPeriod': rotationPeriod!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (nextRotationTime != null)
+      'nextRotationTime': nextRotationTime!.toJson(),
+    if (rotationPeriod != null) 'rotationPeriod': rotationPeriod!.toJson(),
+  };
 
   @override
   String toString() => 'Rotation()';
@@ -1205,7 +1164,7 @@ final class SecretPayload extends ProtoMessage {
       'google.cloud.secretmanager.v1.SecretPayload';
 
   /// The secret data. Must be no larger than 64KiB.
-  final Uint8List? data;
+  final Uint8List data;
 
   /// Optional. If specified,
   /// `SecretManagerService`
@@ -1225,27 +1184,25 @@ final class SecretPayload extends ProtoMessage {
   /// https://cloud.google.com/apis/design/design_patterns#integer_types
   final int? dataCrc32C;
 
-  SecretPayload({this.data, this.dataCrc32C}) : super(fullyQualifiedName);
+  SecretPayload({Uint8List? data, this.dataCrc32C})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
-  factory SecretPayload.fromJson(Map<String, dynamic> json) {
-    return SecretPayload(
-      data: decodeBytes(json['data']),
-      dataCrc32C: decodeInt64(json['dataCrc32c']),
-    );
-  }
+  factory SecretPayload.fromJson(Map<String, dynamic> json) => SecretPayload(
+    data: decodeBytes(json['data']) ?? Uint8List(0),
+    dataCrc32C: decodeInt64(json['dataCrc32c']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (data != null) 'data': encodeBytes(data),
-      if (dataCrc32C != null) 'dataCrc32c': encodeInt64(dataCrc32C),
-    };
-  }
+  Object toJson() => {
+    if (data.isNotDefault) 'data': encodeBytes(data),
+    if (dataCrc32C != null) 'dataCrc32c': encodeInt64(dataCrc32C),
+  };
 
   @override
   String toString() {
     final contents = [
-      if (data != null) 'data=$data',
+      'data=$data',
       if (dataCrc32C != null) 'dataCrc32c=$dataCrc32C',
     ].join(',');
     return 'SecretPayload($contents)';
@@ -1286,24 +1243,21 @@ final class ListSecretsRequest extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory ListSecretsRequest.fromJson(Map<String, dynamic> json) {
-    return ListSecretsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-      filter: json['filter'] ?? '',
-    );
-  }
+  factory ListSecretsRequest.fromJson(Map<String, dynamic> json) =>
+      ListSecretsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+        filter: json['filter'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (filter.isNotDefault) 'filter': filter,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (filter.isNotDefault) 'filter': filter,
+  };
 
   @override
   String toString() {
@@ -1344,22 +1298,19 @@ final class ListSecretsResponse extends ProtoMessage {
     this.totalSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListSecretsResponse.fromJson(Map<String, dynamic> json) {
-    return ListSecretsResponse(
-      secrets: decodeListMessage(json['secrets'], Secret.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-      totalSize: json['totalSize'] ?? 0,
-    );
-  }
+  factory ListSecretsResponse.fromJson(Map<String, dynamic> json) =>
+      ListSecretsResponse(
+        secrets: decodeListMessage(json['secrets'], Secret.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+        totalSize: json['totalSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (secrets.isNotDefault) 'secrets': encodeList(secrets),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-      if (totalSize.isNotDefault) 'totalSize': totalSize,
-    };
-  }
+  Object toJson() => {
+    if (secrets.isNotDefault) 'secrets': encodeList(secrets),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+    if (totalSize.isNotDefault) 'totalSize': totalSize,
+  };
 
   @override
   String toString() {
@@ -1399,22 +1350,19 @@ final class CreateSecretRequest extends ProtoMessage {
     required this.secret,
   }) : super(fullyQualifiedName);
 
-  factory CreateSecretRequest.fromJson(Map<String, dynamic> json) {
-    return CreateSecretRequest(
-      parent: json['parent'] ?? '',
-      secretId: json['secretId'] ?? '',
-      secret: decode(json['secret'], Secret.fromJson),
-    );
-  }
+  factory CreateSecretRequest.fromJson(Map<String, dynamic> json) =>
+      CreateSecretRequest(
+        parent: json['parent'] ?? '',
+        secretId: json['secretId'] ?? '',
+        secret: decode(json['secret'], Secret.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      'secretId': secretId,
-      if (secret != null) 'secret': secret!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    'secretId': secretId,
+    if (secret != null) 'secret': secret!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1442,20 +1390,17 @@ final class AddSecretVersionRequest extends ProtoMessage {
   AddSecretVersionRequest({required this.parent, required this.payload})
     : super(fullyQualifiedName);
 
-  factory AddSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return AddSecretVersionRequest(
-      parent: json['parent'] ?? '',
-      payload: decode(json['payload'], SecretPayload.fromJson),
-    );
-  }
+  factory AddSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
+      AddSecretVersionRequest(
+        parent: json['parent'] ?? '',
+        payload: decode(json['payload'], SecretPayload.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (payload != null) 'payload': payload!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (payload != null) 'payload': payload!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1477,14 +1422,11 @@ final class GetSecretRequest extends ProtoMessage {
 
   GetSecretRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSecretRequest.fromJson(Map<String, dynamic> json) {
-    return GetSecretRequest(name: json['name'] ?? '');
-  }
+  factory GetSecretRequest.fromJson(Map<String, dynamic> json) =>
+      GetSecretRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -1528,24 +1470,21 @@ final class ListSecretVersionsRequest extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory ListSecretVersionsRequest.fromJson(Map<String, dynamic> json) {
-    return ListSecretVersionsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-      filter: json['filter'] ?? '',
-    );
-  }
+  factory ListSecretVersionsRequest.fromJson(Map<String, dynamic> json) =>
+      ListSecretVersionsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+        filter: json['filter'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (filter.isNotDefault) 'filter': filter,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (filter.isNotDefault) 'filter': filter,
+  };
 
   @override
   String toString() {
@@ -1587,23 +1526,20 @@ final class ListSecretVersionsResponse extends ProtoMessage {
     this.totalSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListSecretVersionsResponse.fromJson(Map<String, dynamic> json) {
-    return ListSecretVersionsResponse(
-      versions:
-          decodeListMessage(json['versions'], SecretVersion.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-      totalSize: json['totalSize'] ?? 0,
-    );
-  }
+  factory ListSecretVersionsResponse.fromJson(Map<String, dynamic> json) =>
+      ListSecretVersionsResponse(
+        versions:
+            decodeListMessage(json['versions'], SecretVersion.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+        totalSize: json['totalSize'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (versions.isNotDefault) 'versions': encodeList(versions),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-      if (totalSize.isNotDefault) 'totalSize': totalSize,
-    };
-  }
+  Object toJson() => {
+    if (versions.isNotDefault) 'versions': encodeList(versions),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+    if (totalSize.isNotDefault) 'totalSize': totalSize,
+  };
 
   @override
   String toString() {
@@ -1634,14 +1570,11 @@ final class GetSecretVersionRequest extends ProtoMessage {
 
   GetSecretVersionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return GetSecretVersionRequest(name: json['name'] ?? '');
-  }
+  factory GetSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
+      GetSecretVersionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -1666,20 +1599,17 @@ final class UpdateSecretRequest extends ProtoMessage {
   UpdateSecretRequest({required this.secret, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateSecretRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateSecretRequest(
-      secret: decode(json['secret'], Secret.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateSecretRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateSecretRequest(
+        secret: decode(json['secret'], Secret.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (secret != null) 'secret': secret!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (secret != null) 'secret': secret!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateSecretRequest()';
@@ -1704,14 +1634,11 @@ final class AccessSecretVersionRequest extends ProtoMessage {
 
   AccessSecretVersionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory AccessSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return AccessSecretVersionRequest(name: json['name'] ?? '');
-  }
+  factory AccessSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
+      AccessSecretVersionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -1738,20 +1665,17 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   AccessSecretVersionResponse({this.name = '', this.payload})
     : super(fullyQualifiedName);
 
-  factory AccessSecretVersionResponse.fromJson(Map<String, dynamic> json) {
-    return AccessSecretVersionResponse(
-      name: json['name'] ?? '',
-      payload: decode(json['payload'], SecretPayload.fromJson),
-    );
-  }
+  factory AccessSecretVersionResponse.fromJson(Map<String, dynamic> json) =>
+      AccessSecretVersionResponse(
+        name: json['name'] ?? '',
+        payload: decode(json['payload'], SecretPayload.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (payload != null) 'payload': payload!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (payload != null) 'payload': payload!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1779,17 +1703,11 @@ final class DeleteSecretRequest extends ProtoMessage {
   DeleteSecretRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory DeleteSecretRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteSecretRequest(
-      name: json['name'] ?? '',
-      etag: json['etag'] ?? '',
-    );
-  }
+  factory DeleteSecretRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteSecretRequest(name: json['name'] ?? '', etag: json['etag'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name, if (etag.isNotDefault) 'etag': etag};
-  }
+  Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
 
   @override
   String toString() {
@@ -1819,17 +1737,14 @@ final class DisableSecretVersionRequest extends ProtoMessage {
   DisableSecretVersionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory DisableSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return DisableSecretVersionRequest(
-      name: json['name'] ?? '',
-      etag: json['etag'] ?? '',
-    );
-  }
+  factory DisableSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
+      DisableSecretVersionRequest(
+        name: json['name'] ?? '',
+        etag: json['etag'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, if (etag.isNotDefault) 'etag': etag};
-  }
+  Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
 
   @override
   String toString() {
@@ -1859,17 +1774,14 @@ final class EnableSecretVersionRequest extends ProtoMessage {
   EnableSecretVersionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory EnableSecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return EnableSecretVersionRequest(
-      name: json['name'] ?? '',
-      etag: json['etag'] ?? '',
-    );
-  }
+  factory EnableSecretVersionRequest.fromJson(Map<String, dynamic> json) =>
+      EnableSecretVersionRequest(
+        name: json['name'] ?? '',
+        etag: json['etag'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, if (etag.isNotDefault) 'etag': etag};
-  }
+  Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
 
   @override
   String toString() {
@@ -1899,17 +1811,14 @@ final class DestroySecretVersionRequest extends ProtoMessage {
   DestroySecretVersionRequest({required this.name, this.etag = ''})
     : super(fullyQualifiedName);
 
-  factory DestroySecretVersionRequest.fromJson(Map<String, dynamic> json) {
-    return DestroySecretVersionRequest(
-      name: json['name'] ?? '',
-      etag: json['etag'] ?? '',
-    );
-  }
+  factory DestroySecretVersionRequest.fromJson(Map<String, dynamic> json) =>
+      DestroySecretVersionRequest(
+        name: json['name'] ?? '',
+        etag: json['etag'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, if (etag.isNotDefault) 'etag': etag};
-  }
+  Object toJson() => {'name': name, if (etag.isNotDefault) 'etag': etag};
 
   @override
   String toString() {

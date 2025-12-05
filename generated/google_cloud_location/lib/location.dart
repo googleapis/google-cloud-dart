@@ -21,6 +21,14 @@
 /// zones, regions, and countries.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:google_cloud_rpc/service_client.dart';
@@ -56,9 +64,8 @@ final class Locations {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory Locations.fromApiKey([String? apiKey]) {
-    return Locations(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory Locations.fromApiKey([String? apiKey]) =>
+      Locations(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Lists information about the supported locations for this service.
   ///
@@ -69,9 +76,10 @@ final class Locations {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -118,24 +126,21 @@ final class ListLocationsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListLocationsRequest.fromJson(Map<String, dynamic> json) {
-    return ListLocationsRequest(
-      name: json['name'] ?? '',
-      filter: json['filter'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListLocationsRequest.fromJson(Map<String, dynamic> json) =>
+      ListLocationsRequest(
+        name: json['name'] ?? '',
+        filter: json['filter'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (filter.isNotDefault) 'filter': filter,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (filter.isNotDefault) 'filter': filter,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -163,20 +168,18 @@ final class ListLocationsResponse extends ProtoMessage {
   ListLocationsResponse({this.locations = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLocationsResponse.fromJson(Map<String, dynamic> json) {
-    return ListLocationsResponse(
-      locations: decodeListMessage(json['locations'], Location.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListLocationsResponse.fromJson(Map<String, dynamic> json) =>
+      ListLocationsResponse(
+        locations:
+            decodeListMessage(json['locations'], Location.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (locations.isNotDefault) 'locations': encodeList(locations),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (locations.isNotDefault) 'locations': encodeList(locations),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -195,14 +198,11 @@ final class GetLocationRequest extends ProtoMessage {
 
   GetLocationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory GetLocationRequest.fromJson(Map<String, dynamic> json) {
-    return GetLocationRequest(name: json['name'] ?? '');
-  }
+  factory GetLocationRequest.fromJson(Map<String, dynamic> json) =>
+      GetLocationRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (name.isNotDefault) 'name': name};
-  }
+  Object toJson() => {if (name.isNotDefault) 'name': name};
 
   @override
   String toString() {
@@ -243,26 +243,22 @@ final class Location extends ProtoMessage {
     this.metadata,
   }) : super(fullyQualifiedName);
 
-  factory Location.fromJson(Map<String, dynamic> json) {
-    return Location(
-      name: json['name'] ?? '',
-      locationId: json['locationId'] ?? '',
-      displayName: json['displayName'] ?? '',
-      labels: decodeMap(json['labels']) ?? {},
-      metadata: decode(json['metadata'], Any.fromJson),
-    );
-  }
+  factory Location.fromJson(Map<String, dynamic> json) => Location(
+    name: json['name'] ?? '',
+    locationId: json['locationId'] ?? '',
+    displayName: json['displayName'] ?? '',
+    labels: decodeMap(json['labels']) ?? {},
+    metadata: decode(json['metadata'], Any.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (locationId.isNotDefault) 'locationId': locationId,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (labels.isNotDefault) 'labels': labels,
-      if (metadata != null) 'metadata': metadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (locationId.isNotDefault) 'locationId': locationId,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (labels.isNotDefault) 'labels': labels,
+    if (metadata != null) 'metadata': metadata!.toJson(),
+  };
 
   @override
   String toString() {

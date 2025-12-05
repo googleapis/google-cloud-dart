@@ -19,6 +19,14 @@
 /// Manages lightweight user-provided functions executed in response to events.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
@@ -62,9 +70,8 @@ final class FunctionService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory FunctionService.fromApiKey([String? apiKey]) {
-    return FunctionService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory FunctionService.fromApiKey([String? apiKey]) =>
+      FunctionService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Returns a function with the given name from the requested project.
   ///
@@ -73,7 +80,7 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Function$> getFunction(GetFunctionRequest request) async {
     final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.revision.isNotDefault) 'revision': request.revision,
+      if (request.revision case final $1 when $1.isNotDefault) 'revision': $1,
     });
     final response = await _client.get(url);
     return Function$.fromJson(response);
@@ -88,10 +95,11 @@ final class FunctionService {
     ListFunctionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.orderBy.isNotDefault) 'orderBy': request.orderBy,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
     });
     final response = await _client.get(url);
     return ListFunctionsResponse.fromJson(response);
@@ -114,7 +122,8 @@ final class FunctionService {
     CreateFunctionRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.functionId.isNotDefault) 'functionId': request.functionId,
+      if (request.functionId case final $1 when $1.isNotDefault)
+        'functionId': $1,
     });
     final response = await _client.post(url, body: request.function);
     return Operation.fromJson(
@@ -138,8 +147,7 @@ final class FunctionService {
     UpdateFunctionRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.function!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.function);
     return Operation.fromJson(
@@ -234,7 +242,7 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
     final url = Uri.https(_host, '/v2/${request.parent}/runtimes', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListRuntimesResponse.fromJson(response);
@@ -249,9 +257,10 @@ final class FunctionService {
     ListLocationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/locations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
@@ -280,9 +289,9 @@ final class FunctionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v2/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion.isNotDefault)
-        'options.requestedPolicyVersion':
-            '${request.options!.requestedPolicyVersion}',
+      if (request.options!.requestedPolicyVersion case final $1
+          when $1.isNotDefault)
+        'options.requestedPolicyVersion': '${$1}',
     });
     final response = await _client.get(url);
     return Policy.fromJson(response);
@@ -316,11 +325,12 @@ final class FunctionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -422,50 +432,45 @@ final class Function$ extends ProtoMessage {
     this.createTime,
   }) : super(fullyQualifiedName);
 
-  factory Function$.fromJson(Map<String, dynamic> json) {
-    return Function$(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      buildConfig: decode(json['buildConfig'], BuildConfig.fromJson),
-      serviceConfig: decode(json['serviceConfig'], ServiceConfig.fromJson),
-      eventTrigger: decode(json['eventTrigger'], EventTrigger.fromJson),
-      state:
-          decodeEnum(json['state'], Function$_State.fromJson) ??
-          Function$_State.$default,
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      labels: decodeMap(json['labels']) ?? {},
-      stateMessages:
-          decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
-      environment:
-          decodeEnum(json['environment'], Environment.fromJson) ??
-          Environment.$default,
-      url: json['url'] ?? '',
-      kmsKeyName: json['kmsKeyName'] ?? '',
-      satisfiesPzs: json['satisfiesPzs'] ?? false,
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    );
-  }
+  factory Function$.fromJson(Map<String, dynamic> json) => Function$(
+    name: json['name'] ?? '',
+    description: json['description'] ?? '',
+    buildConfig: decode(json['buildConfig'], BuildConfig.fromJson),
+    serviceConfig: decode(json['serviceConfig'], ServiceConfig.fromJson),
+    eventTrigger: decode(json['eventTrigger'], EventTrigger.fromJson),
+    state:
+        decodeEnum(json['state'], Function$_State.fromJson) ??
+        Function$_State.$default,
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    labels: decodeMap(json['labels']) ?? {},
+    stateMessages:
+        decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
+    environment:
+        decodeEnum(json['environment'], Environment.fromJson) ??
+        Environment.$default,
+    url: json['url'] ?? '',
+    kmsKeyName: json['kmsKeyName'] ?? '',
+    satisfiesPzs: json['satisfiesPzs'] ?? false,
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (description.isNotDefault) 'description': description,
-      if (buildConfig != null) 'buildConfig': buildConfig!.toJson(),
-      if (serviceConfig != null) 'serviceConfig': serviceConfig!.toJson(),
-      if (eventTrigger != null) 'eventTrigger': eventTrigger!.toJson(),
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (labels.isNotDefault) 'labels': labels,
-      if (stateMessages.isNotDefault)
-        'stateMessages': encodeList(stateMessages),
-      if (environment.isNotDefault) 'environment': environment.toJson(),
-      if (url.isNotDefault) 'url': url,
-      if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
-      if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (description.isNotDefault) 'description': description,
+    if (buildConfig != null) 'buildConfig': buildConfig!.toJson(),
+    if (serviceConfig != null) 'serviceConfig': serviceConfig!.toJson(),
+    if (eventTrigger != null) 'eventTrigger': eventTrigger!.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (labels.isNotDefault) 'labels': labels,
+    if (stateMessages.isNotDefault) 'stateMessages': encodeList(stateMessages),
+    if (environment.isNotDefault) 'environment': environment.toJson(),
+    if (url.isNotDefault) 'url': url,
+    if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
+    if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -536,24 +541,20 @@ final class StateMessage extends ProtoMessage {
     this.message = '',
   }) : super(fullyQualifiedName);
 
-  factory StateMessage.fromJson(Map<String, dynamic> json) {
-    return StateMessage(
-      severity:
-          decodeEnum(json['severity'], StateMessage_Severity.fromJson) ??
-          StateMessage_Severity.$default,
-      type: json['type'] ?? '',
-      message: json['message'] ?? '',
-    );
-  }
+  factory StateMessage.fromJson(Map<String, dynamic> json) => StateMessage(
+    severity:
+        decodeEnum(json['severity'], StateMessage_Severity.fromJson) ??
+        StateMessage_Severity.$default,
+    type: json['type'] ?? '',
+    message: json['message'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (severity.isNotDefault) 'severity': severity.toJson(),
-      if (type.isNotDefault) 'type': type,
-      if (message.isNotDefault) 'message': message,
-    };
-  }
+  Object toJson() => {
+    if (severity.isNotDefault) 'severity': severity.toJson(),
+    if (type.isNotDefault) 'type': type,
+    if (message.isNotDefault) 'message': message,
+  };
 
   @override
   String toString() {
@@ -628,24 +629,20 @@ final class StorageSource extends ProtoMessage {
     this.sourceUploadUrl = '',
   }) : super(fullyQualifiedName);
 
-  factory StorageSource.fromJson(Map<String, dynamic> json) {
-    return StorageSource(
-      bucket: json['bucket'] ?? '',
-      object: json['object'] ?? '',
-      generation: decodeInt64(json['generation']) ?? 0,
-      sourceUploadUrl: json['sourceUploadUrl'] ?? '',
-    );
-  }
+  factory StorageSource.fromJson(Map<String, dynamic> json) => StorageSource(
+    bucket: json['bucket'] ?? '',
+    object: json['object'] ?? '',
+    generation: decodeInt64(json['generation']) ?? 0,
+    sourceUploadUrl: json['sourceUploadUrl'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (bucket.isNotDefault) 'bucket': bucket,
-      if (object.isNotDefault) 'object': object,
-      if (generation.isNotDefault) 'generation': encodeInt64(generation),
-      if (sourceUploadUrl.isNotDefault) 'sourceUploadUrl': sourceUploadUrl,
-    };
-  }
+  Object toJson() => {
+    if (bucket.isNotDefault) 'bucket': bucket,
+    if (object.isNotDefault) 'object': object,
+    if (generation.isNotDefault) 'generation': encodeInt64(generation),
+    if (sourceUploadUrl.isNotDefault) 'sourceUploadUrl': sourceUploadUrl,
+  };
 
   @override
   String toString() {
@@ -707,30 +704,26 @@ final class RepoSource extends ProtoMessage {
     this.invertRegex = false,
   }) : super(fullyQualifiedName);
 
-  factory RepoSource.fromJson(Map<String, dynamic> json) {
-    return RepoSource(
-      branchName: json['branchName'],
-      tagName: json['tagName'],
-      commitSha: json['commitSha'],
-      projectId: json['projectId'] ?? '',
-      repoName: json['repoName'] ?? '',
-      dir: json['dir'] ?? '',
-      invertRegex: json['invertRegex'] ?? false,
-    );
-  }
+  factory RepoSource.fromJson(Map<String, dynamic> json) => RepoSource(
+    branchName: json['branchName'],
+    tagName: json['tagName'],
+    commitSha: json['commitSha'],
+    projectId: json['projectId'] ?? '',
+    repoName: json['repoName'] ?? '',
+    dir: json['dir'] ?? '',
+    invertRegex: json['invertRegex'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (branchName != null) 'branchName': branchName,
-      if (tagName != null) 'tagName': tagName,
-      if (commitSha != null) 'commitSha': commitSha,
-      if (projectId.isNotDefault) 'projectId': projectId,
-      if (repoName.isNotDefault) 'repoName': repoName,
-      if (dir.isNotDefault) 'dir': dir,
-      if (invertRegex.isNotDefault) 'invertRegex': invertRegex,
-    };
-  }
+  Object toJson() => {
+    if (branchName != null) 'branchName': branchName,
+    if (tagName != null) 'tagName': tagName,
+    if (commitSha != null) 'commitSha': commitSha,
+    if (projectId.isNotDefault) 'projectId': projectId,
+    if (repoName.isNotDefault) 'repoName': repoName,
+    if (dir.isNotDefault) 'dir': dir,
+    if (invertRegex.isNotDefault) 'invertRegex': invertRegex,
+  };
 
   @override
   String toString() {
@@ -766,22 +759,18 @@ final class Source extends ProtoMessage {
   Source({this.storageSource, this.repoSource, this.gitUri})
     : super(fullyQualifiedName);
 
-  factory Source.fromJson(Map<String, dynamic> json) {
-    return Source(
-      storageSource: decode(json['storageSource'], StorageSource.fromJson),
-      repoSource: decode(json['repoSource'], RepoSource.fromJson),
-      gitUri: json['gitUri'],
-    );
-  }
+  factory Source.fromJson(Map<String, dynamic> json) => Source(
+    storageSource: decode(json['storageSource'], StorageSource.fromJson),
+    repoSource: decode(json['repoSource'], RepoSource.fromJson),
+    gitUri: json['gitUri'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (storageSource != null) 'storageSource': storageSource!.toJson(),
-      if (repoSource != null) 'repoSource': repoSource!.toJson(),
-      if (gitUri != null) 'gitUri': gitUri,
-    };
-  }
+  Object toJson() => {
+    if (storageSource != null) 'storageSource': storageSource!.toJson(),
+    if (repoSource != null) 'repoSource': repoSource!.toJson(),
+    if (gitUri != null) 'gitUri': gitUri,
+  };
 
   @override
   String toString() {
@@ -814,30 +803,27 @@ final class SourceProvenance extends ProtoMessage {
     this.gitUri = '',
   }) : super(fullyQualifiedName);
 
-  factory SourceProvenance.fromJson(Map<String, dynamic> json) {
-    return SourceProvenance(
-      resolvedStorageSource: decode(
-        json['resolvedStorageSource'],
-        StorageSource.fromJson,
-      ),
-      resolvedRepoSource: decode(
-        json['resolvedRepoSource'],
-        RepoSource.fromJson,
-      ),
-      gitUri: json['gitUri'] ?? '',
-    );
-  }
+  factory SourceProvenance.fromJson(Map<String, dynamic> json) =>
+      SourceProvenance(
+        resolvedStorageSource: decode(
+          json['resolvedStorageSource'],
+          StorageSource.fromJson,
+        ),
+        resolvedRepoSource: decode(
+          json['resolvedRepoSource'],
+          RepoSource.fromJson,
+        ),
+        gitUri: json['gitUri'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (resolvedStorageSource != null)
-        'resolvedStorageSource': resolvedStorageSource!.toJson(),
-      if (resolvedRepoSource != null)
-        'resolvedRepoSource': resolvedRepoSource!.toJson(),
-      if (gitUri.isNotDefault) 'gitUri': gitUri,
-    };
-  }
+  Object toJson() => {
+    if (resolvedStorageSource != null)
+      'resolvedStorageSource': resolvedStorageSource!.toJson(),
+    if (resolvedRepoSource != null)
+      'resolvedRepoSource': resolvedRepoSource!.toJson(),
+    if (gitUri.isNotDefault) 'gitUri': gitUri,
+  };
 
   @override
   String toString() {
@@ -941,59 +927,54 @@ final class BuildConfig extends ProtoMessage {
     this.serviceAccount = '',
   }) : super(fullyQualifiedName);
 
-  factory BuildConfig.fromJson(Map<String, dynamic> json) {
-    return BuildConfig(
-      automaticUpdatePolicy: decode(
-        json['automaticUpdatePolicy'],
-        AutomaticUpdatePolicy.fromJson,
-      ),
-      onDeployUpdatePolicy: decode(
-        json['onDeployUpdatePolicy'],
-        OnDeployUpdatePolicy.fromJson,
-      ),
-      build: json['build'] ?? '',
-      runtime: json['runtime'] ?? '',
-      entryPoint: json['entryPoint'] ?? '',
-      source: decode(json['source'], Source.fromJson),
-      sourceProvenance: decode(
-        json['sourceProvenance'],
-        SourceProvenance.fromJson,
-      ),
-      workerPool: json['workerPool'] ?? '',
-      environmentVariables: decodeMap(json['environmentVariables']) ?? {},
-      dockerRegistry:
-          decodeEnum(
-            json['dockerRegistry'],
-            BuildConfig_DockerRegistry.fromJson,
-          ) ??
-          BuildConfig_DockerRegistry.$default,
-      dockerRepository: json['dockerRepository'] ?? '',
-      serviceAccount: json['serviceAccount'] ?? '',
-    );
-  }
+  factory BuildConfig.fromJson(Map<String, dynamic> json) => BuildConfig(
+    automaticUpdatePolicy: decode(
+      json['automaticUpdatePolicy'],
+      AutomaticUpdatePolicy.fromJson,
+    ),
+    onDeployUpdatePolicy: decode(
+      json['onDeployUpdatePolicy'],
+      OnDeployUpdatePolicy.fromJson,
+    ),
+    build: json['build'] ?? '',
+    runtime: json['runtime'] ?? '',
+    entryPoint: json['entryPoint'] ?? '',
+    source: decode(json['source'], Source.fromJson),
+    sourceProvenance: decode(
+      json['sourceProvenance'],
+      SourceProvenance.fromJson,
+    ),
+    workerPool: json['workerPool'] ?? '',
+    environmentVariables: decodeMap(json['environmentVariables']) ?? {},
+    dockerRegistry:
+        decodeEnum(
+          json['dockerRegistry'],
+          BuildConfig_DockerRegistry.fromJson,
+        ) ??
+        BuildConfig_DockerRegistry.$default,
+    dockerRepository: json['dockerRepository'] ?? '',
+    serviceAccount: json['serviceAccount'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (automaticUpdatePolicy != null)
-        'automaticUpdatePolicy': automaticUpdatePolicy!.toJson(),
-      if (onDeployUpdatePolicy != null)
-        'onDeployUpdatePolicy': onDeployUpdatePolicy!.toJson(),
-      if (build.isNotDefault) 'build': build,
-      if (runtime.isNotDefault) 'runtime': runtime,
-      if (entryPoint.isNotDefault) 'entryPoint': entryPoint,
-      if (source != null) 'source': source!.toJson(),
-      if (sourceProvenance != null)
-        'sourceProvenance': sourceProvenance!.toJson(),
-      if (workerPool.isNotDefault) 'workerPool': workerPool,
-      if (environmentVariables.isNotDefault)
-        'environmentVariables': environmentVariables,
-      if (dockerRegistry.isNotDefault)
-        'dockerRegistry': dockerRegistry.toJson(),
-      if (dockerRepository.isNotDefault) 'dockerRepository': dockerRepository,
-      if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
-    };
-  }
+  Object toJson() => {
+    if (automaticUpdatePolicy != null)
+      'automaticUpdatePolicy': automaticUpdatePolicy!.toJson(),
+    if (onDeployUpdatePolicy != null)
+      'onDeployUpdatePolicy': onDeployUpdatePolicy!.toJson(),
+    if (build.isNotDefault) 'build': build,
+    if (runtime.isNotDefault) 'runtime': runtime,
+    if (entryPoint.isNotDefault) 'entryPoint': entryPoint,
+    if (source != null) 'source': source!.toJson(),
+    if (sourceProvenance != null)
+      'sourceProvenance': sourceProvenance!.toJson(),
+    if (workerPool.isNotDefault) 'workerPool': workerPool,
+    if (environmentVariables.isNotDefault)
+      'environmentVariables': environmentVariables,
+    if (dockerRegistry.isNotDefault) 'dockerRegistry': dockerRegistry.toJson(),
+    if (dockerRepository.isNotDefault) 'dockerRepository': dockerRepository,
+    if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
+  };
 
   @override
   String toString() {
@@ -1177,84 +1158,79 @@ final class ServiceConfig extends ProtoMessage {
     this.binaryAuthorizationPolicy = '',
   }) : super(fullyQualifiedName);
 
-  factory ServiceConfig.fromJson(Map<String, dynamic> json) {
-    return ServiceConfig(
-      service: json['service'] ?? '',
-      timeoutSeconds: json['timeoutSeconds'] ?? 0,
-      availableMemory: json['availableMemory'] ?? '',
-      availableCpu: json['availableCpu'] ?? '',
-      environmentVariables: decodeMap(json['environmentVariables']) ?? {},
-      maxInstanceCount: json['maxInstanceCount'] ?? 0,
-      minInstanceCount: json['minInstanceCount'] ?? 0,
-      vpcConnector: json['vpcConnector'] ?? '',
-      vpcConnectorEgressSettings:
-          decodeEnum(
-            json['vpcConnectorEgressSettings'],
-            ServiceConfig_VpcConnectorEgressSettings.fromJson,
-          ) ??
-          ServiceConfig_VpcConnectorEgressSettings.$default,
-      ingressSettings:
-          decodeEnum(
-            json['ingressSettings'],
-            ServiceConfig_IngressSettings.fromJson,
-          ) ??
-          ServiceConfig_IngressSettings.$default,
-      uri: json['uri'] ?? '',
-      serviceAccountEmail: json['serviceAccountEmail'] ?? '',
-      allTrafficOnLatestRevision: json['allTrafficOnLatestRevision'] ?? false,
-      secretEnvironmentVariables:
-          decodeListMessage(
-            json['secretEnvironmentVariables'],
-            SecretEnvVar.fromJson,
-          ) ??
-          [],
-      secretVolumes:
-          decodeListMessage(json['secretVolumes'], SecretVolume.fromJson) ?? [],
-      revision: json['revision'] ?? '',
-      maxInstanceRequestConcurrency: json['maxInstanceRequestConcurrency'] ?? 0,
-      securityLevel:
-          decodeEnum(
-            json['securityLevel'],
-            ServiceConfig_SecurityLevel.fromJson,
-          ) ??
-          ServiceConfig_SecurityLevel.$default,
-      binaryAuthorizationPolicy: json['binaryAuthorizationPolicy'] ?? '',
-    );
-  }
+  factory ServiceConfig.fromJson(Map<String, dynamic> json) => ServiceConfig(
+    service: json['service'] ?? '',
+    timeoutSeconds: json['timeoutSeconds'] ?? 0,
+    availableMemory: json['availableMemory'] ?? '',
+    availableCpu: json['availableCpu'] ?? '',
+    environmentVariables: decodeMap(json['environmentVariables']) ?? {},
+    maxInstanceCount: json['maxInstanceCount'] ?? 0,
+    minInstanceCount: json['minInstanceCount'] ?? 0,
+    vpcConnector: json['vpcConnector'] ?? '',
+    vpcConnectorEgressSettings:
+        decodeEnum(
+          json['vpcConnectorEgressSettings'],
+          ServiceConfig_VpcConnectorEgressSettings.fromJson,
+        ) ??
+        ServiceConfig_VpcConnectorEgressSettings.$default,
+    ingressSettings:
+        decodeEnum(
+          json['ingressSettings'],
+          ServiceConfig_IngressSettings.fromJson,
+        ) ??
+        ServiceConfig_IngressSettings.$default,
+    uri: json['uri'] ?? '',
+    serviceAccountEmail: json['serviceAccountEmail'] ?? '',
+    allTrafficOnLatestRevision: json['allTrafficOnLatestRevision'] ?? false,
+    secretEnvironmentVariables:
+        decodeListMessage(
+          json['secretEnvironmentVariables'],
+          SecretEnvVar.fromJson,
+        ) ??
+        [],
+    secretVolumes:
+        decodeListMessage(json['secretVolumes'], SecretVolume.fromJson) ?? [],
+    revision: json['revision'] ?? '',
+    maxInstanceRequestConcurrency: json['maxInstanceRequestConcurrency'] ?? 0,
+    securityLevel:
+        decodeEnum(
+          json['securityLevel'],
+          ServiceConfig_SecurityLevel.fromJson,
+        ) ??
+        ServiceConfig_SecurityLevel.$default,
+    binaryAuthorizationPolicy: json['binaryAuthorizationPolicy'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (service.isNotDefault) 'service': service,
-      if (timeoutSeconds.isNotDefault) 'timeoutSeconds': timeoutSeconds,
-      if (availableMemory.isNotDefault) 'availableMemory': availableMemory,
-      if (availableCpu.isNotDefault) 'availableCpu': availableCpu,
-      if (environmentVariables.isNotDefault)
-        'environmentVariables': environmentVariables,
-      if (maxInstanceCount.isNotDefault) 'maxInstanceCount': maxInstanceCount,
-      if (minInstanceCount.isNotDefault) 'minInstanceCount': minInstanceCount,
-      if (vpcConnector.isNotDefault) 'vpcConnector': vpcConnector,
-      if (vpcConnectorEgressSettings.isNotDefault)
-        'vpcConnectorEgressSettings': vpcConnectorEgressSettings.toJson(),
-      if (ingressSettings.isNotDefault)
-        'ingressSettings': ingressSettings.toJson(),
-      if (uri.isNotDefault) 'uri': uri,
-      if (serviceAccountEmail.isNotDefault)
-        'serviceAccountEmail': serviceAccountEmail,
-      if (allTrafficOnLatestRevision.isNotDefault)
-        'allTrafficOnLatestRevision': allTrafficOnLatestRevision,
-      if (secretEnvironmentVariables.isNotDefault)
-        'secretEnvironmentVariables': encodeList(secretEnvironmentVariables),
-      if (secretVolumes.isNotDefault)
-        'secretVolumes': encodeList(secretVolumes),
-      if (revision.isNotDefault) 'revision': revision,
-      if (maxInstanceRequestConcurrency.isNotDefault)
-        'maxInstanceRequestConcurrency': maxInstanceRequestConcurrency,
-      if (securityLevel.isNotDefault) 'securityLevel': securityLevel.toJson(),
-      if (binaryAuthorizationPolicy.isNotDefault)
-        'binaryAuthorizationPolicy': binaryAuthorizationPolicy,
-    };
-  }
+  Object toJson() => {
+    if (service.isNotDefault) 'service': service,
+    if (timeoutSeconds.isNotDefault) 'timeoutSeconds': timeoutSeconds,
+    if (availableMemory.isNotDefault) 'availableMemory': availableMemory,
+    if (availableCpu.isNotDefault) 'availableCpu': availableCpu,
+    if (environmentVariables.isNotDefault)
+      'environmentVariables': environmentVariables,
+    if (maxInstanceCount.isNotDefault) 'maxInstanceCount': maxInstanceCount,
+    if (minInstanceCount.isNotDefault) 'minInstanceCount': minInstanceCount,
+    if (vpcConnector.isNotDefault) 'vpcConnector': vpcConnector,
+    if (vpcConnectorEgressSettings.isNotDefault)
+      'vpcConnectorEgressSettings': vpcConnectorEgressSettings.toJson(),
+    if (ingressSettings.isNotDefault)
+      'ingressSettings': ingressSettings.toJson(),
+    if (uri.isNotDefault) 'uri': uri,
+    if (serviceAccountEmail.isNotDefault)
+      'serviceAccountEmail': serviceAccountEmail,
+    if (allTrafficOnLatestRevision.isNotDefault)
+      'allTrafficOnLatestRevision': allTrafficOnLatestRevision,
+    if (secretEnvironmentVariables.isNotDefault)
+      'secretEnvironmentVariables': encodeList(secretEnvironmentVariables),
+    if (secretVolumes.isNotDefault) 'secretVolumes': encodeList(secretVolumes),
+    if (revision.isNotDefault) 'revision': revision,
+    if (maxInstanceRequestConcurrency.isNotDefault)
+      'maxInstanceRequestConcurrency': maxInstanceRequestConcurrency,
+    if (securityLevel.isNotDefault) 'securityLevel': securityLevel.toJson(),
+    if (binaryAuthorizationPolicy.isNotDefault)
+      'binaryAuthorizationPolicy': binaryAuthorizationPolicy,
+  };
 
   @override
   String toString() {
@@ -1421,24 +1397,20 @@ final class SecretEnvVar extends ProtoMessage {
     this.version = '',
   }) : super(fullyQualifiedName);
 
-  factory SecretEnvVar.fromJson(Map<String, dynamic> json) {
-    return SecretEnvVar(
-      key: json['key'] ?? '',
-      projectId: json['projectId'] ?? '',
-      secret: json['secret'] ?? '',
-      version: json['version'] ?? '',
-    );
-  }
+  factory SecretEnvVar.fromJson(Map<String, dynamic> json) => SecretEnvVar(
+    key: json['key'] ?? '',
+    projectId: json['projectId'] ?? '',
+    secret: json['secret'] ?? '',
+    version: json['version'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (key.isNotDefault) 'key': key,
-      if (projectId.isNotDefault) 'projectId': projectId,
-      if (secret.isNotDefault) 'secret': secret,
-      if (version.isNotDefault) 'version': version,
-    };
-  }
+  Object toJson() => {
+    if (key.isNotDefault) 'key': key,
+    if (projectId.isNotDefault) 'projectId': projectId,
+    if (secret.isNotDefault) 'secret': secret,
+    if (version.isNotDefault) 'version': version,
+  };
 
   @override
   String toString() {
@@ -1486,29 +1458,25 @@ final class SecretVolume extends ProtoMessage {
     this.versions = const [],
   }) : super(fullyQualifiedName);
 
-  factory SecretVolume.fromJson(Map<String, dynamic> json) {
-    return SecretVolume(
-      mountPath: json['mountPath'] ?? '',
-      projectId: json['projectId'] ?? '',
-      secret: json['secret'] ?? '',
-      versions:
-          decodeListMessage(
-            json['versions'],
-            SecretVolume_SecretVersion.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory SecretVolume.fromJson(Map<String, dynamic> json) => SecretVolume(
+    mountPath: json['mountPath'] ?? '',
+    projectId: json['projectId'] ?? '',
+    secret: json['secret'] ?? '',
+    versions:
+        decodeListMessage(
+          json['versions'],
+          SecretVolume_SecretVersion.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (mountPath.isNotDefault) 'mountPath': mountPath,
-      if (projectId.isNotDefault) 'projectId': projectId,
-      if (secret.isNotDefault) 'secret': secret,
-      if (versions.isNotDefault) 'versions': encodeList(versions),
-    };
-  }
+  Object toJson() => {
+    if (mountPath.isNotDefault) 'mountPath': mountPath,
+    if (projectId.isNotDefault) 'projectId': projectId,
+    if (secret.isNotDefault) 'secret': secret,
+    if (versions.isNotDefault) 'versions': encodeList(versions),
+  };
 
   @override
   String toString() {
@@ -1540,20 +1508,17 @@ final class SecretVolume_SecretVersion extends ProtoMessage {
   SecretVolume_SecretVersion({this.version = '', this.path = ''})
     : super(fullyQualifiedName);
 
-  factory SecretVolume_SecretVersion.fromJson(Map<String, dynamic> json) {
-    return SecretVolume_SecretVersion(
-      version: json['version'] ?? '',
-      path: json['path'] ?? '',
-    );
-  }
+  factory SecretVolume_SecretVersion.fromJson(Map<String, dynamic> json) =>
+      SecretVolume_SecretVersion(
+        version: json['version'] ?? '',
+        path: json['path'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (version.isNotDefault) 'version': version,
-      if (path.isNotDefault) 'path': path,
-    };
-  }
+  Object toJson() => {
+    if (version.isNotDefault) 'version': version,
+    if (path.isNotDefault) 'path': path,
+  };
 
   @override
   String toString() {
@@ -1633,38 +1598,34 @@ final class EventTrigger extends ProtoMessage {
     this.service = '',
   }) : super(fullyQualifiedName);
 
-  factory EventTrigger.fromJson(Map<String, dynamic> json) {
-    return EventTrigger(
-      trigger: json['trigger'] ?? '',
-      triggerRegion: json['triggerRegion'] ?? '',
-      eventType: json['eventType'] ?? '',
-      eventFilters:
-          decodeListMessage(json['eventFilters'], EventFilter.fromJson) ?? [],
-      pubsubTopic: json['pubsubTopic'] ?? '',
-      serviceAccountEmail: json['serviceAccountEmail'] ?? '',
-      retryPolicy:
-          decodeEnum(json['retryPolicy'], EventTrigger_RetryPolicy.fromJson) ??
-          EventTrigger_RetryPolicy.$default,
-      channel: json['channel'] ?? '',
-      service: json['service'] ?? '',
-    );
-  }
+  factory EventTrigger.fromJson(Map<String, dynamic> json) => EventTrigger(
+    trigger: json['trigger'] ?? '',
+    triggerRegion: json['triggerRegion'] ?? '',
+    eventType: json['eventType'] ?? '',
+    eventFilters:
+        decodeListMessage(json['eventFilters'], EventFilter.fromJson) ?? [],
+    pubsubTopic: json['pubsubTopic'] ?? '',
+    serviceAccountEmail: json['serviceAccountEmail'] ?? '',
+    retryPolicy:
+        decodeEnum(json['retryPolicy'], EventTrigger_RetryPolicy.fromJson) ??
+        EventTrigger_RetryPolicy.$default,
+    channel: json['channel'] ?? '',
+    service: json['service'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (trigger.isNotDefault) 'trigger': trigger,
-      if (triggerRegion.isNotDefault) 'triggerRegion': triggerRegion,
-      'eventType': eventType,
-      if (eventFilters.isNotDefault) 'eventFilters': encodeList(eventFilters),
-      if (pubsubTopic.isNotDefault) 'pubsubTopic': pubsubTopic,
-      if (serviceAccountEmail.isNotDefault)
-        'serviceAccountEmail': serviceAccountEmail,
-      if (retryPolicy.isNotDefault) 'retryPolicy': retryPolicy.toJson(),
-      if (channel.isNotDefault) 'channel': channel,
-      if (service.isNotDefault) 'service': service,
-    };
-  }
+  Object toJson() => {
+    if (trigger.isNotDefault) 'trigger': trigger,
+    if (triggerRegion.isNotDefault) 'triggerRegion': triggerRegion,
+    'eventType': eventType,
+    if (eventFilters.isNotDefault) 'eventFilters': encodeList(eventFilters),
+    if (pubsubTopic.isNotDefault) 'pubsubTopic': pubsubTopic,
+    if (serviceAccountEmail.isNotDefault)
+      'serviceAccountEmail': serviceAccountEmail,
+    if (retryPolicy.isNotDefault) 'retryPolicy': retryPolicy.toJson(),
+    if (channel.isNotDefault) 'channel': channel,
+    if (service.isNotDefault) 'service': service,
+  };
 
   @override
   String toString() {
@@ -1738,22 +1699,18 @@ final class EventFilter extends ProtoMessage {
     this.operator = '',
   }) : super(fullyQualifiedName);
 
-  factory EventFilter.fromJson(Map<String, dynamic> json) {
-    return EventFilter(
-      attribute: json['attribute'] ?? '',
-      value: json['value'] ?? '',
-      operator: json['operator'] ?? '',
-    );
-  }
+  factory EventFilter.fromJson(Map<String, dynamic> json) => EventFilter(
+    attribute: json['attribute'] ?? '',
+    value: json['value'] ?? '',
+    operator: json['operator'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      'attribute': attribute,
-      'value': value,
-      if (operator.isNotDefault) 'operator': operator,
-    };
-  }
+  Object toJson() => {
+    'attribute': attribute,
+    'value': value,
+    if (operator.isNotDefault) 'operator': operator,
+  };
 
   @override
   String toString() {
@@ -1785,17 +1742,17 @@ final class GetFunctionRequest extends ProtoMessage {
   GetFunctionRequest({required this.name, this.revision = ''})
     : super(fullyQualifiedName);
 
-  factory GetFunctionRequest.fromJson(Map<String, dynamic> json) {
-    return GetFunctionRequest(
-      name: json['name'] ?? '',
-      revision: json['revision'] ?? '',
-    );
-  }
+  factory GetFunctionRequest.fromJson(Map<String, dynamic> json) =>
+      GetFunctionRequest(
+        name: json['name'] ?? '',
+        revision: json['revision'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, if (revision.isNotDefault) 'revision': revision};
-  }
+  Object toJson() => {
+    'name': name,
+    if (revision.isNotDefault) 'revision': revision,
+  };
 
   @override
   String toString() {
@@ -1846,26 +1803,23 @@ final class ListFunctionsRequest extends ProtoMessage {
     this.orderBy = '',
   }) : super(fullyQualifiedName);
 
-  factory ListFunctionsRequest.fromJson(Map<String, dynamic> json) {
-    return ListFunctionsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-      filter: json['filter'] ?? '',
-      orderBy: json['orderBy'] ?? '',
-    );
-  }
+  factory ListFunctionsRequest.fromJson(Map<String, dynamic> json) =>
+      ListFunctionsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+        filter: json['filter'] ?? '',
+        orderBy: json['orderBy'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (filter.isNotDefault) 'filter': filter,
-      if (orderBy.isNotDefault) 'orderBy': orderBy,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (filter.isNotDefault) 'filter': filter,
+    if (orderBy.isNotDefault) 'orderBy': orderBy,
+  };
 
   @override
   String toString() {
@@ -1902,22 +1856,20 @@ final class ListFunctionsResponse extends ProtoMessage {
     this.unreachable = const [],
   }) : super(fullyQualifiedName);
 
-  factory ListFunctionsResponse.fromJson(Map<String, dynamic> json) {
-    return ListFunctionsResponse(
-      functions: decodeListMessage(json['functions'], Function$.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-      unreachable: decodeList(json['unreachable']) ?? [],
-    );
-  }
+  factory ListFunctionsResponse.fromJson(Map<String, dynamic> json) =>
+      ListFunctionsResponse(
+        functions:
+            decodeListMessage(json['functions'], Function$.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+        unreachable: decodeList(json['unreachable']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (functions.isNotDefault) 'functions': encodeList(functions),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-      if (unreachable.isNotDefault) 'unreachable': unreachable,
-    };
-  }
+  Object toJson() => {
+    if (functions.isNotDefault) 'functions': encodeList(functions),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+    if (unreachable.isNotDefault) 'unreachable': unreachable,
+  };
 
   @override
   String toString() {
@@ -1951,22 +1903,19 @@ final class CreateFunctionRequest extends ProtoMessage {
     this.functionId = '',
   }) : super(fullyQualifiedName);
 
-  factory CreateFunctionRequest.fromJson(Map<String, dynamic> json) {
-    return CreateFunctionRequest(
-      parent: json['parent'] ?? '',
-      function: decode(json['function'], Function$.fromJson),
-      functionId: json['functionId'] ?? '',
-    );
-  }
+  factory CreateFunctionRequest.fromJson(Map<String, dynamic> json) =>
+      CreateFunctionRequest(
+        parent: json['parent'] ?? '',
+        function: decode(json['function'], Function$.fromJson),
+        functionId: json['functionId'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (function != null) 'function': function!.toJson(),
-      if (functionId.isNotDefault) 'functionId': functionId,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (function != null) 'function': function!.toJson(),
+    if (functionId.isNotDefault) 'functionId': functionId,
+  };
 
   @override
   String toString() {
@@ -1990,20 +1939,17 @@ final class UpdateFunctionRequest extends ProtoMessage {
   UpdateFunctionRequest({required this.function, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateFunctionRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateFunctionRequest(
-      function: decode(json['function'], Function$.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateFunctionRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateFunctionRequest(
+        function: decode(json['function'], Function$.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (function != null) 'function': function!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (function != null) 'function': function!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateFunctionRequest()';
@@ -2019,14 +1965,11 @@ final class DeleteFunctionRequest extends ProtoMessage {
 
   DeleteFunctionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteFunctionRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteFunctionRequest(name: json['name'] ?? '');
-  }
+  factory DeleteFunctionRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteFunctionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -2073,24 +2016,21 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
     this.environment = Environment.$default,
   }) : super(fullyQualifiedName);
 
-  factory GenerateUploadUrlRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateUploadUrlRequest(
-      parent: json['parent'] ?? '',
-      kmsKeyName: json['kmsKeyName'] ?? '',
-      environment:
-          decodeEnum(json['environment'], Environment.fromJson) ??
-          Environment.$default,
-    );
-  }
+  factory GenerateUploadUrlRequest.fromJson(Map<String, dynamic> json) =>
+      GenerateUploadUrlRequest(
+        parent: json['parent'] ?? '',
+        kmsKeyName: json['kmsKeyName'] ?? '',
+        environment:
+            decodeEnum(json['environment'], Environment.fromJson) ??
+            Environment.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
-      if (environment.isNotDefault) 'environment': environment.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (kmsKeyName.isNotDefault) 'kmsKeyName': kmsKeyName,
+    if (environment.isNotDefault) 'environment': environment.toJson(),
+  };
 
   @override
   String toString() {
@@ -2126,20 +2066,17 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   GenerateUploadUrlResponse({this.uploadUrl = '', this.storageSource})
     : super(fullyQualifiedName);
 
-  factory GenerateUploadUrlResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateUploadUrlResponse(
-      uploadUrl: json['uploadUrl'] ?? '',
-      storageSource: decode(json['storageSource'], StorageSource.fromJson),
-    );
-  }
+  factory GenerateUploadUrlResponse.fromJson(Map<String, dynamic> json) =>
+      GenerateUploadUrlResponse(
+        uploadUrl: json['uploadUrl'] ?? '',
+        storageSource: decode(json['storageSource'], StorageSource.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (uploadUrl.isNotDefault) 'uploadUrl': uploadUrl,
-      if (storageSource != null) 'storageSource': storageSource!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (uploadUrl.isNotDefault) 'uploadUrl': uploadUrl,
+    if (storageSource != null) 'storageSource': storageSource!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2159,14 +2096,11 @@ final class GenerateDownloadUrlRequest extends ProtoMessage {
 
   GenerateDownloadUrlRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GenerateDownloadUrlRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateDownloadUrlRequest(name: json['name'] ?? '');
-  }
+  factory GenerateDownloadUrlRequest.fromJson(Map<String, dynamic> json) =>
+      GenerateDownloadUrlRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -2187,14 +2121,11 @@ final class GenerateDownloadUrlResponse extends ProtoMessage {
   GenerateDownloadUrlResponse({this.downloadUrl = ''})
     : super(fullyQualifiedName);
 
-  factory GenerateDownloadUrlResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateDownloadUrlResponse(downloadUrl: json['downloadUrl'] ?? '');
-  }
+  factory GenerateDownloadUrlResponse.fromJson(Map<String, dynamic> json) =>
+      GenerateDownloadUrlResponse(downloadUrl: json['downloadUrl'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (downloadUrl.isNotDefault) 'downloadUrl': downloadUrl};
-  }
+  Object toJson() => {if (downloadUrl.isNotDefault) 'downloadUrl': downloadUrl};
 
   @override
   String toString() {
@@ -2219,17 +2150,17 @@ final class ListRuntimesRequest extends ProtoMessage {
   ListRuntimesRequest({required this.parent, this.filter = ''})
     : super(fullyQualifiedName);
 
-  factory ListRuntimesRequest.fromJson(Map<String, dynamic> json) {
-    return ListRuntimesRequest(
-      parent: json['parent'] ?? '',
-      filter: json['filter'] ?? '',
-    );
-  }
+  factory ListRuntimesRequest.fromJson(Map<String, dynamic> json) =>
+      ListRuntimesRequest(
+        parent: json['parent'] ?? '',
+        filter: json['filter'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'parent': parent, if (filter.isNotDefault) 'filter': filter};
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (filter.isNotDefault) 'filter': filter,
+  };
 
   @override
   String toString() {
@@ -2248,21 +2179,20 @@ final class ListRuntimesResponse extends ProtoMessage {
 
   ListRuntimesResponse({this.runtimes = const []}) : super(fullyQualifiedName);
 
-  factory ListRuntimesResponse.fromJson(Map<String, dynamic> json) {
-    return ListRuntimesResponse(
-      runtimes:
-          decodeListMessage(
-            json['runtimes'],
-            ListRuntimesResponse_Runtime.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory ListRuntimesResponse.fromJson(Map<String, dynamic> json) =>
+      ListRuntimesResponse(
+        runtimes:
+            decodeListMessage(
+              json['runtimes'],
+              ListRuntimesResponse_Runtime.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {if (runtimes.isNotDefault) 'runtimes': encodeList(runtimes)};
-  }
+  Object toJson() => {
+    if (runtimes.isNotDefault) 'runtimes': encodeList(runtimes),
+  };
 
   @override
   String toString() => 'ListRuntimesResponse()';
@@ -2305,38 +2235,35 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
     this.decommissionDate,
   }) : super(fullyQualifiedName);
 
-  factory ListRuntimesResponse_Runtime.fromJson(Map<String, dynamic> json) {
-    return ListRuntimesResponse_Runtime(
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      stage:
-          decodeEnum(
-            json['stage'],
-            ListRuntimesResponse_RuntimeStage.fromJson,
-          ) ??
-          ListRuntimesResponse_RuntimeStage.$default,
-      warnings: decodeList(json['warnings']) ?? [],
-      environment:
-          decodeEnum(json['environment'], Environment.fromJson) ??
-          Environment.$default,
-      deprecationDate: decode(json['deprecationDate'], Date.fromJson),
-      decommissionDate: decode(json['decommissionDate'], Date.fromJson),
-    );
-  }
+  factory ListRuntimesResponse_Runtime.fromJson(Map<String, dynamic> json) =>
+      ListRuntimesResponse_Runtime(
+        name: json['name'] ?? '',
+        displayName: json['displayName'] ?? '',
+        stage:
+            decodeEnum(
+              json['stage'],
+              ListRuntimesResponse_RuntimeStage.fromJson,
+            ) ??
+            ListRuntimesResponse_RuntimeStage.$default,
+        warnings: decodeList(json['warnings']) ?? [],
+        environment:
+            decodeEnum(json['environment'], Environment.fromJson) ??
+            Environment.$default,
+        deprecationDate: decode(json['deprecationDate'], Date.fromJson),
+        decommissionDate: decode(json['decommissionDate'], Date.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (stage.isNotDefault) 'stage': stage.toJson(),
-      if (warnings.isNotDefault) 'warnings': warnings,
-      if (environment.isNotDefault) 'environment': environment.toJson(),
-      if (deprecationDate != null) 'deprecationDate': deprecationDate!.toJson(),
-      if (decommissionDate != null)
-        'decommissionDate': decommissionDate!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (stage.isNotDefault) 'stage': stage.toJson(),
+    if (warnings.isNotDefault) 'warnings': warnings,
+    if (environment.isNotDefault) 'environment': environment.toJson(),
+    if (deprecationDate != null) 'deprecationDate': deprecationDate!.toJson(),
+    if (decommissionDate != null)
+      'decommissionDate': decommissionDate!.toJson(),
+  };
 
   @override
   String toString() {
@@ -2399,14 +2326,11 @@ final class AutomaticUpdatePolicy extends ProtoMessage {
 
   AutomaticUpdatePolicy() : super(fullyQualifiedName);
 
-  factory AutomaticUpdatePolicy.fromJson(Map<String, dynamic> json) {
-    return AutomaticUpdatePolicy();
-  }
+  factory AutomaticUpdatePolicy.fromJson(Map<String, dynamic> json) =>
+      AutomaticUpdatePolicy();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'AutomaticUpdatePolicy()';
@@ -2423,14 +2347,13 @@ final class OnDeployUpdatePolicy extends ProtoMessage {
 
   OnDeployUpdatePolicy({this.runtimeVersion = ''}) : super(fullyQualifiedName);
 
-  factory OnDeployUpdatePolicy.fromJson(Map<String, dynamic> json) {
-    return OnDeployUpdatePolicy(runtimeVersion: json['runtimeVersion'] ?? '');
-  }
+  factory OnDeployUpdatePolicy.fromJson(Map<String, dynamic> json) =>
+      OnDeployUpdatePolicy(runtimeVersion: json['runtimeVersion'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (runtimeVersion.isNotDefault) 'runtimeVersion': runtimeVersion};
-  }
+  Object toJson() => {
+    if (runtimeVersion.isNotDefault) 'runtimeVersion': runtimeVersion,
+  };
 
   @override
   String toString() {
@@ -2501,42 +2424,39 @@ final class OperationMetadata extends ProtoMessage {
     this.operationType = OperationType.$default,
   }) : super(fullyQualifiedName);
 
-  factory OperationMetadata.fromJson(Map<String, dynamic> json) {
-    return OperationMetadata(
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-      target: json['target'] ?? '',
-      verb: json['verb'] ?? '',
-      statusDetail: json['statusDetail'] ?? '',
-      cancelRequested: json['cancelRequested'] ?? false,
-      apiVersion: json['apiVersion'] ?? '',
-      requestResource: decode(json['requestResource'], Any.fromJson),
-      stages: decodeListMessage(json['stages'], Stage.fromJson) ?? [],
-      sourceToken: json['sourceToken'] ?? '',
-      buildName: json['buildName'] ?? '',
-      operationType:
-          decodeEnum(json['operationType'], OperationType.fromJson) ??
-          OperationType.$default,
-    );
-  }
+  factory OperationMetadata.fromJson(Map<String, dynamic> json) =>
+      OperationMetadata(
+        createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+        endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
+        target: json['target'] ?? '',
+        verb: json['verb'] ?? '',
+        statusDetail: json['statusDetail'] ?? '',
+        cancelRequested: json['cancelRequested'] ?? false,
+        apiVersion: json['apiVersion'] ?? '',
+        requestResource: decode(json['requestResource'], Any.fromJson),
+        stages: decodeListMessage(json['stages'], Stage.fromJson) ?? [],
+        sourceToken: json['sourceToken'] ?? '',
+        buildName: json['buildName'] ?? '',
+        operationType:
+            decodeEnum(json['operationType'], OperationType.fromJson) ??
+            OperationType.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (endTime != null) 'endTime': endTime!.toJson(),
-      if (target.isNotDefault) 'target': target,
-      if (verb.isNotDefault) 'verb': verb,
-      if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
-      if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
-      if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
-      if (requestResource != null) 'requestResource': requestResource!.toJson(),
-      if (stages.isNotDefault) 'stages': encodeList(stages),
-      if (sourceToken.isNotDefault) 'sourceToken': sourceToken,
-      if (buildName.isNotDefault) 'buildName': buildName,
-      if (operationType.isNotDefault) 'operationType': operationType.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (target.isNotDefault) 'target': target,
+    if (verb.isNotDefault) 'verb': verb,
+    if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
+    if (cancelRequested.isNotDefault) 'cancelRequested': cancelRequested,
+    if (apiVersion.isNotDefault) 'apiVersion': apiVersion,
+    if (requestResource != null) 'requestResource': requestResource!.toJson(),
+    if (stages.isNotDefault) 'stages': encodeList(stages),
+    if (sourceToken.isNotDefault) 'sourceToken': sourceToken,
+    if (buildName.isNotDefault) 'buildName': buildName,
+    if (operationType.isNotDefault) 'operationType': operationType.toJson(),
+  };
 
   @override
   String toString() {
@@ -2564,19 +2484,16 @@ final class LocationMetadata extends ProtoMessage {
 
   LocationMetadata({this.environments = const []}) : super(fullyQualifiedName);
 
-  factory LocationMetadata.fromJson(Map<String, dynamic> json) {
-    return LocationMetadata(
-      environments:
-          decodeListEnum(json['environments'], Environment.fromJson) ?? [],
-    );
-  }
+  factory LocationMetadata.fromJson(Map<String, dynamic> json) =>
+      LocationMetadata(
+        environments:
+            decodeListEnum(json['environments'], Environment.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (environments.isNotDefault) 'environments': encodeList(environments),
-    };
-  }
+  Object toJson() => {
+    if (environments.isNotDefault) 'environments': encodeList(environments),
+  };
 
   @override
   String toString() => 'LocationMetadata()';
@@ -2613,33 +2530,26 @@ final class Stage extends ProtoMessage {
     this.stateMessages = const [],
   }) : super(fullyQualifiedName);
 
-  factory Stage.fromJson(Map<String, dynamic> json) {
-    return Stage(
-      name:
-          decodeEnum(json['name'], Stage_Name.fromJson) ?? Stage_Name.$default,
-      message: json['message'] ?? '',
-      state:
-          decodeEnum(json['state'], Stage_State.fromJson) ??
-          Stage_State.$default,
-      resource: json['resource'] ?? '',
-      resourceUri: json['resourceUri'] ?? '',
-      stateMessages:
-          decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
-    );
-  }
+  factory Stage.fromJson(Map<String, dynamic> json) => Stage(
+    name: decodeEnum(json['name'], Stage_Name.fromJson) ?? Stage_Name.$default,
+    message: json['message'] ?? '',
+    state:
+        decodeEnum(json['state'], Stage_State.fromJson) ?? Stage_State.$default,
+    resource: json['resource'] ?? '',
+    resourceUri: json['resourceUri'] ?? '',
+    stateMessages:
+        decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name.toJson(),
-      if (message.isNotDefault) 'message': message,
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (resource.isNotDefault) 'resource': resource,
-      if (resourceUri.isNotDefault) 'resourceUri': resourceUri,
-      if (stateMessages.isNotDefault)
-        'stateMessages': encodeList(stateMessages),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name.toJson(),
+    if (message.isNotDefault) 'message': message,
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (resource.isNotDefault) 'resource': resource,
+    if (resourceUri.isNotDefault) 'resourceUri': resourceUri,
+    if (stateMessages.isNotDefault) 'stateMessages': encodeList(stateMessages),
+  };
 
   @override
   String toString() {

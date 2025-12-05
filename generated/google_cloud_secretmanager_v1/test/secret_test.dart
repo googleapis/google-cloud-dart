@@ -13,15 +13,14 @@
 // limitations under the License.
 
 @TestOn('vm')
-library secret_test;
+library;
 
 import 'dart:math';
 
-import 'package:google_cloud_secretmanager_v1/secretmanager.dart';
-import 'package:test/test.dart';
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
-
+import 'package:google_cloud_secretmanager_v1/secretmanager.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
@@ -31,7 +30,7 @@ void main() async {
 
   group('secret', () {
     setUp(() async {
-      final authClient = () async =>
+      Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );

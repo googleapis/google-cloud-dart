@@ -18,6 +18,14 @@
 ///
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
 
@@ -108,49 +116,45 @@ final class HttpRequest extends ProtoMessage {
     this.protocol = '',
   }) : super(fullyQualifiedName);
 
-  factory HttpRequest.fromJson(Map<String, dynamic> json) {
-    return HttpRequest(
-      requestMethod: json['requestMethod'] ?? '',
-      requestUrl: json['requestUrl'] ?? '',
-      requestSize: decodeInt64(json['requestSize']) ?? 0,
-      status: json['status'] ?? 0,
-      responseSize: decodeInt64(json['responseSize']) ?? 0,
-      userAgent: json['userAgent'] ?? '',
-      remoteIp: json['remoteIp'] ?? '',
-      serverIp: json['serverIp'] ?? '',
-      referer: json['referer'] ?? '',
-      latency: decodeCustom(json['latency'], Duration.fromJson),
-      cacheLookup: json['cacheLookup'] ?? false,
-      cacheHit: json['cacheHit'] ?? false,
-      cacheValidatedWithOriginServer:
-          json['cacheValidatedWithOriginServer'] ?? false,
-      cacheFillBytes: decodeInt64(json['cacheFillBytes']) ?? 0,
-      protocol: json['protocol'] ?? '',
-    );
-  }
+  factory HttpRequest.fromJson(Map<String, dynamic> json) => HttpRequest(
+    requestMethod: json['requestMethod'] ?? '',
+    requestUrl: json['requestUrl'] ?? '',
+    requestSize: decodeInt64(json['requestSize']) ?? 0,
+    status: json['status'] ?? 0,
+    responseSize: decodeInt64(json['responseSize']) ?? 0,
+    userAgent: json['userAgent'] ?? '',
+    remoteIp: json['remoteIp'] ?? '',
+    serverIp: json['serverIp'] ?? '',
+    referer: json['referer'] ?? '',
+    latency: decodeCustom(json['latency'], Duration.fromJson),
+    cacheLookup: json['cacheLookup'] ?? false,
+    cacheHit: json['cacheHit'] ?? false,
+    cacheValidatedWithOriginServer:
+        json['cacheValidatedWithOriginServer'] ?? false,
+    cacheFillBytes: decodeInt64(json['cacheFillBytes']) ?? 0,
+    protocol: json['protocol'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (requestMethod.isNotDefault) 'requestMethod': requestMethod,
-      if (requestUrl.isNotDefault) 'requestUrl': requestUrl,
-      if (requestSize.isNotDefault) 'requestSize': encodeInt64(requestSize),
-      if (status.isNotDefault) 'status': status,
-      if (responseSize.isNotDefault) 'responseSize': encodeInt64(responseSize),
-      if (userAgent.isNotDefault) 'userAgent': userAgent,
-      if (remoteIp.isNotDefault) 'remoteIp': remoteIp,
-      if (serverIp.isNotDefault) 'serverIp': serverIp,
-      if (referer.isNotDefault) 'referer': referer,
-      if (latency != null) 'latency': latency!.toJson(),
-      if (cacheLookup.isNotDefault) 'cacheLookup': cacheLookup,
-      if (cacheHit.isNotDefault) 'cacheHit': cacheHit,
-      if (cacheValidatedWithOriginServer.isNotDefault)
-        'cacheValidatedWithOriginServer': cacheValidatedWithOriginServer,
-      if (cacheFillBytes.isNotDefault)
-        'cacheFillBytes': encodeInt64(cacheFillBytes),
-      if (protocol.isNotDefault) 'protocol': protocol,
-    };
-  }
+  Object toJson() => {
+    if (requestMethod.isNotDefault) 'requestMethod': requestMethod,
+    if (requestUrl.isNotDefault) 'requestUrl': requestUrl,
+    if (requestSize.isNotDefault) 'requestSize': encodeInt64(requestSize),
+    if (status.isNotDefault) 'status': status,
+    if (responseSize.isNotDefault) 'responseSize': encodeInt64(responseSize),
+    if (userAgent.isNotDefault) 'userAgent': userAgent,
+    if (remoteIp.isNotDefault) 'remoteIp': remoteIp,
+    if (serverIp.isNotDefault) 'serverIp': serverIp,
+    if (referer.isNotDefault) 'referer': referer,
+    if (latency != null) 'latency': latency!.toJson(),
+    if (cacheLookup.isNotDefault) 'cacheLookup': cacheLookup,
+    if (cacheHit.isNotDefault) 'cacheHit': cacheHit,
+    if (cacheValidatedWithOriginServer.isNotDefault)
+      'cacheValidatedWithOriginServer': cacheValidatedWithOriginServer,
+    if (cacheFillBytes.isNotDefault)
+      'cacheFillBytes': encodeInt64(cacheFillBytes),
+    if (protocol.isNotDefault) 'protocol': protocol,
+  };
 
   @override
   String toString() {

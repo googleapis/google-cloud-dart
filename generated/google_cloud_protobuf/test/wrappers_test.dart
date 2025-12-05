@@ -21,13 +21,13 @@ import 'package:test/test.dart';
 void main() {
   test('BoolValue', () {
     var expected = BoolValue(value: true);
-    var actual = BoolValue.fromJson(encodeDecode(expected.toJson()));
+    var actual = BoolValue.fromJson(encodeDecode(expected.toJson()) as Object);
     expect(actual.value, expected.value);
   });
 
   test('FloatValue', () {
     var expected = FloatValue(value: 0.5);
-    var actual = FloatValue.fromJson(encodeDecode(expected.toJson()));
+    var actual = FloatValue.fromJson(encodeDecode(expected.toJson()) as Object);
     expect(actual.value, expected.value);
 
     expect(FloatValue.fromJson(1).value, 1.0);
@@ -35,7 +35,9 @@ void main() {
 
   test('DoubleValue', () {
     var expected = DoubleValue(value: 0.5);
-    var actual = DoubleValue.fromJson(encodeDecode(expected.toJson()));
+    var actual = DoubleValue.fromJson(
+      encodeDecode(expected.toJson()) as Object,
+    );
     expect(actual.value, expected.value);
 
     expect(DoubleValue.fromJson(1).value, 1.0);
@@ -73,7 +75,7 @@ void main() {
     var expected = Int64Value(value: 5_000);
     expect(expected.toJson(), isA<String>());
 
-    var actual = Int64Value.fromJson(encodeDecode(expected.toJson()));
+    var actual = Int64Value.fromJson(encodeDecode(expected.toJson()) as Object);
     expect(actual.value, expected.value);
 
     expect(Int64Value.fromJson('123').value, 123);
@@ -84,7 +86,9 @@ void main() {
     var expected = Uint64Value(value: 5_000);
     expect(expected.toJson(), isA<String>());
 
-    var actual = Uint64Value.fromJson(encodeDecode(expected.toJson()));
+    var actual = Uint64Value.fromJson(
+      encodeDecode(expected.toJson()) as Object,
+    );
     expect(actual.value, expected.value);
 
     expect(Uint64Value.fromJson('123').value, 123);
@@ -93,26 +97,30 @@ void main() {
 
   test('Int32Value', () {
     var expected = Int32Value(value: 500);
-    var actual = Int32Value.fromJson(encodeDecode(expected.toJson()));
+    var actual = Int32Value.fromJson(encodeDecode(expected.toJson()) as Object);
     expect(actual.value, expected.value);
   });
 
   test('StringValue', () {
     var expected = StringValue(value: 'foobar');
-    var actual = StringValue.fromJson(encodeDecode(expected.toJson()));
+    var actual = StringValue.fromJson(
+      encodeDecode(expected.toJson()) as Object,
+    );
     expect(actual.value, expected.value);
   });
 
   test('BytesValue', () {
     var expected = BytesValue(value: Uint8List.fromList([1, 2, 3]));
-    var actual = BytesValue.fromJson(encodeDecode(expected.toJson()));
-    var encoded = actual.value!.map((item) => '$item').join(',');
+    var actual = BytesValue.fromJson(encodeDecode(expected.toJson()) as Object);
+    var encoded = actual.value.map((item) => '$item').join(',');
     expect(encoded, '1,2,3');
   });
 
   test('Uint32Value', () {
     var expected = Uint32Value(value: 500);
-    var actual = Uint32Value.fromJson(encodeDecode(expected.toJson()));
+    var actual = Uint32Value.fromJson(
+      encodeDecode(expected.toJson()) as Object,
+    );
     expect(actual.value, expected.value);
   });
 }

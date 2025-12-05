@@ -20,9 +20,8 @@ import 'dart:math';
 import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart';
 import 'package:google_cloud_logging_v2/logging.dart';
-import 'package:test/test.dart';
-
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
@@ -32,7 +31,7 @@ void main() async {
 
   group('LoggingServiceV2', () {
     setUp(() async {
-      final authClient = () async =>
+      Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
@@ -70,7 +69,7 @@ void main() async {
         // Writes are not always committed instantly. Uses a fixed delay instead
         // of polling in order to cause recordings to make a deterministic
         // number of requests.
-        await Future.delayed(const Duration(seconds: 15));
+        await Future<void>.delayed(const Duration(seconds: 15));
 
         addTearDown(
           () => logService.deleteLog(DeleteLogRequest(logName: logName)),

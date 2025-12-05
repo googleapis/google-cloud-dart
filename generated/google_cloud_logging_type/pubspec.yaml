@@ -27,6 +27,3 @@ resolution: workspace
 
 dependencies:
   google_cloud_protobuf: ^0.2.0
-
-dev_dependencies:
-  lints: any

@@ -27,4 +27,3 @@ resolution: workspace
 
 dev_dependencies:
   test: any
-  lints: any

@@ -25,6 +25,14 @@
 /// agents, summarization and classification systems, and more.
 library;
 
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
@@ -65,9 +73,8 @@ final class CacheService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory CacheService.fromApiKey([String? apiKey]) {
-    return CacheService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory CacheService.fromApiKey([String? apiKey]) =>
+      CacheService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Lists CachedContents.
   ///
@@ -78,8 +85,9 @@ final class CacheService {
     ListCachedContentsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/cachedContents', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListCachedContentsResponse.fromJson(response);
@@ -120,8 +128,7 @@ final class CacheService {
     UpdateCachedContentRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.cachedContent!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.cachedContent);
     return CachedContent.fromJson(response);
@@ -146,11 +153,12 @@ final class CacheService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -229,9 +237,8 @@ final class DiscussService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory DiscussService.fromApiKey([String? apiKey]) {
-    return DiscussService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory DiscussService.fromApiKey([String? apiKey]) =>
+      DiscussService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Generates a response from the model given an input `MessagePrompt`.
   ///
@@ -268,11 +275,12 @@ final class DiscussService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -348,9 +356,8 @@ final class FileService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory FileService.fromApiKey([String? apiKey]) {
-    return FileService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory FileService.fromApiKey([String? apiKey]) =>
+      FileService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Creates a `File`.
   ///
@@ -370,8 +377,9 @@ final class FileService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListFilesResponse> listFiles(ListFilesRequest request) async {
     final url = Uri.https(_host, '/v1beta/files', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListFilesResponse.fromJson(response);
@@ -418,11 +426,12 @@ final class FileService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -499,9 +508,8 @@ final class GenerativeService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory GenerativeService.fromApiKey([String? apiKey]) {
-    return GenerativeService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory GenerativeService.fromApiKey([String? apiKey]) =>
+      GenerativeService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Generates a model response given an input `GenerateContentRequest`.
   /// Refer to the [text generation
@@ -605,11 +613,12 @@ final class GenerativeService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -685,9 +694,8 @@ final class ModelService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory ModelService.fromApiKey([String? apiKey]) {
-    return ModelService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory ModelService.fromApiKey([String? apiKey]) =>
+      ModelService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Gets information about a specific `Model` such as its version number, token
   /// limits,
@@ -713,8 +721,9 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListModelsResponse> listModels(ListModelsRequest request) async {
     final url = Uri.https(_host, '/v1beta/models', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListModelsResponse.fromJson(response);
@@ -740,9 +749,10 @@ final class ModelService {
     ListTunedModelsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.filter.isNotDefault) 'filter': request.filter,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
     });
     final response = await _client.get(url);
     return ListTunedModelsResponse.fromJson(response);
@@ -769,7 +779,7 @@ final class ModelService {
     CreateTunedModelRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.tunedModelId != null) 'tunedModelId': request.tunedModelId!,
+      if (request.tunedModelId case final $1?) 'tunedModelId': $1,
     });
     final response = await _client.post(url, body: request.tunedModel);
     return Operation.fromJson(
@@ -785,8 +795,7 @@ final class ModelService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<TunedModel> updateTunedModel(UpdateTunedModelRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.tunedModel!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.tunedModel);
     return TunedModel.fromJson(response);
@@ -811,11 +820,12 @@ final class ModelService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -891,9 +901,8 @@ final class PermissionService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory PermissionService.fromApiKey([String? apiKey]) {
-    return PermissionService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory PermissionService.fromApiKey([String? apiKey]) =>
+      PermissionService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Create a permission to a specific resource.
   ///
@@ -926,8 +935,9 @@ final class PermissionService {
     ListPermissionsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/permissions', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListPermissionsResponse.fromJson(response);
@@ -940,8 +950,7 @@ final class PermissionService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Permission> updatePermission(UpdatePermissionRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.permission!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.permission);
     return Permission.fromJson(response);
@@ -981,11 +990,12 @@ final class PermissionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1061,9 +1071,8 @@ final class PredictionService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory PredictionService.fromApiKey([String? apiKey]) {
-    return PredictionService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory PredictionService.fromApiKey([String? apiKey]) =>
+      PredictionService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Performs a prediction request.
   ///
@@ -1109,11 +1118,12 @@ final class PredictionService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1189,9 +1199,8 @@ final class RetrieverService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory RetrieverService.fromApiKey([String? apiKey]) {
-    return RetrieverService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory RetrieverService.fromApiKey([String? apiKey]) =>
+      RetrieverService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Creates an empty `Corpus`.
   ///
@@ -1222,8 +1231,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Corpus> updateCorpus(UpdateCorpusRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.corpus!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.corpus);
     return Corpus.fromJson(response);
@@ -1236,7 +1244,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteCorpus(DeleteCorpusRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force.isNotDefault) 'force': '${request.force}',
+      if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
     });
     await _client.delete(url);
   }
@@ -1248,8 +1256,9 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListCorporaResponse> listCorpora(ListCorporaRequest request) async {
     final url = Uri.https(_host, '/v1beta/corpora', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListCorporaResponse.fromJson(response);
@@ -1295,8 +1304,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Document> updateDocument(UpdateDocumentRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.document!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.document);
     return Document.fromJson(response);
@@ -1309,7 +1317,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<void> deleteDocument(DeleteDocumentRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force.isNotDefault) 'force': '${request.force}',
+      if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
     });
     await _client.delete(url);
   }
@@ -1323,8 +1331,9 @@ final class RetrieverService {
     ListDocumentsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/documents', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListDocumentsResponse.fromJson(response);
@@ -1388,8 +1397,7 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<Chunk> updateChunk(UpdateChunkRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.chunk!.name}', {
-      if (request.updateMask != null)
-        'updateMask': request.updateMask!.toJson(),
+      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
     });
     final response = await _client.patch(url, body: request.chunk);
     return Chunk.fromJson(response);
@@ -1441,8 +1449,9 @@ final class RetrieverService {
   /// [Status] message. Throws a [ServiceException] for any other failure.
   Future<ListChunksResponse> listChunks(ListChunksRequest request) async {
     final url = Uri.https(_host, '/v1beta/${request.parent}/chunks', {
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
     });
     final response = await _client.get(url);
     return ListChunksResponse.fromJson(response);
@@ -1457,11 +1466,12 @@ final class RetrieverService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1540,9 +1550,8 @@ final class TextService {
   /// always throws [ConfigurationException] if called without arguments.
   ///
   /// See [API Keys Overview](https://cloud.google.com/api-keys/docs/overview).
-  factory TextService.fromApiKey([String? apiKey]) {
-    return TextService(client: httpClientFromApiKey(apiKey, _apiKeys));
-  }
+  factory TextService.fromApiKey([String? apiKey]) =>
+      TextService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
   /// Generates a response from the model given an input message.
   ///
@@ -1602,11 +1611,12 @@ final class TextService {
     ListOperationsRequest request,
   ) async {
     final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter.isNotDefault) 'filter': request.filter,
-      if (request.pageSize.isNotDefault) 'pageSize': '${request.pageSize}',
-      if (request.pageToken.isNotDefault) 'pageToken': request.pageToken,
-      if (request.returnPartialSuccess.isNotDefault)
-        'returnPartialSuccess': '${request.returnPartialSuccess}',
+      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+        'returnPartialSuccess': '${$1}',
     });
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
@@ -1676,20 +1686,17 @@ final class ListCachedContentsRequest extends ProtoMessage {
   ListCachedContentsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) {
-    return ListCachedContentsRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) =>
+      ListCachedContentsRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -1715,23 +1722,20 @@ final class ListCachedContentsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) {
-    return ListCachedContentsResponse(
-      cachedContents:
-          decodeListMessage(json['cachedContents'], CachedContent.fromJson) ??
-          [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) =>
+      ListCachedContentsResponse(
+        cachedContents:
+            decodeListMessage(json['cachedContents'], CachedContent.fromJson) ??
+            [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (cachedContents.isNotDefault)
-        'cachedContents': encodeList(cachedContents),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (cachedContents.isNotDefault)
+      'cachedContents': encodeList(cachedContents),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -1751,18 +1755,15 @@ final class CreateCachedContentRequest extends ProtoMessage {
   CreateCachedContentRequest({required this.cachedContent})
     : super(fullyQualifiedName);
 
-  factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) {
-    return CreateCachedContentRequest(
-      cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
-    );
-  }
+  factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) =>
+      CreateCachedContentRequest(
+        cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
+  };
 
   @override
   String toString() => 'CreateCachedContentRequest()';
@@ -1779,14 +1780,11 @@ final class GetCachedContentRequest extends ProtoMessage {
 
   GetCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) {
-    return GetCachedContentRequest(name: json['name'] ?? '');
-  }
+  factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) =>
+      GetCachedContentRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -1809,20 +1807,17 @@ final class UpdateCachedContentRequest extends ProtoMessage {
   UpdateCachedContentRequest({required this.cachedContent, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateCachedContentRequest(
-      cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateCachedContentRequest(
+        cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (cachedContent != null) 'cachedContent': cachedContent!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateCachedContentRequest()';
@@ -1839,14 +1834,11 @@ final class DeleteCachedContentRequest extends ProtoMessage {
 
   DeleteCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteCachedContentRequest(name: json['name'] ?? '');
-  }
+  factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteCachedContentRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -1922,44 +1914,40 @@ final class CachedContent extends ProtoMessage {
     this.usageMetadata,
   }) : super(fullyQualifiedName);
 
-  factory CachedContent.fromJson(Map<String, dynamic> json) {
-    return CachedContent(
-      expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
-      ttl: decodeCustom(json['ttl'], Duration.fromJson),
-      name: json['name'],
-      displayName: json['displayName'],
-      model: json['model'],
-      systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-      tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
-      toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      usageMetadata: decode(
-        json['usageMetadata'],
-        CachedContent_UsageMetadata.fromJson,
-      ),
-    );
-  }
+  factory CachedContent.fromJson(Map<String, dynamic> json) => CachedContent(
+    expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
+    ttl: decodeCustom(json['ttl'], Duration.fromJson),
+    name: json['name'],
+    displayName: json['displayName'],
+    model: json['model'],
+    systemInstruction: decode(json['systemInstruction'], Content.fromJson),
+    contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+    tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
+    toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    usageMetadata: decode(
+      json['usageMetadata'],
+      CachedContent_UsageMetadata.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (expireTime != null) 'expireTime': expireTime!.toJson(),
-      if (ttl != null) 'ttl': ttl!.toJson(),
-      if (name != null) 'name': name,
-      if (displayName != null) 'displayName': displayName,
-      if (model != null) 'model': model,
-      if (systemInstruction != null)
-        'systemInstruction': systemInstruction!.toJson(),
-      if (contents.isNotDefault) 'contents': encodeList(contents),
-      if (tools.isNotDefault) 'tools': encodeList(tools),
-      if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (expireTime != null) 'expireTime': expireTime!.toJson(),
+    if (ttl != null) 'ttl': ttl!.toJson(),
+    if (name != null) 'name': name,
+    if (displayName != null) 'displayName': displayName,
+    if (model != null) 'model': model,
+    if (systemInstruction != null)
+      'systemInstruction': systemInstruction!.toJson(),
+    if (contents.isNotDefault) 'contents': encodeList(contents),
+    if (tools.isNotDefault) 'tools': encodeList(tools),
+    if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1983,18 +1971,15 @@ final class CachedContent_UsageMetadata extends ProtoMessage {
   CachedContent_UsageMetadata({this.totalTokenCount = 0})
     : super(fullyQualifiedName);
 
-  factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) {
-    return CachedContent_UsageMetadata(
-      totalTokenCount: json['totalTokenCount'] ?? 0,
-    );
-  }
+  factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) =>
+      CachedContent_UsageMetadata(
+        totalTokenCount: json['totalTokenCount'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
-    };
-  }
+  Object toJson() => {
+    if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+  };
 
   @override
   String toString() {
@@ -2014,21 +1999,21 @@ final class CitationMetadata extends ProtoMessage {
   CitationMetadata({this.citationSources = const []})
     : super(fullyQualifiedName);
 
-  factory CitationMetadata.fromJson(Map<String, dynamic> json) {
-    return CitationMetadata(
-      citationSources:
-          decodeListMessage(json['citationSources'], CitationSource.fromJson) ??
-          [],
-    );
-  }
+  factory CitationMetadata.fromJson(Map<String, dynamic> json) =>
+      CitationMetadata(
+        citationSources:
+            decodeListMessage(
+              json['citationSources'],
+              CitationSource.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (citationSources.isNotDefault)
-        'citationSources': encodeList(citationSources),
-    };
-  }
+  Object toJson() => {
+    if (citationSources.isNotDefault)
+      'citationSources': encodeList(citationSources),
+  };
 
   @override
   String toString() => 'CitationMetadata()';
@@ -2060,24 +2045,20 @@ final class CitationSource extends ProtoMessage {
   CitationSource({this.startIndex, this.endIndex, this.uri, this.license})
     : super(fullyQualifiedName);
 
-  factory CitationSource.fromJson(Map<String, dynamic> json) {
-    return CitationSource(
-      startIndex: json['startIndex'],
-      endIndex: json['endIndex'],
-      uri: json['uri'],
-      license: json['license'],
-    );
-  }
+  factory CitationSource.fromJson(Map<String, dynamic> json) => CitationSource(
+    startIndex: json['startIndex'],
+    endIndex: json['endIndex'],
+    uri: json['uri'],
+    license: json['license'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (startIndex != null) 'startIndex': startIndex,
-      if (endIndex != null) 'endIndex': endIndex,
-      if (uri != null) 'uri': uri,
-      if (license != null) 'license': license,
-    };
-  }
+  Object toJson() => {
+    if (startIndex != null) 'startIndex': startIndex,
+    if (endIndex != null) 'endIndex': endIndex,
+    if (uri != null) 'uri': uri,
+    if (license != null) 'license': license,
+  };
 
   @override
   String toString() {
@@ -2112,20 +2093,16 @@ final class Content extends ProtoMessage {
 
   Content({this.parts = const [], this.role = ''}) : super(fullyQualifiedName);
 
-  factory Content.fromJson(Map<String, dynamic> json) {
-    return Content(
-      parts: decodeListMessage(json['parts'], Part.fromJson) ?? [],
-      role: json['role'] ?? '',
-    );
-  }
+  factory Content.fromJson(Map<String, dynamic> json) => Content(
+    parts: decodeListMessage(json['parts'], Part.fromJson) ?? [],
+    role: json['role'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (parts.isNotDefault) 'parts': encodeList(parts),
-      if (role.isNotDefault) 'role': role,
-    };
-  }
+  Object toJson() => {
+    if (parts.isNotDefault) 'parts': encodeList(parts),
+    if (role.isNotDefault) 'role': role,
+  };
 
   @override
   String toString() {
@@ -2180,7 +2157,7 @@ final class Part extends ProtoMessage {
 
   /// Optional. An opaque signature for the thought so it can be reused in
   /// subsequent requests.
-  final Uint8List? thoughtSignature;
+  final Uint8List thoughtSignature;
 
   /// Custom metadata associated with the Part.
   /// Agents using genai.Part as content representation may need to keep track
@@ -2198,58 +2175,55 @@ final class Part extends ProtoMessage {
     this.codeExecutionResult,
     this.videoMetadata,
     this.thought = false,
-    this.thoughtSignature,
+    Uint8List? thoughtSignature,
     this.partMetadata,
-  }) : super(fullyQualifiedName);
+  }) : thoughtSignature = thoughtSignature ?? Uint8List(0),
+       super(fullyQualifiedName);
 
-  factory Part.fromJson(Map<String, dynamic> json) {
-    return Part(
-      text: json['text'],
-      inlineData: decode(json['inlineData'], Blob.fromJson),
-      functionCall: decode(json['functionCall'], FunctionCall.fromJson),
-      functionResponse: decode(
-        json['functionResponse'],
-        FunctionResponse.fromJson,
-      ),
-      fileData: decode(json['fileData'], FileData.fromJson),
-      executableCode: decode(json['executableCode'], ExecutableCode.fromJson),
-      codeExecutionResult: decode(
-        json['codeExecutionResult'],
-        CodeExecutionResult.fromJson,
-      ),
-      videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
-      thought: json['thought'] ?? false,
-      thoughtSignature: decodeBytes(json['thoughtSignature']),
-      partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
-    );
-  }
+  factory Part.fromJson(Map<String, dynamic> json) => Part(
+    text: json['text'],
+    inlineData: decode(json['inlineData'], Blob.fromJson),
+    functionCall: decode(json['functionCall'], FunctionCall.fromJson),
+    functionResponse: decode(
+      json['functionResponse'],
+      FunctionResponse.fromJson,
+    ),
+    fileData: decode(json['fileData'], FileData.fromJson),
+    executableCode: decode(json['executableCode'], ExecutableCode.fromJson),
+    codeExecutionResult: decode(
+      json['codeExecutionResult'],
+      CodeExecutionResult.fromJson,
+    ),
+    videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
+    thought: json['thought'] ?? false,
+    thoughtSignature: decodeBytes(json['thoughtSignature']) ?? Uint8List(0),
+    partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (text != null) 'text': text,
-      if (inlineData != null) 'inlineData': inlineData!.toJson(),
-      if (functionCall != null) 'functionCall': functionCall!.toJson(),
-      if (functionResponse != null)
-        'functionResponse': functionResponse!.toJson(),
-      if (fileData != null) 'fileData': fileData!.toJson(),
-      if (executableCode != null) 'executableCode': executableCode!.toJson(),
-      if (codeExecutionResult != null)
-        'codeExecutionResult': codeExecutionResult!.toJson(),
-      if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
-      if (thought.isNotDefault) 'thought': thought,
-      if (thoughtSignature != null)
-        'thoughtSignature': encodeBytes(thoughtSignature),
-      if (partMetadata != null) 'partMetadata': partMetadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (text != null) 'text': text,
+    if (inlineData != null) 'inlineData': inlineData!.toJson(),
+    if (functionCall != null) 'functionCall': functionCall!.toJson(),
+    if (functionResponse != null)
+      'functionResponse': functionResponse!.toJson(),
+    if (fileData != null) 'fileData': fileData!.toJson(),
+    if (executableCode != null) 'executableCode': executableCode!.toJson(),
+    if (codeExecutionResult != null)
+      'codeExecutionResult': codeExecutionResult!.toJson(),
+    if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
+    if (thought.isNotDefault) 'thought': thought,
+    if (thoughtSignature.isNotDefault)
+      'thoughtSignature': encodeBytes(thoughtSignature),
+    if (partMetadata != null) 'partMetadata': partMetadata!.toJson(),
+  };
 
   @override
   String toString() {
     final contents = [
       if (text != null) 'text=$text',
       'thought=$thought',
-      if (thoughtSignature != null) 'thoughtSignature=$thoughtSignature',
+      'thoughtSignature=$thoughtSignature',
     ].join(',');
     return 'Part($contents)';
   }
@@ -2273,16 +2247,15 @@ final class FunctionResponsePart extends ProtoMessage {
 
   FunctionResponsePart({this.inlineData}) : super(fullyQualifiedName);
 
-  factory FunctionResponsePart.fromJson(Map<String, dynamic> json) {
-    return FunctionResponsePart(
-      inlineData: decode(json['inlineData'], FunctionResponseBlob.fromJson),
-    );
-  }
+  factory FunctionResponsePart.fromJson(Map<String, dynamic> json) =>
+      FunctionResponsePart(
+        inlineData: decode(json['inlineData'], FunctionResponseBlob.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {if (inlineData != null) 'inlineData': inlineData!.toJson()};
-  }
+  Object toJson() => {
+    if (inlineData != null) 'inlineData': inlineData!.toJson(),
+  };
 
   @override
   String toString() => 'FunctionResponsePart()';
@@ -2305,31 +2278,26 @@ final class Blob extends ProtoMessage {
   final String mimeType;
 
   /// Raw bytes for media formats.
-  final Uint8List? data;
+  final Uint8List data;
 
-  Blob({this.mimeType = '', this.data}) : super(fullyQualifiedName);
+  Blob({this.mimeType = '', Uint8List? data})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
-  factory Blob.fromJson(Map<String, dynamic> json) {
-    return Blob(
-      mimeType: json['mimeType'] ?? '',
-      data: decodeBytes(json['data']),
-    );
-  }
+  factory Blob.fromJson(Map<String, dynamic> json) => Blob(
+    mimeType: json['mimeType'] ?? '',
+    data: decodeBytes(json['data']) ?? Uint8List(0),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (mimeType.isNotDefault) 'mimeType': mimeType,
-      if (data != null) 'data': encodeBytes(data),
-    };
-  }
+  Object toJson() => {
+    if (mimeType.isNotDefault) 'mimeType': mimeType,
+    if (data.isNotDefault) 'data': encodeBytes(data),
+  };
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'Blob($contents)';
   }
 }
@@ -2352,32 +2320,27 @@ final class FunctionResponseBlob extends ProtoMessage {
   final String mimeType;
 
   /// Raw bytes for media formats.
-  final Uint8List? data;
+  final Uint8List data;
 
-  FunctionResponseBlob({this.mimeType = '', this.data})
-    : super(fullyQualifiedName);
+  FunctionResponseBlob({this.mimeType = '', Uint8List? data})
+    : data = data ?? Uint8List(0),
+      super(fullyQualifiedName);
 
-  factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) {
-    return FunctionResponseBlob(
-      mimeType: json['mimeType'] ?? '',
-      data: decodeBytes(json['data']),
-    );
-  }
+  factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) =>
+      FunctionResponseBlob(
+        mimeType: json['mimeType'] ?? '',
+        data: decodeBytes(json['data']) ?? Uint8List(0),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (mimeType.isNotDefault) 'mimeType': mimeType,
-      if (data != null) 'data': encodeBytes(data),
-    };
-  }
+  Object toJson() => {
+    if (mimeType.isNotDefault) 'mimeType': mimeType,
+    if (data.isNotDefault) 'data': encodeBytes(data),
+  };
 
   @override
   String toString() {
-    final contents = [
-      'mimeType=$mimeType',
-      if (data != null) 'data=$data',
-    ].join(',');
+    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
     return 'FunctionResponseBlob($contents)';
   }
 }
@@ -2396,20 +2359,16 @@ final class FileData extends ProtoMessage {
   FileData({this.mimeType = '', required this.fileUri})
     : super(fullyQualifiedName);
 
-  factory FileData.fromJson(Map<String, dynamic> json) {
-    return FileData(
-      mimeType: json['mimeType'] ?? '',
-      fileUri: json['fileUri'] ?? '',
-    );
-  }
+  factory FileData.fromJson(Map<String, dynamic> json) => FileData(
+    mimeType: json['mimeType'] ?? '',
+    fileUri: json['fileUri'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (mimeType.isNotDefault) 'mimeType': mimeType,
-      'fileUri': fileUri,
-    };
-  }
+  Object toJson() => {
+    if (mimeType.isNotDefault) 'mimeType': mimeType,
+    'fileUri': fileUri,
+  };
 
   @override
   String toString() {
@@ -2436,22 +2395,18 @@ final class VideoMetadata extends ProtoMessage {
   VideoMetadata({this.startOffset, this.endOffset, this.fps = 0})
     : super(fullyQualifiedName);
 
-  factory VideoMetadata.fromJson(Map<String, dynamic> json) {
-    return VideoMetadata(
-      startOffset: decodeCustom(json['startOffset'], Duration.fromJson),
-      endOffset: decodeCustom(json['endOffset'], Duration.fromJson),
-      fps: decodeDouble(json['fps']) ?? 0,
-    );
-  }
+  factory VideoMetadata.fromJson(Map<String, dynamic> json) => VideoMetadata(
+    startOffset: decodeCustom(json['startOffset'], Duration.fromJson),
+    endOffset: decodeCustom(json['endOffset'], Duration.fromJson),
+    fps: decodeDouble(json['fps']) ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (startOffset != null) 'startOffset': startOffset!.toJson(),
-      if (endOffset != null) 'endOffset': endOffset!.toJson(),
-      if (fps.isNotDefault) 'fps': encodeDouble(fps),
-    };
-  }
+  Object toJson() => {
+    if (startOffset != null) 'startOffset': startOffset!.toJson(),
+    if (endOffset != null) 'endOffset': endOffset!.toJson(),
+    if (fps.isNotDefault) 'fps': encodeDouble(fps),
+  };
 
   @override
   String toString() {
@@ -2479,19 +2434,15 @@ final class ExecutableCode extends ProtoMessage {
   ExecutableCode({required this.language, required this.code})
     : super(fullyQualifiedName);
 
-  factory ExecutableCode.fromJson(Map<String, dynamic> json) {
-    return ExecutableCode(
-      language:
-          decodeEnum(json['language'], ExecutableCode_Language.fromJson) ??
-          ExecutableCode_Language.$default,
-      code: json['code'] ?? '',
-    );
-  }
+  factory ExecutableCode.fromJson(Map<String, dynamic> json) => ExecutableCode(
+    language:
+        decodeEnum(json['language'], ExecutableCode_Language.fromJson) ??
+        ExecutableCode_Language.$default,
+    code: json['code'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {'language': language.toJson(), 'code': code};
-  }
+  Object toJson() => {'language': language.toJson(), 'code': code};
 
   @override
   String toString() {
@@ -2542,22 +2493,19 @@ final class CodeExecutionResult extends ProtoMessage {
   CodeExecutionResult({required this.outcome, this.output = ''})
     : super(fullyQualifiedName);
 
-  factory CodeExecutionResult.fromJson(Map<String, dynamic> json) {
-    return CodeExecutionResult(
-      outcome:
-          decodeEnum(json['outcome'], CodeExecutionResult_Outcome.fromJson) ??
-          CodeExecutionResult_Outcome.$default,
-      output: json['output'] ?? '',
-    );
-  }
+  factory CodeExecutionResult.fromJson(Map<String, dynamic> json) =>
+      CodeExecutionResult(
+        outcome:
+            decodeEnum(json['outcome'], CodeExecutionResult_Outcome.fromJson) ??
+            CodeExecutionResult_Outcome.$default,
+        output: json['output'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'outcome': outcome.toJson(),
-      if (output.isNotDefault) 'output': output,
-    };
-  }
+  Object toJson() => {
+    'outcome': outcome.toJson(),
+    if (output.isNotDefault) 'output': output,
+  };
 
   @override
   String toString() {
@@ -2653,38 +2601,34 @@ final class Tool extends ProtoMessage {
     this.urlContext,
   }) : super(fullyQualifiedName);
 
-  factory Tool.fromJson(Map<String, dynamic> json) {
-    return Tool(
-      functionDeclarations:
-          decodeListMessage(
-            json['functionDeclarations'],
-            FunctionDeclaration.fromJson,
-          ) ??
-          [],
-      googleSearchRetrieval: decode(
-        json['googleSearchRetrieval'],
-        GoogleSearchRetrieval.fromJson,
-      ),
-      codeExecution: decode(json['codeExecution'], CodeExecution.fromJson),
-      googleSearch: decode(json['googleSearch'], Tool_GoogleSearch.fromJson),
-      computerUse: decode(json['computerUse'], Tool_ComputerUse.fromJson),
-      urlContext: decode(json['urlContext'], UrlContext.fromJson),
-    );
-  }
+  factory Tool.fromJson(Map<String, dynamic> json) => Tool(
+    functionDeclarations:
+        decodeListMessage(
+          json['functionDeclarations'],
+          FunctionDeclaration.fromJson,
+        ) ??
+        [],
+    googleSearchRetrieval: decode(
+      json['googleSearchRetrieval'],
+      GoogleSearchRetrieval.fromJson,
+    ),
+    codeExecution: decode(json['codeExecution'], CodeExecution.fromJson),
+    googleSearch: decode(json['googleSearch'], Tool_GoogleSearch.fromJson),
+    computerUse: decode(json['computerUse'], Tool_ComputerUse.fromJson),
+    urlContext: decode(json['urlContext'], UrlContext.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (functionDeclarations.isNotDefault)
-        'functionDeclarations': encodeList(functionDeclarations),
-      if (googleSearchRetrieval != null)
-        'googleSearchRetrieval': googleSearchRetrieval!.toJson(),
-      if (codeExecution != null) 'codeExecution': codeExecution!.toJson(),
-      if (googleSearch != null) 'googleSearch': googleSearch!.toJson(),
-      if (computerUse != null) 'computerUse': computerUse!.toJson(),
-      if (urlContext != null) 'urlContext': urlContext!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (functionDeclarations.isNotDefault)
+      'functionDeclarations': encodeList(functionDeclarations),
+    if (googleSearchRetrieval != null)
+      'googleSearchRetrieval': googleSearchRetrieval!.toJson(),
+    if (codeExecution != null) 'codeExecution': codeExecution!.toJson(),
+    if (googleSearch != null) 'googleSearch': googleSearch!.toJson(),
+    if (computerUse != null) 'computerUse': computerUse!.toJson(),
+    if (urlContext != null) 'urlContext': urlContext!.toJson(),
+  };
 
   @override
   String toString() => 'Tool()';
@@ -2703,18 +2647,15 @@ final class Tool_GoogleSearch extends ProtoMessage {
 
   Tool_GoogleSearch({this.timeRangeFilter}) : super(fullyQualifiedName);
 
-  factory Tool_GoogleSearch.fromJson(Map<String, dynamic> json) {
-    return Tool_GoogleSearch(
-      timeRangeFilter: decode(json['timeRangeFilter'], Interval.fromJson),
-    );
-  }
+  factory Tool_GoogleSearch.fromJson(Map<String, dynamic> json) =>
+      Tool_GoogleSearch(
+        timeRangeFilter: decode(json['timeRangeFilter'], Interval.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (timeRangeFilter != null) 'timeRangeFilter': timeRangeFilter!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (timeRangeFilter != null) 'timeRangeFilter': timeRangeFilter!.toJson(),
+  };
 
   @override
   String toString() => 'GoogleSearch()';
@@ -2740,27 +2681,24 @@ final class Tool_ComputerUse extends ProtoMessage {
     this.excludedPredefinedFunctions = const [],
   }) : super(fullyQualifiedName);
 
-  factory Tool_ComputerUse.fromJson(Map<String, dynamic> json) {
-    return Tool_ComputerUse(
-      environment:
-          decodeEnum(
-            json['environment'],
-            Tool_ComputerUse_Environment.fromJson,
-          ) ??
-          Tool_ComputerUse_Environment.$default,
-      excludedPredefinedFunctions:
-          decodeList(json['excludedPredefinedFunctions']) ?? [],
-    );
-  }
+  factory Tool_ComputerUse.fromJson(Map<String, dynamic> json) =>
+      Tool_ComputerUse(
+        environment:
+            decodeEnum(
+              json['environment'],
+              Tool_ComputerUse_Environment.fromJson,
+            ) ??
+            Tool_ComputerUse_Environment.$default,
+        excludedPredefinedFunctions:
+            decodeList(json['excludedPredefinedFunctions']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'environment': environment.toJson(),
-      if (excludedPredefinedFunctions.isNotDefault)
-        'excludedPredefinedFunctions': excludedPredefinedFunctions,
-    };
-  }
+  Object toJson() => {
+    'environment': environment.toJson(),
+    if (excludedPredefinedFunctions.isNotDefault)
+      'excludedPredefinedFunctions': excludedPredefinedFunctions,
+  };
 
   @override
   String toString() {
@@ -2802,14 +2740,10 @@ final class UrlContext extends ProtoMessage {
 
   UrlContext() : super(fullyQualifiedName);
 
-  factory UrlContext.fromJson(Map<String, dynamic> json) {
-    return UrlContext();
-  }
+  factory UrlContext.fromJson(Map<String, dynamic> json) => UrlContext();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'UrlContext()';
@@ -2826,22 +2760,19 @@ final class GoogleSearchRetrieval extends ProtoMessage {
   GoogleSearchRetrieval({this.dynamicRetrievalConfig})
     : super(fullyQualifiedName);
 
-  factory GoogleSearchRetrieval.fromJson(Map<String, dynamic> json) {
-    return GoogleSearchRetrieval(
-      dynamicRetrievalConfig: decode(
-        json['dynamicRetrievalConfig'],
-        DynamicRetrievalConfig.fromJson,
-      ),
-    );
-  }
+  factory GoogleSearchRetrieval.fromJson(Map<String, dynamic> json) =>
+      GoogleSearchRetrieval(
+        dynamicRetrievalConfig: decode(
+          json['dynamicRetrievalConfig'],
+          DynamicRetrievalConfig.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (dynamicRetrievalConfig != null)
-        'dynamicRetrievalConfig': dynamicRetrievalConfig!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (dynamicRetrievalConfig != null)
+      'dynamicRetrievalConfig': dynamicRetrievalConfig!.toJson(),
+  };
 
   @override
   String toString() => 'GoogleSearchRetrieval()';
@@ -2864,23 +2795,20 @@ final class DynamicRetrievalConfig extends ProtoMessage {
     this.dynamicThreshold,
   }) : super(fullyQualifiedName);
 
-  factory DynamicRetrievalConfig.fromJson(Map<String, dynamic> json) {
-    return DynamicRetrievalConfig(
-      mode:
-          decodeEnum(json['mode'], DynamicRetrievalConfig_Mode.fromJson) ??
-          DynamicRetrievalConfig_Mode.$default,
-      dynamicThreshold: decodeDouble(json['dynamicThreshold']),
-    );
-  }
+  factory DynamicRetrievalConfig.fromJson(Map<String, dynamic> json) =>
+      DynamicRetrievalConfig(
+        mode:
+            decodeEnum(json['mode'], DynamicRetrievalConfig_Mode.fromJson) ??
+            DynamicRetrievalConfig_Mode.$default,
+        dynamicThreshold: decodeDouble(json['dynamicThreshold']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (mode.isNotDefault) 'mode': mode.toJson(),
-      if (dynamicThreshold != null)
-        'dynamicThreshold': encodeDouble(dynamicThreshold),
-    };
-  }
+  Object toJson() => {
+    if (mode.isNotDefault) 'mode': mode.toJson(),
+    if (dynamicThreshold != null)
+      'dynamicThreshold': encodeDouble(dynamicThreshold),
+  };
 
   @override
   String toString() {
@@ -2927,14 +2855,10 @@ final class CodeExecution extends ProtoMessage {
 
   CodeExecution() : super(fullyQualifiedName);
 
-  factory CodeExecution.fromJson(Map<String, dynamic> json) {
-    return CodeExecution();
-  }
+  factory CodeExecution.fromJson(Map<String, dynamic> json) => CodeExecution();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'CodeExecution()';
@@ -2951,22 +2875,18 @@ final class ToolConfig extends ProtoMessage {
 
   ToolConfig({this.functionCallingConfig}) : super(fullyQualifiedName);
 
-  factory ToolConfig.fromJson(Map<String, dynamic> json) {
-    return ToolConfig(
-      functionCallingConfig: decode(
-        json['functionCallingConfig'],
-        FunctionCallingConfig.fromJson,
-      ),
-    );
-  }
+  factory ToolConfig.fromJson(Map<String, dynamic> json) => ToolConfig(
+    functionCallingConfig: decode(
+      json['functionCallingConfig'],
+      FunctionCallingConfig.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (functionCallingConfig != null)
-        'functionCallingConfig': functionCallingConfig!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (functionCallingConfig != null)
+      'functionCallingConfig': functionCallingConfig!.toJson(),
+  };
 
   @override
   String toString() => 'ToolConfig()';
@@ -2994,23 +2914,20 @@ final class FunctionCallingConfig extends ProtoMessage {
     this.allowedFunctionNames = const [],
   }) : super(fullyQualifiedName);
 
-  factory FunctionCallingConfig.fromJson(Map<String, dynamic> json) {
-    return FunctionCallingConfig(
-      mode:
-          decodeEnum(json['mode'], FunctionCallingConfig_Mode.fromJson) ??
-          FunctionCallingConfig_Mode.$default,
-      allowedFunctionNames: decodeList(json['allowedFunctionNames']) ?? [],
-    );
-  }
+  factory FunctionCallingConfig.fromJson(Map<String, dynamic> json) =>
+      FunctionCallingConfig(
+        mode:
+            decodeEnum(json['mode'], FunctionCallingConfig_Mode.fromJson) ??
+            FunctionCallingConfig_Mode.$default,
+        allowedFunctionNames: decodeList(json['allowedFunctionNames']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (mode.isNotDefault) 'mode': mode.toJson(),
-      if (allowedFunctionNames.isNotDefault)
-        'allowedFunctionNames': allowedFunctionNames,
-    };
-  }
+  Object toJson() => {
+    if (mode.isNotDefault) 'mode': mode.toJson(),
+    if (allowedFunctionNames.isNotDefault)
+      'allowedFunctionNames': allowedFunctionNames,
+  };
 
   @override
   String toString() {
@@ -3129,40 +3046,40 @@ final class FunctionDeclaration extends ProtoMessage {
     this.behavior = FunctionDeclaration_Behavior.$default,
   }) : super(fullyQualifiedName);
 
-  factory FunctionDeclaration.fromJson(Map<String, dynamic> json) {
-    return FunctionDeclaration(
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
-      parameters: decode(json['parameters'], Schema.fromJson),
-      parametersJsonSchema: decodeCustom(
-        json['parametersJsonSchema'],
-        Value.fromJson,
-      ),
-      response: decode(json['response'], Schema.fromJson),
-      responseJsonSchema: decodeCustom(
-        json['responseJsonSchema'],
-        Value.fromJson,
-      ),
-      behavior:
-          decodeEnum(json['behavior'], FunctionDeclaration_Behavior.fromJson) ??
-          FunctionDeclaration_Behavior.$default,
-    );
-  }
+  factory FunctionDeclaration.fromJson(Map<String, dynamic> json) =>
+      FunctionDeclaration(
+        name: json['name'] ?? '',
+        description: json['description'] ?? '',
+        parameters: decode(json['parameters'], Schema.fromJson),
+        parametersJsonSchema: decodeCustom(
+          json['parametersJsonSchema'],
+          Value.fromJson,
+        ),
+        response: decode(json['response'], Schema.fromJson),
+        responseJsonSchema: decodeCustom(
+          json['responseJsonSchema'],
+          Value.fromJson,
+        ),
+        behavior:
+            decodeEnum(
+              json['behavior'],
+              FunctionDeclaration_Behavior.fromJson,
+            ) ??
+            FunctionDeclaration_Behavior.$default,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      'description': description,
-      if (parameters != null) 'parameters': parameters!.toJson(),
-      if (parametersJsonSchema != null)
-        'parametersJsonSchema': parametersJsonSchema!.toJson(),
-      if (response != null) 'response': response!.toJson(),
-      if (responseJsonSchema != null)
-        'responseJsonSchema': responseJsonSchema!.toJson(),
-      if (behavior.isNotDefault) 'behavior': behavior.toJson(),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    'description': description,
+    if (parameters != null) 'parameters': parameters!.toJson(),
+    if (parametersJsonSchema != null)
+      'parametersJsonSchema': parametersJsonSchema!.toJson(),
+    if (response != null) 'response': response!.toJson(),
+    if (responseJsonSchema != null)
+      'responseJsonSchema': responseJsonSchema!.toJson(),
+    if (behavior.isNotDefault) 'behavior': behavior.toJson(),
+  };
 
   @override
   String toString() {
@@ -3226,22 +3143,18 @@ final class FunctionCall extends ProtoMessage {
   FunctionCall({this.id = '', required this.name, this.args})
     : super(fullyQualifiedName);
 
-  factory FunctionCall.fromJson(Map<String, dynamic> json) {
-    return FunctionCall(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      args: decodeCustom(json['args'], Struct.fromJson),
-    );
-  }
+  factory FunctionCall.fromJson(Map<String, dynamic> json) => FunctionCall(
+    id: json['id'] ?? '',
+    name: json['name'] ?? '',
+    args: decodeCustom(json['args'], Struct.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      'name': name,
-      if (args != null) 'args': args!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (id.isNotDefault) 'id': id,
+    'name': name,
+    if (args != null) 'args': args!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3303,32 +3216,30 @@ final class FunctionResponse extends ProtoMessage {
     this.scheduling,
   }) : super(fullyQualifiedName);
 
-  factory FunctionResponse.fromJson(Map<String, dynamic> json) {
-    return FunctionResponse(
-      id: json['id'] ?? '',
-      name: json['name'] ?? '',
-      response: decodeCustom(json['response'], Struct.fromJson),
-      parts:
-          decodeListMessage(json['parts'], FunctionResponsePart.fromJson) ?? [],
-      willContinue: json['willContinue'] ?? false,
-      scheduling: decodeEnum(
-        json['scheduling'],
-        FunctionResponse_Scheduling.fromJson,
-      ),
-    );
-  }
+  factory FunctionResponse.fromJson(Map<String, dynamic> json) =>
+      FunctionResponse(
+        id: json['id'] ?? '',
+        name: json['name'] ?? '',
+        response: decodeCustom(json['response'], Struct.fromJson),
+        parts:
+            decodeListMessage(json['parts'], FunctionResponsePart.fromJson) ??
+            [],
+        willContinue: json['willContinue'] ?? false,
+        scheduling: decodeEnum(
+          json['scheduling'],
+          FunctionResponse_Scheduling.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      'name': name,
-      if (response != null) 'response': response!.toJson(),
-      if (parts.isNotDefault) 'parts': encodeList(parts),
-      if (willContinue.isNotDefault) 'willContinue': willContinue,
-      if (scheduling != null) 'scheduling': scheduling!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (id.isNotDefault) 'id': id,
+    'name': name,
+    if (response != null) 'response': response!.toJson(),
+    if (parts.isNotDefault) 'parts': encodeList(parts),
+    if (willContinue.isNotDefault) 'willContinue': willContinue,
+    if (scheduling != null) 'scheduling': scheduling!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3488,62 +3399,56 @@ final class Schema extends ProtoMessage {
     this.default$,
   }) : super(fullyQualifiedName);
 
-  factory Schema.fromJson(Map<String, dynamic> json) {
-    return Schema(
-      type: decodeEnum(json['type'], Type.fromJson) ?? Type.$default,
-      format: json['format'] ?? '',
-      title: json['title'] ?? '',
-      description: json['description'] ?? '',
-      nullable: json['nullable'] ?? false,
-      enum$: decodeList(json['enum']) ?? [],
-      items: decode(json['items'], Schema.fromJson),
-      maxItems: decodeInt64(json['maxItems']) ?? 0,
-      minItems: decodeInt64(json['minItems']) ?? 0,
-      properties: decodeMapMessage(json['properties'], Schema.fromJson) ?? {},
-      required: decodeList(json['required']) ?? [],
-      minProperties: decodeInt64(json['minProperties']) ?? 0,
-      maxProperties: decodeInt64(json['maxProperties']) ?? 0,
-      minimum: decodeDouble(json['minimum']),
-      maximum: decodeDouble(json['maximum']),
-      minLength: decodeInt64(json['minLength']) ?? 0,
-      maxLength: decodeInt64(json['maxLength']) ?? 0,
-      pattern: json['pattern'] ?? '',
-      example: decodeCustom(json['example'], Value.fromJson),
-      anyOf: decodeListMessage(json['anyOf'], Schema.fromJson) ?? [],
-      propertyOrdering: decodeList(json['propertyOrdering']) ?? [],
-      default$: decodeCustom(json['default'], Value.fromJson),
-    );
-  }
+  factory Schema.fromJson(Map<String, dynamic> json) => Schema(
+    type: decodeEnum(json['type'], Type.fromJson) ?? Type.$default,
+    format: json['format'] ?? '',
+    title: json['title'] ?? '',
+    description: json['description'] ?? '',
+    nullable: json['nullable'] ?? false,
+    enum$: decodeList(json['enum']) ?? [],
+    items: decode(json['items'], Schema.fromJson),
+    maxItems: decodeInt64(json['maxItems']) ?? 0,
+    minItems: decodeInt64(json['minItems']) ?? 0,
+    properties: decodeMapMessage(json['properties'], Schema.fromJson) ?? {},
+    required: decodeList(json['required']) ?? [],
+    minProperties: decodeInt64(json['minProperties']) ?? 0,
+    maxProperties: decodeInt64(json['maxProperties']) ?? 0,
+    minimum: decodeDouble(json['minimum']),
+    maximum: decodeDouble(json['maximum']),
+    minLength: decodeInt64(json['minLength']) ?? 0,
+    maxLength: decodeInt64(json['maxLength']) ?? 0,
+    pattern: json['pattern'] ?? '',
+    example: decodeCustom(json['example'], Value.fromJson),
+    anyOf: decodeListMessage(json['anyOf'], Schema.fromJson) ?? [],
+    propertyOrdering: decodeList(json['propertyOrdering']) ?? [],
+    default$: decodeCustom(json['default'], Value.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      'type': type.toJson(),
-      if (format.isNotDefault) 'format': format,
-      if (title.isNotDefault) 'title': title,
-      if (description.isNotDefault) 'description': description,
-      if (nullable.isNotDefault) 'nullable': nullable,
-      if (enum$.isNotDefault) 'enum': enum$,
-      if (items != null) 'items': items!.toJson(),
-      if (maxItems.isNotDefault) 'maxItems': encodeInt64(maxItems),
-      if (minItems.isNotDefault) 'minItems': encodeInt64(minItems),
-      if (properties.isNotDefault) 'properties': encodeMap(properties),
-      if (required.isNotDefault) 'required': required,
-      if (minProperties.isNotDefault)
-        'minProperties': encodeInt64(minProperties),
-      if (maxProperties.isNotDefault)
-        'maxProperties': encodeInt64(maxProperties),
-      if (minimum != null) 'minimum': encodeDouble(minimum),
-      if (maximum != null) 'maximum': encodeDouble(maximum),
-      if (minLength.isNotDefault) 'minLength': encodeInt64(minLength),
-      if (maxLength.isNotDefault) 'maxLength': encodeInt64(maxLength),
-      if (pattern.isNotDefault) 'pattern': pattern,
-      if (example != null) 'example': example!.toJson(),
-      if (anyOf.isNotDefault) 'anyOf': encodeList(anyOf),
-      if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
-      if (default$ != null) 'default': default$!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'type': type.toJson(),
+    if (format.isNotDefault) 'format': format,
+    if (title.isNotDefault) 'title': title,
+    if (description.isNotDefault) 'description': description,
+    if (nullable.isNotDefault) 'nullable': nullable,
+    if (enum$.isNotDefault) 'enum': enum$,
+    if (items != null) 'items': items!.toJson(),
+    if (maxItems.isNotDefault) 'maxItems': encodeInt64(maxItems),
+    if (minItems.isNotDefault) 'minItems': encodeInt64(minItems),
+    if (properties.isNotDefault) 'properties': encodeMap(properties),
+    if (required.isNotDefault) 'required': required,
+    if (minProperties.isNotDefault) 'minProperties': encodeInt64(minProperties),
+    if (maxProperties.isNotDefault) 'maxProperties': encodeInt64(maxProperties),
+    if (minimum != null) 'minimum': encodeDouble(minimum),
+    if (maximum != null) 'maximum': encodeDouble(maximum),
+    if (minLength.isNotDefault) 'minLength': encodeInt64(minLength),
+    if (maxLength.isNotDefault) 'maxLength': encodeInt64(maxLength),
+    if (pattern.isNotDefault) 'pattern': pattern,
+    if (example != null) 'example': example!.toJson(),
+    if (anyOf.isNotDefault) 'anyOf': encodeList(anyOf),
+    if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
+    if (default$ != null) 'default': default$!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3581,20 +3486,17 @@ final class GroundingPassage extends ProtoMessage {
 
   GroundingPassage({this.id = '', this.content}) : super(fullyQualifiedName);
 
-  factory GroundingPassage.fromJson(Map<String, dynamic> json) {
-    return GroundingPassage(
-      id: json['id'] ?? '',
-      content: decode(json['content'], Content.fromJson),
-    );
-  }
+  factory GroundingPassage.fromJson(Map<String, dynamic> json) =>
+      GroundingPassage(
+        id: json['id'] ?? '',
+        content: decode(json['content'], Content.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (id.isNotDefault) 'id': id,
-      if (content != null) 'content': content!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (id.isNotDefault) 'id': id,
+    if (content != null) 'content': content!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3613,17 +3515,17 @@ final class GroundingPassages extends ProtoMessage {
 
   GroundingPassages({this.passages = const []}) : super(fullyQualifiedName);
 
-  factory GroundingPassages.fromJson(Map<String, dynamic> json) {
-    return GroundingPassages(
-      passages:
-          decodeListMessage(json['passages'], GroundingPassage.fromJson) ?? [],
-    );
-  }
+  factory GroundingPassages.fromJson(Map<String, dynamic> json) =>
+      GroundingPassages(
+        passages:
+            decodeListMessage(json['passages'], GroundingPassage.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {if (passages.isNotDefault) 'passages': encodeList(passages)};
-  }
+  Object toJson() => {
+    if (passages.isNotDefault) 'passages': encodeList(passages),
+  };
 
   @override
   String toString() => 'GroundingPassages()';
@@ -3643,21 +3545,19 @@ final class ModalityTokenCount extends ProtoMessage {
   ModalityTokenCount({this.modality = Modality.$default, this.tokenCount = 0})
     : super(fullyQualifiedName);
 
-  factory ModalityTokenCount.fromJson(Map<String, dynamic> json) {
-    return ModalityTokenCount(
-      modality:
-          decodeEnum(json['modality'], Modality.fromJson) ?? Modality.$default,
-      tokenCount: json['tokenCount'] ?? 0,
-    );
-  }
+  factory ModalityTokenCount.fromJson(Map<String, dynamic> json) =>
+      ModalityTokenCount(
+        modality:
+            decodeEnum(json['modality'], Modality.fromJson) ??
+            Modality.$default,
+        tokenCount: json['tokenCount'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (modality.isNotDefault) 'modality': modality.toJson(),
-      if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
-    };
-  }
+  Object toJson() => {
+    if (modality.isNotDefault) 'modality': modality.toJson(),
+    if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
+  };
 
   @override
   String toString() {
@@ -3722,28 +3622,25 @@ final class GenerateMessageRequest extends ProtoMessage {
     this.topK,
   }) : super(fullyQualifiedName);
 
-  factory GenerateMessageRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateMessageRequest(
-      model: json['model'] ?? '',
-      prompt: decode(json['prompt'], MessagePrompt.fromJson),
-      temperature: decodeDouble(json['temperature']),
-      candidateCount: json['candidateCount'],
-      topP: decodeDouble(json['topP']),
-      topK: json['topK'],
-    );
-  }
+  factory GenerateMessageRequest.fromJson(Map<String, dynamic> json) =>
+      GenerateMessageRequest(
+        model: json['model'] ?? '',
+        prompt: decode(json['prompt'], MessagePrompt.fromJson),
+        temperature: decodeDouble(json['temperature']),
+        candidateCount: json['candidateCount'],
+        topP: decodeDouble(json['topP']),
+        topK: json['topK'],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (prompt != null) 'prompt': prompt!.toJson(),
-      if (temperature != null) 'temperature': encodeDouble(temperature),
-      if (candidateCount != null) 'candidateCount': candidateCount,
-      if (topP != null) 'topP': encodeDouble(topP),
-      if (topK != null) 'topK': topK,
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (prompt != null) 'prompt': prompt!.toJson(),
+    if (temperature != null) 'temperature': encodeDouble(temperature),
+    if (candidateCount != null) 'candidateCount': candidateCount,
+    if (topP != null) 'topP': encodeDouble(topP),
+    if (topK != null) 'topK': topK,
+  };
 
   @override
   String toString() {
@@ -3786,22 +3683,20 @@ final class GenerateMessageResponse extends ProtoMessage {
     this.filters = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateMessageResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateMessageResponse(
-      candidates: decodeListMessage(json['candidates'], Message.fromJson) ?? [],
-      messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
-      filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
-    );
-  }
+  factory GenerateMessageResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => GenerateMessageResponse(
+    candidates: decodeListMessage(json['candidates'], Message.fromJson) ?? [],
+    messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
+    filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (candidates.isNotDefault) 'candidates': encodeList(candidates),
-      if (messages.isNotDefault) 'messages': encodeList(messages),
-      if (filters.isNotDefault) 'filters': encodeList(filters),
-    };
-  }
+  Object toJson() => {
+    if (candidates.isNotDefault) 'candidates': encodeList(candidates),
+    if (messages.isNotDefault) 'messages': encodeList(messages),
+    if (filters.isNotDefault) 'filters': encodeList(filters),
+  };
 
   @override
   String toString() => 'GenerateMessageResponse()';
@@ -3840,26 +3735,22 @@ final class Message extends ProtoMessage {
   Message({this.author = '', required this.content, this.citationMetadata})
     : super(fullyQualifiedName);
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    return Message(
-      author: json['author'] ?? '',
-      content: json['content'] ?? '',
-      citationMetadata: decode(
-        json['citationMetadata'],
-        CitationMetadata.fromJson,
-      ),
-    );
-  }
+  factory Message.fromJson(Map<String, dynamic> json) => Message(
+    author: json['author'] ?? '',
+    content: json['content'] ?? '',
+    citationMetadata: decode(
+      json['citationMetadata'],
+      CitationMetadata.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (author.isNotDefault) 'author': author,
-      'content': content,
-      if (citationMetadata != null)
-        'citationMetadata': citationMetadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (author.isNotDefault) 'author': author,
+    'content': content,
+    if (citationMetadata != null)
+      'citationMetadata': citationMetadata!.toJson(),
+  };
 
   @override
   String toString() {
@@ -3922,22 +3813,18 @@ final class MessagePrompt extends ProtoMessage {
     required this.messages,
   }) : super(fullyQualifiedName);
 
-  factory MessagePrompt.fromJson(Map<String, dynamic> json) {
-    return MessagePrompt(
-      context: json['context'] ?? '',
-      examples: decodeListMessage(json['examples'], Example.fromJson) ?? [],
-      messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
-    );
-  }
+  factory MessagePrompt.fromJson(Map<String, dynamic> json) => MessagePrompt(
+    context: json['context'] ?? '',
+    examples: decodeListMessage(json['examples'], Example.fromJson) ?? [],
+    messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (context.isNotDefault) 'context': context,
-      if (examples.isNotDefault) 'examples': encodeList(examples),
-      'messages': encodeList(messages),
-    };
-  }
+  Object toJson() => {
+    if (context.isNotDefault) 'context': context,
+    if (examples.isNotDefault) 'examples': encodeList(examples),
+    'messages': encodeList(messages),
+  };
 
   @override
   String toString() {
@@ -3962,20 +3849,16 @@ final class Example extends ProtoMessage {
   Example({required this.input, required this.output})
     : super(fullyQualifiedName);
 
-  factory Example.fromJson(Map<String, dynamic> json) {
-    return Example(
-      input: decode(json['input'], Message.fromJson),
-      output: decode(json['output'], Message.fromJson),
-    );
-  }
+  factory Example.fromJson(Map<String, dynamic> json) => Example(
+    input: decode(json['input'], Message.fromJson),
+    output: decode(json['output'], Message.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (input != null) 'input': input!.toJson(),
-      if (output != null) 'output': output!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (input != null) 'input': input!.toJson(),
+    if (output != null) 'output': output!.toJson(),
+  };
 
   @override
   String toString() => 'Example()';
@@ -4003,17 +3886,17 @@ final class CountMessageTokensRequest extends ProtoMessage {
   CountMessageTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
-  factory CountMessageTokensRequest.fromJson(Map<String, dynamic> json) {
-    return CountMessageTokensRequest(
-      model: json['model'] ?? '',
-      prompt: decode(json['prompt'], MessagePrompt.fromJson),
-    );
-  }
+  factory CountMessageTokensRequest.fromJson(Map<String, dynamic> json) =>
+      CountMessageTokensRequest(
+        model: json['model'] ?? '',
+        prompt: decode(json['prompt'], MessagePrompt.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {'model': model, if (prompt != null) 'prompt': prompt!.toJson()};
-  }
+  Object toJson() => {
+    'model': model,
+    if (prompt != null) 'prompt': prompt!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4036,14 +3919,11 @@ final class CountMessageTokensResponse extends ProtoMessage {
 
   CountMessageTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
 
-  factory CountMessageTokensResponse.fromJson(Map<String, dynamic> json) {
-    return CountMessageTokensResponse(tokenCount: json['tokenCount'] ?? 0);
-  }
+  factory CountMessageTokensResponse.fromJson(Map<String, dynamic> json) =>
+      CountMessageTokensResponse(tokenCount: json['tokenCount'] ?? 0);
 
   @override
-  Object toJson() {
-    return {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
-  }
+  Object toJson() => {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
 
   @override
   String toString() {
@@ -4090,7 +3970,7 @@ final class File extends ProtoMessage {
   final Timestamp? expirationTime;
 
   /// Output only. SHA-256 hash of the uploaded bytes.
-  final Uint8List? sha256Hash;
+  final Uint8List sha256Hash;
 
   /// Output only. The uri of the `File`.
   final String uri;
@@ -4116,55 +3996,52 @@ final class File extends ProtoMessage {
     this.createTime,
     this.updateTime,
     this.expirationTime,
-    this.sha256Hash,
+    Uint8List? sha256Hash,
     this.uri = '',
     this.downloadUri = '',
     this.state = File_State.$default,
     this.source = File_Source.$default,
     this.error,
-  }) : super(fullyQualifiedName);
+  }) : sha256Hash = sha256Hash ?? Uint8List(0),
+       super(fullyQualifiedName);
 
-  factory File.fromJson(Map<String, dynamic> json) {
-    return File(
-      videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      mimeType: json['mimeType'] ?? '',
-      sizeBytes: decodeInt64(json['sizeBytes']) ?? 0,
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
-      sha256Hash: decodeBytes(json['sha256Hash']),
-      uri: json['uri'] ?? '',
-      downloadUri: json['downloadUri'] ?? '',
-      state:
-          decodeEnum(json['state'], File_State.fromJson) ?? File_State.$default,
-      source:
-          decodeEnum(json['source'], File_Source.fromJson) ??
-          File_Source.$default,
-      error: decode(json['error'], Status.fromJson),
-    );
-  }
+  factory File.fromJson(Map<String, dynamic> json) => File(
+    videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
+    name: json['name'] ?? '',
+    displayName: json['displayName'] ?? '',
+    mimeType: json['mimeType'] ?? '',
+    sizeBytes: decodeInt64(json['sizeBytes']) ?? 0,
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
+    sha256Hash: decodeBytes(json['sha256Hash']) ?? Uint8List(0),
+    uri: json['uri'] ?? '',
+    downloadUri: json['downloadUri'] ?? '',
+    state:
+        decodeEnum(json['state'], File_State.fromJson) ?? File_State.$default,
+    source:
+        decodeEnum(json['source'], File_Source.fromJson) ??
+        File_Source.$default,
+    error: decode(json['error'], Status.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
-      if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (mimeType.isNotDefault) 'mimeType': mimeType,
-      if (sizeBytes.isNotDefault) 'sizeBytes': encodeInt64(sizeBytes),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
-      if (sha256Hash != null) 'sha256Hash': encodeBytes(sha256Hash),
-      if (uri.isNotDefault) 'uri': uri,
-      if (downloadUri.isNotDefault) 'downloadUri': downloadUri,
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (source.isNotDefault) 'source': source.toJson(),
-      if (error != null) 'error': error!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (videoMetadata != null) 'videoMetadata': videoMetadata!.toJson(),
+    if (name.isNotDefault) 'name': name,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (mimeType.isNotDefault) 'mimeType': mimeType,
+    if (sizeBytes.isNotDefault) 'sizeBytes': encodeInt64(sizeBytes),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (expirationTime != null) 'expirationTime': expirationTime!.toJson(),
+    if (sha256Hash.isNotDefault) 'sha256Hash': encodeBytes(sha256Hash),
+    if (uri.isNotDefault) 'uri': uri,
+    if (downloadUri.isNotDefault) 'downloadUri': downloadUri,
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (source.isNotDefault) 'source': source.toJson(),
+    if (error != null) 'error': error!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4173,7 +4050,7 @@ final class File extends ProtoMessage {
       'displayName=$displayName',
       'mimeType=$mimeType',
       'sizeBytes=$sizeBytes',
-      if (sha256Hash != null) 'sha256Hash=$sha256Hash',
+      'sha256Hash=$sha256Hash',
       'uri=$uri',
       'downloadUri=$downloadUri',
       'state=$state',
@@ -4246,18 +4123,15 @@ final class VideoFileMetadata extends ProtoMessage {
 
   VideoFileMetadata({this.videoDuration}) : super(fullyQualifiedName);
 
-  factory VideoFileMetadata.fromJson(Map<String, dynamic> json) {
-    return VideoFileMetadata(
-      videoDuration: decodeCustom(json['videoDuration'], Duration.fromJson),
-    );
-  }
+  factory VideoFileMetadata.fromJson(Map<String, dynamic> json) =>
+      VideoFileMetadata(
+        videoDuration: decodeCustom(json['videoDuration'], Duration.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (videoDuration != null) 'videoDuration': videoDuration!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (videoDuration != null) 'videoDuration': videoDuration!.toJson(),
+  };
 
   @override
   String toString() => 'VideoFileMetadata()';
@@ -4273,14 +4147,11 @@ final class CreateFileRequest extends ProtoMessage {
 
   CreateFileRequest({this.file}) : super(fullyQualifiedName);
 
-  factory CreateFileRequest.fromJson(Map<String, dynamic> json) {
-    return CreateFileRequest(file: decode(json['file'], File.fromJson));
-  }
+  factory CreateFileRequest.fromJson(Map<String, dynamic> json) =>
+      CreateFileRequest(file: decode(json['file'], File.fromJson));
 
   @override
-  Object toJson() {
-    return {if (file != null) 'file': file!.toJson()};
-  }
+  Object toJson() => {if (file != null) 'file': file!.toJson()};
 
   @override
   String toString() => 'CreateFileRequest()';
@@ -4296,14 +4167,11 @@ final class CreateFileResponse extends ProtoMessage {
 
   CreateFileResponse({this.file}) : super(fullyQualifiedName);
 
-  factory CreateFileResponse.fromJson(Map<String, dynamic> json) {
-    return CreateFileResponse(file: decode(json['file'], File.fromJson));
-  }
+  factory CreateFileResponse.fromJson(Map<String, dynamic> json) =>
+      CreateFileResponse(file: decode(json['file'], File.fromJson));
 
   @override
-  Object toJson() {
-    return {if (file != null) 'file': file!.toJson()};
-  }
+  Object toJson() => {if (file != null) 'file': file!.toJson()};
 
   @override
   String toString() => 'CreateFileResponse()';
@@ -4324,20 +4192,17 @@ final class ListFilesRequest extends ProtoMessage {
   ListFilesRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListFilesRequest.fromJson(Map<String, dynamic> json) {
-    return ListFilesRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListFilesRequest.fromJson(Map<String, dynamic> json) =>
+      ListFilesRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -4361,20 +4226,17 @@ final class ListFilesResponse extends ProtoMessage {
   ListFilesResponse({this.files = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListFilesResponse.fromJson(Map<String, dynamic> json) {
-    return ListFilesResponse(
-      files: decodeListMessage(json['files'], File.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListFilesResponse.fromJson(Map<String, dynamic> json) =>
+      ListFilesResponse(
+        files: decodeListMessage(json['files'], File.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (files.isNotDefault) 'files': encodeList(files),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (files.isNotDefault) 'files': encodeList(files),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -4394,14 +4256,11 @@ final class GetFileRequest extends ProtoMessage {
 
   GetFileRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetFileRequest.fromJson(Map<String, dynamic> json) {
-    return GetFileRequest(name: json['name'] ?? '');
-  }
+  factory GetFileRequest.fromJson(Map<String, dynamic> json) =>
+      GetFileRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4421,14 +4280,11 @@ final class DeleteFileRequest extends ProtoMessage {
 
   DeleteFileRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteFileRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteFileRequest(name: json['name'] ?? '');
-  }
+  factory DeleteFileRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteFileRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4448,14 +4304,11 @@ final class DownloadFileRequest extends ProtoMessage {
 
   DownloadFileRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DownloadFileRequest.fromJson(Map<String, dynamic> json) {
-    return DownloadFileRequest(name: json['name'] ?? '');
-  }
+  factory DownloadFileRequest.fromJson(Map<String, dynamic> json) =>
+      DownloadFileRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -4471,14 +4324,11 @@ final class DownloadFileResponse extends ProtoMessage {
 
   DownloadFileResponse() : super(fullyQualifiedName);
 
-  factory DownloadFileResponse.fromJson(Map<String, dynamic> json) {
-    return DownloadFileResponse();
-  }
+  factory DownloadFileResponse.fromJson(Map<String, dynamic> json) =>
+      DownloadFileResponse();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'DownloadFileResponse()';
@@ -4564,40 +4414,37 @@ final class GenerateContentRequest extends ProtoMessage {
     this.cachedContent,
   }) : super(fullyQualifiedName);
 
-  factory GenerateContentRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateContentRequest(
-      model: json['model'] ?? '',
-      systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-      tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
-      toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
-      safetySettings:
-          decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
-          [],
-      generationConfig: decode(
-        json['generationConfig'],
-        GenerationConfig.fromJson,
-      ),
-      cachedContent: json['cachedContent'],
-    );
-  }
+  factory GenerateContentRequest.fromJson(Map<String, dynamic> json) =>
+      GenerateContentRequest(
+        model: json['model'] ?? '',
+        systemInstruction: decode(json['systemInstruction'], Content.fromJson),
+        contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+        tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
+        toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
+        safetySettings:
+            decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
+            [],
+        generationConfig: decode(
+          json['generationConfig'],
+          GenerationConfig.fromJson,
+        ),
+        cachedContent: json['cachedContent'],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (systemInstruction != null)
-        'systemInstruction': systemInstruction!.toJson(),
-      'contents': encodeList(contents),
-      if (tools.isNotDefault) 'tools': encodeList(tools),
-      if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
-      if (safetySettings.isNotDefault)
-        'safetySettings': encodeList(safetySettings),
-      if (generationConfig != null)
-        'generationConfig': generationConfig!.toJson(),
-      if (cachedContent != null) 'cachedContent': cachedContent,
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (systemInstruction != null)
+      'systemInstruction': systemInstruction!.toJson(),
+    'contents': encodeList(contents),
+    if (tools.isNotDefault) 'tools': encodeList(tools),
+    if (toolConfig != null) 'toolConfig': toolConfig!.toJson(),
+    if (safetySettings.isNotDefault)
+      'safetySettings': encodeList(safetySettings),
+    if (generationConfig != null)
+      'generationConfig': generationConfig!.toJson(),
+    if (cachedContent != null) 'cachedContent': cachedContent,
+  };
 
   @override
   String toString() {
@@ -4619,14 +4466,11 @@ final class PrebuiltVoiceConfig extends ProtoMessage {
 
   PrebuiltVoiceConfig({this.voiceName}) : super(fullyQualifiedName);
 
-  factory PrebuiltVoiceConfig.fromJson(Map<String, dynamic> json) {
-    return PrebuiltVoiceConfig(voiceName: json['voiceName']);
-  }
+  factory PrebuiltVoiceConfig.fromJson(Map<String, dynamic> json) =>
+      PrebuiltVoiceConfig(voiceName: json['voiceName']);
 
   @override
-  Object toJson() {
-    return {if (voiceName != null) 'voiceName': voiceName};
-  }
+  Object toJson() => {if (voiceName != null) 'voiceName': voiceName};
 
   @override
   String toString() {
@@ -4645,22 +4489,18 @@ final class VoiceConfig extends ProtoMessage {
 
   VoiceConfig({this.prebuiltVoiceConfig}) : super(fullyQualifiedName);
 
-  factory VoiceConfig.fromJson(Map<String, dynamic> json) {
-    return VoiceConfig(
-      prebuiltVoiceConfig: decode(
-        json['prebuiltVoiceConfig'],
-        PrebuiltVoiceConfig.fromJson,
-      ),
-    );
-  }
+  factory VoiceConfig.fromJson(Map<String, dynamic> json) => VoiceConfig(
+    prebuiltVoiceConfig: decode(
+      json['prebuiltVoiceConfig'],
+      PrebuiltVoiceConfig.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (prebuiltVoiceConfig != null)
-        'prebuiltVoiceConfig': prebuiltVoiceConfig!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (prebuiltVoiceConfig != null)
+      'prebuiltVoiceConfig': prebuiltVoiceConfig!.toJson(),
+  };
 
   @override
   String toString() => 'VoiceConfig()';
@@ -4681,20 +4521,17 @@ final class SpeakerVoiceConfig extends ProtoMessage {
   SpeakerVoiceConfig({required this.speaker, required this.voiceConfig})
     : super(fullyQualifiedName);
 
-  factory SpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
-    return SpeakerVoiceConfig(
-      speaker: json['speaker'] ?? '',
-      voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
-    );
-  }
+  factory SpeakerVoiceConfig.fromJson(Map<String, dynamic> json) =>
+      SpeakerVoiceConfig(
+        speaker: json['speaker'] ?? '',
+        voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'speaker': speaker,
-      if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'speaker': speaker,
+    if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
+  };
 
   @override
   String toString() {
@@ -4714,21 +4551,18 @@ final class MultiSpeakerVoiceConfig extends ProtoMessage {
   MultiSpeakerVoiceConfig({required this.speakerVoiceConfigs})
     : super(fullyQualifiedName);
 
-  factory MultiSpeakerVoiceConfig.fromJson(Map<String, dynamic> json) {
-    return MultiSpeakerVoiceConfig(
-      speakerVoiceConfigs:
-          decodeListMessage(
-            json['speakerVoiceConfigs'],
-            SpeakerVoiceConfig.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory MultiSpeakerVoiceConfig.fromJson(Map<String, dynamic> json) =>
+      MultiSpeakerVoiceConfig(
+        speakerVoiceConfigs:
+            decodeListMessage(
+              json['speakerVoiceConfigs'],
+              SpeakerVoiceConfig.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {'speakerVoiceConfigs': encodeList(speakerVoiceConfigs)};
-  }
+  Object toJson() => {'speakerVoiceConfigs': encodeList(speakerVoiceConfigs)};
 
   @override
   String toString() => 'MultiSpeakerVoiceConfig()';
@@ -4761,26 +4595,22 @@ final class SpeechConfig extends ProtoMessage {
     this.languageCode = '',
   }) : super(fullyQualifiedName);
 
-  factory SpeechConfig.fromJson(Map<String, dynamic> json) {
-    return SpeechConfig(
-      voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
-      multiSpeakerVoiceConfig: decode(
-        json['multiSpeakerVoiceConfig'],
-        MultiSpeakerVoiceConfig.fromJson,
-      ),
-      languageCode: json['languageCode'] ?? '',
-    );
-  }
+  factory SpeechConfig.fromJson(Map<String, dynamic> json) => SpeechConfig(
+    voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
+    multiSpeakerVoiceConfig: decode(
+      json['multiSpeakerVoiceConfig'],
+      MultiSpeakerVoiceConfig.fromJson,
+    ),
+    languageCode: json['languageCode'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
-      if (multiSpeakerVoiceConfig != null)
-        'multiSpeakerVoiceConfig': multiSpeakerVoiceConfig!.toJson(),
-      if (languageCode.isNotDefault) 'languageCode': languageCode,
-    };
-  }
+  Object toJson() => {
+    if (voiceConfig != null) 'voiceConfig': voiceConfig!.toJson(),
+    if (multiSpeakerVoiceConfig != null)
+      'multiSpeakerVoiceConfig': multiSpeakerVoiceConfig!.toJson(),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+  };
 
   @override
   String toString() {
@@ -4804,20 +4634,16 @@ final class ThinkingConfig extends ProtoMessage {
   ThinkingConfig({this.includeThoughts, this.thinkingBudget})
     : super(fullyQualifiedName);
 
-  factory ThinkingConfig.fromJson(Map<String, dynamic> json) {
-    return ThinkingConfig(
-      includeThoughts: json['includeThoughts'],
-      thinkingBudget: json['thinkingBudget'],
-    );
-  }
+  factory ThinkingConfig.fromJson(Map<String, dynamic> json) => ThinkingConfig(
+    includeThoughts: json['includeThoughts'],
+    thinkingBudget: json['thinkingBudget'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (includeThoughts != null) 'includeThoughts': includeThoughts,
-      if (thinkingBudget != null) 'thinkingBudget': thinkingBudget,
-    };
-  }
+  Object toJson() => {
+    if (includeThoughts != null) 'includeThoughts': includeThoughts,
+    if (thinkingBudget != null) 'thinkingBudget': thinkingBudget,
+  };
 
   @override
   String toString() {
@@ -4843,14 +4669,11 @@ final class ImageConfig extends ProtoMessage {
 
   ImageConfig({this.aspectRatio}) : super(fullyQualifiedName);
 
-  factory ImageConfig.fromJson(Map<String, dynamic> json) {
-    return ImageConfig(aspectRatio: json['aspectRatio']);
-  }
+  factory ImageConfig.fromJson(Map<String, dynamic> json) =>
+      ImageConfig(aspectRatio: json['aspectRatio']);
 
   @override
-  Object toJson() {
-    return {if (aspectRatio != null) 'aspectRatio': aspectRatio};
-  }
+  Object toJson() => {if (aspectRatio != null) 'aspectRatio': aspectRatio};
 
   @override
   String toString() {
@@ -5086,78 +4909,75 @@ final class GenerationConfig extends ProtoMessage {
     this.mediaResolution,
   }) : super(fullyQualifiedName);
 
-  factory GenerationConfig.fromJson(Map<String, dynamic> json) {
-    return GenerationConfig(
-      candidateCount: json['candidateCount'],
-      stopSequences: decodeList(json['stopSequences']) ?? [],
-      maxOutputTokens: json['maxOutputTokens'],
-      temperature: decodeDouble(json['temperature']),
-      topP: decodeDouble(json['topP']),
-      topK: json['topK'],
-      seed: json['seed'],
-      responseMimeType: json['responseMimeType'] ?? '',
-      responseSchema: decode(json['responseSchema'], Schema.fromJson),
-      responseJsonSchema: decodeCustom(
-        json['_responseJsonSchema'],
-        Value.fromJson,
-      ),
-      responseJsonSchemaOrdered: decodeCustom(
-        json['responseJsonSchema'],
-        Value.fromJson,
-      ),
-      presencePenalty: decodeDouble(json['presencePenalty']),
-      frequencyPenalty: decodeDouble(json['frequencyPenalty']),
-      responseLogprobs: json['responseLogprobs'],
-      logprobs: json['logprobs'],
-      enableEnhancedCivicAnswers: json['enableEnhancedCivicAnswers'],
-      responseModalities:
-          decodeListEnum(
-            json['responseModalities'],
-            GenerationConfig_Modality.fromJson,
-          ) ??
-          [],
-      speechConfig: decode(json['speechConfig'], SpeechConfig.fromJson),
-      thinkingConfig: decode(json['thinkingConfig'], ThinkingConfig.fromJson),
-      imageConfig: decode(json['imageConfig'], ImageConfig.fromJson),
-      mediaResolution: decodeEnum(
-        json['mediaResolution'],
-        GenerationConfig_MediaResolution.fromJson,
-      ),
-    );
-  }
+  factory GenerationConfig.fromJson(Map<String, dynamic> json) =>
+      GenerationConfig(
+        candidateCount: json['candidateCount'],
+        stopSequences: decodeList(json['stopSequences']) ?? [],
+        maxOutputTokens: json['maxOutputTokens'],
+        temperature: decodeDouble(json['temperature']),
+        topP: decodeDouble(json['topP']),
+        topK: json['topK'],
+        seed: json['seed'],
+        responseMimeType: json['responseMimeType'] ?? '',
+        responseSchema: decode(json['responseSchema'], Schema.fromJson),
+        responseJsonSchema: decodeCustom(
+          json['_responseJsonSchema'],
+          Value.fromJson,
+        ),
+        responseJsonSchemaOrdered: decodeCustom(
+          json['responseJsonSchema'],
+          Value.fromJson,
+        ),
+        presencePenalty: decodeDouble(json['presencePenalty']),
+        frequencyPenalty: decodeDouble(json['frequencyPenalty']),
+        responseLogprobs: json['responseLogprobs'],
+        logprobs: json['logprobs'],
+        enableEnhancedCivicAnswers: json['enableEnhancedCivicAnswers'],
+        responseModalities:
+            decodeListEnum(
+              json['responseModalities'],
+              GenerationConfig_Modality.fromJson,
+            ) ??
+            [],
+        speechConfig: decode(json['speechConfig'], SpeechConfig.fromJson),
+        thinkingConfig: decode(json['thinkingConfig'], ThinkingConfig.fromJson),
+        imageConfig: decode(json['imageConfig'], ImageConfig.fromJson),
+        mediaResolution: decodeEnum(
+          json['mediaResolution'],
+          GenerationConfig_MediaResolution.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (candidateCount != null) 'candidateCount': candidateCount,
-      if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
-      if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
-      if (temperature != null) 'temperature': encodeDouble(temperature),
-      if (topP != null) 'topP': encodeDouble(topP),
-      if (topK != null) 'topK': topK,
-      if (seed != null) 'seed': seed,
-      if (responseMimeType.isNotDefault) 'responseMimeType': responseMimeType,
-      if (responseSchema != null) 'responseSchema': responseSchema!.toJson(),
-      if (responseJsonSchema != null)
-        '_responseJsonSchema': responseJsonSchema!.toJson(),
-      if (responseJsonSchemaOrdered != null)
-        'responseJsonSchema': responseJsonSchemaOrdered!.toJson(),
-      if (presencePenalty != null)
-        'presencePenalty': encodeDouble(presencePenalty),
-      if (frequencyPenalty != null)
-        'frequencyPenalty': encodeDouble(frequencyPenalty),
-      if (responseLogprobs != null) 'responseLogprobs': responseLogprobs,
-      if (logprobs != null) 'logprobs': logprobs,
-      if (enableEnhancedCivicAnswers != null)
-        'enableEnhancedCivicAnswers': enableEnhancedCivicAnswers,
-      if (responseModalities.isNotDefault)
-        'responseModalities': encodeList(responseModalities),
-      if (speechConfig != null) 'speechConfig': speechConfig!.toJson(),
-      if (thinkingConfig != null) 'thinkingConfig': thinkingConfig!.toJson(),
-      if (imageConfig != null) 'imageConfig': imageConfig!.toJson(),
-      if (mediaResolution != null) 'mediaResolution': mediaResolution!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (candidateCount != null) 'candidateCount': candidateCount,
+    if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
+    if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
+    if (temperature != null) 'temperature': encodeDouble(temperature),
+    if (topP != null) 'topP': encodeDouble(topP),
+    if (topK != null) 'topK': topK,
+    if (seed != null) 'seed': seed,
+    if (responseMimeType.isNotDefault) 'responseMimeType': responseMimeType,
+    if (responseSchema != null) 'responseSchema': responseSchema!.toJson(),
+    if (responseJsonSchema != null)
+      '_responseJsonSchema': responseJsonSchema!.toJson(),
+    if (responseJsonSchemaOrdered != null)
+      'responseJsonSchema': responseJsonSchemaOrdered!.toJson(),
+    if (presencePenalty != null)
+      'presencePenalty': encodeDouble(presencePenalty),
+    if (frequencyPenalty != null)
+      'frequencyPenalty': encodeDouble(frequencyPenalty),
+    if (responseLogprobs != null) 'responseLogprobs': responseLogprobs,
+    if (logprobs != null) 'logprobs': logprobs,
+    if (enableEnhancedCivicAnswers != null)
+      'enableEnhancedCivicAnswers': enableEnhancedCivicAnswers,
+    if (responseModalities.isNotDefault)
+      'responseModalities': encodeList(responseModalities),
+    if (speechConfig != null) 'speechConfig': speechConfig!.toJson(),
+    if (thinkingConfig != null) 'thinkingConfig': thinkingConfig!.toJson(),
+    if (imageConfig != null) 'imageConfig': imageConfig!.toJson(),
+    if (mediaResolution != null) 'mediaResolution': mediaResolution!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5279,30 +5099,30 @@ final class SemanticRetrieverConfig extends ProtoMessage {
     this.minimumRelevanceScore,
   }) : super(fullyQualifiedName);
 
-  factory SemanticRetrieverConfig.fromJson(Map<String, dynamic> json) {
-    return SemanticRetrieverConfig(
-      source: json['source'] ?? '',
-      query: decode(json['query'], Content.fromJson),
-      metadataFilters:
-          decodeListMessage(json['metadataFilters'], MetadataFilter.fromJson) ??
-          [],
-      maxChunksCount: json['maxChunksCount'],
-      minimumRelevanceScore: decodeDouble(json['minimumRelevanceScore']),
-    );
-  }
+  factory SemanticRetrieverConfig.fromJson(Map<String, dynamic> json) =>
+      SemanticRetrieverConfig(
+        source: json['source'] ?? '',
+        query: decode(json['query'], Content.fromJson),
+        metadataFilters:
+            decodeListMessage(
+              json['metadataFilters'],
+              MetadataFilter.fromJson,
+            ) ??
+            [],
+        maxChunksCount: json['maxChunksCount'],
+        minimumRelevanceScore: decodeDouble(json['minimumRelevanceScore']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'source': source,
-      if (query != null) 'query': query!.toJson(),
-      if (metadataFilters.isNotDefault)
-        'metadataFilters': encodeList(metadataFilters),
-      if (maxChunksCount != null) 'maxChunksCount': maxChunksCount,
-      if (minimumRelevanceScore != null)
-        'minimumRelevanceScore': encodeDouble(minimumRelevanceScore),
-    };
-  }
+  Object toJson() => {
+    'source': source,
+    if (query != null) 'query': query!.toJson(),
+    if (metadataFilters.isNotDefault)
+      'metadataFilters': encodeList(metadataFilters),
+    if (maxChunksCount != null) 'maxChunksCount': maxChunksCount,
+    if (minimumRelevanceScore != null)
+      'minimumRelevanceScore': encodeDouble(minimumRelevanceScore),
+  };
 
   @override
   String toString() {
@@ -5353,33 +5173,30 @@ final class GenerateContentResponse extends ProtoMessage {
     this.responseId = '',
   }) : super(fullyQualifiedName);
 
-  factory GenerateContentResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateContentResponse(
-      candidates:
-          decodeListMessage(json['candidates'], Candidate.fromJson) ?? [],
-      promptFeedback: decode(
-        json['promptFeedback'],
-        GenerateContentResponse_PromptFeedback.fromJson,
-      ),
-      usageMetadata: decode(
-        json['usageMetadata'],
-        GenerateContentResponse_UsageMetadata.fromJson,
-      ),
-      modelVersion: json['modelVersion'] ?? '',
-      responseId: json['responseId'] ?? '',
-    );
-  }
+  factory GenerateContentResponse.fromJson(Map<String, dynamic> json) =>
+      GenerateContentResponse(
+        candidates:
+            decodeListMessage(json['candidates'], Candidate.fromJson) ?? [],
+        promptFeedback: decode(
+          json['promptFeedback'],
+          GenerateContentResponse_PromptFeedback.fromJson,
+        ),
+        usageMetadata: decode(
+          json['usageMetadata'],
+          GenerateContentResponse_UsageMetadata.fromJson,
+        ),
+        modelVersion: json['modelVersion'] ?? '',
+        responseId: json['responseId'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (candidates.isNotDefault) 'candidates': encodeList(candidates),
-      if (promptFeedback != null) 'promptFeedback': promptFeedback!.toJson(),
-      if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
-      if (modelVersion.isNotDefault) 'modelVersion': modelVersion,
-      if (responseId.isNotDefault) 'responseId': responseId,
-    };
-  }
+  Object toJson() => {
+    if (candidates.isNotDefault) 'candidates': encodeList(candidates),
+    if (promptFeedback != null) 'promptFeedback': promptFeedback!.toJson(),
+    if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
+    if (modelVersion.isNotDefault) 'modelVersion': modelVersion,
+    if (responseId.isNotDefault) 'responseId': responseId,
+  };
 
   @override
   String toString() {
@@ -5413,27 +5230,22 @@ final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
 
   factory GenerateContentResponse_PromptFeedback.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return GenerateContentResponse_PromptFeedback(
-      blockReason:
-          decodeEnum(
-            json['blockReason'],
-            GenerateContentResponse_PromptFeedback_BlockReason.fromJson,
-          ) ??
-          GenerateContentResponse_PromptFeedback_BlockReason.$default,
-      safetyRatings:
-          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-    );
-  }
+  ) => GenerateContentResponse_PromptFeedback(
+    blockReason:
+        decodeEnum(
+          json['blockReason'],
+          GenerateContentResponse_PromptFeedback_BlockReason.fromJson,
+        ) ??
+        GenerateContentResponse_PromptFeedback_BlockReason.$default,
+    safetyRatings:
+        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (blockReason.isNotDefault) 'blockReason': blockReason.toJson(),
-      if (safetyRatings.isNotDefault)
-        'safetyRatings': encodeList(safetyRatings),
-    };
-  }
+  Object toJson() => {
+    if (blockReason.isNotDefault) 'blockReason': blockReason.toJson(),
+    if (safetyRatings.isNotDefault) 'safetyRatings': encodeList(safetyRatings),
+  };
 
   @override
   String toString() {
@@ -5547,64 +5359,60 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
 
   factory GenerateContentResponse_UsageMetadata.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return GenerateContentResponse_UsageMetadata(
-      promptTokenCount: json['promptTokenCount'] ?? 0,
-      cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
-      candidatesTokenCount: json['candidatesTokenCount'] ?? 0,
-      toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
-      thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
-      totalTokenCount: json['totalTokenCount'] ?? 0,
-      promptTokensDetails:
-          decodeListMessage(
-            json['promptTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      cacheTokensDetails:
-          decodeListMessage(
-            json['cacheTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      candidatesTokensDetails:
-          decodeListMessage(
-            json['candidatesTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      toolUsePromptTokensDetails:
-          decodeListMessage(
-            json['toolUsePromptTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-    );
-  }
+  ) => GenerateContentResponse_UsageMetadata(
+    promptTokenCount: json['promptTokenCount'] ?? 0,
+    cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
+    candidatesTokenCount: json['candidatesTokenCount'] ?? 0,
+    toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
+    thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
+    totalTokenCount: json['totalTokenCount'] ?? 0,
+    promptTokensDetails:
+        decodeListMessage(
+          json['promptTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+    cacheTokensDetails:
+        decodeListMessage(
+          json['cacheTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+    candidatesTokensDetails:
+        decodeListMessage(
+          json['candidatesTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+    toolUsePromptTokensDetails:
+        decodeListMessage(
+          json['toolUsePromptTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
-      if (cachedContentTokenCount.isNotDefault)
-        'cachedContentTokenCount': cachedContentTokenCount,
-      if (candidatesTokenCount.isNotDefault)
-        'candidatesTokenCount': candidatesTokenCount,
-      if (toolUsePromptTokenCount.isNotDefault)
-        'toolUsePromptTokenCount': toolUsePromptTokenCount,
-      if (thoughtsTokenCount.isNotDefault)
-        'thoughtsTokenCount': thoughtsTokenCount,
-      if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
-      if (promptTokensDetails.isNotDefault)
-        'promptTokensDetails': encodeList(promptTokensDetails),
-      if (cacheTokensDetails.isNotDefault)
-        'cacheTokensDetails': encodeList(cacheTokensDetails),
-      if (candidatesTokensDetails.isNotDefault)
-        'candidatesTokensDetails': encodeList(candidatesTokensDetails),
-      if (toolUsePromptTokensDetails.isNotDefault)
-        'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
-    };
-  }
+  Object toJson() => {
+    if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
+    if (cachedContentTokenCount.isNotDefault)
+      'cachedContentTokenCount': cachedContentTokenCount,
+    if (candidatesTokenCount.isNotDefault)
+      'candidatesTokenCount': candidatesTokenCount,
+    if (toolUsePromptTokenCount.isNotDefault)
+      'toolUsePromptTokenCount': toolUsePromptTokenCount,
+    if (thoughtsTokenCount.isNotDefault)
+      'thoughtsTokenCount': thoughtsTokenCount,
+    if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+    if (promptTokensDetails.isNotDefault)
+      'promptTokensDetails': encodeList(promptTokensDetails),
+    if (cacheTokensDetails.isNotDefault)
+      'cacheTokensDetails': encodeList(cacheTokensDetails),
+    if (candidatesTokensDetails.isNotDefault)
+      'candidatesTokensDetails': encodeList(candidatesTokensDetails),
+    if (toolUsePromptTokensDetails.isNotDefault)
+      'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
+  };
 
   @override
   String toString() {
@@ -5690,62 +5498,57 @@ final class Candidate extends ProtoMessage {
     this.urlContextMetadata,
   }) : super(fullyQualifiedName);
 
-  factory Candidate.fromJson(Map<String, dynamic> json) {
-    return Candidate(
-      index: json['index'],
-      content: decode(json['content'], Content.fromJson),
-      finishReason:
-          decodeEnum(json['finishReason'], Candidate_FinishReason.fromJson) ??
-          Candidate_FinishReason.$default,
-      finishMessage: json['finishMessage'],
-      safetyRatings:
-          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-      citationMetadata: decode(
-        json['citationMetadata'],
-        CitationMetadata.fromJson,
-      ),
-      tokenCount: json['tokenCount'] ?? 0,
-      groundingAttributions:
-          decodeListMessage(
-            json['groundingAttributions'],
-            GroundingAttribution.fromJson,
-          ) ??
-          [],
-      groundingMetadata: decode(
-        json['groundingMetadata'],
-        GroundingMetadata.fromJson,
-      ),
-      avgLogprobs: decodeDouble(json['avgLogprobs']) ?? 0,
-      logprobsResult: decode(json['logprobsResult'], LogprobsResult.fromJson),
-      urlContextMetadata: decode(
-        json['urlContextMetadata'],
-        UrlContextMetadata.fromJson,
-      ),
-    );
-  }
+  factory Candidate.fromJson(Map<String, dynamic> json) => Candidate(
+    index: json['index'],
+    content: decode(json['content'], Content.fromJson),
+    finishReason:
+        decodeEnum(json['finishReason'], Candidate_FinishReason.fromJson) ??
+        Candidate_FinishReason.$default,
+    finishMessage: json['finishMessage'],
+    safetyRatings:
+        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
+    citationMetadata: decode(
+      json['citationMetadata'],
+      CitationMetadata.fromJson,
+    ),
+    tokenCount: json['tokenCount'] ?? 0,
+    groundingAttributions:
+        decodeListMessage(
+          json['groundingAttributions'],
+          GroundingAttribution.fromJson,
+        ) ??
+        [],
+    groundingMetadata: decode(
+      json['groundingMetadata'],
+      GroundingMetadata.fromJson,
+    ),
+    avgLogprobs: decodeDouble(json['avgLogprobs']) ?? 0,
+    logprobsResult: decode(json['logprobsResult'], LogprobsResult.fromJson),
+    urlContextMetadata: decode(
+      json['urlContextMetadata'],
+      UrlContextMetadata.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (index != null) 'index': index,
-      if (content != null) 'content': content!.toJson(),
-      if (finishReason.isNotDefault) 'finishReason': finishReason.toJson(),
-      if (finishMessage != null) 'finishMessage': finishMessage,
-      if (safetyRatings.isNotDefault)
-        'safetyRatings': encodeList(safetyRatings),
-      if (citationMetadata != null)
-        'citationMetadata': citationMetadata!.toJson(),
-      if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
-      if (groundingAttributions.isNotDefault)
-        'groundingAttributions': encodeList(groundingAttributions),
-      if (groundingMetadata != null)
-        'groundingMetadata': groundingMetadata!.toJson(),
-      if (avgLogprobs.isNotDefault) 'avgLogprobs': encodeDouble(avgLogprobs),
-      if (logprobsResult != null) 'logprobsResult': logprobsResult!.toJson(),
-      if (urlContextMetadata != null)
-        'urlContextMetadata': urlContextMetadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (index != null) 'index': index,
+    if (content != null) 'content': content!.toJson(),
+    if (finishReason.isNotDefault) 'finishReason': finishReason.toJson(),
+    if (finishMessage != null) 'finishMessage': finishMessage,
+    if (safetyRatings.isNotDefault) 'safetyRatings': encodeList(safetyRatings),
+    if (citationMetadata != null)
+      'citationMetadata': citationMetadata!.toJson(),
+    if (tokenCount.isNotDefault) 'tokenCount': tokenCount,
+    if (groundingAttributions.isNotDefault)
+      'groundingAttributions': encodeList(groundingAttributions),
+    if (groundingMetadata != null)
+      'groundingMetadata': groundingMetadata!.toJson(),
+    if (avgLogprobs.isNotDefault) 'avgLogprobs': encodeDouble(avgLogprobs),
+    if (logprobsResult != null) 'logprobsResult': logprobsResult!.toJson(),
+    if (urlContextMetadata != null)
+      'urlContextMetadata': urlContextMetadata!.toJson(),
+  };
 
   @override
   String toString() {
@@ -5853,19 +5656,16 @@ final class UrlContextMetadata extends ProtoMessage {
 
   UrlContextMetadata({this.urlMetadata = const []}) : super(fullyQualifiedName);
 
-  factory UrlContextMetadata.fromJson(Map<String, dynamic> json) {
-    return UrlContextMetadata(
-      urlMetadata:
-          decodeListMessage(json['urlMetadata'], UrlMetadata.fromJson) ?? [],
-    );
-  }
+  factory UrlContextMetadata.fromJson(Map<String, dynamic> json) =>
+      UrlContextMetadata(
+        urlMetadata:
+            decodeListMessage(json['urlMetadata'], UrlMetadata.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (urlMetadata.isNotDefault) 'urlMetadata': encodeList(urlMetadata),
-    };
-  }
+  Object toJson() => {
+    if (urlMetadata.isNotDefault) 'urlMetadata': encodeList(urlMetadata),
+  };
 
   @override
   String toString() => 'UrlContextMetadata()';
@@ -5887,26 +5687,22 @@ final class UrlMetadata extends ProtoMessage {
     this.urlRetrievalStatus = UrlMetadata_UrlRetrievalStatus.$default,
   }) : super(fullyQualifiedName);
 
-  factory UrlMetadata.fromJson(Map<String, dynamic> json) {
-    return UrlMetadata(
-      retrievedUrl: json['retrievedUrl'] ?? '',
-      urlRetrievalStatus:
-          decodeEnum(
-            json['urlRetrievalStatus'],
-            UrlMetadata_UrlRetrievalStatus.fromJson,
-          ) ??
-          UrlMetadata_UrlRetrievalStatus.$default,
-    );
-  }
+  factory UrlMetadata.fromJson(Map<String, dynamic> json) => UrlMetadata(
+    retrievedUrl: json['retrievedUrl'] ?? '',
+    urlRetrievalStatus:
+        decodeEnum(
+          json['urlRetrievalStatus'],
+          UrlMetadata_UrlRetrievalStatus.fromJson,
+        ) ??
+        UrlMetadata_UrlRetrievalStatus.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (retrievedUrl.isNotDefault) 'retrievedUrl': retrievedUrl,
-      if (urlRetrievalStatus.isNotDefault)
-        'urlRetrievalStatus': urlRetrievalStatus.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (retrievedUrl.isNotDefault) 'retrievedUrl': retrievedUrl,
+    if (urlRetrievalStatus.isNotDefault)
+      'urlRetrievalStatus': urlRetrievalStatus.toJson(),
+  };
 
   @override
   String toString() {
@@ -5980,35 +5776,30 @@ final class LogprobsResult extends ProtoMessage {
     this.chosenCandidates = const [],
   }) : super(fullyQualifiedName);
 
-  factory LogprobsResult.fromJson(Map<String, dynamic> json) {
-    return LogprobsResult(
-      logProbabilitySum: decodeDouble(json['logProbabilitySum']),
-      topCandidates:
-          decodeListMessage(
-            json['topCandidates'],
-            LogprobsResult_TopCandidates.fromJson,
-          ) ??
-          [],
-      chosenCandidates:
-          decodeListMessage(
-            json['chosenCandidates'],
-            LogprobsResult_Candidate.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory LogprobsResult.fromJson(Map<String, dynamic> json) => LogprobsResult(
+    logProbabilitySum: decodeDouble(json['logProbabilitySum']),
+    topCandidates:
+        decodeListMessage(
+          json['topCandidates'],
+          LogprobsResult_TopCandidates.fromJson,
+        ) ??
+        [],
+    chosenCandidates:
+        decodeListMessage(
+          json['chosenCandidates'],
+          LogprobsResult_Candidate.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (logProbabilitySum != null)
-        'logProbabilitySum': encodeDouble(logProbabilitySum),
-      if (topCandidates.isNotDefault)
-        'topCandidates': encodeList(topCandidates),
-      if (chosenCandidates.isNotDefault)
-        'chosenCandidates': encodeList(chosenCandidates),
-    };
-  }
+  Object toJson() => {
+    if (logProbabilitySum != null)
+      'logProbabilitySum': encodeDouble(logProbabilitySum),
+    if (topCandidates.isNotDefault) 'topCandidates': encodeList(topCandidates),
+    if (chosenCandidates.isNotDefault)
+      'chosenCandidates': encodeList(chosenCandidates),
+  };
 
   @override
   String toString() {
@@ -6036,23 +5827,19 @@ final class LogprobsResult_Candidate extends ProtoMessage {
   LogprobsResult_Candidate({this.token, this.tokenId, this.logProbability})
     : super(fullyQualifiedName);
 
-  factory LogprobsResult_Candidate.fromJson(Map<String, dynamic> json) {
-    return LogprobsResult_Candidate(
-      token: json['token'],
-      tokenId: json['tokenId'],
-      logProbability: decodeDouble(json['logProbability']),
-    );
-  }
+  factory LogprobsResult_Candidate.fromJson(Map<String, dynamic> json) =>
+      LogprobsResult_Candidate(
+        token: json['token'],
+        tokenId: json['tokenId'],
+        logProbability: decodeDouble(json['logProbability']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (token != null) 'token': token,
-      if (tokenId != null) 'tokenId': tokenId,
-      if (logProbability != null)
-        'logProbability': encodeDouble(logProbability),
-    };
-  }
+  Object toJson() => {
+    if (token != null) 'token': token,
+    if (tokenId != null) 'tokenId': tokenId,
+    if (logProbability != null) 'logProbability': encodeDouble(logProbability),
+  };
 
   @override
   String toString() {
@@ -6076,21 +5863,20 @@ final class LogprobsResult_TopCandidates extends ProtoMessage {
   LogprobsResult_TopCandidates({this.candidates = const []})
     : super(fullyQualifiedName);
 
-  factory LogprobsResult_TopCandidates.fromJson(Map<String, dynamic> json) {
-    return LogprobsResult_TopCandidates(
-      candidates:
-          decodeListMessage(
-            json['candidates'],
-            LogprobsResult_Candidate.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory LogprobsResult_TopCandidates.fromJson(Map<String, dynamic> json) =>
+      LogprobsResult_TopCandidates(
+        candidates:
+            decodeListMessage(
+              json['candidates'],
+              LogprobsResult_Candidate.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {if (candidates.isNotDefault) 'candidates': encodeList(candidates)};
-  }
+  Object toJson() => {
+    if (candidates.isNotDefault) 'candidates': encodeList(candidates),
+  };
 
   @override
   String toString() => 'TopCandidates()';
@@ -6110,28 +5896,25 @@ final class AttributionSourceId extends ProtoMessage {
   AttributionSourceId({this.groundingPassage, this.semanticRetrieverChunk})
     : super(fullyQualifiedName);
 
-  factory AttributionSourceId.fromJson(Map<String, dynamic> json) {
-    return AttributionSourceId(
-      groundingPassage: decode(
-        json['groundingPassage'],
-        AttributionSourceId_GroundingPassageId.fromJson,
-      ),
-      semanticRetrieverChunk: decode(
-        json['semanticRetrieverChunk'],
-        AttributionSourceId_SemanticRetrieverChunk.fromJson,
-      ),
-    );
-  }
+  factory AttributionSourceId.fromJson(Map<String, dynamic> json) =>
+      AttributionSourceId(
+        groundingPassage: decode(
+          json['groundingPassage'],
+          AttributionSourceId_GroundingPassageId.fromJson,
+        ),
+        semanticRetrieverChunk: decode(
+          json['semanticRetrieverChunk'],
+          AttributionSourceId_SemanticRetrieverChunk.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (groundingPassage != null)
-        'groundingPassage': groundingPassage!.toJson(),
-      if (semanticRetrieverChunk != null)
-        'semanticRetrieverChunk': semanticRetrieverChunk!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (groundingPassage != null)
+      'groundingPassage': groundingPassage!.toJson(),
+    if (semanticRetrieverChunk != null)
+      'semanticRetrieverChunk': semanticRetrieverChunk!.toJson(),
+  };
 
   @override
   String toString() => 'AttributionSourceId()';
@@ -6157,20 +5940,16 @@ final class AttributionSourceId_GroundingPassageId extends ProtoMessage {
 
   factory AttributionSourceId_GroundingPassageId.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return AttributionSourceId_GroundingPassageId(
-      passageId: json['passageId'] ?? '',
-      partIndex: json['partIndex'] ?? 0,
-    );
-  }
+  ) => AttributionSourceId_GroundingPassageId(
+    passageId: json['passageId'] ?? '',
+    partIndex: json['partIndex'] ?? 0,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (passageId.isNotDefault) 'passageId': passageId,
-      if (partIndex.isNotDefault) 'partIndex': partIndex,
-    };
-  }
+  Object toJson() => {
+    if (passageId.isNotDefault) 'passageId': passageId,
+    if (partIndex.isNotDefault) 'partIndex': partIndex,
+  };
 
   @override
   String toString() {
@@ -6201,20 +5980,16 @@ final class AttributionSourceId_SemanticRetrieverChunk extends ProtoMessage {
 
   factory AttributionSourceId_SemanticRetrieverChunk.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return AttributionSourceId_SemanticRetrieverChunk(
-      source: json['source'] ?? '',
-      chunk: json['chunk'] ?? '',
-    );
-  }
+  ) => AttributionSourceId_SemanticRetrieverChunk(
+    source: json['source'] ?? '',
+    chunk: json['chunk'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (source.isNotDefault) 'source': source,
-      if (chunk.isNotDefault) 'chunk': chunk,
-    };
-  }
+  Object toJson() => {
+    if (source.isNotDefault) 'source': source,
+    if (chunk.isNotDefault) 'chunk': chunk,
+  };
 
   @override
   String toString() {
@@ -6237,20 +6012,17 @@ final class GroundingAttribution extends ProtoMessage {
   GroundingAttribution({this.sourceId, this.content})
     : super(fullyQualifiedName);
 
-  factory GroundingAttribution.fromJson(Map<String, dynamic> json) {
-    return GroundingAttribution(
-      sourceId: decode(json['sourceId'], AttributionSourceId.fromJson),
-      content: decode(json['content'], Content.fromJson),
-    );
-  }
+  factory GroundingAttribution.fromJson(Map<String, dynamic> json) =>
+      GroundingAttribution(
+        sourceId: decode(json['sourceId'], AttributionSourceId.fromJson),
+        content: decode(json['content'], Content.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (sourceId != null) 'sourceId': sourceId!.toJson(),
-      if (content != null) 'content': content!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (sourceId != null) 'sourceId': sourceId!.toJson(),
+    if (content != null) 'content': content!.toJson(),
+  };
 
   @override
   String toString() => 'GroundingAttribution()';
@@ -6271,22 +6043,19 @@ final class RetrievalMetadata extends ProtoMessage {
   RetrievalMetadata({this.googleSearchDynamicRetrievalScore = 0})
     : super(fullyQualifiedName);
 
-  factory RetrievalMetadata.fromJson(Map<String, dynamic> json) {
-    return RetrievalMetadata(
-      googleSearchDynamicRetrievalScore:
-          decodeDouble(json['googleSearchDynamicRetrievalScore']) ?? 0,
-    );
-  }
+  factory RetrievalMetadata.fromJson(Map<String, dynamic> json) =>
+      RetrievalMetadata(
+        googleSearchDynamicRetrievalScore:
+            decodeDouble(json['googleSearchDynamicRetrievalScore']) ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (googleSearchDynamicRetrievalScore.isNotDefault)
-        'googleSearchDynamicRetrievalScore': encodeDouble(
-          googleSearchDynamicRetrievalScore,
-        ),
-    };
-  }
+  Object toJson() => {
+    if (googleSearchDynamicRetrievalScore.isNotDefault)
+      'googleSearchDynamicRetrievalScore': encodeDouble(
+        googleSearchDynamicRetrievalScore,
+      ),
+  };
 
   @override
   String toString() {
@@ -6325,43 +6094,43 @@ final class GroundingMetadata extends ProtoMessage {
     this.webSearchQueries = const [],
   }) : super(fullyQualifiedName);
 
-  factory GroundingMetadata.fromJson(Map<String, dynamic> json) {
-    return GroundingMetadata(
-      searchEntryPoint: decode(
-        json['searchEntryPoint'],
-        SearchEntryPoint.fromJson,
-      ),
-      groundingChunks:
-          decodeListMessage(json['groundingChunks'], GroundingChunk.fromJson) ??
-          [],
-      groundingSupports:
-          decodeListMessage(
-            json['groundingSupports'],
-            GroundingSupport.fromJson,
-          ) ??
-          [],
-      retrievalMetadata: decode(
-        json['retrievalMetadata'],
-        RetrievalMetadata.fromJson,
-      ),
-      webSearchQueries: decodeList(json['webSearchQueries']) ?? [],
-    );
-  }
+  factory GroundingMetadata.fromJson(Map<String, dynamic> json) =>
+      GroundingMetadata(
+        searchEntryPoint: decode(
+          json['searchEntryPoint'],
+          SearchEntryPoint.fromJson,
+        ),
+        groundingChunks:
+            decodeListMessage(
+              json['groundingChunks'],
+              GroundingChunk.fromJson,
+            ) ??
+            [],
+        groundingSupports:
+            decodeListMessage(
+              json['groundingSupports'],
+              GroundingSupport.fromJson,
+            ) ??
+            [],
+        retrievalMetadata: decode(
+          json['retrievalMetadata'],
+          RetrievalMetadata.fromJson,
+        ),
+        webSearchQueries: decodeList(json['webSearchQueries']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (searchEntryPoint != null)
-        'searchEntryPoint': searchEntryPoint!.toJson(),
-      if (groundingChunks.isNotDefault)
-        'groundingChunks': encodeList(groundingChunks),
-      if (groundingSupports.isNotDefault)
-        'groundingSupports': encodeList(groundingSupports),
-      if (retrievalMetadata != null)
-        'retrievalMetadata': retrievalMetadata!.toJson(),
-      if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
-    };
-  }
+  Object toJson() => {
+    if (searchEntryPoint != null)
+      'searchEntryPoint': searchEntryPoint!.toJson(),
+    if (groundingChunks.isNotDefault)
+      'groundingChunks': encodeList(groundingChunks),
+    if (groundingSupports.isNotDefault)
+      'groundingSupports': encodeList(groundingSupports),
+    if (retrievalMetadata != null)
+      'retrievalMetadata': retrievalMetadata!.toJson(),
+    if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
+  };
 
   @override
   String toString() => 'GroundingMetadata()';
@@ -6378,31 +6147,29 @@ final class SearchEntryPoint extends ProtoMessage {
 
   /// Optional. Base64 encoded JSON representing array of <search term, search
   /// url> tuple.
-  final Uint8List? sdkBlob;
+  final Uint8List sdkBlob;
 
-  SearchEntryPoint({this.renderedContent = '', this.sdkBlob})
-    : super(fullyQualifiedName);
+  SearchEntryPoint({this.renderedContent = '', Uint8List? sdkBlob})
+    : sdkBlob = sdkBlob ?? Uint8List(0),
+      super(fullyQualifiedName);
 
-  factory SearchEntryPoint.fromJson(Map<String, dynamic> json) {
-    return SearchEntryPoint(
-      renderedContent: json['renderedContent'] ?? '',
-      sdkBlob: decodeBytes(json['sdkBlob']),
-    );
-  }
+  factory SearchEntryPoint.fromJson(Map<String, dynamic> json) =>
+      SearchEntryPoint(
+        renderedContent: json['renderedContent'] ?? '',
+        sdkBlob: decodeBytes(json['sdkBlob']) ?? Uint8List(0),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (renderedContent.isNotDefault) 'renderedContent': renderedContent,
-      if (sdkBlob != null) 'sdkBlob': encodeBytes(sdkBlob),
-    };
-  }
+  Object toJson() => {
+    if (renderedContent.isNotDefault) 'renderedContent': renderedContent,
+    if (sdkBlob.isNotDefault) 'sdkBlob': encodeBytes(sdkBlob),
+  };
 
   @override
   String toString() {
     final contents = [
       'renderedContent=$renderedContent',
-      if (sdkBlob != null) 'sdkBlob=$sdkBlob',
+      'sdkBlob=$sdkBlob',
     ].join(',');
     return 'SearchEntryPoint($contents)';
   }
@@ -6418,16 +6185,11 @@ final class GroundingChunk extends ProtoMessage {
 
   GroundingChunk({this.web}) : super(fullyQualifiedName);
 
-  factory GroundingChunk.fromJson(Map<String, dynamic> json) {
-    return GroundingChunk(
-      web: decode(json['web'], GroundingChunk_Web.fromJson),
-    );
-  }
+  factory GroundingChunk.fromJson(Map<String, dynamic> json) =>
+      GroundingChunk(web: decode(json['web'], GroundingChunk_Web.fromJson));
 
   @override
-  Object toJson() {
-    return {if (web != null) 'web': web!.toJson()};
-  }
+  Object toJson() => {if (web != null) 'web': web!.toJson()};
 
   @override
   String toString() => 'GroundingChunk()';
@@ -6446,14 +6208,14 @@ final class GroundingChunk_Web extends ProtoMessage {
 
   GroundingChunk_Web({this.uri, this.title}) : super(fullyQualifiedName);
 
-  factory GroundingChunk_Web.fromJson(Map<String, dynamic> json) {
-    return GroundingChunk_Web(uri: json['uri'], title: json['title']);
-  }
+  factory GroundingChunk_Web.fromJson(Map<String, dynamic> json) =>
+      GroundingChunk_Web(uri: json['uri'], title: json['title']);
 
   @override
-  Object toJson() {
-    return {if (uri != null) 'uri': uri, if (title != null) 'title': title};
-  }
+  Object toJson() => {
+    if (uri != null) 'uri': uri,
+    if (title != null) 'title': title,
+  };
 
   @override
   String toString() {
@@ -6491,24 +6253,20 @@ final class Segment extends ProtoMessage {
     this.text = '',
   }) : super(fullyQualifiedName);
 
-  factory Segment.fromJson(Map<String, dynamic> json) {
-    return Segment(
-      partIndex: json['partIndex'] ?? 0,
-      startIndex: json['startIndex'] ?? 0,
-      endIndex: json['endIndex'] ?? 0,
-      text: json['text'] ?? '',
-    );
-  }
+  factory Segment.fromJson(Map<String, dynamic> json) => Segment(
+    partIndex: json['partIndex'] ?? 0,
+    startIndex: json['startIndex'] ?? 0,
+    endIndex: json['endIndex'] ?? 0,
+    text: json['text'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (partIndex.isNotDefault) 'partIndex': partIndex,
-      if (startIndex.isNotDefault) 'startIndex': startIndex,
-      if (endIndex.isNotDefault) 'endIndex': endIndex,
-      if (text.isNotDefault) 'text': text,
-    };
-  }
+  Object toJson() => {
+    if (partIndex.isNotDefault) 'partIndex': partIndex,
+    if (startIndex.isNotDefault) 'startIndex': startIndex,
+    if (endIndex.isNotDefault) 'endIndex': endIndex,
+    if (text.isNotDefault) 'text': text,
+  };
 
   @override
   String toString() {
@@ -6547,23 +6305,20 @@ final class GroundingSupport extends ProtoMessage {
     this.confidenceScores = const [],
   }) : super(fullyQualifiedName);
 
-  factory GroundingSupport.fromJson(Map<String, dynamic> json) {
-    return GroundingSupport(
-      segment: decode(json['segment'], Segment.fromJson),
-      groundingChunkIndices: decodeList(json['groundingChunkIndices']) ?? [],
-      confidenceScores: decodeList(json['confidenceScores']) ?? [],
-    );
-  }
+  factory GroundingSupport.fromJson(Map<String, dynamic> json) =>
+      GroundingSupport(
+        segment: decode(json['segment'], Segment.fromJson),
+        groundingChunkIndices: decodeList(json['groundingChunkIndices']) ?? [],
+        confidenceScores: decodeList(json['confidenceScores']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (segment != null) 'segment': segment!.toJson(),
-      if (groundingChunkIndices.isNotDefault)
-        'groundingChunkIndices': groundingChunkIndices,
-      if (confidenceScores.isNotDefault) 'confidenceScores': confidenceScores,
-    };
-  }
+  Object toJson() => {
+    if (segment != null) 'segment': segment!.toJson(),
+    if (groundingChunkIndices.isNotDefault)
+      'groundingChunkIndices': groundingChunkIndices,
+    if (confidenceScores.isNotDefault) 'confidenceScores': confidenceScores,
+  };
 
   @override
   String toString() => 'GroundingSupport()';
@@ -6637,45 +6392,39 @@ final class GenerateAnswerRequest extends ProtoMessage {
     this.temperature,
   }) : super(fullyQualifiedName);
 
-  factory GenerateAnswerRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateAnswerRequest(
-      inlinePassages: decode(
-        json['inlinePassages'],
-        GroundingPassages.fromJson,
-      ),
-      semanticRetriever: decode(
-        json['semanticRetriever'],
-        SemanticRetrieverConfig.fromJson,
-      ),
-      model: json['model'] ?? '',
-      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-      answerStyle:
-          decodeEnum(
-            json['answerStyle'],
-            GenerateAnswerRequest_AnswerStyle.fromJson,
-          ) ??
-          GenerateAnswerRequest_AnswerStyle.$default,
-      safetySettings:
-          decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
-          [],
-      temperature: decodeDouble(json['temperature']),
-    );
-  }
+  factory GenerateAnswerRequest.fromJson(
+    Map<String, dynamic> json,
+  ) => GenerateAnswerRequest(
+    inlinePassages: decode(json['inlinePassages'], GroundingPassages.fromJson),
+    semanticRetriever: decode(
+      json['semanticRetriever'],
+      SemanticRetrieverConfig.fromJson,
+    ),
+    model: json['model'] ?? '',
+    contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+    answerStyle:
+        decodeEnum(
+          json['answerStyle'],
+          GenerateAnswerRequest_AnswerStyle.fromJson,
+        ) ??
+        GenerateAnswerRequest_AnswerStyle.$default,
+    safetySettings:
+        decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ?? [],
+    temperature: decodeDouble(json['temperature']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (inlinePassages != null) 'inlinePassages': inlinePassages!.toJson(),
-      if (semanticRetriever != null)
-        'semanticRetriever': semanticRetriever!.toJson(),
-      'model': model,
-      'contents': encodeList(contents),
-      'answerStyle': answerStyle.toJson(),
-      if (safetySettings.isNotDefault)
-        'safetySettings': encodeList(safetySettings),
-      if (temperature != null) 'temperature': encodeDouble(temperature),
-    };
-  }
+  Object toJson() => {
+    if (inlinePassages != null) 'inlinePassages': inlinePassages!.toJson(),
+    if (semanticRetriever != null)
+      'semanticRetriever': semanticRetriever!.toJson(),
+    'model': model,
+    'contents': encodeList(contents),
+    'answerStyle': answerStyle.toJson(),
+    if (safetySettings.isNotDefault)
+      'safetySettings': encodeList(safetySettings),
+    if (temperature != null) 'temperature': encodeDouble(temperature),
+  };
 
   @override
   String toString() {
@@ -6765,26 +6514,23 @@ final class GenerateAnswerResponse extends ProtoMessage {
     this.inputFeedback,
   }) : super(fullyQualifiedName);
 
-  factory GenerateAnswerResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateAnswerResponse(
-      answer: decode(json['answer'], Candidate.fromJson),
-      answerableProbability: decodeDouble(json['answerableProbability']),
-      inputFeedback: decode(
-        json['inputFeedback'],
-        GenerateAnswerResponse_InputFeedback.fromJson,
-      ),
-    );
-  }
+  factory GenerateAnswerResponse.fromJson(Map<String, dynamic> json) =>
+      GenerateAnswerResponse(
+        answer: decode(json['answer'], Candidate.fromJson),
+        answerableProbability: decodeDouble(json['answerableProbability']),
+        inputFeedback: decode(
+          json['inputFeedback'],
+          GenerateAnswerResponse_InputFeedback.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (answer != null) 'answer': answer!.toJson(),
-      if (answerableProbability != null)
-        'answerableProbability': encodeDouble(answerableProbability),
-      if (inputFeedback != null) 'inputFeedback': inputFeedback!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (answer != null) 'answer': answer!.toJson(),
+    if (answerableProbability != null)
+      'answerableProbability': encodeDouble(answerableProbability),
+    if (inputFeedback != null) 'inputFeedback': inputFeedback!.toJson(),
+  };
 
   @override
   String toString() {
@@ -6817,25 +6563,20 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
 
   factory GenerateAnswerResponse_InputFeedback.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return GenerateAnswerResponse_InputFeedback(
-      blockReason: decodeEnum(
-        json['blockReason'],
-        GenerateAnswerResponse_InputFeedback_BlockReason.fromJson,
-      ),
-      safetyRatings:
-          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-    );
-  }
+  ) => GenerateAnswerResponse_InputFeedback(
+    blockReason: decodeEnum(
+      json['blockReason'],
+      GenerateAnswerResponse_InputFeedback_BlockReason.fromJson,
+    ),
+    safetyRatings:
+        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (blockReason != null) 'blockReason': blockReason!.toJson(),
-      if (safetyRatings.isNotDefault)
-        'safetyRatings': encodeList(safetyRatings),
-    };
-  }
+  Object toJson() => {
+    if (blockReason != null) 'blockReason': blockReason!.toJson(),
+    if (safetyRatings.isNotDefault) 'safetyRatings': encodeList(safetyRatings),
+  };
 
   @override
   String toString() {
@@ -6922,27 +6663,24 @@ final class EmbedContentRequest extends ProtoMessage {
     this.outputDimensionality,
   }) : super(fullyQualifiedName);
 
-  factory EmbedContentRequest.fromJson(Map<String, dynamic> json) {
-    return EmbedContentRequest(
-      model: json['model'] ?? '',
-      content: decode(json['content'], Content.fromJson),
-      taskType: decodeEnum(json['taskType'], TaskType.fromJson),
-      title: json['title'],
-      outputDimensionality: json['outputDimensionality'],
-    );
-  }
+  factory EmbedContentRequest.fromJson(Map<String, dynamic> json) =>
+      EmbedContentRequest(
+        model: json['model'] ?? '',
+        content: decode(json['content'], Content.fromJson),
+        taskType: decodeEnum(json['taskType'], TaskType.fromJson),
+        title: json['title'],
+        outputDimensionality: json['outputDimensionality'],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (content != null) 'content': content!.toJson(),
-      if (taskType != null) 'taskType': taskType!.toJson(),
-      if (title != null) 'title': title,
-      if (outputDimensionality != null)
-        'outputDimensionality': outputDimensionality,
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (content != null) 'content': content!.toJson(),
+    if (taskType != null) 'taskType': taskType!.toJson(),
+    if (title != null) 'title': title,
+    if (outputDimensionality != null)
+      'outputDimensionality': outputDimensionality,
+  };
 
   @override
   String toString() {
@@ -6967,14 +6705,11 @@ final class ContentEmbedding extends ProtoMessage {
 
   ContentEmbedding({this.values = const []}) : super(fullyQualifiedName);
 
-  factory ContentEmbedding.fromJson(Map<String, dynamic> json) {
-    return ContentEmbedding(values: decodeList(json['values']) ?? []);
-  }
+  factory ContentEmbedding.fromJson(Map<String, dynamic> json) =>
+      ContentEmbedding(values: decodeList(json['values']) ?? []);
 
   @override
-  Object toJson() {
-    return {if (values.isNotDefault) 'values': values};
-  }
+  Object toJson() => {if (values.isNotDefault) 'values': values};
 
   @override
   String toString() => 'ContentEmbedding()';
@@ -6990,16 +6725,13 @@ final class EmbedContentResponse extends ProtoMessage {
 
   EmbedContentResponse({this.embedding}) : super(fullyQualifiedName);
 
-  factory EmbedContentResponse.fromJson(Map<String, dynamic> json) {
-    return EmbedContentResponse(
-      embedding: decode(json['embedding'], ContentEmbedding.fromJson),
-    );
-  }
+  factory EmbedContentResponse.fromJson(Map<String, dynamic> json) =>
+      EmbedContentResponse(
+        embedding: decode(json['embedding'], ContentEmbedding.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {if (embedding != null) 'embedding': embedding!.toJson()};
-  }
+  Object toJson() => {if (embedding != null) 'embedding': embedding!.toJson()};
 
   @override
   String toString() => 'EmbedContentResponse()';
@@ -7025,19 +6757,16 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
   BatchEmbedContentsRequest({required this.model, required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchEmbedContentsRequest.fromJson(Map<String, dynamic> json) {
-    return BatchEmbedContentsRequest(
-      model: json['model'] ?? '',
-      requests:
-          decodeListMessage(json['requests'], EmbedContentRequest.fromJson) ??
-          [],
-    );
-  }
+  factory BatchEmbedContentsRequest.fromJson(Map<String, dynamic> json) =>
+      BatchEmbedContentsRequest(
+        model: json['model'] ?? '',
+        requests:
+            decodeListMessage(json['requests'], EmbedContentRequest.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {'model': model, 'requests': encodeList(requests)};
-  }
+  Object toJson() => {'model': model, 'requests': encodeList(requests)};
 
   @override
   String toString() {
@@ -7058,18 +6787,17 @@ final class BatchEmbedContentsResponse extends ProtoMessage {
   BatchEmbedContentsResponse({this.embeddings = const []})
     : super(fullyQualifiedName);
 
-  factory BatchEmbedContentsResponse.fromJson(Map<String, dynamic> json) {
-    return BatchEmbedContentsResponse(
-      embeddings:
-          decodeListMessage(json['embeddings'], ContentEmbedding.fromJson) ??
-          [],
-    );
-  }
+  factory BatchEmbedContentsResponse.fromJson(Map<String, dynamic> json) =>
+      BatchEmbedContentsResponse(
+        embeddings:
+            decodeListMessage(json['embeddings'], ContentEmbedding.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {if (embeddings.isNotDefault) 'embeddings': encodeList(embeddings)};
-  }
+  Object toJson() => {
+    if (embeddings.isNotDefault) 'embeddings': encodeList(embeddings),
+  };
 
   @override
   String toString() => 'BatchEmbedContentsResponse()';
@@ -7111,26 +6839,23 @@ final class CountTokensRequest extends ProtoMessage {
     this.generateContentRequest,
   }) : super(fullyQualifiedName);
 
-  factory CountTokensRequest.fromJson(Map<String, dynamic> json) {
-    return CountTokensRequest(
-      model: json['model'] ?? '',
-      contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-      generateContentRequest: decode(
-        json['generateContentRequest'],
-        GenerateContentRequest.fromJson,
-      ),
-    );
-  }
+  factory CountTokensRequest.fromJson(Map<String, dynamic> json) =>
+      CountTokensRequest(
+        model: json['model'] ?? '',
+        contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
+        generateContentRequest: decode(
+          json['generateContentRequest'],
+          GenerateContentRequest.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (contents.isNotDefault) 'contents': encodeList(contents),
-      if (generateContentRequest != null)
-        'generateContentRequest': generateContentRequest!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (contents.isNotDefault) 'contents': encodeList(contents),
+    if (generateContentRequest != null)
+      'generateContentRequest': generateContentRequest!.toJson(),
+  };
 
   @override
   String toString() {
@@ -7166,37 +6891,34 @@ final class CountTokensResponse extends ProtoMessage {
     this.cacheTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
-  factory CountTokensResponse.fromJson(Map<String, dynamic> json) {
-    return CountTokensResponse(
-      totalTokens: json['totalTokens'] ?? 0,
-      cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
-      promptTokensDetails:
-          decodeListMessage(
-            json['promptTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      cacheTokensDetails:
-          decodeListMessage(
-            json['cacheTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory CountTokensResponse.fromJson(Map<String, dynamic> json) =>
+      CountTokensResponse(
+        totalTokens: json['totalTokens'] ?? 0,
+        cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
+        promptTokensDetails:
+            decodeListMessage(
+              json['promptTokensDetails'],
+              ModalityTokenCount.fromJson,
+            ) ??
+            [],
+        cacheTokensDetails:
+            decodeListMessage(
+              json['cacheTokensDetails'],
+              ModalityTokenCount.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (totalTokens.isNotDefault) 'totalTokens': totalTokens,
-      if (cachedContentTokenCount.isNotDefault)
-        'cachedContentTokenCount': cachedContentTokenCount,
-      if (promptTokensDetails.isNotDefault)
-        'promptTokensDetails': encodeList(promptTokensDetails),
-      if (cacheTokensDetails.isNotDefault)
-        'cacheTokensDetails': encodeList(cacheTokensDetails),
-    };
-  }
+  Object toJson() => {
+    if (totalTokens.isNotDefault) 'totalTokens': totalTokens,
+    if (cachedContentTokenCount.isNotDefault)
+      'cachedContentTokenCount': cachedContentTokenCount,
+    if (promptTokensDetails.isNotDefault)
+      'promptTokensDetails': encodeList(promptTokensDetails),
+    if (cacheTokensDetails.isNotDefault)
+      'cacheTokensDetails': encodeList(cacheTokensDetails),
+  };
 
   @override
   String toString() {
@@ -7231,33 +6953,30 @@ final class RealtimeInputConfig extends ProtoMessage {
     this.turnCoverage,
   }) : super(fullyQualifiedName);
 
-  factory RealtimeInputConfig.fromJson(Map<String, dynamic> json) {
-    return RealtimeInputConfig(
-      automaticActivityDetection: decode(
-        json['automaticActivityDetection'],
-        RealtimeInputConfig_AutomaticActivityDetection.fromJson,
-      ),
-      activityHandling: decodeEnum(
-        json['activityHandling'],
-        RealtimeInputConfig_ActivityHandling.fromJson,
-      ),
-      turnCoverage: decodeEnum(
-        json['turnCoverage'],
-        RealtimeInputConfig_TurnCoverage.fromJson,
-      ),
-    );
-  }
+  factory RealtimeInputConfig.fromJson(Map<String, dynamic> json) =>
+      RealtimeInputConfig(
+        automaticActivityDetection: decode(
+          json['automaticActivityDetection'],
+          RealtimeInputConfig_AutomaticActivityDetection.fromJson,
+        ),
+        activityHandling: decodeEnum(
+          json['activityHandling'],
+          RealtimeInputConfig_ActivityHandling.fromJson,
+        ),
+        turnCoverage: decodeEnum(
+          json['turnCoverage'],
+          RealtimeInputConfig_TurnCoverage.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (automaticActivityDetection != null)
-        'automaticActivityDetection': automaticActivityDetection!.toJson(),
-      if (activityHandling != null)
-        'activityHandling': activityHandling!.toJson(),
-      if (turnCoverage != null) 'turnCoverage': turnCoverage!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (automaticActivityDetection != null)
+      'automaticActivityDetection': automaticActivityDetection!.toJson(),
+    if (activityHandling != null)
+      'activityHandling': activityHandling!.toJson(),
+    if (turnCoverage != null) 'turnCoverage': turnCoverage!.toJson(),
+  };
 
   @override
   String toString() {
@@ -7309,35 +7028,30 @@ final class RealtimeInputConfig_AutomaticActivityDetection
 
   factory RealtimeInputConfig_AutomaticActivityDetection.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return RealtimeInputConfig_AutomaticActivityDetection(
-      disabled: json['disabled'],
-      startOfSpeechSensitivity: decodeEnum(
-        json['startOfSpeechSensitivity'],
-        RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity
-            .fromJson,
-      ),
-      prefixPaddingMs: json['prefixPaddingMs'],
-      endOfSpeechSensitivity: decodeEnum(
-        json['endOfSpeechSensitivity'],
-        RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson,
-      ),
-      silenceDurationMs: json['silenceDurationMs'],
-    );
-  }
+  ) => RealtimeInputConfig_AutomaticActivityDetection(
+    disabled: json['disabled'],
+    startOfSpeechSensitivity: decodeEnum(
+      json['startOfSpeechSensitivity'],
+      RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.fromJson,
+    ),
+    prefixPaddingMs: json['prefixPaddingMs'],
+    endOfSpeechSensitivity: decodeEnum(
+      json['endOfSpeechSensitivity'],
+      RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson,
+    ),
+    silenceDurationMs: json['silenceDurationMs'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (disabled != null) 'disabled': disabled,
-      if (startOfSpeechSensitivity != null)
-        'startOfSpeechSensitivity': startOfSpeechSensitivity!.toJson(),
-      if (prefixPaddingMs != null) 'prefixPaddingMs': prefixPaddingMs,
-      if (endOfSpeechSensitivity != null)
-        'endOfSpeechSensitivity': endOfSpeechSensitivity!.toJson(),
-      if (silenceDurationMs != null) 'silenceDurationMs': silenceDurationMs,
-    };
-  }
+  Object toJson() => {
+    if (disabled != null) 'disabled': disabled,
+    if (startOfSpeechSensitivity != null)
+      'startOfSpeechSensitivity': startOfSpeechSensitivity!.toJson(),
+    if (prefixPaddingMs != null) 'prefixPaddingMs': prefixPaddingMs,
+    if (endOfSpeechSensitivity != null)
+      'endOfSpeechSensitivity': endOfSpeechSensitivity!.toJson(),
+    if (silenceDurationMs != null) 'silenceDurationMs': silenceDurationMs,
+  };
 
   @override
   String toString() {
@@ -7514,14 +7228,11 @@ final class SessionResumptionConfig extends ProtoMessage {
 
   SessionResumptionConfig({this.handle}) : super(fullyQualifiedName);
 
-  factory SessionResumptionConfig.fromJson(Map<String, dynamic> json) {
-    return SessionResumptionConfig(handle: json['handle']);
-  }
+  factory SessionResumptionConfig.fromJson(Map<String, dynamic> json) =>
+      SessionResumptionConfig(handle: json['handle']);
 
   @override
-  Object toJson() {
-    return {if (handle != null) 'handle': handle};
-  }
+  Object toJson() => {if (handle != null) 'handle': handle};
 
   @override
   String toString() {
@@ -7554,23 +7265,20 @@ final class ContextWindowCompressionConfig extends ProtoMessage {
   ContextWindowCompressionConfig({this.slidingWindow, this.triggerTokens})
     : super(fullyQualifiedName);
 
-  factory ContextWindowCompressionConfig.fromJson(Map<String, dynamic> json) {
-    return ContextWindowCompressionConfig(
-      slidingWindow: decode(
-        json['slidingWindow'],
-        ContextWindowCompressionConfig_SlidingWindow.fromJson,
-      ),
-      triggerTokens: decodeInt64(json['triggerTokens']),
-    );
-  }
+  factory ContextWindowCompressionConfig.fromJson(Map<String, dynamic> json) =>
+      ContextWindowCompressionConfig(
+        slidingWindow: decode(
+          json['slidingWindow'],
+          ContextWindowCompressionConfig_SlidingWindow.fromJson,
+        ),
+        triggerTokens: decodeInt64(json['triggerTokens']),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (slidingWindow != null) 'slidingWindow': slidingWindow!.toJson(),
-      if (triggerTokens != null) 'triggerTokens': encodeInt64(triggerTokens),
-    };
-  }
+  Object toJson() => {
+    if (slidingWindow != null) 'slidingWindow': slidingWindow!.toJson(),
+    if (triggerTokens != null) 'triggerTokens': encodeInt64(triggerTokens),
+  };
 
   @override
   String toString() {
@@ -7603,18 +7311,14 @@ final class ContextWindowCompressionConfig_SlidingWindow extends ProtoMessage {
 
   factory ContextWindowCompressionConfig_SlidingWindow.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return ContextWindowCompressionConfig_SlidingWindow(
-      targetTokens: decodeInt64(json['targetTokens']),
-    );
-  }
+  ) => ContextWindowCompressionConfig_SlidingWindow(
+    targetTokens: decodeInt64(json['targetTokens']),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (targetTokens != null) 'targetTokens': encodeInt64(targetTokens),
-    };
-  }
+  Object toJson() => {
+    if (targetTokens != null) 'targetTokens': encodeInt64(targetTokens),
+  };
 
   @override
   String toString() {
@@ -7632,14 +7336,11 @@ final class AudioTranscriptionConfig extends ProtoMessage {
 
   AudioTranscriptionConfig() : super(fullyQualifiedName);
 
-  factory AudioTranscriptionConfig.fromJson(Map<String, dynamic> json) {
-    return AudioTranscriptionConfig();
-  }
+  factory AudioTranscriptionConfig.fromJson(Map<String, dynamic> json) =>
+      AudioTranscriptionConfig();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'AudioTranscriptionConfig()';
@@ -7724,59 +7425,56 @@ final class BidiGenerateContentSetup extends ProtoMessage {
     this.outputAudioTranscription,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetup.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentSetup(
-      model: json['model'] ?? '',
-      generationConfig: decode(
-        json['generationConfig'],
-        GenerationConfig.fromJson,
-      ),
-      systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-      tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
-      realtimeInputConfig: decode(
-        json['realtimeInputConfig'],
-        RealtimeInputConfig.fromJson,
-      ),
-      sessionResumption: decode(
-        json['sessionResumption'],
-        SessionResumptionConfig.fromJson,
-      ),
-      contextWindowCompression: decode(
-        json['contextWindowCompression'],
-        ContextWindowCompressionConfig.fromJson,
-      ),
-      inputAudioTranscription: decode(
-        json['inputAudioTranscription'],
-        AudioTranscriptionConfig.fromJson,
-      ),
-      outputAudioTranscription: decode(
-        json['outputAudioTranscription'],
-        AudioTranscriptionConfig.fromJson,
-      ),
-    );
-  }
+  factory BidiGenerateContentSetup.fromJson(Map<String, dynamic> json) =>
+      BidiGenerateContentSetup(
+        model: json['model'] ?? '',
+        generationConfig: decode(
+          json['generationConfig'],
+          GenerationConfig.fromJson,
+        ),
+        systemInstruction: decode(json['systemInstruction'], Content.fromJson),
+        tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
+        realtimeInputConfig: decode(
+          json['realtimeInputConfig'],
+          RealtimeInputConfig.fromJson,
+        ),
+        sessionResumption: decode(
+          json['sessionResumption'],
+          SessionResumptionConfig.fromJson,
+        ),
+        contextWindowCompression: decode(
+          json['contextWindowCompression'],
+          ContextWindowCompressionConfig.fromJson,
+        ),
+        inputAudioTranscription: decode(
+          json['inputAudioTranscription'],
+          AudioTranscriptionConfig.fromJson,
+        ),
+        outputAudioTranscription: decode(
+          json['outputAudioTranscription'],
+          AudioTranscriptionConfig.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (generationConfig != null)
-        'generationConfig': generationConfig!.toJson(),
-      if (systemInstruction != null)
-        'systemInstruction': systemInstruction!.toJson(),
-      if (tools.isNotDefault) 'tools': encodeList(tools),
-      if (realtimeInputConfig != null)
-        'realtimeInputConfig': realtimeInputConfig!.toJson(),
-      if (sessionResumption != null)
-        'sessionResumption': sessionResumption!.toJson(),
-      if (contextWindowCompression != null)
-        'contextWindowCompression': contextWindowCompression!.toJson(),
-      if (inputAudioTranscription != null)
-        'inputAudioTranscription': inputAudioTranscription!.toJson(),
-      if (outputAudioTranscription != null)
-        'outputAudioTranscription': outputAudioTranscription!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (generationConfig != null)
+      'generationConfig': generationConfig!.toJson(),
+    if (systemInstruction != null)
+      'systemInstruction': systemInstruction!.toJson(),
+    if (tools.isNotDefault) 'tools': encodeList(tools),
+    if (realtimeInputConfig != null)
+      'realtimeInputConfig': realtimeInputConfig!.toJson(),
+    if (sessionResumption != null)
+      'sessionResumption': sessionResumption!.toJson(),
+    if (contextWindowCompression != null)
+      'contextWindowCompression': contextWindowCompression!.toJson(),
+    if (inputAudioTranscription != null)
+      'inputAudioTranscription': inputAudioTranscription!.toJson(),
+    if (outputAudioTranscription != null)
+      'outputAudioTranscription': outputAudioTranscription!.toJson(),
+  };
 
   @override
   String toString() {
@@ -7811,20 +7509,18 @@ final class BidiGenerateContentClientContent extends ProtoMessage {
     this.turnComplete = false,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentClientContent.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentClientContent(
-      turns: decodeListMessage(json['turns'], Content.fromJson) ?? [],
-      turnComplete: json['turnComplete'] ?? false,
-    );
-  }
+  factory BidiGenerateContentClientContent.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentClientContent(
+    turns: decodeListMessage(json['turns'], Content.fromJson) ?? [],
+    turnComplete: json['turnComplete'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (turns.isNotDefault) 'turns': encodeList(turns),
-      if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
-    };
-  }
+  Object toJson() => {
+    if (turns.isNotDefault) 'turns': encodeList(turns),
+    if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
+  };
 
   @override
   String toString() {
@@ -7899,36 +7595,34 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
     this.activityEnd,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentRealtimeInput(
-      mediaChunks: decodeListMessage(json['mediaChunks'], Blob.fromJson) ?? [],
-      audio: decode(json['audio'], Blob.fromJson),
-      audioStreamEnd: json['audioStreamEnd'],
-      video: decode(json['video'], Blob.fromJson),
-      text: json['text'],
-      activityStart: decode(
-        json['activityStart'],
-        BidiGenerateContentRealtimeInput_ActivityStart.fromJson,
-      ),
-      activityEnd: decode(
-        json['activityEnd'],
-        BidiGenerateContentRealtimeInput_ActivityEnd.fromJson,
-      ),
-    );
-  }
+  factory BidiGenerateContentRealtimeInput.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentRealtimeInput(
+    mediaChunks: decodeListMessage(json['mediaChunks'], Blob.fromJson) ?? [],
+    audio: decode(json['audio'], Blob.fromJson),
+    audioStreamEnd: json['audioStreamEnd'],
+    video: decode(json['video'], Blob.fromJson),
+    text: json['text'],
+    activityStart: decode(
+      json['activityStart'],
+      BidiGenerateContentRealtimeInput_ActivityStart.fromJson,
+    ),
+    activityEnd: decode(
+      json['activityEnd'],
+      BidiGenerateContentRealtimeInput_ActivityEnd.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (mediaChunks.isNotDefault) 'mediaChunks': encodeList(mediaChunks),
-      if (audio != null) 'audio': audio!.toJson(),
-      if (audioStreamEnd != null) 'audioStreamEnd': audioStreamEnd,
-      if (video != null) 'video': video!.toJson(),
-      if (text != null) 'text': text,
-      if (activityStart != null) 'activityStart': activityStart!.toJson(),
-      if (activityEnd != null) 'activityEnd': activityEnd!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (mediaChunks.isNotDefault) 'mediaChunks': encodeList(mediaChunks),
+    if (audio != null) 'audio': audio!.toJson(),
+    if (audioStreamEnd != null) 'audioStreamEnd': audioStreamEnd,
+    if (video != null) 'video': video!.toJson(),
+    if (text != null) 'text': text,
+    if (activityStart != null) 'activityStart': activityStart!.toJson(),
+    if (activityEnd != null) 'activityEnd': activityEnd!.toJson(),
+  };
 
   @override
   String toString() {
@@ -7950,14 +7644,10 @@ final class BidiGenerateContentRealtimeInput_ActivityStart
 
   factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return BidiGenerateContentRealtimeInput_ActivityStart();
-  }
+  ) => BidiGenerateContentRealtimeInput_ActivityStart();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'ActivityStart()';
@@ -7972,14 +7662,10 @@ final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
 
   factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return BidiGenerateContentRealtimeInput_ActivityEnd();
-  }
+  ) => BidiGenerateContentRealtimeInput_ActivityEnd();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'ActivityEnd()';
@@ -8003,24 +7689,21 @@ final class BidiGenerateContentToolResponse extends ProtoMessage {
   BidiGenerateContentToolResponse({this.functionResponses = const []})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentToolResponse.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentToolResponse(
-      functionResponses:
-          decodeListMessage(
-            json['functionResponses'],
-            FunctionResponse.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory BidiGenerateContentToolResponse.fromJson(Map<String, dynamic> json) =>
+      BidiGenerateContentToolResponse(
+        functionResponses:
+            decodeListMessage(
+              json['functionResponses'],
+              FunctionResponse.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (functionResponses.isNotDefault)
-        'functionResponses': encodeList(functionResponses),
-    };
-  }
+  Object toJson() => {
+    if (functionResponses.isNotDefault)
+      'functionResponses': encodeList(functionResponses),
+  };
 
   @override
   String toString() => 'BidiGenerateContentToolResponse()';
@@ -8051,33 +7734,31 @@ final class BidiGenerateContentClientMessage extends ProtoMessage {
     this.toolResponse,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentClientMessage.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentClientMessage(
-      setup: decode(json['setup'], BidiGenerateContentSetup.fromJson),
-      clientContent: decode(
-        json['clientContent'],
-        BidiGenerateContentClientContent.fromJson,
-      ),
-      realtimeInput: decode(
-        json['realtimeInput'],
-        BidiGenerateContentRealtimeInput.fromJson,
-      ),
-      toolResponse: decode(
-        json['toolResponse'],
-        BidiGenerateContentToolResponse.fromJson,
-      ),
-    );
-  }
+  factory BidiGenerateContentClientMessage.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentClientMessage(
+    setup: decode(json['setup'], BidiGenerateContentSetup.fromJson),
+    clientContent: decode(
+      json['clientContent'],
+      BidiGenerateContentClientContent.fromJson,
+    ),
+    realtimeInput: decode(
+      json['realtimeInput'],
+      BidiGenerateContentRealtimeInput.fromJson,
+    ),
+    toolResponse: decode(
+      json['toolResponse'],
+      BidiGenerateContentToolResponse.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (setup != null) 'setup': setup!.toJson(),
-      if (clientContent != null) 'clientContent': clientContent!.toJson(),
-      if (realtimeInput != null) 'realtimeInput': realtimeInput!.toJson(),
-      if (toolResponse != null) 'toolResponse': toolResponse!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (setup != null) 'setup': setup!.toJson(),
+    if (clientContent != null) 'clientContent': clientContent!.toJson(),
+    if (realtimeInput != null) 'realtimeInput': realtimeInput!.toJson(),
+    if (toolResponse != null) 'toolResponse': toolResponse!.toJson(),
+  };
 
   @override
   String toString() => 'BidiGenerateContentClientMessage()';
@@ -8090,14 +7771,12 @@ final class BidiGenerateContentSetupComplete extends ProtoMessage {
 
   BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetupComplete.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentSetupComplete();
-  }
+  factory BidiGenerateContentSetupComplete.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentSetupComplete();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'BidiGenerateContentSetupComplete()';
@@ -8171,51 +7850,49 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
     this.waitingForInput = false,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentServerContent.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentServerContent(
-      modelTurn: decode(json['modelTurn'], Content.fromJson),
-      generationComplete: json['generationComplete'] ?? false,
-      turnComplete: json['turnComplete'] ?? false,
-      interrupted: json['interrupted'] ?? false,
-      groundingMetadata: decode(
-        json['groundingMetadata'],
-        GroundingMetadata.fromJson,
-      ),
-      inputTranscription: decode(
-        json['inputTranscription'],
-        BidiGenerateContentTranscription.fromJson,
-      ),
-      outputTranscription: decode(
-        json['outputTranscription'],
-        BidiGenerateContentTranscription.fromJson,
-      ),
-      urlContextMetadata: decode(
-        json['urlContextMetadata'],
-        UrlContextMetadata.fromJson,
-      ),
-      waitingForInput: json['waitingForInput'] ?? false,
-    );
-  }
+  factory BidiGenerateContentServerContent.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentServerContent(
+    modelTurn: decode(json['modelTurn'], Content.fromJson),
+    generationComplete: json['generationComplete'] ?? false,
+    turnComplete: json['turnComplete'] ?? false,
+    interrupted: json['interrupted'] ?? false,
+    groundingMetadata: decode(
+      json['groundingMetadata'],
+      GroundingMetadata.fromJson,
+    ),
+    inputTranscription: decode(
+      json['inputTranscription'],
+      BidiGenerateContentTranscription.fromJson,
+    ),
+    outputTranscription: decode(
+      json['outputTranscription'],
+      BidiGenerateContentTranscription.fromJson,
+    ),
+    urlContextMetadata: decode(
+      json['urlContextMetadata'],
+      UrlContextMetadata.fromJson,
+    ),
+    waitingForInput: json['waitingForInput'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (modelTurn != null) 'modelTurn': modelTurn!.toJson(),
-      if (generationComplete.isNotDefault)
-        'generationComplete': generationComplete,
-      if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
-      if (interrupted.isNotDefault) 'interrupted': interrupted,
-      if (groundingMetadata != null)
-        'groundingMetadata': groundingMetadata!.toJson(),
-      if (inputTranscription != null)
-        'inputTranscription': inputTranscription!.toJson(),
-      if (outputTranscription != null)
-        'outputTranscription': outputTranscription!.toJson(),
-      if (urlContextMetadata != null)
-        'urlContextMetadata': urlContextMetadata!.toJson(),
-      if (waitingForInput.isNotDefault) 'waitingForInput': waitingForInput,
-    };
-  }
+  Object toJson() => {
+    if (modelTurn != null) 'modelTurn': modelTurn!.toJson(),
+    if (generationComplete.isNotDefault)
+      'generationComplete': generationComplete,
+    if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
+    if (interrupted.isNotDefault) 'interrupted': interrupted,
+    if (groundingMetadata != null)
+      'groundingMetadata': groundingMetadata!.toJson(),
+    if (inputTranscription != null)
+      'inputTranscription': inputTranscription!.toJson(),
+    if (outputTranscription != null)
+      'outputTranscription': outputTranscription!.toJson(),
+    if (urlContextMetadata != null)
+      'urlContextMetadata': urlContextMetadata!.toJson(),
+    if (waitingForInput.isNotDefault) 'waitingForInput': waitingForInput,
+  };
 
   @override
   String toString() {
@@ -8241,20 +7918,17 @@ final class BidiGenerateContentToolCall extends ProtoMessage {
   BidiGenerateContentToolCall({this.functionCalls = const []})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentToolCall.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentToolCall(
-      functionCalls:
-          decodeListMessage(json['functionCalls'], FunctionCall.fromJson) ?? [],
-    );
-  }
+  factory BidiGenerateContentToolCall.fromJson(Map<String, dynamic> json) =>
+      BidiGenerateContentToolCall(
+        functionCalls:
+            decodeListMessage(json['functionCalls'], FunctionCall.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (functionCalls.isNotDefault)
-        'functionCalls': encodeList(functionCalls),
-    };
-  }
+  Object toJson() => {
+    if (functionCalls.isNotDefault) 'functionCalls': encodeList(functionCalls),
+  };
 
   @override
   String toString() => 'BidiGenerateContentToolCall()';
@@ -8277,16 +7951,12 @@ final class BidiGenerateContentToolCallCancellation extends ProtoMessage {
 
   factory BidiGenerateContentToolCallCancellation.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return BidiGenerateContentToolCallCancellation(
-      ids: decodeList(json['ids']) ?? [],
-    );
-  }
+  ) => BidiGenerateContentToolCallCancellation(
+    ids: decodeList(json['ids']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (ids.isNotDefault) 'ids': ids};
-  }
+  Object toJson() => {if (ids.isNotDefault) 'ids': ids};
 
   @override
   String toString() => 'BidiGenerateContentToolCallCancellation()';
@@ -8305,14 +7975,11 @@ final class GoAway extends ProtoMessage {
 
   GoAway({this.timeLeft}) : super(fullyQualifiedName);
 
-  factory GoAway.fromJson(Map<String, dynamic> json) {
-    return GoAway(timeLeft: decodeCustom(json['timeLeft'], Duration.fromJson));
-  }
+  factory GoAway.fromJson(Map<String, dynamic> json) =>
+      GoAway(timeLeft: decodeCustom(json['timeLeft'], Duration.fromJson));
 
   @override
-  Object toJson() {
-    return {if (timeLeft != null) 'timeLeft': timeLeft!.toJson()};
-  }
+  Object toJson() => {if (timeLeft != null) 'timeLeft': timeLeft!.toJson()};
 
   @override
   String toString() => 'GoAway()';
@@ -8341,20 +8008,17 @@ final class SessionResumptionUpdate extends ProtoMessage {
   SessionResumptionUpdate({this.newHandle = '', this.resumable = false})
     : super(fullyQualifiedName);
 
-  factory SessionResumptionUpdate.fromJson(Map<String, dynamic> json) {
-    return SessionResumptionUpdate(
-      newHandle: json['newHandle'] ?? '',
-      resumable: json['resumable'] ?? false,
-    );
-  }
+  factory SessionResumptionUpdate.fromJson(Map<String, dynamic> json) =>
+      SessionResumptionUpdate(
+        newHandle: json['newHandle'] ?? '',
+        resumable: json['resumable'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (newHandle.isNotDefault) 'newHandle': newHandle,
-      if (resumable.isNotDefault) 'resumable': resumable,
-    };
-  }
+  Object toJson() => {
+    if (newHandle.isNotDefault) 'newHandle': newHandle,
+    if (resumable.isNotDefault) 'resumable': resumable,
+  };
 
   @override
   String toString() {
@@ -8374,14 +8038,12 @@ final class BidiGenerateContentTranscription extends ProtoMessage {
   BidiGenerateContentTranscription({this.text = ''})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentTranscription.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentTranscription(text: json['text'] ?? '');
-  }
+  factory BidiGenerateContentTranscription.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentTranscription(text: json['text'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (text.isNotDefault) 'text': text};
-  }
+  Object toJson() => {if (text.isNotDefault) 'text': text};
 
   @override
   String toString() {
@@ -8430,44 +8092,42 @@ final class BidiGenerateContentServerMessage extends ProtoMessage {
     this.usageMetadata,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentServerMessage.fromJson(Map<String, dynamic> json) {
-    return BidiGenerateContentServerMessage(
-      setupComplete: decode(
-        json['setupComplete'],
-        BidiGenerateContentSetupComplete.fromJson,
-      ),
-      serverContent: decode(
-        json['serverContent'],
-        BidiGenerateContentServerContent.fromJson,
-      ),
-      toolCall: decode(json['toolCall'], BidiGenerateContentToolCall.fromJson),
-      toolCallCancellation: decode(
-        json['toolCallCancellation'],
-        BidiGenerateContentToolCallCancellation.fromJson,
-      ),
-      goAway: decode(json['goAway'], GoAway.fromJson),
-      sessionResumptionUpdate: decode(
-        json['sessionResumptionUpdate'],
-        SessionResumptionUpdate.fromJson,
-      ),
-      usageMetadata: decode(json['usageMetadata'], UsageMetadata.fromJson),
-    );
-  }
+  factory BidiGenerateContentServerMessage.fromJson(
+    Map<String, dynamic> json,
+  ) => BidiGenerateContentServerMessage(
+    setupComplete: decode(
+      json['setupComplete'],
+      BidiGenerateContentSetupComplete.fromJson,
+    ),
+    serverContent: decode(
+      json['serverContent'],
+      BidiGenerateContentServerContent.fromJson,
+    ),
+    toolCall: decode(json['toolCall'], BidiGenerateContentToolCall.fromJson),
+    toolCallCancellation: decode(
+      json['toolCallCancellation'],
+      BidiGenerateContentToolCallCancellation.fromJson,
+    ),
+    goAway: decode(json['goAway'], GoAway.fromJson),
+    sessionResumptionUpdate: decode(
+      json['sessionResumptionUpdate'],
+      SessionResumptionUpdate.fromJson,
+    ),
+    usageMetadata: decode(json['usageMetadata'], UsageMetadata.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (setupComplete != null) 'setupComplete': setupComplete!.toJson(),
-      if (serverContent != null) 'serverContent': serverContent!.toJson(),
-      if (toolCall != null) 'toolCall': toolCall!.toJson(),
-      if (toolCallCancellation != null)
-        'toolCallCancellation': toolCallCancellation!.toJson(),
-      if (goAway != null) 'goAway': goAway!.toJson(),
-      if (sessionResumptionUpdate != null)
-        'sessionResumptionUpdate': sessionResumptionUpdate!.toJson(),
-      if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (setupComplete != null) 'setupComplete': setupComplete!.toJson(),
+    if (serverContent != null) 'serverContent': serverContent!.toJson(),
+    if (toolCall != null) 'toolCall': toolCall!.toJson(),
+    if (toolCallCancellation != null)
+      'toolCallCancellation': toolCallCancellation!.toJson(),
+    if (goAway != null) 'goAway': goAway!.toJson(),
+    if (sessionResumptionUpdate != null)
+      'sessionResumptionUpdate': sessionResumptionUpdate!.toJson(),
+    if (usageMetadata != null) 'usageMetadata': usageMetadata!.toJson(),
+  };
 
   @override
   String toString() => 'BidiGenerateContentServerMessage()';
@@ -8526,64 +8186,60 @@ final class UsageMetadata extends ProtoMessage {
     this.toolUsePromptTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
-  factory UsageMetadata.fromJson(Map<String, dynamic> json) {
-    return UsageMetadata(
-      promptTokenCount: json['promptTokenCount'] ?? 0,
-      cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
-      responseTokenCount: json['responseTokenCount'] ?? 0,
-      toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
-      thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
-      totalTokenCount: json['totalTokenCount'] ?? 0,
-      promptTokensDetails:
-          decodeListMessage(
-            json['promptTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      cacheTokensDetails:
-          decodeListMessage(
-            json['cacheTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      responseTokensDetails:
-          decodeListMessage(
-            json['responseTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-      toolUsePromptTokensDetails:
-          decodeListMessage(
-            json['toolUsePromptTokensDetails'],
-            ModalityTokenCount.fromJson,
-          ) ??
-          [],
-    );
-  }
+  factory UsageMetadata.fromJson(Map<String, dynamic> json) => UsageMetadata(
+    promptTokenCount: json['promptTokenCount'] ?? 0,
+    cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
+    responseTokenCount: json['responseTokenCount'] ?? 0,
+    toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
+    thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
+    totalTokenCount: json['totalTokenCount'] ?? 0,
+    promptTokensDetails:
+        decodeListMessage(
+          json['promptTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+    cacheTokensDetails:
+        decodeListMessage(
+          json['cacheTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+    responseTokensDetails:
+        decodeListMessage(
+          json['responseTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+    toolUsePromptTokensDetails:
+        decodeListMessage(
+          json['toolUsePromptTokensDetails'],
+          ModalityTokenCount.fromJson,
+        ) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
-      if (cachedContentTokenCount.isNotDefault)
-        'cachedContentTokenCount': cachedContentTokenCount,
-      if (responseTokenCount.isNotDefault)
-        'responseTokenCount': responseTokenCount,
-      if (toolUsePromptTokenCount.isNotDefault)
-        'toolUsePromptTokenCount': toolUsePromptTokenCount,
-      if (thoughtsTokenCount.isNotDefault)
-        'thoughtsTokenCount': thoughtsTokenCount,
-      if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
-      if (promptTokensDetails.isNotDefault)
-        'promptTokensDetails': encodeList(promptTokensDetails),
-      if (cacheTokensDetails.isNotDefault)
-        'cacheTokensDetails': encodeList(cacheTokensDetails),
-      if (responseTokensDetails.isNotDefault)
-        'responseTokensDetails': encodeList(responseTokensDetails),
-      if (toolUsePromptTokensDetails.isNotDefault)
-        'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
-    };
-  }
+  Object toJson() => {
+    if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
+    if (cachedContentTokenCount.isNotDefault)
+      'cachedContentTokenCount': cachedContentTokenCount,
+    if (responseTokenCount.isNotDefault)
+      'responseTokenCount': responseTokenCount,
+    if (toolUsePromptTokenCount.isNotDefault)
+      'toolUsePromptTokenCount': toolUsePromptTokenCount,
+    if (thoughtsTokenCount.isNotDefault)
+      'thoughtsTokenCount': thoughtsTokenCount,
+    if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+    if (promptTokensDetails.isNotDefault)
+      'promptTokensDetails': encodeList(promptTokensDetails),
+    if (cacheTokensDetails.isNotDefault)
+      'cacheTokensDetails': encodeList(cacheTokensDetails),
+    if (responseTokensDetails.isNotDefault)
+      'responseTokensDetails': encodeList(responseTokensDetails),
+    if (toolUsePromptTokensDetails.isNotDefault)
+      'toolUsePromptTokensDetails': encodeList(toolUsePromptTokensDetails),
+  };
 
   @override
   String toString() {
@@ -8699,45 +8355,40 @@ final class Model extends ProtoMessage {
     this.thinking = false,
   }) : super(fullyQualifiedName);
 
-  factory Model.fromJson(Map<String, dynamic> json) {
-    return Model(
-      name: json['name'] ?? '',
-      baseModelId: json['baseModelId'] ?? '',
-      version: json['version'] ?? '',
-      displayName: json['displayName'] ?? '',
-      description: json['description'] ?? '',
-      inputTokenLimit: json['inputTokenLimit'] ?? 0,
-      outputTokenLimit: json['outputTokenLimit'] ?? 0,
-      supportedGenerationMethods:
-          decodeList(json['supportedGenerationMethods']) ?? [],
-      temperature: decodeDouble(json['temperature']),
-      maxTemperature: decodeDouble(json['maxTemperature']),
-      topP: decodeDouble(json['topP']),
-      topK: json['topK'],
-      thinking: json['thinking'] ?? false,
-    );
-  }
+  factory Model.fromJson(Map<String, dynamic> json) => Model(
+    name: json['name'] ?? '',
+    baseModelId: json['baseModelId'] ?? '',
+    version: json['version'] ?? '',
+    displayName: json['displayName'] ?? '',
+    description: json['description'] ?? '',
+    inputTokenLimit: json['inputTokenLimit'] ?? 0,
+    outputTokenLimit: json['outputTokenLimit'] ?? 0,
+    supportedGenerationMethods:
+        decodeList(json['supportedGenerationMethods']) ?? [],
+    temperature: decodeDouble(json['temperature']),
+    maxTemperature: decodeDouble(json['maxTemperature']),
+    topP: decodeDouble(json['topP']),
+    topK: json['topK'],
+    thinking: json['thinking'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      'baseModelId': baseModelId,
-      'version': version,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (description.isNotDefault) 'description': description,
-      if (inputTokenLimit.isNotDefault) 'inputTokenLimit': inputTokenLimit,
-      if (outputTokenLimit.isNotDefault) 'outputTokenLimit': outputTokenLimit,
-      if (supportedGenerationMethods.isNotDefault)
-        'supportedGenerationMethods': supportedGenerationMethods,
-      if (temperature != null) 'temperature': encodeDouble(temperature),
-      if (maxTemperature != null)
-        'maxTemperature': encodeDouble(maxTemperature),
-      if (topP != null) 'topP': encodeDouble(topP),
-      if (topK != null) 'topK': topK,
-      if (thinking.isNotDefault) 'thinking': thinking,
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    'baseModelId': baseModelId,
+    'version': version,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (description.isNotDefault) 'description': description,
+    if (inputTokenLimit.isNotDefault) 'inputTokenLimit': inputTokenLimit,
+    if (outputTokenLimit.isNotDefault) 'outputTokenLimit': outputTokenLimit,
+    if (supportedGenerationMethods.isNotDefault)
+      'supportedGenerationMethods': supportedGenerationMethods,
+    if (temperature != null) 'temperature': encodeDouble(temperature),
+    if (maxTemperature != null) 'maxTemperature': encodeDouble(maxTemperature),
+    if (topP != null) 'topP': encodeDouble(topP),
+    if (topK != null) 'topK': topK,
+    if (thinking.isNotDefault) 'thinking': thinking,
+  };
 
   @override
   String toString() {
@@ -8773,14 +8424,11 @@ final class GetModelRequest extends ProtoMessage {
 
   GetModelRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetModelRequest.fromJson(Map<String, dynamic> json) {
-    return GetModelRequest(name: json['name'] ?? '');
-  }
+  factory GetModelRequest.fromJson(Map<String, dynamic> json) =>
+      GetModelRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -8813,20 +8461,17 @@ final class ListModelsRequest extends ProtoMessage {
   ListModelsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListModelsRequest.fromJson(Map<String, dynamic> json) {
-    return ListModelsRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListModelsRequest.fromJson(Map<String, dynamic> json) =>
+      ListModelsRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -8851,20 +8496,17 @@ final class ListModelsResponse extends ProtoMessage {
   ListModelsResponse({this.models = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListModelsResponse.fromJson(Map<String, dynamic> json) {
-    return ListModelsResponse(
-      models: decodeListMessage(json['models'], Model.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListModelsResponse.fromJson(Map<String, dynamic> json) =>
+      ListModelsResponse(
+        models: decodeListMessage(json['models'], Model.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (models.isNotDefault) 'models': encodeList(models),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (models.isNotDefault) 'models': encodeList(models),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -8885,14 +8527,11 @@ final class GetTunedModelRequest extends ProtoMessage {
 
   GetTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetTunedModelRequest.fromJson(Map<String, dynamic> json) {
-    return GetTunedModelRequest(name: json['name'] ?? '');
-  }
+  factory GetTunedModelRequest.fromJson(Map<String, dynamic> json) =>
+      GetTunedModelRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -8945,22 +8584,19 @@ final class ListTunedModelsRequest extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory ListTunedModelsRequest.fromJson(Map<String, dynamic> json) {
-    return ListTunedModelsRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-      filter: json['filter'] ?? '',
-    );
-  }
+  factory ListTunedModelsRequest.fromJson(Map<String, dynamic> json) =>
+      ListTunedModelsRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+        filter: json['filter'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-      if (filter.isNotDefault) 'filter': filter,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+    if (filter.isNotDefault) 'filter': filter,
+  };
 
   @override
   String toString() {
@@ -8991,21 +8627,18 @@ final class ListTunedModelsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListTunedModelsResponse.fromJson(Map<String, dynamic> json) {
-    return ListTunedModelsResponse(
-      tunedModels:
-          decodeListMessage(json['tunedModels'], TunedModel.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListTunedModelsResponse.fromJson(Map<String, dynamic> json) =>
+      ListTunedModelsResponse(
+        tunedModels:
+            decodeListMessage(json['tunedModels'], TunedModel.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (tunedModels.isNotDefault) 'tunedModels': encodeList(tunedModels),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (tunedModels.isNotDefault) 'tunedModels': encodeList(tunedModels),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -9031,20 +8664,17 @@ final class CreateTunedModelRequest extends ProtoMessage {
   CreateTunedModelRequest({this.tunedModelId, required this.tunedModel})
     : super(fullyQualifiedName);
 
-  factory CreateTunedModelRequest.fromJson(Map<String, dynamic> json) {
-    return CreateTunedModelRequest(
-      tunedModelId: json['tunedModelId'],
-      tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
-    );
-  }
+  factory CreateTunedModelRequest.fromJson(Map<String, dynamic> json) =>
+      CreateTunedModelRequest(
+        tunedModelId: json['tunedModelId'],
+        tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (tunedModelId != null) 'tunedModelId': tunedModelId,
-      if (tunedModel != null) 'tunedModel': tunedModel!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (tunedModelId != null) 'tunedModelId': tunedModelId,
+    if (tunedModel != null) 'tunedModel': tunedModel!.toJson(),
+  };
 
   @override
   String toString() {
@@ -9084,28 +8714,25 @@ final class CreateTunedModelMetadata extends ProtoMessage {
     this.snapshots = const [],
   }) : super(fullyQualifiedName);
 
-  factory CreateTunedModelMetadata.fromJson(Map<String, dynamic> json) {
-    return CreateTunedModelMetadata(
-      tunedModel: json['tunedModel'] ?? '',
-      totalSteps: json['totalSteps'] ?? 0,
-      completedSteps: json['completedSteps'] ?? 0,
-      completedPercent: decodeDouble(json['completedPercent']) ?? 0,
-      snapshots:
-          decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
-    );
-  }
+  factory CreateTunedModelMetadata.fromJson(Map<String, dynamic> json) =>
+      CreateTunedModelMetadata(
+        tunedModel: json['tunedModel'] ?? '',
+        totalSteps: json['totalSteps'] ?? 0,
+        completedSteps: json['completedSteps'] ?? 0,
+        completedPercent: decodeDouble(json['completedPercent']) ?? 0,
+        snapshots:
+            decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
-      if (totalSteps.isNotDefault) 'totalSteps': totalSteps,
-      if (completedSteps.isNotDefault) 'completedSteps': completedSteps,
-      if (completedPercent.isNotDefault)
-        'completedPercent': encodeDouble(completedPercent),
-      if (snapshots.isNotDefault) 'snapshots': encodeList(snapshots),
-    };
-  }
+  Object toJson() => {
+    if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
+    if (totalSteps.isNotDefault) 'totalSteps': totalSteps,
+    if (completedSteps.isNotDefault) 'completedSteps': completedSteps,
+    if (completedPercent.isNotDefault)
+      'completedPercent': encodeDouble(completedPercent),
+    if (snapshots.isNotDefault) 'snapshots': encodeList(snapshots),
+  };
 
   @override
   String toString() {
@@ -9133,20 +8760,17 @@ final class UpdateTunedModelRequest extends ProtoMessage {
   UpdateTunedModelRequest({required this.tunedModel, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateTunedModelRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateTunedModelRequest(
-      tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateTunedModelRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateTunedModelRequest(
+        tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (tunedModel != null) 'tunedModel': tunedModel!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (tunedModel != null) 'tunedModel': tunedModel!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateTunedModelRequest()';
@@ -9163,14 +8787,11 @@ final class DeleteTunedModelRequest extends ProtoMessage {
 
   DeleteTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteTunedModelRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteTunedModelRequest(name: json['name'] ?? '');
-  }
+  factory DeleteTunedModelRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteTunedModelRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -9222,27 +8843,23 @@ final class Permission extends ProtoMessage {
     required this.role,
   }) : super(fullyQualifiedName);
 
-  factory Permission.fromJson(Map<String, dynamic> json) {
-    return Permission(
-      name: json['name'] ?? '',
-      granteeType: decodeEnum(
-        json['granteeType'],
-        Permission_GranteeType.fromJson,
-      ),
-      emailAddress: json['emailAddress'],
-      role: decodeEnum(json['role'], Permission_Role.fromJson),
-    );
-  }
+  factory Permission.fromJson(Map<String, dynamic> json) => Permission(
+    name: json['name'] ?? '',
+    granteeType: decodeEnum(
+      json['granteeType'],
+      Permission_GranteeType.fromJson,
+    ),
+    emailAddress: json['emailAddress'],
+    role: decodeEnum(json['role'], Permission_Role.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (granteeType != null) 'granteeType': granteeType!.toJson(),
-      if (emailAddress != null) 'emailAddress': emailAddress,
-      if (role != null) 'role': role!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (granteeType != null) 'granteeType': granteeType!.toJson(),
+    if (emailAddress != null) 'emailAddress': emailAddress,
+    if (role != null) 'role': role!.toJson(),
+  };
 
   @override
   String toString() {
@@ -9331,20 +8948,17 @@ final class CreatePermissionRequest extends ProtoMessage {
   CreatePermissionRequest({required this.parent, required this.permission})
     : super(fullyQualifiedName);
 
-  factory CreatePermissionRequest.fromJson(Map<String, dynamic> json) {
-    return CreatePermissionRequest(
-      parent: json['parent'] ?? '',
-      permission: decode(json['permission'], Permission.fromJson),
-    );
-  }
+  factory CreatePermissionRequest.fromJson(Map<String, dynamic> json) =>
+      CreatePermissionRequest(
+        parent: json['parent'] ?? '',
+        permission: decode(json['permission'], Permission.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (permission != null) 'permission': permission!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (permission != null) 'permission': permission!.toJson(),
+  };
 
   @override
   String toString() {
@@ -9367,14 +8981,11 @@ final class GetPermissionRequest extends ProtoMessage {
 
   GetPermissionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetPermissionRequest.fromJson(Map<String, dynamic> json) {
-    return GetPermissionRequest(name: json['name'] ?? '');
-  }
+  factory GetPermissionRequest.fromJson(Map<String, dynamic> json) =>
+      GetPermissionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -9417,22 +9028,19 @@ final class ListPermissionsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListPermissionsRequest.fromJson(Map<String, dynamic> json) {
-    return ListPermissionsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListPermissionsRequest.fromJson(Map<String, dynamic> json) =>
+      ListPermissionsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -9464,21 +9072,18 @@ final class ListPermissionsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListPermissionsResponse.fromJson(Map<String, dynamic> json) {
-    return ListPermissionsResponse(
-      permissions:
-          decodeListMessage(json['permissions'], Permission.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListPermissionsResponse.fromJson(Map<String, dynamic> json) =>
+      ListPermissionsResponse(
+        permissions:
+            decodeListMessage(json['permissions'], Permission.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (permissions.isNotDefault) 'permissions': encodeList(permissions),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (permissions.isNotDefault) 'permissions': encodeList(permissions),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -9504,20 +9109,17 @@ final class UpdatePermissionRequest extends ProtoMessage {
   UpdatePermissionRequest({required this.permission, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdatePermissionRequest.fromJson(Map<String, dynamic> json) {
-    return UpdatePermissionRequest(
-      permission: decode(json['permission'], Permission.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdatePermissionRequest.fromJson(Map<String, dynamic> json) =>
+      UpdatePermissionRequest(
+        permission: decode(json['permission'], Permission.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (permission != null) 'permission': permission!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (permission != null) 'permission': permission!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdatePermissionRequest()';
@@ -9536,14 +9138,11 @@ final class DeletePermissionRequest extends ProtoMessage {
 
   DeletePermissionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeletePermissionRequest.fromJson(Map<String, dynamic> json) {
-    return DeletePermissionRequest(name: json['name'] ?? '');
-  }
+  factory DeletePermissionRequest.fromJson(Map<String, dynamic> json) =>
+      DeletePermissionRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -9569,17 +9168,14 @@ final class TransferOwnershipRequest extends ProtoMessage {
   TransferOwnershipRequest({required this.name, required this.emailAddress})
     : super(fullyQualifiedName);
 
-  factory TransferOwnershipRequest.fromJson(Map<String, dynamic> json) {
-    return TransferOwnershipRequest(
-      name: json['name'] ?? '',
-      emailAddress: json['emailAddress'] ?? '',
-    );
-  }
+  factory TransferOwnershipRequest.fromJson(Map<String, dynamic> json) =>
+      TransferOwnershipRequest(
+        name: json['name'] ?? '',
+        emailAddress: json['emailAddress'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, 'emailAddress': emailAddress};
-  }
+  Object toJson() => {'name': name, 'emailAddress': emailAddress};
 
   @override
   String toString() {
@@ -9595,14 +9191,11 @@ final class TransferOwnershipResponse extends ProtoMessage {
 
   TransferOwnershipResponse() : super(fullyQualifiedName);
 
-  factory TransferOwnershipResponse.fromJson(Map<String, dynamic> json) {
-    return TransferOwnershipResponse();
-  }
+  factory TransferOwnershipResponse.fromJson(Map<String, dynamic> json) =>
+      TransferOwnershipResponse();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'TransferOwnershipResponse()';
@@ -9630,23 +9223,18 @@ final class PredictRequest extends ProtoMessage {
     this.parameters,
   }) : super(fullyQualifiedName);
 
-  factory PredictRequest.fromJson(Map<String, dynamic> json) {
-    return PredictRequest(
-      model: json['model'] ?? '',
-      instances:
-          decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
-      parameters: decodeCustom(json['parameters'], Value.fromJson),
-    );
-  }
+  factory PredictRequest.fromJson(Map<String, dynamic> json) => PredictRequest(
+    model: json['model'] ?? '',
+    instances: decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
+    parameters: decodeCustom(json['parameters'], Value.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      'instances': encodeList(instances),
-      if (parameters != null) 'parameters': parameters!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    'instances': encodeList(instances),
+    if (parameters != null) 'parameters': parameters!.toJson(),
+  };
 
   @override
   String toString() {
@@ -9676,23 +9264,20 @@ final class PredictLongRunningRequest extends ProtoMessage {
     this.parameters,
   }) : super(fullyQualifiedName);
 
-  factory PredictLongRunningRequest.fromJson(Map<String, dynamic> json) {
-    return PredictLongRunningRequest(
-      model: json['model'] ?? '',
-      instances:
-          decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
-      parameters: decodeCustom(json['parameters'], Value.fromJson),
-    );
-  }
+  factory PredictLongRunningRequest.fromJson(Map<String, dynamic> json) =>
+      PredictLongRunningRequest(
+        model: json['model'] ?? '',
+        instances:
+            decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
+        parameters: decodeCustom(json['parameters'], Value.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      'instances': encodeList(instances),
-      if (parameters != null) 'parameters': parameters!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    'instances': encodeList(instances),
+    if (parameters != null) 'parameters': parameters!.toJson(),
+  };
 
   @override
   String toString() {
@@ -9711,19 +9296,16 @@ final class PredictResponse extends ProtoMessage {
 
   PredictResponse({this.predictions = const []}) : super(fullyQualifiedName);
 
-  factory PredictResponse.fromJson(Map<String, dynamic> json) {
-    return PredictResponse(
-      predictions:
-          decodeListMessageCustom(json['predictions'], Value.fromJson) ?? [],
-    );
-  }
+  factory PredictResponse.fromJson(Map<String, dynamic> json) =>
+      PredictResponse(
+        predictions:
+            decodeListMessageCustom(json['predictions'], Value.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (predictions.isNotDefault) 'predictions': encodeList(predictions),
-    };
-  }
+  Object toJson() => {
+    if (predictions.isNotDefault) 'predictions': encodeList(predictions),
+  };
 
   @override
   String toString() => 'PredictResponse()';
@@ -9740,22 +9322,19 @@ final class PredictLongRunningResponse extends ProtoMessage {
   PredictLongRunningResponse({this.generateVideoResponse})
     : super(fullyQualifiedName);
 
-  factory PredictLongRunningResponse.fromJson(Map<String, dynamic> json) {
-    return PredictLongRunningResponse(
-      generateVideoResponse: decode(
-        json['generateVideoResponse'],
-        PredictLongRunningGeneratedVideoResponse.fromJson,
-      ),
-    );
-  }
+  factory PredictLongRunningResponse.fromJson(Map<String, dynamic> json) =>
+      PredictLongRunningResponse(
+        generateVideoResponse: decode(
+          json['generateVideoResponse'],
+          PredictLongRunningGeneratedVideoResponse.fromJson,
+        ),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (generateVideoResponse != null)
-        'generateVideoResponse': generateVideoResponse!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (generateVideoResponse != null)
+      'generateVideoResponse': generateVideoResponse!.toJson(),
+  };
 
   @override
   String toString() => 'PredictLongRunningResponse()';
@@ -9768,14 +9347,11 @@ final class PredictLongRunningMetadata extends ProtoMessage {
 
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
-  factory PredictLongRunningMetadata.fromJson(Map<String, dynamic> json) {
-    return PredictLongRunningMetadata();
-  }
+  factory PredictLongRunningMetadata.fromJson(Map<String, dynamic> json) =>
+      PredictLongRunningMetadata();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'PredictLongRunningMetadata()';
@@ -9791,14 +9367,11 @@ final class Media extends ProtoMessage {
 
   Media({this.video}) : super(fullyQualifiedName);
 
-  factory Media.fromJson(Map<String, dynamic> json) {
-    return Media(video: decode(json['video'], Video.fromJson));
-  }
+  factory Media.fromJson(Map<String, dynamic> json) =>
+      Media(video: decode(json['video'], Video.fromJson));
 
   @override
-  Object toJson() {
-    return {if (video != null) 'video': video!.toJson()};
-  }
+  Object toJson() => {if (video != null) 'video': video!.toJson()};
 
   @override
   String toString() => 'Media()';
@@ -9817,17 +9390,14 @@ final class Video extends ProtoMessage {
 
   Video({this.video, this.uri}) : super(fullyQualifiedName);
 
-  factory Video.fromJson(Map<String, dynamic> json) {
-    return Video(video: decodeBytes(json['video']), uri: json['uri']);
-  }
+  factory Video.fromJson(Map<String, dynamic> json) =>
+      Video(video: decodeBytes(json['video']), uri: json['uri']);
 
   @override
-  Object toJson() {
-    return {
-      if (video != null) 'video': encodeBytes(video),
-      if (uri != null) 'uri': uri,
-    };
-  }
+  Object toJson() => {
+    if (video != null) 'video': encodeBytes(video),
+    if (uri != null) 'uri': uri,
+  };
 
   @override
   String toString() {
@@ -9861,27 +9431,22 @@ final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
 
   factory PredictLongRunningGeneratedVideoResponse.fromJson(
     Map<String, dynamic> json,
-  ) {
-    return PredictLongRunningGeneratedVideoResponse(
-      generatedSamples:
-          decodeListMessage(json['generatedSamples'], Media.fromJson) ?? [],
-      raiMediaFilteredCount: json['raiMediaFilteredCount'] ?? 0,
-      raiMediaFilteredReasons:
-          decodeList(json['raiMediaFilteredReasons']) ?? [],
-    );
-  }
+  ) => PredictLongRunningGeneratedVideoResponse(
+    generatedSamples:
+        decodeListMessage(json['generatedSamples'], Media.fromJson) ?? [],
+    raiMediaFilteredCount: json['raiMediaFilteredCount'] ?? 0,
+    raiMediaFilteredReasons: decodeList(json['raiMediaFilteredReasons']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (generatedSamples.isNotDefault)
-        'generatedSamples': encodeList(generatedSamples),
-      if (raiMediaFilteredCount.isNotDefault)
-        'raiMediaFilteredCount': raiMediaFilteredCount,
-      if (raiMediaFilteredReasons.isNotDefault)
-        'raiMediaFilteredReasons': raiMediaFilteredReasons,
-    };
-  }
+  Object toJson() => {
+    if (generatedSamples.isNotDefault)
+      'generatedSamples': encodeList(generatedSamples),
+    if (raiMediaFilteredCount.isNotDefault)
+      'raiMediaFilteredCount': raiMediaFilteredCount,
+    if (raiMediaFilteredReasons.isNotDefault)
+      'raiMediaFilteredReasons': raiMediaFilteredReasons,
+  };
 
   @override
   String toString() {
@@ -9923,24 +9488,20 @@ final class Corpus extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory Corpus.fromJson(Map<String, dynamic> json) {
-    return Corpus(
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    );
-  }
+  factory Corpus.fromJson(Map<String, dynamic> json) => Corpus(
+    name: json['name'] ?? '',
+    displayName: json['displayName'] ?? '',
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -9986,29 +9547,25 @@ final class Document extends ProtoMessage {
     this.createTime,
   }) : super(fullyQualifiedName);
 
-  factory Document.fromJson(Map<String, dynamic> json) {
-    return Document(
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      customMetadata:
-          decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
-          [],
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    );
-  }
+  factory Document.fromJson(Map<String, dynamic> json) => Document(
+    name: json['name'] ?? '',
+    displayName: json['displayName'] ?? '',
+    customMetadata:
+        decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
+        [],
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (customMetadata.isNotDefault)
-        'customMetadata': encodeList(customMetadata),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (customMetadata.isNotDefault)
+      'customMetadata': encodeList(customMetadata),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+  };
 
   @override
   String toString() {
@@ -10027,14 +9584,11 @@ final class StringList extends ProtoMessage {
 
   StringList({this.values = const []}) : super(fullyQualifiedName);
 
-  factory StringList.fromJson(Map<String, dynamic> json) {
-    return StringList(values: decodeList(json['values']) ?? []);
-  }
+  factory StringList.fromJson(Map<String, dynamic> json) =>
+      StringList(values: decodeList(json['values']) ?? []);
 
   @override
-  Object toJson() {
-    return {if (values.isNotDefault) 'values': values};
-  }
+  Object toJson() => {if (values.isNotDefault) 'values': values};
 
   @override
   String toString() => 'StringList()';
@@ -10064,24 +9618,20 @@ final class CustomMetadata extends ProtoMessage {
     required this.key,
   }) : super(fullyQualifiedName);
 
-  factory CustomMetadata.fromJson(Map<String, dynamic> json) {
-    return CustomMetadata(
-      stringValue: json['stringValue'],
-      stringListValue: decode(json['stringListValue'], StringList.fromJson),
-      numericValue: decodeDouble(json['numericValue']),
-      key: json['key'] ?? '',
-    );
-  }
+  factory CustomMetadata.fromJson(Map<String, dynamic> json) => CustomMetadata(
+    stringValue: json['stringValue'],
+    stringListValue: decode(json['stringListValue'], StringList.fromJson),
+    numericValue: decodeDouble(json['numericValue']),
+    key: json['key'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (stringValue != null) 'stringValue': stringValue,
-      if (stringListValue != null) 'stringListValue': stringListValue!.toJson(),
-      if (numericValue != null) 'numericValue': encodeDouble(numericValue),
-      'key': key,
-    };
-  }
+  Object toJson() => {
+    if (stringValue != null) 'stringValue': stringValue,
+    if (stringListValue != null) 'stringListValue': stringListValue!.toJson(),
+    if (numericValue != null) 'numericValue': encodeDouble(numericValue),
+    'key': key,
+  };
 
   @override
   String toString() {
@@ -10114,18 +9664,13 @@ final class MetadataFilter extends ProtoMessage {
   MetadataFilter({required this.key, required this.conditions})
     : super(fullyQualifiedName);
 
-  factory MetadataFilter.fromJson(Map<String, dynamic> json) {
-    return MetadataFilter(
-      key: json['key'] ?? '',
-      conditions:
-          decodeListMessage(json['conditions'], Condition.fromJson) ?? [],
-    );
-  }
+  factory MetadataFilter.fromJson(Map<String, dynamic> json) => MetadataFilter(
+    key: json['key'] ?? '',
+    conditions: decodeListMessage(json['conditions'], Condition.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {'key': key, 'conditions': encodeList(conditions)};
-  }
+  Object toJson() => {'key': key, 'conditions': encodeList(conditions)};
 
   @override
   String toString() {
@@ -10152,24 +9697,20 @@ final class Condition extends ProtoMessage {
   Condition({this.stringValue, this.numericValue, required this.operation})
     : super(fullyQualifiedName);
 
-  factory Condition.fromJson(Map<String, dynamic> json) {
-    return Condition(
-      stringValue: json['stringValue'],
-      numericValue: decodeDouble(json['numericValue']),
-      operation:
-          decodeEnum(json['operation'], Condition_Operator.fromJson) ??
-          Condition_Operator.$default,
-    );
-  }
+  factory Condition.fromJson(Map<String, dynamic> json) => Condition(
+    stringValue: json['stringValue'],
+    numericValue: decodeDouble(json['numericValue']),
+    operation:
+        decodeEnum(json['operation'], Condition_Operator.fromJson) ??
+        Condition_Operator.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (stringValue != null) 'stringValue': stringValue,
-      if (numericValue != null) 'numericValue': encodeDouble(numericValue),
-      'operation': operation.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (stringValue != null) 'stringValue': stringValue,
+    if (numericValue != null) 'numericValue': encodeDouble(numericValue),
+    'operation': operation.toJson(),
+  };
 
   @override
   String toString() {
@@ -10267,33 +9808,28 @@ final class Chunk extends ProtoMessage {
     this.state = Chunk_State.$default,
   }) : super(fullyQualifiedName);
 
-  factory Chunk.fromJson(Map<String, dynamic> json) {
-    return Chunk(
-      name: json['name'] ?? '',
-      data: decode(json['data'], ChunkData.fromJson),
-      customMetadata:
-          decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
-          [],
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      state:
-          decodeEnum(json['state'], Chunk_State.fromJson) ??
-          Chunk_State.$default,
-    );
-  }
+  factory Chunk.fromJson(Map<String, dynamic> json) => Chunk(
+    name: json['name'] ?? '',
+    data: decode(json['data'], ChunkData.fromJson),
+    customMetadata:
+        decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
+        [],
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    state:
+        decodeEnum(json['state'], Chunk_State.fromJson) ?? Chunk_State.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (data != null) 'data': data!.toJson(),
-      if (customMetadata.isNotDefault)
-        'customMetadata': encodeList(customMetadata),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (state.isNotDefault) 'state': state.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (data != null) 'data': data!.toJson(),
+    if (customMetadata.isNotDefault)
+      'customMetadata': encodeList(customMetadata),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (state.isNotDefault) 'state': state.toJson(),
+  };
 
   @override
   String toString() {
@@ -10340,14 +9876,11 @@ final class ChunkData extends ProtoMessage {
 
   ChunkData({this.stringValue}) : super(fullyQualifiedName);
 
-  factory ChunkData.fromJson(Map<String, dynamic> json) {
-    return ChunkData(stringValue: json['stringValue']);
-  }
+  factory ChunkData.fromJson(Map<String, dynamic> json) =>
+      ChunkData(stringValue: json['stringValue']);
 
   @override
-  Object toJson() {
-    return {if (stringValue != null) 'stringValue': stringValue};
-  }
+  Object toJson() => {if (stringValue != null) 'stringValue': stringValue};
 
   @override
   String toString() {
@@ -10368,14 +9901,11 @@ final class CreateCorpusRequest extends ProtoMessage {
 
   CreateCorpusRequest({required this.corpus}) : super(fullyQualifiedName);
 
-  factory CreateCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return CreateCorpusRequest(corpus: decode(json['corpus'], Corpus.fromJson));
-  }
+  factory CreateCorpusRequest.fromJson(Map<String, dynamic> json) =>
+      CreateCorpusRequest(corpus: decode(json['corpus'], Corpus.fromJson));
 
   @override
-  Object toJson() {
-    return {if (corpus != null) 'corpus': corpus!.toJson()};
-  }
+  Object toJson() => {if (corpus != null) 'corpus': corpus!.toJson()};
 
   @override
   String toString() => 'CreateCorpusRequest()';
@@ -10392,14 +9922,11 @@ final class GetCorpusRequest extends ProtoMessage {
 
   GetCorpusRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return GetCorpusRequest(name: json['name'] ?? '');
-  }
+  factory GetCorpusRequest.fromJson(Map<String, dynamic> json) =>
+      GetCorpusRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -10423,20 +9950,17 @@ final class UpdateCorpusRequest extends ProtoMessage {
   UpdateCorpusRequest({required this.corpus, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateCorpusRequest(
-      corpus: decode(json['corpus'], Corpus.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateCorpusRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateCorpusRequest(
+        corpus: decode(json['corpus'], Corpus.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (corpus != null) 'corpus': corpus!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (corpus != null) 'corpus': corpus!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateCorpusRequest()';
@@ -10461,17 +9985,14 @@ final class DeleteCorpusRequest extends ProtoMessage {
   DeleteCorpusRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
-  factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteCorpusRequest(
-      name: json['name'] ?? '',
-      force: json['force'] ?? false,
-    );
-  }
+  factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteCorpusRequest(
+        name: json['name'] ?? '',
+        force: json['force'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, if (force.isNotDefault) 'force': force};
-  }
+  Object toJson() => {'name': name, if (force.isNotDefault) 'force': force};
 
   @override
   String toString() {
@@ -10504,20 +10025,17 @@ final class ListCorporaRequest extends ProtoMessage {
   ListCorporaRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListCorporaRequest.fromJson(Map<String, dynamic> json) {
-    return ListCorporaRequest(
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListCorporaRequest.fromJson(Map<String, dynamic> json) =>
+      ListCorporaRequest(
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -10542,20 +10060,17 @@ final class ListCorporaResponse extends ProtoMessage {
   ListCorporaResponse({this.corpora = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListCorporaResponse.fromJson(Map<String, dynamic> json) {
-    return ListCorporaResponse(
-      corpora: decodeListMessage(json['corpora'], Corpus.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListCorporaResponse.fromJson(Map<String, dynamic> json) =>
+      ListCorporaResponse(
+        corpora: decodeListMessage(json['corpora'], Corpus.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (corpora.isNotDefault) 'corpora': encodeList(corpora),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (corpora.isNotDefault) 'corpora': encodeList(corpora),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -10623,27 +10138,27 @@ final class QueryCorpusRequest extends ProtoMessage {
     this.resultsCount = 0,
   }) : super(fullyQualifiedName);
 
-  factory QueryCorpusRequest.fromJson(Map<String, dynamic> json) {
-    return QueryCorpusRequest(
-      name: json['name'] ?? '',
-      query: json['query'] ?? '',
-      metadataFilters:
-          decodeListMessage(json['metadataFilters'], MetadataFilter.fromJson) ??
-          [],
-      resultsCount: json['resultsCount'] ?? 0,
-    );
-  }
+  factory QueryCorpusRequest.fromJson(Map<String, dynamic> json) =>
+      QueryCorpusRequest(
+        name: json['name'] ?? '',
+        query: json['query'] ?? '',
+        metadataFilters:
+            decodeListMessage(
+              json['metadataFilters'],
+              MetadataFilter.fromJson,
+            ) ??
+            [],
+        resultsCount: json['resultsCount'] ?? 0,
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      'query': query,
-      if (metadataFilters.isNotDefault)
-        'metadataFilters': encodeList(metadataFilters),
-      if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    'query': query,
+    if (metadataFilters.isNotDefault)
+      'metadataFilters': encodeList(metadataFilters),
+    if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
+  };
 
   @override
   String toString() {
@@ -10667,21 +10182,18 @@ final class QueryCorpusResponse extends ProtoMessage {
   QueryCorpusResponse({this.relevantChunks = const []})
     : super(fullyQualifiedName);
 
-  factory QueryCorpusResponse.fromJson(Map<String, dynamic> json) {
-    return QueryCorpusResponse(
-      relevantChunks:
-          decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
-          [],
-    );
-  }
+  factory QueryCorpusResponse.fromJson(Map<String, dynamic> json) =>
+      QueryCorpusResponse(
+        relevantChunks:
+            decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (relevantChunks.isNotDefault)
-        'relevantChunks': encodeList(relevantChunks),
-    };
-  }
+  Object toJson() => {
+    if (relevantChunks.isNotDefault)
+      'relevantChunks': encodeList(relevantChunks),
+  };
 
   @override
   String toString() => 'QueryCorpusResponse()';
@@ -10704,23 +10216,19 @@ final class RelevantChunk extends ProtoMessage {
   RelevantChunk({this.chunkRelevanceScore = 0, this.chunk, this.document})
     : super(fullyQualifiedName);
 
-  factory RelevantChunk.fromJson(Map<String, dynamic> json) {
-    return RelevantChunk(
-      chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']) ?? 0,
-      chunk: decode(json['chunk'], Chunk.fromJson),
-      document: decode(json['document'], Document.fromJson),
-    );
-  }
+  factory RelevantChunk.fromJson(Map<String, dynamic> json) => RelevantChunk(
+    chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']) ?? 0,
+    chunk: decode(json['chunk'], Chunk.fromJson),
+    document: decode(json['document'], Document.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (chunkRelevanceScore.isNotDefault)
-        'chunkRelevanceScore': encodeDouble(chunkRelevanceScore),
-      if (chunk != null) 'chunk': chunk!.toJson(),
-      if (document != null) 'document': document!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (chunkRelevanceScore.isNotDefault)
+      'chunkRelevanceScore': encodeDouble(chunkRelevanceScore),
+    if (chunk != null) 'chunk': chunk!.toJson(),
+    if (document != null) 'document': document!.toJson(),
+  };
 
   @override
   String toString() {
@@ -10744,20 +10252,17 @@ final class CreateDocumentRequest extends ProtoMessage {
   CreateDocumentRequest({required this.parent, required this.document})
     : super(fullyQualifiedName);
 
-  factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return CreateDocumentRequest(
-      parent: json['parent'] ?? '',
-      document: decode(json['document'], Document.fromJson),
-    );
-  }
+  factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) =>
+      CreateDocumentRequest(
+        parent: json['parent'] ?? '',
+        document: decode(json['document'], Document.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (document != null) 'document': document!.toJson(),
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (document != null) 'document': document!.toJson(),
+  };
 
   @override
   String toString() {
@@ -10777,14 +10282,11 @@ final class GetDocumentRequest extends ProtoMessage {
 
   GetDocumentRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return GetDocumentRequest(name: json['name'] ?? '');
-  }
+  factory GetDocumentRequest.fromJson(Map<String, dynamic> json) =>
+      GetDocumentRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -10809,20 +10311,17 @@ final class UpdateDocumentRequest extends ProtoMessage {
   UpdateDocumentRequest({required this.document, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateDocumentRequest(
-      document: decode(json['document'], Document.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateDocumentRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateDocumentRequest(
+        document: decode(json['document'], Document.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (document != null) 'document': document!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (document != null) 'document': document!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateDocumentRequest()';
@@ -10847,17 +10346,14 @@ final class DeleteDocumentRequest extends ProtoMessage {
   DeleteDocumentRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
-  factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteDocumentRequest(
-      name: json['name'] ?? '',
-      force: json['force'] ?? false,
-    );
-  }
+  factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteDocumentRequest(
+        name: json['name'] ?? '',
+        force: json['force'] ?? false,
+      );
 
   @override
-  Object toJson() {
-    return {'name': name, if (force.isNotDefault) 'force': force};
-  }
+  Object toJson() => {'name': name, if (force.isNotDefault) 'force': force};
 
   @override
   String toString() {
@@ -10897,22 +10393,19 @@ final class ListDocumentsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListDocumentsRequest.fromJson(Map<String, dynamic> json) {
-    return ListDocumentsRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListDocumentsRequest.fromJson(Map<String, dynamic> json) =>
+      ListDocumentsRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -10941,20 +10434,18 @@ final class ListDocumentsResponse extends ProtoMessage {
   ListDocumentsResponse({this.documents = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListDocumentsResponse.fromJson(Map<String, dynamic> json) {
-    return ListDocumentsResponse(
-      documents: decodeListMessage(json['documents'], Document.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListDocumentsResponse.fromJson(Map<String, dynamic> json) =>
+      ListDocumentsResponse(
+        documents:
+            decodeListMessage(json['documents'], Document.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (documents.isNotDefault) 'documents': encodeList(documents),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (documents.isNotDefault) 'documents': encodeList(documents),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -11022,27 +10513,27 @@ final class QueryDocumentRequest extends ProtoMessage {
     this.metadataFilters = const [],
   }) : super(fullyQualifiedName);
 
-  factory QueryDocumentRequest.fromJson(Map<String, dynamic> json) {
-    return QueryDocumentRequest(
-      name: json['name'] ?? '',
-      query: json['query'] ?? '',
-      resultsCount: json['resultsCount'] ?? 0,
-      metadataFilters:
-          decodeListMessage(json['metadataFilters'], MetadataFilter.fromJson) ??
-          [],
-    );
-  }
+  factory QueryDocumentRequest.fromJson(Map<String, dynamic> json) =>
+      QueryDocumentRequest(
+        name: json['name'] ?? '',
+        query: json['query'] ?? '',
+        resultsCount: json['resultsCount'] ?? 0,
+        metadataFilters:
+            decodeListMessage(
+              json['metadataFilters'],
+              MetadataFilter.fromJson,
+            ) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'name': name,
-      'query': query,
-      if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
-      if (metadataFilters.isNotDefault)
-        'metadataFilters': encodeList(metadataFilters),
-    };
-  }
+  Object toJson() => {
+    'name': name,
+    'query': query,
+    if (resultsCount.isNotDefault) 'resultsCount': resultsCount,
+    if (metadataFilters.isNotDefault)
+      'metadataFilters': encodeList(metadataFilters),
+  };
 
   @override
   String toString() {
@@ -11066,21 +10557,18 @@ final class QueryDocumentResponse extends ProtoMessage {
   QueryDocumentResponse({this.relevantChunks = const []})
     : super(fullyQualifiedName);
 
-  factory QueryDocumentResponse.fromJson(Map<String, dynamic> json) {
-    return QueryDocumentResponse(
-      relevantChunks:
-          decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
-          [],
-    );
-  }
+  factory QueryDocumentResponse.fromJson(Map<String, dynamic> json) =>
+      QueryDocumentResponse(
+        relevantChunks:
+            decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (relevantChunks.isNotDefault)
-        'relevantChunks': encodeList(relevantChunks),
-    };
-  }
+  Object toJson() => {
+    if (relevantChunks.isNotDefault)
+      'relevantChunks': encodeList(relevantChunks),
+  };
 
   @override
   String toString() => 'QueryDocumentResponse()';
@@ -11101,17 +10589,17 @@ final class CreateChunkRequest extends ProtoMessage {
   CreateChunkRequest({required this.parent, required this.chunk})
     : super(fullyQualifiedName);
 
-  factory CreateChunkRequest.fromJson(Map<String, dynamic> json) {
-    return CreateChunkRequest(
-      parent: json['parent'] ?? '',
-      chunk: decode(json['chunk'], Chunk.fromJson),
-    );
-  }
+  factory CreateChunkRequest.fromJson(Map<String, dynamic> json) =>
+      CreateChunkRequest(
+        parent: json['parent'] ?? '',
+        chunk: decode(json['chunk'], Chunk.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {'parent': parent, if (chunk != null) 'chunk': chunk!.toJson()};
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (chunk != null) 'chunk': chunk!.toJson(),
+  };
 
   @override
   String toString() {
@@ -11137,22 +10625,19 @@ final class BatchCreateChunksRequest extends ProtoMessage {
   BatchCreateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) {
-    return BatchCreateChunksRequest(
-      parent: json['parent'] ?? '',
-      requests:
-          decodeListMessage(json['requests'], CreateChunkRequest.fromJson) ??
-          [],
-    );
-  }
+  factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) =>
+      BatchCreateChunksRequest(
+        parent: json['parent'] ?? '',
+        requests:
+            decodeListMessage(json['requests'], CreateChunkRequest.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      'requests': encodeList(requests),
-    };
-  }
+  Object toJson() => {
+    if (parent.isNotDefault) 'parent': parent,
+    'requests': encodeList(requests),
+  };
 
   @override
   String toString() {
@@ -11172,16 +10657,13 @@ final class BatchCreateChunksResponse extends ProtoMessage {
   BatchCreateChunksResponse({this.chunks = const []})
     : super(fullyQualifiedName);
 
-  factory BatchCreateChunksResponse.fromJson(Map<String, dynamic> json) {
-    return BatchCreateChunksResponse(
-      chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
-    );
-  }
+  factory BatchCreateChunksResponse.fromJson(Map<String, dynamic> json) =>
+      BatchCreateChunksResponse(
+        chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
-  }
+  Object toJson() => {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
 
   @override
   String toString() => 'BatchCreateChunksResponse()';
@@ -11198,14 +10680,11 @@ final class GetChunkRequest extends ProtoMessage {
 
   GetChunkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetChunkRequest.fromJson(Map<String, dynamic> json) {
-    return GetChunkRequest(name: json['name'] ?? '');
-  }
+  factory GetChunkRequest.fromJson(Map<String, dynamic> json) =>
+      GetChunkRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -11229,20 +10708,17 @@ final class UpdateChunkRequest extends ProtoMessage {
   UpdateChunkRequest({required this.chunk, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateChunkRequest.fromJson(Map<String, dynamic> json) {
-    return UpdateChunkRequest(
-      chunk: decode(json['chunk'], Chunk.fromJson),
-      updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-    );
-  }
+  factory UpdateChunkRequest.fromJson(Map<String, dynamic> json) =>
+      UpdateChunkRequest(
+        chunk: decode(json['chunk'], Chunk.fromJson),
+        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (chunk != null) 'chunk': chunk!.toJson(),
-      if (updateMask != null) 'updateMask': updateMask!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (chunk != null) 'chunk': chunk!.toJson(),
+    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+  };
 
   @override
   String toString() => 'UpdateChunkRequest()';
@@ -11265,22 +10741,19 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
   BatchUpdateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) {
-    return BatchUpdateChunksRequest(
-      parent: json['parent'] ?? '',
-      requests:
-          decodeListMessage(json['requests'], UpdateChunkRequest.fromJson) ??
-          [],
-    );
-  }
+  factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) =>
+      BatchUpdateChunksRequest(
+        parent: json['parent'] ?? '',
+        requests:
+            decodeListMessage(json['requests'], UpdateChunkRequest.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      'requests': encodeList(requests),
-    };
-  }
+  Object toJson() => {
+    if (parent.isNotDefault) 'parent': parent,
+    'requests': encodeList(requests),
+  };
 
   @override
   String toString() {
@@ -11300,16 +10773,13 @@ final class BatchUpdateChunksResponse extends ProtoMessage {
   BatchUpdateChunksResponse({this.chunks = const []})
     : super(fullyQualifiedName);
 
-  factory BatchUpdateChunksResponse.fromJson(Map<String, dynamic> json) {
-    return BatchUpdateChunksResponse(
-      chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
-    );
-  }
+  factory BatchUpdateChunksResponse.fromJson(Map<String, dynamic> json) =>
+      BatchUpdateChunksResponse(
+        chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
-  }
+  Object toJson() => {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
 
   @override
   String toString() => 'BatchUpdateChunksResponse()';
@@ -11326,14 +10796,11 @@ final class DeleteChunkRequest extends ProtoMessage {
 
   DeleteChunkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteChunkRequest.fromJson(Map<String, dynamic> json) {
-    return DeleteChunkRequest(name: json['name'] ?? '');
-  }
+  factory DeleteChunkRequest.fromJson(Map<String, dynamic> json) =>
+      DeleteChunkRequest(name: json['name'] ?? '');
 
   @override
-  Object toJson() {
-    return {'name': name};
-  }
+  Object toJson() => {'name': name};
 
   @override
   String toString() {
@@ -11358,22 +10825,19 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
   BatchDeleteChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) {
-    return BatchDeleteChunksRequest(
-      parent: json['parent'] ?? '',
-      requests:
-          decodeListMessage(json['requests'], DeleteChunkRequest.fromJson) ??
-          [],
-    );
-  }
+  factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) =>
+      BatchDeleteChunksRequest(
+        parent: json['parent'] ?? '',
+        requests:
+            decodeListMessage(json['requests'], DeleteChunkRequest.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (parent.isNotDefault) 'parent': parent,
-      'requests': encodeList(requests),
-    };
-  }
+  Object toJson() => {
+    if (parent.isNotDefault) 'parent': parent,
+    'requests': encodeList(requests),
+  };
 
   @override
   String toString() {
@@ -11413,22 +10877,19 @@ final class ListChunksRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListChunksRequest.fromJson(Map<String, dynamic> json) {
-    return ListChunksRequest(
-      parent: json['parent'] ?? '',
-      pageSize: json['pageSize'] ?? 0,
-      pageToken: json['pageToken'] ?? '',
-    );
-  }
+  factory ListChunksRequest.fromJson(Map<String, dynamic> json) =>
+      ListChunksRequest(
+        parent: json['parent'] ?? '',
+        pageSize: json['pageSize'] ?? 0,
+        pageToken: json['pageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      'parent': parent,
-      if (pageSize.isNotDefault) 'pageSize': pageSize,
-      if (pageToken.isNotDefault) 'pageToken': pageToken,
-    };
-  }
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
 
   @override
   String toString() {
@@ -11457,20 +10918,17 @@ final class ListChunksResponse extends ProtoMessage {
   ListChunksResponse({this.chunks = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListChunksResponse.fromJson(Map<String, dynamic> json) {
-    return ListChunksResponse(
-      chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
-      nextPageToken: json['nextPageToken'] ?? '',
-    );
-  }
+  factory ListChunksResponse.fromJson(Map<String, dynamic> json) =>
+      ListChunksResponse(
+        chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
+        nextPageToken: json['nextPageToken'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (chunks.isNotDefault) 'chunks': encodeList(chunks),
-      if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    };
-  }
+  Object toJson() => {
+    if (chunks.isNotDefault) 'chunks': encodeList(chunks),
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
 
   @override
   String toString() {
@@ -11498,22 +10956,18 @@ final class ContentFilter extends ProtoMessage {
     this.message,
   }) : super(fullyQualifiedName);
 
-  factory ContentFilter.fromJson(Map<String, dynamic> json) {
-    return ContentFilter(
-      reason:
-          decodeEnum(json['reason'], ContentFilter_BlockedReason.fromJson) ??
-          ContentFilter_BlockedReason.$default,
-      message: json['message'],
-    );
-  }
+  factory ContentFilter.fromJson(Map<String, dynamic> json) => ContentFilter(
+    reason:
+        decodeEnum(json['reason'], ContentFilter_BlockedReason.fromJson) ??
+        ContentFilter_BlockedReason.$default,
+    message: json['message'],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (reason.isNotDefault) 'reason': reason.toJson(),
-      if (message != null) 'message': message,
-    };
-  }
+  Object toJson() => {
+    if (reason.isNotDefault) 'reason': reason.toJson(),
+    if (message != null) 'message': message,
+  };
 
   @override
   String toString() {
@@ -11571,20 +11025,16 @@ final class SafetyFeedback extends ProtoMessage {
 
   SafetyFeedback({this.rating, this.setting}) : super(fullyQualifiedName);
 
-  factory SafetyFeedback.fromJson(Map<String, dynamic> json) {
-    return SafetyFeedback(
-      rating: decode(json['rating'], SafetyRating.fromJson),
-      setting: decode(json['setting'], SafetySetting.fromJson),
-    );
-  }
+  factory SafetyFeedback.fromJson(Map<String, dynamic> json) => SafetyFeedback(
+    rating: decode(json['rating'], SafetyRating.fromJson),
+    setting: decode(json['setting'], SafetySetting.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (rating != null) 'rating': rating!.toJson(),
-      if (setting != null) 'setting': setting!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (rating != null) 'rating': rating!.toJson(),
+    if (setting != null) 'setting': setting!.toJson(),
+  };
 
   @override
   String toString() => 'SafetyFeedback()';
@@ -11616,29 +11066,25 @@ final class SafetyRating extends ProtoMessage {
     this.blocked = false,
   }) : super(fullyQualifiedName);
 
-  factory SafetyRating.fromJson(Map<String, dynamic> json) {
-    return SafetyRating(
-      category:
-          decodeEnum(json['category'], HarmCategory.fromJson) ??
-          HarmCategory.$default,
-      probability:
-          decodeEnum(
-            json['probability'],
-            SafetyRating_HarmProbability.fromJson,
-          ) ??
-          SafetyRating_HarmProbability.$default,
-      blocked: json['blocked'] ?? false,
-    );
-  }
+  factory SafetyRating.fromJson(Map<String, dynamic> json) => SafetyRating(
+    category:
+        decodeEnum(json['category'], HarmCategory.fromJson) ??
+        HarmCategory.$default,
+    probability:
+        decodeEnum(
+          json['probability'],
+          SafetyRating_HarmProbability.fromJson,
+        ) ??
+        SafetyRating_HarmProbability.$default,
+    blocked: json['blocked'] ?? false,
+  );
 
   @override
-  Object toJson() {
-    return {
-      'category': category.toJson(),
-      'probability': probability.toJson(),
-      if (blocked.isNotDefault) 'blocked': blocked,
-    };
-  }
+  Object toJson() => {
+    'category': category.toJson(),
+    'probability': probability.toJson(),
+    if (blocked.isNotDefault) 'blocked': blocked,
+  };
 
   @override
   String toString() {
@@ -11704,24 +11150,23 @@ final class SafetySetting extends ProtoMessage {
   SafetySetting({required this.category, required this.threshold})
     : super(fullyQualifiedName);
 
-  factory SafetySetting.fromJson(Map<String, dynamic> json) {
-    return SafetySetting(
-      category:
-          decodeEnum(json['category'], HarmCategory.fromJson) ??
-          HarmCategory.$default,
-      threshold:
-          decodeEnum(
-            json['threshold'],
-            SafetySetting_HarmBlockThreshold.fromJson,
-          ) ??
-          SafetySetting_HarmBlockThreshold.$default,
-    );
-  }
+  factory SafetySetting.fromJson(Map<String, dynamic> json) => SafetySetting(
+    category:
+        decodeEnum(json['category'], HarmCategory.fromJson) ??
+        HarmCategory.$default,
+    threshold:
+        decodeEnum(
+          json['threshold'],
+          SafetySetting_HarmBlockThreshold.fromJson,
+        ) ??
+        SafetySetting_HarmBlockThreshold.$default,
+  );
 
   @override
-  Object toJson() {
-    return {'category': category.toJson(), 'threshold': threshold.toJson()};
-  }
+  Object toJson() => {
+    'category': category.toJson(),
+    'threshold': threshold.toJson(),
+  };
 
   @override
   String toString() {
@@ -11870,37 +11315,34 @@ final class GenerateTextRequest extends ProtoMessage {
     this.stopSequences = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateTextRequest.fromJson(Map<String, dynamic> json) {
-    return GenerateTextRequest(
-      model: json['model'] ?? '',
-      prompt: decode(json['prompt'], TextPrompt.fromJson),
-      temperature: decodeDouble(json['temperature']),
-      candidateCount: json['candidateCount'],
-      maxOutputTokens: json['maxOutputTokens'],
-      topP: decodeDouble(json['topP']),
-      topK: json['topK'],
-      safetySettings:
-          decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
-          [],
-      stopSequences: decodeList(json['stopSequences']) ?? [],
-    );
-  }
+  factory GenerateTextRequest.fromJson(Map<String, dynamic> json) =>
+      GenerateTextRequest(
+        model: json['model'] ?? '',
+        prompt: decode(json['prompt'], TextPrompt.fromJson),
+        temperature: decodeDouble(json['temperature']),
+        candidateCount: json['candidateCount'],
+        maxOutputTokens: json['maxOutputTokens'],
+        topP: decodeDouble(json['topP']),
+        topK: json['topK'],
+        safetySettings:
+            decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
+            [],
+        stopSequences: decodeList(json['stopSequences']) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (prompt != null) 'prompt': prompt!.toJson(),
-      if (temperature != null) 'temperature': encodeDouble(temperature),
-      if (candidateCount != null) 'candidateCount': candidateCount,
-      if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
-      if (topP != null) 'topP': encodeDouble(topP),
-      if (topK != null) 'topK': topK,
-      if (safetySettings.isNotDefault)
-        'safetySettings': encodeList(safetySettings),
-      if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (prompt != null) 'prompt': prompt!.toJson(),
+    if (temperature != null) 'temperature': encodeDouble(temperature),
+    if (candidateCount != null) 'candidateCount': candidateCount,
+    if (maxOutputTokens != null) 'maxOutputTokens': maxOutputTokens,
+    if (topP != null) 'topP': encodeDouble(topP),
+    if (topK != null) 'topK': topK,
+    if (safetySettings.isNotDefault)
+      'safetySettings': encodeList(safetySettings),
+    if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
+  };
 
   @override
   String toString() {
@@ -11946,26 +11388,24 @@ final class GenerateTextResponse extends ProtoMessage {
     this.safetyFeedback = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateTextResponse.fromJson(Map<String, dynamic> json) {
-    return GenerateTextResponse(
-      candidates:
-          decodeListMessage(json['candidates'], TextCompletion.fromJson) ?? [],
-      filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
-      safetyFeedback:
-          decodeListMessage(json['safetyFeedback'], SafetyFeedback.fromJson) ??
-          [],
-    );
-  }
+  factory GenerateTextResponse.fromJson(
+    Map<String, dynamic> json,
+  ) => GenerateTextResponse(
+    candidates:
+        decodeListMessage(json['candidates'], TextCompletion.fromJson) ?? [],
+    filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
+    safetyFeedback:
+        decodeListMessage(json['safetyFeedback'], SafetyFeedback.fromJson) ??
+        [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (candidates.isNotDefault) 'candidates': encodeList(candidates),
-      if (filters.isNotDefault) 'filters': encodeList(filters),
-      if (safetyFeedback.isNotDefault)
-        'safetyFeedback': encodeList(safetyFeedback),
-    };
-  }
+  Object toJson() => {
+    if (candidates.isNotDefault) 'candidates': encodeList(candidates),
+    if (filters.isNotDefault) 'filters': encodeList(filters),
+    if (safetyFeedback.isNotDefault)
+      'safetyFeedback': encodeList(safetyFeedback),
+  };
 
   @override
   String toString() => 'GenerateTextResponse()';
@@ -11983,14 +11423,11 @@ final class TextPrompt extends ProtoMessage {
 
   TextPrompt({required this.text}) : super(fullyQualifiedName);
 
-  factory TextPrompt.fromJson(Map<String, dynamic> json) {
-    return TextPrompt(text: json['text'] ?? '');
-  }
+  factory TextPrompt.fromJson(Map<String, dynamic> json) =>
+      TextPrompt(text: json['text'] ?? '');
 
   @override
-  Object toJson() {
-    return {'text': text};
-  }
+  Object toJson() => {'text': text};
 
   @override
   String toString() {
@@ -12025,28 +11462,23 @@ final class TextCompletion extends ProtoMessage {
     this.citationMetadata,
   }) : super(fullyQualifiedName);
 
-  factory TextCompletion.fromJson(Map<String, dynamic> json) {
-    return TextCompletion(
-      output: json['output'] ?? '',
-      safetyRatings:
-          decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-      citationMetadata: decode(
-        json['citationMetadata'],
-        CitationMetadata.fromJson,
-      ),
-    );
-  }
+  factory TextCompletion.fromJson(Map<String, dynamic> json) => TextCompletion(
+    output: json['output'] ?? '',
+    safetyRatings:
+        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
+    citationMetadata: decode(
+      json['citationMetadata'],
+      CitationMetadata.fromJson,
+    ),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (output.isNotDefault) 'output': output,
-      if (safetyRatings.isNotDefault)
-        'safetyRatings': encodeList(safetyRatings),
-      if (citationMetadata != null)
-        'citationMetadata': citationMetadata!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (output.isNotDefault) 'output': output,
+    if (safetyRatings.isNotDefault) 'safetyRatings': encodeList(safetyRatings),
+    if (citationMetadata != null)
+      'citationMetadata': citationMetadata!.toJson(),
+  };
 
   @override
   String toString() {
@@ -12070,17 +11502,11 @@ final class EmbedTextRequest extends ProtoMessage {
   EmbedTextRequest({required this.model, this.text = ''})
     : super(fullyQualifiedName);
 
-  factory EmbedTextRequest.fromJson(Map<String, dynamic> json) {
-    return EmbedTextRequest(
-      model: json['model'] ?? '',
-      text: json['text'] ?? '',
-    );
-  }
+  factory EmbedTextRequest.fromJson(Map<String, dynamic> json) =>
+      EmbedTextRequest(model: json['model'] ?? '', text: json['text'] ?? '');
 
   @override
-  Object toJson() {
-    return {'model': model, if (text.isNotDefault) 'text': text};
-  }
+  Object toJson() => {'model': model, if (text.isNotDefault) 'text': text};
 
   @override
   String toString() {
@@ -12099,16 +11525,13 @@ final class EmbedTextResponse extends ProtoMessage {
 
   EmbedTextResponse({this.embedding}) : super(fullyQualifiedName);
 
-  factory EmbedTextResponse.fromJson(Map<String, dynamic> json) {
-    return EmbedTextResponse(
-      embedding: decode(json['embedding'], Embedding.fromJson),
-    );
-  }
+  factory EmbedTextResponse.fromJson(Map<String, dynamic> json) =>
+      EmbedTextResponse(
+        embedding: decode(json['embedding'], Embedding.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {if (embedding != null) 'embedding': embedding!.toJson()};
-  }
+  Object toJson() => {if (embedding != null) 'embedding': embedding!.toJson()};
 
   @override
   String toString() => 'EmbedTextResponse()';
@@ -12139,23 +11562,21 @@ final class BatchEmbedTextRequest extends ProtoMessage {
     this.requests = const [],
   }) : super(fullyQualifiedName);
 
-  factory BatchEmbedTextRequest.fromJson(Map<String, dynamic> json) {
-    return BatchEmbedTextRequest(
-      model: json['model'] ?? '',
-      texts: decodeList(json['texts']) ?? [],
-      requests:
-          decodeListMessage(json['requests'], EmbedTextRequest.fromJson) ?? [],
-    );
-  }
+  factory BatchEmbedTextRequest.fromJson(Map<String, dynamic> json) =>
+      BatchEmbedTextRequest(
+        model: json['model'] ?? '',
+        texts: decodeList(json['texts']) ?? [],
+        requests:
+            decodeListMessage(json['requests'], EmbedTextRequest.fromJson) ??
+            [],
+      );
 
   @override
-  Object toJson() {
-    return {
-      'model': model,
-      if (texts.isNotDefault) 'texts': texts,
-      if (requests.isNotDefault) 'requests': encodeList(requests),
-    };
-  }
+  Object toJson() => {
+    'model': model,
+    if (texts.isNotDefault) 'texts': texts,
+    if (requests.isNotDefault) 'requests': encodeList(requests),
+  };
 
   @override
   String toString() {
@@ -12175,17 +11596,16 @@ final class BatchEmbedTextResponse extends ProtoMessage {
   BatchEmbedTextResponse({this.embeddings = const []})
     : super(fullyQualifiedName);
 
-  factory BatchEmbedTextResponse.fromJson(Map<String, dynamic> json) {
-    return BatchEmbedTextResponse(
-      embeddings:
-          decodeListMessage(json['embeddings'], Embedding.fromJson) ?? [],
-    );
-  }
+  factory BatchEmbedTextResponse.fromJson(Map<String, dynamic> json) =>
+      BatchEmbedTextResponse(
+        embeddings:
+            decodeListMessage(json['embeddings'], Embedding.fromJson) ?? [],
+      );
 
   @override
-  Object toJson() {
-    return {if (embeddings.isNotDefault) 'embeddings': encodeList(embeddings)};
-  }
+  Object toJson() => {
+    if (embeddings.isNotDefault) 'embeddings': encodeList(embeddings),
+  };
 
   @override
   String toString() => 'BatchEmbedTextResponse()';
@@ -12201,14 +11621,11 @@ final class Embedding extends ProtoMessage {
 
   Embedding({this.value = const []}) : super(fullyQualifiedName);
 
-  factory Embedding.fromJson(Map<String, dynamic> json) {
-    return Embedding(value: decodeList(json['value']) ?? []);
-  }
+  factory Embedding.fromJson(Map<String, dynamic> json) =>
+      Embedding(value: decodeList(json['value']) ?? []);
 
   @override
-  Object toJson() {
-    return {if (value.isNotDefault) 'value': value};
-  }
+  Object toJson() => {if (value.isNotDefault) 'value': value};
 
   @override
   String toString() => 'Embedding()';
@@ -12236,17 +11653,17 @@ final class CountTextTokensRequest extends ProtoMessage {
   CountTextTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
-  factory CountTextTokensRequest.fromJson(Map<String, dynamic> json) {
-    return CountTextTokensRequest(
-      model: json['model'] ?? '',
-      prompt: decode(json['prompt'], TextPrompt.fromJson),
-    );
-  }
+  factory CountTextTokensRequest.fromJson(Map<String, dynamic> json) =>
+      CountTextTokensRequest(
+        model: json['model'] ?? '',
+        prompt: decode(json['prompt'], TextPrompt.fromJson),
+      );
 
   @override
-  Object toJson() {
-    return {'model': model, if (prompt != null) 'prompt': prompt!.toJson()};
-  }
+  Object toJson() => {
+    'model': model,
+    if (prompt != null) 'prompt': prompt!.toJson(),
+  };
 
   @override
   String toString() {
@@ -12269,14 +11686,11 @@ final class CountTextTokensResponse extends ProtoMessage {
 
   CountTextTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
 
-  factory CountTextTokensResponse.fromJson(Map<String, dynamic> json) {
-    return CountTextTokensResponse(tokenCount: json['tokenCount'] ?? 0);
-  }
+  factory CountTextTokensResponse.fromJson(Map<String, dynamic> json) =>
+      CountTextTokensResponse(tokenCount: json['tokenCount'] ?? 0);
 
   @override
-  Object toJson() {
-    return {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
-  }
+  Object toJson() => {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
 
   @override
   String toString() {
@@ -12377,49 +11791,45 @@ final class TunedModel extends ProtoMessage {
     this.readerProjectNumbers = const [],
   }) : super(fullyQualifiedName);
 
-  factory TunedModel.fromJson(Map<String, dynamic> json) {
-    return TunedModel(
-      tunedModelSource: decode(
-        json['tunedModelSource'],
-        TunedModelSource.fromJson,
-      ),
-      baseModel: json['baseModel'],
-      name: json['name'] ?? '',
-      displayName: json['displayName'] ?? '',
-      description: json['description'] ?? '',
-      temperature: decodeDouble(json['temperature']),
-      topP: decodeDouble(json['topP']),
-      topK: json['topK'],
-      state:
-          decodeEnum(json['state'], TunedModel_State.fromJson) ??
-          TunedModel_State.$default,
-      createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-      updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-      tuningTask: decode(json['tuningTask'], TuningTask.fromJson),
-      readerProjectNumbers: decodeList(json['readerProjectNumbers']) ?? [],
-    );
-  }
+  factory TunedModel.fromJson(Map<String, dynamic> json) => TunedModel(
+    tunedModelSource: decode(
+      json['tunedModelSource'],
+      TunedModelSource.fromJson,
+    ),
+    baseModel: json['baseModel'],
+    name: json['name'] ?? '',
+    displayName: json['displayName'] ?? '',
+    description: json['description'] ?? '',
+    temperature: decodeDouble(json['temperature']),
+    topP: decodeDouble(json['topP']),
+    topK: json['topK'],
+    state:
+        decodeEnum(json['state'], TunedModel_State.fromJson) ??
+        TunedModel_State.$default,
+    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
+    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
+    tuningTask: decode(json['tuningTask'], TuningTask.fromJson),
+    readerProjectNumbers: decodeList(json['readerProjectNumbers']) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (tunedModelSource != null)
-        'tunedModelSource': tunedModelSource!.toJson(),
-      if (baseModel != null) 'baseModel': baseModel,
-      if (name.isNotDefault) 'name': name,
-      if (displayName.isNotDefault) 'displayName': displayName,
-      if (description.isNotDefault) 'description': description,
-      if (temperature != null) 'temperature': encodeDouble(temperature),
-      if (topP != null) 'topP': encodeDouble(topP),
-      if (topK != null) 'topK': topK,
-      if (state.isNotDefault) 'state': state.toJson(),
-      if (createTime != null) 'createTime': createTime!.toJson(),
-      if (updateTime != null) 'updateTime': updateTime!.toJson(),
-      if (tuningTask != null) 'tuningTask': tuningTask!.toJson(),
-      if (readerProjectNumbers.isNotDefault)
-        'readerProjectNumbers': readerProjectNumbers,
-    };
-  }
+  Object toJson() => {
+    if (tunedModelSource != null)
+      'tunedModelSource': tunedModelSource!.toJson(),
+    if (baseModel != null) 'baseModel': baseModel,
+    if (name.isNotDefault) 'name': name,
+    if (displayName.isNotDefault) 'displayName': displayName,
+    if (description.isNotDefault) 'description': description,
+    if (temperature != null) 'temperature': encodeDouble(temperature),
+    if (topP != null) 'topP': encodeDouble(topP),
+    if (topK != null) 'topK': topK,
+    if (state.isNotDefault) 'state': state.toJson(),
+    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (tuningTask != null) 'tuningTask': tuningTask!.toJson(),
+    if (readerProjectNumbers.isNotDefault)
+      'readerProjectNumbers': readerProjectNumbers,
+  };
 
   @override
   String toString() {
@@ -12481,20 +11891,17 @@ final class TunedModelSource extends ProtoMessage {
   TunedModelSource({this.tunedModel = '', this.baseModel = ''})
     : super(fullyQualifiedName);
 
-  factory TunedModelSource.fromJson(Map<String, dynamic> json) {
-    return TunedModelSource(
-      tunedModel: json['tunedModel'] ?? '',
-      baseModel: json['baseModel'] ?? '',
-    );
-  }
+  factory TunedModelSource.fromJson(Map<String, dynamic> json) =>
+      TunedModelSource(
+        tunedModel: json['tunedModel'] ?? '',
+        baseModel: json['baseModel'] ?? '',
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
-      if (baseModel.isNotDefault) 'baseModel': baseModel,
-    };
-  }
+  Object toJson() => {
+    if (tunedModel.isNotDefault) 'tunedModel': tunedModel,
+    if (baseModel.isNotDefault) 'baseModel': baseModel,
+  };
 
   @override
   String toString() {
@@ -12535,30 +11942,23 @@ final class TuningTask extends ProtoMessage {
     this.hyperparameters,
   }) : super(fullyQualifiedName);
 
-  factory TuningTask.fromJson(Map<String, dynamic> json) {
-    return TuningTask(
-      startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-      completeTime: decodeCustom(json['completeTime'], Timestamp.fromJson),
-      snapshots:
-          decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
-      trainingData: decode(json['trainingData'], Dataset.fromJson),
-      hyperparameters: decode(
-        json['hyperparameters'],
-        Hyperparameters.fromJson,
-      ),
-    );
-  }
+  factory TuningTask.fromJson(Map<String, dynamic> json) => TuningTask(
+    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
+    completeTime: decodeCustom(json['completeTime'], Timestamp.fromJson),
+    snapshots:
+        decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
+    trainingData: decode(json['trainingData'], Dataset.fromJson),
+    hyperparameters: decode(json['hyperparameters'], Hyperparameters.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (startTime != null) 'startTime': startTime!.toJson(),
-      if (completeTime != null) 'completeTime': completeTime!.toJson(),
-      if (snapshots.isNotDefault) 'snapshots': encodeList(snapshots),
-      if (trainingData != null) 'trainingData': trainingData!.toJson(),
-      if (hyperparameters != null) 'hyperparameters': hyperparameters!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (startTime != null) 'startTime': startTime!.toJson(),
+    if (completeTime != null) 'completeTime': completeTime!.toJson(),
+    if (snapshots.isNotDefault) 'snapshots': encodeList(snapshots),
+    if (trainingData != null) 'trainingData': trainingData!.toJson(),
+    if (hyperparameters != null) 'hyperparameters': hyperparameters!.toJson(),
+  };
 
   @override
   String toString() => 'TuningTask()';
@@ -12598,25 +11998,22 @@ final class Hyperparameters extends ProtoMessage {
     this.batchSize,
   }) : super(fullyQualifiedName);
 
-  factory Hyperparameters.fromJson(Map<String, dynamic> json) {
-    return Hyperparameters(
-      learningRate: decodeDouble(json['learningRate']),
-      learningRateMultiplier: decodeDouble(json['learningRateMultiplier']),
-      epochCount: json['epochCount'],
-      batchSize: json['batchSize'],
-    );
-  }
+  factory Hyperparameters.fromJson(Map<String, dynamic> json) =>
+      Hyperparameters(
+        learningRate: decodeDouble(json['learningRate']),
+        learningRateMultiplier: decodeDouble(json['learningRateMultiplier']),
+        epochCount: json['epochCount'],
+        batchSize: json['batchSize'],
+      );
 
   @override
-  Object toJson() {
-    return {
-      if (learningRate != null) 'learningRate': encodeDouble(learningRate),
-      if (learningRateMultiplier != null)
-        'learningRateMultiplier': encodeDouble(learningRateMultiplier),
-      if (epochCount != null) 'epochCount': epochCount,
-      if (batchSize != null) 'batchSize': batchSize,
-    };
-  }
+  Object toJson() => {
+    if (learningRate != null) 'learningRate': encodeDouble(learningRate),
+    if (learningRateMultiplier != null)
+      'learningRateMultiplier': encodeDouble(learningRateMultiplier),
+    if (epochCount != null) 'epochCount': epochCount,
+    if (batchSize != null) 'batchSize': batchSize,
+  };
 
   @override
   String toString() {
@@ -12641,14 +12038,11 @@ final class Dataset extends ProtoMessage {
 
   Dataset({this.examples}) : super(fullyQualifiedName);
 
-  factory Dataset.fromJson(Map<String, dynamic> json) {
-    return Dataset(examples: decode(json['examples'], TuningExamples.fromJson));
-  }
+  factory Dataset.fromJson(Map<String, dynamic> json) =>
+      Dataset(examples: decode(json['examples'], TuningExamples.fromJson));
 
   @override
-  Object toJson() {
-    return {if (examples != null) 'examples': examples!.toJson()};
-  }
+  Object toJson() => {if (examples != null) 'examples': examples!.toJson()};
 
   @override
   String toString() => 'Dataset()';
@@ -12665,17 +12059,14 @@ final class TuningExamples extends ProtoMessage {
 
   TuningExamples({this.examples = const []}) : super(fullyQualifiedName);
 
-  factory TuningExamples.fromJson(Map<String, dynamic> json) {
-    return TuningExamples(
-      examples:
-          decodeListMessage(json['examples'], TuningExample.fromJson) ?? [],
-    );
-  }
+  factory TuningExamples.fromJson(Map<String, dynamic> json) => TuningExamples(
+    examples: decodeListMessage(json['examples'], TuningExample.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {if (examples.isNotDefault) 'examples': encodeList(examples)};
-  }
+  Object toJson() => {
+    if (examples.isNotDefault) 'examples': encodeList(examples),
+  };
 
   @override
   String toString() => 'TuningExamples()';
@@ -12695,17 +12086,14 @@ final class TuningExample extends ProtoMessage {
   TuningExample({this.textInput, required this.output})
     : super(fullyQualifiedName);
 
-  factory TuningExample.fromJson(Map<String, dynamic> json) {
-    return TuningExample(
-      textInput: json['textInput'],
-      output: json['output'] ?? '',
-    );
-  }
+  factory TuningExample.fromJson(Map<String, dynamic> json) =>
+      TuningExample(textInput: json['textInput'], output: json['output'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (textInput != null) 'textInput': textInput, 'output': output};
-  }
+  Object toJson() => {
+    if (textInput != null) 'textInput': textInput,
+    'output': output,
+  };
 
   @override
   String toString() {
@@ -12741,24 +12129,20 @@ final class TuningSnapshot extends ProtoMessage {
     this.computeTime,
   }) : super(fullyQualifiedName);
 
-  factory TuningSnapshot.fromJson(Map<String, dynamic> json) {
-    return TuningSnapshot(
-      step: json['step'] ?? 0,
-      epoch: json['epoch'] ?? 0,
-      meanLoss: decodeDouble(json['meanLoss']) ?? 0,
-      computeTime: decodeCustom(json['computeTime'], Timestamp.fromJson),
-    );
-  }
+  factory TuningSnapshot.fromJson(Map<String, dynamic> json) => TuningSnapshot(
+    step: json['step'] ?? 0,
+    epoch: json['epoch'] ?? 0,
+    meanLoss: decodeDouble(json['meanLoss']) ?? 0,
+    computeTime: decodeCustom(json['computeTime'], Timestamp.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (step.isNotDefault) 'step': step,
-      if (epoch.isNotDefault) 'epoch': epoch,
-      if (meanLoss.isNotDefault) 'meanLoss': encodeDouble(meanLoss),
-      if (computeTime != null) 'computeTime': computeTime!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (step.isNotDefault) 'step': step,
+    if (epoch.isNotDefault) 'epoch': epoch,
+    if (meanLoss.isNotDefault) 'meanLoss': encodeDouble(meanLoss),
+    if (computeTime != null) 'computeTime': computeTime!.toJson(),
+  };
 
   @override
   String toString() {

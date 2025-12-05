@@ -19,8 +19,15 @@
 /// Core Protobuf types used by most services.
 library;
 
-import 'package:google_cloud_protobuf/protobuf.dart';
-import 'package:google_cloud_protobuf/src/encoding.dart';
+// ignore_for_file: argument_type_not_assignable
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
+
+import 'src/encoding.dart';
 
 part 'src/protobuf.p.dart';
 
@@ -87,30 +94,26 @@ final class Api extends ProtoMessage {
     this.syntax = Syntax.$default,
   }) : super(fullyQualifiedName);
 
-  factory Api.fromJson(Map<String, dynamic> json) {
-    return Api(
-      name: json['name'] ?? '',
-      methods: decodeListMessage(json['methods'], Method.fromJson) ?? [],
-      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-      version: json['version'] ?? '',
-      sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-      mixins: decodeListMessage(json['mixins'], Mixin.fromJson) ?? [],
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-    );
-  }
+  factory Api.fromJson(Map<String, dynamic> json) => Api(
+    name: json['name'] ?? '',
+    methods: decodeListMessage(json['methods'], Method.fromJson) ?? [],
+    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+    version: json['version'] ?? '',
+    sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
+    mixins: decodeListMessage(json['mixins'], Mixin.fromJson) ?? [],
+    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (methods.isNotDefault) 'methods': encodeList(methods),
-      if (options.isNotDefault) 'options': encodeList(options),
-      if (version.isNotDefault) 'version': version,
-      if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-      if (mixins.isNotDefault) 'mixins': encodeList(mixins),
-      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (methods.isNotDefault) 'methods': encodeList(methods),
+    if (options.isNotDefault) 'options': encodeList(options),
+    if (version.isNotDefault) 'version': version,
+    if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
+    if (mixins.isNotDefault) 'mixins': encodeList(mixins),
+    if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+  };
 
   @override
   String toString() {
@@ -158,31 +161,26 @@ final class Method extends ProtoMessage {
     this.syntax = Syntax.$default,
   }) : super(fullyQualifiedName);
 
-  factory Method.fromJson(Map<String, dynamic> json) {
-    return Method(
-      name: json['name'] ?? '',
-      requestTypeUrl: json['requestTypeUrl'] ?? '',
-      requestStreaming: json['requestStreaming'] ?? false,
-      responseTypeUrl: json['responseTypeUrl'] ?? '',
-      responseStreaming: json['responseStreaming'] ?? false,
-      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-    );
-  }
+  factory Method.fromJson(Map<String, dynamic> json) => Method(
+    name: json['name'] ?? '',
+    requestTypeUrl: json['requestTypeUrl'] ?? '',
+    requestStreaming: json['requestStreaming'] ?? false,
+    responseTypeUrl: json['responseTypeUrl'] ?? '',
+    responseStreaming: json['responseStreaming'] ?? false,
+    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (requestTypeUrl.isNotDefault) 'requestTypeUrl': requestTypeUrl,
-      if (requestStreaming.isNotDefault) 'requestStreaming': requestStreaming,
-      if (responseTypeUrl.isNotDefault) 'responseTypeUrl': responseTypeUrl,
-      if (responseStreaming.isNotDefault)
-        'responseStreaming': responseStreaming,
-      if (options.isNotDefault) 'options': encodeList(options),
-      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (requestTypeUrl.isNotDefault) 'requestTypeUrl': requestTypeUrl,
+    if (requestStreaming.isNotDefault) 'requestStreaming': requestStreaming,
+    if (responseTypeUrl.isNotDefault) 'responseTypeUrl': responseTypeUrl,
+    if (responseStreaming.isNotDefault) 'responseStreaming': responseStreaming,
+    if (options.isNotDefault) 'options': encodeList(options),
+    if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+  };
 
   @override
   String toString() {
@@ -288,17 +286,14 @@ final class Mixin extends ProtoMessage {
 
   Mixin({this.name = '', this.root = ''}) : super(fullyQualifiedName);
 
-  factory Mixin.fromJson(Map<String, dynamic> json) {
-    return Mixin(name: json['name'] ?? '', root: json['root'] ?? '');
-  }
+  factory Mixin.fromJson(Map<String, dynamic> json) =>
+      Mixin(name: json['name'] ?? '', root: json['root'] ?? '');
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (root.isNotDefault) 'root': root,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (root.isNotDefault) 'root': root,
+  };
 
   @override
   String toString() {
@@ -409,14 +404,10 @@ final class Empty extends ProtoMessage {
 
   Empty() : super(fullyQualifiedName);
 
-  factory Empty.fromJson(Map<String, dynamic> json) {
-    return Empty();
-  }
+  factory Empty.fromJson(Map<String, dynamic> json) => Empty();
 
   @override
-  Object toJson() {
-    return {};
-  }
+  Object toJson() => {};
 
   @override
   String toString() => 'Empty()';
@@ -649,14 +640,11 @@ final class SourceContext extends ProtoMessage {
 
   SourceContext({this.fileName = ''}) : super(fullyQualifiedName);
 
-  factory SourceContext.fromJson(Map<String, dynamic> json) {
-    return SourceContext(fileName: json['fileName'] ?? '');
-  }
+  factory SourceContext.fromJson(Map<String, dynamic> json) =>
+      SourceContext(fileName: json['fileName'] ?? '');
 
   @override
-  Object toJson() {
-    return {if (fileName.isNotDefault) 'fileName': fileName};
-  }
+  Object toJson() => {if (fileName.isNotDefault) 'fileName': fileName};
 
   @override
   String toString() {
@@ -864,30 +852,26 @@ final class Type extends ProtoMessage {
     this.edition = '',
   }) : super(fullyQualifiedName);
 
-  factory Type.fromJson(Map<String, dynamic> json) {
-    return Type(
-      name: json['name'] ?? '',
-      fields: decodeListMessage(json['fields'], Field.fromJson) ?? [],
-      oneofs: decodeList(json['oneofs']) ?? [],
-      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-      sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-      edition: json['edition'] ?? '',
-    );
-  }
+  factory Type.fromJson(Map<String, dynamic> json) => Type(
+    name: json['name'] ?? '',
+    fields: decodeListMessage(json['fields'], Field.fromJson) ?? [],
+    oneofs: decodeList(json['oneofs']) ?? [],
+    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+    sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
+    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
+    edition: json['edition'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (fields.isNotDefault) 'fields': encodeList(fields),
-      if (oneofs.isNotDefault) 'oneofs': oneofs,
-      if (options.isNotDefault) 'options': encodeList(options),
-      if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
-      if (edition.isNotDefault) 'edition': edition,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (fields.isNotDefault) 'fields': encodeList(fields),
+    if (oneofs.isNotDefault) 'oneofs': oneofs,
+    if (options.isNotDefault) 'options': encodeList(options),
+    if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
+    if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+    if (edition.isNotDefault) 'edition': edition,
+  };
 
   @override
   String toString() {
@@ -949,39 +933,34 @@ final class Field extends ProtoMessage {
     this.defaultValue = '',
   }) : super(fullyQualifiedName);
 
-  factory Field.fromJson(Map<String, dynamic> json) {
-    return Field(
-      kind:
-          decodeEnum(json['kind'], Field_Kind.fromJson) ?? Field_Kind.$default,
-      cardinality:
-          decodeEnum(json['cardinality'], Field_Cardinality.fromJson) ??
-          Field_Cardinality.$default,
-      number: json['number'] ?? 0,
-      name: json['name'] ?? '',
-      typeUrl: json['typeUrl'] ?? '',
-      oneofIndex: json['oneofIndex'] ?? 0,
-      packed: json['packed'] ?? false,
-      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-      jsonName: json['jsonName'] ?? '',
-      defaultValue: json['defaultValue'] ?? '',
-    );
-  }
+  factory Field.fromJson(Map<String, dynamic> json) => Field(
+    kind: decodeEnum(json['kind'], Field_Kind.fromJson) ?? Field_Kind.$default,
+    cardinality:
+        decodeEnum(json['cardinality'], Field_Cardinality.fromJson) ??
+        Field_Cardinality.$default,
+    number: json['number'] ?? 0,
+    name: json['name'] ?? '',
+    typeUrl: json['typeUrl'] ?? '',
+    oneofIndex: json['oneofIndex'] ?? 0,
+    packed: json['packed'] ?? false,
+    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+    jsonName: json['jsonName'] ?? '',
+    defaultValue: json['defaultValue'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (kind.isNotDefault) 'kind': kind.toJson(),
-      if (cardinality.isNotDefault) 'cardinality': cardinality.toJson(),
-      if (number.isNotDefault) 'number': number,
-      if (name.isNotDefault) 'name': name,
-      if (typeUrl.isNotDefault) 'typeUrl': typeUrl,
-      if (oneofIndex.isNotDefault) 'oneofIndex': oneofIndex,
-      if (packed.isNotDefault) 'packed': packed,
-      if (options.isNotDefault) 'options': encodeList(options),
-      if (jsonName.isNotDefault) 'jsonName': jsonName,
-      if (defaultValue.isNotDefault) 'defaultValue': defaultValue,
-    };
-  }
+  Object toJson() => {
+    if (kind.isNotDefault) 'kind': kind.toJson(),
+    if (cardinality.isNotDefault) 'cardinality': cardinality.toJson(),
+    if (number.isNotDefault) 'number': number,
+    if (name.isNotDefault) 'name': name,
+    if (typeUrl.isNotDefault) 'typeUrl': typeUrl,
+    if (oneofIndex.isNotDefault) 'oneofIndex': oneofIndex,
+    if (packed.isNotDefault) 'packed': packed,
+    if (options.isNotDefault) 'options': encodeList(options),
+    if (jsonName.isNotDefault) 'jsonName': jsonName,
+    if (defaultValue.isNotDefault) 'defaultValue': defaultValue,
+  };
 
   @override
   String toString() {
@@ -1130,28 +1109,24 @@ final class Enum extends ProtoMessage {
     this.edition = '',
   }) : super(fullyQualifiedName);
 
-  factory Enum.fromJson(Map<String, dynamic> json) {
-    return Enum(
-      name: json['name'] ?? '',
-      enumvalue: decodeListMessage(json['enumvalue'], EnumValue.fromJson) ?? [],
-      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-      sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-      syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-      edition: json['edition'] ?? '',
-    );
-  }
+  factory Enum.fromJson(Map<String, dynamic> json) => Enum(
+    name: json['name'] ?? '',
+    enumvalue: decodeListMessage(json['enumvalue'], EnumValue.fromJson) ?? [],
+    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+    sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
+    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
+    edition: json['edition'] ?? '',
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (enumvalue.isNotDefault) 'enumvalue': encodeList(enumvalue),
-      if (options.isNotDefault) 'options': encodeList(options),
-      if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-      if (syntax.isNotDefault) 'syntax': syntax.toJson(),
-      if (edition.isNotDefault) 'edition': edition,
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (enumvalue.isNotDefault) 'enumvalue': encodeList(enumvalue),
+    if (options.isNotDefault) 'options': encodeList(options),
+    if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
+    if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+    if (edition.isNotDefault) 'edition': edition,
+  };
 
   @override
   String toString() {
@@ -1180,22 +1155,18 @@ final class EnumValue extends ProtoMessage {
   EnumValue({this.name = '', this.number = 0, this.options = const []})
     : super(fullyQualifiedName);
 
-  factory EnumValue.fromJson(Map<String, dynamic> json) {
-    return EnumValue(
-      name: json['name'] ?? '',
-      number: json['number'] ?? 0,
-      options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-    );
-  }
+  factory EnumValue.fromJson(Map<String, dynamic> json) => EnumValue(
+    name: json['name'] ?? '',
+    number: json['number'] ?? 0,
+    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (number.isNotDefault) 'number': number,
-      if (options.isNotDefault) 'options': encodeList(options),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (number.isNotDefault) 'number': number,
+    if (options.isNotDefault) 'options': encodeList(options),
+  };
 
   @override
   String toString() {
@@ -1223,20 +1194,16 @@ final class Option extends ProtoMessage {
 
   Option({this.name = '', this.value}) : super(fullyQualifiedName);
 
-  factory Option.fromJson(Map<String, dynamic> json) {
-    return Option(
-      name: json['name'] ?? '',
-      value: decode(json['value'], Any.fromJson),
-    );
-  }
+  factory Option.fromJson(Map<String, dynamic> json) => Option(
+    name: json['name'] ?? '',
+    value: decode(json['value'], Any.fromJson),
+  );
 
   @override
-  Object toJson() {
-    return {
-      if (name.isNotDefault) 'name': name,
-      if (value != null) 'value': value!.toJson(),
-    };
-  }
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (value != null) 'value': value!.toJson(),
+  };
 
   @override
   String toString() {
@@ -1436,9 +1403,11 @@ final class BytesValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BytesValue';
 
   /// The bytes value.
-  final Uint8List? value;
+  final Uint8List value;
 
-  BytesValue({this.value}) : super(fullyQualifiedName);
+  BytesValue({Uint8List? value})
+    : value = value ?? Uint8List(0),
+      super(fullyQualifiedName);
 
   factory BytesValue.fromJson(Object json) => _BytesValueHelper.decode(json);
 
@@ -1447,7 +1416,7 @@ final class BytesValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (value != null) 'value=$value'].join(',');
+    final contents = ['value=$value'].join(',');
     return 'BytesValue($contents)';
   }
 }
