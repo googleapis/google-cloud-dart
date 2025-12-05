@@ -499,12 +499,12 @@ final class Secret extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       topics: switch (json['topics']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Topic.fromJson(i)],
-        _ => throw FormatException('"topics" is not a list'),
+        _ => throw const FormatException('"topics" is not a list'),
       },
       expireTime: switch (json['expireTime']) {
         null => null,
@@ -527,7 +527,7 @@ final class Secret extends ProtoMessage {
         Map<String, Object?> $1 => {
           for (final e in $1.entries) decodeString(e.key): decodeInt64(e.value),
         },
-        _ => throw FormatException('"versionAliases" is not an object'),
+        _ => throw const FormatException('"versionAliases" is not an object'),
       },
       annotations: switch (json['annotations']) {
         null => {},
@@ -535,7 +535,7 @@ final class Secret extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"annotations" is not an object'),
+        _ => throw const FormatException('"annotations" is not an object'),
       },
       versionDestroyTtl: switch (json['versionDestroyTtl']) {
         null => null,
@@ -551,7 +551,7 @@ final class Secret extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"tags" is not an object'),
+        _ => throw const FormatException('"tags" is not an object'),
       },
     );
   }
@@ -866,7 +866,7 @@ final class Replication_UserManaged extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) Replication_UserManaged_Replica.fromJson(i),
         ],
-        _ => throw FormatException('"replicas" is not a list'),
+        _ => throw const FormatException('"replicas" is not a list'),
       },
     );
   }
@@ -1091,7 +1091,7 @@ final class ReplicationStatus_UserManagedStatus extends ProtoMessage {
           for (final i in $1)
             ReplicationStatus_UserManagedStatus_ReplicaStatus.fromJson(i),
         ],
-        _ => throw FormatException('"replicas" is not a list'),
+        _ => throw const FormatException('"replicas" is not a list'),
       },
     );
   }
@@ -1456,7 +1456,7 @@ final class ListSecretsResponse extends ProtoMessage {
       secrets: switch (json['secrets']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Secret.fromJson(i)],
-        _ => throw FormatException('"secrets" is not a list'),
+        _ => throw const FormatException('"secrets" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -1736,7 +1736,7 @@ final class ListSecretVersionsResponse extends ProtoMessage {
       versions: switch (json['versions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SecretVersion.fromJson(i)],
-        _ => throw FormatException('"versions" is not a list'),
+        _ => throw const FormatException('"versions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',

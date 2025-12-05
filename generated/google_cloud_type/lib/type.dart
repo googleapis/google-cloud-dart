@@ -1212,12 +1212,12 @@ final class PostalAddress extends ProtoMessage {
       addressLines: switch (json['addressLines']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"addressLines" is not a list'),
+        _ => throw const FormatException('"addressLines" is not a list'),
       },
       recipients: switch (json['recipients']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"recipients" is not a list'),
+        _ => throw const FormatException('"recipients" is not a list'),
       },
       organization: switch (json['organization']) {
         null => '',

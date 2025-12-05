@@ -303,7 +303,7 @@ final class ListOperationsResponse extends ProtoMessage {
       operations: switch (json['operations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Operation.fromJson(i)],
-        _ => throw FormatException('"operations" is not a list'),
+        _ => throw const FormatException('"operations" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -312,7 +312,7 @@ final class ListOperationsResponse extends ProtoMessage {
       unreachable: switch (json['unreachable']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"unreachable" is not a list'),
+        _ => throw const FormatException('"unreachable" is not a list'),
       },
     );
   }

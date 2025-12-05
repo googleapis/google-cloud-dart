@@ -14912,7 +14912,7 @@ final class Annotation extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
     );
   }
@@ -15182,7 +15182,7 @@ final class Artifact extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -15599,7 +15599,7 @@ final class BatchPredictionJob extends ProtoMessage {
       partialFailures: switch (json['partialFailures']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Status.fromJson(i)],
-        _ => throw FormatException('"partialFailures" is not a list'),
+        _ => throw const FormatException('"partialFailures" is not a list'),
       },
       resourcesConsumed: switch (json['resourcesConsumed']) {
         null => null,
@@ -15631,7 +15631,7 @@ final class BatchPredictionJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -15647,7 +15647,7 @@ final class BatchPredictionJob extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) ModelMonitoringStatsAnomalies.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"modelMonitoringStatsAnomalies" is not a list',
             ),
           },
@@ -15920,12 +15920,12 @@ final class BatchPredictionJob_InstanceConfig extends ProtoMessage {
       includedFields: switch (json['includedFields']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"includedFields" is not a list'),
+        _ => throw const FormatException('"includedFields" is not a list'),
       },
       excludedFields: switch (json['excludedFields']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"excludedFields" is not a list'),
+        _ => throw const FormatException('"excludedFields" is not a list'),
       },
     );
   }
@@ -16220,12 +16220,12 @@ final class CachedContent extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       tools: switch (json['tools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
-        _ => throw FormatException('"tools" is not a list'),
+        _ => throw const FormatException('"tools" is not a list'),
       },
       toolConfig: switch (json['toolConfig']) {
         null => null,
@@ -16465,7 +16465,7 @@ final class Content extends ProtoMessage {
       parts: switch (json['parts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Part.fromJson(i)],
-        _ => throw FormatException('"parts" is not a list'),
+        _ => throw const FormatException('"parts" is not a list'),
       },
     );
   }
@@ -17036,7 +17036,7 @@ final class GenerationConfig extends ProtoMessage {
       stopSequences: switch (json['stopSequences']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"stopSequences" is not a list'),
+        _ => throw const FormatException('"stopSequences" is not a list'),
       },
       responseLogprobs: switch (json['responseLogprobs']) {
         null => null,
@@ -17083,7 +17083,7 @@ final class GenerationConfig extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) GenerationConfig_Modality.fromJson(i),
         ],
-        _ => throw FormatException('"responseModalities" is not a list'),
+        _ => throw const FormatException('"responseModalities" is not a list'),
       },
       mediaResolution: switch (json['mediaResolution']) {
         null => null,
@@ -17817,7 +17817,7 @@ final class CitationMetadata extends ProtoMessage {
       citations: switch (json['citations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Citation.fromJson(i)],
-        _ => throw FormatException('"citations" is not a list'),
+        _ => throw const FormatException('"citations" is not a list'),
       },
     );
   }
@@ -17994,7 +17994,7 @@ final class Candidate extends ProtoMessage {
       safetyRatings: switch (json['safetyRatings']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SafetyRating.fromJson(i)],
-        _ => throw FormatException('"safetyRatings" is not a list'),
+        _ => throw const FormatException('"safetyRatings" is not a list'),
       },
       finishMessage: switch (json['finishMessage']) {
         null => null,
@@ -18120,7 +18120,7 @@ final class UrlContextMetadata extends ProtoMessage {
       urlMetadata: switch (json['urlMetadata']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) UrlMetadata.fromJson(i)],
-        _ => throw FormatException('"urlMetadata" is not a list'),
+        _ => throw const FormatException('"urlMetadata" is not a list'),
       },
     );
   }
@@ -18237,14 +18237,14 @@ final class LogprobsResult extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) LogprobsResult_TopCandidates.fromJson(i),
         ],
-        _ => throw FormatException('"topCandidates" is not a list'),
+        _ => throw const FormatException('"topCandidates" is not a list'),
       },
       chosenCandidates: switch (json['chosenCandidates']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) LogprobsResult_Candidate.fromJson(i),
         ],
-        _ => throw FormatException('"chosenCandidates" is not a list'),
+        _ => throw const FormatException('"chosenCandidates" is not a list'),
       },
     );
   }
@@ -18332,7 +18332,7 @@ final class LogprobsResult_TopCandidates extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) LogprobsResult_Candidate.fromJson(i),
         ],
-        _ => throw FormatException('"candidates" is not a list'),
+        _ => throw const FormatException('"candidates" is not a list'),
       },
     );
   }
@@ -18680,7 +18680,7 @@ final class GroundingChunk_Maps_PlaceAnswerSources extends ProtoMessage {
           for (final i in $1)
             GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet.fromJson(i),
         ],
-        _ => throw FormatException('"reviewSnippets" is not a list'),
+        _ => throw const FormatException('"reviewSnippets" is not a list'),
       },
     );
   }
@@ -18789,12 +18789,14 @@ final class GroundingSupport extends ProtoMessage {
       groundingChunkIndices: switch (json['groundingChunkIndices']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt(i)],
-        _ => throw FormatException('"groundingChunkIndices" is not a list'),
+        _ => throw const FormatException(
+          '"groundingChunkIndices" is not a list',
+        ),
       },
       confidenceScores: switch (json['confidenceScores']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"confidenceScores" is not a list'),
+        _ => throw const FormatException('"confidenceScores" is not a list'),
       },
     );
   }
@@ -18860,7 +18862,7 @@ final class GroundingMetadata extends ProtoMessage {
       webSearchQueries: switch (json['webSearchQueries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"webSearchQueries" is not a list'),
+        _ => throw const FormatException('"webSearchQueries" is not a list'),
       },
       searchEntryPoint: switch (json['searchEntryPoint']) {
         null => null,
@@ -18869,17 +18871,17 @@ final class GroundingMetadata extends ProtoMessage {
       retrievalQueries: switch (json['retrievalQueries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"retrievalQueries" is not a list'),
+        _ => throw const FormatException('"retrievalQueries" is not a list'),
       },
       groundingChunks: switch (json['groundingChunks']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) GroundingChunk.fromJson(i)],
-        _ => throw FormatException('"groundingChunks" is not a list'),
+        _ => throw const FormatException('"groundingChunks" is not a list'),
       },
       groundingSupports: switch (json['groundingSupports']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) GroundingSupport.fromJson(i)],
-        _ => throw FormatException('"groundingSupports" is not a list'),
+        _ => throw const FormatException('"groundingSupports" is not a list'),
       },
       retrievalMetadata: switch (json['retrievalMetadata']) {
         null => null,
@@ -18895,7 +18897,7 @@ final class GroundingMetadata extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) GroundingMetadata_SourceFlaggingUri.fromJson(i),
         ],
-        _ => throw FormatException('"sourceFlaggingUris" is not a list'),
+        _ => throw const FormatException('"sourceFlaggingUris" is not a list'),
       },
     );
   }
@@ -19251,7 +19253,7 @@ final class Context extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -19264,7 +19266,7 @@ final class Context extends ProtoMessage {
       parentContexts: switch (json['parentContexts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"parentContexts" is not a list'),
+        _ => throw const FormatException('"parentContexts" is not a list'),
       },
       schemaTitle: switch (json['schemaTitle']) {
         null => '',
@@ -19450,7 +19452,7 @@ final class CustomJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -19462,7 +19464,7 @@ final class CustomJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"webAccessUris" is not an object'),
+        _ => throw const FormatException('"webAccessUris" is not an object'),
       },
       satisfiesPzs: switch (json['satisfiesPzs']) {
         null => false,
@@ -19676,7 +19678,7 @@ final class CustomJobSpec extends ProtoMessage {
       workerPoolSpecs: switch (json['workerPoolSpecs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) WorkerPoolSpec.fromJson(i)],
-        _ => throw FormatException('"workerPoolSpecs" is not a list'),
+        _ => throw const FormatException('"workerPoolSpecs" is not a list'),
       },
       scheduling: switch (json['scheduling']) {
         null => null,
@@ -19693,7 +19695,7 @@ final class CustomJobSpec extends ProtoMessage {
       reservedIpRanges: switch (json['reservedIpRanges']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"reservedIpRanges" is not a list'),
+        _ => throw const FormatException('"reservedIpRanges" is not a list'),
       },
       pscInterfaceConfig: switch (json['pscInterfaceConfig']) {
         null => null,
@@ -19731,7 +19733,7 @@ final class CustomJobSpec extends ProtoMessage {
       models: switch (json['models']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"models" is not a list'),
+        _ => throw const FormatException('"models" is not a list'),
       },
     );
   }
@@ -19831,7 +19833,7 @@ final class WorkerPoolSpec extends ProtoMessage {
       nfsMounts: switch (json['nfsMounts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NfsMount.fromJson(i)],
-        _ => throw FormatException('"nfsMounts" is not a list'),
+        _ => throw const FormatException('"nfsMounts" is not a list'),
       },
       diskSpec: switch (json['diskSpec']) {
         null => null,
@@ -19895,17 +19897,17 @@ final class ContainerSpec extends ProtoMessage {
       command: switch (json['command']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"command" is not a list'),
+        _ => throw const FormatException('"command" is not a list'),
       },
       args: switch (json['args']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"args" is not a list'),
+        _ => throw const FormatException('"args" is not a list'),
       },
       env: switch (json['env']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EnvVar.fromJson(i)],
-        _ => throw FormatException('"env" is not a list'),
+        _ => throw const FormatException('"env" is not a list'),
       },
     );
   }
@@ -19971,7 +19973,7 @@ final class PythonPackageSpec extends ProtoMessage {
       packageUris: switch (json['packageUris']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"packageUris" is not a list'),
+        _ => throw const FormatException('"packageUris" is not a list'),
       },
       pythonModule: switch (json['pythonModule']) {
         null => '',
@@ -19980,12 +19982,12 @@ final class PythonPackageSpec extends ProtoMessage {
       args: switch (json['args']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"args" is not a list'),
+        _ => throw const FormatException('"args" is not a list'),
       },
       env: switch (json['env']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EnvVar.fromJson(i)],
-        _ => throw FormatException('"env" is not a list'),
+        _ => throw const FormatException('"env" is not a list'),
       },
     );
   }
@@ -20208,7 +20210,7 @@ final class DataItem extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       payload: switch (json['payload']) {
         null => null,
@@ -20387,7 +20389,7 @@ final class DataLabelingJob extends ProtoMessage {
       datasets: switch (json['datasets']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"datasets" is not a list'),
+        _ => throw const FormatException('"datasets" is not a list'),
       },
       annotationLabels: switch (json['annotationLabels']) {
         null => {},
@@ -20395,7 +20397,7 @@ final class DataLabelingJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"annotationLabels" is not an object'),
+        _ => throw const FormatException('"annotationLabels" is not an object'),
       },
       labelerCount: switch (json['labelerCount']) {
         null => 0,
@@ -20443,12 +20445,12 @@ final class DataLabelingJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       specialistPools: switch (json['specialistPools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"specialistPools" is not a list'),
+        _ => throw const FormatException('"specialistPools" is not a list'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -20850,12 +20852,12 @@ final class Dataset extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       savedQueries: switch (json['savedQueries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SavedQuery.fromJson(i)],
-        _ => throw FormatException('"savedQueries" is not a list'),
+        _ => throw const FormatException('"savedQueries" is not a list'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -20981,7 +20983,7 @@ final class ImportDataConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"dataItemLabels" is not an object'),
+        _ => throw const FormatException('"dataItemLabels" is not an object'),
       },
       annotationLabels: switch (json['annotationLabels']) {
         null => {},
@@ -20989,7 +20991,7 @@ final class ImportDataConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"annotationLabels" is not an object'),
+        _ => throw const FormatException('"annotationLabels" is not an object'),
       },
       importSchemaUri: switch (json['importSchemaUri']) {
         null => '',
@@ -21473,7 +21475,7 @@ final class ListDatasetsResponse extends ProtoMessage {
       datasets: switch (json['datasets']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Dataset.fromJson(i)],
-        _ => throw FormatException('"datasets" is not a list'),
+        _ => throw const FormatException('"datasets" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -21556,7 +21558,7 @@ final class ImportDataRequest extends ProtoMessage {
       importConfigs: switch (json['importConfigs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ImportDataConfig.fromJson(i)],
-        _ => throw FormatException('"importConfigs" is not a list'),
+        _ => throw const FormatException('"importConfigs" is not a list'),
       },
     );
   }
@@ -21684,7 +21686,7 @@ final class ExportDataResponse extends ProtoMessage {
       exportedFiles: switch (json['exportedFiles']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"exportedFiles" is not a list'),
+        _ => throw const FormatException('"exportedFiles" is not a list'),
       },
     );
   }
@@ -22012,7 +22014,7 @@ final class ListDatasetVersionsResponse extends ProtoMessage {
       datasetVersions: switch (json['datasetVersions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DatasetVersion.fromJson(i)],
-        _ => throw FormatException('"datasetVersions" is not a list'),
+        _ => throw const FormatException('"datasetVersions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -22210,7 +22212,7 @@ final class ListDataItemsResponse extends ProtoMessage {
       dataItems: switch (json['dataItems']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DataItem.fromJson(i)],
-        _ => throw FormatException('"dataItems" is not a list'),
+        _ => throw const FormatException('"dataItems" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -22364,7 +22366,7 @@ final class SearchDataItemsRequest extends ProtoMessage {
       annotationFilters: switch (json['annotationFilters']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"annotationFilters" is not a list'),
+        _ => throw const FormatException('"annotationFilters" is not a list'),
       },
       fieldMask: switch (json['fieldMask']) {
         null => null,
@@ -22497,7 +22499,7 @@ final class SearchDataItemsResponse extends ProtoMessage {
       dataItemViews: switch (json['dataItemViews']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DataItemView.fromJson(i)],
-        _ => throw FormatException('"dataItemViews" is not a list'),
+        _ => throw const FormatException('"dataItemViews" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -22556,7 +22558,7 @@ final class DataItemView extends ProtoMessage {
       annotations: switch (json['annotations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Annotation.fromJson(i)],
-        _ => throw FormatException('"annotations" is not a list'),
+        _ => throw const FormatException('"annotations" is not a list'),
       },
       hasTruncatedAnnotations: switch (json['hasTruncatedAnnotations']) {
         null => false,
@@ -22694,7 +22696,7 @@ final class ListSavedQueriesResponse extends ProtoMessage {
       savedQueries: switch (json['savedQueries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SavedQuery.fromJson(i)],
-        _ => throw FormatException('"savedQueries" is not a list'),
+        _ => throw const FormatException('"savedQueries" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -22905,7 +22907,7 @@ final class ListAnnotationsResponse extends ProtoMessage {
       annotations: switch (json['annotations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Annotation.fromJson(i)],
-        _ => throw FormatException('"annotations" is not a list'),
+        _ => throw const FormatException('"annotations" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -23343,7 +23345,7 @@ final class AssessDataResponse_TuningValidationAssessmentResult
       errors: switch (json['errors']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"errors" is not a list'),
+        _ => throw const FormatException('"errors" is not a list'),
       },
     );
   }
@@ -23536,7 +23538,7 @@ final class GeminiTemplateConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"fieldMapping" is not an object'),
+        _ => throw const FormatException('"fieldMapping" is not an object'),
       },
     );
   }
@@ -23683,7 +23685,7 @@ final class GeminiExample extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       systemInstruction: switch (json['systemInstruction']) {
         null => null,
@@ -23696,7 +23698,7 @@ final class GeminiExample extends ProtoMessage {
       tools: switch (json['tools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
-        _ => throw FormatException('"tools" is not a list'),
+        _ => throw const FormatException('"tools" is not a list'),
       },
       toolConfig: switch (json['toolConfig']) {
         null => null,
@@ -23708,12 +23710,12 @@ final class GeminiExample extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       safetySettings: switch (json['safetySettings']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SafetySetting.fromJson(i)],
-        _ => throw FormatException('"safetySettings" is not a list'),
+        _ => throw const FormatException('"safetySettings" is not a list'),
       },
       generationConfig: switch (json['generationConfig']) {
         null => null,
@@ -24422,7 +24424,9 @@ final class ListDeploymentResourcePoolsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) DeploymentResourcePool.fromJson(i),
         ],
-        _ => throw FormatException('"deploymentResourcePools" is not a list'),
+        _ => throw const FormatException(
+          '"deploymentResourcePools" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -24655,7 +24659,7 @@ final class QueryDeployedModelsResponse extends ProtoMessage {
       deployedModels: switch (json['deployedModels']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DeployedModel.fromJson(i)],
-        _ => throw FormatException('"deployedModels" is not a list'),
+        _ => throw const FormatException('"deployedModels" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -24664,7 +24668,7 @@ final class QueryDeployedModelsResponse extends ProtoMessage {
       deployedModelRefs: switch (json['deployedModelRefs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DeployedModelRef.fromJson(i)],
-        _ => throw FormatException('"deployedModelRefs" is not a list'),
+        _ => throw const FormatException('"deployedModelRefs" is not a list'),
       },
       totalDeployedModelCount: switch (json['totalDeployedModelCount']) {
         null => 0,
@@ -24915,14 +24919,14 @@ final class Endpoint extends ProtoMessage {
       deployedModels: switch (json['deployedModels']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DeployedModel.fromJson(i)],
-        _ => throw FormatException('"deployedModels" is not a list'),
+        _ => throw const FormatException('"deployedModels" is not a list'),
       },
       trafficSplit: switch (json['trafficSplit']) {
         null => {},
         Map<String, Object?> $1 => {
           for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
         },
-        _ => throw FormatException('"trafficSplit" is not an object'),
+        _ => throw const FormatException('"trafficSplit" is not an object'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -24934,7 +24938,7 @@ final class Endpoint extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -25296,7 +25300,7 @@ final class DeployedModel extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"systemLabels" is not an object'),
+        _ => throw const FormatException('"systemLabels" is not an object'),
       },
       checkpointId: switch (json['checkpointId']) {
         null => '',
@@ -26218,7 +26222,7 @@ final class ListEndpointsResponse extends ProtoMessage {
       endpoints: switch (json['endpoints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Endpoint.fromJson(i)],
-        _ => throw FormatException('"endpoints" is not a list'),
+        _ => throw const FormatException('"endpoints" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -26430,7 +26434,7 @@ final class DeployModelRequest extends ProtoMessage {
         Map<String, Object?> $1 => {
           for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
         },
-        _ => throw FormatException('"trafficSplit" is not an object'),
+        _ => throw const FormatException('"trafficSplit" is not an object'),
       },
     );
   }
@@ -26569,7 +26573,7 @@ final class UndeployModelRequest extends ProtoMessage {
         Map<String, Object?> $1 => {
           for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
         },
-        _ => throw FormatException('"trafficSplit" is not an object'),
+        _ => throw const FormatException('"trafficSplit" is not an object'),
       },
     );
   }
@@ -26985,7 +26989,7 @@ final class EntityType extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -27266,12 +27270,12 @@ final class EvaluatedAnnotation extends ProtoMessage {
       predictions: switch (json['predictions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"predictions" is not a list'),
+        _ => throw const FormatException('"predictions" is not a list'),
       },
       groundTruths: switch (json['groundTruths']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"groundTruths" is not a list'),
+        _ => throw const FormatException('"groundTruths" is not a list'),
       },
       dataItemPayload: switch (json['dataItemPayload']) {
         null => null,
@@ -27286,14 +27290,16 @@ final class EvaluatedAnnotation extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) EvaluatedAnnotationExplanation.fromJson(i),
         ],
-        _ => throw FormatException('"explanations" is not a list'),
+        _ => throw const FormatException('"explanations" is not a list'),
       },
       errorAnalysisAnnotations: switch (json['errorAnalysisAnnotations']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ErrorAnalysisAnnotation.fromJson(i),
         ],
-        _ => throw FormatException('"errorAnalysisAnnotations" is not a list'),
+        _ => throw const FormatException(
+          '"errorAnalysisAnnotations" is not a list',
+        ),
       },
     );
   }
@@ -27442,7 +27448,7 @@ final class ErrorAnalysisAnnotation extends ProtoMessage {
           for (final i in $1)
             ErrorAnalysisAnnotation_AttributedItem.fromJson(i),
         ],
-        _ => throw FormatException('"attributedItems" is not a list'),
+        _ => throw const FormatException('"attributedItems" is not a list'),
       },
       queryType: switch (json['queryType']) {
         null => ErrorAnalysisAnnotation_QueryType.$default,
@@ -27692,7 +27698,7 @@ final class AggregationOutput extends ProtoMessage {
       aggregationResults: switch (json['aggregationResults']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) AggregationResult.fromJson(i)],
-        _ => throw FormatException('"aggregationResults" is not a list'),
+        _ => throw const FormatException('"aggregationResults" is not a list'),
       },
     );
   }
@@ -27837,7 +27843,7 @@ final class EvaluateDatasetRequest extends ProtoMessage {
       metrics: switch (json['metrics']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Metric.fromJson(i)],
-        _ => throw FormatException('"metrics" is not a list'),
+        _ => throw const FormatException('"metrics" is not a list'),
       },
       outputConfig: switch (json['outputConfig']) {
         null => null,
@@ -27955,7 +27961,7 @@ final class Metric extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) Metric_AggregationMetric.fromJson(i),
         ],
-        _ => throw FormatException('"aggregationMetrics" is not a list'),
+        _ => throw const FormatException('"aggregationMetrics" is not a list'),
       },
     );
   }
@@ -28919,7 +28925,7 @@ final class ExactMatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ExactMatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -29014,7 +29020,9 @@ final class ExactMatchResults extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ExactMatchMetricValue.fromJson(i),
         ],
-        _ => throw FormatException('"exactMatchMetricValues" is not a list'),
+        _ => throw const FormatException(
+          '"exactMatchMetricValues" is not a list',
+        ),
       },
     );
   }
@@ -29083,7 +29091,7 @@ final class BleuInput extends ProtoMessage {
       instances: switch (json['instances']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) BleuInstance.fromJson(i)],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -29191,7 +29199,7 @@ final class BleuResults extends ProtoMessage {
       bleuMetricValues: switch (json['bleuMetricValues']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) BleuMetricValue.fromJson(i)],
-        _ => throw FormatException('"bleuMetricValues" is not a list'),
+        _ => throw const FormatException('"bleuMetricValues" is not a list'),
       },
     );
   }
@@ -29260,7 +29268,7 @@ final class RougeInput extends ProtoMessage {
       instances: switch (json['instances']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) RougeInstance.fromJson(i)],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -29392,7 +29400,7 @@ final class RougeResults extends ProtoMessage {
       rougeMetricValues: switch (json['rougeMetricValues']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) RougeMetricValue.fromJson(i)],
-        _ => throw FormatException('"rougeMetricValues" is not a list'),
+        _ => throw const FormatException('"rougeMetricValues" is not a list'),
       },
     );
   }
@@ -32398,7 +32406,7 @@ final class RawOutput extends ProtoMessage {
       rawOutput: switch (json['rawOutput']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"rawOutput" is not a list'),
+        _ => throw const FormatException('"rawOutput" is not a list'),
       },
     );
   }
@@ -32662,7 +32670,7 @@ final class ToolCallValidInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ToolCallValidInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -32756,7 +32764,9 @@ final class ToolCallValidResults extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ToolCallValidMetricValue.fromJson(i),
         ],
-        _ => throw FormatException('"toolCallValidMetricValues" is not a list'),
+        _ => throw const FormatException(
+          '"toolCallValidMetricValues" is not a list',
+        ),
       },
     );
   }
@@ -32827,7 +32837,7 @@ final class ToolNameMatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ToolNameMatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -32921,7 +32931,9 @@ final class ToolNameMatchResults extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ToolNameMatchMetricValue.fromJson(i),
         ],
-        _ => throw FormatException('"toolNameMatchMetricValues" is not a list'),
+        _ => throw const FormatException(
+          '"toolNameMatchMetricValues" is not a list',
+        ),
       },
     );
   }
@@ -32994,7 +33006,7 @@ final class ToolParameterKeyMatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ToolParameterKeyMatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -33094,7 +33106,7 @@ final class ToolParameterKeyMatchResults extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) ToolParameterKeyMatchMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"toolParameterKeyMatchMetricValues" is not a list',
             ),
           },
@@ -33169,7 +33181,7 @@ final class ToolParameterKvmatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ToolParameterKvmatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -33285,7 +33297,7 @@ final class ToolParameterKvmatchResults extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) ToolParameterKvmatchMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"toolParameterKvMatchMetricValues" is not a list',
             ),
           },
@@ -33874,7 +33886,9 @@ final class RubricBasedInstructionFollowingResult extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) RubricCritiqueResult.fromJson(i),
         ],
-        _ => throw FormatException('"rubricCritiqueResults" is not a list'),
+        _ => throw const FormatException(
+          '"rubricCritiqueResults" is not a list',
+        ),
       },
     );
   }
@@ -33961,7 +33975,7 @@ final class TrajectoryExactMatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TrajectoryExactMatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -34057,7 +34071,7 @@ final class TrajectoryExactMatchResults extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) TrajectoryExactMatchMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"trajectoryExactMatchMetricValues" is not a list',
             ),
           },
@@ -34134,7 +34148,7 @@ final class TrajectoryInOrderMatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TrajectoryInOrderMatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -34232,7 +34246,7 @@ final class TrajectoryInOrderMatchResults extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) TrajectoryInOrderMatchMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"trajectoryInOrderMatchMetricValues" is not a list',
             ),
           },
@@ -34309,7 +34323,7 @@ final class TrajectoryAnyOrderMatchInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TrajectoryAnyOrderMatchInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -34408,7 +34422,7 @@ final class TrajectoryAnyOrderMatchResults extends ProtoMessage {
               for (final i in $1)
                 TrajectoryAnyOrderMatchMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"trajectoryAnyOrderMatchMetricValues" is not a list',
             ),
           },
@@ -34483,7 +34497,7 @@ final class TrajectoryPrecisionInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TrajectoryPrecisionInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -34578,7 +34592,7 @@ final class TrajectoryPrecisionResults extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) TrajectoryPrecisionMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"trajectoryPrecisionMetricValues" is not a list',
             ),
           },
@@ -34653,7 +34667,7 @@ final class TrajectoryRecallInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TrajectoryRecallInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -34747,7 +34761,7 @@ final class TrajectoryRecallResults extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) TrajectoryRecallMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"trajectoryRecallMetricValues" is not a list',
             ),
           },
@@ -34822,7 +34836,7 @@ final class TrajectorySingleToolUseInput extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TrajectorySingleToolUseInstance.fromJson(i),
         ],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
     );
   }
@@ -34923,7 +34937,7 @@ final class TrajectorySingleToolUseResults extends ProtoMessage {
               for (final i in $1)
                 TrajectorySingleToolUseMetricValue.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"trajectorySingleToolUseMetricValues" is not a list',
             ),
           },
@@ -34988,7 +35002,7 @@ final class Trajectory extends ProtoMessage {
       toolCalls: switch (json['toolCalls']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ToolCall.fromJson(i)],
-        _ => throw FormatException('"toolCalls" is not a list'),
+        _ => throw const FormatException('"toolCalls" is not a list'),
       },
     );
   }
@@ -35063,7 +35077,7 @@ final class ContentMap extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): ContentMap_Contents.fromJson(e.value),
         },
-        _ => throw FormatException('"values" is not an object'),
+        _ => throw const FormatException('"values" is not an object'),
       },
     );
   }
@@ -35091,7 +35105,7 @@ final class ContentMap_Contents extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
     );
   }
@@ -35169,7 +35183,7 @@ final class Event extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
     );
   }
@@ -35241,14 +35255,14 @@ final class ContentsExample extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       expectedContents: switch (json['expectedContents']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ContentsExample_ExpectedContent.fromJson(i),
         ],
-        _ => throw FormatException('"expectedContents" is not a list'),
+        _ => throw const FormatException('"expectedContents" is not a list'),
       },
     );
   }
@@ -35556,7 +35570,7 @@ final class StoredContentsExampleFilter extends ProtoMessage {
       searchKeys: switch (json['searchKeys']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"searchKeys" is not a list'),
+        _ => throw const FormatException('"searchKeys" is not a list'),
       },
       functionNames: switch (json['functionNames']) {
         null => null,
@@ -35655,7 +35669,7 @@ final class StoredContentsExampleParameters_ContentSearchKey
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       searchKeyGenerationMethod: switch (json['searchKeyGenerationMethod']) {
         null => null,
@@ -35698,7 +35712,7 @@ final class ExamplesArrayFilter extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
       arrayOperator: switch (json['arrayOperator']) {
         null => ExamplesArrayFilter_ArrayOperator.$default,
@@ -36093,7 +36107,7 @@ final class ListExampleStoresResponse extends ProtoMessage {
       exampleStores: switch (json['exampleStores']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ExampleStore.fromJson(i)],
-        _ => throw FormatException('"exampleStores" is not a list'),
+        _ => throw const FormatException('"exampleStores" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -36218,7 +36232,7 @@ final class UpsertExamplesRequest extends ProtoMessage {
       examples: switch (json['examples']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Example.fromJson(i)],
-        _ => throw FormatException('"examples" is not a list'),
+        _ => throw const FormatException('"examples" is not a list'),
       },
       overwrite: switch (json['overwrite']) {
         null => false,
@@ -36264,7 +36278,7 @@ final class UpsertExamplesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) UpsertExamplesResponse_UpsertResult.fromJson(i),
         ],
-        _ => throw FormatException('"results" is not a list'),
+        _ => throw const FormatException('"results" is not a list'),
       },
     );
   }
@@ -36355,7 +36369,7 @@ final class RemoveExamplesRequest extends ProtoMessage {
       exampleIds: switch (json['exampleIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"exampleIds" is not a list'),
+        _ => throw const FormatException('"exampleIds" is not a list'),
       },
     );
   }
@@ -36393,7 +36407,7 @@ final class RemoveExamplesResponse extends ProtoMessage {
       exampleIds: switch (json['exampleIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"exampleIds" is not a list'),
+        _ => throw const FormatException('"exampleIds" is not a list'),
       },
     );
   }
@@ -36482,7 +36496,7 @@ final class SearchExamplesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) SearchExamplesResponse_SimilarExample.fromJson(i),
         ],
-        _ => throw FormatException('"results" is not a list'),
+        _ => throw const FormatException('"results" is not a list'),
       },
     );
   }
@@ -36598,7 +36612,7 @@ final class FetchExamplesRequest extends ProtoMessage {
       exampleIds: switch (json['exampleIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"exampleIds" is not a list'),
+        _ => throw const FormatException('"exampleIds" is not a list'),
       },
     );
   }
@@ -36647,7 +36661,7 @@ final class FetchExamplesResponse extends ProtoMessage {
       examples: switch (json['examples']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Example.fromJson(i)],
-        _ => throw FormatException('"examples" is not a list'),
+        _ => throw const FormatException('"examples" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -36767,7 +36781,7 @@ final class Execution extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -36915,12 +36929,12 @@ final class Explanation extends ProtoMessage {
       attributions: switch (json['attributions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Attribution.fromJson(i)],
-        _ => throw FormatException('"attributions" is not a list'),
+        _ => throw const FormatException('"attributions" is not a list'),
       },
       neighbors: switch (json['neighbors']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Neighbor.fromJson(i)],
-        _ => throw FormatException('"neighbors" is not a list'),
+        _ => throw const FormatException('"neighbors" is not a list'),
       },
     );
   }
@@ -36973,7 +36987,7 @@ final class ModelExplanation extends ProtoMessage {
       meanAttributions: switch (json['meanAttributions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Attribution.fromJson(i)],
-        _ => throw FormatException('"meanAttributions" is not a list'),
+        _ => throw const FormatException('"meanAttributions" is not a list'),
       },
     );
   }
@@ -37127,7 +37141,7 @@ final class Attribution extends ProtoMessage {
       outputIndex: switch (json['outputIndex']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt(i)],
-        _ => throw FormatException('"outputIndex" is not a list'),
+        _ => throw const FormatException('"outputIndex" is not a list'),
       },
       outputDisplayName: switch (json['outputDisplayName']) {
         null => '',
@@ -37649,7 +37663,7 @@ final class FeatureNoiseSigma extends ProtoMessage {
           for (final i in $1)
             FeatureNoiseSigma_NoiseSigmaForFeature.fromJson(i),
         ],
-        _ => throw FormatException('"noiseSigma" is not a list'),
+        _ => throw const FormatException('"noiseSigma" is not a list'),
       },
     );
   }
@@ -38081,7 +38095,7 @@ final class ExplanationMetadataOverride extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"inputs" is not an object'),
+        _ => throw const FormatException('"inputs" is not an object'),
       },
     );
   }
@@ -38121,7 +38135,7 @@ final class ExplanationMetadataOverride_InputMetadataOverride
       inputBaselines: switch (json['inputBaselines']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"inputBaselines" is not a list'),
+        _ => throw const FormatException('"inputBaselines" is not a list'),
       },
     );
   }
@@ -38180,7 +38194,7 @@ final class ExamplesOverride extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ExamplesRestrictionsNamespace.fromJson(i),
         ],
-        _ => throw FormatException('"restrictions" is not a list'),
+        _ => throw const FormatException('"restrictions" is not a list'),
       },
       returnEmbeddings: switch (json['returnEmbeddings']) {
         null => false,
@@ -38271,12 +38285,12 @@ final class ExamplesRestrictionsNamespace extends ProtoMessage {
       allow: switch (json['allow']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"allow" is not a list'),
+        _ => throw const FormatException('"allow" is not a list'),
       },
       deny: switch (json['deny']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"deny" is not a list'),
+        _ => throw const FormatException('"deny" is not a list'),
       },
     );
   }
@@ -38360,7 +38374,7 @@ final class ExplanationMetadata extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"inputs" is not an object'),
+        _ => throw const FormatException('"inputs" is not an object'),
       },
       outputs: switch (json['outputs']) {
         null => {},
@@ -38370,7 +38384,7 @@ final class ExplanationMetadata extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"outputs" is not an object'),
+        _ => throw const FormatException('"outputs" is not an object'),
       },
       featureAttributionsSchemaUri:
           switch (json['featureAttributionsSchemaUri']) {
@@ -38519,7 +38533,7 @@ final class ExplanationMetadata_InputMetadata extends ProtoMessage {
       inputBaselines: switch (json['inputBaselines']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"inputBaselines" is not a list'),
+        _ => throw const FormatException('"inputBaselines" is not a list'),
       },
       inputTensorName: switch (json['inputTensorName']) {
         null => '',
@@ -38549,7 +38563,7 @@ final class ExplanationMetadata_InputMetadata extends ProtoMessage {
       indexFeatureMapping: switch (json['indexFeatureMapping']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"indexFeatureMapping" is not a list'),
+        _ => throw const FormatException('"indexFeatureMapping" is not a list'),
       },
       encodedTensorName: switch (json['encodedTensorName']) {
         null => '',
@@ -38558,7 +38572,7 @@ final class ExplanationMetadata_InputMetadata extends ProtoMessage {
       encodedBaselines: switch (json['encodedBaselines']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"encodedBaselines" is not a list'),
+        _ => throw const FormatException('"encodedBaselines" is not a list'),
       },
       visualization: switch (json['visualization']) {
         null => null,
@@ -39261,7 +39275,7 @@ final class Extension extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ExtensionOperation.fromJson(i),
         ],
-        _ => throw FormatException('"extensionOperations" is not a list'),
+        _ => throw const FormatException('"extensionOperations" is not a list'),
       },
       runtimeConfig: switch (json['runtimeConfig']) {
         null => null,
@@ -39270,7 +39284,7 @@ final class Extension extends ProtoMessage {
       toolUseExamples: switch (json['toolUseExamples']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ToolUseExample.fromJson(i)],
-        _ => throw FormatException('"toolUseExamples" is not a list'),
+        _ => throw const FormatException('"toolUseExamples" is not a list'),
       },
       privateServiceConnectConfig:
           switch (json['privateServiceConnectConfig']) {
@@ -40148,7 +40162,7 @@ final class QueryExtensionRequest extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
     );
   }
@@ -40186,7 +40200,7 @@ final class QueryExtensionResponse extends ProtoMessage {
       steps: switch (json['steps']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"steps" is not a list'),
+        _ => throw const FormatException('"steps" is not a list'),
       },
       failureMessage: switch (json['failureMessage']) {
         null => '',
@@ -40476,7 +40490,7 @@ final class ListExtensionsResponse extends ProtoMessage {
       extensions: switch (json['extensions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Extension.fromJson(i)],
-        _ => throw FormatException('"extensions" is not a list'),
+        _ => throw const FormatException('"extensions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -40678,7 +40692,7 @@ final class Feature extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -40697,21 +40711,25 @@ final class Feature extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FeatureStatsAnomaly.fromJson(i),
         ],
-        _ => throw FormatException('"monitoringStats" is not a list'),
+        _ => throw const FormatException('"monitoringStats" is not a list'),
       },
       monitoringStatsAnomalies: switch (json['monitoringStatsAnomalies']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) Feature_MonitoringStatsAnomaly.fromJson(i),
         ],
-        _ => throw FormatException('"monitoringStatsAnomalies" is not a list'),
+        _ => throw const FormatException(
+          '"monitoringStatsAnomalies" is not a list',
+        ),
       },
       featureStatsAndAnomaly: switch (json['featureStatsAndAnomaly']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) FeatureStatsAndAnomaly.fromJson(i),
         ],
-        _ => throw FormatException('"featureStatsAndAnomaly" is not a list'),
+        _ => throw const FormatException(
+          '"featureStatsAndAnomaly" is not a list',
+        ),
       },
       versionColumnName: switch (json['versionColumnName']) {
         null => '',
@@ -40993,7 +41011,7 @@ final class FeatureGroup extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       description: switch (json['description']) {
         null => '',
@@ -41092,7 +41110,7 @@ final class FeatureGroup_BigQuery extends ProtoMessage {
       entityIdColumns: switch (json['entityIdColumns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"entityIdColumns" is not a list'),
+        _ => throw const FormatException('"entityIdColumns" is not a list'),
       },
       staticDataSource: switch (json['staticDataSource']) {
         null => false,
@@ -41275,7 +41293,7 @@ final class FeatureMonitor extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       description: switch (json['description']) {
         null => '',
@@ -41371,7 +41389,7 @@ final class FeatureSelectionConfig extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FeatureSelectionConfig_FeatureConfig.fromJson(i),
         ],
-        _ => throw FormatException('"featureConfigs" is not a list'),
+        _ => throw const FormatException('"featureConfigs" is not a list'),
       },
     );
   }
@@ -41688,7 +41706,7 @@ final class FeatureMonitorJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       description: switch (json['description']) {
         null => '',
@@ -41771,7 +41789,9 @@ final class FeatureMonitorJob_JobSummary extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FeatureStatsAndAnomaly.fromJson(i),
         ],
-        _ => throw FormatException('"featureStatsAndAnomalies" is not a list'),
+        _ => throw const FormatException(
+          '"featureStatsAndAnomalies" is not a list',
+        ),
       },
     );
   }
@@ -42072,7 +42092,7 @@ final class FeatureOnlineStore extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       state: switch (json['state']) {
         null => FeatureOnlineStore_State.$default,
@@ -42691,7 +42711,7 @@ final class ListFeatureOnlineStoresResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FeatureOnlineStore.fromJson(i),
         ],
-        _ => throw FormatException('"featureOnlineStores" is not a list'),
+        _ => throw const FormatException('"featureOnlineStores" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -43064,7 +43084,7 @@ final class ListFeatureViewsResponse extends ProtoMessage {
       featureViews: switch (json['featureViews']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) FeatureView.fromJson(i)],
-        _ => throw FormatException('"featureViews" is not a list'),
+        _ => throw const FormatException('"featureViews" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -43526,7 +43546,7 @@ final class ListFeatureViewSyncsResponse extends ProtoMessage {
       featureViewSyncs: switch (json['featureViewSyncs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) FeatureViewSync.fromJson(i)],
-        _ => throw FormatException('"featureViewSyncs" is not a list'),
+        _ => throw const FormatException('"featureViewSyncs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -43608,7 +43628,7 @@ final class FeatureViewDataKey_CompositeKey extends ProtoMessage {
       parts: switch (json['parts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"parts" is not a list'),
+        _ => throw const FormatException('"parts" is not a list'),
       },
     );
   }
@@ -43811,7 +43831,7 @@ final class FetchFeatureValuesResponse_FeatureNameValuePairList
               i,
             ),
         ],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
     );
   }
@@ -43906,7 +43926,7 @@ final class StreamingFetchFeatureValuesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FeatureViewDataKey.fromJson(i),
         ],
-        _ => throw FormatException('"dataKeys" is not a list'),
+        _ => throw const FormatException('"dataKeys" is not a list'),
       },
       dataFormat: switch (json['dataFormat']) {
         null => FeatureViewDataFormat.$default,
@@ -43970,14 +43990,14 @@ final class StreamingFetchFeatureValuesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FetchFeatureValuesResponse.fromJson(i),
         ],
-        _ => throw FormatException('"data" is not a list'),
+        _ => throw const FormatException('"data" is not a list'),
       },
       dataKeysWithError: switch (json['dataKeysWithError']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) FeatureViewDataKey.fromJson(i),
         ],
-        _ => throw FormatException('"dataKeysWithError" is not a list'),
+        _ => throw const FormatException('"dataKeysWithError" is not a list'),
       },
     );
   }
@@ -44056,14 +44076,14 @@ final class NearestNeighborQuery extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) NearestNeighborQuery_StringFilter.fromJson(i),
         ],
-        _ => throw FormatException('"stringFilters" is not a list'),
+        _ => throw const FormatException('"stringFilters" is not a list'),
       },
       numericFilters: switch (json['numericFilters']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) NearestNeighborQuery_NumericFilter.fromJson(i),
         ],
-        _ => throw FormatException('"numericFilters" is not a list'),
+        _ => throw const FormatException('"numericFilters" is not a list'),
       },
       perCrowdingAttributeNeighborCount:
           switch (json['perCrowdingAttributeNeighborCount']) {
@@ -44118,7 +44138,7 @@ final class NearestNeighborQuery_Embedding extends ProtoMessage {
       value: switch (json['value']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"value" is not a list'),
+        _ => throw const FormatException('"value" is not a list'),
       },
     );
   }
@@ -44167,12 +44187,12 @@ final class NearestNeighborQuery_StringFilter extends ProtoMessage {
       allowTokens: switch (json['allowTokens']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"allowTokens" is not a list'),
+        _ => throw const FormatException('"allowTokens" is not a list'),
       },
       denyTokens: switch (json['denyTokens']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"denyTokens" is not a list'),
+        _ => throw const FormatException('"denyTokens" is not a list'),
       },
     );
   }
@@ -44453,7 +44473,7 @@ final class NearestNeighbors extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) NearestNeighbors_Neighbor.fromJson(i),
         ],
-        _ => throw FormatException('"neighbors" is not a list'),
+        _ => throw const FormatException('"neighbors" is not a list'),
       },
     );
   }
@@ -44586,7 +44606,9 @@ final class FeatureViewDirectWriteRequest extends ProtoMessage {
           for (final i in $1)
             FeatureViewDirectWriteRequest_DataKeyAndFeatureValues.fromJson(i),
         ],
-        _ => throw FormatException('"dataKeyAndFeatureValues" is not a list'),
+        _ => throw const FormatException(
+          '"dataKeyAndFeatureValues" is not a list',
+        ),
       },
     );
   }
@@ -44639,7 +44661,7 @@ final class FeatureViewDirectWriteRequest_DataKeyAndFeatureValues
               i,
             ),
         ],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
     );
   }
@@ -44802,7 +44824,7 @@ final class FeatureViewDirectWriteResponse extends ProtoMessage {
           for (final i in $1)
             FeatureViewDirectWriteResponse_WriteResponse.fromJson(i),
         ],
-        _ => throw FormatException('"writeResponses" is not a list'),
+        _ => throw const FormatException('"writeResponses" is not a list'),
       },
     );
   }
@@ -45165,7 +45187,7 @@ final class ListFeatureGroupsResponse extends ProtoMessage {
       featureGroups: switch (json['featureGroups']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) FeatureGroup.fromJson(i)],
-        _ => throw FormatException('"featureGroups" is not a list'),
+        _ => throw const FormatException('"featureGroups" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -45597,7 +45619,7 @@ final class ListFeatureMonitorsResponse extends ProtoMessage {
       featureMonitors: switch (json['featureMonitors']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) FeatureMonitor.fromJson(i)],
-        _ => throw FormatException('"featureMonitors" is not a list'),
+        _ => throw const FormatException('"featureMonitors" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -46019,7 +46041,7 @@ final class ListFeatureMonitorJobsResponse extends ProtoMessage {
       featureMonitorJobs: switch (json['featureMonitorJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) FeatureMonitorJob.fromJson(i)],
-        _ => throw FormatException('"featureMonitorJobs" is not a list'),
+        _ => throw const FormatException('"featureMonitorJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -46063,7 +46085,7 @@ final class IdMatcher extends ProtoMessage {
       ids: switch (json['ids']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"ids" is not a list'),
+        _ => throw const FormatException('"ids" is not a list'),
       },
     );
   }
@@ -46245,7 +46267,7 @@ final class FeatureView extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       syncConfig: switch (json['syncConfig']) {
         null => null,
@@ -46350,7 +46372,7 @@ final class FeatureView_BigQuerySource extends ProtoMessage {
       entityIdColumns: switch (json['entityIdColumns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"entityIdColumns" is not a list'),
+        _ => throw const FormatException('"entityIdColumns" is not a list'),
       },
     );
   }
@@ -46475,7 +46497,7 @@ final class FeatureView_VectorSearchConfig extends ProtoMessage {
       filterColumns: switch (json['filterColumns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"filterColumns" is not a list'),
+        _ => throw const FormatException('"filterColumns" is not a list'),
       },
       crowdingColumn: switch (json['crowdingColumn']) {
         null => '',
@@ -46686,7 +46708,7 @@ final class FeatureView_IndexConfig extends ProtoMessage {
       filterColumns: switch (json['filterColumns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"filterColumns" is not a list'),
+        _ => throw const FormatException('"filterColumns" is not a list'),
       },
       crowdingColumn: switch (json['crowdingColumn']) {
         null => '',
@@ -46852,7 +46874,7 @@ final class FeatureView_FeatureRegistrySource extends ProtoMessage {
           for (final i in $1)
             FeatureView_FeatureRegistrySource_FeatureGroup.fromJson(i),
         ],
-        _ => throw FormatException('"featureGroups" is not a list'),
+        _ => throw const FormatException('"featureGroups" is not a list'),
       },
       projectNumber: switch (json['projectNumber']) {
         null => null,
@@ -46904,7 +46926,7 @@ final class FeatureView_FeatureRegistrySource_FeatureGroup
       featureIds: switch (json['featureIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"featureIds" is not a list'),
+        _ => throw const FormatException('"featureIds" is not a list'),
       },
     );
   }
@@ -47329,7 +47351,7 @@ final class Featurestore extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       onlineServingConfig: switch (json['onlineServingConfig']) {
         null => null,
@@ -47938,7 +47960,7 @@ final class WriteFeatureValuesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) WriteFeatureValuesPayload.fromJson(i),
         ],
-        _ => throw FormatException('"payloads" is not a list'),
+        _ => throw const FormatException('"payloads" is not a list'),
       },
     );
   }
@@ -47988,7 +48010,7 @@ final class WriteFeatureValuesPayload extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): FeatureValue.fromJson(e.value),
         },
-        _ => throw FormatException('"featureValues" is not an object'),
+        _ => throw const FormatException('"featureValues" is not an object'),
       },
     );
   }
@@ -48191,7 +48213,7 @@ final class ReadFeatureValuesResponse_Header extends ProtoMessage {
           for (final i in $1)
             ReadFeatureValuesResponse_FeatureDescriptor.fromJson(i),
         ],
-        _ => throw FormatException('"featureDescriptors" is not a list'),
+        _ => throw const FormatException('"featureDescriptors" is not a list'),
       },
     );
   }
@@ -48244,7 +48266,7 @@ final class ReadFeatureValuesResponse_EntityView extends ProtoMessage {
           for (final i in $1)
             ReadFeatureValuesResponse_EntityView_Data.fromJson(i),
         ],
-        _ => throw FormatException('"data" is not a list'),
+        _ => throw const FormatException('"data" is not a list'),
       },
     );
   }
@@ -48343,7 +48365,7 @@ final class StreamingReadFeatureValuesRequest extends ProtoMessage {
       entityIds: switch (json['entityIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"entityIds" is not a list'),
+        _ => throw const FormatException('"entityIds" is not a list'),
       },
       featureSelector: switch (json['featureSelector']) {
         null => null,
@@ -48550,7 +48572,7 @@ final class StructValue extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) StructFieldValue.fromJson(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -48618,7 +48640,7 @@ final class FeatureValueList extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) FeatureValue.fromJson(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -48872,7 +48894,7 @@ final class ListFeaturestoresResponse extends ProtoMessage {
       featurestores: switch (json['featurestores']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Featurestore.fromJson(i)],
-        _ => throw FormatException('"featurestores" is not a list'),
+        _ => throw const FormatException('"featurestores" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -49092,7 +49114,7 @@ final class ImportFeatureValuesRequest extends ProtoMessage {
           for (final i in $1)
             ImportFeatureValuesRequest_FeatureSpec.fromJson(i),
         ],
-        _ => throw FormatException('"featureSpecs" is not a list'),
+        _ => throw const FormatException('"featureSpecs" is not a list'),
       },
       disableOnlineServing: switch (json['disableOnlineServing']) {
         null => false,
@@ -49360,7 +49382,7 @@ final class BatchReadFeatureValuesRequest extends ProtoMessage {
           for (final i in $1)
             BatchReadFeatureValuesRequest_PassThroughField.fromJson(i),
         ],
-        _ => throw FormatException('"passThroughFields" is not a list'),
+        _ => throw const FormatException('"passThroughFields" is not a list'),
       },
       entityTypeSpecs: switch (json['entityTypeSpecs']) {
         null => [],
@@ -49368,7 +49390,7 @@ final class BatchReadFeatureValuesRequest extends ProtoMessage {
           for (final i in $1)
             BatchReadFeatureValuesRequest_EntityTypeSpec.fromJson(i),
         ],
-        _ => throw FormatException('"entityTypeSpecs" is not a list'),
+        _ => throw const FormatException('"entityTypeSpecs" is not a list'),
       },
       startTime: switch (json['startTime']) {
         null => null,
@@ -49473,7 +49495,7 @@ final class BatchReadFeatureValuesRequest_EntityTypeSpec extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) DestinationFeatureSetting.fromJson(i),
         ],
-        _ => throw FormatException('"settings" is not a list'),
+        _ => throw const FormatException('"settings" is not a list'),
       },
     );
   }
@@ -49557,7 +49579,7 @@ final class ExportFeatureValuesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) DestinationFeatureSetting.fromJson(i),
         ],
-        _ => throw FormatException('"settings" is not a list'),
+        _ => throw const FormatException('"settings" is not a list'),
       },
     );
   }
@@ -50054,7 +50076,7 @@ final class ListEntityTypesResponse extends ProtoMessage {
       entityTypes: switch (json['entityTypes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EntityType.fromJson(i)],
-        _ => throw FormatException('"entityTypes" is not a list'),
+        _ => throw const FormatException('"entityTypes" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -50278,7 +50300,7 @@ final class BatchCreateFeaturesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) CreateFeatureRequest.fromJson(i),
         ],
-        _ => throw FormatException('"requests" is not a list'),
+        _ => throw const FormatException('"requests" is not a list'),
       },
     );
   }
@@ -50311,7 +50333,7 @@ final class BatchCreateFeaturesResponse extends ProtoMessage {
       features: switch (json['features']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Feature.fromJson(i)],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
     );
   }
@@ -50549,7 +50571,7 @@ final class ListFeaturesResponse extends ProtoMessage {
       features: switch (json['features']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Feature.fromJson(i)],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -50740,7 +50762,7 @@ final class SearchFeaturesResponse extends ProtoMessage {
       features: switch (json['features']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Feature.fromJson(i)],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -50976,7 +50998,7 @@ final class ImportFeatureValuesOperationMetadata extends ProtoMessage {
       sourceUris: switch (json['sourceUris']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"sourceUris" is not a list'),
+        _ => throw const FormatException('"sourceUris" is not a list'),
       },
       invalidRowCount: switch (json['invalidRowCount']) {
         null => 0,
@@ -50990,7 +51012,9 @@ final class ImportFeatureValuesOperationMetadata extends ProtoMessage {
       blockingOperationIds: switch (json['blockingOperationIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"blockingOperationIds" is not a list'),
+        _ => throw const FormatException(
+          '"blockingOperationIds" is not a list',
+        ),
       },
     );
   }
@@ -51818,7 +51842,7 @@ final class ListCachedContentsResponse extends ProtoMessage {
       cachedContents: switch (json['cachedContents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) CachedContent.fromJson(i)],
-        _ => throw FormatException('"cachedContents" is not a list'),
+        _ => throw const FormatException('"cachedContents" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -52010,7 +52034,7 @@ final class ListTuningJobsResponse extends ProtoMessage {
       tuningJobs: switch (json['tuningJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TuningJob.fromJson(i)],
-        _ => throw FormatException('"tuningJobs" is not a list'),
+        _ => throw const FormatException('"tuningJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -52311,7 +52335,7 @@ final class HyperparameterTuningJob extends ProtoMessage {
       trials: switch (json['trials']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Trial.fromJson(i)],
-        _ => throw FormatException('"trials" is not a list'),
+        _ => throw const FormatException('"trials" is not a list'),
       },
       state: switch (json['state']) {
         null => JobState.$default,
@@ -52343,7 +52367,7 @@ final class HyperparameterTuningJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -52523,7 +52547,7 @@ final class Index extends ProtoMessage {
       deployedIndexes: switch (json['deployedIndexes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DeployedIndexRef.fromJson(i)],
-        _ => throw FormatException('"deployedIndexes" is not a list'),
+        _ => throw const FormatException('"deployedIndexes" is not a list'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -52535,7 +52559,7 @@ final class Index extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -52688,7 +52712,7 @@ final class IndexDatapoint extends ProtoMessage {
       featureVector: switch (json['featureVector']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"featureVector" is not a list'),
+        _ => throw const FormatException('"featureVector" is not a list'),
       },
       sparseEmbedding: switch (json['sparseEmbedding']) {
         null => null,
@@ -52699,14 +52723,14 @@ final class IndexDatapoint extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) IndexDatapoint_Restriction.fromJson(i),
         ],
-        _ => throw FormatException('"restricts" is not a list'),
+        _ => throw const FormatException('"restricts" is not a list'),
       },
       numericRestricts: switch (json['numericRestricts']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) IndexDatapoint_NumericRestriction.fromJson(i),
         ],
-        _ => throw FormatException('"numericRestricts" is not a list'),
+        _ => throw const FormatException('"numericRestricts" is not a list'),
       },
       crowdingTag: switch (json['crowdingTag']) {
         null => null,
@@ -52763,12 +52787,12 @@ final class IndexDatapoint_SparseEmbedding extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
       dimensions: switch (json['dimensions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"dimensions" is not a list'),
+        _ => throw const FormatException('"dimensions" is not a list'),
       },
     );
   }
@@ -52811,12 +52835,12 @@ final class IndexDatapoint_Restriction extends ProtoMessage {
       allowList: switch (json['allowList']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"allowList" is not a list'),
+        _ => throw const FormatException('"allowList" is not a list'),
       },
       denyList: switch (json['denyList']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"denyList" is not a list'),
+        _ => throw const FormatException('"denyList" is not a list'),
       },
     );
   }
@@ -53191,7 +53215,7 @@ final class IndexEndpoint extends ProtoMessage {
       deployedIndexes: switch (json['deployedIndexes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DeployedIndex.fromJson(i)],
-        _ => throw FormatException('"deployedIndexes" is not a list'),
+        _ => throw const FormatException('"deployedIndexes" is not a list'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -53203,7 +53227,7 @@ final class IndexEndpoint extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -53495,7 +53519,7 @@ final class DeployedIndex extends ProtoMessage {
       reservedIpRanges: switch (json['reservedIpRanges']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"reservedIpRanges" is not a list'),
+        _ => throw const FormatException('"reservedIpRanges" is not a list'),
       },
       deploymentGroup: switch (json['deploymentGroup']) {
         null => '',
@@ -53506,7 +53530,9 @@ final class DeployedIndex extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PscautomationConfig.fromJson(i),
         ],
-        _ => throw FormatException('"pscAutomationConfigs" is not a list'),
+        _ => throw const FormatException(
+          '"pscAutomationConfigs" is not a list',
+        ),
       },
     );
   }
@@ -53609,12 +53635,12 @@ final class DeployedIndexAuthConfig_AuthProvider extends ProtoMessage {
       audiences: switch (json['audiences']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"audiences" is not a list'),
+        _ => throw const FormatException('"audiences" is not a list'),
       },
       allowedIssuers: switch (json['allowedIssuers']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"allowedIssuers" is not a list'),
+        _ => throw const FormatException('"allowedIssuers" is not a list'),
       },
     );
   }
@@ -53671,7 +53697,9 @@ final class IndexPrivateEndpoints extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PscAutomatedEndpoints.fromJson(i),
         ],
-        _ => throw FormatException('"pscAutomatedEndpoints" is not a list'),
+        _ => throw const FormatException(
+          '"pscAutomatedEndpoints" is not a list',
+        ),
       },
     );
   }
@@ -53928,7 +53956,7 @@ final class ListIndexEndpointsResponse extends ProtoMessage {
       indexEndpoints: switch (json['indexEndpoints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) IndexEndpoint.fromJson(i)],
-        _ => throw FormatException('"indexEndpoints" is not a list'),
+        _ => throw const FormatException('"indexEndpoints" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -54591,7 +54619,7 @@ final class ListIndexesResponse extends ProtoMessage {
       indexes: switch (json['indexes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Index.fromJson(i)],
-        _ => throw FormatException('"indexes" is not a list'),
+        _ => throw const FormatException('"indexes" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -54847,7 +54875,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
               i,
             ),
         ],
-        _ => throw FormatException('"restricts" is not a list'),
+        _ => throw const FormatException('"restricts" is not a list'),
       },
       numericRestricts: switch (json['numericRestricts']) {
         null => [],
@@ -54857,12 +54885,12 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
               i,
             ),
         ],
-        _ => throw FormatException('"numericRestricts" is not a list'),
+        _ => throw const FormatException('"numericRestricts" is not a list'),
       },
       metadataColumns: switch (json['metadataColumns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"metadataColumns" is not a list'),
+        _ => throw const FormatException('"metadataColumns" is not a list'),
       },
     );
   }
@@ -54920,12 +54948,12 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict
       allowColumn: switch (json['allowColumn']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"allowColumn" is not a list'),
+        _ => throw const FormatException('"allowColumn" is not a list'),
       },
       denyColumn: switch (json['denyColumn']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"denyColumn" is not a list'),
+        _ => throw const FormatException('"denyColumn" is not a list'),
       },
     );
   }
@@ -55210,7 +55238,7 @@ final class UpsertDatapointsRequest extends ProtoMessage {
       datapoints: switch (json['datapoints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) IndexDatapoint.fromJson(i)],
-        _ => throw FormatException('"datapoints" is not a list'),
+        _ => throw const FormatException('"datapoints" is not a list'),
       },
       updateMask: switch (json['updateMask']) {
         null => null,
@@ -55278,7 +55306,7 @@ final class RemoveDatapointsRequest extends ProtoMessage {
       datapointIds: switch (json['datapointIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"datapointIds" is not a list'),
+        _ => throw const FormatException('"datapointIds" is not a list'),
       },
     );
   }
@@ -55347,7 +55375,9 @@ final class NearestNeighborSearchOperationMetadata extends ProtoMessage {
               i,
             ),
         ],
-        _ => throw FormatException('"contentValidationStats" is not a list'),
+        _ => throw const FormatException(
+          '"contentValidationStats" is not a list',
+        ),
       },
       dataBytesCount: switch (json['dataBytesCount']) {
         null => 0,
@@ -55659,7 +55689,7 @@ final class NearestNeighborSearchOperationMetadata_ContentValidationStats
           for (final i in $1)
             NearestNeighborSearchOperationMetadata_RecordError.fromJson(i),
         ],
-        _ => throw FormatException('"partialErrors" is not a list'),
+        _ => throw const FormatException('"partialErrors" is not a list'),
       },
       validSparseRecordCount: switch (json['validSparseRecordCount']) {
         null => 0,
@@ -55771,7 +55801,7 @@ final class GcsSource extends ProtoMessage {
       uris: switch (json['uris']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"uris" is not a list'),
+        _ => throw const FormatException('"uris" is not a list'),
       },
     );
   }
@@ -56007,7 +56037,7 @@ final class GoogleDriveSource extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) GoogleDriveSource_ResourceId.fromJson(i),
         ],
-        _ => throw FormatException('"resourceIds" is not a list'),
+        _ => throw const FormatException('"resourceIds" is not a list'),
       },
     );
   }
@@ -56129,7 +56159,7 @@ final class SlackSource extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) SlackSource_SlackChannels.fromJson(i),
         ],
-        _ => throw FormatException('"channels" is not a list'),
+        _ => throw const FormatException('"channels" is not a list'),
       },
     );
   }
@@ -56169,7 +56199,7 @@ final class SlackSource_SlackChannels extends ProtoMessage {
           for (final i in $1)
             SlackSource_SlackChannels_SlackChannel.fromJson(i),
         ],
-        _ => throw FormatException('"channels" is not a list'),
+        _ => throw const FormatException('"channels" is not a list'),
       },
       apiKeyConfig: switch (json['apiKeyConfig']) {
         null => null,
@@ -56258,7 +56288,7 @@ final class JiraSource extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) JiraSource_JiraQueries.fromJson(i),
         ],
-        _ => throw FormatException('"jiraQueries" is not a list'),
+        _ => throw const FormatException('"jiraQueries" is not a list'),
       },
     );
   }
@@ -56309,12 +56339,12 @@ final class JiraSource_JiraQueries extends ProtoMessage {
       projects: switch (json['projects']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"projects" is not a list'),
+        _ => throw const FormatException('"projects" is not a list'),
       },
       customQueries: switch (json['customQueries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"customQueries" is not a list'),
+        _ => throw const FormatException('"customQueries" is not a list'),
       },
       email: switch (json['email']) {
         null => '',
@@ -56366,7 +56396,7 @@ final class SharePointSources extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) SharePointSources_SharePointSource.fromJson(i),
         ],
-        _ => throw FormatException('"sharePointSources" is not a list'),
+        _ => throw const FormatException('"sharePointSources" is not a list'),
       },
     );
   }
@@ -56703,7 +56733,7 @@ final class ListCustomJobsResponse extends ProtoMessage {
       customJobs: switch (json['customJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) CustomJob.fromJson(i)],
-        _ => throw FormatException('"customJobs" is not a list'),
+        _ => throw const FormatException('"customJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -57004,7 +57034,7 @@ final class ListDataLabelingJobsResponse extends ProtoMessage {
       dataLabelingJobs: switch (json['dataLabelingJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DataLabelingJob.fromJson(i)],
-        _ => throw FormatException('"dataLabelingJobs" is not a list'),
+        _ => throw const FormatException('"dataLabelingJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -57308,7 +57338,9 @@ final class ListHyperparameterTuningJobsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) HyperparameterTuningJob.fromJson(i),
         ],
-        _ => throw FormatException('"hyperparameterTuningJobs" is not a list'),
+        _ => throw const FormatException(
+          '"hyperparameterTuningJobs" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -57602,7 +57634,7 @@ final class ListNasJobsResponse extends ProtoMessage {
       nasJobs: switch (json['nasJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NasJob.fromJson(i)],
-        _ => throw FormatException('"nasJobs" is not a list'),
+        _ => throw const FormatException('"nasJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -57813,7 +57845,7 @@ final class ListNasTrialDetailsResponse extends ProtoMessage {
       nasTrialDetails: switch (json['nasTrialDetails']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NasTrialDetail.fromJson(i)],
-        _ => throw FormatException('"nasTrialDetails" is not a list'),
+        _ => throw const FormatException('"nasTrialDetails" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -58046,7 +58078,7 @@ final class ListBatchPredictionJobsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) BatchPredictionJob.fromJson(i),
         ],
-        _ => throw FormatException('"batchPredictionJobs" is not a list'),
+        _ => throw const FormatException('"batchPredictionJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -58265,7 +58297,7 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesRequest
               i,
             ),
         ],
-        _ => throw FormatException('"objectives" is not a list'),
+        _ => throw const FormatException('"objectives" is not a list'),
       },
       pageSize: switch (json['pageSize']) {
         null => 0,
@@ -58399,7 +58431,7 @@ final class SearchModelDeploymentMonitoringStatsAnomaliesResponse
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringStatsAnomalies.fromJson(i),
         ],
-        _ => throw FormatException('"monitoringStats" is not a list'),
+        _ => throw const FormatException('"monitoringStats" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -58579,7 +58611,7 @@ final class ListModelDeploymentMonitoringJobsResponse extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) ModelDeploymentMonitoringJob.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"modelDeploymentMonitoringJobs" is not a list',
             ),
           },
@@ -58838,17 +58870,17 @@ final class LineageSubgraph extends ProtoMessage {
       artifacts: switch (json['artifacts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Artifact.fromJson(i)],
-        _ => throw FormatException('"artifacts" is not a list'),
+        _ => throw const FormatException('"artifacts" is not a list'),
       },
       executions: switch (json['executions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Execution.fromJson(i)],
-        _ => throw FormatException('"executions" is not a list'),
+        _ => throw const FormatException('"executions" is not a list'),
       },
       events: switch (json['events']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Event.fromJson(i)],
-        _ => throw FormatException('"events" is not a list'),
+        _ => throw const FormatException('"events" is not a list'),
       },
     );
   }
@@ -58903,7 +58935,7 @@ final class ComputeTokensRequest extends ProtoMessage {
       instances: switch (json['instances']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
       model: switch (json['model']) {
         null => '',
@@ -58912,7 +58944,7 @@ final class ComputeTokensRequest extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
     );
   }
@@ -58955,12 +58987,12 @@ final class TokensInfo extends ProtoMessage {
       tokens: switch (json['tokens']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeBytes(i)],
-        _ => throw FormatException('"tokens" is not a list'),
+        _ => throw const FormatException('"tokens" is not a list'),
       },
       tokenIds: switch (json['tokenIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"tokenIds" is not a list'),
+        _ => throw const FormatException('"tokenIds" is not a list'),
       },
       role: switch (json['role']) {
         null => '',
@@ -59002,7 +59034,7 @@ final class ComputeTokensResponse extends ProtoMessage {
       tokensInfo: switch (json['tokensInfo']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TokensInfo.fromJson(i)],
-        _ => throw FormatException('"tokensInfo" is not a list'),
+        _ => throw const FormatException('"tokensInfo" is not a list'),
       },
     );
   }
@@ -59275,7 +59307,9 @@ final class DedicatedResources extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) AutoscalingMetricSpec.fromJson(i),
         ],
-        _ => throw FormatException('"autoscalingMetricSpecs" is not a list'),
+        _ => throw const FormatException(
+          '"autoscalingMetricSpecs" is not a list',
+        ),
       },
       spot: switch (json['spot']) {
         null => false,
@@ -59736,7 +59770,7 @@ final class AutoscalingMetricSpec extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException(
+        _ => throw const FormatException(
           '"monitoredResourceLabels" is not an object',
         ),
       },
@@ -59918,7 +59952,7 @@ final class FindNeighborsRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FindNeighborsRequest_Query.fromJson(i),
         ],
-        _ => throw FormatException('"queries" is not a list'),
+        _ => throw const FormatException('"queries" is not a list'),
       },
       returnFullDatapoint: switch (json['returnFullDatapoint']) {
         null => false,
@@ -60107,7 +60141,7 @@ final class FindNeighborsResponse extends ProtoMessage {
           for (final i in $1)
             FindNeighborsResponse_NearestNeighbors.fromJson(i),
         ],
-        _ => throw FormatException('"nearestNeighbors" is not a list'),
+        _ => throw const FormatException('"nearestNeighbors" is not a list'),
       },
     );
   }
@@ -60209,7 +60243,7 @@ final class FindNeighborsResponse_NearestNeighbors extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FindNeighborsResponse_Neighbor.fromJson(i),
         ],
-        _ => throw FormatException('"neighbors" is not a list'),
+        _ => throw const FormatException('"neighbors" is not a list'),
       },
     );
   }
@@ -60264,7 +60298,7 @@ final class ReadIndexDatapointsRequest extends ProtoMessage {
       ids: switch (json['ids']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"ids" is not a list'),
+        _ => throw const FormatException('"ids" is not a list'),
       },
     );
   }
@@ -60304,7 +60338,7 @@ final class ReadIndexDatapointsResponse extends ProtoMessage {
       datapoints: switch (json['datapoints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) IndexDatapoint.fromJson(i)],
-        _ => throw FormatException('"datapoints" is not a list'),
+        _ => throw const FormatException('"datapoints" is not a list'),
       },
     );
   }
@@ -60410,7 +60444,7 @@ final class Memory extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"scope" is not an object'),
+        _ => throw const FormatException('"scope" is not an object'),
       },
     );
   }
@@ -60722,7 +60756,7 @@ final class ListMemoriesResponse extends ProtoMessage {
       memories: switch (json['memories']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Memory.fromJson(i)],
-        _ => throw FormatException('"memories" is not a list'),
+        _ => throw const FormatException('"memories" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -60884,7 +60918,7 @@ final class GenerateMemoriesRequest extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"scope" is not an object'),
+        _ => throw const FormatException('"scope" is not an object'),
       },
     );
   }
@@ -60993,7 +61027,7 @@ final class GenerateMemoriesRequest_DirectContentsSource extends ProtoMessage {
           for (final i in $1)
             GenerateMemoriesRequest_DirectContentsSource_Event.fromJson(i),
         ],
-        _ => throw FormatException('"events" is not a list'),
+        _ => throw const FormatException('"events" is not a list'),
       },
     );
   }
@@ -61061,7 +61095,7 @@ final class GenerateMemoriesRequest_DirectMemoriesSource extends ProtoMessage {
               i,
             ),
         ],
-        _ => throw FormatException('"directMemories" is not a list'),
+        _ => throw const FormatException('"directMemories" is not a list'),
       },
     );
   }
@@ -61129,7 +61163,7 @@ final class GenerateMemoriesResponse extends ProtoMessage {
           for (final i in $1)
             GenerateMemoriesResponse_GeneratedMemory.fromJson(i),
         ],
-        _ => throw FormatException('"generatedMemories" is not a list'),
+        _ => throw const FormatException('"generatedMemories" is not a list'),
       },
     );
   }
@@ -61311,7 +61345,7 @@ final class RetrieveMemoriesRequest extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"scope" is not an object'),
+        _ => throw const FormatException('"scope" is not an object'),
       },
     );
   }
@@ -61458,7 +61492,7 @@ final class RetrieveMemoriesResponse extends ProtoMessage {
           for (final i in $1)
             RetrieveMemoriesResponse_RetrievedMemory.fromJson(i),
         ],
-        _ => throw FormatException('"retrievedMemories" is not a list'),
+        _ => throw const FormatException('"retrievedMemories" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -61873,7 +61907,7 @@ final class ListMetadataStoresResponse extends ProtoMessage {
       metadataStores: switch (json['metadataStores']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) MetadataStore.fromJson(i)],
-        _ => throw FormatException('"metadataStores" is not a list'),
+        _ => throw const FormatException('"metadataStores" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -62208,7 +62242,7 @@ final class ListArtifactsResponse extends ProtoMessage {
       artifacts: switch (json['artifacts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Artifact.fromJson(i)],
-        _ => throw FormatException('"artifacts" is not a list'),
+        _ => throw const FormatException('"artifacts" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -62422,7 +62456,7 @@ final class PurgeArtifactsResponse extends ProtoMessage {
       purgeSample: switch (json['purgeSample']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"purgeSample" is not a list'),
+        _ => throw const FormatException('"purgeSample" is not a list'),
       },
     );
   }
@@ -62713,7 +62747,7 @@ final class ListContextsResponse extends ProtoMessage {
       contexts: switch (json['contexts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Context.fromJson(i)],
-        _ => throw FormatException('"contexts" is not a list'),
+        _ => throw const FormatException('"contexts" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -62938,7 +62972,7 @@ final class PurgeContextsResponse extends ProtoMessage {
       purgeSample: switch (json['purgeSample']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"purgeSample" is not a list'),
+        _ => throw const FormatException('"purgeSample" is not a list'),
       },
     );
   }
@@ -63026,12 +63060,12 @@ final class AddContextArtifactsAndExecutionsRequest extends ProtoMessage {
       artifacts: switch (json['artifacts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"artifacts" is not a list'),
+        _ => throw const FormatException('"artifacts" is not a list'),
       },
       executions: switch (json['executions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"executions" is not a list'),
+        _ => throw const FormatException('"executions" is not a list'),
       },
     );
   }
@@ -63098,7 +63132,7 @@ final class AddContextChildrenRequest extends ProtoMessage {
       childContexts: switch (json['childContexts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"childContexts" is not a list'),
+        _ => throw const FormatException('"childContexts" is not a list'),
       },
     );
   }
@@ -63164,7 +63198,7 @@ final class RemoveContextChildrenRequest extends ProtoMessage {
       childContexts: switch (json['childContexts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"childContexts" is not a list'),
+        _ => throw const FormatException('"childContexts" is not a list'),
       },
     );
   }
@@ -63480,7 +63514,7 @@ final class ListExecutionsResponse extends ProtoMessage {
       executions: switch (json['executions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Execution.fromJson(i)],
-        _ => throw FormatException('"executions" is not a list'),
+        _ => throw const FormatException('"executions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -63695,7 +63729,7 @@ final class PurgeExecutionsResponse extends ProtoMessage {
       purgeSample: switch (json['purgeSample']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"purgeSample" is not a list'),
+        _ => throw const FormatException('"purgeSample" is not a list'),
       },
     );
   }
@@ -63771,7 +63805,7 @@ final class AddExecutionEventsRequest extends ProtoMessage {
       events: switch (json['events']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Event.fromJson(i)],
-        _ => throw FormatException('"events" is not a list'),
+        _ => throw const FormatException('"events" is not a list'),
       },
     );
   }
@@ -64042,7 +64076,7 @@ final class ListMetadataSchemasResponse extends ProtoMessage {
       metadataSchemas: switch (json['metadataSchemas']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) MetadataSchema.fromJson(i)],
-        _ => throw FormatException('"metadataSchemas" is not a list'),
+        _ => throw const FormatException('"metadataSchemas" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -64591,7 +64625,7 @@ final class MigratableResource_DataLabelingDataset extends ProtoMessage {
                   i,
                 ),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"dataLabelingAnnotatedDatasets" is not a list',
             ),
           },
@@ -64783,7 +64817,7 @@ final class SearchMigratableResourcesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) MigratableResource.fromJson(i),
         ],
-        _ => throw FormatException('"migratableResources" is not a list'),
+        _ => throw const FormatException('"migratableResources" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -64838,7 +64872,9 @@ final class BatchMigrateResourcesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) MigrateResourceRequest.fromJson(i),
         ],
-        _ => throw FormatException('"migrateResourceRequests" is not a list'),
+        _ => throw const FormatException(
+          '"migrateResourceRequests" is not a list',
+        ),
       },
     );
   }
@@ -65165,7 +65201,7 @@ final class MigrateResourceRequest_MigrateDataLabelingDatasetConfig
                   i,
                 ),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"migrateDataLabelingAnnotatedDatasetConfigs" is not a list',
             ),
           },
@@ -65251,7 +65287,9 @@ final class BatchMigrateResourcesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) MigrateResourceResponse.fromJson(i),
         ],
-        _ => throw FormatException('"migrateResourceResponses" is not a list'),
+        _ => throw const FormatException(
+          '"migrateResourceResponses" is not a list',
+        ),
       },
     );
   }
@@ -65351,7 +65389,7 @@ final class BatchMigrateResourcesOperationMetadata extends ProtoMessage {
           for (final i in $1)
             BatchMigrateResourcesOperationMetadata_PartialResult.fromJson(i),
         ],
-        _ => throw FormatException('"partialResults" is not a list'),
+        _ => throw const FormatException('"partialResults" is not a list'),
       },
     );
   }
@@ -65773,7 +65811,7 @@ final class Model extends ProtoMessage {
       versionAliases: switch (json['versionAliases']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"versionAliases" is not a list'),
+        _ => throw const FormatException('"versionAliases" is not a list'),
       },
       versionCreateTime: switch (json['versionCreateTime']) {
         null => null,
@@ -65816,7 +65854,9 @@ final class Model extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) Model_ExportFormat.fromJson(i),
         ],
-        _ => throw FormatException('"supportedExportFormats" is not a list'),
+        _ => throw const FormatException(
+          '"supportedExportFormats" is not a list',
+        ),
       },
       trainingPipeline: switch (json['trainingPipeline']) {
         null => '',
@@ -65836,7 +65876,7 @@ final class Model extends ProtoMessage {
             List<Object?> $1 => [
               for (final i in $1) Model_DeploymentResourcesType.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"supportedDeploymentResourcesTypes" is not a list',
             ),
           },
@@ -65844,7 +65884,7 @@ final class Model extends ProtoMessage {
           switch (json['supportedInputStorageFormats']) {
             null => [],
             List<Object?> $1 => [for (final i in $1) decodeString(i)],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"supportedInputStorageFormats" is not a list',
             ),
           },
@@ -65852,7 +65892,7 @@ final class Model extends ProtoMessage {
           switch (json['supportedOutputStorageFormats']) {
             null => [],
             List<Object?> $1 => [for (final i in $1) decodeString(i)],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"supportedOutputStorageFormats" is not a list',
             ),
           },
@@ -65867,7 +65907,7 @@ final class Model extends ProtoMessage {
       deployedModels: switch (json['deployedModels']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DeployedModelRef.fromJson(i)],
-        _ => throw FormatException('"deployedModels" is not a list'),
+        _ => throw const FormatException('"deployedModels" is not a list'),
       },
       explanationSpec: switch (json['explanationSpec']) {
         null => null,
@@ -65883,7 +65923,7 @@ final class Model extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -65916,7 +65956,7 @@ final class Model extends ProtoMessage {
       checkpoints: switch (json['checkpoints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Checkpoint.fromJson(i)],
-        _ => throw FormatException('"checkpoints" is not a list'),
+        _ => throw const FormatException('"checkpoints" is not a list'),
       },
     );
   }
@@ -66038,7 +66078,7 @@ final class Model_ExportFormat extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) Model_ExportFormat_ExportableContent.fromJson(i),
         ],
-        _ => throw FormatException('"exportableContents" is not a list'),
+        _ => throw const FormatException('"exportableContents" is not a list'),
       },
     );
   }
@@ -66710,22 +66750,22 @@ final class ModelContainerSpec extends ProtoMessage {
       command: switch (json['command']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"command" is not a list'),
+        _ => throw const FormatException('"command" is not a list'),
       },
       args: switch (json['args']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"args" is not a list'),
+        _ => throw const FormatException('"args" is not a list'),
       },
       env: switch (json['env']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EnvVar.fromJson(i)],
-        _ => throw FormatException('"env" is not a list'),
+        _ => throw const FormatException('"env" is not a list'),
       },
       ports: switch (json['ports']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Port.fromJson(i)],
-        _ => throw FormatException('"ports" is not a list'),
+        _ => throw const FormatException('"ports" is not a list'),
       },
       predictRoute: switch (json['predictRoute']) {
         null => '',
@@ -66742,7 +66782,7 @@ final class ModelContainerSpec extends ProtoMessage {
       grpcPorts: switch (json['grpcPorts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Port.fromJson(i)],
-        _ => throw FormatException('"grpcPorts" is not a list'),
+        _ => throw const FormatException('"grpcPorts" is not a list'),
       },
       deploymentTimeout: switch (json['deploymentTimeout']) {
         null => null,
@@ -67078,7 +67118,7 @@ final class Probe_ExecAction extends ProtoMessage {
       command: switch (json['command']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"command" is not a list'),
+        _ => throw const FormatException('"command" is not a list'),
       },
     );
   }
@@ -67143,7 +67183,7 @@ final class Probe_HttpGetAction extends ProtoMessage {
       httpHeaders: switch (json['httpHeaders']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Probe_HttpHeader.fromJson(i)],
-        _ => throw FormatException('"httpHeaders" is not a list'),
+        _ => throw const FormatException('"httpHeaders" is not a list'),
       },
     );
   }
@@ -67555,7 +67595,7 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
               for (final i in $1)
                 ModelDeploymentMonitoringObjectiveConfig.fromJson(i),
             ],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"modelDeploymentMonitoringObjectiveConfigs" is not a list',
             ),
           },
@@ -67590,7 +67630,7 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
           for (final i in $1)
             ModelDeploymentMonitoringBigQueryTable.fromJson(i),
         ],
-        _ => throw FormatException('"bigqueryTables" is not a list'),
+        _ => throw const FormatException('"bigqueryTables" is not a list'),
       },
       logTtl: switch (json['logTtl']) {
         null => null,
@@ -67602,7 +67642,7 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -68072,7 +68112,7 @@ final class ModelMonitoringStatsAnomalies extends ProtoMessage {
               i,
             ),
         ],
-        _ => throw FormatException('"featureStats" is not a list'),
+        _ => throw const FormatException('"featureStats" is not a list'),
       },
     );
   }
@@ -68144,7 +68184,7 @@ final class ModelMonitoringStatsAnomalies_FeatureHistoricStatsAnomalies
         List<Object?> $1 => [
           for (final i in $1) FeatureStatsAnomaly.fromJson(i),
         ],
-        _ => throw FormatException('"predictionStats" is not a list'),
+        _ => throw const FormatException('"predictionStats" is not a list'),
       },
     );
   }
@@ -68256,7 +68296,7 @@ final class ModelEvaluation extends ProtoMessage {
       sliceDimensions: switch (json['sliceDimensions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"sliceDimensions" is not a list'),
+        _ => throw const FormatException('"sliceDimensions" is not a list'),
       },
       modelExplanation: switch (json['modelExplanation']) {
         null => null,
@@ -68268,7 +68308,7 @@ final class ModelEvaluation extends ProtoMessage {
           for (final i in $1)
             ModelEvaluation_ModelEvaluationExplanationSpec.fromJson(i),
         ],
-        _ => throw FormatException('"explanationSpecs" is not a list'),
+        _ => throw const FormatException('"explanationSpecs" is not a list'),
       },
       metadata: switch (json['metadata']) {
         null => null,
@@ -68403,7 +68443,7 @@ final class ModelEvaluation_BiasConfig extends ProtoMessage {
       labels: switch (json['labels']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"labels" is not a list'),
+        _ => throw const FormatException('"labels" is not a list'),
       },
     );
   }
@@ -68599,7 +68639,7 @@ final class ModelEvaluationSlice_Slice_SliceSpec extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"configs" is not an object'),
+        _ => throw const FormatException('"configs" is not an object'),
       },
     );
   }
@@ -69044,7 +69084,7 @@ final class ListPublisherModelsResponse extends ProtoMessage {
       publisherModels: switch (json['publisherModels']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) PublisherModel.fromJson(i)],
-        _ => throw FormatException('"publisherModels" is not a list'),
+        _ => throw const FormatException('"publisherModels" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -69453,7 +69493,7 @@ final class DeployRequest_DeployConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"systemLabels" is not an object'),
+        _ => throw const FormatException('"systemLabels" is not an object'),
       },
     );
   }
@@ -70468,21 +70508,21 @@ final class ModelMonitoringSchema extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringSchema_FieldSchema.fromJson(i),
         ],
-        _ => throw FormatException('"featureFields" is not a list'),
+        _ => throw const FormatException('"featureFields" is not a list'),
       },
       predictionFields: switch (json['predictionFields']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringSchema_FieldSchema.fromJson(i),
         ],
-        _ => throw FormatException('"predictionFields" is not a list'),
+        _ => throw const FormatException('"predictionFields" is not a list'),
       },
       groundTruthFields: switch (json['groundTruthFields']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringSchema_FieldSchema.fromJson(i),
         ],
-        _ => throw FormatException('"groundTruthFields" is not a list'),
+        _ => throw const FormatException('"groundTruthFields" is not a list'),
       },
     );
   }
@@ -70602,7 +70642,7 @@ final class ModelMonitoringConfig extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringObjectiveConfig.fromJson(i),
         ],
-        _ => throw FormatException('"objectiveConfigs" is not a list'),
+        _ => throw const FormatException('"objectiveConfigs" is not a list'),
       },
       alertConfig: switch (json['alertConfig']) {
         null => null,
@@ -70859,7 +70899,7 @@ final class ModelMonitoringObjectiveConfig_TrainingPredictionSkewDetectionConfig
           for (final e in $1.entries)
             decodeString(e.key): ThresholdConfig.fromJson(e.value),
         },
-        _ => throw FormatException('"skewThresholds" is not an object'),
+        _ => throw const FormatException('"skewThresholds" is not an object'),
       },
       attributionScoreSkewThresholds:
           switch (json['attributionScoreSkewThresholds']) {
@@ -70868,7 +70908,7 @@ final class ModelMonitoringObjectiveConfig_TrainingPredictionSkewDetectionConfig
               for (final e in $1.entries)
                 decodeString(e.key): ThresholdConfig.fromJson(e.value),
             },
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"attributionScoreSkewThresholds" is not an object',
             ),
           },
@@ -70933,7 +70973,7 @@ final class ModelMonitoringObjectiveConfig_PredictionDriftDetectionConfig
           for (final e in $1.entries)
             decodeString(e.key): ThresholdConfig.fromJson(e.value),
         },
-        _ => throw FormatException('"driftThresholds" is not an object'),
+        _ => throw const FormatException('"driftThresholds" is not an object'),
       },
       attributionScoreDriftThresholds:
           switch (json['attributionScoreDriftThresholds']) {
@@ -70942,7 +70982,7 @@ final class ModelMonitoringObjectiveConfig_PredictionDriftDetectionConfig
               for (final e in $1.entries)
                 decodeString(e.key): ThresholdConfig.fromJson(e.value),
             },
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"attributionScoreDriftThresholds" is not an object',
             ),
           },
@@ -71172,7 +71212,9 @@ final class ModelMonitoringAlertConfig extends ProtoMessage {
       notificationChannels: switch (json['notificationChannels']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"notificationChannels" is not a list'),
+        _ => throw const FormatException(
+          '"notificationChannels" is not a list',
+        ),
       },
     );
   }
@@ -71210,7 +71252,7 @@ final class ModelMonitoringAlertConfig_EmailAlertConfig extends ProtoMessage {
       userEmails: switch (json['userEmails']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"userEmails" is not a list'),
+        _ => throw const FormatException('"userEmails" is not a list'),
       },
     );
   }
@@ -71716,7 +71758,7 @@ final class ModelMonitoringJobExecutionDetail extends ProtoMessage {
           for (final i in $1)
             ModelMonitoringJobExecutionDetail_ProcessedDataset.fromJson(i),
         ],
-        _ => throw FormatException('"baselineDatasets" is not a list'),
+        _ => throw const FormatException('"baselineDatasets" is not a list'),
       },
       targetDatasets: switch (json['targetDatasets']) {
         null => [],
@@ -71724,7 +71766,7 @@ final class ModelMonitoringJobExecutionDetail extends ProtoMessage {
           for (final i in $1)
             ModelMonitoringJobExecutionDetail_ProcessedDataset.fromJson(i),
         ],
-        _ => throw FormatException('"targetDatasets" is not a list'),
+        _ => throw const FormatException('"targetDatasets" is not a list'),
       },
       objectiveStatus: switch (json['objectiveStatus']) {
         null => {},
@@ -71732,7 +71774,7 @@ final class ModelMonitoringJobExecutionDetail extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Status.fromJson(e.value),
         },
-        _ => throw FormatException('"objectiveStatus" is not an object'),
+        _ => throw const FormatException('"objectiveStatus" is not an object'),
       },
       error: switch (json['error']) {
         null => null,
@@ -72104,7 +72146,7 @@ final class ListModelMonitorsResponse extends ProtoMessage {
       modelMonitors: switch (json['modelMonitors']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ModelMonitor.fromJson(i)],
-        _ => throw FormatException('"modelMonitors" is not a list'),
+        _ => throw const FormatException('"modelMonitors" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -72370,7 +72412,7 @@ final class ListModelMonitoringJobsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringJob.fromJson(i),
         ],
-        _ => throw FormatException('"modelMonitoringJobs" is not a list'),
+        _ => throw const FormatException('"modelMonitoringJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -72533,7 +72575,7 @@ final class SearchModelMonitoringStatsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringStats.fromJson(i),
         ],
-        _ => throw FormatException('"monitoringStats" is not a list'),
+        _ => throw const FormatException('"monitoringStats" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -72694,7 +72736,9 @@ final class SearchModelMonitoringAlertsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringAlert.fromJson(i),
         ],
-        _ => throw FormatException('"modelMonitoringAlerts" is not a list'),
+        _ => throw const FormatException(
+          '"modelMonitoringAlerts" is not a list',
+        ),
       },
       totalNumberAlerts: switch (json['totalNumberAlerts']) {
         null => 0,
@@ -72890,7 +72934,7 @@ final class ModelMonitoringObjectiveSpec_DataDriftSpec extends ProtoMessage {
       features: switch (json['features']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
       categoricalMetricType: switch (json['categoricalMetricType']) {
         null => '',
@@ -72918,7 +72962,9 @@ final class ModelMonitoringObjectiveSpec_DataDriftSpec extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"featureAlertConditions" is not an object'),
+        _ => throw const FormatException(
+          '"featureAlertConditions" is not an object',
+        ),
       },
     );
   }
@@ -72986,7 +73032,7 @@ final class ModelMonitoringObjectiveSpec_FeatureAttributionSpec
       features: switch (json['features']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"features" is not a list'),
+        _ => throw const FormatException('"features" is not a list'),
       },
       defaultAlertCondition: switch (json['defaultAlertCondition']) {
         null => null,
@@ -73000,7 +73046,9 @@ final class ModelMonitoringObjectiveSpec_FeatureAttributionSpec
               e.value,
             ),
         },
-        _ => throw FormatException('"featureAlertConditions" is not an object'),
+        _ => throw const FormatException(
+          '"featureAlertConditions" is not an object',
+        ),
       },
       batchExplanationDedicatedResources:
           switch (json['batchExplanationDedicatedResources']) {
@@ -73466,7 +73514,7 @@ final class ModelMonitoringInput_VertexEndpointLogs extends ProtoMessage {
       endpoints: switch (json['endpoints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"endpoints" is not a list'),
+        _ => throw const FormatException('"endpoints" is not a list'),
       },
     );
   }
@@ -73573,7 +73621,7 @@ final class ModelMonitoringNotificationSpec extends ProtoMessage {
               i,
             ),
         ],
-        _ => throw FormatException(
+        _ => throw const FormatException(
           '"notificationChannelConfigs" is not a list',
         ),
       },
@@ -73613,7 +73661,7 @@ final class ModelMonitoringNotificationSpec_EmailConfig extends ProtoMessage {
       userEmails: switch (json['userEmails']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"userEmails" is not a list'),
+        _ => throw const FormatException('"userEmails" is not a list'),
       },
     );
   }
@@ -73944,7 +73992,7 @@ final class ModelMonitoringTabularStats extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelMonitoringStatsDataPoint.fromJson(i),
         ],
-        _ => throw FormatException('"dataPoints" is not a list'),
+        _ => throw const FormatException('"dataPoints" is not a list'),
       },
     );
   }
@@ -74416,7 +74464,7 @@ final class ListModelsResponse extends ProtoMessage {
       models: switch (json['models']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Model.fromJson(i)],
-        _ => throw FormatException('"models" is not a list'),
+        _ => throw const FormatException('"models" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -74572,7 +74620,7 @@ final class ListModelVersionsResponse extends ProtoMessage {
       models: switch (json['models']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Model.fromJson(i)],
-        _ => throw FormatException('"models" is not a list'),
+        _ => throw const FormatException('"models" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -74747,7 +74795,7 @@ final class ListModelVersionCheckpointsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelVersionCheckpoint.fromJson(i),
         ],
-        _ => throw FormatException('"checkpoints" is not a list'),
+        _ => throw const FormatException('"checkpoints" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -75006,7 +75054,7 @@ final class MergeVersionAliasesRequest extends ProtoMessage {
       versionAliases: switch (json['versionAliases']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"versionAliases" is not a list'),
+        _ => throw const FormatException('"versionAliases" is not a list'),
       },
     );
   }
@@ -75502,7 +75550,9 @@ final class BatchImportModelEvaluationSlicesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelEvaluationSlice.fromJson(i),
         ],
-        _ => throw FormatException('"modelEvaluationSlices" is not a list'),
+        _ => throw const FormatException(
+          '"modelEvaluationSlices" is not a list',
+        ),
       },
     );
   }
@@ -75541,7 +75591,7 @@ final class BatchImportModelEvaluationSlicesResponse extends ProtoMessage {
           switch (json['importedModelEvaluationSlices']) {
             null => [],
             List<Object?> $1 => [for (final i in $1) decodeString(i)],
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"importedModelEvaluationSlices" is not a list',
             ),
           },
@@ -75589,7 +75639,9 @@ final class BatchImportEvaluatedAnnotationsRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) EvaluatedAnnotation.fromJson(i),
         ],
-        _ => throw FormatException('"evaluatedAnnotations" is not a list'),
+        _ => throw const FormatException(
+          '"evaluatedAnnotations" is not a list',
+        ),
       },
     );
   }
@@ -75787,7 +75839,7 @@ final class ListModelEvaluationsResponse extends ProtoMessage {
       modelEvaluations: switch (json['modelEvaluations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ModelEvaluation.fromJson(i)],
-        _ => throw FormatException('"modelEvaluations" is not a list'),
+        _ => throw const FormatException('"modelEvaluations" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -75957,7 +76009,9 @@ final class ListModelEvaluationSlicesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModelEvaluationSlice.fromJson(i),
         ],
-        _ => throw FormatException('"modelEvaluationSlices" is not a list'),
+        _ => throw const FormatException(
+          '"modelEvaluationSlices" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -76089,7 +76143,7 @@ final class RecommendSpecResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) RecommendSpecResponse_Recommendation.fromJson(i),
         ],
-        _ => throw FormatException('"recommendations" is not a list'),
+        _ => throw const FormatException('"recommendations" is not a list'),
       },
       specs: switch (json['specs']) {
         null => [],
@@ -76097,7 +76151,7 @@ final class RecommendSpecResponse extends ProtoMessage {
           for (final i in $1)
             RecommendSpecResponse_MachineAndModelContainerSpec.fromJson(i),
         ],
-        _ => throw FormatException('"specs" is not a list'),
+        _ => throw const FormatException('"specs" is not a list'),
       },
     );
   }
@@ -76387,7 +76441,7 @@ final class NasJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -76941,12 +76995,12 @@ final class NasJobOutput_MultiTrialJobOutput extends ProtoMessage {
       searchTrials: switch (json['searchTrials']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NasTrial.fromJson(i)],
-        _ => throw FormatException('"searchTrials" is not a list'),
+        _ => throw const FormatException('"searchTrials" is not a list'),
       },
       trainTrials: switch (json['trainTrials']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NasTrial.fromJson(i)],
-        _ => throw FormatException('"trainTrials" is not a list'),
+        _ => throw const FormatException('"trainTrials" is not a list'),
       },
     );
   }
@@ -77368,7 +77422,7 @@ final class NotebookExecutionJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       kernelName: switch (json['kernelName']) {
         null => '',
@@ -77839,7 +77893,7 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       idleShutdownConfig: switch (json['idleShutdownConfig']) {
         null => null,
@@ -77868,7 +77922,7 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
       networkTags: switch (json['networkTags']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"networkTags" is not a list'),
+        _ => throw const FormatException('"networkTags" is not a list'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -78135,7 +78189,7 @@ final class NotebookRuntime extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       expirationTime: switch (json['expirationTime']) {
         null => null,
@@ -78176,7 +78230,7 @@ final class NotebookRuntime extends ProtoMessage {
       networkTags: switch (json['networkTags']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"networkTags" is not a list'),
+        _ => throw const FormatException('"networkTags" is not a list'),
       },
       softwareConfig: switch (json['softwareConfig']) {
         null => null,
@@ -78639,7 +78693,9 @@ final class ListNotebookRuntimeTemplatesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) NotebookRuntimeTemplate.fromJson(i),
         ],
-        _ => throw FormatException('"notebookRuntimeTemplates" is not a list'),
+        _ => throw const FormatException(
+          '"notebookRuntimeTemplates" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -79055,7 +79111,7 @@ final class ListNotebookRuntimesResponse extends ProtoMessage {
       notebookRuntimes: switch (json['notebookRuntimes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NotebookRuntime.fromJson(i)],
-        _ => throw FormatException('"notebookRuntimes" is not a list'),
+        _ => throw const FormatException('"notebookRuntimes" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -79675,7 +79731,9 @@ final class ListNotebookExecutionJobsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) NotebookExecutionJob.fromJson(i),
         ],
-        _ => throw FormatException('"notebookExecutionJobs" is not a list'),
+        _ => throw const FormatException(
+          '"notebookExecutionJobs" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -79899,7 +79957,7 @@ final class NotebookSoftwareConfig extends ProtoMessage {
       env: switch (json['env']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EnvVar.fromJson(i)],
-        _ => throw FormatException('"env" is not a list'),
+        _ => throw const FormatException('"env" is not a list'),
       },
       postStartupScriptConfig: switch (json['postStartupScriptConfig']) {
         null => null,
@@ -80110,7 +80168,7 @@ final class Schema extends ProtoMessage {
       enum$: switch (json['enum']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"enum" is not a list'),
+        _ => throw const FormatException('"enum" is not a list'),
       },
       properties: switch (json['properties']) {
         null => {},
@@ -80118,17 +80176,17 @@ final class Schema extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Schema.fromJson(e.value),
         },
-        _ => throw FormatException('"properties" is not an object'),
+        _ => throw const FormatException('"properties" is not an object'),
       },
       propertyOrdering: switch (json['propertyOrdering']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"propertyOrdering" is not a list'),
+        _ => throw const FormatException('"propertyOrdering" is not a list'),
       },
       required: switch (json['required']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"required" is not a list'),
+        _ => throw const FormatException('"required" is not a list'),
       },
       minProperties: switch (json['minProperties']) {
         null => 0,
@@ -80165,7 +80223,7 @@ final class Schema extends ProtoMessage {
       anyOf: switch (json['anyOf']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Schema.fromJson(i)],
-        _ => throw FormatException('"anyOf" is not a list'),
+        _ => throw const FormatException('"anyOf" is not a list'),
       },
       additionalProperties: switch (json['additionalProperties']) {
         null => null,
@@ -80181,7 +80239,7 @@ final class Schema extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Schema.fromJson(e.value),
         },
-        _ => throw FormatException('"defs" is not an object'),
+        _ => throw const FormatException('"defs" is not an object'),
       },
     );
   }
@@ -80270,7 +80328,7 @@ final class GenericOperationMetadata extends ProtoMessage {
       partialFailures: switch (json['partialFailures']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Status.fromJson(i)],
-        _ => throw FormatException('"partialFailures" is not a list'),
+        _ => throw const FormatException('"partialFailures" is not a list'),
       },
       createTime: switch (json['createTime']) {
         null => null,
@@ -80452,7 +80510,7 @@ final class PersistentResource extends ProtoMessage {
       resourcePools: switch (json['resourcePools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ResourcePool.fromJson(i)],
-        _ => throw FormatException('"resourcePools" is not a list'),
+        _ => throw const FormatException('"resourcePools" is not a list'),
       },
       state: switch (json['state']) {
         null => PersistentResource_State.$default,
@@ -80480,7 +80538,7 @@ final class PersistentResource extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       network: switch (json['network']) {
         null => '',
@@ -80505,7 +80563,7 @@ final class PersistentResource extends ProtoMessage {
       reservedIpRanges: switch (json['reservedIpRanges']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"reservedIpRanges" is not a list'),
+        _ => throw const FormatException('"reservedIpRanges" is not a list'),
       },
       satisfiesPzs: switch (json['satisfiesPzs']) {
         null => false,
@@ -80843,7 +80901,7 @@ final class RaySpec extends ProtoMessage {
       nfsMounts: switch (json['nfsMounts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) NfsMount.fromJson(i)],
-        _ => throw FormatException('"nfsMounts" is not a list'),
+        _ => throw const FormatException('"nfsMounts" is not a list'),
       },
       resourcePoolImages: switch (json['resourcePoolImages']) {
         null => {},
@@ -80851,7 +80909,9 @@ final class RaySpec extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"resourcePoolImages" is not an object'),
+        _ => throw const FormatException(
+          '"resourcePoolImages" is not an object',
+        ),
       },
       headNodeResourcePoolId: switch (json['headNodeResourcePoolId']) {
         null => '',
@@ -80924,7 +80984,7 @@ final class ResourceRuntime extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"accessUris" is not an object'),
+        _ => throw const FormatException('"accessUris" is not an object'),
       },
       notebookRuntimeTemplate: switch (json['notebookRuntimeTemplate']) {
         null => '',
@@ -81380,7 +81440,7 @@ final class ListPersistentResourcesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PersistentResource.fromJson(i),
         ],
-        _ => throw FormatException('"persistentResources" is not a list'),
+        _ => throw const FormatException('"persistentResources" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -81729,7 +81789,7 @@ final class PipelineJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       runtimeConfig: switch (json['runtimeConfig']) {
         null => null,
@@ -81750,7 +81810,7 @@ final class PipelineJob extends ProtoMessage {
       reservedIpRanges: switch (json['reservedIpRanges']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"reservedIpRanges" is not a list'),
+        _ => throw const FormatException('"reservedIpRanges" is not a list'),
       },
       pscInterfaceConfig: switch (json['pscInterfaceConfig']) {
         null => null,
@@ -81789,7 +81849,9 @@ final class PipelineJob extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PipelineTaskRerunConfig.fromJson(i),
         ],
-        _ => throw FormatException('"pipelineTaskRerunConfigs" is not a list'),
+        _ => throw const FormatException(
+          '"pipelineTaskRerunConfigs" is not a list',
+        ),
       },
     );
   }
@@ -81916,7 +81978,7 @@ final class PipelineJob_RuntimeConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Value.fromJson(e.value),
         },
-        _ => throw FormatException('"parameters" is not an object'),
+        _ => throw const FormatException('"parameters" is not an object'),
       },
       gcsOutputDirectory: switch (json['gcsOutputDirectory']) {
         null => '',
@@ -81928,7 +81990,7 @@ final class PipelineJob_RuntimeConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): protobuf.Value.fromJson(e.value),
         },
-        _ => throw FormatException('"parameterValues" is not an object'),
+        _ => throw const FormatException('"parameterValues" is not an object'),
       },
       failurePolicy: switch (json['failurePolicy']) {
         null => PipelineFailurePolicy.$default,
@@ -81941,7 +82003,7 @@ final class PipelineJob_RuntimeConfig extends ProtoMessage {
             decodeString(e.key):
                 PipelineJob_RuntimeConfig_InputArtifact.fromJson(e.value),
         },
-        _ => throw FormatException('"inputArtifacts" is not an object'),
+        _ => throw const FormatException('"inputArtifacts" is not an object'),
       },
       defaultRuntime: switch (json['defaultRuntime']) {
         null => null,
@@ -82243,7 +82305,7 @@ final class PipelineJobDetail extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PipelineTaskDetail.fromJson(i),
         ],
-        _ => throw FormatException('"taskDetails" is not a list'),
+        _ => throw const FormatException('"taskDetails" is not a list'),
       },
     );
   }
@@ -82383,7 +82445,7 @@ final class PipelineTaskDetail extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PipelineTaskDetail_PipelineTaskStatus.fromJson(i),
         ],
-        _ => throw FormatException('"pipelineTaskStatus" is not a list'),
+        _ => throw const FormatException('"pipelineTaskStatus" is not a list'),
       },
       inputs: switch (json['inputs']) {
         null => {},
@@ -82393,7 +82455,7 @@ final class PipelineTaskDetail extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"inputs" is not an object'),
+        _ => throw const FormatException('"inputs" is not an object'),
       },
       outputs: switch (json['outputs']) {
         null => {},
@@ -82403,7 +82465,7 @@ final class PipelineTaskDetail extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"outputs" is not an object'),
+        _ => throw const FormatException('"outputs" is not an object'),
       },
       taskUniqueName: switch (json['taskUniqueName']) {
         null => '',
@@ -82517,7 +82579,7 @@ final class PipelineTaskDetail_ArtifactList extends ProtoMessage {
       artifacts: switch (json['artifacts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Artifact.fromJson(i)],
-        _ => throw FormatException('"artifacts" is not a list'),
+        _ => throw const FormatException('"artifacts" is not a list'),
       },
     );
   }
@@ -82671,12 +82733,14 @@ final class PipelineTaskExecutorDetail_ContainerDetail extends ProtoMessage {
       failedMainJobs: switch (json['failedMainJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"failedMainJobs" is not a list'),
+        _ => throw const FormatException('"failedMainJobs" is not a list'),
       },
       failedPreCachingCheckJobs: switch (json['failedPreCachingCheckJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"failedPreCachingCheckJobs" is not a list'),
+        _ => throw const FormatException(
+          '"failedPreCachingCheckJobs" is not a list',
+        ),
       },
     );
   }
@@ -82730,7 +82794,7 @@ final class PipelineTaskExecutorDetail_CustomJobDetail extends ProtoMessage {
       failedJobs: switch (json['failedJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"failedJobs" is not a list'),
+        _ => throw const FormatException('"failedJobs" is not a list'),
       },
     );
   }
@@ -82843,7 +82907,7 @@ final class PipelineTaskRerunConfig_ArtifactList extends ProtoMessage {
       artifacts: switch (json['artifacts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) RuntimeArtifact.fromJson(i)],
-        _ => throw FormatException('"artifacts" is not a list'),
+        _ => throw const FormatException('"artifacts" is not a list'),
       },
     );
   }
@@ -82884,7 +82948,7 @@ final class PipelineTaskRerunConfig_Inputs extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"artifacts" is not an object'),
+        _ => throw const FormatException('"artifacts" is not an object'),
       },
       parameterValues: switch (json['parameterValues']) {
         null => {},
@@ -82892,7 +82956,7 @@ final class PipelineTaskRerunConfig_Inputs extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): protobuf.Value.fromJson(e.value),
         },
-        _ => throw FormatException('"parameterValues" is not an object'),
+        _ => throw const FormatException('"parameterValues" is not an object'),
       },
     );
   }
@@ -83145,7 +83209,7 @@ final class ListTrainingPipelinesResponse extends ProtoMessage {
       trainingPipelines: switch (json['trainingPipelines']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TrainingPipeline.fromJson(i)],
-        _ => throw FormatException('"trainingPipelines" is not a list'),
+        _ => throw const FormatException('"trainingPipelines" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -83494,7 +83558,7 @@ final class ListPipelineJobsResponse extends ProtoMessage {
       pipelineJobs: switch (json['pipelineJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) PipelineJob.fromJson(i)],
-        _ => throw FormatException('"pipelineJobs" is not a list'),
+        _ => throw const FormatException('"pipelineJobs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -83578,7 +83642,7 @@ final class BatchDeletePipelineJobsRequest extends ProtoMessage {
       names: switch (json['names']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"names" is not a list'),
+        _ => throw const FormatException('"names" is not a list'),
       },
     );
   }
@@ -83611,7 +83675,7 @@ final class BatchDeletePipelineJobsResponse extends ProtoMessage {
       pipelineJobs: switch (json['pipelineJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) PipelineJob.fromJson(i)],
-        _ => throw FormatException('"pipelineJobs" is not a list'),
+        _ => throw const FormatException('"pipelineJobs" is not a list'),
       },
     );
   }
@@ -83687,7 +83751,7 @@ final class BatchCancelPipelineJobsRequest extends ProtoMessage {
       names: switch (json['names']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"names" is not a list'),
+        _ => throw const FormatException('"names" is not a list'),
       },
     );
   }
@@ -83720,7 +83784,7 @@ final class BatchCancelPipelineJobsResponse extends ProtoMessage {
       pipelineJobs: switch (json['pipelineJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) PipelineJob.fromJson(i)],
-        _ => throw FormatException('"pipelineJobs" is not a list'),
+        _ => throw const FormatException('"pipelineJobs" is not a list'),
       },
     );
   }
@@ -83785,7 +83849,7 @@ final class PredictRequest extends ProtoMessage {
       instances: switch (json['instances']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -83797,7 +83861,7 @@ final class PredictRequest extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
     );
   }
@@ -83866,7 +83930,7 @@ final class PredictResponse extends ProtoMessage {
       predictions: switch (json['predictions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"predictions" is not a list'),
+        _ => throw const FormatException('"predictions" is not a list'),
       },
       deployedModelId: switch (json['deployedModelId']) {
         null => '',
@@ -84048,7 +84112,7 @@ final class DirectPredictRequest extends ProtoMessage {
       inputs: switch (json['inputs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"inputs" is not a list'),
+        _ => throw const FormatException('"inputs" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84092,7 +84156,7 @@ final class DirectPredictResponse extends ProtoMessage {
       outputs: switch (json['outputs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"outputs" is not a list'),
+        _ => throw const FormatException('"outputs" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84248,7 +84312,7 @@ final class StreamDirectPredictRequest extends ProtoMessage {
       inputs: switch (json['inputs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"inputs" is not a list'),
+        _ => throw const FormatException('"inputs" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84292,7 +84356,7 @@ final class StreamDirectPredictResponse extends ProtoMessage {
       outputs: switch (json['outputs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"outputs" is not a list'),
+        _ => throw const FormatException('"outputs" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84459,7 +84523,7 @@ final class StreamingPredictRequest extends ProtoMessage {
       inputs: switch (json['inputs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"inputs" is not a list'),
+        _ => throw const FormatException('"inputs" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84503,7 +84567,7 @@ final class StreamingPredictResponse extends ProtoMessage {
       outputs: switch (json['outputs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"outputs" is not a list'),
+        _ => throw const FormatException('"outputs" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84705,7 +84769,7 @@ final class ExplainRequest extends ProtoMessage {
       instances: switch (json['instances']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -84722,7 +84786,7 @@ final class ExplainRequest extends ProtoMessage {
               for (final e in $1.entries)
                 decodeString(e.key): ExplanationSpecOverride.fromJson(e.value),
             },
-            _ => throw FormatException(
+            _ => throw const FormatException(
               '"concurrentExplanationSpecOverride" is not an object',
             ),
           },
@@ -84797,7 +84861,7 @@ final class ExplainResponse extends ProtoMessage {
       explanations: switch (json['explanations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Explanation.fromJson(i)],
-        _ => throw FormatException('"explanations" is not a list'),
+        _ => throw const FormatException('"explanations" is not a list'),
       },
       concurrentExplanations: switch (json['concurrentExplanations']) {
         null => {},
@@ -84807,7 +84871,9 @@ final class ExplainResponse extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"concurrentExplanations" is not an object'),
+        _ => throw const FormatException(
+          '"concurrentExplanations" is not an object',
+        ),
       },
       deployedModelId: switch (json['deployedModelId']) {
         null => '',
@@ -84816,7 +84882,7 @@ final class ExplainResponse extends ProtoMessage {
       predictions: switch (json['predictions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"predictions" is not a list'),
+        _ => throw const FormatException('"predictions" is not a list'),
       },
     );
   }
@@ -84859,7 +84925,7 @@ final class ExplainResponse_ConcurrentExplanation extends ProtoMessage {
       explanations: switch (json['explanations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Explanation.fromJson(i)],
-        _ => throw FormatException('"explanations" is not a list'),
+        _ => throw const FormatException('"explanations" is not a list'),
       },
     );
   }
@@ -84937,12 +85003,12 @@ final class CountTokensRequest extends ProtoMessage {
       instances: switch (json['instances']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Value.fromJson(i)],
-        _ => throw FormatException('"instances" is not a list'),
+        _ => throw const FormatException('"instances" is not a list'),
       },
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       systemInstruction: switch (json['systemInstruction']) {
         null => null,
@@ -84951,7 +85017,7 @@ final class CountTokensRequest extends ProtoMessage {
       tools: switch (json['tools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
-        _ => throw FormatException('"tools" is not a list'),
+        _ => throw const FormatException('"tools" is not a list'),
       },
       generationConfig: switch (json['generationConfig']) {
         null => null,
@@ -85018,7 +85084,7 @@ final class CountTokensResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModalityTokenCount.fromJson(i),
         ],
-        _ => throw FormatException('"promptTokensDetails" is not a list'),
+        _ => throw const FormatException('"promptTokensDetails" is not a list'),
       },
     );
   }
@@ -85131,7 +85197,7 @@ final class GenerateContentRequest extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       systemInstruction: switch (json['systemInstruction']) {
         null => null,
@@ -85144,7 +85210,7 @@ final class GenerateContentRequest extends ProtoMessage {
       tools: switch (json['tools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
-        _ => throw FormatException('"tools" is not a list'),
+        _ => throw const FormatException('"tools" is not a list'),
       },
       toolConfig: switch (json['toolConfig']) {
         null => null,
@@ -85156,12 +85222,12 @@ final class GenerateContentRequest extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       safetySettings: switch (json['safetySettings']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SafetySetting.fromJson(i)],
-        _ => throw FormatException('"safetySettings" is not a list'),
+        _ => throw const FormatException('"safetySettings" is not a list'),
       },
       modelArmorConfig: switch (json['modelArmorConfig']) {
         null => null,
@@ -85240,7 +85306,7 @@ final class GenerateContentResponse extends ProtoMessage {
       candidates: switch (json['candidates']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Candidate.fromJson(i)],
-        _ => throw FormatException('"candidates" is not a list'),
+        _ => throw const FormatException('"candidates" is not a list'),
       },
       modelVersion: switch (json['modelVersion']) {
         null => '',
@@ -85317,7 +85383,7 @@ final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
       safetyRatings: switch (json['safetyRatings']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SafetyRating.fromJson(i)],
-        _ => throw FormatException('"safetyRatings" is not a list'),
+        _ => throw const FormatException('"safetyRatings" is not a list'),
       },
       blockReasonMessage: switch (json['blockReasonMessage']) {
         null => '',
@@ -85466,21 +85532,23 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ModalityTokenCount.fromJson(i),
         ],
-        _ => throw FormatException('"promptTokensDetails" is not a list'),
+        _ => throw const FormatException('"promptTokensDetails" is not a list'),
       },
       cacheTokensDetails: switch (json['cacheTokensDetails']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ModalityTokenCount.fromJson(i),
         ],
-        _ => throw FormatException('"cacheTokensDetails" is not a list'),
+        _ => throw const FormatException('"cacheTokensDetails" is not a list'),
       },
       candidatesTokensDetails: switch (json['candidatesTokensDetails']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ModalityTokenCount.fromJson(i),
         ],
-        _ => throw FormatException('"candidatesTokensDetails" is not a list'),
+        _ => throw const FormatException(
+          '"candidatesTokensDetails" is not a list',
+        ),
       },
     );
   }
@@ -85634,7 +85702,7 @@ final class GenerateVideoResponse extends ProtoMessage {
       generatedSamples: switch (json['generatedSamples']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"generatedSamples" is not a list'),
+        _ => throw const FormatException('"generatedSamples" is not a list'),
       },
       raiMediaFilteredCount: switch (json['raiMediaFilteredCount']) {
         null => null,
@@ -85643,7 +85711,9 @@ final class GenerateVideoResponse extends ProtoMessage {
       raiMediaFilteredReasons: switch (json['raiMediaFilteredReasons']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"raiMediaFilteredReasons" is not a list'),
+        _ => throw const FormatException(
+          '"raiMediaFilteredReasons" is not a list',
+        ),
       },
     );
   }
@@ -85749,7 +85819,7 @@ final class PublisherModel extends ProtoMessage {
       frameworks: switch (json['frameworks']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"frameworks" is not a list'),
+        _ => throw const FormatException('"frameworks" is not a list'),
       },
       launchStage: switch (json['launchStage']) {
         null => PublisherModel_LaunchStage.$default,
@@ -86161,7 +86231,7 @@ final class PublisherModel_CallToAction_RegionalResourceReferences
               e.value,
             ),
         },
-        _ => throw FormatException('"references" is not an object'),
+        _ => throw const FormatException('"references" is not an object'),
       },
       title: switch (json['title']) {
         null => '',
@@ -86228,7 +86298,7 @@ final class PublisherModel_CallToAction_ViewRestApi extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PublisherModel_Documentation.fromJson(i),
         ],
-        _ => throw FormatException('"documentations" is not a list'),
+        _ => throw const FormatException('"documentations" is not a list'),
       },
       title: switch (json['title']) {
         null => '',
@@ -86270,7 +86340,7 @@ final class PublisherModel_CallToAction_OpenNotebooks extends ProtoMessage {
           for (final i in $1)
             PublisherModel_CallToAction_RegionalResourceReferences.fromJson(i),
         ],
-        _ => throw FormatException('"notebooks" is not a list'),
+        _ => throw const FormatException('"notebooks" is not a list'),
       },
     );
   }
@@ -86307,7 +86377,7 @@ final class PublisherModel_CallToAction_OpenFineTuningPipelines
           for (final i in $1)
             PublisherModel_CallToAction_RegionalResourceReferences.fromJson(i),
         ],
-        _ => throw FormatException('"fineTuningPipelines" is not a list'),
+        _ => throw const FormatException('"fineTuningPipelines" is not a list'),
       },
     );
   }
@@ -86338,7 +86408,7 @@ final class PublisherModel_CallToAction_DeployVertex extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PublisherModel_CallToAction_Deploy.fromJson(i),
         ],
-        _ => throw FormatException('"multiDeployVertex" is not a list'),
+        _ => throw const FormatException('"multiDeployVertex" is not a list'),
       },
     );
   }
@@ -86529,7 +86599,7 @@ final class PublisherModel_CallToAction_Deploy_DeployMetadata
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       sampleRequest: switch (json['sampleRequest']) {
         null => '',
@@ -86568,7 +86638,7 @@ final class PublisherModel_CallToAction_DeployGke extends ProtoMessage {
       gkeYamlConfigs: switch (json['gkeYamlConfigs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"gkeYamlConfigs" is not a list'),
+        _ => throw const FormatException('"gkeYamlConfigs" is not a list'),
       },
     );
   }
@@ -86767,7 +86837,7 @@ final class ReasoningEngineSpec extends ProtoMessage {
       classMethods: switch (json['classMethods']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) protobuf.Struct.fromJson(i)],
-        _ => throw FormatException('"classMethods" is not a list'),
+        _ => throw const FormatException('"classMethods" is not a list'),
       },
       agentFramework: switch (json['agentFramework']) {
         null => '',
@@ -86928,12 +86998,12 @@ final class ReasoningEngineSpec_DeploymentSpec extends ProtoMessage {
       env: switch (json['env']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EnvVar.fromJson(i)],
-        _ => throw FormatException('"env" is not a list'),
+        _ => throw const FormatException('"env" is not a list'),
       },
       secretEnv: switch (json['secretEnv']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SecretEnvVar.fromJson(i)],
-        _ => throw FormatException('"secretEnv" is not a list'),
+        _ => throw const FormatException('"secretEnv" is not a list'),
       },
       pscInterfaceConfig: switch (json['pscInterfaceConfig']) {
         null => null,
@@ -86953,7 +87023,7 @@ final class ReasoningEngineSpec_DeploymentSpec extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"resourceLimits" is not an object'),
+        _ => throw const FormatException('"resourceLimits" is not an object'),
       },
       containerConcurrency: switch (json['containerConcurrency']) {
         null => null,
@@ -87237,7 +87307,7 @@ final class ReasoningEngine extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
     );
   }
@@ -87965,7 +88035,7 @@ final class ListReasoningEnginesResponse extends ProtoMessage {
       reasoningEngines: switch (json['reasoningEngines']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ReasoningEngine.fromJson(i)],
-        _ => throw FormatException('"reasoningEngines" is not a list'),
+        _ => throw const FormatException('"reasoningEngines" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -88071,7 +88141,7 @@ final class ReservationAffinity extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -88830,7 +88900,7 @@ final class ListSchedulesResponse extends ProtoMessage {
       schedules: switch (json['schedules']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Schedule.fromJson(i)],
-        _ => throw FormatException('"schedules" is not a list'),
+        _ => throw const FormatException('"schedules" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -89147,14 +89217,16 @@ final class PrivateServiceConnectConfig extends ProtoMessage {
       projectAllowlist: switch (json['projectAllowlist']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"projectAllowlist" is not a list'),
+        _ => throw const FormatException('"projectAllowlist" is not a list'),
       },
       pscAutomationConfigs: switch (json['pscAutomationConfigs']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) PscautomationConfig.fromJson(i),
         ],
-        _ => throw FormatException('"pscAutomationConfigs" is not a list'),
+        _ => throw const FormatException(
+          '"pscAutomationConfigs" is not a list',
+        ),
       },
       enableSecurePrivateServiceConnect:
           switch (json['enableSecurePrivateServiceConnect']) {
@@ -89283,7 +89355,7 @@ final class PscInterfaceConfig extends ProtoMessage {
       dnsPeeringConfigs: switch (json['dnsPeeringConfigs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) DnsPeeringConfig.fromJson(i)],
-        _ => throw FormatException('"dnsPeeringConfigs" is not a list'),
+        _ => throw const FormatException('"dnsPeeringConfigs" is not a list'),
       },
     );
   }
@@ -89652,7 +89724,7 @@ final class EventMetadata extends ProtoMessage {
       longRunningToolIds: switch (json['longRunningToolIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"longRunningToolIds" is not a list'),
+        _ => throw const FormatException('"longRunningToolIds" is not a list'),
       },
       branch: switch (json['branch']) {
         null => '',
@@ -89748,7 +89820,7 @@ final class EventActions extends ProtoMessage {
         Map<String, Object?> $1 => {
           for (final e in $1.entries) decodeString(e.key): decodeInt(e.value),
         },
-        _ => throw FormatException('"artifactDelta" is not an object'),
+        _ => throw const FormatException('"artifactDelta" is not an object'),
       },
       transferToAgent: switch (json['transferToAgent']) {
         null => false,
@@ -90020,7 +90092,7 @@ final class ListSessionsResponse extends ProtoMessage {
       sessions: switch (json['sessions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Session.fromJson(i)],
-        _ => throw FormatException('"sessions" is not a list'),
+        _ => throw const FormatException('"sessions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -90222,7 +90294,7 @@ final class ListEventsResponse extends ProtoMessage {
       sessionEvents: switch (json['sessionEvents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SessionEvent.fromJson(i)],
-        _ => throw FormatException('"sessionEvents" is not a list'),
+        _ => throw const FormatException('"sessionEvents" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -90363,17 +90435,23 @@ final class SpecialistPool extends ProtoMessage {
       specialistManagerEmails: switch (json['specialistManagerEmails']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"specialistManagerEmails" is not a list'),
+        _ => throw const FormatException(
+          '"specialistManagerEmails" is not a list',
+        ),
       },
       pendingDataLabelingJobs: switch (json['pendingDataLabelingJobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"pendingDataLabelingJobs" is not a list'),
+        _ => throw const FormatException(
+          '"pendingDataLabelingJobs" is not a list',
+        ),
       },
       specialistWorkerEmails: switch (json['specialistWorkerEmails']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"specialistWorkerEmails" is not a list'),
+        _ => throw const FormatException(
+          '"specialistWorkerEmails" is not a list',
+        ),
       },
     );
   }
@@ -90607,7 +90685,7 @@ final class ListSpecialistPoolsResponse extends ProtoMessage {
       specialistPools: switch (json['specialistPools']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SpecialistPool.fromJson(i)],
-        _ => throw FormatException('"specialistPools" is not a list'),
+        _ => throw const FormatException('"specialistPools" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -90975,7 +91053,7 @@ final class Trial extends ProtoMessage {
       parameters: switch (json['parameters']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Trial_Parameter.fromJson(i)],
-        _ => throw FormatException('"parameters" is not a list'),
+        _ => throw const FormatException('"parameters" is not a list'),
       },
       finalMeasurement: switch (json['finalMeasurement']) {
         null => null,
@@ -90984,7 +91062,7 @@ final class Trial extends ProtoMessage {
       measurements: switch (json['measurements']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Measurement.fromJson(i)],
-        _ => throw FormatException('"measurements" is not a list'),
+        _ => throw const FormatException('"measurements" is not a list'),
       },
       startTime: switch (json['startTime']) {
         null => null,
@@ -91012,7 +91090,7 @@ final class Trial extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"webAccessUris" is not an object'),
+        _ => throw const FormatException('"webAccessUris" is not an object'),
       },
     );
   }
@@ -91163,7 +91241,7 @@ final class TrialContext extends ProtoMessage {
       parameters: switch (json['parameters']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Trial_Parameter.fromJson(i)],
-        _ => throw FormatException('"parameters" is not a list'),
+        _ => throw const FormatException('"parameters" is not a list'),
       },
     );
   }
@@ -91302,14 +91380,14 @@ final class StudySpec extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) StudySpec_MetricSpec.fromJson(i),
         ],
-        _ => throw FormatException('"metrics" is not a list'),
+        _ => throw const FormatException('"metrics" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) StudySpec_ParameterSpec.fromJson(i),
         ],
-        _ => throw FormatException('"parameters" is not a list'),
+        _ => throw const FormatException('"parameters" is not a list'),
       },
       algorithm: switch (json['algorithm']) {
         null => StudySpec_Algorithm.$default,
@@ -91583,7 +91661,9 @@ final class StudySpec_ParameterSpec extends ProtoMessage {
           for (final i in $1)
             StudySpec_ParameterSpec_ConditionalParameterSpec.fromJson(i),
         ],
-        _ => throw FormatException('"conditionalParameterSpecs" is not a list'),
+        _ => throw const FormatException(
+          '"conditionalParameterSpecs" is not a list',
+        ),
       },
     );
   }
@@ -91762,7 +91842,7 @@ final class StudySpec_ParameterSpec_CategoricalValueSpec extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
       defaultValue: switch (json['defaultValue']) {
         null => null,
@@ -91817,7 +91897,7 @@ final class StudySpec_ParameterSpec_DiscreteValueSpec extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
       defaultValue: switch (json['defaultValue']) {
         null => null,
@@ -91941,7 +92021,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_DiscreteValueCondit
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -91975,7 +92055,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_IntValueCondition
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -92010,7 +92090,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCon
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -92400,7 +92480,7 @@ final class StudySpec_TransferLearningConfig extends ProtoMessage {
       priorStudyNames: switch (json['priorStudyNames']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"priorStudyNames" is not a list'),
+        _ => throw const FormatException('"priorStudyNames" is not a list'),
       },
     );
   }
@@ -92690,7 +92770,7 @@ final class Measurement extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) Measurement_Metric.fromJson(i),
         ],
-        _ => throw FormatException('"metrics" is not a list'),
+        _ => throw const FormatException('"metrics" is not a list'),
       },
     );
   }
@@ -92874,7 +92954,7 @@ final class Tensorboard extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -92968,7 +93048,7 @@ final class TimeSeriesData extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TimeSeriesDataPoint.fromJson(i),
         ],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -93150,7 +93230,7 @@ final class TensorboardBlobSequence extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TensorboardBlob.fromJson(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -93296,7 +93376,7 @@ final class TensorboardExperiment extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -93422,7 +93502,7 @@ final class TensorboardRun extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       etag: switch (json['etag']) {
         null => '',
@@ -93653,7 +93733,7 @@ final class ListTensorboardsResponse extends ProtoMessage {
       tensorboards: switch (json['tensorboards']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensorboard.fromJson(i)],
-        _ => throw FormatException('"tensorboards" is not a list'),
+        _ => throw const FormatException('"tensorboards" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -93816,7 +93896,7 @@ final class ReadTensorboardUsageResponse extends ProtoMessage {
               e.value,
             ),
         },
-        _ => throw FormatException('"monthlyUsageData" is not an object'),
+        _ => throw const FormatException('"monthlyUsageData" is not an object'),
       },
     );
   }
@@ -93896,7 +93976,7 @@ final class ReadTensorboardUsageResponse_PerMonthUsageData
           for (final i in $1)
             ReadTensorboardUsageResponse_PerUserUsageData.fromJson(i),
         ],
-        _ => throw FormatException('"userUsageData" is not a list'),
+        _ => throw const FormatException('"userUsageData" is not a list'),
       },
     );
   }
@@ -94201,7 +94281,9 @@ final class ListTensorboardExperimentsResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TensorboardExperiment.fromJson(i),
         ],
-        _ => throw FormatException('"tensorboardExperiments" is not a list'),
+        _ => throw const FormatException(
+          '"tensorboardExperiments" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -94341,7 +94423,7 @@ final class BatchCreateTensorboardRunsRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) CreateTensorboardRunRequest.fromJson(i),
         ],
-        _ => throw FormatException('"requests" is not a list'),
+        _ => throw const FormatException('"requests" is not a list'),
       },
     );
   }
@@ -94374,7 +94456,7 @@ final class BatchCreateTensorboardRunsResponse extends ProtoMessage {
       tensorboardRuns: switch (json['tensorboardRuns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TensorboardRun.fromJson(i)],
-        _ => throw FormatException('"tensorboardRuns" is not a list'),
+        _ => throw const FormatException('"tensorboardRuns" is not a list'),
       },
     );
   }
@@ -94513,7 +94595,7 @@ final class ReadTensorboardBlobDataRequest extends ProtoMessage {
       blobIds: switch (json['blobIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"blobIds" is not a list'),
+        _ => throw const FormatException('"blobIds" is not a list'),
       },
     );
   }
@@ -94549,7 +94631,7 @@ final class ReadTensorboardBlobDataResponse extends ProtoMessage {
       blobs: switch (json['blobs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TensorboardBlob.fromJson(i)],
-        _ => throw FormatException('"blobs" is not a list'),
+        _ => throw const FormatException('"blobs" is not a list'),
       },
     );
   }
@@ -94684,7 +94766,7 @@ final class ListTensorboardRunsResponse extends ProtoMessage {
       tensorboardRuns: switch (json['tensorboardRuns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TensorboardRun.fromJson(i)],
-        _ => throw FormatException('"tensorboardRuns" is not a list'),
+        _ => throw const FormatException('"tensorboardRuns" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -94824,7 +94906,7 @@ final class BatchCreateTensorboardTimeSeriesRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) CreateTensorboardTimeSeriesRequest.fromJson(i),
         ],
-        _ => throw FormatException('"requests" is not a list'),
+        _ => throw const FormatException('"requests" is not a list'),
       },
     );
   }
@@ -94860,7 +94942,9 @@ final class BatchCreateTensorboardTimeSeriesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TensorboardTimeSeries.fromJson(i),
         ],
-        _ => throw FormatException('"tensorboardTimeSeries" is not a list'),
+        _ => throw const FormatException(
+          '"tensorboardTimeSeries" is not a list',
+        ),
       },
     );
   }
@@ -95098,7 +95182,9 @@ final class ListTensorboardTimeSeriesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TensorboardTimeSeries.fromJson(i),
         ],
-        _ => throw FormatException('"tensorboardTimeSeries" is not a list'),
+        _ => throw const FormatException(
+          '"tensorboardTimeSeries" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -95239,7 +95325,7 @@ final class BatchReadTensorboardTimeSeriesDataRequest extends ProtoMessage {
       timeSeries: switch (json['timeSeries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"timeSeries" is not a list'),
+        _ => throw const FormatException('"timeSeries" is not a list'),
       },
     );
   }
@@ -95272,7 +95358,7 @@ final class BatchReadTensorboardTimeSeriesDataResponse extends ProtoMessage {
       timeSeriesData: switch (json['timeSeriesData']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TimeSeriesData.fromJson(i)],
-        _ => throw FormatException('"timeSeriesData" is not a list'),
+        _ => throw const FormatException('"timeSeriesData" is not a list'),
       },
     );
   }
@@ -95411,7 +95497,9 @@ final class WriteTensorboardExperimentDataRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) WriteTensorboardRunDataRequest.fromJson(i),
         ],
-        _ => throw FormatException('"writeRunDataRequests" is not a list'),
+        _ => throw const FormatException(
+          '"writeRunDataRequests" is not a list',
+        ),
       },
     );
   }
@@ -95480,7 +95568,7 @@ final class WriteTensorboardRunDataRequest extends ProtoMessage {
       timeSeriesData: switch (json['timeSeriesData']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TimeSeriesData.fromJson(i)],
-        _ => throw FormatException('"timeSeriesData" is not a list'),
+        _ => throw const FormatException('"timeSeriesData" is not a list'),
       },
     );
   }
@@ -95633,7 +95721,9 @@ final class ExportTensorboardTimeSeriesDataResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TimeSeriesDataPoint.fromJson(i),
         ],
-        _ => throw FormatException('"timeSeriesDataPoints" is not a list'),
+        _ => throw const FormatException(
+          '"timeSeriesDataPoints" is not a list',
+        ),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -96014,7 +96104,9 @@ final class Tool extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) FunctionDeclaration.fromJson(i),
         ],
-        _ => throw FormatException('"functionDeclarations" is not a list'),
+        _ => throw const FormatException(
+          '"functionDeclarations" is not a list',
+        ),
       },
       retrieval: switch (json['retrieval']) {
         null => null,
@@ -96095,7 +96187,7 @@ final class Tool_GoogleSearch extends ProtoMessage {
       excludeDomains: switch (json['excludeDomains']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"excludeDomains" is not a list'),
+        _ => throw const FormatException('"excludeDomains" is not a list'),
       },
       blockingConfidence: switch (json['blockingConfidence']) {
         null => null,
@@ -96887,14 +96979,14 @@ final class VertexRagStore extends ProtoMessage {
       ragCorpora: switch (json['ragCorpora']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"ragCorpora" is not a list'),
+        _ => throw const FormatException('"ragCorpora" is not a list'),
       },
       ragResources: switch (json['ragResources']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) VertexRagStore_RagResource.fromJson(i),
         ],
-        _ => throw FormatException('"ragResources" is not a list'),
+        _ => throw const FormatException('"ragResources" is not a list'),
       },
       similarityTopK: switch (json['similarityTopK']) {
         null => null,
@@ -96966,7 +97058,7 @@ final class VertexRagStore_RagResource extends ProtoMessage {
       ragFileIds: switch (json['ragFileIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"ragFileIds" is not a list'),
+        _ => throw const FormatException('"ragFileIds" is not a list'),
       },
     );
   }
@@ -97047,7 +97139,7 @@ final class VertexAisearch extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) VertexAisearch_DataStoreSpec.fromJson(i),
         ],
-        _ => throw FormatException('"dataStoreSpecs" is not a list'),
+        _ => throw const FormatException('"dataStoreSpecs" is not a list'),
       },
     );
   }
@@ -97207,7 +97299,7 @@ final class EnterpriseWebSearch extends ProtoMessage {
       excludeDomains: switch (json['excludeDomains']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"excludeDomains" is not a list'),
+        _ => throw const FormatException('"excludeDomains" is not a list'),
       },
       blockingConfidence: switch (json['blockingConfidence']) {
         null => null,
@@ -97371,7 +97463,9 @@ final class FunctionCallingConfig extends ProtoMessage {
       allowedFunctionNames: switch (json['allowedFunctionNames']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"allowedFunctionNames" is not a list'),
+        _ => throw const FormatException(
+          '"allowedFunctionNames" is not a list',
+        ),
       },
     );
   }
@@ -97942,7 +98036,7 @@ final class TrainingPipeline extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       encryptionSpec: switch (json['encryptionSpec']) {
         null => null,
@@ -98794,7 +98888,7 @@ final class TuningJob extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       experiment: switch (json['experiment']) {
         null => '',
@@ -98829,7 +98923,7 @@ final class TuningJob extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) EvaluateDatasetRun.fromJson(i),
         ],
-        _ => throw FormatException('"evaluateDatasetRuns" is not a list'),
+        _ => throw const FormatException('"evaluateDatasetRuns" is not a list'),
       },
     );
   }
@@ -98932,7 +99026,7 @@ final class TunedModel extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) TunedModelCheckpoint.fromJson(i),
         ],
-        _ => throw FormatException('"checkpoints" is not a list'),
+        _ => throw const FormatException('"checkpoints" is not a list'),
       },
     );
   }
@@ -99036,7 +99130,7 @@ final class SupervisedTuningDatasetDistribution extends ProtoMessage {
           for (final i in $1)
             SupervisedTuningDatasetDistribution_DatasetBucket.fromJson(i),
         ],
-        _ => throw FormatException('"buckets" is not a list'),
+        _ => throw const FormatException('"buckets" is not a list'),
       },
     );
   }
@@ -99227,7 +99321,7 @@ final class SupervisedTuningDataStats extends ProtoMessage {
       userDatasetExamples: switch (json['userDatasetExamples']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"userDatasetExamples" is not a list'),
+        _ => throw const FormatException('"userDatasetExamples" is not a list'),
       },
       totalTruncatedExampleCount: switch (json['totalTruncatedExampleCount']) {
         null => 0,
@@ -99236,12 +99330,16 @@ final class SupervisedTuningDataStats extends ProtoMessage {
       truncatedExampleIndices: switch (json['truncatedExampleIndices']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"truncatedExampleIndices" is not a list'),
+        _ => throw const FormatException(
+          '"truncatedExampleIndices" is not a list',
+        ),
       },
       droppedExampleReasons: switch (json['droppedExampleReasons']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"droppedExampleReasons" is not a list'),
+        _ => throw const FormatException(
+          '"droppedExampleReasons" is not a list',
+        ),
       },
     );
   }
@@ -99366,7 +99464,7 @@ final class DatasetDistribution extends ProtoMessage {
           for (final i in $1)
             DatasetDistribution_DistributionBucket.fromJson(i),
         ],
-        _ => throw FormatException('"buckets" is not a list'),
+        _ => throw const FormatException('"buckets" is not a list'),
       },
     );
   }
@@ -99528,7 +99626,7 @@ final class DatasetStats extends ProtoMessage {
       userDatasetExamples: switch (json['userDatasetExamples']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"userDatasetExamples" is not a list'),
+        _ => throw const FormatException('"userDatasetExamples" is not a list'),
       },
     );
   }
@@ -100099,7 +100197,7 @@ final class PartnerModelTuningSpec extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): protobuf.Value.fromJson(e.value),
         },
-        _ => throw FormatException('"hyperParameters" is not an object'),
+        _ => throw const FormatException('"hyperParameters" is not an object'),
       },
     );
   }
@@ -100349,7 +100447,7 @@ final class EvaluationConfig extends ProtoMessage {
       metrics: switch (json['metrics']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Metric.fromJson(i)],
-        _ => throw FormatException('"metrics" is not a list'),
+        _ => throw const FormatException('"metrics" is not a list'),
       },
       outputConfig: switch (json['outputConfig']) {
         null => null,
@@ -100591,7 +100689,7 @@ final class BoolArray extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeBool(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -100619,7 +100717,7 @@ final class DoubleArray extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -100647,7 +100745,7 @@ final class Int64Array extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -100675,7 +100773,7 @@ final class StringArray extends ProtoMessage {
       values: switch (json['values']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"values" is not a list'),
+        _ => throw const FormatException('"values" is not a list'),
       },
     );
   }
@@ -100771,57 +100869,57 @@ final class Tensor extends ProtoMessage {
       shape: switch (json['shape']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"shape" is not a list'),
+        _ => throw const FormatException('"shape" is not a list'),
       },
       boolVal: switch (json['boolVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeBool(i)],
-        _ => throw FormatException('"boolVal" is not a list'),
+        _ => throw const FormatException('"boolVal" is not a list'),
       },
       stringVal: switch (json['stringVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"stringVal" is not a list'),
+        _ => throw const FormatException('"stringVal" is not a list'),
       },
       bytesVal: switch (json['bytesVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeBytes(i)],
-        _ => throw FormatException('"bytesVal" is not a list'),
+        _ => throw const FormatException('"bytesVal" is not a list'),
       },
       floatVal: switch (json['floatVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"floatVal" is not a list'),
+        _ => throw const FormatException('"floatVal" is not a list'),
       },
       doubleVal: switch (json['doubleVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
-        _ => throw FormatException('"doubleVal" is not a list'),
+        _ => throw const FormatException('"doubleVal" is not a list'),
       },
       intVal: switch (json['intVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt(i)],
-        _ => throw FormatException('"intVal" is not a list'),
+        _ => throw const FormatException('"intVal" is not a list'),
       },
       int64Val: switch (json['int64Val']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
-        _ => throw FormatException('"int64Val" is not a list'),
+        _ => throw const FormatException('"int64Val" is not a list'),
       },
       uintVal: switch (json['uintVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt(i)],
-        _ => throw FormatException('"uintVal" is not a list'),
+        _ => throw const FormatException('"uintVal" is not a list'),
       },
       uint64Val: switch (json['uint64Val']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
-        _ => throw FormatException('"uint64Val" is not a list'),
+        _ => throw const FormatException('"uint64Val" is not a list'),
       },
       listVal: switch (json['listVal']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Tensor.fromJson(i)],
-        _ => throw FormatException('"listVal" is not a list'),
+        _ => throw const FormatException('"listVal" is not a list'),
       },
       structVal: switch (json['structVal']) {
         null => {},
@@ -100829,7 +100927,7 @@ final class Tensor extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Tensor.fromJson(e.value),
         },
-        _ => throw FormatException('"structVal" is not an object'),
+        _ => throw const FormatException('"structVal" is not an object'),
       },
       tensorVal: switch (json['tensorVal']) {
         null => Uint8List(0),
@@ -101045,7 +101143,7 @@ final class RuntimeArtifact extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Value.fromJson(e.value),
         },
-        _ => throw FormatException('"properties" is not an object'),
+        _ => throw const FormatException('"properties" is not an object'),
       },
       customProperties: switch (json['customProperties']) {
         null => {},
@@ -101053,7 +101151,7 @@ final class RuntimeArtifact extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): Value.fromJson(e.value),
         },
-        _ => throw FormatException('"customProperties" is not an object'),
+        _ => throw const FormatException('"customProperties" is not an object'),
       },
       metadata: switch (json['metadata']) {
         null => null,
@@ -103701,7 +103799,7 @@ final class ListRagCorporaResponse extends ProtoMessage {
       ragCorpora: switch (json['ragCorpora']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) RagCorpus.fromJson(i)],
-        _ => throw FormatException('"ragCorpora" is not a list'),
+        _ => throw const FormatException('"ragCorpora" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -104117,7 +104215,7 @@ final class ListRagFilesResponse extends ProtoMessage {
       ragFiles: switch (json['ragFiles']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) RagFile.fromJson(i)],
-        _ => throw FormatException('"ragFiles" is not a list'),
+        _ => throw const FormatException('"ragFiles" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -104626,7 +104724,7 @@ final class RetrieveContextsRequest_VertexRagStore extends ProtoMessage {
       ragCorpora: switch (json['ragCorpora']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"ragCorpora" is not a list'),
+        _ => throw const FormatException('"ragCorpora" is not a list'),
       },
       ragResources: switch (json['ragResources']) {
         null => [],
@@ -104634,7 +104732,7 @@ final class RetrieveContextsRequest_VertexRagStore extends ProtoMessage {
           for (final i in $1)
             RetrieveContextsRequest_VertexRagStore_RagResource.fromJson(i),
         ],
-        _ => throw FormatException('"ragResources" is not a list'),
+        _ => throw const FormatException('"ragResources" is not a list'),
       },
       vectorDistanceThreshold: switch (json['vectorDistanceThreshold']) {
         null => null,
@@ -104693,7 +104791,7 @@ final class RetrieveContextsRequest_VertexRagStore_RagResource
       ragFileIds: switch (json['ragFileIds']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"ragFileIds" is not a list'),
+        _ => throw const FormatException('"ragFileIds" is not a list'),
       },
     );
   }
@@ -104729,7 +104827,7 @@ final class RagContexts extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) RagContexts_Context.fromJson(i),
         ],
-        _ => throw FormatException('"contexts" is not a list'),
+        _ => throw const FormatException('"contexts" is not a list'),
       },
     );
   }
@@ -104919,7 +105017,7 @@ final class AugmentPromptRequest extends ProtoMessage {
       contents: switch (json['contents']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"contents" is not a list'),
+        _ => throw const FormatException('"contents" is not a list'),
       },
       model: switch (json['model']) {
         null => null,
@@ -105007,12 +105105,12 @@ final class AugmentPromptResponse extends ProtoMessage {
       augmentedPrompt: switch (json['augmentedPrompt']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
-        _ => throw FormatException('"augmentedPrompt" is not a list'),
+        _ => throw const FormatException('"augmentedPrompt" is not a list'),
       },
       facts: switch (json['facts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Fact.fromJson(i)],
-        _ => throw FormatException('"facts" is not a list'),
+        _ => throw const FormatException('"facts" is not a list'),
       },
     );
   }
@@ -105072,7 +105170,7 @@ final class CorroborateContentRequest extends ProtoMessage {
       facts: switch (json['facts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Fact.fromJson(i)],
-        _ => throw FormatException('"facts" is not a list'),
+        _ => throw const FormatException('"facts" is not a list'),
       },
       parameters: switch (json['parameters']) {
         null => null,
@@ -105157,7 +105255,7 @@ final class CorroborateContentResponse extends ProtoMessage {
       claims: switch (json['claims']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Claim.fromJson(i)],
-        _ => throw FormatException('"claims" is not a list'),
+        _ => throw const FormatException('"claims" is not a list'),
       },
     );
   }
@@ -105318,7 +105416,7 @@ final class Claim extends ProtoMessage {
       factIndexes: switch (json['factIndexes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeInt(i)],
-        _ => throw FormatException('"factIndexes" is not a list'),
+        _ => throw const FormatException('"factIndexes" is not a list'),
       },
       score: switch (json['score']) {
         null => null,
@@ -105504,7 +105602,7 @@ final class ListStudiesResponse extends ProtoMessage {
       studies: switch (json['studies']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Study.fromJson(i)],
-        _ => throw FormatException('"studies" is not a list'),
+        _ => throw const FormatException('"studies" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -105681,7 +105779,7 @@ final class SuggestTrialsRequest extends ProtoMessage {
       contexts: switch (json['contexts']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TrialContext.fromJson(i)],
-        _ => throw FormatException('"contexts" is not a list'),
+        _ => throw const FormatException('"contexts" is not a list'),
       },
     );
   }
@@ -105736,7 +105834,7 @@ final class SuggestTrialsResponse extends ProtoMessage {
       trials: switch (json['trials']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Trial.fromJson(i)],
-        _ => throw FormatException('"trials" is not a list'),
+        _ => throw const FormatException('"trials" is not a list'),
       },
       studyState: switch (json['studyState']) {
         null => Study_State.$default,
@@ -105972,7 +106070,7 @@ final class ListTrialsResponse extends ProtoMessage {
       trials: switch (json['trials']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Trial.fromJson(i)],
-        _ => throw FormatException('"trials" is not a list'),
+        _ => throw const FormatException('"trials" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -106351,7 +106449,7 @@ final class ListOptimalTrialsResponse extends ProtoMessage {
       optimalTrials: switch (json['optimalTrials']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Trial.fromJson(i)],
-        _ => throw FormatException('"optimalTrials" is not a list'),
+        _ => throw const FormatException('"optimalTrials" is not a list'),
       },
     );
   }

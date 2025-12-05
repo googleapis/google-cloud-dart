@@ -324,12 +324,12 @@ final class Entity extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"metadata" is not an object'),
+        _ => throw const FormatException('"metadata" is not an object'),
       },
       mentions: switch (json['mentions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EntityMention.fromJson(i)],
-        _ => throw FormatException('"mentions" is not a list'),
+        _ => throw const FormatException('"mentions" is not a list'),
       },
       sentiment: switch (json['sentiment']) {
         null => null,
@@ -767,7 +767,7 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
       sentences: switch (json['sentences']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Sentence.fromJson(i)],
-        _ => throw FormatException('"sentences" is not a list'),
+        _ => throw const FormatException('"sentences" is not a list'),
       },
       languageSupported: switch (json['languageSupported']) {
         null => false,
@@ -868,7 +868,7 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
       entities: switch (json['entities']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Entity.fromJson(i)],
-        _ => throw FormatException('"entities" is not a list'),
+        _ => throw const FormatException('"entities" is not a list'),
       },
       languageCode: switch (json['languageCode']) {
         null => '',
@@ -957,7 +957,7 @@ final class ClassifyTextResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ClassificationCategory.fromJson(i),
         ],
-        _ => throw FormatException('"categories" is not a list'),
+        _ => throw const FormatException('"categories" is not a list'),
       },
       languageCode: switch (json['languageCode']) {
         null => '',
@@ -1097,7 +1097,9 @@ final class ModerateTextResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ClassificationCategory.fromJson(i),
         ],
-        _ => throw FormatException('"moderationCategories" is not a list'),
+        _ => throw const FormatException(
+          '"moderationCategories" is not a list',
+        ),
       },
       languageCode: switch (json['languageCode']) {
         null => '',
@@ -1301,12 +1303,12 @@ final class AnnotateTextResponse extends ProtoMessage {
       sentences: switch (json['sentences']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Sentence.fromJson(i)],
-        _ => throw FormatException('"sentences" is not a list'),
+        _ => throw const FormatException('"sentences" is not a list'),
       },
       entities: switch (json['entities']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Entity.fromJson(i)],
-        _ => throw FormatException('"entities" is not a list'),
+        _ => throw const FormatException('"entities" is not a list'),
       },
       documentSentiment: switch (json['documentSentiment']) {
         null => null,
@@ -1321,14 +1323,16 @@ final class AnnotateTextResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ClassificationCategory.fromJson(i),
         ],
-        _ => throw FormatException('"categories" is not a list'),
+        _ => throw const FormatException('"categories" is not a list'),
       },
       moderationCategories: switch (json['moderationCategories']) {
         null => [],
         List<Object?> $1 => [
           for (final i in $1) ClassificationCategory.fromJson(i),
         ],
-        _ => throw FormatException('"moderationCategories" is not a list'),
+        _ => throw const FormatException(
+          '"moderationCategories" is not a list',
+        ),
       },
       languageSupported: switch (json['languageSupported']) {
         null => false,

@@ -103,12 +103,12 @@ final class Api extends ProtoMessage {
       methods: switch (json['methods']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Method.fromJson(i)],
-        _ => throw FormatException('"methods" is not a list'),
+        _ => throw const FormatException('"methods" is not a list'),
       },
       options: switch (json['options']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
-        _ => throw FormatException('"options" is not a list'),
+        _ => throw const FormatException('"options" is not a list'),
       },
       version: switch (json['version']) {
         null => '',
@@ -121,7 +121,7 @@ final class Api extends ProtoMessage {
       mixins: switch (json['mixins']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Mixin.fromJson(i)],
-        _ => throw FormatException('"mixins" is not a list'),
+        _ => throw const FormatException('"mixins" is not a list'),
       },
       syntax: switch (json['syntax']) {
         null => Syntax.$default,
@@ -213,7 +213,7 @@ final class Method extends ProtoMessage {
       options: switch (json['options']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
-        _ => throw FormatException('"options" is not a list'),
+        _ => throw const FormatException('"options" is not a list'),
       },
       syntax: switch (json['syntax']) {
         null => Syntax.$default,
@@ -931,17 +931,17 @@ final class Type extends ProtoMessage {
       fields: switch (json['fields']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Field.fromJson(i)],
-        _ => throw FormatException('"fields" is not a list'),
+        _ => throw const FormatException('"fields" is not a list'),
       },
       oneofs: switch (json['oneofs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw FormatException('"oneofs" is not a list'),
+        _ => throw const FormatException('"oneofs" is not a list'),
       },
       options: switch (json['options']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
-        _ => throw FormatException('"options" is not a list'),
+        _ => throw const FormatException('"options" is not a list'),
       },
       sourceContext: switch (json['sourceContext']) {
         null => null,
@@ -1063,7 +1063,7 @@ final class Field extends ProtoMessage {
       options: switch (json['options']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
-        _ => throw FormatException('"options" is not a list'),
+        _ => throw const FormatException('"options" is not a list'),
       },
       jsonName: switch (json['jsonName']) {
         null => '',
@@ -1248,12 +1248,12 @@ final class Enum extends ProtoMessage {
       enumvalue: switch (json['enumvalue']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EnumValue.fromJson(i)],
-        _ => throw FormatException('"enumvalue" is not a list'),
+        _ => throw const FormatException('"enumvalue" is not a list'),
       },
       options: switch (json['options']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
-        _ => throw FormatException('"options" is not a list'),
+        _ => throw const FormatException('"options" is not a list'),
       },
       sourceContext: switch (json['sourceContext']) {
         null => null,
@@ -1321,7 +1321,7 @@ final class EnumValue extends ProtoMessage {
       options: switch (json['options']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
-        _ => throw FormatException('"options" is not a list'),
+        _ => throw const FormatException('"options" is not a list'),
       },
     );
   }

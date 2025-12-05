@@ -187,7 +187,7 @@ final class ListLocationsResponse extends ProtoMessage {
       locations: switch (json['locations']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Location.fromJson(i)],
-        _ => throw FormatException('"locations" is not a list'),
+        _ => throw const FormatException('"locations" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -292,7 +292,7 @@ final class Location extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw FormatException('"labels" is not an object'),
+        _ => throw const FormatException('"labels" is not an object'),
       },
       metadata: switch (json['metadata']) {
         null => null,
