@@ -12,10 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Utility methods for JSON encoding and decoding from [ProtoMessage] objects.
+/// Utility methods for JSON encoding and decoding.
 ///
 /// See https://protobuf.dev/programming-guides/json/ for docs on the JSON
 /// encoding of many of these types.
+///
+/// Must be kept in sync with
+/// [`dart/annotate.go`](https://github.com/googleapis/librarian/blob/main/internal/sidekick/dart/annotate.go).
 library;
 
 import 'dart:convert';
@@ -25,21 +28,13 @@ import '../protobuf.dart';
 
 export 'dart:typed_data' show Uint8List;
 
-/// Decode an `int64` value.
-int decodeInt64(Object? value) =>
-    value is String ? int.parse(value) : value as int;
-
-/// Decode an `uint64` value.
-BigInt decodeUint64(Object? value) =>
-    value is String ? BigInt.parse(value) : BigInt.from(value as int);
-
-int decodeInt(Object? value) => value as int;
-
+/// Decodes: `BOOL_TYPE`.
 bool decodeBool(Object? value) => value as bool;
 
-String decodeString(Object? value) => value as String;
+/// Decodes: `BYTES_TYPE`.
+Uint8List decodeBytes(Object? value) => base64Decode(value as String);
 
-/// Decode a `double` value.
+/// Decodes: `FLOAT_TYPE`, `DOUBLE_TYPE`.
 double decodeDouble(Object? value) {
   if (value is String) {
     if (value == 'NaN' || value == 'Infinity' || value == '-Infinity') {
@@ -54,8 +49,20 @@ double decodeDouble(Object? value) {
   }
 }
 
-/// Decode a `bytes` value.
-Uint8List decodeBytes(Object? value) => base64Decode(value as String);
+/// Decodes: `INT32_TYPE`, `FIXED32_TYPE`, `SFIXED32_TYPE`, `SINT32_TYPE`,
+/// `UINT32_TYPE`.
+int decodeInt(Object? value) => value as int;
+
+/// Decodes: `INT64_TYPE`, `SINT64_TYPE`, `SFIXED64_TYPE`.
+int decodeInt64(Object? value) =>
+    value is String ? int.parse(value) : value as int;
+
+/// Decodes: `STRING_TYPE`.
+String decodeString(Object? value) => value as String;
+
+/// Decodes: `FIXED64_TYPE`, `UINT64_TYPE`.
+BigInt decodeUint64(Object? value) =>
+    value is String ? BigInt.parse(value) : BigInt.from(value as int);
 
 /// Encode an `int64` value into JSON.
 String? encodeInt64(int? value) => value == null ? null : '$value';
@@ -90,10 +97,6 @@ Map<T, Object?>? encodeMap<T>(Map<T, JsonEncodable>? value) =>
 /// Encode a list of `bytes` values into JSON.
 Map<T, String>? encodeMapBytes<T>(Map<T, Uint8List>? value) =>
     value?.map((key, value) => MapEntry(key, base64Encode(value)));
-
-/// Encode a map of `double` values into JSON.
-Map<T, Object?>? encodeMapDouble<T>(Map<T, double>? value) =>
-    value?.map((key, value) => MapEntry(key, encodeDouble(value)));
 
 /// Extensions methods used for comparing to proto default values.
 extension BigIntProtoDefault on BigInt {

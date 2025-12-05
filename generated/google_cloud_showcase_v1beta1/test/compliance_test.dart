@@ -41,6 +41,54 @@ void main() async {
       await showcaseServer.stop();
     });
 
+    group('client verified', () {
+      group('double', () {
+        test('simple value', () async {
+          final complianceData = ComplianceData(fDouble: 1.0);
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, 1.0);
+        });
+
+        test('NaN', () async {
+          final complianceData = ComplianceData(fDouble: double.nan);
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, isNaN);
+        });
+
+        test('infinity', () async {
+          final complianceData = ComplianceData(fDouble: double.infinity);
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, double.infinity);
+        });
+
+        test('-infinity', () async {
+          final complianceData = ComplianceData(
+            fDouble: double.negativeInfinity,
+          );
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, double.negativeInfinity);
+        });
+
+        test('integer decode', () async {
+          // Verify https://github.com/googleapis/google-cloud-dart/issues/90
+          final complianceData = ComplianceData.fromJson({'fDouble': 1});
+          expect(complianceData.fDouble, 1.0);
+        });
+      });
+    });
+
     // Conformance tests that can be verified by the server.
     // See https://github.com/googleapis/gapic-showcase/blob/main/server/services/compliance_suite.json
     group('server verified', () {
