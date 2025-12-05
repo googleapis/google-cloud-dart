@@ -83,7 +83,7 @@ void main() {
   });
 
   test('Uint64Value', () {
-    var expected = Uint64Value(value: 5_000);
+    var expected = Uint64Value(value: BigInt.from(5_000));
     expect(expected.toJson(), isA<String>());
 
     var actual = Uint64Value.fromJson(
@@ -91,8 +91,8 @@ void main() {
     );
     expect(actual.value, expected.value);
 
-    expect(Uint64Value.fromJson('123').value, 123);
-    expect(Uint64Value.fromJson(123).value, 123);
+    expect(Uint64Value.fromJson('123').value, BigInt.from(123));
+    expect(Uint64Value.fromJson(123).value, BigInt.from(123));
   });
 
   test('Int32Value', () {

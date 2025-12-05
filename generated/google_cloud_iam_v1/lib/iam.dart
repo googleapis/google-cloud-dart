@@ -268,7 +268,7 @@ final class TestIamPermissionsRequest extends ProtoMessage {
       permissions: switch (json['permissions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"permissions" is not a list'),
       },
     );
   }
@@ -301,7 +301,7 @@ final class TestIamPermissionsResponse extends ProtoMessage {
       permissions: switch (json['permissions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"permissions" is not a list'),
       },
     );
   }
@@ -515,12 +515,12 @@ final class Policy extends ProtoMessage {
       bindings: switch (json['bindings']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Binding.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"bindings" is not a list'),
       },
       auditConfigs: switch (json['auditConfigs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) AuditConfig.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"auditConfigs" is not a list'),
       },
       etag: switch (json['etag']) {
         null => Uint8List(0),
@@ -623,7 +623,7 @@ final class Binding extends ProtoMessage {
       members: switch (json['members']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"members" is not a list'),
       },
       condition: switch (json['condition']) {
         null => null,
@@ -721,7 +721,7 @@ final class AuditConfig extends ProtoMessage {
       auditLogConfigs: switch (json['auditLogConfigs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) AuditLogConfig.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"auditLogConfigs" is not a list'),
       },
     );
   }
@@ -786,7 +786,7 @@ final class AuditLogConfig extends ProtoMessage {
       exemptedMembers: switch (json['exemptedMembers']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"exemptedMembers" is not a list'),
       },
     );
   }
@@ -856,12 +856,12 @@ final class PolicyDelta extends ProtoMessage {
       bindingDeltas: switch (json['bindingDeltas']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) BindingDelta.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"bindingDeltas" is not a list'),
       },
       auditConfigDeltas: switch (json['auditConfigDeltas']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) AuditConfigDelta.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"auditConfigDeltas" is not a list'),
       },
     );
   }

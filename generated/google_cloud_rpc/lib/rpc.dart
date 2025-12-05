@@ -104,7 +104,7 @@ final class ErrorInfo extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw TypeError(),
+        _ => throw FormatException('"metadata" is not an object'),
       },
     );
   }
@@ -182,7 +182,7 @@ final class DebugInfo extends ProtoMessage {
       stackEntries: switch (json['stackEntries']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"stackEntries" is not a list'),
       },
       detail: switch (json['detail']) {
         null => '',
@@ -231,7 +231,7 @@ final class QuotaFailure extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) QuotaFailure_Violation.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"violations" is not a list'),
       },
     );
   }
@@ -369,7 +369,7 @@ final class QuotaFailure_Violation extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw TypeError(),
+        _ => throw FormatException('"quotaDimensions" is not an object'),
       },
       quotaValue: switch (json['quotaValue']) {
         null => 0,
@@ -431,7 +431,7 @@ final class PreconditionFailure extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) PreconditionFailure_Violation.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"violations" is not a list'),
       },
     );
   }
@@ -526,7 +526,7 @@ final class BadRequest extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) BadRequest_FieldViolation.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"fieldViolations" is not a list'),
       },
     );
   }
@@ -788,7 +788,7 @@ final class Help extends ProtoMessage {
       links: switch (json['links']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Help_Link.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"links" is not a list'),
       },
     );
   }
@@ -921,7 +921,7 @@ final class HttpRequest extends ProtoMessage {
       headers: switch (json['headers']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) HttpHeader.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"headers" is not a list'),
       },
       body: switch (json['body']) {
         null => Uint8List(0),
@@ -984,7 +984,7 @@ final class HttpResponse extends ProtoMessage {
       headers: switch (json['headers']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) HttpHeader.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"headers" is not a list'),
       },
       body: switch (json['body']) {
         null => Uint8List(0),
@@ -1092,7 +1092,7 @@ final class Status extends ProtoMessage {
       details: switch (json['details']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"details" is not a list'),
       },
     );
   }

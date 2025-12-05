@@ -29,6 +29,10 @@ export 'dart:typed_data' show Uint8List;
 int decodeInt64(Object? value) =>
     value is String ? int.parse(value) : value as int;
 
+/// Decode an `uint64` value.
+BigInt decodeUint64(Object? value) =>
+    value is String ? BigInt.parse(value) : BigInt.from(value as int);
+
 int decodeInt(Object? value) => value as int;
 
 bool decodeBool(Object? value) => value as bool;
@@ -55,6 +59,8 @@ Uint8List decodeBytes(Object? value) => base64Decode(value as String);
 
 /// Encode an `int64` value into JSON.
 String? encodeInt64(int? value) => value == null ? null : '$value';
+
+String? encodeUint64(BigInt? value) => value == null ? null : '$value';
 
 /// Encode 'float` and `double` values into JSON.
 Object? encodeDouble(double? value) {
@@ -88,6 +94,11 @@ Map<T, String>? encodeMapBytes<T>(Map<T, Uint8List>? value) =>
 /// Encode a map of `double` values into JSON.
 Map<T, Object?>? encodeMapDouble<T>(Map<T, double>? value) =>
     value?.map((key, value) => MapEntry(key, encodeDouble(value)));
+
+/// Extensions methods used for comparing to proto default values.
+extension BigIntProtoDefault on BigInt {
+  bool get isNotDefault => this != BigInt.zero;
+}
 
 /// Extensions methods used for comparing to proto default values.
 extension BoolProtoDefault on bool {

@@ -468,12 +468,12 @@ final class Function$ extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw TypeError(),
+        _ => throw FormatException('"labels" is not an object'),
       },
       stateMessages: switch (json['stateMessages']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) StateMessage.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"stateMessages" is not a list'),
       },
       environment: switch (json['environment']) {
         null => Environment.$default,
@@ -1079,7 +1079,7 @@ final class BuildConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw TypeError(),
+        _ => throw FormatException('"environmentVariables" is not an object'),
       },
       dockerRegistry: switch (json['dockerRegistry']) {
         null => BuildConfig_DockerRegistry.$default,
@@ -1323,7 +1323,7 @@ final class ServiceConfig extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): decodeString(e.value),
         },
-        _ => throw TypeError(),
+        _ => throw FormatException('"environmentVariables" is not an object'),
       },
       maxInstanceCount: switch (json['maxInstanceCount']) {
         null => 0,
@@ -1360,12 +1360,14 @@ final class ServiceConfig extends ProtoMessage {
       secretEnvironmentVariables: switch (json['secretEnvironmentVariables']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SecretEnvVar.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException(
+          '"secretEnvironmentVariables" is not a list',
+        ),
       },
       secretVolumes: switch (json['secretVolumes']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) SecretVolume.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"secretVolumes" is not a list'),
       },
       revision: switch (json['revision']) {
         null => '',
@@ -1679,7 +1681,7 @@ final class SecretVolume extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) SecretVolume_SecretVersion.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"versions" is not a list'),
       },
     );
   }
@@ -1838,7 +1840,7 @@ final class EventTrigger extends ProtoMessage {
       eventFilters: switch (json['eventFilters']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EventFilter.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"eventFilters" is not a list'),
       },
       pubsubTopic: switch (json['pubsubTopic']) {
         null => '',
@@ -2149,7 +2151,7 @@ final class ListFunctionsResponse extends ProtoMessage {
       functions: switch (json['functions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Function$.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"functions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -2158,7 +2160,7 @@ final class ListFunctionsResponse extends ProtoMessage {
       unreachable: switch (json['unreachable']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"unreachable" is not a list'),
       },
     );
   }
@@ -2551,7 +2553,7 @@ final class ListRuntimesResponse extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) ListRuntimesResponse_Runtime.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"runtimes" is not a list'),
       },
     );
   }
@@ -2620,7 +2622,7 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
       warnings: switch (json['warnings']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"warnings" is not a list'),
       },
       environment: switch (json['environment']) {
         null => Environment.$default,
@@ -2852,7 +2854,7 @@ final class OperationMetadata extends ProtoMessage {
       stages: switch (json['stages']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Stage.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"stages" is not a list'),
       },
       sourceToken: switch (json['sourceToken']) {
         null => '',
@@ -2917,7 +2919,7 @@ final class LocationMetadata extends ProtoMessage {
       environments: switch (json['environments']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Environment.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"environments" is not a list'),
       },
     );
   }
@@ -2988,7 +2990,7 @@ final class Stage extends ProtoMessage {
       stateMessages: switch (json['stateMessages']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) StateMessage.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"stateMessages" is not a list'),
       },
     );
   }

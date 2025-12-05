@@ -2428,7 +2428,7 @@ final class ComplianceSuite extends ProtoMessage {
       group: switch (json['group']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) ComplianceGroup.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"group" is not a list'),
       },
     );
   }
@@ -2469,12 +2469,12 @@ final class ComplianceGroup extends ProtoMessage {
       rpcs: switch (json['rpcs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"rpcs" is not a list'),
       },
       requests: switch (json['requests']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) RepeatRequest.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"requests" is not a list'),
       },
     );
   }
@@ -2517,9 +2517,9 @@ final class ComplianceData extends ProtoMessage {
 
   final int fSfixed64;
 
-  final int fUint64;
+  final BigInt fUint64;
 
-  final int fFixed64;
+  final BigInt fFixed64;
 
   final double fDouble;
 
@@ -2555,8 +2555,8 @@ final class ComplianceData extends ProtoMessage {
     this.fInt64 = 0,
     this.fSint64 = 0,
     this.fSfixed64 = 0,
-    this.fUint64 = 0,
-    this.fFixed64 = 0,
+    BigInt? fUint64,
+    BigInt? fFixed64,
     this.fDouble = 0,
     this.fFloat = 0,
     this.fBool = false,
@@ -2569,7 +2569,9 @@ final class ComplianceData extends ProtoMessage {
     this.pBool,
     this.pKingdom,
     this.pChild,
-  }) : fBytes = fBytes ?? Uint8List(0),
+  }) : fUint64 = fUint64 ?? BigInt.zero,
+       fFixed64 = fFixed64 ?? BigInt.zero,
+       fBytes = fBytes ?? Uint8List(0),
        super(fullyQualifiedName);
 
   factory ComplianceData.fromJson(Object? j) {
@@ -2612,12 +2614,12 @@ final class ComplianceData extends ProtoMessage {
         Object $1 => decodeInt64($1),
       },
       fUint64: switch (json['fUint64']) {
-        null => 0,
-        Object $1 => decodeInt64($1),
+        null => BigInt.zero,
+        Object $1 => decodeUint64($1),
       },
       fFixed64: switch (json['fFixed64']) {
-        null => 0,
-        Object $1 => decodeInt64($1),
+        null => BigInt.zero,
+        Object $1 => decodeUint64($1),
       },
       fDouble: switch (json['fDouble']) {
         null => 0,
@@ -2681,8 +2683,8 @@ final class ComplianceData extends ProtoMessage {
     if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
     if (fSint64.isNotDefault) 'fSint64': encodeInt64(fSint64),
     if (fSfixed64.isNotDefault) 'fSfixed64': encodeInt64(fSfixed64),
-    if (fUint64.isNotDefault) 'fUint64': encodeInt64(fUint64),
-    if (fFixed64.isNotDefault) 'fFixed64': encodeInt64(fFixed64),
+    if (fUint64.isNotDefault) 'fUint64': encodeUint64(fUint64),
+    if (fFixed64.isNotDefault) 'fFixed64': encodeUint64(fFixed64),
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
     if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
     if (fBool.isNotDefault) 'fBool': fBool,
@@ -3201,7 +3203,7 @@ final class EchoErrorDetailsRequest extends ProtoMessage {
       multiDetailText: switch (json['multiDetailText']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"multiDetailText" is not a list'),
       },
     );
   }
@@ -3347,7 +3349,7 @@ final class ErrorWithMultipleDetails extends ProtoMessage {
       details: switch (json['details']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"details" is not a list'),
       },
     );
   }
@@ -3624,7 +3626,7 @@ final class PagedExpandResponse extends ProtoMessage {
       responses: switch (json['responses']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) EchoResponse.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"responses" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -3661,7 +3663,7 @@ final class PagedExpandResponseList extends ProtoMessage {
       words: switch (json['words']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"words" is not a list'),
       },
     );
   }
@@ -3699,7 +3701,7 @@ final class PagedExpandLegacyMappedResponse extends ProtoMessage {
           for (final e in $1.entries)
             decodeString(e.key): PagedExpandResponseList.fromJson(e.value),
         },
-        _ => throw TypeError(),
+        _ => throw FormatException('"alphabetized" is not an object'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -4229,7 +4231,7 @@ final class ListUsersResponse extends ProtoMessage {
       users: switch (json['users']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) User.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"users" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -4522,7 +4524,7 @@ final class ListRoomsResponse extends ProtoMessage {
       rooms: switch (json['rooms']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Room.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"rooms" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -4881,7 +4883,7 @@ final class ListBlurbsResponse extends ProtoMessage {
       blurbs: switch (json['blurbs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Blurb.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"blurbs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -5029,7 +5031,7 @@ final class SearchBlurbsResponse extends ProtoMessage {
       blurbs: switch (json['blurbs']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Blurb.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"blurbs" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -5183,7 +5185,7 @@ final class SendBlurbsResponse extends ProtoMessage {
       names: switch (json['names']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"names" is not a list'),
       },
     );
   }
@@ -5330,7 +5332,7 @@ final class RestError_Status extends ProtoMessage {
       details: switch (json['details']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"details" is not a list'),
       },
     );
   }
@@ -5376,7 +5378,7 @@ final class Sequence extends ProtoMessage {
       responses: switch (json['responses']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Sequence_Response.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"responses" is not a list'),
       },
     );
   }
@@ -5466,7 +5468,7 @@ final class StreamingSequence extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) StreamingSequence_Response.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"responses" is not a list'),
       },
     );
   }
@@ -5558,7 +5560,7 @@ final class StreamingSequenceReport extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) StreamingSequenceReport_Attempt.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"attempts" is not a list'),
       },
     );
   }
@@ -5672,7 +5674,7 @@ final class SequenceReport extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) SequenceReport_Attempt.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"attempts" is not a list'),
       },
     );
   }
@@ -6165,7 +6167,7 @@ final class ListSessionsResponse extends ProtoMessage {
       sessions: switch (json['sessions']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Session.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"sessions" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -6273,7 +6275,7 @@ final class ReportSessionResponse extends ProtoMessage {
       testRuns: switch (json['testRuns']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) TestRun.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"testRuns" is not a list'),
       },
     );
   }
@@ -6365,7 +6367,7 @@ final class Test extends ProtoMessage {
       blueprints: switch (json['blueprints']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Test_Blueprint.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"blueprints" is not a list'),
       },
     );
   }
@@ -6437,7 +6439,7 @@ final class Test_Blueprint extends ProtoMessage {
         List<Object?> $1 => [
           for (final i in $1) Test_Blueprint_Invocation.fromJson(i),
         ],
-        _ => throw TypeError(),
+        _ => throw FormatException('"additionalRequests" is not a list'),
       },
     );
   }
@@ -6726,7 +6728,7 @@ final class ListTestsResponse extends ProtoMessage {
       tests: switch (json['tests']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Test.fromJson(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"tests" is not a list'),
       },
       nextPageToken: switch (json['nextPageToken']) {
         null => '',
@@ -6853,7 +6855,7 @@ final class VerifyTestRequest extends ProtoMessage {
       answers: switch (json['answers']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) decodeBytes(i)],
-        _ => throw TypeError(),
+        _ => throw FormatException('"answers" is not a list'),
       },
     );
   }
