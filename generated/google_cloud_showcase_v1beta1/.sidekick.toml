@@ -21,6 +21,6 @@ roots = 'showcase,googleapis'
 
 [codec]
 copyright-year       = '2025'
-dev-dependencies     = "path,test,test_utils"
+dev-dependencies     = 'path,test,test_utils'
 not-for-publication  = 'true'
-repository-url       = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1"
+repository-url       = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1'
