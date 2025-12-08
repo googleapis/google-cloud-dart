@@ -5,7 +5,7 @@
       "method": "POST",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.9.4 gax/0.2.0"
+        "x-goog-api-client": "gl-dart/3.10.2 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "eyJyZXBsaWNhdGlvbiI6eyJhdXRvbWF0aWMiOnt9fSwidHRsIjoiMTIwcyJ9"
     },
@@ -14,7 +14,7 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "transfer-encoding": "chunked",
-        "date": "Tue, 11 Nov 2025 22:14:51 GMT",
+        "date": "Thu, 04 Dec 2025 03:19:16 GMT",
         "vary": "Origin,X-Origin,Referer",
         "content-encoding": "gzip",
         "content-type": "application/json; charset=UTF-8",
@@ -23,7 +23,7 @@
         "x-content-type-options": "nosniff",
         "server": "ESF"
       },
-      "body": "ewogICJuYW1lIjogInByb2plY3RzLzc0NzU3NTEwNjM3NS9zZWNyZXRzL215c2VjcmV0IiwKICAicmVwbGljYXRpb24iOiB7CiAgICAiYXV0b21hdGljIjoge30KICB9LAogICJjcmVhdGVUaW1lIjogIjIwMjUtMTEtMTFUMjI6MTQ6NDkuMjA1MTM0WiIsCiAgImV4cGlyZVRpbWUiOiAiMjAyNS0xMS0xMVQyMjoxNjo0OS4xNzUyNjUwODdaIiwKICAiZXRhZyI6ICJcIjE2NDM1OGZhMGIxN2E3XCIiCn0K",
+      "body": "{\n  \"name\": \"projects/747575106375/secrets/mysecret\",\n  \"replication\": {\n    \"automatic\": {}\n  },\n  \"createTime\": \"2025-12-04T03:19:15.907272Z\",\n  \"expireTime\": \"2025-12-04T03:21:15.853501228Z\",\n  \"etag\": \"\\\"164517cb3534ad\\\"\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -33,7 +33,7 @@
       "method": "PATCH",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.9.4 gax/0.2.0"
+        "x-goog-api-client": "gl-dart/3.10.2 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "eyJuYW1lIjoicHJvamVjdHMvNzQ3NTc1MTA2Mzc1L3NlY3JldHMvbXlzZWNyZXQiLCJsYWJlbHMiOnsieCI6InkifSwiYW5ub3RhdGlvbnMiOnsiYSI6ImIifX0="
     },
@@ -42,7 +42,7 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "transfer-encoding": "chunked",
-        "date": "Tue, 11 Nov 2025 22:14:51 GMT",
+        "date": "Thu, 04 Dec 2025 03:19:16 GMT",
         "vary": "Origin,X-Origin,Referer",
         "content-encoding": "gzip",
         "content-type": "application/json; charset=UTF-8",
@@ -51,7 +51,7 @@
         "x-content-type-options": "nosniff",
         "server": "ESF"
       },
-      "body": "ewogICJuYW1lIjogInByb2plY3RzLzc0NzU3NTEwNjM3NS9zZWNyZXRzL215c2VjcmV0IiwKICAicmVwbGljYXRpb24iOiB7CiAgICAiYXV0b21hdGljIjoge30KICB9LAogICJjcmVhdGVUaW1lIjogIjIwMjUtMTEtMTFUMjI6MTQ6NDkuMjA1MTM0WiIsCiAgImV4cGlyZVRpbWUiOiAiMjAyNS0xMS0xMVQyMjoxNjo0OS4xNzUyNjUwODdaIiwKICAiZXRhZyI6ICJcIjE2NDM1OGZhMGVmNmVhXCIiLAogICJhbm5vdGF0aW9ucyI6IHsKICAgICJhIjogImIiCiAgfQp9Cg==",
+      "body": "{\n  \"name\": \"projects/747575106375/secrets/mysecret\",\n  \"replication\": {\n    \"automatic\": {}\n  },\n  \"createTime\": \"2025-12-04T03:19:15.907272Z\",\n  \"expireTime\": \"2025-12-04T03:21:15.853501228Z\",\n  \"etag\": \"\\\"164517cb396ca9\\\"\",\n  \"annotations\": {\n    \"a\": \"b\"\n  }\n}\n",
       "reasonPhrase": "OK"
     }
   }

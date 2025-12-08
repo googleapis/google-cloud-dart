@@ -19,7 +19,6 @@
 /// Writes log entries and manages your Cloud Logging configuration.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -1161,33 +1160,83 @@ final class LogEntry extends ProtoMessage {
     this.split,
   }) : super(fullyQualifiedName);
 
-  factory LogEntry.fromJson(Map<String, dynamic> json) => LogEntry(
-    logName: json['logName'] ?? '',
-    resource: decode(json['resource'], MonitoredResource.fromJson),
-    protoPayload: decode(json['protoPayload'], Any.fromJson),
-    textPayload: json['textPayload'],
-    jsonPayload: decodeCustom(json['jsonPayload'], Struct.fromJson),
-    timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
-    receiveTimestamp: decodeCustom(
-      json['receiveTimestamp'],
-      Timestamp.fromJson,
-    ),
-    severity:
-        decodeEnum(json['severity'], logging_type.LogSeverity.fromJson) ??
-        logging_type.LogSeverity.$default,
-    insertId: json['insertId'] ?? '',
-    httpRequest: decode(json['httpRequest'], logging_type.HttpRequest.fromJson),
-    labels: decodeMap(json['labels']) ?? {},
-    operation: decode(json['operation'], LogEntryOperation.fromJson),
-    trace: json['trace'] ?? '',
-    spanId: json['spanId'] ?? '',
-    traceSampled: json['traceSampled'] ?? false,
-    sourceLocation: decode(
-      json['sourceLocation'],
-      LogEntrySourceLocation.fromJson,
-    ),
-    split: decode(json['split'], LogSplit.fromJson),
-  );
+  factory LogEntry.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogEntry(
+      logName: switch (json['logName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resource: switch (json['resource']) {
+        null => null,
+        Object $1 => MonitoredResource.fromJson($1),
+      },
+      protoPayload: switch (json['protoPayload']) {
+        null => null,
+        Object $1 => Any.fromJson($1),
+      },
+      textPayload: switch (json['textPayload']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      jsonPayload: switch (json['jsonPayload']) {
+        null => null,
+        Object $1 => Struct.fromJson($1),
+      },
+      timestamp: switch (json['timestamp']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      receiveTimestamp: switch (json['receiveTimestamp']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      severity: switch (json['severity']) {
+        null => logging_type.LogSeverity.$default,
+        Object $1 => logging_type.LogSeverity.fromJson($1),
+      },
+      insertId: switch (json['insertId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      httpRequest: switch (json['httpRequest']) {
+        null => null,
+        Object $1 => logging_type.HttpRequest.fromJson($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
+      operation: switch (json['operation']) {
+        null => null,
+        Object $1 => LogEntryOperation.fromJson($1),
+      },
+      trace: switch (json['trace']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      spanId: switch (json['spanId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      traceSampled: switch (json['traceSampled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      sourceLocation: switch (json['sourceLocation']) {
+        null => null,
+        Object $1 => LogEntrySourceLocation.fromJson($1),
+      },
+      split: switch (json['split']) {
+        null => null,
+        Object $1 => LogSplit.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1254,13 +1303,27 @@ final class LogEntryOperation extends ProtoMessage {
     this.last = false,
   }) : super(fullyQualifiedName);
 
-  factory LogEntryOperation.fromJson(Map<String, dynamic> json) =>
-      LogEntryOperation(
-        id: json['id'] ?? '',
-        producer: json['producer'] ?? '',
-        first: json['first'] ?? false,
-        last: json['last'] ?? false,
-      );
+  factory LogEntryOperation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogEntryOperation(
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      producer: switch (json['producer']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      first: switch (json['first']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      last: switch (json['last']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1307,12 +1370,23 @@ final class LogEntrySourceLocation extends ProtoMessage {
   LogEntrySourceLocation({this.file = '', this.line = 0, this.function = ''})
     : super(fullyQualifiedName);
 
-  factory LogEntrySourceLocation.fromJson(Map<String, dynamic> json) =>
-      LogEntrySourceLocation(
-        file: json['file'] ?? '',
-        line: decodeInt64(json['line']) ?? 0,
-        function: json['function'] ?? '',
-      );
+  factory LogEntrySourceLocation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogEntrySourceLocation(
+      file: switch (json['file']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      line: switch (json['line']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      function: switch (json['function']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1354,11 +1428,23 @@ final class LogSplit extends ProtoMessage {
   LogSplit({this.uid = '', this.index = 0, this.totalSplits = 0})
     : super(fullyQualifiedName);
 
-  factory LogSplit.fromJson(Map<String, dynamic> json) => LogSplit(
-    uid: json['uid'] ?? '',
-    index: json['index'] ?? 0,
-    totalSplits: json['totalSplits'] ?? 0,
-  );
+  factory LogSplit.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogSplit(
+      uid: switch (json['uid']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      index: switch (json['index']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      totalSplits: switch (json['totalSplits']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1399,8 +1485,15 @@ final class DeleteLogRequest extends ProtoMessage {
 
   DeleteLogRequest({required this.logName}) : super(fullyQualifiedName);
 
-  factory DeleteLogRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteLogRequest(logName: json['logName'] ?? '');
+  factory DeleteLogRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteLogRequest(
+      logName: switch (json['logName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'logName': logName};
@@ -1501,15 +1594,40 @@ final class WriteLogEntriesRequest extends ProtoMessage {
     this.dryRun = false,
   }) : super(fullyQualifiedName);
 
-  factory WriteLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
-      WriteLogEntriesRequest(
-        logName: json['logName'] ?? '',
-        resource: decode(json['resource'], MonitoredResource.fromJson),
-        labels: decodeMap(json['labels']) ?? {},
-        entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
-        partialSuccess: json['partialSuccess'] ?? false,
-        dryRun: json['dryRun'] ?? false,
-      );
+  factory WriteLogEntriesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return WriteLogEntriesRequest(
+      logName: switch (json['logName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resource: switch (json['resource']) {
+        null => null,
+        Object $1 => MonitoredResource.fromJson($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
+      entries: switch (json['entries']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogEntry.fromJson(i)],
+        _ => throw const FormatException('"entries" is not a list'),
+      },
+      partialSuccess: switch (json['partialSuccess']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      dryRun: switch (json['dryRun']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1539,7 +1657,7 @@ final class WriteLogEntriesResponse extends ProtoMessage {
 
   WriteLogEntriesResponse() : super(fullyQualifiedName);
 
-  factory WriteLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
+  factory WriteLogEntriesResponse.fromJson(Object? j) =>
       WriteLogEntriesResponse();
 
   @override
@@ -1565,11 +1683,19 @@ final class WriteLogEntriesPartialErrors extends ProtoMessage {
   WriteLogEntriesPartialErrors({this.logEntryErrors = const {}})
     : super(fullyQualifiedName);
 
-  factory WriteLogEntriesPartialErrors.fromJson(Map<String, dynamic> json) =>
-      WriteLogEntriesPartialErrors(
-        logEntryErrors:
-            decodeMapMessage(json['logEntryErrors'], Status.fromJson) ?? {},
-      );
+  factory WriteLogEntriesPartialErrors.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return WriteLogEntriesPartialErrors(
+      logEntryErrors: switch (json['logEntryErrors']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeInt(e.key): Status.fromJson(e.value),
+        },
+        _ => throw const FormatException('"logEntryErrors" is not an object'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1640,14 +1766,32 @@ final class ListLogEntriesRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
-      ListLogEntriesRequest(
-        resourceNames: decodeList(json['resourceNames']) ?? [],
-        filter: json['filter'] ?? '',
-        orderBy: json['orderBy'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListLogEntriesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLogEntriesRequest(
+      resourceNames: switch (json['resourceNames']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"resourceNames" is not a list'),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      orderBy: switch (json['orderBy']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1695,11 +1839,20 @@ final class ListLogEntriesResponse extends ProtoMessage {
   ListLogEntriesResponse({this.entries = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
-      ListLogEntriesResponse(
-        entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListLogEntriesResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLogEntriesResponse(
+      entries: switch (json['entries']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogEntry.fromJson(i)],
+        _ => throw const FormatException('"entries" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1735,12 +1888,19 @@ final class ListMonitoredResourceDescriptorsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListMonitoredResourceDescriptorsRequest.fromJson(
-    Map<String, dynamic> json,
-  ) => ListMonitoredResourceDescriptorsRequest(
-    pageSize: json['pageSize'] ?? 0,
-    pageToken: json['pageToken'] ?? '',
-  );
+  factory ListMonitoredResourceDescriptorsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListMonitoredResourceDescriptorsRequest(
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1773,17 +1933,22 @@ final class ListMonitoredResourceDescriptorsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListMonitoredResourceDescriptorsResponse.fromJson(
-    Map<String, dynamic> json,
-  ) => ListMonitoredResourceDescriptorsResponse(
-    resourceDescriptors:
-        decodeListMessage(
-          json['resourceDescriptors'],
-          MonitoredResourceDescriptor.fromJson,
-        ) ??
-        [],
-    nextPageToken: json['nextPageToken'] ?? '',
-  );
+  factory ListMonitoredResourceDescriptorsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListMonitoredResourceDescriptorsResponse(
+      resourceDescriptors: switch (json['resourceDescriptors']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) MonitoredResourceDescriptor.fromJson(i),
+        ],
+        _ => throw const FormatException('"resourceDescriptors" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1846,13 +2011,28 @@ final class ListLogsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListLogsRequest.fromJson(Map<String, dynamic> json) =>
-      ListLogsRequest(
-        parent: json['parent'] ?? '',
-        resourceNames: decodeList(json['resourceNames']) ?? [],
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListLogsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLogsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resourceNames: switch (json['resourceNames']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"resourceNames" is not a list'),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1890,11 +2070,20 @@ final class ListLogsResponse extends ProtoMessage {
   ListLogsResponse({this.logNames = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLogsResponse.fromJson(Map<String, dynamic> json) =>
-      ListLogsResponse(
-        logNames: decodeList(json['logNames']) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListLogsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLogsResponse(
+      logNames: switch (json['logNames']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"logNames" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1948,12 +2137,24 @@ final class TailLogEntriesRequest extends ProtoMessage {
     this.bufferWindow,
   }) : super(fullyQualifiedName);
 
-  factory TailLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
-      TailLogEntriesRequest(
-        resourceNames: decodeList(json['resourceNames']) ?? [],
-        filter: json['filter'] ?? '',
-        bufferWindow: decodeCustom(json['bufferWindow'], Duration.fromJson),
-      );
+  factory TailLogEntriesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TailLogEntriesRequest(
+      resourceNames: switch (json['resourceNames']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"resourceNames" is not a list'),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      bufferWindow: switch (json['bufferWindow']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1991,16 +2192,24 @@ final class TailLogEntriesResponse extends ProtoMessage {
     this.suppressionInfo = const [],
   }) : super(fullyQualifiedName);
 
-  factory TailLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
-      TailLogEntriesResponse(
-        entries: decodeListMessage(json['entries'], LogEntry.fromJson) ?? [],
-        suppressionInfo:
-            decodeListMessage(
-              json['suppressionInfo'],
-              TailLogEntriesResponse_SuppressionInfo.fromJson,
-            ) ??
-            [],
-      );
+  factory TailLogEntriesResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TailLogEntriesResponse(
+      entries: switch (json['entries']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogEntry.fromJson(i)],
+        _ => throw const FormatException('"entries" is not a list'),
+      },
+      suppressionInfo: switch (json['suppressionInfo']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            TailLogEntriesResponse_SuppressionInfo.fromJson(i),
+        ],
+        _ => throw const FormatException('"suppressionInfo" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2029,17 +2238,19 @@ final class TailLogEntriesResponse_SuppressionInfo extends ProtoMessage {
     this.suppressedCount = 0,
   }) : super(fullyQualifiedName);
 
-  factory TailLogEntriesResponse_SuppressionInfo.fromJson(
-    Map<String, dynamic> json,
-  ) => TailLogEntriesResponse_SuppressionInfo(
-    reason:
-        decodeEnum(
-          json['reason'],
-          TailLogEntriesResponse_SuppressionInfo_Reason.fromJson,
-        ) ??
-        TailLogEntriesResponse_SuppressionInfo_Reason.$default,
-    suppressedCount: json['suppressedCount'] ?? 0,
-  );
+  factory TailLogEntriesResponse_SuppressionInfo.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TailLogEntriesResponse_SuppressionInfo(
+      reason: switch (json['reason']) {
+        null => TailLogEntriesResponse_SuppressionInfo_Reason.$default,
+        Object $1 => TailLogEntriesResponse_SuppressionInfo_Reason.fromJson($1),
+      },
+      suppressedCount: switch (json['suppressedCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2082,8 +2293,9 @@ final class TailLogEntriesResponse_SuppressionInfo_Reason extends ProtoEnum {
 
   const TailLogEntriesResponse_SuppressionInfo_Reason(super.value);
 
-  factory TailLogEntriesResponse_SuppressionInfo_Reason.fromJson(String json) =>
-      TailLogEntriesResponse_SuppressionInfo_Reason(json);
+  factory TailLogEntriesResponse_SuppressionInfo_Reason.fromJson(
+    Object? json,
+  ) => TailLogEntriesResponse_SuppressionInfo_Reason(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2117,11 +2329,23 @@ final class IndexConfig extends ProtoMessage {
   IndexConfig({required this.fieldPath, required this.type, this.createTime})
     : super(fullyQualifiedName);
 
-  factory IndexConfig.fromJson(Map<String, dynamic> json) => IndexConfig(
-    fieldPath: json['fieldPath'] ?? '',
-    type: decodeEnum(json['type'], IndexType.fromJson) ?? IndexType.$default,
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-  );
+  factory IndexConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return IndexConfig(
+      fieldPath: switch (json['fieldPath']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      type: switch (json['type']) {
+        null => IndexType.$default,
+        Object $1 => IndexType.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2219,22 +2443,57 @@ final class LogBucket extends ProtoMessage {
     this.cmekSettings,
   }) : super(fullyQualifiedName);
 
-  factory LogBucket.fromJson(Map<String, dynamic> json) => LogBucket(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    retentionDays: json['retentionDays'] ?? 0,
-    locked: json['locked'] ?? false,
-    lifecycleState:
-        decodeEnum(json['lifecycleState'], LifecycleState.fromJson) ??
-        LifecycleState.$default,
-    analyticsEnabled: json['analyticsEnabled'] ?? false,
-    restrictedFields: decodeList(json['restrictedFields']) ?? [],
-    indexConfigs:
-        decodeListMessage(json['indexConfigs'], IndexConfig.fromJson) ?? [],
-    cmekSettings: decode(json['cmekSettings'], CmekSettings.fromJson),
-  );
+  factory LogBucket.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogBucket(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      retentionDays: switch (json['retentionDays']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      locked: switch (json['locked']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      lifecycleState: switch (json['lifecycleState']) {
+        null => LifecycleState.$default,
+        Object $1 => LifecycleState.fromJson($1),
+      },
+      analyticsEnabled: switch (json['analyticsEnabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      restrictedFields: switch (json['restrictedFields']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"restrictedFields" is not a list'),
+      },
+      indexConfigs: switch (json['indexConfigs']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) IndexConfig.fromJson(i)],
+        _ => throw const FormatException('"indexConfigs" is not a list'),
+      },
+      cmekSettings: switch (json['cmekSettings']) {
+        null => null,
+        Object $1 => CmekSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2309,13 +2568,31 @@ final class LogView extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory LogView.fromJson(Map<String, dynamic> json) => LogView(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    filter: json['filter'] ?? '',
-  );
+  factory LogView.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogView(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2462,26 +2739,60 @@ final class LogSink extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory LogSink.fromJson(Map<String, dynamic> json) => LogSink(
-    name: json['name'] ?? '',
-    destination: json['destination'] ?? '',
-    filter: json['filter'] ?? '',
-    description: json['description'] ?? '',
-    disabled: json['disabled'] ?? false,
-    exclusions:
-        decodeListMessage(json['exclusions'], LogExclusion.fromJson) ?? [],
-    outputVersionFormat:
-        decodeEnum(
-          json['outputVersionFormat'],
-          LogSink_VersionFormat.fromJson,
-        ) ??
-        LogSink_VersionFormat.$default,
-    writerIdentity: json['writerIdentity'] ?? '',
-    includeChildren: json['includeChildren'] ?? false,
-    bigqueryOptions: decode(json['bigqueryOptions'], BigQueryOptions.fromJson),
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-  );
+  factory LogSink.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogSink(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      destination: switch (json['destination']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      disabled: switch (json['disabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      exclusions: switch (json['exclusions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogExclusion.fromJson(i)],
+        _ => throw const FormatException('"exclusions" is not a list'),
+      },
+      outputVersionFormat: switch (json['outputVersionFormat']) {
+        null => LogSink_VersionFormat.$default,
+        Object $1 => LogSink_VersionFormat.fromJson($1),
+      },
+      writerIdentity: switch (json['writerIdentity']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      includeChildren: switch (json['includeChildren']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      bigqueryOptions: switch (json['bigqueryOptions']) {
+        null => null,
+        Object $1 => BigQueryOptions.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2534,8 +2845,8 @@ final class LogSink_VersionFormat extends ProtoEnum {
 
   const LogSink_VersionFormat(super.value);
 
-  factory LogSink_VersionFormat.fromJson(String json) =>
-      LogSink_VersionFormat(json);
+  factory LogSink_VersionFormat.fromJson(Object? json) =>
+      LogSink_VersionFormat(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2558,8 +2869,15 @@ final class BigQueryDataset extends ProtoMessage {
 
   BigQueryDataset({this.datasetId = ''}) : super(fullyQualifiedName);
 
-  factory BigQueryDataset.fromJson(Map<String, dynamic> json) =>
-      BigQueryDataset(datasetId: json['datasetId'] ?? '');
+  factory BigQueryDataset.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BigQueryDataset(
+      datasetId: switch (json['datasetId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (datasetId.isNotDefault) 'datasetId': datasetId};
@@ -2614,15 +2932,31 @@ final class Link extends ProtoMessage {
     this.bigqueryDataset,
   }) : super(fullyQualifiedName);
 
-  factory Link.fromJson(Map<String, dynamic> json) => Link(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    lifecycleState:
-        decodeEnum(json['lifecycleState'], LifecycleState.fromJson) ??
-        LifecycleState.$default,
-    bigqueryDataset: decode(json['bigqueryDataset'], BigQueryDataset.fromJson),
-  );
+  factory Link.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Link(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      lifecycleState: switch (json['lifecycleState']) {
+        null => LifecycleState.$default,
+        Object $1 => LifecycleState.fromJson($1),
+      },
+      bigqueryDataset: switch (json['bigqueryDataset']) {
+        null => null,
+        Object $1 => BigQueryDataset.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2672,12 +3006,20 @@ final class BigQueryOptions extends ProtoMessage {
     this.usesTimestampColumnPartitioning = false,
   }) : super(fullyQualifiedName);
 
-  factory BigQueryOptions.fromJson(Map<String, dynamic> json) =>
-      BigQueryOptions(
-        usePartitionedTables: json['usePartitionedTables'] ?? false,
-        usesTimestampColumnPartitioning:
-            json['usesTimestampColumnPartitioning'] ?? false,
-      );
+  factory BigQueryOptions.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BigQueryOptions(
+      usePartitionedTables: switch (json['usePartitionedTables']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      usesTimestampColumnPartitioning:
+          switch (json['usesTimestampColumnPartitioning']) {
+            null => false,
+            Object $1 => decodeBool($1),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2731,12 +3073,23 @@ final class ListBucketsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListBucketsRequest.fromJson(Map<String, dynamic> json) =>
-      ListBucketsRequest(
-        parent: json['parent'] ?? '',
-        pageToken: json['pageToken'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-      );
+  factory ListBucketsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListBucketsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2772,11 +3125,20 @@ final class ListBucketsResponse extends ProtoMessage {
   ListBucketsResponse({this.buckets = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListBucketsResponse.fromJson(Map<String, dynamic> json) =>
-      ListBucketsResponse(
-        buckets: decodeListMessage(json['buckets'], LogBucket.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListBucketsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListBucketsResponse(
+      buckets: switch (json['buckets']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogBucket.fromJson(i)],
+        _ => throw const FormatException('"buckets" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2821,12 +3183,23 @@ final class CreateBucketRequest extends ProtoMessage {
     required this.bucket,
   }) : super(fullyQualifiedName);
 
-  factory CreateBucketRequest.fromJson(Map<String, dynamic> json) =>
-      CreateBucketRequest(
-        parent: json['parent'] ?? '',
-        bucketId: json['bucketId'] ?? '',
-        bucket: decode(json['bucket'], LogBucket.fromJson),
-      );
+  factory CreateBucketRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateBucketRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      bucketId: switch (json['bucketId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      bucket: switch (json['bucket']) {
+        null => null,
+        Object $1 => LogBucket.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2878,12 +3251,23 @@ final class UpdateBucketRequest extends ProtoMessage {
     required this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateBucketRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateBucketRequest(
-        name: json['name'] ?? '',
-        bucket: decode(json['bucket'], LogBucket.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateBucketRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateBucketRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      bucket: switch (json['bucket']) {
+        null => null,
+        Object $1 => LogBucket.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2917,8 +3301,15 @@ final class GetBucketRequest extends ProtoMessage {
 
   GetBucketRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetBucketRequest.fromJson(Map<String, dynamic> json) =>
-      GetBucketRequest(name: json['name'] ?? '');
+  factory GetBucketRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetBucketRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -2949,8 +3340,15 @@ final class DeleteBucketRequest extends ProtoMessage {
 
   DeleteBucketRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteBucketRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteBucketRequest(name: json['name'] ?? '');
+  factory DeleteBucketRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteBucketRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -2981,8 +3379,15 @@ final class UndeleteBucketRequest extends ProtoMessage {
 
   UndeleteBucketRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory UndeleteBucketRequest.fromJson(Map<String, dynamic> json) =>
-      UndeleteBucketRequest(name: json['name'] ?? '');
+  factory UndeleteBucketRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UndeleteBucketRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -3021,12 +3426,23 @@ final class ListViewsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListViewsRequest.fromJson(Map<String, dynamic> json) =>
-      ListViewsRequest(
-        parent: json['parent'] ?? '',
-        pageToken: json['pageToken'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-      );
+  factory ListViewsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListViewsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3062,11 +3478,20 @@ final class ListViewsResponse extends ProtoMessage {
   ListViewsResponse({this.views = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListViewsResponse.fromJson(Map<String, dynamic> json) =>
-      ListViewsResponse(
-        views: decodeListMessage(json['views'], LogView.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListViewsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListViewsResponse(
+      views: switch (json['views']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogView.fromJson(i)],
+        _ => throw const FormatException('"views" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3109,12 +3534,23 @@ final class CreateViewRequest extends ProtoMessage {
     required this.view,
   }) : super(fullyQualifiedName);
 
-  factory CreateViewRequest.fromJson(Map<String, dynamic> json) =>
-      CreateViewRequest(
-        parent: json['parent'] ?? '',
-        viewId: json['viewId'] ?? '',
-        view: decode(json['view'], LogView.fromJson),
-      );
+  factory CreateViewRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateViewRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      viewId: switch (json['viewId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      view: switch (json['view']) {
+        null => null,
+        Object $1 => LogView.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3160,12 +3596,23 @@ final class UpdateViewRequest extends ProtoMessage {
   UpdateViewRequest({required this.name, required this.view, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateViewRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateViewRequest(
-        name: json['name'] ?? '',
-        view: decode(json['view'], LogView.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateViewRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateViewRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      view: switch (json['view']) {
+        null => null,
+        Object $1 => LogView.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3196,8 +3643,15 @@ final class GetViewRequest extends ProtoMessage {
 
   GetViewRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetViewRequest.fromJson(Map<String, dynamic> json) =>
-      GetViewRequest(name: json['name'] ?? '');
+  factory GetViewRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetViewRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -3225,8 +3679,15 @@ final class DeleteViewRequest extends ProtoMessage {
 
   DeleteViewRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteViewRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteViewRequest(name: json['name'] ?? '');
+  factory DeleteViewRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteViewRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -3267,12 +3728,23 @@ final class ListSinksRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListSinksRequest.fromJson(Map<String, dynamic> json) =>
-      ListSinksRequest(
-        parent: json['parent'] ?? '',
-        pageToken: json['pageToken'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-      );
+  factory ListSinksRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListSinksRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3308,11 +3780,20 @@ final class ListSinksResponse extends ProtoMessage {
   ListSinksResponse({this.sinks = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListSinksResponse.fromJson(Map<String, dynamic> json) =>
-      ListSinksResponse(
-        sinks: decodeListMessage(json['sinks'], LogSink.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListSinksResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListSinksResponse(
+      sinks: switch (json['sinks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogSink.fromJson(i)],
+        _ => throw const FormatException('"sinks" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3345,8 +3826,15 @@ final class GetSinkRequest extends ProtoMessage {
 
   GetSinkRequest({required this.sinkName}) : super(fullyQualifiedName);
 
-  factory GetSinkRequest.fromJson(Map<String, dynamic> json) =>
-      GetSinkRequest(sinkName: json['sinkName'] ?? '');
+  factory GetSinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetSinkRequest(
+      sinkName: switch (json['sinkName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'sinkName': sinkName};
@@ -3400,12 +3888,23 @@ final class CreateSinkRequest extends ProtoMessage {
     this.uniqueWriterIdentity = false,
   }) : super(fullyQualifiedName);
 
-  factory CreateSinkRequest.fromJson(Map<String, dynamic> json) =>
-      CreateSinkRequest(
-        parent: json['parent'] ?? '',
-        sink: decode(json['sink'], LogSink.fromJson),
-        uniqueWriterIdentity: json['uniqueWriterIdentity'] ?? false,
-      );
+  factory CreateSinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateSinkRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sink: switch (json['sink']) {
+        null => null,
+        Object $1 => LogSink.fromJson($1),
+      },
+      uniqueWriterIdentity: switch (json['uniqueWriterIdentity']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3485,13 +3984,27 @@ final class UpdateSinkRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateSinkRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateSinkRequest(
-        sinkName: json['sinkName'] ?? '',
-        sink: decode(json['sink'], LogSink.fromJson),
-        uniqueWriterIdentity: json['uniqueWriterIdentity'] ?? false,
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateSinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateSinkRequest(
+      sinkName: switch (json['sinkName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sink: switch (json['sink']) {
+        null => null,
+        Object $1 => LogSink.fromJson($1),
+      },
+      uniqueWriterIdentity: switch (json['uniqueWriterIdentity']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3532,8 +4045,15 @@ final class DeleteSinkRequest extends ProtoMessage {
 
   DeleteSinkRequest({required this.sinkName}) : super(fullyQualifiedName);
 
-  factory DeleteSinkRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteSinkRequest(sinkName: json['sinkName'] ?? '');
+  factory DeleteSinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteSinkRequest(
+      sinkName: switch (json['sinkName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'sinkName': sinkName};
@@ -3572,12 +4092,23 @@ final class CreateLinkRequest extends ProtoMessage {
     required this.linkId,
   }) : super(fullyQualifiedName);
 
-  factory CreateLinkRequest.fromJson(Map<String, dynamic> json) =>
-      CreateLinkRequest(
-        parent: json['parent'] ?? '',
-        link: decode(json['link'], Link.fromJson),
-        linkId: json['linkId'] ?? '',
-      );
+  factory CreateLinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateLinkRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      link: switch (json['link']) {
+        null => null,
+        Object $1 => Link.fromJson($1),
+      },
+      linkId: switch (json['linkId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3608,8 +4139,15 @@ final class DeleteLinkRequest extends ProtoMessage {
 
   DeleteLinkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteLinkRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteLinkRequest(name: json['name'] ?? '');
+  factory DeleteLinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteLinkRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -3647,12 +4185,23 @@ final class ListLinksRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListLinksRequest.fromJson(Map<String, dynamic> json) =>
-      ListLinksRequest(
-        parent: json['parent'] ?? '',
-        pageToken: json['pageToken'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-      );
+  factory ListLinksRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLinksRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3688,11 +4237,20 @@ final class ListLinksResponse extends ProtoMessage {
   ListLinksResponse({this.links = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLinksResponse.fromJson(Map<String, dynamic> json) =>
-      ListLinksResponse(
-        links: decodeListMessage(json['links'], Link.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListLinksResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLinksResponse(
+      links: switch (json['links']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Link.fromJson(i)],
+        _ => throw const FormatException('"links" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3721,8 +4279,15 @@ final class GetLinkRequest extends ProtoMessage {
 
   GetLinkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetLinkRequest.fromJson(Map<String, dynamic> json) =>
-      GetLinkRequest(name: json['name'] ?? '');
+  factory GetLinkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetLinkRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -3788,14 +4353,35 @@ final class LogExclusion extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory LogExclusion.fromJson(Map<String, dynamic> json) => LogExclusion(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    filter: json['filter'] ?? '',
-    disabled: json['disabled'] ?? false,
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-  );
+  factory LogExclusion.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogExclusion(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      disabled: switch (json['disabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3849,12 +4435,23 @@ final class ListExclusionsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListExclusionsRequest.fromJson(Map<String, dynamic> json) =>
-      ListExclusionsRequest(
-        parent: json['parent'] ?? '',
-        pageToken: json['pageToken'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-      );
+  factory ListExclusionsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListExclusionsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3890,12 +4487,20 @@ final class ListExclusionsResponse extends ProtoMessage {
   ListExclusionsResponse({this.exclusions = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListExclusionsResponse.fromJson(Map<String, dynamic> json) =>
-      ListExclusionsResponse(
-        exclusions:
-            decodeListMessage(json['exclusions'], LogExclusion.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListExclusionsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListExclusionsResponse(
+      exclusions: switch (json['exclusions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogExclusion.fromJson(i)],
+        _ => throw const FormatException('"exclusions" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3929,8 +4534,15 @@ final class GetExclusionRequest extends ProtoMessage {
 
   GetExclusionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetExclusionRequest.fromJson(Map<String, dynamic> json) =>
-      GetExclusionRequest(name: json['name'] ?? '');
+  factory GetExclusionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetExclusionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -3967,11 +4579,19 @@ final class CreateExclusionRequest extends ProtoMessage {
   CreateExclusionRequest({required this.parent, required this.exclusion})
     : super(fullyQualifiedName);
 
-  factory CreateExclusionRequest.fromJson(Map<String, dynamic> json) =>
-      CreateExclusionRequest(
-        parent: json['parent'] ?? '',
-        exclusion: decode(json['exclusion'], LogExclusion.fromJson),
-      );
+  factory CreateExclusionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateExclusionRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      exclusion: switch (json['exclusion']) {
+        null => null,
+        Object $1 => LogExclusion.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4023,12 +4643,23 @@ final class UpdateExclusionRequest extends ProtoMessage {
     required this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateExclusionRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateExclusionRequest(
-        name: json['name'] ?? '',
-        exclusion: decode(json['exclusion'], LogExclusion.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateExclusionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateExclusionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      exclusion: switch (json['exclusion']) {
+        null => null,
+        Object $1 => LogExclusion.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4063,8 +4694,15 @@ final class DeleteExclusionRequest extends ProtoMessage {
 
   DeleteExclusionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteExclusionRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteExclusionRequest(name: json['name'] ?? '');
+  factory DeleteExclusionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteExclusionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -4105,8 +4743,15 @@ final class GetCmekSettingsRequest extends ProtoMessage {
 
   GetCmekSettingsRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetCmekSettingsRequest.fromJson(Map<String, dynamic> json) =>
-      GetCmekSettingsRequest(name: json['name'] ?? '');
+  factory GetCmekSettingsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetCmekSettingsRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -4166,12 +4811,23 @@ final class UpdateCmekSettingsRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateCmekSettingsRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateCmekSettingsRequest(
-        name: json['name'] ?? '',
-        cmekSettings: decode(json['cmekSettings'], CmekSettings.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateCmekSettingsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateCmekSettingsRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      cmekSettings: switch (json['cmekSettings']) {
+        null => null,
+        Object $1 => CmekSettings.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4273,12 +4929,27 @@ final class CmekSettings extends ProtoMessage {
     this.serviceAccountId = '',
   }) : super(fullyQualifiedName);
 
-  factory CmekSettings.fromJson(Map<String, dynamic> json) => CmekSettings(
-    name: json['name'] ?? '',
-    kmsKeyName: json['kmsKeyName'] ?? '',
-    kmsKeyVersionName: json['kmsKeyVersionName'] ?? '',
-    serviceAccountId: json['serviceAccountId'] ?? '',
-  );
+  factory CmekSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CmekSettings(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      kmsKeyName: switch (json['kmsKeyName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      kmsKeyVersionName: switch (json['kmsKeyVersionName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceAccountId: switch (json['serviceAccountId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4329,8 +5000,15 @@ final class GetSettingsRequest extends ProtoMessage {
 
   GetSettingsRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetSettingsRequest.fromJson(Map<String, dynamic> json) =>
-      GetSettingsRequest(name: json['name'] ?? '');
+  factory GetSettingsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetSettingsRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -4387,12 +5065,23 @@ final class UpdateSettingsRequest extends ProtoMessage {
     this.updateMask,
   }) : super(fullyQualifiedName);
 
-  factory UpdateSettingsRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateSettingsRequest(
-        name: json['name'] ?? '',
-        settings: decode(json['settings'], Settings.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateSettingsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateSettingsRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      settings: switch (json['settings']) {
+        null => null,
+        Object $1 => Settings.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4478,13 +5167,31 @@ final class Settings extends ProtoMessage {
     this.disableDefaultSink = false,
   }) : super(fullyQualifiedName);
 
-  factory Settings.fromJson(Map<String, dynamic> json) => Settings(
-    name: json['name'] ?? '',
-    kmsKeyName: json['kmsKeyName'] ?? '',
-    kmsServiceAccountId: json['kmsServiceAccountId'] ?? '',
-    storageLocation: json['storageLocation'] ?? '',
-    disableDefaultSink: json['disableDefaultSink'] ?? false,
-  );
+  factory Settings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Settings(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      kmsKeyName: switch (json['kmsKeyName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      kmsServiceAccountId: switch (json['kmsServiceAccountId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      storageLocation: switch (json['storageLocation']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      disableDefaultSink: switch (json['disableDefaultSink']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4535,12 +5242,23 @@ final class CopyLogEntriesRequest extends ProtoMessage {
     required this.destination,
   }) : super(fullyQualifiedName);
 
-  factory CopyLogEntriesRequest.fromJson(Map<String, dynamic> json) =>
-      CopyLogEntriesRequest(
-        name: json['name'] ?? '',
-        filter: json['filter'] ?? '',
-        destination: json['destination'] ?? '',
-      );
+  factory CopyLogEntriesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CopyLogEntriesRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      destination: switch (json['destination']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4602,18 +5320,39 @@ final class CopyLogEntriesMetadata extends ProtoMessage {
     this.writerIdentity = '',
   }) : super(fullyQualifiedName);
 
-  factory CopyLogEntriesMetadata.fromJson(Map<String, dynamic> json) =>
-      CopyLogEntriesMetadata(
-        startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-        endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-        state:
-            decodeEnum(json['state'], OperationState.fromJson) ??
-            OperationState.$default,
-        cancellationRequested: json['cancellationRequested'] ?? false,
-        request: decode(json['request'], CopyLogEntriesRequest.fromJson),
-        progress: json['progress'] ?? 0,
-        writerIdentity: json['writerIdentity'] ?? '',
-      );
+  factory CopyLogEntriesMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CopyLogEntriesMetadata(
+      startTime: switch (json['startTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => OperationState.$default,
+        Object $1 => OperationState.fromJson($1),
+      },
+      cancellationRequested: switch (json['cancellationRequested']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      request: switch (json['request']) {
+        null => null,
+        Object $1 => CopyLogEntriesRequest.fromJson($1),
+      },
+      progress: switch (json['progress']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      writerIdentity: switch (json['writerIdentity']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4650,10 +5389,15 @@ final class CopyLogEntriesResponse extends ProtoMessage {
   CopyLogEntriesResponse({this.logEntriesCopiedCount = 0})
     : super(fullyQualifiedName);
 
-  factory CopyLogEntriesResponse.fromJson(Map<String, dynamic> json) =>
-      CopyLogEntriesResponse(
-        logEntriesCopiedCount: decodeInt64(json['logEntriesCopiedCount']) ?? 0,
-      );
+  factory CopyLogEntriesResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CopyLogEntriesResponse(
+      logEntriesCopiedCount: switch (json['logEntriesCopiedCount']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4695,21 +5439,31 @@ final class BucketMetadata extends ProtoMessage {
     this.updateBucketRequest,
   }) : super(fullyQualifiedName);
 
-  factory BucketMetadata.fromJson(Map<String, dynamic> json) => BucketMetadata(
-    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-    state:
-        decodeEnum(json['state'], OperationState.fromJson) ??
-        OperationState.$default,
-    createBucketRequest: decode(
-      json['createBucketRequest'],
-      CreateBucketRequest.fromJson,
-    ),
-    updateBucketRequest: decode(
-      json['updateBucketRequest'],
-      UpdateBucketRequest.fromJson,
-    ),
-  );
+  factory BucketMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BucketMetadata(
+      startTime: switch (json['startTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => OperationState.$default,
+        Object $1 => OperationState.fromJson($1),
+      },
+      createBucketRequest: switch (json['createBucketRequest']) {
+        null => null,
+        Object $1 => CreateBucketRequest.fromJson($1),
+      },
+      updateBucketRequest: switch (json['updateBucketRequest']) {
+        null => null,
+        Object $1 => UpdateBucketRequest.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4756,21 +5510,31 @@ final class LinkMetadata extends ProtoMessage {
     this.deleteLinkRequest,
   }) : super(fullyQualifiedName);
 
-  factory LinkMetadata.fromJson(Map<String, dynamic> json) => LinkMetadata(
-    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-    state:
-        decodeEnum(json['state'], OperationState.fromJson) ??
-        OperationState.$default,
-    createLinkRequest: decode(
-      json['createLinkRequest'],
-      CreateLinkRequest.fromJson,
-    ),
-    deleteLinkRequest: decode(
-      json['deleteLinkRequest'],
-      DeleteLinkRequest.fromJson,
-    ),
-  );
+  factory LinkMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LinkMetadata(
+      startTime: switch (json['startTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => OperationState.$default,
+        Object $1 => OperationState.fromJson($1),
+      },
+      createLinkRequest: switch (json['createLinkRequest']) {
+        null => null,
+        Object $1 => CreateLinkRequest.fromJson($1),
+      },
+      deleteLinkRequest: switch (json['deleteLinkRequest']) {
+        null => null,
+        Object $1 => DeleteLinkRequest.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4801,10 +5565,15 @@ final class LocationMetadata extends ProtoMessage {
   LocationMetadata({this.logAnalyticsEnabled = false})
     : super(fullyQualifiedName);
 
-  factory LocationMetadata.fromJson(Map<String, dynamic> json) =>
-      LocationMetadata(
-        logAnalyticsEnabled: json['logAnalyticsEnabled'] ?? false,
-      );
+  factory LocationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LocationMetadata(
+      logAnalyticsEnabled: switch (json['logAnalyticsEnabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4967,28 +5736,63 @@ final class LogMetric extends ProtoMessage {
     this.version = LogMetric_ApiVersion.$default,
   }) : super(fullyQualifiedName);
 
-  factory LogMetric.fromJson(Map<String, dynamic> json) => LogMetric(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    filter: json['filter'] ?? '',
-    bucketName: json['bucketName'] ?? '',
-    disabled: json['disabled'] ?? false,
-    metricDescriptor: decode(
-      json['metricDescriptor'],
-      MetricDescriptor.fromJson,
-    ),
-    valueExtractor: json['valueExtractor'] ?? '',
-    labelExtractors: decodeMap(json['labelExtractors']) ?? {},
-    bucketOptions: decode(
-      json['bucketOptions'],
-      Distribution_BucketOptions.fromJson,
-    ),
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    version:
-        decodeEnum(json['version'], LogMetric_ApiVersion.fromJson) ??
-        LogMetric_ApiVersion.$default,
-  );
+  factory LogMetric.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogMetric(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      bucketName: switch (json['bucketName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      disabled: switch (json['disabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      metricDescriptor: switch (json['metricDescriptor']) {
+        null => null,
+        Object $1 => MetricDescriptor.fromJson($1),
+      },
+      valueExtractor: switch (json['valueExtractor']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labelExtractors: switch (json['labelExtractors']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labelExtractors" is not an object'),
+      },
+      bucketOptions: switch (json['bucketOptions']) {
+        null => null,
+        Object $1 => Distribution_BucketOptions.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      version: switch (json['version']) {
+        null => LogMetric_ApiVersion.$default,
+        Object $1 => LogMetric_ApiVersion.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5035,8 +5839,8 @@ final class LogMetric_ApiVersion extends ProtoEnum {
 
   const LogMetric_ApiVersion(super.value);
 
-  factory LogMetric_ApiVersion.fromJson(String json) =>
-      LogMetric_ApiVersion(json);
+  factory LogMetric_ApiVersion.fromJson(Object? json) =>
+      LogMetric_ApiVersion(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5071,12 +5875,23 @@ final class ListLogMetricsRequest extends ProtoMessage {
     this.pageSize = 0,
   }) : super(fullyQualifiedName);
 
-  factory ListLogMetricsRequest.fromJson(Map<String, dynamic> json) =>
-      ListLogMetricsRequest(
-        parent: json['parent'] ?? '',
-        pageToken: json['pageToken'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-      );
+  factory ListLogMetricsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLogMetricsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5112,11 +5927,20 @@ final class ListLogMetricsResponse extends ProtoMessage {
   ListLogMetricsResponse({this.metrics = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLogMetricsResponse.fromJson(Map<String, dynamic> json) =>
-      ListLogMetricsResponse(
-        metrics: decodeListMessage(json['metrics'], LogMetric.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListLogMetricsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLogMetricsResponse(
+      metrics: switch (json['metrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogMetric.fromJson(i)],
+        _ => throw const FormatException('"metrics" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5143,8 +5967,15 @@ final class GetLogMetricRequest extends ProtoMessage {
 
   GetLogMetricRequest({required this.metricName}) : super(fullyQualifiedName);
 
-  factory GetLogMetricRequest.fromJson(Map<String, dynamic> json) =>
-      GetLogMetricRequest(metricName: json['metricName'] ?? '');
+  factory GetLogMetricRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetLogMetricRequest(
+      metricName: switch (json['metricName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'metricName': metricName};
@@ -5175,11 +6006,19 @@ final class CreateLogMetricRequest extends ProtoMessage {
   CreateLogMetricRequest({required this.parent, required this.metric})
     : super(fullyQualifiedName);
 
-  factory CreateLogMetricRequest.fromJson(Map<String, dynamic> json) =>
-      CreateLogMetricRequest(
-        parent: json['parent'] ?? '',
-        metric: decode(json['metric'], LogMetric.fromJson),
-      );
+  factory CreateLogMetricRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateLogMetricRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metric: switch (json['metric']) {
+        null => null,
+        Object $1 => LogMetric.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5214,11 +6053,19 @@ final class UpdateLogMetricRequest extends ProtoMessage {
   UpdateLogMetricRequest({required this.metricName, required this.metric})
     : super(fullyQualifiedName);
 
-  factory UpdateLogMetricRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateLogMetricRequest(
-        metricName: json['metricName'] ?? '',
-        metric: decode(json['metric'], LogMetric.fromJson),
-      );
+  factory UpdateLogMetricRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateLogMetricRequest(
+      metricName: switch (json['metricName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metric: switch (json['metric']) {
+        null => null,
+        Object $1 => LogMetric.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5246,8 +6093,15 @@ final class DeleteLogMetricRequest extends ProtoMessage {
   DeleteLogMetricRequest({required this.metricName})
     : super(fullyQualifiedName);
 
-  factory DeleteLogMetricRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteLogMetricRequest(metricName: json['metricName'] ?? '');
+  factory DeleteLogMetricRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteLogMetricRequest(
+      metricName: switch (json['metricName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'metricName': metricName};
@@ -5303,7 +6157,8 @@ final class OperationState extends ProtoEnum {
 
   const OperationState(super.value);
 
-  factory OperationState.fromJson(String json) => OperationState(json);
+  factory OperationState.fromJson(Object? json) =>
+      OperationState(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5342,7 +6197,8 @@ final class LifecycleState extends ProtoEnum {
 
   const LifecycleState(super.value);
 
-  factory LifecycleState.fromJson(String json) => LifecycleState(json);
+  factory LifecycleState.fromJson(Object? json) =>
+      LifecycleState(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5367,7 +6223,7 @@ final class IndexType extends ProtoEnum {
 
   const IndexType(super.value);
 
-  factory IndexType.fromJson(String json) => IndexType(json);
+  factory IndexType.fromJson(Object? json) => IndexType(json as String);
 
   bool get isNotDefault => this != $default;
 

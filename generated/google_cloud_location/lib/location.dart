@@ -21,7 +21,6 @@
 /// zones, regions, and countries.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -126,13 +125,27 @@ final class ListLocationsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListLocationsRequest.fromJson(Map<String, dynamic> json) =>
-      ListLocationsRequest(
-        name: json['name'] ?? '',
-        filter: json['filter'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListLocationsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLocationsRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -168,12 +181,20 @@ final class ListLocationsResponse extends ProtoMessage {
   ListLocationsResponse({this.locations = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListLocationsResponse.fromJson(Map<String, dynamic> json) =>
-      ListLocationsResponse(
-        locations:
-            decodeListMessage(json['locations'], Location.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListLocationsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListLocationsResponse(
+      locations: switch (json['locations']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Location.fromJson(i)],
+        _ => throw const FormatException('"locations" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -198,8 +219,15 @@ final class GetLocationRequest extends ProtoMessage {
 
   GetLocationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory GetLocationRequest.fromJson(Map<String, dynamic> json) =>
-      GetLocationRequest(name: json['name'] ?? '');
+  factory GetLocationRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetLocationRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (name.isNotDefault) 'name': name};
@@ -243,13 +271,35 @@ final class Location extends ProtoMessage {
     this.metadata,
   }) : super(fullyQualifiedName);
 
-  factory Location.fromJson(Map<String, dynamic> json) => Location(
-    name: json['name'] ?? '',
-    locationId: json['locationId'] ?? '',
-    displayName: json['displayName'] ?? '',
-    labels: decodeMap(json['labels']) ?? {},
-    metadata: decode(json['metadata'], Any.fromJson),
-  );
+  factory Location.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Location(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      locationId: switch (json['locationId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
+      metadata: switch (json['metadata']) {
+        null => null,
+        Object $1 => Any.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {

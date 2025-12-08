@@ -19,7 +19,6 @@
 /// Core Protobuf types used by most services.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -94,15 +93,42 @@ final class Api extends ProtoMessage {
     this.syntax = Syntax.$default,
   }) : super(fullyQualifiedName);
 
-  factory Api.fromJson(Map<String, dynamic> json) => Api(
-    name: json['name'] ?? '',
-    methods: decodeListMessage(json['methods'], Method.fromJson) ?? [],
-    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-    version: json['version'] ?? '',
-    sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-    mixins: decodeListMessage(json['mixins'], Mixin.fromJson) ?? [],
-    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-  );
+  factory Api.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Api(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      methods: switch (json['methods']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Method.fromJson(i)],
+        _ => throw const FormatException('"methods" is not a list'),
+      },
+      options: switch (json['options']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
+        _ => throw const FormatException('"options" is not a list'),
+      },
+      version: switch (json['version']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sourceContext: switch (json['sourceContext']) {
+        null => null,
+        Object $1 => SourceContext.fromJson($1),
+      },
+      mixins: switch (json['mixins']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Mixin.fromJson(i)],
+        _ => throw const FormatException('"mixins" is not a list'),
+      },
+      syntax: switch (json['syntax']) {
+        null => Syntax.$default,
+        Object $1 => Syntax.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -161,15 +187,40 @@ final class Method extends ProtoMessage {
     this.syntax = Syntax.$default,
   }) : super(fullyQualifiedName);
 
-  factory Method.fromJson(Map<String, dynamic> json) => Method(
-    name: json['name'] ?? '',
-    requestTypeUrl: json['requestTypeUrl'] ?? '',
-    requestStreaming: json['requestStreaming'] ?? false,
-    responseTypeUrl: json['responseTypeUrl'] ?? '',
-    responseStreaming: json['responseStreaming'] ?? false,
-    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-  );
+  factory Method.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Method(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestTypeUrl: switch (json['requestTypeUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestStreaming: switch (json['requestStreaming']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      responseTypeUrl: switch (json['responseTypeUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      responseStreaming: switch (json['responseStreaming']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      options: switch (json['options']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
+        _ => throw const FormatException('"options" is not a list'),
+      },
+      syntax: switch (json['syntax']) {
+        null => Syntax.$default,
+        Object $1 => Syntax.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -286,8 +337,19 @@ final class Mixin extends ProtoMessage {
 
   Mixin({this.name = '', this.root = ''}) : super(fullyQualifiedName);
 
-  factory Mixin.fromJson(Map<String, dynamic> json) =>
-      Mixin(name: json['name'] ?? '', root: json['root'] ?? '');
+  factory Mixin.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Mixin(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      root: switch (json['root']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -380,7 +442,7 @@ final class Duration extends ProtoMessage {
     _validate();
   }
 
-  factory Duration.fromJson(Object json) => _DurationHelper.decode(json);
+  factory Duration.fromJson(Object? json) => _DurationHelper.decode(json);
 
   @override
   Object toJson() => _DurationHelper.encode(this);
@@ -404,7 +466,7 @@ final class Empty extends ProtoMessage {
 
   Empty() : super(fullyQualifiedName);
 
-  factory Empty.fromJson(Map<String, dynamic> json) => Empty();
+  factory Empty.fromJson(Object? j) => Empty();
 
   @override
   Object toJson() => {};
@@ -620,7 +682,7 @@ final class FieldMask extends ProtoMessage {
 
   FieldMask({this.paths = const []}) : super(fullyQualifiedName);
 
-  factory FieldMask.fromJson(Object json) => _FieldMaskHelper.decode(json);
+  factory FieldMask.fromJson(Object? json) => _FieldMaskHelper.decode(json);
 
   @override
   Object toJson() => _FieldMaskHelper.encode(this);
@@ -640,8 +702,15 @@ final class SourceContext extends ProtoMessage {
 
   SourceContext({this.fileName = ''}) : super(fullyQualifiedName);
 
-  factory SourceContext.fromJson(Map<String, dynamic> json) =>
-      SourceContext(fileName: json['fileName'] ?? '');
+  factory SourceContext.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SourceContext(
+      fileName: switch (json['fileName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (fileName.isNotDefault) 'fileName': fileName};
@@ -669,7 +738,7 @@ final class Struct extends ProtoMessage {
 
   Struct({this.fields = const {}}) : super(fullyQualifiedName);
 
-  factory Struct.fromJson(Object json) => _StructHelper.decode(json);
+  factory Struct.fromJson(Object? json) => _StructHelper.decode(json);
 
   @override
   Object toJson() => _StructHelper.encode(this);
@@ -689,7 +758,7 @@ final class ListValue extends ProtoMessage {
 
   ListValue({this.values = const []}) : super(fullyQualifiedName);
 
-  factory ListValue.fromJson(Object json) => _ListValueHelper.decode(json);
+  factory ListValue.fromJson(Object? json) => _ListValueHelper.decode(json);
 
   @override
   Object toJson() => _ListValueHelper.encode(this);
@@ -805,7 +874,7 @@ final class Timestamp extends ProtoMessage {
     _validate();
   }
 
-  factory Timestamp.fromJson(Object json) => _TimestampHelper.decode(json);
+  factory Timestamp.fromJson(Object? json) => _TimestampHelper.decode(json);
 
   @override
   Object toJson() => _TimestampHelper.encode(this);
@@ -852,15 +921,42 @@ final class Type extends ProtoMessage {
     this.edition = '',
   }) : super(fullyQualifiedName);
 
-  factory Type.fromJson(Map<String, dynamic> json) => Type(
-    name: json['name'] ?? '',
-    fields: decodeListMessage(json['fields'], Field.fromJson) ?? [],
-    oneofs: decodeList(json['oneofs']) ?? [],
-    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-    sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-    edition: json['edition'] ?? '',
-  );
+  factory Type.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Type(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      fields: switch (json['fields']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Field.fromJson(i)],
+        _ => throw const FormatException('"fields" is not a list'),
+      },
+      oneofs: switch (json['oneofs']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"oneofs" is not a list'),
+      },
+      options: switch (json['options']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
+        _ => throw const FormatException('"options" is not a list'),
+      },
+      sourceContext: switch (json['sourceContext']) {
+        null => null,
+        Object $1 => SourceContext.fromJson($1),
+      },
+      syntax: switch (json['syntax']) {
+        null => Syntax.$default,
+        Object $1 => Syntax.fromJson($1),
+      },
+      edition: switch (json['edition']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -933,20 +1029,52 @@ final class Field extends ProtoMessage {
     this.defaultValue = '',
   }) : super(fullyQualifiedName);
 
-  factory Field.fromJson(Map<String, dynamic> json) => Field(
-    kind: decodeEnum(json['kind'], Field_Kind.fromJson) ?? Field_Kind.$default,
-    cardinality:
-        decodeEnum(json['cardinality'], Field_Cardinality.fromJson) ??
-        Field_Cardinality.$default,
-    number: json['number'] ?? 0,
-    name: json['name'] ?? '',
-    typeUrl: json['typeUrl'] ?? '',
-    oneofIndex: json['oneofIndex'] ?? 0,
-    packed: json['packed'] ?? false,
-    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-    jsonName: json['jsonName'] ?? '',
-    defaultValue: json['defaultValue'] ?? '',
-  );
+  factory Field.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Field(
+      kind: switch (json['kind']) {
+        null => Field_Kind.$default,
+        Object $1 => Field_Kind.fromJson($1),
+      },
+      cardinality: switch (json['cardinality']) {
+        null => Field_Cardinality.$default,
+        Object $1 => Field_Cardinality.fromJson($1),
+      },
+      number: switch (json['number']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      typeUrl: switch (json['typeUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      oneofIndex: switch (json['oneofIndex']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      packed: switch (json['packed']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      options: switch (json['options']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
+        _ => throw const FormatException('"options" is not a list'),
+      },
+      jsonName: switch (json['jsonName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      defaultValue: switch (json['defaultValue']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1043,7 +1171,7 @@ final class Field_Kind extends ProtoEnum {
 
   const Field_Kind(super.value);
 
-  factory Field_Kind.fromJson(String json) => Field_Kind(json);
+  factory Field_Kind.fromJson(Object? json) => Field_Kind(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1070,7 +1198,8 @@ final class Field_Cardinality extends ProtoEnum {
 
   const Field_Cardinality(super.value);
 
-  factory Field_Cardinality.fromJson(String json) => Field_Cardinality(json);
+  factory Field_Cardinality.fromJson(Object? json) =>
+      Field_Cardinality(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1109,14 +1238,37 @@ final class Enum extends ProtoMessage {
     this.edition = '',
   }) : super(fullyQualifiedName);
 
-  factory Enum.fromJson(Map<String, dynamic> json) => Enum(
-    name: json['name'] ?? '',
-    enumvalue: decodeListMessage(json['enumvalue'], EnumValue.fromJson) ?? [],
-    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-    sourceContext: decode(json['sourceContext'], SourceContext.fromJson),
-    syntax: decodeEnum(json['syntax'], Syntax.fromJson) ?? Syntax.$default,
-    edition: json['edition'] ?? '',
-  );
+  factory Enum.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Enum(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      enumvalue: switch (json['enumvalue']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) EnumValue.fromJson(i)],
+        _ => throw const FormatException('"enumvalue" is not a list'),
+      },
+      options: switch (json['options']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
+        _ => throw const FormatException('"options" is not a list'),
+      },
+      sourceContext: switch (json['sourceContext']) {
+        null => null,
+        Object $1 => SourceContext.fromJson($1),
+      },
+      syntax: switch (json['syntax']) {
+        null => Syntax.$default,
+        Object $1 => Syntax.fromJson($1),
+      },
+      edition: switch (json['edition']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1155,11 +1307,24 @@ final class EnumValue extends ProtoMessage {
   EnumValue({this.name = '', this.number = 0, this.options = const []})
     : super(fullyQualifiedName);
 
-  factory EnumValue.fromJson(Map<String, dynamic> json) => EnumValue(
-    name: json['name'] ?? '',
-    number: json['number'] ?? 0,
-    options: decodeListMessage(json['options'], Option.fromJson) ?? [],
-  );
+  factory EnumValue.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EnumValue(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      number: switch (json['number']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      options: switch (json['options']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Option.fromJson(i)],
+        _ => throw const FormatException('"options" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1194,10 +1359,19 @@ final class Option extends ProtoMessage {
 
   Option({this.name = '', this.value}) : super(fullyQualifiedName);
 
-  factory Option.fromJson(Map<String, dynamic> json) => Option(
-    name: json['name'] ?? '',
-    value: decode(json['value'], Any.fromJson),
-  );
+  factory Option.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Option(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      value: switch (json['value']) {
+        null => null,
+        Object $1 => Any.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1223,7 +1397,7 @@ final class DoubleValue extends ProtoMessage {
 
   DoubleValue({this.value = 0}) : super(fullyQualifiedName);
 
-  factory DoubleValue.fromJson(Object json) => _DoubleValueHelper.decode(json);
+  factory DoubleValue.fromJson(Object? json) => _DoubleValueHelper.decode(json);
 
   @override
   Object toJson() => _DoubleValueHelper.encode(this);
@@ -1246,7 +1420,7 @@ final class FloatValue extends ProtoMessage {
 
   FloatValue({this.value = 0}) : super(fullyQualifiedName);
 
-  factory FloatValue.fromJson(Object json) => _FloatValueHelper.decode(json);
+  factory FloatValue.fromJson(Object? json) => _FloatValueHelper.decode(json);
 
   @override
   Object toJson() => _FloatValueHelper.encode(this);
@@ -1269,7 +1443,7 @@ final class Int64Value extends ProtoMessage {
 
   Int64Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Int64Value.fromJson(Object json) => _Int64ValueHelper.decode(json);
+  factory Int64Value.fromJson(Object? json) => _Int64ValueHelper.decode(json);
 
   @override
   Object toJson() => _Int64ValueHelper.encode(this);
@@ -1288,11 +1462,13 @@ final class Uint64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt64Value';
 
   /// The uint64 value.
-  final int value;
+  final BigInt value;
 
-  Uint64Value({this.value = 0}) : super(fullyQualifiedName);
+  Uint64Value({BigInt? value})
+    : value = value ?? BigInt.zero,
+      super(fullyQualifiedName);
 
-  factory Uint64Value.fromJson(Object json) => _Uint64ValueHelper.decode(json);
+  factory Uint64Value.fromJson(Object? json) => _Uint64ValueHelper.decode(json);
 
   @override
   Object toJson() => _Uint64ValueHelper.encode(this);
@@ -1315,7 +1491,7 @@ final class Int32Value extends ProtoMessage {
 
   Int32Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Int32Value.fromJson(Object json) => _Int32ValueHelper.decode(json);
+  factory Int32Value.fromJson(Object? json) => _Int32ValueHelper.decode(json);
 
   @override
   Object toJson() => _Int32ValueHelper.encode(this);
@@ -1338,7 +1514,7 @@ final class Uint32Value extends ProtoMessage {
 
   Uint32Value({this.value = 0}) : super(fullyQualifiedName);
 
-  factory Uint32Value.fromJson(Object json) => _Uint32ValueHelper.decode(json);
+  factory Uint32Value.fromJson(Object? json) => _Uint32ValueHelper.decode(json);
 
   @override
   Object toJson() => _Uint32ValueHelper.encode(this);
@@ -1361,7 +1537,7 @@ final class BoolValue extends ProtoMessage {
 
   BoolValue({this.value = false}) : super(fullyQualifiedName);
 
-  factory BoolValue.fromJson(Object json) => _BoolValueHelper.decode(json);
+  factory BoolValue.fromJson(Object? json) => _BoolValueHelper.decode(json);
 
   @override
   Object toJson() => _BoolValueHelper.encode(this);
@@ -1384,7 +1560,7 @@ final class StringValue extends ProtoMessage {
 
   StringValue({this.value = ''}) : super(fullyQualifiedName);
 
-  factory StringValue.fromJson(Object json) => _StringValueHelper.decode(json);
+  factory StringValue.fromJson(Object? json) => _StringValueHelper.decode(json);
 
   @override
   Object toJson() => _StringValueHelper.encode(this);
@@ -1409,7 +1585,7 @@ final class BytesValue extends ProtoMessage {
     : value = value ?? Uint8List(0),
       super(fullyQualifiedName);
 
-  factory BytesValue.fromJson(Object json) => _BytesValueHelper.decode(json);
+  factory BytesValue.fromJson(Object? json) => _BytesValueHelper.decode(json);
 
   @override
   Object toJson() => _BytesValueHelper.encode(this);
@@ -1434,7 +1610,7 @@ final class NullValue extends ProtoEnum {
 
   const NullValue(super.value);
 
-  factory NullValue.fromJson(String json) => NullValue(json);
+  factory NullValue.fromJson(Object? json) => NullValue(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1458,7 +1634,7 @@ final class Syntax extends ProtoEnum {
 
   const Syntax(super.value);
 
-  factory Syntax.fromJson(String json) => Syntax(json);
+  factory Syntax.fromJson(Object? json) => Syntax(json as String);
 
   bool get isNotDefault => this != $default;
 

@@ -28,7 +28,6 @@
 /// [Long-running operations]: https://google.aip.dev/151
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -167,8 +166,15 @@ final class GetOperationRequest extends ProtoMessage {
 
   GetOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory GetOperationRequest.fromJson(Map<String, dynamic> json) =>
-      GetOperationRequest(name: json['name'] ?? '');
+  factory GetOperationRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetOperationRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (name.isNotDefault) 'name': name};
@@ -218,14 +224,31 @@ final class ListOperationsRequest extends ProtoMessage {
     this.returnPartialSuccess = false,
   }) : super(fullyQualifiedName);
 
-  factory ListOperationsRequest.fromJson(Map<String, dynamic> json) =>
-      ListOperationsRequest(
-        name: json['name'] ?? '',
-        filter: json['filter'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-        returnPartialSuccess: json['returnPartialSuccess'] ?? false,
-      );
+  factory ListOperationsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListOperationsRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      returnPartialSuccess: switch (json['returnPartialSuccess']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -274,13 +297,25 @@ final class ListOperationsResponse extends ProtoMessage {
     this.unreachable = const [],
   }) : super(fullyQualifiedName);
 
-  factory ListOperationsResponse.fromJson(Map<String, dynamic> json) =>
-      ListOperationsResponse(
-        operations:
-            decodeListMessage(json['operations'], Operation.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-        unreachable: decodeList(json['unreachable']) ?? [],
-      );
+  factory ListOperationsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListOperationsResponse(
+      operations: switch (json['operations']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Operation.fromJson(i)],
+        _ => throw const FormatException('"operations" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      unreachable: switch (json['unreachable']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"unreachable" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -307,8 +342,15 @@ final class CancelOperationRequest extends ProtoMessage {
 
   CancelOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory CancelOperationRequest.fromJson(Map<String, dynamic> json) =>
-      CancelOperationRequest(name: json['name'] ?? '');
+  factory CancelOperationRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CancelOperationRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (name.isNotDefault) 'name': name};
@@ -331,8 +373,15 @@ final class DeleteOperationRequest extends ProtoMessage {
 
   DeleteOperationRequest({this.name = ''}) : super(fullyQualifiedName);
 
-  factory DeleteOperationRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteOperationRequest(name: json['name'] ?? '');
+  factory DeleteOperationRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteOperationRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (name.isNotDefault) 'name': name};
@@ -361,11 +410,19 @@ final class WaitOperationRequest extends ProtoMessage {
   WaitOperationRequest({this.name = '', this.timeout})
     : super(fullyQualifiedName);
 
-  factory WaitOperationRequest.fromJson(Map<String, dynamic> json) =>
-      WaitOperationRequest(
-        name: json['name'] ?? '',
-        timeout: decodeCustom(json['timeout'], Duration.fromJson),
-      );
+  factory WaitOperationRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return WaitOperationRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      timeout: switch (json['timeout']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -415,10 +472,19 @@ final class OperationInfo extends ProtoMessage {
   OperationInfo({this.responseType = '', this.metadataType = ''})
     : super(fullyQualifiedName);
 
-  factory OperationInfo.fromJson(Map<String, dynamic> json) => OperationInfo(
-    responseType: json['responseType'] ?? '',
-    metadataType: json['metadataType'] ?? '',
-  );
+  factory OperationInfo.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OperationInfo(
+      responseType: switch (json['responseType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metadataType: switch (json['metadataType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {

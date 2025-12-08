@@ -21,7 +21,6 @@
 /// annotations, to developers.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -168,14 +167,27 @@ final class Document extends ProtoMessage {
     this.languageCode = '',
   }) : super(fullyQualifiedName);
 
-  factory Document.fromJson(Map<String, dynamic> json) => Document(
-    type:
-        decodeEnum(json['type'], Document_Type.fromJson) ??
-        Document_Type.$default,
-    content: json['content'],
-    gcsContentUri: json['gcsContentUri'],
-    languageCode: json['languageCode'] ?? '',
-  );
+  factory Document.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Document(
+      type: switch (json['type']) {
+        null => Document_Type.$default,
+        Object $1 => Document_Type.fromJson($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      gcsContentUri: switch (json['gcsContentUri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -213,7 +225,7 @@ final class Document_Type extends ProtoEnum {
 
   const Document_Type(super.value);
 
-  factory Document_Type.fromJson(String json) => Document_Type(json);
+  factory Document_Type.fromJson(Object? json) => Document_Type(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -235,10 +247,19 @@ final class Sentence extends ProtoMessage {
 
   Sentence({this.text, this.sentiment}) : super(fullyQualifiedName);
 
-  factory Sentence.fromJson(Map<String, dynamic> json) => Sentence(
-    text: decode(json['text'], TextSpan.fromJson),
-    sentiment: decode(json['sentiment'], Sentiment.fromJson),
-  );
+  factory Sentence.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Sentence(
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => TextSpan.fromJson($1),
+      },
+      sentiment: switch (json['sentiment']) {
+        null => null,
+        Object $1 => Sentiment.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -286,14 +307,36 @@ final class Entity extends ProtoMessage {
     this.sentiment,
   }) : super(fullyQualifiedName);
 
-  factory Entity.fromJson(Map<String, dynamic> json) => Entity(
-    name: json['name'] ?? '',
-    type:
-        decodeEnum(json['type'], Entity_Type.fromJson) ?? Entity_Type.$default,
-    metadata: decodeMap(json['metadata']) ?? {},
-    mentions: decodeListMessage(json['mentions'], EntityMention.fromJson) ?? [],
-    sentiment: decode(json['sentiment'], Sentiment.fromJson),
-  );
+  factory Entity.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Entity(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      type: switch (json['type']) {
+        null => Entity_Type.$default,
+        Object $1 => Entity_Type.fromJson($1),
+      },
+      metadata: switch (json['metadata']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"metadata" is not an object'),
+      },
+      mentions: switch (json['mentions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) EntityMention.fromJson(i)],
+        _ => throw const FormatException('"mentions" is not a list'),
+      },
+      sentiment: switch (json['sentiment']) {
+        null => null,
+        Object $1 => Sentiment.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -393,7 +436,7 @@ final class Entity_Type extends ProtoEnum {
 
   const Entity_Type(super.value);
 
-  factory Entity_Type.fromJson(String json) => Entity_Type(json);
+  factory Entity_Type.fromJson(Object? json) => Entity_Type(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -417,10 +460,19 @@ final class Sentiment extends ProtoMessage {
 
   Sentiment({this.magnitude = 0, this.score = 0}) : super(fullyQualifiedName);
 
-  factory Sentiment.fromJson(Map<String, dynamic> json) => Sentiment(
-    magnitude: decodeDouble(json['magnitude']) ?? 0,
-    score: decodeDouble(json['score']) ?? 0,
-  );
+  factory Sentiment.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Sentiment(
+      magnitude: switch (json['magnitude']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      score: switch (json['score']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -466,14 +518,27 @@ final class EntityMention extends ProtoMessage {
     this.probability = 0,
   }) : super(fullyQualifiedName);
 
-  factory EntityMention.fromJson(Map<String, dynamic> json) => EntityMention(
-    text: decode(json['text'], TextSpan.fromJson),
-    type:
-        decodeEnum(json['type'], EntityMention_Type.fromJson) ??
-        EntityMention_Type.$default,
-    sentiment: decode(json['sentiment'], Sentiment.fromJson),
-    probability: decodeDouble(json['probability']) ?? 0,
-  );
+  factory EntityMention.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EntityMention(
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => TextSpan.fromJson($1),
+      },
+      type: switch (json['type']) {
+        null => EntityMention_Type.$default,
+        Object $1 => EntityMention_Type.fromJson($1),
+      },
+      sentiment: switch (json['sentiment']) {
+        null => null,
+        Object $1 => Sentiment.fromJson($1),
+      },
+      probability: switch (json['probability']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -506,7 +571,8 @@ final class EntityMention_Type extends ProtoEnum {
 
   const EntityMention_Type(super.value);
 
-  factory EntityMention_Type.fromJson(String json) => EntityMention_Type(json);
+  factory EntityMention_Type.fromJson(Object? json) =>
+      EntityMention_Type(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -530,10 +596,19 @@ final class TextSpan extends ProtoMessage {
   TextSpan({this.content = '', this.beginOffset = 0})
     : super(fullyQualifiedName);
 
-  factory TextSpan.fromJson(Map<String, dynamic> json) => TextSpan(
-    content: json['content'] ?? '',
-    beginOffset: json['beginOffset'] ?? 0,
-  );
+  factory TextSpan.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TextSpan(
+      content: switch (json['content']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      beginOffset: switch (json['beginOffset']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -571,12 +646,23 @@ final class ClassificationCategory extends ProtoMessage {
     this.severity = 0,
   }) : super(fullyQualifiedName);
 
-  factory ClassificationCategory.fromJson(Map<String, dynamic> json) =>
-      ClassificationCategory(
-        name: json['name'] ?? '',
-        confidence: decodeDouble(json['confidence']) ?? 0,
-        severity: decodeDouble(json['severity']) ?? 0,
-      );
+  factory ClassificationCategory.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ClassificationCategory(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      confidence: switch (json['confidence']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      severity: switch (json['severity']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -612,13 +698,19 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeSentimentRequest.fromJson(Map<String, dynamic> json) =>
-      AnalyzeSentimentRequest(
-        document: decode(json['document'], Document.fromJson),
-        encodingType:
-            decodeEnum(json['encodingType'], EncodingType.fromJson) ??
-            EncodingType.$default,
-      );
+  factory AnalyzeSentimentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnalyzeSentimentRequest(
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+      encodingType: switch (json['encodingType']) {
+        null => EncodingType.$default,
+        Object $1 => EncodingType.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -661,14 +753,28 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeSentimentResponse.fromJson(
-    Map<String, dynamic> json,
-  ) => AnalyzeSentimentResponse(
-    documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
-    languageCode: json['languageCode'] ?? '',
-    sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
-    languageSupported: json['languageSupported'] ?? false,
-  );
+  factory AnalyzeSentimentResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnalyzeSentimentResponse(
+      documentSentiment: switch (json['documentSentiment']) {
+        null => null,
+        Object $1 => Sentiment.fromJson($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sentences: switch (json['sentences']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Sentence.fromJson(i)],
+        _ => throw const FormatException('"sentences" is not a list'),
+      },
+      languageSupported: switch (json['languageSupported']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -705,13 +811,19 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeEntitiesRequest.fromJson(Map<String, dynamic> json) =>
-      AnalyzeEntitiesRequest(
-        document: decode(json['document'], Document.fromJson),
-        encodingType:
-            decodeEnum(json['encodingType'], EncodingType.fromJson) ??
-            EncodingType.$default,
-      );
+  factory AnalyzeEntitiesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnalyzeEntitiesRequest(
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+      encodingType: switch (json['encodingType']) {
+        null => EncodingType.$default,
+        Object $1 => EncodingType.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -750,12 +862,24 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory AnalyzeEntitiesResponse.fromJson(Map<String, dynamic> json) =>
-      AnalyzeEntitiesResponse(
-        entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
-        languageCode: json['languageCode'] ?? '',
-        languageSupported: json['languageSupported'] ?? false,
-      );
+  factory AnalyzeEntitiesResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnalyzeEntitiesResponse(
+      entities: switch (json['entities']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Entity.fromJson(i)],
+        _ => throw const FormatException('"entities" is not a list'),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      languageSupported: switch (json['languageSupported']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -784,10 +908,15 @@ final class ClassifyTextRequest extends ProtoMessage {
 
   ClassifyTextRequest({required this.document}) : super(fullyQualifiedName);
 
-  factory ClassifyTextRequest.fromJson(Map<String, dynamic> json) =>
-      ClassifyTextRequest(
-        document: decode(json['document'], Document.fromJson),
-      );
+  factory ClassifyTextRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ClassifyTextRequest(
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (document != null) 'document': document!.toJson()};
@@ -820,17 +949,26 @@ final class ClassifyTextResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory ClassifyTextResponse.fromJson(Map<String, dynamic> json) =>
-      ClassifyTextResponse(
-        categories:
-            decodeListMessage(
-              json['categories'],
-              ClassificationCategory.fromJson,
-            ) ??
-            [],
-        languageCode: json['languageCode'] ?? '',
-        languageSupported: json['languageSupported'] ?? false,
-      );
+  factory ClassifyTextResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ClassifyTextResponse(
+      categories: switch (json['categories']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ClassificationCategory.fromJson(i),
+        ],
+        _ => throw const FormatException('"categories" is not a list'),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      languageSupported: switch (json['languageSupported']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -865,16 +1003,19 @@ final class ModerateTextRequest extends ProtoMessage {
     this.modelVersion = ModerateTextRequest_ModelVersion.$default,
   }) : super(fullyQualifiedName);
 
-  factory ModerateTextRequest.fromJson(Map<String, dynamic> json) =>
-      ModerateTextRequest(
-        document: decode(json['document'], Document.fromJson),
-        modelVersion:
-            decodeEnum(
-              json['modelVersion'],
-              ModerateTextRequest_ModelVersion.fromJson,
-            ) ??
-            ModerateTextRequest_ModelVersion.$default,
-      );
+  factory ModerateTextRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ModerateTextRequest(
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+      modelVersion: switch (json['modelVersion']) {
+        null => ModerateTextRequest_ModelVersion.$default,
+        Object $1 => ModerateTextRequest_ModelVersion.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -915,8 +1056,8 @@ final class ModerateTextRequest_ModelVersion extends ProtoEnum {
 
   const ModerateTextRequest_ModelVersion(super.value);
 
-  factory ModerateTextRequest_ModelVersion.fromJson(String json) =>
-      ModerateTextRequest_ModelVersion(json);
+  factory ModerateTextRequest_ModelVersion.fromJson(Object? json) =>
+      ModerateTextRequest_ModelVersion(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -948,17 +1089,28 @@ final class ModerateTextResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory ModerateTextResponse.fromJson(Map<String, dynamic> json) =>
-      ModerateTextResponse(
-        moderationCategories:
-            decodeListMessage(
-              json['moderationCategories'],
-              ClassificationCategory.fromJson,
-            ) ??
-            [],
-        languageCode: json['languageCode'] ?? '',
-        languageSupported: json['languageSupported'] ?? false,
-      );
+  factory ModerateTextResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ModerateTextResponse(
+      moderationCategories: switch (json['moderationCategories']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ClassificationCategory.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"moderationCategories" is not a list',
+        ),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      languageSupported: switch (json['languageSupported']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -999,17 +1151,23 @@ final class AnnotateTextRequest extends ProtoMessage {
     this.encodingType = EncodingType.$default,
   }) : super(fullyQualifiedName);
 
-  factory AnnotateTextRequest.fromJson(Map<String, dynamic> json) =>
-      AnnotateTextRequest(
-        document: decode(json['document'], Document.fromJson),
-        features: decode(
-          json['features'],
-          AnnotateTextRequest_Features.fromJson,
-        ),
-        encodingType:
-            decodeEnum(json['encodingType'], EncodingType.fromJson) ??
-            EncodingType.$default,
-      );
+  factory AnnotateTextRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnnotateTextRequest(
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+      features: switch (json['features']) {
+        null => null,
+        Object $1 => AnnotateTextRequest_Features.fromJson($1),
+      },
+      encodingType: switch (json['encodingType']) {
+        null => EncodingType.$default,
+        Object $1 => EncodingType.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1050,13 +1208,27 @@ final class AnnotateTextRequest_Features extends ProtoMessage {
     this.moderateText = false,
   }) : super(fullyQualifiedName);
 
-  factory AnnotateTextRequest_Features.fromJson(Map<String, dynamic> json) =>
-      AnnotateTextRequest_Features(
-        extractEntities: json['extractEntities'] ?? false,
-        extractDocumentSentiment: json['extractDocumentSentiment'] ?? false,
-        classifyText: json['classifyText'] ?? false,
-        moderateText: json['moderateText'] ?? false,
-      );
+  factory AnnotateTextRequest_Features.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnnotateTextRequest_Features(
+      extractEntities: switch (json['extractEntities']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      extractDocumentSentiment: switch (json['extractDocumentSentiment']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      classifyText: switch (json['classifyText']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      moderateText: switch (json['moderateText']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1125,27 +1297,49 @@ final class AnnotateTextResponse extends ProtoMessage {
     this.languageSupported = false,
   }) : super(fullyQualifiedName);
 
-  factory AnnotateTextResponse.fromJson(
-    Map<String, dynamic> json,
-  ) => AnnotateTextResponse(
-    sentences: decodeListMessage(json['sentences'], Sentence.fromJson) ?? [],
-    entities: decodeListMessage(json['entities'], Entity.fromJson) ?? [],
-    documentSentiment: decode(json['documentSentiment'], Sentiment.fromJson),
-    languageCode: json['languageCode'] ?? '',
-    categories:
-        decodeListMessage(
-          json['categories'],
-          ClassificationCategory.fromJson,
-        ) ??
-        [],
-    moderationCategories:
-        decodeListMessage(
-          json['moderationCategories'],
-          ClassificationCategory.fromJson,
-        ) ??
-        [],
-    languageSupported: json['languageSupported'] ?? false,
-  );
+  factory AnnotateTextResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AnnotateTextResponse(
+      sentences: switch (json['sentences']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Sentence.fromJson(i)],
+        _ => throw const FormatException('"sentences" is not a list'),
+      },
+      entities: switch (json['entities']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Entity.fromJson(i)],
+        _ => throw const FormatException('"entities" is not a list'),
+      },
+      documentSentiment: switch (json['documentSentiment']) {
+        null => null,
+        Object $1 => Sentiment.fromJson($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      categories: switch (json['categories']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ClassificationCategory.fromJson(i),
+        ],
+        _ => throw const FormatException('"categories" is not a list'),
+      },
+      moderationCategories: switch (json['moderationCategories']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ClassificationCategory.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"moderationCategories" is not a list',
+        ),
+      },
+      languageSupported: switch (json['languageSupported']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1200,7 +1394,7 @@ final class EncodingType extends ProtoEnum {
 
   const EncodingType(super.value);
 
-  factory EncodingType.fromJson(String json) => EncodingType(json);
+  factory EncodingType.fromJson(Object? json) => EncodingType(json as String);
 
   bool get isNotDefault => this != $default;
 

@@ -41,6 +41,54 @@ void main() async {
       await showcaseServer.stop();
     });
 
+    group('client verified', () {
+      group('double', () {
+        test('simple value', () async {
+          final complianceData = ComplianceData(fDouble: 1.0);
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, 1.0);
+        });
+
+        test('NaN', () async {
+          final complianceData = ComplianceData(fDouble: double.nan);
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, isNaN);
+        });
+
+        test('infinity', () async {
+          final complianceData = ComplianceData(fDouble: double.infinity);
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, double.infinity);
+        });
+
+        test('-infinity', () async {
+          final complianceData = ComplianceData(
+            fDouble: double.negativeInfinity,
+          );
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(name: 'double', info: complianceData),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+          expect(response.request!.info!.fDouble, double.negativeInfinity);
+        });
+
+        test('integer decode', () async {
+          // Verify https://github.com/googleapis/google-cloud-dart/issues/90
+          final complianceData = ComplianceData.fromJson({'fDouble': 1});
+          expect(complianceData.fDouble, 1.0);
+        });
+      });
+    });
+
     // Conformance tests that can be verified by the server.
     // See https://github.com/googleapis/gapic-showcase/blob/main/server/services/compliance_suite.json
     group('server verified', () {
@@ -56,8 +104,8 @@ void main() async {
             fInt64: -11,
             fSint64: -13,
             fSfixed64: -17,
-            fUint64: 19,
-            fFixed64: 23,
+            fUint64: BigInt.from(19),
+            fFixed64: BigInt.from(23),
             fDouble: -29e4,
             fFloat: -31,
             fBool: true,
@@ -89,8 +137,8 @@ void main() async {
             fInt64: -11,
             fSint64: -13,
             fSfixed64: -17,
-            fUint64: 19,
-            fFixed64: 23,
+            fUint64: BigInt.from(19),
+            fFixed64: BigInt.from(23),
             fDouble: -29e4,
             fFloat: -31,
             fBool: true,
@@ -120,8 +168,8 @@ void main() async {
               fInt64: 0,
               fSint64: 0,
               fSfixed64: 0,
-              fUint64: 0,
-              fFixed64: 0,
+              fUint64: BigInt.zero,
+              fFixed64: BigInt.zero,
               fDouble: 0,
               fFloat: 0,
               fBool: false,
@@ -165,8 +213,38 @@ void main() async {
           },
         );
 
-        // TODO(https://github.com/googleapis/google-cloud-dart/issues/92):
-        // Add "Extreme values" test.
+        test('Extreme values', () async {
+          final complianceData = ComplianceData(
+            fString:
+                'non-ASCII+non-printable string ☺ → ← '
+                '"\\/\\b\\f\\r\\t\\u1234 works, not newlines yet',
+            fInt32: 2147483647,
+            fSint32: 2147483647,
+            fSfixed32: 2147483647,
+            fUint32: 4294967295,
+            fFixed32: 4294967295,
+            fInt64: 9223372036854775807,
+            fSint64: 9223372036854775807,
+            fSfixed64: 9223372036854775807,
+            fUint64: BigInt.parse('18446744073709551615'),
+            fFixed64: BigInt.parse('18446744073709551615'),
+            fDouble: 1.7976931348623157e+308,
+            fFloat: 3.4028235e+38, // 3.4028234663852886e+38,
+            fBool: false,
+            pString: 'Goodbye',
+            pInt32: 2147483647,
+            pDouble: 1.7976931348623157e+308,
+            pBool: false,
+          );
+          final response = await complianceService.repeatDataBody(
+            RepeatRequest(
+              name: 'Extreme values',
+              info: complianceData,
+              serverVerify: false,
+            ),
+          );
+          expect(response.request!.info, messageEquals(complianceData));
+        });
 
         test('Strings with spaces', () async {
           final complianceData = ComplianceData(fString: 'Hello there');

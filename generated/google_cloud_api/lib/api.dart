@@ -19,7 +19,6 @@
 /// Lets you define and config your API service.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -62,11 +61,23 @@ final class Authentication extends ProtoMessage {
   Authentication({this.rules = const [], this.providers = const []})
     : super(fullyQualifiedName);
 
-  factory Authentication.fromJson(Map<String, dynamic> json) => Authentication(
-    rules: decodeListMessage(json['rules'], AuthenticationRule.fromJson) ?? [],
-    providers:
-        decodeListMessage(json['providers'], AuthProvider.fromJson) ?? [],
-  );
+  factory Authentication.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Authentication(
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) AuthenticationRule.fromJson(i),
+        ],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+      providers: switch (json['providers']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) AuthProvider.fromJson(i)],
+        _ => throw const FormatException('"providers" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -113,15 +124,28 @@ final class AuthenticationRule extends ProtoMessage {
     this.requirements = const [],
   }) : super(fullyQualifiedName);
 
-  factory AuthenticationRule.fromJson(Map<String, dynamic> json) =>
-      AuthenticationRule(
-        selector: json['selector'] ?? '',
-        oauth: decode(json['oauth'], OauthRequirements.fromJson),
-        allowWithoutCredential: json['allowWithoutCredential'] ?? false,
-        requirements:
-            decodeListMessage(json['requirements'], AuthRequirement.fromJson) ??
-            [],
-      );
+  factory AuthenticationRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AuthenticationRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      oauth: switch (json['oauth']) {
+        null => null,
+        Object $1 => OauthRequirements.fromJson($1),
+      },
+      allowWithoutCredential: switch (json['allowWithoutCredential']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      requirements: switch (json['requirements']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) AuthRequirement.fromJson(i)],
+        _ => throw const FormatException('"requirements" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -168,12 +192,27 @@ final class JwtLocation extends ProtoMessage {
   JwtLocation({this.header, this.query, this.cookie, this.valuePrefix = ''})
     : super(fullyQualifiedName);
 
-  factory JwtLocation.fromJson(Map<String, dynamic> json) => JwtLocation(
-    header: json['header'],
-    query: json['query'],
-    cookie: json['cookie'],
-    valuePrefix: json['valuePrefix'] ?? '',
-  );
+  factory JwtLocation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return JwtLocation(
+      header: switch (json['header']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      query: switch (json['query']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      cookie: switch (json['cookie']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      valuePrefix: switch (json['valuePrefix']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -281,15 +320,36 @@ final class AuthProvider extends ProtoMessage {
     this.jwtLocations = const [],
   }) : super(fullyQualifiedName);
 
-  factory AuthProvider.fromJson(Map<String, dynamic> json) => AuthProvider(
-    id: json['id'] ?? '',
-    issuer: json['issuer'] ?? '',
-    jwksUri: json['jwksUri'] ?? '',
-    audiences: json['audiences'] ?? '',
-    authorizationUrl: json['authorizationUrl'] ?? '',
-    jwtLocations:
-        decodeListMessage(json['jwtLocations'], JwtLocation.fromJson) ?? [],
-  );
+  factory AuthProvider.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AuthProvider(
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      issuer: switch (json['issuer']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      jwksUri: switch (json['jwksUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      audiences: switch (json['audiences']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      authorizationUrl: switch (json['authorizationUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      jwtLocations: switch (json['jwtLocations']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) JwtLocation.fromJson(i)],
+        _ => throw const FormatException('"jwtLocations" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -346,8 +406,15 @@ final class OauthRequirements extends ProtoMessage {
 
   OauthRequirements({this.canonicalScopes = ''}) : super(fullyQualifiedName);
 
-  factory OauthRequirements.fromJson(Map<String, dynamic> json) =>
-      OauthRequirements(canonicalScopes: json['canonicalScopes'] ?? '');
+  factory OauthRequirements.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OauthRequirements(
+      canonicalScopes: switch (json['canonicalScopes']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -395,11 +462,19 @@ final class AuthRequirement extends ProtoMessage {
   AuthRequirement({this.providerId = '', this.audiences = ''})
     : super(fullyQualifiedName);
 
-  factory AuthRequirement.fromJson(Map<String, dynamic> json) =>
-      AuthRequirement(
-        providerId: json['providerId'] ?? '',
-        audiences: json['audiences'] ?? '',
-      );
+  factory AuthRequirement.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AuthRequirement(
+      providerId: switch (json['providerId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      audiences: switch (json['audiences']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -428,9 +503,16 @@ final class Backend extends ProtoMessage {
 
   Backend({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory Backend.fromJson(Map<String, dynamic> json) => Backend(
-    rules: decodeListMessage(json['rules'], BackendRule.fromJson) ?? [],
-  );
+  factory Backend.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Backend(
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) BackendRule.fromJson(i)],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
@@ -534,28 +616,57 @@ final class BackendRule extends ProtoMessage {
     this.overridesByRequestProtocol = const {},
   }) : super(fullyQualifiedName);
 
-  factory BackendRule.fromJson(Map<String, dynamic> json) => BackendRule(
-    selector: json['selector'] ?? '',
-    address: json['address'] ?? '',
-    deadline: decodeDouble(json['deadline']) ?? 0,
-    minDeadline: decodeDouble(json['minDeadline']) ?? 0,
-    operationDeadline: decodeDouble(json['operationDeadline']) ?? 0,
-    pathTranslation:
-        decodeEnum(
-          json['pathTranslation'],
-          BackendRule_PathTranslation.fromJson,
-        ) ??
-        BackendRule_PathTranslation.$default,
-    jwtAudience: json['jwtAudience'],
-    disableAuth: json['disableAuth'],
-    protocol: json['protocol'] ?? '',
-    overridesByRequestProtocol:
-        decodeMapMessage(
-          json['overridesByRequestProtocol'],
-          BackendRule.fromJson,
-        ) ??
-        {},
-  );
+  factory BackendRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BackendRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      address: switch (json['address']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      deadline: switch (json['deadline']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      minDeadline: switch (json['minDeadline']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      operationDeadline: switch (json['operationDeadline']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      pathTranslation: switch (json['pathTranslation']) {
+        null => BackendRule_PathTranslation.$default,
+        Object $1 => BackendRule_PathTranslation.fromJson($1),
+      },
+      jwtAudience: switch (json['jwtAudience']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      disableAuth: switch (json['disableAuth']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      protocol: switch (json['protocol']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      overridesByRequestProtocol: switch (json['overridesByRequestProtocol']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): BackendRule.fromJson(e.value),
+        },
+        _ => throw const FormatException(
+          '"overridesByRequestProtocol" is not an object',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -658,8 +769,8 @@ final class BackendRule_PathTranslation extends ProtoEnum {
 
   const BackendRule_PathTranslation(super.value);
 
-  factory BackendRule_PathTranslation.fromJson(String json) =>
-      BackendRule_PathTranslation(json);
+  factory BackendRule_PathTranslation.fromJson(Object? json) =>
+      BackendRule_PathTranslation(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -710,14 +821,20 @@ final class Billing extends ProtoMessage {
 
   Billing({this.consumerDestinations = const []}) : super(fullyQualifiedName);
 
-  factory Billing.fromJson(Map<String, dynamic> json) => Billing(
-    consumerDestinations:
-        decodeListMessage(
-          json['consumerDestinations'],
-          Billing_BillingDestination.fromJson,
-        ) ??
-        [],
-  );
+  factory Billing.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Billing(
+      consumerDestinations: switch (json['consumerDestinations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Billing_BillingDestination.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"consumerDestinations" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -750,11 +867,20 @@ final class Billing_BillingDestination extends ProtoMessage {
     this.metrics = const [],
   }) : super(fullyQualifiedName);
 
-  factory Billing_BillingDestination.fromJson(Map<String, dynamic> json) =>
-      Billing_BillingDestination(
-        monitoredResource: json['monitoredResource'] ?? '',
-        metrics: decodeList(json['metrics']) ?? [],
-      );
+  factory Billing_BillingDestination.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Billing_BillingDestination(
+      monitoredResource: switch (json['monitoredResource']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metrics: switch (json['metrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"metrics" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -789,20 +915,26 @@ final class CommonLanguageSettings extends ProtoMessage {
     this.selectiveGapicGeneration,
   }) : super(fullyQualifiedName);
 
-  factory CommonLanguageSettings.fromJson(Map<String, dynamic> json) =>
-      CommonLanguageSettings(
-        referenceDocsUri: json['referenceDocsUri'] ?? '',
-        destinations:
-            decodeListEnum(
-              json['destinations'],
-              ClientLibraryDestination.fromJson,
-            ) ??
-            [],
-        selectiveGapicGeneration: decode(
-          json['selectiveGapicGeneration'],
-          SelectiveGapicGeneration.fromJson,
-        ),
-      );
+  factory CommonLanguageSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CommonLanguageSettings(
+      referenceDocsUri: switch (json['referenceDocsUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      destinations: switch (json['destinations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ClientLibraryDestination.fromJson(i),
+        ],
+        _ => throw const FormatException('"destinations" is not a list'),
+      },
+      selectiveGapicGeneration: switch (json['selectiveGapicGeneration']) {
+        null => null,
+        Object $1 => SelectiveGapicGeneration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -873,22 +1005,55 @@ final class ClientLibrarySettings extends ProtoMessage {
     this.goSettings,
   }) : super(fullyQualifiedName);
 
-  factory ClientLibrarySettings.fromJson(Map<String, dynamic> json) =>
-      ClientLibrarySettings(
-        version: json['version'] ?? '',
-        launchStage:
-            decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-            LaunchStage.$default,
-        restNumericEnums: json['restNumericEnums'] ?? false,
-        javaSettings: decode(json['javaSettings'], JavaSettings.fromJson),
-        cppSettings: decode(json['cppSettings'], CppSettings.fromJson),
-        phpSettings: decode(json['phpSettings'], PhpSettings.fromJson),
-        pythonSettings: decode(json['pythonSettings'], PythonSettings.fromJson),
-        nodeSettings: decode(json['nodeSettings'], NodeSettings.fromJson),
-        dotnetSettings: decode(json['dotnetSettings'], DotnetSettings.fromJson),
-        rubySettings: decode(json['rubySettings'], RubySettings.fromJson),
-        goSettings: decode(json['goSettings'], GoSettings.fromJson),
-      );
+  factory ClientLibrarySettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ClientLibrarySettings(
+      version: switch (json['version']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      launchStage: switch (json['launchStage']) {
+        null => LaunchStage.$default,
+        Object $1 => LaunchStage.fromJson($1),
+      },
+      restNumericEnums: switch (json['restNumericEnums']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      javaSettings: switch (json['javaSettings']) {
+        null => null,
+        Object $1 => JavaSettings.fromJson($1),
+      },
+      cppSettings: switch (json['cppSettings']) {
+        null => null,
+        Object $1 => CppSettings.fromJson($1),
+      },
+      phpSettings: switch (json['phpSettings']) {
+        null => null,
+        Object $1 => PhpSettings.fromJson($1),
+      },
+      pythonSettings: switch (json['pythonSettings']) {
+        null => null,
+        Object $1 => PythonSettings.fromJson($1),
+      },
+      nodeSettings: switch (json['nodeSettings']) {
+        null => null,
+        Object $1 => NodeSettings.fromJson($1),
+      },
+      dotnetSettings: switch (json['dotnetSettings']) {
+        null => null,
+        Object $1 => DotnetSettings.fromJson($1),
+      },
+      rubySettings: switch (json['rubySettings']) {
+        null => null,
+        Object $1 => RubySettings.fromJson($1),
+      },
+      goSettings: switch (json['goSettings']) {
+        null => null,
+        Object $1 => GoSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -980,29 +1145,64 @@ final class Publishing extends ProtoMessage {
     this.restReferenceDocumentationUri = '',
   }) : super(fullyQualifiedName);
 
-  factory Publishing.fromJson(Map<String, dynamic> json) => Publishing(
-    methodSettings:
-        decodeListMessage(json['methodSettings'], MethodSettings.fromJson) ??
-        [],
-    newIssueUri: json['newIssueUri'] ?? '',
-    documentationUri: json['documentationUri'] ?? '',
-    apiShortName: json['apiShortName'] ?? '',
-    githubLabel: json['githubLabel'] ?? '',
-    codeownerGithubTeams: decodeList(json['codeownerGithubTeams']) ?? [],
-    docTagPrefix: json['docTagPrefix'] ?? '',
-    organization:
-        decodeEnum(json['organization'], ClientLibraryOrganization.fromJson) ??
-        ClientLibraryOrganization.$default,
-    librarySettings:
-        decodeListMessage(
-          json['librarySettings'],
-          ClientLibrarySettings.fromJson,
-        ) ??
-        [],
-    protoReferenceDocumentationUri:
-        json['protoReferenceDocumentationUri'] ?? '',
-    restReferenceDocumentationUri: json['restReferenceDocumentationUri'] ?? '',
-  );
+  factory Publishing.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Publishing(
+      methodSettings: switch (json['methodSettings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MethodSettings.fromJson(i)],
+        _ => throw const FormatException('"methodSettings" is not a list'),
+      },
+      newIssueUri: switch (json['newIssueUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      documentationUri: switch (json['documentationUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      apiShortName: switch (json['apiShortName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      githubLabel: switch (json['githubLabel']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      codeownerGithubTeams: switch (json['codeownerGithubTeams']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"codeownerGithubTeams" is not a list',
+        ),
+      },
+      docTagPrefix: switch (json['docTagPrefix']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      organization: switch (json['organization']) {
+        null => ClientLibraryOrganization.$default,
+        Object $1 => ClientLibraryOrganization.fromJson($1),
+      },
+      librarySettings: switch (json['librarySettings']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ClientLibrarySettings.fromJson(i),
+        ],
+        _ => throw const FormatException('"librarySettings" is not a list'),
+      },
+      protoReferenceDocumentationUri:
+          switch (json['protoReferenceDocumentationUri']) {
+            null => '',
+            Object $1 => decodeString($1),
+          },
+      restReferenceDocumentationUri:
+          switch (json['restReferenceDocumentationUri']) {
+            null => '',
+            Object $1 => decodeString($1),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1082,11 +1282,29 @@ final class JavaSettings extends ProtoMessage {
     this.common,
   }) : super(fullyQualifiedName);
 
-  factory JavaSettings.fromJson(Map<String, dynamic> json) => JavaSettings(
-    libraryPackage: json['libraryPackage'] ?? '',
-    serviceClassNames: decodeMap(json['serviceClassNames']) ?? {},
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-  );
+  factory JavaSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return JavaSettings(
+      libraryPackage: switch (json['libraryPackage']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceClassNames: switch (json['serviceClassNames']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException(
+          '"serviceClassNames" is not an object',
+        ),
+      },
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1111,9 +1329,15 @@ final class CppSettings extends ProtoMessage {
 
   CppSettings({this.common}) : super(fullyQualifiedName);
 
-  factory CppSettings.fromJson(Map<String, dynamic> json) => CppSettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-  );
+  factory CppSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CppSettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (common != null) 'common': common!.toJson()};
@@ -1131,9 +1355,15 @@ final class PhpSettings extends ProtoMessage {
 
   PhpSettings({this.common}) : super(fullyQualifiedName);
 
-  factory PhpSettings.fromJson(Map<String, dynamic> json) => PhpSettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-  );
+  factory PhpSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PhpSettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (common != null) 'common': common!.toJson()};
@@ -1155,13 +1385,19 @@ final class PythonSettings extends ProtoMessage {
   PythonSettings({this.common, this.experimentalFeatures})
     : super(fullyQualifiedName);
 
-  factory PythonSettings.fromJson(Map<String, dynamic> json) => PythonSettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-    experimentalFeatures: decode(
-      json['experimentalFeatures'],
-      PythonSettings_ExperimentalFeatures.fromJson,
-    ),
-  );
+  factory PythonSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PythonSettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+      experimentalFeatures: switch (json['experimentalFeatures']) {
+        null => null,
+        Object $1 => PythonSettings_ExperimentalFeatures.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1205,13 +1441,24 @@ final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
     this.unversionedPackageDisabled = false,
   }) : super(fullyQualifiedName);
 
-  factory PythonSettings_ExperimentalFeatures.fromJson(
-    Map<String, dynamic> json,
-  ) => PythonSettings_ExperimentalFeatures(
-    restAsyncIoEnabled: json['restAsyncIoEnabled'] ?? false,
-    protobufPythonicTypesEnabled: json['protobufPythonicTypesEnabled'] ?? false,
-    unversionedPackageDisabled: json['unversionedPackageDisabled'] ?? false,
-  );
+  factory PythonSettings_ExperimentalFeatures.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PythonSettings_ExperimentalFeatures(
+      restAsyncIoEnabled: switch (json['restAsyncIoEnabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      protobufPythonicTypesEnabled:
+          switch (json['protobufPythonicTypesEnabled']) {
+            null => false,
+            Object $1 => decodeBool($1),
+          },
+      unversionedPackageDisabled: switch (json['unversionedPackageDisabled']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1243,9 +1490,15 @@ final class NodeSettings extends ProtoMessage {
 
   NodeSettings({this.common}) : super(fullyQualifiedName);
 
-  factory NodeSettings.fromJson(Map<String, dynamic> json) => NodeSettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-  );
+  factory NodeSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return NodeSettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (common != null) 'common': common!.toJson()};
@@ -1300,14 +1553,50 @@ final class DotnetSettings extends ProtoMessage {
     this.handwrittenSignatures = const [],
   }) : super(fullyQualifiedName);
 
-  factory DotnetSettings.fromJson(Map<String, dynamic> json) => DotnetSettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-    renamedServices: decodeMap(json['renamedServices']) ?? {},
-    renamedResources: decodeMap(json['renamedResources']) ?? {},
-    ignoredResources: decodeList(json['ignoredResources']) ?? [],
-    forcedNamespaceAliases: decodeList(json['forcedNamespaceAliases']) ?? [],
-    handwrittenSignatures: decodeList(json['handwrittenSignatures']) ?? [],
-  );
+  factory DotnetSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DotnetSettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+      renamedServices: switch (json['renamedServices']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"renamedServices" is not an object'),
+      },
+      renamedResources: switch (json['renamedResources']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"renamedResources" is not an object'),
+      },
+      ignoredResources: switch (json['ignoredResources']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"ignoredResources" is not a list'),
+      },
+      forcedNamespaceAliases: switch (json['forcedNamespaceAliases']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"forcedNamespaceAliases" is not a list',
+        ),
+      },
+      handwrittenSignatures: switch (json['handwrittenSignatures']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"handwrittenSignatures" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1334,9 +1623,15 @@ final class RubySettings extends ProtoMessage {
 
   RubySettings({this.common}) : super(fullyQualifiedName);
 
-  factory RubySettings.fromJson(Map<String, dynamic> json) => RubySettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-  );
+  factory RubySettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RubySettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (common != null) 'common': common!.toJson()};
@@ -1365,10 +1660,23 @@ final class GoSettings extends ProtoMessage {
   GoSettings({this.common, this.renamedServices = const {}})
     : super(fullyQualifiedName);
 
-  factory GoSettings.fromJson(Map<String, dynamic> json) => GoSettings(
-    common: decode(json['common'], CommonLanguageSettings.fromJson),
-    renamedServices: decodeMap(json['renamedServices']) ?? {},
-  );
+  factory GoSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GoSettings(
+      common: switch (json['common']) {
+        null => null,
+        Object $1 => CommonLanguageSettings.fromJson($1),
+      },
+      renamedServices: switch (json['renamedServices']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"renamedServices" is not an object'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1430,14 +1738,24 @@ final class MethodSettings extends ProtoMessage {
     this.autoPopulatedFields = const [],
   }) : super(fullyQualifiedName);
 
-  factory MethodSettings.fromJson(Map<String, dynamic> json) => MethodSettings(
-    selector: json['selector'] ?? '',
-    longRunning: decode(
-      json['longRunning'],
-      MethodSettings_LongRunning.fromJson,
-    ),
-    autoPopulatedFields: decodeList(json['autoPopulatedFields']) ?? [],
-  );
+  factory MethodSettings.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MethodSettings(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      longRunning: switch (json['longRunning']) {
+        null => null,
+        Object $1 => MethodSettings_LongRunning.fromJson($1),
+      },
+      autoPopulatedFields: switch (json['autoPopulatedFields']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"autoPopulatedFields" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1487,14 +1805,27 @@ final class MethodSettings_LongRunning extends ProtoMessage {
     this.totalPollTimeout,
   }) : super(fullyQualifiedName);
 
-  factory MethodSettings_LongRunning.fromJson(
-    Map<String, dynamic> json,
-  ) => MethodSettings_LongRunning(
-    initialPollDelay: decodeCustom(json['initialPollDelay'], Duration.fromJson),
-    pollDelayMultiplier: decodeDouble(json['pollDelayMultiplier']) ?? 0,
-    maxPollDelay: decodeCustom(json['maxPollDelay'], Duration.fromJson),
-    totalPollTimeout: decodeCustom(json['totalPollTimeout'], Duration.fromJson),
-  );
+  factory MethodSettings_LongRunning.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MethodSettings_LongRunning(
+      initialPollDelay: switch (json['initialPollDelay']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      pollDelayMultiplier: switch (json['pollDelayMultiplier']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      maxPollDelay: switch (json['maxPollDelay']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      totalPollTimeout: switch (json['totalPollTimeout']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1537,11 +1868,20 @@ final class SelectiveGapicGeneration extends ProtoMessage {
     this.generateOmittedAsInternal = false,
   }) : super(fullyQualifiedName);
 
-  factory SelectiveGapicGeneration.fromJson(Map<String, dynamic> json) =>
-      SelectiveGapicGeneration(
-        methods: decodeList(json['methods']) ?? [],
-        generateOmittedAsInternal: json['generateOmittedAsInternal'] ?? false,
-      );
+  factory SelectiveGapicGeneration.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SelectiveGapicGeneration(
+      methods: switch (json['methods']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"methods" is not a list'),
+      },
+      generateOmittedAsInternal: switch (json['generateOmittedAsInternal']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1602,15 +1942,32 @@ final class ConfigChange extends ProtoMessage {
     this.advices = const [],
   }) : super(fullyQualifiedName);
 
-  factory ConfigChange.fromJson(Map<String, dynamic> json) => ConfigChange(
-    element: json['element'] ?? '',
-    oldValue: json['oldValue'] ?? '',
-    newValue: json['newValue'] ?? '',
-    changeType:
-        decodeEnum(json['changeType'], ChangeType.fromJson) ??
-        ChangeType.$default,
-    advices: decodeListMessage(json['advices'], Advice.fromJson) ?? [],
-  );
+  factory ConfigChange.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ConfigChange(
+      element: switch (json['element']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      oldValue: switch (json['oldValue']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      newValue: switch (json['newValue']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      changeType: switch (json['changeType']) {
+        null => ChangeType.$default,
+        Object $1 => ChangeType.fromJson($1),
+      },
+      advices: switch (json['advices']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Advice.fromJson(i)],
+        _ => throw const FormatException('"advices" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1644,8 +2001,15 @@ final class Advice extends ProtoMessage {
 
   Advice({this.description = ''}) : super(fullyQualifiedName);
 
-  factory Advice.fromJson(Map<String, dynamic> json) =>
-      Advice(description: json['description'] ?? '');
+  factory Advice.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Advice(
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (description.isNotDefault) 'description': description};
@@ -1681,11 +2045,16 @@ final class ProjectProperties extends ProtoMessage {
 
   ProjectProperties({this.properties = const []}) : super(fullyQualifiedName);
 
-  factory ProjectProperties.fromJson(Map<String, dynamic> json) =>
-      ProjectProperties(
-        properties:
-            decodeListMessage(json['properties'], Property.fromJson) ?? [],
-      );
+  factory ProjectProperties.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ProjectProperties(
+      properties: switch (json['properties']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Property.fromJson(i)],
+        _ => throw const FormatException('"properties" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1724,13 +2093,23 @@ final class Property extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory Property.fromJson(Map<String, dynamic> json) => Property(
-    name: json['name'] ?? '',
-    type:
-        decodeEnum(json['type'], Property_PropertyType.fromJson) ??
-        Property_PropertyType.$default,
-    description: json['description'] ?? '',
-  );
+  factory Property.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Property(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      type: switch (json['type']) {
+        null => Property_PropertyType.$default,
+        Object $1 => Property_PropertyType.fromJson($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1772,8 +2151,8 @@ final class Property_PropertyType extends ProtoEnum {
 
   const Property_PropertyType(super.value);
 
-  factory Property_PropertyType.fromJson(String json) =>
-      Property_PropertyType(json);
+  factory Property_PropertyType.fromJson(Object? json) =>
+      Property_PropertyType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1827,9 +2206,16 @@ final class Context extends ProtoMessage {
 
   Context({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory Context.fromJson(Map<String, dynamic> json) => Context(
-    rules: decodeListMessage(json['rules'], ContextRule.fromJson) ?? [],
-  );
+  factory Context.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Context(
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ContextRule.fromJson(i)],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
@@ -1873,15 +2259,39 @@ final class ContextRule extends ProtoMessage {
     this.allowedResponseExtensions = const [],
   }) : super(fullyQualifiedName);
 
-  factory ContextRule.fromJson(Map<String, dynamic> json) => ContextRule(
-    selector: json['selector'] ?? '',
-    requested: decodeList(json['requested']) ?? [],
-    provided: decodeList(json['provided']) ?? [],
-    allowedRequestExtensions:
-        decodeList(json['allowedRequestExtensions']) ?? [],
-    allowedResponseExtensions:
-        decodeList(json['allowedResponseExtensions']) ?? [],
-  );
+  factory ContextRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ContextRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requested: switch (json['requested']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"requested" is not a list'),
+      },
+      provided: switch (json['provided']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"provided" is not a list'),
+      },
+      allowedRequestExtensions: switch (json['allowedRequestExtensions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"allowedRequestExtensions" is not a list',
+        ),
+      },
+      allowedResponseExtensions: switch (json['allowedResponseExtensions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"allowedResponseExtensions" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1921,11 +2331,20 @@ final class Control extends ProtoMessage {
   Control({this.environment = '', this.methodPolicies = const []})
     : super(fullyQualifiedName);
 
-  factory Control.fromJson(Map<String, dynamic> json) => Control(
-    environment: json['environment'] ?? '',
-    methodPolicies:
-        decodeListMessage(json['methodPolicies'], MethodPolicy.fromJson) ?? [],
-  );
+  factory Control.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Control(
+      environment: switch (json['environment']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      methodPolicies: switch (json['methodPolicies']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MethodPolicy.fromJson(i)],
+        _ => throw const FormatException('"methodPolicies" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2016,20 +2435,43 @@ final class Distribution extends ProtoMessage {
     this.exemplars = const [],
   }) : super(fullyQualifiedName);
 
-  factory Distribution.fromJson(Map<String, dynamic> json) => Distribution(
-    count: decodeInt64(json['count']) ?? 0,
-    mean: decodeDouble(json['mean']) ?? 0,
-    sumOfSquaredDeviation: decodeDouble(json['sumOfSquaredDeviation']) ?? 0,
-    range: decode(json['range'], Distribution_Range.fromJson),
-    bucketOptions: decode(
-      json['bucketOptions'],
-      Distribution_BucketOptions.fromJson,
-    ),
-    bucketCounts: decodeList(json['bucketCounts']) ?? [],
-    exemplars:
-        decodeListMessage(json['exemplars'], Distribution_Exemplar.fromJson) ??
-        [],
-  );
+  factory Distribution.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution(
+      count: switch (json['count']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      mean: switch (json['mean']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      sumOfSquaredDeviation: switch (json['sumOfSquaredDeviation']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      range: switch (json['range']) {
+        null => null,
+        Object $1 => Distribution_Range.fromJson($1),
+      },
+      bucketOptions: switch (json['bucketOptions']) {
+        null => null,
+        Object $1 => Distribution_BucketOptions.fromJson($1),
+      },
+      bucketCounts: switch (json['bucketCounts']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"bucketCounts" is not a list'),
+      },
+      exemplars: switch (json['exemplars']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Distribution_Exemplar.fromJson(i),
+        ],
+        _ => throw const FormatException('"exemplars" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2066,11 +2508,19 @@ final class Distribution_Range extends ProtoMessage {
 
   Distribution_Range({this.min = 0, this.max = 0}) : super(fullyQualifiedName);
 
-  factory Distribution_Range.fromJson(Map<String, dynamic> json) =>
-      Distribution_Range(
-        min: decodeDouble(json['min']) ?? 0,
-        max: decodeDouble(json['max']) ?? 0,
-      );
+  factory Distribution_Range.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution_Range(
+      min: switch (json['min']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      max: switch (json['max']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2119,21 +2569,23 @@ final class Distribution_BucketOptions extends ProtoMessage {
     this.explicitBuckets,
   }) : super(fullyQualifiedName);
 
-  factory Distribution_BucketOptions.fromJson(Map<String, dynamic> json) =>
-      Distribution_BucketOptions(
-        linearBuckets: decode(
-          json['linearBuckets'],
-          Distribution_BucketOptions_Linear.fromJson,
-        ),
-        exponentialBuckets: decode(
-          json['exponentialBuckets'],
-          Distribution_BucketOptions_Exponential.fromJson,
-        ),
-        explicitBuckets: decode(
-          json['explicitBuckets'],
-          Distribution_BucketOptions_Explicit.fromJson,
-        ),
-      );
+  factory Distribution_BucketOptions.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution_BucketOptions(
+      linearBuckets: switch (json['linearBuckets']) {
+        null => null,
+        Object $1 => Distribution_BucketOptions_Linear.fromJson($1),
+      },
+      exponentialBuckets: switch (json['exponentialBuckets']) {
+        null => null,
+        Object $1 => Distribution_BucketOptions_Exponential.fromJson($1),
+      },
+      explicitBuckets: switch (json['explicitBuckets']) {
+        null => null,
+        Object $1 => Distribution_BucketOptions_Explicit.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2176,13 +2628,23 @@ final class Distribution_BucketOptions_Linear extends ProtoMessage {
     this.offset = 0,
   }) : super(fullyQualifiedName);
 
-  factory Distribution_BucketOptions_Linear.fromJson(
-    Map<String, dynamic> json,
-  ) => Distribution_BucketOptions_Linear(
-    numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
-    width: decodeDouble(json['width']) ?? 0,
-    offset: decodeDouble(json['offset']) ?? 0,
-  );
+  factory Distribution_BucketOptions_Linear.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution_BucketOptions_Linear(
+      numFiniteBuckets: switch (json['numFiniteBuckets']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      width: switch (json['width']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      offset: switch (json['offset']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2231,13 +2693,23 @@ final class Distribution_BucketOptions_Exponential extends ProtoMessage {
     this.scale = 0,
   }) : super(fullyQualifiedName);
 
-  factory Distribution_BucketOptions_Exponential.fromJson(
-    Map<String, dynamic> json,
-  ) => Distribution_BucketOptions_Exponential(
-    numFiniteBuckets: json['numFiniteBuckets'] ?? 0,
-    growthFactor: decodeDouble(json['growthFactor']) ?? 0,
-    scale: decodeDouble(json['scale']) ?? 0,
-  );
+  factory Distribution_BucketOptions_Exponential.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution_BucketOptions_Exponential(
+      numFiniteBuckets: switch (json['numFiniteBuckets']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      growthFactor: switch (json['growthFactor']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      scale: switch (json['scale']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2278,11 +2750,16 @@ final class Distribution_BucketOptions_Explicit extends ProtoMessage {
   Distribution_BucketOptions_Explicit({this.bounds = const []})
     : super(fullyQualifiedName);
 
-  factory Distribution_BucketOptions_Explicit.fromJson(
-    Map<String, dynamic> json,
-  ) => Distribution_BucketOptions_Explicit(
-    bounds: decodeList(json['bounds']) ?? [],
-  );
+  factory Distribution_BucketOptions_Explicit.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution_BucketOptions_Explicit(
+      bounds: switch (json['bounds']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"bounds" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (bounds.isNotDefault) 'bounds': bounds};
@@ -2325,12 +2802,24 @@ final class Distribution_Exemplar extends ProtoMessage {
     this.attachments = const [],
   }) : super(fullyQualifiedName);
 
-  factory Distribution_Exemplar.fromJson(Map<String, dynamic> json) =>
-      Distribution_Exemplar(
-        value: decodeDouble(json['value']) ?? 0,
-        timestamp: decodeCustom(json['timestamp'], Timestamp.fromJson),
-        attachments: decodeListMessage(json['attachments'], Any.fromJson) ?? [],
-      );
+  factory Distribution_Exemplar.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Distribution_Exemplar(
+      value: switch (json['value']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      timestamp: switch (json['timestamp']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      attachments: switch (json['attachments']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
+        _ => throw const FormatException('"attachments" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2451,14 +2940,37 @@ final class Documentation extends ProtoMessage {
     this.overview = '',
   }) : super(fullyQualifiedName);
 
-  factory Documentation.fromJson(Map<String, dynamic> json) => Documentation(
-    summary: json['summary'] ?? '',
-    pages: decodeListMessage(json['pages'], Page.fromJson) ?? [],
-    rules: decodeListMessage(json['rules'], DocumentationRule.fromJson) ?? [],
-    documentationRootUrl: json['documentationRootUrl'] ?? '',
-    serviceRootUrl: json['serviceRootUrl'] ?? '',
-    overview: json['overview'] ?? '',
-  );
+  factory Documentation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Documentation(
+      summary: switch (json['summary']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pages: switch (json['pages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Page.fromJson(i)],
+        _ => throw const FormatException('"pages" is not a list'),
+      },
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) DocumentationRule.fromJson(i)],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+      documentationRootUrl: switch (json['documentationRootUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceRootUrl: switch (json['serviceRootUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      overview: switch (json['overview']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2511,12 +3023,23 @@ final class DocumentationRule extends ProtoMessage {
     this.deprecationDescription = '',
   }) : super(fullyQualifiedName);
 
-  factory DocumentationRule.fromJson(Map<String, dynamic> json) =>
-      DocumentationRule(
-        selector: json['selector'] ?? '',
-        description: json['description'] ?? '',
-        deprecationDescription: json['deprecationDescription'] ?? '',
-      );
+  factory DocumentationRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DocumentationRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      deprecationDescription: switch (json['deprecationDescription']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2570,11 +3093,24 @@ final class Page extends ProtoMessage {
   Page({this.name = '', this.content = '', this.subpages = const []})
     : super(fullyQualifiedName);
 
-  factory Page.fromJson(Map<String, dynamic> json) => Page(
-    name: json['name'] ?? '',
-    content: json['content'] ?? '',
-    subpages: decodeListMessage(json['subpages'], Page.fromJson) ?? [],
-  );
+  factory Page.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Page(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      subpages: switch (json['subpages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Page.fromJson(i)],
+        _ => throw const FormatException('"subpages" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2644,12 +3180,28 @@ final class Endpoint extends ProtoMessage {
     this.allowCors = false,
   }) : super(fullyQualifiedName);
 
-  factory Endpoint.fromJson(Map<String, dynamic> json) => Endpoint(
-    name: json['name'] ?? '',
-    aliases: decodeList(json['aliases']) ?? [],
-    target: json['target'] ?? '',
-    allowCors: json['allowCors'] ?? false,
-  );
+  factory Endpoint.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Endpoint(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      aliases: switch (json['aliases']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"aliases" is not a list'),
+      },
+      target: switch (json['target']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      allowCors: switch (json['allowCors']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2690,14 +3242,20 @@ final class FieldInfo extends ProtoMessage {
     this.referencedTypes = const [],
   }) : super(fullyQualifiedName);
 
-  factory FieldInfo.fromJson(Map<String, dynamic> json) => FieldInfo(
-    format:
-        decodeEnum(json['format'], FieldInfo_Format.fromJson) ??
-        FieldInfo_Format.$default,
-    referencedTypes:
-        decodeListMessage(json['referencedTypes'], TypeReference.fromJson) ??
-        [],
-  );
+  factory FieldInfo.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FieldInfo(
+      format: switch (json['format']) {
+        null => FieldInfo_Format.$default,
+        Object $1 => FieldInfo_Format.fromJson($1),
+      },
+      referencedTypes: switch (json['referencedTypes']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) TypeReference.fromJson(i)],
+        _ => throw const FormatException('"referencedTypes" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2749,7 +3307,8 @@ final class FieldInfo_Format extends ProtoEnum {
 
   const FieldInfo_Format(super.value);
 
-  factory FieldInfo_Format.fromJson(String json) => FieldInfo_Format(json);
+  factory FieldInfo_Format.fromJson(Object? json) =>
+      FieldInfo_Format(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2774,8 +3333,15 @@ final class TypeReference extends ProtoMessage {
 
   TypeReference({this.typeName = ''}) : super(fullyQualifiedName);
 
-  factory TypeReference.fromJson(Map<String, dynamic> json) =>
-      TypeReference(typeName: json['typeName'] ?? '');
+  factory TypeReference.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TypeReference(
+      typeName: switch (json['typeName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (typeName.isNotDefault) 'typeName': typeName};
@@ -2809,10 +3375,21 @@ final class Http extends ProtoMessage {
   Http({this.rules = const [], this.fullyDecodeReservedExpansion = false})
     : super(fullyQualifiedName);
 
-  factory Http.fromJson(Map<String, dynamic> json) => Http(
-    rules: decodeListMessage(json['rules'], HttpRule.fromJson) ?? [],
-    fullyDecodeReservedExpansion: json['fullyDecodeReservedExpansion'] ?? false,
-  );
+  factory Http.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Http(
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) HttpRule.fromJson(i)],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+      fullyDecodeReservedExpansion:
+          switch (json['fullyDecodeReservedExpansion']) {
+            null => false,
+            Object $1 => decodeBool($1),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3159,19 +3736,52 @@ final class HttpRule extends ProtoMessage {
     this.additionalBindings = const [],
   }) : super(fullyQualifiedName);
 
-  factory HttpRule.fromJson(Map<String, dynamic> json) => HttpRule(
-    selector: json['selector'] ?? '',
-    get: json['get'],
-    put: json['put'],
-    post: json['post'],
-    delete: json['delete'],
-    patch: json['patch'],
-    custom: decode(json['custom'], CustomHttpPattern.fromJson),
-    body: json['body'] ?? '',
-    responseBody: json['responseBody'] ?? '',
-    additionalBindings:
-        decodeListMessage(json['additionalBindings'], HttpRule.fromJson) ?? [],
-  );
+  factory HttpRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return HttpRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      get: switch (json['get']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      put: switch (json['put']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      post: switch (json['post']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      delete: switch (json['delete']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      patch: switch (json['patch']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      custom: switch (json['custom']) {
+        null => null,
+        Object $1 => CustomHttpPattern.fromJson($1),
+      },
+      body: switch (json['body']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      responseBody: switch (json['responseBody']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      additionalBindings: switch (json['additionalBindings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) HttpRule.fromJson(i)],
+        _ => throw const FormatException('"additionalBindings" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3217,8 +3827,19 @@ final class CustomHttpPattern extends ProtoMessage {
   CustomHttpPattern({this.kind = '', this.path = ''})
     : super(fullyQualifiedName);
 
-  factory CustomHttpPattern.fromJson(Map<String, dynamic> json) =>
-      CustomHttpPattern(kind: json['kind'] ?? '', path: json['path'] ?? '');
+  factory CustomHttpPattern.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CustomHttpPattern(
+      kind: switch (json['kind']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      path: switch (json['path']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3293,11 +3914,24 @@ final class HttpBody extends ProtoMessage {
     : data = data ?? Uint8List(0),
       super(fullyQualifiedName);
 
-  factory HttpBody.fromJson(Map<String, dynamic> json) => HttpBody(
-    contentType: json['contentType'] ?? '',
-    data: decodeBytes(json['data']) ?? Uint8List(0),
-    extensions: decodeListMessage(json['extensions'], Any.fromJson) ?? [],
-  );
+  factory HttpBody.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return HttpBody(
+      contentType: switch (json['contentType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      data: switch (json['data']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+      extensions: switch (json['extensions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
+        _ => throw const FormatException('"extensions" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3332,14 +3966,23 @@ final class LabelDescriptor extends ProtoMessage {
     this.description = '',
   }) : super(fullyQualifiedName);
 
-  factory LabelDescriptor.fromJson(Map<String, dynamic> json) =>
-      LabelDescriptor(
-        key: json['key'] ?? '',
-        valueType:
-            decodeEnum(json['valueType'], LabelDescriptor_ValueType.fromJson) ??
-            LabelDescriptor_ValueType.$default,
-        description: json['description'] ?? '',
-      );
+  factory LabelDescriptor.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LabelDescriptor(
+      key: switch (json['key']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      valueType: switch (json['valueType']) {
+        null => LabelDescriptor_ValueType.$default,
+        Object $1 => LabelDescriptor_ValueType.fromJson($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3375,8 +4018,8 @@ final class LabelDescriptor_ValueType extends ProtoEnum {
 
   const LabelDescriptor_ValueType(super.value);
 
-  factory LabelDescriptor_ValueType.fromJson(String json) =>
-      LabelDescriptor_ValueType(json);
+  factory LabelDescriptor_ValueType.fromJson(Object? json) =>
+      LabelDescriptor_ValueType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -3421,12 +4064,28 @@ final class LogDescriptor extends ProtoMessage {
     this.displayName = '',
   }) : super(fullyQualifiedName);
 
-  factory LogDescriptor.fromJson(Map<String, dynamic> json) => LogDescriptor(
-    name: json['name'] ?? '',
-    labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
-    description: json['description'] ?? '',
-    displayName: json['displayName'] ?? '',
-  );
+  factory LogDescriptor.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogDescriptor(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labels: switch (json['labels']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LabelDescriptor.fromJson(i)],
+        _ => throw const FormatException('"labels" is not a list'),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3496,20 +4155,29 @@ final class Logging extends ProtoMessage {
     this.consumerDestinations = const [],
   }) : super(fullyQualifiedName);
 
-  factory Logging.fromJson(Map<String, dynamic> json) => Logging(
-    producerDestinations:
-        decodeListMessage(
-          json['producerDestinations'],
-          Logging_LoggingDestination.fromJson,
-        ) ??
-        [],
-    consumerDestinations:
-        decodeListMessage(
-          json['consumerDestinations'],
-          Logging_LoggingDestination.fromJson,
-        ) ??
-        [],
-  );
+  factory Logging.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Logging(
+      producerDestinations: switch (json['producerDestinations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Logging_LoggingDestination.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"producerDestinations" is not a list',
+        ),
+      },
+      consumerDestinations: switch (json['consumerDestinations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Logging_LoggingDestination.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"consumerDestinations" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3545,11 +4213,20 @@ final class Logging_LoggingDestination extends ProtoMessage {
     this.logs = const [],
   }) : super(fullyQualifiedName);
 
-  factory Logging_LoggingDestination.fromJson(Map<String, dynamic> json) =>
-      Logging_LoggingDestination(
-        monitoredResource: json['monitoredResource'] ?? '',
-        logs: decodeList(json['logs']) ?? [],
-      );
+  factory Logging_LoggingDestination.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Logging_LoggingDestination(
+      monitoredResource: switch (json['monitoredResource']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      logs: switch (json['logs']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"logs" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3740,30 +4417,59 @@ final class MetricDescriptor extends ProtoMessage {
     this.monitoredResourceTypes = const [],
   }) : super(fullyQualifiedName);
 
-  factory MetricDescriptor.fromJson(
-    Map<String, dynamic> json,
-  ) => MetricDescriptor(
-    name: json['name'] ?? '',
-    type: json['type'] ?? '',
-    labels: decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
-    metricKind:
-        decodeEnum(json['metricKind'], MetricDescriptor_MetricKind.fromJson) ??
-        MetricDescriptor_MetricKind.$default,
-    valueType:
-        decodeEnum(json['valueType'], MetricDescriptor_ValueType.fromJson) ??
-        MetricDescriptor_ValueType.$default,
-    unit: json['unit'] ?? '',
-    description: json['description'] ?? '',
-    displayName: json['displayName'] ?? '',
-    metadata: decode(
-      json['metadata'],
-      MetricDescriptor_MetricDescriptorMetadata.fromJson,
-    ),
-    launchStage:
-        decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-        LaunchStage.$default,
-    monitoredResourceTypes: decodeList(json['monitoredResourceTypes']) ?? [],
-  );
+  factory MetricDescriptor.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricDescriptor(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labels: switch (json['labels']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LabelDescriptor.fromJson(i)],
+        _ => throw const FormatException('"labels" is not a list'),
+      },
+      metricKind: switch (json['metricKind']) {
+        null => MetricDescriptor_MetricKind.$default,
+        Object $1 => MetricDescriptor_MetricKind.fromJson($1),
+      },
+      valueType: switch (json['valueType']) {
+        null => MetricDescriptor_ValueType.$default,
+        Object $1 => MetricDescriptor_ValueType.fromJson($1),
+      },
+      unit: switch (json['unit']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metadata: switch (json['metadata']) {
+        null => null,
+        Object $1 => MetricDescriptor_MetricDescriptorMetadata.fromJson($1),
+      },
+      launchStage: switch (json['launchStage']) {
+        null => LaunchStage.$default,
+        Object $1 => LaunchStage.fromJson($1),
+      },
+      monitoredResourceTypes: switch (json['monitoredResourceTypes']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"monitoredResourceTypes" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3831,22 +4537,36 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
     this.timeSeriesResourceHierarchyLevel = const [],
   }) : super(fullyQualifiedName);
 
-  factory MetricDescriptor_MetricDescriptorMetadata.fromJson(
-    Map<String, dynamic> json,
-  ) => MetricDescriptor_MetricDescriptorMetadata(
-    launchStage:
-        decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-        LaunchStage.$default,
-    samplePeriod: decodeCustom(json['samplePeriod'], Duration.fromJson),
-    ingestDelay: decodeCustom(json['ingestDelay'], Duration.fromJson),
-    timeSeriesResourceHierarchyLevel:
-        decodeListEnum(
-          json['timeSeriesResourceHierarchyLevel'],
-          MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel
-              .fromJson,
-        ) ??
-        [],
-  );
+  factory MetricDescriptor_MetricDescriptorMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricDescriptor_MetricDescriptorMetadata(
+      launchStage: switch (json['launchStage']) {
+        null => LaunchStage.$default,
+        Object $1 => LaunchStage.fromJson($1),
+      },
+      samplePeriod: switch (json['samplePeriod']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      ingestDelay: switch (json['ingestDelay']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      timeSeriesResourceHierarchyLevel:
+          switch (json['timeSeriesResourceHierarchyLevel']) {
+            null => [],
+            List<Object?> $1 => [
+              for (final i in $1)
+                MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel.fromJson(
+                  i,
+                ),
+            ],
+            _ => throw const FormatException(
+              '"timeSeriesResourceHierarchyLevel" is not a list',
+            ),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3901,10 +4621,10 @@ final class MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarch
   );
 
   factory MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel.fromJson(
-    String json,
+    Object? json,
   ) =>
       MetricDescriptor_MetricDescriptorMetadata_TimeSeriesResourceHierarchyLevel(
-        json,
+        json as String,
       );
 
   bool get isNotDefault => this != $default;
@@ -3940,8 +4660,8 @@ final class MetricDescriptor_MetricKind extends ProtoEnum {
 
   const MetricDescriptor_MetricKind(super.value);
 
-  factory MetricDescriptor_MetricKind.fromJson(String json) =>
-      MetricDescriptor_MetricKind(json);
+  factory MetricDescriptor_MetricKind.fromJson(Object? json) =>
+      MetricDescriptor_MetricKind(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -3981,8 +4701,8 @@ final class MetricDescriptor_ValueType extends ProtoEnum {
 
   const MetricDescriptor_ValueType(super.value);
 
-  factory MetricDescriptor_ValueType.fromJson(String json) =>
-      MetricDescriptor_ValueType(json);
+  factory MetricDescriptor_ValueType.fromJson(Object? json) =>
+      MetricDescriptor_ValueType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -4006,8 +4726,23 @@ final class Metric extends ProtoMessage {
 
   Metric({this.type = '', this.labels = const {}}) : super(fullyQualifiedName);
 
-  factory Metric.fromJson(Map<String, dynamic> json) =>
-      Metric(type: json['type'] ?? '', labels: decodeMap(json['labels']) ?? {});
+  factory Metric.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Metric(
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4079,18 +4814,36 @@ final class MonitoredResourceDescriptor extends ProtoMessage {
     this.launchStage = LaunchStage.$default,
   }) : super(fullyQualifiedName);
 
-  factory MonitoredResourceDescriptor.fromJson(Map<String, dynamic> json) =>
-      MonitoredResourceDescriptor(
-        name: json['name'] ?? '',
-        type: json['type'] ?? '',
-        displayName: json['displayName'] ?? '',
-        description: json['description'] ?? '',
-        labels:
-            decodeListMessage(json['labels'], LabelDescriptor.fromJson) ?? [],
-        launchStage:
-            decodeEnum(json['launchStage'], LaunchStage.fromJson) ??
-            LaunchStage.$default,
-      );
+  factory MonitoredResourceDescriptor.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MonitoredResourceDescriptor(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labels: switch (json['labels']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LabelDescriptor.fromJson(i)],
+        _ => throw const FormatException('"labels" is not a list'),
+      },
+      launchStage: switch (json['launchStage']) {
+        null => LaunchStage.$default,
+        Object $1 => LaunchStage.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4151,11 +4904,23 @@ final class MonitoredResource extends ProtoMessage {
   MonitoredResource({this.type = '', this.labels = const {}})
     : super(fullyQualifiedName);
 
-  factory MonitoredResource.fromJson(Map<String, dynamic> json) =>
-      MonitoredResource(
-        type: json['type'] ?? '',
-        labels: decodeMap(json['labels']) ?? {},
-      );
+  factory MonitoredResource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MonitoredResource(
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4198,11 +4963,23 @@ final class MonitoredResourceMetadata extends ProtoMessage {
   MonitoredResourceMetadata({this.systemLabels, this.userLabels = const {}})
     : super(fullyQualifiedName);
 
-  factory MonitoredResourceMetadata.fromJson(Map<String, dynamic> json) =>
-      MonitoredResourceMetadata(
-        systemLabels: decodeCustom(json['systemLabels'], Struct.fromJson),
-        userLabels: decodeMap(json['userLabels']) ?? {},
-      );
+  factory MonitoredResourceMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MonitoredResourceMetadata(
+      systemLabels: switch (json['systemLabels']) {
+        null => null,
+        Object $1 => Struct.fromJson($1),
+      },
+      userLabels: switch (json['userLabels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"userLabels" is not an object'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4290,20 +5067,29 @@ final class Monitoring extends ProtoMessage {
     this.consumerDestinations = const [],
   }) : super(fullyQualifiedName);
 
-  factory Monitoring.fromJson(Map<String, dynamic> json) => Monitoring(
-    producerDestinations:
-        decodeListMessage(
-          json['producerDestinations'],
-          Monitoring_MonitoringDestination.fromJson,
-        ) ??
-        [],
-    consumerDestinations:
-        decodeListMessage(
-          json['consumerDestinations'],
-          Monitoring_MonitoringDestination.fromJson,
-        ) ??
-        [],
-  );
+  factory Monitoring.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Monitoring(
+      producerDestinations: switch (json['producerDestinations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Monitoring_MonitoringDestination.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"producerDestinations" is not a list',
+        ),
+      },
+      consumerDestinations: switch (json['consumerDestinations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) Monitoring_MonitoringDestination.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"consumerDestinations" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4338,12 +5124,20 @@ final class Monitoring_MonitoringDestination extends ProtoMessage {
     this.metrics = const [],
   }) : super(fullyQualifiedName);
 
-  factory Monitoring_MonitoringDestination.fromJson(
-    Map<String, dynamic> json,
-  ) => Monitoring_MonitoringDestination(
-    monitoredResource: json['monitoredResource'] ?? '',
-    metrics: decodeList(json['metrics']) ?? [],
-  );
+  factory Monitoring_MonitoringDestination.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Monitoring_MonitoringDestination(
+      monitoredResource: switch (json['monitoredResource']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metrics: switch (json['metrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"metrics" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4396,11 +5190,23 @@ final class FieldPolicy extends ProtoMessage {
     this.resourceType = '',
   }) : super(fullyQualifiedName);
 
-  factory FieldPolicy.fromJson(Map<String, dynamic> json) => FieldPolicy(
-    selector: json['selector'] ?? '',
-    resourcePermission: json['resourcePermission'] ?? '',
-    resourceType: json['resourceType'] ?? '',
-  );
+  factory FieldPolicy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FieldPolicy(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resourcePermission: switch (json['resourcePermission']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resourceType: switch (json['resourceType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4441,11 +5247,20 @@ final class MethodPolicy extends ProtoMessage {
   MethodPolicy({this.selector = '', this.requestPolicies = const []})
     : super(fullyQualifiedName);
 
-  factory MethodPolicy.fromJson(Map<String, dynamic> json) => MethodPolicy(
-    selector: json['selector'] ?? '',
-    requestPolicies:
-        decodeListMessage(json['requestPolicies'], FieldPolicy.fromJson) ?? [],
-  );
+  factory MethodPolicy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MethodPolicy(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestPolicies: switch (json['requestPolicies']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) FieldPolicy.fromJson(i)],
+        _ => throw const FormatException('"requestPolicies" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4523,11 +5338,21 @@ final class Quota extends ProtoMessage {
   Quota({this.limits = const [], this.metricRules = const []})
     : super(fullyQualifiedName);
 
-  factory Quota.fromJson(Map<String, dynamic> json) => Quota(
-    limits: decodeListMessage(json['limits'], QuotaLimit.fromJson) ?? [],
-    metricRules:
-        decodeListMessage(json['metricRules'], MetricRule.fromJson) ?? [],
-  );
+  factory Quota.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Quota(
+      limits: switch (json['limits']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) QuotaLimit.fromJson(i)],
+        _ => throw const FormatException('"limits" is not a list'),
+      },
+      metricRules: switch (json['metricRules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetricRule.fromJson(i)],
+        _ => throw const FormatException('"metricRules" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4561,10 +5386,22 @@ final class MetricRule extends ProtoMessage {
   MetricRule({this.selector = '', this.metricCosts = const {}})
     : super(fullyQualifiedName);
 
-  factory MetricRule.fromJson(Map<String, dynamic> json) => MetricRule(
-    selector: json['selector'] ?? '',
-    metricCosts: decodeMap(json['metricCosts']) ?? {},
-  );
+  factory MetricRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metricCosts: switch (json['metricCosts']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt64(e.value),
+        },
+        _ => throw const FormatException('"metricCosts" is not an object'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4676,18 +5513,54 @@ final class QuotaLimit extends ProtoMessage {
     this.displayName = '',
   }) : super(fullyQualifiedName);
 
-  factory QuotaLimit.fromJson(Map<String, dynamic> json) => QuotaLimit(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    defaultLimit: decodeInt64(json['defaultLimit']) ?? 0,
-    maxLimit: decodeInt64(json['maxLimit']) ?? 0,
-    freeTier: decodeInt64(json['freeTier']) ?? 0,
-    duration: json['duration'] ?? '',
-    metric: json['metric'] ?? '',
-    unit: json['unit'] ?? '',
-    values: decodeMap(json['values']) ?? {},
-    displayName: json['displayName'] ?? '',
-  );
+  factory QuotaLimit.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return QuotaLimit(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      defaultLimit: switch (json['defaultLimit']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      maxLimit: switch (json['maxLimit']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      freeTier: switch (json['freeTier']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      duration: switch (json['duration']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metric: switch (json['metric']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      unit: switch (json['unit']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      values: switch (json['values']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeInt64(e.value),
+        },
+        _ => throw const FormatException('"values" is not an object'),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4859,20 +5732,43 @@ final class ResourceDescriptor extends ProtoMessage {
     this.style = const [],
   }) : super(fullyQualifiedName);
 
-  factory ResourceDescriptor.fromJson(Map<String, dynamic> json) =>
-      ResourceDescriptor(
-        type: json['type'] ?? '',
-        pattern: decodeList(json['pattern']) ?? [],
-        nameField: json['nameField'] ?? '',
-        history:
-            decodeEnum(json['history'], ResourceDescriptor_History.fromJson) ??
-            ResourceDescriptor_History.$default,
-        plural: json['plural'] ?? '',
-        singular: json['singular'] ?? '',
-        style:
-            decodeListEnum(json['style'], ResourceDescriptor_Style.fromJson) ??
-            [],
-      );
+  factory ResourceDescriptor.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ResourceDescriptor(
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pattern: switch (json['pattern']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"pattern" is not a list'),
+      },
+      nameField: switch (json['nameField']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      history: switch (json['history']) {
+        null => ResourceDescriptor_History.$default,
+        Object $1 => ResourceDescriptor_History.fromJson($1),
+      },
+      plural: switch (json['plural']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      singular: switch (json['singular']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      style: switch (json['style']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ResourceDescriptor_Style.fromJson(i),
+        ],
+        _ => throw const FormatException('"style" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4924,8 +5820,8 @@ final class ResourceDescriptor_History extends ProtoEnum {
 
   const ResourceDescriptor_History(super.value);
 
-  factory ResourceDescriptor_History.fromJson(String json) =>
-      ResourceDescriptor_History(json);
+  factory ResourceDescriptor_History.fromJson(Object? json) =>
+      ResourceDescriptor_History(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -4955,8 +5851,8 @@ final class ResourceDescriptor_Style extends ProtoEnum {
 
   const ResourceDescriptor_Style(super.value);
 
-  factory ResourceDescriptor_Style.fromJson(String json) =>
-      ResourceDescriptor_Style(json);
+  factory ResourceDescriptor_Style.fromJson(Object? json) =>
+      ResourceDescriptor_Style(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5007,11 +5903,19 @@ final class ResourceReference extends ProtoMessage {
   ResourceReference({this.type = '', this.childType = ''})
     : super(fullyQualifiedName);
 
-  factory ResourceReference.fromJson(Map<String, dynamic> json) =>
-      ResourceReference(
-        type: json['type'] ?? '',
-        childType: json['childType'] ?? '',
-      );
+  factory ResourceReference.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ResourceReference(
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      childType: switch (json['childType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5398,14 +6302,16 @@ final class RoutingRule extends ProtoMessage {
 
   RoutingRule({this.routingParameters = const []}) : super(fullyQualifiedName);
 
-  factory RoutingRule.fromJson(Map<String, dynamic> json) => RoutingRule(
-    routingParameters:
-        decodeListMessage(
-          json['routingParameters'],
-          RoutingParameter.fromJson,
-        ) ??
-        [],
-  );
+  factory RoutingRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RoutingRule(
+      routingParameters: switch (json['routingParameters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RoutingParameter.fromJson(i)],
+        _ => throw const FormatException('"routingParameters" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5483,11 +6389,19 @@ final class RoutingParameter extends ProtoMessage {
   RoutingParameter({this.field = '', this.pathTemplate = ''})
     : super(fullyQualifiedName);
 
-  factory RoutingParameter.fromJson(Map<String, dynamic> json) =>
-      RoutingParameter(
-        field: json['field'] ?? '',
-        pathTemplate: json['pathTemplate'] ?? '',
-      );
+  factory RoutingParameter.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RoutingParameter(
+      field: switch (json['field']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pathTemplate: switch (json['pathTemplate']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5678,43 +6592,124 @@ final class Service extends ProtoMessage {
     this.configVersion,
   }) : super(fullyQualifiedName);
 
-  factory Service.fromJson(Map<String, dynamic> json) => Service(
-    name: json['name'] ?? '',
-    title: json['title'] ?? '',
-    producerProjectId: json['producerProjectId'] ?? '',
-    id: json['id'] ?? '',
-    apis: decodeListMessage(json['apis'], Api.fromJson) ?? [],
-    types: decodeListMessage(json['types'], Type.fromJson) ?? [],
-    enums: decodeListMessage(json['enums'], Enum.fromJson) ?? [],
-    documentation: decode(json['documentation'], Documentation.fromJson),
-    backend: decode(json['backend'], Backend.fromJson),
-    http: decode(json['http'], Http.fromJson),
-    quota: decode(json['quota'], Quota.fromJson),
-    authentication: decode(json['authentication'], Authentication.fromJson),
-    context: decode(json['context'], Context.fromJson),
-    usage: decode(json['usage'], Usage.fromJson),
-    endpoints: decodeListMessage(json['endpoints'], Endpoint.fromJson) ?? [],
-    control: decode(json['control'], Control.fromJson),
-    logs: decodeListMessage(json['logs'], LogDescriptor.fromJson) ?? [],
-    metrics:
-        decodeListMessage(json['metrics'], MetricDescriptor.fromJson) ?? [],
-    monitoredResources:
-        decodeListMessage(
-          json['monitoredResources'],
-          MonitoredResourceDescriptor.fromJson,
-        ) ??
-        [],
-    billing: decode(json['billing'], Billing.fromJson),
-    logging: decode(json['logging'], Logging.fromJson),
-    monitoring: decode(json['monitoring'], Monitoring.fromJson),
-    systemParameters: decode(
-      json['systemParameters'],
-      SystemParameters.fromJson,
-    ),
-    sourceInfo: decode(json['sourceInfo'], SourceInfo.fromJson),
-    publishing: decode(json['publishing'], Publishing.fromJson),
-    configVersion: decodeCustom(json['configVersion'], Uint32Value.fromJson),
-  );
+  factory Service.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Service(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      producerProjectId: switch (json['producerProjectId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      apis: switch (json['apis']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Api.fromJson(i)],
+        _ => throw const FormatException('"apis" is not a list'),
+      },
+      types: switch (json['types']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Type.fromJson(i)],
+        _ => throw const FormatException('"types" is not a list'),
+      },
+      enums: switch (json['enums']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Enum.fromJson(i)],
+        _ => throw const FormatException('"enums" is not a list'),
+      },
+      documentation: switch (json['documentation']) {
+        null => null,
+        Object $1 => Documentation.fromJson($1),
+      },
+      backend: switch (json['backend']) {
+        null => null,
+        Object $1 => Backend.fromJson($1),
+      },
+      http: switch (json['http']) {
+        null => null,
+        Object $1 => Http.fromJson($1),
+      },
+      quota: switch (json['quota']) {
+        null => null,
+        Object $1 => Quota.fromJson($1),
+      },
+      authentication: switch (json['authentication']) {
+        null => null,
+        Object $1 => Authentication.fromJson($1),
+      },
+      context: switch (json['context']) {
+        null => null,
+        Object $1 => Context.fromJson($1),
+      },
+      usage: switch (json['usage']) {
+        null => null,
+        Object $1 => Usage.fromJson($1),
+      },
+      endpoints: switch (json['endpoints']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Endpoint.fromJson(i)],
+        _ => throw const FormatException('"endpoints" is not a list'),
+      },
+      control: switch (json['control']) {
+        null => null,
+        Object $1 => Control.fromJson($1),
+      },
+      logs: switch (json['logs']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LogDescriptor.fromJson(i)],
+        _ => throw const FormatException('"logs" is not a list'),
+      },
+      metrics: switch (json['metrics']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetricDescriptor.fromJson(i)],
+        _ => throw const FormatException('"metrics" is not a list'),
+      },
+      monitoredResources: switch (json['monitoredResources']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) MonitoredResourceDescriptor.fromJson(i),
+        ],
+        _ => throw const FormatException('"monitoredResources" is not a list'),
+      },
+      billing: switch (json['billing']) {
+        null => null,
+        Object $1 => Billing.fromJson($1),
+      },
+      logging: switch (json['logging']) {
+        null => null,
+        Object $1 => Logging.fromJson($1),
+      },
+      monitoring: switch (json['monitoring']) {
+        null => null,
+        Object $1 => Monitoring.fromJson($1),
+      },
+      systemParameters: switch (json['systemParameters']) {
+        null => null,
+        Object $1 => SystemParameters.fromJson($1),
+      },
+      sourceInfo: switch (json['sourceInfo']) {
+        null => null,
+        Object $1 => SourceInfo.fromJson($1),
+      },
+      publishing: switch (json['publishing']) {
+        null => null,
+        Object $1 => Publishing.fromJson($1),
+      },
+      configVersion: switch (json['configVersion']) {
+        null => null,
+        Object $1 => Uint32Value.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5769,9 +6764,16 @@ final class SourceInfo extends ProtoMessage {
 
   SourceInfo({this.sourceFiles = const []}) : super(fullyQualifiedName);
 
-  factory SourceInfo.fromJson(Map<String, dynamic> json) => SourceInfo(
-    sourceFiles: decodeListMessage(json['sourceFiles'], Any.fromJson) ?? [],
-  );
+  factory SourceInfo.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SourceInfo(
+      sourceFiles: switch (json['sourceFiles']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
+        _ => throw const FormatException('"sourceFiles" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5824,11 +6826,18 @@ final class SystemParameters extends ProtoMessage {
 
   SystemParameters({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory SystemParameters.fromJson(
-    Map<String, dynamic> json,
-  ) => SystemParameters(
-    rules: decodeListMessage(json['rules'], SystemParameterRule.fromJson) ?? [],
-  );
+  factory SystemParameters.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SystemParameters(
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) SystemParameterRule.fromJson(i),
+        ],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
@@ -5859,13 +6868,20 @@ final class SystemParameterRule extends ProtoMessage {
   SystemParameterRule({this.selector = '', this.parameters = const []})
     : super(fullyQualifiedName);
 
-  factory SystemParameterRule.fromJson(Map<String, dynamic> json) =>
-      SystemParameterRule(
-        selector: json['selector'] ?? '',
-        parameters:
-            decodeListMessage(json['parameters'], SystemParameter.fromJson) ??
-            [],
-      );
+  factory SystemParameterRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SystemParameterRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      parameters: switch (json['parameters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SystemParameter.fromJson(i)],
+        _ => throw const FormatException('"parameters" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5903,12 +6919,23 @@ final class SystemParameter extends ProtoMessage {
     this.urlQueryParameter = '',
   }) : super(fullyQualifiedName);
 
-  factory SystemParameter.fromJson(Map<String, dynamic> json) =>
-      SystemParameter(
-        name: json['name'] ?? '',
-        httpHeader: json['httpHeader'] ?? '',
-        urlQueryParameter: json['urlQueryParameter'] ?? '',
-      );
+  factory SystemParameter.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SystemParameter(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      httpHeader: switch (json['httpHeader']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      urlQueryParameter: switch (json['urlQueryParameter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5964,11 +6991,26 @@ final class Usage extends ProtoMessage {
     this.producerNotificationChannel = '',
   }) : super(fullyQualifiedName);
 
-  factory Usage.fromJson(Map<String, dynamic> json) => Usage(
-    requirements: decodeList(json['requirements']) ?? [],
-    rules: decodeListMessage(json['rules'], UsageRule.fromJson) ?? [],
-    producerNotificationChannel: json['producerNotificationChannel'] ?? '',
-  );
+  factory Usage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Usage(
+      requirements: switch (json['requirements']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"requirements" is not a list'),
+      },
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) UsageRule.fromJson(i)],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+      producerNotificationChannel:
+          switch (json['producerNotificationChannel']) {
+            null => '',
+            Object $1 => decodeString($1),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6038,11 +7080,23 @@ final class UsageRule extends ProtoMessage {
     this.skipServiceControl = false,
   }) : super(fullyQualifiedName);
 
-  factory UsageRule.fromJson(Map<String, dynamic> json) => UsageRule(
-    selector: json['selector'] ?? '',
-    allowUnregisteredCalls: json['allowUnregisteredCalls'] ?? false,
-    skipServiceControl: json['skipServiceControl'] ?? false,
-  );
+  factory UsageRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UsageRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      allowUnregisteredCalls: switch (json['allowUnregisteredCalls']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      skipServiceControl: switch (json['skipServiceControl']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6097,9 +7151,16 @@ final class Visibility extends ProtoMessage {
 
   Visibility({this.rules = const []}) : super(fullyQualifiedName);
 
-  factory Visibility.fromJson(Map<String, dynamic> json) => Visibility(
-    rules: decodeListMessage(json['rules'], VisibilityRule.fromJson) ?? [],
-  );
+  factory Visibility.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Visibility(
+      rules: switch (json['rules']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) VisibilityRule.fromJson(i)],
+        _ => throw const FormatException('"rules" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
@@ -6139,10 +7200,19 @@ final class VisibilityRule extends ProtoMessage {
   VisibilityRule({this.selector = '', this.restriction = ''})
     : super(fullyQualifiedName);
 
-  factory VisibilityRule.fromJson(Map<String, dynamic> json) => VisibilityRule(
-    selector: json['selector'] ?? '',
-    restriction: json['restriction'] ?? '',
-  );
+  factory VisibilityRule.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VisibilityRule(
+      selector: switch (json['selector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      restriction: switch (json['restriction']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6194,8 +7264,8 @@ final class ClientLibraryOrganization extends ProtoEnum {
 
   const ClientLibraryOrganization(super.value);
 
-  factory ClientLibraryOrganization.fromJson(String json) =>
-      ClientLibraryOrganization(json);
+  factory ClientLibraryOrganization.fromJson(Object? json) =>
+      ClientLibraryOrganization(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -6223,8 +7293,8 @@ final class ClientLibraryDestination extends ProtoEnum {
 
   const ClientLibraryDestination(super.value);
 
-  factory ClientLibraryDestination.fromJson(String json) =>
-      ClientLibraryDestination(json);
+  factory ClientLibraryDestination.fromJson(Object? json) =>
+      ClientLibraryDestination(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -6255,7 +7325,7 @@ final class ChangeType extends ProtoEnum {
 
   const ChangeType(super.value);
 
-  factory ChangeType.fromJson(String json) => ChangeType(json);
+  factory ChangeType.fromJson(Object? json) => ChangeType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -6886,7 +7956,7 @@ final class ErrorReason extends ProtoEnum {
 
   const ErrorReason(super.value);
 
-  factory ErrorReason.fromJson(String json) => ErrorReason(json);
+  factory ErrorReason.fromJson(Object? json) => ErrorReason(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -6963,7 +8033,7 @@ final class FieldBehavior extends ProtoEnum {
 
   const FieldBehavior(super.value);
 
-  factory FieldBehavior.fromJson(String json) => FieldBehavior(json);
+  factory FieldBehavior.fromJson(Object? json) => FieldBehavior(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -7024,7 +8094,7 @@ final class LaunchStage extends ProtoEnum {
 
   const LaunchStage(super.value);
 
-  factory LaunchStage.fromJson(String json) => LaunchStage(json);
+  factory LaunchStage.fromJson(Object? json) => LaunchStage(json as String);
 
   bool get isNotDefault => this != $default;
 

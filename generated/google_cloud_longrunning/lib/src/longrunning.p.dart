@@ -68,17 +68,29 @@ class Operation<T extends ProtoMessage, S extends ProtoMessage>
     this.operationHelper,
   }) : super(fullyQualifiedName);
 
-  factory Operation.fromJson(
-    Map<String, dynamic> json, [
-    OperationHelper<T, S>? helper,
-  ]) => Operation(
-    name: json['name'] as String?,
-    metadata: decode(json['metadata'] as Map<String, dynamic>?, Any.fromJson),
-    done: json['done'] as bool?,
-    error: decode(json['error'] as Map<String, dynamic>?, Status.fromJson),
-    response: decode(json['response'] as Map<String, dynamic>?, Any.fromJson),
-    operationHelper: helper,
-  );
+  factory Operation.fromJson(Object? j, [OperationHelper<T, S>? helper]) {
+    final json = j as Map<String, dynamic>;
+    return Operation(
+      name: json['name'] as String?,
+      metadata: switch (json['metadata']) {
+        null => null,
+        Map<String, dynamic> metadata => Any.fromJson(metadata),
+        _ => throw const FormatException('Invalid metadata'),
+      },
+      done: json['done'] as bool?,
+      error: switch (json['error']) {
+        null => null,
+        Map<String, dynamic> status => Status.fromJson(status),
+        _ => throw const FormatException('Invalid error'),
+      },
+      response: switch (json['response']) {
+        null => null,
+        Map<String, dynamic> response => Any.fromJson(response),
+        _ => throw const FormatException('Invalid response'),
+      },
+      operationHelper: helper,
+    );
+  }
 
   /// The normal, successful response of the operation.
   ///

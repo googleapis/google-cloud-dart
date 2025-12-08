@@ -16,7 +16,7 @@
 
 name: google_cloud_type
 description: The Google Cloud client library for the Common Types.
-version: 0.2.1
+version: 0.3.0
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_type
 issue_tracker: https://github.com/googleapis/google-cloud-dart/issues
 
@@ -26,4 +26,4 @@ environment:
 resolution: workspace
 
 dependencies:
-  google_cloud_protobuf: ^0.2.0
+  google_cloud_protobuf: ^0.3.0

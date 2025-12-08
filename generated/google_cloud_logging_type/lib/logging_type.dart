@@ -18,7 +18,6 @@
 ///
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -116,24 +115,72 @@ final class HttpRequest extends ProtoMessage {
     this.protocol = '',
   }) : super(fullyQualifiedName);
 
-  factory HttpRequest.fromJson(Map<String, dynamic> json) => HttpRequest(
-    requestMethod: json['requestMethod'] ?? '',
-    requestUrl: json['requestUrl'] ?? '',
-    requestSize: decodeInt64(json['requestSize']) ?? 0,
-    status: json['status'] ?? 0,
-    responseSize: decodeInt64(json['responseSize']) ?? 0,
-    userAgent: json['userAgent'] ?? '',
-    remoteIp: json['remoteIp'] ?? '',
-    serverIp: json['serverIp'] ?? '',
-    referer: json['referer'] ?? '',
-    latency: decodeCustom(json['latency'], Duration.fromJson),
-    cacheLookup: json['cacheLookup'] ?? false,
-    cacheHit: json['cacheHit'] ?? false,
-    cacheValidatedWithOriginServer:
-        json['cacheValidatedWithOriginServer'] ?? false,
-    cacheFillBytes: decodeInt64(json['cacheFillBytes']) ?? 0,
-    protocol: json['protocol'] ?? '',
-  );
+  factory HttpRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return HttpRequest(
+      requestMethod: switch (json['requestMethod']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestUrl: switch (json['requestUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestSize: switch (json['requestSize']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      status: switch (json['status']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      responseSize: switch (json['responseSize']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      userAgent: switch (json['userAgent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      remoteIp: switch (json['remoteIp']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serverIp: switch (json['serverIp']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      referer: switch (json['referer']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      latency: switch (json['latency']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      cacheLookup: switch (json['cacheLookup']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      cacheHit: switch (json['cacheHit']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      cacheValidatedWithOriginServer:
+          switch (json['cacheValidatedWithOriginServer']) {
+            null => false,
+            Object $1 => decodeBool($1),
+          },
+      cacheFillBytes: switch (json['cacheFillBytes']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      protocol: switch (json['protocol']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -227,7 +274,7 @@ final class LogSeverity extends ProtoEnum {
 
   const LogSeverity(super.value);
 
-  factory LogSeverity.fromJson(String json) => LogSeverity(json);
+  factory LogSeverity.fromJson(Object? json) => LogSeverity(json as String);
 
   bool get isNotDefault => this != $default;
 

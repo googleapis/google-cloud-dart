@@ -25,7 +25,6 @@
 /// agents, summarization and classification systems, and more.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -1686,11 +1685,19 @@ final class ListCachedContentsRequest extends ProtoMessage {
   ListCachedContentsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListCachedContentsRequest.fromJson(Map<String, dynamic> json) =>
-      ListCachedContentsRequest(
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListCachedContentsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListCachedContentsRequest(
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1722,13 +1729,20 @@ final class ListCachedContentsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListCachedContentsResponse.fromJson(Map<String, dynamic> json) =>
-      ListCachedContentsResponse(
-        cachedContents:
-            decodeListMessage(json['cachedContents'], CachedContent.fromJson) ??
-            [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListCachedContentsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListCachedContentsResponse(
+      cachedContents: switch (json['cachedContents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) CachedContent.fromJson(i)],
+        _ => throw const FormatException('"cachedContents" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1755,10 +1769,15 @@ final class CreateCachedContentRequest extends ProtoMessage {
   CreateCachedContentRequest({required this.cachedContent})
     : super(fullyQualifiedName);
 
-  factory CreateCachedContentRequest.fromJson(Map<String, dynamic> json) =>
-      CreateCachedContentRequest(
-        cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
-      );
+  factory CreateCachedContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateCachedContentRequest(
+      cachedContent: switch (json['cachedContent']) {
+        null => null,
+        Object $1 => CachedContent.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1780,8 +1799,15 @@ final class GetCachedContentRequest extends ProtoMessage {
 
   GetCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetCachedContentRequest.fromJson(Map<String, dynamic> json) =>
-      GetCachedContentRequest(name: json['name'] ?? '');
+  factory GetCachedContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetCachedContentRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -1807,11 +1833,19 @@ final class UpdateCachedContentRequest extends ProtoMessage {
   UpdateCachedContentRequest({required this.cachedContent, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateCachedContentRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateCachedContentRequest(
-        cachedContent: decode(json['cachedContent'], CachedContent.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateCachedContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateCachedContentRequest(
+      cachedContent: switch (json['cachedContent']) {
+        null => null,
+        Object $1 => CachedContent.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1834,8 +1868,15 @@ final class DeleteCachedContentRequest extends ProtoMessage {
 
   DeleteCachedContentRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteCachedContentRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteCachedContentRequest(name: json['name'] ?? '');
+  factory DeleteCachedContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteCachedContentRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -1914,23 +1955,61 @@ final class CachedContent extends ProtoMessage {
     this.usageMetadata,
   }) : super(fullyQualifiedName);
 
-  factory CachedContent.fromJson(Map<String, dynamic> json) => CachedContent(
-    expireTime: decodeCustom(json['expireTime'], Timestamp.fromJson),
-    ttl: decodeCustom(json['ttl'], Duration.fromJson),
-    name: json['name'],
-    displayName: json['displayName'],
-    model: json['model'],
-    systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-    contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-    tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
-    toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    usageMetadata: decode(
-      json['usageMetadata'],
-      CachedContent_UsageMetadata.fromJson,
-    ),
-  );
+  factory CachedContent.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CachedContent(
+      expireTime: switch (json['expireTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      ttl: switch (json['ttl']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      name: switch (json['name']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      model: switch (json['model']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      systemInstruction: switch (json['systemInstruction']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      contents: switch (json['contents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"contents" is not a list'),
+      },
+      tools: switch (json['tools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tools" is not a list'),
+      },
+      toolConfig: switch (json['toolConfig']) {
+        null => null,
+        Object $1 => ToolConfig.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      usageMetadata: switch (json['usageMetadata']) {
+        null => null,
+        Object $1 => CachedContent_UsageMetadata.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1971,10 +2050,15 @@ final class CachedContent_UsageMetadata extends ProtoMessage {
   CachedContent_UsageMetadata({this.totalTokenCount = 0})
     : super(fullyQualifiedName);
 
-  factory CachedContent_UsageMetadata.fromJson(Map<String, dynamic> json) =>
-      CachedContent_UsageMetadata(
-        totalTokenCount: json['totalTokenCount'] ?? 0,
-      );
+  factory CachedContent_UsageMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CachedContent_UsageMetadata(
+      totalTokenCount: switch (json['totalTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1999,15 +2083,16 @@ final class CitationMetadata extends ProtoMessage {
   CitationMetadata({this.citationSources = const []})
     : super(fullyQualifiedName);
 
-  factory CitationMetadata.fromJson(Map<String, dynamic> json) =>
-      CitationMetadata(
-        citationSources:
-            decodeListMessage(
-              json['citationSources'],
-              CitationSource.fromJson,
-            ) ??
-            [],
-      );
+  factory CitationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CitationMetadata(
+      citationSources: switch (json['citationSources']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) CitationSource.fromJson(i)],
+        _ => throw const FormatException('"citationSources" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2045,12 +2130,27 @@ final class CitationSource extends ProtoMessage {
   CitationSource({this.startIndex, this.endIndex, this.uri, this.license})
     : super(fullyQualifiedName);
 
-  factory CitationSource.fromJson(Map<String, dynamic> json) => CitationSource(
-    startIndex: json['startIndex'],
-    endIndex: json['endIndex'],
-    uri: json['uri'],
-    license: json['license'],
-  );
+  factory CitationSource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CitationSource(
+      startIndex: switch (json['startIndex']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      endIndex: switch (json['endIndex']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      uri: switch (json['uri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      license: switch (json['license']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2093,10 +2193,20 @@ final class Content extends ProtoMessage {
 
   Content({this.parts = const [], this.role = ''}) : super(fullyQualifiedName);
 
-  factory Content.fromJson(Map<String, dynamic> json) => Content(
-    parts: decodeListMessage(json['parts'], Part.fromJson) ?? [],
-    role: json['role'] ?? '',
-  );
+  factory Content.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Content(
+      parts: switch (json['parts']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Part.fromJson(i)],
+        _ => throw const FormatException('"parts" is not a list'),
+      },
+      role: switch (json['role']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2180,25 +2290,55 @@ final class Part extends ProtoMessage {
   }) : thoughtSignature = thoughtSignature ?? Uint8List(0),
        super(fullyQualifiedName);
 
-  factory Part.fromJson(Map<String, dynamic> json) => Part(
-    text: json['text'],
-    inlineData: decode(json['inlineData'], Blob.fromJson),
-    functionCall: decode(json['functionCall'], FunctionCall.fromJson),
-    functionResponse: decode(
-      json['functionResponse'],
-      FunctionResponse.fromJson,
-    ),
-    fileData: decode(json['fileData'], FileData.fromJson),
-    executableCode: decode(json['executableCode'], ExecutableCode.fromJson),
-    codeExecutionResult: decode(
-      json['codeExecutionResult'],
-      CodeExecutionResult.fromJson,
-    ),
-    videoMetadata: decode(json['videoMetadata'], VideoMetadata.fromJson),
-    thought: json['thought'] ?? false,
-    thoughtSignature: decodeBytes(json['thoughtSignature']) ?? Uint8List(0),
-    partMetadata: decodeCustom(json['partMetadata'], Struct.fromJson),
-  );
+  factory Part.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Part(
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      inlineData: switch (json['inlineData']) {
+        null => null,
+        Object $1 => Blob.fromJson($1),
+      },
+      functionCall: switch (json['functionCall']) {
+        null => null,
+        Object $1 => FunctionCall.fromJson($1),
+      },
+      functionResponse: switch (json['functionResponse']) {
+        null => null,
+        Object $1 => FunctionResponse.fromJson($1),
+      },
+      fileData: switch (json['fileData']) {
+        null => null,
+        Object $1 => FileData.fromJson($1),
+      },
+      executableCode: switch (json['executableCode']) {
+        null => null,
+        Object $1 => ExecutableCode.fromJson($1),
+      },
+      codeExecutionResult: switch (json['codeExecutionResult']) {
+        null => null,
+        Object $1 => CodeExecutionResult.fromJson($1),
+      },
+      videoMetadata: switch (json['videoMetadata']) {
+        null => null,
+        Object $1 => VideoMetadata.fromJson($1),
+      },
+      thought: switch (json['thought']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      thoughtSignature: switch (json['thoughtSignature']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+      partMetadata: switch (json['partMetadata']) {
+        null => null,
+        Object $1 => Struct.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2247,10 +2387,15 @@ final class FunctionResponsePart extends ProtoMessage {
 
   FunctionResponsePart({this.inlineData}) : super(fullyQualifiedName);
 
-  factory FunctionResponsePart.fromJson(Map<String, dynamic> json) =>
-      FunctionResponsePart(
-        inlineData: decode(json['inlineData'], FunctionResponseBlob.fromJson),
-      );
+  factory FunctionResponsePart.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionResponsePart(
+      inlineData: switch (json['inlineData']) {
+        null => null,
+        Object $1 => FunctionResponseBlob.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2284,10 +2429,19 @@ final class Blob extends ProtoMessage {
     : data = data ?? Uint8List(0),
       super(fullyQualifiedName);
 
-  factory Blob.fromJson(Map<String, dynamic> json) => Blob(
-    mimeType: json['mimeType'] ?? '',
-    data: decodeBytes(json['data']) ?? Uint8List(0),
-  );
+  factory Blob.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Blob(
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      data: switch (json['data']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2326,11 +2480,19 @@ final class FunctionResponseBlob extends ProtoMessage {
     : data = data ?? Uint8List(0),
       super(fullyQualifiedName);
 
-  factory FunctionResponseBlob.fromJson(Map<String, dynamic> json) =>
-      FunctionResponseBlob(
-        mimeType: json['mimeType'] ?? '',
-        data: decodeBytes(json['data']) ?? Uint8List(0),
-      );
+  factory FunctionResponseBlob.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionResponseBlob(
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      data: switch (json['data']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2359,10 +2521,19 @@ final class FileData extends ProtoMessage {
   FileData({this.mimeType = '', required this.fileUri})
     : super(fullyQualifiedName);
 
-  factory FileData.fromJson(Map<String, dynamic> json) => FileData(
-    mimeType: json['mimeType'] ?? '',
-    fileUri: json['fileUri'] ?? '',
-  );
+  factory FileData.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FileData(
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      fileUri: switch (json['fileUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2395,11 +2566,23 @@ final class VideoMetadata extends ProtoMessage {
   VideoMetadata({this.startOffset, this.endOffset, this.fps = 0})
     : super(fullyQualifiedName);
 
-  factory VideoMetadata.fromJson(Map<String, dynamic> json) => VideoMetadata(
-    startOffset: decodeCustom(json['startOffset'], Duration.fromJson),
-    endOffset: decodeCustom(json['endOffset'], Duration.fromJson),
-    fps: decodeDouble(json['fps']) ?? 0,
-  );
+  factory VideoMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VideoMetadata(
+      startOffset: switch (json['startOffset']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      endOffset: switch (json['endOffset']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      fps: switch (json['fps']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2434,12 +2617,19 @@ final class ExecutableCode extends ProtoMessage {
   ExecutableCode({required this.language, required this.code})
     : super(fullyQualifiedName);
 
-  factory ExecutableCode.fromJson(Map<String, dynamic> json) => ExecutableCode(
-    language:
-        decodeEnum(json['language'], ExecutableCode_Language.fromJson) ??
-        ExecutableCode_Language.$default,
-    code: json['code'] ?? '',
-  );
+  factory ExecutableCode.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ExecutableCode(
+      language: switch (json['language']) {
+        null => ExecutableCode_Language.$default,
+        Object $1 => ExecutableCode_Language.fromJson($1),
+      },
+      code: switch (json['code']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'language': language.toJson(), 'code': code};
@@ -2466,8 +2656,8 @@ final class ExecutableCode_Language extends ProtoEnum {
 
   const ExecutableCode_Language(super.value);
 
-  factory ExecutableCode_Language.fromJson(String json) =>
-      ExecutableCode_Language(json);
+  factory ExecutableCode_Language.fromJson(Object? json) =>
+      ExecutableCode_Language(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2493,13 +2683,19 @@ final class CodeExecutionResult extends ProtoMessage {
   CodeExecutionResult({required this.outcome, this.output = ''})
     : super(fullyQualifiedName);
 
-  factory CodeExecutionResult.fromJson(Map<String, dynamic> json) =>
-      CodeExecutionResult(
-        outcome:
-            decodeEnum(json['outcome'], CodeExecutionResult_Outcome.fromJson) ??
-            CodeExecutionResult_Outcome.$default,
-        output: json['output'] ?? '',
-      );
+  factory CodeExecutionResult.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CodeExecutionResult(
+      outcome: switch (json['outcome']) {
+        null => CodeExecutionResult_Outcome.$default,
+        Object $1 => CodeExecutionResult_Outcome.fromJson($1),
+      },
+      output: switch (json['output']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2539,8 +2735,8 @@ final class CodeExecutionResult_Outcome extends ProtoEnum {
 
   const CodeExecutionResult_Outcome(super.value);
 
-  factory CodeExecutionResult_Outcome.fromJson(String json) =>
-      CodeExecutionResult_Outcome(json);
+  factory CodeExecutionResult_Outcome.fromJson(Object? json) =>
+      CodeExecutionResult_Outcome(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2601,22 +2797,40 @@ final class Tool extends ProtoMessage {
     this.urlContext,
   }) : super(fullyQualifiedName);
 
-  factory Tool.fromJson(Map<String, dynamic> json) => Tool(
-    functionDeclarations:
-        decodeListMessage(
-          json['functionDeclarations'],
-          FunctionDeclaration.fromJson,
-        ) ??
-        [],
-    googleSearchRetrieval: decode(
-      json['googleSearchRetrieval'],
-      GoogleSearchRetrieval.fromJson,
-    ),
-    codeExecution: decode(json['codeExecution'], CodeExecution.fromJson),
-    googleSearch: decode(json['googleSearch'], Tool_GoogleSearch.fromJson),
-    computerUse: decode(json['computerUse'], Tool_ComputerUse.fromJson),
-    urlContext: decode(json['urlContext'], UrlContext.fromJson),
-  );
+  factory Tool.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Tool(
+      functionDeclarations: switch (json['functionDeclarations']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) FunctionDeclaration.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"functionDeclarations" is not a list',
+        ),
+      },
+      googleSearchRetrieval: switch (json['googleSearchRetrieval']) {
+        null => null,
+        Object $1 => GoogleSearchRetrieval.fromJson($1),
+      },
+      codeExecution: switch (json['codeExecution']) {
+        null => null,
+        Object $1 => CodeExecution.fromJson($1),
+      },
+      googleSearch: switch (json['googleSearch']) {
+        null => null,
+        Object $1 => Tool_GoogleSearch.fromJson($1),
+      },
+      computerUse: switch (json['computerUse']) {
+        null => null,
+        Object $1 => Tool_ComputerUse.fromJson($1),
+      },
+      urlContext: switch (json['urlContext']) {
+        null => null,
+        Object $1 => UrlContext.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2647,10 +2861,15 @@ final class Tool_GoogleSearch extends ProtoMessage {
 
   Tool_GoogleSearch({this.timeRangeFilter}) : super(fullyQualifiedName);
 
-  factory Tool_GoogleSearch.fromJson(Map<String, dynamic> json) =>
-      Tool_GoogleSearch(
-        timeRangeFilter: decode(json['timeRangeFilter'], Interval.fromJson),
-      );
+  factory Tool_GoogleSearch.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Tool_GoogleSearch(
+      timeRangeFilter: switch (json['timeRangeFilter']) {
+        null => null,
+        Object $1 => Interval.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2681,17 +2900,23 @@ final class Tool_ComputerUse extends ProtoMessage {
     this.excludedPredefinedFunctions = const [],
   }) : super(fullyQualifiedName);
 
-  factory Tool_ComputerUse.fromJson(Map<String, dynamic> json) =>
-      Tool_ComputerUse(
-        environment:
-            decodeEnum(
-              json['environment'],
-              Tool_ComputerUse_Environment.fromJson,
-            ) ??
-            Tool_ComputerUse_Environment.$default,
-        excludedPredefinedFunctions:
-            decodeList(json['excludedPredefinedFunctions']) ?? [],
-      );
+  factory Tool_ComputerUse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Tool_ComputerUse(
+      environment: switch (json['environment']) {
+        null => Tool_ComputerUse_Environment.$default,
+        Object $1 => Tool_ComputerUse_Environment.fromJson($1),
+      },
+      excludedPredefinedFunctions:
+          switch (json['excludedPredefinedFunctions']) {
+            null => [],
+            List<Object?> $1 => [for (final i in $1) decodeString(i)],
+            _ => throw const FormatException(
+              '"excludedPredefinedFunctions" is not a list',
+            ),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2724,8 +2949,8 @@ final class Tool_ComputerUse_Environment extends ProtoEnum {
 
   const Tool_ComputerUse_Environment(super.value);
 
-  factory Tool_ComputerUse_Environment.fromJson(String json) =>
-      Tool_ComputerUse_Environment(json);
+  factory Tool_ComputerUse_Environment.fromJson(Object? json) =>
+      Tool_ComputerUse_Environment(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2740,7 +2965,7 @@ final class UrlContext extends ProtoMessage {
 
   UrlContext() : super(fullyQualifiedName);
 
-  factory UrlContext.fromJson(Map<String, dynamic> json) => UrlContext();
+  factory UrlContext.fromJson(Object? j) => UrlContext();
 
   @override
   Object toJson() => {};
@@ -2760,13 +2985,15 @@ final class GoogleSearchRetrieval extends ProtoMessage {
   GoogleSearchRetrieval({this.dynamicRetrievalConfig})
     : super(fullyQualifiedName);
 
-  factory GoogleSearchRetrieval.fromJson(Map<String, dynamic> json) =>
-      GoogleSearchRetrieval(
-        dynamicRetrievalConfig: decode(
-          json['dynamicRetrievalConfig'],
-          DynamicRetrievalConfig.fromJson,
-        ),
-      );
+  factory GoogleSearchRetrieval.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GoogleSearchRetrieval(
+      dynamicRetrievalConfig: switch (json['dynamicRetrievalConfig']) {
+        null => null,
+        Object $1 => DynamicRetrievalConfig.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2795,13 +3022,19 @@ final class DynamicRetrievalConfig extends ProtoMessage {
     this.dynamicThreshold,
   }) : super(fullyQualifiedName);
 
-  factory DynamicRetrievalConfig.fromJson(Map<String, dynamic> json) =>
-      DynamicRetrievalConfig(
-        mode:
-            decodeEnum(json['mode'], DynamicRetrievalConfig_Mode.fromJson) ??
-            DynamicRetrievalConfig_Mode.$default,
-        dynamicThreshold: decodeDouble(json['dynamicThreshold']),
-      );
+  factory DynamicRetrievalConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DynamicRetrievalConfig(
+      mode: switch (json['mode']) {
+        null => DynamicRetrievalConfig_Mode.$default,
+        Object $1 => DynamicRetrievalConfig_Mode.fromJson($1),
+      },
+      dynamicThreshold: switch (json['dynamicThreshold']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2835,8 +3068,8 @@ final class DynamicRetrievalConfig_Mode extends ProtoEnum {
 
   const DynamicRetrievalConfig_Mode(super.value);
 
-  factory DynamicRetrievalConfig_Mode.fromJson(String json) =>
-      DynamicRetrievalConfig_Mode(json);
+  factory DynamicRetrievalConfig_Mode.fromJson(Object? json) =>
+      DynamicRetrievalConfig_Mode(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2855,7 +3088,7 @@ final class CodeExecution extends ProtoMessage {
 
   CodeExecution() : super(fullyQualifiedName);
 
-  factory CodeExecution.fromJson(Map<String, dynamic> json) => CodeExecution();
+  factory CodeExecution.fromJson(Object? j) => CodeExecution();
 
   @override
   Object toJson() => {};
@@ -2875,12 +3108,15 @@ final class ToolConfig extends ProtoMessage {
 
   ToolConfig({this.functionCallingConfig}) : super(fullyQualifiedName);
 
-  factory ToolConfig.fromJson(Map<String, dynamic> json) => ToolConfig(
-    functionCallingConfig: decode(
-      json['functionCallingConfig'],
-      FunctionCallingConfig.fromJson,
-    ),
-  );
+  factory ToolConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ToolConfig(
+      functionCallingConfig: switch (json['functionCallingConfig']) {
+        null => null,
+        Object $1 => FunctionCallingConfig.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2914,13 +3150,22 @@ final class FunctionCallingConfig extends ProtoMessage {
     this.allowedFunctionNames = const [],
   }) : super(fullyQualifiedName);
 
-  factory FunctionCallingConfig.fromJson(Map<String, dynamic> json) =>
-      FunctionCallingConfig(
-        mode:
-            decodeEnum(json['mode'], FunctionCallingConfig_Mode.fromJson) ??
-            FunctionCallingConfig_Mode.$default,
-        allowedFunctionNames: decodeList(json['allowedFunctionNames']) ?? [],
-      );
+  factory FunctionCallingConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionCallingConfig(
+      mode: switch (json['mode']) {
+        null => FunctionCallingConfig_Mode.$default,
+        Object $1 => FunctionCallingConfig_Mode.fromJson($1),
+      },
+      allowedFunctionNames: switch (json['allowedFunctionNames']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"allowedFunctionNames" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2969,8 +3214,8 @@ final class FunctionCallingConfig_Mode extends ProtoEnum {
 
   const FunctionCallingConfig_Mode(super.value);
 
-  factory FunctionCallingConfig_Mode.fromJson(String json) =>
-      FunctionCallingConfig_Mode(json);
+  factory FunctionCallingConfig_Mode.fromJson(Object? json) =>
+      FunctionCallingConfig_Mode(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -3046,27 +3291,39 @@ final class FunctionDeclaration extends ProtoMessage {
     this.behavior = FunctionDeclaration_Behavior.$default,
   }) : super(fullyQualifiedName);
 
-  factory FunctionDeclaration.fromJson(Map<String, dynamic> json) =>
-      FunctionDeclaration(
-        name: json['name'] ?? '',
-        description: json['description'] ?? '',
-        parameters: decode(json['parameters'], Schema.fromJson),
-        parametersJsonSchema: decodeCustom(
-          json['parametersJsonSchema'],
-          Value.fromJson,
-        ),
-        response: decode(json['response'], Schema.fromJson),
-        responseJsonSchema: decodeCustom(
-          json['responseJsonSchema'],
-          Value.fromJson,
-        ),
-        behavior:
-            decodeEnum(
-              json['behavior'],
-              FunctionDeclaration_Behavior.fromJson,
-            ) ??
-            FunctionDeclaration_Behavior.$default,
-      );
+  factory FunctionDeclaration.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionDeclaration(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      parameters: switch (json['parameters']) {
+        null => null,
+        Object $1 => Schema.fromJson($1),
+      },
+      parametersJsonSchema: switch (json['parametersJsonSchema']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+      response: switch (json['response']) {
+        null => null,
+        Object $1 => Schema.fromJson($1),
+      },
+      responseJsonSchema: switch (json['responseJsonSchema']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+      behavior: switch (json['behavior']) {
+        null => FunctionDeclaration_Behavior.$default,
+        Object $1 => FunctionDeclaration_Behavior.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3112,8 +3369,8 @@ final class FunctionDeclaration_Behavior extends ProtoEnum {
 
   const FunctionDeclaration_Behavior(super.value);
 
-  factory FunctionDeclaration_Behavior.fromJson(String json) =>
-      FunctionDeclaration_Behavior(json);
+  factory FunctionDeclaration_Behavior.fromJson(Object? json) =>
+      FunctionDeclaration_Behavior(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -3143,11 +3400,23 @@ final class FunctionCall extends ProtoMessage {
   FunctionCall({this.id = '', required this.name, this.args})
     : super(fullyQualifiedName);
 
-  factory FunctionCall.fromJson(Map<String, dynamic> json) => FunctionCall(
-    id: json['id'] ?? '',
-    name: json['name'] ?? '',
-    args: decodeCustom(json['args'], Struct.fromJson),
-  );
+  factory FunctionCall.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionCall(
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      args: switch (json['args']) {
+        null => null,
+        Object $1 => Struct.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3216,20 +3485,38 @@ final class FunctionResponse extends ProtoMessage {
     this.scheduling,
   }) : super(fullyQualifiedName);
 
-  factory FunctionResponse.fromJson(Map<String, dynamic> json) =>
-      FunctionResponse(
-        id: json['id'] ?? '',
-        name: json['name'] ?? '',
-        response: decodeCustom(json['response'], Struct.fromJson),
-        parts:
-            decodeListMessage(json['parts'], FunctionResponsePart.fromJson) ??
-            [],
-        willContinue: json['willContinue'] ?? false,
-        scheduling: decodeEnum(
-          json['scheduling'],
-          FunctionResponse_Scheduling.fromJson,
-        ),
-      );
+  factory FunctionResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionResponse(
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      response: switch (json['response']) {
+        null => null,
+        Object $1 => Struct.fromJson($1),
+      },
+      parts: switch (json['parts']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) FunctionResponsePart.fromJson(i),
+        ],
+        _ => throw const FormatException('"parts" is not a list'),
+      },
+      willContinue: switch (json['willContinue']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      scheduling: switch (json['scheduling']) {
+        null => null,
+        Object $1 => FunctionResponse_Scheduling.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3277,8 +3564,8 @@ final class FunctionResponse_Scheduling extends ProtoEnum {
 
   const FunctionResponse_Scheduling(super.value);
 
-  factory FunctionResponse_Scheduling.fromJson(String json) =>
-      FunctionResponse_Scheduling(json);
+  factory FunctionResponse_Scheduling.fromJson(Object? json) =>
+      FunctionResponse_Scheduling(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -3399,30 +3686,107 @@ final class Schema extends ProtoMessage {
     this.default$,
   }) : super(fullyQualifiedName);
 
-  factory Schema.fromJson(Map<String, dynamic> json) => Schema(
-    type: decodeEnum(json['type'], Type.fromJson) ?? Type.$default,
-    format: json['format'] ?? '',
-    title: json['title'] ?? '',
-    description: json['description'] ?? '',
-    nullable: json['nullable'] ?? false,
-    enum$: decodeList(json['enum']) ?? [],
-    items: decode(json['items'], Schema.fromJson),
-    maxItems: decodeInt64(json['maxItems']) ?? 0,
-    minItems: decodeInt64(json['minItems']) ?? 0,
-    properties: decodeMapMessage(json['properties'], Schema.fromJson) ?? {},
-    required: decodeList(json['required']) ?? [],
-    minProperties: decodeInt64(json['minProperties']) ?? 0,
-    maxProperties: decodeInt64(json['maxProperties']) ?? 0,
-    minimum: decodeDouble(json['minimum']),
-    maximum: decodeDouble(json['maximum']),
-    minLength: decodeInt64(json['minLength']) ?? 0,
-    maxLength: decodeInt64(json['maxLength']) ?? 0,
-    pattern: json['pattern'] ?? '',
-    example: decodeCustom(json['example'], Value.fromJson),
-    anyOf: decodeListMessage(json['anyOf'], Schema.fromJson) ?? [],
-    propertyOrdering: decodeList(json['propertyOrdering']) ?? [],
-    default$: decodeCustom(json['default'], Value.fromJson),
-  );
+  factory Schema.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Schema(
+      type: switch (json['type']) {
+        null => Type.$default,
+        Object $1 => Type.fromJson($1),
+      },
+      format: switch (json['format']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      nullable: switch (json['nullable']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      enum$: switch (json['enum']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"enum" is not a list'),
+      },
+      items: switch (json['items']) {
+        null => null,
+        Object $1 => Schema.fromJson($1),
+      },
+      maxItems: switch (json['maxItems']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      minItems: switch (json['minItems']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      properties: switch (json['properties']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): Schema.fromJson(e.value),
+        },
+        _ => throw const FormatException('"properties" is not an object'),
+      },
+      required: switch (json['required']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"required" is not a list'),
+      },
+      minProperties: switch (json['minProperties']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      maxProperties: switch (json['maxProperties']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      minimum: switch (json['minimum']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      maximum: switch (json['maximum']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      minLength: switch (json['minLength']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      maxLength: switch (json['maxLength']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      pattern: switch (json['pattern']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      example: switch (json['example']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+      anyOf: switch (json['anyOf']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Schema.fromJson(i)],
+        _ => throw const FormatException('"anyOf" is not a list'),
+      },
+      propertyOrdering: switch (json['propertyOrdering']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"propertyOrdering" is not a list'),
+      },
+      default$: switch (json['default']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3486,11 +3850,19 @@ final class GroundingPassage extends ProtoMessage {
 
   GroundingPassage({this.id = '', this.content}) : super(fullyQualifiedName);
 
-  factory GroundingPassage.fromJson(Map<String, dynamic> json) =>
-      GroundingPassage(
-        id: json['id'] ?? '',
-        content: decode(json['content'], Content.fromJson),
-      );
+  factory GroundingPassage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingPassage(
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3515,12 +3887,16 @@ final class GroundingPassages extends ProtoMessage {
 
   GroundingPassages({this.passages = const []}) : super(fullyQualifiedName);
 
-  factory GroundingPassages.fromJson(Map<String, dynamic> json) =>
-      GroundingPassages(
-        passages:
-            decodeListMessage(json['passages'], GroundingPassage.fromJson) ??
-            [],
-      );
+  factory GroundingPassages.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingPassages(
+      passages: switch (json['passages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) GroundingPassage.fromJson(i)],
+        _ => throw const FormatException('"passages" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3545,13 +3921,19 @@ final class ModalityTokenCount extends ProtoMessage {
   ModalityTokenCount({this.modality = Modality.$default, this.tokenCount = 0})
     : super(fullyQualifiedName);
 
-  factory ModalityTokenCount.fromJson(Map<String, dynamic> json) =>
-      ModalityTokenCount(
-        modality:
-            decodeEnum(json['modality'], Modality.fromJson) ??
-            Modality.$default,
-        tokenCount: json['tokenCount'] ?? 0,
-      );
+  factory ModalityTokenCount.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ModalityTokenCount(
+      modality: switch (json['modality']) {
+        null => Modality.$default,
+        Object $1 => Modality.fromJson($1),
+      },
+      tokenCount: switch (json['tokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3622,15 +4004,35 @@ final class GenerateMessageRequest extends ProtoMessage {
     this.topK,
   }) : super(fullyQualifiedName);
 
-  factory GenerateMessageRequest.fromJson(Map<String, dynamic> json) =>
-      GenerateMessageRequest(
-        model: json['model'] ?? '',
-        prompt: decode(json['prompt'], MessagePrompt.fromJson),
-        temperature: decodeDouble(json['temperature']),
-        candidateCount: json['candidateCount'],
-        topP: decodeDouble(json['topP']),
-        topK: json['topK'],
-      );
+  factory GenerateMessageRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateMessageRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      prompt: switch (json['prompt']) {
+        null => null,
+        Object $1 => MessagePrompt.fromJson($1),
+      },
+      temperature: switch (json['temperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      candidateCount: switch (json['candidateCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      topP: switch (json['topP']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topK: switch (json['topK']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3683,13 +4085,26 @@ final class GenerateMessageResponse extends ProtoMessage {
     this.filters = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateMessageResponse.fromJson(
-    Map<String, dynamic> json,
-  ) => GenerateMessageResponse(
-    candidates: decodeListMessage(json['candidates'], Message.fromJson) ?? [],
-    messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
-    filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
-  );
+  factory GenerateMessageResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateMessageResponse(
+      candidates: switch (json['candidates']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Message.fromJson(i)],
+        _ => throw const FormatException('"candidates" is not a list'),
+      },
+      messages: switch (json['messages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Message.fromJson(i)],
+        _ => throw const FormatException('"messages" is not a list'),
+      },
+      filters: switch (json['filters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ContentFilter.fromJson(i)],
+        _ => throw const FormatException('"filters" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3735,14 +4150,23 @@ final class Message extends ProtoMessage {
   Message({this.author = '', required this.content, this.citationMetadata})
     : super(fullyQualifiedName);
 
-  factory Message.fromJson(Map<String, dynamic> json) => Message(
-    author: json['author'] ?? '',
-    content: json['content'] ?? '',
-    citationMetadata: decode(
-      json['citationMetadata'],
-      CitationMetadata.fromJson,
-    ),
-  );
+  factory Message.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Message(
+      author: switch (json['author']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      citationMetadata: switch (json['citationMetadata']) {
+        null => null,
+        Object $1 => CitationMetadata.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3813,11 +4237,25 @@ final class MessagePrompt extends ProtoMessage {
     required this.messages,
   }) : super(fullyQualifiedName);
 
-  factory MessagePrompt.fromJson(Map<String, dynamic> json) => MessagePrompt(
-    context: json['context'] ?? '',
-    examples: decodeListMessage(json['examples'], Example.fromJson) ?? [],
-    messages: decodeListMessage(json['messages'], Message.fromJson) ?? [],
-  );
+  factory MessagePrompt.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MessagePrompt(
+      context: switch (json['context']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      examples: switch (json['examples']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Example.fromJson(i)],
+        _ => throw const FormatException('"examples" is not a list'),
+      },
+      messages: switch (json['messages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Message.fromJson(i)],
+        _ => throw const FormatException('"messages" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3849,10 +4287,19 @@ final class Example extends ProtoMessage {
   Example({required this.input, required this.output})
     : super(fullyQualifiedName);
 
-  factory Example.fromJson(Map<String, dynamic> json) => Example(
-    input: decode(json['input'], Message.fromJson),
-    output: decode(json['output'], Message.fromJson),
-  );
+  factory Example.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Example(
+      input: switch (json['input']) {
+        null => null,
+        Object $1 => Message.fromJson($1),
+      },
+      output: switch (json['output']) {
+        null => null,
+        Object $1 => Message.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3886,11 +4333,19 @@ final class CountMessageTokensRequest extends ProtoMessage {
   CountMessageTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
-  factory CountMessageTokensRequest.fromJson(Map<String, dynamic> json) =>
-      CountMessageTokensRequest(
-        model: json['model'] ?? '',
-        prompt: decode(json['prompt'], MessagePrompt.fromJson),
-      );
+  factory CountMessageTokensRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CountMessageTokensRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      prompt: switch (json['prompt']) {
+        null => null,
+        Object $1 => MessagePrompt.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -3919,8 +4374,15 @@ final class CountMessageTokensResponse extends ProtoMessage {
 
   CountMessageTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
 
-  factory CountMessageTokensResponse.fromJson(Map<String, dynamic> json) =>
-      CountMessageTokensResponse(tokenCount: json['tokenCount'] ?? 0);
+  factory CountMessageTokensResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CountMessageTokensResponse(
+      tokenCount: switch (json['tokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
@@ -4005,25 +4467,67 @@ final class File extends ProtoMessage {
   }) : sha256Hash = sha256Hash ?? Uint8List(0),
        super(fullyQualifiedName);
 
-  factory File.fromJson(Map<String, dynamic> json) => File(
-    videoMetadata: decode(json['videoMetadata'], VideoFileMetadata.fromJson),
-    name: json['name'] ?? '',
-    displayName: json['displayName'] ?? '',
-    mimeType: json['mimeType'] ?? '',
-    sizeBytes: decodeInt64(json['sizeBytes']) ?? 0,
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    expirationTime: decodeCustom(json['expirationTime'], Timestamp.fromJson),
-    sha256Hash: decodeBytes(json['sha256Hash']) ?? Uint8List(0),
-    uri: json['uri'] ?? '',
-    downloadUri: json['downloadUri'] ?? '',
-    state:
-        decodeEnum(json['state'], File_State.fromJson) ?? File_State.$default,
-    source:
-        decodeEnum(json['source'], File_Source.fromJson) ??
-        File_Source.$default,
-    error: decode(json['error'], Status.fromJson),
-  );
+  factory File.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return File(
+      videoMetadata: switch (json['videoMetadata']) {
+        null => null,
+        Object $1 => VideoFileMetadata.fromJson($1),
+      },
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sizeBytes: switch (json['sizeBytes']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      expirationTime: switch (json['expirationTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      sha256Hash: switch (json['sha256Hash']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+      uri: switch (json['uri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      downloadUri: switch (json['downloadUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      state: switch (json['state']) {
+        null => File_State.$default,
+        Object $1 => File_State.fromJson($1),
+      },
+      source: switch (json['source']) {
+        null => File_Source.$default,
+        Object $1 => File_Source.fromJson($1),
+      },
+      error: switch (json['error']) {
+        null => null,
+        Object $1 => Status.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4079,7 +4583,7 @@ final class File_State extends ProtoEnum {
 
   const File_State(super.value);
 
-  factory File_State.fromJson(String json) => File_State(json);
+  factory File_State.fromJson(Object? json) => File_State(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -4105,7 +4609,7 @@ final class File_Source extends ProtoEnum {
 
   const File_Source(super.value);
 
-  factory File_Source.fromJson(String json) => File_Source(json);
+  factory File_Source.fromJson(Object? json) => File_Source(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -4123,10 +4627,15 @@ final class VideoFileMetadata extends ProtoMessage {
 
   VideoFileMetadata({this.videoDuration}) : super(fullyQualifiedName);
 
-  factory VideoFileMetadata.fromJson(Map<String, dynamic> json) =>
-      VideoFileMetadata(
-        videoDuration: decodeCustom(json['videoDuration'], Duration.fromJson),
-      );
+  factory VideoFileMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VideoFileMetadata(
+      videoDuration: switch (json['videoDuration']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4147,8 +4656,15 @@ final class CreateFileRequest extends ProtoMessage {
 
   CreateFileRequest({this.file}) : super(fullyQualifiedName);
 
-  factory CreateFileRequest.fromJson(Map<String, dynamic> json) =>
-      CreateFileRequest(file: decode(json['file'], File.fromJson));
+  factory CreateFileRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateFileRequest(
+      file: switch (json['file']) {
+        null => null,
+        Object $1 => File.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (file != null) 'file': file!.toJson()};
@@ -4167,8 +4683,15 @@ final class CreateFileResponse extends ProtoMessage {
 
   CreateFileResponse({this.file}) : super(fullyQualifiedName);
 
-  factory CreateFileResponse.fromJson(Map<String, dynamic> json) =>
-      CreateFileResponse(file: decode(json['file'], File.fromJson));
+  factory CreateFileResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateFileResponse(
+      file: switch (json['file']) {
+        null => null,
+        Object $1 => File.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (file != null) 'file': file!.toJson()};
@@ -4192,11 +4715,19 @@ final class ListFilesRequest extends ProtoMessage {
   ListFilesRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListFilesRequest.fromJson(Map<String, dynamic> json) =>
-      ListFilesRequest(
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListFilesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListFilesRequest(
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4226,11 +4757,20 @@ final class ListFilesResponse extends ProtoMessage {
   ListFilesResponse({this.files = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListFilesResponse.fromJson(Map<String, dynamic> json) =>
-      ListFilesResponse(
-        files: decodeListMessage(json['files'], File.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListFilesResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListFilesResponse(
+      files: switch (json['files']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) File.fromJson(i)],
+        _ => throw const FormatException('"files" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4256,8 +4796,15 @@ final class GetFileRequest extends ProtoMessage {
 
   GetFileRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetFileRequest.fromJson(Map<String, dynamic> json) =>
-      GetFileRequest(name: json['name'] ?? '');
+  factory GetFileRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetFileRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -4280,8 +4827,15 @@ final class DeleteFileRequest extends ProtoMessage {
 
   DeleteFileRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteFileRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteFileRequest(name: json['name'] ?? '');
+  factory DeleteFileRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteFileRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -4304,8 +4858,15 @@ final class DownloadFileRequest extends ProtoMessage {
 
   DownloadFileRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DownloadFileRequest.fromJson(Map<String, dynamic> json) =>
-      DownloadFileRequest(name: json['name'] ?? '');
+  factory DownloadFileRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DownloadFileRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -4324,8 +4885,7 @@ final class DownloadFileResponse extends ProtoMessage {
 
   DownloadFileResponse() : super(fullyQualifiedName);
 
-  factory DownloadFileResponse.fromJson(Map<String, dynamic> json) =>
-      DownloadFileResponse();
+  factory DownloadFileResponse.fromJson(Object? j) => DownloadFileResponse();
 
   @override
   Object toJson() => {};
@@ -4414,22 +4974,46 @@ final class GenerateContentRequest extends ProtoMessage {
     this.cachedContent,
   }) : super(fullyQualifiedName);
 
-  factory GenerateContentRequest.fromJson(Map<String, dynamic> json) =>
-      GenerateContentRequest(
-        model: json['model'] ?? '',
-        systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-        contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-        tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
-        toolConfig: decode(json['toolConfig'], ToolConfig.fromJson),
-        safetySettings:
-            decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
-            [],
-        generationConfig: decode(
-          json['generationConfig'],
-          GenerationConfig.fromJson,
-        ),
-        cachedContent: json['cachedContent'],
-      );
+  factory GenerateContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateContentRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      systemInstruction: switch (json['systemInstruction']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      contents: switch (json['contents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"contents" is not a list'),
+      },
+      tools: switch (json['tools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tools" is not a list'),
+      },
+      toolConfig: switch (json['toolConfig']) {
+        null => null,
+        Object $1 => ToolConfig.fromJson($1),
+      },
+      safetySettings: switch (json['safetySettings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetySetting.fromJson(i)],
+        _ => throw const FormatException('"safetySettings" is not a list'),
+      },
+      generationConfig: switch (json['generationConfig']) {
+        null => null,
+        Object $1 => GenerationConfig.fromJson($1),
+      },
+      cachedContent: switch (json['cachedContent']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4466,8 +5050,15 @@ final class PrebuiltVoiceConfig extends ProtoMessage {
 
   PrebuiltVoiceConfig({this.voiceName}) : super(fullyQualifiedName);
 
-  factory PrebuiltVoiceConfig.fromJson(Map<String, dynamic> json) =>
-      PrebuiltVoiceConfig(voiceName: json['voiceName']);
+  factory PrebuiltVoiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PrebuiltVoiceConfig(
+      voiceName: switch (json['voiceName']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (voiceName != null) 'voiceName': voiceName};
@@ -4489,12 +5080,15 @@ final class VoiceConfig extends ProtoMessage {
 
   VoiceConfig({this.prebuiltVoiceConfig}) : super(fullyQualifiedName);
 
-  factory VoiceConfig.fromJson(Map<String, dynamic> json) => VoiceConfig(
-    prebuiltVoiceConfig: decode(
-      json['prebuiltVoiceConfig'],
-      PrebuiltVoiceConfig.fromJson,
-    ),
-  );
+  factory VoiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VoiceConfig(
+      prebuiltVoiceConfig: switch (json['prebuiltVoiceConfig']) {
+        null => null,
+        Object $1 => PrebuiltVoiceConfig.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4521,11 +5115,19 @@ final class SpeakerVoiceConfig extends ProtoMessage {
   SpeakerVoiceConfig({required this.speaker, required this.voiceConfig})
     : super(fullyQualifiedName);
 
-  factory SpeakerVoiceConfig.fromJson(Map<String, dynamic> json) =>
-      SpeakerVoiceConfig(
-        speaker: json['speaker'] ?? '',
-        voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
-      );
+  factory SpeakerVoiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SpeakerVoiceConfig(
+      speaker: switch (json['speaker']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      voiceConfig: switch (json['voiceConfig']) {
+        null => null,
+        Object $1 => VoiceConfig.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4551,15 +5153,18 @@ final class MultiSpeakerVoiceConfig extends ProtoMessage {
   MultiSpeakerVoiceConfig({required this.speakerVoiceConfigs})
     : super(fullyQualifiedName);
 
-  factory MultiSpeakerVoiceConfig.fromJson(Map<String, dynamic> json) =>
-      MultiSpeakerVoiceConfig(
-        speakerVoiceConfigs:
-            decodeListMessage(
-              json['speakerVoiceConfigs'],
-              SpeakerVoiceConfig.fromJson,
-            ) ??
-            [],
-      );
+  factory MultiSpeakerVoiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MultiSpeakerVoiceConfig(
+      speakerVoiceConfigs: switch (json['speakerVoiceConfigs']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) SpeakerVoiceConfig.fromJson(i),
+        ],
+        _ => throw const FormatException('"speakerVoiceConfigs" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'speakerVoiceConfigs': encodeList(speakerVoiceConfigs)};
@@ -4595,14 +5200,23 @@ final class SpeechConfig extends ProtoMessage {
     this.languageCode = '',
   }) : super(fullyQualifiedName);
 
-  factory SpeechConfig.fromJson(Map<String, dynamic> json) => SpeechConfig(
-    voiceConfig: decode(json['voiceConfig'], VoiceConfig.fromJson),
-    multiSpeakerVoiceConfig: decode(
-      json['multiSpeakerVoiceConfig'],
-      MultiSpeakerVoiceConfig.fromJson,
-    ),
-    languageCode: json['languageCode'] ?? '',
-  );
+  factory SpeechConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SpeechConfig(
+      voiceConfig: switch (json['voiceConfig']) {
+        null => null,
+        Object $1 => VoiceConfig.fromJson($1),
+      },
+      multiSpeakerVoiceConfig: switch (json['multiSpeakerVoiceConfig']) {
+        null => null,
+        Object $1 => MultiSpeakerVoiceConfig.fromJson($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4634,10 +5248,19 @@ final class ThinkingConfig extends ProtoMessage {
   ThinkingConfig({this.includeThoughts, this.thinkingBudget})
     : super(fullyQualifiedName);
 
-  factory ThinkingConfig.fromJson(Map<String, dynamic> json) => ThinkingConfig(
-    includeThoughts: json['includeThoughts'],
-    thinkingBudget: json['thinkingBudget'],
-  );
+  factory ThinkingConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ThinkingConfig(
+      includeThoughts: switch (json['includeThoughts']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      thinkingBudget: switch (json['thinkingBudget']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -4669,8 +5292,15 @@ final class ImageConfig extends ProtoMessage {
 
   ImageConfig({this.aspectRatio}) : super(fullyQualifiedName);
 
-  factory ImageConfig.fromJson(Map<String, dynamic> json) =>
-      ImageConfig(aspectRatio: json['aspectRatio']);
+  factory ImageConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ImageConfig(
+      aspectRatio: switch (json['aspectRatio']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (aspectRatio != null) 'aspectRatio': aspectRatio};
@@ -4909,44 +5539,99 @@ final class GenerationConfig extends ProtoMessage {
     this.mediaResolution,
   }) : super(fullyQualifiedName);
 
-  factory GenerationConfig.fromJson(Map<String, dynamic> json) =>
-      GenerationConfig(
-        candidateCount: json['candidateCount'],
-        stopSequences: decodeList(json['stopSequences']) ?? [],
-        maxOutputTokens: json['maxOutputTokens'],
-        temperature: decodeDouble(json['temperature']),
-        topP: decodeDouble(json['topP']),
-        topK: json['topK'],
-        seed: json['seed'],
-        responseMimeType: json['responseMimeType'] ?? '',
-        responseSchema: decode(json['responseSchema'], Schema.fromJson),
-        responseJsonSchema: decodeCustom(
-          json['_responseJsonSchema'],
-          Value.fromJson,
-        ),
-        responseJsonSchemaOrdered: decodeCustom(
-          json['responseJsonSchema'],
-          Value.fromJson,
-        ),
-        presencePenalty: decodeDouble(json['presencePenalty']),
-        frequencyPenalty: decodeDouble(json['frequencyPenalty']),
-        responseLogprobs: json['responseLogprobs'],
-        logprobs: json['logprobs'],
-        enableEnhancedCivicAnswers: json['enableEnhancedCivicAnswers'],
-        responseModalities:
-            decodeListEnum(
-              json['responseModalities'],
-              GenerationConfig_Modality.fromJson,
-            ) ??
-            [],
-        speechConfig: decode(json['speechConfig'], SpeechConfig.fromJson),
-        thinkingConfig: decode(json['thinkingConfig'], ThinkingConfig.fromJson),
-        imageConfig: decode(json['imageConfig'], ImageConfig.fromJson),
-        mediaResolution: decodeEnum(
-          json['mediaResolution'],
-          GenerationConfig_MediaResolution.fromJson,
-        ),
-      );
+  factory GenerationConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerationConfig(
+      candidateCount: switch (json['candidateCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      stopSequences: switch (json['stopSequences']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"stopSequences" is not a list'),
+      },
+      maxOutputTokens: switch (json['maxOutputTokens']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      temperature: switch (json['temperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topP: switch (json['topP']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topK: switch (json['topK']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      seed: switch (json['seed']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      responseMimeType: switch (json['responseMimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      responseSchema: switch (json['responseSchema']) {
+        null => null,
+        Object $1 => Schema.fromJson($1),
+      },
+      responseJsonSchema: switch (json['_responseJsonSchema']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+      responseJsonSchemaOrdered: switch (json['responseJsonSchema']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+      presencePenalty: switch (json['presencePenalty']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      frequencyPenalty: switch (json['frequencyPenalty']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      responseLogprobs: switch (json['responseLogprobs']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      logprobs: switch (json['logprobs']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      enableEnhancedCivicAnswers: switch (json['enableEnhancedCivicAnswers']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      responseModalities: switch (json['responseModalities']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) GenerationConfig_Modality.fromJson(i),
+        ],
+        _ => throw const FormatException('"responseModalities" is not a list'),
+      },
+      speechConfig: switch (json['speechConfig']) {
+        null => null,
+        Object $1 => SpeechConfig.fromJson($1),
+      },
+      thinkingConfig: switch (json['thinkingConfig']) {
+        null => null,
+        Object $1 => ThinkingConfig.fromJson($1),
+      },
+      imageConfig: switch (json['imageConfig']) {
+        null => null,
+        Object $1 => ImageConfig.fromJson($1),
+      },
+      mediaResolution: switch (json['mediaResolution']) {
+        null => null,
+        Object $1 => GenerationConfig_MediaResolution.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5022,8 +5707,8 @@ final class GenerationConfig_Modality extends ProtoEnum {
 
   const GenerationConfig_Modality(super.value);
 
-  factory GenerationConfig_Modality.fromJson(String json) =>
-      GenerationConfig_Modality(json);
+  factory GenerationConfig_Modality.fromJson(Object? json) =>
+      GenerationConfig_Modality(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5058,8 +5743,8 @@ final class GenerationConfig_MediaResolution extends ProtoEnum {
 
   const GenerationConfig_MediaResolution(super.value);
 
-  factory GenerationConfig_MediaResolution.fromJson(String json) =>
-      GenerationConfig_MediaResolution(json);
+  factory GenerationConfig_MediaResolution.fromJson(Object? json) =>
+      GenerationConfig_MediaResolution(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5099,19 +5784,32 @@ final class SemanticRetrieverConfig extends ProtoMessage {
     this.minimumRelevanceScore,
   }) : super(fullyQualifiedName);
 
-  factory SemanticRetrieverConfig.fromJson(Map<String, dynamic> json) =>
-      SemanticRetrieverConfig(
-        source: json['source'] ?? '',
-        query: decode(json['query'], Content.fromJson),
-        metadataFilters:
-            decodeListMessage(
-              json['metadataFilters'],
-              MetadataFilter.fromJson,
-            ) ??
-            [],
-        maxChunksCount: json['maxChunksCount'],
-        minimumRelevanceScore: decodeDouble(json['minimumRelevanceScore']),
-      );
+  factory SemanticRetrieverConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SemanticRetrieverConfig(
+      source: switch (json['source']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      query: switch (json['query']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      metadataFilters: switch (json['metadataFilters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetadataFilter.fromJson(i)],
+        _ => throw const FormatException('"metadataFilters" is not a list'),
+      },
+      maxChunksCount: switch (json['maxChunksCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      minimumRelevanceScore: switch (json['minimumRelevanceScore']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5173,21 +5871,32 @@ final class GenerateContentResponse extends ProtoMessage {
     this.responseId = '',
   }) : super(fullyQualifiedName);
 
-  factory GenerateContentResponse.fromJson(Map<String, dynamic> json) =>
-      GenerateContentResponse(
-        candidates:
-            decodeListMessage(json['candidates'], Candidate.fromJson) ?? [],
-        promptFeedback: decode(
-          json['promptFeedback'],
-          GenerateContentResponse_PromptFeedback.fromJson,
-        ),
-        usageMetadata: decode(
-          json['usageMetadata'],
-          GenerateContentResponse_UsageMetadata.fromJson,
-        ),
-        modelVersion: json['modelVersion'] ?? '',
-        responseId: json['responseId'] ?? '',
-      );
+  factory GenerateContentResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateContentResponse(
+      candidates: switch (json['candidates']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Candidate.fromJson(i)],
+        _ => throw const FormatException('"candidates" is not a list'),
+      },
+      promptFeedback: switch (json['promptFeedback']) {
+        null => null,
+        Object $1 => GenerateContentResponse_PromptFeedback.fromJson($1),
+      },
+      usageMetadata: switch (json['usageMetadata']) {
+        null => null,
+        Object $1 => GenerateContentResponse_UsageMetadata.fromJson($1),
+      },
+      modelVersion: switch (json['modelVersion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      responseId: switch (json['responseId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5228,18 +5937,21 @@ final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
     this.safetyRatings = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateContentResponse_PromptFeedback.fromJson(
-    Map<String, dynamic> json,
-  ) => GenerateContentResponse_PromptFeedback(
-    blockReason:
-        decodeEnum(
-          json['blockReason'],
-          GenerateContentResponse_PromptFeedback_BlockReason.fromJson,
-        ) ??
-        GenerateContentResponse_PromptFeedback_BlockReason.$default,
-    safetyRatings:
-        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-  );
+  factory GenerateContentResponse_PromptFeedback.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateContentResponse_PromptFeedback(
+      blockReason: switch (json['blockReason']) {
+        null => GenerateContentResponse_PromptFeedback_BlockReason.$default,
+        Object $1 =>
+          GenerateContentResponse_PromptFeedback_BlockReason.fromJson($1),
+      },
+      safetyRatings: switch (json['safetyRatings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetyRating.fromJson(i)],
+        _ => throw const FormatException('"safetyRatings" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5295,8 +6007,8 @@ final class GenerateContentResponse_PromptFeedback_BlockReason
   const GenerateContentResponse_PromptFeedback_BlockReason(super.value);
 
   factory GenerateContentResponse_PromptFeedback_BlockReason.fromJson(
-    String json,
-  ) => GenerateContentResponse_PromptFeedback_BlockReason(json);
+    Object? json,
+  ) => GenerateContentResponse_PromptFeedback_BlockReason(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5357,40 +6069,67 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
     this.toolUsePromptTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateContentResponse_UsageMetadata.fromJson(
-    Map<String, dynamic> json,
-  ) => GenerateContentResponse_UsageMetadata(
-    promptTokenCount: json['promptTokenCount'] ?? 0,
-    cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
-    candidatesTokenCount: json['candidatesTokenCount'] ?? 0,
-    toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
-    thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
-    totalTokenCount: json['totalTokenCount'] ?? 0,
-    promptTokensDetails:
-        decodeListMessage(
-          json['promptTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-    cacheTokensDetails:
-        decodeListMessage(
-          json['cacheTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-    candidatesTokensDetails:
-        decodeListMessage(
-          json['candidatesTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-    toolUsePromptTokensDetails:
-        decodeListMessage(
-          json['toolUsePromptTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-  );
+  factory GenerateContentResponse_UsageMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateContentResponse_UsageMetadata(
+      promptTokenCount: switch (json['promptTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      cachedContentTokenCount: switch (json['cachedContentTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      candidatesTokenCount: switch (json['candidatesTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      toolUsePromptTokenCount: switch (json['toolUsePromptTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      thoughtsTokenCount: switch (json['thoughtsTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      totalTokenCount: switch (json['totalTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      promptTokensDetails: switch (json['promptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"promptTokensDetails" is not a list'),
+      },
+      cacheTokensDetails: switch (json['cacheTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"cacheTokensDetails" is not a list'),
+      },
+      candidatesTokensDetails: switch (json['candidatesTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"candidatesTokensDetails" is not a list',
+        ),
+      },
+      toolUsePromptTokensDetails: switch (json['toolUsePromptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"toolUsePromptTokensDetails" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5498,37 +6237,65 @@ final class Candidate extends ProtoMessage {
     this.urlContextMetadata,
   }) : super(fullyQualifiedName);
 
-  factory Candidate.fromJson(Map<String, dynamic> json) => Candidate(
-    index: json['index'],
-    content: decode(json['content'], Content.fromJson),
-    finishReason:
-        decodeEnum(json['finishReason'], Candidate_FinishReason.fromJson) ??
-        Candidate_FinishReason.$default,
-    finishMessage: json['finishMessage'],
-    safetyRatings:
-        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-    citationMetadata: decode(
-      json['citationMetadata'],
-      CitationMetadata.fromJson,
-    ),
-    tokenCount: json['tokenCount'] ?? 0,
-    groundingAttributions:
-        decodeListMessage(
-          json['groundingAttributions'],
-          GroundingAttribution.fromJson,
-        ) ??
-        [],
-    groundingMetadata: decode(
-      json['groundingMetadata'],
-      GroundingMetadata.fromJson,
-    ),
-    avgLogprobs: decodeDouble(json['avgLogprobs']) ?? 0,
-    logprobsResult: decode(json['logprobsResult'], LogprobsResult.fromJson),
-    urlContextMetadata: decode(
-      json['urlContextMetadata'],
-      UrlContextMetadata.fromJson,
-    ),
-  );
+  factory Candidate.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Candidate(
+      index: switch (json['index']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      finishReason: switch (json['finishReason']) {
+        null => Candidate_FinishReason.$default,
+        Object $1 => Candidate_FinishReason.fromJson($1),
+      },
+      finishMessage: switch (json['finishMessage']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      safetyRatings: switch (json['safetyRatings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetyRating.fromJson(i)],
+        _ => throw const FormatException('"safetyRatings" is not a list'),
+      },
+      citationMetadata: switch (json['citationMetadata']) {
+        null => null,
+        Object $1 => CitationMetadata.fromJson($1),
+      },
+      tokenCount: switch (json['tokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      groundingAttributions: switch (json['groundingAttributions']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) GroundingAttribution.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"groundingAttributions" is not a list',
+        ),
+      },
+      groundingMetadata: switch (json['groundingMetadata']) {
+        null => null,
+        Object $1 => GroundingMetadata.fromJson($1),
+      },
+      avgLogprobs: switch (json['avgLogprobs']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      logprobsResult: switch (json['logprobsResult']) {
+        null => null,
+        Object $1 => LogprobsResult.fromJson($1),
+      },
+      urlContextMetadata: switch (json['urlContextMetadata']) {
+        null => null,
+        Object $1 => UrlContextMetadata.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5637,8 +6404,8 @@ final class Candidate_FinishReason extends ProtoEnum {
 
   const Candidate_FinishReason(super.value);
 
-  factory Candidate_FinishReason.fromJson(String json) =>
-      Candidate_FinishReason(json);
+  factory Candidate_FinishReason.fromJson(Object? json) =>
+      Candidate_FinishReason(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5656,11 +6423,16 @@ final class UrlContextMetadata extends ProtoMessage {
 
   UrlContextMetadata({this.urlMetadata = const []}) : super(fullyQualifiedName);
 
-  factory UrlContextMetadata.fromJson(Map<String, dynamic> json) =>
-      UrlContextMetadata(
-        urlMetadata:
-            decodeListMessage(json['urlMetadata'], UrlMetadata.fromJson) ?? [],
-      );
+  factory UrlContextMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UrlContextMetadata(
+      urlMetadata: switch (json['urlMetadata']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) UrlMetadata.fromJson(i)],
+        _ => throw const FormatException('"urlMetadata" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5687,15 +6459,19 @@ final class UrlMetadata extends ProtoMessage {
     this.urlRetrievalStatus = UrlMetadata_UrlRetrievalStatus.$default,
   }) : super(fullyQualifiedName);
 
-  factory UrlMetadata.fromJson(Map<String, dynamic> json) => UrlMetadata(
-    retrievedUrl: json['retrievedUrl'] ?? '',
-    urlRetrievalStatus:
-        decodeEnum(
-          json['urlRetrievalStatus'],
-          UrlMetadata_UrlRetrievalStatus.fromJson,
-        ) ??
-        UrlMetadata_UrlRetrievalStatus.$default,
-  );
+  factory UrlMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UrlMetadata(
+      retrievedUrl: switch (json['retrievedUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      urlRetrievalStatus: switch (json['urlRetrievalStatus']) {
+        null => UrlMetadata_UrlRetrievalStatus.$default,
+        Object $1 => UrlMetadata_UrlRetrievalStatus.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5746,8 +6522,8 @@ final class UrlMetadata_UrlRetrievalStatus extends ProtoEnum {
 
   const UrlMetadata_UrlRetrievalStatus(super.value);
 
-  factory UrlMetadata_UrlRetrievalStatus.fromJson(String json) =>
-      UrlMetadata_UrlRetrievalStatus(json);
+  factory UrlMetadata_UrlRetrievalStatus.fromJson(Object? json) =>
+      UrlMetadata_UrlRetrievalStatus(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -5776,21 +6552,29 @@ final class LogprobsResult extends ProtoMessage {
     this.chosenCandidates = const [],
   }) : super(fullyQualifiedName);
 
-  factory LogprobsResult.fromJson(Map<String, dynamic> json) => LogprobsResult(
-    logProbabilitySum: decodeDouble(json['logProbabilitySum']),
-    topCandidates:
-        decodeListMessage(
-          json['topCandidates'],
-          LogprobsResult_TopCandidates.fromJson,
-        ) ??
-        [],
-    chosenCandidates:
-        decodeListMessage(
-          json['chosenCandidates'],
-          LogprobsResult_Candidate.fromJson,
-        ) ??
-        [],
-  );
+  factory LogprobsResult.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogprobsResult(
+      logProbabilitySum: switch (json['logProbabilitySum']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topCandidates: switch (json['topCandidates']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) LogprobsResult_TopCandidates.fromJson(i),
+        ],
+        _ => throw const FormatException('"topCandidates" is not a list'),
+      },
+      chosenCandidates: switch (json['chosenCandidates']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) LogprobsResult_Candidate.fromJson(i),
+        ],
+        _ => throw const FormatException('"chosenCandidates" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5827,12 +6611,23 @@ final class LogprobsResult_Candidate extends ProtoMessage {
   LogprobsResult_Candidate({this.token, this.tokenId, this.logProbability})
     : super(fullyQualifiedName);
 
-  factory LogprobsResult_Candidate.fromJson(Map<String, dynamic> json) =>
-      LogprobsResult_Candidate(
-        token: json['token'],
-        tokenId: json['tokenId'],
-        logProbability: decodeDouble(json['logProbability']),
-      );
+  factory LogprobsResult_Candidate.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogprobsResult_Candidate(
+      token: switch (json['token']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      tokenId: switch (json['tokenId']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      logProbability: switch (json['logProbability']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5863,15 +6658,18 @@ final class LogprobsResult_TopCandidates extends ProtoMessage {
   LogprobsResult_TopCandidates({this.candidates = const []})
     : super(fullyQualifiedName);
 
-  factory LogprobsResult_TopCandidates.fromJson(Map<String, dynamic> json) =>
-      LogprobsResult_TopCandidates(
-        candidates:
-            decodeListMessage(
-              json['candidates'],
-              LogprobsResult_Candidate.fromJson,
-            ) ??
-            [],
-      );
+  factory LogprobsResult_TopCandidates.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LogprobsResult_TopCandidates(
+      candidates: switch (json['candidates']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) LogprobsResult_Candidate.fromJson(i),
+        ],
+        _ => throw const FormatException('"candidates" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5896,17 +6694,19 @@ final class AttributionSourceId extends ProtoMessage {
   AttributionSourceId({this.groundingPassage, this.semanticRetrieverChunk})
     : super(fullyQualifiedName);
 
-  factory AttributionSourceId.fromJson(Map<String, dynamic> json) =>
-      AttributionSourceId(
-        groundingPassage: decode(
-          json['groundingPassage'],
-          AttributionSourceId_GroundingPassageId.fromJson,
-        ),
-        semanticRetrieverChunk: decode(
-          json['semanticRetrieverChunk'],
-          AttributionSourceId_SemanticRetrieverChunk.fromJson,
-        ),
-      );
+  factory AttributionSourceId.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AttributionSourceId(
+      groundingPassage: switch (json['groundingPassage']) {
+        null => null,
+        Object $1 => AttributionSourceId_GroundingPassageId.fromJson($1),
+      },
+      semanticRetrieverChunk: switch (json['semanticRetrieverChunk']) {
+        null => null,
+        Object $1 => AttributionSourceId_SemanticRetrieverChunk.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5938,12 +6738,19 @@ final class AttributionSourceId_GroundingPassageId extends ProtoMessage {
     this.partIndex = 0,
   }) : super(fullyQualifiedName);
 
-  factory AttributionSourceId_GroundingPassageId.fromJson(
-    Map<String, dynamic> json,
-  ) => AttributionSourceId_GroundingPassageId(
-    passageId: json['passageId'] ?? '',
-    partIndex: json['partIndex'] ?? 0,
-  );
+  factory AttributionSourceId_GroundingPassageId.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AttributionSourceId_GroundingPassageId(
+      passageId: switch (json['passageId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      partIndex: switch (json['partIndex']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -5978,12 +6785,19 @@ final class AttributionSourceId_SemanticRetrieverChunk extends ProtoMessage {
     this.chunk = '',
   }) : super(fullyQualifiedName);
 
-  factory AttributionSourceId_SemanticRetrieverChunk.fromJson(
-    Map<String, dynamic> json,
-  ) => AttributionSourceId_SemanticRetrieverChunk(
-    source: json['source'] ?? '',
-    chunk: json['chunk'] ?? '',
-  );
+  factory AttributionSourceId_SemanticRetrieverChunk.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AttributionSourceId_SemanticRetrieverChunk(
+      source: switch (json['source']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      chunk: switch (json['chunk']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6012,11 +6826,19 @@ final class GroundingAttribution extends ProtoMessage {
   GroundingAttribution({this.sourceId, this.content})
     : super(fullyQualifiedName);
 
-  factory GroundingAttribution.fromJson(Map<String, dynamic> json) =>
-      GroundingAttribution(
-        sourceId: decode(json['sourceId'], AttributionSourceId.fromJson),
-        content: decode(json['content'], Content.fromJson),
-      );
+  factory GroundingAttribution.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingAttribution(
+      sourceId: switch (json['sourceId']) {
+        null => null,
+        Object $1 => AttributionSourceId.fromJson($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6043,11 +6865,16 @@ final class RetrievalMetadata extends ProtoMessage {
   RetrievalMetadata({this.googleSearchDynamicRetrievalScore = 0})
     : super(fullyQualifiedName);
 
-  factory RetrievalMetadata.fromJson(Map<String, dynamic> json) =>
-      RetrievalMetadata(
-        googleSearchDynamicRetrievalScore:
-            decodeDouble(json['googleSearchDynamicRetrievalScore']) ?? 0,
-      );
+  factory RetrievalMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RetrievalMetadata(
+      googleSearchDynamicRetrievalScore:
+          switch (json['googleSearchDynamicRetrievalScore']) {
+            null => 0,
+            Object $1 => decodeDouble($1),
+          },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6094,30 +6921,34 @@ final class GroundingMetadata extends ProtoMessage {
     this.webSearchQueries = const [],
   }) : super(fullyQualifiedName);
 
-  factory GroundingMetadata.fromJson(Map<String, dynamic> json) =>
-      GroundingMetadata(
-        searchEntryPoint: decode(
-          json['searchEntryPoint'],
-          SearchEntryPoint.fromJson,
-        ),
-        groundingChunks:
-            decodeListMessage(
-              json['groundingChunks'],
-              GroundingChunk.fromJson,
-            ) ??
-            [],
-        groundingSupports:
-            decodeListMessage(
-              json['groundingSupports'],
-              GroundingSupport.fromJson,
-            ) ??
-            [],
-        retrievalMetadata: decode(
-          json['retrievalMetadata'],
-          RetrievalMetadata.fromJson,
-        ),
-        webSearchQueries: decodeList(json['webSearchQueries']) ?? [],
-      );
+  factory GroundingMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingMetadata(
+      searchEntryPoint: switch (json['searchEntryPoint']) {
+        null => null,
+        Object $1 => SearchEntryPoint.fromJson($1),
+      },
+      groundingChunks: switch (json['groundingChunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) GroundingChunk.fromJson(i)],
+        _ => throw const FormatException('"groundingChunks" is not a list'),
+      },
+      groundingSupports: switch (json['groundingSupports']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) GroundingSupport.fromJson(i)],
+        _ => throw const FormatException('"groundingSupports" is not a list'),
+      },
+      retrievalMetadata: switch (json['retrievalMetadata']) {
+        null => null,
+        Object $1 => RetrievalMetadata.fromJson($1),
+      },
+      webSearchQueries: switch (json['webSearchQueries']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"webSearchQueries" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6153,11 +6984,19 @@ final class SearchEntryPoint extends ProtoMessage {
     : sdkBlob = sdkBlob ?? Uint8List(0),
       super(fullyQualifiedName);
 
-  factory SearchEntryPoint.fromJson(Map<String, dynamic> json) =>
-      SearchEntryPoint(
-        renderedContent: json['renderedContent'] ?? '',
-        sdkBlob: decodeBytes(json['sdkBlob']) ?? Uint8List(0),
-      );
+  factory SearchEntryPoint.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SearchEntryPoint(
+      renderedContent: switch (json['renderedContent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sdkBlob: switch (json['sdkBlob']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6185,8 +7024,15 @@ final class GroundingChunk extends ProtoMessage {
 
   GroundingChunk({this.web}) : super(fullyQualifiedName);
 
-  factory GroundingChunk.fromJson(Map<String, dynamic> json) =>
-      GroundingChunk(web: decode(json['web'], GroundingChunk_Web.fromJson));
+  factory GroundingChunk.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk(
+      web: switch (json['web']) {
+        null => null,
+        Object $1 => GroundingChunk_Web.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (web != null) 'web': web!.toJson()};
@@ -6208,8 +7054,19 @@ final class GroundingChunk_Web extends ProtoMessage {
 
   GroundingChunk_Web({this.uri, this.title}) : super(fullyQualifiedName);
 
-  factory GroundingChunk_Web.fromJson(Map<String, dynamic> json) =>
-      GroundingChunk_Web(uri: json['uri'], title: json['title']);
+  factory GroundingChunk_Web.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk_Web(
+      uri: switch (json['uri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6253,12 +7110,27 @@ final class Segment extends ProtoMessage {
     this.text = '',
   }) : super(fullyQualifiedName);
 
-  factory Segment.fromJson(Map<String, dynamic> json) => Segment(
-    partIndex: json['partIndex'] ?? 0,
-    startIndex: json['startIndex'] ?? 0,
-    endIndex: json['endIndex'] ?? 0,
-    text: json['text'] ?? '',
-  );
+  factory Segment.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Segment(
+      partIndex: switch (json['partIndex']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      startIndex: switch (json['startIndex']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      endIndex: switch (json['endIndex']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      text: switch (json['text']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6305,12 +7177,27 @@ final class GroundingSupport extends ProtoMessage {
     this.confidenceScores = const [],
   }) : super(fullyQualifiedName);
 
-  factory GroundingSupport.fromJson(Map<String, dynamic> json) =>
-      GroundingSupport(
-        segment: decode(json['segment'], Segment.fromJson),
-        groundingChunkIndices: decodeList(json['groundingChunkIndices']) ?? [],
-        confidenceScores: decodeList(json['confidenceScores']) ?? [],
-      );
+  factory GroundingSupport.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingSupport(
+      segment: switch (json['segment']) {
+        null => null,
+        Object $1 => Segment.fromJson($1),
+      },
+      groundingChunkIndices: switch (json['groundingChunkIndices']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException(
+          '"groundingChunkIndices" is not a list',
+        ),
+      },
+      confidenceScores: switch (json['confidenceScores']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"confidenceScores" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6392,26 +7279,41 @@ final class GenerateAnswerRequest extends ProtoMessage {
     this.temperature,
   }) : super(fullyQualifiedName);
 
-  factory GenerateAnswerRequest.fromJson(
-    Map<String, dynamic> json,
-  ) => GenerateAnswerRequest(
-    inlinePassages: decode(json['inlinePassages'], GroundingPassages.fromJson),
-    semanticRetriever: decode(
-      json['semanticRetriever'],
-      SemanticRetrieverConfig.fromJson,
-    ),
-    model: json['model'] ?? '',
-    contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-    answerStyle:
-        decodeEnum(
-          json['answerStyle'],
-          GenerateAnswerRequest_AnswerStyle.fromJson,
-        ) ??
-        GenerateAnswerRequest_AnswerStyle.$default,
-    safetySettings:
-        decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ?? [],
-    temperature: decodeDouble(json['temperature']),
-  );
+  factory GenerateAnswerRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateAnswerRequest(
+      inlinePassages: switch (json['inlinePassages']) {
+        null => null,
+        Object $1 => GroundingPassages.fromJson($1),
+      },
+      semanticRetriever: switch (json['semanticRetriever']) {
+        null => null,
+        Object $1 => SemanticRetrieverConfig.fromJson($1),
+      },
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      contents: switch (json['contents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"contents" is not a list'),
+      },
+      answerStyle: switch (json['answerStyle']) {
+        null => GenerateAnswerRequest_AnswerStyle.$default,
+        Object $1 => GenerateAnswerRequest_AnswerStyle.fromJson($1),
+      },
+      safetySettings: switch (json['safetySettings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetySetting.fromJson(i)],
+        _ => throw const FormatException('"safetySettings" is not a list'),
+      },
+      temperature: switch (json['temperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6459,8 +7361,8 @@ final class GenerateAnswerRequest_AnswerStyle extends ProtoEnum {
 
   const GenerateAnswerRequest_AnswerStyle(super.value);
 
-  factory GenerateAnswerRequest_AnswerStyle.fromJson(String json) =>
-      GenerateAnswerRequest_AnswerStyle(json);
+  factory GenerateAnswerRequest_AnswerStyle.fromJson(Object? json) =>
+      GenerateAnswerRequest_AnswerStyle(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -6514,15 +7416,23 @@ final class GenerateAnswerResponse extends ProtoMessage {
     this.inputFeedback,
   }) : super(fullyQualifiedName);
 
-  factory GenerateAnswerResponse.fromJson(Map<String, dynamic> json) =>
-      GenerateAnswerResponse(
-        answer: decode(json['answer'], Candidate.fromJson),
-        answerableProbability: decodeDouble(json['answerableProbability']),
-        inputFeedback: decode(
-          json['inputFeedback'],
-          GenerateAnswerResponse_InputFeedback.fromJson,
-        ),
-      );
+  factory GenerateAnswerResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateAnswerResponse(
+      answer: switch (json['answer']) {
+        null => null,
+        Object $1 => Candidate.fromJson($1),
+      },
+      answerableProbability: switch (json['answerableProbability']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      inputFeedback: switch (json['inputFeedback']) {
+        null => null,
+        Object $1 => GenerateAnswerResponse_InputFeedback.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6561,16 +7471,22 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
     this.safetyRatings = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateAnswerResponse_InputFeedback.fromJson(
-    Map<String, dynamic> json,
-  ) => GenerateAnswerResponse_InputFeedback(
-    blockReason: decodeEnum(
-      json['blockReason'],
-      GenerateAnswerResponse_InputFeedback_BlockReason.fromJson,
-    ),
-    safetyRatings:
-        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-  );
+  factory GenerateAnswerResponse_InputFeedback.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateAnswerResponse_InputFeedback(
+      blockReason: switch (json['blockReason']) {
+        null => null,
+        Object $1 => GenerateAnswerResponse_InputFeedback_BlockReason.fromJson(
+          $1,
+        ),
+      },
+      safetyRatings: switch (json['safetyRatings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetyRating.fromJson(i)],
+        _ => throw const FormatException('"safetyRatings" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6612,8 +7528,8 @@ final class GenerateAnswerResponse_InputFeedback_BlockReason extends ProtoEnum {
   const GenerateAnswerResponse_InputFeedback_BlockReason(super.value);
 
   factory GenerateAnswerResponse_InputFeedback_BlockReason.fromJson(
-    String json,
-  ) => GenerateAnswerResponse_InputFeedback_BlockReason(json);
+    Object? json,
+  ) => GenerateAnswerResponse_InputFeedback_BlockReason(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -6663,14 +7579,31 @@ final class EmbedContentRequest extends ProtoMessage {
     this.outputDimensionality,
   }) : super(fullyQualifiedName);
 
-  factory EmbedContentRequest.fromJson(Map<String, dynamic> json) =>
-      EmbedContentRequest(
-        model: json['model'] ?? '',
-        content: decode(json['content'], Content.fromJson),
-        taskType: decodeEnum(json['taskType'], TaskType.fromJson),
-        title: json['title'],
-        outputDimensionality: json['outputDimensionality'],
-      );
+  factory EmbedContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedContentRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      taskType: switch (json['taskType']) {
+        null => null,
+        Object $1 => TaskType.fromJson($1),
+      },
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      outputDimensionality: switch (json['outputDimensionality']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6705,8 +7638,16 @@ final class ContentEmbedding extends ProtoMessage {
 
   ContentEmbedding({this.values = const []}) : super(fullyQualifiedName);
 
-  factory ContentEmbedding.fromJson(Map<String, dynamic> json) =>
-      ContentEmbedding(values: decodeList(json['values']) ?? []);
+  factory ContentEmbedding.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ContentEmbedding(
+      values: switch (json['values']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"values" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (values.isNotDefault) 'values': values};
@@ -6725,10 +7666,15 @@ final class EmbedContentResponse extends ProtoMessage {
 
   EmbedContentResponse({this.embedding}) : super(fullyQualifiedName);
 
-  factory EmbedContentResponse.fromJson(Map<String, dynamic> json) =>
-      EmbedContentResponse(
-        embedding: decode(json['embedding'], ContentEmbedding.fromJson),
-      );
+  factory EmbedContentResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedContentResponse(
+      embedding: switch (json['embedding']) {
+        null => null,
+        Object $1 => ContentEmbedding.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (embedding != null) 'embedding': embedding!.toJson()};
@@ -6757,13 +7703,22 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
   BatchEmbedContentsRequest({required this.model, required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchEmbedContentsRequest.fromJson(Map<String, dynamic> json) =>
-      BatchEmbedContentsRequest(
-        model: json['model'] ?? '',
-        requests:
-            decodeListMessage(json['requests'], EmbedContentRequest.fromJson) ??
-            [],
-      );
+  factory BatchEmbedContentsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchEmbedContentsRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) EmbedContentRequest.fromJson(i),
+        ],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'model': model, 'requests': encodeList(requests)};
@@ -6787,12 +7742,16 @@ final class BatchEmbedContentsResponse extends ProtoMessage {
   BatchEmbedContentsResponse({this.embeddings = const []})
     : super(fullyQualifiedName);
 
-  factory BatchEmbedContentsResponse.fromJson(Map<String, dynamic> json) =>
-      BatchEmbedContentsResponse(
-        embeddings:
-            decodeListMessage(json['embeddings'], ContentEmbedding.fromJson) ??
-            [],
-      );
+  factory BatchEmbedContentsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchEmbedContentsResponse(
+      embeddings: switch (json['embeddings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ContentEmbedding.fromJson(i)],
+        _ => throw const FormatException('"embeddings" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6839,15 +7798,24 @@ final class CountTokensRequest extends ProtoMessage {
     this.generateContentRequest,
   }) : super(fullyQualifiedName);
 
-  factory CountTokensRequest.fromJson(Map<String, dynamic> json) =>
-      CountTokensRequest(
-        model: json['model'] ?? '',
-        contents: decodeListMessage(json['contents'], Content.fromJson) ?? [],
-        generateContentRequest: decode(
-          json['generateContentRequest'],
-          GenerateContentRequest.fromJson,
-        ),
-      );
+  factory CountTokensRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CountTokensRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      contents: switch (json['contents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"contents" is not a list'),
+      },
+      generateContentRequest: switch (json['generateContentRequest']) {
+        null => null,
+        Object $1 => GenerateContentRequest.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6891,23 +7859,33 @@ final class CountTokensResponse extends ProtoMessage {
     this.cacheTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
-  factory CountTokensResponse.fromJson(Map<String, dynamic> json) =>
-      CountTokensResponse(
-        totalTokens: json['totalTokens'] ?? 0,
-        cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
-        promptTokensDetails:
-            decodeListMessage(
-              json['promptTokensDetails'],
-              ModalityTokenCount.fromJson,
-            ) ??
-            [],
-        cacheTokensDetails:
-            decodeListMessage(
-              json['cacheTokensDetails'],
-              ModalityTokenCount.fromJson,
-            ) ??
-            [],
-      );
+  factory CountTokensResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CountTokensResponse(
+      totalTokens: switch (json['totalTokens']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      cachedContentTokenCount: switch (json['cachedContentTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      promptTokensDetails: switch (json['promptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"promptTokensDetails" is not a list'),
+      },
+      cacheTokensDetails: switch (json['cacheTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"cacheTokensDetails" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -6953,21 +7931,25 @@ final class RealtimeInputConfig extends ProtoMessage {
     this.turnCoverage,
   }) : super(fullyQualifiedName);
 
-  factory RealtimeInputConfig.fromJson(Map<String, dynamic> json) =>
-      RealtimeInputConfig(
-        automaticActivityDetection: decode(
-          json['automaticActivityDetection'],
-          RealtimeInputConfig_AutomaticActivityDetection.fromJson,
+  factory RealtimeInputConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RealtimeInputConfig(
+      automaticActivityDetection: switch (json['automaticActivityDetection']) {
+        null => null,
+        Object $1 => RealtimeInputConfig_AutomaticActivityDetection.fromJson(
+          $1,
         ),
-        activityHandling: decodeEnum(
-          json['activityHandling'],
-          RealtimeInputConfig_ActivityHandling.fromJson,
-        ),
-        turnCoverage: decodeEnum(
-          json['turnCoverage'],
-          RealtimeInputConfig_TurnCoverage.fromJson,
-        ),
-      );
+      },
+      activityHandling: switch (json['activityHandling']) {
+        null => null,
+        Object $1 => RealtimeInputConfig_ActivityHandling.fromJson($1),
+      },
+      turnCoverage: switch (json['turnCoverage']) {
+        null => null,
+        Object $1 => RealtimeInputConfig_TurnCoverage.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7026,21 +8008,37 @@ final class RealtimeInputConfig_AutomaticActivityDetection
     this.silenceDurationMs,
   }) : super(fullyQualifiedName);
 
-  factory RealtimeInputConfig_AutomaticActivityDetection.fromJson(
-    Map<String, dynamic> json,
-  ) => RealtimeInputConfig_AutomaticActivityDetection(
-    disabled: json['disabled'],
-    startOfSpeechSensitivity: decodeEnum(
-      json['startOfSpeechSensitivity'],
-      RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.fromJson,
-    ),
-    prefixPaddingMs: json['prefixPaddingMs'],
-    endOfSpeechSensitivity: decodeEnum(
-      json['endOfSpeechSensitivity'],
-      RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson,
-    ),
-    silenceDurationMs: json['silenceDurationMs'],
-  );
+  factory RealtimeInputConfig_AutomaticActivityDetection.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RealtimeInputConfig_AutomaticActivityDetection(
+      disabled: switch (json['disabled']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      startOfSpeechSensitivity: switch (json['startOfSpeechSensitivity']) {
+        null => null,
+        Object $1 =>
+          RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.fromJson(
+            $1,
+          ),
+      },
+      prefixPaddingMs: switch (json['prefixPaddingMs']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      endOfSpeechSensitivity: switch (json['endOfSpeechSensitivity']) {
+        null => null,
+        Object $1 =>
+          RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson(
+            $1,
+          ),
+      },
+      silenceDurationMs: switch (json['silenceDurationMs']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7097,8 +8095,10 @@ final class RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity
   );
 
   factory RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity.fromJson(
-    String json,
-  ) => RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(json);
+    Object? json,
+  ) => RealtimeInputConfig_AutomaticActivityDetection_StartSensitivity(
+    json as String,
+  );
 
   bool get isNotDefault => this != $default;
 
@@ -7135,8 +8135,10 @@ final class RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity
   );
 
   factory RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity.fromJson(
-    String json,
-  ) => RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(json);
+    Object? json,
+  ) => RealtimeInputConfig_AutomaticActivityDetection_EndSensitivity(
+    json as String,
+  );
 
   bool get isNotDefault => this != $default;
 
@@ -7167,8 +8169,8 @@ final class RealtimeInputConfig_ActivityHandling extends ProtoEnum {
 
   const RealtimeInputConfig_ActivityHandling(super.value);
 
-  factory RealtimeInputConfig_ActivityHandling.fromJson(String json) =>
-      RealtimeInputConfig_ActivityHandling(json);
+  factory RealtimeInputConfig_ActivityHandling.fromJson(Object? json) =>
+      RealtimeInputConfig_ActivityHandling(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -7201,8 +8203,8 @@ final class RealtimeInputConfig_TurnCoverage extends ProtoEnum {
 
   const RealtimeInputConfig_TurnCoverage(super.value);
 
-  factory RealtimeInputConfig_TurnCoverage.fromJson(String json) =>
-      RealtimeInputConfig_TurnCoverage(json);
+  factory RealtimeInputConfig_TurnCoverage.fromJson(Object? json) =>
+      RealtimeInputConfig_TurnCoverage(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -7228,8 +8230,15 @@ final class SessionResumptionConfig extends ProtoMessage {
 
   SessionResumptionConfig({this.handle}) : super(fullyQualifiedName);
 
-  factory SessionResumptionConfig.fromJson(Map<String, dynamic> json) =>
-      SessionResumptionConfig(handle: json['handle']);
+  factory SessionResumptionConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SessionResumptionConfig(
+      handle: switch (json['handle']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (handle != null) 'handle': handle};
@@ -7265,14 +8274,19 @@ final class ContextWindowCompressionConfig extends ProtoMessage {
   ContextWindowCompressionConfig({this.slidingWindow, this.triggerTokens})
     : super(fullyQualifiedName);
 
-  factory ContextWindowCompressionConfig.fromJson(Map<String, dynamic> json) =>
-      ContextWindowCompressionConfig(
-        slidingWindow: decode(
-          json['slidingWindow'],
-          ContextWindowCompressionConfig_SlidingWindow.fromJson,
-        ),
-        triggerTokens: decodeInt64(json['triggerTokens']),
-      );
+  factory ContextWindowCompressionConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ContextWindowCompressionConfig(
+      slidingWindow: switch (json['slidingWindow']) {
+        null => null,
+        Object $1 => ContextWindowCompressionConfig_SlidingWindow.fromJson($1),
+      },
+      triggerTokens: switch (json['triggerTokens']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7309,11 +8323,15 @@ final class ContextWindowCompressionConfig_SlidingWindow extends ProtoMessage {
   ContextWindowCompressionConfig_SlidingWindow({this.targetTokens})
     : super(fullyQualifiedName);
 
-  factory ContextWindowCompressionConfig_SlidingWindow.fromJson(
-    Map<String, dynamic> json,
-  ) => ContextWindowCompressionConfig_SlidingWindow(
-    targetTokens: decodeInt64(json['targetTokens']),
-  );
+  factory ContextWindowCompressionConfig_SlidingWindow.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ContextWindowCompressionConfig_SlidingWindow(
+      targetTokens: switch (json['targetTokens']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7336,7 +8354,7 @@ final class AudioTranscriptionConfig extends ProtoMessage {
 
   AudioTranscriptionConfig() : super(fullyQualifiedName);
 
-  factory AudioTranscriptionConfig.fromJson(Map<String, dynamic> json) =>
+  factory AudioTranscriptionConfig.fromJson(Object? j) =>
       AudioTranscriptionConfig();
 
   @override
@@ -7425,36 +8443,48 @@ final class BidiGenerateContentSetup extends ProtoMessage {
     this.outputAudioTranscription,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetup.fromJson(Map<String, dynamic> json) =>
-      BidiGenerateContentSetup(
-        model: json['model'] ?? '',
-        generationConfig: decode(
-          json['generationConfig'],
-          GenerationConfig.fromJson,
-        ),
-        systemInstruction: decode(json['systemInstruction'], Content.fromJson),
-        tools: decodeListMessage(json['tools'], Tool.fromJson) ?? [],
-        realtimeInputConfig: decode(
-          json['realtimeInputConfig'],
-          RealtimeInputConfig.fromJson,
-        ),
-        sessionResumption: decode(
-          json['sessionResumption'],
-          SessionResumptionConfig.fromJson,
-        ),
-        contextWindowCompression: decode(
-          json['contextWindowCompression'],
-          ContextWindowCompressionConfig.fromJson,
-        ),
-        inputAudioTranscription: decode(
-          json['inputAudioTranscription'],
-          AudioTranscriptionConfig.fromJson,
-        ),
-        outputAudioTranscription: decode(
-          json['outputAudioTranscription'],
-          AudioTranscriptionConfig.fromJson,
-        ),
-      );
+  factory BidiGenerateContentSetup.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentSetup(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      generationConfig: switch (json['generationConfig']) {
+        null => null,
+        Object $1 => GenerationConfig.fromJson($1),
+      },
+      systemInstruction: switch (json['systemInstruction']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      tools: switch (json['tools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tools" is not a list'),
+      },
+      realtimeInputConfig: switch (json['realtimeInputConfig']) {
+        null => null,
+        Object $1 => RealtimeInputConfig.fromJson($1),
+      },
+      sessionResumption: switch (json['sessionResumption']) {
+        null => null,
+        Object $1 => SessionResumptionConfig.fromJson($1),
+      },
+      contextWindowCompression: switch (json['contextWindowCompression']) {
+        null => null,
+        Object $1 => ContextWindowCompressionConfig.fromJson($1),
+      },
+      inputAudioTranscription: switch (json['inputAudioTranscription']) {
+        null => null,
+        Object $1 => AudioTranscriptionConfig.fromJson($1),
+      },
+      outputAudioTranscription: switch (json['outputAudioTranscription']) {
+        null => null,
+        Object $1 => AudioTranscriptionConfig.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7509,12 +8539,20 @@ final class BidiGenerateContentClientContent extends ProtoMessage {
     this.turnComplete = false,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentClientContent.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentClientContent(
-    turns: decodeListMessage(json['turns'], Content.fromJson) ?? [],
-    turnComplete: json['turnComplete'] ?? false,
-  );
+  factory BidiGenerateContentClientContent.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentClientContent(
+      turns: switch (json['turns']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Content.fromJson(i)],
+        _ => throw const FormatException('"turns" is not a list'),
+      },
+      turnComplete: switch (json['turnComplete']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7595,23 +8633,42 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
     this.activityEnd,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentRealtimeInput(
-    mediaChunks: decodeListMessage(json['mediaChunks'], Blob.fromJson) ?? [],
-    audio: decode(json['audio'], Blob.fromJson),
-    audioStreamEnd: json['audioStreamEnd'],
-    video: decode(json['video'], Blob.fromJson),
-    text: json['text'],
-    activityStart: decode(
-      json['activityStart'],
-      BidiGenerateContentRealtimeInput_ActivityStart.fromJson,
-    ),
-    activityEnd: decode(
-      json['activityEnd'],
-      BidiGenerateContentRealtimeInput_ActivityEnd.fromJson,
-    ),
-  );
+  factory BidiGenerateContentRealtimeInput.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentRealtimeInput(
+      mediaChunks: switch (json['mediaChunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Blob.fromJson(i)],
+        _ => throw const FormatException('"mediaChunks" is not a list'),
+      },
+      audio: switch (json['audio']) {
+        null => null,
+        Object $1 => Blob.fromJson($1),
+      },
+      audioStreamEnd: switch (json['audioStreamEnd']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      video: switch (json['video']) {
+        null => null,
+        Object $1 => Blob.fromJson($1),
+      },
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      activityStart: switch (json['activityStart']) {
+        null => null,
+        Object $1 => BidiGenerateContentRealtimeInput_ActivityStart.fromJson(
+          $1,
+        ),
+      },
+      activityEnd: switch (json['activityEnd']) {
+        null => null,
+        Object $1 => BidiGenerateContentRealtimeInput_ActivityEnd.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7642,9 +8699,8 @@ final class BidiGenerateContentRealtimeInput_ActivityStart
 
   BidiGenerateContentRealtimeInput_ActivityStart() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentRealtimeInput_ActivityStart();
+  factory BidiGenerateContentRealtimeInput_ActivityStart.fromJson(Object? j) =>
+      BidiGenerateContentRealtimeInput_ActivityStart();
 
   @override
   Object toJson() => {};
@@ -7660,9 +8716,8 @@ final class BidiGenerateContentRealtimeInput_ActivityEnd extends ProtoMessage {
 
   BidiGenerateContentRealtimeInput_ActivityEnd() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentRealtimeInput_ActivityEnd();
+  factory BidiGenerateContentRealtimeInput_ActivityEnd.fromJson(Object? j) =>
+      BidiGenerateContentRealtimeInput_ActivityEnd();
 
   @override
   Object toJson() => {};
@@ -7689,15 +8744,16 @@ final class BidiGenerateContentToolResponse extends ProtoMessage {
   BidiGenerateContentToolResponse({this.functionResponses = const []})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentToolResponse.fromJson(Map<String, dynamic> json) =>
-      BidiGenerateContentToolResponse(
-        functionResponses:
-            decodeListMessage(
-              json['functionResponses'],
-              FunctionResponse.fromJson,
-            ) ??
-            [],
-      );
+  factory BidiGenerateContentToolResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentToolResponse(
+      functionResponses: switch (json['functionResponses']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) FunctionResponse.fromJson(i)],
+        _ => throw const FormatException('"functionResponses" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7734,23 +8790,27 @@ final class BidiGenerateContentClientMessage extends ProtoMessage {
     this.toolResponse,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentClientMessage.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentClientMessage(
-    setup: decode(json['setup'], BidiGenerateContentSetup.fromJson),
-    clientContent: decode(
-      json['clientContent'],
-      BidiGenerateContentClientContent.fromJson,
-    ),
-    realtimeInput: decode(
-      json['realtimeInput'],
-      BidiGenerateContentRealtimeInput.fromJson,
-    ),
-    toolResponse: decode(
-      json['toolResponse'],
-      BidiGenerateContentToolResponse.fromJson,
-    ),
-  );
+  factory BidiGenerateContentClientMessage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentClientMessage(
+      setup: switch (json['setup']) {
+        null => null,
+        Object $1 => BidiGenerateContentSetup.fromJson($1),
+      },
+      clientContent: switch (json['clientContent']) {
+        null => null,
+        Object $1 => BidiGenerateContentClientContent.fromJson($1),
+      },
+      realtimeInput: switch (json['realtimeInput']) {
+        null => null,
+        Object $1 => BidiGenerateContentRealtimeInput.fromJson($1),
+      },
+      toolResponse: switch (json['toolResponse']) {
+        null => null,
+        Object $1 => BidiGenerateContentToolResponse.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7771,9 +8831,8 @@ final class BidiGenerateContentSetupComplete extends ProtoMessage {
 
   BidiGenerateContentSetupComplete() : super(fullyQualifiedName);
 
-  factory BidiGenerateContentSetupComplete.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentSetupComplete();
+  factory BidiGenerateContentSetupComplete.fromJson(Object? j) =>
+      BidiGenerateContentSetupComplete();
 
   @override
   Object toJson() => {};
@@ -7850,31 +8909,47 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
     this.waitingForInput = false,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentServerContent.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentServerContent(
-    modelTurn: decode(json['modelTurn'], Content.fromJson),
-    generationComplete: json['generationComplete'] ?? false,
-    turnComplete: json['turnComplete'] ?? false,
-    interrupted: json['interrupted'] ?? false,
-    groundingMetadata: decode(
-      json['groundingMetadata'],
-      GroundingMetadata.fromJson,
-    ),
-    inputTranscription: decode(
-      json['inputTranscription'],
-      BidiGenerateContentTranscription.fromJson,
-    ),
-    outputTranscription: decode(
-      json['outputTranscription'],
-      BidiGenerateContentTranscription.fromJson,
-    ),
-    urlContextMetadata: decode(
-      json['urlContextMetadata'],
-      UrlContextMetadata.fromJson,
-    ),
-    waitingForInput: json['waitingForInput'] ?? false,
-  );
+  factory BidiGenerateContentServerContent.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentServerContent(
+      modelTurn: switch (json['modelTurn']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      generationComplete: switch (json['generationComplete']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      turnComplete: switch (json['turnComplete']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      interrupted: switch (json['interrupted']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      groundingMetadata: switch (json['groundingMetadata']) {
+        null => null,
+        Object $1 => GroundingMetadata.fromJson($1),
+      },
+      inputTranscription: switch (json['inputTranscription']) {
+        null => null,
+        Object $1 => BidiGenerateContentTranscription.fromJson($1),
+      },
+      outputTranscription: switch (json['outputTranscription']) {
+        null => null,
+        Object $1 => BidiGenerateContentTranscription.fromJson($1),
+      },
+      urlContextMetadata: switch (json['urlContextMetadata']) {
+        null => null,
+        Object $1 => UrlContextMetadata.fromJson($1),
+      },
+      waitingForInput: switch (json['waitingForInput']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7918,12 +8993,16 @@ final class BidiGenerateContentToolCall extends ProtoMessage {
   BidiGenerateContentToolCall({this.functionCalls = const []})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentToolCall.fromJson(Map<String, dynamic> json) =>
-      BidiGenerateContentToolCall(
-        functionCalls:
-            decodeListMessage(json['functionCalls'], FunctionCall.fromJson) ??
-            [],
-      );
+  factory BidiGenerateContentToolCall.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentToolCall(
+      functionCalls: switch (json['functionCalls']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) FunctionCall.fromJson(i)],
+        _ => throw const FormatException('"functionCalls" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -7949,11 +9028,16 @@ final class BidiGenerateContentToolCallCancellation extends ProtoMessage {
   BidiGenerateContentToolCallCancellation({this.ids = const []})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentToolCallCancellation.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentToolCallCancellation(
-    ids: decodeList(json['ids']) ?? [],
-  );
+  factory BidiGenerateContentToolCallCancellation.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentToolCallCancellation(
+      ids: switch (json['ids']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"ids" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (ids.isNotDefault) 'ids': ids};
@@ -7975,8 +9059,15 @@ final class GoAway extends ProtoMessage {
 
   GoAway({this.timeLeft}) : super(fullyQualifiedName);
 
-  factory GoAway.fromJson(Map<String, dynamic> json) =>
-      GoAway(timeLeft: decodeCustom(json['timeLeft'], Duration.fromJson));
+  factory GoAway.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GoAway(
+      timeLeft: switch (json['timeLeft']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (timeLeft != null) 'timeLeft': timeLeft!.toJson()};
@@ -8008,11 +9099,19 @@ final class SessionResumptionUpdate extends ProtoMessage {
   SessionResumptionUpdate({this.newHandle = '', this.resumable = false})
     : super(fullyQualifiedName);
 
-  factory SessionResumptionUpdate.fromJson(Map<String, dynamic> json) =>
-      SessionResumptionUpdate(
-        newHandle: json['newHandle'] ?? '',
-        resumable: json['resumable'] ?? false,
-      );
+  factory SessionResumptionUpdate.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SessionResumptionUpdate(
+      newHandle: switch (json['newHandle']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resumable: switch (json['resumable']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8038,9 +9137,15 @@ final class BidiGenerateContentTranscription extends ProtoMessage {
   BidiGenerateContentTranscription({this.text = ''})
     : super(fullyQualifiedName);
 
-  factory BidiGenerateContentTranscription.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentTranscription(text: json['text'] ?? '');
+  factory BidiGenerateContentTranscription.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentTranscription(
+      text: switch (json['text']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (text.isNotDefault) 'text': text};
@@ -8092,29 +9197,39 @@ final class BidiGenerateContentServerMessage extends ProtoMessage {
     this.usageMetadata,
   }) : super(fullyQualifiedName);
 
-  factory BidiGenerateContentServerMessage.fromJson(
-    Map<String, dynamic> json,
-  ) => BidiGenerateContentServerMessage(
-    setupComplete: decode(
-      json['setupComplete'],
-      BidiGenerateContentSetupComplete.fromJson,
-    ),
-    serverContent: decode(
-      json['serverContent'],
-      BidiGenerateContentServerContent.fromJson,
-    ),
-    toolCall: decode(json['toolCall'], BidiGenerateContentToolCall.fromJson),
-    toolCallCancellation: decode(
-      json['toolCallCancellation'],
-      BidiGenerateContentToolCallCancellation.fromJson,
-    ),
-    goAway: decode(json['goAway'], GoAway.fromJson),
-    sessionResumptionUpdate: decode(
-      json['sessionResumptionUpdate'],
-      SessionResumptionUpdate.fromJson,
-    ),
-    usageMetadata: decode(json['usageMetadata'], UsageMetadata.fromJson),
-  );
+  factory BidiGenerateContentServerMessage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BidiGenerateContentServerMessage(
+      setupComplete: switch (json['setupComplete']) {
+        null => null,
+        Object $1 => BidiGenerateContentSetupComplete.fromJson($1),
+      },
+      serverContent: switch (json['serverContent']) {
+        null => null,
+        Object $1 => BidiGenerateContentServerContent.fromJson($1),
+      },
+      toolCall: switch (json['toolCall']) {
+        null => null,
+        Object $1 => BidiGenerateContentToolCall.fromJson($1),
+      },
+      toolCallCancellation: switch (json['toolCallCancellation']) {
+        null => null,
+        Object $1 => BidiGenerateContentToolCallCancellation.fromJson($1),
+      },
+      goAway: switch (json['goAway']) {
+        null => null,
+        Object $1 => GoAway.fromJson($1),
+      },
+      sessionResumptionUpdate: switch (json['sessionResumptionUpdate']) {
+        null => null,
+        Object $1 => SessionResumptionUpdate.fromJson($1),
+      },
+      usageMetadata: switch (json['usageMetadata']) {
+        null => null,
+        Object $1 => UsageMetadata.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8186,38 +9301,67 @@ final class UsageMetadata extends ProtoMessage {
     this.toolUsePromptTokensDetails = const [],
   }) : super(fullyQualifiedName);
 
-  factory UsageMetadata.fromJson(Map<String, dynamic> json) => UsageMetadata(
-    promptTokenCount: json['promptTokenCount'] ?? 0,
-    cachedContentTokenCount: json['cachedContentTokenCount'] ?? 0,
-    responseTokenCount: json['responseTokenCount'] ?? 0,
-    toolUsePromptTokenCount: json['toolUsePromptTokenCount'] ?? 0,
-    thoughtsTokenCount: json['thoughtsTokenCount'] ?? 0,
-    totalTokenCount: json['totalTokenCount'] ?? 0,
-    promptTokensDetails:
-        decodeListMessage(
-          json['promptTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-    cacheTokensDetails:
-        decodeListMessage(
-          json['cacheTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-    responseTokensDetails:
-        decodeListMessage(
-          json['responseTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-    toolUsePromptTokensDetails:
-        decodeListMessage(
-          json['toolUsePromptTokensDetails'],
-          ModalityTokenCount.fromJson,
-        ) ??
-        [],
-  );
+  factory UsageMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UsageMetadata(
+      promptTokenCount: switch (json['promptTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      cachedContentTokenCount: switch (json['cachedContentTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      responseTokenCount: switch (json['responseTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      toolUsePromptTokenCount: switch (json['toolUsePromptTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      thoughtsTokenCount: switch (json['thoughtsTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      totalTokenCount: switch (json['totalTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      promptTokensDetails: switch (json['promptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"promptTokensDetails" is not a list'),
+      },
+      cacheTokensDetails: switch (json['cacheTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"cacheTokensDetails" is not a list'),
+      },
+      responseTokensDetails: switch (json['responseTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"responseTokensDetails" is not a list',
+        ),
+      },
+      toolUsePromptTokensDetails: switch (json['toolUsePromptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"toolUsePromptTokensDetails" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8355,22 +9499,66 @@ final class Model extends ProtoMessage {
     this.thinking = false,
   }) : super(fullyQualifiedName);
 
-  factory Model.fromJson(Map<String, dynamic> json) => Model(
-    name: json['name'] ?? '',
-    baseModelId: json['baseModelId'] ?? '',
-    version: json['version'] ?? '',
-    displayName: json['displayName'] ?? '',
-    description: json['description'] ?? '',
-    inputTokenLimit: json['inputTokenLimit'] ?? 0,
-    outputTokenLimit: json['outputTokenLimit'] ?? 0,
-    supportedGenerationMethods:
-        decodeList(json['supportedGenerationMethods']) ?? [],
-    temperature: decodeDouble(json['temperature']),
-    maxTemperature: decodeDouble(json['maxTemperature']),
-    topP: decodeDouble(json['topP']),
-    topK: json['topK'],
-    thinking: json['thinking'] ?? false,
-  );
+  factory Model.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Model(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      baseModelId: switch (json['baseModelId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      version: switch (json['version']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      inputTokenLimit: switch (json['inputTokenLimit']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      outputTokenLimit: switch (json['outputTokenLimit']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      supportedGenerationMethods: switch (json['supportedGenerationMethods']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"supportedGenerationMethods" is not a list',
+        ),
+      },
+      temperature: switch (json['temperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      maxTemperature: switch (json['maxTemperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topP: switch (json['topP']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topK: switch (json['topK']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      thinking: switch (json['thinking']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8424,8 +9612,15 @@ final class GetModelRequest extends ProtoMessage {
 
   GetModelRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetModelRequest.fromJson(Map<String, dynamic> json) =>
-      GetModelRequest(name: json['name'] ?? '');
+  factory GetModelRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetModelRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -8461,11 +9656,19 @@ final class ListModelsRequest extends ProtoMessage {
   ListModelsRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListModelsRequest.fromJson(Map<String, dynamic> json) =>
-      ListModelsRequest(
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListModelsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListModelsRequest(
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8496,11 +9699,20 @@ final class ListModelsResponse extends ProtoMessage {
   ListModelsResponse({this.models = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListModelsResponse.fromJson(Map<String, dynamic> json) =>
-      ListModelsResponse(
-        models: decodeListMessage(json['models'], Model.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListModelsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListModelsResponse(
+      models: switch (json['models']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Model.fromJson(i)],
+        _ => throw const FormatException('"models" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8527,8 +9739,15 @@ final class GetTunedModelRequest extends ProtoMessage {
 
   GetTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetTunedModelRequest.fromJson(Map<String, dynamic> json) =>
-      GetTunedModelRequest(name: json['name'] ?? '');
+  factory GetTunedModelRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetTunedModelRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -8584,12 +9803,23 @@ final class ListTunedModelsRequest extends ProtoMessage {
     this.filter = '',
   }) : super(fullyQualifiedName);
 
-  factory ListTunedModelsRequest.fromJson(Map<String, dynamic> json) =>
-      ListTunedModelsRequest(
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-        filter: json['filter'] ?? '',
-      );
+  factory ListTunedModelsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListTunedModelsRequest(
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8627,12 +9857,20 @@ final class ListTunedModelsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListTunedModelsResponse.fromJson(Map<String, dynamic> json) =>
-      ListTunedModelsResponse(
-        tunedModels:
-            decodeListMessage(json['tunedModels'], TunedModel.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListTunedModelsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListTunedModelsResponse(
+      tunedModels: switch (json['tunedModels']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) TunedModel.fromJson(i)],
+        _ => throw const FormatException('"tunedModels" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8664,11 +9902,19 @@ final class CreateTunedModelRequest extends ProtoMessage {
   CreateTunedModelRequest({this.tunedModelId, required this.tunedModel})
     : super(fullyQualifiedName);
 
-  factory CreateTunedModelRequest.fromJson(Map<String, dynamic> json) =>
-      CreateTunedModelRequest(
-        tunedModelId: json['tunedModelId'],
-        tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
-      );
+  factory CreateTunedModelRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateTunedModelRequest(
+      tunedModelId: switch (json['tunedModelId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      tunedModel: switch (json['tunedModel']) {
+        null => null,
+        Object $1 => TunedModel.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8714,15 +9960,32 @@ final class CreateTunedModelMetadata extends ProtoMessage {
     this.snapshots = const [],
   }) : super(fullyQualifiedName);
 
-  factory CreateTunedModelMetadata.fromJson(Map<String, dynamic> json) =>
-      CreateTunedModelMetadata(
-        tunedModel: json['tunedModel'] ?? '',
-        totalSteps: json['totalSteps'] ?? 0,
-        completedSteps: json['completedSteps'] ?? 0,
-        completedPercent: decodeDouble(json['completedPercent']) ?? 0,
-        snapshots:
-            decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
-      );
+  factory CreateTunedModelMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateTunedModelMetadata(
+      tunedModel: switch (json['tunedModel']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      totalSteps: switch (json['totalSteps']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      completedSteps: switch (json['completedSteps']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      completedPercent: switch (json['completedPercent']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      snapshots: switch (json['snapshots']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) TuningSnapshot.fromJson(i)],
+        _ => throw const FormatException('"snapshots" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8760,11 +10023,19 @@ final class UpdateTunedModelRequest extends ProtoMessage {
   UpdateTunedModelRequest({required this.tunedModel, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateTunedModelRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateTunedModelRequest(
-        tunedModel: decode(json['tunedModel'], TunedModel.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateTunedModelRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateTunedModelRequest(
+      tunedModel: switch (json['tunedModel']) {
+        null => null,
+        Object $1 => TunedModel.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8787,8 +10058,15 @@ final class DeleteTunedModelRequest extends ProtoMessage {
 
   DeleteTunedModelRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteTunedModelRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteTunedModelRequest(name: json['name'] ?? '');
+  factory DeleteTunedModelRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteTunedModelRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -8843,15 +10121,27 @@ final class Permission extends ProtoMessage {
     required this.role,
   }) : super(fullyQualifiedName);
 
-  factory Permission.fromJson(Map<String, dynamic> json) => Permission(
-    name: json['name'] ?? '',
-    granteeType: decodeEnum(
-      json['granteeType'],
-      Permission_GranteeType.fromJson,
-    ),
-    emailAddress: json['emailAddress'],
-    role: decodeEnum(json['role'], Permission_Role.fromJson),
-  );
+  factory Permission.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Permission(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      granteeType: switch (json['granteeType']) {
+        null => null,
+        Object $1 => Permission_GranteeType.fromJson($1),
+      },
+      emailAddress: switch (json['emailAddress']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      role: switch (json['role']) {
+        null => null,
+        Object $1 => Permission_Role.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8895,8 +10185,8 @@ final class Permission_GranteeType extends ProtoEnum {
 
   const Permission_GranteeType(super.value);
 
-  factory Permission_GranteeType.fromJson(String json) =>
-      Permission_GranteeType(json);
+  factory Permission_GranteeType.fromJson(Object? json) =>
+      Permission_GranteeType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -8923,7 +10213,8 @@ final class Permission_Role extends ProtoEnum {
 
   const Permission_Role(super.value);
 
-  factory Permission_Role.fromJson(String json) => Permission_Role(json);
+  factory Permission_Role.fromJson(Object? json) =>
+      Permission_Role(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -8948,11 +10239,19 @@ final class CreatePermissionRequest extends ProtoMessage {
   CreatePermissionRequest({required this.parent, required this.permission})
     : super(fullyQualifiedName);
 
-  factory CreatePermissionRequest.fromJson(Map<String, dynamic> json) =>
-      CreatePermissionRequest(
-        parent: json['parent'] ?? '',
-        permission: decode(json['permission'], Permission.fromJson),
-      );
+  factory CreatePermissionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreatePermissionRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      permission: switch (json['permission']) {
+        null => null,
+        Object $1 => Permission.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -8981,8 +10280,15 @@ final class GetPermissionRequest extends ProtoMessage {
 
   GetPermissionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetPermissionRequest.fromJson(Map<String, dynamic> json) =>
-      GetPermissionRequest(name: json['name'] ?? '');
+  factory GetPermissionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetPermissionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -9028,12 +10334,23 @@ final class ListPermissionsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListPermissionsRequest.fromJson(Map<String, dynamic> json) =>
-      ListPermissionsRequest(
-        parent: json['parent'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListPermissionsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListPermissionsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9072,12 +10389,20 @@ final class ListPermissionsResponse extends ProtoMessage {
     this.nextPageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListPermissionsResponse.fromJson(Map<String, dynamic> json) =>
-      ListPermissionsResponse(
-        permissions:
-            decodeListMessage(json['permissions'], Permission.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListPermissionsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListPermissionsResponse(
+      permissions: switch (json['permissions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Permission.fromJson(i)],
+        _ => throw const FormatException('"permissions" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9109,11 +10434,19 @@ final class UpdatePermissionRequest extends ProtoMessage {
   UpdatePermissionRequest({required this.permission, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdatePermissionRequest.fromJson(Map<String, dynamic> json) =>
-      UpdatePermissionRequest(
-        permission: decode(json['permission'], Permission.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdatePermissionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdatePermissionRequest(
+      permission: switch (json['permission']) {
+        null => null,
+        Object $1 => Permission.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9138,8 +10471,15 @@ final class DeletePermissionRequest extends ProtoMessage {
 
   DeletePermissionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeletePermissionRequest.fromJson(Map<String, dynamic> json) =>
-      DeletePermissionRequest(name: json['name'] ?? '');
+  factory DeletePermissionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeletePermissionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -9168,11 +10508,19 @@ final class TransferOwnershipRequest extends ProtoMessage {
   TransferOwnershipRequest({required this.name, required this.emailAddress})
     : super(fullyQualifiedName);
 
-  factory TransferOwnershipRequest.fromJson(Map<String, dynamic> json) =>
-      TransferOwnershipRequest(
-        name: json['name'] ?? '',
-        emailAddress: json['emailAddress'] ?? '',
-      );
+  factory TransferOwnershipRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TransferOwnershipRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      emailAddress: switch (json['emailAddress']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, 'emailAddress': emailAddress};
@@ -9191,7 +10539,7 @@ final class TransferOwnershipResponse extends ProtoMessage {
 
   TransferOwnershipResponse() : super(fullyQualifiedName);
 
-  factory TransferOwnershipResponse.fromJson(Map<String, dynamic> json) =>
+  factory TransferOwnershipResponse.fromJson(Object? j) =>
       TransferOwnershipResponse();
 
   @override
@@ -9223,11 +10571,24 @@ final class PredictRequest extends ProtoMessage {
     this.parameters,
   }) : super(fullyQualifiedName);
 
-  factory PredictRequest.fromJson(Map<String, dynamic> json) => PredictRequest(
-    model: json['model'] ?? '',
-    instances: decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
-    parameters: decodeCustom(json['parameters'], Value.fromJson),
-  );
+  factory PredictRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PredictRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      instances: switch (json['instances']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Value.fromJson(i)],
+        _ => throw const FormatException('"instances" is not a list'),
+      },
+      parameters: switch (json['parameters']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9264,13 +10625,24 @@ final class PredictLongRunningRequest extends ProtoMessage {
     this.parameters,
   }) : super(fullyQualifiedName);
 
-  factory PredictLongRunningRequest.fromJson(Map<String, dynamic> json) =>
-      PredictLongRunningRequest(
-        model: json['model'] ?? '',
-        instances:
-            decodeListMessageCustom(json['instances'], Value.fromJson) ?? [],
-        parameters: decodeCustom(json['parameters'], Value.fromJson),
-      );
+  factory PredictLongRunningRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PredictLongRunningRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      instances: switch (json['instances']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Value.fromJson(i)],
+        _ => throw const FormatException('"instances" is not a list'),
+      },
+      parameters: switch (json['parameters']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9296,11 +10668,16 @@ final class PredictResponse extends ProtoMessage {
 
   PredictResponse({this.predictions = const []}) : super(fullyQualifiedName);
 
-  factory PredictResponse.fromJson(Map<String, dynamic> json) =>
-      PredictResponse(
-        predictions:
-            decodeListMessageCustom(json['predictions'], Value.fromJson) ?? [],
-      );
+  factory PredictResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PredictResponse(
+      predictions: switch (json['predictions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Value.fromJson(i)],
+        _ => throw const FormatException('"predictions" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9322,13 +10699,15 @@ final class PredictLongRunningResponse extends ProtoMessage {
   PredictLongRunningResponse({this.generateVideoResponse})
     : super(fullyQualifiedName);
 
-  factory PredictLongRunningResponse.fromJson(Map<String, dynamic> json) =>
-      PredictLongRunningResponse(
-        generateVideoResponse: decode(
-          json['generateVideoResponse'],
-          PredictLongRunningGeneratedVideoResponse.fromJson,
-        ),
-      );
+  factory PredictLongRunningResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PredictLongRunningResponse(
+      generateVideoResponse: switch (json['generateVideoResponse']) {
+        null => null,
+        Object $1 => PredictLongRunningGeneratedVideoResponse.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9347,7 +10726,7 @@ final class PredictLongRunningMetadata extends ProtoMessage {
 
   PredictLongRunningMetadata() : super(fullyQualifiedName);
 
-  factory PredictLongRunningMetadata.fromJson(Map<String, dynamic> json) =>
+  factory PredictLongRunningMetadata.fromJson(Object? j) =>
       PredictLongRunningMetadata();
 
   @override
@@ -9367,8 +10746,15 @@ final class Media extends ProtoMessage {
 
   Media({this.video}) : super(fullyQualifiedName);
 
-  factory Media.fromJson(Map<String, dynamic> json) =>
-      Media(video: decode(json['video'], Video.fromJson));
+  factory Media.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Media(
+      video: switch (json['video']) {
+        null => null,
+        Object $1 => Video.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (video != null) 'video': video!.toJson()};
@@ -9390,8 +10776,19 @@ final class Video extends ProtoMessage {
 
   Video({this.video, this.uri}) : super(fullyQualifiedName);
 
-  factory Video.fromJson(Map<String, dynamic> json) =>
-      Video(video: decodeBytes(json['video']), uri: json['uri']);
+  factory Video.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Video(
+      video: switch (json['video']) {
+        null => null,
+        Object $1 => decodeBytes($1),
+      },
+      uri: switch (json['uri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9429,14 +10826,27 @@ final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
     this.raiMediaFilteredReasons = const [],
   }) : super(fullyQualifiedName);
 
-  factory PredictLongRunningGeneratedVideoResponse.fromJson(
-    Map<String, dynamic> json,
-  ) => PredictLongRunningGeneratedVideoResponse(
-    generatedSamples:
-        decodeListMessage(json['generatedSamples'], Media.fromJson) ?? [],
-    raiMediaFilteredCount: json['raiMediaFilteredCount'] ?? 0,
-    raiMediaFilteredReasons: decodeList(json['raiMediaFilteredReasons']) ?? [],
-  );
+  factory PredictLongRunningGeneratedVideoResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PredictLongRunningGeneratedVideoResponse(
+      generatedSamples: switch (json['generatedSamples']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Media.fromJson(i)],
+        _ => throw const FormatException('"generatedSamples" is not a list'),
+      },
+      raiMediaFilteredCount: switch (json['raiMediaFilteredCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      raiMediaFilteredReasons: switch (json['raiMediaFilteredReasons']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException(
+          '"raiMediaFilteredReasons" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9488,12 +10898,27 @@ final class Corpus extends ProtoMessage {
     this.updateTime,
   }) : super(fullyQualifiedName);
 
-  factory Corpus.fromJson(Map<String, dynamic> json) => Corpus(
-    name: json['name'] ?? '',
-    displayName: json['displayName'] ?? '',
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-  );
+  factory Corpus.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Corpus(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9547,15 +10972,32 @@ final class Document extends ProtoMessage {
     this.createTime,
   }) : super(fullyQualifiedName);
 
-  factory Document.fromJson(Map<String, dynamic> json) => Document(
-    name: json['name'] ?? '',
-    displayName: json['displayName'] ?? '',
-    customMetadata:
-        decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
-        [],
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-  );
+  factory Document.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Document(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      customMetadata: switch (json['customMetadata']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) CustomMetadata.fromJson(i)],
+        _ => throw const FormatException('"customMetadata" is not a list'),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9584,8 +11026,16 @@ final class StringList extends ProtoMessage {
 
   StringList({this.values = const []}) : super(fullyQualifiedName);
 
-  factory StringList.fromJson(Map<String, dynamic> json) =>
-      StringList(values: decodeList(json['values']) ?? []);
+  factory StringList.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return StringList(
+      values: switch (json['values']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"values" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (values.isNotDefault) 'values': values};
@@ -9618,12 +11068,27 @@ final class CustomMetadata extends ProtoMessage {
     required this.key,
   }) : super(fullyQualifiedName);
 
-  factory CustomMetadata.fromJson(Map<String, dynamic> json) => CustomMetadata(
-    stringValue: json['stringValue'],
-    stringListValue: decode(json['stringListValue'], StringList.fromJson),
-    numericValue: decodeDouble(json['numericValue']),
-    key: json['key'] ?? '',
-  );
+  factory CustomMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CustomMetadata(
+      stringValue: switch (json['stringValue']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      stringListValue: switch (json['stringListValue']) {
+        null => null,
+        Object $1 => StringList.fromJson($1),
+      },
+      numericValue: switch (json['numericValue']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      key: switch (json['key']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9664,10 +11129,20 @@ final class MetadataFilter extends ProtoMessage {
   MetadataFilter({required this.key, required this.conditions})
     : super(fullyQualifiedName);
 
-  factory MetadataFilter.fromJson(Map<String, dynamic> json) => MetadataFilter(
-    key: json['key'] ?? '',
-    conditions: decodeListMessage(json['conditions'], Condition.fromJson) ?? [],
-  );
+  factory MetadataFilter.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetadataFilter(
+      key: switch (json['key']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      conditions: switch (json['conditions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Condition.fromJson(i)],
+        _ => throw const FormatException('"conditions" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'key': key, 'conditions': encodeList(conditions)};
@@ -9697,13 +11172,23 @@ final class Condition extends ProtoMessage {
   Condition({this.stringValue, this.numericValue, required this.operation})
     : super(fullyQualifiedName);
 
-  factory Condition.fromJson(Map<String, dynamic> json) => Condition(
-    stringValue: json['stringValue'],
-    numericValue: decodeDouble(json['numericValue']),
-    operation:
-        decodeEnum(json['operation'], Condition_Operator.fromJson) ??
-        Condition_Operator.$default,
-  );
+  factory Condition.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Condition(
+      stringValue: switch (json['stringValue']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      numericValue: switch (json['numericValue']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      operation: switch (json['operation']) {
+        null => Condition_Operator.$default,
+        Object $1 => Condition_Operator.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9759,7 +11244,8 @@ final class Condition_Operator extends ProtoEnum {
 
   const Condition_Operator(super.value);
 
-  factory Condition_Operator.fromJson(String json) => Condition_Operator(json);
+  factory Condition_Operator.fromJson(Object? json) =>
+      Condition_Operator(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -9808,17 +11294,36 @@ final class Chunk extends ProtoMessage {
     this.state = Chunk_State.$default,
   }) : super(fullyQualifiedName);
 
-  factory Chunk.fromJson(Map<String, dynamic> json) => Chunk(
-    name: json['name'] ?? '',
-    data: decode(json['data'], ChunkData.fromJson),
-    customMetadata:
-        decodeListMessage(json['customMetadata'], CustomMetadata.fromJson) ??
-        [],
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    state:
-        decodeEnum(json['state'], Chunk_State.fromJson) ?? Chunk_State.$default,
-  );
+  factory Chunk.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Chunk(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      data: switch (json['data']) {
+        null => null,
+        Object $1 => ChunkData.fromJson($1),
+      },
+      customMetadata: switch (json['customMetadata']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) CustomMetadata.fromJson(i)],
+        _ => throw const FormatException('"customMetadata" is not a list'),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => Chunk_State.$default,
+        Object $1 => Chunk_State.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9857,7 +11362,7 @@ final class Chunk_State extends ProtoEnum {
 
   const Chunk_State(super.value);
 
-  factory Chunk_State.fromJson(String json) => Chunk_State(json);
+  factory Chunk_State.fromJson(Object? json) => Chunk_State(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -9876,8 +11381,15 @@ final class ChunkData extends ProtoMessage {
 
   ChunkData({this.stringValue}) : super(fullyQualifiedName);
 
-  factory ChunkData.fromJson(Map<String, dynamic> json) =>
-      ChunkData(stringValue: json['stringValue']);
+  factory ChunkData.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ChunkData(
+      stringValue: switch (json['stringValue']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (stringValue != null) 'stringValue': stringValue};
@@ -9901,8 +11413,15 @@ final class CreateCorpusRequest extends ProtoMessage {
 
   CreateCorpusRequest({required this.corpus}) : super(fullyQualifiedName);
 
-  factory CreateCorpusRequest.fromJson(Map<String, dynamic> json) =>
-      CreateCorpusRequest(corpus: decode(json['corpus'], Corpus.fromJson));
+  factory CreateCorpusRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateCorpusRequest(
+      corpus: switch (json['corpus']) {
+        null => null,
+        Object $1 => Corpus.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (corpus != null) 'corpus': corpus!.toJson()};
@@ -9922,8 +11441,15 @@ final class GetCorpusRequest extends ProtoMessage {
 
   GetCorpusRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetCorpusRequest.fromJson(Map<String, dynamic> json) =>
-      GetCorpusRequest(name: json['name'] ?? '');
+  factory GetCorpusRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetCorpusRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -9950,11 +11476,19 @@ final class UpdateCorpusRequest extends ProtoMessage {
   UpdateCorpusRequest({required this.corpus, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateCorpusRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateCorpusRequest(
-        corpus: decode(json['corpus'], Corpus.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateCorpusRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateCorpusRequest(
+      corpus: switch (json['corpus']) {
+        null => null,
+        Object $1 => Corpus.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -9985,11 +11519,19 @@ final class DeleteCorpusRequest extends ProtoMessage {
   DeleteCorpusRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
-  factory DeleteCorpusRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteCorpusRequest(
-        name: json['name'] ?? '',
-        force: json['force'] ?? false,
-      );
+  factory DeleteCorpusRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteCorpusRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      force: switch (json['force']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, if (force.isNotDefault) 'force': force};
@@ -10025,11 +11567,19 @@ final class ListCorporaRequest extends ProtoMessage {
   ListCorporaRequest({this.pageSize = 0, this.pageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListCorporaRequest.fromJson(Map<String, dynamic> json) =>
-      ListCorporaRequest(
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListCorporaRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListCorporaRequest(
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10060,11 +11610,20 @@ final class ListCorporaResponse extends ProtoMessage {
   ListCorporaResponse({this.corpora = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListCorporaResponse.fromJson(Map<String, dynamic> json) =>
-      ListCorporaResponse(
-        corpora: decodeListMessage(json['corpora'], Corpus.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListCorporaResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListCorporaResponse(
+      corpora: switch (json['corpora']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Corpus.fromJson(i)],
+        _ => throw const FormatException('"corpora" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10138,18 +11697,28 @@ final class QueryCorpusRequest extends ProtoMessage {
     this.resultsCount = 0,
   }) : super(fullyQualifiedName);
 
-  factory QueryCorpusRequest.fromJson(Map<String, dynamic> json) =>
-      QueryCorpusRequest(
-        name: json['name'] ?? '',
-        query: json['query'] ?? '',
-        metadataFilters:
-            decodeListMessage(
-              json['metadataFilters'],
-              MetadataFilter.fromJson,
-            ) ??
-            [],
-        resultsCount: json['resultsCount'] ?? 0,
-      );
+  factory QueryCorpusRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return QueryCorpusRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      query: switch (json['query']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metadataFilters: switch (json['metadataFilters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetadataFilter.fromJson(i)],
+        _ => throw const FormatException('"metadataFilters" is not a list'),
+      },
+      resultsCount: switch (json['resultsCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10182,12 +11751,16 @@ final class QueryCorpusResponse extends ProtoMessage {
   QueryCorpusResponse({this.relevantChunks = const []})
     : super(fullyQualifiedName);
 
-  factory QueryCorpusResponse.fromJson(Map<String, dynamic> json) =>
-      QueryCorpusResponse(
-        relevantChunks:
-            decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
-            [],
-      );
+  factory QueryCorpusResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return QueryCorpusResponse(
+      relevantChunks: switch (json['relevantChunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RelevantChunk.fromJson(i)],
+        _ => throw const FormatException('"relevantChunks" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10216,11 +11789,23 @@ final class RelevantChunk extends ProtoMessage {
   RelevantChunk({this.chunkRelevanceScore = 0, this.chunk, this.document})
     : super(fullyQualifiedName);
 
-  factory RelevantChunk.fromJson(Map<String, dynamic> json) => RelevantChunk(
-    chunkRelevanceScore: decodeDouble(json['chunkRelevanceScore']) ?? 0,
-    chunk: decode(json['chunk'], Chunk.fromJson),
-    document: decode(json['document'], Document.fromJson),
-  );
+  factory RelevantChunk.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RelevantChunk(
+      chunkRelevanceScore: switch (json['chunkRelevanceScore']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      chunk: switch (json['chunk']) {
+        null => null,
+        Object $1 => Chunk.fromJson($1),
+      },
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10252,11 +11837,19 @@ final class CreateDocumentRequest extends ProtoMessage {
   CreateDocumentRequest({required this.parent, required this.document})
     : super(fullyQualifiedName);
 
-  factory CreateDocumentRequest.fromJson(Map<String, dynamic> json) =>
-      CreateDocumentRequest(
-        parent: json['parent'] ?? '',
-        document: decode(json['document'], Document.fromJson),
-      );
+  factory CreateDocumentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateDocumentRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10282,8 +11875,15 @@ final class GetDocumentRequest extends ProtoMessage {
 
   GetDocumentRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetDocumentRequest.fromJson(Map<String, dynamic> json) =>
-      GetDocumentRequest(name: json['name'] ?? '');
+  factory GetDocumentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetDocumentRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -10311,11 +11911,19 @@ final class UpdateDocumentRequest extends ProtoMessage {
   UpdateDocumentRequest({required this.document, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateDocumentRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateDocumentRequest(
-        document: decode(json['document'], Document.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateDocumentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateDocumentRequest(
+      document: switch (json['document']) {
+        null => null,
+        Object $1 => Document.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10346,11 +11954,19 @@ final class DeleteDocumentRequest extends ProtoMessage {
   DeleteDocumentRequest({required this.name, this.force = false})
     : super(fullyQualifiedName);
 
-  factory DeleteDocumentRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteDocumentRequest(
-        name: json['name'] ?? '',
-        force: json['force'] ?? false,
-      );
+  factory DeleteDocumentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteDocumentRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      force: switch (json['force']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name, if (force.isNotDefault) 'force': force};
@@ -10393,12 +12009,23 @@ final class ListDocumentsRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListDocumentsRequest.fromJson(Map<String, dynamic> json) =>
-      ListDocumentsRequest(
-        parent: json['parent'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListDocumentsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListDocumentsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10434,12 +12061,20 @@ final class ListDocumentsResponse extends ProtoMessage {
   ListDocumentsResponse({this.documents = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListDocumentsResponse.fromJson(Map<String, dynamic> json) =>
-      ListDocumentsResponse(
-        documents:
-            decodeListMessage(json['documents'], Document.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListDocumentsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListDocumentsResponse(
+      documents: switch (json['documents']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Document.fromJson(i)],
+        _ => throw const FormatException('"documents" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10513,18 +12148,28 @@ final class QueryDocumentRequest extends ProtoMessage {
     this.metadataFilters = const [],
   }) : super(fullyQualifiedName);
 
-  factory QueryDocumentRequest.fromJson(Map<String, dynamic> json) =>
-      QueryDocumentRequest(
-        name: json['name'] ?? '',
-        query: json['query'] ?? '',
-        resultsCount: json['resultsCount'] ?? 0,
-        metadataFilters:
-            decodeListMessage(
-              json['metadataFilters'],
-              MetadataFilter.fromJson,
-            ) ??
-            [],
-      );
+  factory QueryDocumentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return QueryDocumentRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      query: switch (json['query']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resultsCount: switch (json['resultsCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      metadataFilters: switch (json['metadataFilters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetadataFilter.fromJson(i)],
+        _ => throw const FormatException('"metadataFilters" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10557,12 +12202,16 @@ final class QueryDocumentResponse extends ProtoMessage {
   QueryDocumentResponse({this.relevantChunks = const []})
     : super(fullyQualifiedName);
 
-  factory QueryDocumentResponse.fromJson(Map<String, dynamic> json) =>
-      QueryDocumentResponse(
-        relevantChunks:
-            decodeListMessage(json['relevantChunks'], RelevantChunk.fromJson) ??
-            [],
-      );
+  factory QueryDocumentResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return QueryDocumentResponse(
+      relevantChunks: switch (json['relevantChunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RelevantChunk.fromJson(i)],
+        _ => throw const FormatException('"relevantChunks" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10589,11 +12238,19 @@ final class CreateChunkRequest extends ProtoMessage {
   CreateChunkRequest({required this.parent, required this.chunk})
     : super(fullyQualifiedName);
 
-  factory CreateChunkRequest.fromJson(Map<String, dynamic> json) =>
-      CreateChunkRequest(
-        parent: json['parent'] ?? '',
-        chunk: decode(json['chunk'], Chunk.fromJson),
-      );
+  factory CreateChunkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateChunkRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      chunk: switch (json['chunk']) {
+        null => null,
+        Object $1 => Chunk.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10625,13 +12282,22 @@ final class BatchCreateChunksRequest extends ProtoMessage {
   BatchCreateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchCreateChunksRequest.fromJson(Map<String, dynamic> json) =>
-      BatchCreateChunksRequest(
-        parent: json['parent'] ?? '',
-        requests:
-            decodeListMessage(json['requests'], CreateChunkRequest.fromJson) ??
-            [],
-      );
+  factory BatchCreateChunksRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateChunksRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) CreateChunkRequest.fromJson(i),
+        ],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10657,10 +12323,16 @@ final class BatchCreateChunksResponse extends ProtoMessage {
   BatchCreateChunksResponse({this.chunks = const []})
     : super(fullyQualifiedName);
 
-  factory BatchCreateChunksResponse.fromJson(Map<String, dynamic> json) =>
-      BatchCreateChunksResponse(
-        chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
-      );
+  factory BatchCreateChunksResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateChunksResponse(
+      chunks: switch (json['chunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Chunk.fromJson(i)],
+        _ => throw const FormatException('"chunks" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
@@ -10680,8 +12352,15 @@ final class GetChunkRequest extends ProtoMessage {
 
   GetChunkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GetChunkRequest.fromJson(Map<String, dynamic> json) =>
-      GetChunkRequest(name: json['name'] ?? '');
+  factory GetChunkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetChunkRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -10708,11 +12387,19 @@ final class UpdateChunkRequest extends ProtoMessage {
   UpdateChunkRequest({required this.chunk, required this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateChunkRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateChunkRequest(
-        chunk: decode(json['chunk'], Chunk.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateChunkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateChunkRequest(
+      chunk: switch (json['chunk']) {
+        null => null,
+        Object $1 => Chunk.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10741,13 +12428,22 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
   BatchUpdateChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchUpdateChunksRequest.fromJson(Map<String, dynamic> json) =>
-      BatchUpdateChunksRequest(
-        parent: json['parent'] ?? '',
-        requests:
-            decodeListMessage(json['requests'], UpdateChunkRequest.fromJson) ??
-            [],
-      );
+  factory BatchUpdateChunksRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchUpdateChunksRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) UpdateChunkRequest.fromJson(i),
+        ],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10773,10 +12469,16 @@ final class BatchUpdateChunksResponse extends ProtoMessage {
   BatchUpdateChunksResponse({this.chunks = const []})
     : super(fullyQualifiedName);
 
-  factory BatchUpdateChunksResponse.fromJson(Map<String, dynamic> json) =>
-      BatchUpdateChunksResponse(
-        chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
-      );
+  factory BatchUpdateChunksResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchUpdateChunksResponse(
+      chunks: switch (json['chunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Chunk.fromJson(i)],
+        _ => throw const FormatException('"chunks" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (chunks.isNotDefault) 'chunks': encodeList(chunks)};
@@ -10796,8 +12498,15 @@ final class DeleteChunkRequest extends ProtoMessage {
 
   DeleteChunkRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteChunkRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteChunkRequest(name: json['name'] ?? '');
+  factory DeleteChunkRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteChunkRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -10825,13 +12534,22 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
   BatchDeleteChunksRequest({this.parent = '', required this.requests})
     : super(fullyQualifiedName);
 
-  factory BatchDeleteChunksRequest.fromJson(Map<String, dynamic> json) =>
-      BatchDeleteChunksRequest(
-        parent: json['parent'] ?? '',
-        requests:
-            decodeListMessage(json['requests'], DeleteChunkRequest.fromJson) ??
-            [],
-      );
+  factory BatchDeleteChunksRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchDeleteChunksRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) DeleteChunkRequest.fromJson(i),
+        ],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10877,12 +12595,23 @@ final class ListChunksRequest extends ProtoMessage {
     this.pageToken = '',
   }) : super(fullyQualifiedName);
 
-  factory ListChunksRequest.fromJson(Map<String, dynamic> json) =>
-      ListChunksRequest(
-        parent: json['parent'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-      );
+  factory ListChunksRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListChunksRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10918,11 +12647,20 @@ final class ListChunksResponse extends ProtoMessage {
   ListChunksResponse({this.chunks = const [], this.nextPageToken = ''})
     : super(fullyQualifiedName);
 
-  factory ListChunksResponse.fromJson(Map<String, dynamic> json) =>
-      ListChunksResponse(
-        chunks: decodeListMessage(json['chunks'], Chunk.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-      );
+  factory ListChunksResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListChunksResponse(
+      chunks: switch (json['chunks']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Chunk.fromJson(i)],
+        _ => throw const FormatException('"chunks" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10956,12 +12694,19 @@ final class ContentFilter extends ProtoMessage {
     this.message,
   }) : super(fullyQualifiedName);
 
-  factory ContentFilter.fromJson(Map<String, dynamic> json) => ContentFilter(
-    reason:
-        decodeEnum(json['reason'], ContentFilter_BlockedReason.fromJson) ??
-        ContentFilter_BlockedReason.$default,
-    message: json['message'],
-  );
+  factory ContentFilter.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ContentFilter(
+      reason: switch (json['reason']) {
+        null => ContentFilter_BlockedReason.$default,
+        Object $1 => ContentFilter_BlockedReason.fromJson($1),
+      },
+      message: switch (json['message']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -10997,8 +12742,8 @@ final class ContentFilter_BlockedReason extends ProtoEnum {
 
   const ContentFilter_BlockedReason(super.value);
 
-  factory ContentFilter_BlockedReason.fromJson(String json) =>
-      ContentFilter_BlockedReason(json);
+  factory ContentFilter_BlockedReason.fromJson(Object? json) =>
+      ContentFilter_BlockedReason(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -11025,10 +12770,19 @@ final class SafetyFeedback extends ProtoMessage {
 
   SafetyFeedback({this.rating, this.setting}) : super(fullyQualifiedName);
 
-  factory SafetyFeedback.fromJson(Map<String, dynamic> json) => SafetyFeedback(
-    rating: decode(json['rating'], SafetyRating.fromJson),
-    setting: decode(json['setting'], SafetySetting.fromJson),
-  );
+  factory SafetyFeedback.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SafetyFeedback(
+      rating: switch (json['rating']) {
+        null => null,
+        Object $1 => SafetyRating.fromJson($1),
+      },
+      setting: switch (json['setting']) {
+        null => null,
+        Object $1 => SafetySetting.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11066,18 +12820,23 @@ final class SafetyRating extends ProtoMessage {
     this.blocked = false,
   }) : super(fullyQualifiedName);
 
-  factory SafetyRating.fromJson(Map<String, dynamic> json) => SafetyRating(
-    category:
-        decodeEnum(json['category'], HarmCategory.fromJson) ??
-        HarmCategory.$default,
-    probability:
-        decodeEnum(
-          json['probability'],
-          SafetyRating_HarmProbability.fromJson,
-        ) ??
-        SafetyRating_HarmProbability.$default,
-    blocked: json['blocked'] ?? false,
-  );
+  factory SafetyRating.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SafetyRating(
+      category: switch (json['category']) {
+        null => HarmCategory.$default,
+        Object $1 => HarmCategory.fromJson($1),
+      },
+      probability: switch (json['probability']) {
+        null => SafetyRating_HarmProbability.$default,
+        Object $1 => SafetyRating_HarmProbability.fromJson($1),
+      },
+      blocked: switch (json['blocked']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11124,8 +12883,8 @@ final class SafetyRating_HarmProbability extends ProtoEnum {
 
   const SafetyRating_HarmProbability(super.value);
 
-  factory SafetyRating_HarmProbability.fromJson(String json) =>
-      SafetyRating_HarmProbability(json);
+  factory SafetyRating_HarmProbability.fromJson(Object? json) =>
+      SafetyRating_HarmProbability(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -11150,17 +12909,19 @@ final class SafetySetting extends ProtoMessage {
   SafetySetting({required this.category, required this.threshold})
     : super(fullyQualifiedName);
 
-  factory SafetySetting.fromJson(Map<String, dynamic> json) => SafetySetting(
-    category:
-        decodeEnum(json['category'], HarmCategory.fromJson) ??
-        HarmCategory.$default,
-    threshold:
-        decodeEnum(
-          json['threshold'],
-          SafetySetting_HarmBlockThreshold.fromJson,
-        ) ??
-        SafetySetting_HarmBlockThreshold.$default,
-  );
+  factory SafetySetting.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SafetySetting(
+      category: switch (json['category']) {
+        null => HarmCategory.$default,
+        Object $1 => HarmCategory.fromJson($1),
+      },
+      threshold: switch (json['threshold']) {
+        null => SafetySetting_HarmBlockThreshold.$default,
+        Object $1 => SafetySetting_HarmBlockThreshold.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11208,8 +12969,8 @@ final class SafetySetting_HarmBlockThreshold extends ProtoEnum {
 
   const SafetySetting_HarmBlockThreshold(super.value);
 
-  factory SafetySetting_HarmBlockThreshold.fromJson(String json) =>
-      SafetySetting_HarmBlockThreshold(json);
+  factory SafetySetting_HarmBlockThreshold.fromJson(Object? json) =>
+      SafetySetting_HarmBlockThreshold(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -11315,20 +13076,49 @@ final class GenerateTextRequest extends ProtoMessage {
     this.stopSequences = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateTextRequest.fromJson(Map<String, dynamic> json) =>
-      GenerateTextRequest(
-        model: json['model'] ?? '',
-        prompt: decode(json['prompt'], TextPrompt.fromJson),
-        temperature: decodeDouble(json['temperature']),
-        candidateCount: json['candidateCount'],
-        maxOutputTokens: json['maxOutputTokens'],
-        topP: decodeDouble(json['topP']),
-        topK: json['topK'],
-        safetySettings:
-            decodeListMessage(json['safetySettings'], SafetySetting.fromJson) ??
-            [],
-        stopSequences: decodeList(json['stopSequences']) ?? [],
-      );
+  factory GenerateTextRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateTextRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      prompt: switch (json['prompt']) {
+        null => null,
+        Object $1 => TextPrompt.fromJson($1),
+      },
+      temperature: switch (json['temperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      candidateCount: switch (json['candidateCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      maxOutputTokens: switch (json['maxOutputTokens']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      topP: switch (json['topP']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topK: switch (json['topK']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      safetySettings: switch (json['safetySettings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetySetting.fromJson(i)],
+        _ => throw const FormatException('"safetySettings" is not a list'),
+      },
+      stopSequences: switch (json['stopSequences']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"stopSequences" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11388,16 +13178,26 @@ final class GenerateTextResponse extends ProtoMessage {
     this.safetyFeedback = const [],
   }) : super(fullyQualifiedName);
 
-  factory GenerateTextResponse.fromJson(
-    Map<String, dynamic> json,
-  ) => GenerateTextResponse(
-    candidates:
-        decodeListMessage(json['candidates'], TextCompletion.fromJson) ?? [],
-    filters: decodeListMessage(json['filters'], ContentFilter.fromJson) ?? [],
-    safetyFeedback:
-        decodeListMessage(json['safetyFeedback'], SafetyFeedback.fromJson) ??
-        [],
-  );
+  factory GenerateTextResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateTextResponse(
+      candidates: switch (json['candidates']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) TextCompletion.fromJson(i)],
+        _ => throw const FormatException('"candidates" is not a list'),
+      },
+      filters: switch (json['filters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ContentFilter.fromJson(i)],
+        _ => throw const FormatException('"filters" is not a list'),
+      },
+      safetyFeedback: switch (json['safetyFeedback']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetyFeedback.fromJson(i)],
+        _ => throw const FormatException('"safetyFeedback" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11423,8 +13223,15 @@ final class TextPrompt extends ProtoMessage {
 
   TextPrompt({required this.text}) : super(fullyQualifiedName);
 
-  factory TextPrompt.fromJson(Map<String, dynamic> json) =>
-      TextPrompt(text: json['text'] ?? '');
+  factory TextPrompt.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TextPrompt(
+      text: switch (json['text']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'text': text};
@@ -11462,15 +13269,24 @@ final class TextCompletion extends ProtoMessage {
     this.citationMetadata,
   }) : super(fullyQualifiedName);
 
-  factory TextCompletion.fromJson(Map<String, dynamic> json) => TextCompletion(
-    output: json['output'] ?? '',
-    safetyRatings:
-        decodeListMessage(json['safetyRatings'], SafetyRating.fromJson) ?? [],
-    citationMetadata: decode(
-      json['citationMetadata'],
-      CitationMetadata.fromJson,
-    ),
-  );
+  factory TextCompletion.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TextCompletion(
+      output: switch (json['output']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      safetyRatings: switch (json['safetyRatings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SafetyRating.fromJson(i)],
+        _ => throw const FormatException('"safetyRatings" is not a list'),
+      },
+      citationMetadata: switch (json['citationMetadata']) {
+        null => null,
+        Object $1 => CitationMetadata.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11502,8 +13318,19 @@ final class EmbedTextRequest extends ProtoMessage {
   EmbedTextRequest({required this.model, this.text = ''})
     : super(fullyQualifiedName);
 
-  factory EmbedTextRequest.fromJson(Map<String, dynamic> json) =>
-      EmbedTextRequest(model: json['model'] ?? '', text: json['text'] ?? '');
+  factory EmbedTextRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedTextRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      text: switch (json['text']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'model': model, if (text.isNotDefault) 'text': text};
@@ -11525,10 +13352,15 @@ final class EmbedTextResponse extends ProtoMessage {
 
   EmbedTextResponse({this.embedding}) : super(fullyQualifiedName);
 
-  factory EmbedTextResponse.fromJson(Map<String, dynamic> json) =>
-      EmbedTextResponse(
-        embedding: decode(json['embedding'], Embedding.fromJson),
-      );
+  factory EmbedTextResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedTextResponse(
+      embedding: switch (json['embedding']) {
+        null => null,
+        Object $1 => Embedding.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (embedding != null) 'embedding': embedding!.toJson()};
@@ -11562,14 +13394,25 @@ final class BatchEmbedTextRequest extends ProtoMessage {
     this.requests = const [],
   }) : super(fullyQualifiedName);
 
-  factory BatchEmbedTextRequest.fromJson(Map<String, dynamic> json) =>
-      BatchEmbedTextRequest(
-        model: json['model'] ?? '',
-        texts: decodeList(json['texts']) ?? [],
-        requests:
-            decodeListMessage(json['requests'], EmbedTextRequest.fromJson) ??
-            [],
-      );
+  factory BatchEmbedTextRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchEmbedTextRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      texts: switch (json['texts']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"texts" is not a list'),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) EmbedTextRequest.fromJson(i)],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11596,11 +13439,16 @@ final class BatchEmbedTextResponse extends ProtoMessage {
   BatchEmbedTextResponse({this.embeddings = const []})
     : super(fullyQualifiedName);
 
-  factory BatchEmbedTextResponse.fromJson(Map<String, dynamic> json) =>
-      BatchEmbedTextResponse(
-        embeddings:
-            decodeListMessage(json['embeddings'], Embedding.fromJson) ?? [],
-      );
+  factory BatchEmbedTextResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchEmbedTextResponse(
+      embeddings: switch (json['embeddings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Embedding.fromJson(i)],
+        _ => throw const FormatException('"embeddings" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11621,8 +13469,16 @@ final class Embedding extends ProtoMessage {
 
   Embedding({this.value = const []}) : super(fullyQualifiedName);
 
-  factory Embedding.fromJson(Map<String, dynamic> json) =>
-      Embedding(value: decodeList(json['value']) ?? []);
+  factory Embedding.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Embedding(
+      value: switch (json['value']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"value" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (value.isNotDefault) 'value': value};
@@ -11653,11 +13509,19 @@ final class CountTextTokensRequest extends ProtoMessage {
   CountTextTokensRequest({required this.model, required this.prompt})
     : super(fullyQualifiedName);
 
-  factory CountTextTokensRequest.fromJson(Map<String, dynamic> json) =>
-      CountTextTokensRequest(
-        model: json['model'] ?? '',
-        prompt: decode(json['prompt'], TextPrompt.fromJson),
-      );
+  factory CountTextTokensRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CountTextTokensRequest(
+      model: switch (json['model']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      prompt: switch (json['prompt']) {
+        null => null,
+        Object $1 => TextPrompt.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11686,8 +13550,15 @@ final class CountTextTokensResponse extends ProtoMessage {
 
   CountTextTokensResponse({this.tokenCount = 0}) : super(fullyQualifiedName);
 
-  factory CountTextTokensResponse.fromJson(Map<String, dynamic> json) =>
-      CountTextTokensResponse(tokenCount: json['tokenCount'] ?? 0);
+  factory CountTextTokensResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CountTextTokensResponse(
+      tokenCount: switch (json['tokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (tokenCount.isNotDefault) 'tokenCount': tokenCount};
@@ -11791,26 +13662,66 @@ final class TunedModel extends ProtoMessage {
     this.readerProjectNumbers = const [],
   }) : super(fullyQualifiedName);
 
-  factory TunedModel.fromJson(Map<String, dynamic> json) => TunedModel(
-    tunedModelSource: decode(
-      json['tunedModelSource'],
-      TunedModelSource.fromJson,
-    ),
-    baseModel: json['baseModel'],
-    name: json['name'] ?? '',
-    displayName: json['displayName'] ?? '',
-    description: json['description'] ?? '',
-    temperature: decodeDouble(json['temperature']),
-    topP: decodeDouble(json['topP']),
-    topK: json['topK'],
-    state:
-        decodeEnum(json['state'], TunedModel_State.fromJson) ??
-        TunedModel_State.$default,
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    tuningTask: decode(json['tuningTask'], TuningTask.fromJson),
-    readerProjectNumbers: decodeList(json['readerProjectNumbers']) ?? [],
-  );
+  factory TunedModel.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TunedModel(
+      tunedModelSource: switch (json['tunedModelSource']) {
+        null => null,
+        Object $1 => TunedModelSource.fromJson($1),
+      },
+      baseModel: switch (json['baseModel']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      temperature: switch (json['temperature']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topP: switch (json['topP']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      topK: switch (json['topK']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      state: switch (json['state']) {
+        null => TunedModel_State.$default,
+        Object $1 => TunedModel_State.fromJson($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      tuningTask: switch (json['tuningTask']) {
+        null => null,
+        Object $1 => TuningTask.fromJson($1),
+      },
+      readerProjectNumbers: switch (json['readerProjectNumbers']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException(
+          '"readerProjectNumbers" is not a list',
+        ),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11866,7 +13777,8 @@ final class TunedModel_State extends ProtoEnum {
 
   const TunedModel_State(super.value);
 
-  factory TunedModel_State.fromJson(String json) => TunedModel_State(json);
+  factory TunedModel_State.fromJson(Object? json) =>
+      TunedModel_State(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -11891,11 +13803,19 @@ final class TunedModelSource extends ProtoMessage {
   TunedModelSource({this.tunedModel = '', this.baseModel = ''})
     : super(fullyQualifiedName);
 
-  factory TunedModelSource.fromJson(Map<String, dynamic> json) =>
-      TunedModelSource(
-        tunedModel: json['tunedModel'] ?? '',
-        baseModel: json['baseModel'] ?? '',
-      );
+  factory TunedModelSource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TunedModelSource(
+      tunedModel: switch (json['tunedModel']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      baseModel: switch (json['baseModel']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11942,14 +13862,32 @@ final class TuningTask extends ProtoMessage {
     this.hyperparameters,
   }) : super(fullyQualifiedName);
 
-  factory TuningTask.fromJson(Map<String, dynamic> json) => TuningTask(
-    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-    completeTime: decodeCustom(json['completeTime'], Timestamp.fromJson),
-    snapshots:
-        decodeListMessage(json['snapshots'], TuningSnapshot.fromJson) ?? [],
-    trainingData: decode(json['trainingData'], Dataset.fromJson),
-    hyperparameters: decode(json['hyperparameters'], Hyperparameters.fromJson),
-  );
+  factory TuningTask.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TuningTask(
+      startTime: switch (json['startTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      completeTime: switch (json['completeTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      snapshots: switch (json['snapshots']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) TuningSnapshot.fromJson(i)],
+        _ => throw const FormatException('"snapshots" is not a list'),
+      },
+      trainingData: switch (json['trainingData']) {
+        null => null,
+        Object $1 => Dataset.fromJson($1),
+      },
+      hyperparameters: switch (json['hyperparameters']) {
+        null => null,
+        Object $1 => Hyperparameters.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -11998,13 +13936,27 @@ final class Hyperparameters extends ProtoMessage {
     this.batchSize,
   }) : super(fullyQualifiedName);
 
-  factory Hyperparameters.fromJson(Map<String, dynamic> json) =>
-      Hyperparameters(
-        learningRate: decodeDouble(json['learningRate']),
-        learningRateMultiplier: decodeDouble(json['learningRateMultiplier']),
-        epochCount: json['epochCount'],
-        batchSize: json['batchSize'],
-      );
+  factory Hyperparameters.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Hyperparameters(
+      learningRate: switch (json['learningRate']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      learningRateMultiplier: switch (json['learningRateMultiplier']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      epochCount: switch (json['epochCount']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      batchSize: switch (json['batchSize']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -12038,8 +13990,15 @@ final class Dataset extends ProtoMessage {
 
   Dataset({this.examples}) : super(fullyQualifiedName);
 
-  factory Dataset.fromJson(Map<String, dynamic> json) =>
-      Dataset(examples: decode(json['examples'], TuningExamples.fromJson));
+  factory Dataset.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Dataset(
+      examples: switch (json['examples']) {
+        null => null,
+        Object $1 => TuningExamples.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (examples != null) 'examples': examples!.toJson()};
@@ -12059,9 +14018,16 @@ final class TuningExamples extends ProtoMessage {
 
   TuningExamples({this.examples = const []}) : super(fullyQualifiedName);
 
-  factory TuningExamples.fromJson(Map<String, dynamic> json) => TuningExamples(
-    examples: decodeListMessage(json['examples'], TuningExample.fromJson) ?? [],
-  );
+  factory TuningExamples.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TuningExamples(
+      examples: switch (json['examples']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) TuningExample.fromJson(i)],
+        _ => throw const FormatException('"examples" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -12086,8 +14052,19 @@ final class TuningExample extends ProtoMessage {
   TuningExample({this.textInput, required this.output})
     : super(fullyQualifiedName);
 
-  factory TuningExample.fromJson(Map<String, dynamic> json) =>
-      TuningExample(textInput: json['textInput'], output: json['output'] ?? '');
+  factory TuningExample.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TuningExample(
+      textInput: switch (json['textInput']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      output: switch (json['output']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -12129,12 +14106,27 @@ final class TuningSnapshot extends ProtoMessage {
     this.computeTime,
   }) : super(fullyQualifiedName);
 
-  factory TuningSnapshot.fromJson(Map<String, dynamic> json) => TuningSnapshot(
-    step: json['step'] ?? 0,
-    epoch: json['epoch'] ?? 0,
-    meanLoss: decodeDouble(json['meanLoss']) ?? 0,
-    computeTime: decodeCustom(json['computeTime'], Timestamp.fromJson),
-  );
+  factory TuningSnapshot.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TuningSnapshot(
+      step: switch (json['step']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      epoch: switch (json['epoch']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      meanLoss: switch (json['meanLoss']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      computeTime: switch (json['computeTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -12187,7 +14179,7 @@ final class Type extends ProtoEnum {
 
   const Type(super.value);
 
-  factory Type.fromJson(String json) => Type(json);
+  factory Type.fromJson(Object? json) => Type(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -12220,7 +14212,7 @@ final class Modality extends ProtoEnum {
 
   const Modality(super.value);
 
-  factory Modality.fromJson(String json) => Modality(json);
+  factory Modality.fromJson(Object? json) => Modality(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -12262,7 +14254,7 @@ final class TaskType extends ProtoEnum {
 
   const TaskType(super.value);
 
-  factory TaskType.fromJson(String json) => TaskType(json);
+  factory TaskType.fromJson(Object? json) => TaskType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -12334,7 +14326,7 @@ final class HarmCategory extends ProtoEnum {
 
   const HarmCategory(super.value);
 
-  factory HarmCategory.fromJson(String json) => HarmCategory(json);
+  factory HarmCategory.fromJson(Object? json) => HarmCategory(json as String);
 
   bool get isNotDefault => this != $default;
 

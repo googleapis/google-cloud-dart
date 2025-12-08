@@ -19,7 +19,6 @@
 /// Manages lightweight user-provided functions executed in response to events.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -432,27 +431,72 @@ final class Function$ extends ProtoMessage {
     this.createTime,
   }) : super(fullyQualifiedName);
 
-  factory Function$.fromJson(Map<String, dynamic> json) => Function$(
-    name: json['name'] ?? '',
-    description: json['description'] ?? '',
-    buildConfig: decode(json['buildConfig'], BuildConfig.fromJson),
-    serviceConfig: decode(json['serviceConfig'], ServiceConfig.fromJson),
-    eventTrigger: decode(json['eventTrigger'], EventTrigger.fromJson),
-    state:
-        decodeEnum(json['state'], Function$_State.fromJson) ??
-        Function$_State.$default,
-    updateTime: decodeCustom(json['updateTime'], Timestamp.fromJson),
-    labels: decodeMap(json['labels']) ?? {},
-    stateMessages:
-        decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
-    environment:
-        decodeEnum(json['environment'], Environment.fromJson) ??
-        Environment.$default,
-    url: json['url'] ?? '',
-    kmsKeyName: json['kmsKeyName'] ?? '',
-    satisfiesPzs: json['satisfiesPzs'] ?? false,
-    createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-  );
+  factory Function$.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Function$(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      buildConfig: switch (json['buildConfig']) {
+        null => null,
+        Object $1 => BuildConfig.fromJson($1),
+      },
+      serviceConfig: switch (json['serviceConfig']) {
+        null => null,
+        Object $1 => ServiceConfig.fromJson($1),
+      },
+      eventTrigger: switch (json['eventTrigger']) {
+        null => null,
+        Object $1 => EventTrigger.fromJson($1),
+      },
+      state: switch (json['state']) {
+        null => Function$_State.$default,
+        Object $1 => Function$_State.fromJson($1),
+      },
+      updateTime: switch (json['updateTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
+      stateMessages: switch (json['stateMessages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) StateMessage.fromJson(i)],
+        _ => throw const FormatException('"stateMessages" is not a list'),
+      },
+      environment: switch (json['environment']) {
+        null => Environment.$default,
+        Object $1 => Environment.fromJson($1),
+      },
+      url: switch (json['url']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      kmsKeyName: switch (json['kmsKeyName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      satisfiesPzs: switch (json['satisfiesPzs']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -513,7 +557,8 @@ final class Function$_State extends ProtoEnum {
 
   const Function$_State(super.value);
 
-  factory Function$_State.fromJson(String json) => Function$_State(json);
+  factory Function$_State.fromJson(Object? json) =>
+      Function$_State(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -541,13 +586,23 @@ final class StateMessage extends ProtoMessage {
     this.message = '',
   }) : super(fullyQualifiedName);
 
-  factory StateMessage.fromJson(Map<String, dynamic> json) => StateMessage(
-    severity:
-        decodeEnum(json['severity'], StateMessage_Severity.fromJson) ??
-        StateMessage_Severity.$default,
-    type: json['type'] ?? '',
-    message: json['message'] ?? '',
-  );
+  factory StateMessage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return StateMessage(
+      severity: switch (json['severity']) {
+        null => StateMessage_Severity.$default,
+        Object $1 => StateMessage_Severity.fromJson($1),
+      },
+      type: switch (json['type']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      message: switch (json['message']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -588,8 +643,8 @@ final class StateMessage_Severity extends ProtoEnum {
 
   const StateMessage_Severity(super.value);
 
-  factory StateMessage_Severity.fromJson(String json) =>
-      StateMessage_Severity(json);
+  factory StateMessage_Severity.fromJson(Object? json) =>
+      StateMessage_Severity(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -629,12 +684,27 @@ final class StorageSource extends ProtoMessage {
     this.sourceUploadUrl = '',
   }) : super(fullyQualifiedName);
 
-  factory StorageSource.fromJson(Map<String, dynamic> json) => StorageSource(
-    bucket: json['bucket'] ?? '',
-    object: json['object'] ?? '',
-    generation: decodeInt64(json['generation']) ?? 0,
-    sourceUploadUrl: json['sourceUploadUrl'] ?? '',
-  );
+  factory StorageSource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return StorageSource(
+      bucket: switch (json['bucket']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      object: switch (json['object']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      generation: switch (json['generation']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      sourceUploadUrl: switch (json['sourceUploadUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -704,15 +774,39 @@ final class RepoSource extends ProtoMessage {
     this.invertRegex = false,
   }) : super(fullyQualifiedName);
 
-  factory RepoSource.fromJson(Map<String, dynamic> json) => RepoSource(
-    branchName: json['branchName'],
-    tagName: json['tagName'],
-    commitSha: json['commitSha'],
-    projectId: json['projectId'] ?? '',
-    repoName: json['repoName'] ?? '',
-    dir: json['dir'] ?? '',
-    invertRegex: json['invertRegex'] ?? false,
-  );
+  factory RepoSource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RepoSource(
+      branchName: switch (json['branchName']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      tagName: switch (json['tagName']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      commitSha: switch (json['commitSha']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      projectId: switch (json['projectId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      repoName: switch (json['repoName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      dir: switch (json['dir']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      invertRegex: switch (json['invertRegex']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -759,11 +853,23 @@ final class Source extends ProtoMessage {
   Source({this.storageSource, this.repoSource, this.gitUri})
     : super(fullyQualifiedName);
 
-  factory Source.fromJson(Map<String, dynamic> json) => Source(
-    storageSource: decode(json['storageSource'], StorageSource.fromJson),
-    repoSource: decode(json['repoSource'], RepoSource.fromJson),
-    gitUri: json['gitUri'],
-  );
+  factory Source.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Source(
+      storageSource: switch (json['storageSource']) {
+        null => null,
+        Object $1 => StorageSource.fromJson($1),
+      },
+      repoSource: switch (json['repoSource']) {
+        null => null,
+        Object $1 => RepoSource.fromJson($1),
+      },
+      gitUri: switch (json['gitUri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -803,18 +909,23 @@ final class SourceProvenance extends ProtoMessage {
     this.gitUri = '',
   }) : super(fullyQualifiedName);
 
-  factory SourceProvenance.fromJson(Map<String, dynamic> json) =>
-      SourceProvenance(
-        resolvedStorageSource: decode(
-          json['resolvedStorageSource'],
-          StorageSource.fromJson,
-        ),
-        resolvedRepoSource: decode(
-          json['resolvedRepoSource'],
-          RepoSource.fromJson,
-        ),
-        gitUri: json['gitUri'] ?? '',
-      );
+  factory SourceProvenance.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SourceProvenance(
+      resolvedStorageSource: switch (json['resolvedStorageSource']) {
+        null => null,
+        Object $1 => StorageSource.fromJson($1),
+      },
+      resolvedRepoSource: switch (json['resolvedRepoSource']) {
+        null => null,
+        Object $1 => RepoSource.fromJson($1),
+      },
+      gitUri: switch (json['gitUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -927,34 +1038,65 @@ final class BuildConfig extends ProtoMessage {
     this.serviceAccount = '',
   }) : super(fullyQualifiedName);
 
-  factory BuildConfig.fromJson(Map<String, dynamic> json) => BuildConfig(
-    automaticUpdatePolicy: decode(
-      json['automaticUpdatePolicy'],
-      AutomaticUpdatePolicy.fromJson,
-    ),
-    onDeployUpdatePolicy: decode(
-      json['onDeployUpdatePolicy'],
-      OnDeployUpdatePolicy.fromJson,
-    ),
-    build: json['build'] ?? '',
-    runtime: json['runtime'] ?? '',
-    entryPoint: json['entryPoint'] ?? '',
-    source: decode(json['source'], Source.fromJson),
-    sourceProvenance: decode(
-      json['sourceProvenance'],
-      SourceProvenance.fromJson,
-    ),
-    workerPool: json['workerPool'] ?? '',
-    environmentVariables: decodeMap(json['environmentVariables']) ?? {},
-    dockerRegistry:
-        decodeEnum(
-          json['dockerRegistry'],
-          BuildConfig_DockerRegistry.fromJson,
-        ) ??
-        BuildConfig_DockerRegistry.$default,
-    dockerRepository: json['dockerRepository'] ?? '',
-    serviceAccount: json['serviceAccount'] ?? '',
-  );
+  factory BuildConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BuildConfig(
+      automaticUpdatePolicy: switch (json['automaticUpdatePolicy']) {
+        null => null,
+        Object $1 => AutomaticUpdatePolicy.fromJson($1),
+      },
+      onDeployUpdatePolicy: switch (json['onDeployUpdatePolicy']) {
+        null => null,
+        Object $1 => OnDeployUpdatePolicy.fromJson($1),
+      },
+      build: switch (json['build']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      runtime: switch (json['runtime']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      entryPoint: switch (json['entryPoint']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      source: switch (json['source']) {
+        null => null,
+        Object $1 => Source.fromJson($1),
+      },
+      sourceProvenance: switch (json['sourceProvenance']) {
+        null => null,
+        Object $1 => SourceProvenance.fromJson($1),
+      },
+      workerPool: switch (json['workerPool']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      environmentVariables: switch (json['environmentVariables']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException(
+          '"environmentVariables" is not an object',
+        ),
+      },
+      dockerRegistry: switch (json['dockerRegistry']) {
+        null => BuildConfig_DockerRegistry.$default,
+        Object $1 => BuildConfig_DockerRegistry.fromJson($1),
+      },
+      dockerRepository: switch (json['dockerRepository']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceAccount: switch (json['serviceAccount']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1018,8 +1160,8 @@ final class BuildConfig_DockerRegistry extends ProtoEnum {
 
   const BuildConfig_DockerRegistry(super.value);
 
-  factory BuildConfig_DockerRegistry.fromJson(String json) =>
-      BuildConfig_DockerRegistry(json);
+  factory BuildConfig_DockerRegistry.fromJson(Object? json) =>
+      BuildConfig_DockerRegistry(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1158,48 +1300,98 @@ final class ServiceConfig extends ProtoMessage {
     this.binaryAuthorizationPolicy = '',
   }) : super(fullyQualifiedName);
 
-  factory ServiceConfig.fromJson(Map<String, dynamic> json) => ServiceConfig(
-    service: json['service'] ?? '',
-    timeoutSeconds: json['timeoutSeconds'] ?? 0,
-    availableMemory: json['availableMemory'] ?? '',
-    availableCpu: json['availableCpu'] ?? '',
-    environmentVariables: decodeMap(json['environmentVariables']) ?? {},
-    maxInstanceCount: json['maxInstanceCount'] ?? 0,
-    minInstanceCount: json['minInstanceCount'] ?? 0,
-    vpcConnector: json['vpcConnector'] ?? '',
-    vpcConnectorEgressSettings:
-        decodeEnum(
-          json['vpcConnectorEgressSettings'],
-          ServiceConfig_VpcConnectorEgressSettings.fromJson,
-        ) ??
-        ServiceConfig_VpcConnectorEgressSettings.$default,
-    ingressSettings:
-        decodeEnum(
-          json['ingressSettings'],
-          ServiceConfig_IngressSettings.fromJson,
-        ) ??
-        ServiceConfig_IngressSettings.$default,
-    uri: json['uri'] ?? '',
-    serviceAccountEmail: json['serviceAccountEmail'] ?? '',
-    allTrafficOnLatestRevision: json['allTrafficOnLatestRevision'] ?? false,
-    secretEnvironmentVariables:
-        decodeListMessage(
-          json['secretEnvironmentVariables'],
-          SecretEnvVar.fromJson,
-        ) ??
-        [],
-    secretVolumes:
-        decodeListMessage(json['secretVolumes'], SecretVolume.fromJson) ?? [],
-    revision: json['revision'] ?? '',
-    maxInstanceRequestConcurrency: json['maxInstanceRequestConcurrency'] ?? 0,
-    securityLevel:
-        decodeEnum(
-          json['securityLevel'],
-          ServiceConfig_SecurityLevel.fromJson,
-        ) ??
-        ServiceConfig_SecurityLevel.$default,
-    binaryAuthorizationPolicy: json['binaryAuthorizationPolicy'] ?? '',
-  );
+  factory ServiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ServiceConfig(
+      service: switch (json['service']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      timeoutSeconds: switch (json['timeoutSeconds']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      availableMemory: switch (json['availableMemory']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      availableCpu: switch (json['availableCpu']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      environmentVariables: switch (json['environmentVariables']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException(
+          '"environmentVariables" is not an object',
+        ),
+      },
+      maxInstanceCount: switch (json['maxInstanceCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      minInstanceCount: switch (json['minInstanceCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      vpcConnector: switch (json['vpcConnector']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      vpcConnectorEgressSettings: switch (json['vpcConnectorEgressSettings']) {
+        null => ServiceConfig_VpcConnectorEgressSettings.$default,
+        Object $1 => ServiceConfig_VpcConnectorEgressSettings.fromJson($1),
+      },
+      ingressSettings: switch (json['ingressSettings']) {
+        null => ServiceConfig_IngressSettings.$default,
+        Object $1 => ServiceConfig_IngressSettings.fromJson($1),
+      },
+      uri: switch (json['uri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceAccountEmail: switch (json['serviceAccountEmail']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      allTrafficOnLatestRevision: switch (json['allTrafficOnLatestRevision']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      secretEnvironmentVariables: switch (json['secretEnvironmentVariables']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SecretEnvVar.fromJson(i)],
+        _ => throw const FormatException(
+          '"secretEnvironmentVariables" is not a list',
+        ),
+      },
+      secretVolumes: switch (json['secretVolumes']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) SecretVolume.fromJson(i)],
+        _ => throw const FormatException('"secretVolumes" is not a list'),
+      },
+      revision: switch (json['revision']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      maxInstanceRequestConcurrency:
+          switch (json['maxInstanceRequestConcurrency']) {
+            null => 0,
+            Object $1 => decodeInt($1),
+          },
+      securityLevel: switch (json['securityLevel']) {
+        null => ServiceConfig_SecurityLevel.$default,
+        Object $1 => ServiceConfig_SecurityLevel.fromJson($1),
+      },
+      binaryAuthorizationPolicy: switch (json['binaryAuthorizationPolicy']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1283,8 +1475,8 @@ final class ServiceConfig_VpcConnectorEgressSettings extends ProtoEnum {
 
   const ServiceConfig_VpcConnectorEgressSettings(super.value);
 
-  factory ServiceConfig_VpcConnectorEgressSettings.fromJson(String json) =>
-      ServiceConfig_VpcConnectorEgressSettings(json);
+  factory ServiceConfig_VpcConnectorEgressSettings.fromJson(Object? json) =>
+      ServiceConfig_VpcConnectorEgressSettings(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1321,8 +1513,8 @@ final class ServiceConfig_IngressSettings extends ProtoEnum {
 
   const ServiceConfig_IngressSettings(super.value);
 
-  factory ServiceConfig_IngressSettings.fromJson(String json) =>
-      ServiceConfig_IngressSettings(json);
+  factory ServiceConfig_IngressSettings.fromJson(Object? json) =>
+      ServiceConfig_IngressSettings(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1357,8 +1549,8 @@ final class ServiceConfig_SecurityLevel extends ProtoEnum {
 
   const ServiceConfig_SecurityLevel(super.value);
 
-  factory ServiceConfig_SecurityLevel.fromJson(String json) =>
-      ServiceConfig_SecurityLevel(json);
+  factory ServiceConfig_SecurityLevel.fromJson(Object? json) =>
+      ServiceConfig_SecurityLevel(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1397,12 +1589,27 @@ final class SecretEnvVar extends ProtoMessage {
     this.version = '',
   }) : super(fullyQualifiedName);
 
-  factory SecretEnvVar.fromJson(Map<String, dynamic> json) => SecretEnvVar(
-    key: json['key'] ?? '',
-    projectId: json['projectId'] ?? '',
-    secret: json['secret'] ?? '',
-    version: json['version'] ?? '',
-  );
+  factory SecretEnvVar.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SecretEnvVar(
+      key: switch (json['key']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      projectId: switch (json['projectId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      secret: switch (json['secret']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      version: switch (json['version']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1458,17 +1665,30 @@ final class SecretVolume extends ProtoMessage {
     this.versions = const [],
   }) : super(fullyQualifiedName);
 
-  factory SecretVolume.fromJson(Map<String, dynamic> json) => SecretVolume(
-    mountPath: json['mountPath'] ?? '',
-    projectId: json['projectId'] ?? '',
-    secret: json['secret'] ?? '',
-    versions:
-        decodeListMessage(
-          json['versions'],
-          SecretVolume_SecretVersion.fromJson,
-        ) ??
-        [],
-  );
+  factory SecretVolume.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SecretVolume(
+      mountPath: switch (json['mountPath']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      projectId: switch (json['projectId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      secret: switch (json['secret']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      versions: switch (json['versions']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) SecretVolume_SecretVersion.fromJson(i),
+        ],
+        _ => throw const FormatException('"versions" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1508,11 +1728,19 @@ final class SecretVolume_SecretVersion extends ProtoMessage {
   SecretVolume_SecretVersion({this.version = '', this.path = ''})
     : super(fullyQualifiedName);
 
-  factory SecretVolume_SecretVersion.fromJson(Map<String, dynamic> json) =>
-      SecretVolume_SecretVersion(
-        version: json['version'] ?? '',
-        path: json['path'] ?? '',
-      );
+  factory SecretVolume_SecretVersion.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SecretVolume_SecretVersion(
+      version: switch (json['version']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      path: switch (json['path']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1598,20 +1826,48 @@ final class EventTrigger extends ProtoMessage {
     this.service = '',
   }) : super(fullyQualifiedName);
 
-  factory EventTrigger.fromJson(Map<String, dynamic> json) => EventTrigger(
-    trigger: json['trigger'] ?? '',
-    triggerRegion: json['triggerRegion'] ?? '',
-    eventType: json['eventType'] ?? '',
-    eventFilters:
-        decodeListMessage(json['eventFilters'], EventFilter.fromJson) ?? [],
-    pubsubTopic: json['pubsubTopic'] ?? '',
-    serviceAccountEmail: json['serviceAccountEmail'] ?? '',
-    retryPolicy:
-        decodeEnum(json['retryPolicy'], EventTrigger_RetryPolicy.fromJson) ??
-        EventTrigger_RetryPolicy.$default,
-    channel: json['channel'] ?? '',
-    service: json['service'] ?? '',
-  );
+  factory EventTrigger.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EventTrigger(
+      trigger: switch (json['trigger']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      triggerRegion: switch (json['triggerRegion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      eventType: switch (json['eventType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      eventFilters: switch (json['eventFilters']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) EventFilter.fromJson(i)],
+        _ => throw const FormatException('"eventFilters" is not a list'),
+      },
+      pubsubTopic: switch (json['pubsubTopic']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      serviceAccountEmail: switch (json['serviceAccountEmail']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      retryPolicy: switch (json['retryPolicy']) {
+        null => EventTrigger_RetryPolicy.$default,
+        Object $1 => EventTrigger_RetryPolicy.fromJson($1),
+      },
+      channel: switch (json['channel']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      service: switch (json['service']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1667,8 +1923,8 @@ final class EventTrigger_RetryPolicy extends ProtoEnum {
 
   const EventTrigger_RetryPolicy(super.value);
 
-  factory EventTrigger_RetryPolicy.fromJson(String json) =>
-      EventTrigger_RetryPolicy(json);
+  factory EventTrigger_RetryPolicy.fromJson(Object? json) =>
+      EventTrigger_RetryPolicy(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1699,11 +1955,23 @@ final class EventFilter extends ProtoMessage {
     this.operator = '',
   }) : super(fullyQualifiedName);
 
-  factory EventFilter.fromJson(Map<String, dynamic> json) => EventFilter(
-    attribute: json['attribute'] ?? '',
-    value: json['value'] ?? '',
-    operator: json['operator'] ?? '',
-  );
+  factory EventFilter.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EventFilter(
+      attribute: switch (json['attribute']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      value: switch (json['value']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      operator: switch (json['operator']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1742,11 +2010,19 @@ final class GetFunctionRequest extends ProtoMessage {
   GetFunctionRequest({required this.name, this.revision = ''})
     : super(fullyQualifiedName);
 
-  factory GetFunctionRequest.fromJson(Map<String, dynamic> json) =>
-      GetFunctionRequest(
-        name: json['name'] ?? '',
-        revision: json['revision'] ?? '',
-      );
+  factory GetFunctionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetFunctionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      revision: switch (json['revision']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1803,14 +2079,31 @@ final class ListFunctionsRequest extends ProtoMessage {
     this.orderBy = '',
   }) : super(fullyQualifiedName);
 
-  factory ListFunctionsRequest.fromJson(Map<String, dynamic> json) =>
-      ListFunctionsRequest(
-        parent: json['parent'] ?? '',
-        pageSize: json['pageSize'] ?? 0,
-        pageToken: json['pageToken'] ?? '',
-        filter: json['filter'] ?? '',
-        orderBy: json['orderBy'] ?? '',
-      );
+  factory ListFunctionsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListFunctionsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      orderBy: switch (json['orderBy']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1856,13 +2149,25 @@ final class ListFunctionsResponse extends ProtoMessage {
     this.unreachable = const [],
   }) : super(fullyQualifiedName);
 
-  factory ListFunctionsResponse.fromJson(Map<String, dynamic> json) =>
-      ListFunctionsResponse(
-        functions:
-            decodeListMessage(json['functions'], Function$.fromJson) ?? [],
-        nextPageToken: json['nextPageToken'] ?? '',
-        unreachable: decodeList(json['unreachable']) ?? [],
-      );
+  factory ListFunctionsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListFunctionsResponse(
+      functions: switch (json['functions']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Function$.fromJson(i)],
+        _ => throw const FormatException('"functions" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      unreachable: switch (json['unreachable']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"unreachable" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1903,12 +2208,23 @@ final class CreateFunctionRequest extends ProtoMessage {
     this.functionId = '',
   }) : super(fullyQualifiedName);
 
-  factory CreateFunctionRequest.fromJson(Map<String, dynamic> json) =>
-      CreateFunctionRequest(
-        parent: json['parent'] ?? '',
-        function: decode(json['function'], Function$.fromJson),
-        functionId: json['functionId'] ?? '',
-      );
+  factory CreateFunctionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateFunctionRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      function: switch (json['function']) {
+        null => null,
+        Object $1 => Function$.fromJson($1),
+      },
+      functionId: switch (json['functionId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1939,11 +2255,19 @@ final class UpdateFunctionRequest extends ProtoMessage {
   UpdateFunctionRequest({required this.function, this.updateMask})
     : super(fullyQualifiedName);
 
-  factory UpdateFunctionRequest.fromJson(Map<String, dynamic> json) =>
-      UpdateFunctionRequest(
-        function: decode(json['function'], Function$.fromJson),
-        updateMask: decodeCustom(json['updateMask'], FieldMask.fromJson),
-      );
+  factory UpdateFunctionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateFunctionRequest(
+      function: switch (json['function']) {
+        null => null,
+        Object $1 => Function$.fromJson($1),
+      },
+      updateMask: switch (json['updateMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1965,8 +2289,15 @@ final class DeleteFunctionRequest extends ProtoMessage {
 
   DeleteFunctionRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory DeleteFunctionRequest.fromJson(Map<String, dynamic> json) =>
-      DeleteFunctionRequest(name: json['name'] ?? '');
+  factory DeleteFunctionRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteFunctionRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -2016,14 +2347,23 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
     this.environment = Environment.$default,
   }) : super(fullyQualifiedName);
 
-  factory GenerateUploadUrlRequest.fromJson(Map<String, dynamic> json) =>
-      GenerateUploadUrlRequest(
-        parent: json['parent'] ?? '',
-        kmsKeyName: json['kmsKeyName'] ?? '',
-        environment:
-            decodeEnum(json['environment'], Environment.fromJson) ??
-            Environment.$default,
-      );
+  factory GenerateUploadUrlRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateUploadUrlRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      kmsKeyName: switch (json['kmsKeyName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      environment: switch (json['environment']) {
+        null => Environment.$default,
+        Object $1 => Environment.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2066,11 +2406,19 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
   GenerateUploadUrlResponse({this.uploadUrl = '', this.storageSource})
     : super(fullyQualifiedName);
 
-  factory GenerateUploadUrlResponse.fromJson(Map<String, dynamic> json) =>
-      GenerateUploadUrlResponse(
-        uploadUrl: json['uploadUrl'] ?? '',
-        storageSource: decode(json['storageSource'], StorageSource.fromJson),
-      );
+  factory GenerateUploadUrlResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateUploadUrlResponse(
+      uploadUrl: switch (json['uploadUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      storageSource: switch (json['storageSource']) {
+        null => null,
+        Object $1 => StorageSource.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2096,8 +2444,15 @@ final class GenerateDownloadUrlRequest extends ProtoMessage {
 
   GenerateDownloadUrlRequest({required this.name}) : super(fullyQualifiedName);
 
-  factory GenerateDownloadUrlRequest.fromJson(Map<String, dynamic> json) =>
-      GenerateDownloadUrlRequest(name: json['name'] ?? '');
+  factory GenerateDownloadUrlRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateDownloadUrlRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {'name': name};
@@ -2121,8 +2476,15 @@ final class GenerateDownloadUrlResponse extends ProtoMessage {
   GenerateDownloadUrlResponse({this.downloadUrl = ''})
     : super(fullyQualifiedName);
 
-  factory GenerateDownloadUrlResponse.fromJson(Map<String, dynamic> json) =>
-      GenerateDownloadUrlResponse(downloadUrl: json['downloadUrl'] ?? '');
+  factory GenerateDownloadUrlResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GenerateDownloadUrlResponse(
+      downloadUrl: switch (json['downloadUrl']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (downloadUrl.isNotDefault) 'downloadUrl': downloadUrl};
@@ -2150,11 +2512,19 @@ final class ListRuntimesRequest extends ProtoMessage {
   ListRuntimesRequest({required this.parent, this.filter = ''})
     : super(fullyQualifiedName);
 
-  factory ListRuntimesRequest.fromJson(Map<String, dynamic> json) =>
-      ListRuntimesRequest(
-        parent: json['parent'] ?? '',
-        filter: json['filter'] ?? '',
-      );
+  factory ListRuntimesRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRuntimesRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filter: switch (json['filter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2179,15 +2549,18 @@ final class ListRuntimesResponse extends ProtoMessage {
 
   ListRuntimesResponse({this.runtimes = const []}) : super(fullyQualifiedName);
 
-  factory ListRuntimesResponse.fromJson(Map<String, dynamic> json) =>
-      ListRuntimesResponse(
-        runtimes:
-            decodeListMessage(
-              json['runtimes'],
-              ListRuntimesResponse_Runtime.fromJson,
-            ) ??
-            [],
-      );
+  factory ListRuntimesResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRuntimesResponse(
+      runtimes: switch (json['runtimes']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ListRuntimesResponse_Runtime.fromJson(i),
+        ],
+        _ => throw const FormatException('"runtimes" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2235,23 +2608,40 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
     this.decommissionDate,
   }) : super(fullyQualifiedName);
 
-  factory ListRuntimesResponse_Runtime.fromJson(Map<String, dynamic> json) =>
-      ListRuntimesResponse_Runtime(
-        name: json['name'] ?? '',
-        displayName: json['displayName'] ?? '',
-        stage:
-            decodeEnum(
-              json['stage'],
-              ListRuntimesResponse_RuntimeStage.fromJson,
-            ) ??
-            ListRuntimesResponse_RuntimeStage.$default,
-        warnings: decodeList(json['warnings']) ?? [],
-        environment:
-            decodeEnum(json['environment'], Environment.fromJson) ??
-            Environment.$default,
-        deprecationDate: decode(json['deprecationDate'], Date.fromJson),
-        decommissionDate: decode(json['decommissionDate'], Date.fromJson),
-      );
+  factory ListRuntimesResponse_Runtime.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRuntimesResponse_Runtime(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      stage: switch (json['stage']) {
+        null => ListRuntimesResponse_RuntimeStage.$default,
+        Object $1 => ListRuntimesResponse_RuntimeStage.fromJson($1),
+      },
+      warnings: switch (json['warnings']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"warnings" is not a list'),
+      },
+      environment: switch (json['environment']) {
+        null => Environment.$default,
+        Object $1 => Environment.fromJson($1),
+      },
+      deprecationDate: switch (json['deprecationDate']) {
+        null => null,
+        Object $1 => Date.fromJson($1),
+      },
+      decommissionDate: switch (json['decommissionDate']) {
+        null => null,
+        Object $1 => Date.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2309,8 +2699,8 @@ final class ListRuntimesResponse_RuntimeStage extends ProtoEnum {
 
   const ListRuntimesResponse_RuntimeStage(super.value);
 
-  factory ListRuntimesResponse_RuntimeStage.fromJson(String json) =>
-      ListRuntimesResponse_RuntimeStage(json);
+  factory ListRuntimesResponse_RuntimeStage.fromJson(Object? json) =>
+      ListRuntimesResponse_RuntimeStage(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2326,8 +2716,7 @@ final class AutomaticUpdatePolicy extends ProtoMessage {
 
   AutomaticUpdatePolicy() : super(fullyQualifiedName);
 
-  factory AutomaticUpdatePolicy.fromJson(Map<String, dynamic> json) =>
-      AutomaticUpdatePolicy();
+  factory AutomaticUpdatePolicy.fromJson(Object? j) => AutomaticUpdatePolicy();
 
   @override
   Object toJson() => {};
@@ -2347,8 +2736,15 @@ final class OnDeployUpdatePolicy extends ProtoMessage {
 
   OnDeployUpdatePolicy({this.runtimeVersion = ''}) : super(fullyQualifiedName);
 
-  factory OnDeployUpdatePolicy.fromJson(Map<String, dynamic> json) =>
-      OnDeployUpdatePolicy(runtimeVersion: json['runtimeVersion'] ?? '');
+  factory OnDeployUpdatePolicy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OnDeployUpdatePolicy(
+      runtimeVersion: switch (json['runtimeVersion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2424,23 +2820,60 @@ final class OperationMetadata extends ProtoMessage {
     this.operationType = OperationType.$default,
   }) : super(fullyQualifiedName);
 
-  factory OperationMetadata.fromJson(Map<String, dynamic> json) =>
-      OperationMetadata(
-        createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-        endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-        target: json['target'] ?? '',
-        verb: json['verb'] ?? '',
-        statusDetail: json['statusDetail'] ?? '',
-        cancelRequested: json['cancelRequested'] ?? false,
-        apiVersion: json['apiVersion'] ?? '',
-        requestResource: decode(json['requestResource'], Any.fromJson),
-        stages: decodeListMessage(json['stages'], Stage.fromJson) ?? [],
-        sourceToken: json['sourceToken'] ?? '',
-        buildName: json['buildName'] ?? '',
-        operationType:
-            decodeEnum(json['operationType'], OperationType.fromJson) ??
-            OperationType.$default,
-      );
+  factory OperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OperationMetadata(
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      target: switch (json['target']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      verb: switch (json['verb']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      statusDetail: switch (json['statusDetail']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      cancelRequested: switch (json['cancelRequested']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      apiVersion: switch (json['apiVersion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requestResource: switch (json['requestResource']) {
+        null => null,
+        Object $1 => Any.fromJson($1),
+      },
+      stages: switch (json['stages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Stage.fromJson(i)],
+        _ => throw const FormatException('"stages" is not a list'),
+      },
+      sourceToken: switch (json['sourceToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      buildName: switch (json['buildName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      operationType: switch (json['operationType']) {
+        null => OperationType.$default,
+        Object $1 => OperationType.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2484,11 +2917,16 @@ final class LocationMetadata extends ProtoMessage {
 
   LocationMetadata({this.environments = const []}) : super(fullyQualifiedName);
 
-  factory LocationMetadata.fromJson(Map<String, dynamic> json) =>
-      LocationMetadata(
-        environments:
-            decodeListEnum(json['environments'], Environment.fromJson) ?? [],
-      );
+  factory LocationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LocationMetadata(
+      environments: switch (json['environments']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Environment.fromJson(i)],
+        _ => throw const FormatException('"environments" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2530,16 +2968,36 @@ final class Stage extends ProtoMessage {
     this.stateMessages = const [],
   }) : super(fullyQualifiedName);
 
-  factory Stage.fromJson(Map<String, dynamic> json) => Stage(
-    name: decodeEnum(json['name'], Stage_Name.fromJson) ?? Stage_Name.$default,
-    message: json['message'] ?? '',
-    state:
-        decodeEnum(json['state'], Stage_State.fromJson) ?? Stage_State.$default,
-    resource: json['resource'] ?? '',
-    resourceUri: json['resourceUri'] ?? '',
-    stateMessages:
-        decodeListMessage(json['stateMessages'], StateMessage.fromJson) ?? [],
-  );
+  factory Stage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Stage(
+      name: switch (json['name']) {
+        null => Stage_Name.$default,
+        Object $1 => Stage_Name.fromJson($1),
+      },
+      message: switch (json['message']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      state: switch (json['state']) {
+        null => Stage_State.$default,
+        Object $1 => Stage_State.fromJson($1),
+      },
+      resource: switch (json['resource']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      resourceUri: switch (json['resourceUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      stateMessages: switch (json['stateMessages']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) StateMessage.fromJson(i)],
+        _ => throw const FormatException('"stateMessages" is not a list'),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -2592,7 +3050,7 @@ final class Stage_Name extends ProtoEnum {
 
   const Stage_Name(super.value);
 
-  factory Stage_Name.fromJson(String json) => Stage_Name(json);
+  factory Stage_Name.fromJson(Object? json) => Stage_Name(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2619,7 +3077,7 @@ final class Stage_State extends ProtoEnum {
 
   const Stage_State(super.value);
 
-  factory Stage_State.fromJson(String json) => Stage_State(json);
+  factory Stage_State.fromJson(Object? json) => Stage_State(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2648,7 +3106,7 @@ final class OperationType extends ProtoEnum {
 
   const OperationType(super.value);
 
-  factory OperationType.fromJson(String json) => OperationType(json);
+  factory OperationType.fromJson(Object? json) => OperationType(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -2672,7 +3130,7 @@ final class Environment extends ProtoEnum {
 
   const Environment(super.value);
 
-  factory Environment.fromJson(String json) => Environment(json);
+  factory Environment.fromJson(Object? json) => Environment(json as String);
 
   bool get isNotDefault => this != $default;
 

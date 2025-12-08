@@ -19,7 +19,6 @@
 /// Defines common types for Google APIs.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -182,12 +181,27 @@ final class Color extends ProtoMessage {
   Color({this.red = 0, this.green = 0, this.blue = 0, this.alpha})
     : super(fullyQualifiedName);
 
-  factory Color.fromJson(Map<String, dynamic> json) => Color(
-    red: decodeDouble(json['red']) ?? 0,
-    green: decodeDouble(json['green']) ?? 0,
-    blue: decodeDouble(json['blue']) ?? 0,
-    alpha: decodeCustom(json['alpha'], FloatValue.fromJson),
-  );
+  factory Color.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Color(
+      red: switch (json['red']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      green: switch (json['green']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      blue: switch (json['blue']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      alpha: switch (json['alpha']) {
+        null => null,
+        Object $1 => FloatValue.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -236,11 +250,23 @@ final class Date extends ProtoMessage {
   Date({this.year = 0, this.month = 0, this.day = 0})
     : super(fullyQualifiedName);
 
-  factory Date.fromJson(Map<String, dynamic> json) => Date(
-    year: json['year'] ?? 0,
-    month: json['month'] ?? 0,
-    day: json['day'] ?? 0,
-  );
+  factory Date.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Date(
+      year: switch (json['year']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      month: switch (json['month']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      day: switch (json['day']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -330,17 +356,47 @@ final class DateTime extends ProtoMessage {
     this.timeZone,
   }) : super(fullyQualifiedName);
 
-  factory DateTime.fromJson(Map<String, dynamic> json) => DateTime(
-    year: json['year'] ?? 0,
-    month: json['month'] ?? 0,
-    day: json['day'] ?? 0,
-    hours: json['hours'] ?? 0,
-    minutes: json['minutes'] ?? 0,
-    seconds: json['seconds'] ?? 0,
-    nanos: json['nanos'] ?? 0,
-    utcOffset: decodeCustom(json['utcOffset'], Duration.fromJson),
-    timeZone: decode(json['timeZone'], TimeZone.fromJson),
-  );
+  factory DateTime.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DateTime(
+      year: switch (json['year']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      month: switch (json['month']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      day: switch (json['day']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      hours: switch (json['hours']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      minutes: switch (json['minutes']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      seconds: switch (json['seconds']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      nanos: switch (json['nanos']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      utcOffset: switch (json['utcOffset']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      timeZone: switch (json['timeZone']) {
+        null => null,
+        Object $1 => TimeZone.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -383,8 +439,19 @@ final class TimeZone extends ProtoMessage {
 
   TimeZone({this.id = '', this.version = ''}) : super(fullyQualifiedName);
 
-  factory TimeZone.fromJson(Map<String, dynamic> json) =>
-      TimeZone(id: json['id'] ?? '', version: json['version'] ?? '');
+  factory TimeZone.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TimeZone(
+      id: switch (json['id']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      version: switch (json['version']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -473,8 +540,15 @@ final class Decimal extends ProtoMessage {
 
   Decimal({this.value = ''}) : super(fullyQualifiedName);
 
-  factory Decimal.fromJson(Map<String, dynamic> json) =>
-      Decimal(value: json['value'] ?? '');
+  factory Decimal.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Decimal(
+      value: switch (json['value']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {if (value.isNotDefault) 'value': value};
@@ -544,12 +618,27 @@ final class Expr extends ProtoMessage {
     this.location = '',
   }) : super(fullyQualifiedName);
 
-  factory Expr.fromJson(Map<String, dynamic> json) => Expr(
-    expression: json['expression'] ?? '',
-    title: json['title'] ?? '',
-    description: json['description'] ?? '',
-    location: json['location'] ?? '',
-  );
+  factory Expr.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Expr(
+      expression: switch (json['expression']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      description: switch (json['description']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      location: switch (json['location']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -585,10 +674,19 @@ final class Fraction extends ProtoMessage {
   Fraction({this.numerator = 0, this.denominator = 0})
     : super(fullyQualifiedName);
 
-  factory Fraction.fromJson(Map<String, dynamic> json) => Fraction(
-    numerator: decodeInt64(json['numerator']) ?? 0,
-    denominator: decodeInt64(json['denominator']) ?? 0,
-  );
+  factory Fraction.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Fraction(
+      numerator: switch (json['numerator']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      denominator: switch (json['denominator']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -629,10 +727,19 @@ final class Interval extends ProtoMessage {
 
   Interval({this.startTime, this.endTime}) : super(fullyQualifiedName);
 
-  factory Interval.fromJson(Map<String, dynamic> json) => Interval(
-    startTime: decodeCustom(json['startTime'], Timestamp.fromJson),
-    endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-  );
+  factory Interval.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Interval(
+      startTime: switch (json['startTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -660,10 +767,19 @@ final class LatLng extends ProtoMessage {
 
   LatLng({this.latitude = 0, this.longitude = 0}) : super(fullyQualifiedName);
 
-  factory LatLng.fromJson(Map<String, dynamic> json) => LatLng(
-    latitude: decodeDouble(json['latitude']) ?? 0,
-    longitude: decodeDouble(json['longitude']) ?? 0,
-  );
+  factory LatLng.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LatLng(
+      latitude: switch (json['latitude']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      longitude: switch (json['longitude']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -694,10 +810,19 @@ final class LocalizedText extends ProtoMessage {
   LocalizedText({this.text = '', this.languageCode = ''})
     : super(fullyQualifiedName);
 
-  factory LocalizedText.fromJson(Map<String, dynamic> json) => LocalizedText(
-    text: json['text'] ?? '',
-    languageCode: json['languageCode'] ?? '',
-  );
+  factory LocalizedText.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LocalizedText(
+      text: switch (json['text']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -734,11 +859,23 @@ final class Money extends ProtoMessage {
   Money({this.currencyCode = '', this.units = 0, this.nanos = 0})
     : super(fullyQualifiedName);
 
-  factory Money.fromJson(Map<String, dynamic> json) => Money(
-    currencyCode: json['currencyCode'] ?? '',
-    units: decodeInt64(json['units']) ?? 0,
-    nanos: json['nanos'] ?? 0,
-  );
+  factory Money.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Money(
+      currencyCode: switch (json['currencyCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      units: switch (json['units']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      nanos: switch (json['nanos']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -824,11 +961,23 @@ final class PhoneNumber extends ProtoMessage {
   PhoneNumber({this.e164Number, this.shortCode, this.extension = ''})
     : super(fullyQualifiedName);
 
-  factory PhoneNumber.fromJson(Map<String, dynamic> json) => PhoneNumber(
-    e164Number: json['e164Number'],
-    shortCode: decode(json['shortCode'], PhoneNumber_ShortCode.fromJson),
-    extension: json['extension'] ?? '',
-  );
+  factory PhoneNumber.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PhoneNumber(
+      e164Number: switch (json['e164Number']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      shortCode: switch (json['shortCode']) {
+        null => null,
+        Object $1 => PhoneNumber_ShortCode.fromJson($1),
+      },
+      extension: switch (json['extension']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -873,11 +1022,19 @@ final class PhoneNumber_ShortCode extends ProtoMessage {
   PhoneNumber_ShortCode({this.regionCode = '', this.number = ''})
     : super(fullyQualifiedName);
 
-  factory PhoneNumber_ShortCode.fromJson(Map<String, dynamic> json) =>
-      PhoneNumber_ShortCode(
-        regionCode: json['regionCode'] ?? '',
-        number: json['number'] ?? '',
-      );
+  factory PhoneNumber_ShortCode.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PhoneNumber_ShortCode(
+      regionCode: switch (json['regionCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      number: switch (json['number']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1017,19 +1174,57 @@ final class PostalAddress extends ProtoMessage {
     this.organization = '',
   }) : super(fullyQualifiedName);
 
-  factory PostalAddress.fromJson(Map<String, dynamic> json) => PostalAddress(
-    revision: json['revision'] ?? 0,
-    regionCode: json['regionCode'] ?? '',
-    languageCode: json['languageCode'] ?? '',
-    postalCode: json['postalCode'] ?? '',
-    sortingCode: json['sortingCode'] ?? '',
-    administrativeArea: json['administrativeArea'] ?? '',
-    locality: json['locality'] ?? '',
-    sublocality: json['sublocality'] ?? '',
-    addressLines: decodeList(json['addressLines']) ?? [],
-    recipients: decodeList(json['recipients']) ?? [],
-    organization: json['organization'] ?? '',
-  );
+  factory PostalAddress.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PostalAddress(
+      revision: switch (json['revision']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      regionCode: switch (json['regionCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      postalCode: switch (json['postalCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sortingCode: switch (json['sortingCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      administrativeArea: switch (json['administrativeArea']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      locality: switch (json['locality']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      sublocality: switch (json['sublocality']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      addressLines: switch (json['addressLines']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"addressLines" is not a list'),
+      },
+      recipients: switch (json['recipients']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"recipients" is not a list'),
+      },
+      organization: switch (json['organization']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1137,12 +1332,27 @@ final class Quaternion extends ProtoMessage {
   Quaternion({this.x = 0, this.y = 0, this.z = 0, this.w = 0})
     : super(fullyQualifiedName);
 
-  factory Quaternion.fromJson(Map<String, dynamic> json) => Quaternion(
-    x: decodeDouble(json['x']) ?? 0,
-    y: decodeDouble(json['y']) ?? 0,
-    z: decodeDouble(json['z']) ?? 0,
-    w: decodeDouble(json['w']) ?? 0,
-  );
+  factory Quaternion.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Quaternion(
+      x: switch (json['x']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      y: switch (json['y']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      z: switch (json['z']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      w: switch (json['w']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1187,12 +1397,27 @@ final class TimeOfDay extends ProtoMessage {
     this.nanos = 0,
   }) : super(fullyQualifiedName);
 
-  factory TimeOfDay.fromJson(Map<String, dynamic> json) => TimeOfDay(
-    hours: json['hours'] ?? 0,
-    minutes: json['minutes'] ?? 0,
-    seconds: json['seconds'] ?? 0,
-    nanos: json['nanos'] ?? 0,
-  );
+  factory TimeOfDay.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TimeOfDay(
+      hours: switch (json['hours']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      minutes: switch (json['minutes']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      seconds: switch (json['seconds']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      nanos: switch (json['nanos']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
@@ -1253,7 +1478,8 @@ final class CalendarPeriod extends ProtoEnum {
 
   const CalendarPeriod(super.value);
 
-  factory CalendarPeriod.fromJson(String json) => CalendarPeriod(json);
+  factory CalendarPeriod.fromJson(Object? json) =>
+      CalendarPeriod(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1292,7 +1518,7 @@ final class DayOfWeek extends ProtoEnum {
 
   const DayOfWeek(super.value);
 
-  factory DayOfWeek.fromJson(String json) => DayOfWeek(json);
+  factory DayOfWeek.fromJson(Object? json) => DayOfWeek(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -1346,7 +1572,7 @@ final class Month extends ProtoEnum {
 
   const Month(super.value);
 
-  factory Month.fromJson(String json) => Month(json);
+  factory Month.fromJson(Object? json) => Month(json as String);
 
   bool get isNotDefault => this != $default;
 

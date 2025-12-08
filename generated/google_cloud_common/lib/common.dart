@@ -19,7 +19,6 @@
 /// Additional metadata for operations.
 library;
 
-// ignore_for_file: argument_type_not_assignable
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
@@ -69,16 +68,39 @@ final class OperationMetadata extends ProtoMessage {
     this.apiVersion = '',
   }) : super(fullyQualifiedName);
 
-  factory OperationMetadata.fromJson(Map<String, dynamic> json) =>
-      OperationMetadata(
-        createTime: decodeCustom(json['createTime'], Timestamp.fromJson),
-        endTime: decodeCustom(json['endTime'], Timestamp.fromJson),
-        target: json['target'] ?? '',
-        verb: json['verb'] ?? '',
-        statusDetail: json['statusDetail'] ?? '',
-        cancelRequested: json['cancelRequested'] ?? false,
-        apiVersion: json['apiVersion'] ?? '',
-      );
+  factory OperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return OperationMetadata(
+      createTime: switch (json['createTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      endTime: switch (json['endTime']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      target: switch (json['target']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      verb: switch (json['verb']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      statusDetail: switch (json['statusDetail']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      cancelRequested: switch (json['cancelRequested']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      apiVersion: switch (json['apiVersion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {

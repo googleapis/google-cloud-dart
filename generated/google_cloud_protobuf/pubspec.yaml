@@ -16,7 +16,7 @@
 
 name: google_cloud_protobuf
 description: The Google Cloud client library for the Core Protobuf Types.
-version: 0.2.1
+version: 0.3.0
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protobuf
 issue_tracker: https://github.com/googleapis/google-cloud-dart/issues
 

@@ -33,7 +33,7 @@ void main() {
   test('json round-tripping', () {
     final duration = Duration(seconds: 10, nanos: 100);
 
-    final any = Any()..packInto(duration);
+    final any = Any(json: {})..packInto(duration);
 
     final anyCopy = Any.fromJson(any.toJson());
     final actual = anyCopy.unpackFrom(Duration.fromJson);
@@ -45,7 +45,7 @@ void main() {
   test('pack into and from FieldMask', () {
     final fieldMask = FieldMask(paths: ['foo', 'bar']);
 
-    final any = Any()..packInto(fieldMask);
+    final any = Any(json: {})..packInto(fieldMask);
     expect(any.typeName, 'google.protobuf.FieldMask');
 
     final actual = any.unpackFrom(FieldMask.fromJson);

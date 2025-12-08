@@ -77,7 +77,7 @@ jobs:
       - name: Install Go
         uses: actions/setup-go@44694675825211faa026b3c33043df3e48a5fa00
         with:
-          go-version: 1.25.3
+          go-version: 1.25.5
       - name: Install Dart  # The generator uses "dart format".
         uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
         with:
@@ -92,7 +92,7 @@ jobs:
       - name: Regenerate existing clients
         # The current head version of sidekick can be generated with:
         # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
-        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.7.1-0.20251203190837-f6ee79bfbbfe refreshall -project-root .
+        run: go run github.com/googleapis/librarian/cmd/sidekick@v0.7.1-0.20251205014030-80ed13c07365 refreshall -project-root .
       - name: Regenerate dependency graph
         run: dart run tool/deps_diagram.dart
       - name: Generated Diff
