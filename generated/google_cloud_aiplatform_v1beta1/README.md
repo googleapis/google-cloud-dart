@@ -74,11 +74,11 @@ $ gcloud auth application-default login
 > [!NOTE]
 >
 > Model names must be in the form
-> `"projects/{projectId}/locations/{location}/publishers/{publisher}/models/{model}"`.
+> `'projects/{projectId}/locations/{location}/publishers/{publisher}/models/{model}'`.
 >
-> For example, if the Google Cloud project id were `"happycat"`, then this would
+> For example, if the Google Cloud project id were `'happycat'`, then this would
 > be a valid model:
-> `"projects/happycat/locations/global/publishers/google/models/gemini-2.5-flash"`.
+> `'projects/happycat/locations/global/publishers/google/models/gemini-2.5-flash'`.
 
 ```dart
 import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
@@ -102,8 +102,8 @@ void main() async {
         'publishers/google/models/gemini-2.5-flash',
     contents: [
       Content(
-        parts: [Part(text: "Explain how AI works in a few words")],
-        role: "user",
+        parts: [Part(text: 'Explain how AI works in a few words')],
+        role: 'user',
       ),
     ],
   );

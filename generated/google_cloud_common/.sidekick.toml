@@ -21,4 +21,4 @@ description-override = 'Additional metadata for operations.'
 
 [codec]
 copyright-year = '2025'
-repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common"
+repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common'

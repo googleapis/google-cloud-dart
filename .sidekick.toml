@@ -23,17 +23,17 @@ googleapis-sha256       = 'df47fc8368ce3e02f12e857dbb73d0631c35a5860527629cc3721
 protobuf-extracted-name = 'protobuf-29.3'
 protobuf-root           = 'https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protobuf-29.3.tar.gz'
 protobuf-sha256         = '008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e'
-protobuf-subdir         = "src"
+protobuf-subdir         = 'src'
 showcase-extracted-name = 'gapic-showcase-0.36.2'
 showcase-root           = 'https://github.com/googleapis/gapic-showcase/archive/refs/tags/v0.36.2.tar.gz'
 showcase-sha256         = '0914bdbb088713aa087a53b355ff6631ad95e4769afd8bbd97d5d9e78d4cdf09'
 
 [codec]
 # The default version for Dart packages.
-version = "0.3.0"
+version = '0.3.0'
 
-api-keys-environment-variables = "GOOGLE_API_KEY"
-issue-tracker-url = "https://github.com/googleapis/google-cloud-dart/issues"
+api-keys-environment-variables = 'GOOGLE_API_KEY'
+issue-tracker-url = 'https://github.com/googleapis/google-cloud-dart/issues'
 
 # Dart names for `as` imports.
 'prefix:google.logging.type' = 'logging_type'

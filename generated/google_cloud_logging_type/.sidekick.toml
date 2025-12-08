@@ -16,9 +16,9 @@
 specification-source = 'google/logging/type'
 
 [source]
-title-override = "Logging types"
+title-override = 'Logging types'
 name-override = 'logging_type'
 
 [codec]
 copyright-year = '2025'
-repository-url = "https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_type"
+repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_type'
