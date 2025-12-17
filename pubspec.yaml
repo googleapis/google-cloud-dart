@@ -38,6 +38,7 @@ workspace:
   - generated/google_cloud_type
   - test_utils
   - tests
+  - google_cloud_storage
 
 dev_dependencies:
   dart_flutter_team_lints: ^3.5.2
