@@ -181,8 +181,8 @@ final class GetOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetOperationRequest(${$contents})';
   }
 }
 
@@ -262,14 +262,14 @@ final class ListOperationsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'filter=$filter',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'returnPartialSuccess=$returnPartialSuccess',
     ].join(',');
-    return 'ListOperationsRequest($contents)';
+    return 'ListOperationsRequest(${$contents})';
   }
 }
 
@@ -326,8 +326,8 @@ final class ListOperationsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListOperationsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListOperationsResponse(${$contents})';
   }
 }
 
@@ -357,8 +357,8 @@ final class CancelOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'CancelOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'CancelOperationRequest(${$contents})';
   }
 }
 
@@ -388,8 +388,8 @@ final class DeleteOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteOperationRequest(${$contents})';
   }
 }
 
@@ -432,8 +432,8 @@ final class WaitOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'WaitOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'WaitOperationRequest(${$contents})';
   }
 }
 
@@ -494,10 +494,10 @@ final class OperationInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'responseType=$responseType',
       'metadataType=$metadataType',
     ].join(',');
-    return 'OperationInfo($contents)';
+    return 'OperationInfo(${$contents})';
   }
 }

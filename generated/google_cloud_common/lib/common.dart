@@ -115,13 +115,13 @@ final class OperationMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'target=$target',
       'verb=$verb',
       'statusDetail=$statusDetail',
       'cancelRequested=$cancelRequested',
       'apiVersion=$apiVersion',
     ].join(',');
-    return 'OperationMetadata($contents)';
+    return 'OperationMetadata(${$contents})';
   }
 }

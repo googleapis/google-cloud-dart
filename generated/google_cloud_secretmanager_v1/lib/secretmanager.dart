@@ -578,8 +578,8 @@ final class Secret extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'Secret($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'Secret(${$contents})';
   }
 }
 
@@ -715,13 +715,13 @@ final class SecretVersion extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'state=$state',
       'etag=$etag',
       'clientSpecifiedPayloadChecksum=$clientSpecifiedPayloadChecksum',
     ].join(',');
-    return 'SecretVersion($contents)';
+    return 'SecretVersion(${$contents})';
   }
 }
 
@@ -927,8 +927,8 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['location=$location'].join(',');
-    return 'Replica($contents)';
+    final $contents = ['location=$location'].join(',');
+    return 'Replica(${$contents})';
   }
 }
 
@@ -971,8 +971,8 @@ final class CustomerManagedEncryption extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['kmsKeyName=$kmsKeyName'].join(',');
-    return 'CustomerManagedEncryption($contents)';
+    final $contents = ['kmsKeyName=$kmsKeyName'].join(',');
+    return 'CustomerManagedEncryption(${$contents})';
   }
 }
 
@@ -1151,8 +1151,8 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
 
   @override
   String toString() {
-    final contents = ['location=$location'].join(',');
-    return 'ReplicaStatus($contents)';
+    final $contents = ['location=$location'].join(',');
+    return 'ReplicaStatus(${$contents})';
   }
 }
 
@@ -1184,8 +1184,8 @@ final class CustomerManagedEncryptionStatus extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['kmsKeyVersionName=$kmsKeyVersionName'].join(',');
-    return 'CustomerManagedEncryptionStatus($contents)';
+    final $contents = ['kmsKeyVersionName=$kmsKeyVersionName'].join(',');
+    return 'CustomerManagedEncryptionStatus(${$contents})';
   }
 }
 
@@ -1219,8 +1219,8 @@ final class Topic extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'Topic($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'Topic(${$contents})';
   }
 }
 
@@ -1339,11 +1339,11 @@ final class SecretPayload extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'data=$data',
       if (dataCrc32C != null) 'dataCrc32c=$dataCrc32C',
     ].join(',');
-    return 'SecretPayload($contents)';
+    return 'SecretPayload(${$contents})';
   }
 }
 
@@ -1413,13 +1413,13 @@ final class ListSecretsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
     ].join(',');
-    return 'ListSecretsRequest($contents)';
+    return 'ListSecretsRequest(${$contents})';
   }
 }
 
@@ -1478,11 +1478,11 @@ final class ListSecretsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'nextPageToken=$nextPageToken',
       'totalSize=$totalSize',
     ].join(',');
-    return 'ListSecretsResponse($contents)';
+    return 'ListSecretsResponse(${$contents})';
   }
 }
 
@@ -1541,8 +1541,8 @@ final class CreateSecretRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'secretId=$secretId'].join(',');
-    return 'CreateSecretRequest($contents)';
+    final $contents = ['parent=$parent', 'secretId=$secretId'].join(',');
+    return 'CreateSecretRequest(${$contents})';
   }
 }
 
@@ -1587,8 +1587,8 @@ final class AddSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'AddSecretVersionRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'AddSecretVersionRequest(${$contents})';
   }
 }
 
@@ -1620,8 +1620,8 @@ final class GetSecretRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSecretRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSecretRequest(${$contents})';
   }
 }
 
@@ -1692,13 +1692,13 @@ final class ListSecretVersionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
     ].join(',');
-    return 'ListSecretVersionsRequest($contents)';
+    return 'ListSecretVersionsRequest(${$contents})';
   }
 }
 
@@ -1758,11 +1758,11 @@ final class ListSecretVersionsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'nextPageToken=$nextPageToken',
       'totalSize=$totalSize',
     ].join(',');
-    return 'ListSecretVersionsResponse($contents)';
+    return 'ListSecretVersionsResponse(${$contents})';
   }
 }
 
@@ -1800,8 +1800,8 @@ final class GetSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSecretVersionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSecretVersionRequest(${$contents})';
   }
 }
 
@@ -1879,8 +1879,8 @@ final class AccessSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'AccessSecretVersionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'AccessSecretVersionRequest(${$contents})';
   }
 }
 
@@ -1924,8 +1924,8 @@ final class AccessSecretVersionResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'AccessSecretVersionResponse($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'AccessSecretVersionResponse(${$contents})';
   }
 }
 
@@ -1967,8 +1967,8 @@ final class DeleteSecretRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'DeleteSecretRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'DeleteSecretRequest(${$contents})';
   }
 }
 
@@ -2012,8 +2012,8 @@ final class DisableSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'DisableSecretVersionRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'DisableSecretVersionRequest(${$contents})';
   }
 }
 
@@ -2057,8 +2057,8 @@ final class EnableSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'EnableSecretVersionRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'EnableSecretVersionRequest(${$contents})';
   }
 }
 
@@ -2102,7 +2102,7 @@ final class DestroySecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'DestroySecretVersionRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'DestroySecretVersionRequest(${$contents})';
   }
 }

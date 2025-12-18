@@ -213,8 +213,8 @@ final class Color extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['red=$red', 'green=$green', 'blue=$blue'].join(',');
-    return 'Color($contents)';
+    final $contents = ['red=$red', 'green=$green', 'blue=$blue'].join(',');
+    return 'Color(${$contents})';
   }
 }
 
@@ -277,8 +277,8 @@ final class Date extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['year=$year', 'month=$month', 'day=$day'].join(',');
-    return 'Date($contents)';
+    final $contents = ['year=$year', 'month=$month', 'day=$day'].join(',');
+    return 'Date(${$contents})';
   }
 }
 
@@ -413,7 +413,7 @@ final class DateTime extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'year=$year',
       'month=$month',
       'day=$day',
@@ -422,7 +422,7 @@ final class DateTime extends ProtoMessage {
       'seconds=$seconds',
       'nanos=$nanos',
     ].join(',');
-    return 'DateTime($contents)';
+    return 'DateTime(${$contents})';
   }
 }
 
@@ -461,8 +461,8 @@ final class TimeZone extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['id=$id', 'version=$version'].join(',');
-    return 'TimeZone($contents)';
+    final $contents = ['id=$id', 'version=$version'].join(',');
+    return 'TimeZone(${$contents})';
   }
 }
 
@@ -555,8 +555,8 @@ final class Decimal extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'Decimal($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'Decimal(${$contents})';
   }
 }
 
@@ -650,13 +650,13 @@ final class Expr extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'expression=$expression',
       'title=$title',
       'description=$description',
       'location=$location',
     ].join(',');
-    return 'Expr($contents)';
+    return 'Expr(${$contents})';
   }
 }
 
@@ -696,11 +696,11 @@ final class Fraction extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'numerator=$numerator',
       'denominator=$denominator',
     ].join(',');
-    return 'Fraction($contents)';
+    return 'Fraction(${$contents})';
   }
 }
 
@@ -789,8 +789,8 @@ final class LatLng extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['latitude=$latitude', 'longitude=$longitude'].join(',');
-    return 'LatLng($contents)';
+    final $contents = ['latitude=$latitude', 'longitude=$longitude'].join(',');
+    return 'LatLng(${$contents})';
   }
 }
 
@@ -832,8 +832,8 @@ final class LocalizedText extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['text=$text', 'languageCode=$languageCode'].join(',');
-    return 'LocalizedText($contents)';
+    final $contents = ['text=$text', 'languageCode=$languageCode'].join(',');
+    return 'LocalizedText(${$contents})';
   }
 }
 
@@ -886,12 +886,12 @@ final class Money extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'currencyCode=$currencyCode',
       'units=$units',
       'nanos=$nanos',
     ].join(',');
-    return 'Money($contents)';
+    return 'Money(${$contents})';
   }
 }
 
@@ -988,11 +988,11 @@ final class PhoneNumber extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (e164Number != null) 'e164Number=$e164Number',
       'extension=$extension',
     ].join(',');
-    return 'PhoneNumber($contents)';
+    return 'PhoneNumber(${$contents})';
   }
 }
 
@@ -1044,8 +1044,8 @@ final class PhoneNumber_ShortCode extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['regionCode=$regionCode', 'number=$number'].join(',');
-    return 'ShortCode($contents)';
+    final $contents = ['regionCode=$regionCode', 'number=$number'].join(',');
+    return 'ShortCode(${$contents})';
   }
 }
 
@@ -1244,7 +1244,7 @@ final class PostalAddress extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'revision=$revision',
       'regionCode=$regionCode',
       'languageCode=$languageCode',
@@ -1255,7 +1255,7 @@ final class PostalAddress extends ProtoMessage {
       'sublocality=$sublocality',
       'organization=$organization',
     ].join(',');
-    return 'PostalAddress($contents)';
+    return 'PostalAddress(${$contents})';
   }
 }
 
@@ -1364,8 +1364,8 @@ final class Quaternion extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['x=$x', 'y=$y', 'z=$z', 'w=$w'].join(',');
-    return 'Quaternion($contents)';
+    final $contents = ['x=$x', 'y=$y', 'z=$z', 'w=$w'].join(',');
+    return 'Quaternion(${$contents})';
   }
 }
 
@@ -1429,13 +1429,13 @@ final class TimeOfDay extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'hours=$hours',
       'minutes=$minutes',
       'seconds=$seconds',
       'nanos=$nanos',
     ].join(',');
-    return 'TimeOfDay($contents)';
+    return 'TimeOfDay(${$contents})';
   }
 }
 

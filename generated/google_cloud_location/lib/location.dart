@@ -157,13 +157,13 @@ final class ListLocationsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'filter=$filter',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListLocationsRequest($contents)';
+    return 'ListLocationsRequest(${$contents})';
   }
 }
 
@@ -204,8 +204,8 @@ final class ListLocationsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLocationsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLocationsResponse(${$contents})';
   }
 }
 
@@ -234,8 +234,8 @@ final class GetLocationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetLocationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetLocationRequest(${$contents})';
   }
 }
 
@@ -312,11 +312,11 @@ final class Location extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'locationId=$locationId',
       'displayName=$displayName',
     ].join(',');
-    return 'Location($contents)';
+    return 'Location(${$contents})';
   }
 }

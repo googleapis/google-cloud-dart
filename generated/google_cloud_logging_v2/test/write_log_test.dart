@@ -51,14 +51,14 @@ void main() async {
         'write_log_entries_partial_errors',
       );
 
-      expect(
+      await expectLater(
         logService.writeLogEntries(
           WriteLogEntriesRequest(
             partialSuccess: true,
             entries: [
               LogEntry(
                 severity: LogSeverity.critical,
-                logName: 'xxx',
+                logName: 'invalid log name',
                 resource: MonitoredResource(type: 'gce_instance'),
                 textPayload: 'Hello World!',
               ),
@@ -77,6 +77,7 @@ void main() async {
           ]),
         ),
       );
+      await testClient.endTest();
     });
 
     test('writeLogEntries', () async {

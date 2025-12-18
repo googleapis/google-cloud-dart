@@ -205,7 +205,7 @@ final class HttpRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'requestMethod=$requestMethod',
       'requestUrl=$requestUrl',
       'requestSize=$requestSize',
@@ -221,7 +221,7 @@ final class HttpRequest extends ProtoMessage {
       'cacheFillBytes=$cacheFillBytes',
       'protocol=$protocol',
     ].join(',');
-    return 'HttpRequest($contents)';
+    return 'HttpRequest(${$contents})';
   }
 }
 
