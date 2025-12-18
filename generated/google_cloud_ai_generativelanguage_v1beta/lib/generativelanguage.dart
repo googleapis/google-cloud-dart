@@ -1707,8 +1707,8 @@ final class ListCachedContentsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListCachedContentsRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListCachedContentsRequest(${$contents})';
   }
 }
 
@@ -1753,8 +1753,8 @@ final class ListCachedContentsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListCachedContentsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListCachedContentsResponse(${$contents})';
   }
 }
 
@@ -1814,8 +1814,8 @@ final class GetCachedContentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetCachedContentRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetCachedContentRequest(${$contents})';
   }
 }
 
@@ -1883,8 +1883,8 @@ final class DeleteCachedContentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteCachedContentRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteCachedContentRequest(${$contents})';
   }
 }
 
@@ -2030,12 +2030,12 @@ final class CachedContent extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (name != null) 'name=$name',
       if (displayName != null) 'displayName=$displayName',
       if (model != null) 'model=$model',
     ].join(',');
-    return 'CachedContent($contents)';
+    return 'CachedContent(${$contents})';
   }
 }
 
@@ -2067,8 +2067,8 @@ final class CachedContent_UsageMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['totalTokenCount=$totalTokenCount'].join(',');
-    return 'UsageMetadata($contents)';
+    final $contents = ['totalTokenCount=$totalTokenCount'].join(',');
+    return 'UsageMetadata(${$contents})';
   }
 }
 
@@ -2162,13 +2162,13 @@ final class CitationSource extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (startIndex != null) 'startIndex=$startIndex',
       if (endIndex != null) 'endIndex=$endIndex',
       if (uri != null) 'uri=$uri',
       if (license != null) 'license=$license',
     ].join(',');
-    return 'CitationSource($contents)';
+    return 'CitationSource(${$contents})';
   }
 }
 
@@ -2216,8 +2216,8 @@ final class Content extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['role=$role'].join(',');
-    return 'Content($contents)';
+    final $contents = ['role=$role'].join(',');
+    return 'Content(${$contents})';
   }
 }
 
@@ -2360,12 +2360,12 @@ final class Part extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (text != null) 'text=$text',
       'thought=$thought',
       'thoughtSignature=$thoughtSignature',
     ].join(',');
-    return 'Part($contents)';
+    return 'Part(${$contents})';
   }
 }
 
@@ -2451,8 +2451,8 @@ final class Blob extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
-    return 'Blob($contents)';
+    final $contents = ['mimeType=$mimeType', 'data=$data'].join(',');
+    return 'Blob(${$contents})';
   }
 }
 
@@ -2502,8 +2502,8 @@ final class FunctionResponseBlob extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['mimeType=$mimeType', 'data=$data'].join(',');
-    return 'FunctionResponseBlob($contents)';
+    final $contents = ['mimeType=$mimeType', 'data=$data'].join(',');
+    return 'FunctionResponseBlob(${$contents})';
   }
 }
 
@@ -2543,8 +2543,8 @@ final class FileData extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['mimeType=$mimeType', 'fileUri=$fileUri'].join(',');
-    return 'FileData($contents)';
+    final $contents = ['mimeType=$mimeType', 'fileUri=$fileUri'].join(',');
+    return 'FileData(${$contents})';
   }
 }
 
@@ -2593,8 +2593,8 @@ final class VideoMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['fps=$fps'].join(',');
-    return 'VideoMetadata($contents)';
+    final $contents = ['fps=$fps'].join(',');
+    return 'VideoMetadata(${$contents})';
   }
 }
 
@@ -2636,8 +2636,8 @@ final class ExecutableCode extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['language=$language', 'code=$code'].join(',');
-    return 'ExecutableCode($contents)';
+    final $contents = ['language=$language', 'code=$code'].join(',');
+    return 'ExecutableCode(${$contents})';
   }
 }
 
@@ -2705,8 +2705,8 @@ final class CodeExecutionResult extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['outcome=$outcome', 'output=$output'].join(',');
-    return 'CodeExecutionResult($contents)';
+    final $contents = ['outcome=$outcome', 'output=$output'].join(',');
+    return 'CodeExecutionResult(${$contents})';
   }
 }
 
@@ -2927,8 +2927,8 @@ final class Tool_ComputerUse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['environment=$environment'].join(',');
-    return 'ComputerUse($contents)';
+    final $contents = ['environment=$environment'].join(',');
+    return 'ComputerUse(${$contents})';
   }
 }
 
@@ -3045,11 +3045,11 @@ final class DynamicRetrievalConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'mode=$mode',
       if (dynamicThreshold != null) 'dynamicThreshold=$dynamicThreshold',
     ].join(',');
-    return 'DynamicRetrievalConfig($contents)';
+    return 'DynamicRetrievalConfig(${$contents})';
   }
 }
 
@@ -3176,8 +3176,8 @@ final class FunctionCallingConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['mode=$mode'].join(',');
-    return 'FunctionCallingConfig($contents)';
+    final $contents = ['mode=$mode'].join(',');
+    return 'FunctionCallingConfig(${$contents})';
   }
 }
 
@@ -3340,12 +3340,12 @@ final class FunctionDeclaration extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'behavior=$behavior',
     ].join(',');
-    return 'FunctionDeclaration($contents)';
+    return 'FunctionDeclaration(${$contents})';
   }
 }
 
@@ -3427,8 +3427,8 @@ final class FunctionCall extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['id=$id', 'name=$name'].join(',');
-    return 'FunctionCall($contents)';
+    final $contents = ['id=$id', 'name=$name'].join(',');
+    return 'FunctionCall(${$contents})';
   }
 }
 
@@ -3530,13 +3530,13 @@ final class FunctionResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'id=$id',
       'name=$name',
       'willContinue=$willContinue',
       if (scheduling != null) 'scheduling=$scheduling',
     ].join(',');
-    return 'FunctionResponse($contents)';
+    return 'FunctionResponse(${$contents})';
   }
 }
 
@@ -3816,7 +3816,7 @@ final class Schema extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       'format=$format',
       'title=$title',
@@ -3832,7 +3832,7 @@ final class Schema extends ProtoMessage {
       'maxLength=$maxLength',
       'pattern=$pattern',
     ].join(',');
-    return 'Schema($contents)';
+    return 'Schema(${$contents})';
   }
 }
 
@@ -3872,8 +3872,8 @@ final class GroundingPassage extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['id=$id'].join(',');
-    return 'GroundingPassage($contents)';
+    final $contents = ['id=$id'].join(',');
+    return 'GroundingPassage(${$contents})';
   }
 }
 
@@ -3943,8 +3943,11 @@ final class ModalityTokenCount extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['modality=$modality', 'tokenCount=$tokenCount'].join(',');
-    return 'ModalityTokenCount($contents)';
+    final $contents = [
+      'modality=$modality',
+      'tokenCount=$tokenCount',
+    ].join(',');
+    return 'ModalityTokenCount(${$contents})';
   }
 }
 
@@ -4046,14 +4049,14 @@ final class GenerateMessageRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'model=$model',
       if (temperature != null) 'temperature=$temperature',
       if (candidateCount != null) 'candidateCount=$candidateCount',
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
     ].join(',');
-    return 'GenerateMessageRequest($contents)';
+    return 'GenerateMessageRequest(${$contents})';
   }
 }
 
@@ -4178,8 +4181,8 @@ final class Message extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['author=$author', 'content=$content'].join(',');
-    return 'Message($contents)';
+    final $contents = ['author=$author', 'content=$content'].join(',');
+    return 'Message(${$contents})';
   }
 }
 
@@ -4266,8 +4269,8 @@ final class MessagePrompt extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['context=$context'].join(',');
-    return 'MessagePrompt($contents)';
+    final $contents = ['context=$context'].join(',');
+    return 'MessagePrompt(${$contents})';
   }
 }
 
@@ -4355,8 +4358,8 @@ final class CountMessageTokensRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'CountMessageTokensRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'CountMessageTokensRequest(${$contents})';
   }
 }
 
@@ -4389,8 +4392,8 @@ final class CountMessageTokensResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['tokenCount=$tokenCount'].join(',');
-    return 'CountMessageTokensResponse($contents)';
+    final $contents = ['tokenCount=$tokenCount'].join(',');
+    return 'CountMessageTokensResponse(${$contents})';
   }
 }
 
@@ -4549,7 +4552,7 @@ final class File extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'displayName=$displayName',
       'mimeType=$mimeType',
@@ -4560,7 +4563,7 @@ final class File extends ProtoMessage {
       'state=$state',
       'source=$source',
     ].join(',');
-    return 'File($contents)';
+    return 'File(${$contents})';
   }
 }
 
@@ -4737,8 +4740,8 @@ final class ListFilesRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListFilesRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListFilesRequest(${$contents})';
   }
 }
 
@@ -4780,8 +4783,8 @@ final class ListFilesResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListFilesResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListFilesResponse(${$contents})';
   }
 }
 
@@ -4811,8 +4814,8 @@ final class GetFileRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetFileRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetFileRequest(${$contents})';
   }
 }
 
@@ -4842,8 +4845,8 @@ final class DeleteFileRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteFileRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteFileRequest(${$contents})';
   }
 }
 
@@ -4873,8 +4876,8 @@ final class DownloadFileRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DownloadFileRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DownloadFileRequest(${$contents})';
   }
 }
 
@@ -5032,11 +5035,11 @@ final class GenerateContentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'model=$model',
       if (cachedContent != null) 'cachedContent=$cachedContent',
     ].join(',');
-    return 'GenerateContentRequest($contents)';
+    return 'GenerateContentRequest(${$contents})';
   }
 }
 
@@ -5065,8 +5068,8 @@ final class PrebuiltVoiceConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (voiceName != null) 'voiceName=$voiceName'].join(',');
-    return 'PrebuiltVoiceConfig($contents)';
+    final $contents = [if (voiceName != null) 'voiceName=$voiceName'].join(',');
+    return 'PrebuiltVoiceConfig(${$contents})';
   }
 }
 
@@ -5137,8 +5140,8 @@ final class SpeakerVoiceConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['speaker=$speaker'].join(',');
-    return 'SpeakerVoiceConfig($contents)';
+    final $contents = ['speaker=$speaker'].join(',');
+    return 'SpeakerVoiceConfig(${$contents})';
   }
 }
 
@@ -5228,8 +5231,8 @@ final class SpeechConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['languageCode=$languageCode'].join(',');
-    return 'SpeechConfig($contents)';
+    final $contents = ['languageCode=$languageCode'].join(',');
+    return 'SpeechConfig(${$contents})';
   }
 }
 
@@ -5270,11 +5273,11 @@ final class ThinkingConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (includeThoughts != null) 'includeThoughts=$includeThoughts',
       if (thinkingBudget != null) 'thinkingBudget=$thinkingBudget',
     ].join(',');
-    return 'ThinkingConfig($contents)';
+    return 'ThinkingConfig(${$contents})';
   }
 }
 
@@ -5307,10 +5310,10 @@ final class ImageConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (aspectRatio != null) 'aspectRatio=$aspectRatio',
     ].join(',');
-    return 'ImageConfig($contents)';
+    return 'ImageConfig(${$contents})';
   }
 }
 
@@ -5666,7 +5669,7 @@ final class GenerationConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (candidateCount != null) 'candidateCount=$candidateCount',
       if (maxOutputTokens != null) 'maxOutputTokens=$maxOutputTokens',
       if (temperature != null) 'temperature=$temperature',
@@ -5682,7 +5685,7 @@ final class GenerationConfig extends ProtoMessage {
         'enableEnhancedCivicAnswers=$enableEnhancedCivicAnswers',
       if (mediaResolution != null) 'mediaResolution=$mediaResolution',
     ].join(',');
-    return 'GenerationConfig($contents)';
+    return 'GenerationConfig(${$contents})';
   }
 }
 
@@ -5824,13 +5827,13 @@ final class SemanticRetrieverConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'source=$source',
       if (maxChunksCount != null) 'maxChunksCount=$maxChunksCount',
       if (minimumRelevanceScore != null)
         'minimumRelevanceScore=$minimumRelevanceScore',
     ].join(',');
-    return 'SemanticRetrieverConfig($contents)';
+    return 'SemanticRetrieverConfig(${$contents})';
   }
 }
 
@@ -5909,11 +5912,11 @@ final class GenerateContentResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'modelVersion=$modelVersion',
       'responseId=$responseId',
     ].join(',');
-    return 'GenerateContentResponse($contents)';
+    return 'GenerateContentResponse(${$contents})';
   }
 }
 
@@ -5961,8 +5964,8 @@ final class GenerateContentResponse_PromptFeedback extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['blockReason=$blockReason'].join(',');
-    return 'PromptFeedback($contents)';
+    final $contents = ['blockReason=$blockReason'].join(',');
+    return 'PromptFeedback(${$contents})';
   }
 }
 
@@ -6155,7 +6158,7 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'promptTokenCount=$promptTokenCount',
       'cachedContentTokenCount=$cachedContentTokenCount',
       'candidatesTokenCount=$candidatesTokenCount',
@@ -6163,7 +6166,7 @@ final class GenerateContentResponse_UsageMetadata extends ProtoMessage {
       'thoughtsTokenCount=$thoughtsTokenCount',
       'totalTokenCount=$totalTokenCount',
     ].join(',');
-    return 'UsageMetadata($contents)';
+    return 'UsageMetadata(${$contents})';
   }
 }
 
@@ -6319,14 +6322,14 @@ final class Candidate extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (index != null) 'index=$index',
       'finishReason=$finishReason',
       if (finishMessage != null) 'finishMessage=$finishMessage',
       'tokenCount=$tokenCount',
       'avgLogprobs=$avgLogprobs',
     ].join(',');
-    return 'Candidate($contents)';
+    return 'Candidate(${$contents})';
   }
 }
 
@@ -6482,11 +6485,11 @@ final class UrlMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'retrievedUrl=$retrievedUrl',
       'urlRetrievalStatus=$urlRetrievalStatus',
     ].join(',');
-    return 'UrlMetadata($contents)';
+    return 'UrlMetadata(${$contents})';
   }
 }
 
@@ -6587,10 +6590,10 @@ final class LogprobsResult extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (logProbabilitySum != null) 'logProbabilitySum=$logProbabilitySum',
     ].join(',');
-    return 'LogprobsResult($contents)';
+    return 'LogprobsResult(${$contents})';
   }
 }
 
@@ -6638,12 +6641,12 @@ final class LogprobsResult_Candidate extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (token != null) 'token=$token',
       if (tokenId != null) 'tokenId=$tokenId',
       if (logProbability != null) 'logProbability=$logProbability',
     ].join(',');
-    return 'Candidate($contents)';
+    return 'Candidate(${$contents})';
   }
 }
 
@@ -6760,8 +6763,11 @@ final class AttributionSourceId_GroundingPassageId extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['passageId=$passageId', 'partIndex=$partIndex'].join(',');
-    return 'GroundingPassageId($contents)';
+    final $contents = [
+      'passageId=$passageId',
+      'partIndex=$partIndex',
+    ].join(',');
+    return 'GroundingPassageId(${$contents})';
   }
 }
 
@@ -6807,8 +6813,8 @@ final class AttributionSourceId_SemanticRetrieverChunk extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['source=$source', 'chunk=$chunk'].join(',');
-    return 'SemanticRetrieverChunk($contents)';
+    final $contents = ['source=$source', 'chunk=$chunk'].join(',');
+    return 'SemanticRetrieverChunk(${$contents})';
   }
 }
 
@@ -6886,10 +6892,10 @@ final class RetrievalMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'googleSearchDynamicRetrievalScore=$googleSearchDynamicRetrievalScore',
     ].join(',');
-    return 'RetrievalMetadata($contents)';
+    return 'RetrievalMetadata(${$contents})';
   }
 }
 
@@ -7006,11 +7012,11 @@ final class SearchEntryPoint extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'renderedContent=$renderedContent',
       'sdkBlob=$sdkBlob',
     ].join(',');
-    return 'SearchEntryPoint($contents)';
+    return 'SearchEntryPoint(${$contents})';
   }
 }
 
@@ -7076,11 +7082,11 @@ final class GroundingChunk_Web extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (uri != null) 'uri=$uri',
       if (title != null) 'title=$title',
     ].join(',');
-    return 'Web($contents)';
+    return 'Web(${$contents})';
   }
 }
 
@@ -7142,13 +7148,13 @@ final class Segment extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'partIndex=$partIndex',
       'startIndex=$startIndex',
       'endIndex=$endIndex',
       'text=$text',
     ].join(',');
-    return 'Segment($contents)';
+    return 'Segment(${$contents})';
   }
 }
 
@@ -7330,12 +7336,12 @@ final class GenerateAnswerRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'model=$model',
       'answerStyle=$answerStyle',
       if (temperature != null) 'temperature=$temperature',
     ].join(',');
-    return 'GenerateAnswerRequest($contents)';
+    return 'GenerateAnswerRequest(${$contents})';
   }
 }
 
@@ -7444,11 +7450,11 @@ final class GenerateAnswerResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (answerableProbability != null)
         'answerableProbability=$answerableProbability',
     ].join(',');
-    return 'GenerateAnswerResponse($contents)';
+    return 'GenerateAnswerResponse(${$contents})';
   }
 }
 
@@ -7496,10 +7502,10 @@ final class GenerateAnswerResponse_InputFeedback extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (blockReason != null) 'blockReason=$blockReason',
     ].join(',');
-    return 'InputFeedback($contents)';
+    return 'InputFeedback(${$contents})';
   }
 }
 
@@ -7617,14 +7623,14 @@ final class EmbedContentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'model=$model',
       if (taskType != null) 'taskType=$taskType',
       if (title != null) 'title=$title',
       if (outputDimensionality != null)
         'outputDimensionality=$outputDimensionality',
     ].join(',');
-    return 'EmbedContentRequest($contents)';
+    return 'EmbedContentRequest(${$contents})';
   }
 }
 
@@ -7725,8 +7731,8 @@ final class BatchEmbedContentsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'BatchEmbedContentsRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'BatchEmbedContentsRequest(${$contents})';
   }
 }
 
@@ -7827,8 +7833,8 @@ final class CountTokensRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'CountTokensRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'CountTokensRequest(${$contents})';
   }
 }
 
@@ -7900,11 +7906,11 @@ final class CountTokensResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'totalTokens=$totalTokens',
       'cachedContentTokenCount=$cachedContentTokenCount',
     ].join(',');
-    return 'CountTokensResponse($contents)';
+    return 'CountTokensResponse(${$contents})';
   }
 }
 
@@ -7962,11 +7968,11 @@ final class RealtimeInputConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (activityHandling != null) 'activityHandling=$activityHandling',
       if (turnCoverage != null) 'turnCoverage=$turnCoverage',
     ].join(',');
-    return 'RealtimeInputConfig($contents)';
+    return 'RealtimeInputConfig(${$contents})';
   }
 }
 
@@ -8053,7 +8059,7 @@ final class RealtimeInputConfig_AutomaticActivityDetection
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (disabled != null) 'disabled=$disabled',
       if (startOfSpeechSensitivity != null)
         'startOfSpeechSensitivity=$startOfSpeechSensitivity',
@@ -8062,7 +8068,7 @@ final class RealtimeInputConfig_AutomaticActivityDetection
         'endOfSpeechSensitivity=$endOfSpeechSensitivity',
       if (silenceDurationMs != null) 'silenceDurationMs=$silenceDurationMs',
     ].join(',');
-    return 'AutomaticActivityDetection($contents)';
+    return 'AutomaticActivityDetection(${$contents})';
   }
 }
 
@@ -8245,8 +8251,8 @@ final class SessionResumptionConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (handle != null) 'handle=$handle'].join(',');
-    return 'SessionResumptionConfig($contents)';
+    final $contents = [if (handle != null) 'handle=$handle'].join(',');
+    return 'SessionResumptionConfig(${$contents})';
   }
 }
 
@@ -8296,10 +8302,10 @@ final class ContextWindowCompressionConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (triggerTokens != null) 'triggerTokens=$triggerTokens',
     ].join(',');
-    return 'ContextWindowCompressionConfig($contents)';
+    return 'ContextWindowCompressionConfig(${$contents})';
   }
 }
 
@@ -8340,10 +8346,10 @@ final class ContextWindowCompressionConfig_SlidingWindow extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (targetTokens != null) 'targetTokens=$targetTokens',
     ].join(',');
-    return 'SlidingWindow($contents)';
+    return 'SlidingWindow(${$contents})';
   }
 }
 
@@ -8508,8 +8514,8 @@ final class BidiGenerateContentSetup extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'BidiGenerateContentSetup($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'BidiGenerateContentSetup(${$contents})';
   }
 }
 
@@ -8562,8 +8568,8 @@ final class BidiGenerateContentClientContent extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['turnComplete=$turnComplete'].join(',');
-    return 'BidiGenerateContentClientContent($contents)';
+    final $contents = ['turnComplete=$turnComplete'].join(',');
+    return 'BidiGenerateContentClientContent(${$contents})';
   }
 }
 
@@ -8683,11 +8689,11 @@ final class BidiGenerateContentRealtimeInput extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (audioStreamEnd != null) 'audioStreamEnd=$audioStreamEnd',
       if (text != null) 'text=$text',
     ].join(',');
-    return 'BidiGenerateContentRealtimeInput($contents)';
+    return 'BidiGenerateContentRealtimeInput(${$contents})';
   }
 }
 
@@ -8971,13 +8977,13 @@ final class BidiGenerateContentServerContent extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'generationComplete=$generationComplete',
       'turnComplete=$turnComplete',
       'interrupted=$interrupted',
       'waitingForInput=$waitingForInput',
     ].join(',');
-    return 'BidiGenerateContentServerContent($contents)';
+    return 'BidiGenerateContentServerContent(${$contents})';
   }
 }
 
@@ -9121,8 +9127,11 @@ final class SessionResumptionUpdate extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['newHandle=$newHandle', 'resumable=$resumable'].join(',');
-    return 'SessionResumptionUpdate($contents)';
+    final $contents = [
+      'newHandle=$newHandle',
+      'resumable=$resumable',
+    ].join(',');
+    return 'SessionResumptionUpdate(${$contents})';
   }
 }
 
@@ -9152,8 +9161,8 @@ final class BidiGenerateContentTranscription extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['text=$text'].join(',');
-    return 'BidiGenerateContentTranscription($contents)';
+    final $contents = ['text=$text'].join(',');
+    return 'BidiGenerateContentTranscription(${$contents})';
   }
 }
 
@@ -9387,7 +9396,7 @@ final class UsageMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'promptTokenCount=$promptTokenCount',
       'cachedContentTokenCount=$cachedContentTokenCount',
       'responseTokenCount=$responseTokenCount',
@@ -9395,7 +9404,7 @@ final class UsageMetadata extends ProtoMessage {
       'thoughtsTokenCount=$thoughtsTokenCount',
       'totalTokenCount=$totalTokenCount',
     ].join(',');
-    return 'UsageMetadata($contents)';
+    return 'UsageMetadata(${$contents})';
   }
 }
 
@@ -9580,7 +9589,7 @@ final class Model extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'baseModelId=$baseModelId',
       'version=$version',
@@ -9594,7 +9603,7 @@ final class Model extends ProtoMessage {
       if (topK != null) 'topK=$topK',
       'thinking=$thinking',
     ].join(',');
-    return 'Model($contents)';
+    return 'Model(${$contents})';
   }
 }
 
@@ -9627,8 +9636,8 @@ final class GetModelRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetModelRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetModelRequest(${$contents})';
   }
 }
 
@@ -9678,8 +9687,8 @@ final class ListModelsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListModelsRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListModelsRequest(${$contents})';
   }
 }
 
@@ -9722,8 +9731,8 @@ final class ListModelsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListModelsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListModelsResponse(${$contents})';
   }
 }
 
@@ -9754,8 +9763,8 @@ final class GetTunedModelRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetTunedModelRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetTunedModelRequest(${$contents})';
   }
 }
 
@@ -9830,12 +9839,12 @@ final class ListTunedModelsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
     ].join(',');
-    return 'ListTunedModelsRequest($contents)';
+    return 'ListTunedModelsRequest(${$contents})';
   }
 }
 
@@ -9880,8 +9889,8 @@ final class ListTunedModelsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListTunedModelsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListTunedModelsResponse(${$contents})';
   }
 }
 
@@ -9924,10 +9933,10 @@ final class CreateTunedModelRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (tunedModelId != null) 'tunedModelId=$tunedModelId',
     ].join(',');
-    return 'CreateTunedModelRequest($contents)';
+    return 'CreateTunedModelRequest(${$contents})';
   }
 }
 
@@ -9999,13 +10008,13 @@ final class CreateTunedModelMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'tunedModel=$tunedModel',
       'totalSteps=$totalSteps',
       'completedSteps=$completedSteps',
       'completedPercent=$completedPercent',
     ].join(',');
-    return 'CreateTunedModelMetadata($contents)';
+    return 'CreateTunedModelMetadata(${$contents})';
   }
 }
 
@@ -10073,8 +10082,8 @@ final class DeleteTunedModelRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteTunedModelRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteTunedModelRequest(${$contents})';
   }
 }
 
@@ -10153,13 +10162,13 @@ final class Permission extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       if (granteeType != null) 'granteeType=$granteeType',
       if (emailAddress != null) 'emailAddress=$emailAddress',
       if (role != null) 'role=$role',
     ].join(',');
-    return 'Permission($contents)';
+    return 'Permission(${$contents})';
   }
 }
 
@@ -10261,8 +10270,8 @@ final class CreatePermissionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'CreatePermissionRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreatePermissionRequest(${$contents})';
   }
 }
 
@@ -10295,8 +10304,8 @@ final class GetPermissionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetPermissionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetPermissionRequest(${$contents})';
   }
 }
 
@@ -10361,12 +10370,12 @@ final class ListPermissionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListPermissionsRequest($contents)';
+    return 'ListPermissionsRequest(${$contents})';
   }
 }
 
@@ -10412,8 +10421,8 @@ final class ListPermissionsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListPermissionsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListPermissionsResponse(${$contents})';
   }
 }
 
@@ -10486,8 +10495,8 @@ final class DeletePermissionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeletePermissionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeletePermissionRequest(${$contents})';
   }
 }
 
@@ -10527,8 +10536,8 @@ final class TransferOwnershipRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'emailAddress=$emailAddress'].join(',');
-    return 'TransferOwnershipRequest($contents)';
+    final $contents = ['name=$name', 'emailAddress=$emailAddress'].join(',');
+    return 'TransferOwnershipRequest(${$contents})';
   }
 }
 
@@ -10599,8 +10608,8 @@ final class PredictRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'PredictRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'PredictRequest(${$contents})';
   }
 }
 
@@ -10653,8 +10662,8 @@ final class PredictLongRunningRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'PredictLongRunningRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'PredictLongRunningRequest(${$contents})';
   }
 }
 
@@ -10798,11 +10807,11 @@ final class Video extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (video != null) 'video=$video',
       if (uri != null) 'uri=$uri',
     ].join(',');
-    return 'Video($contents)';
+    return 'Video(${$contents})';
   }
 }
 
@@ -10860,8 +10869,10 @@ final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['raiMediaFilteredCount=$raiMediaFilteredCount'].join(',');
-    return 'PredictLongRunningGeneratedVideoResponse($contents)';
+    final $contents = [
+      'raiMediaFilteredCount=$raiMediaFilteredCount',
+    ].join(',');
+    return 'PredictLongRunningGeneratedVideoResponse(${$contents})';
   }
 }
 
@@ -10930,8 +10941,8 @@ final class Corpus extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'displayName=$displayName'].join(',');
-    return 'Corpus($contents)';
+    final $contents = ['name=$name', 'displayName=$displayName'].join(',');
+    return 'Corpus(${$contents})';
   }
 }
 
@@ -11011,8 +11022,8 @@ final class Document extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'displayName=$displayName'].join(',');
-    return 'Document($contents)';
+    final $contents = ['name=$name', 'displayName=$displayName'].join(',');
+    return 'Document(${$contents})';
   }
 }
 
@@ -11100,12 +11111,12 @@ final class CustomMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (stringValue != null) 'stringValue=$stringValue',
       if (numericValue != null) 'numericValue=$numericValue',
       'key=$key',
     ].join(',');
-    return 'CustomMetadata($contents)';
+    return 'CustomMetadata(${$contents})';
   }
 }
 
@@ -11149,8 +11160,8 @@ final class MetadataFilter extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['key=$key'].join(',');
-    return 'MetadataFilter($contents)';
+    final $contents = ['key=$key'].join(',');
+    return 'MetadataFilter(${$contents})';
   }
 }
 
@@ -11199,12 +11210,12 @@ final class Condition extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (stringValue != null) 'stringValue=$stringValue',
       if (numericValue != null) 'numericValue=$numericValue',
       'operation=$operation',
     ].join(',');
-    return 'Condition($contents)';
+    return 'Condition(${$contents})';
   }
 }
 
@@ -11338,8 +11349,8 @@ final class Chunk extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'state=$state'].join(',');
-    return 'Chunk($contents)';
+    final $contents = ['name=$name', 'state=$state'].join(',');
+    return 'Chunk(${$contents})';
   }
 }
 
@@ -11396,10 +11407,10 @@ final class ChunkData extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (stringValue != null) 'stringValue=$stringValue',
     ].join(',');
-    return 'ChunkData($contents)';
+    return 'ChunkData(${$contents})';
   }
 }
 
@@ -11456,8 +11467,8 @@ final class GetCorpusRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetCorpusRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetCorpusRequest(${$contents})';
   }
 }
 
@@ -11538,8 +11549,8 @@ final class DeleteCorpusRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'force=$force'].join(',');
-    return 'DeleteCorpusRequest($contents)';
+    final $contents = ['name=$name', 'force=$force'].join(',');
+    return 'DeleteCorpusRequest(${$contents})';
   }
 }
 
@@ -11589,8 +11600,8 @@ final class ListCorporaRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListCorporaRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListCorporaRequest(${$contents})';
   }
 }
 
@@ -11633,8 +11644,8 @@ final class ListCorporaResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListCorporaResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListCorporaResponse(${$contents})';
   }
 }
 
@@ -11731,12 +11742,12 @@ final class QueryCorpusRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'query=$query',
       'resultsCount=$resultsCount',
     ].join(',');
-    return 'QueryCorpusRequest($contents)';
+    return 'QueryCorpusRequest(${$contents})';
   }
 }
 
@@ -11817,8 +11828,8 @@ final class RelevantChunk extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['chunkRelevanceScore=$chunkRelevanceScore'].join(',');
-    return 'RelevantChunk($contents)';
+    final $contents = ['chunkRelevanceScore=$chunkRelevanceScore'].join(',');
+    return 'RelevantChunk(${$contents})';
   }
 }
 
@@ -11859,8 +11870,8 @@ final class CreateDocumentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'CreateDocumentRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreateDocumentRequest(${$contents})';
   }
 }
 
@@ -11890,8 +11901,8 @@ final class GetDocumentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetDocumentRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetDocumentRequest(${$contents})';
   }
 }
 
@@ -11973,8 +11984,8 @@ final class DeleteDocumentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'force=$force'].join(',');
-    return 'DeleteDocumentRequest($contents)';
+    final $contents = ['name=$name', 'force=$force'].join(',');
+    return 'DeleteDocumentRequest(${$contents})';
   }
 }
 
@@ -12036,12 +12047,12 @@ final class ListDocumentsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListDocumentsRequest($contents)';
+    return 'ListDocumentsRequest(${$contents})';
   }
 }
 
@@ -12084,8 +12095,8 @@ final class ListDocumentsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListDocumentsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListDocumentsResponse(${$contents})';
   }
 }
 
@@ -12182,12 +12193,12 @@ final class QueryDocumentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'query=$query',
       'resultsCount=$resultsCount',
     ].join(',');
-    return 'QueryDocumentRequest($contents)';
+    return 'QueryDocumentRequest(${$contents})';
   }
 }
 
@@ -12260,8 +12271,8 @@ final class CreateChunkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'CreateChunkRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreateChunkRequest(${$contents})';
   }
 }
 
@@ -12307,8 +12318,8 @@ final class BatchCreateChunksRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'BatchCreateChunksRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchCreateChunksRequest(${$contents})';
   }
 }
 
@@ -12367,8 +12378,8 @@ final class GetChunkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetChunkRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetChunkRequest(${$contents})';
   }
 }
 
@@ -12453,8 +12464,8 @@ final class BatchUpdateChunksRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'BatchUpdateChunksRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchUpdateChunksRequest(${$contents})';
   }
 }
 
@@ -12513,8 +12524,8 @@ final class DeleteChunkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteChunkRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteChunkRequest(${$contents})';
   }
 }
 
@@ -12559,8 +12570,8 @@ final class BatchDeleteChunksRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'BatchDeleteChunksRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchDeleteChunksRequest(${$contents})';
   }
 }
 
@@ -12622,12 +12633,12 @@ final class ListChunksRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListChunksRequest($contents)';
+    return 'ListChunksRequest(${$contents})';
   }
 }
 
@@ -12670,8 +12681,8 @@ final class ListChunksResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListChunksResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListChunksResponse(${$contents})';
   }
 }
 
@@ -12716,11 +12727,11 @@ final class ContentFilter extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'reason=$reason',
       if (message != null) 'message=$message',
     ].join(',');
-    return 'ContentFilter($contents)';
+    return 'ContentFilter(${$contents})';
   }
 }
 
@@ -12847,12 +12858,12 @@ final class SafetyRating extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'category=$category',
       'probability=$probability',
       'blocked=$blocked',
     ].join(',');
-    return 'SafetyRating($contents)';
+    return 'SafetyRating(${$contents})';
   }
 }
 
@@ -12931,8 +12942,8 @@ final class SafetySetting extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['category=$category', 'threshold=$threshold'].join(',');
-    return 'SafetySetting($contents)';
+    final $contents = ['category=$category', 'threshold=$threshold'].join(',');
+    return 'SafetySetting(${$contents})';
   }
 }
 
@@ -13136,7 +13147,7 @@ final class GenerateTextRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'model=$model',
       if (temperature != null) 'temperature=$temperature',
       if (candidateCount != null) 'candidateCount=$candidateCount',
@@ -13144,7 +13155,7 @@ final class GenerateTextRequest extends ProtoMessage {
       if (topP != null) 'topP=$topP',
       if (topK != null) 'topK=$topK',
     ].join(',');
-    return 'GenerateTextRequest($contents)';
+    return 'GenerateTextRequest(${$contents})';
   }
 }
 
@@ -13238,8 +13249,8 @@ final class TextPrompt extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['text=$text'].join(',');
-    return 'TextPrompt($contents)';
+    final $contents = ['text=$text'].join(',');
+    return 'TextPrompt(${$contents})';
   }
 }
 
@@ -13298,8 +13309,8 @@ final class TextCompletion extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['output=$output'].join(',');
-    return 'TextCompletion($contents)';
+    final $contents = ['output=$output'].join(',');
+    return 'TextCompletion(${$contents})';
   }
 }
 
@@ -13337,8 +13348,8 @@ final class EmbedTextRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model', 'text=$text'].join(',');
-    return 'EmbedTextRequest($contents)';
+    final $contents = ['model=$model', 'text=$text'].join(',');
+    return 'EmbedTextRequest(${$contents})';
   }
 }
 
@@ -13423,8 +13434,8 @@ final class BatchEmbedTextRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'BatchEmbedTextRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'BatchEmbedTextRequest(${$contents})';
   }
 }
 
@@ -13531,8 +13542,8 @@ final class CountTextTokensRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['model=$model'].join(',');
-    return 'CountTextTokensRequest($contents)';
+    final $contents = ['model=$model'].join(',');
+    return 'CountTextTokensRequest(${$contents})';
   }
 }
 
@@ -13565,8 +13576,8 @@ final class CountTextTokensResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['tokenCount=$tokenCount'].join(',');
-    return 'CountTextTokensResponse($contents)';
+    final $contents = ['tokenCount=$tokenCount'].join(',');
+    return 'CountTextTokensResponse(${$contents})';
   }
 }
 
@@ -13744,7 +13755,7 @@ final class TunedModel extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (baseModel != null) 'baseModel=$baseModel',
       'name=$name',
       'displayName=$displayName',
@@ -13754,7 +13765,7 @@ final class TunedModel extends ProtoMessage {
       if (topK != null) 'topK=$topK',
       'state=$state',
     ].join(',');
-    return 'TunedModel($contents)';
+    return 'TunedModel(${$contents})';
   }
 }
 
@@ -13825,11 +13836,11 @@ final class TunedModelSource extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'tunedModel=$tunedModel',
       'baseModel=$baseModel',
     ].join(',');
-    return 'TunedModelSource($contents)';
+    return 'TunedModelSource(${$contents})';
   }
 }
 
@@ -13969,14 +13980,14 @@ final class Hyperparameters extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (learningRate != null) 'learningRate=$learningRate',
       if (learningRateMultiplier != null)
         'learningRateMultiplier=$learningRateMultiplier',
       if (epochCount != null) 'epochCount=$epochCount',
       if (batchSize != null) 'batchSize=$batchSize',
     ].join(',');
-    return 'Hyperparameters($contents)';
+    return 'Hyperparameters(${$contents})';
   }
 }
 
@@ -14074,11 +14085,11 @@ final class TuningExample extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (textInput != null) 'textInput=$textInput',
       'output=$output',
     ].join(',');
-    return 'TuningExample($contents)';
+    return 'TuningExample(${$contents})';
   }
 }
 
@@ -14138,12 +14149,12 @@ final class TuningSnapshot extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'step=$step',
       'epoch=$epoch',
       'meanLoss=$meanLoss',
     ].join(',');
-    return 'TuningSnapshot($contents)';
+    return 'TuningSnapshot(${$contents})';
   }
 }
 

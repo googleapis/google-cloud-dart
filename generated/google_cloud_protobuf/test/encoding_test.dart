@@ -21,6 +21,12 @@ void main() {
     expect(encodeInt64(decodeInt64(1)), '1');
   });
 
+  test('decodeIntKey', () {
+    expect(decodeIntKey('1'), 1);
+    expect(() => decodeIntKey(1), throwsA(isA<TypeError>()));
+    expect(() => decodeIntKey('apple'), throwsA(isA<FormatException>()));
+  });
+
   test('double', () {
     expect(decodeDouble(1), 1);
     expect(decodeDouble(1.1), 1.1);

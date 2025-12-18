@@ -118,8 +118,8 @@ final class ErrorInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['reason=$reason', 'domain=$domain'].join(',');
-    return 'ErrorInfo($contents)';
+    final $contents = ['reason=$reason', 'domain=$domain'].join(',');
+    return 'ErrorInfo(${$contents})';
   }
 }
 
@@ -199,8 +199,8 @@ final class DebugInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['detail=$detail'].join(',');
-    return 'DebugInfo($contents)';
+    final $contents = ['detail=$detail'].join(',');
+    return 'DebugInfo(${$contents})';
   }
 }
 
@@ -397,7 +397,7 @@ final class QuotaFailure_Violation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'subject=$subject',
       'description=$description',
       'apiService=$apiService',
@@ -406,7 +406,7 @@ final class QuotaFailure_Violation extends ProtoMessage {
       'quotaValue=$quotaValue',
       if (futureQuotaValue != null) 'futureQuotaValue=$futureQuotaValue',
     ].join(',');
-    return 'Violation($contents)';
+    return 'Violation(${$contents})';
   }
 }
 
@@ -499,12 +499,12 @@ final class PreconditionFailure_Violation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       'subject=$subject',
       'description=$description',
     ].join(',');
-    return 'Violation($contents)';
+    return 'Violation(${$contents})';
   }
 }
 
@@ -640,12 +640,12 @@ final class BadRequest_FieldViolation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'field=$field',
       'description=$description',
       'reason=$reason',
     ].join(',');
-    return 'FieldViolation($contents)';
+    return 'FieldViolation(${$contents})';
   }
 }
 
@@ -687,11 +687,11 @@ final class RequestInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'requestId=$requestId',
       'servingData=$servingData',
     ].join(',');
-    return 'RequestInfo($contents)';
+    return 'RequestInfo(${$contents})';
   }
 }
 
@@ -759,13 +759,13 @@ final class ResourceInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'resourceType=$resourceType',
       'resourceName=$resourceName',
       'owner=$owner',
       'description=$description',
     ].join(',');
-    return 'ResourceInfo($contents)';
+    return 'ResourceInfo(${$contents})';
   }
 }
 
@@ -834,8 +834,8 @@ final class Help_Link extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['description=$description', 'url=$url'].join(',');
-    return 'Link($contents)';
+    final $contents = ['description=$description', 'url=$url'].join(',');
+    return 'Link(${$contents})';
   }
 }
 
@@ -877,8 +877,8 @@ final class LocalizedMessage extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['locale=$locale', 'message=$message'].join(',');
-    return 'LocalizedMessage($contents)';
+    final $contents = ['locale=$locale', 'message=$message'].join(',');
+    return 'LocalizedMessage(${$contents})';
   }
 }
 
@@ -940,8 +940,8 @@ final class HttpRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
-    return 'HttpRequest($contents)';
+    final $contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
+    return 'HttpRequest(${$contents})';
   }
 }
 
@@ -1003,12 +1003,12 @@ final class HttpResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'status=$status',
       'reason=$reason',
       'body=$body',
     ].join(',');
-    return 'HttpResponse($contents)';
+    return 'HttpResponse(${$contents})';
   }
 }
 
@@ -1046,8 +1046,8 @@ final class HttpHeader extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['key=$key', 'value=$value'].join(',');
-    return 'HttpHeader($contents)';
+    final $contents = ['key=$key', 'value=$value'].join(',');
+    return 'HttpHeader(${$contents})';
   }
 }
 
@@ -1106,8 +1106,8 @@ final class Status extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['code=$code', 'message=$message'].join(',');
-    return 'Status($contents)';
+    final $contents = ['code=$code', 'message=$message'].join(',');
+    return 'Status(${$contents})';
   }
 }
 

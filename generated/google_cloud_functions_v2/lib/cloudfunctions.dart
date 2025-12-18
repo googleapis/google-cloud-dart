@@ -518,7 +518,7 @@ final class Function$ extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'state=$state',
@@ -527,7 +527,7 @@ final class Function$ extends ProtoMessage {
       'kmsKeyName=$kmsKeyName',
       'satisfiesPzs=$satisfiesPzs',
     ].join(',');
-    return 'Function($contents)';
+    return 'Function(${$contents})';
   }
 }
 
@@ -613,12 +613,12 @@ final class StateMessage extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'severity=$severity',
       'type=$type',
       'message=$message',
     ].join(',');
-    return 'StateMessage($contents)';
+    return 'StateMessage(${$contents})';
   }
 }
 
@@ -716,13 +716,13 @@ final class StorageSource extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'bucket=$bucket',
       'object=$object',
       'generation=$generation',
       'sourceUploadUrl=$sourceUploadUrl',
     ].join(',');
-    return 'StorageSource($contents)';
+    return 'StorageSource(${$contents})';
   }
 }
 
@@ -821,7 +821,7 @@ final class RepoSource extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (branchName != null) 'branchName=$branchName',
       if (tagName != null) 'tagName=$tagName',
       if (commitSha != null) 'commitSha=$commitSha',
@@ -830,7 +830,7 @@ final class RepoSource extends ProtoMessage {
       'dir=$dir',
       'invertRegex=$invertRegex',
     ].join(',');
-    return 'RepoSource($contents)';
+    return 'RepoSource(${$contents})';
   }
 }
 
@@ -880,8 +880,8 @@ final class Source extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [if (gitUri != null) 'gitUri=$gitUri'].join(',');
-    return 'Source($contents)';
+    final $contents = [if (gitUri != null) 'gitUri=$gitUri'].join(',');
+    return 'Source(${$contents})';
   }
 }
 
@@ -938,8 +938,8 @@ final class SourceProvenance extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['gitUri=$gitUri'].join(',');
-    return 'SourceProvenance($contents)';
+    final $contents = ['gitUri=$gitUri'].join(',');
+    return 'SourceProvenance(${$contents})';
   }
 }
 
@@ -1120,7 +1120,7 @@ final class BuildConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'build=$build',
       'runtime=$runtime',
       'entryPoint=$entryPoint',
@@ -1129,7 +1129,7 @@ final class BuildConfig extends ProtoMessage {
       'dockerRepository=$dockerRepository',
       'serviceAccount=$serviceAccount',
     ].join(',');
-    return 'BuildConfig($contents)';
+    return 'BuildConfig(${$contents})';
   }
 }
 
@@ -1426,7 +1426,7 @@ final class ServiceConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'service=$service',
       'timeoutSeconds=$timeoutSeconds',
       'availableMemory=$availableMemory',
@@ -1444,7 +1444,7 @@ final class ServiceConfig extends ProtoMessage {
       'securityLevel=$securityLevel',
       'binaryAuthorizationPolicy=$binaryAuthorizationPolicy',
     ].join(',');
-    return 'ServiceConfig($contents)';
+    return 'ServiceConfig(${$contents})';
   }
 }
 
@@ -1621,13 +1621,13 @@ final class SecretEnvVar extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'key=$key',
       'projectId=$projectId',
       'secret=$secret',
       'version=$version',
     ].join(',');
-    return 'SecretEnvVar($contents)';
+    return 'SecretEnvVar(${$contents})';
   }
 }
 
@@ -1700,12 +1700,12 @@ final class SecretVolume extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'mountPath=$mountPath',
       'projectId=$projectId',
       'secret=$secret',
     ].join(',');
-    return 'SecretVolume($contents)';
+    return 'SecretVolume(${$contents})';
   }
 }
 
@@ -1750,8 +1750,8 @@ final class SecretVolume_SecretVersion extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['version=$version', 'path=$path'].join(',');
-    return 'SecretVersion($contents)';
+    final $contents = ['version=$version', 'path=$path'].join(',');
+    return 'SecretVersion(${$contents})';
   }
 }
 
@@ -1885,7 +1885,7 @@ final class EventTrigger extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'trigger=$trigger',
       'triggerRegion=$triggerRegion',
       'eventType=$eventType',
@@ -1895,7 +1895,7 @@ final class EventTrigger extends ProtoMessage {
       'channel=$channel',
       'service=$service',
     ].join(',');
-    return 'EventTrigger($contents)';
+    return 'EventTrigger(${$contents})';
   }
 }
 
@@ -1982,12 +1982,12 @@ final class EventFilter extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'attribute=$attribute',
       'value=$value',
       'operator=$operator',
     ].join(',');
-    return 'EventFilter($contents)';
+    return 'EventFilter(${$contents})';
   }
 }
 
@@ -2032,8 +2032,8 @@ final class GetFunctionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'revision=$revision'].join(',');
-    return 'GetFunctionRequest($contents)';
+    final $contents = ['name=$name', 'revision=$revision'].join(',');
+    return 'GetFunctionRequest(${$contents})';
   }
 }
 
@@ -2116,14 +2116,14 @@ final class ListFunctionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
       'orderBy=$orderBy',
     ].join(',');
-    return 'ListFunctionsRequest($contents)';
+    return 'ListFunctionsRequest(${$contents})';
   }
 }
 
@@ -2178,8 +2178,8 @@ final class ListFunctionsResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListFunctionsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListFunctionsResponse(${$contents})';
   }
 }
 
@@ -2235,8 +2235,8 @@ final class CreateFunctionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'functionId=$functionId'].join(',');
-    return 'CreateFunctionRequest($contents)';
+    final $contents = ['parent=$parent', 'functionId=$functionId'].join(',');
+    return 'CreateFunctionRequest(${$contents})';
   }
 }
 
@@ -2304,8 +2304,8 @@ final class DeleteFunctionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteFunctionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteFunctionRequest(${$contents})';
   }
 }
 
@@ -2374,12 +2374,12 @@ final class GenerateUploadUrlRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'kmsKeyName=$kmsKeyName',
       'environment=$environment',
     ].join(',');
-    return 'GenerateUploadUrlRequest($contents)';
+    return 'GenerateUploadUrlRequest(${$contents})';
   }
 }
 
@@ -2428,8 +2428,8 @@ final class GenerateUploadUrlResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['uploadUrl=$uploadUrl'].join(',');
-    return 'GenerateUploadUrlResponse($contents)';
+    final $contents = ['uploadUrl=$uploadUrl'].join(',');
+    return 'GenerateUploadUrlResponse(${$contents})';
   }
 }
 
@@ -2459,8 +2459,8 @@ final class GenerateDownloadUrlRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GenerateDownloadUrlRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GenerateDownloadUrlRequest(${$contents})';
   }
 }
 
@@ -2491,8 +2491,8 @@ final class GenerateDownloadUrlResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['downloadUrl=$downloadUrl'].join(',');
-    return 'GenerateDownloadUrlResponse($contents)';
+    final $contents = ['downloadUrl=$downloadUrl'].join(',');
+    return 'GenerateDownloadUrlResponse(${$contents})';
   }
 }
 
@@ -2534,8 +2534,8 @@ final class ListRuntimesRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'filter=$filter'].join(',');
-    return 'ListRuntimesRequest($contents)';
+    final $contents = ['parent=$parent', 'filter=$filter'].join(',');
+    return 'ListRuntimesRequest(${$contents})';
   }
 }
 
@@ -2657,13 +2657,13 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'displayName=$displayName',
       'stage=$stage',
       'environment=$environment',
     ].join(',');
-    return 'Runtime($contents)';
+    return 'Runtime(${$contents})';
   }
 }
 
@@ -2753,8 +2753,8 @@ final class OnDeployUpdatePolicy extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['runtimeVersion=$runtimeVersion'].join(',');
-    return 'OnDeployUpdatePolicy($contents)';
+    final $contents = ['runtimeVersion=$runtimeVersion'].join(',');
+    return 'OnDeployUpdatePolicy(${$contents})';
   }
 }
 
@@ -2893,7 +2893,7 @@ final class OperationMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'target=$target',
       'verb=$verb',
       'statusDetail=$statusDetail',
@@ -2903,7 +2903,7 @@ final class OperationMetadata extends ProtoMessage {
       'buildName=$buildName',
       'operationType=$operationType',
     ].join(',');
-    return 'OperationMetadata($contents)';
+    return 'OperationMetadata(${$contents})';
   }
 }
 
@@ -3011,14 +3011,14 @@ final class Stage extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'message=$message',
       'state=$state',
       'resource=$resource',
       'resourceUri=$resourceUri',
     ].join(',');
-    return 'Stage($contents)';
+    return 'Stage(${$contents})';
   }
 }
 

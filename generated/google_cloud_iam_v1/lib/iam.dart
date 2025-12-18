@@ -193,8 +193,8 @@ final class SetIamPolicyRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['resource=$resource'].join(',');
-    return 'SetIamPolicyRequest($contents)';
+    final $contents = ['resource=$resource'].join(',');
+    return 'SetIamPolicyRequest(${$contents})';
   }
 }
 
@@ -235,8 +235,8 @@ final class GetIamPolicyRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['resource=$resource'].join(',');
-    return 'GetIamPolicyRequest($contents)';
+    final $contents = ['resource=$resource'].join(',');
+    return 'GetIamPolicyRequest(${$contents})';
   }
 }
 
@@ -278,8 +278,8 @@ final class TestIamPermissionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['resource=$resource'].join(',');
-    return 'TestIamPermissionsRequest($contents)';
+    final $contents = ['resource=$resource'].join(',');
+    return 'TestIamPermissionsRequest(${$contents})';
   }
 }
 
@@ -358,10 +358,10 @@ final class GetPolicyOptions extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'requestedPolicyVersion=$requestedPolicyVersion',
     ].join(',');
-    return 'GetPolicyOptions($contents)';
+    return 'GetPolicyOptions(${$contents})';
   }
 }
 
@@ -539,8 +539,8 @@ final class Policy extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['version=$version', 'etag=$etag'].join(',');
-    return 'Policy($contents)';
+    final $contents = ['version=$version', 'etag=$etag'].join(',');
+    return 'Policy(${$contents})';
   }
 }
 
@@ -641,8 +641,8 @@ final class Binding extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['role=$role'].join(',');
-    return 'Binding($contents)';
+    final $contents = ['role=$role'].join(',');
+    return 'Binding(${$contents})';
   }
 }
 
@@ -735,8 +735,8 @@ final class AuditConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['service=$service'].join(',');
-    return 'AuditConfig($contents)';
+    final $contents = ['service=$service'].join(',');
+    return 'AuditConfig(${$contents})';
   }
 }
 
@@ -799,8 +799,8 @@ final class AuditLogConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['logType=$logType'].join(',');
-    return 'AuditLogConfig($contents)';
+    final $contents = ['logType=$logType'].join(',');
+    return 'AuditLogConfig(${$contents})';
   }
 }
 
@@ -938,12 +938,12 @@ final class BindingDelta extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'action=$action',
       'role=$role',
       'member=$member',
     ].join(',');
-    return 'BindingDelta($contents)';
+    return 'BindingDelta(${$contents})';
   }
 }
 
@@ -1036,13 +1036,13 @@ final class AuditConfigDelta extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'action=$action',
       'service=$service',
       'exemptedMember=$exemptedMember',
       'logType=$logType',
     ].join(',');
-    return 'AuditConfigDelta($contents)';
+    return 'AuditConfigDelta(${$contents})';
   }
 }
 
@@ -1125,10 +1125,10 @@ final class ResourcePolicyMember extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'iamPolicyNamePrincipal=$iamPolicyNamePrincipal',
       'iamPolicyUidPrincipal=$iamPolicyUidPrincipal',
     ].join(',');
-    return 'ResourcePolicyMember($contents)';
+    return 'ResourcePolicyMember(${$contents})';
   }
 }

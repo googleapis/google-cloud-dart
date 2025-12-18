@@ -57,6 +57,12 @@ int decodeInt(Object? value) => value as int;
 int decodeInt64(Object? value) =>
     value is String ? int.parse(value) : value as int;
 
+/// Decodes: `INT32_TYPE`, `FIXED32_TYPE`, `SFIXED32_TYPE`, `SINT32_TYPE`,
+/// `UINT32_TYPE`, `INT64_TYPE`, `SINT64_TYPE`, `SFIXED64_TYPE`.
+///
+/// Decodes all integer type map keys that can be represented by a Dart `int`.
+int decodeIntKey(Object? value) => int.parse(value as String);
+
 /// Decodes: `STRING_TYPE`.
 String decodeString(Object? value) => value as String;
 

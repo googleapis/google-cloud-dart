@@ -199,13 +199,13 @@ final class Document extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       if (content != null) 'content=$content',
       if (gcsContentUri != null) 'gcsContentUri=$gcsContentUri',
       'languageCode=$languageCode',
     ].join(',');
-    return 'Document($contents)';
+    return 'Document(${$contents})';
   }
 }
 
@@ -349,8 +349,8 @@ final class Entity extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'type=$type'].join(',');
-    return 'Entity($contents)';
+    final $contents = ['name=$name', 'type=$type'].join(',');
+    return 'Entity(${$contents})';
   }
 }
 
@@ -482,8 +482,8 @@ final class Sentiment extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['magnitude=$magnitude', 'score=$score'].join(',');
-    return 'Sentiment($contents)';
+    final $contents = ['magnitude=$magnitude', 'score=$score'].join(',');
+    return 'Sentiment(${$contents})';
   }
 }
 
@@ -550,8 +550,8 @@ final class EntityMention extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['type=$type', 'probability=$probability'].join(',');
-    return 'EntityMention($contents)';
+    final $contents = ['type=$type', 'probability=$probability'].join(',');
+    return 'EntityMention(${$contents})';
   }
 }
 
@@ -618,8 +618,11 @@ final class TextSpan extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['content=$content', 'beginOffset=$beginOffset'].join(',');
-    return 'TextSpan($contents)';
+    final $contents = [
+      'content=$content',
+      'beginOffset=$beginOffset',
+    ].join(',');
+    return 'TextSpan(${$contents})';
   }
 }
 
@@ -673,12 +676,12 @@ final class ClassificationCategory extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'confidence=$confidence',
       'severity=$severity',
     ].join(',');
-    return 'ClassificationCategory($contents)';
+    return 'ClassificationCategory(${$contents})';
   }
 }
 
@@ -720,8 +723,8 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['encodingType=$encodingType'].join(',');
-    return 'AnalyzeSentimentRequest($contents)';
+    final $contents = ['encodingType=$encodingType'].join(',');
+    return 'AnalyzeSentimentRequest(${$contents})';
   }
 }
 
@@ -787,11 +790,11 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'AnalyzeSentimentResponse($contents)';
+    return 'AnalyzeSentimentResponse(${$contents})';
   }
 }
 
@@ -833,8 +836,8 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['encodingType=$encodingType'].join(',');
-    return 'AnalyzeEntitiesRequest($contents)';
+    final $contents = ['encodingType=$encodingType'].join(',');
+    return 'AnalyzeEntitiesRequest(${$contents})';
   }
 }
 
@@ -890,11 +893,11 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'AnalyzeEntitiesResponse($contents)';
+    return 'AnalyzeEntitiesResponse(${$contents})';
   }
 }
 
@@ -979,11 +982,11 @@ final class ClassifyTextResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'ClassifyTextResponse($contents)';
+    return 'ClassifyTextResponse(${$contents})';
   }
 }
 
@@ -1025,8 +1028,8 @@ final class ModerateTextRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['modelVersion=$modelVersion'].join(',');
-    return 'ModerateTextRequest($contents)';
+    final $contents = ['modelVersion=$modelVersion'].join(',');
+    return 'ModerateTextRequest(${$contents})';
   }
 }
 
@@ -1122,11 +1125,11 @@ final class ModerateTextResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'ModerateTextResponse($contents)';
+    return 'ModerateTextResponse(${$contents})';
   }
 }
 
@@ -1178,8 +1181,8 @@ final class AnnotateTextRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['encodingType=$encodingType'].join(',');
-    return 'AnnotateTextRequest($contents)';
+    final $contents = ['encodingType=$encodingType'].join(',');
+    return 'AnnotateTextRequest(${$contents})';
   }
 }
 
@@ -1241,13 +1244,13 @@ final class AnnotateTextRequest_Features extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'extractEntities=$extractEntities',
       'extractDocumentSentiment=$extractDocumentSentiment',
       'classifyText=$classifyText',
       'moderateText=$moderateText',
     ].join(',');
-    return 'Features($contents)';
+    return 'Features(${$contents})';
   }
 }
 
@@ -1356,11 +1359,11 @@ final class AnnotateTextResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'AnnotateTextResponse($contents)';
+    return 'AnnotateTextResponse(${$contents})';
   }
 }
 
