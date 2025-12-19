@@ -380,7 +380,7 @@ void main() async {
       });
     });
 
-    group('nested message', () {
+    group('nested_message', () {
       test('empty', () {
         final nested = TestAllTypesProto3_NestedMessage();
         checkField(
@@ -400,6 +400,162 @@ void main() async {
           },
           (m) => m.optionalNestedMessage,
           nested,
+        );
+      });
+    });
+
+    group('foreign_message', () {
+      test('empty', () {
+        final foreign = ForeignMessage();
+        checkField(
+          TestAllTypesProto3(optionalForeignMessage: foreign),
+          {'optionalForeignMessage': <String, dynamic>{}},
+          (m) => m.optionalForeignMessage,
+          foreign,
+        );
+      });
+
+      test('non-empty', () {
+        final foreign = ForeignMessage(c: 1);
+        checkField(
+          TestAllTypesProto3(optionalForeignMessage: foreign),
+          {
+            'optionalForeignMessage': {'c': 1},
+          },
+          (m) => m.optionalForeignMessage,
+          foreign,
+        );
+      });
+    });
+
+    group('nested_enum', () {
+      test('default', () {
+        checkField(
+          TestAllTypesProto3(
+            optionalNestedEnum: TestAllTypesProto3_NestedEnum.foo,
+          ),
+          {},
+          (m) => m.optionalNestedEnum,
+          TestAllTypesProto3_NestedEnum.foo,
+        );
+      });
+
+      test('non-default', () {
+        checkField(
+          TestAllTypesProto3(
+            optionalNestedEnum: TestAllTypesProto3_NestedEnum.bar,
+          ),
+          {'optionalNestedEnum': 'BAR'},
+          (m) => m.optionalNestedEnum,
+          TestAllTypesProto3_NestedEnum.bar,
+        );
+      });
+    });
+
+    group('foreign_enum', () {
+      test('default', () {
+        checkField(
+          TestAllTypesProto3(optionalForeignEnum: ForeignEnum.foreignFoo),
+          {},
+          (m) => m.optionalForeignEnum,
+          ForeignEnum.foreignFoo,
+        );
+      });
+
+      test('non-default', () {
+        checkField(
+          TestAllTypesProto3(optionalForeignEnum: ForeignEnum.foreignBar),
+          {'optionalForeignEnum': 'FOREIGN_BAR'},
+          (m) => m.optionalForeignEnum,
+          ForeignEnum.foreignBar,
+        );
+      });
+    });
+
+    group('aliased_enum', () {
+      test('default', () {
+        checkField(
+          TestAllTypesProto3(
+            optionalAliasedEnum: TestAllTypesProto3_AliasedEnum.ALIAS_FOO,
+          ),
+          {},
+          (m) => m.optionalAliasedEnum,
+          TestAllTypesProto3_AliasedEnum.ALIAS_FOO,
+        );
+      });
+
+      test('non-default', () {
+        checkField(
+          TestAllTypesProto3(
+            optionalAliasedEnum: TestAllTypesProto3_AliasedEnum.ALIAS_BAR,
+          ),
+          {'optionalAliasedEnum': 'ALIAS_BAR'},
+          (m) => m.optionalAliasedEnum,
+          TestAllTypesProto3_AliasedEnum.ALIAS_BAR,
+        );
+      });
+    });
+
+    group('string_piece', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(optionalStringPiece: ''),
+          {},
+          (m) => m.optionalStringPiece,
+          '',
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(optionalStringPiece: 'foo'),
+          {'optionalStringPiece': 'foo'},
+          (m) => m.optionalStringPiece,
+          'foo',
+        );
+      });
+    });
+
+    group('cord', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(optionalCord: ''),
+          {},
+          (m) => m.optionalCord,
+          '',
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(optionalCord: 'foo'),
+          {'optionalCord': 'foo'},
+          (m) => m.optionalCord,
+          'foo',
+        );
+      });
+    });
+
+    group('recursive_message', () {
+      test('empty', () {
+        final recursive = TestAllTypesProto3();
+        checkField(
+          TestAllTypesProto3(recursiveMessage: recursive),
+          {'recursiveMessage': <String, dynamic>{}},
+          (m) => m.recursiveMessage,
+          recursive,
+        );
+      });
+
+      test('non-empty', () {
+        final recursive = TestAllTypesProto3(optionalInt32: 1);
+        checkField(
+          TestAllTypesProto3(recursiveMessage: recursive),
+          {
+            'recursiveMessage': {'optionalInt32': 1},
+          },
+          (m) => m.recursiveMessage,
+          recursive,
         );
       });
     });
