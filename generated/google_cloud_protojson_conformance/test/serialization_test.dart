@@ -18,6 +18,11 @@ void checkField(
   final f = feature(TestAllTypesProto3.fromJson(message.toJson()));
   if (f is ProtoMessage) {
     expect(f.toJson(), (matcher as ProtoMessage).toJson());
+  } else if (f is List && f.isNotEmpty && f.first is ProtoMessage) {
+    expect(
+      f.map((e) => (e as ProtoMessage).toJson()).toList(),
+      (matcher as List).map((e) => (e as ProtoMessage).toJson()).toList(),
+    );
   } else {
     expect(f, matcher);
   }
@@ -556,6 +561,499 @@ void main() async {
           },
           (m) => m.recursiveMessage,
           recursive,
+        );
+      });
+    });
+
+    // Repeated
+
+    group('repeated int32', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedInt32: []),
+          {},
+          (m) => m.repeatedInt32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedInt32: [1, 2, 3]),
+          {
+            'repeatedInt32': [1, 2, 3],
+          },
+          (m) => m.repeatedInt32,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated int64', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedInt64: []),
+          {},
+          (m) => m.repeatedInt64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedInt64: [1, 2, 3]),
+          {
+            'repeatedInt64': ['1', '2', '3'],
+          },
+          (m) => m.repeatedInt64,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated uint32', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedUint32: []),
+          {},
+          (m) => m.repeatedUint32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedUint32: [1, 2, 3]),
+          {
+            'repeatedUint32': [1, 2, 3],
+          },
+          (m) => m.repeatedUint32,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated uint64', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedUint64: []),
+          {},
+          (m) => m.repeatedUint64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(
+            repeatedUint64: [BigInt.one, BigInt.from(2), BigInt.from(3)],
+          ),
+          {
+            'repeatedUint64': ['1', '2', '3'],
+          },
+          (m) => m.repeatedUint64,
+          [BigInt.one, BigInt.from(2), BigInt.from(3)],
+        );
+      });
+    });
+
+    group('repeated sint32', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSint32: []),
+          {},
+          (m) => m.repeatedSint32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSint32: [1, 2, 3]),
+          {
+            'repeatedSint32': [1, 2, 3],
+          },
+          (m) => m.repeatedSint32,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated sint64', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSint64: []),
+          {},
+          (m) => m.repeatedSint64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSint64: [1, 2, 3]),
+          {
+            'repeatedSint64': ['1', '2', '3'],
+          },
+          (m) => m.repeatedSint64,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated fixed32', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedFixed32: []),
+          {},
+          (m) => m.repeatedFixed32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedFixed32: [1, 2, 3]),
+          {
+            'repeatedFixed32': [1, 2, 3],
+          },
+          (m) => m.repeatedFixed32,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated fixed64', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedFixed64: []),
+          {},
+          (m) => m.repeatedFixed64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(
+            repeatedFixed64: [BigInt.one, BigInt.from(2), BigInt.from(3)],
+          ),
+          {
+            'repeatedFixed64': ['1', '2', '3'],
+          },
+          (m) => m.repeatedFixed64,
+          [BigInt.one, BigInt.from(2), BigInt.from(3)],
+        );
+      });
+    });
+
+    group('repeated sfixed32', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSfixed32: []),
+          {},
+          (m) => m.repeatedSfixed32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSfixed32: [1, 2, 3]),
+          {
+            'repeatedSfixed32': [1, 2, 3],
+          },
+          (m) => m.repeatedSfixed32,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated sfixed64', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSfixed64: []),
+          {},
+          (m) => m.repeatedSfixed64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedSfixed64: [1, 2, 3]),
+          {
+            'repeatedSfixed64': ['1', '2', '3'],
+          },
+          (m) => m.repeatedSfixed64,
+          [1, 2, 3],
+        );
+      });
+    });
+
+    group('repeated float', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedFloat: []),
+          {},
+          (m) => m.repeatedFloat,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedFloat: [1.5, 2.5]),
+          {
+            'repeatedFloat': [1.5, 2.5],
+          },
+          (m) => m.repeatedFloat,
+          [1.5, 2.5],
+        );
+      });
+    });
+
+    group('repeated double', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedDouble: []),
+          {},
+          (m) => m.repeatedDouble,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedDouble: [1.5, 2.5]),
+          {
+            'repeatedDouble': [1.5, 2.5],
+          },
+          (m) => m.repeatedDouble,
+          [1.5, 2.5],
+        );
+      });
+    });
+
+    group('repeated bool', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedBool: []),
+          {},
+          (m) => m.repeatedBool,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedBool: [true, false]),
+          {
+            'repeatedBool': [true, false],
+          },
+          (m) => m.repeatedBool,
+          [true, false],
+        );
+      });
+    });
+
+    group('repeated string', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedString: []),
+          {},
+          (m) => m.repeatedString,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedString: ['foo', 'bar']),
+          {
+            'repeatedString': ['foo', 'bar'],
+          },
+          (m) => m.repeatedString,
+          ['foo', 'bar'],
+        );
+      });
+    });
+
+    group('repeated bytes', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedBytes: []),
+          {},
+          (m) => m.repeatedBytes,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        final bytes1 = Uint8List.fromList([1]);
+        final bytes2 = Uint8List.fromList([2]);
+        checkField(
+          TestAllTypesProto3(repeatedBytes: [bytes1, bytes2]),
+          {
+            'repeatedBytes': ['AQ==', 'Ag=='],
+          },
+          (m) => m.repeatedBytes,
+          [bytes1, bytes2],
+        );
+      });
+    });
+
+    group('repeated nested_message', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedNestedMessage: []),
+          {},
+          (m) => m.repeatedNestedMessage,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        final nested1 = TestAllTypesProto3_NestedMessage(a: 5);
+        final nested2 = TestAllTypesProto3_NestedMessage(a: 10);
+        checkField(
+          TestAllTypesProto3(repeatedNestedMessage: [nested1, nested2]),
+          {
+            'repeatedNestedMessage': [
+              {'a': 5},
+              {'a': 10},
+            ],
+          },
+          (m) => m.repeatedNestedMessage,
+          [nested1, nested2],
+        );
+      });
+    });
+
+    group('repeated foreign_message', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedForeignMessage: []),
+          {},
+          (m) => m.repeatedForeignMessage,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        final foreign1 = ForeignMessage(c: 1);
+        final foreign2 = ForeignMessage(c: 2);
+        checkField(
+          TestAllTypesProto3(repeatedForeignMessage: [foreign1, foreign2]),
+          {
+            'repeatedForeignMessage': [
+              {'c': 1},
+              {'c': 2},
+            ],
+          },
+          (m) => m.repeatedForeignMessage,
+          [foreign1, foreign2],
+        );
+      });
+    });
+
+    group('repeated nested_enum', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedNestedEnum: []),
+          {},
+          (m) => m.repeatedNestedEnum,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(
+            repeatedNestedEnum: [
+              TestAllTypesProto3_NestedEnum.foo,
+              TestAllTypesProto3_NestedEnum.bar,
+            ],
+          ),
+          {
+            'repeatedNestedEnum': ['FOO', 'BAR'],
+          },
+          (m) => m.repeatedNestedEnum,
+          [
+            TestAllTypesProto3_NestedEnum.foo,
+            TestAllTypesProto3_NestedEnum.bar,
+          ],
+        );
+      });
+    });
+
+    group('repeated foreign_enum', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedForeignEnum: []),
+          {},
+          (m) => m.repeatedForeignEnum,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(
+            repeatedForeignEnum: [
+              ForeignEnum.foreignFoo,
+              ForeignEnum.foreignBar,
+            ],
+          ),
+          {
+            'repeatedForeignEnum': ['FOREIGN_FOO', 'FOREIGN_BAR'],
+          },
+          (m) => m.repeatedForeignEnum,
+          [ForeignEnum.foreignFoo, ForeignEnum.foreignBar],
+        );
+      });
+    });
+
+    group('repeated string_piece', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedStringPiece: []),
+          {},
+          (m) => m.repeatedStringPiece,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedStringPiece: ['foo', 'bar']),
+          {
+            'repeatedStringPiece': ['foo', 'bar'],
+          },
+          (m) => m.repeatedStringPiece,
+          ['foo', 'bar'],
+        );
+      });
+    });
+
+    group('repeated cord', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedCord: []),
+          {},
+          (m) => m.repeatedCord,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(repeatedCord: ['foo', 'bar']),
+          {
+            'repeatedCord': ['foo', 'bar'],
+          },
+          (m) => m.repeatedCord,
+          ['foo', 'bar'],
         );
       });
     });
