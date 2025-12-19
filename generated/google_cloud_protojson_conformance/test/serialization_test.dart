@@ -1494,9 +1494,6 @@ void main() async {
     });
 
     group('oneof', () {
-      // TODO(https://github.com/googleapis/google-cloud-dart/issues/26):
-      // Test duplicate sets when that is handled by the generated code.
-
       test('oneof_uint32', () {
         checkField(
           TestAllTypesProto3(oneofUint32: 5),
@@ -1517,6 +1514,94 @@ void main() async {
           nested,
         );
       });
+
+      test('oneof_string', () {
+        checkField(
+          TestAllTypesProto3(oneofString: 'foo'),
+          {'oneofString': 'foo'},
+          (m) => m.oneofString,
+          'foo',
+        );
+      });
+
+      test('oneof_bytes', () {
+        final bytes = Uint8List.fromList([1]);
+        checkField(
+          TestAllTypesProto3(oneofBytes: bytes),
+          {'oneofBytes': 'AQ=='},
+          (m) => m.oneofBytes,
+          bytes,
+        );
+      });
+
+      test('oneof_bool', () {
+        checkField(
+          TestAllTypesProto3(oneofBool: true),
+          {'oneofBool': true},
+          (m) => m.oneofBool,
+          true,
+        );
+      });
+
+      test('oneof_uint64', () {
+        checkField(
+          TestAllTypesProto3(oneofUint64: BigInt.from(5)),
+          {'oneofUint64': '5'},
+          (m) => m.oneofUint64,
+          BigInt.from(5),
+        );
+      });
+
+      test('oneof_float', () {
+        checkField(
+          TestAllTypesProto3(oneofFloat: 1.5),
+          {'oneofFloat': 1.5},
+          (m) => m.oneofFloat,
+          1.5,
+        );
+      });
+
+      test('oneof_double', () {
+        checkField(
+          TestAllTypesProto3(oneofDouble: 1.5),
+          {'oneofDouble': 1.5},
+          (m) => m.oneofDouble,
+          1.5,
+        );
+      });
+
+      test('oneof_enum', () {
+        checkField(
+          TestAllTypesProto3(oneofEnum: TestAllTypesProto3_NestedEnum.bar),
+          {'oneofEnum': 'BAR'},
+          (m) => m.oneofEnum,
+          TestAllTypesProto3_NestedEnum.bar,
+        );
+      });
+
+      test(
+        'oneof_null_value',
+        () {
+          checkField(
+            TestAllTypesProto3(oneofNullValue: NullValue.nullValue),
+            {'oneofNullValue': null},
+            (m) => m.oneofNullValue,
+            NullValue.nullValue,
+          );
+        },
+        skip: 'https://github.com/googleapis/google-cloud-dart/issues/99',
+      );
+
+      test(
+        'duplicate',
+        () {
+          expect(
+            () => TestAllTypesProto3(oneofUint32: 5, oneofString: 'foo'),
+            throwsA(isA<ArgumentError>()),
+          );
+        },
+        skip: 'TODO(https://github.com/googleapis/google-cloud-dart/issues/26)',
+      );
     });
   });
 }
