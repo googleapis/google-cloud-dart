@@ -18,10 +18,16 @@ void checkField(
   final f = feature(TestAllTypesProto3.fromJson(message.toJson()));
   if (f is ProtoMessage) {
     expect(f.toJson(), (matcher as ProtoMessage).toJson());
-  } else if (f is List && f.isNotEmpty && f.first is ProtoMessage) {
+  } else if (f is List<ProtoMessage> && matcher is List<ProtoMessage>) {
     expect(
-      f.map((e) => (e as ProtoMessage).toJson()).toList(),
-      (matcher as List).map((e) => (e as ProtoMessage).toJson()).toList(),
+      f.map((e) => e.toJson()).toList(),
+      matcher.map((e) => e.toJson()).toList(),
+    );
+  } else if (f is Map<dynamic, ProtoMessage> &&
+      matcher is Map<dynamic, ProtoMessage>) {
+    expect(
+      {for (final e in f.entries) e.key: e.value.toJson()},
+      {for (final e in matcher.entries) e.key: e.value.toJson()},
     );
   } else {
     expect(f, matcher);
@@ -1076,6 +1082,439 @@ void main() async {
           },
           (m) => m.mapInt32Int32,
           {1: 5},
+        );
+      });
+    });
+
+    group('map<int64, int64>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapInt64Int64: {}),
+          {},
+          (m) => m.mapInt64Int64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapInt64Int64: {1: 5}),
+          {
+            'mapInt64Int64': {'1': '5'},
+          },
+          (m) => m.mapInt64Int64,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<uint32, uint32>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapUint32Uint32: {}),
+          {},
+          (m) => m.mapUint32Uint32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapUint32Uint32: {1: 5}),
+          {
+            'mapUint32Uint32': {'1': 5},
+          },
+          (m) => m.mapUint32Uint32,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<uint64, uint64>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapUint64Uint64: {}),
+          {},
+          (m) => m.mapUint64Uint64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapUint64Uint64: {BigInt.one: BigInt.from(5)}),
+          {
+            'mapUint64Uint64': {'1': '5'},
+          },
+          (m) => m.mapUint64Uint64,
+          {BigInt.one: BigInt.from(5)},
+        );
+      });
+    });
+
+    group('map<sint32, sint32>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapSint32Sint32: {}),
+          {},
+          (m) => m.mapSint32Sint32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapSint32Sint32: {1: 5}),
+          {
+            'mapSint32Sint32': {'1': 5},
+          },
+          (m) => m.mapSint32Sint32,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<sint64, sint64>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapSint64Sint64: {}),
+          {},
+          (m) => m.mapSint64Sint64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapSint64Sint64: {1: 5}),
+          {
+            'mapSint64Sint64': {'1': '5'},
+          },
+          (m) => m.mapSint64Sint64,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<fixed32, fixed32>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapFixed32Fixed32: {}),
+          {},
+          (m) => m.mapFixed32Fixed32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapFixed32Fixed32: {1: 5}),
+          {
+            'mapFixed32Fixed32': {'1': 5},
+          },
+          (m) => m.mapFixed32Fixed32,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<fixed64, fixed64>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapFixed64Fixed64: {}),
+          {},
+          (m) => m.mapFixed64Fixed64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapFixed64Fixed64: {BigInt.one: BigInt.from(5)}),
+          {
+            'mapFixed64Fixed64': {'1': '5'},
+          },
+          (m) => m.mapFixed64Fixed64,
+          {BigInt.one: BigInt.from(5)},
+        );
+      });
+    });
+
+    group('map<sfixed32, sfixed32>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapSfixed32Sfixed32: {}),
+          {},
+          (m) => m.mapSfixed32Sfixed32,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapSfixed32Sfixed32: {1: 5}),
+          {
+            'mapSfixed32Sfixed32': {'1': 5},
+          },
+          (m) => m.mapSfixed32Sfixed32,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<sfixed64, sfixed64>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapSfixed64Sfixed64: {}),
+          {},
+          (m) => m.mapSfixed64Sfixed64,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapSfixed64Sfixed64: {1: 5}),
+          {
+            'mapSfixed64Sfixed64': {'1': '5'},
+          },
+          (m) => m.mapSfixed64Sfixed64,
+          {1: 5},
+        );
+      });
+    });
+
+    group('map<int32, float>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapInt32Float: {}),
+          {},
+          (m) => m.mapInt32Float,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapInt32Float: {1: 1.5}),
+          {
+            'mapInt32Float': {'1': 1.5},
+          },
+          (m) => m.mapInt32Float,
+          {1: 1.5},
+        );
+      });
+    });
+
+    group('map<int32, double>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapInt32Double: {}),
+          {},
+          (m) => m.mapInt32Double,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapInt32Double: {1: 1.5}),
+          {
+            'mapInt32Double': {'1': 1.5},
+          },
+          (m) => m.mapInt32Double,
+          {1: 1.5},
+        );
+      });
+    });
+
+    group('map<bool, bool>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapBoolBool: {}),
+          {},
+          (m) => m.mapBoolBool,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapBoolBool: {true: true}),
+          {
+            'mapBoolBool': {'true': true},
+          },
+          (m) => m.mapBoolBool,
+          {true: true},
+        );
+      });
+    });
+
+    group('map<string, string>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringString: {}),
+          {},
+          (m) => m.mapStringString,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringString: {'foo': 'bar'}),
+          {
+            'mapStringString': {'foo': 'bar'},
+          },
+          (m) => m.mapStringString,
+          {'foo': 'bar'},
+        );
+      });
+    });
+
+    group('map<string, bytes>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringBytes: {}),
+          {},
+          (m) => m.mapStringBytes,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        final bytes = Uint8List.fromList([1]);
+        checkField(
+          TestAllTypesProto3(mapStringBytes: {'foo': bytes}),
+          {
+            'mapStringBytes': {'foo': 'AQ=='},
+          },
+          (m) => m.mapStringBytes,
+          {'foo': bytes},
+        );
+      });
+    });
+
+    group('map<string, nested_message>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringNestedMessage: {}),
+          {},
+          (m) => m.mapStringNestedMessage,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        final nested = TestAllTypesProto3_NestedMessage(a: 5);
+        checkField(
+          TestAllTypesProto3(mapStringNestedMessage: {'foo': nested}),
+          {
+            'mapStringNestedMessage': {
+              'foo': {'a': 5},
+            },
+          },
+          (m) => m.mapStringNestedMessage,
+          {'foo': nested},
+        );
+      });
+    });
+
+    group('map<string, foreign_message>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringForeignMessage: {}),
+          {},
+          (m) => m.mapStringForeignMessage,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        final foreign = ForeignMessage(c: 1);
+        checkField(
+          TestAllTypesProto3(mapStringForeignMessage: {'foo': foreign}),
+          {
+            'mapStringForeignMessage': {
+              'foo': {'c': 1},
+            },
+          },
+          (m) => m.mapStringForeignMessage,
+          {'foo': foreign},
+        );
+      });
+    });
+
+    group('map<string, nested_enum>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringNestedEnum: {}),
+          {},
+          (m) => m.mapStringNestedEnum,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(
+            mapStringNestedEnum: {'foo': TestAllTypesProto3_NestedEnum.bar},
+          ),
+          {
+            'mapStringNestedEnum': {'foo': 'BAR'},
+          },
+          (m) => m.mapStringNestedEnum,
+          {'foo': TestAllTypesProto3_NestedEnum.bar},
+        );
+      });
+    });
+
+    group('map<string, foreign_enum>', () {
+      test('empty', () {
+        checkField(
+          TestAllTypesProto3(mapStringForeignEnum: {}),
+          {},
+          (m) => m.mapStringForeignEnum,
+          isEmpty,
+        );
+      });
+
+      test('non-empty', () {
+        checkField(
+          TestAllTypesProto3(
+            mapStringForeignEnum: {'foo': ForeignEnum.foreignBar},
+          ),
+          {
+            'mapStringForeignEnum': {'foo': 'FOREIGN_BAR'},
+          },
+          (m) => m.mapStringForeignEnum,
+          {'foo': ForeignEnum.foreignBar},
+        );
+      });
+    });
+
+    group('oneof', () {
+      // TODO(https://github.com/googleapis/google-cloud-dart/issues/26):
+      // Test duplicate sets when that is handled by the generated code.
+
+      test('oneof_uint32', () {
+        checkField(
+          TestAllTypesProto3(oneofUint32: 5),
+          {'oneofUint32': 5},
+          (m) => m.oneofUint32,
+          5,
+        );
+      });
+
+      test('oneof_nested_message', () {
+        final nested = TestAllTypesProto3_NestedMessage(a: 5);
+        checkField(
+          TestAllTypesProto3(oneofNestedMessage: nested),
+          {
+            'oneofNestedMessage': {'a': 5},
+          },
+          (m) => m.oneofNestedMessage,
+          nested,
         );
       });
     });
