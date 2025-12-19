@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf_test_messages_proto3/google_cloud_protobuf_test_messages_proto3.dart';
 import 'package:test/test.dart';
 
@@ -13,7 +14,13 @@ void checkField(
   dynamic matcher,
 ) {
   expect(message.toJson(), expectedJson);
-  expect(feature(TestAllTypesProto3.fromJson(message.toJson())), matcher);
+
+  final f = feature(TestAllTypesProto3.fromJson(message.toJson()));
+  if (f is ProtoMessage) {
+    expect(f.toJson(), (matcher as ProtoMessage).toJson());
+  } else {
+    expect(f, matcher);
+  }
 }
 
 void main() async {
@@ -369,6 +376,30 @@ void main() async {
           {'optionalBytes': 'AQ=='},
           (m) => m.optionalBytes,
           bytes,
+        );
+      });
+    });
+
+    group('nested message', () {
+      test('empty', () {
+        final nested = TestAllTypesProto3_NestedMessage();
+        checkField(
+          TestAllTypesProto3(optionalNestedMessage: nested),
+          {'optionalNestedMessage': <String, dynamic>{}},
+          (m) => m.optionalNestedMessage,
+          nested,
+        );
+      });
+
+      test('non-empty', () {
+        final nested = TestAllTypesProto3_NestedMessage(a: 5);
+        checkField(
+          TestAllTypesProto3(optionalNestedMessage: nested),
+          {
+            'optionalNestedMessage': {'a': 5},
+          },
+          (m) => m.optionalNestedMessage,
+          nested,
         );
       });
     });
