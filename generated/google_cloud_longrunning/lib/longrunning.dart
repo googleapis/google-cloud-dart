@@ -31,6 +31,7 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -181,8 +182,8 @@ final class GetOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetOperationRequest(${$contents})';
   }
 }
 
@@ -262,14 +263,14 @@ final class ListOperationsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'filter=$filter',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'returnPartialSuccess=$returnPartialSuccess',
     ].join(',');
-    return 'ListOperationsRequest($contents)';
+    return 'ListOperationsRequest(${$contents})';
   }
 }
 
@@ -319,15 +320,17 @@ final class ListOperationsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (operations.isNotDefault) 'operations': encodeList(operations),
+    if (operations.isNotDefault)
+      'operations': [for (final i in operations) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    if (unreachable.isNotDefault) 'unreachable': unreachable,
+    if (unreachable.isNotDefault)
+      'unreachable': [for (final i in unreachable) i],
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListOperationsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListOperationsResponse(${$contents})';
   }
 }
 
@@ -357,8 +360,8 @@ final class CancelOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'CancelOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'CancelOperationRequest(${$contents})';
   }
 }
 
@@ -388,8 +391,8 @@ final class DeleteOperationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteOperationRequest(${$contents})';
   }
 }
 
@@ -427,13 +430,13 @@ final class WaitOperationRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (timeout != null) 'timeout': timeout!.toJson(),
+    if (timeout case final timeout?) 'timeout': timeout.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'WaitOperationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'WaitOperationRequest(${$contents})';
   }
 }
 
@@ -494,10 +497,10 @@ final class OperationInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'responseType=$responseType',
       'metadataType=$metadataType',
     ].join(',');
-    return 'OperationInfo($contents)';
+    return 'OperationInfo(${$contents})';
   }
 }

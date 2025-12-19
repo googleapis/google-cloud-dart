@@ -22,6 +22,7 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -113,13 +114,14 @@ final class ErrorInfo extends ProtoMessage {
   Object toJson() => {
     if (reason.isNotDefault) 'reason': reason,
     if (domain.isNotDefault) 'domain': domain,
-    if (metadata.isNotDefault) 'metadata': metadata,
+    if (metadata.isNotDefault)
+      'metadata': {for (final e in metadata.entries) e.key: e.value},
   };
 
   @override
   String toString() {
-    final contents = ['reason=$reason', 'domain=$domain'].join(',');
-    return 'ErrorInfo($contents)';
+    final $contents = ['reason=$reason', 'domain=$domain'].join(',');
+    return 'ErrorInfo(${$contents})';
   }
 }
 
@@ -156,7 +158,7 @@ final class RetryInfo extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (retryDelay != null) 'retryDelay': retryDelay!.toJson(),
+    if (retryDelay case final retryDelay?) 'retryDelay': retryDelay.toJson(),
   };
 
   @override
@@ -193,14 +195,15 @@ final class DebugInfo extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (stackEntries.isNotDefault) 'stackEntries': stackEntries,
+    if (stackEntries.isNotDefault)
+      'stackEntries': [for (final i in stackEntries) i],
     if (detail.isNotDefault) 'detail': detail,
   };
 
   @override
   String toString() {
-    final contents = ['detail=$detail'].join(',');
-    return 'DebugInfo($contents)';
+    final $contents = ['detail=$detail'].join(',');
+    return 'DebugInfo(${$contents})';
   }
 }
 
@@ -238,7 +241,8 @@ final class QuotaFailure extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (violations.isNotDefault) 'violations': encodeList(violations),
+    if (violations.isNotDefault)
+      'violations': [for (final i in violations) i.toJson()],
   };
 
   @override
@@ -389,15 +393,18 @@ final class QuotaFailure_Violation extends ProtoMessage {
     if (apiService.isNotDefault) 'apiService': apiService,
     if (quotaMetric.isNotDefault) 'quotaMetric': quotaMetric,
     if (quotaId.isNotDefault) 'quotaId': quotaId,
-    if (quotaDimensions.isNotDefault) 'quotaDimensions': quotaDimensions,
-    if (quotaValue.isNotDefault) 'quotaValue': encodeInt64(quotaValue),
-    if (futureQuotaValue != null)
-      'futureQuotaValue': encodeInt64(futureQuotaValue),
+    if (quotaDimensions.isNotDefault)
+      'quotaDimensions': {
+        for (final e in quotaDimensions.entries) e.key: e.value,
+      },
+    if (quotaValue.isNotDefault) 'quotaValue': quotaValue.toString(),
+    if (futureQuotaValue case final futureQuotaValue?)
+      'futureQuotaValue': futureQuotaValue.toString(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'subject=$subject',
       'description=$description',
       'apiService=$apiService',
@@ -406,7 +413,7 @@ final class QuotaFailure_Violation extends ProtoMessage {
       'quotaValue=$quotaValue',
       if (futureQuotaValue != null) 'futureQuotaValue=$futureQuotaValue',
     ].join(',');
-    return 'Violation($contents)';
+    return 'Violation(${$contents})';
   }
 }
 
@@ -438,7 +445,8 @@ final class PreconditionFailure extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (violations.isNotDefault) 'violations': encodeList(violations),
+    if (violations.isNotDefault)
+      'violations': [for (final i in violations) i.toJson()],
   };
 
   @override
@@ -499,12 +507,12 @@ final class PreconditionFailure_Violation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       'subject=$subject',
       'description=$description',
     ].join(',');
-    return 'Violation($contents)';
+    return 'Violation(${$contents})';
   }
 }
 
@@ -534,7 +542,7 @@ final class BadRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (fieldViolations.isNotDefault)
-      'fieldViolations': encodeList(fieldViolations),
+      'fieldViolations': [for (final i in fieldViolations) i.toJson()],
   };
 
   @override
@@ -634,18 +642,18 @@ final class BadRequest_FieldViolation extends ProtoMessage {
     if (field.isNotDefault) 'field': field,
     if (description.isNotDefault) 'description': description,
     if (reason.isNotDefault) 'reason': reason,
-    if (localizedMessage != null)
-      'localizedMessage': localizedMessage!.toJson(),
+    if (localizedMessage case final localizedMessage?)
+      'localizedMessage': localizedMessage.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'field=$field',
       'description=$description',
       'reason=$reason',
     ].join(',');
-    return 'FieldViolation($contents)';
+    return 'FieldViolation(${$contents})';
   }
 }
 
@@ -687,11 +695,11 @@ final class RequestInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'requestId=$requestId',
       'servingData=$servingData',
     ].join(',');
-    return 'RequestInfo($contents)';
+    return 'RequestInfo(${$contents})';
   }
 }
 
@@ -759,13 +767,13 @@ final class ResourceInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'resourceType=$resourceType',
       'resourceName=$resourceName',
       'owner=$owner',
       'description=$description',
     ].join(',');
-    return 'ResourceInfo($contents)';
+    return 'ResourceInfo(${$contents})';
   }
 }
 
@@ -794,7 +802,9 @@ final class Help extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (links.isNotDefault) 'links': encodeList(links)};
+  Object toJson() => {
+    if (links.isNotDefault) 'links': [for (final i in links) i.toJson()],
+  };
 
   @override
   String toString() => 'Help()';
@@ -834,8 +844,8 @@ final class Help_Link extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['description=$description', 'url=$url'].join(',');
-    return 'Link($contents)';
+    final $contents = ['description=$description', 'url=$url'].join(',');
+    return 'Link(${$contents})';
   }
 }
 
@@ -877,8 +887,8 @@ final class LocalizedMessage extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['locale=$locale', 'message=$message'].join(',');
-    return 'LocalizedMessage($contents)';
+    final $contents = ['locale=$locale', 'message=$message'].join(',');
+    return 'LocalizedMessage(${$contents})';
   }
 }
 
@@ -934,14 +944,14 @@ final class HttpRequest extends ProtoMessage {
   Object toJson() => {
     if (method.isNotDefault) 'method': method,
     if (uri.isNotDefault) 'uri': uri,
-    if (headers.isNotDefault) 'headers': encodeList(headers),
+    if (headers.isNotDefault) 'headers': [for (final i in headers) i.toJson()],
     if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
   String toString() {
-    final contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
-    return 'HttpRequest($contents)';
+    final $contents = ['method=$method', 'uri=$uri', 'body=$body'].join(',');
+    return 'HttpRequest(${$contents})';
   }
 }
 
@@ -997,18 +1007,18 @@ final class HttpResponse extends ProtoMessage {
   Object toJson() => {
     if (status.isNotDefault) 'status': status,
     if (reason.isNotDefault) 'reason': reason,
-    if (headers.isNotDefault) 'headers': encodeList(headers),
+    if (headers.isNotDefault) 'headers': [for (final i in headers) i.toJson()],
     if (body.isNotDefault) 'body': encodeBytes(body),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'status=$status',
       'reason=$reason',
       'body=$body',
     ].join(',');
-    return 'HttpResponse($contents)';
+    return 'HttpResponse(${$contents})';
   }
 }
 
@@ -1046,8 +1056,8 @@ final class HttpHeader extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['key=$key', 'value=$value'].join(',');
-    return 'HttpHeader($contents)';
+    final $contents = ['key=$key', 'value=$value'].join(',');
+    return 'HttpHeader(${$contents})';
   }
 }
 
@@ -1101,13 +1111,13 @@ final class Status extends ProtoMessage {
   Object toJson() => {
     if (code.isNotDefault) 'code': code,
     if (message.isNotDefault) 'message': message,
-    if (details.isNotDefault) 'details': encodeList(details),
+    if (details.isNotDefault) 'details': [for (final i in details) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['code=$code', 'message=$message'].join(',');
-    return 'Status($contents)';
+    final $contents = ['code=$code', 'message=$message'].join(',');
+    return 'Status(${$contents})';
   }
 }
 

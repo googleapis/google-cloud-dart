@@ -22,6 +22,7 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -1241,28 +1242,33 @@ final class LogEntry extends ProtoMessage {
   @override
   Object toJson() => {
     'logName': logName,
-    if (resource != null) 'resource': resource!.toJson(),
-    if (protoPayload != null) 'protoPayload': protoPayload!.toJson(),
-    if (textPayload != null) 'textPayload': textPayload,
-    if (jsonPayload != null) 'jsonPayload': jsonPayload!.toJson(),
-    if (timestamp != null) 'timestamp': timestamp!.toJson(),
-    if (receiveTimestamp != null)
-      'receiveTimestamp': receiveTimestamp!.toJson(),
+    if (resource case final resource?) 'resource': resource.toJson(),
+    if (protoPayload case final protoPayload?)
+      'protoPayload': protoPayload.toJson(),
+    if (textPayload case final textPayload?) 'textPayload': textPayload,
+    if (jsonPayload case final jsonPayload?)
+      'jsonPayload': jsonPayload.toJson(),
+    if (timestamp case final timestamp?) 'timestamp': timestamp.toJson(),
+    if (receiveTimestamp case final receiveTimestamp?)
+      'receiveTimestamp': receiveTimestamp.toJson(),
     if (severity.isNotDefault) 'severity': severity.toJson(),
     if (insertId.isNotDefault) 'insertId': insertId,
-    if (httpRequest != null) 'httpRequest': httpRequest!.toJson(),
-    if (labels.isNotDefault) 'labels': labels,
-    if (operation != null) 'operation': operation!.toJson(),
+    if (httpRequest case final httpRequest?)
+      'httpRequest': httpRequest.toJson(),
+    if (labels.isNotDefault)
+      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (operation case final operation?) 'operation': operation.toJson(),
     if (trace.isNotDefault) 'trace': trace,
     if (spanId.isNotDefault) 'spanId': spanId,
     if (traceSampled.isNotDefault) 'traceSampled': traceSampled,
-    if (sourceLocation != null) 'sourceLocation': sourceLocation!.toJson(),
-    if (split != null) 'split': split!.toJson(),
+    if (sourceLocation case final sourceLocation?)
+      'sourceLocation': sourceLocation.toJson(),
+    if (split case final split?) 'split': split.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'logName=$logName',
       if (textPayload != null) 'textPayload=$textPayload',
       'severity=$severity',
@@ -1271,7 +1277,7 @@ final class LogEntry extends ProtoMessage {
       'spanId=$spanId',
       'traceSampled=$traceSampled',
     ].join(',');
-    return 'LogEntry($contents)';
+    return 'LogEntry(${$contents})';
   }
 }
 
@@ -1335,13 +1341,13 @@ final class LogEntryOperation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'id=$id',
       'producer=$producer',
       'first=$first',
       'last=$last',
     ].join(',');
-    return 'LogEntryOperation($contents)';
+    return 'LogEntryOperation(${$contents})';
   }
 }
 
@@ -1391,18 +1397,18 @@ final class LogEntrySourceLocation extends ProtoMessage {
   @override
   Object toJson() => {
     if (file.isNotDefault) 'file': file,
-    if (line.isNotDefault) 'line': encodeInt64(line),
+    if (line.isNotDefault) 'line': line.toString(),
     if (function.isNotDefault) 'function': function,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'file=$file',
       'line=$line',
       'function=$function',
     ].join(',');
-    return 'LogEntrySourceLocation($contents)';
+    return 'LogEntrySourceLocation(${$contents})';
   }
 }
 
@@ -1455,12 +1461,12 @@ final class LogSplit extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'uid=$uid',
       'index=$index',
       'totalSplits=$totalSplits',
     ].join(',');
-    return 'LogSplit($contents)';
+    return 'LogSplit(${$contents})';
   }
 }
 
@@ -1500,8 +1506,8 @@ final class DeleteLogRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['logName=$logName'].join(',');
-    return 'DeleteLogRequest($contents)';
+    final $contents = ['logName=$logName'].join(',');
+    return 'DeleteLogRequest(${$contents})';
   }
 }
 
@@ -1632,21 +1638,22 @@ final class WriteLogEntriesRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (logName.isNotDefault) 'logName': logName,
-    if (resource != null) 'resource': resource!.toJson(),
-    if (labels.isNotDefault) 'labels': labels,
-    'entries': encodeList(entries),
+    if (resource case final resource?) 'resource': resource.toJson(),
+    if (labels.isNotDefault)
+      'labels': {for (final e in labels.entries) e.key: e.value},
+    'entries': [for (final i in entries) i.toJson()],
     if (partialSuccess.isNotDefault) 'partialSuccess': partialSuccess,
     if (dryRun.isNotDefault) 'dryRun': dryRun,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'logName=$logName',
       'partialSuccess=$partialSuccess',
       'dryRun=$dryRun',
     ].join(',');
-    return 'WriteLogEntriesRequest($contents)';
+    return 'WriteLogEntriesRequest(${$contents})';
   }
 }
 
@@ -1690,7 +1697,7 @@ final class WriteLogEntriesPartialErrors extends ProtoMessage {
         null => {},
         Map<String, Object?> $1 => {
           for (final e in $1.entries)
-            decodeInt(e.key): Status.fromJson(e.value),
+            decodeIntKey(e.key): Status.fromJson(e.value),
         },
         _ => throw const FormatException('"logEntryErrors" is not an object'),
       },
@@ -1700,7 +1707,10 @@ final class WriteLogEntriesPartialErrors extends ProtoMessage {
   @override
   Object toJson() => {
     if (logEntryErrors.isNotDefault)
-      'logEntryErrors': encodeMap(logEntryErrors),
+      'logEntryErrors': {
+        for (final e in logEntryErrors.entries)
+          e.key.toString(): e.value.toJson(),
+      },
   };
 
   @override
@@ -1795,7 +1805,7 @@ final class ListLogEntriesRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'resourceNames': resourceNames,
+    'resourceNames': [for (final i in resourceNames) i],
     if (filter.isNotDefault) 'filter': filter,
     if (orderBy.isNotDefault) 'orderBy': orderBy,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
@@ -1804,13 +1814,13 @@ final class ListLogEntriesRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'filter=$filter',
       'orderBy=$orderBy',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListLogEntriesRequest($contents)';
+    return 'ListLogEntriesRequest(${$contents})';
   }
 }
 
@@ -1856,14 +1866,14 @@ final class ListLogEntriesResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (entries.isNotDefault) 'entries': encodeList(entries),
+    if (entries.isNotDefault) 'entries': [for (final i in entries) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLogEntriesResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLogEntriesResponse(${$contents})';
   }
 }
 
@@ -1910,8 +1920,8 @@ final class ListMonitoredResourceDescriptorsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListMonitoredResourceDescriptorsRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListMonitoredResourceDescriptorsRequest(${$contents})';
   }
 }
 
@@ -1953,14 +1963,14 @@ final class ListMonitoredResourceDescriptorsResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (resourceDescriptors.isNotDefault)
-      'resourceDescriptors': encodeList(resourceDescriptors),
+      'resourceDescriptors': [for (final i in resourceDescriptors) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListMonitoredResourceDescriptorsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListMonitoredResourceDescriptorsResponse(${$contents})';
   }
 }
 
@@ -2037,19 +2047,20 @@ final class ListLogsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (resourceNames.isNotDefault) 'resourceNames': resourceNames,
+    if (resourceNames.isNotDefault)
+      'resourceNames': [for (final i in resourceNames) i],
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListLogsRequest($contents)';
+    return 'ListLogsRequest(${$contents})';
   }
 }
 
@@ -2087,14 +2098,14 @@ final class ListLogsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (logNames.isNotDefault) 'logNames': logNames,
+    if (logNames.isNotDefault) 'logNames': [for (final i in logNames) i],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLogsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLogsResponse(${$contents})';
   }
 }
 
@@ -2158,15 +2169,16 @@ final class TailLogEntriesRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'resourceNames': resourceNames,
+    'resourceNames': [for (final i in resourceNames) i],
     if (filter.isNotDefault) 'filter': filter,
-    if (bufferWindow != null) 'bufferWindow': bufferWindow!.toJson(),
+    if (bufferWindow case final bufferWindow?)
+      'bufferWindow': bufferWindow.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['filter=$filter'].join(',');
-    return 'TailLogEntriesRequest($contents)';
+    final $contents = ['filter=$filter'].join(',');
+    return 'TailLogEntriesRequest(${$contents})';
   }
 }
 
@@ -2213,9 +2225,9 @@ final class TailLogEntriesResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (entries.isNotDefault) 'entries': encodeList(entries),
+    if (entries.isNotDefault) 'entries': [for (final i in entries) i.toJson()],
     if (suppressionInfo.isNotDefault)
-      'suppressionInfo': encodeList(suppressionInfo),
+      'suppressionInfo': [for (final i in suppressionInfo) i.toJson()],
   };
 
   @override
@@ -2260,11 +2272,11 @@ final class TailLogEntriesResponse_SuppressionInfo extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'reason=$reason',
       'suppressedCount=$suppressedCount',
     ].join(',');
-    return 'SuppressionInfo($contents)';
+    return 'SuppressionInfo(${$contents})';
   }
 }
 
@@ -2351,13 +2363,13 @@ final class IndexConfig extends ProtoMessage {
   Object toJson() => {
     'fieldPath': fieldPath,
     'type': type.toJson(),
-    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['fieldPath=$fieldPath', 'type=$type'].join(',');
-    return 'IndexConfig($contents)';
+    final $contents = ['fieldPath=$fieldPath', 'type=$type'].join(',');
+    return 'IndexConfig(${$contents})';
   }
 }
 
@@ -2499,20 +2511,23 @@ final class LogBucket extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (retentionDays.isNotDefault) 'retentionDays': retentionDays,
     if (locked.isNotDefault) 'locked': locked,
     if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
     if (analyticsEnabled.isNotDefault) 'analyticsEnabled': analyticsEnabled,
-    if (restrictedFields.isNotDefault) 'restrictedFields': restrictedFields,
-    if (indexConfigs.isNotDefault) 'indexConfigs': encodeList(indexConfigs),
-    if (cmekSettings != null) 'cmekSettings': cmekSettings!.toJson(),
+    if (restrictedFields.isNotDefault)
+      'restrictedFields': [for (final i in restrictedFields) i],
+    if (indexConfigs.isNotDefault)
+      'indexConfigs': [for (final i in indexConfigs) i.toJson()],
+    if (cmekSettings case final cmekSettings?)
+      'cmekSettings': cmekSettings.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'retentionDays=$retentionDays',
@@ -2520,7 +2535,7 @@ final class LogBucket extends ProtoMessage {
       'lifecycleState=$lifecycleState',
       'analyticsEnabled=$analyticsEnabled',
     ].join(',');
-    return 'LogBucket($contents)';
+    return 'LogBucket(${$contents})';
   }
 }
 
@@ -2598,19 +2613,19 @@ final class LogView extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (filter.isNotDefault) 'filter': filter,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'filter=$filter',
     ].join(',');
-    return 'LogView($contents)';
+    return 'LogView(${$contents})';
   }
 }
 
@@ -2801,19 +2816,21 @@ final class LogSink extends ProtoMessage {
     if (filter.isNotDefault) 'filter': filter,
     if (description.isNotDefault) 'description': description,
     if (disabled.isNotDefault) 'disabled': disabled,
-    if (exclusions.isNotDefault) 'exclusions': encodeList(exclusions),
+    if (exclusions.isNotDefault)
+      'exclusions': [for (final i in exclusions) i.toJson()],
     if (outputVersionFormat.isNotDefault)
       'outputVersionFormat': outputVersionFormat.toJson(),
     if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
     if (includeChildren.isNotDefault) 'includeChildren': includeChildren,
-    if (bigqueryOptions != null) 'bigqueryOptions': bigqueryOptions!.toJson(),
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (bigqueryOptions case final bigqueryOptions?)
+      'bigqueryOptions': bigqueryOptions.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'destination=$destination',
       'filter=$filter',
@@ -2823,7 +2840,7 @@ final class LogSink extends ProtoMessage {
       'writerIdentity=$writerIdentity',
       'includeChildren=$includeChildren',
     ].join(',');
-    return 'LogSink($contents)';
+    return 'LogSink(${$contents})';
   }
 }
 
@@ -2884,8 +2901,8 @@ final class BigQueryDataset extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['datasetId=$datasetId'].join(',');
-    return 'BigQueryDataset($contents)';
+    final $contents = ['datasetId=$datasetId'].join(',');
+    return 'BigQueryDataset(${$contents})';
   }
 }
 
@@ -2962,19 +2979,20 @@ final class Link extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
-    if (bigqueryDataset != null) 'bigqueryDataset': bigqueryDataset!.toJson(),
+    if (bigqueryDataset case final bigqueryDataset?)
+      'bigqueryDataset': bigqueryDataset.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'lifecycleState=$lifecycleState',
     ].join(',');
-    return 'Link($contents)';
+    return 'Link(${$contents})';
   }
 }
 
@@ -3031,11 +3049,11 @@ final class BigQueryOptions extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'usePartitionedTables=$usePartitionedTables',
       'usesTimestampColumnPartitioning=$usesTimestampColumnPartitioning',
     ].join(',');
-    return 'BigQueryOptions($contents)';
+    return 'BigQueryOptions(${$contents})';
   }
 }
 
@@ -3100,12 +3118,12 @@ final class ListBucketsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageToken=$pageToken',
       'pageSize=$pageSize',
     ].join(',');
-    return 'ListBucketsRequest($contents)';
+    return 'ListBucketsRequest(${$contents})';
   }
 }
 
@@ -3142,14 +3160,14 @@ final class ListBucketsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (buckets.isNotDefault) 'buckets': encodeList(buckets),
+    if (buckets.isNotDefault) 'buckets': [for (final i in buckets) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListBucketsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListBucketsResponse(${$contents})';
   }
 }
 
@@ -3205,13 +3223,13 @@ final class CreateBucketRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     'bucketId': bucketId,
-    if (bucket != null) 'bucket': bucket!.toJson(),
+    if (bucket case final bucket?) 'bucket': bucket.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'bucketId=$bucketId'].join(',');
-    return 'CreateBucketRequest($contents)';
+    final $contents = ['parent=$parent', 'bucketId=$bucketId'].join(',');
+    return 'CreateBucketRequest(${$contents})';
   }
 }
 
@@ -3272,14 +3290,14 @@ final class UpdateBucketRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (bucket != null) 'bucket': bucket!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (bucket case final bucket?) 'bucket': bucket.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'UpdateBucketRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'UpdateBucketRequest(${$contents})';
   }
 }
 
@@ -3316,8 +3334,8 @@ final class GetBucketRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetBucketRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetBucketRequest(${$contents})';
   }
 }
 
@@ -3355,8 +3373,8 @@ final class DeleteBucketRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteBucketRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteBucketRequest(${$contents})';
   }
 }
 
@@ -3394,8 +3412,8 @@ final class UndeleteBucketRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'UndeleteBucketRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'UndeleteBucketRequest(${$contents})';
   }
 }
 
@@ -3453,12 +3471,12 @@ final class ListViewsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageToken=$pageToken',
       'pageSize=$pageSize',
     ].join(',');
-    return 'ListViewsRequest($contents)';
+    return 'ListViewsRequest(${$contents})';
   }
 }
 
@@ -3495,14 +3513,14 @@ final class ListViewsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (views.isNotDefault) 'views': encodeList(views),
+    if (views.isNotDefault) 'views': [for (final i in views) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListViewsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListViewsResponse(${$contents})';
   }
 }
 
@@ -3556,13 +3574,13 @@ final class CreateViewRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     'viewId': viewId,
-    if (view != null) 'view': view!.toJson(),
+    if (view case final view?) 'view': view.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'viewId=$viewId'].join(',');
-    return 'CreateViewRequest($contents)';
+    final $contents = ['parent=$parent', 'viewId=$viewId'].join(',');
+    return 'CreateViewRequest(${$contents})';
   }
 }
 
@@ -3617,14 +3635,14 @@ final class UpdateViewRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (view != null) 'view': view!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (view case final view?) 'view': view.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'UpdateViewRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'UpdateViewRequest(${$contents})';
   }
 }
 
@@ -3658,8 +3676,8 @@ final class GetViewRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetViewRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetViewRequest(${$contents})';
   }
 }
 
@@ -3694,8 +3712,8 @@ final class DeleteViewRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteViewRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteViewRequest(${$contents})';
   }
 }
 
@@ -3755,12 +3773,12 @@ final class ListSinksRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageToken=$pageToken',
       'pageSize=$pageSize',
     ].join(',');
-    return 'ListSinksRequest($contents)';
+    return 'ListSinksRequest(${$contents})';
   }
 }
 
@@ -3797,14 +3815,14 @@ final class ListSinksResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (sinks.isNotDefault) 'sinks': encodeList(sinks),
+    if (sinks.isNotDefault) 'sinks': [for (final i in sinks) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListSinksResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListSinksResponse(${$contents})';
   }
 }
 
@@ -3841,8 +3859,8 @@ final class GetSinkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['sinkName=$sinkName'].join(',');
-    return 'GetSinkRequest($contents)';
+    final $contents = ['sinkName=$sinkName'].join(',');
+    return 'GetSinkRequest(${$contents})';
   }
 }
 
@@ -3909,18 +3927,18 @@ final class CreateSinkRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (sink != null) 'sink': sink!.toJson(),
+    if (sink case final sink?) 'sink': sink.toJson(),
     if (uniqueWriterIdentity.isNotDefault)
       'uniqueWriterIdentity': uniqueWriterIdentity,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'uniqueWriterIdentity=$uniqueWriterIdentity',
     ].join(',');
-    return 'CreateSinkRequest($contents)';
+    return 'CreateSinkRequest(${$contents})';
   }
 }
 
@@ -4009,19 +4027,19 @@ final class UpdateSinkRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'sinkName': sinkName,
-    if (sink != null) 'sink': sink!.toJson(),
+    if (sink case final sink?) 'sink': sink.toJson(),
     if (uniqueWriterIdentity.isNotDefault)
       'uniqueWriterIdentity': uniqueWriterIdentity,
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'sinkName=$sinkName',
       'uniqueWriterIdentity=$uniqueWriterIdentity',
     ].join(',');
-    return 'UpdateSinkRequest($contents)';
+    return 'UpdateSinkRequest(${$contents})';
   }
 }
 
@@ -4060,8 +4078,8 @@ final class DeleteSinkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['sinkName=$sinkName'].join(',');
-    return 'DeleteSinkRequest($contents)';
+    final $contents = ['sinkName=$sinkName'].join(',');
+    return 'DeleteSinkRequest(${$contents})';
   }
 }
 
@@ -4113,14 +4131,14 @@ final class CreateLinkRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (link != null) 'link': link!.toJson(),
+    if (link case final link?) 'link': link.toJson(),
     'linkId': linkId,
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'linkId=$linkId'].join(',');
-    return 'CreateLinkRequest($contents)';
+    final $contents = ['parent=$parent', 'linkId=$linkId'].join(',');
+    return 'CreateLinkRequest(${$contents})';
   }
 }
 
@@ -4154,8 +4172,8 @@ final class DeleteLinkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteLinkRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteLinkRequest(${$contents})';
   }
 }
 
@@ -4212,12 +4230,12 @@ final class ListLinksRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageToken=$pageToken',
       'pageSize=$pageSize',
     ].join(',');
-    return 'ListLinksRequest($contents)';
+    return 'ListLinksRequest(${$contents})';
   }
 }
 
@@ -4254,14 +4272,14 @@ final class ListLinksResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (links.isNotDefault) 'links': encodeList(links),
+    if (links.isNotDefault) 'links': [for (final i in links) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLinksResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLinksResponse(${$contents})';
   }
 }
 
@@ -4294,8 +4312,8 @@ final class GetLinkRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetLinkRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetLinkRequest(${$contents})';
   }
 }
 
@@ -4389,19 +4407,19 @@ final class LogExclusion extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     'filter': filter,
     if (disabled.isNotDefault) 'disabled': disabled,
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'filter=$filter',
       'disabled=$disabled',
     ].join(',');
-    return 'LogExclusion($contents)';
+    return 'LogExclusion(${$contents})';
   }
 }
 
@@ -4462,12 +4480,12 @@ final class ListExclusionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageToken=$pageToken',
       'pageSize=$pageSize',
     ].join(',');
-    return 'ListExclusionsRequest($contents)';
+    return 'ListExclusionsRequest(${$contents})';
   }
 }
 
@@ -4504,14 +4522,15 @@ final class ListExclusionsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (exclusions.isNotDefault) 'exclusions': encodeList(exclusions),
+    if (exclusions.isNotDefault)
+      'exclusions': [for (final i in exclusions) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListExclusionsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListExclusionsResponse(${$contents})';
   }
 }
 
@@ -4549,8 +4568,8 @@ final class GetExclusionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetExclusionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetExclusionRequest(${$contents})';
   }
 }
 
@@ -4596,13 +4615,13 @@ final class CreateExclusionRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (exclusion != null) 'exclusion': exclusion!.toJson(),
+    if (exclusion case final exclusion?) 'exclusion': exclusion.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'CreateExclusionRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreateExclusionRequest(${$contents})';
   }
 }
 
@@ -4664,14 +4683,14 @@ final class UpdateExclusionRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (exclusion != null) 'exclusion': exclusion!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (exclusion case final exclusion?) 'exclusion': exclusion.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'UpdateExclusionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'UpdateExclusionRequest(${$contents})';
   }
 }
 
@@ -4709,8 +4728,8 @@ final class DeleteExclusionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteExclusionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteExclusionRequest(${$contents})';
   }
 }
 
@@ -4758,8 +4777,8 @@ final class GetCmekSettingsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetCmekSettingsRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetCmekSettingsRequest(${$contents})';
   }
 }
 
@@ -4832,14 +4851,15 @@ final class UpdateCmekSettingsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (cmekSettings != null) 'cmekSettings': cmekSettings!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (cmekSettings case final cmekSettings?)
+      'cmekSettings': cmekSettings.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'UpdateCmekSettingsRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'UpdateCmekSettingsRequest(${$contents})';
   }
 }
 
@@ -4961,13 +4981,13 @@ final class CmekSettings extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'kmsKeyName=$kmsKeyName',
       'kmsKeyVersionName=$kmsKeyVersionName',
       'serviceAccountId=$serviceAccountId',
     ].join(',');
-    return 'CmekSettings($contents)';
+    return 'CmekSettings(${$contents})';
   }
 }
 
@@ -5015,8 +5035,8 @@ final class GetSettingsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSettingsRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSettingsRequest(${$contents})';
   }
 }
 
@@ -5086,14 +5106,14 @@ final class UpdateSettingsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (settings != null) 'settings': settings!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (settings case final settings?) 'settings': settings.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'UpdateSettingsRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'UpdateSettingsRequest(${$contents})';
   }
 }
 
@@ -5206,14 +5226,14 @@ final class Settings extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'kmsKeyName=$kmsKeyName',
       'kmsServiceAccountId=$kmsServiceAccountId',
       'storageLocation=$storageLocation',
       'disableDefaultSink=$disableDefaultSink',
     ].join(',');
-    return 'Settings($contents)';
+    return 'Settings(${$contents})';
   }
 }
 
@@ -5269,12 +5289,12 @@ final class CopyLogEntriesRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'filter=$filter',
       'destination=$destination',
     ].join(',');
-    return 'CopyLogEntriesRequest($contents)';
+    return 'CopyLogEntriesRequest(${$contents})';
   }
 }
 
@@ -5356,25 +5376,25 @@ final class CopyLogEntriesMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime != null) 'startTime': startTime!.toJson(),
-    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (startTime case final startTime?) 'startTime': startTime.toJson(),
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
     if (cancellationRequested.isNotDefault)
       'cancellationRequested': cancellationRequested,
-    if (request != null) 'request': request!.toJson(),
+    if (request case final request?) 'request': request.toJson(),
     if (progress.isNotDefault) 'progress': progress,
     if (writerIdentity.isNotDefault) 'writerIdentity': writerIdentity,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'state=$state',
       'cancellationRequested=$cancellationRequested',
       'progress=$progress',
       'writerIdentity=$writerIdentity',
     ].join(',');
-    return 'CopyLogEntriesMetadata($contents)';
+    return 'CopyLogEntriesMetadata(${$contents})';
   }
 }
 
@@ -5402,13 +5422,15 @@ final class CopyLogEntriesResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (logEntriesCopiedCount.isNotDefault)
-      'logEntriesCopiedCount': encodeInt64(logEntriesCopiedCount),
+      'logEntriesCopiedCount': logEntriesCopiedCount.toString(),
   };
 
   @override
   String toString() {
-    final contents = ['logEntriesCopiedCount=$logEntriesCopiedCount'].join(',');
-    return 'CopyLogEntriesResponse($contents)';
+    final $contents = [
+      'logEntriesCopiedCount=$logEntriesCopiedCount',
+    ].join(',');
+    return 'CopyLogEntriesResponse(${$contents})';
   }
 }
 
@@ -5467,19 +5489,19 @@ final class BucketMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime != null) 'startTime': startTime!.toJson(),
-    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (startTime case final startTime?) 'startTime': startTime.toJson(),
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (createBucketRequest != null)
-      'createBucketRequest': createBucketRequest!.toJson(),
-    if (updateBucketRequest != null)
-      'updateBucketRequest': updateBucketRequest!.toJson(),
+    if (createBucketRequest case final createBucketRequest?)
+      'createBucketRequest': createBucketRequest.toJson(),
+    if (updateBucketRequest case final updateBucketRequest?)
+      'updateBucketRequest': updateBucketRequest.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['state=$state'].join(',');
-    return 'BucketMetadata($contents)';
+    final $contents = ['state=$state'].join(',');
+    return 'BucketMetadata(${$contents})';
   }
 }
 
@@ -5538,19 +5560,19 @@ final class LinkMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime != null) 'startTime': startTime!.toJson(),
-    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (startTime case final startTime?) 'startTime': startTime.toJson(),
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (createLinkRequest != null)
-      'createLinkRequest': createLinkRequest!.toJson(),
-    if (deleteLinkRequest != null)
-      'deleteLinkRequest': deleteLinkRequest!.toJson(),
+    if (createLinkRequest case final createLinkRequest?)
+      'createLinkRequest': createLinkRequest.toJson(),
+    if (deleteLinkRequest case final deleteLinkRequest?)
+      'deleteLinkRequest': deleteLinkRequest.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['state=$state'].join(',');
-    return 'LinkMetadata($contents)';
+    final $contents = ['state=$state'].join(',');
+    return 'LinkMetadata(${$contents})';
   }
 }
 
@@ -5583,8 +5605,8 @@ final class LocationMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['logAnalyticsEnabled=$logAnalyticsEnabled'].join(',');
-    return 'LocationMetadata($contents)';
+    final $contents = ['logAnalyticsEnabled=$logAnalyticsEnabled'].join(',');
+    return 'LocationMetadata(${$contents})';
   }
 }
 
@@ -5801,19 +5823,23 @@ final class LogMetric extends ProtoMessage {
     'filter': filter,
     if (bucketName.isNotDefault) 'bucketName': bucketName,
     if (disabled.isNotDefault) 'disabled': disabled,
-    if (metricDescriptor != null)
-      'metricDescriptor': metricDescriptor!.toJson(),
+    if (metricDescriptor case final metricDescriptor?)
+      'metricDescriptor': metricDescriptor.toJson(),
     if (valueExtractor.isNotDefault) 'valueExtractor': valueExtractor,
-    if (labelExtractors.isNotDefault) 'labelExtractors': labelExtractors,
-    if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (labelExtractors.isNotDefault)
+      'labelExtractors': {
+        for (final e in labelExtractors.entries) e.key: e.value,
+      },
+    if (bucketOptions case final bucketOptions?)
+      'bucketOptions': bucketOptions.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (version.isNotDefault) 'version': version.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'filter=$filter',
@@ -5822,7 +5848,7 @@ final class LogMetric extends ProtoMessage {
       'valueExtractor=$valueExtractor',
       'version=$version',
     ].join(',');
-    return 'LogMetric($contents)';
+    return 'LogMetric(${$contents})';
   }
 }
 
@@ -5902,12 +5928,12 @@ final class ListLogMetricsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageToken=$pageToken',
       'pageSize=$pageSize',
     ].join(',');
-    return 'ListLogMetricsRequest($contents)';
+    return 'ListLogMetricsRequest(${$contents})';
   }
 }
 
@@ -5944,14 +5970,14 @@ final class ListLogMetricsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+    if (metrics.isNotDefault) 'metrics': [for (final i in metrics) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLogMetricsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLogMetricsResponse(${$contents})';
   }
 }
 
@@ -5982,8 +6008,8 @@ final class GetLogMetricRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['metricName=$metricName'].join(',');
-    return 'GetLogMetricRequest($contents)';
+    final $contents = ['metricName=$metricName'].join(',');
+    return 'GetLogMetricRequest(${$contents})';
   }
 }
 
@@ -6023,13 +6049,13 @@ final class CreateLogMetricRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (metric != null) 'metric': metric!.toJson(),
+    if (metric case final metric?) 'metric': metric.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'CreateLogMetricRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreateLogMetricRequest(${$contents})';
   }
 }
 
@@ -6070,13 +6096,13 @@ final class UpdateLogMetricRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'metricName': metricName,
-    if (metric != null) 'metric': metric!.toJson(),
+    if (metric case final metric?) 'metric': metric.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['metricName=$metricName'].join(',');
-    return 'UpdateLogMetricRequest($contents)';
+    final $contents = ['metricName=$metricName'].join(',');
+    return 'UpdateLogMetricRequest(${$contents})';
   }
 }
 
@@ -6108,8 +6134,8 @@ final class DeleteLogMetricRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['metricName=$metricName'].join(',');
-    return 'DeleteLogMetricRequest($contents)';
+    final $contents = ['metricName=$metricName'].join(',');
+    return 'DeleteLogMetricRequest(${$contents})';
   }
 }
 

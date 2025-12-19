@@ -416,14 +416,14 @@ class _FloatValueHelper {
 }
 
 class _Int64ValueHelper {
-  static String encode(Int64Value value) => encodeInt64(value.value)!;
+  static String encode(Int64Value value) => value.value.toString();
 
   static Int64Value decode(Object? value) =>
       Int64Value(value: decodeInt64(value));
 }
 
 class _Uint64ValueHelper {
-  static String encode(Uint64Value value) => encodeUint64(value.value)!;
+  static String encode(Uint64Value value) => value.value.toString();
 
   static Uint64Value decode(Object? value) =>
       Uint64Value(value: decodeUint64(value));

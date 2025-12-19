@@ -22,6 +22,7 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -104,8 +105,8 @@ final class OperationMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (target.isNotDefault) 'target': target,
     if (verb.isNotDefault) 'verb': verb,
     if (statusDetail.isNotDefault) 'statusDetail': statusDetail,
@@ -115,13 +116,13 @@ final class OperationMetadata extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'target=$target',
       'verb=$verb',
       'statusDetail=$statusDetail',
       'cancelRequested=$cancelRequested',
       'apiVersion=$apiVersion',
     ].join(',');
-    return 'OperationMetadata($contents)';
+    return 'OperationMetadata(${$contents})';
   }
 }

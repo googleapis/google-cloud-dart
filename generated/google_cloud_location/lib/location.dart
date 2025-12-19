@@ -24,6 +24,7 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -157,13 +158,13 @@ final class ListLocationsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'filter=$filter',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListLocationsRequest($contents)';
+    return 'ListLocationsRequest(${$contents})';
   }
 }
 
@@ -198,14 +199,15 @@ final class ListLocationsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (locations.isNotDefault) 'locations': encodeList(locations),
+    if (locations.isNotDefault)
+      'locations': [for (final i in locations) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLocationsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLocationsResponse(${$contents})';
   }
 }
 
@@ -234,8 +236,8 @@ final class GetLocationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetLocationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetLocationRequest(${$contents})';
   }
 }
 
@@ -306,17 +308,18 @@ final class Location extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     if (locationId.isNotDefault) 'locationId': locationId,
     if (displayName.isNotDefault) 'displayName': displayName,
-    if (labels.isNotDefault) 'labels': labels,
-    if (metadata != null) 'metadata': metadata!.toJson(),
+    if (labels.isNotDefault)
+      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (metadata case final metadata?) 'metadata': metadata.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'locationId=$locationId',
       'displayName=$displayName',
     ].join(',');
-    return 'Location($contents)';
+    return 'Location(${$contents})';
   }
 }

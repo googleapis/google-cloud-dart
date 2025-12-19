@@ -22,6 +22,7 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -208,13 +209,13 @@ final class Color extends ProtoMessage {
     if (red.isNotDefault) 'red': encodeDouble(red),
     if (green.isNotDefault) 'green': encodeDouble(green),
     if (blue.isNotDefault) 'blue': encodeDouble(blue),
-    if (alpha != null) 'alpha': alpha!.toJson(),
+    if (alpha case final alpha?) 'alpha': alpha.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['red=$red', 'green=$green', 'blue=$blue'].join(',');
-    return 'Color($contents)';
+    final $contents = ['red=$red', 'green=$green', 'blue=$blue'].join(',');
+    return 'Color(${$contents})';
   }
 }
 
@@ -277,8 +278,8 @@ final class Date extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['year=$year', 'month=$month', 'day=$day'].join(',');
-    return 'Date($contents)';
+    final $contents = ['year=$year', 'month=$month', 'day=$day'].join(',');
+    return 'Date(${$contents})';
   }
 }
 
@@ -407,13 +408,13 @@ final class DateTime extends ProtoMessage {
     if (minutes.isNotDefault) 'minutes': minutes,
     if (seconds.isNotDefault) 'seconds': seconds,
     if (nanos.isNotDefault) 'nanos': nanos,
-    if (utcOffset != null) 'utcOffset': utcOffset!.toJson(),
-    if (timeZone != null) 'timeZone': timeZone!.toJson(),
+    if (utcOffset case final utcOffset?) 'utcOffset': utcOffset.toJson(),
+    if (timeZone case final timeZone?) 'timeZone': timeZone.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'year=$year',
       'month=$month',
       'day=$day',
@@ -422,7 +423,7 @@ final class DateTime extends ProtoMessage {
       'seconds=$seconds',
       'nanos=$nanos',
     ].join(',');
-    return 'DateTime($contents)';
+    return 'DateTime(${$contents})';
   }
 }
 
@@ -461,8 +462,8 @@ final class TimeZone extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['id=$id', 'version=$version'].join(',');
-    return 'TimeZone($contents)';
+    final $contents = ['id=$id', 'version=$version'].join(',');
+    return 'TimeZone(${$contents})';
   }
 }
 
@@ -555,8 +556,8 @@ final class Decimal extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'Decimal($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'Decimal(${$contents})';
   }
 }
 
@@ -650,13 +651,13 @@ final class Expr extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'expression=$expression',
       'title=$title',
       'description=$description',
       'location=$location',
     ].join(',');
-    return 'Expr($contents)';
+    return 'Expr(${$contents})';
   }
 }
 
@@ -690,17 +691,17 @@ final class Fraction extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (numerator.isNotDefault) 'numerator': encodeInt64(numerator),
-    if (denominator.isNotDefault) 'denominator': encodeInt64(denominator),
+    if (numerator.isNotDefault) 'numerator': numerator.toString(),
+    if (denominator.isNotDefault) 'denominator': denominator.toString(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'numerator=$numerator',
       'denominator=$denominator',
     ].join(',');
-    return 'Fraction($contents)';
+    return 'Fraction(${$contents})';
   }
 }
 
@@ -743,8 +744,8 @@ final class Interval extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (startTime != null) 'startTime': startTime!.toJson(),
-    if (endTime != null) 'endTime': endTime!.toJson(),
+    if (startTime case final startTime?) 'startTime': startTime.toJson(),
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
   };
 
   @override
@@ -789,8 +790,8 @@ final class LatLng extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['latitude=$latitude', 'longitude=$longitude'].join(',');
-    return 'LatLng($contents)';
+    final $contents = ['latitude=$latitude', 'longitude=$longitude'].join(',');
+    return 'LatLng(${$contents})';
   }
 }
 
@@ -832,8 +833,8 @@ final class LocalizedText extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['text=$text', 'languageCode=$languageCode'].join(',');
-    return 'LocalizedText($contents)';
+    final $contents = ['text=$text', 'languageCode=$languageCode'].join(',');
+    return 'LocalizedText(${$contents})';
   }
 }
 
@@ -880,18 +881,18 @@ final class Money extends ProtoMessage {
   @override
   Object toJson() => {
     if (currencyCode.isNotDefault) 'currencyCode': currencyCode,
-    if (units.isNotDefault) 'units': encodeInt64(units),
+    if (units.isNotDefault) 'units': units.toString(),
     if (nanos.isNotDefault) 'nanos': nanos,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'currencyCode=$currencyCode',
       'units=$units',
       'nanos=$nanos',
     ].join(',');
-    return 'Money($contents)';
+    return 'Money(${$contents})';
   }
 }
 
@@ -981,18 +982,18 @@ final class PhoneNumber extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (e164Number != null) 'e164Number': e164Number,
-    if (shortCode != null) 'shortCode': shortCode!.toJson(),
+    if (e164Number case final e164Number?) 'e164Number': e164Number,
+    if (shortCode case final shortCode?) 'shortCode': shortCode.toJson(),
     if (extension.isNotDefault) 'extension': extension,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (e164Number != null) 'e164Number=$e164Number',
       'extension=$extension',
     ].join(',');
-    return 'PhoneNumber($contents)';
+    return 'PhoneNumber(${$contents})';
   }
 }
 
@@ -1044,8 +1045,8 @@ final class PhoneNumber_ShortCode extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['regionCode=$regionCode', 'number=$number'].join(',');
-    return 'ShortCode($contents)';
+    final $contents = ['regionCode=$regionCode', 'number=$number'].join(',');
+    return 'ShortCode(${$contents})';
   }
 }
 
@@ -1237,14 +1238,15 @@ final class PostalAddress extends ProtoMessage {
       'administrativeArea': administrativeArea,
     if (locality.isNotDefault) 'locality': locality,
     if (sublocality.isNotDefault) 'sublocality': sublocality,
-    if (addressLines.isNotDefault) 'addressLines': addressLines,
-    if (recipients.isNotDefault) 'recipients': recipients,
+    if (addressLines.isNotDefault)
+      'addressLines': [for (final i in addressLines) i],
+    if (recipients.isNotDefault) 'recipients': [for (final i in recipients) i],
     if (organization.isNotDefault) 'organization': organization,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'revision=$revision',
       'regionCode=$regionCode',
       'languageCode=$languageCode',
@@ -1255,7 +1257,7 @@ final class PostalAddress extends ProtoMessage {
       'sublocality=$sublocality',
       'organization=$organization',
     ].join(',');
-    return 'PostalAddress($contents)';
+    return 'PostalAddress(${$contents})';
   }
 }
 
@@ -1364,8 +1366,8 @@ final class Quaternion extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['x=$x', 'y=$y', 'z=$z', 'w=$w'].join(',');
-    return 'Quaternion($contents)';
+    final $contents = ['x=$x', 'y=$y', 'z=$z', 'w=$w'].join(',');
+    return 'Quaternion(${$contents})';
   }
 }
 
@@ -1429,13 +1431,13 @@ final class TimeOfDay extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'hours=$hours',
       'minutes=$minutes',
       'seconds=$seconds',
       'nanos=$nanos',
     ].join(',');
-    return 'TimeOfDay($contents)';
+    return 'TimeOfDay(${$contents})';
   }
 }
 
