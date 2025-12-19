@@ -236,6 +236,33 @@ void main() async {
           1.5,
         );
       });
+
+      test('NaN', () {
+        checkField(
+          TestAllTypesProto3(optionalFloat: double.nan),
+          {'optionalFloat': 'NaN'},
+          (m) => m.optionalFloat,
+          isNaN,
+        );
+      });
+
+      test('Infinity', () {
+        checkField(
+          TestAllTypesProto3(optionalFloat: double.infinity),
+          {'optionalFloat': 'Infinity'},
+          (m) => m.optionalFloat,
+          double.infinity,
+        );
+      });
+
+      test('-Infinity', () {
+        checkField(
+          TestAllTypesProto3(optionalFloat: double.negativeInfinity),
+          {'optionalFloat': '-Infinity'},
+          (m) => m.optionalFloat,
+          double.negativeInfinity,
+        );
+      });
     });
 
     group('double', () {
@@ -254,6 +281,33 @@ void main() async {
           {'optionalDouble': 1.5},
           (m) => m.optionalDouble,
           1.5,
+        );
+      });
+
+      test('NaN', () {
+        checkField(
+          TestAllTypesProto3(optionalDouble: double.nan),
+          {'optionalDouble': 'NaN'},
+          (m) => m.optionalDouble,
+          isNaN,
+        );
+      });
+
+      test('Infinity', () {
+        checkField(
+          TestAllTypesProto3(optionalDouble: double.infinity),
+          {'optionalDouble': 'Infinity'},
+          (m) => m.optionalDouble,
+          double.infinity,
+        );
+      });
+
+      test('-Infinity', () {
+        checkField(
+          TestAllTypesProto3(optionalDouble: double.negativeInfinity),
+          {'optionalDouble': '-Infinity'},
+          (m) => m.optionalDouble,
+          double.negativeInfinity,
         );
       });
     });
