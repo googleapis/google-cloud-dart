@@ -1603,5 +1603,861 @@ void main() async {
         skip: 'TODO(https://github.com/googleapis/google-cloud-dart/issues/26)',
       );
     });
+
+    // Well-known types
+    group('well-known types', () {
+      group('google.protobuf.BoolValue', () {
+        test('true', () {
+          checkField(
+            TestAllTypesProto3(optionalBoolWrapper: BoolValue(value: true)),
+            {'optionalBoolWrapper': true},
+            (m) => m.optionalBoolWrapper,
+            BoolValue(value: true),
+          );
+        });
+
+        test('false', () {
+          checkField(
+            TestAllTypesProto3(optionalBoolWrapper: BoolValue(value: false)),
+            {'optionalBoolWrapper': false},
+            (m) => m.optionalBoolWrapper,
+            BoolValue(value: false),
+          );
+        });
+      });
+
+      group('google.protobuf.Int32Value', () {
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(optionalInt32Wrapper: Int32Value(value: 0)),
+            {'optionalInt32Wrapper': 0},
+            (m) => m.optionalInt32Wrapper,
+            Int32Value(value: 0),
+          );
+        });
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(optionalInt32Wrapper: Int32Value(value: 5)),
+            {'optionalInt32Wrapper': 5},
+            (m) => m.optionalInt32Wrapper,
+            Int32Value(value: 5),
+          );
+        });
+      });
+
+      group('google.protobuf.Int64Value', () {
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(optionalInt64Wrapper: Int64Value(value: 0)),
+            {'optionalInt64Wrapper': '0'},
+            (m) => m.optionalInt64Wrapper,
+            Int64Value(value: 0),
+          );
+        });
+
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(optionalInt64Wrapper: Int64Value(value: 5)),
+            {'optionalInt64Wrapper': '5'},
+            (m) => m.optionalInt64Wrapper,
+            Int64Value(value: 5),
+          );
+        });
+      });
+
+      group('google.protobuf.UInt32Value', () {
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(optionalUint32Wrapper: Uint32Value(value: 0)),
+            {'optionalUint32Wrapper': 0},
+            (m) => m.optionalUint32Wrapper,
+            Uint32Value(value: 0),
+          );
+        });
+
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(optionalUint32Wrapper: Uint32Value(value: 5)),
+            {'optionalUint32Wrapper': 5},
+            (m) => m.optionalUint32Wrapper,
+            Uint32Value(value: 5),
+          );
+        });
+      });
+
+      group('google.protobuf.UInt64Value', () {
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalUint64Wrapper: Uint64Value(value: BigInt.zero),
+            ),
+            {'optionalUint64Wrapper': '0'},
+            (m) => m.optionalUint64Wrapper,
+            Uint64Value(value: BigInt.zero),
+          );
+        });
+
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalUint64Wrapper: Uint64Value(value: BigInt.from(5)),
+            ),
+            {'optionalUint64Wrapper': '5'},
+            (m) => m.optionalUint64Wrapper,
+            Uint64Value(value: BigInt.from(5)),
+          );
+        });
+      });
+
+      group('google.protobuf.FloatValue', () {
+        // What about Inf, Nan?
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(optionalFloatWrapper: FloatValue(value: 0.0)),
+            {'optionalFloatWrapper': 0.0},
+            (m) => m.optionalFloatWrapper,
+            FloatValue(value: 0.0),
+          );
+        });
+
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(optionalFloatWrapper: FloatValue(value: 1.5)),
+            {'optionalFloatWrapper': 1.5},
+            (m) => m.optionalFloatWrapper,
+            FloatValue(value: 1.5),
+          );
+        });
+      });
+
+      group('google.protobuf.DoubleValue', () {
+        // What about Inf, Nan?
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(optionalDoubleWrapper: DoubleValue(value: 0.0)),
+            {'optionalDoubleWrapper': 0.0},
+            (m) => m.optionalDoubleWrapper,
+            DoubleValue(value: 0.0),
+          );
+        });
+
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(optionalDoubleWrapper: DoubleValue(value: 1.5)),
+            {'optionalDoubleWrapper': 1.5},
+            (m) => m.optionalDoubleWrapper,
+            DoubleValue(value: 1.5),
+          );
+        });
+      });
+
+      group('google.protobuf.StringValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(optionalStringWrapper: StringValue(value: '')),
+            {'optionalStringWrapper': ''},
+            (m) => m.optionalStringWrapper,
+            StringValue(value: ''),
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalStringWrapper: StringValue(value: 'foo'),
+            ),
+            {'optionalStringWrapper': 'foo'},
+            (m) => m.optionalStringWrapper,
+            StringValue(value: 'foo'),
+          );
+        });
+      });
+
+      group('google.protobuf.BytesValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalBytesWrapper: BytesValue(value: Uint8List(0)),
+            ),
+            {'optionalBytesWrapper': ''},
+            (m) => m.optionalBytesWrapper,
+            BytesValue(value: Uint8List(0)),
+          );
+        });
+
+        test('non-empty', () {
+          final bytes = Uint8List.fromList([1]);
+          checkField(
+            TestAllTypesProto3(optionalBytesWrapper: BytesValue(value: bytes)),
+            {'optionalBytesWrapper': 'AQ=='},
+            (m) => m.optionalBytesWrapper,
+            BytesValue(value: bytes),
+          );
+        });
+      });
+
+      group('repeated BoolValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedBoolWrapper: []),
+            {},
+            (m) => m.repeatedBoolWrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedBoolWrapper: [
+                BoolValue(value: true),
+                BoolValue(value: false),
+              ],
+            ),
+            {
+              'repeatedBoolWrapper': [true, false],
+            },
+            (m) => m.repeatedBoolWrapper,
+            [BoolValue(value: true), BoolValue(value: false)],
+          );
+        });
+      });
+
+      group('repeated Int32Value', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedInt32Wrapper: []),
+            {},
+            (m) => m.repeatedInt32Wrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedInt32Wrapper: [
+                Int32Value(value: 1),
+                Int32Value(value: 2),
+              ],
+            ),
+            {
+              'repeatedInt32Wrapper': [1, 2],
+            },
+            (m) => m.repeatedInt32Wrapper,
+            [Int32Value(value: 1), Int32Value(value: 2)],
+          );
+        });
+      });
+
+      group('repeated Int64Value', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedInt64Wrapper: []),
+            {},
+            (m) => m.repeatedInt64Wrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedInt64Wrapper: [
+                Int64Value(value: 1),
+                Int64Value(value: 2),
+              ],
+            ),
+            {
+              'repeatedInt64Wrapper': ['1', '2'],
+            },
+            (m) => m.repeatedInt64Wrapper,
+            [Int64Value(value: 1), Int64Value(value: 2)],
+          );
+        });
+      });
+
+      group('repeated Uint32Value', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedUint32Wrapper: []),
+            {},
+            (m) => m.repeatedUint32Wrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedUint32Wrapper: [
+                Uint32Value(value: 1),
+                Uint32Value(value: 2),
+              ],
+            ),
+            {
+              'repeatedUint32Wrapper': [1, 2],
+            },
+            (m) => m.repeatedUint32Wrapper,
+            [Uint32Value(value: 1), Uint32Value(value: 2)],
+          );
+        });
+      });
+
+      group('repeated Uint64Value', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedUint64Wrapper: []),
+            {},
+            (m) => m.repeatedUint64Wrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedUint64Wrapper: [
+                Uint64Value(value: BigInt.one),
+                Uint64Value(value: BigInt.two),
+              ],
+            ),
+            {
+              'repeatedUint64Wrapper': ['1', '2'],
+            },
+            (m) => m.repeatedUint64Wrapper,
+            [Uint64Value(value: BigInt.one), Uint64Value(value: BigInt.two)],
+          );
+        });
+      });
+
+      group('repeated FloatValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedFloatWrapper: []),
+            {},
+            (m) => m.repeatedFloatWrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedFloatWrapper: [
+                FloatValue(value: 1.5),
+                FloatValue(value: 2.5),
+              ],
+            ),
+            {
+              'repeatedFloatWrapper': [1.5, 2.5],
+            },
+            (m) => m.repeatedFloatWrapper,
+            [FloatValue(value: 1.5), FloatValue(value: 2.5)],
+          );
+        });
+      });
+
+      group('repeated DoubleValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedDoubleWrapper: []),
+            {},
+            (m) => m.repeatedDoubleWrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedDoubleWrapper: [
+                DoubleValue(value: 1.5),
+                DoubleValue(value: 2.5),
+              ],
+            ),
+            {
+              'repeatedDoubleWrapper': [1.5, 2.5],
+            },
+            (m) => m.repeatedDoubleWrapper,
+            [DoubleValue(value: 1.5), DoubleValue(value: 2.5)],
+          );
+        });
+      });
+
+      group('repeated StringValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedStringWrapper: []),
+            {},
+            (m) => m.repeatedStringWrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedStringWrapper: [
+                StringValue(value: 'foo'),
+                StringValue(value: 'bar'),
+              ],
+            ),
+            {
+              'repeatedStringWrapper': ['foo', 'bar'],
+            },
+            (m) => m.repeatedStringWrapper,
+            [StringValue(value: 'foo'), StringValue(value: 'bar')],
+          );
+        });
+      });
+
+      group('repeated BytesValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedBytesWrapper: []),
+            {},
+            (m) => m.repeatedBytesWrapper,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          final bytes1 = Uint8List.fromList([1]);
+          final bytes2 = Uint8List.fromList([2]);
+          checkField(
+            TestAllTypesProto3(
+              repeatedBytesWrapper: [
+                BytesValue(value: bytes1),
+                BytesValue(value: bytes2),
+              ],
+            ),
+            {
+              'repeatedBytesWrapper': ['AQ==', 'Ag=='],
+            },
+            (m) => m.repeatedBytesWrapper,
+            [BytesValue(value: bytes1), BytesValue(value: bytes2)],
+          );
+        });
+      });
+
+      group('google.protobuf.Duration', () {
+        test('zero', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalDuration: Duration(seconds: 0, nanos: 0),
+            ),
+            {'optionalDuration': '0s'},
+            (m) => m.optionalDuration,
+            Duration(seconds: 0, nanos: 0),
+          );
+        });
+
+        test('non-zero', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalDuration: Duration(seconds: 1, nanos: 500000000),
+            ),
+            {'optionalDuration': '1.5s'},
+            (m) => m.optionalDuration,
+            Duration(seconds: 1, nanos: 500000000),
+          );
+        });
+      });
+
+      group('google.protobuf.Timestamp', () {
+        test('epoch', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalTimestamp: Timestamp(seconds: 0, nanos: 0),
+            ),
+            {'optionalTimestamp': '1970-01-01T00:00:00Z'},
+            (m) => m.optionalTimestamp,
+            Timestamp(seconds: 0, nanos: 0),
+          );
+        });
+
+        test('non-epoch', () {
+          // 2017-01-15T01:30:15.01Z = 1484443815 seconds + 10000000 nanos
+          checkField(
+            TestAllTypesProto3(
+              optionalTimestamp: Timestamp(
+                seconds: 1484443815,
+                nanos: 10000000,
+              ),
+            ),
+            {'optionalTimestamp': '2017-01-15T01:30:15.010Z'},
+            (m) => m.optionalTimestamp,
+            Timestamp(seconds: 1484443815, nanos: 10000000),
+          );
+        });
+      });
+
+      group('google.protobuf.FieldMask', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(optionalFieldMask: FieldMask(paths: [])),
+            {'optionalFieldMask': ''},
+            (m) => m.optionalFieldMask,
+            FieldMask(paths: []),
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalFieldMask: FieldMask(
+                paths: ['foo.bar', 'baz', 'foo_bar'],
+              ),
+            ),
+            {'optionalFieldMask': 'foo.bar,baz,foo_bar'},
+            (m) => m.optionalFieldMask,
+            FieldMask(paths: ['foo.bar', 'baz', 'foo_bar']),
+          );
+        });
+      });
+
+      group('google.protobuf.Struct', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalStruct: Struct(fields: <String, Value>{}),
+            ),
+            {'optionalStruct': <String, dynamic>{}},
+            (m) => m.optionalStruct,
+            Struct(fields: <String, Value>{}),
+          );
+        });
+
+        test('non-empty', () {
+          final s = Struct(
+            fields: <String, Value>{
+              'a': Value(numberValue: 1.0),
+              'b': Value(boolValue: true),
+            },
+          );
+          checkField(
+            TestAllTypesProto3(optionalStruct: s),
+            {
+              'optionalStruct': {'a': 1.0, 'b': true},
+            },
+            (m) => m.optionalStruct,
+            s,
+          );
+        });
+      });
+
+      group('google.protobuf.Any', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(optionalAny: Any(json: {})),
+            {'optionalAny': <String, dynamic>{}},
+            (m) => m.optionalAny,
+            Any(json: {}),
+          );
+        });
+
+        test('message', () {
+          final message = ForeignMessage(c: 5);
+          checkField(
+            TestAllTypesProto3(optionalAny: Any.from(message)),
+            {
+              'optionalAny': {
+                '@type':
+                    'type.googleapis.com/protobuf_test_messages.proto3.ForeignMessage',
+                'c': 5,
+              },
+            },
+            (m) => m.optionalAny,
+            Any.from(message),
+          );
+        });
+      });
+
+      group('google.protobuf.Value', () {
+        test('null', () {
+          checkField(
+            TestAllTypesProto3(
+              optionalValue: Value(nullValue: NullValue.nullValue),
+            ),
+            {'optionalValue': null},
+            (m) => m.optionalValue,
+            isNull,
+          );
+        });
+
+        test('number', () {
+          checkField(
+            TestAllTypesProto3(optionalValue: Value(numberValue: 1.5)),
+            {'optionalValue': 1.5},
+            (m) => m.optionalValue,
+            Value(numberValue: 1.5),
+          );
+        });
+
+        test('string', () {
+          checkField(
+            TestAllTypesProto3(optionalValue: Value(stringValue: 'foo')),
+            {'optionalValue': 'foo'},
+            (m) => m.optionalValue,
+            Value(stringValue: 'foo'),
+          );
+        });
+
+        test('bool', () {
+          checkField(
+            TestAllTypesProto3(optionalValue: Value(boolValue: true)),
+            {'optionalValue': true},
+            (m) => m.optionalValue,
+            Value(boolValue: true),
+          );
+        });
+      });
+
+      group('google.protobuf.NullValue', () {
+        test('null', () {
+          checkField(
+            TestAllTypesProto3(optionalNullValue: NullValue.nullValue),
+            {}, // XXX
+            (m) => m.optionalNullValue,
+            NullValue.nullValue,
+          );
+        });
+      });
+
+      group('repeated Duration', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedDuration: []),
+            {},
+            (m) => m.repeatedDuration,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedDuration: [
+                Duration(seconds: 1, nanos: 500000000),
+                Duration(seconds: 2, nanos: 0),
+              ],
+            ),
+            {
+              'repeatedDuration': ['1.5s', '2s'],
+            },
+            (m) => m.repeatedDuration,
+            [
+              Duration(seconds: 1, nanos: 500000000),
+              Duration(seconds: 2, nanos: 0),
+            ],
+          );
+        });
+      });
+
+      group('repeated Timestamp', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedTimestamp: []),
+            {},
+            (m) => m.repeatedTimestamp,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedTimestamp: [
+                Timestamp(seconds: 0, nanos: 0),
+                Timestamp(seconds: 1484443815, nanos: 10000000),
+              ],
+            ),
+            {
+              'repeatedTimestamp': [
+                '1970-01-01T00:00:00Z',
+                '2017-01-15T01:30:15.010Z',
+              ],
+            },
+            (m) => m.repeatedTimestamp,
+            [
+              Timestamp(seconds: 0, nanos: 0),
+              Timestamp(seconds: 1484443815, nanos: 10000000),
+            ],
+          );
+        });
+      });
+
+      group('repeated FieldMask', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedFieldmask: []),
+            {},
+            (m) => m.repeatedFieldmask,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedFieldmask: [
+                FieldMask(paths: ['foo', 'bar']),
+                FieldMask(paths: ['baz']),
+              ],
+            ),
+            {
+              'repeatedFieldmask': ['foo,bar', 'baz'],
+            },
+            (m) => m.repeatedFieldmask,
+            [
+              FieldMask(paths: ['foo', 'bar']),
+              FieldMask(paths: ['baz']),
+            ],
+          );
+        });
+      });
+
+      group('repeated Struct', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedStruct: []),
+            {},
+            (m) => m.repeatedStruct,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          final s1 = Struct(
+            fields: <String, Value>{'a': Value(numberValue: 1.0)},
+          );
+          final s2 = Struct(
+            fields: <String, Value>{'b': Value(boolValue: true)},
+          );
+          checkField(
+            TestAllTypesProto3(repeatedStruct: [s1, s2]),
+            {
+              'repeatedStruct': [
+                {'a': 1.0},
+                {'b': true},
+              ],
+            },
+            (m) => m.repeatedStruct,
+            [s1, s2],
+          );
+        });
+      });
+
+      group('repeated Any', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedAny: []),
+            {},
+            (m) => m.repeatedAny,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          final message1 = ForeignMessage(c: 5);
+          // Value should check that more than value is not set.
+          final message2 = Value(nullValue: NullValue.nullValue);
+          final message3 = ForeignMessage(c: 6);
+
+          checkField(
+            TestAllTypesProto3(
+              repeatedAny: [
+                Any.from(message1),
+                Any.from(message2),
+                Any.from(message3),
+              ],
+            ),
+            {
+              'repeatedAny': [
+                {
+                  '@type':
+                      'type.googleapis.com/protobuf_test_messages.proto3.ForeignMessage',
+                  'c': 5,
+                },
+                {
+                  '@type': 'type.googleapis.com/google.protobuf.Value',
+                  'value': null,
+                },
+                {
+                  '@type':
+                      'type.googleapis.com/protobuf_test_messages.proto3.ForeignMessage',
+                  'c': 6,
+                },
+              ],
+            },
+            (m) => m.repeatedAny,
+            [Any.from(message1), Any.from(message2), Any.from(message3)],
+          );
+        });
+      });
+
+      group('repeated Value', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedValue: []),
+            {},
+            (m) => m.repeatedValue,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          checkField(
+            TestAllTypesProto3(
+              repeatedValue: [
+                Value(numberValue: 1.0),
+                Value(nullValue: NullValue.nullValue),
+                Value(stringValue: 'foo'),
+              ],
+            ),
+            {
+              'repeatedValue': [1.0, null, 'foo'],
+            },
+            (m) => m.repeatedValue,
+            [
+              Value(numberValue: 1.0),
+              Value(nullValue: NullValue.nullValue),
+              Value(stringValue: 'foo'),
+            ],
+          );
+        });
+      });
+
+      group('repeated ListValue', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedListValue: []),
+            {},
+            (m) => m.repeatedListValue,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          // XXX
+          final l1 = ListValue(
+            values: [Value(numberValue: 1.0), Value(boolValue: true)],
+          );
+          final l2 = ListValue(values: [Value(stringValue: 'foo')]);
+          checkField(
+            TestAllTypesProto3(repeatedListValue: [l1, l2]),
+            {
+              'repeatedListValue': [
+                [1.0, true],
+                ['foo'],
+              ],
+            },
+            (m) => m.repeatedListValue,
+            [l1, l2],
+          );
+        });
+      });
+    });
   });
 }
