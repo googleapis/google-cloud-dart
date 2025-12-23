@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -1238,9 +1237,8 @@ final class PostalAddress extends ProtoMessage {
       'administrativeArea': administrativeArea,
     if (locality.isNotDefault) 'locality': locality,
     if (sublocality.isNotDefault) 'sublocality': sublocality,
-    if (addressLines.isNotDefault)
-      'addressLines': [for (final i in addressLines) i],
-    if (recipients.isNotDefault) 'recipients': [for (final i in recipients) i],
+    if (addressLines.isNotDefault) 'addressLines': addressLines,
+    if (recipients.isNotDefault) 'recipients': recipients,
     if (organization.isNotDefault) 'organization': organization,
   };
 

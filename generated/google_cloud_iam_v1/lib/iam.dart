@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -275,10 +274,7 @@ final class TestIamPermissionsRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'resource': resource,
-    'permissions': [for (final i in permissions) i],
-  };
+  Object toJson() => {'resource': resource, 'permissions': permissions};
 
   @override
   String toString() {
@@ -311,10 +307,7 @@ final class TestIamPermissionsResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (permissions.isNotDefault)
-      'permissions': [for (final i in permissions) i],
-  };
+  Object toJson() => {if (permissions.isNotDefault) 'permissions': permissions};
 
   @override
   String toString() => 'TestIamPermissionsResponse()';
@@ -644,7 +637,7 @@ final class Binding extends ProtoMessage {
   @override
   Object toJson() => {
     if (role.isNotDefault) 'role': role,
-    if (members.isNotDefault) 'members': [for (final i in members) i],
+    if (members.isNotDefault) 'members': members,
     if (condition case final condition?) 'condition': condition.toJson(),
   };
 
@@ -803,8 +796,7 @@ final class AuditLogConfig extends ProtoMessage {
   @override
   Object toJson() => {
     if (logType.isNotDefault) 'logType': logType.toJson(),
-    if (exemptedMembers.isNotDefault)
-      'exemptedMembers': [for (final i in exemptedMembers) i],
+    if (exemptedMembers.isNotDefault) 'exemptedMembers': exemptedMembers,
   };
 
   @override

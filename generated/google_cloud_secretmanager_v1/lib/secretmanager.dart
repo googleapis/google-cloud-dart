@@ -23,7 +23,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -563,8 +562,7 @@ final class Secret extends ProtoMessage {
     if (replication case final replication?)
       'replication': replication.toJson(),
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (topics.isNotDefault) 'topics': [for (final i in topics) i.toJson()],
     if (expireTime case final expireTime?) 'expireTime': expireTime.toJson(),
     if (ttl case final ttl?) 'ttl': ttl.toJson(),
@@ -574,14 +572,12 @@ final class Secret extends ProtoMessage {
       'versionAliases': {
         for (final e in versionAliases.entries) e.key: e.value.toString(),
       },
-    if (annotations.isNotDefault)
-      'annotations': {for (final e in annotations.entries) e.key: e.value},
+    if (annotations.isNotDefault) 'annotations': annotations,
     if (versionDestroyTtl case final versionDestroyTtl?)
       'versionDestroyTtl': versionDestroyTtl.toJson(),
     if (customerManagedEncryption case final customerManagedEncryption?)
       'customerManagedEncryption': customerManagedEncryption.toJson(),
-    if (tags.isNotDefault)
-      'tags': {for (final e in tags.entries) e.key: e.value},
+    if (tags.isNotDefault) 'tags': tags,
   };
 
   @override

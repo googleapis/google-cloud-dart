@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -511,8 +510,7 @@ final class Function$ extends ProtoMessage {
       'eventTrigger': eventTrigger.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (stateMessages.isNotDefault)
       'stateMessages': [for (final i in stateMessages) i.toJson()],
     if (environment.isNotDefault) 'environment': environment.toJson(),
@@ -1119,9 +1117,7 @@ final class BuildConfig extends ProtoMessage {
       'sourceProvenance': sourceProvenance.toJson(),
     if (workerPool.isNotDefault) 'workerPool': workerPool,
     if (environmentVariables.isNotDefault)
-      'environmentVariables': {
-        for (final e in environmentVariables.entries) e.key: e.value,
-      },
+      'environmentVariables': environmentVariables,
     if (dockerRegistry.isNotDefault) 'dockerRegistry': dockerRegistry.toJson(),
     if (dockerRepository.isNotDefault) 'dockerRepository': dockerRepository,
     if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
@@ -1409,9 +1405,7 @@ final class ServiceConfig extends ProtoMessage {
     if (availableMemory.isNotDefault) 'availableMemory': availableMemory,
     if (availableCpu.isNotDefault) 'availableCpu': availableCpu,
     if (environmentVariables.isNotDefault)
-      'environmentVariables': {
-        for (final e in environmentVariables.entries) e.key: e.value,
-      },
+      'environmentVariables': environmentVariables,
     if (maxInstanceCount.isNotDefault) 'maxInstanceCount': maxInstanceCount,
     if (minInstanceCount.isNotDefault) 'minInstanceCount': minInstanceCount,
     if (vpcConnector.isNotDefault) 'vpcConnector': vpcConnector,
@@ -2190,8 +2184,7 @@ final class ListFunctionsResponse extends ProtoMessage {
     if (functions.isNotDefault)
       'functions': [for (final i in functions) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
-    if (unreachable.isNotDefault)
-      'unreachable': [for (final i in unreachable) i],
+    if (unreachable.isNotDefault) 'unreachable': unreachable,
   };
 
   @override
@@ -2668,7 +2661,7 @@ final class ListRuntimesResponse_Runtime extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (stage.isNotDefault) 'stage': stage.toJson(),
-    if (warnings.isNotDefault) 'warnings': [for (final i in warnings) i],
+    if (warnings.isNotDefault) 'warnings': warnings,
     if (environment.isNotDefault) 'environment': environment.toJson(),
     if (deprecationDate case final deprecationDate?)
       'deprecationDate': deprecationDate.toJson(),

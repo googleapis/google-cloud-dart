@@ -28,7 +28,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -2938,9 +2937,7 @@ final class Tool_ComputerUse extends ProtoMessage {
   Object toJson() => {
     'environment': environment.toJson(),
     if (excludedPredefinedFunctions.isNotDefault)
-      'excludedPredefinedFunctions': [
-        for (final i in excludedPredefinedFunctions) i,
-      ],
+      'excludedPredefinedFunctions': excludedPredefinedFunctions,
   };
 
   @override
@@ -3189,7 +3186,7 @@ final class FunctionCallingConfig extends ProtoMessage {
   Object toJson() => {
     if (mode.isNotDefault) 'mode': mode.toJson(),
     if (allowedFunctionNames.isNotDefault)
-      'allowedFunctionNames': [for (final i in allowedFunctionNames) i],
+      'allowedFunctionNames': allowedFunctionNames,
   };
 
   @override
@@ -3813,7 +3810,7 @@ final class Schema extends ProtoMessage {
     if (title.isNotDefault) 'title': title,
     if (description.isNotDefault) 'description': description,
     if (nullable.isNotDefault) 'nullable': nullable,
-    if (enum$.isNotDefault) 'enum': [for (final i in enum$) i],
+    if (enum$.isNotDefault) 'enum': enum$,
     if (items case final items?) 'items': items.toJson(),
     if (maxItems.isNotDefault) 'maxItems': maxItems.toString(),
     if (minItems.isNotDefault) 'minItems': minItems.toString(),
@@ -3821,7 +3818,7 @@ final class Schema extends ProtoMessage {
       'properties': {
         for (final e in properties.entries) e.key: e.value.toJson(),
       },
-    if (required.isNotDefault) 'required': [for (final i in required) i],
+    if (required.isNotDefault) 'required': required,
     if (minProperties.isNotDefault) 'minProperties': minProperties.toString(),
     if (maxProperties.isNotDefault) 'maxProperties': maxProperties.toString(),
     if (minimum case final minimum?) 'minimum': encodeDouble(minimum),
@@ -3831,8 +3828,7 @@ final class Schema extends ProtoMessage {
     if (pattern.isNotDefault) 'pattern': pattern,
     if (example case final example?) 'example': example.toJson(),
     if (anyOf.isNotDefault) 'anyOf': [for (final i in anyOf) i.toJson()],
-    if (propertyOrdering.isNotDefault)
-      'propertyOrdering': [for (final i in propertyOrdering) i],
+    if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
     if (default$ case final default$?) 'default': default$.toJson(),
   };
 
@@ -5681,8 +5677,7 @@ final class GenerationConfig extends ProtoMessage {
   Object toJson() => {
     if (candidateCount case final candidateCount?)
       'candidateCount': candidateCount,
-    if (stopSequences.isNotDefault)
-      'stopSequences': [for (final i in stopSequences) i],
+    if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
     if (maxOutputTokens case final maxOutputTokens?)
       'maxOutputTokens': maxOutputTokens,
     if (temperature case final temperature?)
@@ -7034,8 +7029,7 @@ final class GroundingMetadata extends ProtoMessage {
       'groundingSupports': [for (final i in groundingSupports) i.toJson()],
     if (retrievalMetadata case final retrievalMetadata?)
       'retrievalMetadata': retrievalMetadata.toJson(),
-    if (webSearchQueries.isNotDefault)
-      'webSearchQueries': [for (final i in webSearchQueries) i],
+    if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
   };
 
   @override
@@ -7278,7 +7272,7 @@ final class GroundingSupport extends ProtoMessage {
   Object toJson() => {
     if (segment case final segment?) 'segment': segment.toJson(),
     if (groundingChunkIndices.isNotDefault)
-      'groundingChunkIndices': [for (final i in groundingChunkIndices) i],
+      'groundingChunkIndices': groundingChunkIndices,
     if (confidenceScores.isNotDefault)
       'confidenceScores': [for (final i in confidenceScores) encodeDouble(i)],
   };
@@ -9145,9 +9139,7 @@ final class BidiGenerateContentToolCallCancellation extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (ids.isNotDefault) 'ids': [for (final i in ids) i],
-  };
+  Object toJson() => {if (ids.isNotDefault) 'ids': ids};
 
   @override
   String toString() => 'BidiGenerateContentToolCallCancellation()';
@@ -9689,9 +9681,7 @@ final class Model extends ProtoMessage {
     if (inputTokenLimit.isNotDefault) 'inputTokenLimit': inputTokenLimit,
     if (outputTokenLimit.isNotDefault) 'outputTokenLimit': outputTokenLimit,
     if (supportedGenerationMethods.isNotDefault)
-      'supportedGenerationMethods': [
-        for (final i in supportedGenerationMethods) i,
-      ],
+      'supportedGenerationMethods': supportedGenerationMethods,
     if (temperature case final temperature?)
       'temperature': encodeDouble(temperature),
     if (maxTemperature case final maxTemperature?)
@@ -10983,7 +10973,7 @@ final class PredictLongRunningGeneratedVideoResponse extends ProtoMessage {
     if (raiMediaFilteredCount.isNotDefault)
       'raiMediaFilteredCount': raiMediaFilteredCount,
     if (raiMediaFilteredReasons.isNotDefault)
-      'raiMediaFilteredReasons': [for (final i in raiMediaFilteredReasons) i],
+      'raiMediaFilteredReasons': raiMediaFilteredReasons,
   };
 
   @override
@@ -11168,9 +11158,7 @@ final class StringList extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (values.isNotDefault) 'values': [for (final i in values) i],
-  };
+  Object toJson() => {if (values.isNotDefault) 'values': values};
 
   @override
   String toString() => 'StringList()';
@@ -13279,8 +13267,7 @@ final class GenerateTextRequest extends ProtoMessage {
     if (topK case final topK?) 'topK': topK,
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
-    if (stopSequences.isNotDefault)
-      'stopSequences': [for (final i in stopSequences) i],
+    if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
   };
 
   @override
@@ -13570,7 +13557,7 @@ final class BatchEmbedTextRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'model': model,
-    if (texts.isNotDefault) 'texts': [for (final i in texts) i],
+    if (texts.isNotDefault) 'texts': texts,
     if (requests.isNotDefault)
       'requests': [for (final i in requests) i.toJson()],
   };

@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -114,8 +113,7 @@ final class ErrorInfo extends ProtoMessage {
   Object toJson() => {
     if (reason.isNotDefault) 'reason': reason,
     if (domain.isNotDefault) 'domain': domain,
-    if (metadata.isNotDefault)
-      'metadata': {for (final e in metadata.entries) e.key: e.value},
+    if (metadata.isNotDefault) 'metadata': metadata,
   };
 
   @override
@@ -195,8 +193,7 @@ final class DebugInfo extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (stackEntries.isNotDefault)
-      'stackEntries': [for (final i in stackEntries) i],
+    if (stackEntries.isNotDefault) 'stackEntries': stackEntries,
     if (detail.isNotDefault) 'detail': detail,
   };
 
@@ -393,10 +390,7 @@ final class QuotaFailure_Violation extends ProtoMessage {
     if (apiService.isNotDefault) 'apiService': apiService,
     if (quotaMetric.isNotDefault) 'quotaMetric': quotaMetric,
     if (quotaId.isNotDefault) 'quotaId': quotaId,
-    if (quotaDimensions.isNotDefault)
-      'quotaDimensions': {
-        for (final e in quotaDimensions.entries) e.key: e.value,
-      },
+    if (quotaDimensions.isNotDefault) 'quotaDimensions': quotaDimensions,
     if (quotaValue.isNotDefault) 'quotaValue': quotaValue.toString(),
     if (futureQuotaValue case final futureQuotaValue?)
       'futureQuotaValue': futureQuotaValue.toString(),

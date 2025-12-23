@@ -23,7 +23,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -2486,7 +2485,7 @@ final class ComplianceGroup extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (rpcs.isNotDefault) 'rpcs': [for (final i in rpcs) i],
+    if (rpcs.isNotDefault) 'rpcs': rpcs,
     if (requests.isNotDefault)
       'requests': [for (final i in requests) i.toJson()],
   };
@@ -3217,8 +3216,7 @@ final class EchoErrorDetailsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (singleDetailText.isNotDefault) 'singleDetailText': singleDetailText,
-    if (multiDetailText.isNotDefault)
-      'multiDetailText': [for (final i in multiDetailText) i],
+    if (multiDetailText.isNotDefault) 'multiDetailText': multiDetailText,
   };
 
   @override
@@ -3684,9 +3682,7 @@ final class PagedExpandResponseList extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (words.isNotDefault) 'words': [for (final i in words) i],
-  };
+  Object toJson() => {if (words.isNotDefault) 'words': words};
 
   @override
   String toString() => 'PagedExpandResponseList()';
@@ -5218,9 +5214,7 @@ final class SendBlurbsResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (names.isNotDefault) 'names': [for (final i in names) i],
-  };
+  Object toJson() => {if (names.isNotDefault) 'names': names};
 
   @override
   String toString() => 'SendBlurbsResponse()';

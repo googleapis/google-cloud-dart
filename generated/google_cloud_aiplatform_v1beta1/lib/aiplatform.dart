@@ -23,7 +23,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -14928,8 +14927,7 @@ final class Annotation extends ProtoMessage {
     if (etag.isNotDefault) 'etag': etag,
     if (annotationSource case final annotationSource?)
       'annotationSource': annotationSource.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -15224,8 +15222,7 @@ final class Artifact extends ProtoMessage {
     if (displayName.isNotDefault) 'displayName': displayName,
     if (uri.isNotDefault) 'uri': uri,
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
@@ -15712,8 +15709,7 @@ final class BatchPredictionJob extends ProtoMessage {
     if (startTime case final startTime?) 'startTime': startTime.toJson(),
     if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (modelMonitoringConfig case final modelMonitoringConfig?)
@@ -15947,10 +15943,8 @@ final class BatchPredictionJob_InstanceConfig extends ProtoMessage {
   Object toJson() => {
     if (instanceType.isNotDefault) 'instanceType': instanceType,
     if (keyField.isNotDefault) 'keyField': keyField,
-    if (includedFields.isNotDefault)
-      'includedFields': [for (final i in includedFields) i],
-    if (excludedFields.isNotDefault)
-      'excludedFields': [for (final i in excludedFields) i],
+    if (includedFields.isNotDefault) 'includedFields': includedFields,
+    if (excludedFields.isNotDefault) 'excludedFields': excludedFields,
   };
 
   @override
@@ -17147,8 +17141,7 @@ final class GenerationConfig extends ProtoMessage {
       'candidateCount': candidateCount,
     if (maxOutputTokens case final maxOutputTokens?)
       'maxOutputTokens': maxOutputTokens,
-    if (stopSequences.isNotDefault)
-      'stopSequences': [for (final i in stopSequences) i],
+    if (stopSequences.isNotDefault) 'stopSequences': stopSequences,
     if (responseLogprobs case final responseLogprobs?)
       'responseLogprobs': responseLogprobs,
     if (logprobs case final logprobs?) 'logprobs': logprobs,
@@ -18859,7 +18852,7 @@ final class GroundingSupport extends ProtoMessage {
   Object toJson() => {
     if (segment case final segment?) 'segment': segment.toJson(),
     if (groundingChunkIndices.isNotDefault)
-      'groundingChunkIndices': [for (final i in groundingChunkIndices) i],
+      'groundingChunkIndices': groundingChunkIndices,
     if (confidenceScores.isNotDefault)
       'confidenceScores': [for (final i in confidenceScores) encodeDouble(i)],
   };
@@ -18959,12 +18952,10 @@ final class GroundingMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (webSearchQueries.isNotDefault)
-      'webSearchQueries': [for (final i in webSearchQueries) i],
+    if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
     if (searchEntryPoint case final searchEntryPoint?)
       'searchEntryPoint': searchEntryPoint.toJson(),
-    if (retrievalQueries.isNotDefault)
-      'retrievalQueries': [for (final i in retrievalQueries) i],
+    if (retrievalQueries.isNotDefault) 'retrievalQueries': retrievalQueries,
     if (groundingChunks.isNotDefault)
       'groundingChunks': [for (final i in groundingChunks) i.toJson()],
     if (groundingSupports.isNotDefault)
@@ -19352,12 +19343,10 @@ final class Context extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (parentContexts.isNotDefault)
-      'parentContexts': [for (final i in parentContexts) i],
+    if (parentContexts.isNotDefault) 'parentContexts': parentContexts,
     if (schemaTitle.isNotDefault) 'schemaTitle': schemaTitle,
     if (schemaVersion.isNotDefault) 'schemaVersion': schemaVersion,
     if (metadata case final metadata?) 'metadata': metadata.toJson(),
@@ -19550,12 +19539,10 @@ final class CustomJob extends ProtoMessage {
     if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (error case final error?) 'error': error.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
-    if (webAccessUris.isNotDefault)
-      'webAccessUris': {for (final e in webAccessUris.entries) e.key: e.value},
+    if (webAccessUris.isNotDefault) 'webAccessUris': webAccessUris,
     if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
     if (satisfiesPzi.isNotDefault) 'satisfiesPzi': satisfiesPzi,
   };
@@ -19811,8 +19798,7 @@ final class CustomJobSpec extends ProtoMessage {
     if (scheduling case final scheduling?) 'scheduling': scheduling.toJson(),
     if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
     if (network.isNotDefault) 'network': network,
-    if (reservedIpRanges.isNotDefault)
-      'reservedIpRanges': [for (final i in reservedIpRanges) i],
+    if (reservedIpRanges.isNotDefault) 'reservedIpRanges': reservedIpRanges,
     if (pscInterfaceConfig case final pscInterfaceConfig?)
       'pscInterfaceConfig': pscInterfaceConfig.toJson(),
     if (baseOutputDirectory case final baseOutputDirectory?)
@@ -19825,7 +19811,7 @@ final class CustomJobSpec extends ProtoMessage {
       'enableDashboardAccess': enableDashboardAccess,
     if (experiment.isNotDefault) 'experiment': experiment,
     if (experimentRun.isNotDefault) 'experimentRun': experimentRun,
-    if (models.isNotDefault) 'models': [for (final i in models) i],
+    if (models.isNotDefault) 'models': models,
   };
 
   @override
@@ -19984,8 +19970,8 @@ final class ContainerSpec extends ProtoMessage {
   @override
   Object toJson() => {
     'imageUri': imageUri,
-    if (command.isNotDefault) 'command': [for (final i in command) i],
-    if (args.isNotDefault) 'args': [for (final i in args) i],
+    if (command.isNotDefault) 'command': command,
+    if (args.isNotDefault) 'args': args,
     if (env.isNotDefault) 'env': [for (final i in env) i.toJson()],
   };
 
@@ -20064,9 +20050,9 @@ final class PythonPackageSpec extends ProtoMessage {
   @override
   Object toJson() => {
     'executorImageUri': executorImageUri,
-    'packageUris': [for (final i in packageUris) i],
+    'packageUris': packageUris,
     'pythonModule': pythonModule,
-    if (args.isNotDefault) 'args': [for (final i in args) i],
+    if (args.isNotDefault) 'args': args,
     if (env.isNotDefault) 'env': [for (final i in env) i.toJson()],
   };
 
@@ -20306,8 +20292,7 @@ final class DataItem extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (payload case final payload?) 'payload': payload.toJson(),
     if (etag.isNotDefault) 'etag': etag,
     if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
@@ -20538,11 +20523,8 @@ final class DataLabelingJob extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     'displayName': displayName,
-    'datasets': [for (final i in datasets) i],
-    if (annotationLabels.isNotDefault)
-      'annotationLabels': {
-        for (final e in annotationLabels.entries) e.key: e.value,
-      },
+    'datasets': datasets,
+    if (annotationLabels.isNotDefault) 'annotationLabels': annotationLabels,
     'labelerCount': labelerCount,
     'instructionUri': instructionUri,
     'inputsSchemaUri': inputsSchemaUri,
@@ -20554,10 +20536,8 @@ final class DataLabelingJob extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (error case final error?) 'error': error.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
-    if (specialistPools.isNotDefault)
-      'specialistPools': [for (final i in specialistPools) i],
+    if (labels.isNotDefault) 'labels': labels,
+    if (specialistPools.isNotDefault) 'specialistPools': specialistPools,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (activeLearningConfig case final activeLearningConfig?)
@@ -20974,8 +20954,7 @@ final class Dataset extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (savedQueries.isNotDefault)
       'savedQueries': [for (final i in savedQueries) i.toJson()],
     if (encryptionSpec case final encryptionSpec?)
@@ -21087,14 +21066,8 @@ final class ImportDataConfig extends ProtoMessage {
   @override
   Object toJson() => {
     if (gcsSource case final gcsSource?) 'gcsSource': gcsSource.toJson(),
-    if (dataItemLabels.isNotDefault)
-      'dataItemLabels': {
-        for (final e in dataItemLabels.entries) e.key: e.value,
-      },
-    if (annotationLabels.isNotDefault)
-      'annotationLabels': {
-        for (final e in annotationLabels.entries) e.key: e.value,
-      },
+    if (dataItemLabels.isNotDefault) 'dataItemLabels': dataItemLabels,
+    if (annotationLabels.isNotDefault) 'annotationLabels': annotationLabels,
     'importSchemaUri': importSchemaUri,
   };
 
@@ -21793,8 +21766,7 @@ final class ExportDataResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (exportedFiles.isNotDefault)
-      'exportedFiles': [for (final i in exportedFiles) i],
+    if (exportedFiles.isNotDefault) 'exportedFiles': exportedFiles,
   };
 
   @override
@@ -22508,8 +22480,7 @@ final class SearchDataItemsRequest extends ProtoMessage {
     if (dataLabelingJob.isNotDefault) 'dataLabelingJob': dataLabelingJob,
     if (dataItemFilter.isNotDefault) 'dataItemFilter': dataItemFilter,
     if (annotationsFilter.isNotDefault) 'annotationsFilter': annotationsFilter,
-    if (annotationFilters.isNotDefault)
-      'annotationFilters': [for (final i in annotationFilters) i],
+    if (annotationFilters.isNotDefault) 'annotationFilters': annotationFilters,
     if (fieldMask case final fieldMask?) 'fieldMask': fieldMask.toJson(),
     if (annotationsLimit.isNotDefault) 'annotationsLimit': annotationsLimit,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
@@ -23471,9 +23442,7 @@ final class AssessDataResponse_TuningValidationAssessmentResult
   }
 
   @override
-  Object toJson() => {
-    if (errors.isNotDefault) 'errors': [for (final i in errors) i],
-  };
+  Object toJson() => {if (errors.isNotDefault) 'errors': errors};
 
   @override
   String toString() => 'TuningValidationAssessmentResult()';
@@ -23670,7 +23639,7 @@ final class GeminiTemplateConfig extends ProtoMessage {
   Object toJson() => {
     if (geminiExample case final geminiExample?)
       'geminiExample': geminiExample.toJson(),
-    'fieldMapping': {for (final e in fieldMapping.entries) e.key: e.value},
+    'fieldMapping': fieldMapping,
   };
 
   @override
@@ -23858,8 +23827,7 @@ final class GeminiExample extends ProtoMessage {
     if (cachedContent.isNotDefault) 'cachedContent': cachedContent,
     if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
     if (toolConfig case final toolConfig?) 'toolConfig': toolConfig.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
     if (generationConfig case final generationConfig?)
@@ -25150,11 +25118,9 @@ final class Endpoint extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     if (deployedModels.isNotDefault)
       'deployedModels': [for (final i in deployedModels) i.toJson()],
-    if (trafficSplit.isNotDefault)
-      'trafficSplit': {for (final e in trafficSplit.entries) e.key: e.value},
+    if (trafficSplit.isNotDefault) 'trafficSplit': trafficSplit,
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (encryptionSpec case final encryptionSpec?)
@@ -25483,8 +25449,7 @@ final class DeployedModel extends ProtoMessage {
     if (rolloutOptions case final rolloutOptions?)
       'rolloutOptions': rolloutOptions.toJson(),
     if (status case final status?) 'status': status.toJson(),
-    if (systemLabels.isNotDefault)
-      'systemLabels': {for (final e in systemLabels.entries) e.key: e.value},
+    if (systemLabels.isNotDefault) 'systemLabels': systemLabels,
     if (checkpointId.isNotDefault) 'checkpointId': checkpointId,
     if (speculativeDecodingSpec case final speculativeDecodingSpec?)
       'speculativeDecodingSpec': speculativeDecodingSpec.toJson(),
@@ -26600,8 +26565,7 @@ final class DeployModelRequest extends ProtoMessage {
     'endpoint': endpoint,
     if (deployedModel case final deployedModel?)
       'deployedModel': deployedModel.toJson(),
-    if (trafficSplit.isNotDefault)
-      'trafficSplit': {for (final e in trafficSplit.entries) e.key: e.value},
+    if (trafficSplit.isNotDefault) 'trafficSplit': trafficSplit,
   };
 
   @override
@@ -26742,8 +26706,7 @@ final class UndeployModelRequest extends ProtoMessage {
   Object toJson() => {
     'endpoint': endpoint,
     'deployedModelId': deployedModelId,
-    if (trafficSplit.isNotDefault)
-      'trafficSplit': {for (final e in trafficSplit.entries) e.key: e.value},
+    if (trafficSplit.isNotDefault) 'trafficSplit': trafficSplit,
   };
 
   @override
@@ -27186,8 +27149,7 @@ final class EntityType extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (etag.isNotDefault) 'etag': etag,
     if (monitoringConfig case final monitoringConfig?)
       'monitoringConfig': monitoringConfig.toJson(),
@@ -32652,9 +32614,7 @@ final class RawOutput extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (rawOutput.isNotDefault) 'rawOutput': [for (final i in rawOutput) i],
-  };
+  Object toJson() => {if (rawOutput.isNotDefault) 'rawOutput': rawOutput};
 
   @override
   String toString() => 'RawOutput()';
@@ -35478,8 +35438,7 @@ final class Event extends ProtoMessage {
     if (execution.isNotDefault) 'execution': execution,
     if (eventTime case final eventTime?) 'eventTime': eventTime.toJson(),
     'type': type.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -35871,7 +35830,7 @@ final class StoredContentsExampleFilter extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (searchKeys.isNotDefault) 'searchKeys': [for (final i in searchKeys) i],
+    if (searchKeys.isNotDefault) 'searchKeys': searchKeys,
     if (functionNames case final functionNames?)
       'functionNames': functionNames.toJson(),
   };
@@ -36015,7 +35974,7 @@ final class ExamplesArrayFilter extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'values': [for (final i in values) i],
+    'values': values,
     'arrayOperator': arrayOperator.toJson(),
   };
 
@@ -36679,7 +36638,7 @@ final class RemoveExamplesRequest extends ProtoMessage {
     if (storedContentsExampleFilter case final storedContentsExampleFilter?)
       'storedContentsExampleFilter': storedContentsExampleFilter.toJson(),
     'exampleStore': exampleStore,
-    if (exampleIds.isNotDefault) 'exampleIds': [for (final i in exampleIds) i],
+    if (exampleIds.isNotDefault) 'exampleIds': exampleIds,
   };
 
   @override
@@ -36713,9 +36672,7 @@ final class RemoveExamplesResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (exampleIds.isNotDefault) 'exampleIds': [for (final i in exampleIds) i],
-  };
+  Object toJson() => {if (exampleIds.isNotDefault) 'exampleIds': exampleIds};
 
   @override
   String toString() => 'RemoveExamplesResponse()';
@@ -36929,7 +36886,7 @@ final class FetchExamplesRequest extends ProtoMessage {
     'exampleStore': exampleStore,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
-    if (exampleIds.isNotDefault) 'exampleIds': [for (final i in exampleIds) i],
+    if (exampleIds.isNotDefault) 'exampleIds': exampleIds,
   };
 
   @override
@@ -37122,8 +37079,7 @@ final class Execution extends ProtoMessage {
     if (displayName.isNotDefault) 'displayName': displayName,
     if (state.isNotDefault) 'state': state.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (schemaTitle.isNotDefault) 'schemaTitle': schemaTitle,
@@ -37475,8 +37431,7 @@ final class Attribution extends ProtoMessage {
       'instanceOutputValue': encodeDouble(instanceOutputValue),
     if (featureAttributions case final featureAttributions?)
       'featureAttributions': featureAttributions.toJson(),
-    if (outputIndex.isNotDefault)
-      'outputIndex': [for (final i in outputIndex) i],
+    if (outputIndex.isNotDefault) 'outputIndex': outputIndex,
     if (outputDisplayName.isNotDefault) 'outputDisplayName': outputDisplayName,
     if (approximationError.isNotDefault)
       'approximationError': encodeDouble(approximationError),
@@ -38615,8 +38570,8 @@ final class ExamplesRestrictionsNamespace extends ProtoMessage {
   @override
   Object toJson() => {
     if (namespaceName.isNotDefault) 'namespaceName': namespaceName,
-    if (allow.isNotDefault) 'allow': [for (final i in allow) i],
-    if (deny.isNotDefault) 'deny': [for (final i in deny) i],
+    if (allow.isNotDefault) 'allow': allow,
+    if (deny.isNotDefault) 'deny': deny,
   };
 
   @override
@@ -38917,7 +38872,7 @@ final class ExplanationMetadata_InputMetadata extends ProtoMessage {
     if (denseShapeTensorName.isNotDefault)
       'denseShapeTensorName': denseShapeTensorName,
     if (indexFeatureMapping.isNotDefault)
-      'indexFeatureMapping': [for (final i in indexFeatureMapping) i],
+      'indexFeatureMapping': indexFeatureMapping,
     if (encodedTensorName.isNotDefault) 'encodedTensorName': encodedTensorName,
     if (encodedBaselines.isNotDefault)
       'encodedBaselines': [for (final i in encodedBaselines) i.toJson()],
@@ -41079,8 +41034,7 @@ final class Feature extends ProtoMessage {
     if (valueType.isNotDefault) 'valueType': valueType.toJson(),
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (etag.isNotDefault) 'etag': etag,
     if (monitoringConfig case final monitoringConfig?)
       'monitoringConfig': monitoringConfig.toJson(),
@@ -41370,8 +41324,7 @@ final class FeatureGroup extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (description.isNotDefault) 'description': description,
     if (serviceAgentType.isNotDefault)
       'serviceAgentType': serviceAgentType.toJson(),
@@ -41467,8 +41420,7 @@ final class FeatureGroup_BigQuery extends ProtoMessage {
   Object toJson() => {
     if (bigQuerySource case final bigQuerySource?)
       'bigQuerySource': bigQuerySource.toJson(),
-    if (entityIdColumns.isNotDefault)
-      'entityIdColumns': [for (final i in entityIdColumns) i],
+    if (entityIdColumns.isNotDefault) 'entityIdColumns': entityIdColumns,
     if (staticDataSource.isNotDefault) 'staticDataSource': staticDataSource,
     if (timeSeries case final timeSeries?) 'timeSeries': timeSeries.toJson(),
     if (dense.isNotDefault) 'dense': dense,
@@ -41654,8 +41606,7 @@ final class FeatureMonitor extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (description.isNotDefault) 'description': description,
     if (scheduleConfig case final scheduleConfig?)
       'scheduleConfig': scheduleConfig.toJson(),
@@ -42082,8 +42033,7 @@ final class FeatureMonitorJob extends ProtoMessage {
     if (finalStatus case final finalStatus?)
       'finalStatus': finalStatus.toJson(),
     if (jobSummary case final jobSummary?) 'jobSummary': jobSummary.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (description.isNotDefault) 'description': description,
     if (driftBaseFeatureMonitorJobId.isNotDefault)
       'driftBaseFeatureMonitorJobId': driftBaseFeatureMonitorJobId.toString(),
@@ -42476,8 +42426,7 @@ final class FeatureOnlineStore extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (state.isNotDefault) 'state': state.toJson(),
     if (dedicatedServingEndpoint case final dedicatedServingEndpoint?)
       'dedicatedServingEndpoint': dedicatedServingEndpoint.toJson(),
@@ -43992,9 +43941,7 @@ final class FeatureViewDataKey_CompositeKey extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (parts.isNotDefault) 'parts': [for (final i in parts) i],
-  };
+  Object toJson() => {if (parts.isNotDefault) 'parts': parts};
 
   @override
   String toString() => 'CompositeKey()';
@@ -44566,9 +44513,8 @@ final class NearestNeighborQuery_StringFilter extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (allowTokens.isNotDefault)
-      'allowTokens': [for (final i in allowTokens) i],
-    if (denyTokens.isNotDefault) 'denyTokens': [for (final i in denyTokens) i],
+    if (allowTokens.isNotDefault) 'allowTokens': allowTokens,
+    if (denyTokens.isNotDefault) 'denyTokens': denyTokens,
   };
 
   @override
@@ -46476,9 +46422,7 @@ final class IdMatcher extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'ids': [for (final i in ids) i],
-  };
+  Object toJson() => {'ids': ids};
 
   @override
   String toString() => 'IdMatcher()';
@@ -46709,8 +46653,7 @@ final class FeatureView extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (syncConfig case final syncConfig?) 'syncConfig': syncConfig.toJson(),
     if (vectorSearchConfig case final vectorSearchConfig?)
       'vectorSearchConfig': vectorSearchConfig.toJson(),
@@ -46772,10 +46715,7 @@ final class FeatureView_BigQuerySource extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'uri': uri,
-    'entityIdColumns': [for (final i in entityIdColumns) i],
-  };
+  Object toJson() => {'uri': uri, 'entityIdColumns': entityIdColumns};
 
   @override
   String toString() {
@@ -46919,8 +46859,7 @@ final class FeatureView_VectorSearchConfig extends ProtoMessage {
     if (bruteForceConfig case final bruteForceConfig?)
       'bruteForceConfig': bruteForceConfig.toJson(),
     if (embeddingColumn.isNotDefault) 'embeddingColumn': embeddingColumn,
-    if (filterColumns.isNotDefault)
-      'filterColumns': [for (final i in filterColumns) i],
+    if (filterColumns.isNotDefault) 'filterColumns': filterColumns,
     if (crowdingColumn.isNotDefault) 'crowdingColumn': crowdingColumn,
     if (embeddingDimension case final embeddingDimension?)
       'embeddingDimension': embeddingDimension,
@@ -47132,8 +47071,7 @@ final class FeatureView_IndexConfig extends ProtoMessage {
     if (bruteForceConfig case final bruteForceConfig?)
       'bruteForceConfig': bruteForceConfig.toJson(),
     if (embeddingColumn.isNotDefault) 'embeddingColumn': embeddingColumn,
-    if (filterColumns.isNotDefault)
-      'filterColumns': [for (final i in filterColumns) i],
+    if (filterColumns.isNotDefault) 'filterColumns': filterColumns,
     if (crowdingColumn.isNotDefault) 'crowdingColumn': crowdingColumn,
     if (embeddingDimension case final embeddingDimension?)
       'embeddingDimension': embeddingDimension,
@@ -47338,7 +47276,7 @@ final class FeatureView_FeatureRegistrySource_FeatureGroup
   @override
   Object toJson() => {
     'featureGroupId': featureGroupId,
-    'featureIds': [for (final i in featureIds) i],
+    'featureIds': featureIds,
   };
 
   @override
@@ -47795,8 +47733,7 @@ final class Featurestore extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (onlineServingConfig case final onlineServingConfig?)
       'onlineServingConfig': onlineServingConfig.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
@@ -48796,7 +48733,7 @@ final class StreamingReadFeatureValuesRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'entityType': entityType,
-    'entityIds': [for (final i in entityIds) i],
+    'entityIds': entityIds,
     if (featureSelector case final featureSelector?)
       'featureSelector': featureSelector.toJson(),
   };
@@ -51483,7 +51420,7 @@ final class ImportFeatureValuesOperationMetadata extends ProtoMessage {
       'importedEntityCount': importedEntityCount.toString(),
     if (importedFeatureValueCount.isNotDefault)
       'importedFeatureValueCount': importedFeatureValueCount.toString(),
-    if (sourceUris.isNotDefault) 'sourceUris': [for (final i in sourceUris) i],
+    if (sourceUris.isNotDefault) 'sourceUris': sourceUris,
     if (invalidRowCount.isNotDefault)
       'invalidRowCount': invalidRowCount.toString(),
     if (timestampOutsideRetentionRowsCount.isNotDefault)
@@ -52870,8 +52807,7 @@ final class HyperparameterTuningJob extends ProtoMessage {
     if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (error case final error?) 'error': error.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
@@ -53073,8 +53009,7 @@ final class Index extends ProtoMessage {
     if (deployedIndexes.isNotDefault)
       'deployedIndexes': [for (final i in deployedIndexes) i.toJson()],
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (indexStats case final indexStats?) 'indexStats': indexStats.toJson(),
@@ -53327,8 +53262,8 @@ final class IndexDatapoint_Restriction extends ProtoMessage {
   @override
   Object toJson() => {
     if (namespace.isNotDefault) 'namespace': namespace,
-    if (allowList.isNotDefault) 'allowList': [for (final i in allowList) i],
-    if (denyList.isNotDefault) 'denyList': [for (final i in denyList) i],
+    if (allowList.isNotDefault) 'allowList': allowList,
+    if (denyList.isNotDefault) 'denyList': denyList,
   };
 
   @override
@@ -53763,8 +53698,7 @@ final class IndexEndpoint extends ProtoMessage {
     if (deployedIndexes.isNotDefault)
       'deployedIndexes': [for (final i in deployedIndexes) i.toJson()],
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (network.isNotDefault) 'network': network,
@@ -54040,8 +53974,7 @@ final class DeployedIndex extends ProtoMessage {
       'enableDatapointUpsertLogging': enableDatapointUpsertLogging,
     if (deployedIndexAuthConfig case final deployedIndexAuthConfig?)
       'deployedIndexAuthConfig': deployedIndexAuthConfig.toJson(),
-    if (reservedIpRanges.isNotDefault)
-      'reservedIpRanges': [for (final i in reservedIpRanges) i],
+    if (reservedIpRanges.isNotDefault) 'reservedIpRanges': reservedIpRanges,
     if (deploymentGroup.isNotDefault) 'deploymentGroup': deploymentGroup,
     if (pscAutomationConfigs.isNotDefault)
       'pscAutomationConfigs': [
@@ -54135,9 +54068,8 @@ final class DeployedIndexAuthConfig_AuthProvider extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (audiences.isNotDefault) 'audiences': [for (final i in audiences) i],
-    if (allowedIssuers.isNotDefault)
-      'allowedIssuers': [for (final i in allowedIssuers) i],
+    if (audiences.isNotDefault) 'audiences': audiences,
+    if (allowedIssuers.isNotDefault) 'allowedIssuers': allowedIssuers,
   };
 
   @override
@@ -55408,8 +55340,7 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping
       'restricts': [for (final i in restricts) i.toJson()],
     if (numericRestricts.isNotDefault)
       'numericRestricts': [for (final i in numericRestricts) i.toJson()],
-    if (metadataColumns.isNotDefault)
-      'metadataColumns': [for (final i in metadataColumns) i],
+    if (metadataColumns.isNotDefault) 'metadataColumns': metadataColumns,
   };
 
   @override
@@ -55468,9 +55399,8 @@ final class ImportIndexRequest_ConnectorConfig_DatapointFieldMapping_Restrict
   @override
   Object toJson() => {
     'namespace': namespace,
-    if (allowColumn.isNotDefault)
-      'allowColumn': [for (final i in allowColumn) i],
-    if (denyColumn.isNotDefault) 'denyColumn': [for (final i in denyColumn) i],
+    if (allowColumn.isNotDefault) 'allowColumn': allowColumn,
+    if (denyColumn.isNotDefault) 'denyColumn': denyColumn,
   };
 
   @override
@@ -55824,8 +55754,7 @@ final class RemoveDatapointsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'index': index,
-    if (datapointIds.isNotDefault)
-      'datapointIds': [for (final i in datapointIds) i],
+    if (datapointIds.isNotDefault) 'datapointIds': datapointIds,
   };
 
   @override
@@ -56325,9 +56254,7 @@ final class GcsSource extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'uris': [for (final i in uris) i],
-  };
+  Object toJson() => {'uris': uris};
 
   @override
   String toString() => 'GcsSource()';
@@ -56892,9 +56819,8 @@ final class JiraSource_JiraQueries extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (projects.isNotDefault) 'projects': [for (final i in projects) i],
-    if (customQueries.isNotDefault)
-      'customQueries': [for (final i in customQueries) i],
+    if (projects.isNotDefault) 'projects': projects,
+    if (customQueries.isNotDefault) 'customQueries': customQueries,
     'email': email,
     'serverUri': serverUri,
     if (apiKeyConfig case final apiKeyConfig?)
@@ -60334,9 +60260,7 @@ final class AutoscalingMetricSpec extends ProtoMessage {
     'metricName': metricName,
     if (target.isNotDefault) 'target': target,
     if (monitoredResourceLabels.isNotDefault)
-      'monitoredResourceLabels': {
-        for (final e in monitoredResourceLabels.entries) e.key: e.value,
-      },
+      'monitoredResourceLabels': monitoredResourceLabels,
   };
 
   @override
@@ -60862,7 +60786,7 @@ final class ReadIndexDatapointsRequest extends ProtoMessage {
   Object toJson() => {
     'indexEndpoint': indexEndpoint,
     if (deployedIndexId.isNotDefault) 'deployedIndexId': deployedIndexId,
-    if (ids.isNotDefault) 'ids': [for (final i in ids) i],
+    if (ids.isNotDefault) 'ids': ids,
   };
 
   @override
@@ -61015,7 +60939,7 @@ final class Memory extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     'fact': fact,
-    'scope': {for (final e in scope.entries) e.key: e.value},
+    'scope': scope,
   };
 
   @override
@@ -61494,8 +61418,7 @@ final class GenerateMemoriesRequest extends ProtoMessage {
     'parent': parent,
     if (disableConsolidation.isNotDefault)
       'disableConsolidation': disableConsolidation,
-    if (scope.isNotDefault)
-      'scope': {for (final e in scope.entries) e.key: e.value},
+    if (scope.isNotDefault) 'scope': scope,
   };
 
   @override
@@ -61925,7 +61848,7 @@ final class RetrieveMemoriesRequest extends ProtoMessage {
     if (simpleRetrievalParams case final simpleRetrievalParams?)
       'simpleRetrievalParams': simpleRetrievalParams.toJson(),
     'parent': parent,
-    'scope': {for (final e in scope.entries) e.key: e.value},
+    'scope': scope,
   };
 
   @override
@@ -63036,8 +62959,7 @@ final class PurgeArtifactsResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (purgeCount.isNotDefault) 'purgeCount': purgeCount.toString(),
-    if (purgeSample.isNotDefault)
-      'purgeSample': [for (final i in purgeSample) i],
+    if (purgeSample.isNotDefault) 'purgeSample': purgeSample,
   };
 
   @override
@@ -63555,8 +63477,7 @@ final class PurgeContextsResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (purgeCount.isNotDefault) 'purgeCount': purgeCount.toString(),
-    if (purgeSample.isNotDefault)
-      'purgeSample': [for (final i in purgeSample) i],
+    if (purgeSample.isNotDefault) 'purgeSample': purgeSample,
   };
 
   @override
@@ -63650,8 +63571,8 @@ final class AddContextArtifactsAndExecutionsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'context': context,
-    if (artifacts.isNotDefault) 'artifacts': [for (final i in artifacts) i],
-    if (executions.isNotDefault) 'executions': [for (final i in executions) i],
+    if (artifacts.isNotDefault) 'artifacts': artifacts,
+    if (executions.isNotDefault) 'executions': executions,
   };
 
   @override
@@ -63717,8 +63638,7 @@ final class AddContextChildrenRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'context': context,
-    if (childContexts.isNotDefault)
-      'childContexts': [for (final i in childContexts) i],
+    if (childContexts.isNotDefault) 'childContexts': childContexts,
   };
 
   @override
@@ -63784,8 +63704,7 @@ final class RemoveContextChildrenRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'context': context,
-    if (childContexts.isNotDefault)
-      'childContexts': [for (final i in childContexts) i],
+    if (childContexts.isNotDefault) 'childContexts': childContexts,
   };
 
   @override
@@ -64317,8 +64236,7 @@ final class PurgeExecutionsResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (purgeCount.isNotDefault) 'purgeCount': purgeCount.toString(),
-    if (purgeSample.isNotDefault)
-      'purgeSample': [for (final i in purgeSample) i],
+    if (purgeSample.isNotDefault) 'purgeSample': purgeSample,
   };
 
   @override
@@ -66561,8 +66479,7 @@ final class Model extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (versionId.isNotDefault) 'versionId': versionId,
-    if (versionAliases.isNotDefault)
-      'versionAliases': [for (final i in versionAliases) i],
+    if (versionAliases.isNotDefault) 'versionAliases': versionAliases,
     if (versionCreateTime case final versionCreateTime?)
       'versionCreateTime': versionCreateTime.toJson(),
     if (versionUpdateTime case final versionUpdateTime?)
@@ -66590,13 +66507,9 @@ final class Model extends ProtoMessage {
         for (final i in supportedDeploymentResourcesTypes) i.toJson(),
       ],
     if (supportedInputStorageFormats.isNotDefault)
-      'supportedInputStorageFormats': [
-        for (final i in supportedInputStorageFormats) i,
-      ],
+      'supportedInputStorageFormats': supportedInputStorageFormats,
     if (supportedOutputStorageFormats.isNotDefault)
-      'supportedOutputStorageFormats': [
-        for (final i in supportedOutputStorageFormats) i,
-      ],
+      'supportedOutputStorageFormats': supportedOutputStorageFormats,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (deployedModels.isNotDefault)
@@ -66604,8 +66517,7 @@ final class Model extends ProtoMessage {
     if (explanationSpec case final explanationSpec?)
       'explanationSpec': explanationSpec.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (modelSourceInfo case final modelSourceInfo?)
@@ -67422,8 +67334,8 @@ final class ModelContainerSpec extends ProtoMessage {
   @override
   Object toJson() => {
     'imageUri': imageUri,
-    if (command.isNotDefault) 'command': [for (final i in command) i],
-    if (args.isNotDefault) 'args': [for (final i in args) i],
+    if (command.isNotDefault) 'command': command,
+    if (args.isNotDefault) 'args': args,
     if (env.isNotDefault) 'env': [for (final i in env) i.toJson()],
     if (ports.isNotDefault) 'ports': [for (final i in ports) i.toJson()],
     if (predictRoute.isNotDefault) 'predictRoute': predictRoute,
@@ -67740,9 +67652,7 @@ final class Probe_ExecAction extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (command.isNotDefault) 'command': [for (final i in command) i],
-  };
+  Object toJson() => {if (command.isNotDefault) 'command': command};
 
   @override
   String toString() => 'ExecAction()';
@@ -68335,8 +68245,7 @@ final class ModelDeploymentMonitoringJob extends ProtoMessage {
     if (bigqueryTables.isNotDefault)
       'bigqueryTables': [for (final i in bigqueryTables) i.toJson()],
     if (logTtl case final logTtl?) 'logTtl': logTtl.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (nextScheduleTime case final nextScheduleTime?)
@@ -68956,8 +68865,7 @@ final class ModelEvaluation extends ProtoMessage {
     if (metricsSchemaUri.isNotDefault) 'metricsSchemaUri': metricsSchemaUri,
     if (metrics case final metrics?) 'metrics': metrics.toJson(),
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
-    if (sliceDimensions.isNotDefault)
-      'sliceDimensions': [for (final i in sliceDimensions) i],
+    if (sliceDimensions.isNotDefault) 'sliceDimensions': sliceDimensions,
     if (modelExplanation case final modelExplanation?)
       'modelExplanation': modelExplanation.toJson(),
     if (explanationSpecs.isNotDefault)
@@ -69082,7 +68990,7 @@ final class ModelEvaluation_BiasConfig extends ProtoMessage {
   @override
   Object toJson() => {
     if (biasSlices case final biasSlices?) 'biasSlices': biasSlices.toJson(),
-    if (labels.isNotDefault) 'labels': [for (final i in labels) i],
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -70145,8 +70053,7 @@ final class DeployRequest_DeployConfig extends ProtoMessage {
     if (dedicatedResources case final dedicatedResources?)
       'dedicatedResources': dedicatedResources.toJson(),
     if (fastTryoutEnabled.isNotDefault) 'fastTryoutEnabled': fastTryoutEnabled,
-    if (systemLabels.isNotDefault)
-      'systemLabels': {for (final e in systemLabels.entries) e.key: e.value},
+    if (systemLabels.isNotDefault) 'systemLabels': systemLabels,
   };
 
   @override
@@ -71887,7 +71794,7 @@ final class ModelMonitoringAlertConfig extends ProtoMessage {
       'emailAlertConfig': emailAlertConfig.toJson(),
     if (enableLogging.isNotDefault) 'enableLogging': enableLogging,
     if (notificationChannels.isNotDefault)
-      'notificationChannels': [for (final i in notificationChannels) i],
+      'notificationChannels': notificationChannels,
   };
 
   @override
@@ -71920,9 +71827,7 @@ final class ModelMonitoringAlertConfig_EmailAlertConfig extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (userEmails.isNotDefault) 'userEmails': [for (final i in userEmails) i],
-  };
+  Object toJson() => {if (userEmails.isNotDefault) 'userEmails': userEmails};
 
   @override
   String toString() => 'EmailAlertConfig()';
@@ -73655,7 +73560,7 @@ final class ModelMonitoringObjectiveSpec_DataDriftSpec extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (features.isNotDefault) 'features': [for (final i in features) i],
+    if (features.isNotDefault) 'features': features,
     if (categoricalMetricType.isNotDefault)
       'categoricalMetricType': categoricalMetricType,
     if (numericMetricType.isNotDefault) 'numericMetricType': numericMetricType,
@@ -73747,7 +73652,7 @@ final class ModelMonitoringObjectiveSpec_FeatureAttributionSpec
 
   @override
   Object toJson() => {
-    if (features.isNotDefault) 'features': [for (final i in features) i],
+    if (features.isNotDefault) 'features': features,
     if (defaultAlertCondition case final defaultAlertCondition?)
       'defaultAlertCondition': defaultAlertCondition.toJson(),
     if (featureAlertConditions.isNotDefault)
@@ -74212,9 +74117,7 @@ final class ModelMonitoringInput_VertexEndpointLogs extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (endpoints.isNotDefault) 'endpoints': [for (final i in endpoints) i],
-  };
+  Object toJson() => {if (endpoints.isNotDefault) 'endpoints': endpoints};
 
   @override
   String toString() => 'VertexEndpointLogs()';
@@ -74364,9 +74267,7 @@ final class ModelMonitoringNotificationSpec_EmailConfig extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (userEmails.isNotDefault) 'userEmails': [for (final i in userEmails) i],
-  };
+  Object toJson() => {if (userEmails.isNotDefault) 'userEmails': userEmails};
 
   @override
   String toString() => 'EmailConfig()';
@@ -75770,10 +75671,7 @@ final class MergeVersionAliasesRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'name': name,
-    'versionAliases': [for (final i in versionAliases) i],
-  };
+  Object toJson() => {'name': name, 'versionAliases': versionAliases};
 
   @override
   String toString() {
@@ -76321,9 +76219,7 @@ final class BatchImportModelEvaluationSlicesResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (importedModelEvaluationSlices.isNotDefault)
-      'importedModelEvaluationSlices': [
-        for (final i in importedModelEvaluationSlices) i,
-      ],
+      'importedModelEvaluationSlices': importedModelEvaluationSlices,
   };
 
   @override
@@ -77202,8 +77098,7 @@ final class NasJob extends ProtoMessage {
     if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (error case final error?) 'error': error.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (enableRestrictedImageTraining.isNotDefault)
@@ -78199,8 +78094,7 @@ final class NotebookExecutionJob extends ProtoMessage {
     if (status case final status?) 'status': status.toJson(),
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (kernelName.isNotDefault) 'kernelName': kernelName,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
@@ -78690,8 +78584,7 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
       'networkSpec': networkSpec.toJson(),
     if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
     if (etag.isNotDefault) 'etag': etag,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (idleShutdownConfig case final idleShutdownConfig?)
       'idleShutdownConfig': idleShutdownConfig.toJson(),
     if (eucConfig case final eucConfig?) 'eucConfig': eucConfig.toJson(),
@@ -78701,8 +78594,7 @@ final class NotebookRuntimeTemplate extends ProtoMessage {
       'notebookRuntimeType': notebookRuntimeType.toJson(),
     if (shieldedVmConfig case final shieldedVmConfig?)
       'shieldedVmConfig': shieldedVmConfig.toJson(),
-    if (networkTags.isNotDefault)
-      'networkTags': [for (final i in networkTags) i],
+    if (networkTags.isNotDefault) 'networkTags': networkTags,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (softwareConfig case final softwareConfig?)
@@ -79013,8 +78905,7 @@ final class NotebookRuntime extends ProtoMessage {
     if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
     if (runtimeState.isNotDefault) 'runtimeState': runtimeState.toJson(),
     if (isUpgradable.isNotDefault) 'isUpgradable': isUpgradable,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (expirationTime case final expirationTime?)
       'expirationTime': expirationTime.toJson(),
     if (version.isNotDefault) 'version': version,
@@ -79031,8 +78922,7 @@ final class NotebookRuntime extends ProtoMessage {
     if (eucConfig case final eucConfig?) 'eucConfig': eucConfig.toJson(),
     if (shieldedVmConfig case final shieldedVmConfig?)
       'shieldedVmConfig': shieldedVmConfig.toJson(),
-    if (networkTags.isNotDefault)
-      'networkTags': [for (final i in networkTags) i],
+    if (networkTags.isNotDefault) 'networkTags': networkTags,
     if (softwareConfig case final softwareConfig?)
       'softwareConfig': softwareConfig.toJson(),
     if (encryptionSpec case final encryptionSpec?)
@@ -81020,14 +80910,13 @@ final class Schema extends ProtoMessage {
     if (items case final items?) 'items': items.toJson(),
     if (minItems.isNotDefault) 'minItems': minItems.toString(),
     if (maxItems.isNotDefault) 'maxItems': maxItems.toString(),
-    if (enum$.isNotDefault) 'enum': [for (final i in enum$) i],
+    if (enum$.isNotDefault) 'enum': enum$,
     if (properties.isNotDefault)
       'properties': {
         for (final e in properties.entries) e.key: e.value.toJson(),
       },
-    if (propertyOrdering.isNotDefault)
-      'propertyOrdering': [for (final i in propertyOrdering) i],
-    if (required.isNotDefault) 'required': [for (final i in required) i],
+    if (propertyOrdering.isNotDefault) 'propertyOrdering': propertyOrdering,
+    if (required.isNotDefault) 'required': required,
     if (minProperties.isNotDefault) 'minProperties': minProperties.toString(),
     if (maxProperties.isNotDefault) 'maxProperties': maxProperties.toString(),
     if (minimum.isNotDefault) 'minimum': encodeDouble(minimum),
@@ -81357,8 +81246,7 @@ final class PersistentResource extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (startTime case final startTime?) 'startTime': startTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (network.isNotDefault) 'network': network,
     if (pscInterfaceConfig case final pscInterfaceConfig?)
       'pscInterfaceConfig': pscInterfaceConfig.toJson(),
@@ -81368,8 +81256,7 @@ final class PersistentResource extends ProtoMessage {
       'resourceRuntimeSpec': resourceRuntimeSpec.toJson(),
     if (resourceRuntime case final resourceRuntime?)
       'resourceRuntime': resourceRuntime.toJson(),
-    if (reservedIpRanges.isNotDefault)
-      'reservedIpRanges': [for (final i in reservedIpRanges) i],
+    if (reservedIpRanges.isNotDefault) 'reservedIpRanges': reservedIpRanges,
     if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
     if (satisfiesPzi.isNotDefault) 'satisfiesPzi': satisfiesPzi,
   };
@@ -81712,9 +81599,7 @@ final class RaySpec extends ProtoMessage {
     if (nfsMounts.isNotDefault)
       'nfsMounts': [for (final i in nfsMounts) i.toJson()],
     if (resourcePoolImages.isNotDefault)
-      'resourcePoolImages': {
-        for (final e in resourcePoolImages.entries) e.key: e.value,
-      },
+      'resourcePoolImages': resourcePoolImages,
     if (headNodeResourcePoolId.isNotDefault)
       'headNodeResourcePoolId': headNodeResourcePoolId,
     if (rayMetricSpec case final rayMetricSpec?)
@@ -81778,8 +81663,7 @@ final class ResourceRuntime extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (accessUris.isNotDefault)
-      'accessUris': {for (final e in accessUris.entries) e.key: e.value},
+    if (accessUris.isNotDefault) 'accessUris': accessUris,
     if (notebookRuntimeTemplate.isNotDefault)
       'notebookRuntimeTemplate': notebookRuntimeTemplate,
   };
@@ -82656,16 +82540,14 @@ final class PipelineJob extends ProtoMessage {
     if (state.isNotDefault) 'state': state.toJson(),
     if (jobDetail case final jobDetail?) 'jobDetail': jobDetail.toJson(),
     if (error case final error?) 'error': error.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (runtimeConfig case final runtimeConfig?)
       'runtimeConfig': runtimeConfig.toJson(),
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
     if (serviceAccount.isNotDefault) 'serviceAccount': serviceAccount,
     if (network.isNotDefault) 'network': network,
-    if (reservedIpRanges.isNotDefault)
-      'reservedIpRanges': [for (final i in reservedIpRanges) i],
+    if (reservedIpRanges.isNotDefault) 'reservedIpRanges': reservedIpRanges,
     if (pscInterfaceConfig case final pscInterfaceConfig?)
       'pscInterfaceConfig': pscInterfaceConfig.toJson(),
     if (templateUri.isNotDefault) 'templateUri': templateUri,
@@ -83562,12 +83444,9 @@ final class PipelineTaskExecutorDetail_ContainerDetail extends ProtoMessage {
     if (mainJob.isNotDefault) 'mainJob': mainJob,
     if (preCachingCheckJob.isNotDefault)
       'preCachingCheckJob': preCachingCheckJob,
-    if (failedMainJobs.isNotDefault)
-      'failedMainJobs': [for (final i in failedMainJobs) i],
+    if (failedMainJobs.isNotDefault) 'failedMainJobs': failedMainJobs,
     if (failedPreCachingCheckJobs.isNotDefault)
-      'failedPreCachingCheckJobs': [
-        for (final i in failedPreCachingCheckJobs) i,
-      ],
+      'failedPreCachingCheckJobs': failedPreCachingCheckJobs,
   };
 
   @override
@@ -83617,7 +83496,7 @@ final class PipelineTaskExecutorDetail_CustomJobDetail extends ProtoMessage {
   @override
   Object toJson() => {
     if (job.isNotDefault) 'job': job,
-    if (failedJobs.isNotDefault) 'failedJobs': [for (final i in failedJobs) i],
+    if (failedJobs.isNotDefault) 'failedJobs': failedJobs,
   };
 
   @override
@@ -84470,10 +84349,7 @@ final class BatchDeletePipelineJobsRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    'names': [for (final i in names) i],
-  };
+  Object toJson() => {'parent': parent, 'names': names};
 
   @override
   String toString() {
@@ -84583,10 +84459,7 @@ final class BatchCancelPipelineJobsRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'parent': parent,
-    'names': [for (final i in names) i],
-  };
+  Object toJson() => {'parent': parent, 'names': names};
 
   @override
   String toString() {
@@ -84701,8 +84574,7 @@ final class PredictRequest extends ProtoMessage {
     'endpoint': endpoint,
     'instances': [for (final i in instances) i.toJson()],
     if (parameters case final parameters?) 'parameters': parameters.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -86089,8 +85961,7 @@ final class GenerateContentRequest extends ProtoMessage {
     if (cachedContent.isNotDefault) 'cachedContent': cachedContent,
     if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
     if (toolConfig case final toolConfig?) 'toolConfig': toolConfig.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
     if (modelArmorConfig case final modelArmorConfig?)
@@ -86570,12 +86441,11 @@ final class GenerateVideoResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (generatedSamples.isNotDefault)
-      'generatedSamples': [for (final i in generatedSamples) i],
+    if (generatedSamples.isNotDefault) 'generatedSamples': generatedSamples,
     if (raiMediaFilteredCount case final raiMediaFilteredCount?)
       'raiMediaFilteredCount': raiMediaFilteredCount,
     if (raiMediaFilteredReasons.isNotDefault)
-      'raiMediaFilteredReasons': [for (final i in raiMediaFilteredReasons) i],
+      'raiMediaFilteredReasons': raiMediaFilteredReasons,
   };
 
   @override
@@ -86699,7 +86569,7 @@ final class PublisherModel extends ProtoMessage {
     if (parent case final parent?) 'parent': parent.toJson(),
     if (supportedActions case final supportedActions?)
       'supportedActions': supportedActions.toJson(),
-    if (frameworks.isNotDefault) 'frameworks': [for (final i in frameworks) i],
+    if (frameworks.isNotDefault) 'frameworks': frameworks,
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     if (versionState.isNotDefault) 'versionState': versionState.toJson(),
     if (publisherModelTemplate.isNotDefault)
@@ -87476,8 +87346,7 @@ final class PublisherModel_CallToAction_Deploy_DeployMetadata
 
   @override
   Object toJson() => {
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (sampleRequest.isNotDefault) 'sampleRequest': sampleRequest,
   };
 
@@ -87512,8 +87381,7 @@ final class PublisherModel_CallToAction_DeployGke extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (gkeYamlConfigs.isNotDefault)
-      'gkeYamlConfigs': [for (final i in gkeYamlConfigs) i],
+    if (gkeYamlConfigs.isNotDefault) 'gkeYamlConfigs': gkeYamlConfigs,
   };
 
   @override
@@ -87914,10 +87782,7 @@ final class ReasoningEngineSpec_DeploymentSpec extends ProtoMessage {
       'pscInterfaceConfig': pscInterfaceConfig.toJson(),
     if (minInstances case final minInstances?) 'minInstances': minInstances,
     if (maxInstances case final maxInstances?) 'maxInstances': maxInstances,
-    if (resourceLimits.isNotDefault)
-      'resourceLimits': {
-        for (final e in resourceLimits.entries) e.key: e.value,
-      },
+    if (resourceLimits.isNotDefault) 'resourceLimits': resourceLimits,
     if (containerConcurrency case final containerConcurrency?)
       'containerConcurrency': containerConcurrency,
   };
@@ -88203,8 +88068,7 @@ final class ReasoningEngine extends ProtoMessage {
       'contextSpec': contextSpec.toJson(),
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -89035,7 +88899,7 @@ final class ReservationAffinity extends ProtoMessage {
   Object toJson() => {
     'reservationAffinityType': reservationAffinityType.toJson(),
     if (key.isNotDefault) 'key': key,
-    if (values.isNotDefault) 'values': [for (final i in values) i],
+    if (values.isNotDefault) 'values': values,
   };
 
   @override
@@ -90134,8 +89998,7 @@ final class PrivateServiceConnectConfig extends ProtoMessage {
   @override
   Object toJson() => {
     'enablePrivateServiceConnect': enablePrivateServiceConnect,
-    if (projectAllowlist.isNotDefault)
-      'projectAllowlist': [for (final i in projectAllowlist) i],
+    if (projectAllowlist.isNotDefault) 'projectAllowlist': projectAllowlist,
     if (pscAutomationConfigs.isNotDefault)
       'pscAutomationConfigs': [
         for (final i in pscAutomationConfigs) i.toJson(),
@@ -90641,7 +90504,7 @@ final class EventMetadata extends ProtoMessage {
     if (turnComplete.isNotDefault) 'turnComplete': turnComplete,
     if (interrupted.isNotDefault) 'interrupted': interrupted,
     if (longRunningToolIds.isNotDefault)
-      'longRunningToolIds': [for (final i in longRunningToolIds) i],
+      'longRunningToolIds': longRunningToolIds,
     if (branch.isNotDefault) 'branch': branch,
     if (customMetadata case final customMetadata?)
       'customMetadata': customMetadata.toJson(),
@@ -90742,8 +90605,7 @@ final class EventActions extends ProtoMessage {
   Object toJson() => {
     if (skipSummarization.isNotDefault) 'skipSummarization': skipSummarization,
     if (stateDelta case final stateDelta?) 'stateDelta': stateDelta.toJson(),
-    if (artifactDelta.isNotDefault)
-      'artifactDelta': {for (final e in artifactDelta.entries) e.key: e.value},
+    if (artifactDelta.isNotDefault) 'artifactDelta': artifactDelta,
     if (transferToAgent.isNotDefault) 'transferToAgent': transferToAgent,
     if (escalate.isNotDefault) 'escalate': escalate,
     if (requestedAuthConfigs case final requestedAuthConfigs?)
@@ -91364,11 +91226,11 @@ final class SpecialistPool extends ProtoMessage {
     if (specialistManagersCount.isNotDefault)
       'specialistManagersCount': specialistManagersCount,
     if (specialistManagerEmails.isNotDefault)
-      'specialistManagerEmails': [for (final i in specialistManagerEmails) i],
+      'specialistManagerEmails': specialistManagerEmails,
     if (pendingDataLabelingJobs.isNotDefault)
-      'pendingDataLabelingJobs': [for (final i in pendingDataLabelingJobs) i],
+      'pendingDataLabelingJobs': pendingDataLabelingJobs,
     if (specialistWorkerEmails.isNotDefault)
-      'specialistWorkerEmails': [for (final i in specialistWorkerEmails) i],
+      'specialistWorkerEmails': specialistWorkerEmails,
   };
 
   @override
@@ -92016,8 +91878,7 @@ final class Trial extends ProtoMessage {
     if (clientId.isNotDefault) 'clientId': clientId,
     if (infeasibleReason.isNotDefault) 'infeasibleReason': infeasibleReason,
     if (customJob.isNotDefault) 'customJob': customJob,
-    if (webAccessUris.isNotDefault)
-      'webAccessUris': {for (final e in webAccessUris.entries) e.key: e.value},
+    if (webAccessUris.isNotDefault) 'webAccessUris': webAccessUris,
   };
 
   @override
@@ -92769,7 +92630,7 @@ final class StudySpec_ParameterSpec_CategoricalValueSpec extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'values': [for (final i in values) i],
+    'values': values,
     if (defaultValue case final defaultValue?) 'defaultValue': defaultValue,
   };
 
@@ -93019,9 +92880,7 @@ final class StudySpec_ParameterSpec_ConditionalParameterSpec_CategoricalValueCon
   }
 
   @override
-  Object toJson() => {
-    'values': [for (final i in values) i],
-  };
+  Object toJson() => {'values': values};
 
   @override
   String toString() => 'CategoricalValueCondition()';
@@ -93414,8 +93273,7 @@ final class StudySpec_TransferLearningConfig extends ProtoMessage {
   Object toJson() => {
     if (disableTransferLearning.isNotDefault)
       'disableTransferLearning': disableTransferLearning,
-    if (priorStudyNames.isNotDefault)
-      'priorStudyNames': [for (final i in priorStudyNames) i],
+    if (priorStudyNames.isNotDefault) 'priorStudyNames': priorStudyNames,
   };
 
   @override
@@ -93917,8 +93775,7 @@ final class Tensorboard extends ProtoMessage {
     if (runCount.isNotDefault) 'runCount': runCount,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (etag.isNotDefault) 'etag': etag,
     if (isDefault.isNotDefault) 'isDefault': isDefault,
     if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
@@ -94333,8 +94190,7 @@ final class TensorboardExperiment extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (etag.isNotDefault) 'etag': etag,
     if (source.isNotDefault) 'source': source,
   };
@@ -94456,8 +94312,7 @@ final class TensorboardRun extends ProtoMessage {
     if (description.isNotDefault) 'description': description,
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (etag.isNotDefault) 'etag': etag,
   };
 
@@ -95554,7 +95409,7 @@ final class ReadTensorboardBlobDataRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'timeSeries': timeSeries,
-    if (blobIds.isNotDefault) 'blobIds': [for (final i in blobIds) i],
+    if (blobIds.isNotDefault) 'blobIds': blobIds,
   };
 
   @override
@@ -96292,10 +96147,7 @@ final class BatchReadTensorboardTimeSeriesDataRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    'tensorboard': tensorboard,
-    'timeSeries': [for (final i in timeSeries) i],
-  };
+  Object toJson() => {'tensorboard': tensorboard, 'timeSeries': timeSeries};
 
   @override
   String toString() {
@@ -97175,8 +97027,7 @@ final class Tool_GoogleSearch extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (excludeDomains.isNotDefault)
-      'excludeDomains': [for (final i in excludeDomains) i],
+    if (excludeDomains.isNotDefault) 'excludeDomains': excludeDomains,
     if (blockingConfidence case final blockingConfidence?)
       'blockingConfidence': blockingConfidence.toJson(),
   };
@@ -97991,7 +97842,7 @@ final class VertexRagStore extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (ragCorpora.isNotDefault) 'ragCorpora': [for (final i in ragCorpora) i],
+    if (ragCorpora.isNotDefault) 'ragCorpora': ragCorpora,
     if (ragResources.isNotDefault)
       'ragResources': [for (final i in ragResources) i.toJson()],
     if (similarityTopK case final similarityTopK?)
@@ -98050,7 +97901,7 @@ final class VertexRagStore_RagResource extends ProtoMessage {
   @override
   Object toJson() => {
     if (ragCorpus.isNotDefault) 'ragCorpus': ragCorpus,
-    if (ragFileIds.isNotDefault) 'ragFileIds': [for (final i in ragFileIds) i],
+    if (ragFileIds.isNotDefault) 'ragFileIds': ragFileIds,
   };
 
   @override
@@ -98294,8 +98145,7 @@ final class EnterpriseWebSearch extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (excludeDomains.isNotDefault)
-      'excludeDomains': [for (final i in excludeDomains) i],
+    if (excludeDomains.isNotDefault) 'excludeDomains': excludeDomains,
     if (blockingConfidence case final blockingConfidence?)
       'blockingConfidence': blockingConfidence.toJson(),
   };
@@ -98460,7 +98310,7 @@ final class FunctionCallingConfig extends ProtoMessage {
   Object toJson() => {
     if (mode.isNotDefault) 'mode': mode.toJson(),
     if (allowedFunctionNames.isNotDefault)
-      'allowedFunctionNames': [for (final i in allowedFunctionNames) i],
+      'allowedFunctionNames': allowedFunctionNames,
   };
 
   @override
@@ -99060,8 +98910,7 @@ final class TrainingPipeline extends ProtoMessage {
     if (startTime case final startTime?) 'startTime': startTime.toJson(),
     if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (encryptionSpec case final encryptionSpec?)
       'encryptionSpec': encryptionSpec.toJson(),
   };
@@ -99956,8 +99805,7 @@ final class TuningJob extends ProtoMessage {
     if (endTime case final endTime?) 'endTime': endTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (error case final error?) 'error': error.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (experiment.isNotDefault) 'experiment': experiment,
     if (tunedModel case final tunedModel?) 'tunedModel': tunedModel.toJson(),
     if (tuningDataStats case final tuningDataStats?)
@@ -100383,7 +100231,7 @@ final class SupervisedTuningDataStats extends ProtoMessage {
         for (final i in truncatedExampleIndices) i.toString(),
       ],
     if (droppedExampleReasons.isNotDefault)
-      'droppedExampleReasons': [for (final i in droppedExampleReasons) i],
+      'droppedExampleReasons': droppedExampleReasons,
   };
 
   @override
@@ -101717,9 +101565,7 @@ final class BoolArray extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (values.isNotDefault) 'values': [for (final i in values) i],
-  };
+  Object toJson() => {if (values.isNotDefault) 'values': values};
 
   @override
   String toString() => 'BoolArray()';
@@ -101808,9 +101654,7 @@ final class StringArray extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {
-    if (values.isNotDefault) 'values': [for (final i in values) i],
-  };
+  Object toJson() => {if (values.isNotDefault) 'values': values};
 
   @override
   String toString() => 'StringArray()';
@@ -101971,18 +101815,18 @@ final class Tensor extends ProtoMessage {
   Object toJson() => {
     if (dtype.isNotDefault) 'dtype': dtype.toJson(),
     if (shape.isNotDefault) 'shape': [for (final i in shape) i.toString()],
-    if (boolVal.isNotDefault) 'boolVal': [for (final i in boolVal) i],
-    if (stringVal.isNotDefault) 'stringVal': [for (final i in stringVal) i],
+    if (boolVal.isNotDefault) 'boolVal': boolVal,
+    if (stringVal.isNotDefault) 'stringVal': stringVal,
     if (bytesVal.isNotDefault)
       'bytesVal': [for (final i in bytesVal) encodeBytes(i)],
     if (floatVal.isNotDefault)
       'floatVal': [for (final i in floatVal) encodeDouble(i)],
     if (doubleVal.isNotDefault)
       'doubleVal': [for (final i in doubleVal) encodeDouble(i)],
-    if (intVal.isNotDefault) 'intVal': [for (final i in intVal) i],
+    if (intVal.isNotDefault) 'intVal': intVal,
     if (int64Val.isNotDefault)
       'int64Val': [for (final i in int64Val) i.toString()],
-    if (uintVal.isNotDefault) 'uintVal': [for (final i in uintVal) i],
+    if (uintVal.isNotDefault) 'uintVal': uintVal,
     if (uint64Val.isNotDefault)
       'uint64Val': [for (final i in uint64Val) i.toString()],
     if (listVal.isNotDefault) 'listVal': [for (final i in listVal) i.toJson()],
@@ -105827,7 +105671,7 @@ final class RetrieveContextsRequest_VertexRagStore extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (ragCorpora.isNotDefault) 'ragCorpora': [for (final i in ragCorpora) i],
+    if (ragCorpora.isNotDefault) 'ragCorpora': ragCorpora,
     if (ragResources.isNotDefault)
       'ragResources': [for (final i in ragResources) i.toJson()],
     if (vectorDistanceThreshold case final vectorDistanceThreshold?)
@@ -105884,7 +105728,7 @@ final class RetrieveContextsRequest_VertexRagStore_RagResource
   @override
   Object toJson() => {
     if (ragCorpus.isNotDefault) 'ragCorpus': ragCorpus,
-    if (ragFileIds.isNotDefault) 'ragFileIds': [for (final i in ragFileIds) i],
+    if (ragFileIds.isNotDefault) 'ragFileIds': ragFileIds,
   };
 
   @override
@@ -106520,8 +106364,7 @@ final class Claim extends ProtoMessage {
   Object toJson() => {
     if (startIndex case final startIndex?) 'startIndex': startIndex,
     if (endIndex case final endIndex?) 'endIndex': endIndex,
-    if (factIndexes.isNotDefault)
-      'factIndexes': [for (final i in factIndexes) i],
+    if (factIndexes.isNotDefault) 'factIndexes': factIndexes,
     if (score case final score?) 'score': encodeDouble(score),
   };
 

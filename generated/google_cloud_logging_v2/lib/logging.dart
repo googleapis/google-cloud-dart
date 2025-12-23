@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -1255,8 +1254,7 @@ final class LogEntry extends ProtoMessage {
     if (insertId.isNotDefault) 'insertId': insertId,
     if (httpRequest case final httpRequest?)
       'httpRequest': httpRequest.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     if (operation case final operation?) 'operation': operation.toJson(),
     if (trace.isNotDefault) 'trace': trace,
     if (spanId.isNotDefault) 'spanId': spanId,
@@ -1639,8 +1637,7 @@ final class WriteLogEntriesRequest extends ProtoMessage {
   Object toJson() => {
     if (logName.isNotDefault) 'logName': logName,
     if (resource case final resource?) 'resource': resource.toJson(),
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
     'entries': [for (final i in entries) i.toJson()],
     if (partialSuccess.isNotDefault) 'partialSuccess': partialSuccess,
     if (dryRun.isNotDefault) 'dryRun': dryRun,
@@ -1805,7 +1802,7 @@ final class ListLogEntriesRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'resourceNames': [for (final i in resourceNames) i],
+    'resourceNames': resourceNames,
     if (filter.isNotDefault) 'filter': filter,
     if (orderBy.isNotDefault) 'orderBy': orderBy,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
@@ -2047,8 +2044,7 @@ final class ListLogsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (resourceNames.isNotDefault)
-      'resourceNames': [for (final i in resourceNames) i],
+    if (resourceNames.isNotDefault) 'resourceNames': resourceNames,
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
   };
@@ -2098,7 +2094,7 @@ final class ListLogsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (logNames.isNotDefault) 'logNames': [for (final i in logNames) i],
+    if (logNames.isNotDefault) 'logNames': logNames,
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
@@ -2169,7 +2165,7 @@ final class TailLogEntriesRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    'resourceNames': [for (final i in resourceNames) i],
+    'resourceNames': resourceNames,
     if (filter.isNotDefault) 'filter': filter,
     if (bufferWindow case final bufferWindow?)
       'bufferWindow': bufferWindow.toJson(),
@@ -2517,8 +2513,7 @@ final class LogBucket extends ProtoMessage {
     if (locked.isNotDefault) 'locked': locked,
     if (lifecycleState.isNotDefault) 'lifecycleState': lifecycleState.toJson(),
     if (analyticsEnabled.isNotDefault) 'analyticsEnabled': analyticsEnabled,
-    if (restrictedFields.isNotDefault)
-      'restrictedFields': [for (final i in restrictedFields) i],
+    if (restrictedFields.isNotDefault) 'restrictedFields': restrictedFields,
     if (indexConfigs.isNotDefault)
       'indexConfigs': [for (final i in indexConfigs) i.toJson()],
     if (cmekSettings case final cmekSettings?)
@@ -5826,10 +5821,7 @@ final class LogMetric extends ProtoMessage {
     if (metricDescriptor case final metricDescriptor?)
       'metricDescriptor': metricDescriptor.toJson(),
     if (valueExtractor.isNotDefault) 'valueExtractor': valueExtractor,
-    if (labelExtractors.isNotDefault)
-      'labelExtractors': {
-        for (final e in labelExtractors.entries) e.key: e.value,
-      },
+    if (labelExtractors.isNotDefault) 'labelExtractors': labelExtractors,
     if (bucketOptions case final bucketOptions?)
       'bucketOptions': bucketOptions.toJson(),
     if (createTime case final createTime?) 'createTime': createTime.toJson(),

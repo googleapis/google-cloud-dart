@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -964,7 +963,7 @@ final class Type extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (fields.isNotDefault) 'fields': [for (final i in fields) i.toJson()],
-    if (oneofs.isNotDefault) 'oneofs': [for (final i in oneofs) i],
+    if (oneofs.isNotDefault) 'oneofs': oneofs,
     if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
     if (sourceContext case final sourceContext?)
       'sourceContext': sourceContext.toJson(),

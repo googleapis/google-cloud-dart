@@ -22,7 +22,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -896,7 +895,7 @@ final class Billing_BillingDestination extends ProtoMessage {
   @override
   Object toJson() => {
     if (monitoredResource.isNotDefault) 'monitoredResource': monitoredResource,
-    if (metrics.isNotDefault) 'metrics': [for (final i in metrics) i],
+    if (metrics.isNotDefault) 'metrics': metrics,
   };
 
   @override
@@ -1232,7 +1231,7 @@ final class Publishing extends ProtoMessage {
     if (apiShortName.isNotDefault) 'apiShortName': apiShortName,
     if (githubLabel.isNotDefault) 'githubLabel': githubLabel,
     if (codeownerGithubTeams.isNotDefault)
-      'codeownerGithubTeams': [for (final i in codeownerGithubTeams) i],
+      'codeownerGithubTeams': codeownerGithubTeams,
     if (docTagPrefix.isNotDefault) 'docTagPrefix': docTagPrefix,
     if (organization.isNotDefault) 'organization': organization.toJson(),
     if (librarySettings.isNotDefault)
@@ -1328,10 +1327,7 @@ final class JavaSettings extends ProtoMessage {
   @override
   Object toJson() => {
     if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
-    if (serviceClassNames.isNotDefault)
-      'serviceClassNames': {
-        for (final e in serviceClassNames.entries) e.key: e.value,
-      },
+    if (serviceClassNames.isNotDefault) 'serviceClassNames': serviceClassNames,
     if (common case final common?) 'common': common.toJson(),
   };
 
@@ -1623,20 +1619,13 @@ final class DotnetSettings extends ProtoMessage {
   @override
   Object toJson() => {
     if (common case final common?) 'common': common.toJson(),
-    if (renamedServices.isNotDefault)
-      'renamedServices': {
-        for (final e in renamedServices.entries) e.key: e.value,
-      },
-    if (renamedResources.isNotDefault)
-      'renamedResources': {
-        for (final e in renamedResources.entries) e.key: e.value,
-      },
-    if (ignoredResources.isNotDefault)
-      'ignoredResources': [for (final i in ignoredResources) i],
+    if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
+    if (renamedResources.isNotDefault) 'renamedResources': renamedResources,
+    if (ignoredResources.isNotDefault) 'ignoredResources': ignoredResources,
     if (forcedNamespaceAliases.isNotDefault)
-      'forcedNamespaceAliases': [for (final i in forcedNamespaceAliases) i],
+      'forcedNamespaceAliases': forcedNamespaceAliases,
     if (handwrittenSignatures.isNotDefault)
-      'handwrittenSignatures': [for (final i in handwrittenSignatures) i],
+      'handwrittenSignatures': handwrittenSignatures,
   };
 
   @override
@@ -1710,10 +1699,7 @@ final class GoSettings extends ProtoMessage {
   @override
   Object toJson() => {
     if (common case final common?) 'common': common.toJson(),
-    if (renamedServices.isNotDefault)
-      'renamedServices': {
-        for (final e in renamedServices.entries) e.key: e.value,
-      },
+    if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
   };
 
   @override
@@ -1795,7 +1781,7 @@ final class MethodSettings extends ProtoMessage {
     if (longRunning case final longRunning?)
       'longRunning': longRunning.toJson(),
     if (autoPopulatedFields.isNotDefault)
-      'autoPopulatedFields': [for (final i in autoPopulatedFields) i],
+      'autoPopulatedFields': autoPopulatedFields,
   };
 
   @override
@@ -1919,7 +1905,7 @@ final class SelectiveGapicGeneration extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (methods.isNotDefault) 'methods': [for (final i in methods) i],
+    if (methods.isNotDefault) 'methods': methods,
     if (generateOmittedAsInternal.isNotDefault)
       'generateOmittedAsInternal': generateOmittedAsInternal,
   };
@@ -2333,14 +2319,12 @@ final class ContextRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (requested.isNotDefault) 'requested': [for (final i in requested) i],
-    if (provided.isNotDefault) 'provided': [for (final i in provided) i],
+    if (requested.isNotDefault) 'requested': requested,
+    if (provided.isNotDefault) 'provided': provided,
     if (allowedRequestExtensions.isNotDefault)
-      'allowedRequestExtensions': [for (final i in allowedRequestExtensions) i],
+      'allowedRequestExtensions': allowedRequestExtensions,
     if (allowedResponseExtensions.isNotDefault)
-      'allowedResponseExtensions': [
-        for (final i in allowedResponseExtensions) i,
-      ],
+      'allowedResponseExtensions': allowedResponseExtensions,
   };
 
   @override
@@ -3255,7 +3239,7 @@ final class Endpoint extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (aliases.isNotDefault) 'aliases': [for (final i in aliases) i],
+    if (aliases.isNotDefault) 'aliases': aliases,
     if (target.isNotDefault) 'target': target,
     if (allowCors.isNotDefault) 'allowCors': allowCors,
   };
@@ -4285,7 +4269,7 @@ final class Logging_LoggingDestination extends ProtoMessage {
   @override
   Object toJson() => {
     if (monitoredResource.isNotDefault) 'monitoredResource': monitoredResource,
-    if (logs.isNotDefault) 'logs': [for (final i in logs) i],
+    if (logs.isNotDefault) 'logs': logs,
   };
 
   @override
@@ -4538,7 +4522,7 @@ final class MetricDescriptor extends ProtoMessage {
     if (metadata case final metadata?) 'metadata': metadata.toJson(),
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     if (monitoredResourceTypes.isNotDefault)
-      'monitoredResourceTypes': [for (final i in monitoredResourceTypes) i],
+      'monitoredResourceTypes': monitoredResourceTypes,
   };
 
   @override
@@ -4803,8 +4787,7 @@ final class Metric extends ProtoMessage {
   @override
   Object toJson() => {
     if (type.isNotDefault) 'type': type,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -4982,8 +4965,7 @@ final class MonitoredResource extends ProtoMessage {
   @override
   Object toJson() => {
     if (type.isNotDefault) 'type': type,
-    if (labels.isNotDefault)
-      'labels': {for (final e in labels.entries) e.key: e.value},
+    if (labels.isNotDefault) 'labels': labels,
   };
 
   @override
@@ -5043,8 +5025,7 @@ final class MonitoredResourceMetadata extends ProtoMessage {
   Object toJson() => {
     if (systemLabels case final systemLabels?)
       'systemLabels': systemLabels.toJson(),
-    if (userLabels.isNotDefault)
-      'userLabels': {for (final e in userLabels.entries) e.key: e.value},
+    if (userLabels.isNotDefault) 'userLabels': userLabels,
   };
 
   @override
@@ -5206,7 +5187,7 @@ final class Monitoring_MonitoringDestination extends ProtoMessage {
   @override
   Object toJson() => {
     if (monitoredResource.isNotDefault) 'monitoredResource': monitoredResource,
-    if (metrics.isNotDefault) 'metrics': [for (final i in metrics) i],
+    if (metrics.isNotDefault) 'metrics': metrics,
   };
 
   @override
@@ -5842,7 +5823,7 @@ final class ResourceDescriptor extends ProtoMessage {
   @override
   Object toJson() => {
     if (type.isNotDefault) 'type': type,
-    if (pattern.isNotDefault) 'pattern': [for (final i in pattern) i],
+    if (pattern.isNotDefault) 'pattern': pattern,
     if (nameField.isNotDefault) 'nameField': nameField,
     if (history.isNotDefault) 'history': history.toJson(),
     if (plural.isNotDefault) 'plural': plural,
@@ -7091,8 +7072,7 @@ final class Usage extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (requirements.isNotDefault)
-      'requirements': [for (final i in requirements) i],
+    if (requirements.isNotDefault) 'requirements': requirements,
     if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
     if (producerNotificationChannel.isNotDefault)
       'producerNotificationChannel': producerNotificationChannel,
