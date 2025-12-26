@@ -1,109 +1,50 @@
 library google_cloud_storage;
 
-import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 import 'bucket.dart';
-import 'object.dart';
-import 'utils.dart';
+import 'package:google_cloud_rpc/service_client.dart';
 
-class StorageClient {
-  final http.Client _client;
-  final String _basePath = 'https://storage.googleapis.com/storage/v1/';
-  final String _uploadPath = 'https://storage.googleapis.com/upload/storage/v1/';
+// _RETRYABLE_STATUS_CODES = (
+//     http.client.TOO_MANY_REQUESTS,  # 429
+//     http.client.REQUEST_TIMEOUT,  # 408
+//     http.client.INTERNAL_SERVER_ERROR,  # 500
+//     http.client.BAD_GATEWAY,  # 502
+//     http.client.SERVICE_UNAVAILABLE,  # 503
+//     http.client.GATEWAY_TIMEOUT,  # 504
+// )
+class StorageService {
+  final ServiceClient _client;
+  static const _host = 'storage.googleapis.com';
 
-  StorageClient(this._client);
+  StorageService({required http.Client client})
+    : _client = ServiceClient(client: client);
 
-  Future<Bucket> getBucket(String bucketName) async {
-    final response = await retryRequest(() => 
-      _client.get(Uri.parse('$_basePath' + 'buckets/' + bucketName)));
-    
-    if (response.statusCode != 200) {
-      throw http.ClientException('Failed to get bucket: ${response.statusCode} ${response.reasonPhrase}', response.request?.url);
-    }
-    return Bucket.fromJson(jsonDecode(response.body));
+  Bucket bucket(String bucketName) {
+    return Bucket(name: bucketName);
   }
 
-  Future<ListBucketsResponse> listBuckets() async {
-    final response = await retryRequest(() => 
-      _client.get(Uri.parse('$_basePath' + 'buckets')));
-    
-    if (response.statusCode != 200) {
-      throw http.ClientException('Failed to list buckets: ${response.statusCode} ${response.reasonPhrase}', response.request?.url);
-    }
-    return ListBucketsResponse.fromJson(jsonDecode(response.body));
-  }
-
-  Future<StorageObject> getObject(String bucketName, String objectName) async {
-    final response = await retryRequest(() => 
-      _client.get(Uri.parse('$_basePath' + 'b/' + bucketName + '/o/' + objectName + '?alt=json')));
-    
-    if (response.statusCode != 200) {
-      throw http.ClientException('Failed to get object: ${response.statusCode} ${response.reasonPhrase}', response.request?.url);
-    }
-    return StorageObject.fromJson(jsonDecode(response.body));
-  }
-
-  Future<ListObjectsResponse> listObjects(String bucketName) async {
-    final response = await retryRequest(() => 
-      _client.get(Uri.parse('$_basePath' + 'b/' + bucketName + '/o')));
-    
-    if (response.statusCode != 200) {
-      throw http.ClientException('Failed to list objects: ${response.statusCode} ${response.reasonPhrase}', response.request?.url);
-    }
-    return ListObjectsResponse.fromJson(jsonDecode(response.body));
-  }
-
-  Future<StorageObject> uploadObject(
-    String bucketName,
-    String objectName,
-    Stream<List<int>> data,
-    int contentLength, {
-    String? contentType,
+  /// Creates a new bucket.
+  ///
+  /// See https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
+  Future<Bucket> createBucket({
+    required String bucketName,
+    String? project,
+    String? userProject,
+    String? location,
   }) async {
-    // 1. Initiate resumable upload
-    final initiateUri = Uri.parse(
-        '$_uploadPath' + 'b/$bucketName/o?uploadType=resumable&name=$objectName');
-    
-    final initiateResponse = await retryRequest(() => _client.post(
-      initiateUri,
-      headers: {
-        'X-Upload-Content-Type': contentType ?? 'application/octet-stream',
-        'X-Upload-Content-Length': contentLength.toString(),
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-    ));
+    final query = {
+      if (project != null) 'project': project,
+      if (userProject != null) 'userProject': userProject,
+      if (location != null) 'location': location,
+    };
 
-    if (initiateResponse.statusCode != 200) {
-       throw http.ClientException('Failed to initiate upload: ${initiateResponse.statusCode} ${initiateResponse.reasonPhrase}', initiateResponse.request?.url);
-    }
+    final body = Bucket(name: bucketName);
 
-    final uploadUri = initiateResponse.headers['location'];
-    if (uploadUri == null) {
-       throw http.ClientException('Upload URL not found in response headers');
-    }
+    final url = Uri.https(_host, 'storage/v1/b', query);
+    final response = await _client.post(url, body: body);
 
-    // 2. Upload data
-    // Note: This simple implementation does not fully utilize resumable capabilities (chunking/resuming).
-    // It performs a single PUT request with the stream.
-    final request = http.StreamedRequest('PUT', Uri.parse(uploadUri));
-    request.headers['Content-Length'] = contentLength.toString();
-    if (contentType != null) {
-       request.headers['Content-Type'] = contentType;
-    }
-    
-    data.listen(request.sink.add, onDone: request.sink.close, onError: request.sink.addError);
-
-    // We don't wrap this in the generic retryRequest because we can't easily replay the stream.
-    // A robust implementation would need to buffer chunks or be able to reset the stream.
-    final response = await _client.send(request);
-    final responseBody = await http.Response.fromStream(response);
-
-    if (responseBody.statusCode != 200 && responseBody.statusCode != 201) {
-       throw http.ClientException('Failed to upload: ${responseBody.statusCode} ${responseBody.reasonPhrase}', Uri.parse(uploadUri));
-    }
-    
-    return StorageObject.fromJson(jsonDecode(responseBody.body));
+    return Bucket.fromJson(response);
   }
 
   void close() {

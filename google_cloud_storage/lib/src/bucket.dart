@@ -1,43 +1,21 @@
+import 'package:google_cloud_protobuf/protobuf.dart';
 
-class Bucket {
-  final String id;
+class Bucket implements JsonEncodable {
   final String name;
-  final String? kind;
-  final String? location;
-  final String? storageClass;
 
-  Bucket({
-    required this.id,
-    required this.name,
-    this.kind,
-    this.location,
-    this.storageClass,
-  });
+  Bucket({required this.name});
 
   factory Bucket.fromJson(Map<String, dynamic> json) {
-    return Bucket(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      kind: json['kind'] as String?,
-      location: json['location'] as String?,
-      storageClass: json['storageClass'] as String?,
-    );
+    return Bucket(name: json['name'] as String);
   }
-}
 
-class ListBucketsResponse {
-  final List<Bucket> items;
-  final String? nextPageToken;
+  @override
+  Map<String, dynamic> toJson() {
+    return {'name': name};
+  }
 
-  ListBucketsResponse({required this.items, this.nextPageToken});
-
-  factory ListBucketsResponse.fromJson(Map<String, dynamic> json) {
-    return ListBucketsResponse(
-      items: (json['items'] as List<dynamic>?)
-              ?.map((e) => Bucket.fromJson(e as Map<String, dynamic>))
-              .toList() ??
-          [],
-      nextPageToken: json['nextPageToken'] as String?,
-    );
+  @override
+  String toString() {
+    return 'Bucket(name: $name)';
   }
 }
