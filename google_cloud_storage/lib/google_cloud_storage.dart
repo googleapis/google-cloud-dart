@@ -15,5 +15,5 @@
 /// Stores and retrieves potentially large, immutable data objects.
 library;
 
-export 'src/storage.dart';
 export 'src/bucket.dart';
+export 'src/storage.dart';
