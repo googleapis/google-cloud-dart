@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 import 'bucket.dart';
-import 'package:google_cloud_rpc/service_client.dart';
 
 /// API for storing and retrieving potentially large, immutable data objects.
 class StorageService {

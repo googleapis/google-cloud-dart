@@ -19,17 +19,12 @@ class Bucket implements JsonEncodable {
 
   Bucket({required this.name});
 
-  factory Bucket.fromJson(Map<String, dynamic> json) {
-    return Bucket(name: json['name'] as String);
-  }
+  factory Bucket.fromJson(Map<String, dynamic> json) =>
+      Bucket(name: json['name'] as String);
 
   @override
-  Map<String, dynamic> toJson() {
-    return {'name': name};
-  }
+  Map<String, dynamic> toJson() => {'name': name};
 
   @override
-  String toString() {
-    return 'Bucket(name: $name)';
-  }
+  String toString() => 'Bucket(name: $name)';
 }
