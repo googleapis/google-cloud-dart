@@ -20,17 +20,15 @@ import 'dart:math';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
 import 'package:test_utils/cloud.dart';
+import 'package:test_utils/test_http_client.dart';
 
 const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-String uniqueBucketName() {
-  return List.generate(
-    32,
-    (index) => bucketChars[Random().nextInt(bucketChars.length)],
-  ).join();
-}
+String uniqueBucketName() => List.generate(
+  32,
+  (index) => bucketChars[Random().nextInt(bucketChars.length)],
+).join();
 
 void main() async {
   late StorageService storageService;
@@ -53,7 +51,12 @@ void main() async {
     tearDown(() => storageService.close());
     test('create', () async {
       await testClient.startTest('google_cloud_storage', 'bucket_create');
-      final bucketName = uniqueBucketName();
+
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'dart-cloud-storage-test-bucket1'
+          : uniqueBucketName();
+
       final bucket = await storageService.createBucket(
         bucketName: bucketName,
         project: projectId,
