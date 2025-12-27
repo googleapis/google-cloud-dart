@@ -16,11 +16,33 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 
 class Bucket implements JsonEncodable {
   final String name;
+  final Uri? selfLink;
+  final int? metaGeneration;
+  final String? location;
+  final String? locationType;
+  final DateTime? timeCreated;
 
-  Bucket({required this.name});
+  Bucket({
+    required this.name,
+    this.selfLink,
+    this.metaGeneration,
+    this.location,
+    this.locationType,
+    this.timeCreated,
+  });
 
-  factory Bucket.fromJson(Map<String, dynamic> json) =>
-      Bucket(name: json['name'] as String);
+  factory Bucket.fromJson(Map<String, dynamic> json) => Bucket(
+    name: json['name'] as String,
+    selfLink: Uri.parse(json['selfLink'] as String),
+    metaGeneration: switch (json['metageneration']) {
+      String s => int.parse(s),
+      int i => i,
+      _ => throw const FormatException('"metageneration" format incorrect'),
+    },
+    location: json['location'] as String,
+    locationType: json['locationType'] as String,
+    timeCreated: Timestamp.fromJson(json['timeCreated']).toDateTime(),
+  );
 
   @override
   Map<String, dynamic> toJson() => {'name': name};

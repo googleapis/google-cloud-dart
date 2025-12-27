@@ -66,6 +66,18 @@ void main() async {
         project: projectId,
       );
       expect(bucket.name, bucketName);
+      expect(
+        bucket.selfLink,
+        Uri.https(
+          'www.googleapis.com',
+          'storage/v1/b/dart-cloud-storage-test-bucket1',
+        ),
+      );
+      expect(bucket.metaGeneration, 1);
+      expect(bucket.location, 'US');
+      expect(bucket.locationType, 'multi-region');
+      expect(bucket.timeCreated, isNotNull);
+
       await testClient.endTest();
     });
   });

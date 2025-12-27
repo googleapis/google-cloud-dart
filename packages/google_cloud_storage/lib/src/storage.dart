@@ -36,8 +36,6 @@ class StorageService {
   Future<Bucket> createBucket({
     required String bucketName,
     String? project,
-    String? userProject,
-    String? location,
   }) async {
     final query = {if (project != null) 'project': project};
 
