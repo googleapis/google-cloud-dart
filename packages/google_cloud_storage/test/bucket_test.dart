@@ -25,10 +25,13 @@ import 'package:test_utils/test_http_client.dart';
 
 const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-String uniqueBucketName() => List.generate(
-  32,
-  (index) => bucketChars[Random().nextInt(bucketChars.length)],
-).join();
+String uniqueBucketName() {
+  final random = Random();
+  return List.generate(
+    32,
+    (index) => bucketChars[random.nextInt(bucketChars.length)],
+  ).join();
+}
 
 void main() async {
   late StorageService storageService;
