@@ -39,11 +39,7 @@ class StorageService {
     String? userProject,
     String? location,
   }) async {
-    final query = {
-      if (project != null) 'project': project,
-      if (userProject != null) 'userProject': userProject,
-      if (location != null) 'location': location,
-    };
+    final query = {if (project != null) 'project': project};
 
     final body = Bucket(name: bucketName);
 
