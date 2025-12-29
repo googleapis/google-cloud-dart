@@ -58,7 +58,7 @@ void main() async {
 
       final bucketName =
           TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'dart-cloud-storage-test-bucket1'
+          ? 'dart-cloud-storage-test-bucket-create'
           : uniqueBucketName();
 
       final bucket = await storageService.createBucket(
@@ -68,16 +68,34 @@ void main() async {
       expect(bucket.name, bucketName);
       expect(
         bucket.selfLink,
-        Uri.https(
-          'www.googleapis.com',
-          'storage/v1/b/dart-cloud-storage-test-bucket1',
-        ),
+        Uri.https('www.googleapis.com', 'storage/v1/b/$bucketName'),
       );
       expect(bucket.metaGeneration, 1);
       expect(bucket.location, 'US');
       expect(bucket.locationType, 'multi-region');
       expect(bucket.timeCreated, isNotNull);
 
+      await testClient.endTest();
+    });
+
+    test('create duplicate', () async {
+      await testClient.startTest('google_cloud_storage', 'bucket_create');
+
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'dart-cloud-storage-test-bucket-create-dup'
+          : uniqueBucketName();
+
+      final bucket = await storageService.createBucket(
+        bucketName: bucketName,
+        project: projectId,
+      );
+      expect(bucket.name, bucketName);
+
+      await storageService.createBucket(
+        bucketName: bucketName,
+        project: projectId,
+      );
       await testClient.endTest();
     });
   });

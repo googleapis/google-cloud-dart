@@ -136,10 +136,10 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<StatusException>()
-              .having((e) => e.status.code, 'code', 1)
-              .having((e) => e.status.message, 'message', 'failure')
-              .having((e) => e.status.details, 'details', isEmpty)
+          isA<BadRequestException>()
+              .having((e) => e.message, 'message', 'failure')
+              .having((e) => e.statusCode, 'statusCode', 400)
+              .having((e) => e.status?.toJson(), 'status', status.toJson())
               .having((e) => e.responseBody, 'responseBody', responseBody),
         ),
       );
@@ -153,7 +153,7 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<ServiceException>().having(
+          isA<BadRequestException>().having(
             (e) => e.responseBody,
             'responseBody',
             '"Hello!"',
@@ -287,10 +287,8 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<StatusException>()
-                .having((e) => e.status.code, 'code', 1)
-                .having((e) => e.status.message, 'message', 'failure')
-                .having((e) => e.status.details, 'details', isEmpty)
+            isA<BadRequestException>()
+                .having((e) => e.status?.toJson(), 'status', status.toJson())
                 .having((e) => e.responseBody, 'responseBody', responseBody),
           ),
           emitsDone,

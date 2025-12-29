@@ -17,6 +17,12 @@ import 'package:http/http.dart' as http;
 
 import 'bucket.dart';
 
+class ConflictException implements Exception {
+  final String message;
+
+  ConflictException(this.message);
+}
+
 /// API for storing and retrieving potentially large, immutable data objects.
 class StorageService {
   final ServiceClient _client;

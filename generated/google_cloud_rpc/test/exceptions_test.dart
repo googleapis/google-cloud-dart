@@ -14,68 +14,64 @@
 
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() {
   group('ServiceException', () {
     test('no body', () {
-      final e = ServiceException('test message', statusCode: 404);
-
-      expect(e.message, 'test message');
-      expect(e.toString(), 'ServiceException: test message, statusCode=404');
-    });
-    test('with body', () {
+      final response = http.Response('test message', 404);
       final e = ServiceException(
         'test message',
-        statusCode: 404,
-        responseBody: '<response body>',
+        response: response,
+        statusCode: 400,
       );
 
       expect(e.message, 'test message');
-      expect(e.statusCode, 404);
-      expect(e.responseBody, '<response body>');
-      expect(
-        e.toString(),
-        'ServiceException: test message, statusCode=404, '
-        'responseBody="<response body>"',
-      );
-    });
-  });
+      expect(e.statusCode, 400);
+      expect(e.responseBody, null);
+      expect(e.response, response);
 
-  group('StatusException', () {
-    test('no body, no message', () {
-      final e = StatusException.fromStatus(Status(code: 123), statusCode: 500);
-
-      expect(e.message, isEmpty);
-      expect(e.status.code, 123);
-      expect(e.statusCode, 500);
-      expect(e.toString(), 'StatusException: ');
+      expect(e.toString(), 'ServiceException: test message');
     });
 
-    test('no body, status message', () {
-      final e = StatusException.fromStatus(
-        Status(message: 'bad auth', code: 123),
-        statusCode: 500,
-      );
+    test('with body', () {
+      final response = http.Response('test message', 400);
 
-      expect(e.message, 'bad auth');
-      expect(e.status.code, 123);
-      expect(e.statusCode, 500);
-      expect(e.toString(), 'StatusException: bad auth');
-    });
-
-    test('with body, status message', () {
-      final e = StatusException.fromStatus(
-        Status(message: 'bad auth', code: 123),
-        statusCode: 500,
+      final e = ServiceException(
+        'test message',
+        response: response,
         responseBody: '<response body>',
+        statusCode: 400,
       );
 
-      expect(e.message, 'bad auth');
+      expect(e.message, 'test message');
+      expect(e.statusCode, 400);
       expect(e.responseBody, '<response body>');
-      expect(e.status.code, 123);
-      expect(e.statusCode, 500);
-      expect(e.toString(), 'StatusException: bad auth');
+      expect(e.response, response);
+
+      expect(e.toString(), 'ServiceException: test message');
+    });
+
+    test('with status', () {
+      final response = http.Response('test message', 400);
+      final status = Status(code: 400, message: 'failure', details: []);
+
+      final e = ServiceException(
+        'test message',
+        response: response,
+        responseBody: '<response body>',
+        statusCode: 400,
+        status: status,
+      );
+
+      expect(e.message, 'test message');
+      expect(e.statusCode, 400);
+      expect(e.responseBody, '<response body>');
+      expect(e.response, response);
+      expect(e.status?.toJson(), status.toJson());
+
+      expect(e.toString(), 'ServiceException: test message');
     });
   });
 }

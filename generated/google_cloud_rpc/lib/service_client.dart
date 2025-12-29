@@ -55,36 +55,113 @@ final class ServiceException implements Exception {
   final int statusCode;
 
   /// The server response that caused the exception.
+  final http.BaseResponse response;
+
   final String? responseBody;
 
-  ServiceException(this.message, {required this.statusCode, this.responseBody});
+  final Status? status;
+
+  ServiceException(
+    this.message, {
+    required this.statusCode,
+    required this.response,
+    this.responseBody,
+    this.status,
+  });
+
+  factory ServiceException._fromDecodedResponse(
+    String message, {
+    required http.BaseResponse response,
+    String? responseBody,
+    Status? status,
+  }) => switch (response.statusCode) {
+    400 => BadRequestException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    409 => ConflictException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    _ => ServiceException(
+      message,
+      statusCode: response.statusCode,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+  };
+
+  factory ServiceException.fromHttpResponse(
+    http.BaseResponse response,
+    String responseBody,
+  ) {
+    final dynamic json;
+
+    try {
+      json = jsonDecode(responseBody);
+    } on FormatException {
+      return ServiceException._fromDecodedResponse(
+        responseBody.isEmpty ? 'unknown error' : responseBody,
+        response: response,
+        responseBody: responseBody,
+      );
+    }
+
+    // We use `dynamic` and catch `TypeError` to simply JSON decoding.
+    final Status status;
+    try {
+      // ignore: avoid_dynamic_calls
+      status = Status.fromJson(json['error'] as Map<String, dynamic>);
+      // ignore: avoid_catching_errors
+    } on TypeError {
+      return ServiceException._fromDecodedResponse(
+        responseBody.isEmpty ? 'unknown error' : responseBody,
+        response: response,
+        responseBody: responseBody,
+      );
+    }
+
+    return ServiceException._fromDecodedResponse(
+      status.message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    );
+  }
+
+  String get _name => 'ServiceException';
 
   @override
-  String toString() {
-    final body = responseBody != null
-        ? ', responseBody=${Error.safeToString(responseBody)}'
-        : '';
-    return 'ServiceException: $message, statusCode=$statusCode$body';
-  }
+  String toString() => '$_name: $message';
 }
 
-/// Exception thrown when an API method fails with a [Status] indicating an
-/// error.
-///
-/// You can find out more about this error model and how to work with it in the
-/// [API Design Guide](https://cloud.google.com/apis/design/errors).
-final class StatusException extends ServiceException {
-  /// The status message returned by the server.
-  final Status status;
-
-  StatusException.fromStatus(
-    this.status, {
-    required super.statusCode,
-    super.responseBody,
-  }) : super(status.message);
+final class BadRequestException extends ServiceException {
+  BadRequestException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 400);
 
   @override
-  String toString() => 'StatusException: $message';
+  String get _name => 'BadRequestException';
+}
+
+final class ConflictException extends ServiceException {
+  ConflictException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 409);
+
+  @override
+  String get _name => 'ConflictException';
 }
 
 /// A low-level mechanism to communicate with Google APIs.
@@ -150,7 +227,7 @@ class ServiceClient {
     final responseBody = await response.stream.bytesToString();
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
-      _throwException(response.statusCode, response.reasonPhrase, responseBody);
+      throw ServiceException.fromHttpResponse(response, responseBody);
     }
     return responseBody.isEmpty
         ? {}
@@ -178,9 +255,8 @@ class ServiceClient {
     final response = await client.send(request);
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
-      _throwException(
-        response.statusCode,
-        response.reasonPhrase,
+      throw ServiceException.fromHttpResponse(
+        response,
         await response.stream.bytesToString(),
       );
     }
@@ -205,43 +281,6 @@ class ServiceClient {
     final query = Map.of(url.queryParameters);
     query['alt'] = 'sse';
     return url.replace(queryParameters: query);
-  }
-
-  Never _throwException(
-    int statusCode,
-    String? reasonPhrase,
-    String responseBody,
-  ) {
-    final dynamic json;
-    try {
-      json = jsonDecode(responseBody);
-    } on FormatException {
-      throw ServiceException(
-        'Invalid JSON response from server',
-        statusCode: statusCode,
-        responseBody: responseBody,
-      );
-    }
-
-    // We use `dynamic` and catch `TypeError` to simply JSON decoding.
-    final Status status;
-    try {
-      // ignore: avoid_dynamic_calls
-      status = Status.fromJson(json['error'] as Map<String, dynamic>);
-      // ignore: avoid_catching_errors
-    } on TypeError {
-      throw ServiceException(
-        'unexpected response format from server',
-        statusCode: statusCode,
-        responseBody: responseBody,
-      );
-    }
-
-    throw StatusException.fromStatus(
-      status,
-      statusCode: statusCode,
-      responseBody: responseBody,
-    );
   }
 }
 
