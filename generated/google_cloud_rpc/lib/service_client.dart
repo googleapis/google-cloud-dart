@@ -211,13 +211,10 @@ final class ServiceException implements Exception {
       );
     }
 
-    // We use `dynamic` and catch `TypeError` to simplify JSON decoding.
     final Status status;
-    try {
-      // ignore: avoid_dynamic_calls
+    if (json is Map<String, dynamic> && json['error'] is Map<String, dynamic>) {
       status = Status.fromJson(json['error'] as Map<String, dynamic>);
-      // ignore: avoid_catching_errors
-    } on TypeError {
+    } else {
       return ServiceException._fromDecodedResponse(
         responseBody,
         response: response,
