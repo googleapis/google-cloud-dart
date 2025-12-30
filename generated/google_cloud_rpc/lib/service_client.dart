@@ -81,7 +81,91 @@ final class ServiceException implements Exception {
       responseBody: responseBody,
       status: status,
     ),
+    401 => UnauthorizedException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    403 => ForbiddenException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    404 => NotFoundException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    405 => MethodNotAllowedException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
     409 => ConflictException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    411 => LengthRequiredException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    412 => PreconditionFailedException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    416 => RequestRangeNotSatisfiableException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    429 => TooManyRequestsException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    499 => CancelledException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    500 => InternalServerErrorException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    501 => NotImplementedException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    502 => BadGatewayException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    503 => ServiceUnavailableException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
+    504 => GatewayTimeoutException(
       message,
       response: response,
       responseBody: responseBody,
@@ -100,8 +184,6 @@ final class ServiceException implements Exception {
     http.BaseResponse response,
     String? responseBody,
   ) {
-    final dynamic json;
-
     if (responseBody == null || responseBody.isEmpty) {
       return ServiceException._fromDecodedResponse(
         'unknown error',
@@ -110,6 +192,7 @@ final class ServiceException implements Exception {
       );
     }
 
+    final dynamic json;
     try {
       json = jsonDecode(responseBody);
     } on FormatException {
@@ -148,6 +231,7 @@ final class ServiceException implements Exception {
   String toString() => '$_name: $message';
 }
 
+/// Exception thrown when the server returns a "400 Bad Request" response.
 final class BadRequestException extends ServiceException {
   BadRequestException(
     super.message, {

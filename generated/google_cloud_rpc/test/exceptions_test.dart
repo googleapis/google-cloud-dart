@@ -129,23 +129,194 @@ void main() {
       const responseBody = '''
 {
   "error": {
-    "code": 500,
+    "code": 418,
     "message": "internal error",
     "status": "INTERNAL",
     "details": []
   }
 }
 ''';
-      final response = http.Response(responseBody, 500);
+      final response = http.Response(responseBody, 418);
       final e = ServiceException.fromHttpResponse(response, responseBody);
       expect(e, isA<ServiceException>());
       expect(e, isNot(isA<BadRequestException>()));
       expect(e, isNot(isA<ConflictException>()));
       expect(e.message, 'internal error');
-      expect(e.statusCode, 500);
+      expect(e.statusCode, 418);
       expect(e.responseBody, responseBody);
       expect(e.status, isNotNull);
       expect(e.toString(), 'ServiceException: internal error');
+    });
+
+    test('valid error 401', () {
+      final response = http.Response(
+        '{"error": {"message": "unauthorized"}}',
+        401,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<UnauthorizedException>());
+      expect(e.message, 'unauthorized');
+      expect(e.statusCode, 401);
+      expect(e.toString(), 'UnauthorizedException: unauthorized');
+    });
+
+    test('valid error 403', () {
+      final response = http.Response(
+        '{"error": {"message": "forbidden"}}',
+        403,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<ForbiddenException>());
+      expect(e.message, 'forbidden');
+      expect(e.statusCode, 403);
+      expect(e.toString(), 'ForbiddenException: forbidden');
+    });
+
+    test('valid error 404', () {
+      final response = http.Response(
+        '{"error": {"message": "not found"}}',
+        404,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<NotFoundException>());
+      expect(e.message, 'not found');
+      expect(e.statusCode, 404);
+      expect(e.toString(), 'NotFoundException: not found');
+    });
+
+    test('valid error 405', () {
+      final response = http.Response(
+        '{"error": {"message": "method not allowed"}}',
+        405,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<MethodNotAllowedException>());
+      expect(e.message, 'method not allowed');
+      expect(e.statusCode, 405);
+      expect(e.toString(), 'MethodNotAllowedException: method not allowed');
+    });
+
+    test('valid error 411', () {
+      final response = http.Response(
+        '{"error": {"message": "length required"}}',
+        411,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<LengthRequiredException>());
+      expect(e.message, 'length required');
+      expect(e.statusCode, 411);
+      expect(e.toString(), 'LengthRequiredException: length required');
+    });
+
+    test('valid error 412', () {
+      final response = http.Response(
+        '{"error": {"message": "precondition failed"}}',
+        412,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<PreconditionFailedException>());
+      expect(e.message, 'precondition failed');
+      expect(e.statusCode, 412);
+      expect(e.toString(), 'PreconditionFailedException: precondition failed');
+    });
+
+    test('valid error 416', () {
+      final response = http.Response(
+        '{"error": {"message": "range not satisfiable"}}',
+        416,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<RequestRangeNotSatisfiableException>());
+      expect(e.message, 'range not satisfiable');
+      expect(e.statusCode, 416);
+      expect(
+        e.toString(),
+        'RequestRangeNotSatisfiableException: range not satisfiable',
+      );
+    });
+
+    test('valid error 429', () {
+      final response = http.Response(
+        '{"error": {"message": "too many requests"}}',
+        429,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<TooManyRequestsException>());
+      expect(e.message, 'too many requests');
+      expect(e.statusCode, 429);
+      expect(e.toString(), 'TooManyRequestsException: too many requests');
+    });
+
+    test('valid error 499', () {
+      final response = http.Response(
+        '{"error": {"message": "cancelled"}}',
+        499,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<CancelledException>());
+      expect(e.message, 'cancelled');
+      expect(e.statusCode, 499);
+      expect(e.toString(), 'CancelledException: cancelled');
+    });
+
+    test('valid error 500', () {
+      final response = http.Response(
+        '{"error": {"message": "internal server error"}}',
+        500,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<InternalServerErrorException>());
+      expect(e.message, 'internal server error');
+      expect(e.statusCode, 500);
+      expect(e.toString(), 'InternalException: internal server error');
+    });
+
+    test('valid error 501', () {
+      final response = http.Response(
+        '{"error": {"message": "not implemented"}}',
+        501,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<NotImplementedException>());
+      expect(e.message, 'not implemented');
+      expect(e.statusCode, 501);
+      expect(e.toString(), 'NotImplementedException: not implemented');
+    });
+
+    test('valid error 502', () {
+      final response = http.Response(
+        '{"error": {"message": "bad gateway"}}',
+        502,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<BadGatewayException>());
+      expect(e.message, 'bad gateway');
+      expect(e.statusCode, 502);
+      expect(e.toString(), 'BadGatewayException: bad gateway');
+    });
+
+    test('valid error 503', () {
+      final response = http.Response(
+        '{"error": {"message": "service unavailable"}}',
+        503,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<ServiceUnavailableException>());
+      expect(e.message, 'service unavailable');
+      expect(e.statusCode, 503);
+      expect(e.toString(), 'ServiceUnavailableException: service unavailable');
+    });
+
+    test('valid error 504', () {
+      final response = http.Response(
+        '{"error": {"message": "gateway timeout"}}',
+        504,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<GatewayTimeoutException>());
+      expect(e.message, 'gateway timeout');
+      expect(e.statusCode, 504);
+      expect(e.toString(), 'GatewayTimeoutException: gateway timeout');
     });
   });
 }
