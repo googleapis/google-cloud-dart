@@ -18,60 +18,126 @@ import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() {
-  group('ServiceException', () {
-    test('no body', () {
-      final response = http.Response('test message', 404);
-      final e = ServiceException(
-        'test message',
-        response: response,
-        statusCode: 400,
-      );
-
-      expect(e.message, 'test message');
+  group('fromHttpResponse', () {
+    test('empty body', () {
+      final response = http.Response.bytes([0xff], 400);
+      final e = ServiceException.fromHttpResponse(response, null);
+      expect(e, isA<BadRequestException>());
+      expect(e.message, 'unknown error');
       expect(e.statusCode, 400);
+      expect(e.response, response);
       expect(e.responseBody, null);
-      expect(e.response, response);
-
-      expect(e.toString(), 'ServiceException: test message');
+      expect(e.status, isNull);
     });
 
-    test('with body', () {
-      final response = http.Response('test message', 400);
-
-      final e = ServiceException(
-        'test message',
-        response: response,
-        responseBody: '<response body>',
-        statusCode: 400,
-      );
-
-      expect(e.message, 'test message');
+    test('empty body', () {
+      final response = http.Response('', 400);
+      final e = ServiceException.fromHttpResponse(response, '');
+      expect(e, isA<BadRequestException>());
+      expect(e.message, 'unknown error');
       expect(e.statusCode, 400);
-      expect(e.responseBody, '<response body>');
       expect(e.response, response);
-
-      expect(e.toString(), 'ServiceException: test message');
+      expect(e.responseBody, '');
+      expect(e.status, isNull);
     });
 
-    test('with status', () {
-      final response = http.Response('test message', 400);
-      final status = Status(code: 400, message: 'failure', details: []);
-
-      final e = ServiceException(
-        'test message',
-        response: response,
-        responseBody: '<response body>',
-        statusCode: 400,
-        status: status,
-      );
-
-      expect(e.message, 'test message');
+    test('invalid json body', () {
+      final response = http.Response('not json', 400);
+      final e = ServiceException.fromHttpResponse(response, 'not json');
+      expect(e, isA<BadRequestException>());
+      expect(e.message, 'not json');
       expect(e.statusCode, 400);
-      expect(e.responseBody, '<response body>');
       expect(e.response, response);
-      expect(e.status?.toJson(), status.toJson());
+      expect(e.responseBody, 'not json');
+      expect(e.status, isNull);
+    });
 
-      expect(e.toString(), 'ServiceException: test message');
+    test('valid json but missing error field', () {
+      final response = http.Response('{}', 400);
+      final e = ServiceException.fromHttpResponse(response, '{}');
+      expect(e, isA<BadRequestException>());
+      expect(e.message, '{}');
+      expect(e.statusCode, 400);
+      expect(e.response, response);
+      expect(e.responseBody, '{}');
+      expect(e.status, isNull);
+    });
+
+    test('valid json but error field is not a map', () {
+      final response = http.Response('{"error": "string error"}', 400);
+      final e = ServiceException.fromHttpResponse(
+        response,
+        '{"error": "string error"}',
+      );
+      expect(e, isA<BadRequestException>());
+      expect(e.message, '{"error": "string error"}');
+      expect(e.statusCode, 400);
+      expect(e.responseBody, '{"error": "string error"}');
+      expect(e.status, isNull);
+    });
+
+    test('valid error 400', () {
+      const responseBody = '''
+{
+  "error": {
+    "code": 400,
+    "message": "bad request",
+    "status": "INVALID_ARGUMENT",
+    "details": []
+  }
+}
+''';
+      final response = http.Response(responseBody, 400);
+      final e = ServiceException.fromHttpResponse(response, responseBody);
+      expect(e, isA<BadRequestException>());
+      expect(e.message, 'bad request');
+      expect(e.statusCode, 400);
+      expect(e.responseBody, responseBody);
+      expect(e.status, isNotNull);
+      expect(e.status!.code, 400);
+      expect(e.status!.message, 'bad request');
+    });
+
+    test('valid error 409', () {
+      const responseBody = '''
+{
+  "error": {
+    "code": 409,
+    "message": "conflict",
+    "status": "ALREADY_EXISTS",
+    "details": []
+  }
+}
+''';
+      final response = http.Response(responseBody, 409);
+      final e = ServiceException.fromHttpResponse(response, responseBody);
+      expect(e, isA<ConflictException>());
+      expect(e.message, 'conflict');
+      expect(e.statusCode, 409);
+      expect(e.responseBody, responseBody);
+      expect(e.status, isNotNull);
+    });
+
+    test('valid error other', () {
+      const responseBody = '''
+{
+  "error": {
+    "code": 500,
+    "message": "internal error",
+    "status": "INTERNAL",
+    "details": []
+  }
+}
+''';
+      final response = http.Response(responseBody, 500);
+      final e = ServiceException.fromHttpResponse(response, responseBody);
+      expect(e, isA<ServiceException>());
+      expect(e, isNot(isA<BadRequestException>()));
+      expect(e, isNot(isA<ConflictException>()));
+      expect(e.message, 'internal error');
+      expect(e.statusCode, 500);
+      expect(e.responseBody, responseBody);
+      expect(e.status, isNotNull);
     });
   });
 }

@@ -98,15 +98,23 @@ final class ServiceException implements Exception {
 
   factory ServiceException.fromHttpResponse(
     http.BaseResponse response,
-    String responseBody,
+    String? responseBody,
   ) {
     final dynamic json;
+
+    if (responseBody == null || responseBody.isEmpty) {
+      return ServiceException._fromDecodedResponse(
+        'unknown error',
+        response: response,
+        responseBody: responseBody,
+      );
+    }
 
     try {
       json = jsonDecode(responseBody);
     } on FormatException {
       return ServiceException._fromDecodedResponse(
-        responseBody.isEmpty ? 'unknown error' : responseBody,
+        responseBody,
         response: response,
         responseBody: responseBody,
       );
@@ -120,7 +128,7 @@ final class ServiceException implements Exception {
       // ignore: avoid_catching_errors
     } on TypeError {
       return ServiceException._fromDecodedResponse(
-        responseBody.isEmpty ? 'unknown error' : responseBody,
+        responseBody,
         response: response,
         responseBody: responseBody,
       );
