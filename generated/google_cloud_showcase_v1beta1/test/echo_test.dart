@@ -19,8 +19,8 @@
 library;
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
-import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
@@ -65,10 +65,10 @@ void main() async {
           ),
         ),
         throwsA(
-          isA<StatusException>().having(
-            (e) => e.status.code,
-            'status.code',
-            400, // HTTP equivalent of INVALID_ARGUMENT
+          isA<BadRequestException>().having(
+            (e) => e.message,
+            'message',
+            'INVALID_ARGUMENT',
           ),
         ),
       );
@@ -121,13 +121,9 @@ void main() async {
       await expectLater(
         () => echoService.failEchoWithDetails(request),
         throwsA(
-          isA<StatusException>()
-              .having(
-                (e) => e.status.code,
-                'status.code',
-                409, // Aborted
-              )
-              .having((e) => e.status.details, 'status.details', [
+          isA<ConflictException>()
+              .having((e) => e.message, 'message', 'ABORTED')
+              .having((e) => e.status?.details, 'status.details', [
                 anyTypeName('google.rpc.ErrorInfo'),
                 anyTypeName('google.rpc.LocalizedMessage'),
                 wrapMatcher((protobuf.Any x) {

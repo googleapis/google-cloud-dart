@@ -15,6 +15,7 @@
 import 'dart:convert';
 
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart';
@@ -117,10 +118,27 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<ServiceException>().having(
+          isA<InternalServerErrorException>().having(
             (e) => e.responseBody,
             'responseBody',
             '',
+          ),
+        ),
+      );
+    });
+
+    test('500 response, no status, with undecodable response body', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async => Response.bytes([0xff], 400)),
+      );
+
+      await expectLater(
+        () => service.post(sampleUrl),
+        throwsA(
+          isA<BadRequestException>().having(
+            (e) => e.responseBody,
+            'responseBody',
+            isNull,
           ),
         ),
       );
@@ -136,10 +154,10 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<StatusException>()
-              .having((e) => e.status.code, 'code', 1)
-              .having((e) => e.status.message, 'message', 'failure')
-              .having((e) => e.status.details, 'details', isEmpty)
+          isA<BadRequestException>()
+              .having((e) => e.message, 'message', 'failure')
+              .having((e) => e.statusCode, 'statusCode', 400)
+              .having((e) => e.status?.toJson(), 'status', status.toJson())
               .having((e) => e.responseBody, 'responseBody', responseBody),
         ),
       );
@@ -153,7 +171,7 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<ServiceException>().having(
+          isA<BadRequestException>().having(
             (e) => e.responseBody,
             'responseBody',
             '"Hello!"',
@@ -265,10 +283,30 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<ServiceException>().having(
+            isA<InternalServerErrorException>().having(
               (e) => e.responseBody,
               'responseBody',
               '',
+            ),
+          ),
+          emitsDone,
+        ]),
+      );
+    });
+
+    test('500 response, no status, with undecodable response body', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async => Response.bytes([0xff], 400)),
+      );
+
+      expect(
+        service.postStreaming(sampleUrl),
+        emitsInOrder([
+          emitsError(
+            isA<BadRequestException>().having(
+              (e) => e.responseBody,
+              'responseBody',
+              isNull,
             ),
           ),
           emitsDone,
@@ -287,10 +325,8 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<StatusException>()
-                .having((e) => e.status.code, 'code', 1)
-                .having((e) => e.status.message, 'message', 'failure')
-                .having((e) => e.status.details, 'details', isEmpty)
+            isA<BadRequestException>()
+                .having((e) => e.status?.toJson(), 'status', status.toJson())
                 .having((e) => e.responseBody, 'responseBody', responseBody),
           ),
           emitsDone,
@@ -307,7 +343,7 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<ServiceException>().having(
+            isA<BadRequestException>().having(
               (e) => e.responseBody,
               'responseBody',
               '"Hello!"',

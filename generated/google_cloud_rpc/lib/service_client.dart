@@ -17,7 +17,7 @@ import 'dart:convert';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:http/http.dart' as http;
 
-import 'rpc.dart';
+import 'exceptions.dart';
 import 'src/versions.dart';
 
 export 'dart:typed_data' show Uint8List;
@@ -34,58 +34,6 @@ final String _clientName =
 
 const String _contentTypeKey = 'content-type';
 const String _typeJson = 'application/json';
-
-/// Exception thrown when a method is called without correct configuration.
-final class ConfigurationException implements Exception {
-  /// A message describing the cause of the exception.
-  final String message;
-
-  ConfigurationException(this.message);
-
-  @override
-  String toString() => 'ConfigurationException: $message';
-}
-
-/// Exception thrown when calling an API through [ServiceClient] fails.
-final class ServiceException implements Exception {
-  /// A message describing the cause of the exception.
-  final String message;
-
-  /// The HTTP status code that the server returned (e.g. 404).
-  final int statusCode;
-
-  /// The server response that caused the exception.
-  final String? responseBody;
-
-  ServiceException(this.message, {required this.statusCode, this.responseBody});
-
-  @override
-  String toString() {
-    final body = responseBody != null
-        ? ', responseBody=${Error.safeToString(responseBody)}'
-        : '';
-    return 'ServiceException: $message, statusCode=$statusCode$body';
-  }
-}
-
-/// Exception thrown when an API method fails with a [Status] indicating an
-/// error.
-///
-/// You can find out more about this error model and how to work with it in the
-/// [API Design Guide](https://cloud.google.com/apis/design/errors).
-final class StatusException extends ServiceException {
-  /// The status message returned by the server.
-  final Status status;
-
-  StatusException.fromStatus(
-    this.status, {
-    required super.statusCode,
-    super.responseBody,
-  }) : super(status.message);
-
-  @override
-  String toString() => 'StatusException: $message';
-}
 
 /// A low-level mechanism to communicate with Google APIs.
 class ServiceClient {
@@ -147,11 +95,17 @@ class ServiceClient {
     });
 
     final response = await client.send(request);
-    final responseBody = await response.stream.bytesToString();
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
-      _throwException(response.statusCode, response.reasonPhrase, responseBody);
+      String? responseBody;
+      try {
+        responseBody = await response.stream.bytesToString();
+      } on FormatException {
+        // ignore
+      }
+      throw ServiceException.fromHttpResponse(response, responseBody);
     }
+    final responseBody = await response.stream.bytesToString();
     return responseBody.isEmpty
         ? {}
         : jsonDecode(responseBody) as Map<String, dynamic>;
@@ -178,11 +132,13 @@ class ServiceClient {
     final response = await client.send(request);
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
-      _throwException(
-        response.statusCode,
-        response.reasonPhrase,
-        await response.stream.bytesToString(),
-      );
+      String? responseBody;
+      try {
+        responseBody = await response.stream.bytesToString();
+      } on FormatException {
+        // ignore
+      }
+      throw ServiceException.fromHttpResponse(response, responseBody);
     }
 
     final lines = response.stream.toStringStream().transform(
@@ -205,43 +161,6 @@ class ServiceClient {
     final query = Map.of(url.queryParameters);
     query['alt'] = 'sse';
     return url.replace(queryParameters: query);
-  }
-
-  Never _throwException(
-    int statusCode,
-    String? reasonPhrase,
-    String responseBody,
-  ) {
-    final dynamic json;
-    try {
-      json = jsonDecode(responseBody);
-    } on FormatException {
-      throw ServiceException(
-        'Invalid JSON response from server',
-        statusCode: statusCode,
-        responseBody: responseBody,
-      );
-    }
-
-    // We use `dynamic` and catch `TypeError` to simply JSON decoding.
-    final Status status;
-    try {
-      // ignore: avoid_dynamic_calls
-      status = Status.fromJson(json['error'] as Map<String, dynamic>);
-      // ignore: avoid_catching_errors
-    } on TypeError {
-      throw ServiceException(
-        'unexpected response format from server',
-        statusCode: statusCode,
-        responseBody: responseBody,
-      );
-    }
-
-    throw StatusException.fromStatus(
-      status,
-      statusCode: statusCode,
-      responseBody: responseBody,
-    );
   }
 }
 
