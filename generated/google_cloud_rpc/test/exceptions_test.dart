@@ -267,7 +267,10 @@ void main() {
       expect(e, isA<InternalServerErrorException>());
       expect(e.message, 'internal server error');
       expect(e.statusCode, 500);
-      expect(e.toString(), 'InternalException: internal server error');
+      expect(
+        e.toString(),
+        'InternalServerErrorException: internal server error',
+      );
     });
 
     test('valid error 501', () {

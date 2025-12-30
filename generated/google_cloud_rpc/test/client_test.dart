@@ -129,13 +129,13 @@ void main() {
 
     test('500 response, no status, with undecodable response body', () async {
       final service = ServiceClient(
-        client: MockClient((request) async => Response.bytes([0xff], 400)),
+        client: MockClient((request) async => Response.bytes([0xff], 500)),
       );
 
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<BadRequestException>().having(
+          isA<InternalServerErrorException>().having(
             (e) => e.responseBody,
             'responseBody',
             isNull,
@@ -296,14 +296,14 @@ void main() {
 
     test('500 response, no status, with undecodable response body', () async {
       final service = ServiceClient(
-        client: MockClient((request) async => Response.bytes([0xff], 400)),
+        client: MockClient((request) async => Response.bytes([0xff], 500)),
       );
 
       expect(
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<BadRequestException>().having(
+            isA<InternalServerErrorException>().having(
               (e) => e.responseBody,
               'responseBody',
               isNull,

@@ -376,7 +376,7 @@ final class InternalServerErrorException extends ServiceException {
   }) : super(statusCode: 500);
 
   @override
-  String get _name => 'InternalException';
+  String get _name => 'InternalServerErrorException';
 }
 
 /// Exception thrown when the server returns a "501 Not Implemented" response.

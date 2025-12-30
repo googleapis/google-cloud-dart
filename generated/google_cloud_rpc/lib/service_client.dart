@@ -101,7 +101,7 @@ class ServiceClient {
       try {
         responseBody = await response.stream.bytesToString();
       } on FormatException {
-        // ignore
+        // The response body is not valid UTF-8.
       }
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
@@ -136,7 +136,7 @@ class ServiceClient {
       try {
         responseBody = await response.stream.bytesToString();
       } on FormatException {
-        // ignore
+        // The response body is not valid UTF-8.
       }
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
