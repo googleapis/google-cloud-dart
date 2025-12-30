@@ -117,7 +117,7 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<ServiceException>().having(
+          isA<InternalServerErrorException>().having(
             (e) => e.responseBody,
             'responseBody',
             '',
@@ -134,7 +134,7 @@ void main() {
       await expectLater(
         () => service.post(sampleUrl),
         throwsA(
-          isA<ServiceException>().having(
+          isA<BadRequestException>().having(
             (e) => e.responseBody,
             'responseBody',
             isNull,
@@ -282,7 +282,7 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<ServiceException>().having(
+            isA<InternalServerErrorException>().having(
               (e) => e.responseBody,
               'responseBody',
               '',
@@ -302,7 +302,7 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<ServiceException>().having(
+            isA<BadRequestException>().having(
               (e) => e.responseBody,
               'responseBody',
               isNull,
@@ -342,7 +342,7 @@ void main() {
         service.postStreaming(sampleUrl),
         emitsInOrder([
           emitsError(
-            isA<ServiceException>().having(
+            isA<BadRequestException>().having(
               (e) => e.responseBody,
               'responseBody',
               '"Hello!"',
