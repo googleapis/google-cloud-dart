@@ -57,7 +57,7 @@ final class ServiceException implements Exception {
   /// The server response that caused the exception.
   final http.BaseResponse response;
 
-  /// The response body that caused the exception. Maybe `null` if the response
+  /// The response body that caused the exception. May be `null` if the response
   /// body could not be decoded.
   final String? responseBody;
 
@@ -211,7 +211,7 @@ final class ServiceException implements Exception {
       );
     }
 
-    // We use `dynamic` and catch `TypeError` to simply JSON decoding.
+    // We use `dynamic` and catch `TypeError` to simplify JSON decoding.
     final Status status;
     try {
       // ignore: avoid_dynamic_calls
