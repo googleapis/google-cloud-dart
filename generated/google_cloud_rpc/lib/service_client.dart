@@ -57,8 +57,14 @@ final class ServiceException implements Exception {
   /// The server response that caused the exception.
   final http.BaseResponse response;
 
+  /// The response body that caused the exception. Maybe `null` if the response
+  /// body could not be decoded.
   final String? responseBody;
 
+  /// The status message returned by the server.
+  ///
+  /// You can find out more about this error model and how to work with it in the
+  /// [API Design Guide](https://cloud.google.com/apis/design/errors).
   final Status? status;
 
   ServiceException(
@@ -180,6 +186,8 @@ final class ServiceException implements Exception {
     ),
   };
 
+  /// Create a [ServiceException] (or appropriate subclass) from an HTTP
+  /// response.
   factory ServiceException.fromHttpResponse(
     http.BaseResponse response,
     String? responseBody,
@@ -244,6 +252,7 @@ final class BadRequestException extends ServiceException {
   String get _name => 'BadRequestException';
 }
 
+/// Exception thrown when the server returns a "401 Unauthorized" response.
 final class UnauthorizedException extends ServiceException {
   UnauthorizedException(
     super.message, {
@@ -256,6 +265,7 @@ final class UnauthorizedException extends ServiceException {
   String get _name => 'UnauthorizedException';
 }
 
+/// Exception thrown when the server returns a "403 Forbidden" response.
 final class ForbiddenException extends ServiceException {
   ForbiddenException(
     super.message, {
@@ -268,6 +278,7 @@ final class ForbiddenException extends ServiceException {
   String get _name => 'ForbiddenException';
 }
 
+/// Exception thrown when the server returns a "404 Not Found" response.
 final class NotFoundException extends ServiceException {
   NotFoundException(
     super.message, {
@@ -280,6 +291,7 @@ final class NotFoundException extends ServiceException {
   String get _name => 'NotFoundException';
 }
 
+/// Exception thrown when the server returns a "405 Method Not Allowed" response.
 final class MethodNotAllowedException extends ServiceException {
   MethodNotAllowedException(
     super.message, {
@@ -292,6 +304,7 @@ final class MethodNotAllowedException extends ServiceException {
   String get _name => 'MethodNotAllowedException';
 }
 
+/// Exception thrown when the server returns a "409 Conflict" response.
 final class ConflictException extends ServiceException {
   ConflictException(
     super.message, {
@@ -304,6 +317,7 @@ final class ConflictException extends ServiceException {
   String get _name => 'ConflictException';
 }
 
+/// Exception thrown when the server returns a "411 Length Required" response.
 final class LengthRequiredException extends ServiceException {
   LengthRequiredException(
     super.message, {
@@ -316,6 +330,7 @@ final class LengthRequiredException extends ServiceException {
   String get _name => 'LengthRequiredException';
 }
 
+/// Exception thrown when the server returns a "412 Precondition Failed" response.
 final class PreconditionFailedException extends ServiceException {
   PreconditionFailedException(
     super.message, {
@@ -328,6 +343,7 @@ final class PreconditionFailedException extends ServiceException {
   String get _name => 'PreconditionFailedException';
 }
 
+/// Exception thrown when the server returns a "416 Request Range Not Satisfiable" response.
 final class RequestRangeNotSatisfiableException extends ServiceException {
   RequestRangeNotSatisfiableException(
     super.message, {
@@ -340,6 +356,7 @@ final class RequestRangeNotSatisfiableException extends ServiceException {
   String get _name => 'RequestRangeNotSatisfiableException';
 }
 
+/// Exception thrown when the server returns a "429 Too Many Requests" response.
 final class TooManyRequestsException extends ServiceException {
   TooManyRequestsException(
     super.message, {
@@ -352,6 +369,7 @@ final class TooManyRequestsException extends ServiceException {
   String get _name => 'TooManyRequestsException';
 }
 
+/// Exception thrown when the server returns a "499 Cancelled" response.
 final class CancelledException extends ServiceException {
   CancelledException(
     super.message, {
@@ -364,6 +382,7 @@ final class CancelledException extends ServiceException {
   String get _name => 'CancelledException';
 }
 
+/// Exception thrown when the server returns a "500 Internal Server Error" response.
 final class InternalServerErrorException extends ServiceException {
   InternalServerErrorException(
     super.message, {
@@ -376,6 +395,7 @@ final class InternalServerErrorException extends ServiceException {
   String get _name => 'InternalException';
 }
 
+/// Exception thrown when the server returns a "501 Not Implemented" response.
 final class NotImplementedException extends ServiceException {
   NotImplementedException(
     super.message, {
@@ -388,6 +408,7 @@ final class NotImplementedException extends ServiceException {
   String get _name => 'NotImplementedException';
 }
 
+/// Exception thrown when the server returns a "502 Bad Gateway" response.
 final class BadGatewayException extends ServiceException {
   BadGatewayException(
     super.message, {
@@ -400,6 +421,7 @@ final class BadGatewayException extends ServiceException {
   String get _name => 'BadGatewayException';
 }
 
+/// Exception thrown when the server returns a "503 Service Unavailable" response.
 final class ServiceUnavailableException extends ServiceException {
   ServiceUnavailableException(
     super.message, {
@@ -412,6 +434,7 @@ final class ServiceUnavailableException extends ServiceException {
   String get _name => 'ServiceUnavailableException';
 }
 
+/// Exception thrown when the server returns a "504 Gateway Timeout" response.
 final class GatewayTimeoutException extends ServiceException {
   GatewayTimeoutException(
     super.message, {
@@ -484,11 +507,17 @@ class ServiceClient {
     });
 
     final response = await client.send(request);
-    final responseBody = await response.stream.bytesToString();
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
+      String? responseBody;
+      try {
+        responseBody = await response.stream.bytesToString();
+      } on FormatException {
+        // ignore
+      }
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
+    final responseBody = await response.stream.bytesToString();
     return responseBody.isEmpty
         ? {}
         : jsonDecode(responseBody) as Map<String, dynamic>;
@@ -515,10 +544,13 @@ class ServiceClient {
     final response = await client.send(request);
     final statusOK = response.statusCode >= 200 && response.statusCode < 300;
     if (!statusOK) {
-      throw ServiceException.fromHttpResponse(
-        response,
-        await response.stream.bytesToString(),
-      );
+      String? responseBody;
+      try {
+        responseBody = await response.stream.bytesToString();
+      } on FormatException {
+        // ignore
+      }
+      throw ServiceException.fromHttpResponse(response, responseBody);
     }
 
     final lines = response.stream.toStringStream().transform(

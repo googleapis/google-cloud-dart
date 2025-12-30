@@ -126,6 +126,23 @@ void main() {
       );
     });
 
+    test('500 response, no status, with undecodable response body', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async => Response.bytes([0xff], 400)),
+      );
+
+      await expectLater(
+        () => service.post(sampleUrl),
+        throwsA(
+          isA<ServiceException>().having(
+            (e) => e.responseBody,
+            'responseBody',
+            isNull,
+          ),
+        ),
+      );
+    });
+
     test('400 response with status', () async {
       final status = Status(code: 1, message: 'failure', details: []);
       final responseBody = jsonEncode({'error': status.toJson()});
@@ -269,6 +286,26 @@ void main() {
               (e) => e.responseBody,
               'responseBody',
               '',
+            ),
+          ),
+          emitsDone,
+        ]),
+      );
+    });
+
+    test('500 response, no status, with undecodable response body', () async {
+      final service = ServiceClient(
+        client: MockClient((request) async => Response.bytes([0xff], 400)),
+      );
+
+      expect(
+        service.postStreaming(sampleUrl),
+        emitsInOrder([
+          emitsError(
+            isA<ServiceException>().having(
+              (e) => e.responseBody,
+              'responseBody',
+              isNull,
             ),
           ),
           emitsDone,
