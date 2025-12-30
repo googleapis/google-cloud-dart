@@ -28,6 +28,7 @@ void main() {
       expect(e.response, response);
       expect(e.responseBody, null);
       expect(e.status, isNull);
+      expect(e.toString(), 'BadRequestException: unknown error');
     });
 
     test('empty body', () {
@@ -39,6 +40,7 @@ void main() {
       expect(e.response, response);
       expect(e.responseBody, '');
       expect(e.status, isNull);
+      expect(e.toString(), 'BadRequestException: unknown error');
     });
 
     test('invalid json body', () {
@@ -50,6 +52,7 @@ void main() {
       expect(e.response, response);
       expect(e.responseBody, 'not json');
       expect(e.status, isNull);
+      expect(e.toString(), 'BadRequestException: not json');
     });
 
     test('valid json but missing error field', () {
@@ -61,6 +64,7 @@ void main() {
       expect(e.response, response);
       expect(e.responseBody, '{}');
       expect(e.status, isNull);
+      expect(e.toString(), 'BadRequestException: {}');
     });
 
     test('valid json but error field is not a map', () {
@@ -74,6 +78,7 @@ void main() {
       expect(e.statusCode, 400);
       expect(e.responseBody, '{"error": "string error"}');
       expect(e.status, isNull);
+      expect(e.toString(), 'BadRequestException: {"error": "string error"}');
     });
 
     test('valid error 400', () {
@@ -96,6 +101,7 @@ void main() {
       expect(e.status, isNotNull);
       expect(e.status!.code, 400);
       expect(e.status!.message, 'bad request');
+      expect(e.toString(), 'BadRequestException: bad request');
     });
 
     test('valid error 409', () {
@@ -116,6 +122,7 @@ void main() {
       expect(e.statusCode, 409);
       expect(e.responseBody, responseBody);
       expect(e.status, isNotNull);
+      expect(e.toString(), 'ConflictException: conflict');
     });
 
     test('valid error other', () {
@@ -138,6 +145,7 @@ void main() {
       expect(e.statusCode, 500);
       expect(e.responseBody, responseBody);
       expect(e.status, isNotNull);
+      expect(e.toString(), 'ServiceException: internal error');
     });
   });
 }
