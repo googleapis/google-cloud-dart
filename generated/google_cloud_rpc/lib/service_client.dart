@@ -160,6 +160,54 @@ final class BadRequestException extends ServiceException {
   String get _name => 'BadRequestException';
 }
 
+final class UnauthorizedException extends ServiceException {
+  UnauthorizedException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 401);
+
+  @override
+  String get _name => 'UnauthorizedException';
+}
+
+final class ForbiddenException extends ServiceException {
+  ForbiddenException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 403);
+
+  @override
+  String get _name => 'ForbiddenException';
+}
+
+final class NotFoundException extends ServiceException {
+  NotFoundException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 404);
+
+  @override
+  String get _name => 'NotFoundException';
+}
+
+final class MethodNotAllowedException extends ServiceException {
+  MethodNotAllowedException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 405);
+
+  @override
+  String get _name => 'MethodNotAllowedException';
+}
+
 final class ConflictException extends ServiceException {
   ConflictException(
     super.message, {
@@ -170,6 +218,126 @@ final class ConflictException extends ServiceException {
 
   @override
   String get _name => 'ConflictException';
+}
+
+final class LengthRequiredException extends ServiceException {
+  LengthRequiredException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 411);
+
+  @override
+  String get _name => 'LengthRequiredException';
+}
+
+final class PreconditionFailedException extends ServiceException {
+  PreconditionFailedException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 412);
+
+  @override
+  String get _name => 'PreconditionFailedException';
+}
+
+final class RequestRangeNotSatisfiableException extends ServiceException {
+  RequestRangeNotSatisfiableException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 416);
+
+  @override
+  String get _name => 'RequestRangeNotSatisfiableException';
+}
+
+final class TooManyRequestsException extends ServiceException {
+  TooManyRequestsException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 429);
+
+  @override
+  String get _name => 'TooManyRequestsException';
+}
+
+final class CancelledException extends ServiceException {
+  CancelledException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 499);
+
+  @override
+  String get _name => 'CancelledException';
+}
+
+final class InternalServerErrorException extends ServiceException {
+  InternalServerErrorException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 500);
+
+  @override
+  String get _name => 'InternalException';
+}
+
+final class NotImplementedException extends ServiceException {
+  NotImplementedException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 501);
+
+  @override
+  String get _name => 'NotImplementedException';
+}
+
+final class BadGatewayException extends ServiceException {
+  BadGatewayException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 502);
+
+  @override
+  String get _name => 'BadGatewayException';
+}
+
+final class ServiceUnavailableException extends ServiceException {
+  ServiceUnavailableException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 503);
+
+  @override
+  String get _name => 'ServiceUnavailableException';
+}
+
+final class GatewayTimeoutException extends ServiceException {
+  GatewayTimeoutException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 504);
+
+  @override
+  String get _name => 'GatewayTimeoutException';
 }
 
 /// A low-level mechanism to communicate with Google APIs.
