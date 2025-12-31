@@ -195,6 +195,18 @@ void main() {
       expect(e.toString(), 'MethodNotAllowedException: method not allowed');
     });
 
+    test('valid error 408', () {
+      final response = http.Response(
+        '{"error": {"message": "request timeout"}}',
+        408,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<RequestTimeoutException>());
+      expect(e.message, 'request timeout');
+      expect(e.statusCode, 408);
+      expect(e.toString(), 'RequestTimeoutException: request timeout');
+    });
+
     test('valid error 411', () {
       final response = http.Response(
         '{"error": {"message": "length required"}}',

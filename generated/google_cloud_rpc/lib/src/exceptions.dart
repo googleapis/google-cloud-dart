@@ -94,6 +94,12 @@ final class ServiceException implements Exception {
       responseBody: responseBody,
       status: status,
     ),
+    408 => RequestTimeoutException(
+      message,
+      response: response,
+      responseBody: responseBody,
+      status: status,
+    ),
     409 => ConflictException(
       message,
       response: response,
@@ -283,6 +289,19 @@ final class MethodNotAllowedException extends ServiceException {
 
   @override
   String get _name => 'MethodNotAllowedException';
+}
+
+/// Exception thrown when the server returns a "408 Request Timeout" response.
+final class RequestTimeoutException extends ServiceException {
+  RequestTimeoutException(
+    super.message, {
+    required super.response,
+    required super.responseBody,
+    super.status,
+  }) : super(statusCode: 408);
+
+  @override
+  String get _name => 'RequestTimeoutException';
 }
 
 /// Exception thrown when the server returns a "409 Conflict" response.
