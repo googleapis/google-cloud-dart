@@ -12,20 +12,43 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
+
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 import 'bucket.dart';
 
-class ConflictException implements Exception {
-  final String message;
+final class Retry {
+  Future<T> run<T extends http.BaseResponse>(Future<T> Function() body) =>
+      body();
 
-  ConflictException(this.message);
+  const Retry();
 }
+
+final class DefaultRetry {
+  Future<T> run<T extends http.BaseResponse>(Future<T> Function() body) {
+    while (true) {
+      try {
+        return body();
+      } on (TooManyRequestsException, 
+      InternalServerErrorException,
+      BadGatewayException,
+      ServiceUnavailableException,
+      GatewayTimeoutException,
+//      RequestTimeoutException,
+      http.ClientException) catch (e {
+        return body();
+      }
+    }
+  }
+}
+
+const defaultRetry = DefaultRetry();
 
 /// API for storing and retrieving potentially large, immutable data objects.
 class StorageService {
-  final ServiceClient _client;
+  final http.Client _client;
   static const _host = 'storage.googleapis.com';
 
   /// Creates a `StorageService` using [client] for transport.
@@ -33,8 +56,7 @@ class StorageService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `StorageService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  StorageService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  StorageService({required http.Client client}) : _client = client;
 
   /// Creates a new bucket.
   ///
@@ -42,15 +64,16 @@ class StorageService {
   Future<Bucket> createBucket({
     required String bucketName,
     String? project,
+    Retry retry = defaultRetry,
   }) async {
     final query = {if (project != null) 'project': project};
 
     final body = Bucket(name: bucketName);
 
     final url = Uri.https(_host, 'storage/v1/b', query);
-    final response = await _client.post(url, body: body);
+    final response = await retry.run(() => _client.post(url, body: body));
 
-    return Bucket.fromJson(response);
+    return Bucket.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
   }
 
   void close() {

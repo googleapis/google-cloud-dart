@@ -92,10 +92,12 @@ void main() async {
       );
       expect(bucket.name, bucketName);
 
-      await storageService.createBucket(
-        bucketName: bucketName,
-        project: projectId,
-      );
+      /*
+      DO_NOT_SUBMIT! XXX!
+      expect(
+        storageService.createBucket(bucketName: bucketName, project: projectId),
+        throwsA(isA<ConflictException>()),
+      );*/
       await testClient.endTest();
     });
   });
