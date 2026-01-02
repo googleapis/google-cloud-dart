@@ -13,6 +13,9 @@
 // limitations under the License.
 
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:http/http.dart' as http;
+
+import 'retry.dart';
 
 class Bucket implements JsonEncodable {
   final String name;
@@ -30,6 +33,8 @@ class Bucket implements JsonEncodable {
     this.locationType,
     this.timeCreated,
   });
+
+  Future<void> delete() {}
 
   factory Bucket.fromJson(Map<String, dynamic> json) => Bucket(
     name: json['name'] as String,

@@ -13,51 +13,20 @@
 // limitations under the License.
 
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 import 'bucket.dart';
+import 'retry.dart';
 
-final class Retry {
-  Future<T> run<T extends http.BaseResponse>(Future<T> Function() body) =>
-      body();
-
-  const Retry();
+abstract interface class Bucket {
+  Future<void> delete();
 }
-
-final class DefaultRetry {
-  Future<T> run<T extends http.BaseResponse>(Future<T> Function() body) {
-    while (true) {
-      try {
-        return body();
-      } on (TooManyRequestsException, 
-      InternalServerErrorException,
-      BadGatewayException,
-      ServiceUnavailableException,
-      GatewayTimeoutException,
-//      RequestTimeoutException,
-      http.ClientException) catch (e {
-        return body();
-      }
-    }
-  }
-}
-
-const defaultRetry = DefaultRetry();
 
 /// API for storing and retrieving potentially large, immutable data objects.
-class StorageService {
-  final http.Client _client;
-  static const _host = 'storage.googleapis.com';
-
-  /// Creates a `StorageService` using [client] for transport.
-  ///
-  /// The provided [http.Client] must be configured to provide whatever
-  /// authentication is required by `StorageService`. You can do that using
-  /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  StorageService({required http.Client client}) : _client = client;
-
+abstract interface class StorageService {
   /// Creates a new bucket.
   ///
   /// See https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
@@ -65,18 +34,7 @@ class StorageService {
     required String bucketName,
     String? project,
     Retry retry = defaultRetry,
-  }) async {
-    final query = {if (project != null) 'project': project};
+  });
 
-    final body = Bucket(name: bucketName);
-
-    final url = Uri.https(_host, 'storage/v1/b', query);
-    final response = await retry.run(() => _client.post(url, body: body));
-
-    return Bucket.fromJson(jsonDecode(response.body) as Map<String, dynamic>);
-  }
-
-  void close() {
-    _client.close();
-  }
+  void close();
 }
