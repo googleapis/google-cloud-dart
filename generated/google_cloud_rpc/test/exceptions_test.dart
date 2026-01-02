@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud_rpc/rpc.dart';
-import 'package:google_cloud_rpc/service_client.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
@@ -196,6 +195,18 @@ void main() {
       expect(e.toString(), 'MethodNotAllowedException: method not allowed');
     });
 
+    test('valid error 408', () {
+      final response = http.Response(
+        '{"error": {"message": "request timeout"}}',
+        408,
+      );
+      final e = ServiceException.fromHttpResponse(response, response.body);
+      expect(e, isA<RequestTimeoutException>());
+      expect(e.message, 'request timeout');
+      expect(e.statusCode, 408);
+      expect(e.toString(), 'RequestTimeoutException: request timeout');
+    });
+
     test('valid error 411', () {
       final response = http.Response(
         '{"error": {"message": "length required"}}',
@@ -268,7 +279,10 @@ void main() {
       expect(e, isA<InternalServerErrorException>());
       expect(e.message, 'internal server error');
       expect(e.statusCode, 500);
-      expect(e.toString(), 'InternalException: internal server error');
+      expect(
+        e.toString(),
+        'InternalServerErrorException: internal server error',
+      );
     });
 
     test('valid error 501', () {
