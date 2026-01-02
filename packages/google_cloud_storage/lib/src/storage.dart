@@ -13,28 +13,46 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'dart:math';
 
-import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
-import 'bucket.dart';
+import '../google_cloud_storage.dart';
+import 'bucket.dart' as bucket;
 import 'retry.dart';
 
-abstract interface class Bucket {
-  Future<void> delete();
-}
+final class StorageService {
+  static const _host = 'storage.googleapis.com';
 
-/// API for storing and retrieving potentially large, immutable data objects.
-abstract interface class StorageService {
-  /// Creates a new bucket.
-  ///
-  /// See https://cloud.google.com/storage/docs/json_api/v1/buckets/insert
+  final http.Client client;
+
+  StorageService(this.client);
+
   Future<Bucket> createBucket({
     required String bucketName,
     String? project,
     Retry retry = defaultRetry,
-  });
+  }) async {
+    final query = {if (project != null) 'project': project};
 
-  void close();
+    final url = Uri.https(_host, 'storage/v1/b', query);
+    final response = await retry.run(() => http.post(url));
+
+    return bucket.fromJson(
+      jsonDecode(response.body) as Map<String, dynamic>,
+      this,
+    );
+  }
+
+  Future<void> deleteBucket({
+    required String bucketName,
+    String? project,
+    Retry retry = defaultRetry,
+  }) async {
+    final url = Uri.https(_host, 'storage/v1/b/$bucketName');
+    await retry.run(() => client.delete(url));
+  }
+
+  void close() {
+    client.close();
+  }
 }

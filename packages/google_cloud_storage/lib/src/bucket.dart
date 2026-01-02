@@ -15,18 +15,54 @@
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:http/http.dart' as http;
 
+import '../google_cloud_storage.dart';
 import 'retry.dart';
 
-class Bucket implements JsonEncodable {
+Bucket create({
+  required String name,
+  required StorageService storageService,
+  Uri? selfLink,
+  int? metaGeneration,
+  String? location,
+  String? locationType,
+  DateTime? timeCreated,
+}) => Bucket._(
+  name: name,
+  storageService: storageService,
+  selfLink: selfLink,
+  metaGeneration: metaGeneration,
+  location: location,
+  locationType: locationType,
+  timeCreated: timeCreated,
+);
+
+Bucket fromJson(Map<String, dynamic> json, StorageService storageService) =>
+    Bucket._(
+      name: json['name'] as String,
+      storageService: storageService,
+      selfLink: Uri.parse(json['selfLink'] as String),
+      metaGeneration: switch (json['metageneration']) {
+        String s => int.parse(s),
+        int i => i,
+        _ => throw const FormatException('"metageneration" format incorrect'),
+      },
+      location: json['location'] as String,
+      locationType: json['locationType'] as String,
+      timeCreated: Timestamp.fromJson(json['timeCreated']).toDateTime(),
+    );
+
+final class Bucket {
   final String name;
+  final StorageService storageService;
   final Uri? selfLink;
   final int? metaGeneration;
   final String? location;
   final String? locationType;
   final DateTime? timeCreated;
 
-  Bucket({
+  Bucket._({
     required this.name,
+    required this.storageService,
     this.selfLink,
     this.metaGeneration,
     this.location,
@@ -34,23 +70,9 @@ class Bucket implements JsonEncodable {
     this.timeCreated,
   });
 
-  Future<void> delete() {}
-
-  factory Bucket.fromJson(Map<String, dynamic> json) => Bucket(
-    name: json['name'] as String,
-    selfLink: Uri.parse(json['selfLink'] as String),
-    metaGeneration: switch (json['metageneration']) {
-      String s => int.parse(s),
-      int i => i,
-      _ => throw const FormatException('"metageneration" format incorrect'),
-    },
-    location: json['location'] as String,
-    locationType: json['locationType'] as String,
-    timeCreated: Timestamp.fromJson(json['timeCreated']).toDateTime(),
-  );
-
-  @override
-  Map<String, dynamic> toJson() => {'name': name};
+  Future<void> delete() async {
+    await storageService.deleteBucket(bucketName: name);
+  }
 
   @override
   String toString() => 'Bucket(name: $name)';
