@@ -20,6 +20,7 @@ roots        = 'conformance'
 include-list = 'test_messages_proto3.proto'
 
 [codec]
-dev-dependencies     = 'path,test,test_utils'
-not-for-publication  = 'true'
-repository-url       = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protojson_conformance'
+dev-dependencies      = 'path,test,test_utils'
+not-for-publication   = 'true'
+library-path-override = 'google_cloud_protobuf_test_messages_proto3.dart'
+repository-url        = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_protojson_conformance'

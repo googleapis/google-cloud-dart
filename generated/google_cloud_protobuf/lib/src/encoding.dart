@@ -24,8 +24,6 @@ library;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import '../protobuf.dart';
-
 export 'dart:typed_data' show Uint8List;
 
 /// Decodes: `BOOL_TYPE`.

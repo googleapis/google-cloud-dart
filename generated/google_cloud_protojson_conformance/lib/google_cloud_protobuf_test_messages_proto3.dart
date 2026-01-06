@@ -21,7 +21,6 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: unintended_html_in_doc_comment
@@ -1334,34 +1333,27 @@ final class TestAllTypesProto3 extends ProtoMessage {
     if (optionalCord.isNotDefault) 'optionalCord': optionalCord,
     if (recursiveMessage case final recursiveMessage?)
       'recursiveMessage': recursiveMessage.toJson(),
-    if (repeatedInt32.isNotDefault)
-      'repeatedInt32': [for (final i in repeatedInt32) i],
+    if (repeatedInt32.isNotDefault) 'repeatedInt32': repeatedInt32,
     if (repeatedInt64.isNotDefault)
       'repeatedInt64': [for (final i in repeatedInt64) i.toString()],
-    if (repeatedUint32.isNotDefault)
-      'repeatedUint32': [for (final i in repeatedUint32) i],
+    if (repeatedUint32.isNotDefault) 'repeatedUint32': repeatedUint32,
     if (repeatedUint64.isNotDefault)
       'repeatedUint64': [for (final i in repeatedUint64) i.toString()],
-    if (repeatedSint32.isNotDefault)
-      'repeatedSint32': [for (final i in repeatedSint32) i],
+    if (repeatedSint32.isNotDefault) 'repeatedSint32': repeatedSint32,
     if (repeatedSint64.isNotDefault)
       'repeatedSint64': [for (final i in repeatedSint64) i.toString()],
-    if (repeatedFixed32.isNotDefault)
-      'repeatedFixed32': [for (final i in repeatedFixed32) i],
+    if (repeatedFixed32.isNotDefault) 'repeatedFixed32': repeatedFixed32,
     if (repeatedFixed64.isNotDefault)
       'repeatedFixed64': [for (final i in repeatedFixed64) i.toString()],
-    if (repeatedSfixed32.isNotDefault)
-      'repeatedSfixed32': [for (final i in repeatedSfixed32) i],
+    if (repeatedSfixed32.isNotDefault) 'repeatedSfixed32': repeatedSfixed32,
     if (repeatedSfixed64.isNotDefault)
       'repeatedSfixed64': [for (final i in repeatedSfixed64) i.toString()],
     if (repeatedFloat.isNotDefault)
       'repeatedFloat': [for (final i in repeatedFloat) encodeDouble(i)],
     if (repeatedDouble.isNotDefault)
       'repeatedDouble': [for (final i in repeatedDouble) encodeDouble(i)],
-    if (repeatedBool.isNotDefault)
-      'repeatedBool': [for (final i in repeatedBool) i],
-    if (repeatedString.isNotDefault)
-      'repeatedString': [for (final i in repeatedString) i],
+    if (repeatedBool.isNotDefault) 'repeatedBool': repeatedBool,
+    if (repeatedString.isNotDefault) 'repeatedString': repeatedString,
     if (repeatedBytes.isNotDefault)
       'repeatedBytes': [for (final i in repeatedBytes) encodeBytes(i)],
     if (repeatedNestedMessage.isNotDefault)
@@ -1377,62 +1369,50 @@ final class TestAllTypesProto3 extends ProtoMessage {
     if (repeatedForeignEnum.isNotDefault)
       'repeatedForeignEnum': [for (final i in repeatedForeignEnum) i.toJson()],
     if (repeatedStringPiece.isNotDefault)
-      'repeatedStringPiece': [for (final i in repeatedStringPiece) i],
-    if (repeatedCord.isNotDefault)
-      'repeatedCord': [for (final i in repeatedCord) i],
-    if (packedInt32.isNotDefault)
-      'packedInt32': [for (final i in packedInt32) i],
+      'repeatedStringPiece': repeatedStringPiece,
+    if (repeatedCord.isNotDefault) 'repeatedCord': repeatedCord,
+    if (packedInt32.isNotDefault) 'packedInt32': packedInt32,
     if (packedInt64.isNotDefault)
       'packedInt64': [for (final i in packedInt64) i.toString()],
-    if (packedUint32.isNotDefault)
-      'packedUint32': [for (final i in packedUint32) i],
+    if (packedUint32.isNotDefault) 'packedUint32': packedUint32,
     if (packedUint64.isNotDefault)
       'packedUint64': [for (final i in packedUint64) i.toString()],
-    if (packedSint32.isNotDefault)
-      'packedSint32': [for (final i in packedSint32) i],
+    if (packedSint32.isNotDefault) 'packedSint32': packedSint32,
     if (packedSint64.isNotDefault)
       'packedSint64': [for (final i in packedSint64) i.toString()],
-    if (packedFixed32.isNotDefault)
-      'packedFixed32': [for (final i in packedFixed32) i],
+    if (packedFixed32.isNotDefault) 'packedFixed32': packedFixed32,
     if (packedFixed64.isNotDefault)
       'packedFixed64': [for (final i in packedFixed64) i.toString()],
-    if (packedSfixed32.isNotDefault)
-      'packedSfixed32': [for (final i in packedSfixed32) i],
+    if (packedSfixed32.isNotDefault) 'packedSfixed32': packedSfixed32,
     if (packedSfixed64.isNotDefault)
       'packedSfixed64': [for (final i in packedSfixed64) i.toString()],
     if (packedFloat.isNotDefault)
       'packedFloat': [for (final i in packedFloat) encodeDouble(i)],
     if (packedDouble.isNotDefault)
       'packedDouble': [for (final i in packedDouble) encodeDouble(i)],
-    if (packedBool.isNotDefault) 'packedBool': [for (final i in packedBool) i],
+    if (packedBool.isNotDefault) 'packedBool': packedBool,
     if (packedNestedEnum.isNotDefault)
       'packedNestedEnum': [for (final i in packedNestedEnum) i.toJson()],
-    if (unpackedInt32.isNotDefault)
-      'unpackedInt32': [for (final i in unpackedInt32) i],
+    if (unpackedInt32.isNotDefault) 'unpackedInt32': unpackedInt32,
     if (unpackedInt64.isNotDefault)
       'unpackedInt64': [for (final i in unpackedInt64) i.toString()],
-    if (unpackedUint32.isNotDefault)
-      'unpackedUint32': [for (final i in unpackedUint32) i],
+    if (unpackedUint32.isNotDefault) 'unpackedUint32': unpackedUint32,
     if (unpackedUint64.isNotDefault)
       'unpackedUint64': [for (final i in unpackedUint64) i.toString()],
-    if (unpackedSint32.isNotDefault)
-      'unpackedSint32': [for (final i in unpackedSint32) i],
+    if (unpackedSint32.isNotDefault) 'unpackedSint32': unpackedSint32,
     if (unpackedSint64.isNotDefault)
       'unpackedSint64': [for (final i in unpackedSint64) i.toString()],
-    if (unpackedFixed32.isNotDefault)
-      'unpackedFixed32': [for (final i in unpackedFixed32) i],
+    if (unpackedFixed32.isNotDefault) 'unpackedFixed32': unpackedFixed32,
     if (unpackedFixed64.isNotDefault)
       'unpackedFixed64': [for (final i in unpackedFixed64) i.toString()],
-    if (unpackedSfixed32.isNotDefault)
-      'unpackedSfixed32': [for (final i in unpackedSfixed32) i],
+    if (unpackedSfixed32.isNotDefault) 'unpackedSfixed32': unpackedSfixed32,
     if (unpackedSfixed64.isNotDefault)
       'unpackedSfixed64': [for (final i in unpackedSfixed64) i.toString()],
     if (unpackedFloat.isNotDefault)
       'unpackedFloat': [for (final i in unpackedFloat) encodeDouble(i)],
     if (unpackedDouble.isNotDefault)
       'unpackedDouble': [for (final i in unpackedDouble) encodeDouble(i)],
-    if (unpackedBool.isNotDefault)
-      'unpackedBool': [for (final i in unpackedBool) i],
+    if (unpackedBool.isNotDefault) 'unpackedBool': unpackedBool,
     if (unpackedNestedEnum.isNotDefault)
       'unpackedNestedEnum': [for (final i in unpackedNestedEnum) i.toJson()],
     if (mapInt32Int32.isNotDefault)
@@ -1494,10 +1474,7 @@ final class TestAllTypesProto3 extends ProtoMessage {
       'mapBoolBool': {
         for (final e in mapBoolBool.entries) e.key.toString(): e.value,
       },
-    if (mapStringString.isNotDefault)
-      'mapStringString': {
-        for (final e in mapStringString.entries) e.key: e.value,
-      },
+    if (mapStringString.isNotDefault) 'mapStringString': mapStringString,
     if (mapStringBytes.isNotDefault)
       'mapStringBytes': {
         for (final e in mapStringBytes.entries) e.key: encodeBytes(e.value),

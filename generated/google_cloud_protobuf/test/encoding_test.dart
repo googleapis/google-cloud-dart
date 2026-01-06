@@ -16,11 +16,6 @@ import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('int64', () {
-    expect(encodeInt64(decodeInt64('1')), '1');
-    expect(encodeInt64(decodeInt64(1)), '1');
-  });
-
   test('double', () {
     expect(decodeDouble(1), 1);
     expect(decodeDouble(1.1), 1.1);
