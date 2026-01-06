@@ -28,6 +28,7 @@ library;
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;
@@ -93,8 +94,8 @@ final class IAMPolicy {
   /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED` errors.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -106,8 +107,8 @@ final class IAMPolicy {
   /// set.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy');
     final response = await _client.post(url, body: request);
@@ -123,8 +124,8 @@ final class IAMPolicy {
   /// may "fail open" without warning.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {

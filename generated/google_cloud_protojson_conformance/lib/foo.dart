@@ -18,19 +18,15 @@
 ///
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters 
-// ignore_for_file: camel_case_types 
-// ignore_for_file: comment_references 
-// ignore_for_file: implementation_imports 
-// ignore_for_file: lines_longer_than_80_chars 
-// ignore_for_file: unintended_html_in_doc_comment 
+// ignore_for_file: avoid_unused_constructor_parameters
+// ignore_for_file: camel_case_types
+// ignore_for_file: comment_references
+// ignore_for_file: implementation_imports
+// ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
-
-
-
-
 
 /// This proto includes every type of field in both singular and repeated
 /// forms.
@@ -40,7 +36,8 @@ import 'package:google_cloud_protobuf/src/encoding.dart';
 /// could trigger bugs that occur in any message type in this file.  We verify
 /// this stays true in a unit test.
 final class TestAllTypesProto3 extends ProtoMessage {
-  static const String fullyQualifiedName = 'protobuf_test_messages.proto3.TestAllTypesProto3';
+  static const String fullyQualifiedName =
+      'protobuf_test_messages.proto3.TestAllTypesProto3';
 
   /// Singular
   final int optionalInt32;
@@ -504,324 +501,1116 @@ final class TestAllTypesProto3 extends ProtoMessage {
     this.fieldName16 = 0,
     this.fieldName17 = 0,
     this.fieldName18 = 0,
-  }) : 
-    optionalUint64 = optionalUint64 ?? BigInt.zero,
-    optionalFixed64 = optionalFixed64 ?? BigInt.zero,
-    optionalBytes = optionalBytes ?? Uint8List(0),
-  super(fullyQualifiedName);
+  }) : optionalUint64 = optionalUint64 ?? BigInt.zero,
+       optionalFixed64 = optionalFixed64 ?? BigInt.zero,
+       optionalBytes = optionalBytes ?? Uint8List(0),
+       super(fullyQualifiedName);
 
-  factory TestAllTypesProto3.fromJson(Object? j) 
-    {
-      final json = j as Map<String, Object?>;
-      return TestAllTypesProto3(
-        optionalInt32: switch (json['optionalInt32']) { null => 0, Object $1 => decodeInt($1)},
-        optionalInt64: switch (json['optionalInt64']) { null => 0, Object $1 => decodeInt64($1)},
-        optionalUint32: switch (json['optionalUint32']) { null => 0, Object $1 => decodeInt($1)},
-        optionalUint64: switch (json['optionalUint64']) { null => BigInt.zero, Object $1 => decodeUint64($1)},
-        optionalSint32: switch (json['optionalSint32']) { null => 0, Object $1 => decodeInt($1)},
-        optionalSint64: switch (json['optionalSint64']) { null => 0, Object $1 => decodeInt64($1)},
-        optionalFixed32: switch (json['optionalFixed32']) { null => 0, Object $1 => decodeInt($1)},
-        optionalFixed64: switch (json['optionalFixed64']) { null => BigInt.zero, Object $1 => decodeUint64($1)},
-        optionalSfixed32: switch (json['optionalSfixed32']) { null => 0, Object $1 => decodeInt($1)},
-        optionalSfixed64: switch (json['optionalSfixed64']) { null => 0, Object $1 => decodeInt64($1)},
-        optionalFloat: switch (json['optionalFloat']) { null => 0, Object $1 => decodeDouble($1)},
-        optionalDouble: switch (json['optionalDouble']) { null => 0, Object $1 => decodeDouble($1)},
-        optionalBool: switch (json['optionalBool']) { null => false, Object $1 => decodeBool($1)},
-        optionalString: switch (json['optionalString']) { null => '', Object $1 => decodeString($1)},
-        optionalBytes: switch (json['optionalBytes']) { null => Uint8List(0), Object $1 => decodeBytes($1)},
-        optionalNestedMessage: switch (json['optionalNestedMessage']) { null => null, Object $1 => TestAllTypesProto3_NestedMessage.fromJson($1)},
-        optionalForeignMessage: switch (json['optionalForeignMessage']) { null => null, Object $1 => ForeignMessage.fromJson($1)},
-        optionalNestedEnum: switch (json['optionalNestedEnum']) { null => TestAllTypesProto3_NestedEnum.$default, Object $1 => TestAllTypesProto3_NestedEnum.fromJson($1)},
-        optionalForeignEnum: switch (json['optionalForeignEnum']) { null => ForeignEnum.$default, Object $1 => ForeignEnum.fromJson($1)},
-        optionalAliasedEnum: switch (json['optionalAliasedEnum']) { null => TestAllTypesProto3_AliasedEnum.$default, Object $1 => TestAllTypesProto3_AliasedEnum.fromJson($1)},
-        optionalStringPiece: switch (json['optionalStringPiece']) { null => '', Object $1 => decodeString($1)},
-        optionalCord: switch (json['optionalCord']) { null => '', Object $1 => decodeString($1)},
-        recursiveMessage: switch (json['recursiveMessage']) { null => null, Object $1 => TestAllTypesProto3.fromJson($1)},
-        repeatedInt32: switch (json['repeatedInt32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"repeatedInt32" is not a list') },
-        repeatedInt64: switch (json['repeatedInt64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"repeatedInt64" is not a list') },
-        repeatedUint32: switch (json['repeatedUint32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"repeatedUint32" is not a list') },
-        repeatedUint64: switch (json['repeatedUint64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeUint64(i)], _ => throw const FormatException('"repeatedUint64" is not a list') },
-        repeatedSint32: switch (json['repeatedSint32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"repeatedSint32" is not a list') },
-        repeatedSint64: switch (json['repeatedSint64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"repeatedSint64" is not a list') },
-        repeatedFixed32: switch (json['repeatedFixed32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"repeatedFixed32" is not a list') },
-        repeatedFixed64: switch (json['repeatedFixed64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeUint64(i)], _ => throw const FormatException('"repeatedFixed64" is not a list') },
-        repeatedSfixed32: switch (json['repeatedSfixed32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"repeatedSfixed32" is not a list') },
-        repeatedSfixed64: switch (json['repeatedSfixed64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"repeatedSfixed64" is not a list') },
-        repeatedFloat: switch (json['repeatedFloat']) { null => [], List<Object?> $1 => [for (final i in $1) decodeDouble(i)], _ => throw const FormatException('"repeatedFloat" is not a list') },
-        repeatedDouble: switch (json['repeatedDouble']) { null => [], List<Object?> $1 => [for (final i in $1) decodeDouble(i)], _ => throw const FormatException('"repeatedDouble" is not a list') },
-        repeatedBool: switch (json['repeatedBool']) { null => [], List<Object?> $1 => [for (final i in $1) decodeBool(i)], _ => throw const FormatException('"repeatedBool" is not a list') },
-        repeatedString: switch (json['repeatedString']) { null => [], List<Object?> $1 => [for (final i in $1) decodeString(i)], _ => throw const FormatException('"repeatedString" is not a list') },
-        repeatedBytes: switch (json['repeatedBytes']) { null => [], List<Object?> $1 => [for (final i in $1) decodeBytes(i)], _ => throw const FormatException('"repeatedBytes" is not a list') },
-        repeatedNestedMessage: switch (json['repeatedNestedMessage']) { null => [], List<Object?> $1 => [for (final i in $1) TestAllTypesProto3_NestedMessage.fromJson(i)], _ => throw const FormatException('"repeatedNestedMessage" is not a list') },
-        repeatedForeignMessage: switch (json['repeatedForeignMessage']) { null => [], List<Object?> $1 => [for (final i in $1) ForeignMessage.fromJson(i)], _ => throw const FormatException('"repeatedForeignMessage" is not a list') },
-        repeatedNestedEnum: switch (json['repeatedNestedEnum']) { null => [], List<Object?> $1 => [for (final i in $1) TestAllTypesProto3_NestedEnum.fromJson(i)], _ => throw const FormatException('"repeatedNestedEnum" is not a list') },
-        repeatedForeignEnum: switch (json['repeatedForeignEnum']) { null => [], List<Object?> $1 => [for (final i in $1) ForeignEnum.fromJson(i)], _ => throw const FormatException('"repeatedForeignEnum" is not a list') },
-        repeatedStringPiece: switch (json['repeatedStringPiece']) { null => [], List<Object?> $1 => [for (final i in $1) decodeString(i)], _ => throw const FormatException('"repeatedStringPiece" is not a list') },
-        repeatedCord: switch (json['repeatedCord']) { null => [], List<Object?> $1 => [for (final i in $1) decodeString(i)], _ => throw const FormatException('"repeatedCord" is not a list') },
-        packedInt32: switch (json['packedInt32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"packedInt32" is not a list') },
-        packedInt64: switch (json['packedInt64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"packedInt64" is not a list') },
-        packedUint32: switch (json['packedUint32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"packedUint32" is not a list') },
-        packedUint64: switch (json['packedUint64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeUint64(i)], _ => throw const FormatException('"packedUint64" is not a list') },
-        packedSint32: switch (json['packedSint32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"packedSint32" is not a list') },
-        packedSint64: switch (json['packedSint64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"packedSint64" is not a list') },
-        packedFixed32: switch (json['packedFixed32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"packedFixed32" is not a list') },
-        packedFixed64: switch (json['packedFixed64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeUint64(i)], _ => throw const FormatException('"packedFixed64" is not a list') },
-        packedSfixed32: switch (json['packedSfixed32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"packedSfixed32" is not a list') },
-        packedSfixed64: switch (json['packedSfixed64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"packedSfixed64" is not a list') },
-        packedFloat: switch (json['packedFloat']) { null => [], List<Object?> $1 => [for (final i in $1) decodeDouble(i)], _ => throw const FormatException('"packedFloat" is not a list') },
-        packedDouble: switch (json['packedDouble']) { null => [], List<Object?> $1 => [for (final i in $1) decodeDouble(i)], _ => throw const FormatException('"packedDouble" is not a list') },
-        packedBool: switch (json['packedBool']) { null => [], List<Object?> $1 => [for (final i in $1) decodeBool(i)], _ => throw const FormatException('"packedBool" is not a list') },
-        packedNestedEnum: switch (json['packedNestedEnum']) { null => [], List<Object?> $1 => [for (final i in $1) TestAllTypesProto3_NestedEnum.fromJson(i)], _ => throw const FormatException('"packedNestedEnum" is not a list') },
-        unpackedInt32: switch (json['unpackedInt32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"unpackedInt32" is not a list') },
-        unpackedInt64: switch (json['unpackedInt64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"unpackedInt64" is not a list') },
-        unpackedUint32: switch (json['unpackedUint32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"unpackedUint32" is not a list') },
-        unpackedUint64: switch (json['unpackedUint64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeUint64(i)], _ => throw const FormatException('"unpackedUint64" is not a list') },
-        unpackedSint32: switch (json['unpackedSint32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"unpackedSint32" is not a list') },
-        unpackedSint64: switch (json['unpackedSint64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"unpackedSint64" is not a list') },
-        unpackedFixed32: switch (json['unpackedFixed32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"unpackedFixed32" is not a list') },
-        unpackedFixed64: switch (json['unpackedFixed64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeUint64(i)], _ => throw const FormatException('"unpackedFixed64" is not a list') },
-        unpackedSfixed32: switch (json['unpackedSfixed32']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt(i)], _ => throw const FormatException('"unpackedSfixed32" is not a list') },
-        unpackedSfixed64: switch (json['unpackedSfixed64']) { null => [], List<Object?> $1 => [for (final i in $1) decodeInt64(i)], _ => throw const FormatException('"unpackedSfixed64" is not a list') },
-        unpackedFloat: switch (json['unpackedFloat']) { null => [], List<Object?> $1 => [for (final i in $1) decodeDouble(i)], _ => throw const FormatException('"unpackedFloat" is not a list') },
-        unpackedDouble: switch (json['unpackedDouble']) { null => [], List<Object?> $1 => [for (final i in $1) decodeDouble(i)], _ => throw const FormatException('"unpackedDouble" is not a list') },
-        unpackedBool: switch (json['unpackedBool']) { null => [], List<Object?> $1 => [for (final i in $1) decodeBool(i)], _ => throw const FormatException('"unpackedBool" is not a list') },
-        unpackedNestedEnum: switch (json['unpackedNestedEnum']) { null => [], List<Object?> $1 => [for (final i in $1) TestAllTypesProto3_NestedEnum.fromJson(i)], _ => throw const FormatException('"unpackedNestedEnum" is not a list') },
-        mapInt32Int32: switch (json['mapInt32Int32']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value)}, _ => throw const FormatException('"mapInt32Int32" is not an object') },
-        mapInt64Int64: switch (json['mapInt64Int64']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt64(e.value)}, _ => throw const FormatException('"mapInt64Int64" is not an object') },
-        mapUint32Uint32: switch (json['mapUint32Uint32']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value)}, _ => throw const FormatException('"mapUint32Uint32" is not an object') },
-        mapUint64Uint64: switch (json['mapUint64Uint64']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeUint64Key(e.key): decodeUint64(e.value)}, _ => throw const FormatException('"mapUint64Uint64" is not an object') },
-        mapSint32Sint32: switch (json['mapSint32Sint32']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value)}, _ => throw const FormatException('"mapSint32Sint32" is not an object') },
-        mapSint64Sint64: switch (json['mapSint64Sint64']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt64(e.value)}, _ => throw const FormatException('"mapSint64Sint64" is not an object') },
-        mapFixed32Fixed32: switch (json['mapFixed32Fixed32']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value)}, _ => throw const FormatException('"mapFixed32Fixed32" is not an object') },
-        mapFixed64Fixed64: switch (json['mapFixed64Fixed64']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeUint64Key(e.key): decodeUint64(e.value)}, _ => throw const FormatException('"mapFixed64Fixed64" is not an object') },
-        mapSfixed32Sfixed32: switch (json['mapSfixed32Sfixed32']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value)}, _ => throw const FormatException('"mapSfixed32Sfixed32" is not an object') },
-        mapSfixed64Sfixed64: switch (json['mapSfixed64Sfixed64']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeInt64(e.value)}, _ => throw const FormatException('"mapSfixed64Sfixed64" is not an object') },
-        mapInt32Float: switch (json['mapInt32Float']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeDouble(e.value)}, _ => throw const FormatException('"mapInt32Float" is not an object') },
-        mapInt32Double: switch (json['mapInt32Double']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeIntKey(e.key): decodeDouble(e.value)}, _ => throw const FormatException('"mapInt32Double" is not an object') },
-        mapBoolBool: switch (json['mapBoolBool']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeBoolKey(e.key): decodeBool(e.value)}, _ => throw const FormatException('"mapBoolBool" is not an object') },
-        mapStringString: switch (json['mapStringString']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeString(e.key): decodeString(e.value)}, _ => throw const FormatException('"mapStringString" is not an object') },
-        mapStringBytes: switch (json['mapStringBytes']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeString(e.key): decodeBytes(e.value)}, _ => throw const FormatException('"mapStringBytes" is not an object') },
-        mapStringNestedMessage: switch (json['mapStringNestedMessage']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeString(e.key): TestAllTypesProto3_NestedMessage.fromJson(e.value)}, _ => throw const FormatException('"mapStringNestedMessage" is not an object') },
-        mapStringForeignMessage: switch (json['mapStringForeignMessage']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeString(e.key): ForeignMessage.fromJson(e.value)}, _ => throw const FormatException('"mapStringForeignMessage" is not an object') },
-        mapStringNestedEnum: switch (json['mapStringNestedEnum']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeString(e.key): TestAllTypesProto3_NestedEnum.fromJson(e.value)}, _ => throw const FormatException('"mapStringNestedEnum" is not an object') },
-        mapStringForeignEnum: switch (json['mapStringForeignEnum']) { null => {}, Map<String, Object?> $1 => {for (final e in $1.entries) decodeString(e.key): ForeignEnum.fromJson(e.value)}, _ => throw const FormatException('"mapStringForeignEnum" is not an object') },
-        oneofUint32: switch (json['oneofUint32']) { null => null, Object $1 => decodeInt($1)},
-        oneofNestedMessage: switch (json['oneofNestedMessage']) { null => null, Object $1 => TestAllTypesProto3_NestedMessage.fromJson($1)},
-        oneofString: switch (json['oneofString']) { null => null, Object $1 => decodeString($1)},
-        oneofBytes: switch (json['oneofBytes']) { null => null, Object $1 => decodeBytes($1)},
-        oneofBool: switch (json['oneofBool']) { null => null, Object $1 => decodeBool($1)},
-        oneofUint64: switch (json['oneofUint64']) { null => null, Object $1 => decodeUint64($1)},
-        oneofFloat: switch (json['oneofFloat']) { null => null, Object $1 => decodeDouble($1)},
-        oneofDouble: switch (json['oneofDouble']) { null => null, Object $1 => decodeDouble($1)},
-        oneofEnum: switch (json['oneofEnum']) { null => null, Object $1 => TestAllTypesProto3_NestedEnum.fromJson($1)},
-        oneofNullValue: switch (json['oneofNullValue']) { null => null, Object $1 => NullValue.fromJson($1)},
-        optionalBoolWrapper: switch (json['optionalBoolWrapper']) { null => null, Object $1 => BoolValue.fromJson($1)},
-        optionalInt32Wrapper: switch (json['optionalInt32Wrapper']) { null => null, Object $1 => Int32Value.fromJson($1)},
-        optionalInt64Wrapper: switch (json['optionalInt64Wrapper']) { null => null, Object $1 => Int64Value.fromJson($1)},
-        optionalUint32Wrapper: switch (json['optionalUint32Wrapper']) { null => null, Object $1 => Uint32Value.fromJson($1)},
-        optionalUint64Wrapper: switch (json['optionalUint64Wrapper']) { null => null, Object $1 => Uint64Value.fromJson($1)},
-        optionalFloatWrapper: switch (json['optionalFloatWrapper']) { null => null, Object $1 => FloatValue.fromJson($1)},
-        optionalDoubleWrapper: switch (json['optionalDoubleWrapper']) { null => null, Object $1 => DoubleValue.fromJson($1)},
-        optionalStringWrapper: switch (json['optionalStringWrapper']) { null => null, Object $1 => StringValue.fromJson($1)},
-        optionalBytesWrapper: switch (json['optionalBytesWrapper']) { null => null, Object $1 => BytesValue.fromJson($1)},
-        repeatedBoolWrapper: switch (json['repeatedBoolWrapper']) { null => [], List<Object?> $1 => [for (final i in $1) BoolValue.fromJson(i)], _ => throw const FormatException('"repeatedBoolWrapper" is not a list') },
-        repeatedInt32Wrapper: switch (json['repeatedInt32Wrapper']) { null => [], List<Object?> $1 => [for (final i in $1) Int32Value.fromJson(i)], _ => throw const FormatException('"repeatedInt32Wrapper" is not a list') },
-        repeatedInt64Wrapper: switch (json['repeatedInt64Wrapper']) { null => [], List<Object?> $1 => [for (final i in $1) Int64Value.fromJson(i)], _ => throw const FormatException('"repeatedInt64Wrapper" is not a list') },
-        repeatedUint32Wrapper: switch (json['repeatedUint32Wrapper']) { null => [], List<Object?> $1 => [for (final i in $1) Uint32Value.fromJson(i)], _ => throw const FormatException('"repeatedUint32Wrapper" is not a list') },
-        repeatedUint64Wrapper: switch (json['repeatedUint64Wrapper']) { null => [], List<Object?> $1 => [for (final i in $1) Uint64Value.fromJson(i)], _ => throw const FormatException('"repeatedUint64Wrapper" is not a list') },
-        repeatedFloatWrapper: switch (json['repeatedFloatWrapper']) { null => [], List<Object?> $1 => [for (final i in $1) FloatValue.fromJson(i)], _ => throw const FormatException('"repeatedFloatWrapper" is not a list') },
-        repeatedDoubleWrapper: switch (json['repeatedDoubleWrapper']) { null => [], List<Object?> $1 => [for (final i in $1) DoubleValue.fromJson(i)], _ => throw const FormatException('"repeatedDoubleWrapper" is not a list') },
-        repeatedStringWrapper: switch (json['repeatedStringWrapper']) { null => [], List<Object?> $1 => [for (final i in $1) StringValue.fromJson(i)], _ => throw const FormatException('"repeatedStringWrapper" is not a list') },
-        repeatedBytesWrapper: switch (json['repeatedBytesWrapper']) { null => [], List<Object?> $1 => [for (final i in $1) BytesValue.fromJson(i)], _ => throw const FormatException('"repeatedBytesWrapper" is not a list') },
-        optionalDuration: switch (json['optionalDuration']) { null => null, Object $1 => Duration.fromJson($1)},
-        optionalTimestamp: switch (json['optionalTimestamp']) { null => null, Object $1 => Timestamp.fromJson($1)},
-        optionalFieldMask: switch (json['optionalFieldMask']) { null => null, Object $1 => FieldMask.fromJson($1)},
-        optionalStruct: switch (json['optionalStruct']) { null => null, Object $1 => Struct.fromJson($1)},
-        optionalAny: switch (json['optionalAny']) { null => null, Object $1 => Any.fromJson($1)},
-        optionalValue: switch (json['optionalValue']) { null => null, Object $1 => Value.fromJson($1)},
-        optionalNullValue: switch (json['optionalNullValue']) { null => NullValue.$default, Object $1 => NullValue.fromJson($1)},
-        repeatedDuration: switch (json['repeatedDuration']) { null => [], List<Object?> $1 => [for (final i in $1) Duration.fromJson(i)], _ => throw const FormatException('"repeatedDuration" is not a list') },
-        repeatedTimestamp: switch (json['repeatedTimestamp']) { null => [], List<Object?> $1 => [for (final i in $1) Timestamp.fromJson(i)], _ => throw const FormatException('"repeatedTimestamp" is not a list') },
-        repeatedFieldmask: switch (json['repeatedFieldmask']) { null => [], List<Object?> $1 => [for (final i in $1) FieldMask.fromJson(i)], _ => throw const FormatException('"repeatedFieldmask" is not a list') },
-        repeatedStruct: switch (json['repeatedStruct']) { null => [], List<Object?> $1 => [for (final i in $1) Struct.fromJson(i)], _ => throw const FormatException('"repeatedStruct" is not a list') },
-        repeatedAny: switch (json['repeatedAny']) { null => [], List<Object?> $1 => [for (final i in $1) Any.fromJson(i)], _ => throw const FormatException('"repeatedAny" is not a list') },
-        repeatedValue: switch (json['repeatedValue']) { null => [], List<Object?> $1 => [for (final i in $1) Value.fromJson(i)], _ => throw const FormatException('"repeatedValue" is not a list') },
-        repeatedListValue: switch (json['repeatedListValue']) { null => [], List<Object?> $1 => [for (final i in $1) ListValue.fromJson(i)], _ => throw const FormatException('"repeatedListValue" is not a list') },
-        fieldname1: switch (json['fieldname1']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName2: switch (json['fieldName2']) { null => 0, Object $1 => decodeInt($1)},
-        FieldName3: switch (json['FieldName3']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName4: switch (json['fieldName4']) { null => 0, Object $1 => decodeInt($1)},
-        field0Name5: switch (json['field0name5']) { null => 0, Object $1 => decodeInt($1)},
-        field0Name6: switch (json['field0Name6']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName7: switch (json['fieldName7']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName8: switch (json['FieldName8']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName9: switch (json['fieldName9']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName10: switch (json['FieldName10']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName11: switch (json['FIELDNAME11']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName12: switch (json['FIELDName12']) { null => 0, Object $1 => decodeInt($1)},
-        FieldName13: switch (json['FieldName13']) { null => 0, Object $1 => decodeInt($1)},
-        FieldName14: switch (json['FieldName14']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName15: switch (json['fieldName15']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName16: switch (json['fieldName16']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName17: switch (json['fieldName17']) { null => 0, Object $1 => decodeInt($1)},
-        fieldName18: switch (json['FieldName18']) { null => 0, Object $1 => decodeInt($1)},
-      );
-    }
+  factory TestAllTypesProto3.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TestAllTypesProto3(
+      optionalInt32: switch (json['optionalInt32']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      optionalInt64: switch (json['optionalInt64']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      optionalUint32: switch (json['optionalUint32']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      optionalUint64: switch (json['optionalUint64']) {
+        null => BigInt.zero,
+        Object $1 => decodeUint64($1),
+      },
+      optionalSint32: switch (json['optionalSint32']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      optionalSint64: switch (json['optionalSint64']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      optionalFixed32: switch (json['optionalFixed32']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      optionalFixed64: switch (json['optionalFixed64']) {
+        null => BigInt.zero,
+        Object $1 => decodeUint64($1),
+      },
+      optionalSfixed32: switch (json['optionalSfixed32']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      optionalSfixed64: switch (json['optionalSfixed64']) {
+        null => 0,
+        Object $1 => decodeInt64($1),
+      },
+      optionalFloat: switch (json['optionalFloat']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      optionalDouble: switch (json['optionalDouble']) {
+        null => 0,
+        Object $1 => decodeDouble($1),
+      },
+      optionalBool: switch (json['optionalBool']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      optionalString: switch (json['optionalString']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      optionalBytes: switch (json['optionalBytes']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+      optionalNestedMessage: switch (json['optionalNestedMessage']) {
+        null => null,
+        Object $1 => TestAllTypesProto3_NestedMessage.fromJson($1),
+      },
+      optionalForeignMessage: switch (json['optionalForeignMessage']) {
+        null => null,
+        Object $1 => ForeignMessage.fromJson($1),
+      },
+      optionalNestedEnum: switch (json['optionalNestedEnum']) {
+        null => TestAllTypesProto3_NestedEnum.$default,
+        Object $1 => TestAllTypesProto3_NestedEnum.fromJson($1),
+      },
+      optionalForeignEnum: switch (json['optionalForeignEnum']) {
+        null => ForeignEnum.$default,
+        Object $1 => ForeignEnum.fromJson($1),
+      },
+      optionalAliasedEnum: switch (json['optionalAliasedEnum']) {
+        null => TestAllTypesProto3_AliasedEnum.$default,
+        Object $1 => TestAllTypesProto3_AliasedEnum.fromJson($1),
+      },
+      optionalStringPiece: switch (json['optionalStringPiece']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      optionalCord: switch (json['optionalCord']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      recursiveMessage: switch (json['recursiveMessage']) {
+        null => null,
+        Object $1 => TestAllTypesProto3.fromJson($1),
+      },
+      repeatedInt32: switch (json['repeatedInt32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"repeatedInt32" is not a list'),
+      },
+      repeatedInt64: switch (json['repeatedInt64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"repeatedInt64" is not a list'),
+      },
+      repeatedUint32: switch (json['repeatedUint32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"repeatedUint32" is not a list'),
+      },
+      repeatedUint64: switch (json['repeatedUint64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
+        _ => throw const FormatException('"repeatedUint64" is not a list'),
+      },
+      repeatedSint32: switch (json['repeatedSint32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"repeatedSint32" is not a list'),
+      },
+      repeatedSint64: switch (json['repeatedSint64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"repeatedSint64" is not a list'),
+      },
+      repeatedFixed32: switch (json['repeatedFixed32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"repeatedFixed32" is not a list'),
+      },
+      repeatedFixed64: switch (json['repeatedFixed64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
+        _ => throw const FormatException('"repeatedFixed64" is not a list'),
+      },
+      repeatedSfixed32: switch (json['repeatedSfixed32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"repeatedSfixed32" is not a list'),
+      },
+      repeatedSfixed64: switch (json['repeatedSfixed64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"repeatedSfixed64" is not a list'),
+      },
+      repeatedFloat: switch (json['repeatedFloat']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"repeatedFloat" is not a list'),
+      },
+      repeatedDouble: switch (json['repeatedDouble']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"repeatedDouble" is not a list'),
+      },
+      repeatedBool: switch (json['repeatedBool']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeBool(i)],
+        _ => throw const FormatException('"repeatedBool" is not a list'),
+      },
+      repeatedString: switch (json['repeatedString']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"repeatedString" is not a list'),
+      },
+      repeatedBytes: switch (json['repeatedBytes']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeBytes(i)],
+        _ => throw const FormatException('"repeatedBytes" is not a list'),
+      },
+      repeatedNestedMessage: switch (json['repeatedNestedMessage']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) TestAllTypesProto3_NestedMessage.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"repeatedNestedMessage" is not a list',
+        ),
+      },
+      repeatedForeignMessage: switch (json['repeatedForeignMessage']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ForeignMessage.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedForeignMessage" is not a list',
+        ),
+      },
+      repeatedNestedEnum: switch (json['repeatedNestedEnum']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) TestAllTypesProto3_NestedEnum.fromJson(i),
+        ],
+        _ => throw const FormatException('"repeatedNestedEnum" is not a list'),
+      },
+      repeatedForeignEnum: switch (json['repeatedForeignEnum']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ForeignEnum.fromJson(i)],
+        _ => throw const FormatException('"repeatedForeignEnum" is not a list'),
+      },
+      repeatedStringPiece: switch (json['repeatedStringPiece']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"repeatedStringPiece" is not a list'),
+      },
+      repeatedCord: switch (json['repeatedCord']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"repeatedCord" is not a list'),
+      },
+      packedInt32: switch (json['packedInt32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"packedInt32" is not a list'),
+      },
+      packedInt64: switch (json['packedInt64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"packedInt64" is not a list'),
+      },
+      packedUint32: switch (json['packedUint32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"packedUint32" is not a list'),
+      },
+      packedUint64: switch (json['packedUint64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
+        _ => throw const FormatException('"packedUint64" is not a list'),
+      },
+      packedSint32: switch (json['packedSint32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"packedSint32" is not a list'),
+      },
+      packedSint64: switch (json['packedSint64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"packedSint64" is not a list'),
+      },
+      packedFixed32: switch (json['packedFixed32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"packedFixed32" is not a list'),
+      },
+      packedFixed64: switch (json['packedFixed64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
+        _ => throw const FormatException('"packedFixed64" is not a list'),
+      },
+      packedSfixed32: switch (json['packedSfixed32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"packedSfixed32" is not a list'),
+      },
+      packedSfixed64: switch (json['packedSfixed64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"packedSfixed64" is not a list'),
+      },
+      packedFloat: switch (json['packedFloat']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"packedFloat" is not a list'),
+      },
+      packedDouble: switch (json['packedDouble']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"packedDouble" is not a list'),
+      },
+      packedBool: switch (json['packedBool']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeBool(i)],
+        _ => throw const FormatException('"packedBool" is not a list'),
+      },
+      packedNestedEnum: switch (json['packedNestedEnum']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) TestAllTypesProto3_NestedEnum.fromJson(i),
+        ],
+        _ => throw const FormatException('"packedNestedEnum" is not a list'),
+      },
+      unpackedInt32: switch (json['unpackedInt32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"unpackedInt32" is not a list'),
+      },
+      unpackedInt64: switch (json['unpackedInt64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"unpackedInt64" is not a list'),
+      },
+      unpackedUint32: switch (json['unpackedUint32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"unpackedUint32" is not a list'),
+      },
+      unpackedUint64: switch (json['unpackedUint64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
+        _ => throw const FormatException('"unpackedUint64" is not a list'),
+      },
+      unpackedSint32: switch (json['unpackedSint32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"unpackedSint32" is not a list'),
+      },
+      unpackedSint64: switch (json['unpackedSint64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"unpackedSint64" is not a list'),
+      },
+      unpackedFixed32: switch (json['unpackedFixed32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"unpackedFixed32" is not a list'),
+      },
+      unpackedFixed64: switch (json['unpackedFixed64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeUint64(i)],
+        _ => throw const FormatException('"unpackedFixed64" is not a list'),
+      },
+      unpackedSfixed32: switch (json['unpackedSfixed32']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt(i)],
+        _ => throw const FormatException('"unpackedSfixed32" is not a list'),
+      },
+      unpackedSfixed64: switch (json['unpackedSfixed64']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeInt64(i)],
+        _ => throw const FormatException('"unpackedSfixed64" is not a list'),
+      },
+      unpackedFloat: switch (json['unpackedFloat']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"unpackedFloat" is not a list'),
+      },
+      unpackedDouble: switch (json['unpackedDouble']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"unpackedDouble" is not a list'),
+      },
+      unpackedBool: switch (json['unpackedBool']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeBool(i)],
+        _ => throw const FormatException('"unpackedBool" is not a list'),
+      },
+      unpackedNestedEnum: switch (json['unpackedNestedEnum']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) TestAllTypesProto3_NestedEnum.fromJson(i),
+        ],
+        _ => throw const FormatException('"unpackedNestedEnum" is not a list'),
+      },
+      mapInt32Int32: switch (json['mapInt32Int32']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value),
+        },
+        _ => throw const FormatException('"mapInt32Int32" is not an object'),
+      },
+      mapInt64Int64: switch (json['mapInt64Int64']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt64(e.value),
+        },
+        _ => throw const FormatException('"mapInt64Int64" is not an object'),
+      },
+      mapUint32Uint32: switch (json['mapUint32Uint32']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value),
+        },
+        _ => throw const FormatException('"mapUint32Uint32" is not an object'),
+      },
+      mapUint64Uint64: switch (json['mapUint64Uint64']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeUint64Key(e.key): decodeUint64(e.value),
+        },
+        _ => throw const FormatException('"mapUint64Uint64" is not an object'),
+      },
+      mapSint32Sint32: switch (json['mapSint32Sint32']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value),
+        },
+        _ => throw const FormatException('"mapSint32Sint32" is not an object'),
+      },
+      mapSint64Sint64: switch (json['mapSint64Sint64']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt64(e.value),
+        },
+        _ => throw const FormatException('"mapSint64Sint64" is not an object'),
+      },
+      mapFixed32Fixed32: switch (json['mapFixed32Fixed32']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value),
+        },
+        _ => throw const FormatException(
+          '"mapFixed32Fixed32" is not an object',
+        ),
+      },
+      mapFixed64Fixed64: switch (json['mapFixed64Fixed64']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeUint64Key(e.key): decodeUint64(e.value),
+        },
+        _ => throw const FormatException(
+          '"mapFixed64Fixed64" is not an object',
+        ),
+      },
+      mapSfixed32Sfixed32: switch (json['mapSfixed32Sfixed32']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt(e.value),
+        },
+        _ => throw const FormatException(
+          '"mapSfixed32Sfixed32" is not an object',
+        ),
+      },
+      mapSfixed64Sfixed64: switch (json['mapSfixed64Sfixed64']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeIntKey(e.key): decodeInt64(e.value),
+        },
+        _ => throw const FormatException(
+          '"mapSfixed64Sfixed64" is not an object',
+        ),
+      },
+      mapInt32Float: switch (json['mapInt32Float']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeIntKey(e.key): decodeDouble(e.value),
+        },
+        _ => throw const FormatException('"mapInt32Float" is not an object'),
+      },
+      mapInt32Double: switch (json['mapInt32Double']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeIntKey(e.key): decodeDouble(e.value),
+        },
+        _ => throw const FormatException('"mapInt32Double" is not an object'),
+      },
+      mapBoolBool: switch (json['mapBoolBool']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeBoolKey(e.key): decodeBool(e.value),
+        },
+        _ => throw const FormatException('"mapBoolBool" is not an object'),
+      },
+      mapStringString: switch (json['mapStringString']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"mapStringString" is not an object'),
+      },
+      mapStringBytes: switch (json['mapStringBytes']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries) decodeString(e.key): decodeBytes(e.value),
+        },
+        _ => throw const FormatException('"mapStringBytes" is not an object'),
+      },
+      mapStringNestedMessage: switch (json['mapStringNestedMessage']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): TestAllTypesProto3_NestedMessage.fromJson(
+              e.value,
+            ),
+        },
+        _ => throw const FormatException(
+          '"mapStringNestedMessage" is not an object',
+        ),
+      },
+      mapStringForeignMessage: switch (json['mapStringForeignMessage']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ForeignMessage.fromJson(e.value),
+        },
+        _ => throw const FormatException(
+          '"mapStringForeignMessage" is not an object',
+        ),
+      },
+      mapStringNestedEnum: switch (json['mapStringNestedEnum']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): TestAllTypesProto3_NestedEnum.fromJson(
+              e.value,
+            ),
+        },
+        _ => throw const FormatException(
+          '"mapStringNestedEnum" is not an object',
+        ),
+      },
+      mapStringForeignEnum: switch (json['mapStringForeignEnum']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): ForeignEnum.fromJson(e.value),
+        },
+        _ => throw const FormatException(
+          '"mapStringForeignEnum" is not an object',
+        ),
+      },
+      oneofUint32: switch (json['oneofUint32']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      oneofNestedMessage: switch (json['oneofNestedMessage']) {
+        null => null,
+        Object $1 => TestAllTypesProto3_NestedMessage.fromJson($1),
+      },
+      oneofString: switch (json['oneofString']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      oneofBytes: switch (json['oneofBytes']) {
+        null => null,
+        Object $1 => decodeBytes($1),
+      },
+      oneofBool: switch (json['oneofBool']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      oneofUint64: switch (json['oneofUint64']) {
+        null => null,
+        Object $1 => decodeUint64($1),
+      },
+      oneofFloat: switch (json['oneofFloat']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      oneofDouble: switch (json['oneofDouble']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      oneofEnum: switch (json['oneofEnum']) {
+        null => null,
+        Object $1 => TestAllTypesProto3_NestedEnum.fromJson($1),
+      },
+      oneofNullValue: switch (json['oneofNullValue']) {
+        null => null,
+        Object $1 => NullValue.fromJson($1),
+      },
+      optionalBoolWrapper: switch (json['optionalBoolWrapper']) {
+        null => null,
+        Object $1 => BoolValue.fromJson($1),
+      },
+      optionalInt32Wrapper: switch (json['optionalInt32Wrapper']) {
+        null => null,
+        Object $1 => Int32Value.fromJson($1),
+      },
+      optionalInt64Wrapper: switch (json['optionalInt64Wrapper']) {
+        null => null,
+        Object $1 => Int64Value.fromJson($1),
+      },
+      optionalUint32Wrapper: switch (json['optionalUint32Wrapper']) {
+        null => null,
+        Object $1 => Uint32Value.fromJson($1),
+      },
+      optionalUint64Wrapper: switch (json['optionalUint64Wrapper']) {
+        null => null,
+        Object $1 => Uint64Value.fromJson($1),
+      },
+      optionalFloatWrapper: switch (json['optionalFloatWrapper']) {
+        null => null,
+        Object $1 => FloatValue.fromJson($1),
+      },
+      optionalDoubleWrapper: switch (json['optionalDoubleWrapper']) {
+        null => null,
+        Object $1 => DoubleValue.fromJson($1),
+      },
+      optionalStringWrapper: switch (json['optionalStringWrapper']) {
+        null => null,
+        Object $1 => StringValue.fromJson($1),
+      },
+      optionalBytesWrapper: switch (json['optionalBytesWrapper']) {
+        null => null,
+        Object $1 => BytesValue.fromJson($1),
+      },
+      repeatedBoolWrapper: switch (json['repeatedBoolWrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) BoolValue.fromJson(i)],
+        _ => throw const FormatException('"repeatedBoolWrapper" is not a list'),
+      },
+      repeatedInt32Wrapper: switch (json['repeatedInt32Wrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Int32Value.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedInt32Wrapper" is not a list',
+        ),
+      },
+      repeatedInt64Wrapper: switch (json['repeatedInt64Wrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Int64Value.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedInt64Wrapper" is not a list',
+        ),
+      },
+      repeatedUint32Wrapper: switch (json['repeatedUint32Wrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Uint32Value.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedUint32Wrapper" is not a list',
+        ),
+      },
+      repeatedUint64Wrapper: switch (json['repeatedUint64Wrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Uint64Value.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedUint64Wrapper" is not a list',
+        ),
+      },
+      repeatedFloatWrapper: switch (json['repeatedFloatWrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) FloatValue.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedFloatWrapper" is not a list',
+        ),
+      },
+      repeatedDoubleWrapper: switch (json['repeatedDoubleWrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) DoubleValue.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedDoubleWrapper" is not a list',
+        ),
+      },
+      repeatedStringWrapper: switch (json['repeatedStringWrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) StringValue.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedStringWrapper" is not a list',
+        ),
+      },
+      repeatedBytesWrapper: switch (json['repeatedBytesWrapper']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) BytesValue.fromJson(i)],
+        _ => throw const FormatException(
+          '"repeatedBytesWrapper" is not a list',
+        ),
+      },
+      optionalDuration: switch (json['optionalDuration']) {
+        null => null,
+        Object $1 => Duration.fromJson($1),
+      },
+      optionalTimestamp: switch (json['optionalTimestamp']) {
+        null => null,
+        Object $1 => Timestamp.fromJson($1),
+      },
+      optionalFieldMask: switch (json['optionalFieldMask']) {
+        null => null,
+        Object $1 => FieldMask.fromJson($1),
+      },
+      optionalStruct: switch (json['optionalStruct']) {
+        null => null,
+        Object $1 => Struct.fromJson($1),
+      },
+      optionalAny: switch (json['optionalAny']) {
+        null => null,
+        Object $1 => Any.fromJson($1),
+      },
+      optionalValue: switch (json['optionalValue']) {
+        null => null,
+        Object $1 => Value.fromJson($1),
+      },
+      optionalNullValue: switch (json['optionalNullValue']) {
+        null => NullValue.$default,
+        Object $1 => NullValue.fromJson($1),
+      },
+      repeatedDuration: switch (json['repeatedDuration']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Duration.fromJson(i)],
+        _ => throw const FormatException('"repeatedDuration" is not a list'),
+      },
+      repeatedTimestamp: switch (json['repeatedTimestamp']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Timestamp.fromJson(i)],
+        _ => throw const FormatException('"repeatedTimestamp" is not a list'),
+      },
+      repeatedFieldmask: switch (json['repeatedFieldmask']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) FieldMask.fromJson(i)],
+        _ => throw const FormatException('"repeatedFieldmask" is not a list'),
+      },
+      repeatedStruct: switch (json['repeatedStruct']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Struct.fromJson(i)],
+        _ => throw const FormatException('"repeatedStruct" is not a list'),
+      },
+      repeatedAny: switch (json['repeatedAny']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Any.fromJson(i)],
+        _ => throw const FormatException('"repeatedAny" is not a list'),
+      },
+      repeatedValue: switch (json['repeatedValue']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Value.fromJson(i)],
+        _ => throw const FormatException('"repeatedValue" is not a list'),
+      },
+      repeatedListValue: switch (json['repeatedListValue']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) ListValue.fromJson(i)],
+        _ => throw const FormatException('"repeatedListValue" is not a list'),
+      },
+      fieldname1: switch (json['fieldname1']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName2: switch (json['fieldName2']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      FieldName3: switch (json['FieldName3']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName4: switch (json['fieldName4']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      field0Name5: switch (json['field0name5']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      field0Name6: switch (json['field0Name6']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName7: switch (json['fieldName7']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName8: switch (json['FieldName8']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName9: switch (json['fieldName9']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName10: switch (json['FieldName10']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName11: switch (json['FIELDNAME11']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName12: switch (json['FIELDName12']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      FieldName13: switch (json['FieldName13']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      FieldName14: switch (json['FieldName14']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName15: switch (json['fieldName15']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName16: switch (json['fieldName16']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName17: switch (json['fieldName17']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      fieldName18: switch (json['FieldName18']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
-          if (optionalInt32.isNotDefault) 'optionalInt32': optionalInt32,
-          if (optionalInt64.isNotDefault) 'optionalInt64': optionalInt64.toString(),
-          if (optionalUint32.isNotDefault) 'optionalUint32': optionalUint32,
-          if (optionalUint64.isNotDefault) 'optionalUint64': optionalUint64.toString(),
-          if (optionalSint32.isNotDefault) 'optionalSint32': optionalSint32,
-          if (optionalSint64.isNotDefault) 'optionalSint64': optionalSint64.toString(),
-          if (optionalFixed32.isNotDefault) 'optionalFixed32': optionalFixed32,
-          if (optionalFixed64.isNotDefault) 'optionalFixed64': optionalFixed64.toString(),
-          if (optionalSfixed32.isNotDefault) 'optionalSfixed32': optionalSfixed32,
-          if (optionalSfixed64.isNotDefault) 'optionalSfixed64': optionalSfixed64.toString(),
-          if (optionalFloat.isNotDefault) 'optionalFloat': encodeDouble(optionalFloat),
-          if (optionalDouble.isNotDefault) 'optionalDouble': encodeDouble(optionalDouble),
-          if (optionalBool.isNotDefault) 'optionalBool': optionalBool,
-          if (optionalString.isNotDefault) 'optionalString': optionalString,
-          if (optionalBytes.isNotDefault) 'optionalBytes': encodeBytes(optionalBytes),
-      if (optionalNestedMessage case final optionalNestedMessage?) 'optionalNestedMessage': optionalNestedMessage.toJson(),
-      if (optionalForeignMessage case final optionalForeignMessage?) 'optionalForeignMessage': optionalForeignMessage.toJson(),
-          if (optionalNestedEnum.isNotDefault) 'optionalNestedEnum': optionalNestedEnum.toJson(),
-          if (optionalForeignEnum.isNotDefault) 'optionalForeignEnum': optionalForeignEnum.toJson(),
-          if (optionalAliasedEnum.isNotDefault) 'optionalAliasedEnum': optionalAliasedEnum.toJson(),
-          if (optionalStringPiece.isNotDefault) 'optionalStringPiece': optionalStringPiece,
-          if (optionalCord.isNotDefault) 'optionalCord': optionalCord,
-      if (recursiveMessage case final recursiveMessage?) 'recursiveMessage': recursiveMessage.toJson(),
-          if (repeatedInt32.isNotDefault) 'repeatedInt32': repeatedInt32,
-          if (repeatedInt64.isNotDefault) 'repeatedInt64': [for (final i in repeatedInt64) i.toString()],
-          if (repeatedUint32.isNotDefault) 'repeatedUint32': repeatedUint32,
-          if (repeatedUint64.isNotDefault) 'repeatedUint64': [for (final i in repeatedUint64) i.toString()],
-          if (repeatedSint32.isNotDefault) 'repeatedSint32': repeatedSint32,
-          if (repeatedSint64.isNotDefault) 'repeatedSint64': [for (final i in repeatedSint64) i.toString()],
-          if (repeatedFixed32.isNotDefault) 'repeatedFixed32': repeatedFixed32,
-          if (repeatedFixed64.isNotDefault) 'repeatedFixed64': [for (final i in repeatedFixed64) i.toString()],
-          if (repeatedSfixed32.isNotDefault) 'repeatedSfixed32': repeatedSfixed32,
-          if (repeatedSfixed64.isNotDefault) 'repeatedSfixed64': [for (final i in repeatedSfixed64) i.toString()],
-          if (repeatedFloat.isNotDefault) 'repeatedFloat': [for (final i in repeatedFloat) encodeDouble(i)],
-          if (repeatedDouble.isNotDefault) 'repeatedDouble': [for (final i in repeatedDouble) encodeDouble(i)],
-          if (repeatedBool.isNotDefault) 'repeatedBool': repeatedBool,
-          if (repeatedString.isNotDefault) 'repeatedString': repeatedString,
-          if (repeatedBytes.isNotDefault) 'repeatedBytes': [for (final i in repeatedBytes) encodeBytes(i)],
-          if (repeatedNestedMessage.isNotDefault) 'repeatedNestedMessage': [for (final i in repeatedNestedMessage) i.toJson()],
-          if (repeatedForeignMessage.isNotDefault) 'repeatedForeignMessage': [for (final i in repeatedForeignMessage) i.toJson()],
-          if (repeatedNestedEnum.isNotDefault) 'repeatedNestedEnum': [for (final i in repeatedNestedEnum) i.toJson()],
-          if (repeatedForeignEnum.isNotDefault) 'repeatedForeignEnum': [for (final i in repeatedForeignEnum) i.toJson()],
-          if (repeatedStringPiece.isNotDefault) 'repeatedStringPiece': repeatedStringPiece,
-          if (repeatedCord.isNotDefault) 'repeatedCord': repeatedCord,
-          if (packedInt32.isNotDefault) 'packedInt32': packedInt32,
-          if (packedInt64.isNotDefault) 'packedInt64': [for (final i in packedInt64) i.toString()],
-          if (packedUint32.isNotDefault) 'packedUint32': packedUint32,
-          if (packedUint64.isNotDefault) 'packedUint64': [for (final i in packedUint64) i.toString()],
-          if (packedSint32.isNotDefault) 'packedSint32': packedSint32,
-          if (packedSint64.isNotDefault) 'packedSint64': [for (final i in packedSint64) i.toString()],
-          if (packedFixed32.isNotDefault) 'packedFixed32': packedFixed32,
-          if (packedFixed64.isNotDefault) 'packedFixed64': [for (final i in packedFixed64) i.toString()],
-          if (packedSfixed32.isNotDefault) 'packedSfixed32': packedSfixed32,
-          if (packedSfixed64.isNotDefault) 'packedSfixed64': [for (final i in packedSfixed64) i.toString()],
-          if (packedFloat.isNotDefault) 'packedFloat': [for (final i in packedFloat) encodeDouble(i)],
-          if (packedDouble.isNotDefault) 'packedDouble': [for (final i in packedDouble) encodeDouble(i)],
-          if (packedBool.isNotDefault) 'packedBool': packedBool,
-          if (packedNestedEnum.isNotDefault) 'packedNestedEnum': [for (final i in packedNestedEnum) i.toJson()],
-          if (unpackedInt32.isNotDefault) 'unpackedInt32': unpackedInt32,
-          if (unpackedInt64.isNotDefault) 'unpackedInt64': [for (final i in unpackedInt64) i.toString()],
-          if (unpackedUint32.isNotDefault) 'unpackedUint32': unpackedUint32,
-          if (unpackedUint64.isNotDefault) 'unpackedUint64': [for (final i in unpackedUint64) i.toString()],
-          if (unpackedSint32.isNotDefault) 'unpackedSint32': unpackedSint32,
-          if (unpackedSint64.isNotDefault) 'unpackedSint64': [for (final i in unpackedSint64) i.toString()],
-          if (unpackedFixed32.isNotDefault) 'unpackedFixed32': unpackedFixed32,
-          if (unpackedFixed64.isNotDefault) 'unpackedFixed64': [for (final i in unpackedFixed64) i.toString()],
-          if (unpackedSfixed32.isNotDefault) 'unpackedSfixed32': unpackedSfixed32,
-          if (unpackedSfixed64.isNotDefault) 'unpackedSfixed64': [for (final i in unpackedSfixed64) i.toString()],
-          if (unpackedFloat.isNotDefault) 'unpackedFloat': [for (final i in unpackedFloat) encodeDouble(i)],
-          if (unpackedDouble.isNotDefault) 'unpackedDouble': [for (final i in unpackedDouble) encodeDouble(i)],
-          if (unpackedBool.isNotDefault) 'unpackedBool': unpackedBool,
-          if (unpackedNestedEnum.isNotDefault) 'unpackedNestedEnum': [for (final i in unpackedNestedEnum) i.toJson()],
-          if (mapInt32Int32.isNotDefault) 'mapInt32Int32': {for (final e in mapInt32Int32.entries) e.key.toString(): e.value},
-          if (mapInt64Int64.isNotDefault) 'mapInt64Int64': {for (final e in mapInt64Int64.entries) e.key.toString(): e.value.toString()},
-          if (mapUint32Uint32.isNotDefault) 'mapUint32Uint32': {for (final e in mapUint32Uint32.entries) e.key.toString(): e.value},
-          if (mapUint64Uint64.isNotDefault) 'mapUint64Uint64': {for (final e in mapUint64Uint64.entries) e.key.toString(): e.value.toString()},
-          if (mapSint32Sint32.isNotDefault) 'mapSint32Sint32': {for (final e in mapSint32Sint32.entries) e.key.toString(): e.value},
-          if (mapSint64Sint64.isNotDefault) 'mapSint64Sint64': {for (final e in mapSint64Sint64.entries) e.key.toString(): e.value.toString()},
-          if (mapFixed32Fixed32.isNotDefault) 'mapFixed32Fixed32': {for (final e in mapFixed32Fixed32.entries) e.key.toString(): e.value},
-          if (mapFixed64Fixed64.isNotDefault) 'mapFixed64Fixed64': {for (final e in mapFixed64Fixed64.entries) e.key.toString(): e.value.toString()},
-          if (mapSfixed32Sfixed32.isNotDefault) 'mapSfixed32Sfixed32': {for (final e in mapSfixed32Sfixed32.entries) e.key.toString(): e.value},
-          if (mapSfixed64Sfixed64.isNotDefault) 'mapSfixed64Sfixed64': {for (final e in mapSfixed64Sfixed64.entries) e.key.toString(): e.value.toString()},
-          if (mapInt32Float.isNotDefault) 'mapInt32Float': {for (final e in mapInt32Float.entries) e.key.toString(): encodeDouble(e.value)},
-          if (mapInt32Double.isNotDefault) 'mapInt32Double': {for (final e in mapInt32Double.entries) e.key.toString(): encodeDouble(e.value)},
-          if (mapBoolBool.isNotDefault) 'mapBoolBool': {for (final e in mapBoolBool.entries) e.key.toString(): e.value},
-          if (mapStringString.isNotDefault) 'mapStringString': mapStringString,
-          if (mapStringBytes.isNotDefault) 'mapStringBytes': {for (final e in mapStringBytes.entries) e.key: encodeBytes(e.value)},
-          if (mapStringNestedMessage.isNotDefault) 'mapStringNestedMessage': {for (final e in mapStringNestedMessage.entries) e.key: e.value.toJson()},
-          if (mapStringForeignMessage.isNotDefault) 'mapStringForeignMessage': {for (final e in mapStringForeignMessage.entries) e.key: e.value.toJson()},
-          if (mapStringNestedEnum.isNotDefault) 'mapStringNestedEnum': {for (final e in mapStringNestedEnum.entries) e.key: e.value.toJson()},
-          if (mapStringForeignEnum.isNotDefault) 'mapStringForeignEnum': {for (final e in mapStringForeignEnum.entries) e.key: e.value.toJson()},
-      if (oneofUint32 case final oneofUint32?) 'oneofUint32': oneofUint32,
-      if (oneofNestedMessage case final oneofNestedMessage?) 'oneofNestedMessage': oneofNestedMessage.toJson(),
-      if (oneofString case final oneofString?) 'oneofString': oneofString,
-      if (oneofBytes case final oneofBytes?) 'oneofBytes': encodeBytes(oneofBytes),
-      if (oneofBool case final oneofBool?) 'oneofBool': oneofBool,
-      if (oneofUint64 case final oneofUint64?) 'oneofUint64': oneofUint64.toString(),
-      if (oneofFloat case final oneofFloat?) 'oneofFloat': encodeDouble(oneofFloat),
-      if (oneofDouble case final oneofDouble?) 'oneofDouble': encodeDouble(oneofDouble),
-      if (oneofEnum case final oneofEnum?) 'oneofEnum': oneofEnum.toJson(),
-      if (oneofNullValue case final oneofNullValue?) 'oneofNullValue': oneofNullValue.toJson(),
-      if (optionalBoolWrapper case final optionalBoolWrapper?) 'optionalBoolWrapper': optionalBoolWrapper.toJson(),
-      if (optionalInt32Wrapper case final optionalInt32Wrapper?) 'optionalInt32Wrapper': optionalInt32Wrapper.toJson(),
-      if (optionalInt64Wrapper case final optionalInt64Wrapper?) 'optionalInt64Wrapper': optionalInt64Wrapper.toJson(),
-      if (optionalUint32Wrapper case final optionalUint32Wrapper?) 'optionalUint32Wrapper': optionalUint32Wrapper.toJson(),
-      if (optionalUint64Wrapper case final optionalUint64Wrapper?) 'optionalUint64Wrapper': optionalUint64Wrapper.toJson(),
-      if (optionalFloatWrapper case final optionalFloatWrapper?) 'optionalFloatWrapper': optionalFloatWrapper.toJson(),
-      if (optionalDoubleWrapper case final optionalDoubleWrapper?) 'optionalDoubleWrapper': optionalDoubleWrapper.toJson(),
-      if (optionalStringWrapper case final optionalStringWrapper?) 'optionalStringWrapper': optionalStringWrapper.toJson(),
-      if (optionalBytesWrapper case final optionalBytesWrapper?) 'optionalBytesWrapper': optionalBytesWrapper.toJson(),
-          if (repeatedBoolWrapper.isNotDefault) 'repeatedBoolWrapper': [for (final i in repeatedBoolWrapper) i.toJson()],
-          if (repeatedInt32Wrapper.isNotDefault) 'repeatedInt32Wrapper': [for (final i in repeatedInt32Wrapper) i.toJson()],
-          if (repeatedInt64Wrapper.isNotDefault) 'repeatedInt64Wrapper': [for (final i in repeatedInt64Wrapper) i.toJson()],
-          if (repeatedUint32Wrapper.isNotDefault) 'repeatedUint32Wrapper': [for (final i in repeatedUint32Wrapper) i.toJson()],
-          if (repeatedUint64Wrapper.isNotDefault) 'repeatedUint64Wrapper': [for (final i in repeatedUint64Wrapper) i.toJson()],
-          if (repeatedFloatWrapper.isNotDefault) 'repeatedFloatWrapper': [for (final i in repeatedFloatWrapper) i.toJson()],
-          if (repeatedDoubleWrapper.isNotDefault) 'repeatedDoubleWrapper': [for (final i in repeatedDoubleWrapper) i.toJson()],
-          if (repeatedStringWrapper.isNotDefault) 'repeatedStringWrapper': [for (final i in repeatedStringWrapper) i.toJson()],
-          if (repeatedBytesWrapper.isNotDefault) 'repeatedBytesWrapper': [for (final i in repeatedBytesWrapper) i.toJson()],
-      if (optionalDuration case final optionalDuration?) 'optionalDuration': optionalDuration.toJson(),
-      if (optionalTimestamp case final optionalTimestamp?) 'optionalTimestamp': optionalTimestamp.toJson(),
-      if (optionalFieldMask case final optionalFieldMask?) 'optionalFieldMask': optionalFieldMask.toJson(),
-      if (optionalStruct case final optionalStruct?) 'optionalStruct': optionalStruct.toJson(),
-      if (optionalAny case final optionalAny?) 'optionalAny': optionalAny.toJson(),
-      if (optionalValue case final optionalValue?) 'optionalValue': optionalValue.toJson(),
-          if (optionalNullValue.isNotDefault) 'optionalNullValue': optionalNullValue.toJson(),
-          if (repeatedDuration.isNotDefault) 'repeatedDuration': [for (final i in repeatedDuration) i.toJson()],
-          if (repeatedTimestamp.isNotDefault) 'repeatedTimestamp': [for (final i in repeatedTimestamp) i.toJson()],
-          if (repeatedFieldmask.isNotDefault) 'repeatedFieldmask': [for (final i in repeatedFieldmask) i.toJson()],
-          if (repeatedStruct.isNotDefault) 'repeatedStruct': [for (final i in repeatedStruct) i.toJson()],
-          if (repeatedAny.isNotDefault) 'repeatedAny': [for (final i in repeatedAny) i.toJson()],
-          if (repeatedValue.isNotDefault) 'repeatedValue': [for (final i in repeatedValue) i.toJson()],
-          if (repeatedListValue.isNotDefault) 'repeatedListValue': [for (final i in repeatedListValue) i.toJson()],
-          if (fieldname1.isNotDefault) 'fieldname1': fieldname1,
-          if (fieldName2.isNotDefault) 'fieldName2': fieldName2,
-          if (FieldName3.isNotDefault) 'FieldName3': FieldName3,
-          if (fieldName4.isNotDefault) 'fieldName4': fieldName4,
-          if (field0Name5.isNotDefault) 'field0name5': field0Name5,
-          if (field0Name6.isNotDefault) 'field0Name6': field0Name6,
-          if (fieldName7.isNotDefault) 'fieldName7': fieldName7,
-          if (fieldName8.isNotDefault) 'FieldName8': fieldName8,
-          if (fieldName9.isNotDefault) 'fieldName9': fieldName9,
-          if (fieldName10.isNotDefault) 'FieldName10': fieldName10,
-          if (fieldName11.isNotDefault) 'FIELDNAME11': fieldName11,
-          if (fieldName12.isNotDefault) 'FIELDName12': fieldName12,
-          if (FieldName13.isNotDefault) 'FieldName13': FieldName13,
-          if (FieldName14.isNotDefault) 'FieldName14': FieldName14,
-          if (fieldName15.isNotDefault) 'fieldName15': fieldName15,
-          if (fieldName16.isNotDefault) 'fieldName16': fieldName16,
-          if (fieldName17.isNotDefault) 'fieldName17': fieldName17,
-          if (fieldName18.isNotDefault) 'FieldName18': fieldName18,
-    };
+    if (optionalInt32.isNotDefault) 'optionalInt32': optionalInt32,
+    if (optionalInt64.isNotDefault) 'optionalInt64': optionalInt64.toString(),
+    if (optionalUint32.isNotDefault) 'optionalUint32': optionalUint32,
+    if (optionalUint64.isNotDefault)
+      'optionalUint64': optionalUint64.toString(),
+    if (optionalSint32.isNotDefault) 'optionalSint32': optionalSint32,
+    if (optionalSint64.isNotDefault)
+      'optionalSint64': optionalSint64.toString(),
+    if (optionalFixed32.isNotDefault) 'optionalFixed32': optionalFixed32,
+    if (optionalFixed64.isNotDefault)
+      'optionalFixed64': optionalFixed64.toString(),
+    if (optionalSfixed32.isNotDefault) 'optionalSfixed32': optionalSfixed32,
+    if (optionalSfixed64.isNotDefault)
+      'optionalSfixed64': optionalSfixed64.toString(),
+    if (optionalFloat.isNotDefault)
+      'optionalFloat': encodeDouble(optionalFloat),
+    if (optionalDouble.isNotDefault)
+      'optionalDouble': encodeDouble(optionalDouble),
+    if (optionalBool.isNotDefault) 'optionalBool': optionalBool,
+    if (optionalString.isNotDefault) 'optionalString': optionalString,
+    if (optionalBytes.isNotDefault) 'optionalBytes': encodeBytes(optionalBytes),
+    if (optionalNestedMessage case final optionalNestedMessage?)
+      'optionalNestedMessage': optionalNestedMessage.toJson(),
+    if (optionalForeignMessage case final optionalForeignMessage?)
+      'optionalForeignMessage': optionalForeignMessage.toJson(),
+    if (optionalNestedEnum.isNotDefault)
+      'optionalNestedEnum': optionalNestedEnum.toJson(),
+    if (optionalForeignEnum.isNotDefault)
+      'optionalForeignEnum': optionalForeignEnum.toJson(),
+    if (optionalAliasedEnum.isNotDefault)
+      'optionalAliasedEnum': optionalAliasedEnum.toJson(),
+    if (optionalStringPiece.isNotDefault)
+      'optionalStringPiece': optionalStringPiece,
+    if (optionalCord.isNotDefault) 'optionalCord': optionalCord,
+    if (recursiveMessage case final recursiveMessage?)
+      'recursiveMessage': recursiveMessage.toJson(),
+    if (repeatedInt32.isNotDefault) 'repeatedInt32': repeatedInt32,
+    if (repeatedInt64.isNotDefault)
+      'repeatedInt64': [for (final i in repeatedInt64) i.toString()],
+    if (repeatedUint32.isNotDefault) 'repeatedUint32': repeatedUint32,
+    if (repeatedUint64.isNotDefault)
+      'repeatedUint64': [for (final i in repeatedUint64) i.toString()],
+    if (repeatedSint32.isNotDefault) 'repeatedSint32': repeatedSint32,
+    if (repeatedSint64.isNotDefault)
+      'repeatedSint64': [for (final i in repeatedSint64) i.toString()],
+    if (repeatedFixed32.isNotDefault) 'repeatedFixed32': repeatedFixed32,
+    if (repeatedFixed64.isNotDefault)
+      'repeatedFixed64': [for (final i in repeatedFixed64) i.toString()],
+    if (repeatedSfixed32.isNotDefault) 'repeatedSfixed32': repeatedSfixed32,
+    if (repeatedSfixed64.isNotDefault)
+      'repeatedSfixed64': [for (final i in repeatedSfixed64) i.toString()],
+    if (repeatedFloat.isNotDefault)
+      'repeatedFloat': [for (final i in repeatedFloat) encodeDouble(i)],
+    if (repeatedDouble.isNotDefault)
+      'repeatedDouble': [for (final i in repeatedDouble) encodeDouble(i)],
+    if (repeatedBool.isNotDefault) 'repeatedBool': repeatedBool,
+    if (repeatedString.isNotDefault) 'repeatedString': repeatedString,
+    if (repeatedBytes.isNotDefault)
+      'repeatedBytes': [for (final i in repeatedBytes) encodeBytes(i)],
+    if (repeatedNestedMessage.isNotDefault)
+      'repeatedNestedMessage': [
+        for (final i in repeatedNestedMessage) i.toJson(),
+      ],
+    if (repeatedForeignMessage.isNotDefault)
+      'repeatedForeignMessage': [
+        for (final i in repeatedForeignMessage) i.toJson(),
+      ],
+    if (repeatedNestedEnum.isNotDefault)
+      'repeatedNestedEnum': [for (final i in repeatedNestedEnum) i.toJson()],
+    if (repeatedForeignEnum.isNotDefault)
+      'repeatedForeignEnum': [for (final i in repeatedForeignEnum) i.toJson()],
+    if (repeatedStringPiece.isNotDefault)
+      'repeatedStringPiece': repeatedStringPiece,
+    if (repeatedCord.isNotDefault) 'repeatedCord': repeatedCord,
+    if (packedInt32.isNotDefault) 'packedInt32': packedInt32,
+    if (packedInt64.isNotDefault)
+      'packedInt64': [for (final i in packedInt64) i.toString()],
+    if (packedUint32.isNotDefault) 'packedUint32': packedUint32,
+    if (packedUint64.isNotDefault)
+      'packedUint64': [for (final i in packedUint64) i.toString()],
+    if (packedSint32.isNotDefault) 'packedSint32': packedSint32,
+    if (packedSint64.isNotDefault)
+      'packedSint64': [for (final i in packedSint64) i.toString()],
+    if (packedFixed32.isNotDefault) 'packedFixed32': packedFixed32,
+    if (packedFixed64.isNotDefault)
+      'packedFixed64': [for (final i in packedFixed64) i.toString()],
+    if (packedSfixed32.isNotDefault) 'packedSfixed32': packedSfixed32,
+    if (packedSfixed64.isNotDefault)
+      'packedSfixed64': [for (final i in packedSfixed64) i.toString()],
+    if (packedFloat.isNotDefault)
+      'packedFloat': [for (final i in packedFloat) encodeDouble(i)],
+    if (packedDouble.isNotDefault)
+      'packedDouble': [for (final i in packedDouble) encodeDouble(i)],
+    if (packedBool.isNotDefault) 'packedBool': packedBool,
+    if (packedNestedEnum.isNotDefault)
+      'packedNestedEnum': [for (final i in packedNestedEnum) i.toJson()],
+    if (unpackedInt32.isNotDefault) 'unpackedInt32': unpackedInt32,
+    if (unpackedInt64.isNotDefault)
+      'unpackedInt64': [for (final i in unpackedInt64) i.toString()],
+    if (unpackedUint32.isNotDefault) 'unpackedUint32': unpackedUint32,
+    if (unpackedUint64.isNotDefault)
+      'unpackedUint64': [for (final i in unpackedUint64) i.toString()],
+    if (unpackedSint32.isNotDefault) 'unpackedSint32': unpackedSint32,
+    if (unpackedSint64.isNotDefault)
+      'unpackedSint64': [for (final i in unpackedSint64) i.toString()],
+    if (unpackedFixed32.isNotDefault) 'unpackedFixed32': unpackedFixed32,
+    if (unpackedFixed64.isNotDefault)
+      'unpackedFixed64': [for (final i in unpackedFixed64) i.toString()],
+    if (unpackedSfixed32.isNotDefault) 'unpackedSfixed32': unpackedSfixed32,
+    if (unpackedSfixed64.isNotDefault)
+      'unpackedSfixed64': [for (final i in unpackedSfixed64) i.toString()],
+    if (unpackedFloat.isNotDefault)
+      'unpackedFloat': [for (final i in unpackedFloat) encodeDouble(i)],
+    if (unpackedDouble.isNotDefault)
+      'unpackedDouble': [for (final i in unpackedDouble) encodeDouble(i)],
+    if (unpackedBool.isNotDefault) 'unpackedBool': unpackedBool,
+    if (unpackedNestedEnum.isNotDefault)
+      'unpackedNestedEnum': [for (final i in unpackedNestedEnum) i.toJson()],
+    if (mapInt32Int32.isNotDefault)
+      'mapInt32Int32': {
+        for (final e in mapInt32Int32.entries) e.key.toString(): e.value,
+      },
+    if (mapInt64Int64.isNotDefault)
+      'mapInt64Int64': {
+        for (final e in mapInt64Int64.entries)
+          e.key.toString(): e.value.toString(),
+      },
+    if (mapUint32Uint32.isNotDefault)
+      'mapUint32Uint32': {
+        for (final e in mapUint32Uint32.entries) e.key.toString(): e.value,
+      },
+    if (mapUint64Uint64.isNotDefault)
+      'mapUint64Uint64': {
+        for (final e in mapUint64Uint64.entries)
+          e.key.toString(): e.value.toString(),
+      },
+    if (mapSint32Sint32.isNotDefault)
+      'mapSint32Sint32': {
+        for (final e in mapSint32Sint32.entries) e.key.toString(): e.value,
+      },
+    if (mapSint64Sint64.isNotDefault)
+      'mapSint64Sint64': {
+        for (final e in mapSint64Sint64.entries)
+          e.key.toString(): e.value.toString(),
+      },
+    if (mapFixed32Fixed32.isNotDefault)
+      'mapFixed32Fixed32': {
+        for (final e in mapFixed32Fixed32.entries) e.key.toString(): e.value,
+      },
+    if (mapFixed64Fixed64.isNotDefault)
+      'mapFixed64Fixed64': {
+        for (final e in mapFixed64Fixed64.entries)
+          e.key.toString(): e.value.toString(),
+      },
+    if (mapSfixed32Sfixed32.isNotDefault)
+      'mapSfixed32Sfixed32': {
+        for (final e in mapSfixed32Sfixed32.entries) e.key.toString(): e.value,
+      },
+    if (mapSfixed64Sfixed64.isNotDefault)
+      'mapSfixed64Sfixed64': {
+        for (final e in mapSfixed64Sfixed64.entries)
+          e.key.toString(): e.value.toString(),
+      },
+    if (mapInt32Float.isNotDefault)
+      'mapInt32Float': {
+        for (final e in mapInt32Float.entries)
+          e.key.toString(): encodeDouble(e.value),
+      },
+    if (mapInt32Double.isNotDefault)
+      'mapInt32Double': {
+        for (final e in mapInt32Double.entries)
+          e.key.toString(): encodeDouble(e.value),
+      },
+    if (mapBoolBool.isNotDefault)
+      'mapBoolBool': {
+        for (final e in mapBoolBool.entries) e.key.toString(): e.value,
+      },
+    if (mapStringString.isNotDefault) 'mapStringString': mapStringString,
+    if (mapStringBytes.isNotDefault)
+      'mapStringBytes': {
+        for (final e in mapStringBytes.entries) e.key: encodeBytes(e.value),
+      },
+    if (mapStringNestedMessage.isNotDefault)
+      'mapStringNestedMessage': {
+        for (final e in mapStringNestedMessage.entries) e.key: e.value.toJson(),
+      },
+    if (mapStringForeignMessage.isNotDefault)
+      'mapStringForeignMessage': {
+        for (final e in mapStringForeignMessage.entries)
+          e.key: e.value.toJson(),
+      },
+    if (mapStringNestedEnum.isNotDefault)
+      'mapStringNestedEnum': {
+        for (final e in mapStringNestedEnum.entries) e.key: e.value.toJson(),
+      },
+    if (mapStringForeignEnum.isNotDefault)
+      'mapStringForeignEnum': {
+        for (final e in mapStringForeignEnum.entries) e.key: e.value.toJson(),
+      },
+    if (oneofUint32 case final oneofUint32?) 'oneofUint32': oneofUint32,
+    if (oneofNestedMessage case final oneofNestedMessage?)
+      'oneofNestedMessage': oneofNestedMessage.toJson(),
+    if (oneofString case final oneofString?) 'oneofString': oneofString,
+    if (oneofBytes case final oneofBytes?)
+      'oneofBytes': encodeBytes(oneofBytes),
+    if (oneofBool case final oneofBool?) 'oneofBool': oneofBool,
+    if (oneofUint64 case final oneofUint64?)
+      'oneofUint64': oneofUint64.toString(),
+    if (oneofFloat case final oneofFloat?)
+      'oneofFloat': encodeDouble(oneofFloat),
+    if (oneofDouble case final oneofDouble?)
+      'oneofDouble': encodeDouble(oneofDouble),
+    if (oneofEnum case final oneofEnum?) 'oneofEnum': oneofEnum.toJson(),
+    if (oneofNullValue case final oneofNullValue?)
+      'oneofNullValue': oneofNullValue.toJson(),
+    if (optionalBoolWrapper case final optionalBoolWrapper?)
+      'optionalBoolWrapper': optionalBoolWrapper.toJson(),
+    if (optionalInt32Wrapper case final optionalInt32Wrapper?)
+      'optionalInt32Wrapper': optionalInt32Wrapper.toJson(),
+    if (optionalInt64Wrapper case final optionalInt64Wrapper?)
+      'optionalInt64Wrapper': optionalInt64Wrapper.toJson(),
+    if (optionalUint32Wrapper case final optionalUint32Wrapper?)
+      'optionalUint32Wrapper': optionalUint32Wrapper.toJson(),
+    if (optionalUint64Wrapper case final optionalUint64Wrapper?)
+      'optionalUint64Wrapper': optionalUint64Wrapper.toJson(),
+    if (optionalFloatWrapper case final optionalFloatWrapper?)
+      'optionalFloatWrapper': optionalFloatWrapper.toJson(),
+    if (optionalDoubleWrapper case final optionalDoubleWrapper?)
+      'optionalDoubleWrapper': optionalDoubleWrapper.toJson(),
+    if (optionalStringWrapper case final optionalStringWrapper?)
+      'optionalStringWrapper': optionalStringWrapper.toJson(),
+    if (optionalBytesWrapper case final optionalBytesWrapper?)
+      'optionalBytesWrapper': optionalBytesWrapper.toJson(),
+    if (repeatedBoolWrapper.isNotDefault)
+      'repeatedBoolWrapper': [for (final i in repeatedBoolWrapper) i.toJson()],
+    if (repeatedInt32Wrapper.isNotDefault)
+      'repeatedInt32Wrapper': [
+        for (final i in repeatedInt32Wrapper) i.toJson(),
+      ],
+    if (repeatedInt64Wrapper.isNotDefault)
+      'repeatedInt64Wrapper': [
+        for (final i in repeatedInt64Wrapper) i.toJson(),
+      ],
+    if (repeatedUint32Wrapper.isNotDefault)
+      'repeatedUint32Wrapper': [
+        for (final i in repeatedUint32Wrapper) i.toJson(),
+      ],
+    if (repeatedUint64Wrapper.isNotDefault)
+      'repeatedUint64Wrapper': [
+        for (final i in repeatedUint64Wrapper) i.toJson(),
+      ],
+    if (repeatedFloatWrapper.isNotDefault)
+      'repeatedFloatWrapper': [
+        for (final i in repeatedFloatWrapper) i.toJson(),
+      ],
+    if (repeatedDoubleWrapper.isNotDefault)
+      'repeatedDoubleWrapper': [
+        for (final i in repeatedDoubleWrapper) i.toJson(),
+      ],
+    if (repeatedStringWrapper.isNotDefault)
+      'repeatedStringWrapper': [
+        for (final i in repeatedStringWrapper) i.toJson(),
+      ],
+    if (repeatedBytesWrapper.isNotDefault)
+      'repeatedBytesWrapper': [
+        for (final i in repeatedBytesWrapper) i.toJson(),
+      ],
+    if (optionalDuration case final optionalDuration?)
+      'optionalDuration': optionalDuration.toJson(),
+    if (optionalTimestamp case final optionalTimestamp?)
+      'optionalTimestamp': optionalTimestamp.toJson(),
+    if (optionalFieldMask case final optionalFieldMask?)
+      'optionalFieldMask': optionalFieldMask.toJson(),
+    if (optionalStruct case final optionalStruct?)
+      'optionalStruct': optionalStruct.toJson(),
+    if (optionalAny case final optionalAny?)
+      'optionalAny': optionalAny.toJson(),
+    if (optionalValue case final optionalValue?)
+      'optionalValue': optionalValue.toJson(),
+    if (optionalNullValue.isNotDefault)
+      'optionalNullValue': optionalNullValue.toJson(),
+    if (repeatedDuration.isNotDefault)
+      'repeatedDuration': [for (final i in repeatedDuration) i.toJson()],
+    if (repeatedTimestamp.isNotDefault)
+      'repeatedTimestamp': [for (final i in repeatedTimestamp) i.toJson()],
+    if (repeatedFieldmask.isNotDefault)
+      'repeatedFieldmask': [for (final i in repeatedFieldmask) i.toJson()],
+    if (repeatedStruct.isNotDefault)
+      'repeatedStruct': [for (final i in repeatedStruct) i.toJson()],
+    if (repeatedAny.isNotDefault)
+      'repeatedAny': [for (final i in repeatedAny) i.toJson()],
+    if (repeatedValue.isNotDefault)
+      'repeatedValue': [for (final i in repeatedValue) i.toJson()],
+    if (repeatedListValue.isNotDefault)
+      'repeatedListValue': [for (final i in repeatedListValue) i.toJson()],
+    if (fieldname1.isNotDefault) 'fieldname1': fieldname1,
+    if (fieldName2.isNotDefault) 'fieldName2': fieldName2,
+    if (FieldName3.isNotDefault) 'FieldName3': FieldName3,
+    if (fieldName4.isNotDefault) 'fieldName4': fieldName4,
+    if (field0Name5.isNotDefault) 'field0name5': field0Name5,
+    if (field0Name6.isNotDefault) 'field0Name6': field0Name6,
+    if (fieldName7.isNotDefault) 'fieldName7': fieldName7,
+    if (fieldName8.isNotDefault) 'FieldName8': fieldName8,
+    if (fieldName9.isNotDefault) 'fieldName9': fieldName9,
+    if (fieldName10.isNotDefault) 'FieldName10': fieldName10,
+    if (fieldName11.isNotDefault) 'FIELDNAME11': fieldName11,
+    if (fieldName12.isNotDefault) 'FIELDName12': fieldName12,
+    if (FieldName13.isNotDefault) 'FieldName13': FieldName13,
+    if (FieldName14.isNotDefault) 'FieldName14': FieldName14,
+    if (fieldName15.isNotDefault) 'fieldName15': fieldName15,
+    if (fieldName16.isNotDefault) 'fieldName16': fieldName16,
+    if (fieldName17.isNotDefault) 'fieldName17': fieldName17,
+    if (fieldName18.isNotDefault) 'FieldName18': fieldName18,
+  };
 
   @override
   String toString() {
@@ -880,38 +1669,40 @@ final class TestAllTypesProto3 extends ProtoMessage {
 }
 
 final class TestAllTypesProto3_NestedMessage extends ProtoMessage {
-  static const String fullyQualifiedName = 'protobuf_test_messages.proto3.TestAllTypesProto3.NestedMessage';
+  static const String fullyQualifiedName =
+      'protobuf_test_messages.proto3.TestAllTypesProto3.NestedMessage';
 
   final int a;
 
   final TestAllTypesProto3? corecursive;
 
-  TestAllTypesProto3_NestedMessage({
-    this.a = 0,
-    this.corecursive,
-  }) : 
-  super(fullyQualifiedName);
+  TestAllTypesProto3_NestedMessage({this.a = 0, this.corecursive})
+    : super(fullyQualifiedName);
 
-  factory TestAllTypesProto3_NestedMessage.fromJson(Object? j) 
-    {
-      final json = j as Map<String, Object?>;
-      return TestAllTypesProto3_NestedMessage(
-        a: switch (json['a']) { null => 0, Object $1 => decodeInt($1)},
-        corecursive: switch (json['corecursive']) { null => null, Object $1 => TestAllTypesProto3.fromJson($1)},
-      );
-    }
+  factory TestAllTypesProto3_NestedMessage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return TestAllTypesProto3_NestedMessage(
+      a: switch (json['a']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      corecursive: switch (json['corecursive']) {
+        null => null,
+        Object $1 => TestAllTypesProto3.fromJson($1),
+      },
+    );
+  }
 
   @override
   Object toJson() => {
-          if (a.isNotDefault) 'a': a,
-      if (corecursive case final corecursive?) 'corecursive': corecursive.toJson(),
-    };
+    if (a.isNotDefault) 'a': a,
+    if (corecursive case final corecursive?)
+      'corecursive': corecursive.toJson(),
+  };
 
   @override
   String toString() {
-    final $contents = [
-      'a=$a',
-    ].join(',');
+    final $contents = ['a=$a'].join(',');
     return 'NestedMessage(${$contents})';
   }
 }
@@ -930,7 +1721,8 @@ final class TestAllTypesProto3_NestedEnum extends ProtoEnum {
 
   const TestAllTypesProto3_NestedEnum(super.value);
 
-  factory TestAllTypesProto3_NestedEnum.fromJson(Object? json) => TestAllTypesProto3_NestedEnum(json as String);
+  factory TestAllTypesProto3_NestedEnum.fromJson(Object? json) =>
+      TestAllTypesProto3_NestedEnum(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -956,7 +1748,8 @@ final class TestAllTypesProto3_AliasedEnum extends ProtoEnum {
 
   const TestAllTypesProto3_AliasedEnum(super.value);
 
-  factory TestAllTypesProto3_AliasedEnum.fromJson(Object? json) => TestAllTypesProto3_AliasedEnum(json as String);
+  factory TestAllTypesProto3_AliasedEnum.fromJson(Object? json) =>
+      TestAllTypesProto3_AliasedEnum(json as String);
 
   bool get isNotDefault => this != $default;
 
@@ -965,66 +1758,58 @@ final class TestAllTypesProto3_AliasedEnum extends ProtoEnum {
 }
 
 final class ForeignMessage extends ProtoMessage {
-  static const String fullyQualifiedName = 'protobuf_test_messages.proto3.ForeignMessage';
+  static const String fullyQualifiedName =
+      'protobuf_test_messages.proto3.ForeignMessage';
 
   final int c;
 
-  ForeignMessage({
-    this.c = 0,
-  }) : 
-  super(fullyQualifiedName);
+  ForeignMessage({this.c = 0}) : super(fullyQualifiedName);
 
-  factory ForeignMessage.fromJson(Object? j) 
-    {
-      final json = j as Map<String, Object?>;
-      return ForeignMessage(
-        c: switch (json['c']) { null => 0, Object $1 => decodeInt($1)},
-      );
-    }
+  factory ForeignMessage.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ForeignMessage(
+      c: switch (json['c']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
 
   @override
-  Object toJson() => {
-          if (c.isNotDefault) 'c': c,
-    };
+  Object toJson() => {if (c.isNotDefault) 'c': c};
 
   @override
   String toString() {
-    final $contents = [
-      'c=$c',
-    ].join(',');
+    final $contents = ['c=$c'].join(',');
     return 'ForeignMessage(${$contents})';
   }
 }
 
 final class NullHypothesisProto3 extends ProtoMessage {
-  static const String fullyQualifiedName = 'protobuf_test_messages.proto3.NullHypothesisProto3';
+  static const String fullyQualifiedName =
+      'protobuf_test_messages.proto3.NullHypothesisProto3';
 
-  NullHypothesisProto3() : 
-  super(fullyQualifiedName);
+  NullHypothesisProto3() : super(fullyQualifiedName);
 
-  factory NullHypothesisProto3.fromJson(Object? j) 
-    => NullHypothesisProto3();
+  factory NullHypothesisProto3.fromJson(Object? j) => NullHypothesisProto3();
 
   @override
-  Object toJson() => {
-    };
+  Object toJson() => {};
 
   @override
   String toString() => 'NullHypothesisProto3()';
 }
 
 final class EnumOnlyProto3 extends ProtoMessage {
-  static const String fullyQualifiedName = 'protobuf_test_messages.proto3.EnumOnlyProto3';
+  static const String fullyQualifiedName =
+      'protobuf_test_messages.proto3.EnumOnlyProto3';
 
-  EnumOnlyProto3() : 
-  super(fullyQualifiedName);
+  EnumOnlyProto3() : super(fullyQualifiedName);
 
-  factory EnumOnlyProto3.fromJson(Object? j) 
-    => EnumOnlyProto3();
+  factory EnumOnlyProto3.fromJson(Object? j) => EnumOnlyProto3();
 
   @override
-  Object toJson() => {
-    };
+  Object toJson() => {};
 
   @override
   String toString() => 'EnumOnlyProto3()';
@@ -1040,7 +1825,8 @@ final class EnumOnlyProto3_Bool extends ProtoEnum {
 
   const EnumOnlyProto3_Bool(super.value);
 
-  factory EnumOnlyProto3_Bool.fromJson(Object? json) => EnumOnlyProto3_Bool(json as String);
+  factory EnumOnlyProto3_Bool.fromJson(Object? json) =>
+      EnumOnlyProto3_Bool(json as String);
 
   bool get isNotDefault => this != $default;
 

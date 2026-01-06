@@ -37,6 +37,7 @@ library;
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
@@ -86,8 +87,8 @@ final class Operations {
   /// server doesn't support this method, it returns `UNIMPLEMENTED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -108,8 +109,8 @@ final class Operations {
   /// service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Operation> getOperation(GetOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -122,8 +123,8 @@ final class Operations {
   /// `google.rpc.Code.UNIMPLEMENTED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     await _client.delete(url);
@@ -142,8 +143,8 @@ final class Operations {
   /// `Code.CANCELLED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}:cancel');
     await _client.post(url, body: request);

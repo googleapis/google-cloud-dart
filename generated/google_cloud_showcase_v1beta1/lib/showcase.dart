@@ -32,6 +32,7 @@ import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
@@ -73,8 +74,8 @@ final class Compliance {
   /// sending the entire request object in the REST body.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBody(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:body');
     final response = await _client.post(url, body: request);
@@ -86,8 +87,8 @@ final class Compliance {
   /// top-level, non-repeated fields can be sent this way.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodyinfo', {
       if (request.name case final $1 when $1.isNotDefault) 'name': $1,
@@ -110,8 +111,8 @@ final class Compliance {
   /// sending all request fields as query parameters.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:query', {
       if (request.name case final $1 when $1.isNotDefault) 'name': $1,
@@ -248,8 +249,8 @@ final class Compliance {
   /// "/bar/{foo}" rather than "/{foo=bar/*}"), and the rest as query parameters.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataSimplePath(RepeatRequest request) async {
     final url = Uri.https(
       _host,
@@ -390,8 +391,8 @@ final class Compliance {
   /// Same as RepeatDataSimplePath, but with a path resource.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataPathResource(RepeatRequest request) async {
     final url = Uri.https(
       _host,
@@ -532,8 +533,8 @@ final class Compliance {
   /// Same as RepeatDataSimplePath, but with a trailing resource.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataPathTrailingResource(
     RepeatRequest request,
   ) async {
@@ -676,8 +677,8 @@ final class Compliance {
   /// This method echoes the ComplianceData request, using the HTTP PUT method.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBodyPut(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodyput');
     final response = await _client.put(url, body: request);
@@ -687,8 +688,8 @@ final class Compliance {
   /// This method echoes the ComplianceData request, using the HTTP PATCH method.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBodyPatch(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodypatch');
     final response = await _client.patch(url, body: request);
@@ -703,8 +704,8 @@ final class Compliance {
   /// VerifyEnum() to work) but are not guaranteed to be the same across separate Showcase server runs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EnumResponse> getEnum(EnumRequest request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
       if (request.unknownEnum case final $1 when $1.isNotDefault)
@@ -722,8 +723,8 @@ final class Compliance {
   /// although they are not guaranteed to be the same across separate Showcase server runs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
       if (request.request!.unknownEnum case final $1 when $1.isNotDefault)
@@ -738,8 +739,8 @@ final class Compliance {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -756,8 +757,8 @@ final class Compliance {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -767,8 +768,8 @@ final class Compliance {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -778,8 +779,8 @@ final class Compliance {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -793,8 +794,8 @@ final class Compliance {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -809,8 +810,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -830,8 +831,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -847,8 +848,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -857,8 +858,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -907,8 +908,8 @@ final class Echo {
   /// This method simply echoes the request. This method showcases unary RPCs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EchoResponse> echo(EchoRequest request) async {
     final url = Uri.https(_host, '/v1beta1/echo:echo');
     final response = await _client.post(url, body: request);
@@ -923,8 +924,8 @@ final class Echo {
   /// google/rpc/error_details.proto.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EchoErrorDetailsResponse> echoErrorDetails(
     EchoErrorDetailsRequest request,
   ) async {
@@ -942,8 +943,8 @@ final class Echo {
   /// to the user in an idiomatic form.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<FailEchoWithDetailsResponse> failEchoWithDetails(
     FailEchoWithDetailsRequest request,
   ) async {
@@ -956,8 +957,8 @@ final class Echo {
   /// through the stream. This method showcases server-side streaming RPCs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Stream<EchoResponse> expand(ExpandRequest request) {
     final url = Uri.https(_host, '/v1beta1/echo:expand');
     return _client.postStreaming(url, body: request).map(EchoResponse.fromJson);
@@ -967,8 +968,8 @@ final class Echo {
   /// expanded words, this method returns a paged list of expanded words.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<PagedExpandResponse> pagedExpand(PagedExpandRequest request) async {
     final url = Uri.https(_host, '/v1beta1/echo:pagedExpand');
     final response = await _client.post(url, body: request);
@@ -980,8 +981,8 @@ final class Echo {
   /// do. New APIs should NOT use this pattern.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<PagedExpandResponse> pagedExpandLegacy(
     PagedExpandLegacyRequest request,
   ) async {
@@ -997,8 +998,8 @@ final class Echo {
   /// APIs. New APIs should NOT use this pattern.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<PagedExpandLegacyMappedResponse> pagedExpandLegacyMapped(
     PagedExpandRequest request,
   ) async {
@@ -1011,8 +1012,8 @@ final class Echo {
   /// This method showcases how a client handles a request timeout.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -1035,8 +1036,8 @@ final class Echo {
   /// This method showcases how a client handles delays or retries.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<BlockResponse> block(BlockRequest request) async {
     final url = Uri.https(_host, '/v1beta1/echo:block');
     final response = await _client.post(url, body: request);
@@ -1046,8 +1047,8 @@ final class Echo {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1064,8 +1065,8 @@ final class Echo {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1075,8 +1076,8 @@ final class Echo {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1086,8 +1087,8 @@ final class Echo {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1101,8 +1102,8 @@ final class Echo {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1117,8 +1118,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1138,8 +1139,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1155,8 +1156,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1165,8 +1166,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -1210,8 +1211,8 @@ final class Identity {
   /// Creates a user.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<User> createUser(CreateUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/users');
     final response = await _client.post(url, body: request);
@@ -1221,8 +1222,8 @@ final class Identity {
   /// Retrieves the User with the given uri.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<User> getUser(GetUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1232,8 +1233,8 @@ final class Identity {
   /// Updates a user.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<User> updateUser(UpdateUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.user!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -1245,8 +1246,8 @@ final class Identity {
   /// Deletes a user, their profile, and all of their authored messages.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteUser(DeleteUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1255,8 +1256,8 @@ final class Identity {
   /// Lists all users.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
     final url = Uri.https(_host, '/v1beta1/users', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -1270,8 +1271,8 @@ final class Identity {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1288,8 +1289,8 @@ final class Identity {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1299,8 +1300,8 @@ final class Identity {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1310,8 +1311,8 @@ final class Identity {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1325,8 +1326,8 @@ final class Identity {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1341,8 +1342,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1362,8 +1363,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1379,8 +1380,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1389,8 +1390,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -1437,8 +1438,8 @@ final class Messaging {
   /// Creates a room.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Room> createRoom(CreateRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/rooms');
     final response = await _client.post(url, body: request);
@@ -1448,8 +1449,8 @@ final class Messaging {
   /// Retrieves the Room with the given resource name.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Room> getRoom(GetRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1459,8 +1460,8 @@ final class Messaging {
   /// Updates a room.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Room> updateRoom(UpdateRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.room!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -1472,8 +1473,8 @@ final class Messaging {
   /// Deletes a room and all of its blurbs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteRoom(DeleteRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1482,8 +1483,8 @@ final class Messaging {
   /// Lists all chat rooms.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/rooms', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -1499,8 +1500,8 @@ final class Messaging {
   /// to be a post on the profile.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Blurb> createBlurb(CreateBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs');
     final response = await _client.post(url, body: request);
@@ -1510,8 +1511,8 @@ final class Messaging {
   /// Retrieves the Blurb with the given resource name.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Blurb> getBlurb(GetBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1521,8 +1522,8 @@ final class Messaging {
   /// Updates a blurb.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.blurb!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -1534,8 +1535,8 @@ final class Messaging {
   /// Deletes a blurb.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteBlurb(DeleteBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1545,8 +1546,8 @@ final class Messaging {
   /// parent resource name.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -1562,8 +1563,8 @@ final class Messaging {
   /// contain an exact match of a queried word will be returned.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -1588,8 +1589,8 @@ final class Messaging {
   /// particular chat room or user profile.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Stream<StreamBlurbsResponse> streamBlurbs(StreamBlurbsRequest request) {
     final url = Uri.https(_host, '/v1beta1/${request.name}/blurbs:stream');
     return _client
@@ -1600,8 +1601,8 @@ final class Messaging {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1618,8 +1619,8 @@ final class Messaging {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1629,8 +1630,8 @@ final class Messaging {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1640,8 +1641,8 @@ final class Messaging {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1655,8 +1656,8 @@ final class Messaging {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1671,8 +1672,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1692,8 +1693,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1709,8 +1710,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1719,8 +1720,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -1763,8 +1764,8 @@ final class SequenceService {
   /// Creates a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Sequence> createSequence(CreateSequenceRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sequences');
     final response = await _client.post(url, body: request.sequence);
@@ -1774,8 +1775,8 @@ final class SequenceService {
   /// Creates a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<StreamingSequence> createStreamingSequence(
     CreateStreamingSequenceRequest request,
   ) async {
@@ -1787,8 +1788,8 @@ final class SequenceService {
   /// Retrieves a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SequenceReport> getSequenceReport(
     GetSequenceReportRequest request,
   ) async {
@@ -1800,8 +1801,8 @@ final class SequenceService {
   /// Retrieves a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<StreamingSequenceReport> getStreamingSequenceReport(
     GetStreamingSequenceReportRequest request,
   ) async {
@@ -1813,8 +1814,8 @@ final class SequenceService {
   /// Attempts a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> attemptSequence(AttemptSequenceRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.post(url, body: request);
@@ -1825,8 +1826,8 @@ final class SequenceService {
   /// See https://github.com/googleapis/gapic-showcase/issues/1377 for more details
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Stream<AttemptStreamingSequenceResponse> attemptStreamingSequence(
     AttemptStreamingSequenceRequest request,
   ) {
@@ -1839,8 +1840,8 @@ final class SequenceService {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1857,8 +1858,8 @@ final class SequenceService {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1868,8 +1869,8 @@ final class SequenceService {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1879,8 +1880,8 @@ final class SequenceService {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1894,8 +1895,8 @@ final class SequenceService {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1910,8 +1911,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1931,8 +1932,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1948,8 +1949,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1958,8 +1959,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -2010,8 +2011,8 @@ final class Testing {
   /// 2) `Nonsense`: `pokemon/*/psychic/*`
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Session> createSession(CreateSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sessions');
     final response = await _client.post(url, body: request.session);
@@ -2021,8 +2022,8 @@ final class Testing {
   /// Gets a testing session.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Session> getSession(GetSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -2032,8 +2033,8 @@ final class Testing {
   /// Lists the current test sessions.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sessions', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -2047,8 +2048,8 @@ final class Testing {
   /// Delete a test session.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteSession(DeleteSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -2059,8 +2060,8 @@ final class Testing {
   /// and an overall rollup.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ReportSessionResponse> reportSession(
     ReportSessionRequest request,
   ) async {
@@ -2072,8 +2073,8 @@ final class Testing {
   /// List the tests of a sessesion.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListTestsResponse> listTests(ListTestsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/tests', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -2092,8 +2093,8 @@ final class Testing {
   /// This method will error if attempting to delete a required test.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteTest(DeleteTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -2105,8 +2106,8 @@ final class Testing {
   /// end of the test, this method provides the means to do so.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:check', {
       if (request.answer case final $1 when $1.isNotDefault)
@@ -2121,8 +2122,8 @@ final class Testing {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -2139,8 +2140,8 @@ final class Testing {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -2150,8 +2151,8 @@ final class Testing {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -2161,8 +2162,8 @@ final class Testing {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -2176,8 +2177,8 @@ final class Testing {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -2192,8 +2193,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -2213,8 +2214,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -2230,8 +2231,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -2240,8 +2241,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);

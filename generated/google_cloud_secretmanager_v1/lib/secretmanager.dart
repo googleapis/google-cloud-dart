@@ -31,6 +31,7 @@ import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -74,8 +75,8 @@ final class SecretManagerService {
   /// Lists `Secrets`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -91,8 +92,8 @@ final class SecretManagerService {
   /// `SecretVersions`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Secret> createSecret(CreateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
       if (request.secretId case final $1 when $1.isNotDefault) 'secretId': $1,
@@ -106,8 +107,8 @@ final class SecretManagerService {
   /// `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> addSecretVersion(
     AddSecretVersionRequest request,
   ) async {
@@ -119,8 +120,8 @@ final class SecretManagerService {
   /// Gets metadata for a given `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Secret> getSecret(GetSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -131,8 +132,8 @@ final class SecretManagerService {
   /// `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.secret!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -144,8 +145,8 @@ final class SecretManagerService {
   /// Deletes a `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteSecret(DeleteSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
       if (request.etag case final $1 when $1.isNotDefault) 'etag': $1,
@@ -157,8 +158,8 @@ final class SecretManagerService {
   /// call does not return secret data.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListSecretVersionsResponse> listSecretVersions(
     ListSecretVersionsRequest request,
   ) async {
@@ -179,8 +180,8 @@ final class SecretManagerService {
   /// created `SecretVersion`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> getSecretVersion(
     GetSecretVersionRequest request,
   ) async {
@@ -196,8 +197,8 @@ final class SecretManagerService {
   /// created `SecretVersion`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AccessSecretVersionResponse> accessSecretVersion(
     AccessSecretVersionRequest request,
   ) async {
@@ -213,8 +214,8 @@ final class SecretManagerService {
   /// `DISABLED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> disableSecretVersion(
     DisableSecretVersionRequest request,
   ) async {
@@ -230,8 +231,8 @@ final class SecretManagerService {
   /// `ENABLED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> enableSecretVersion(
     EnableSecretVersionRequest request,
   ) async {
@@ -248,8 +249,8 @@ final class SecretManagerService {
   /// and irrevocably destroys the secret data.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> destroySecretVersion(
     DestroySecretVersionRequest request,
   ) async {
@@ -267,8 +268,8 @@ final class SecretManagerService {
   /// `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -279,8 +280,8 @@ final class SecretManagerService {
   /// Returns empty policy if the secret exists and does not have a policy set.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -300,8 +301,8 @@ final class SecretManagerService {
   /// may "fail open" without warning.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -313,8 +314,8 @@ final class SecretManagerService {
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -331,8 +332,8 @@ final class SecretManagerService {
   /// Gets information about a location.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);

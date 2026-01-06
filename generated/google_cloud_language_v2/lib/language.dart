@@ -30,6 +30,7 @@ library;
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -68,8 +69,8 @@ final class LanguageService {
   /// Analyzes the sentiment of the provided text.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AnalyzeSentimentResponse> analyzeSentiment(
     AnalyzeSentimentRequest request,
   ) async {
@@ -83,8 +84,8 @@ final class LanguageService {
   /// other properties.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AnalyzeEntitiesResponse> analyzeEntities(
     AnalyzeEntitiesRequest request,
   ) async {
@@ -96,8 +97,8 @@ final class LanguageService {
   /// Classifies a document into categories.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:classifyText');
     final response = await _client.post(url, body: request);
@@ -107,8 +108,8 @@ final class LanguageService {
   /// Moderates a document for harmful and sensitive categories.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:moderateText');
     final response = await _client.post(url, body: request);
@@ -118,8 +119,8 @@ final class LanguageService {
   /// A convenience method that provides all features in one call.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:annotateText');
     final response = await _client.post(url, body: request);
