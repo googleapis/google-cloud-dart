@@ -23,8 +23,10 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_api/api.dart';
