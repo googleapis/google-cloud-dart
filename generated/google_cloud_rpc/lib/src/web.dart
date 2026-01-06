@@ -18,7 +18,7 @@ library;
 import 'package:googleapis_auth/googleapis_auth.dart' as auth;
 import 'package:http/http.dart' as http;
 
-import '../../service_client.dart';
+import 'exceptions.dart';
 
 /// The Dart version to use in "x-goog-api-client" headers.
 ///
