@@ -18,7 +18,7 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 
 sealed class Retry {
-  Future<T> run<T extends http.BaseResponse>(Future<T> Function() body);
+  Future<T> run<T extends http.Response>(Future<T> Function() body);
 }
 
 Duration _minDuration(Duration a, Duration b) => a < b ? a : b;
@@ -39,17 +39,30 @@ final class DefaultRetry implements Retry {
   });
 
   @override
-  Future<T> run<T extends http.BaseResponse>(Future<T> Function() body) async {
+  Future<T> run<T extends http.Response>(Future<T> Function() body) async {
     for (var i = 0; true; ++i) {
       try {
-        return body();
+        final response = await body();
+        final statusOK =
+            response.statusCode >= 200 && response.statusCode < 300;
+        if (!statusOK) {
+          String? responseBody;
+          try {
+            responseBody = response.body;
+          } on FormatException {
+            // The response body is not valid UTF-8.
+          }
+          throw ServiceException.fromHttpResponse(response, responseBody);
+        }
+
+        return response;
       } on (
         TooManyRequestsException,
         InternalServerErrorException,
         BadGatewayException,
         ServiceUnavailableException,
         GatewayTimeoutException,
-        //      RequestTimeoutException,
+        RequestTimeoutException,
         http.ClientException,
       ) {
         if (i >= maxRetries) {

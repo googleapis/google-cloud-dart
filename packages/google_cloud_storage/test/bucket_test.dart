@@ -48,7 +48,7 @@ void main() async {
           );
 
       testClient = await TestHttpClient.fromEnvironment(authClient);
-      storageService = StorageService(client: testClient);
+      storageService = StorageService(testClient);
     });
 
     tearDown(() => storageService.close());

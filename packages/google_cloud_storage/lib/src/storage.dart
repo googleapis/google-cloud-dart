@@ -36,7 +36,7 @@ final class StorageService {
 
     final url = Uri.https(_host, 'storage/v1/b', query);
     final response = await retry.run(() => http.post(url));
-
+    print(response.body);
     return bucket.fromJson(
       jsonDecode(response.body) as Map<String, dynamic>,
       this,
