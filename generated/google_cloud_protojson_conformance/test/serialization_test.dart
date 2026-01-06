@@ -4,8 +4,6 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf_test_messages_proto3/google_cloud_protobuf_test_messages_proto3.dart';
 import 'package:test/test.dart';
 
-// https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/test_messages_proto3.proto
-
 void checkField(
   TestAllTypesProto3 message,
   Object expectedJson,
@@ -33,6 +31,8 @@ void checkField(
   }
 }
 
+/// Tests for the serialization of the
+/// [TestAllTypesProto3 message](https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/test_messages_proto3.proto).
 void main() async {
   group('test', () {
     group('int32', () {
@@ -1588,7 +1588,7 @@ void main() async {
             NullValue.nullValue,
           );
         },
-        skip: 'https://github.com/googleapis/google-cloud-dart/issues/99',
+        skip: 'TODO(https://github.com/googleapis/google-cloud-dart/issues/99)',
       );
 
       test(
@@ -2217,7 +2217,7 @@ void main() async {
         test('null', () {
           checkField(
             TestAllTypesProto3(optionalNullValue: NullValue.nullValue),
-            {}, // XXX
+            {},
             (m) => m.optionalNullValue,
             NullValue.nullValue,
           );
@@ -2439,7 +2439,6 @@ void main() async {
         });
 
         test('non-empty', () {
-          // XXX
           final l1 = ListValue(
             values: [Value(numberValue: 1.0), Value(boolValue: true)],
           );
