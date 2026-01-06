@@ -55,6 +55,20 @@ int decodeInt(Object? value) => value as int;
 int decodeInt64(Object? value) =>
     value is String ? int.parse(value) : value as int;
 
+/// Decodes: `STRING_TYPE`.
+String decodeString(Object? value) => value as String;
+
+/// Decodes: `FIXED64_TYPE`, `UINT64_TYPE`.
+BigInt decodeUint64(Object? value) =>
+    value is String ? BigInt.parse(value) : BigInt.from(value as int);
+
+/// Decodes: `BOOL_TYPE`.
+bool decodeBoolKey(Object? value) => switch (value) {
+  'true' => true,
+  'false' => false,
+  _ => throw FormatException('Invalid boolean value: $value'),
+};
+
 /// Decodes: `INT32_TYPE`, `FIXED32_TYPE`, `SFIXED32_TYPE`, `SINT32_TYPE`,
 /// `UINT32_TYPE`, `INT64_TYPE`, `SINT64_TYPE`, `SFIXED64_TYPE`.
 ///
@@ -64,19 +78,9 @@ int decodeIntKey(Object? value) => int.parse(value as String);
 /// Decodes: `UINT64_TYPE`, `FIXED64_TYPE`.
 BigInt decodeUint64Key(Object? value) => BigInt.parse(value as String);
 
-/// Decodes: `BOOL_TYPE`.
-bool decodeBoolKey(Object? value) => switch (value) {
-  'true' => true,
-  'false' => false,
-  _ => throw FormatException('Invalid boolean value: $value'),
-};
-
-/// Decodes: `STRING_TYPE`.
-String decodeString(Object? value) => value as String;
-
-/// Decodes: `FIXED64_TYPE`, `UINT64_TYPE`.
-BigInt decodeUint64(Object? value) =>
-    value is String ? BigInt.parse(value) : BigInt.from(value as int);
+/// Encode a `bytes` value into JSON.
+String? encodeBytes(Uint8List? value) =>
+    value == null ? null : base64Encode(value);
 
 /// Encode 'float` and `double` values into JSON.
 Object? encodeDouble(double? value) {
@@ -86,10 +90,6 @@ Object? encodeDouble(double? value) {
 
   return value.isNaN || value.isInfinite ? '$value' : value;
 }
-
-/// Encode a `bytes` value into JSON.
-String? encodeBytes(Uint8List? value) =>
-    value == null ? null : base64Encode(value);
 
 /// Extensions methods used for comparing to proto default values.
 extension BigIntProtoDefault on BigInt {

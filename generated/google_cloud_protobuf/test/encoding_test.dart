@@ -16,27 +16,119 @@ import 'package:google_cloud_protobuf/src/encoding.dart';
 import 'package:test/test.dart';
 
 void main() {
-  test('double', () {
-    expect(decodeDouble(1), 1);
-    expect(decodeDouble(1.1), 1.1);
-    expect(decodeDouble(encodeDouble(1)), 1);
-    expect(decodeDouble(encodeDouble(1.1)), 1.1);
+  group('decodeBool', () {
+    test('true', () {
+      expect(decodeBool(true), true);
+    });
+    test('false', () {
+      expect(decodeBool(false), false);
+    });
   });
 
-  test('double NaN', () {
-    expect(decodeDouble('NaN'), isNaN);
-    expect(decodeDouble('Infinity'), double.infinity);
-    expect(decodeDouble('-Infinity'), double.negativeInfinity);
+  group('decodeBytes', () {
+    test('empty', () {
+      final actual = decodeBytes('');
+      expect(actual, isEmpty);
+    });
 
-    // don't allow arbitrary strings for doubles
-    expect(() => decodeDouble('1.0'), throwsFormatException);
-
-    expect(encodeDouble(double.nan), 'NaN');
-    expect(encodeDouble(double.infinity), 'Infinity');
-    expect(encodeDouble(double.negativeInfinity), '-Infinity');
+    test('simple', () {
+      final actual = decodeBytes('bG9yZW0gaXBzdW0=');
+      final expected = [108, 111, 114, 101, 109, 32, 105, 112, 115, 117, 109];
+      expect(actual, expected);
+    });
   });
 
-  group('bytes', () {
+  group('decodeDouble', () {
+    test('double', () {
+      expect(decodeDouble(1.1), 1.1);
+    });
+
+    test('int', () {
+      expect(decodeDouble(1), 1);
+    });
+
+    test('NaN', () {
+      expect(decodeDouble('NaN'), isNaN);
+    });
+
+    test('Infinity', () {
+      expect(decodeDouble('Infinity'), double.infinity);
+    });
+
+    test('-Infinity', () {
+      expect(decodeDouble('-Infinity'), double.negativeInfinity);
+    });
+
+    test('string', () {
+      expect(() => decodeDouble('1.0'), throwsFormatException);
+    });
+  });
+
+  group('decodeInt', () {
+    test('int', () {
+      expect(decodeInt(1), 1);
+    });
+
+    test('string', () {
+      expect(() => decodeInt('1'), throwsA(isA<TypeError>()));
+    });
+  });
+
+  group('decodeInt64', () {
+    test('int', () {
+      expect(decodeInt64(1), 1);
+    });
+
+    test('string', () {
+      expect(decodeInt64('1'), 1);
+    });
+  });
+
+  group('decodeUint64', () {
+    test('int', () {
+      expect(decodeUint64(1), BigInt.from(1));
+    });
+
+    test('string', () {
+      expect(decodeUint64('1'), BigInt.from(1));
+    });
+  });
+
+  group('decodeBoolKey', () {
+    test('true', () {
+      expect(decodeBoolKey('true'), true);
+    });
+
+    test('false', () {
+      expect(decodeBoolKey('false'), false);
+    });
+
+    test('invalid', () {
+      expect(() => decodeBoolKey('xxx'), throwsFormatException);
+    });
+  });
+
+  group('decodeIntKey', () {
+    test('int', () {
+      expect(decodeIntKey('1'), 1);
+    });
+
+    test('invalid', () {
+      expect(() => decodeIntKey('xxx'), throwsFormatException);
+    });
+  });
+
+  group('decodeUint64Key', () {
+    test('int', () {
+      expect(decodeUint64Key('1'), BigInt.one);
+    });
+
+    test('invalid', () {
+      expect(() => decodeUint64Key('xxx'), throwsFormatException);
+    });
+  });
+
+  group('encodeBytes', () {
     test('encode empty', () {
       final bytes = Uint8List.fromList([]);
       expect(encodeBytes(bytes), '');
@@ -46,24 +138,23 @@ void main() {
       final bytes = Uint8List.fromList([1, 2, 3]);
       expect(encodeBytes(bytes), 'AQID');
     });
+  });
 
-    test('decode empty', () {
-      final bytes = decodeBytes('AQID');
-      final actual = bytes.map((item) => '$item').join(',');
-      expect(actual, '1,2,3');
+  group('encodeDouble', () {
+    test('double', () {
+      expect(encodeDouble(1.1), 1.1);
     });
 
-    test('decode simple', () {
-      final bytes = decodeBytes('bG9yZW0gaXBzdW0=');
-      final actual = bytes.map((item) => '$item').join(',');
-      // "lorem ipsum"
-      expect(actual, '108,111,114,101,109,32,105,112,115,117,109');
+    test('NaN', () {
+      expect(encodeDouble(double.nan), 'NaN');
     });
 
-    test('decode simple', () {
-      final bytes = decodeBytes('YWJjMTIzIT8kKiYoKSctPUB+');
-      final actual = bytes.map((item) => '$item').join(',');
-      expect(actual, '97,98,99,49,50,51,33,63,36,42,38,40,41,39,45,61,64,126');
+    test('Infinity', () {
+      expect(encodeDouble(double.infinity), 'Infinity');
+    });
+
+    test('-Infinity', () {
+      expect(encodeDouble(double.negativeInfinity), '-Infinity');
     });
   });
 }
