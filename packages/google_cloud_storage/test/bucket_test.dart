@@ -55,7 +55,7 @@ void main() async {
 
     test('create', () async {
       await testClient.startTest('google_cloud_storage', 'bucket_create');
-
+      addTearDown(testClient.endTest);
       final bucketName =
           TestHttpClient.isRecording || TestHttpClient.isReplaying
           ? 'dart-cloud-storage-test-bucket-create'
@@ -65,6 +65,7 @@ void main() async {
         bucketName: bucketName,
         project: projectId,
       );
+      addTearDown(bucket.delete);
       expect(bucket.name, bucketName);
       expect(
         bucket.selfLink,
@@ -74,12 +75,14 @@ void main() async {
       expect(bucket.location, 'US');
       expect(bucket.locationType, 'multi-region');
       expect(bucket.timeCreated, isNotNull);
-
-      await testClient.endTest();
     });
 
     test('create duplicate', () async {
-      await testClient.startTest('google_cloud_storage', 'bucket_create');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'bucket_create_duplicate',
+      );
+      addTearDown(testClient.endTest);
 
       final bucketName =
           TestHttpClient.isRecording || TestHttpClient.isReplaying
@@ -90,6 +93,7 @@ void main() async {
         bucketName: bucketName,
         project: projectId,
       );
+      addTearDown(bucket.delete);
       expect(bucket.name, bucketName);
 
       // Verify that creating the same bucket again fails.
@@ -97,7 +101,27 @@ void main() async {
         storageService.createBucket(bucketName: bucketName, project: projectId),
         throwsA(isA<ConflictException>()),
       );
-      await testClient.endTest();
+    });
+
+    test('bucket exists', () async {
+      await testClient.startTest('google_cloud_storage', 'bucket_exists');
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'dart-cloud-storage-test-bucket-exists'
+          : uniqueBucketName();
+
+      // Check that the bucket does not exist.
+      expect(await storageService.bucketExists(bucketName), isFalse);
+
+      final bucket = await storageService.createBucket(
+        bucketName: bucketName,
+        project: projectId,
+      );
+      addTearDown(bucket.delete);
+
+      // Check that the bucket exists.
+      expect(await storageService.bucketExists(bucketName), isTrue);
     });
   });
 }

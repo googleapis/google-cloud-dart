@@ -1,0 +1,105 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-exists",
+      "method": "HEAD",
+      "headers": {},
+      "body": ""
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 07 Jan 2026 21:49:34 GMT",
+        "vary": "Origin,X-Origin",
+        "x-guploader-uploadid": "AJRbA5W77HtOE2GOzxc1L4jAKd-Hf8WBGHpWuwS8qoMf3-iyw00ICx8dB33neSAdCkhG3_EQUnCKoMw",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "Not Found"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWV4aXN0cyJ9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 07 Jan 2026 21:49:35 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "937",
+        "x-guploader-uploadid": "AHVrFxNF2N7cXCa3-Q3WG9uT80-12WsD4xYptwQzR_pBQJNMHbR_-n6VgcsERJuEWoiwV7WgKetXqhI",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-exists\",\n  \"id\": \"dart-cloud-storage-test-bucket-exists\",\n  \"name\": \"dart-cloud-storage-test-bucket-exists\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1767822574785966122\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-07T21:49:35.098Z\",\n  \"updated\": \"2026-01-07T21:49:35.098Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-07T21:49:35.098Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:35.098Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:35.098Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-exists",
+      "method": "HEAD",
+      "headers": {},
+      "body": ""
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "private, max-age=0, must-revalidate, no-transform",
+        "transfer-encoding": "chunked",
+        "date": "Wed, 07 Jan 2026 21:49:35 GMT",
+        "vary": "Origin,X-Origin",
+        "x-guploader-uploadid": "AJRbA5WLGDluz8mYF33XkaONinEMxxxEW-YcXmOc65e8IeZUrREItnsouhWDOaIG5fzF-JekHHtMEoU",
+        "etag": "CAE=",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Wed, 07 Jan 2026 21:49:35 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-exists",
+      "method": "DELETE",
+      "headers": {},
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 07 Jan 2026 21:49:36 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AHVrFxMwgJkIrden_S2V5aHphBFld5tazgzZIAa2C7icEH20F0-1cJFzGW-Z_xnUml33k_69",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
+    }
+  }
+]

@@ -27,6 +27,19 @@ final class StorageService {
 
   StorageService(this.client);
 
+  Future<bool> bucketExists(
+    String bucketName, {
+    Retry retry = defaultRetry,
+  }) async {
+    final url = Uri.https(_host, 'storage/v1/b/$bucketName');
+    try {
+      await retry.run(() => client.head(url));
+      return true;
+    } on NotFoundException {
+      return false;
+    }
+  }
+
   Future<Bucket> createBucket({
     required String bucketName,
     String? project,

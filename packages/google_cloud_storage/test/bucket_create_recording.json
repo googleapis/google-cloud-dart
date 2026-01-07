@@ -6,52 +6,50 @@
       "headers": {
         "content-type": "application/json; charset=utf-8"
       },
-      "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZS1kdXAifQ=="
+      "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZSJ9"
     },
     "response": {
       "statusCode": 200,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 07 Jan 2026 21:17:02 GMT",
+        "date": "Wed, 07 Jan 2026 21:49:30 GMT",
         "vary": "Origin,X-Origin",
-        "content-length": "949",
-        "x-guploader-uploadid": "AJRbA5VMpI6Tdsx8KSt9V5HjmZOzmUkUEPGiIpVNV4MR_jjd3eu6WTB7W7R8_dYG9YzpqM7Q-dEsBcs",
+        "content-length": "937",
+        "x-guploader-uploadid": "AJRbA5WtF_dbEcdraJP6usc59-cs4n0jGK03UzqVRM9aliHM08G6dlqzmaIg6lCm99Vj-W_DnQhR2H0",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create-dup\",\n  \"id\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"name\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1767820621795029205\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-07T21:17:02.105Z\",\n  \"updated\": \"2026-01-07T21:17:02.105Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-07T21:17:02.105Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:17:02.105Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:17:02.105Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create\",\n  \"id\": \"dart-cloud-storage-test-bucket-create\",\n  \"name\": \"dart-cloud-storage-test-bucket-create\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1767822569839135388\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-07T21:49:30.109Z\",\n  \"updated\": \"2026-01-07T21:49:30.109Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-07T21:49:30.109Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:30.109Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:30.109Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/json; charset=utf-8"
-      },
-      "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZS1kdXAifQ=="
+      "url": "https://storage.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create",
+      "method": "DELETE",
+      "headers": {},
+      "body": ""
     },
     "response": {
-      "statusCode": 409,
+      "statusCode": 204,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 07 Jan 2026 21:17:02 GMT",
+        "date": "Wed, 07 Jan 2026 21:49:30 GMT",
         "vary": "Origin,X-Origin",
-        "content-length": "339",
-        "x-guploader-uploadid": "AHVrFxM8K1STH2PtecuChaefQBEOgbmRq4bq6V4tIzr1T3ekG6TtCoUbGsg8akMYurxPKElA11ga64PpAH86",
-        "content-type": "application/json; charset=UTF-8",
+        "content-length": "0",
+        "x-guploader-uploadid": "AHVrFxMlSXXyai1GVyPUQquS22s9zHWJuYVR_HGenFJaUi6GzTlpRXFC6EK3taoS-WgjdOWvz6x1Zkg",
+        "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Your previous request to create the named bucket succeeded and you already own it.\",\n    \"errors\": [\n      {\n        \"message\": \"Your previous request to create the named bucket succeeded and you already own it.\",\n        \"domain\": \"global\",\n        \"reason\": \"conflict\"\n      }\n    ]\n  }\n}\n",
-      "reasonPhrase": "Conflict"
+      "body": "",
+      "reasonPhrase": "No Content"
     }
   }
 ]

@@ -1,0 +1,82 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZS1kdXAifQ=="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 07 Jan 2026 21:49:32 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "949",
+        "x-guploader-uploadid": "AHVrFxP6cp0VbvCqsFzgY1WgahNo86gzI49REr7TKNjwZ7UZoYCzyqdzOgHQxw5wrqkPcO0TV5eqqns",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create-dup\",\n  \"id\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"name\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1767822571832569244\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-07T21:49:32.116Z\",\n  \"updated\": \"2026-01-07T21:49:32.116Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-07T21:49:32.116Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:32.116Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:32.116Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json; charset=utf-8"
+      },
+      "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZS1kdXAifQ=="
+    },
+    "response": {
+      "statusCode": 409,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 07 Jan 2026 21:49:32 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "339",
+        "x-guploader-uploadid": "AHVrFxO4uku9ZYOnrYqnrAhRXV6T-_2mSKEc4Gx1oaqVR-GWAOk-2OCC4rAHwg3t5eOlTRHR1A4-av8",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Your previous request to create the named bucket succeeded and you already own it.\",\n    \"errors\": [\n      {\n        \"message\": \"Your previous request to create the named bucket succeeded and you already own it.\",\n        \"domain\": \"global\",\n        \"reason\": \"conflict\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Conflict"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create-dup",
+      "method": "DELETE",
+      "headers": {},
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 07 Jan 2026 21:49:33 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AHVrFxMqX7qEKTY9waIx8SMdFYF6v066Krw64tt6bJ8LA4b52EpvZjQxfsN7DMR9EI3o9r325RISihk",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
+    }
+  }
+]
