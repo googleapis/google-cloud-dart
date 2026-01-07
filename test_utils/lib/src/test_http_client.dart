@@ -87,7 +87,7 @@ abstract class TestHttpClient extends BaseClient {
     );
 
     return p.setExtension(
-      p.join(p.dirname(packageUri!.path), 'test', test),
+      p.join(p.dirname(packageUri!.path), 'test', '${test}_recording'),
       '.json',
     );
   }

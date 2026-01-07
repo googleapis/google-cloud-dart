@@ -20,6 +20,9 @@ import 'dart:math';
 import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart';
 import 'package:google_cloud_logging_v2/logging.dart';
+import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
+import 'package:google_cloud_rpc/exceptions.dart';
+import 'package:google_cloud_rpc/rpc.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
@@ -41,6 +44,46 @@ void main() async {
     });
 
     tearDown(() => logService.close());
+
+    test('writeLogEntries - partial errors', () async {
+      await testClient.startTest(
+        'google_cloud_logging_v2',
+        'write_log_entries_partial_errors',
+      );
+
+      await expectLater(
+        logService.writeLogEntries(
+          WriteLogEntriesRequest(
+            partialSuccess: true,
+            entries: [
+              LogEntry(
+                severity: LogSeverity.critical,
+                logName: 'invalid log name',
+                resource: MonitoredResource(type: 'gce_instance'),
+                textPayload: 'Hello World!',
+              ),
+            ],
+          ),
+        ),
+        throwsA(
+          isA<BadRequestException>().having(
+            (e) => e.status?.details,
+            'details',
+            [
+              isA<protobuf.Any>().having(
+                (a) => a
+                    .unpackFrom(WriteLogEntriesPartialErrors.fromJson)
+                    .logEntryErrors,
+                'logEntryErrors',
+                {0: isA<Status>().having((s) => s.code, 'code', 3)},
+              ),
+            ],
+          ),
+        ),
+      );
+      await testClient.endTest();
+    });
+
     test('writeLogEntries', () async {
       await testClient.startTest(
         'google_cloud_logging_v2',

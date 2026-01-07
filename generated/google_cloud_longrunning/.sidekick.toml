@@ -31,6 +31,7 @@ operations.
 
 [codec]
 copyright-year = '2025'
+extra-imports = 'package:google_cloud_rpc/rpc.dart'
 dev-dependencies = 'test'
 part-file = 'src/longrunning.p.dart'
 repository-url = 'https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_longrunning'

@@ -23,14 +23,17 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_iam_v1/iam.dart';
 import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -74,8 +77,8 @@ final class SecretManagerService {
   /// Lists `Secrets`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -91,8 +94,8 @@ final class SecretManagerService {
   /// `SecretVersions`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Secret> createSecret(CreateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
       if (request.secretId case final $1 when $1.isNotDefault) 'secretId': $1,
@@ -106,8 +109,8 @@ final class SecretManagerService {
   /// `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> addSecretVersion(
     AddSecretVersionRequest request,
   ) async {
@@ -119,8 +122,8 @@ final class SecretManagerService {
   /// Gets metadata for a given `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Secret> getSecret(GetSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -131,8 +134,8 @@ final class SecretManagerService {
   /// `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.secret!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -144,8 +147,8 @@ final class SecretManagerService {
   /// Deletes a `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteSecret(DeleteSecretRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}', {
       if (request.etag case final $1 when $1.isNotDefault) 'etag': $1,
@@ -157,8 +160,8 @@ final class SecretManagerService {
   /// call does not return secret data.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListSecretVersionsResponse> listSecretVersions(
     ListSecretVersionsRequest request,
   ) async {
@@ -179,8 +182,8 @@ final class SecretManagerService {
   /// created `SecretVersion`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> getSecretVersion(
     GetSecretVersionRequest request,
   ) async {
@@ -196,8 +199,8 @@ final class SecretManagerService {
   /// created `SecretVersion`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AccessSecretVersionResponse> accessSecretVersion(
     AccessSecretVersionRequest request,
   ) async {
@@ -213,8 +216,8 @@ final class SecretManagerService {
   /// `DISABLED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> disableSecretVersion(
     DisableSecretVersionRequest request,
   ) async {
@@ -230,8 +233,8 @@ final class SecretManagerService {
   /// `ENABLED`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> enableSecretVersion(
     EnableSecretVersionRequest request,
   ) async {
@@ -248,8 +251,8 @@ final class SecretManagerService {
   /// and irrevocably destroys the secret data.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SecretVersion> destroySecretVersion(
     DestroySecretVersionRequest request,
   ) async {
@@ -267,8 +270,8 @@ final class SecretManagerService {
   /// `Secret`.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -279,8 +282,8 @@ final class SecretManagerService {
   /// Returns empty policy if the secret exists and does not have a policy set.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -300,8 +303,8 @@ final class SecretManagerService {
   /// may "fail open" without warning.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -313,8 +316,8 @@ final class SecretManagerService {
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -331,8 +334,8 @@ final class SecretManagerService {
   /// Gets information about a location.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -559,27 +562,31 @@ final class Secret extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (replication != null) 'replication': replication!.toJson(),
-    if (createTime != null) 'createTime': createTime!.toJson(),
+    if (replication case final replication?)
+      'replication': replication.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (labels.isNotDefault) 'labels': labels,
-    if (topics.isNotDefault) 'topics': encodeList(topics),
-    if (expireTime != null) 'expireTime': expireTime!.toJson(),
-    if (ttl != null) 'ttl': ttl!.toJson(),
+    if (topics.isNotDefault) 'topics': [for (final i in topics) i.toJson()],
+    if (expireTime case final expireTime?) 'expireTime': expireTime.toJson(),
+    if (ttl case final ttl?) 'ttl': ttl.toJson(),
     if (etag.isNotDefault) 'etag': etag,
-    if (rotation != null) 'rotation': rotation!.toJson(),
-    if (versionAliases.isNotDefault) 'versionAliases': versionAliases,
+    if (rotation case final rotation?) 'rotation': rotation.toJson(),
+    if (versionAliases.isNotDefault)
+      'versionAliases': {
+        for (final e in versionAliases.entries) e.key: e.value.toString(),
+      },
     if (annotations.isNotDefault) 'annotations': annotations,
-    if (versionDestroyTtl != null)
-      'versionDestroyTtl': versionDestroyTtl!.toJson(),
-    if (customerManagedEncryption != null)
-      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (versionDestroyTtl case final versionDestroyTtl?)
+      'versionDestroyTtl': versionDestroyTtl.toJson(),
+    if (customerManagedEncryption case final customerManagedEncryption?)
+      'customerManagedEncryption': customerManagedEncryption.toJson(),
     if (tags.isNotDefault) 'tags': tags,
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'Secret($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'Secret(${$contents})';
   }
 }
 
@@ -699,29 +706,30 @@ final class SecretVersion extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (destroyTime != null) 'destroyTime': destroyTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (destroyTime case final destroyTime?)
+      'destroyTime': destroyTime.toJson(),
     if (state.isNotDefault) 'state': state.toJson(),
-    if (replicationStatus != null)
-      'replicationStatus': replicationStatus!.toJson(),
+    if (replicationStatus case final replicationStatus?)
+      'replicationStatus': replicationStatus.toJson(),
     if (etag.isNotDefault) 'etag': etag,
     if (clientSpecifiedPayloadChecksum.isNotDefault)
       'clientSpecifiedPayloadChecksum': clientSpecifiedPayloadChecksum,
-    if (scheduledDestroyTime != null)
-      'scheduledDestroyTime': scheduledDestroyTime!.toJson(),
-    if (customerManagedEncryption != null)
-      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (scheduledDestroyTime case final scheduledDestroyTime?)
+      'scheduledDestroyTime': scheduledDestroyTime.toJson(),
+    if (customerManagedEncryption case final customerManagedEncryption?)
+      'customerManagedEncryption': customerManagedEncryption.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'state=$state',
       'etag=$etag',
       'clientSpecifiedPayloadChecksum=$clientSpecifiedPayloadChecksum',
     ].join(',');
-    return 'SecretVersion($contents)';
+    return 'SecretVersion(${$contents})';
   }
 }
 
@@ -793,8 +801,9 @@ final class Replication extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (automatic != null) 'automatic': automatic!.toJson(),
-    if (userManaged != null) 'userManaged': userManaged!.toJson(),
+    if (automatic case final automatic?) 'automatic': automatic.toJson(),
+    if (userManaged case final userManaged?)
+      'userManaged': userManaged.toJson(),
   };
 
   @override
@@ -834,8 +843,8 @@ final class Replication_Automatic extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (customerManagedEncryption != null)
-      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (customerManagedEncryption case final customerManagedEncryption?)
+      'customerManagedEncryption': customerManagedEncryption.toJson(),
   };
 
   @override
@@ -872,7 +881,9 @@ final class Replication_UserManaged extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {'replicas': encodeList(replicas)};
+  Object toJson() => {
+    'replicas': [for (final i in replicas) i.toJson()],
+  };
 
   @override
   String toString() => 'UserManaged()';
@@ -921,14 +932,14 @@ final class Replication_UserManaged_Replica extends ProtoMessage {
   @override
   Object toJson() => {
     if (location.isNotDefault) 'location': location,
-    if (customerManagedEncryption != null)
-      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (customerManagedEncryption case final customerManagedEncryption?)
+      'customerManagedEncryption': customerManagedEncryption.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['location=$location'].join(',');
-    return 'Replica($contents)';
+    final $contents = ['location=$location'].join(',');
+    return 'Replica(${$contents})';
   }
 }
 
@@ -971,8 +982,8 @@ final class CustomerManagedEncryption extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['kmsKeyName=$kmsKeyName'].join(',');
-    return 'CustomerManagedEncryption($contents)';
+    final $contents = ['kmsKeyName=$kmsKeyName'].join(',');
+    return 'CustomerManagedEncryption(${$contents})';
   }
 }
 
@@ -1019,8 +1030,9 @@ final class ReplicationStatus extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (automatic != null) 'automatic': automatic!.toJson(),
-    if (userManaged != null) 'userManaged': userManaged!.toJson(),
+    if (automatic case final automatic?) 'automatic': automatic.toJson(),
+    if (userManaged case final userManaged?)
+      'userManaged': userManaged.toJson(),
   };
 
   @override
@@ -1057,8 +1069,8 @@ final class ReplicationStatus_AutomaticStatus extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (customerManagedEncryption != null)
-      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (customerManagedEncryption case final customerManagedEncryption?)
+      'customerManagedEncryption': customerManagedEncryption.toJson(),
   };
 
   @override
@@ -1098,7 +1110,8 @@ final class ReplicationStatus_UserManagedStatus extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (replicas.isNotDefault) 'replicas': encodeList(replicas),
+    if (replicas.isNotDefault)
+      'replicas': [for (final i in replicas) i.toJson()],
   };
 
   @override
@@ -1145,14 +1158,14 @@ final class ReplicationStatus_UserManagedStatus_ReplicaStatus
   @override
   Object toJson() => {
     if (location.isNotDefault) 'location': location,
-    if (customerManagedEncryption != null)
-      'customerManagedEncryption': customerManagedEncryption!.toJson(),
+    if (customerManagedEncryption case final customerManagedEncryption?)
+      'customerManagedEncryption': customerManagedEncryption.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['location=$location'].join(',');
-    return 'ReplicaStatus($contents)';
+    final $contents = ['location=$location'].join(',');
+    return 'ReplicaStatus(${$contents})';
   }
 }
 
@@ -1184,8 +1197,8 @@ final class CustomerManagedEncryptionStatus extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['kmsKeyVersionName=$kmsKeyVersionName'].join(',');
-    return 'CustomerManagedEncryptionStatus($contents)';
+    final $contents = ['kmsKeyVersionName=$kmsKeyVersionName'].join(',');
+    return 'CustomerManagedEncryptionStatus(${$contents})';
   }
 }
 
@@ -1219,8 +1232,8 @@ final class Topic extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'Topic($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'Topic(${$contents})';
   }
 }
 
@@ -1276,9 +1289,10 @@ final class Rotation extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (nextRotationTime != null)
-      'nextRotationTime': nextRotationTime!.toJson(),
-    if (rotationPeriod != null) 'rotationPeriod': rotationPeriod!.toJson(),
+    if (nextRotationTime case final nextRotationTime?)
+      'nextRotationTime': nextRotationTime.toJson(),
+    if (rotationPeriod case final rotationPeriod?)
+      'rotationPeriod': rotationPeriod.toJson(),
   };
 
   @override
@@ -1334,16 +1348,16 @@ final class SecretPayload extends ProtoMessage {
   @override
   Object toJson() => {
     if (data.isNotDefault) 'data': encodeBytes(data),
-    if (dataCrc32C != null) 'dataCrc32c': encodeInt64(dataCrc32C),
+    if (dataCrc32C case final dataCrc32C?) 'dataCrc32c': dataCrc32C.toString(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'data=$data',
       if (dataCrc32C != null) 'dataCrc32c=$dataCrc32C',
     ].join(',');
-    return 'SecretPayload($contents)';
+    return 'SecretPayload(${$contents})';
   }
 }
 
@@ -1413,13 +1427,13 @@ final class ListSecretsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
     ].join(',');
-    return 'ListSecretsRequest($contents)';
+    return 'ListSecretsRequest(${$contents})';
   }
 }
 
@@ -1471,18 +1485,18 @@ final class ListSecretsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (secrets.isNotDefault) 'secrets': encodeList(secrets),
+    if (secrets.isNotDefault) 'secrets': [for (final i in secrets) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     if (totalSize.isNotDefault) 'totalSize': totalSize,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'nextPageToken=$nextPageToken',
       'totalSize=$totalSize',
     ].join(',');
-    return 'ListSecretsResponse($contents)';
+    return 'ListSecretsResponse(${$contents})';
   }
 }
 
@@ -1536,13 +1550,13 @@ final class CreateSecretRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     'secretId': secretId,
-    if (secret != null) 'secret': secret!.toJson(),
+    if (secret case final secret?) 'secret': secret.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent', 'secretId=$secretId'].join(',');
-    return 'CreateSecretRequest($contents)';
+    final $contents = ['parent=$parent', 'secretId=$secretId'].join(',');
+    return 'CreateSecretRequest(${$contents})';
   }
 }
 
@@ -1582,13 +1596,13 @@ final class AddSecretVersionRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (payload != null) 'payload': payload!.toJson(),
+    if (payload case final payload?) 'payload': payload.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'AddSecretVersionRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'AddSecretVersionRequest(${$contents})';
   }
 }
 
@@ -1620,8 +1634,8 @@ final class GetSecretRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSecretRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSecretRequest(${$contents})';
   }
 }
 
@@ -1692,13 +1706,13 @@ final class ListSecretVersionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
     ].join(',');
-    return 'ListSecretVersionsRequest($contents)';
+    return 'ListSecretVersionsRequest(${$contents})';
   }
 }
 
@@ -1751,18 +1765,19 @@ final class ListSecretVersionsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (versions.isNotDefault) 'versions': encodeList(versions),
+    if (versions.isNotDefault)
+      'versions': [for (final i in versions) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
     if (totalSize.isNotDefault) 'totalSize': totalSize,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'nextPageToken=$nextPageToken',
       'totalSize=$totalSize',
     ].join(',');
-    return 'ListSecretVersionsResponse($contents)';
+    return 'ListSecretVersionsResponse(${$contents})';
   }
 }
 
@@ -1800,8 +1815,8 @@ final class GetSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSecretVersionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSecretVersionRequest(${$contents})';
   }
 }
 
@@ -1837,8 +1852,8 @@ final class UpdateSecretRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (secret != null) 'secret': secret!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (secret case final secret?) 'secret': secret.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
@@ -1879,8 +1894,8 @@ final class AccessSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'AccessSecretVersionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'AccessSecretVersionRequest(${$contents})';
   }
 }
 
@@ -1919,13 +1934,13 @@ final class AccessSecretVersionResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (payload != null) 'payload': payload!.toJson(),
+    if (payload case final payload?) 'payload': payload.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'AccessSecretVersionResponse($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'AccessSecretVersionResponse(${$contents})';
   }
 }
 
@@ -1967,8 +1982,8 @@ final class DeleteSecretRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'DeleteSecretRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'DeleteSecretRequest(${$contents})';
   }
 }
 
@@ -2012,8 +2027,8 @@ final class DisableSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'DisableSecretVersionRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'DisableSecretVersionRequest(${$contents})';
   }
 }
 
@@ -2057,8 +2072,8 @@ final class EnableSecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'EnableSecretVersionRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'EnableSecretVersionRequest(${$contents})';
   }
 }
 
@@ -2102,7 +2117,7 @@ final class DestroySecretVersionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'etag=$etag'].join(',');
-    return 'DestroySecretVersionRequest($contents)';
+    final $contents = ['name=$name', 'etag=$etag'].join(',');
+    return 'DestroySecretVersionRequest(${$contents})';
   }
 }

@@ -24,12 +24,15 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -69,8 +72,8 @@ final class Locations {
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -87,8 +90,8 @@ final class Locations {
   /// Gets information about a location.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1/${request.name}');
     final response = await _client.get(url);
@@ -157,13 +160,13 @@ final class ListLocationsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'filter=$filter',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListLocationsRequest($contents)';
+    return 'ListLocationsRequest(${$contents})';
   }
 }
 
@@ -198,14 +201,15 @@ final class ListLocationsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (locations.isNotDefault) 'locations': encodeList(locations),
+    if (locations.isNotDefault)
+      'locations': [for (final i in locations) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListLocationsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListLocationsResponse(${$contents})';
   }
 }
 
@@ -234,8 +238,8 @@ final class GetLocationRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetLocationRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetLocationRequest(${$contents})';
   }
 }
 
@@ -307,16 +311,16 @@ final class Location extends ProtoMessage {
     if (locationId.isNotDefault) 'locationId': locationId,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (labels.isNotDefault) 'labels': labels,
-    if (metadata != null) 'metadata': metadata!.toJson(),
+    if (metadata case final metadata?) 'metadata': metadata.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'locationId=$locationId',
       'displayName=$displayName',
     ].join(',');
-    return 'Location($contents)';
+    return 'Location(${$contents})';
   }
 }

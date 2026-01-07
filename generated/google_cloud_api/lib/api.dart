@@ -22,8 +22,10 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -81,8 +83,9 @@ final class Authentication extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (rules.isNotDefault) 'rules': encodeList(rules),
-    if (providers.isNotDefault) 'providers': encodeList(providers),
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
+    if (providers.isNotDefault)
+      'providers': [for (final i in providers) i.toJson()],
   };
 
   @override
@@ -150,19 +153,20 @@ final class AuthenticationRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (oauth != null) 'oauth': oauth!.toJson(),
+    if (oauth case final oauth?) 'oauth': oauth.toJson(),
     if (allowWithoutCredential.isNotDefault)
       'allowWithoutCredential': allowWithoutCredential,
-    if (requirements.isNotDefault) 'requirements': encodeList(requirements),
+    if (requirements.isNotDefault)
+      'requirements': [for (final i in requirements) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       'allowWithoutCredential=$allowWithoutCredential',
     ].join(',');
-    return 'AuthenticationRule($contents)';
+    return 'AuthenticationRule(${$contents})';
   }
 }
 
@@ -216,21 +220,21 @@ final class JwtLocation extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (header != null) 'header': header,
-    if (query != null) 'query': query,
-    if (cookie != null) 'cookie': cookie,
+    if (header case final header?) 'header': header,
+    if (query case final query?) 'query': query,
+    if (cookie case final cookie?) 'cookie': cookie,
     if (valuePrefix.isNotDefault) 'valuePrefix': valuePrefix,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (header != null) 'header=$header',
       if (query != null) 'query=$query',
       if (cookie != null) 'cookie=$cookie',
       'valuePrefix=$valuePrefix',
     ].join(',');
-    return 'JwtLocation($contents)';
+    return 'JwtLocation(${$contents})';
   }
 }
 
@@ -358,19 +362,20 @@ final class AuthProvider extends ProtoMessage {
     if (jwksUri.isNotDefault) 'jwksUri': jwksUri,
     if (audiences.isNotDefault) 'audiences': audiences,
     if (authorizationUrl.isNotDefault) 'authorizationUrl': authorizationUrl,
-    if (jwtLocations.isNotDefault) 'jwtLocations': encodeList(jwtLocations),
+    if (jwtLocations.isNotDefault)
+      'jwtLocations': [for (final i in jwtLocations) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'id=$id',
       'issuer=$issuer',
       'jwksUri=$jwksUri',
       'audiences=$audiences',
       'authorizationUrl=$authorizationUrl',
     ].join(',');
-    return 'AuthProvider($contents)';
+    return 'AuthProvider(${$contents})';
   }
 }
 
@@ -423,8 +428,8 @@ final class OauthRequirements extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['canonicalScopes=$canonicalScopes'].join(',');
-    return 'OAuthRequirements($contents)';
+    final $contents = ['canonicalScopes=$canonicalScopes'].join(',');
+    return 'OAuthRequirements(${$contents})';
   }
 }
 
@@ -484,11 +489,11 @@ final class AuthRequirement extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'providerId=$providerId',
       'audiences=$audiences',
     ].join(',');
-    return 'AuthRequirement($contents)';
+    return 'AuthRequirement(${$contents})';
   }
 }
 
@@ -515,7 +520,9 @@ final class Backend extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
+  Object toJson() => {
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
+  };
 
   @override
   String toString() => 'Backend()';
@@ -678,16 +685,19 @@ final class BackendRule extends ProtoMessage {
       'operationDeadline': encodeDouble(operationDeadline),
     if (pathTranslation.isNotDefault)
       'pathTranslation': pathTranslation.toJson(),
-    if (jwtAudience != null) 'jwtAudience': jwtAudience,
-    if (disableAuth != null) 'disableAuth': disableAuth,
+    if (jwtAudience case final jwtAudience?) 'jwtAudience': jwtAudience,
+    if (disableAuth case final disableAuth?) 'disableAuth': disableAuth,
     if (protocol.isNotDefault) 'protocol': protocol,
     if (overridesByRequestProtocol.isNotDefault)
-      'overridesByRequestProtocol': encodeMap(overridesByRequestProtocol),
+      'overridesByRequestProtocol': {
+        for (final e in overridesByRequestProtocol.entries)
+          e.key: e.value.toJson(),
+      },
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       'address=$address',
       'deadline=$deadline',
@@ -698,7 +708,7 @@ final class BackendRule extends ProtoMessage {
       if (disableAuth != null) 'disableAuth=$disableAuth',
       'protocol=$protocol',
     ].join(',');
-    return 'BackendRule($contents)';
+    return 'BackendRule(${$contents})';
   }
 }
 
@@ -839,7 +849,9 @@ final class Billing extends ProtoMessage {
   @override
   Object toJson() => {
     if (consumerDestinations.isNotDefault)
-      'consumerDestinations': encodeList(consumerDestinations),
+      'consumerDestinations': [
+        for (final i in consumerDestinations) i.toJson(),
+      ],
   };
 
   @override
@@ -890,8 +902,8 @@ final class Billing_BillingDestination extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['monitoredResource=$monitoredResource'].join(',');
-    return 'BillingDestination($contents)';
+    final $contents = ['monitoredResource=$monitoredResource'].join(',');
+    return 'BillingDestination(${$contents})';
   }
 }
 
@@ -939,15 +951,16 @@ final class CommonLanguageSettings extends ProtoMessage {
   @override
   Object toJson() => {
     if (referenceDocsUri.isNotDefault) 'referenceDocsUri': referenceDocsUri,
-    if (destinations.isNotDefault) 'destinations': encodeList(destinations),
-    if (selectiveGapicGeneration != null)
-      'selectiveGapicGeneration': selectiveGapicGeneration!.toJson(),
+    if (destinations.isNotDefault)
+      'destinations': [for (final i in destinations) i.toJson()],
+    if (selectiveGapicGeneration case final selectiveGapicGeneration?)
+      'selectiveGapicGeneration': selectiveGapicGeneration.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['referenceDocsUri=$referenceDocsUri'].join(',');
-    return 'CommonLanguageSettings($contents)';
+    final $contents = ['referenceDocsUri=$referenceDocsUri'].join(',');
+    return 'CommonLanguageSettings(${$contents})';
   }
 }
 
@@ -1060,24 +1073,31 @@ final class ClientLibrarySettings extends ProtoMessage {
     if (version.isNotDefault) 'version': version,
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     if (restNumericEnums.isNotDefault) 'restNumericEnums': restNumericEnums,
-    if (javaSettings != null) 'javaSettings': javaSettings!.toJson(),
-    if (cppSettings != null) 'cppSettings': cppSettings!.toJson(),
-    if (phpSettings != null) 'phpSettings': phpSettings!.toJson(),
-    if (pythonSettings != null) 'pythonSettings': pythonSettings!.toJson(),
-    if (nodeSettings != null) 'nodeSettings': nodeSettings!.toJson(),
-    if (dotnetSettings != null) 'dotnetSettings': dotnetSettings!.toJson(),
-    if (rubySettings != null) 'rubySettings': rubySettings!.toJson(),
-    if (goSettings != null) 'goSettings': goSettings!.toJson(),
+    if (javaSettings case final javaSettings?)
+      'javaSettings': javaSettings.toJson(),
+    if (cppSettings case final cppSettings?)
+      'cppSettings': cppSettings.toJson(),
+    if (phpSettings case final phpSettings?)
+      'phpSettings': phpSettings.toJson(),
+    if (pythonSettings case final pythonSettings?)
+      'pythonSettings': pythonSettings.toJson(),
+    if (nodeSettings case final nodeSettings?)
+      'nodeSettings': nodeSettings.toJson(),
+    if (dotnetSettings case final dotnetSettings?)
+      'dotnetSettings': dotnetSettings.toJson(),
+    if (rubySettings case final rubySettings?)
+      'rubySettings': rubySettings.toJson(),
+    if (goSettings case final goSettings?) 'goSettings': goSettings.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'version=$version',
       'launchStage=$launchStage',
       'restNumericEnums=$restNumericEnums',
     ].join(',');
-    return 'ClientLibrarySettings($contents)';
+    return 'ClientLibrarySettings(${$contents})';
   }
 }
 
@@ -1207,7 +1227,7 @@ final class Publishing extends ProtoMessage {
   @override
   Object toJson() => {
     if (methodSettings.isNotDefault)
-      'methodSettings': encodeList(methodSettings),
+      'methodSettings': [for (final i in methodSettings) i.toJson()],
     if (newIssueUri.isNotDefault) 'newIssueUri': newIssueUri,
     if (documentationUri.isNotDefault) 'documentationUri': documentationUri,
     if (apiShortName.isNotDefault) 'apiShortName': apiShortName,
@@ -1217,7 +1237,7 @@ final class Publishing extends ProtoMessage {
     if (docTagPrefix.isNotDefault) 'docTagPrefix': docTagPrefix,
     if (organization.isNotDefault) 'organization': organization.toJson(),
     if (librarySettings.isNotDefault)
-      'librarySettings': encodeList(librarySettings),
+      'librarySettings': [for (final i in librarySettings) i.toJson()],
     if (protoReferenceDocumentationUri.isNotDefault)
       'protoReferenceDocumentationUri': protoReferenceDocumentationUri,
     if (restReferenceDocumentationUri.isNotDefault)
@@ -1226,7 +1246,7 @@ final class Publishing extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'newIssueUri=$newIssueUri',
       'documentationUri=$documentationUri',
       'apiShortName=$apiShortName',
@@ -1236,7 +1256,7 @@ final class Publishing extends ProtoMessage {
       'protoReferenceDocumentationUri=$protoReferenceDocumentationUri',
       'restReferenceDocumentationUri=$restReferenceDocumentationUri',
     ].join(',');
-    return 'Publishing($contents)';
+    return 'Publishing(${$contents})';
   }
 }
 
@@ -1310,13 +1330,13 @@ final class JavaSettings extends ProtoMessage {
   Object toJson() => {
     if (libraryPackage.isNotDefault) 'libraryPackage': libraryPackage,
     if (serviceClassNames.isNotDefault) 'serviceClassNames': serviceClassNames,
-    if (common != null) 'common': common!.toJson(),
+    if (common case final common?) 'common': common.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['libraryPackage=$libraryPackage'].join(',');
-    return 'JavaSettings($contents)';
+    final $contents = ['libraryPackage=$libraryPackage'].join(',');
+    return 'JavaSettings(${$contents})';
   }
 }
 
@@ -1340,7 +1360,7 @@ final class CppSettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common != null) 'common': common!.toJson()};
+  Object toJson() => {if (common case final common?) 'common': common.toJson()};
 
   @override
   String toString() => 'CppSettings()';
@@ -1366,7 +1386,7 @@ final class PhpSettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common != null) 'common': common!.toJson()};
+  Object toJson() => {if (common case final common?) 'common': common.toJson()};
 
   @override
   String toString() => 'PhpSettings()';
@@ -1401,9 +1421,9 @@ final class PythonSettings extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (common != null) 'common': common!.toJson(),
-    if (experimentalFeatures != null)
-      'experimentalFeatures': experimentalFeatures!.toJson(),
+    if (common case final common?) 'common': common.toJson(),
+    if (experimentalFeatures case final experimentalFeatures?)
+      'experimentalFeatures': experimentalFeatures.toJson(),
   };
 
   @override
@@ -1472,12 +1492,12 @@ final class PythonSettings_ExperimentalFeatures extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'restAsyncIoEnabled=$restAsyncIoEnabled',
       'protobufPythonicTypesEnabled=$protobufPythonicTypesEnabled',
       'unversionedPackageDisabled=$unversionedPackageDisabled',
     ].join(',');
-    return 'ExperimentalFeatures($contents)';
+    return 'ExperimentalFeatures(${$contents})';
   }
 }
 
@@ -1501,7 +1521,7 @@ final class NodeSettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common != null) 'common': common!.toJson()};
+  Object toJson() => {if (common case final common?) 'common': common.toJson()};
 
   @override
   String toString() => 'NodeSettings()';
@@ -1600,7 +1620,7 @@ final class DotnetSettings extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (common != null) 'common': common!.toJson(),
+    if (common case final common?) 'common': common.toJson(),
     if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
     if (renamedResources.isNotDefault) 'renamedResources': renamedResources,
     if (ignoredResources.isNotDefault) 'ignoredResources': ignoredResources,
@@ -1634,7 +1654,7 @@ final class RubySettings extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (common != null) 'common': common!.toJson()};
+  Object toJson() => {if (common case final common?) 'common': common.toJson()};
 
   @override
   String toString() => 'RubySettings()';
@@ -1680,7 +1700,7 @@ final class GoSettings extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (common != null) 'common': common!.toJson(),
+    if (common case final common?) 'common': common.toJson(),
     if (renamedServices.isNotDefault) 'renamedServices': renamedServices,
   };
 
@@ -1760,15 +1780,16 @@ final class MethodSettings extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (longRunning != null) 'longRunning': longRunning!.toJson(),
+    if (longRunning case final longRunning?)
+      'longRunning': longRunning.toJson(),
     if (autoPopulatedFields.isNotDefault)
       'autoPopulatedFields': autoPopulatedFields,
   };
 
   @override
   String toString() {
-    final contents = ['selector=$selector'].join(',');
-    return 'MethodSettings($contents)';
+    final $contents = ['selector=$selector'].join(',');
+    return 'MethodSettings(${$contents})';
   }
 }
 
@@ -1829,19 +1850,20 @@ final class MethodSettings_LongRunning extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (initialPollDelay != null)
-      'initialPollDelay': initialPollDelay!.toJson(),
+    if (initialPollDelay case final initialPollDelay?)
+      'initialPollDelay': initialPollDelay.toJson(),
     if (pollDelayMultiplier.isNotDefault)
       'pollDelayMultiplier': encodeDouble(pollDelayMultiplier),
-    if (maxPollDelay != null) 'maxPollDelay': maxPollDelay!.toJson(),
-    if (totalPollTimeout != null)
-      'totalPollTimeout': totalPollTimeout!.toJson(),
+    if (maxPollDelay case final maxPollDelay?)
+      'maxPollDelay': maxPollDelay.toJson(),
+    if (totalPollTimeout case final totalPollTimeout?)
+      'totalPollTimeout': totalPollTimeout.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['pollDelayMultiplier=$pollDelayMultiplier'].join(',');
-    return 'LongRunning($contents)';
+    final $contents = ['pollDelayMultiplier=$pollDelayMultiplier'].join(',');
+    return 'LongRunning(${$contents})';
   }
 }
 
@@ -1892,10 +1914,10 @@ final class SelectiveGapicGeneration extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'generateOmittedAsInternal=$generateOmittedAsInternal',
     ].join(',');
-    return 'SelectiveGapicGeneration($contents)';
+    return 'SelectiveGapicGeneration(${$contents})';
   }
 }
 
@@ -1975,18 +1997,18 @@ final class ConfigChange extends ProtoMessage {
     if (oldValue.isNotDefault) 'oldValue': oldValue,
     if (newValue.isNotDefault) 'newValue': newValue,
     if (changeType.isNotDefault) 'changeType': changeType.toJson(),
-    if (advices.isNotDefault) 'advices': encodeList(advices),
+    if (advices.isNotDefault) 'advices': [for (final i in advices) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'element=$element',
       'oldValue=$oldValue',
       'newValue=$newValue',
       'changeType=$changeType',
     ].join(',');
-    return 'ConfigChange($contents)';
+    return 'ConfigChange(${$contents})';
   }
 }
 
@@ -2016,8 +2038,8 @@ final class Advice extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['description=$description'].join(',');
-    return 'Advice($contents)';
+    final $contents = ['description=$description'].join(',');
+    return 'Advice(${$contents})';
   }
 }
 
@@ -2058,7 +2080,8 @@ final class ProjectProperties extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (properties.isNotDefault) 'properties': encodeList(properties),
+    if (properties.isNotDefault)
+      'properties': [for (final i in properties) i.toJson()],
   };
 
   @override
@@ -2120,12 +2143,12 @@ final class Property extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'type=$type',
       'description=$description',
     ].join(',');
-    return 'Property($contents)';
+    return 'Property(${$contents})';
   }
 }
 
@@ -2218,7 +2241,9 @@ final class Context extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
+  Object toJson() => {
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
+  };
 
   @override
   String toString() => 'Context()';
@@ -2306,8 +2331,8 @@ final class ContextRule extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['selector=$selector'].join(',');
-    return 'ContextRule($contents)';
+    final $contents = ['selector=$selector'].join(',');
+    return 'ContextRule(${$contents})';
   }
 }
 
@@ -2350,13 +2375,13 @@ final class Control extends ProtoMessage {
   Object toJson() => {
     if (environment.isNotDefault) 'environment': environment,
     if (methodPolicies.isNotDefault)
-      'methodPolicies': encodeList(methodPolicies),
+      'methodPolicies': [for (final i in methodPolicies) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['environment=$environment'].join(',');
-    return 'Control($contents)';
+    final $contents = ['environment=$environment'].join(',');
+    return 'Control(${$contents})';
   }
 }
 
@@ -2475,24 +2500,27 @@ final class Distribution extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (count.isNotDefault) 'count': encodeInt64(count),
+    if (count.isNotDefault) 'count': count.toString(),
     if (mean.isNotDefault) 'mean': encodeDouble(mean),
     if (sumOfSquaredDeviation.isNotDefault)
       'sumOfSquaredDeviation': encodeDouble(sumOfSquaredDeviation),
-    if (range != null) 'range': range!.toJson(),
-    if (bucketOptions != null) 'bucketOptions': bucketOptions!.toJson(),
-    if (bucketCounts.isNotDefault) 'bucketCounts': bucketCounts,
-    if (exemplars.isNotDefault) 'exemplars': encodeList(exemplars),
+    if (range case final range?) 'range': range.toJson(),
+    if (bucketOptions case final bucketOptions?)
+      'bucketOptions': bucketOptions.toJson(),
+    if (bucketCounts.isNotDefault)
+      'bucketCounts': [for (final i in bucketCounts) i.toString()],
+    if (exemplars.isNotDefault)
+      'exemplars': [for (final i in exemplars) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'count=$count',
       'mean=$mean',
       'sumOfSquaredDeviation=$sumOfSquaredDeviation',
     ].join(',');
-    return 'Distribution($contents)';
+    return 'Distribution(${$contents})';
   }
 }
 
@@ -2530,8 +2558,8 @@ final class Distribution_Range extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['min=$min', 'max=$max'].join(',');
-    return 'Range($contents)';
+    final $contents = ['min=$min', 'max=$max'].join(',');
+    return 'Range(${$contents})';
   }
 }
 
@@ -2589,10 +2617,12 @@ final class Distribution_BucketOptions extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (linearBuckets != null) 'linearBuckets': linearBuckets!.toJson(),
-    if (exponentialBuckets != null)
-      'exponentialBuckets': exponentialBuckets!.toJson(),
-    if (explicitBuckets != null) 'explicitBuckets': explicitBuckets!.toJson(),
+    if (linearBuckets case final linearBuckets?)
+      'linearBuckets': linearBuckets.toJson(),
+    if (exponentialBuckets case final exponentialBuckets?)
+      'exponentialBuckets': exponentialBuckets.toJson(),
+    if (explicitBuckets case final explicitBuckets?)
+      'explicitBuckets': explicitBuckets.toJson(),
   };
 
   @override
@@ -2655,12 +2685,12 @@ final class Distribution_BucketOptions_Linear extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'numFiniteBuckets=$numFiniteBuckets',
       'width=$width',
       'offset=$offset',
     ].join(',');
-    return 'Linear($contents)';
+    return 'Linear(${$contents})';
   }
 }
 
@@ -2720,12 +2750,12 @@ final class Distribution_BucketOptions_Exponential extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'numFiniteBuckets=$numFiniteBuckets',
       'growthFactor=$growthFactor',
       'scale=$scale',
     ].join(',');
-    return 'Exponential($contents)';
+    return 'Exponential(${$contents})';
   }
 }
 
@@ -2762,7 +2792,10 @@ final class Distribution_BucketOptions_Explicit extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (bounds.isNotDefault) 'bounds': bounds};
+  Object toJson() => {
+    if (bounds.isNotDefault)
+      'bounds': [for (final i in bounds) encodeDouble(i)],
+  };
 
   @override
   String toString() => 'Explicit()';
@@ -2824,14 +2857,15 @@ final class Distribution_Exemplar extends ProtoMessage {
   @override
   Object toJson() => {
     if (value.isNotDefault) 'value': encodeDouble(value),
-    if (timestamp != null) 'timestamp': timestamp!.toJson(),
-    if (attachments.isNotDefault) 'attachments': encodeList(attachments),
+    if (timestamp case final timestamp?) 'timestamp': timestamp.toJson(),
+    if (attachments.isNotDefault)
+      'attachments': [for (final i in attachments) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'Exemplar($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'Exemplar(${$contents})';
   }
 }
 
@@ -2975,8 +3009,8 @@ final class Documentation extends ProtoMessage {
   @override
   Object toJson() => {
     if (summary.isNotDefault) 'summary': summary,
-    if (pages.isNotDefault) 'pages': encodeList(pages),
-    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (pages.isNotDefault) 'pages': [for (final i in pages) i.toJson()],
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
     if (documentationRootUrl.isNotDefault)
       'documentationRootUrl': documentationRootUrl,
     if (serviceRootUrl.isNotDefault) 'serviceRootUrl': serviceRootUrl,
@@ -2985,13 +3019,13 @@ final class Documentation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'summary=$summary',
       'documentationRootUrl=$documentationRootUrl',
       'serviceRootUrl=$serviceRootUrl',
       'overview=$overview',
     ].join(',');
-    return 'Documentation($contents)';
+    return 'Documentation(${$contents})';
   }
 }
 
@@ -3051,12 +3085,12 @@ final class DocumentationRule extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       'description=$description',
       'deprecationDescription=$deprecationDescription',
     ].join(',');
-    return 'DocumentationRule($contents)';
+    return 'DocumentationRule(${$contents})';
   }
 }
 
@@ -3116,13 +3150,14 @@ final class Page extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (content.isNotDefault) 'content': content,
-    if (subpages.isNotDefault) 'subpages': encodeList(subpages),
+    if (subpages.isNotDefault)
+      'subpages': [for (final i in subpages) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'content=$content'].join(',');
-    return 'Page($contents)';
+    final $contents = ['name=$name', 'content=$content'].join(',');
+    return 'Page(${$contents})';
   }
 }
 
@@ -3213,12 +3248,12 @@ final class Endpoint extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'target=$target',
       'allowCors=$allowCors',
     ].join(',');
-    return 'Endpoint($contents)';
+    return 'Endpoint(${$contents})';
   }
 }
 
@@ -3261,13 +3296,13 @@ final class FieldInfo extends ProtoMessage {
   Object toJson() => {
     if (format.isNotDefault) 'format': format.toJson(),
     if (referencedTypes.isNotDefault)
-      'referencedTypes': encodeList(referencedTypes),
+      'referencedTypes': [for (final i in referencedTypes) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['format=$format'].join(',');
-    return 'FieldInfo($contents)';
+    final $contents = ['format=$format'].join(',');
+    return 'FieldInfo(${$contents})';
   }
 }
 
@@ -3348,8 +3383,8 @@ final class TypeReference extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['typeName=$typeName'].join(',');
-    return 'TypeReference($contents)';
+    final $contents = ['typeName=$typeName'].join(',');
+    return 'TypeReference(${$contents})';
   }
 }
 
@@ -3393,17 +3428,17 @@ final class Http extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
     if (fullyDecodeReservedExpansion.isNotDefault)
       'fullyDecodeReservedExpansion': fullyDecodeReservedExpansion,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'fullyDecodeReservedExpansion=$fullyDecodeReservedExpansion',
     ].join(',');
-    return 'Http($contents)';
+    return 'Http(${$contents})';
   }
 }
 
@@ -3786,21 +3821,21 @@ final class HttpRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (get != null) 'get': get,
-    if (put != null) 'put': put,
-    if (post != null) 'post': post,
-    if (delete != null) 'delete': delete,
-    if (patch != null) 'patch': patch,
-    if (custom != null) 'custom': custom!.toJson(),
+    if (get case final get?) 'get': get,
+    if (put case final put?) 'put': put,
+    if (post case final post?) 'post': post,
+    if (delete case final delete?) 'delete': delete,
+    if (patch case final patch?) 'patch': patch,
+    if (custom case final custom?) 'custom': custom.toJson(),
     if (body.isNotDefault) 'body': body,
     if (responseBody.isNotDefault) 'responseBody': responseBody,
     if (additionalBindings.isNotDefault)
-      'additionalBindings': encodeList(additionalBindings),
+      'additionalBindings': [for (final i in additionalBindings) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       if (get != null) 'get=$get',
       if (put != null) 'put=$put',
@@ -3810,7 +3845,7 @@ final class HttpRule extends ProtoMessage {
       'body=$body',
       'responseBody=$responseBody',
     ].join(',');
-    return 'HttpRule($contents)';
+    return 'HttpRule(${$contents})';
   }
 }
 
@@ -3849,8 +3884,8 @@ final class CustomHttpPattern extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['kind=$kind', 'path=$path'].join(',');
-    return 'CustomHttpPattern($contents)';
+    final $contents = ['kind=$kind', 'path=$path'].join(',');
+    return 'CustomHttpPattern(${$contents})';
   }
 }
 
@@ -3937,13 +3972,14 @@ final class HttpBody extends ProtoMessage {
   Object toJson() => {
     if (contentType.isNotDefault) 'contentType': contentType,
     if (data.isNotDefault) 'data': encodeBytes(data),
-    if (extensions.isNotDefault) 'extensions': encodeList(extensions),
+    if (extensions.isNotDefault)
+      'extensions': [for (final i in extensions) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['contentType=$contentType', 'data=$data'].join(',');
-    return 'HttpBody($contents)';
+    final $contents = ['contentType=$contentType', 'data=$data'].join(',');
+    return 'HttpBody(${$contents})';
   }
 }
 
@@ -3993,12 +4029,12 @@ final class LabelDescriptor extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'key=$key',
       'valueType=$valueType',
       'description=$description',
     ].join(',');
-    return 'LabelDescriptor($contents)';
+    return 'LabelDescriptor(${$contents})';
   }
 }
 
@@ -4090,19 +4126,19 @@ final class LogDescriptor extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (labels.isNotDefault) 'labels': encodeList(labels),
+    if (labels.isNotDefault) 'labels': [for (final i in labels) i.toJson()],
     if (description.isNotDefault) 'description': description,
     if (displayName.isNotDefault) 'displayName': displayName,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'displayName=$displayName',
     ].join(',');
-    return 'LogDescriptor($contents)';
+    return 'LogDescriptor(${$contents})';
   }
 }
 
@@ -4182,9 +4218,13 @@ final class Logging extends ProtoMessage {
   @override
   Object toJson() => {
     if (producerDestinations.isNotDefault)
-      'producerDestinations': encodeList(producerDestinations),
+      'producerDestinations': [
+        for (final i in producerDestinations) i.toJson(),
+      ],
     if (consumerDestinations.isNotDefault)
-      'consumerDestinations': encodeList(consumerDestinations),
+      'consumerDestinations': [
+        for (final i in consumerDestinations) i.toJson(),
+      ],
   };
 
   @override
@@ -4236,8 +4276,8 @@ final class Logging_LoggingDestination extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['monitoredResource=$monitoredResource'].join(',');
-    return 'LoggingDestination($contents)';
+    final $contents = ['monitoredResource=$monitoredResource'].join(',');
+    return 'LoggingDestination(${$contents})';
   }
 }
 
@@ -4475,13 +4515,13 @@ final class MetricDescriptor extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (type.isNotDefault) 'type': type,
-    if (labels.isNotDefault) 'labels': encodeList(labels),
+    if (labels.isNotDefault) 'labels': [for (final i in labels) i.toJson()],
     if (metricKind.isNotDefault) 'metricKind': metricKind.toJson(),
     if (valueType.isNotDefault) 'valueType': valueType.toJson(),
     if (unit.isNotDefault) 'unit': unit,
     if (description.isNotDefault) 'description': description,
     if (displayName.isNotDefault) 'displayName': displayName,
-    if (metadata != null) 'metadata': metadata!.toJson(),
+    if (metadata case final metadata?) 'metadata': metadata.toJson(),
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
     if (monitoredResourceTypes.isNotDefault)
       'monitoredResourceTypes': monitoredResourceTypes,
@@ -4489,7 +4529,7 @@ final class MetricDescriptor extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'type=$type',
       'metricKind=$metricKind',
@@ -4499,7 +4539,7 @@ final class MetricDescriptor extends ProtoMessage {
       'displayName=$displayName',
       'launchStage=$launchStage',
     ].join(',');
-    return 'MetricDescriptor($contents)';
+    return 'MetricDescriptor(${$contents})';
   }
 }
 
@@ -4571,18 +4611,20 @@ final class MetricDescriptor_MetricDescriptorMetadata extends ProtoMessage {
   @override
   Object toJson() => {
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
-    if (samplePeriod != null) 'samplePeriod': samplePeriod!.toJson(),
-    if (ingestDelay != null) 'ingestDelay': ingestDelay!.toJson(),
+    if (samplePeriod case final samplePeriod?)
+      'samplePeriod': samplePeriod.toJson(),
+    if (ingestDelay case final ingestDelay?)
+      'ingestDelay': ingestDelay.toJson(),
     if (timeSeriesResourceHierarchyLevel.isNotDefault)
-      'timeSeriesResourceHierarchyLevel': encodeList(
-        timeSeriesResourceHierarchyLevel,
-      ),
+      'timeSeriesResourceHierarchyLevel': [
+        for (final i in timeSeriesResourceHierarchyLevel) i.toJson(),
+      ],
   };
 
   @override
   String toString() {
-    final contents = ['launchStage=$launchStage'].join(',');
-    return 'MetricDescriptorMetadata($contents)';
+    final $contents = ['launchStage=$launchStage'].join(',');
+    return 'MetricDescriptorMetadata(${$contents})';
   }
 }
 
@@ -4752,8 +4794,8 @@ final class Metric extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['type=$type'].join(',');
-    return 'Metric($contents)';
+    final $contents = ['type=$type'].join(',');
+    return 'Metric(${$contents})';
   }
 }
 
@@ -4851,20 +4893,20 @@ final class MonitoredResourceDescriptor extends ProtoMessage {
     if (type.isNotDefault) 'type': type,
     if (displayName.isNotDefault) 'displayName': displayName,
     if (description.isNotDefault) 'description': description,
-    if (labels.isNotDefault) 'labels': encodeList(labels),
+    if (labels.isNotDefault) 'labels': [for (final i in labels) i.toJson()],
     if (launchStage.isNotDefault) 'launchStage': launchStage.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'type=$type',
       'displayName=$displayName',
       'description=$description',
       'launchStage=$launchStage',
     ].join(',');
-    return 'MonitoredResourceDescriptor($contents)';
+    return 'MonitoredResourceDescriptor(${$contents})';
   }
 }
 
@@ -4930,8 +4972,8 @@ final class MonitoredResource extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['type=$type'].join(',');
-    return 'MonitoredResource($contents)';
+    final $contents = ['type=$type'].join(',');
+    return 'MonitoredResource(${$contents})';
   }
 }
 
@@ -4983,7 +5025,8 @@ final class MonitoredResourceMetadata extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (systemLabels != null) 'systemLabels': systemLabels!.toJson(),
+    if (systemLabels case final systemLabels?)
+      'systemLabels': systemLabels.toJson(),
     if (userLabels.isNotDefault) 'userLabels': userLabels,
   };
 
@@ -5094,9 +5137,13 @@ final class Monitoring extends ProtoMessage {
   @override
   Object toJson() => {
     if (producerDestinations.isNotDefault)
-      'producerDestinations': encodeList(producerDestinations),
+      'producerDestinations': [
+        for (final i in producerDestinations) i.toJson(),
+      ],
     if (consumerDestinations.isNotDefault)
-      'consumerDestinations': encodeList(consumerDestinations),
+      'consumerDestinations': [
+        for (final i in consumerDestinations) i.toJson(),
+      ],
   };
 
   @override
@@ -5147,8 +5194,8 @@ final class Monitoring_MonitoringDestination extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['monitoredResource=$monitoredResource'].join(',');
-    return 'MonitoringDestination($contents)';
+    final $contents = ['monitoredResource=$monitoredResource'].join(',');
+    return 'MonitoringDestination(${$contents})';
   }
 }
 
@@ -5218,12 +5265,12 @@ final class FieldPolicy extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       'resourcePermission=$resourcePermission',
       'resourceType=$resourceType',
     ].join(',');
-    return 'FieldPolicy($contents)';
+    return 'FieldPolicy(${$contents})';
   }
 }
 
@@ -5266,13 +5313,13 @@ final class MethodPolicy extends ProtoMessage {
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
     if (requestPolicies.isNotDefault)
-      'requestPolicies': encodeList(requestPolicies),
+      'requestPolicies': [for (final i in requestPolicies) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['selector=$selector'].join(',');
-    return 'MethodPolicy($contents)';
+    final $contents = ['selector=$selector'].join(',');
+    return 'MethodPolicy(${$contents})';
   }
 }
 
@@ -5356,8 +5403,9 @@ final class Quota extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (limits.isNotDefault) 'limits': encodeList(limits),
-    if (metricRules.isNotDefault) 'metricRules': encodeList(metricRules),
+    if (limits.isNotDefault) 'limits': [for (final i in limits) i.toJson()],
+    if (metricRules.isNotDefault)
+      'metricRules': [for (final i in metricRules) i.toJson()],
   };
 
   @override
@@ -5406,13 +5454,16 @@ final class MetricRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (metricCosts.isNotDefault) 'metricCosts': metricCosts,
+    if (metricCosts.isNotDefault)
+      'metricCosts': {
+        for (final e in metricCosts.entries) e.key: e.value.toString(),
+      },
   };
 
   @override
   String toString() {
-    final contents = ['selector=$selector'].join(',');
-    return 'MetricRule($contents)';
+    final $contents = ['selector=$selector'].join(',');
+    return 'MetricRule(${$contents})';
   }
 }
 
@@ -5566,19 +5617,20 @@ final class QuotaLimit extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (defaultLimit.isNotDefault) 'defaultLimit': encodeInt64(defaultLimit),
-    if (maxLimit.isNotDefault) 'maxLimit': encodeInt64(maxLimit),
-    if (freeTier.isNotDefault) 'freeTier': encodeInt64(freeTier),
+    if (defaultLimit.isNotDefault) 'defaultLimit': defaultLimit.toString(),
+    if (maxLimit.isNotDefault) 'maxLimit': maxLimit.toString(),
+    if (freeTier.isNotDefault) 'freeTier': freeTier.toString(),
     if (duration.isNotDefault) 'duration': duration,
     if (metric.isNotDefault) 'metric': metric,
     if (unit.isNotDefault) 'unit': unit,
-    if (values.isNotDefault) 'values': values,
+    if (values.isNotDefault)
+      'values': {for (final e in values.entries) e.key: e.value.toString()},
     if (displayName.isNotDefault) 'displayName': displayName,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'description=$description',
       'defaultLimit=$defaultLimit',
@@ -5589,7 +5641,7 @@ final class QuotaLimit extends ProtoMessage {
       'unit=$unit',
       'displayName=$displayName',
     ].join(',');
-    return 'QuotaLimit($contents)';
+    return 'QuotaLimit(${$contents})';
   }
 }
 
@@ -5778,19 +5830,19 @@ final class ResourceDescriptor extends ProtoMessage {
     if (history.isNotDefault) 'history': history.toJson(),
     if (plural.isNotDefault) 'plural': plural,
     if (singular.isNotDefault) 'singular': singular,
-    if (style.isNotDefault) 'style': encodeList(style),
+    if (style.isNotDefault) 'style': [for (final i in style) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       'nameField=$nameField',
       'history=$history',
       'plural=$plural',
       'singular=$singular',
     ].join(',');
-    return 'ResourceDescriptor($contents)';
+    return 'ResourceDescriptor(${$contents})';
   }
 }
 
@@ -5925,8 +5977,8 @@ final class ResourceReference extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['type=$type', 'childType=$childType'].join(',');
-    return 'ResourceReference($contents)';
+    final $contents = ['type=$type', 'childType=$childType'].join(',');
+    return 'ResourceReference(${$contents})';
   }
 }
 
@@ -6316,7 +6368,7 @@ final class RoutingRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (routingParameters.isNotDefault)
-      'routingParameters': encodeList(routingParameters),
+      'routingParameters': [for (final i in routingParameters) i.toJson()],
   };
 
   @override
@@ -6411,8 +6463,8 @@ final class RoutingParameter extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['field=$field', 'pathTemplate=$pathTemplate'].join(',');
-    return 'RoutingParameter($contents)';
+    final $contents = ['field=$field', 'pathTemplate=$pathTemplate'].join(',');
+    return 'RoutingParameter(${$contents})';
   }
 }
 
@@ -6717,41 +6769,45 @@ final class Service extends ProtoMessage {
     if (title.isNotDefault) 'title': title,
     if (producerProjectId.isNotDefault) 'producerProjectId': producerProjectId,
     if (id.isNotDefault) 'id': id,
-    if (apis.isNotDefault) 'apis': encodeList(apis),
-    if (types.isNotDefault) 'types': encodeList(types),
-    if (enums.isNotDefault) 'enums': encodeList(enums),
-    if (documentation != null) 'documentation': documentation!.toJson(),
-    if (backend != null) 'backend': backend!.toJson(),
-    if (http != null) 'http': http!.toJson(),
-    if (quota != null) 'quota': quota!.toJson(),
-    if (authentication != null) 'authentication': authentication!.toJson(),
-    if (context != null) 'context': context!.toJson(),
-    if (usage != null) 'usage': usage!.toJson(),
-    if (endpoints.isNotDefault) 'endpoints': encodeList(endpoints),
-    if (control != null) 'control': control!.toJson(),
-    if (logs.isNotDefault) 'logs': encodeList(logs),
-    if (metrics.isNotDefault) 'metrics': encodeList(metrics),
+    if (apis.isNotDefault) 'apis': [for (final i in apis) i.toJson()],
+    if (types.isNotDefault) 'types': [for (final i in types) i.toJson()],
+    if (enums.isNotDefault) 'enums': [for (final i in enums) i.toJson()],
+    if (documentation case final documentation?)
+      'documentation': documentation.toJson(),
+    if (backend case final backend?) 'backend': backend.toJson(),
+    if (http case final http?) 'http': http.toJson(),
+    if (quota case final quota?) 'quota': quota.toJson(),
+    if (authentication case final authentication?)
+      'authentication': authentication.toJson(),
+    if (context case final context?) 'context': context.toJson(),
+    if (usage case final usage?) 'usage': usage.toJson(),
+    if (endpoints.isNotDefault)
+      'endpoints': [for (final i in endpoints) i.toJson()],
+    if (control case final control?) 'control': control.toJson(),
+    if (logs.isNotDefault) 'logs': [for (final i in logs) i.toJson()],
+    if (metrics.isNotDefault) 'metrics': [for (final i in metrics) i.toJson()],
     if (monitoredResources.isNotDefault)
-      'monitoredResources': encodeList(monitoredResources),
-    if (billing != null) 'billing': billing!.toJson(),
-    if (logging != null) 'logging': logging!.toJson(),
-    if (monitoring != null) 'monitoring': monitoring!.toJson(),
-    if (systemParameters != null)
-      'systemParameters': systemParameters!.toJson(),
-    if (sourceInfo != null) 'sourceInfo': sourceInfo!.toJson(),
-    if (publishing != null) 'publishing': publishing!.toJson(),
-    if (configVersion != null) 'configVersion': configVersion!.toJson(),
+      'monitoredResources': [for (final i in monitoredResources) i.toJson()],
+    if (billing case final billing?) 'billing': billing.toJson(),
+    if (logging case final logging?) 'logging': logging.toJson(),
+    if (monitoring case final monitoring?) 'monitoring': monitoring.toJson(),
+    if (systemParameters case final systemParameters?)
+      'systemParameters': systemParameters.toJson(),
+    if (sourceInfo case final sourceInfo?) 'sourceInfo': sourceInfo.toJson(),
+    if (publishing case final publishing?) 'publishing': publishing.toJson(),
+    if (configVersion case final configVersion?)
+      'configVersion': configVersion.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'title=$title',
       'producerProjectId=$producerProjectId',
       'id=$id',
     ].join(',');
-    return 'Service($contents)';
+    return 'Service(${$contents})';
   }
 }
 
@@ -6777,7 +6833,8 @@ final class SourceInfo extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (sourceFiles.isNotDefault) 'sourceFiles': encodeList(sourceFiles),
+    if (sourceFiles.isNotDefault)
+      'sourceFiles': [for (final i in sourceFiles) i.toJson()],
   };
 
   @override
@@ -6840,7 +6897,9 @@ final class SystemParameters extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
+  Object toJson() => {
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
+  };
 
   @override
   String toString() => 'SystemParameters()';
@@ -6886,13 +6945,14 @@ final class SystemParameterRule extends ProtoMessage {
   @override
   Object toJson() => {
     if (selector.isNotDefault) 'selector': selector,
-    if (parameters.isNotDefault) 'parameters': encodeList(parameters),
+    if (parameters.isNotDefault)
+      'parameters': [for (final i in parameters) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['selector=$selector'].join(',');
-    return 'SystemParameterRule($contents)';
+    final $contents = ['selector=$selector'].join(',');
+    return 'SystemParameterRule(${$contents})';
   }
 }
 
@@ -6946,12 +7006,12 @@ final class SystemParameter extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'httpHeader=$httpHeader',
       'urlQueryParameter=$urlQueryParameter',
     ].join(',');
-    return 'SystemParameter($contents)';
+    return 'SystemParameter(${$contents})';
   }
 }
 
@@ -7015,17 +7075,17 @@ final class Usage extends ProtoMessage {
   @override
   Object toJson() => {
     if (requirements.isNotDefault) 'requirements': requirements,
-    if (rules.isNotDefault) 'rules': encodeList(rules),
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
     if (producerNotificationChannel.isNotDefault)
       'producerNotificationChannel': producerNotificationChannel,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'producerNotificationChannel=$producerNotificationChannel',
     ].join(',');
-    return 'Usage($contents)';
+    return 'Usage(${$contents})';
   }
 }
 
@@ -7109,12 +7169,12 @@ final class UsageRule extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       'allowUnregisteredCalls=$allowUnregisteredCalls',
       'skipServiceControl=$skipServiceControl',
     ].join(',');
-    return 'UsageRule($contents)';
+    return 'UsageRule(${$contents})';
   }
 }
 
@@ -7163,7 +7223,9 @@ final class Visibility extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (rules.isNotDefault) 'rules': encodeList(rules)};
+  Object toJson() => {
+    if (rules.isNotDefault) 'rules': [for (final i in rules) i.toJson()],
+  };
 
   @override
   String toString() => 'Visibility()';
@@ -7222,11 +7284,11 @@ final class VisibilityRule extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'selector=$selector',
       'restriction=$restriction',
     ].join(',');
-    return 'VisibilityRule($contents)';
+    return 'VisibilityRule(${$contents})';
   }
 }
 

@@ -24,12 +24,15 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
@@ -68,8 +71,8 @@ final class LanguageService {
   /// Analyzes the sentiment of the provided text.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AnalyzeSentimentResponse> analyzeSentiment(
     AnalyzeSentimentRequest request,
   ) async {
@@ -83,8 +86,8 @@ final class LanguageService {
   /// other properties.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AnalyzeEntitiesResponse> analyzeEntities(
     AnalyzeEntitiesRequest request,
   ) async {
@@ -96,8 +99,8 @@ final class LanguageService {
   /// Classifies a document into categories.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:classifyText');
     final response = await _client.post(url, body: request);
@@ -107,8 +110,8 @@ final class LanguageService {
   /// Moderates a document for harmful and sensitive categories.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:moderateText');
     final response = await _client.post(url, body: request);
@@ -118,8 +121,8 @@ final class LanguageService {
   /// A convenience method that provides all features in one call.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
     final url = Uri.https(_host, '/v2/documents:annotateText');
     final response = await _client.post(url, body: request);
@@ -192,20 +195,20 @@ final class Document extends ProtoMessage {
   @override
   Object toJson() => {
     if (type.isNotDefault) 'type': type.toJson(),
-    if (content != null) 'content': content,
-    if (gcsContentUri != null) 'gcsContentUri': gcsContentUri,
+    if (content case final content?) 'content': content,
+    if (gcsContentUri case final gcsContentUri?) 'gcsContentUri': gcsContentUri,
     if (languageCode.isNotDefault) 'languageCode': languageCode,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       if (content != null) 'content=$content',
       if (gcsContentUri != null) 'gcsContentUri=$gcsContentUri',
       'languageCode=$languageCode',
     ].join(',');
-    return 'Document($contents)';
+    return 'Document(${$contents})';
   }
 }
 
@@ -263,8 +266,8 @@ final class Sentence extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (text != null) 'text': text!.toJson(),
-    if (sentiment != null) 'sentiment': sentiment!.toJson(),
+    if (text case final text?) 'text': text.toJson(),
+    if (sentiment case final sentiment?) 'sentiment': sentiment.toJson(),
   };
 
   @override
@@ -343,14 +346,15 @@ final class Entity extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     if (type.isNotDefault) 'type': type.toJson(),
     if (metadata.isNotDefault) 'metadata': metadata,
-    if (mentions.isNotDefault) 'mentions': encodeList(mentions),
-    if (sentiment != null) 'sentiment': sentiment!.toJson(),
+    if (mentions.isNotDefault)
+      'mentions': [for (final i in mentions) i.toJson()],
+    if (sentiment case final sentiment?) 'sentiment': sentiment.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'type=$type'].join(',');
-    return 'Entity($contents)';
+    final $contents = ['name=$name', 'type=$type'].join(',');
+    return 'Entity(${$contents})';
   }
 }
 
@@ -482,8 +486,8 @@ final class Sentiment extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['magnitude=$magnitude', 'score=$score'].join(',');
-    return 'Sentiment($contents)';
+    final $contents = ['magnitude=$magnitude', 'score=$score'].join(',');
+    return 'Sentiment(${$contents})';
   }
 }
 
@@ -542,16 +546,16 @@ final class EntityMention extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (text != null) 'text': text!.toJson(),
+    if (text case final text?) 'text': text.toJson(),
     if (type.isNotDefault) 'type': type.toJson(),
-    if (sentiment != null) 'sentiment': sentiment!.toJson(),
+    if (sentiment case final sentiment?) 'sentiment': sentiment.toJson(),
     if (probability.isNotDefault) 'probability': encodeDouble(probability),
   };
 
   @override
   String toString() {
-    final contents = ['type=$type', 'probability=$probability'].join(',');
-    return 'EntityMention($contents)';
+    final $contents = ['type=$type', 'probability=$probability'].join(',');
+    return 'EntityMention(${$contents})';
   }
 }
 
@@ -618,8 +622,11 @@ final class TextSpan extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['content=$content', 'beginOffset=$beginOffset'].join(',');
-    return 'TextSpan($contents)';
+    final $contents = [
+      'content=$content',
+      'beginOffset=$beginOffset',
+    ].join(',');
+    return 'TextSpan(${$contents})';
   }
 }
 
@@ -673,12 +680,12 @@ final class ClassificationCategory extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'confidence=$confidence',
       'severity=$severity',
     ].join(',');
-    return 'ClassificationCategory($contents)';
+    return 'ClassificationCategory(${$contents})';
   }
 }
 
@@ -714,14 +721,14 @@ final class AnalyzeSentimentRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document != null) 'document': document!.toJson(),
+    if (document case final document?) 'document': document.toJson(),
     if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['encodingType=$encodingType'].join(',');
-    return 'AnalyzeSentimentRequest($contents)';
+    final $contents = ['encodingType=$encodingType'].join(',');
+    return 'AnalyzeSentimentRequest(${$contents})';
   }
 }
 
@@ -778,20 +785,21 @@ final class AnalyzeSentimentResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (documentSentiment != null)
-      'documentSentiment': documentSentiment!.toJson(),
+    if (documentSentiment case final documentSentiment?)
+      'documentSentiment': documentSentiment.toJson(),
     if (languageCode.isNotDefault) 'languageCode': languageCode,
-    if (sentences.isNotDefault) 'sentences': encodeList(sentences),
+    if (sentences.isNotDefault)
+      'sentences': [for (final i in sentences) i.toJson()],
     if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'AnalyzeSentimentResponse($contents)';
+    return 'AnalyzeSentimentResponse(${$contents})';
   }
 }
 
@@ -827,14 +835,14 @@ final class AnalyzeEntitiesRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document != null) 'document': document!.toJson(),
+    if (document case final document?) 'document': document.toJson(),
     if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['encodingType=$encodingType'].join(',');
-    return 'AnalyzeEntitiesRequest($contents)';
+    final $contents = ['encodingType=$encodingType'].join(',');
+    return 'AnalyzeEntitiesRequest(${$contents})';
   }
 }
 
@@ -883,18 +891,19 @@ final class AnalyzeEntitiesResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (entities.isNotDefault) 'entities': encodeList(entities),
+    if (entities.isNotDefault)
+      'entities': [for (final i in entities) i.toJson()],
     if (languageCode.isNotDefault) 'languageCode': languageCode,
     if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'AnalyzeEntitiesResponse($contents)';
+    return 'AnalyzeEntitiesResponse(${$contents})';
   }
 }
 
@@ -919,7 +928,9 @@ final class ClassifyTextRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (document != null) 'document': document!.toJson()};
+  Object toJson() => {
+    if (document case final document?) 'document': document.toJson(),
+  };
 
   @override
   String toString() => 'ClassifyTextRequest()';
@@ -972,18 +983,19 @@ final class ClassifyTextResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (categories.isNotDefault) 'categories': encodeList(categories),
+    if (categories.isNotDefault)
+      'categories': [for (final i in categories) i.toJson()],
     if (languageCode.isNotDefault) 'languageCode': languageCode,
     if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'ClassifyTextResponse($contents)';
+    return 'ClassifyTextResponse(${$contents})';
   }
 }
 
@@ -1019,14 +1031,14 @@ final class ModerateTextRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document != null) 'document': document!.toJson(),
+    if (document case final document?) 'document': document.toJson(),
     if (modelVersion.isNotDefault) 'modelVersion': modelVersion.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['modelVersion=$modelVersion'].join(',');
-    return 'ModerateTextRequest($contents)';
+    final $contents = ['modelVersion=$modelVersion'].join(',');
+    return 'ModerateTextRequest(${$contents})';
   }
 }
 
@@ -1115,18 +1127,20 @@ final class ModerateTextResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (moderationCategories.isNotDefault)
-      'moderationCategories': encodeList(moderationCategories),
+      'moderationCategories': [
+        for (final i in moderationCategories) i.toJson(),
+      ],
     if (languageCode.isNotDefault) 'languageCode': languageCode,
     if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'ModerateTextResponse($contents)';
+    return 'ModerateTextResponse(${$contents})';
   }
 }
 
@@ -1171,15 +1185,15 @@ final class AnnotateTextRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (document != null) 'document': document!.toJson(),
-    if (features != null) 'features': features!.toJson(),
+    if (document case final document?) 'document': document.toJson(),
+    if (features case final features?) 'features': features.toJson(),
     if (encodingType.isNotDefault) 'encodingType': encodingType.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['encodingType=$encodingType'].join(',');
-    return 'AnnotateTextRequest($contents)';
+    final $contents = ['encodingType=$encodingType'].join(',');
+    return 'AnnotateTextRequest(${$contents})';
   }
 }
 
@@ -1241,13 +1255,13 @@ final class AnnotateTextRequest_Features extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'extractEntities=$extractEntities',
       'extractDocumentSentiment=$extractDocumentSentiment',
       'classifyText=$classifyText',
       'moderateText=$moderateText',
     ].join(',');
-    return 'Features($contents)';
+    return 'Features(${$contents})';
   }
 }
 
@@ -1343,24 +1357,29 @@ final class AnnotateTextResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (sentences.isNotDefault) 'sentences': encodeList(sentences),
-    if (entities.isNotDefault) 'entities': encodeList(entities),
-    if (documentSentiment != null)
-      'documentSentiment': documentSentiment!.toJson(),
+    if (sentences.isNotDefault)
+      'sentences': [for (final i in sentences) i.toJson()],
+    if (entities.isNotDefault)
+      'entities': [for (final i in entities) i.toJson()],
+    if (documentSentiment case final documentSentiment?)
+      'documentSentiment': documentSentiment.toJson(),
     if (languageCode.isNotDefault) 'languageCode': languageCode,
-    if (categories.isNotDefault) 'categories': encodeList(categories),
+    if (categories.isNotDefault)
+      'categories': [for (final i in categories) i.toJson()],
     if (moderationCategories.isNotDefault)
-      'moderationCategories': encodeList(moderationCategories),
+      'moderationCategories': [
+        for (final i in moderationCategories) i.toJson(),
+      ],
     if (languageSupported.isNotDefault) 'languageSupported': languageSupported,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'languageCode=$languageCode',
       'languageSupported=$languageSupported',
     ].join(',');
-    return 'AnnotateTextResponse($contents)';
+    return 'AnnotateTextResponse(${$contents})';
   }
 }
 

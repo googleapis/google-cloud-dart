@@ -21,8 +21,10 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -186,26 +188,26 @@ final class HttpRequest extends ProtoMessage {
   Object toJson() => {
     if (requestMethod.isNotDefault) 'requestMethod': requestMethod,
     if (requestUrl.isNotDefault) 'requestUrl': requestUrl,
-    if (requestSize.isNotDefault) 'requestSize': encodeInt64(requestSize),
+    if (requestSize.isNotDefault) 'requestSize': requestSize.toString(),
     if (status.isNotDefault) 'status': status,
-    if (responseSize.isNotDefault) 'responseSize': encodeInt64(responseSize),
+    if (responseSize.isNotDefault) 'responseSize': responseSize.toString(),
     if (userAgent.isNotDefault) 'userAgent': userAgent,
     if (remoteIp.isNotDefault) 'remoteIp': remoteIp,
     if (serverIp.isNotDefault) 'serverIp': serverIp,
     if (referer.isNotDefault) 'referer': referer,
-    if (latency != null) 'latency': latency!.toJson(),
+    if (latency case final latency?) 'latency': latency.toJson(),
     if (cacheLookup.isNotDefault) 'cacheLookup': cacheLookup,
     if (cacheHit.isNotDefault) 'cacheHit': cacheHit,
     if (cacheValidatedWithOriginServer.isNotDefault)
       'cacheValidatedWithOriginServer': cacheValidatedWithOriginServer,
     if (cacheFillBytes.isNotDefault)
-      'cacheFillBytes': encodeInt64(cacheFillBytes),
+      'cacheFillBytes': cacheFillBytes.toString(),
     if (protocol.isNotDefault) 'protocol': protocol,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'requestMethod=$requestMethod',
       'requestUrl=$requestUrl',
       'requestSize=$requestSize',
@@ -221,7 +223,7 @@ final class HttpRequest extends ProtoMessage {
       'cacheFillBytes=$cacheFillBytes',
       'protocol=$protocol',
     ].join(',');
-    return 'HttpRequest($contents)';
+    return 'HttpRequest(${$contents})';
   }
 }
 
