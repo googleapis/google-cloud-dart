@@ -35,8 +35,13 @@ final class StorageService {
     final query = {if (project != null) 'project': project};
 
     final url = Uri.https(_host, 'storage/v1/b', query);
-    final response = await retry.run(() => http.post(url));
-    print(response.body);
+    final response = await retry.run(
+      () => client.post(
+        url,
+        headers: {'content-type': 'application/json'},
+        body: jsonEncode({'name': bucketName}),
+      ),
+    );
     return bucket.fromJson(
       jsonDecode(response.body) as Map<String, dynamic>,
       this,
