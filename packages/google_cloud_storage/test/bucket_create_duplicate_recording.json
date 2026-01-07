@@ -4,7 +4,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
       "method": "POST",
       "headers": {
-        "content-type": "application/json; charset=utf-8"
+        "content-type": "application/json"
       },
       "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZS1kdXAifQ=="
     },
@@ -13,17 +13,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 07 Jan 2026 21:49:32 GMT",
+        "date": "Wed, 07 Jan 2026 22:13:07 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "949",
-        "x-guploader-uploadid": "AHVrFxP6cp0VbvCqsFzgY1WgahNo86gzI49REr7TKNjwZ7UZoYCzyqdzOgHQxw5wrqkPcO0TV5eqqns",
+        "x-guploader-uploadid": "AHVrFxNNHDytefRcqYOtucFatFQQgv9BuxzXQ_eD8qUka540P9aZRT1h5f22xRXxd7ggJrIux-LrO_g",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create-dup\",\n  \"id\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"name\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1767822571832569244\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-07T21:49:32.116Z\",\n  \"updated\": \"2026-01-07T21:49:32.116Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-07T21:49:32.116Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:32.116Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T21:49:32.116Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart-cloud-storage-test-bucket-create-dup\",\n  \"id\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"name\": \"dart-cloud-storage-test-bucket-create-dup\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1767823987101625838\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-07T22:13:07.369Z\",\n  \"updated\": \"2026-01-07T22:13:07.369Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-07T22:13:07.369Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T22:13:07.369Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-07T22:13:07.369Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -32,7 +32,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
       "method": "POST",
       "headers": {
-        "content-type": "application/json; charset=utf-8"
+        "content-type": "application/json"
       },
       "body": "eyJuYW1lIjoiZGFydC1jbG91ZC1zdG9yYWdlLXRlc3QtYnVja2V0LWNyZWF0ZS1kdXAifQ=="
     },
@@ -41,10 +41,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 07 Jan 2026 21:49:32 GMT",
+        "date": "Wed, 07 Jan 2026 22:13:07 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "339",
-        "x-guploader-uploadid": "AHVrFxO4uku9ZYOnrYqnrAhRXV6T-_2mSKEc4Gx1oaqVR-GWAOk-2OCC4rAHwg3t5eOlTRHR1A4-av8",
+        "x-guploader-uploadid": "AHVrFxPb09DQ7F01k6qnnlaGY2UaF7aCSrHriHI0y6nWMYcSb-_ndNkJML4ZMBqDjPLCH65c5imfOMw",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
@@ -66,10 +66,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 07 Jan 2026 21:49:33 GMT",
+        "date": "Wed, 07 Jan 2026 22:13:08 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AHVrFxMqX7qEKTY9waIx8SMdFYF6v066Krw64tt6bJ8LA4b52EpvZjQxfsN7DMR9EI3o9r325RISihk",
+        "x-guploader-uploadid": "AHVrFxOM62ArK4ljQkzLWblqNU5vdJdq7xmWn8WCHbef4tUe7y6JgY3-lT_lQjoOCraFDe6C",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",
