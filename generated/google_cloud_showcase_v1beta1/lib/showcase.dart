@@ -23,8 +23,10 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_iam_v1/iam.dart';
@@ -32,6 +34,7 @@ import 'package:google_cloud_location/location.dart';
 import 'package:google_cloud_longrunning/longrunning.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
@@ -73,8 +76,8 @@ final class Compliance {
   /// sending the entire request object in the REST body.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBody(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:body');
     final response = await _client.post(url, body: request);
@@ -86,8 +89,8 @@ final class Compliance {
   /// top-level, non-repeated fields can be sent this way.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodyinfo', {
       if (request.name case final $1 when $1.isNotDefault) 'name': $1,
@@ -110,8 +113,8 @@ final class Compliance {
   /// sending all request fields as query parameters.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:query', {
       if (request.name case final $1 when $1.isNotDefault) 'name': $1,
@@ -248,8 +251,8 @@ final class Compliance {
   /// "/bar/{foo}" rather than "/{foo=bar/*}"), and the rest as query parameters.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataSimplePath(RepeatRequest request) async {
     final url = Uri.https(
       _host,
@@ -390,8 +393,8 @@ final class Compliance {
   /// Same as RepeatDataSimplePath, but with a path resource.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataPathResource(RepeatRequest request) async {
     final url = Uri.https(
       _host,
@@ -532,8 +535,8 @@ final class Compliance {
   /// Same as RepeatDataSimplePath, but with a trailing resource.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataPathTrailingResource(
     RepeatRequest request,
   ) async {
@@ -676,8 +679,8 @@ final class Compliance {
   /// This method echoes the ComplianceData request, using the HTTP PUT method.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBodyPut(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodyput');
     final response = await _client.put(url, body: request);
@@ -687,8 +690,8 @@ final class Compliance {
   /// This method echoes the ComplianceData request, using the HTTP PATCH method.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<RepeatResponse> repeatDataBodyPatch(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:bodypatch');
     final response = await _client.patch(url, body: request);
@@ -703,8 +706,8 @@ final class Compliance {
   /// VerifyEnum() to work) but are not guaranteed to be the same across separate Showcase server runs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EnumResponse> getEnum(EnumRequest request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
       if (request.unknownEnum case final $1 when $1.isNotDefault)
@@ -722,8 +725,8 @@ final class Compliance {
   /// although they are not guaranteed to be the same across separate Showcase server runs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
       if (request.request!.unknownEnum case final $1 when $1.isNotDefault)
@@ -738,8 +741,8 @@ final class Compliance {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -756,8 +759,8 @@ final class Compliance {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -767,8 +770,8 @@ final class Compliance {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -778,8 +781,8 @@ final class Compliance {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -793,8 +796,8 @@ final class Compliance {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -809,8 +812,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -830,8 +833,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -847,8 +850,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -857,8 +860,8 @@ final class Compliance {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -907,8 +910,8 @@ final class Echo {
   /// This method simply echoes the request. This method showcases unary RPCs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EchoResponse> echo(EchoRequest request) async {
     final url = Uri.https(_host, '/v1beta1/echo:echo');
     final response = await _client.post(url, body: request);
@@ -923,8 +926,8 @@ final class Echo {
   /// google/rpc/error_details.proto.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<EchoErrorDetailsResponse> echoErrorDetails(
     EchoErrorDetailsRequest request,
   ) async {
@@ -942,8 +945,8 @@ final class Echo {
   /// to the user in an idiomatic form.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<FailEchoWithDetailsResponse> failEchoWithDetails(
     FailEchoWithDetailsRequest request,
   ) async {
@@ -956,8 +959,8 @@ final class Echo {
   /// through the stream. This method showcases server-side streaming RPCs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Stream<EchoResponse> expand(ExpandRequest request) {
     final url = Uri.https(_host, '/v1beta1/echo:expand');
     return _client.postStreaming(url, body: request).map(EchoResponse.fromJson);
@@ -967,8 +970,8 @@ final class Echo {
   /// expanded words, this method returns a paged list of expanded words.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<PagedExpandResponse> pagedExpand(PagedExpandRequest request) async {
     final url = Uri.https(_host, '/v1beta1/echo:pagedExpand');
     final response = await _client.post(url, body: request);
@@ -980,8 +983,8 @@ final class Echo {
   /// do. New APIs should NOT use this pattern.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<PagedExpandResponse> pagedExpandLegacy(
     PagedExpandLegacyRequest request,
   ) async {
@@ -997,8 +1000,8 @@ final class Echo {
   /// APIs. New APIs should NOT use this pattern.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<PagedExpandLegacyMappedResponse> pagedExpandLegacyMapped(
     PagedExpandRequest request,
   ) async {
@@ -1011,8 +1014,8 @@ final class Echo {
   /// This method showcases how a client handles a request timeout.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -1035,8 +1038,8 @@ final class Echo {
   /// This method showcases how a client handles delays or retries.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<BlockResponse> block(BlockRequest request) async {
     final url = Uri.https(_host, '/v1beta1/echo:block');
     final response = await _client.post(url, body: request);
@@ -1046,8 +1049,8 @@ final class Echo {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1064,8 +1067,8 @@ final class Echo {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1075,8 +1078,8 @@ final class Echo {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1086,8 +1089,8 @@ final class Echo {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1101,8 +1104,8 @@ final class Echo {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1117,8 +1120,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1138,8 +1141,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1155,8 +1158,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1165,8 +1168,8 @@ final class Echo {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -1210,8 +1213,8 @@ final class Identity {
   /// Creates a user.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<User> createUser(CreateUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/users');
     final response = await _client.post(url, body: request);
@@ -1221,8 +1224,8 @@ final class Identity {
   /// Retrieves the User with the given uri.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<User> getUser(GetUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1232,8 +1235,8 @@ final class Identity {
   /// Updates a user.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<User> updateUser(UpdateUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.user!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -1245,8 +1248,8 @@ final class Identity {
   /// Deletes a user, their profile, and all of their authored messages.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteUser(DeleteUserRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1255,8 +1258,8 @@ final class Identity {
   /// Lists all users.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
     final url = Uri.https(_host, '/v1beta1/users', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -1270,8 +1273,8 @@ final class Identity {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1288,8 +1291,8 @@ final class Identity {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1299,8 +1302,8 @@ final class Identity {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1310,8 +1313,8 @@ final class Identity {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1325,8 +1328,8 @@ final class Identity {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1341,8 +1344,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1362,8 +1365,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1379,8 +1382,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1389,8 +1392,8 @@ final class Identity {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -1437,8 +1440,8 @@ final class Messaging {
   /// Creates a room.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Room> createRoom(CreateRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/rooms');
     final response = await _client.post(url, body: request);
@@ -1448,8 +1451,8 @@ final class Messaging {
   /// Retrieves the Room with the given resource name.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Room> getRoom(GetRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1459,8 +1462,8 @@ final class Messaging {
   /// Updates a room.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Room> updateRoom(UpdateRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.room!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -1472,8 +1475,8 @@ final class Messaging {
   /// Deletes a room and all of its blurbs.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteRoom(DeleteRoomRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1482,8 +1485,8 @@ final class Messaging {
   /// Lists all chat rooms.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/rooms', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -1499,8 +1502,8 @@ final class Messaging {
   /// to be a post on the profile.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Blurb> createBlurb(CreateBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs');
     final response = await _client.post(url, body: request);
@@ -1510,8 +1513,8 @@ final class Messaging {
   /// Retrieves the Blurb with the given resource name.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Blurb> getBlurb(GetBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1521,8 +1524,8 @@ final class Messaging {
   /// Updates a blurb.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.blurb!.name}', {
       if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
@@ -1534,8 +1537,8 @@ final class Messaging {
   /// Deletes a blurb.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteBlurb(DeleteBlurbRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1545,8 +1548,8 @@ final class Messaging {
   /// parent resource name.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -1562,8 +1565,8 @@ final class Messaging {
   /// contain an exact match of a queried word will be returned.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// Returns an [Operation] representing the status of the long-running
   /// operation.
@@ -1588,8 +1591,8 @@ final class Messaging {
   /// particular chat room or user profile.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Stream<StreamBlurbsResponse> streamBlurbs(StreamBlurbsRequest request) {
     final url = Uri.https(_host, '/v1beta1/${request.name}/blurbs:stream');
     return _client
@@ -1600,8 +1603,8 @@ final class Messaging {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1618,8 +1621,8 @@ final class Messaging {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1629,8 +1632,8 @@ final class Messaging {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1640,8 +1643,8 @@ final class Messaging {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1655,8 +1658,8 @@ final class Messaging {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1671,8 +1674,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1692,8 +1695,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1709,8 +1712,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1719,8 +1722,8 @@ final class Messaging {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -1763,8 +1766,8 @@ final class SequenceService {
   /// Creates a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Sequence> createSequence(CreateSequenceRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sequences');
     final response = await _client.post(url, body: request.sequence);
@@ -1774,8 +1777,8 @@ final class SequenceService {
   /// Creates a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<StreamingSequence> createStreamingSequence(
     CreateStreamingSequenceRequest request,
   ) async {
@@ -1787,8 +1790,8 @@ final class SequenceService {
   /// Retrieves a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<SequenceReport> getSequenceReport(
     GetSequenceReportRequest request,
   ) async {
@@ -1800,8 +1803,8 @@ final class SequenceService {
   /// Retrieves a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<StreamingSequenceReport> getStreamingSequenceReport(
     GetStreamingSequenceReportRequest request,
   ) async {
@@ -1813,8 +1816,8 @@ final class SequenceService {
   /// Attempts a sequence.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> attemptSequence(AttemptSequenceRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.post(url, body: request);
@@ -1825,8 +1828,8 @@ final class SequenceService {
   /// See https://github.com/googleapis/gapic-showcase/issues/1377 for more details
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Stream<AttemptStreamingSequenceResponse> attemptStreamingSequence(
     AttemptStreamingSequenceRequest request,
   ) {
@@ -1839,8 +1842,8 @@ final class SequenceService {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -1857,8 +1860,8 @@ final class SequenceService {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -1868,8 +1871,8 @@ final class SequenceService {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -1879,8 +1882,8 @@ final class SequenceService {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -1894,8 +1897,8 @@ final class SequenceService {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -1910,8 +1913,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -1931,8 +1934,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -1948,8 +1951,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -1958,8 +1961,8 @@ final class SequenceService {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -2010,8 +2013,8 @@ final class Testing {
   /// 2) `Nonsense`: `pokemon/*/psychic/*`
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Session> createSession(CreateSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sessions');
     final response = await _client.post(url, body: request.session);
@@ -2021,8 +2024,8 @@ final class Testing {
   /// Gets a testing session.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Session> getSession(GetSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -2032,8 +2035,8 @@ final class Testing {
   /// Lists the current test sessions.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/sessions', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -2047,8 +2050,8 @@ final class Testing {
   /// Delete a test session.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteSession(DeleteSessionRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -2059,8 +2062,8 @@ final class Testing {
   /// and an overall rollup.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ReportSessionResponse> reportSession(
     ReportSessionRequest request,
   ) async {
@@ -2072,8 +2075,8 @@ final class Testing {
   /// List the tests of a sessesion.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListTestsResponse> listTests(ListTestsRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.parent}/tests', {
       if (request.pageSize case final $1 when $1.isNotDefault)
@@ -2092,8 +2095,8 @@ final class Testing {
   /// This method will error if attempting to delete a required test.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteTest(DeleteTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -2105,8 +2108,8 @@ final class Testing {
   /// end of the test, this method provides the means to do so.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:check', {
       if (request.answer case final $1 when $1.isNotDefault)
@@ -2121,8 +2124,8 @@ final class Testing {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
@@ -2139,8 +2142,8 @@ final class Testing {
   /// Provides the `Locations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
@@ -2150,8 +2153,8 @@ final class Testing {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -2161,8 +2164,8 @@ final class Testing {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
       if (request.options!.requestedPolicyVersion case final $1
@@ -2176,8 +2179,8 @@ final class Testing {
   /// Provides the `IAMPolicy` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -2192,8 +2195,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
@@ -2213,8 +2216,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   ///
   /// This method can be used to get the current status of a long-running
   /// operation.
@@ -2230,8 +2233,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     await _client.delete(url);
@@ -2240,8 +2243,8 @@ final class Testing {
   /// Provides the `Operations` service functionality in this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
     await _client.post(url);
@@ -2344,20 +2347,21 @@ final class RepeatRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (info != null) 'info': info!.toJson(),
+    if (info case final info?) 'info': info.toJson(),
     if (serverVerify.isNotDefault) 'serverVerify': serverVerify,
-    if (intendedBindingUri != null) 'intendedBindingUri': intendedBindingUri,
+    if (intendedBindingUri case final intendedBindingUri?)
+      'intendedBindingUri': intendedBindingUri,
     if (fInt32.isNotDefault) 'fInt32': fInt32,
-    if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
+    if (fInt64.isNotDefault) 'fInt64': fInt64.toString(),
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
-    if (pInt32 != null) 'pInt32': pInt32,
-    if (pInt64 != null) 'pInt64': encodeInt64(pInt64),
-    if (pDouble != null) 'pDouble': encodeDouble(pDouble),
+    if (pInt32 case final pInt32?) 'pInt32': pInt32,
+    if (pInt64 case final pInt64?) 'pInt64': pInt64.toString(),
+    if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'serverVerify=$serverVerify',
       if (intendedBindingUri != null) 'intendedBindingUri=$intendedBindingUri',
@@ -2368,7 +2372,7 @@ final class RepeatRequest extends ProtoMessage {
       if (pInt64 != null) 'pInt64=$pInt64',
       if (pDouble != null) 'pDouble=$pDouble',
     ].join(',');
-    return 'RepeatRequest($contents)';
+    return 'RepeatRequest(${$contents})';
   }
 }
 
@@ -2400,14 +2404,14 @@ final class RepeatResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (request != null) 'request': request!.toJson(),
+    if (request case final request?) 'request': request.toJson(),
     if (bindingUri.isNotDefault) 'bindingUri': bindingUri,
   };
 
   @override
   String toString() {
-    final contents = ['bindingUri=$bindingUri'].join(',');
-    return 'RepeatResponse($contents)';
+    final $contents = ['bindingUri=$bindingUri'].join(',');
+    return 'RepeatResponse(${$contents})';
   }
 }
 
@@ -2434,7 +2438,9 @@ final class ComplianceSuite extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (group.isNotDefault) 'group': encodeList(group)};
+  Object toJson() => {
+    if (group.isNotDefault) 'group': [for (final i in group) i.toJson()],
+  };
 
   @override
   String toString() => 'ComplianceSuite()';
@@ -2483,13 +2489,14 @@ final class ComplianceGroup extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (rpcs.isNotDefault) 'rpcs': rpcs,
-    if (requests.isNotDefault) 'requests': encodeList(requests),
+    if (requests.isNotDefault)
+      'requests': [for (final i in requests) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'ComplianceGroup($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'ComplianceGroup(${$contents})';
   }
 }
 
@@ -2680,28 +2687,28 @@ final class ComplianceData extends ProtoMessage {
     if (fSfixed32.isNotDefault) 'fSfixed32': fSfixed32,
     if (fUint32.isNotDefault) 'fUint32': fUint32,
     if (fFixed32.isNotDefault) 'fFixed32': fFixed32,
-    if (fInt64.isNotDefault) 'fInt64': encodeInt64(fInt64),
-    if (fSint64.isNotDefault) 'fSint64': encodeInt64(fSint64),
-    if (fSfixed64.isNotDefault) 'fSfixed64': encodeInt64(fSfixed64),
-    if (fUint64.isNotDefault) 'fUint64': encodeUint64(fUint64),
-    if (fFixed64.isNotDefault) 'fFixed64': encodeUint64(fFixed64),
+    if (fInt64.isNotDefault) 'fInt64': fInt64.toString(),
+    if (fSint64.isNotDefault) 'fSint64': fSint64.toString(),
+    if (fSfixed64.isNotDefault) 'fSfixed64': fSfixed64.toString(),
+    if (fUint64.isNotDefault) 'fUint64': fUint64.toString(),
+    if (fFixed64.isNotDefault) 'fFixed64': fFixed64.toString(),
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
     if (fFloat.isNotDefault) 'fFloat': encodeDouble(fFloat),
     if (fBool.isNotDefault) 'fBool': fBool,
     if (fBytes.isNotDefault) 'fBytes': encodeBytes(fBytes),
     if (fKingdom.isNotDefault) 'fKingdom': fKingdom.toJson(),
-    if (fChild != null) 'fChild': fChild!.toJson(),
-    if (pString != null) 'pString': pString,
-    if (pInt32 != null) 'pInt32': pInt32,
-    if (pDouble != null) 'pDouble': encodeDouble(pDouble),
-    if (pBool != null) 'pBool': pBool,
-    if (pKingdom != null) 'pKingdom': pKingdom!.toJson(),
-    if (pChild != null) 'pChild': pChild!.toJson(),
+    if (fChild case final fChild?) 'fChild': fChild.toJson(),
+    if (pString case final pString?) 'pString': pString,
+    if (pInt32 case final pInt32?) 'pInt32': pInt32,
+    if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
+    if (pBool case final pBool?) 'pBool': pBool,
+    if (pKingdom case final pKingdom?) 'pKingdom': pKingdom.toJson(),
+    if (pChild case final pChild?) 'pChild': pChild.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'fString=$fString',
       'fInt32=$fInt32',
       'fSint32=$fSint32',
@@ -2724,7 +2731,7 @@ final class ComplianceData extends ProtoMessage {
       if (pBool != null) 'pBool=$pBool',
       if (pKingdom != null) 'pKingdom=$pKingdom',
     ].join(',');
-    return 'ComplianceData($contents)';
+    return 'ComplianceData(${$contents})';
   }
 }
 
@@ -2863,18 +2870,18 @@ final class ComplianceDataChild extends ProtoMessage {
     if (fDouble.isNotDefault) 'fDouble': encodeDouble(fDouble),
     if (fBool.isNotDefault) 'fBool': fBool,
     if (fContinent.isNotDefault) 'fContinent': fContinent.toJson(),
-    if (fChild != null) 'fChild': fChild!.toJson(),
-    if (pString != null) 'pString': pString,
-    if (pFloat != null) 'pFloat': encodeDouble(pFloat),
-    if (pDouble != null) 'pDouble': encodeDouble(pDouble),
-    if (pBool != null) 'pBool': pBool,
+    if (fChild case final fChild?) 'fChild': fChild.toJson(),
+    if (pString case final pString?) 'pString': pString,
+    if (pFloat case final pFloat?) 'pFloat': encodeDouble(pFloat),
+    if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
+    if (pBool case final pBool?) 'pBool': pBool,
     if (pContinent.isNotDefault) 'pContinent': pContinent.toJson(),
-    if (pChild != null) 'pChild': pChild!.toJson(),
+    if (pChild case final pChild?) 'pChild': pChild.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'fString=$fString',
       'fFloat=$fFloat',
       'fDouble=$fDouble',
@@ -2886,7 +2893,7 @@ final class ComplianceDataChild extends ProtoMessage {
       if (pBool != null) 'pBool=$pBool',
       'pContinent=$pContinent',
     ].join(',');
-    return 'ComplianceDataChild($contents)';
+    return 'ComplianceDataChild(${$contents})';
   }
 }
 
@@ -2933,12 +2940,12 @@ final class ComplianceDataGrandchild extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'fString=$fString',
       'fDouble=$fDouble',
       'fBool=$fBool',
     ].join(',');
-    return 'ComplianceDataGrandchild($contents)';
+    return 'ComplianceDataGrandchild(${$contents})';
   }
 }
 
@@ -2966,8 +2973,8 @@ final class EnumRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['unknownEnum=$unknownEnum'].join(',');
-    return 'EnumRequest($contents)';
+    final $contents = ['unknownEnum=$unknownEnum'].join(',');
+    return 'EnumRequest(${$contents})';
   }
 }
 
@@ -3000,14 +3007,14 @@ final class EnumResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (request != null) 'request': request!.toJson(),
+    if (request case final request?) 'request': request.toJson(),
     if (continent.isNotDefault) 'continent': continent.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['continent=$continent'].join(',');
-    return 'EnumResponse($contents)';
+    final $contents = ['continent=$continent'].join(',');
+    return 'EnumResponse(${$contents})';
   }
 }
 
@@ -3086,18 +3093,19 @@ final class EchoRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (content != null) 'content': content,
-    if (error != null) 'error': error!.toJson(),
+    if (content case final content?) 'content': content,
+    if (error case final error?) 'error': error.toJson(),
     if (severity.isNotDefault) 'severity': severity.toJson(),
     if (header.isNotDefault) 'header': header,
     if (otherHeader.isNotDefault) 'otherHeader': otherHeader,
     if (requestId.isNotDefault) 'requestId': requestId,
-    if (otherRequestId != null) 'otherRequestId': otherRequestId,
+    if (otherRequestId case final otherRequestId?)
+      'otherRequestId': otherRequestId,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       if (content != null) 'content=$content',
       'severity=$severity',
       'header=$header',
@@ -3105,7 +3113,7 @@ final class EchoRequest extends ProtoMessage {
       'requestId=$requestId',
       if (otherRequestId != null) 'otherRequestId=$otherRequestId',
     ].join(',');
-    return 'EchoRequest($contents)';
+    return 'EchoRequest(${$contents})';
   }
 }
 
@@ -3165,13 +3173,13 @@ final class EchoResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'content=$content',
       'severity=$severity',
       'requestId=$requestId',
       'otherRequestId=$otherRequestId',
     ].join(',');
-    return 'EchoResponse($contents)';
+    return 'EchoResponse(${$contents})';
   }
 }
 
@@ -3216,8 +3224,8 @@ final class EchoErrorDetailsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['singleDetailText=$singleDetailText'].join(',');
-    return 'EchoErrorDetailsRequest($contents)';
+    final $contents = ['singleDetailText=$singleDetailText'].join(',');
+    return 'EchoErrorDetailsRequest(${$contents})';
   }
 }
 
@@ -3249,8 +3257,10 @@ final class EchoErrorDetailsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (singleDetail != null) 'singleDetail': singleDetail!.toJson(),
-    if (multipleDetails != null) 'multipleDetails': multipleDetails!.toJson(),
+    if (singleDetail case final singleDetail?)
+      'singleDetail': singleDetail.toJson(),
+    if (multipleDetails case final multipleDetails?)
+      'multipleDetails': multipleDetails.toJson(),
   };
 
   @override
@@ -3277,7 +3287,7 @@ final class EchoErrorDetailsResponse_SingleDetail extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (error != null) 'error': error!.toJson()};
+  Object toJson() => {if (error case final error?) 'error': error.toJson()};
 
   @override
   String toString() => 'SingleDetail()';
@@ -3303,7 +3313,7 @@ final class EchoErrorDetailsResponse_MultipleDetails extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (error != null) 'error': error!.toJson()};
+  Object toJson() => {if (error case final error?) 'error': error.toJson()};
 
   @override
   String toString() => 'MultipleDetails()';
@@ -3328,7 +3338,9 @@ final class ErrorWithSingleDetail extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (details != null) 'details': details!.toJson()};
+  Object toJson() => {
+    if (details case final details?) 'details': details.toJson(),
+  };
 
   @override
   String toString() => 'ErrorWithSingleDetail()';
@@ -3355,7 +3367,9 @@ final class ErrorWithMultipleDetails extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (details.isNotDefault) 'details': encodeList(details)};
+  Object toJson() => {
+    if (details.isNotDefault) 'details': [for (final i in details) i.toJson()],
+  };
 
   @override
   String toString() => 'ErrorWithMultipleDetails()';
@@ -3387,8 +3401,8 @@ final class PoetryError extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['poem=$poem'].join(',');
-    return 'PoetryError($contents)';
+    final $contents = ['poem=$poem'].join(',');
+    return 'PoetryError(${$contents})';
   }
 }
 
@@ -3418,8 +3432,8 @@ final class FailEchoWithDetailsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['message=$message'].join(',');
-    return 'FailEchoWithDetailsRequest($contents)';
+    final $contents = ['message=$message'].join(',');
+    return 'FailEchoWithDetailsRequest(${$contents})';
   }
 }
 
@@ -3479,14 +3493,15 @@ final class ExpandRequest extends ProtoMessage {
   @override
   Object toJson() => {
     if (content.isNotDefault) 'content': content,
-    if (error != null) 'error': error!.toJson(),
-    if (streamWaitTime != null) 'streamWaitTime': streamWaitTime!.toJson(),
+    if (error case final error?) 'error': error.toJson(),
+    if (streamWaitTime case final streamWaitTime?)
+      'streamWaitTime': streamWaitTime.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['content=$content'].join(',');
-    return 'ExpandRequest($contents)';
+    final $contents = ['content=$content'].join(',');
+    return 'ExpandRequest(${$contents})';
   }
 }
 
@@ -3537,12 +3552,12 @@ final class PagedExpandRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'content=$content',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'PagedExpandRequest($contents)';
+    return 'PagedExpandRequest(${$contents})';
   }
 }
 
@@ -3597,12 +3612,12 @@ final class PagedExpandLegacyRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'content=$content',
       'maxResults=$maxResults',
       'pageToken=$pageToken',
     ].join(',');
-    return 'PagedExpandLegacyRequest($contents)';
+    return 'PagedExpandLegacyRequest(${$contents})';
   }
 }
 
@@ -3637,14 +3652,15 @@ final class PagedExpandResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (responses.isNotDefault) 'responses': encodeList(responses),
+    if (responses.isNotDefault)
+      'responses': [for (final i in responses) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'PagedExpandResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'PagedExpandResponse(${$contents})';
   }
 }
 
@@ -3712,14 +3728,17 @@ final class PagedExpandLegacyMappedResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (alphabetized.isNotDefault) 'alphabetized': encodeMap(alphabetized),
+    if (alphabetized.isNotDefault)
+      'alphabetized': {
+        for (final e in alphabetized.entries) e.key: e.value.toJson(),
+      },
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'PagedExpandLegacyMappedResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'PagedExpandLegacyMappedResponse(${$contents})';
   }
 }
 
@@ -3768,10 +3787,10 @@ final class WaitRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (endTime != null) 'endTime': endTime!.toJson(),
-    if (ttl != null) 'ttl': ttl!.toJson(),
-    if (error != null) 'error': error!.toJson(),
-    if (success != null) 'success': success!.toJson(),
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+    if (ttl case final ttl?) 'ttl': ttl.toJson(),
+    if (error case final error?) 'error': error.toJson(),
+    if (success case final success?) 'success': success.toJson(),
   };
 
   @override
@@ -3803,8 +3822,8 @@ final class WaitResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['content=$content'].join(',');
-    return 'WaitResponse($contents)';
+    final $contents = ['content=$content'].join(',');
+    return 'WaitResponse(${$contents})';
   }
 }
 
@@ -3829,7 +3848,9 @@ final class WaitMetadata extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (endTime != null) 'endTime': endTime!.toJson()};
+  Object toJson() => {
+    if (endTime case final endTime?) 'endTime': endTime.toJson(),
+  };
 
   @override
   String toString() => 'WaitMetadata()';
@@ -3873,9 +3894,10 @@ final class BlockRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (responseDelay != null) 'responseDelay': responseDelay!.toJson(),
-    if (error != null) 'error': error!.toJson(),
-    if (success != null) 'success': success!.toJson(),
+    if (responseDelay case final responseDelay?)
+      'responseDelay': responseDelay.toJson(),
+    if (error case final error?) 'error': error.toJson(),
+    if (success case final success?) 'success': success.toJson(),
   };
 
   @override
@@ -3908,8 +3930,8 @@ final class BlockResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['content=$content'].join(',');
-    return 'BlockResponse($contents)';
+    final $contents = ['content=$content'].join(',');
+    return 'BlockResponse(${$contents})';
   }
 }
 
@@ -4009,17 +4031,19 @@ final class User extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     'displayName': displayName,
     'email': email,
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
-    if (age != null) 'age': age,
-    if (heightFeet != null) 'heightFeet': encodeDouble(heightFeet),
-    if (nickname != null) 'nickname': nickname,
-    if (enableNotifications != null) 'enableNotifications': enableNotifications,
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    if (age case final age?) 'age': age,
+    if (heightFeet case final heightFeet?)
+      'heightFeet': encodeDouble(heightFeet),
+    if (nickname case final nickname?) 'nickname': nickname,
+    if (enableNotifications case final enableNotifications?)
+      'enableNotifications': enableNotifications,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'displayName=$displayName',
       'email=$email',
@@ -4029,7 +4053,7 @@ final class User extends ProtoMessage {
       if (enableNotifications != null)
         'enableNotifications=$enableNotifications',
     ].join(',');
-    return 'User($contents)';
+    return 'User(${$contents})';
   }
 }
 
@@ -4055,7 +4079,7 @@ final class CreateUserRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (user != null) 'user': user!.toJson()};
+  Object toJson() => {if (user case final user?) 'user': user.toJson()};
 
   @override
   String toString() => 'CreateUserRequest()';
@@ -4087,8 +4111,8 @@ final class GetUserRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetUserRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetUserRequest(${$contents})';
   }
 }
 
@@ -4123,8 +4147,8 @@ final class UpdateUserRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (user != null) 'user': user!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (user case final user?) 'user': user.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
@@ -4157,8 +4181,8 @@ final class DeleteUserRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteUserRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteUserRequest(${$contents})';
   }
 }
 
@@ -4202,8 +4226,8 @@ final class ListUsersRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListUsersRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListUsersRequest(${$contents})';
   }
 }
 
@@ -4242,14 +4266,14 @@ final class ListUsersResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (users.isNotDefault) 'users': encodeList(users),
+    if (users.isNotDefault) 'users': [for (final i in users) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListUsersResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListUsersResponse(${$contents})';
   }
 }
 
@@ -4311,18 +4335,18 @@ final class Room extends ProtoMessage {
     if (name.isNotDefault) 'name': name,
     'displayName': displayName,
     if (description.isNotDefault) 'description': description,
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'displayName=$displayName',
       'description=$description',
     ].join(',');
-    return 'Room($contents)';
+    return 'Room(${$contents})';
   }
 }
 
@@ -4348,7 +4372,7 @@ final class CreateRoomRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (room != null) 'room': room!.toJson()};
+  Object toJson() => {if (room case final room?) 'room': room.toJson()};
 
   @override
   String toString() => 'CreateRoomRequest()';
@@ -4380,8 +4404,8 @@ final class GetRoomRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetRoomRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetRoomRequest(${$contents})';
   }
 }
 
@@ -4416,8 +4440,8 @@ final class UpdateRoomRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (room != null) 'room': room!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (room case final room?) 'room': room.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
@@ -4450,8 +4474,8 @@ final class DeleteRoomRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteRoomRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteRoomRequest(${$contents})';
   }
 }
 
@@ -4495,8 +4519,8 @@ final class ListRoomsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListRoomsRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListRoomsRequest(${$contents})';
   }
 }
 
@@ -4535,14 +4559,14 @@ final class ListRoomsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (rooms.isNotDefault) 'rooms': encodeList(rooms),
+    if (rooms.isNotDefault) 'rooms': [for (final i in rooms) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListRoomsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListRoomsResponse(${$contents})';
   }
 }
 
@@ -4632,17 +4656,17 @@ final class Blurb extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     'user': user,
-    if (text != null) 'text': text,
-    if (image != null) 'image': encodeBytes(image),
-    if (createTime != null) 'createTime': createTime!.toJson(),
-    if (updateTime != null) 'updateTime': updateTime!.toJson(),
-    if (legacyRoomId != null) 'legacyRoomId': legacyRoomId,
-    if (legacyUserId != null) 'legacyUserId': legacyUserId,
+    if (text case final text?) 'text': text,
+    if (image case final image?) 'image': encodeBytes(image),
+    if (createTime case final createTime?) 'createTime': createTime.toJson(),
+    if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
+    if (legacyRoomId case final legacyRoomId?) 'legacyRoomId': legacyRoomId,
+    if (legacyUserId case final legacyUserId?) 'legacyUserId': legacyUserId,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'user=$user',
       if (text != null) 'text=$text',
@@ -4650,7 +4674,7 @@ final class Blurb extends ProtoMessage {
       if (legacyRoomId != null) 'legacyRoomId=$legacyRoomId',
       if (legacyUserId != null) 'legacyUserId=$legacyUserId',
     ].join(',');
-    return 'Blurb($contents)';
+    return 'Blurb(${$contents})';
   }
 }
 
@@ -4687,13 +4711,13 @@ final class CreateBlurbRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'parent': parent,
-    if (blurb != null) 'blurb': blurb!.toJson(),
+    if (blurb case final blurb?) 'blurb': blurb.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'CreateBlurbRequest($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'CreateBlurbRequest(${$contents})';
   }
 }
 
@@ -4723,8 +4747,8 @@ final class GetBlurbRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetBlurbRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetBlurbRequest(${$contents})';
   }
 }
 
@@ -4759,8 +4783,8 @@ final class UpdateBlurbRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blurb != null) 'blurb': blurb!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (blurb case final blurb?) 'blurb': blurb.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
@@ -4793,8 +4817,8 @@ final class DeleteBlurbRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteBlurbRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteBlurbRequest(${$contents})';
   }
 }
 
@@ -4850,12 +4874,12 @@ final class ListBlurbsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListBlurbsRequest($contents)';
+    return 'ListBlurbsRequest(${$contents})';
   }
 }
 
@@ -4894,14 +4918,14 @@ final class ListBlurbsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blurbs.isNotDefault) 'blurbs': encodeList(blurbs),
+    if (blurbs.isNotDefault) 'blurbs': [for (final i in blurbs) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListBlurbsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListBlurbsResponse(${$contents})';
   }
 }
 
@@ -4969,13 +4993,13 @@ final class SearchBlurbsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'query=$query',
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'SearchBlurbsRequest($contents)';
+    return 'SearchBlurbsRequest(${$contents})';
   }
 }
 
@@ -5001,7 +5025,9 @@ final class SearchBlurbsMetadata extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (retryInfo != null) 'retryInfo': retryInfo!.toJson()};
+  Object toJson() => {
+    if (retryInfo case final retryInfo?) 'retryInfo': retryInfo.toJson(),
+  };
 
   @override
   String toString() => 'SearchBlurbsMetadata()';
@@ -5042,14 +5068,14 @@ final class SearchBlurbsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blurbs.isNotDefault) 'blurbs': encodeList(blurbs),
+    if (blurbs.isNotDefault) 'blurbs': [for (final i in blurbs) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'SearchBlurbsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'SearchBlurbsResponse(${$contents})';
   }
 }
 
@@ -5085,13 +5111,13 @@ final class StreamBlurbsRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'name': name,
-    if (expireTime != null) 'expireTime': expireTime!.toJson(),
+    if (expireTime case final expireTime?) 'expireTime': expireTime.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'StreamBlurbsRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'StreamBlurbsRequest(${$contents})';
   }
 }
 
@@ -5128,14 +5154,14 @@ final class StreamBlurbsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (blurb != null) 'blurb': blurb!.toJson(),
+    if (blurb case final blurb?) 'blurb': blurb.toJson(),
     if (action.isNotDefault) 'action': action.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['action=$action'].join(',');
-    return 'StreamBlurbsResponse($contents)';
+    final $contents = ['action=$action'].join(',');
+    return 'StreamBlurbsResponse(${$contents})';
   }
 }
 
@@ -5228,8 +5254,8 @@ final class ConnectRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (config != null) 'config': config!.toJson(),
-    if (blurb != null) 'blurb': blurb!.toJson(),
+    if (config case final config?) 'config': config.toJson(),
+    if (blurb case final blurb?) 'blurb': blurb.toJson(),
   };
 
   @override
@@ -5260,8 +5286,8 @@ final class ConnectRequest_ConnectConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['parent=$parent'].join(',');
-    return 'ConnectConfig($contents)';
+    final $contents = ['parent=$parent'].join(',');
+    return 'ConnectConfig(${$contents})';
   }
 }
 
@@ -5285,7 +5311,7 @@ final class RestError extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (error != null) 'error': error!.toJson()};
+  Object toJson() => {if (error case final error?) 'error': error.toJson()};
 
   @override
   String toString() => 'RestError()';
@@ -5342,17 +5368,17 @@ final class RestError_Status extends ProtoMessage {
     if (code.isNotDefault) 'code': code,
     if (message.isNotDefault) 'message': message,
     if (status.isNotDefault) 'status': status.toJson(),
-    if (details.isNotDefault) 'details': encodeList(details),
+    if (details.isNotDefault) 'details': [for (final i in details) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'code=$code',
       'message=$message',
       'status=$status',
     ].join(',');
-    return 'Status($contents)';
+    return 'Status(${$contents})';
   }
 }
 
@@ -5386,13 +5412,14 @@ final class Sequence extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (responses.isNotDefault) 'responses': encodeList(responses),
+    if (responses.isNotDefault)
+      'responses': [for (final i in responses) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'Sequence($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'Sequence(${$contents})';
   }
 }
 
@@ -5425,8 +5452,8 @@ final class Sequence_Response extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (status != null) 'status': status!.toJson(),
-    if (delay != null) 'delay': delay!.toJson(),
+    if (status case final status?) 'status': status.toJson(),
+    if (delay case final delay?) 'delay': delay.toJson(),
   };
 
   @override
@@ -5477,13 +5504,14 @@ final class StreamingSequence extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (content.isNotDefault) 'content': content,
-    if (responses.isNotDefault) 'responses': encodeList(responses),
+    if (responses.isNotDefault)
+      'responses': [for (final i in responses) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'content=$content'].join(',');
-    return 'StreamingSequence($contents)';
+    final $contents = ['name=$name', 'content=$content'].join(',');
+    return 'StreamingSequence(${$contents})';
   }
 }
 
@@ -5524,15 +5552,15 @@ final class StreamingSequence_Response extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (status != null) 'status': status!.toJson(),
-    if (delay != null) 'delay': delay!.toJson(),
+    if (status case final status?) 'status': status.toJson(),
+    if (delay case final delay?) 'delay': delay.toJson(),
     if (responseIndex.isNotDefault) 'responseIndex': responseIndex,
   };
 
   @override
   String toString() {
-    final contents = ['responseIndex=$responseIndex'].join(',');
-    return 'Response($contents)';
+    final $contents = ['responseIndex=$responseIndex'].join(',');
+    return 'Response(${$contents})';
   }
 }
 
@@ -5568,13 +5596,14 @@ final class StreamingSequenceReport extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (attempts.isNotDefault) 'attempts': encodeList(attempts),
+    if (attempts.isNotDefault)
+      'attempts': [for (final i in attempts) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'StreamingSequenceReport($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'StreamingSequenceReport(${$contents})';
   }
 }
 
@@ -5637,16 +5666,19 @@ final class StreamingSequenceReport_Attempt extends ProtoMessage {
   @override
   Object toJson() => {
     if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
-    if (attemptDeadline != null) 'attemptDeadline': attemptDeadline!.toJson(),
-    if (responseTime != null) 'responseTime': responseTime!.toJson(),
-    if (attemptDelay != null) 'attemptDelay': attemptDelay!.toJson(),
-    if (status != null) 'status': status!.toJson(),
+    if (attemptDeadline case final attemptDeadline?)
+      'attemptDeadline': attemptDeadline.toJson(),
+    if (responseTime case final responseTime?)
+      'responseTime': responseTime.toJson(),
+    if (attemptDelay case final attemptDelay?)
+      'attemptDelay': attemptDelay.toJson(),
+    if (status case final status?) 'status': status.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['attemptNumber=$attemptNumber'].join(',');
-    return 'Attempt($contents)';
+    final $contents = ['attemptNumber=$attemptNumber'].join(',');
+    return 'Attempt(${$contents})';
   }
 }
 
@@ -5682,13 +5714,14 @@ final class SequenceReport extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (attempts.isNotDefault) 'attempts': encodeList(attempts),
+    if (attempts.isNotDefault)
+      'attempts': [for (final i in attempts) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'SequenceReport($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'SequenceReport(${$contents})';
   }
 }
 
@@ -5751,16 +5784,19 @@ final class SequenceReport_Attempt extends ProtoMessage {
   @override
   Object toJson() => {
     if (attemptNumber.isNotDefault) 'attemptNumber': attemptNumber,
-    if (attemptDeadline != null) 'attemptDeadline': attemptDeadline!.toJson(),
-    if (responseTime != null) 'responseTime': responseTime!.toJson(),
-    if (attemptDelay != null) 'attemptDelay': attemptDelay!.toJson(),
-    if (status != null) 'status': status!.toJson(),
+    if (attemptDeadline case final attemptDeadline?)
+      'attemptDeadline': attemptDeadline.toJson(),
+    if (responseTime case final responseTime?)
+      'responseTime': responseTime.toJson(),
+    if (attemptDelay case final attemptDelay?)
+      'attemptDelay': attemptDelay.toJson(),
+    if (status case final status?) 'status': status.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['attemptNumber=$attemptNumber'].join(',');
-    return 'Attempt($contents)';
+    final $contents = ['attemptNumber=$attemptNumber'].join(',');
+    return 'Attempt(${$contents})';
   }
 }
 
@@ -5783,7 +5819,9 @@ final class CreateSequenceRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (sequence != null) 'sequence': sequence!.toJson()};
+  Object toJson() => {
+    if (sequence case final sequence?) 'sequence': sequence.toJson(),
+  };
 
   @override
   String toString() => 'CreateSequenceRequest()';
@@ -5810,8 +5848,8 @@ final class CreateStreamingSequenceRequest extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (streamingSequence != null)
-      'streamingSequence': streamingSequence!.toJson(),
+    if (streamingSequence case final streamingSequence?)
+      'streamingSequence': streamingSequence.toJson(),
   };
 
   @override
@@ -5841,8 +5879,8 @@ final class AttemptSequenceRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'AttemptSequenceRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'AttemptSequenceRequest(${$contents})';
   }
 }
 
@@ -5882,8 +5920,8 @@ final class AttemptStreamingSequenceRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'lastFailIndex=$lastFailIndex'].join(',');
-    return 'AttemptStreamingSequenceRequest($contents)';
+    final $contents = ['name=$name', 'lastFailIndex=$lastFailIndex'].join(',');
+    return 'AttemptStreamingSequenceRequest(${$contents})';
   }
 }
 
@@ -5913,8 +5951,8 @@ final class AttemptStreamingSequenceResponse extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['content=$content'].join(',');
-    return 'AttemptStreamingSequenceResponse($contents)';
+    final $contents = ['content=$content'].join(',');
+    return 'AttemptStreamingSequenceResponse(${$contents})';
   }
 }
 
@@ -5941,8 +5979,8 @@ final class GetSequenceReportRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSequenceReportRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSequenceReportRequest(${$contents})';
   }
 }
 
@@ -5970,8 +6008,8 @@ final class GetStreamingSequenceReportRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetStreamingSequenceReportRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetStreamingSequenceReportRequest(${$contents})';
   }
 }
 
@@ -6015,8 +6053,8 @@ final class Session extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'version=$version'].join(',');
-    return 'Session($contents)';
+    final $contents = ['name=$name', 'version=$version'].join(',');
+    return 'Session(${$contents})';
   }
 }
 
@@ -6069,7 +6107,9 @@ final class CreateSessionRequest extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (session != null) 'session': session!.toJson()};
+  Object toJson() => {
+    if (session case final session?) 'session': session.toJson(),
+  };
 
   @override
   String toString() => 'CreateSessionRequest()';
@@ -6100,8 +6140,8 @@ final class GetSessionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'GetSessionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'GetSessionRequest(${$contents})';
   }
 }
 
@@ -6141,8 +6181,8 @@ final class ListSessionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
-    return 'ListSessionsRequest($contents)';
+    final $contents = ['pageSize=$pageSize', 'pageToken=$pageToken'].join(',');
+    return 'ListSessionsRequest(${$contents})';
   }
 }
 
@@ -6178,14 +6218,15 @@ final class ListSessionsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (sessions.isNotDefault) 'sessions': encodeList(sessions),
+    if (sessions.isNotDefault)
+      'sessions': [for (final i in sessions) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListSessionsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListSessionsResponse(${$contents})';
   }
 }
 
@@ -6214,8 +6255,8 @@ final class DeleteSessionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteSessionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteSessionRequest(${$contents})';
   }
 }
 
@@ -6244,8 +6285,8 @@ final class ReportSessionRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'ReportSessionRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'ReportSessionRequest(${$contents})';
   }
 }
 
@@ -6283,13 +6324,14 @@ final class ReportSessionResponse extends ProtoMessage {
   @override
   Object toJson() => {
     if (result.isNotDefault) 'result': result.toJson(),
-    if (testRuns.isNotDefault) 'testRuns': encodeList(testRuns),
+    if (testRuns.isNotDefault)
+      'testRuns': [for (final i in testRuns) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['result=$result'].join(',');
-    return 'ReportSessionResponse($contents)';
+    final $contents = ['result=$result'].join(',');
+    return 'ReportSessionResponse(${$contents})';
   }
 }
 
@@ -6378,17 +6420,18 @@ final class Test extends ProtoMessage {
     if (expectationLevel.isNotDefault)
       'expectationLevel': expectationLevel.toJson(),
     if (description.isNotDefault) 'description': description,
-    if (blueprints.isNotDefault) 'blueprints': encodeList(blueprints),
+    if (blueprints.isNotDefault)
+      'blueprints': [for (final i in blueprints) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'expectationLevel=$expectationLevel',
       'description=$description',
     ].join(',');
-    return 'Test($contents)';
+    return 'Test(${$contents})';
   }
 }
 
@@ -6448,15 +6491,15 @@ final class Test_Blueprint extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (description.isNotDefault) 'description': description,
-    if (request != null) 'request': request!.toJson(),
+    if (request case final request?) 'request': request.toJson(),
     if (additionalRequests.isNotDefault)
-      'additionalRequests': encodeList(additionalRequests),
+      'additionalRequests': [for (final i in additionalRequests) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'description=$description'].join(',');
-    return 'Blueprint($contents)';
+    final $contents = ['name=$name', 'description=$description'].join(',');
+    return 'Blueprint(${$contents})';
   }
 }
 
@@ -6498,11 +6541,11 @@ final class Test_Blueprint_Invocation extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'method=$method',
       'serializedRequest=$serializedRequest',
     ].join(',');
-    return 'Invocation($contents)';
+    return 'Invocation(${$contents})';
   }
 }
 
@@ -6594,12 +6637,12 @@ final class Issue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'type=$type',
       'severity=$severity',
       'description=$description',
     ].join(',');
-    return 'Issue($contents)';
+    return 'Issue(${$contents})';
   }
 }
 
@@ -6698,12 +6741,12 @@ final class ListTestsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'parent=$parent',
       'pageSize=$pageSize',
       'pageToken=$pageToken',
     ].join(',');
-    return 'ListTestsRequest($contents)';
+    return 'ListTestsRequest(${$contents})';
   }
 }
 
@@ -6739,14 +6782,14 @@ final class ListTestsResponse extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (tests.isNotDefault) 'tests': encodeList(tests),
+    if (tests.isNotDefault) 'tests': [for (final i in tests) i.toJson()],
     if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
   };
 
   @override
   String toString() {
-    final contents = ['nextPageToken=$nextPageToken'].join(',');
-    return 'ListTestsResponse($contents)';
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListTestsResponse(${$contents})';
   }
 }
 
@@ -6781,13 +6824,13 @@ final class TestRun extends ProtoMessage {
   @override
   Object toJson() => {
     if (test.isNotDefault) 'test': test,
-    if (issue != null) 'issue': issue!.toJson(),
+    if (issue case final issue?) 'issue': issue.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['test=$test'].join(',');
-    return 'TestRun($contents)';
+    final $contents = ['test=$test'].join(',');
+    return 'TestRun(${$contents})';
   }
 }
 
@@ -6816,8 +6859,8 @@ final class DeleteTestRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'DeleteTestRequest($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteTestRequest(${$contents})';
   }
 }
 
@@ -6864,13 +6907,14 @@ final class VerifyTestRequest extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (answer.isNotDefault) 'answer': encodeBytes(answer),
-    if (answers.isNotDefault) 'answers': encodeListBytes(answers),
+    if (answers.isNotDefault)
+      'answers': [for (final i in answers) encodeBytes(i)],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'answer=$answer'].join(',');
-    return 'VerifyTestRequest($contents)';
+    final $contents = ['name=$name', 'answer=$answer'].join(',');
+    return 'VerifyTestRequest(${$contents})';
   }
 }
 
@@ -6894,7 +6938,7 @@ final class VerifyTestResponse extends ProtoMessage {
   }
 
   @override
-  Object toJson() => {if (issue != null) 'issue': issue!.toJson()};
+  Object toJson() => {if (issue case final issue?) 'issue': issue.toJson()};
 
   @override
   String toString() => 'VerifyTestResponse()';

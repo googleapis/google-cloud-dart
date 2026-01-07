@@ -27,6 +27,9 @@ protobuf-subdir         = 'src'
 showcase-extracted-name = 'gapic-showcase-0.36.2'
 showcase-root           = 'https://github.com/googleapis/gapic-showcase/archive/refs/tags/v0.36.2.tar.gz'
 showcase-sha256         = '0914bdbb088713aa087a53b355ff6631ad95e4769afd8bbd97d5d9e78d4cdf09'
+conformance-extracted-name = 'protobuf-b407e8416e3893036aee5af9a12bd9b6a0e2b2e6'
+conformance-root           = 'https://github.com/protocolbuffers/protobuf/archive/b407e8416e3893036aee5af9a12bd9b6a0e2b2e6.tar.gz'
+conformance-sha256         = '55912546338433f465a552e9ef09930c63b9eb697053937416890cff83a8622d'
 
 [codec]
 # The default version for Dart packages.

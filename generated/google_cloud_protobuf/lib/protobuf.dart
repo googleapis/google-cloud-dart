@@ -22,8 +22,10 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'src/encoding.dart';
@@ -133,22 +135,23 @@ final class Api extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (methods.isNotDefault) 'methods': encodeList(methods),
-    if (options.isNotDefault) 'options': encodeList(options),
+    if (methods.isNotDefault) 'methods': [for (final i in methods) i.toJson()],
+    if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
     if (version.isNotDefault) 'version': version,
-    if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
-    if (mixins.isNotDefault) 'mixins': encodeList(mixins),
+    if (sourceContext case final sourceContext?)
+      'sourceContext': sourceContext.toJson(),
+    if (mixins.isNotDefault) 'mixins': [for (final i in mixins) i.toJson()],
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'version=$version',
       'syntax=$syntax',
     ].join(',');
-    return 'Api($contents)';
+    return 'Api(${$contents})';
   }
 }
 
@@ -229,13 +232,13 @@ final class Method extends ProtoMessage {
     if (requestStreaming.isNotDefault) 'requestStreaming': requestStreaming,
     if (responseTypeUrl.isNotDefault) 'responseTypeUrl': responseTypeUrl,
     if (responseStreaming.isNotDefault) 'responseStreaming': responseStreaming,
-    if (options.isNotDefault) 'options': encodeList(options),
+    if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'requestTypeUrl=$requestTypeUrl',
       'requestStreaming=$requestStreaming',
@@ -243,7 +246,7 @@ final class Method extends ProtoMessage {
       'responseStreaming=$responseStreaming',
       'syntax=$syntax',
     ].join(',');
-    return 'Method($contents)';
+    return 'Method(${$contents})';
   }
 }
 
@@ -359,8 +362,8 @@ final class Mixin extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['name=$name', 'root=$root'].join(',');
-    return 'Mixin($contents)';
+    final $contents = ['name=$name', 'root=$root'].join(',');
+    return 'Mixin(${$contents})';
   }
 }
 
@@ -449,8 +452,8 @@ final class Duration extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['seconds=$seconds', 'nanos=$nanos'].join(',');
-    return 'Duration($contents)';
+    final $contents = ['seconds=$seconds', 'nanos=$nanos'].join(',');
+    return 'Duration(${$contents})';
   }
 }
 
@@ -717,8 +720,8 @@ final class SourceContext extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['fileName=$fileName'].join(',');
-    return 'SourceContext($contents)';
+    final $contents = ['fileName=$fileName'].join(',');
+    return 'SourceContext(${$contents})';
   }
 }
 
@@ -881,8 +884,8 @@ final class Timestamp extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['seconds=$seconds', 'nanos=$nanos'].join(',');
-    return 'Timestamp($contents)';
+    final $contents = ['seconds=$seconds', 'nanos=$nanos'].join(',');
+    return 'Timestamp(${$contents})';
   }
 }
 
@@ -961,22 +964,23 @@ final class Type extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (fields.isNotDefault) 'fields': encodeList(fields),
+    if (fields.isNotDefault) 'fields': [for (final i in fields) i.toJson()],
     if (oneofs.isNotDefault) 'oneofs': oneofs,
-    if (options.isNotDefault) 'options': encodeList(options),
-    if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
+    if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
+    if (sourceContext case final sourceContext?)
+      'sourceContext': sourceContext.toJson(),
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     if (edition.isNotDefault) 'edition': edition,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'syntax=$syntax',
       'edition=$edition',
     ].join(',');
-    return 'Type($contents)';
+    return 'Type(${$contents})';
   }
 }
 
@@ -1085,14 +1089,14 @@ final class Field extends ProtoMessage {
     if (typeUrl.isNotDefault) 'typeUrl': typeUrl,
     if (oneofIndex.isNotDefault) 'oneofIndex': oneofIndex,
     if (packed.isNotDefault) 'packed': packed,
-    if (options.isNotDefault) 'options': encodeList(options),
+    if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
     if (jsonName.isNotDefault) 'jsonName': jsonName,
     if (defaultValue.isNotDefault) 'defaultValue': defaultValue,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'kind=$kind',
       'cardinality=$cardinality',
       'number=$number',
@@ -1103,7 +1107,7 @@ final class Field extends ProtoMessage {
       'jsonName=$jsonName',
       'defaultValue=$defaultValue',
     ].join(',');
-    return 'Field($contents)';
+    return 'Field(${$contents})';
   }
 }
 
@@ -1273,21 +1277,23 @@ final class Enum extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (enumvalue.isNotDefault) 'enumvalue': encodeList(enumvalue),
-    if (options.isNotDefault) 'options': encodeList(options),
-    if (sourceContext != null) 'sourceContext': sourceContext!.toJson(),
+    if (enumvalue.isNotDefault)
+      'enumvalue': [for (final i in enumvalue) i.toJson()],
+    if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
+    if (sourceContext case final sourceContext?)
+      'sourceContext': sourceContext.toJson(),
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
     if (edition.isNotDefault) 'edition': edition,
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'name=$name',
       'syntax=$syntax',
       'edition=$edition',
     ].join(',');
-    return 'Enum($contents)';
+    return 'Enum(${$contents})';
   }
 }
 
@@ -1330,13 +1336,13 @@ final class EnumValue extends ProtoMessage {
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
     if (number.isNotDefault) 'number': number,
-    if (options.isNotDefault) 'options': encodeList(options),
+    if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['name=$name', 'number=$number'].join(',');
-    return 'EnumValue($contents)';
+    final $contents = ['name=$name', 'number=$number'].join(',');
+    return 'EnumValue(${$contents})';
   }
 }
 
@@ -1376,13 +1382,13 @@ final class Option extends ProtoMessage {
   @override
   Object toJson() => {
     if (name.isNotDefault) 'name': name,
-    if (value != null) 'value': value!.toJson(),
+    if (value case final value?) 'value': value.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['name=$name'].join(',');
-    return 'Option($contents)';
+    final $contents = ['name=$name'].join(',');
+    return 'Option(${$contents})';
   }
 }
 
@@ -1404,8 +1410,8 @@ final class DoubleValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'DoubleValue($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'DoubleValue(${$contents})';
   }
 }
 
@@ -1427,8 +1433,8 @@ final class FloatValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'FloatValue($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'FloatValue(${$contents})';
   }
 }
 
@@ -1450,8 +1456,8 @@ final class Int64Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'Int64Value($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'Int64Value(${$contents})';
   }
 }
 
@@ -1475,8 +1481,8 @@ final class Uint64Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'UInt64Value($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'UInt64Value(${$contents})';
   }
 }
 
@@ -1498,8 +1504,8 @@ final class Int32Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'Int32Value($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'Int32Value(${$contents})';
   }
 }
 
@@ -1521,8 +1527,8 @@ final class Uint32Value extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'UInt32Value($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'UInt32Value(${$contents})';
   }
 }
 
@@ -1544,8 +1550,8 @@ final class BoolValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'BoolValue($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'BoolValue(${$contents})';
   }
 }
 
@@ -1567,8 +1573,8 @@ final class StringValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'StringValue($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'StringValue(${$contents})';
   }
 }
 
@@ -1592,8 +1598,8 @@ final class BytesValue extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['value=$value'].join(',');
-    return 'BytesValue($contents)';
+    final $contents = ['value=$value'].join(',');
+    return 'BytesValue(${$contents})';
   }
 }
 

@@ -22,12 +22,15 @@ library;
 // ignore_for_file: avoid_unused_constructor_parameters
 // ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
+// ignore_for_file: constant_identifier_names
 // ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
+// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_protobuf/src/encoding.dart';
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:google_cloud_type/type.dart';
 import 'package:http/http.dart' as http;
@@ -93,8 +96,8 @@ final class IAMPolicy {
   /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED` errors.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
@@ -106,8 +109,8 @@ final class IAMPolicy {
   /// set.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy');
     final response = await _client.post(url, body: request);
@@ -123,8 +126,8 @@ final class IAMPolicy {
   /// may "fail open" without warning.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
-  /// the API service. Throws a [StatusException] if the API failed with a
-  /// [Status] message. Throws a [ServiceException] for any other failure.
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
@@ -187,14 +190,14 @@ final class SetIamPolicyRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'resource': resource,
-    if (policy != null) 'policy': policy!.toJson(),
-    if (updateMask != null) 'updateMask': updateMask!.toJson(),
+    if (policy case final policy?) 'policy': policy.toJson(),
+    if (updateMask case final updateMask?) 'updateMask': updateMask.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['resource=$resource'].join(',');
-    return 'SetIamPolicyRequest($contents)';
+    final $contents = ['resource=$resource'].join(',');
+    return 'SetIamPolicyRequest(${$contents})';
   }
 }
 
@@ -230,13 +233,13 @@ final class GetIamPolicyRequest extends ProtoMessage {
   @override
   Object toJson() => {
     'resource': resource,
-    if (options != null) 'options': options!.toJson(),
+    if (options case final options?) 'options': options.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['resource=$resource'].join(',');
-    return 'GetIamPolicyRequest($contents)';
+    final $contents = ['resource=$resource'].join(',');
+    return 'GetIamPolicyRequest(${$contents})';
   }
 }
 
@@ -278,8 +281,8 @@ final class TestIamPermissionsRequest extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['resource=$resource'].join(',');
-    return 'TestIamPermissionsRequest($contents)';
+    final $contents = ['resource=$resource'].join(',');
+    return 'TestIamPermissionsRequest(${$contents})';
   }
 }
 
@@ -358,10 +361,10 @@ final class GetPolicyOptions extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'requestedPolicyVersion=$requestedPolicyVersion',
     ].join(',');
-    return 'GetPolicyOptions($contents)';
+    return 'GetPolicyOptions(${$contents})';
   }
 }
 
@@ -532,15 +535,17 @@ final class Policy extends ProtoMessage {
   @override
   Object toJson() => {
     if (version.isNotDefault) 'version': version,
-    if (bindings.isNotDefault) 'bindings': encodeList(bindings),
-    if (auditConfigs.isNotDefault) 'auditConfigs': encodeList(auditConfigs),
+    if (bindings.isNotDefault)
+      'bindings': [for (final i in bindings) i.toJson()],
+    if (auditConfigs.isNotDefault)
+      'auditConfigs': [for (final i in auditConfigs) i.toJson()],
     if (etag.isNotDefault) 'etag': encodeBytes(etag),
   };
 
   @override
   String toString() {
-    final contents = ['version=$version', 'etag=$etag'].join(',');
-    return 'Policy($contents)';
+    final $contents = ['version=$version', 'etag=$etag'].join(',');
+    return 'Policy(${$contents})';
   }
 }
 
@@ -636,13 +641,13 @@ final class Binding extends ProtoMessage {
   Object toJson() => {
     if (role.isNotDefault) 'role': role,
     if (members.isNotDefault) 'members': members,
-    if (condition != null) 'condition': condition!.toJson(),
+    if (condition case final condition?) 'condition': condition.toJson(),
   };
 
   @override
   String toString() {
-    final contents = ['role=$role'].join(',');
-    return 'Binding($contents)';
+    final $contents = ['role=$role'].join(',');
+    return 'Binding(${$contents})';
   }
 }
 
@@ -730,13 +735,13 @@ final class AuditConfig extends ProtoMessage {
   Object toJson() => {
     if (service.isNotDefault) 'service': service,
     if (auditLogConfigs.isNotDefault)
-      'auditLogConfigs': encodeList(auditLogConfigs),
+      'auditLogConfigs': [for (final i in auditLogConfigs) i.toJson()],
   };
 
   @override
   String toString() {
-    final contents = ['service=$service'].join(',');
-    return 'AuditConfig($contents)';
+    final $contents = ['service=$service'].join(',');
+    return 'AuditConfig(${$contents})';
   }
 }
 
@@ -799,8 +804,8 @@ final class AuditLogConfig extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = ['logType=$logType'].join(',');
-    return 'AuditLogConfig($contents)';
+    final $contents = ['logType=$logType'].join(',');
+    return 'AuditLogConfig(${$contents})';
   }
 }
 
@@ -868,9 +873,10 @@ final class PolicyDelta extends ProtoMessage {
 
   @override
   Object toJson() => {
-    if (bindingDeltas.isNotDefault) 'bindingDeltas': encodeList(bindingDeltas),
+    if (bindingDeltas.isNotDefault)
+      'bindingDeltas': [for (final i in bindingDeltas) i.toJson()],
     if (auditConfigDeltas.isNotDefault)
-      'auditConfigDeltas': encodeList(auditConfigDeltas),
+      'auditConfigDeltas': [for (final i in auditConfigDeltas) i.toJson()],
   };
 
   @override
@@ -933,17 +939,17 @@ final class BindingDelta extends ProtoMessage {
     if (action.isNotDefault) 'action': action.toJson(),
     if (role.isNotDefault) 'role': role,
     if (member.isNotDefault) 'member': member,
-    if (condition != null) 'condition': condition!.toJson(),
+    if (condition case final condition?) 'condition': condition.toJson(),
   };
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'action=$action',
       'role=$role',
       'member=$member',
     ].join(',');
-    return 'BindingDelta($contents)';
+    return 'BindingDelta(${$contents})';
   }
 }
 
@@ -1036,13 +1042,13 @@ final class AuditConfigDelta extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'action=$action',
       'service=$service',
       'exemptedMember=$exemptedMember',
       'logType=$logType',
     ].join(',');
-    return 'AuditConfigDelta($contents)';
+    return 'AuditConfigDelta(${$contents})';
   }
 }
 
@@ -1125,10 +1131,10 @@ final class ResourcePolicyMember extends ProtoMessage {
 
   @override
   String toString() {
-    final contents = [
+    final $contents = [
       'iamPolicyNamePrincipal=$iamPolicyNamePrincipal',
       'iamPolicyUidPrincipal=$iamPolicyUidPrincipal',
     ].join(',');
-    return 'ResourcePolicyMember($contents)';
+    return 'ResourcePolicyMember(${$contents})';
   }
 }
