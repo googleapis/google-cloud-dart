@@ -11456,6 +11456,17 @@ final class PredictionService {
         .map(HttpBody.fromJson);
   }
 
+  /// Embed content with multimodal inputs.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<EmbedContentResponse> embedContent(EmbedContentRequest request) async {
+    final url = Uri.https(_host, '/v1beta1/${request.model}:embedContent');
+    final response = await _client.post(url, body: request);
+    return EmbedContentResponse.fromJson(response);
+  }
+
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -12545,6 +12556,7 @@ final class SessionService {
         'pageSize': '${$1}',
       if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
       if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
     });
     final response = await _client.get(url);
     return ListEventsResponse.fromJson(response);
@@ -16788,15 +16800,69 @@ final class PrebuiltVoiceConfig extends ProtoMessage {
   }
 }
 
-/// The configuration for the voice to use.
+/// The configuration for the replicated voice to use.
+final class ReplicatedVoiceConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReplicatedVoiceConfig';
+
+  /// Optional. The mimetype of the voice sample. The only currently supported
+  /// value is `audio/wav`. This represents 16-bit signed little-endian wav data,
+  /// with a 24kHz sampling rate. `mime_type` will default to `audio/wav` if not
+  /// set.
+  final String mimeType;
+
+  /// Optional. The sample of the custom voice.
+  final Uint8List voiceSampleAudio;
+
+  ReplicatedVoiceConfig({this.mimeType = '', Uint8List? voiceSampleAudio})
+    : voiceSampleAudio = voiceSampleAudio ?? Uint8List(0),
+      super(fullyQualifiedName);
+
+  factory ReplicatedVoiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReplicatedVoiceConfig(
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      voiceSampleAudio: switch (json['voiceSampleAudio']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (mimeType.isNotDefault) 'mimeType': mimeType,
+    if (voiceSampleAudio.isNotDefault)
+      'voiceSampleAudio': encodeBytes(voiceSampleAudio),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'mimeType=$mimeType',
+      'voiceSampleAudio=$voiceSampleAudio',
+    ].join(',');
+    return 'ReplicatedVoiceConfig(${$contents})';
+  }
+}
+
+/// Configuration for a voice.
 final class VoiceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.VoiceConfig';
 
-  /// The configuration for the prebuilt voice to use.
+  /// The configuration for a prebuilt voice.
   final PrebuiltVoiceConfig? prebuiltVoiceConfig;
 
-  VoiceConfig({this.prebuiltVoiceConfig}) : super(fullyQualifiedName);
+  /// Optional. The configuration for a replicated voice. This enables users to
+  /// replicate a voice from an audio sample.
+  final ReplicatedVoiceConfig? replicatedVoiceConfig;
+
+  VoiceConfig({this.prebuiltVoiceConfig, this.replicatedVoiceConfig})
+    : super(fullyQualifiedName);
 
   factory VoiceConfig.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -16805,6 +16871,10 @@ final class VoiceConfig extends ProtoMessage {
         null => null,
         Object $1 => PrebuiltVoiceConfig.fromJson($1),
       },
+      replicatedVoiceConfig: switch (json['replicatedVoiceConfig']) {
+        null => null,
+        Object $1 => ReplicatedVoiceConfig.fromJson($1),
+      },
     );
   }
 
@@ -16812,25 +16882,36 @@ final class VoiceConfig extends ProtoMessage {
   Object toJson() => {
     if (prebuiltVoiceConfig case final prebuiltVoiceConfig?)
       'prebuiltVoiceConfig': prebuiltVoiceConfig.toJson(),
+    if (replicatedVoiceConfig case final replicatedVoiceConfig?)
+      'replicatedVoiceConfig': replicatedVoiceConfig.toJson(),
   };
 
   @override
   String toString() => 'VoiceConfig()';
 }
 
-/// The speech generation config.
-final class SpeechConfig extends ProtoMessage {
+/// Configuration for a single speaker in a multi-speaker setup.
+final class SpeakerVoiceConfig extends ProtoMessage {
   static const String fullyQualifiedName =
-      'google.cloud.aiplatform.v1beta1.SpeechConfig';
+      'google.cloud.aiplatform.v1beta1.SpeakerVoiceConfig';
 
-  /// The configuration for the speaker to use.
+  /// Required. The name of the speaker. This should be the same as the speaker
+  /// name used in the prompt.
+  final String speaker;
+
+  /// Required. The configuration for the voice of this speaker.
   final VoiceConfig? voiceConfig;
 
-  SpeechConfig({this.voiceConfig}) : super(fullyQualifiedName);
+  SpeakerVoiceConfig({required this.speaker, required this.voiceConfig})
+    : super(fullyQualifiedName);
 
-  factory SpeechConfig.fromJson(Object? j) {
+  factory SpeakerVoiceConfig.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
-    return SpeechConfig(
+    return SpeakerVoiceConfig(
+      speaker: switch (json['speaker']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
       voiceConfig: switch (json['voiceConfig']) {
         null => null,
         Object $1 => VoiceConfig.fromJson($1),
@@ -16840,12 +16921,105 @@ final class SpeechConfig extends ProtoMessage {
 
   @override
   Object toJson() => {
+    'speaker': speaker,
     if (voiceConfig case final voiceConfig?)
       'voiceConfig': voiceConfig.toJson(),
   };
 
   @override
-  String toString() => 'SpeechConfig()';
+  String toString() {
+    final $contents = ['speaker=$speaker'].join(',');
+    return 'SpeakerVoiceConfig(${$contents})';
+  }
+}
+
+/// Configuration for a multi-speaker text-to-speech request.
+final class MultiSpeakerVoiceConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MultiSpeakerVoiceConfig';
+
+  /// Required. A list of configurations for the voices of the speakers. Exactly
+  /// two speaker voice configurations must be provided.
+  final List<SpeakerVoiceConfig> speakerVoiceConfigs;
+
+  MultiSpeakerVoiceConfig({required this.speakerVoiceConfigs})
+    : super(fullyQualifiedName);
+
+  factory MultiSpeakerVoiceConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MultiSpeakerVoiceConfig(
+      speakerVoiceConfigs: switch (json['speakerVoiceConfigs']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) SpeakerVoiceConfig.fromJson(i),
+        ],
+        _ => throw const FormatException('"speakerVoiceConfigs" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'speakerVoiceConfigs': [for (final i in speakerVoiceConfigs) i.toJson()],
+  };
+
+  @override
+  String toString() => 'MultiSpeakerVoiceConfig()';
+}
+
+/// Configuration for speech generation.
+final class SpeechConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.SpeechConfig';
+
+  /// The configuration for the voice to use.
+  final VoiceConfig? voiceConfig;
+
+  /// Optional. The language code (ISO 639-1) for the speech synthesis.
+  final String languageCode;
+
+  /// The configuration for a multi-speaker text-to-speech request.
+  /// This field is mutually exclusive with `voice_config`.
+  final MultiSpeakerVoiceConfig? multiSpeakerVoiceConfig;
+
+  SpeechConfig({
+    this.voiceConfig,
+    this.languageCode = '',
+    this.multiSpeakerVoiceConfig,
+  }) : super(fullyQualifiedName);
+
+  factory SpeechConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return SpeechConfig(
+      voiceConfig: switch (json['voiceConfig']) {
+        null => null,
+        Object $1 => VoiceConfig.fromJson($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      multiSpeakerVoiceConfig: switch (json['multiSpeakerVoiceConfig']) {
+        null => null,
+        Object $1 => MultiSpeakerVoiceConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (voiceConfig case final voiceConfig?)
+      'voiceConfig': voiceConfig.toJson(),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+    if (multiSpeakerVoiceConfig case final multiSpeakerVoiceConfig?)
+      'multiSpeakerVoiceConfig': multiSpeakerVoiceConfig.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['languageCode=$languageCode'].join(',');
+    return 'SpeechConfig(${$contents})';
+  }
 }
 
 /// Config for image generation features.
@@ -19854,6 +20028,9 @@ final class WorkerPoolSpec extends ProtoMessage {
   /// Optional. List of NFS mount spec.
   final List<NfsMount> nfsMounts;
 
+  /// Optional. List of Lustre mounts.
+  final List<LustreMount> lustreMounts;
+
   /// Disk spec.
   final DiskSpec? diskSpec;
 
@@ -19863,6 +20040,7 @@ final class WorkerPoolSpec extends ProtoMessage {
     this.machineSpec,
     this.replicaCount = 0,
     this.nfsMounts = const [],
+    this.lustreMounts = const [],
     this.diskSpec,
   }) : super(fullyQualifiedName);
 
@@ -19890,6 +20068,11 @@ final class WorkerPoolSpec extends ProtoMessage {
         List<Object?> $1 => [for (final i in $1) NfsMount.fromJson(i)],
         _ => throw const FormatException('"nfsMounts" is not a list'),
       },
+      lustreMounts: switch (json['lustreMounts']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) LustreMount.fromJson(i)],
+        _ => throw const FormatException('"lustreMounts" is not a list'),
+      },
       diskSpec: switch (json['diskSpec']) {
         null => null,
         Object $1 => DiskSpec.fromJson($1),
@@ -19908,6 +20091,8 @@ final class WorkerPoolSpec extends ProtoMessage {
     if (replicaCount.isNotDefault) 'replicaCount': replicaCount.toString(),
     if (nfsMounts.isNotDefault)
       'nfsMounts': [for (final i in nfsMounts) i.toJson()],
+    if (lustreMounts.isNotDefault)
+      'lustreMounts': [for (final i in lustreMounts) i.toJson()],
     if (diskSpec case final diskSpec?) 'diskSpec': diskSpec.toJson(),
   };
 
@@ -20074,10 +20259,10 @@ final class Scheduling extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Scheduling';
 
-  /// The maximum job running time. The default is 7 days.
+  /// Optional. The maximum job running time. The default is 7 days.
   final protobuf.Duration? timeout;
 
-  /// Restarts the entire CustomJob if a worker gets restarted.
+  /// Optional. Restarts the entire CustomJob if a worker gets restarted.
   /// This feature can be used by distributed training jobs that are not
   /// resilient to workers leaving and joining a job.
   final bool restartJobOnWorkerRestart;
@@ -25191,6 +25376,9 @@ final class DeployedModel extends ProtoMessage {
   /// `projects/{project}/locations/{location}/deploymentResourcePools/{deployment_resource_pool}`
   final String? sharedResources;
 
+  /// Optional. Resources for a full fine tuned model.
+  final FullFineTunedResources? fullFineTunedResources;
+
   /// Immutable. The ID of the DeployedModel. If not provided upon deployment,
   /// Vertex AI will generate a value for this ID.
   ///
@@ -25307,6 +25495,7 @@ final class DeployedModel extends ProtoMessage {
     this.dedicatedResources,
     this.automaticResources,
     this.sharedResources,
+    this.fullFineTunedResources,
     this.id = '',
     this.model = '',
     this.modelVersionId = '',
@@ -25341,6 +25530,10 @@ final class DeployedModel extends ProtoMessage {
       sharedResources: switch (json['sharedResources']) {
         null => null,
         Object $1 => decodeString($1),
+      },
+      fullFineTunedResources: switch (json['fullFineTunedResources']) {
+        null => null,
+        Object $1 => FullFineTunedResources.fromJson($1),
       },
       id: switch (json['id']) {
         null => '',
@@ -25429,6 +25622,8 @@ final class DeployedModel extends ProtoMessage {
       'automaticResources': automaticResources.toJson(),
     if (sharedResources case final sharedResources?)
       'sharedResources': sharedResources,
+    if (fullFineTunedResources case final fullFineTunedResources?)
+      'fullFineTunedResources': fullFineTunedResources.toJson(),
     if (id.isNotDefault) 'id': id,
     if (model.isNotDefault) 'model': model,
     if (modelVersionId.isNotDefault) 'modelVersionId': modelVersionId,
@@ -42467,10 +42662,16 @@ final class FeatureOnlineStore_Bigtable extends ProtoMessage {
   /// Metadata of the Bigtable instance. Output only.
   final FeatureOnlineStore_Bigtable_BigtableMetadata? bigtableMetadata;
 
+  /// Optional. The zone where the underlying Bigtable cluster for the primary
+  /// Bigtable instance will be provisioned. Only the zone must be provided.
+  /// For example, only "us-central1-a" should be provided.
+  final String zone;
+
   FeatureOnlineStore_Bigtable({
     required this.autoScaling,
     this.enableDirectBigtableAccess = false,
     this.bigtableMetadata,
+    this.zone = '',
   }) : super(fullyQualifiedName);
 
   factory FeatureOnlineStore_Bigtable.fromJson(Object? j) {
@@ -42488,6 +42689,10 @@ final class FeatureOnlineStore_Bigtable extends ProtoMessage {
         null => null,
         Object $1 => FeatureOnlineStore_Bigtable_BigtableMetadata.fromJson($1),
       },
+      zone: switch (json['zone']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -42499,12 +42704,14 @@ final class FeatureOnlineStore_Bigtable extends ProtoMessage {
       'enableDirectBigtableAccess': enableDirectBigtableAccess,
     if (bigtableMetadata case final bigtableMetadata?)
       'bigtableMetadata': bigtableMetadata.toJson(),
+    if (zone.isNotDefault) 'zone': zone,
   };
 
   @override
   String toString() {
     final $contents = [
       'enableDirectBigtableAccess=$enableDirectBigtableAccess',
+      'zone=$zone',
     ].join(',');
     return 'Bigtable(${$contents})';
   }
@@ -59577,6 +59784,11 @@ final class MachineSpec extends ProtoMessage {
   /// consumes reservation.
   final ReservationAffinity? reservationAffinity;
 
+  /// Optional. Immutable. The minimum GPU driver version that this machine
+  /// requires. For example, "535.104.06". If not specified, the default GPU
+  /// driver version will be used by the underlying infrastructure.
+  final String minGpuDriverVersion;
+
   MachineSpec({
     this.machineType = '',
     this.acceleratorType = AcceleratorType.$default,
@@ -59585,6 +59797,7 @@ final class MachineSpec extends ProtoMessage {
     this.tpuTopology = '',
     this.multihostGpuNodeCount = 0,
     this.reservationAffinity,
+    this.minGpuDriverVersion = '',
   }) : super(fullyQualifiedName);
 
   factory MachineSpec.fromJson(Object? j) {
@@ -59618,6 +59831,10 @@ final class MachineSpec extends ProtoMessage {
         null => null,
         Object $1 => ReservationAffinity.fromJson($1),
       },
+      minGpuDriverVersion: switch (json['minGpuDriverVersion']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -59633,6 +59850,8 @@ final class MachineSpec extends ProtoMessage {
       'multihostGpuNodeCount': multihostGpuNodeCount,
     if (reservationAffinity case final reservationAffinity?)
       'reservationAffinity': reservationAffinity.toJson(),
+    if (minGpuDriverVersion.isNotDefault)
+      'minGpuDriverVersion': minGpuDriverVersion,
   };
 
   @override
@@ -59644,6 +59863,7 @@ final class MachineSpec extends ProtoMessage {
       'gpuPartitionSize=$gpuPartitionSize',
       'tpuTopology=$tpuTopology',
       'multihostGpuNodeCount=$multihostGpuNodeCount',
+      'minGpuDriverVersion=$minGpuDriverVersion',
     ].join(',');
     return 'MachineSpec(${$contents})';
   }
@@ -59843,7 +60063,7 @@ final class DedicatedResources_ScaleToZeroSpec extends ProtoMessage {
   final protobuf.Duration? minScaleupPeriod;
 
   /// Optional. Duration of no traffic before scaling to zero.
-  /// [MinValue=3600] (5 minutes)
+  /// [MinValue=300] (5 minutes)
   /// [MaxValue=28800] (8 hours)
   final protobuf.Duration? idleScaledownPeriod;
 
@@ -60017,6 +60237,98 @@ final class BatchDedicatedResources extends ProtoMessage {
     ].join(',');
     return 'BatchDedicatedResources(${$contents})';
   }
+}
+
+/// Resources for an fft model.
+final class FullFineTunedResources extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.FullFineTunedResources';
+
+  /// Required. The kind of deployment.
+  final FullFineTunedResources_DeploymentType deploymentType;
+
+  /// Optional. The number of model inference units to use for this deployment.
+  /// This can only be specified for DEPLOYMENT_TYPE_PROD.
+  /// The following table lists the number of model inference units for different
+  /// model types:
+  /// * Gemini 2.5 Flash
+  ///   * Foundation FMIU: 25
+  ///   * Expansion FMIU: 4
+  /// * Gemini 2.5 Pro
+  ///   * Foundation FMIU: 32
+  ///   * Expansion FMIU: 16
+  /// * Veo 3.0 (undistilled)
+  ///   * Foundation FMIU: 63
+  ///   * Expansion FMIU: 7
+  /// * Veo 3.0 (distilled)
+  ///   * Foundation FMIU: 30
+  ///   * Expansion FMIU: 10
+  final int modelInferenceUnitCount;
+
+  FullFineTunedResources({
+    required this.deploymentType,
+    this.modelInferenceUnitCount = 0,
+  }) : super(fullyQualifiedName);
+
+  factory FullFineTunedResources.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FullFineTunedResources(
+      deploymentType: switch (json['deploymentType']) {
+        null => FullFineTunedResources_DeploymentType.$default,
+        Object $1 => FullFineTunedResources_DeploymentType.fromJson($1),
+      },
+      modelInferenceUnitCount: switch (json['modelInferenceUnitCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'deploymentType': deploymentType.toJson(),
+    if (modelInferenceUnitCount.isNotDefault)
+      'modelInferenceUnitCount': modelInferenceUnitCount,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'deploymentType=$deploymentType',
+      'modelInferenceUnitCount=$modelInferenceUnitCount',
+    ].join(',');
+    return 'FullFineTunedResources(${$contents})';
+  }
+}
+
+/// The type of deployment.
+final class FullFineTunedResources_DeploymentType extends ProtoEnum {
+  /// Unspecified deployment type.
+  static const deploymentTypeUnspecified =
+      FullFineTunedResources_DeploymentType('DEPLOYMENT_TYPE_UNSPECIFIED');
+
+  /// Eval deployment type.
+  static const deploymentTypeEval = FullFineTunedResources_DeploymentType(
+    'DEPLOYMENT_TYPE_EVAL',
+  );
+
+  /// Prod deployment type.
+  static const deploymentTypeProd = FullFineTunedResources_DeploymentType(
+    'DEPLOYMENT_TYPE_PROD',
+  );
+
+  /// The default value for [FullFineTunedResources_DeploymentType].
+  static const $default = deploymentTypeUnspecified;
+
+  const FullFineTunedResources_DeploymentType(super.value);
+
+  factory FullFineTunedResources_DeploymentType.fromJson(Object? json) =>
+      FullFineTunedResources_DeploymentType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'DeploymentType.$value';
 }
 
 /// Statistics information about resource consumption.
@@ -60198,6 +60510,73 @@ final class NfsMount extends ProtoMessage {
       'mountPoint=$mountPoint',
     ].join(',');
     return 'NfsMount(${$contents})';
+  }
+}
+
+/// Represents a mount configuration for Lustre file system.
+final class LustreMount extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.LustreMount';
+
+  /// Required. IP address of the Lustre instance.
+  final String instanceIp;
+
+  /// Required. The unique identifier of the Lustre volume.
+  final String volumeHandle;
+
+  /// Required. The name of the Lustre filesystem.
+  final String filesystem;
+
+  /// Required. Destination mount path. The Lustre file system will be mounted
+  /// for the user under /mnt/lustre/<mount_point>
+  final String mountPoint;
+
+  LustreMount({
+    required this.instanceIp,
+    required this.volumeHandle,
+    required this.filesystem,
+    required this.mountPoint,
+  }) : super(fullyQualifiedName);
+
+  factory LustreMount.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LustreMount(
+      instanceIp: switch (json['instanceIp']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      volumeHandle: switch (json['volumeHandle']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      filesystem: switch (json['filesystem']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      mountPoint: switch (json['mountPoint']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'instanceIp': instanceIp,
+    'volumeHandle': volumeHandle,
+    'filesystem': filesystem,
+    'mountPoint': mountPoint,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'instanceIp=$instanceIp',
+      'volumeHandle=$volumeHandle',
+      'filesystem=$filesystem',
+      'mountPoint=$mountPoint',
+    ].join(',');
+    return 'LustreMount(${$contents})';
   }
 }
 
@@ -80445,14 +80824,20 @@ final class DeleteNotebookExecutionJobRequest extends ProtoMessage {
   }
 }
 
+/// Post-startup script config.
 final class PostStartupScriptConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.PostStartupScriptConfig';
 
+  /// Optional. Post-startup script to run after runtime is started.
   final String postStartupScript;
 
+  /// Optional. Post-startup script url to download. Example:
+  /// https://bucket/script.sh
   final String postStartupScriptUrl;
 
+  /// Optional. Post-startup script behavior that defines download and execution
+  /// behavior.
   final PostStartupScriptConfig_PostStartupScriptBehavior
   postStartupScriptBehavior;
 
@@ -80503,20 +80888,26 @@ final class PostStartupScriptConfig extends ProtoMessage {
   }
 }
 
+/// Represents a notebook runtime post-startup script behavior.
 final class PostStartupScriptConfig_PostStartupScriptBehavior
     extends ProtoEnum {
+  /// Unspecified post-startup script behavior.
   static const postStartupScriptBehaviorUnspecified =
       PostStartupScriptConfig_PostStartupScriptBehavior(
         'POST_STARTUP_SCRIPT_BEHAVIOR_UNSPECIFIED',
       );
 
+  /// Run the post-startup script only once, during runtime creation.
   static const runOnce = PostStartupScriptConfig_PostStartupScriptBehavior(
     'RUN_ONCE',
   );
 
+  /// Run the post-startup script after every start.
   static const runEveryStart =
       PostStartupScriptConfig_PostStartupScriptBehavior('RUN_EVERY_START');
 
+  /// After every start, download the post-startup script from its source and
+  /// run it.
   static const downloadAndRunEveryStart =
       PostStartupScriptConfig_PostStartupScriptBehavior(
         'DOWNLOAD_AND_RUN_EVERY_START',
@@ -80597,6 +80988,7 @@ final class NotebookSoftwareConfig extends ProtoMessage {
   /// Maximum limit is 100.
   final List<EnvVar> env;
 
+  /// Optional. Post-startup script config.
   final PostStartupScriptConfig? postStartupScriptConfig;
 
   NotebookSoftwareConfig({
@@ -86461,6 +86853,243 @@ final class GenerateVideoResponse extends ProtoMessage {
   }
 }
 
+/// Request message for
+/// `PredictionService.EmbedContent`.
+final class EmbedContentRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EmbedContentRequest';
+
+  /// Required. The name of the publisher model requested to serve the
+  /// prediction. Format:
+  /// `projects/{project}/locations/{location}/publishers/*/models/*`
+  final String? model;
+
+  /// Required. Input content to be embedded. Required.
+  final Content? content;
+
+  /// Optional. An optional title for the text.
+  final String? title;
+
+  /// Optional. The task type of the embedding.
+  final EmbedContentRequest_EmbeddingTaskType? taskType;
+
+  /// Optional. Optional reduced dimension for the output embedding. If set,
+  /// excessive values in the output embedding are truncated from the end.
+  final int? outputDimensionality;
+
+  /// Optional. Whether to silently truncate the input content if it's longer
+  /// than the maximum sequence length.
+  final bool? autoTruncate;
+
+  EmbedContentRequest({
+    this.model,
+    this.content,
+    this.title,
+    this.taskType,
+    this.outputDimensionality,
+    this.autoTruncate,
+  }) : super(fullyQualifiedName);
+
+  factory EmbedContentRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedContentRequest(
+      model: switch (json['model']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      content: switch (json['content']) {
+        null => null,
+        Object $1 => Content.fromJson($1),
+      },
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      taskType: switch (json['taskType']) {
+        null => null,
+        Object $1 => EmbedContentRequest_EmbeddingTaskType.fromJson($1),
+      },
+      outputDimensionality: switch (json['outputDimensionality']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      autoTruncate: switch (json['autoTruncate']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (model case final model?) 'model': model,
+    if (content case final content?) 'content': content.toJson(),
+    if (title case final title?) 'title': title,
+    if (taskType case final taskType?) 'taskType': taskType.toJson(),
+    if (outputDimensionality case final outputDimensionality?)
+      'outputDimensionality': outputDimensionality,
+    if (autoTruncate case final autoTruncate?) 'autoTruncate': autoTruncate,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (model != null) 'model=$model',
+      if (title != null) 'title=$title',
+      if (taskType != null) 'taskType=$taskType',
+      if (outputDimensionality != null)
+        'outputDimensionality=$outputDimensionality',
+      if (autoTruncate != null) 'autoTruncate=$autoTruncate',
+    ].join(',');
+    return 'EmbedContentRequest(${$contents})';
+  }
+}
+
+/// Represents a downstream task the embeddings will be used for.
+final class EmbedContentRequest_EmbeddingTaskType extends ProtoEnum {
+  /// Unset value, which will default to one of the other enum values.
+  static const unspecified = EmbedContentRequest_EmbeddingTaskType(
+    'UNSPECIFIED',
+  );
+
+  /// Specifies the given text is a query in a search/retrieval setting.
+  static const retrievalQuery = EmbedContentRequest_EmbeddingTaskType(
+    'RETRIEVAL_QUERY',
+  );
+
+  /// Specifies the given text is a document from the corpus being searched.
+  static const retrievalDocument = EmbedContentRequest_EmbeddingTaskType(
+    'RETRIEVAL_DOCUMENT',
+  );
+
+  /// Specifies the given text will be used for STS.
+  static const semanticSimilarity = EmbedContentRequest_EmbeddingTaskType(
+    'SEMANTIC_SIMILARITY',
+  );
+
+  /// Specifies that the given text will be classified.
+  static const classification = EmbedContentRequest_EmbeddingTaskType(
+    'CLASSIFICATION',
+  );
+
+  /// Specifies that the embeddings will be used for clustering.
+  static const clustering = EmbedContentRequest_EmbeddingTaskType('CLUSTERING');
+
+  /// Specifies that the embeddings will be used for question answering.
+  static const questionAnswering = EmbedContentRequest_EmbeddingTaskType(
+    'QUESTION_ANSWERING',
+  );
+
+  /// Specifies that the embeddings will be used for fact verification.
+  static const factVerification = EmbedContentRequest_EmbeddingTaskType(
+    'FACT_VERIFICATION',
+  );
+
+  /// Specifies that the embeddings will be used for code retrieval.
+  static const codeRetrievalQuery = EmbedContentRequest_EmbeddingTaskType(
+    'CODE_RETRIEVAL_QUERY',
+  );
+
+  /// The default value for [EmbedContentRequest_EmbeddingTaskType].
+  static const $default = unspecified;
+
+  const EmbedContentRequest_EmbeddingTaskType(super.value);
+
+  factory EmbedContentRequest_EmbeddingTaskType.fromJson(Object? json) =>
+      EmbedContentRequest_EmbeddingTaskType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'EmbeddingTaskType.$value';
+}
+
+/// Response message for
+/// `PredictionService.EmbedContent`.
+final class EmbedContentResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EmbedContentResponse';
+
+  /// The embedding generated from the input content.
+  final EmbedContentResponse_Embedding? embedding;
+
+  /// Metadata about the response(s).
+  final UsageMetadata? usageMetadata;
+
+  /// Whether the input content was truncated before generating the embedding.
+  final bool truncated;
+
+  EmbedContentResponse({
+    this.embedding,
+    this.usageMetadata,
+    this.truncated = false,
+  }) : super(fullyQualifiedName);
+
+  factory EmbedContentResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedContentResponse(
+      embedding: switch (json['embedding']) {
+        null => null,
+        Object $1 => EmbedContentResponse_Embedding.fromJson($1),
+      },
+      usageMetadata: switch (json['usageMetadata']) {
+        null => null,
+        Object $1 => UsageMetadata.fromJson($1),
+      },
+      truncated: switch (json['truncated']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (embedding case final embedding?) 'embedding': embedding.toJson(),
+    if (usageMetadata case final usageMetadata?)
+      'usageMetadata': usageMetadata.toJson(),
+    if (truncated.isNotDefault) 'truncated': truncated,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['truncated=$truncated'].join(',');
+    return 'EmbedContentResponse(${$contents})';
+  }
+}
+
+/// A list of floats representing an embedding.
+final class EmbedContentResponse_Embedding extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EmbedContentResponse.Embedding';
+
+  /// Embedding vector values.
+  final List<double> values;
+
+  EmbedContentResponse_Embedding({this.values = const []})
+    : super(fullyQualifiedName);
+
+  factory EmbedContentResponse_Embedding.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedContentResponse_Embedding(
+      values: switch (json['values']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeDouble(i)],
+        _ => throw const FormatException('"values" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (values.isNotDefault)
+      'values': [for (final i in values) encodeDouble(i)],
+  };
+
+  @override
+  String toString() => 'Embedding()';
+}
+
 /// A Model Garden Publisher Model.
 final class PublisherModel extends ProtoMessage {
   static const String fullyQualifiedName =
@@ -87625,8 +88254,9 @@ final class ReasoningEngineSpec_PackageSpec extends ProtoMessage {
   /// Optional. The Cloud Storage URI of the `requirements.txt` file
   final String requirementsGcsUri;
 
-  /// Optional. The Python version. Currently support 3.8, 3.9, 3.10, 3.11.
-  /// If not specified, default value is 3.10.
+  /// Optional. The Python version. Supported values
+  /// are 3.9, 3.10, 3.11, 3.12, 3.13. If not specified, the default value
+  /// is 3.10.
   final String pythonVersion;
 
   ReasoningEngineSpec_PackageSpec({
@@ -87810,11 +88440,18 @@ final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
   /// Source code is provided directly in the request.
   final ReasoningEngineSpec_SourceCodeSpec_InlineSource? inlineSource;
 
+  /// Source code is in a Git repository managed by Developer Connect.
+  final ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectSource?
+  developerConnectSource;
+
   /// Configuration for a Python application.
   final ReasoningEngineSpec_SourceCodeSpec_PythonSpec? pythonSpec;
 
-  ReasoningEngineSpec_SourceCodeSpec({this.inlineSource, this.pythonSpec})
-    : super(fullyQualifiedName);
+  ReasoningEngineSpec_SourceCodeSpec({
+    this.inlineSource,
+    this.developerConnectSource,
+    this.pythonSpec,
+  }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec_SourceCodeSpec.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -87824,6 +88461,13 @@ final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
         Object $1 => ReasoningEngineSpec_SourceCodeSpec_InlineSource.fromJson(
           $1,
         ),
+      },
+      developerConnectSource: switch (json['developerConnectSource']) {
+        null => null,
+        Object $1 =>
+          ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectSource.fromJson(
+            $1,
+          ),
       },
       pythonSpec: switch (json['pythonSpec']) {
         null => null,
@@ -87836,6 +88480,8 @@ final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
   Object toJson() => {
     if (inlineSource case final inlineSource?)
       'inlineSource': inlineSource.toJson(),
+    if (developerConnectSource case final developerConnectSource?)
+      'developerConnectSource': developerConnectSource.toJson(),
     if (pythonSpec case final pythonSpec?) 'pythonSpec': pythonSpec.toJson(),
   };
 
@@ -87875,6 +88521,108 @@ final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
     final $contents = ['sourceArchive=$sourceArchive'].join(',');
     return 'InlineSource(${$contents})';
   }
+}
+
+/// Specifies the configuration for fetching source code from a Git
+/// repository that is managed by Developer Connect. This includes the
+/// repository, revision, and directory to use.
+final class ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectConfig
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.SourceCodeSpec.DeveloperConnectConfig';
+
+  /// Required. The Developer Connect Git repository link, formatted as
+  /// `projects/*/locations/*/connections/*/gitRepositoryLink/*`.
+  final String gitRepositoryLink;
+
+  /// Required. Directory, relative to the source root, in which to run the
+  /// build.
+  final String dir;
+
+  /// Required. The revision to fetch from the Git repository such as a
+  /// branch, a tag, a commit SHA, or any Git ref.
+  final String revision;
+
+  ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectConfig({
+    required this.gitRepositoryLink,
+    required this.dir,
+    required this.revision,
+  }) : super(fullyQualifiedName);
+
+  factory ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectConfig.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectConfig(
+      gitRepositoryLink: switch (json['gitRepositoryLink']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      dir: switch (json['dir']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      revision: switch (json['revision']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'gitRepositoryLink': gitRepositoryLink,
+    'dir': dir,
+    'revision': revision,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'gitRepositoryLink=$gitRepositoryLink',
+      'dir=$dir',
+      'revision=$revision',
+    ].join(',');
+    return 'DeveloperConnectConfig(${$contents})';
+  }
+}
+
+/// Specifies source code to be fetched from a Git repository managed through
+/// the Developer Connect service.
+final class ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectSource
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.SourceCodeSpec.DeveloperConnectSource';
+
+  /// Required. The Developer Connect configuration that defines the
+  /// specific repository, revision, and directory to use as the source code
+  /// root.
+  final ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectConfig? config;
+
+  ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectSource({
+    required this.config,
+  }) : super(fullyQualifiedName);
+
+  factory ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectSource.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectSource(
+      config: switch (json['config']) {
+        null => null,
+        Object $1 =>
+          ReasoningEngineSpec_SourceCodeSpec_DeveloperConnectConfig.fromJson(
+            $1,
+          ),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (config case final config?) 'config': config.toJson()};
+
+  @override
+  String toString() => 'DeveloperConnectSource()';
 }
 
 /// Specification for running a Python application from source.
@@ -90542,9 +91290,6 @@ final class EventActions extends ProtoMessage {
   /// filename, value is the version.
   final Map<String, int> artifactDelta;
 
-  /// Deprecated. If set, the event transfers to the specified agent.
-  final bool transferToAgent;
-
   /// Optional. The agent is escalating to a higher level agent.
   final bool escalate;
 
@@ -90561,7 +91306,6 @@ final class EventActions extends ProtoMessage {
     this.skipSummarization = false,
     this.stateDelta,
     this.artifactDelta = const {},
-    this.transferToAgent = false,
     this.escalate = false,
     this.requestedAuthConfigs,
     this.transferAgent = '',
@@ -90585,10 +91329,6 @@ final class EventActions extends ProtoMessage {
         },
         _ => throw const FormatException('"artifactDelta" is not an object'),
       },
-      transferToAgent: switch (json['transferToAgent']) {
-        null => false,
-        Object $1 => decodeBool($1),
-      },
       escalate: switch (json['escalate']) {
         null => false,
         Object $1 => decodeBool($1),
@@ -90609,7 +91349,6 @@ final class EventActions extends ProtoMessage {
     if (skipSummarization.isNotDefault) 'skipSummarization': skipSummarization,
     if (stateDelta case final stateDelta?) 'stateDelta': stateDelta.toJson(),
     if (artifactDelta.isNotDefault) 'artifactDelta': artifactDelta,
-    if (transferToAgent.isNotDefault) 'transferToAgent': transferToAgent,
     if (escalate.isNotDefault) 'escalate': escalate,
     if (requestedAuthConfigs case final requestedAuthConfigs?)
       'requestedAuthConfigs': requestedAuthConfigs.toJson(),
@@ -90620,7 +91359,6 @@ final class EventActions extends ProtoMessage {
   String toString() {
     final $contents = [
       'skipSummarization=$skipSummarization',
-      'transferToAgent=$transferToAgent',
       'escalate=$escalate',
       'transferAgent=$transferAgent',
     ].join(',');
@@ -90764,8 +91502,9 @@ final class ListSessionsRequest extends ProtoMessage {
   /// Optional. The standard list filter.
   /// Supported fields:
   ///    * `display_name`
+  ///    * `user_id`
   ///
-  /// Example: `display_name=abc`.
+  /// Example: `display_name="abc"`, `user_id="123"`.
   final String filter;
 
   /// Optional. A comma-separated list of fields to order by, sorted in ascending
@@ -90985,11 +91724,19 @@ final class ListEventsRequest extends ProtoMessage {
   /// More detail in [AIP-160](https://google.aip.dev/160).
   final String filter;
 
+  /// Optional. A comma-separated list of fields to order by, sorted in ascending
+  /// order. Use "desc" after a field name for descending. Supported fields:
+  ///   * `timestamp`
+  ///
+  /// Example: `timestamp desc`.
+  final String orderBy;
+
   ListEventsRequest({
     required this.parent,
     this.pageSize = 0,
     this.pageToken = '',
     this.filter = '',
+    this.orderBy = '',
   }) : super(fullyQualifiedName);
 
   factory ListEventsRequest.fromJson(Object? j) {
@@ -91011,6 +91758,10 @@ final class ListEventsRequest extends ProtoMessage {
         null => '',
         Object $1 => decodeString($1),
       },
+      orderBy: switch (json['orderBy']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -91020,6 +91771,7 @@ final class ListEventsRequest extends ProtoMessage {
     if (pageSize.isNotDefault) 'pageSize': pageSize,
     if (pageToken.isNotDefault) 'pageToken': pageToken,
     if (filter.isNotDefault) 'filter': filter,
+    if (orderBy.isNotDefault) 'orderBy': orderBy,
   };
 
   @override
@@ -91029,6 +91781,7 @@ final class ListEventsRequest extends ProtoMessage {
       'pageSize=$pageSize',
       'pageToken=$pageToken',
       'filter=$filter',
+      'orderBy=$orderBy',
     ].join(',');
     return 'ListEventsRequest(${$contents})';
   }
@@ -97072,7 +97825,18 @@ final class Tool_ComputerUse extends ProtoMessage {
   /// Required. The environment being operated.
   final Tool_ComputerUse_Environment environment;
 
-  Tool_ComputerUse({required this.environment}) : super(fullyQualifiedName);
+  /// Optional. By default, [predefined
+  /// functions](https://cloud.google.com/vertex-ai/generative-ai/docs/computer-use#supported-actions)
+  /// are included in the final model call. Some of them can be explicitly
+  /// excluded from being automatically included. This can serve two purposes:
+  /// 1. Using a more restricted / different action space.
+  /// 2. Improving the definitions / instructions of predefined functions.
+  final List<String> excludedPredefinedFunctions;
+
+  Tool_ComputerUse({
+    required this.environment,
+    this.excludedPredefinedFunctions = const [],
+  }) : super(fullyQualifiedName);
 
   factory Tool_ComputerUse.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -97081,11 +97845,23 @@ final class Tool_ComputerUse extends ProtoMessage {
         null => Tool_ComputerUse_Environment.$default,
         Object $1 => Tool_ComputerUse_Environment.fromJson($1),
       },
+      excludedPredefinedFunctions:
+          switch (json['excludedPredefinedFunctions']) {
+            null => [],
+            List<Object?> $1 => [for (final i in $1) decodeString(i)],
+            _ => throw const FormatException(
+              '"excludedPredefinedFunctions" is not a list',
+            ),
+          },
     );
   }
 
   @override
-  Object toJson() => {'environment': environment.toJson()};
+  Object toJson() => {
+    'environment': environment.toJson(),
+    if (excludedPredefinedFunctions.isNotDefault)
+      'excludedPredefinedFunctions': excludedPredefinedFunctions,
+  };
 
   @override
   String toString() {
@@ -97467,16 +98243,31 @@ final class FunctionCall extends ProtoMessage {
   /// execute the `function_call` and return the response with the matching `id`.
   final String id;
 
-  /// Required. The name of the function to call.
+  /// Optional. The name of the function to call.
   /// Matches [FunctionDeclaration.name].
   final String name;
 
-  /// Optional. Required. The function parameters and values in JSON object
-  /// format. See [FunctionDeclaration.parameters] for parameter details.
+  /// Optional. The function parameters and values in JSON object format.
+  /// See [FunctionDeclaration.parameters] for parameter details.
   final protobuf.Struct? args;
 
-  FunctionCall({this.id = '', required this.name, this.args})
-    : super(fullyQualifiedName);
+  /// Optional. The partial argument value of the function call.
+  /// If provided, represents the arguments/fields that are streamed
+  /// incrementally.
+  final List<PartialArg> partialArgs;
+
+  /// Optional. Whether this is the last part of the FunctionCall.
+  /// If true, another partial message for the current FunctionCall is expected
+  /// to follow.
+  final bool willContinue;
+
+  FunctionCall({
+    this.id = '',
+    this.name = '',
+    this.args,
+    this.partialArgs = const [],
+    this.willContinue = false,
+  }) : super(fullyQualifiedName);
 
   factory FunctionCall.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -97493,20 +98284,298 @@ final class FunctionCall extends ProtoMessage {
         null => null,
         Object $1 => protobuf.Struct.fromJson($1),
       },
+      partialArgs: switch (json['partialArgs']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) PartialArg.fromJson(i)],
+        _ => throw const FormatException('"partialArgs" is not a list'),
+      },
+      willContinue: switch (json['willContinue']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
     );
   }
 
   @override
   Object toJson() => {
     if (id.isNotDefault) 'id': id,
-    'name': name,
+    if (name.isNotDefault) 'name': name,
     if (args case final args?) 'args': args.toJson(),
+    if (partialArgs.isNotDefault)
+      'partialArgs': [for (final i in partialArgs) i.toJson()],
+    if (willContinue.isNotDefault) 'willContinue': willContinue,
   };
 
   @override
   String toString() {
-    final $contents = ['id=$id', 'name=$name'].join(',');
+    final $contents = [
+      'id=$id',
+      'name=$name',
+      'willContinue=$willContinue',
+    ].join(',');
     return 'FunctionCall(${$contents})';
+  }
+}
+
+/// Partial argument value of the function call.
+final class PartialArg extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.PartialArg';
+
+  /// Optional. Represents a null value.
+  final protobuf.NullValue? nullValue;
+
+  /// Optional. Represents a double value.
+  final double? numberValue;
+
+  /// Optional. Represents a string value.
+  final String? stringValue;
+
+  /// Optional. Represents a boolean value.
+  final bool? boolValue;
+
+  /// Required. A JSON Path (RFC 9535) to the argument being streamed.
+  /// https://datatracker.ietf.org/doc/html/rfc9535. e.g. "$.foo.bar[0].data".
+  final String jsonPath;
+
+  /// Optional. Whether this is not the last part of the same json_path.
+  /// If true, another PartialArg message for the current json_path is expected
+  /// to follow.
+  final bool willContinue;
+
+  PartialArg({
+    this.nullValue,
+    this.numberValue,
+    this.stringValue,
+    this.boolValue,
+    required this.jsonPath,
+    this.willContinue = false,
+  }) : super(fullyQualifiedName);
+
+  factory PartialArg.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PartialArg(
+      nullValue: switch (json['nullValue']) {
+        null => null,
+        Object $1 => protobuf.NullValue.fromJson($1),
+      },
+      numberValue: switch (json['numberValue']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      stringValue: switch (json['stringValue']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      boolValue: switch (json['boolValue']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      jsonPath: switch (json['jsonPath']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      willContinue: switch (json['willContinue']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (nullValue case final nullValue?) 'nullValue': nullValue.toJson(),
+    if (numberValue case final numberValue?)
+      'numberValue': encodeDouble(numberValue),
+    if (stringValue case final stringValue?) 'stringValue': stringValue,
+    if (boolValue case final boolValue?) 'boolValue': boolValue,
+    'jsonPath': jsonPath,
+    if (willContinue.isNotDefault) 'willContinue': willContinue,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (nullValue != null) 'nullValue=$nullValue',
+      if (numberValue != null) 'numberValue=$numberValue',
+      if (stringValue != null) 'stringValue=$stringValue',
+      if (boolValue != null) 'boolValue=$boolValue',
+      'jsonPath=$jsonPath',
+      'willContinue=$willContinue',
+    ].join(',');
+    return 'PartialArg(${$contents})';
+  }
+}
+
+/// A datatype containing media that is part of a `FunctionResponse` message.
+///
+/// A `FunctionResponsePart` consists of data which has an associated datatype. A
+/// `FunctionResponsePart` can only contain one of the accepted types in
+/// `FunctionResponsePart.data`.
+///
+/// A `FunctionResponsePart` must have a fixed IANA MIME type identifying the
+/// type and subtype of the media if the `inline_data` field is filled with raw
+/// bytes.
+final class FunctionResponsePart extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.FunctionResponsePart';
+
+  /// Inline media bytes.
+  final FunctionResponseBlob? inlineData;
+
+  /// URI based data.
+  final FunctionResponseFileData? fileData;
+
+  FunctionResponsePart({this.inlineData, this.fileData})
+    : super(fullyQualifiedName);
+
+  factory FunctionResponsePart.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionResponsePart(
+      inlineData: switch (json['inlineData']) {
+        null => null,
+        Object $1 => FunctionResponseBlob.fromJson($1),
+      },
+      fileData: switch (json['fileData']) {
+        null => null,
+        Object $1 => FunctionResponseFileData.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (inlineData case final inlineData?) 'inlineData': inlineData.toJson(),
+    if (fileData case final fileData?) 'fileData': fileData.toJson(),
+  };
+
+  @override
+  String toString() => 'FunctionResponsePart()';
+}
+
+/// Raw media bytes for function response.
+///
+/// Text should not be sent as raw bytes, use the 'text' field.
+final class FunctionResponseBlob extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.FunctionResponseBlob';
+
+  /// Required. The IANA standard MIME type of the source data.
+  final String mimeType;
+
+  /// Required. Raw bytes.
+  final Uint8List data;
+
+  /// Optional. Display name of the blob.
+  ///
+  /// Used to provide a label or filename to distinguish blobs.
+  ///
+  /// This field is only returned in PromptMessage for prompt management.
+  /// It is currently used in the Gemini GenerateContent calls only when server
+  /// side tools (code_execution, google_search, and url_context) are enabled.
+  final String displayName;
+
+  FunctionResponseBlob({
+    required this.mimeType,
+    required this.data,
+    this.displayName = '',
+  }) : super(fullyQualifiedName);
+
+  factory FunctionResponseBlob.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionResponseBlob(
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      data: switch (json['data']) {
+        null => Uint8List(0),
+        Object $1 => decodeBytes($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'mimeType': mimeType,
+    'data': encodeBytes(data),
+    if (displayName.isNotDefault) 'displayName': displayName,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'mimeType=$mimeType',
+      'data=$data',
+      'displayName=$displayName',
+    ].join(',');
+    return 'FunctionResponseBlob(${$contents})';
+  }
+}
+
+/// URI based data for function response.
+final class FunctionResponseFileData extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.FunctionResponseFileData';
+
+  /// Required. The IANA standard MIME type of the source data.
+  final String mimeType;
+
+  /// Required. URI.
+  final String fileUri;
+
+  /// Optional. Display name of the file data.
+  ///
+  /// Used to provide a label or filename to distinguish file datas.
+  ///
+  /// This field is only returned in PromptMessage for prompt management.
+  /// It is currently used in the Gemini GenerateContent calls only when server
+  /// side tools (code_execution, google_search, and url_context) are enabled.
+  final String displayName;
+
+  FunctionResponseFileData({
+    required this.mimeType,
+    required this.fileUri,
+    this.displayName = '',
+  }) : super(fullyQualifiedName);
+
+  factory FunctionResponseFileData.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FunctionResponseFileData(
+      mimeType: switch (json['mimeType']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      fileUri: switch (json['fileUri']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'mimeType': mimeType,
+    'fileUri': fileUri,
+    if (displayName.isNotDefault) 'displayName': displayName,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'mimeType=$mimeType',
+      'fileUri=$fileUri',
+      'displayName=$displayName',
+    ].join(',');
+    return 'FunctionResponseFileData(${$contents})';
   }
 }
 
@@ -97532,8 +98601,16 @@ final class FunctionResponse extends ProtoMessage {
   /// then whole "response" is treated as function output.
   final protobuf.Struct? response;
 
-  FunctionResponse({this.id = '', required this.name, required this.response})
-    : super(fullyQualifiedName);
+  /// Optional. Ordered `Parts` that constitute a function response. Parts may
+  /// have different IANA MIME types.
+  final List<FunctionResponsePart> parts;
+
+  FunctionResponse({
+    this.id = '',
+    required this.name,
+    required this.response,
+    this.parts = const [],
+  }) : super(fullyQualifiedName);
 
   factory FunctionResponse.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -97550,6 +98627,13 @@ final class FunctionResponse extends ProtoMessage {
         null => null,
         Object $1 => protobuf.Struct.fromJson($1),
       },
+      parts: switch (json['parts']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) FunctionResponsePart.fromJson(i),
+        ],
+        _ => throw const FormatException('"parts" is not a list'),
+      },
     );
   }
 
@@ -97558,6 +98642,7 @@ final class FunctionResponse extends ProtoMessage {
     if (id.isNotDefault) 'id': id,
     'name': name,
     if (response case final response?) 'response': response.toJson(),
+    if (parts.isNotDefault) 'parts': [for (final i in parts) i.toJson()],
   };
 
   @override
@@ -98287,9 +99372,15 @@ final class FunctionCallingConfig extends ProtoMessage {
   /// will predict a function call from the set of function names provided.
   final List<String> allowedFunctionNames;
 
+  /// Optional. When set to true, arguments of a single function call will be
+  /// streamed out in multiple parts/contents/responses. Partial parameter
+  /// results will be returned in the [FunctionCall.partial_args] field.
+  final bool streamFunctionCallArguments;
+
   FunctionCallingConfig({
     this.mode = FunctionCallingConfig_Mode.$default,
     this.allowedFunctionNames = const [],
+    this.streamFunctionCallArguments = false,
   }) : super(fullyQualifiedName);
 
   factory FunctionCallingConfig.fromJson(Object? j) {
@@ -98306,6 +99397,11 @@ final class FunctionCallingConfig extends ProtoMessage {
           '"allowedFunctionNames" is not a list',
         ),
       },
+      streamFunctionCallArguments:
+          switch (json['streamFunctionCallArguments']) {
+            null => false,
+            Object $1 => decodeBool($1),
+          },
     );
   }
 
@@ -98314,11 +99410,16 @@ final class FunctionCallingConfig extends ProtoMessage {
     if (mode.isNotDefault) 'mode': mode.toJson(),
     if (allowedFunctionNames.isNotDefault)
       'allowedFunctionNames': allowedFunctionNames,
+    if (streamFunctionCallArguments.isNotDefault)
+      'streamFunctionCallArguments': streamFunctionCallArguments,
   };
 
   @override
   String toString() {
-    final $contents = ['mode=$mode'].join(',');
+    final $contents = [
+      'mode=$mode',
+      'streamFunctionCallArguments=$streamFunctionCallArguments',
+    ].join(',');
     return 'FunctionCallingConfig(${$contents})';
   }
 }
@@ -102125,6 +103226,209 @@ final class UnmanagedContainerModel extends ProtoMessage {
   }
 }
 
+/// Usage metadata about the content generation request and response.
+/// This message provides a detailed breakdown of token usage and other
+/// relevant metrics.
+final class UsageMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.UsageMetadata';
+
+  /// The total number of tokens in the prompt. This includes any text, images,
+  /// or other media provided in the request. When `cached_content` is set,
+  /// this also includes the number of tokens in the cached content.
+  final int promptTokenCount;
+
+  /// The total number of tokens in the generated candidates.
+  final int candidatesTokenCount;
+
+  /// The total number of tokens for the entire request. This is the sum of
+  /// `prompt_token_count`, `candidates_token_count`,
+  /// `tool_use_prompt_token_count`, and `thoughts_token_count`.
+  final int totalTokenCount;
+
+  /// Output only. The number of tokens in the results from tool executions,
+  /// which are provided back to the model as input, if applicable.
+  final int toolUsePromptTokenCount;
+
+  /// Output only. The number of tokens that were part of the model's generated
+  /// "thoughts" output, if applicable.
+  final int thoughtsTokenCount;
+
+  /// Output only. The number of tokens in the cached content that was used for
+  /// this request.
+  final int cachedContentTokenCount;
+
+  /// Output only. A detailed breakdown of the token count for each modality in
+  /// the prompt.
+  final List<ModalityTokenCount> promptTokensDetails;
+
+  /// Output only. A detailed breakdown of the token count for each modality in
+  /// the cached content.
+  final List<ModalityTokenCount> cacheTokensDetails;
+
+  /// Output only. A detailed breakdown of the token count for each modality in
+  /// the generated candidates.
+  final List<ModalityTokenCount> candidatesTokensDetails;
+
+  /// Output only. A detailed breakdown by modality of the token counts from the
+  /// results of tool executions, which are provided back to the model as input.
+  final List<ModalityTokenCount> toolUsePromptTokensDetails;
+
+  /// Output only. The traffic type for this request.
+  final UsageMetadata_TrafficType trafficType;
+
+  UsageMetadata({
+    this.promptTokenCount = 0,
+    this.candidatesTokenCount = 0,
+    this.totalTokenCount = 0,
+    this.toolUsePromptTokenCount = 0,
+    this.thoughtsTokenCount = 0,
+    this.cachedContentTokenCount = 0,
+    this.promptTokensDetails = const [],
+    this.cacheTokensDetails = const [],
+    this.candidatesTokensDetails = const [],
+    this.toolUsePromptTokensDetails = const [],
+    this.trafficType = UsageMetadata_TrafficType.$default,
+  }) : super(fullyQualifiedName);
+
+  factory UsageMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UsageMetadata(
+      promptTokenCount: switch (json['promptTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      candidatesTokenCount: switch (json['candidatesTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      totalTokenCount: switch (json['totalTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      toolUsePromptTokenCount: switch (json['toolUsePromptTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      thoughtsTokenCount: switch (json['thoughtsTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      cachedContentTokenCount: switch (json['cachedContentTokenCount']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      promptTokensDetails: switch (json['promptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"promptTokensDetails" is not a list'),
+      },
+      cacheTokensDetails: switch (json['cacheTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException('"cacheTokensDetails" is not a list'),
+      },
+      candidatesTokensDetails: switch (json['candidatesTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"candidatesTokensDetails" is not a list',
+        ),
+      },
+      toolUsePromptTokensDetails: switch (json['toolUsePromptTokensDetails']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) ModalityTokenCount.fromJson(i),
+        ],
+        _ => throw const FormatException(
+          '"toolUsePromptTokensDetails" is not a list',
+        ),
+      },
+      trafficType: switch (json['trafficType']) {
+        null => UsageMetadata_TrafficType.$default,
+        Object $1 => UsageMetadata_TrafficType.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (promptTokenCount.isNotDefault) 'promptTokenCount': promptTokenCount,
+    if (candidatesTokenCount.isNotDefault)
+      'candidatesTokenCount': candidatesTokenCount,
+    if (totalTokenCount.isNotDefault) 'totalTokenCount': totalTokenCount,
+    if (toolUsePromptTokenCount.isNotDefault)
+      'toolUsePromptTokenCount': toolUsePromptTokenCount,
+    if (thoughtsTokenCount.isNotDefault)
+      'thoughtsTokenCount': thoughtsTokenCount,
+    if (cachedContentTokenCount.isNotDefault)
+      'cachedContentTokenCount': cachedContentTokenCount,
+    if (promptTokensDetails.isNotDefault)
+      'promptTokensDetails': [for (final i in promptTokensDetails) i.toJson()],
+    if (cacheTokensDetails.isNotDefault)
+      'cacheTokensDetails': [for (final i in cacheTokensDetails) i.toJson()],
+    if (candidatesTokensDetails.isNotDefault)
+      'candidatesTokensDetails': [
+        for (final i in candidatesTokensDetails) i.toJson(),
+      ],
+    if (toolUsePromptTokensDetails.isNotDefault)
+      'toolUsePromptTokensDetails': [
+        for (final i in toolUsePromptTokensDetails) i.toJson(),
+      ],
+    if (trafficType.isNotDefault) 'trafficType': trafficType.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'promptTokenCount=$promptTokenCount',
+      'candidatesTokenCount=$candidatesTokenCount',
+      'totalTokenCount=$totalTokenCount',
+      'toolUsePromptTokenCount=$toolUsePromptTokenCount',
+      'thoughtsTokenCount=$thoughtsTokenCount',
+      'cachedContentTokenCount=$cachedContentTokenCount',
+      'trafficType=$trafficType',
+    ].join(',');
+    return 'UsageMetadata(${$contents})';
+  }
+}
+
+/// The type of traffic that this request was processed with, indicating which
+/// quota gets consumed.
+final class UsageMetadata_TrafficType extends ProtoEnum {
+  /// Unspecified request traffic type.
+  static const trafficTypeUnspecified = UsageMetadata_TrafficType(
+    'TRAFFIC_TYPE_UNSPECIFIED',
+  );
+
+  /// Type for Pay-As-You-Go traffic.
+  static const onDemand = UsageMetadata_TrafficType('ON_DEMAND');
+
+  /// Type for Provisioned Throughput traffic.
+  static const provisionedThroughput = UsageMetadata_TrafficType(
+    'PROVISIONED_THROUGHPUT',
+  );
+
+  /// The default value for [UsageMetadata_TrafficType].
+  static const $default = trafficTypeUnspecified;
+
+  const UsageMetadata_TrafficType(super.value);
+
+  factory UsageMetadata_TrafficType.fromJson(Object? json) =>
+      UsageMetadata_TrafficType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'TrafficType.$value';
+}
+
 /// References an API call. It contains more information about long running
 /// operation and Jobs that are triggered by the API call.
 final class UserActionReference extends ProtoMessage {
@@ -102517,6 +103821,10 @@ final class RagVectorDbConfig extends ProtoMessage {
   /// The config for the Vertex Vector Search.
   final RagVectorDbConfig_VertexVectorSearch? vertexVectorSearch;
 
+  /// The config for the RAG-managed Vertex Vector Search 2.0.
+  final RagVectorDbConfig_RagManagedVertexVectorSearch?
+  ragManagedVertexVectorSearch;
+
   /// Authentication config for the chosen Vector DB.
   final ApiAuth? apiAuth;
 
@@ -102529,6 +103837,7 @@ final class RagVectorDbConfig extends ProtoMessage {
     this.pinecone,
     this.vertexFeatureStore,
     this.vertexVectorSearch,
+    this.ragManagedVertexVectorSearch,
     this.apiAuth,
     this.ragEmbeddingModelConfig,
   }) : super(fullyQualifiedName);
@@ -102556,6 +103865,12 @@ final class RagVectorDbConfig extends ProtoMessage {
         null => null,
         Object $1 => RagVectorDbConfig_VertexVectorSearch.fromJson($1),
       },
+      ragManagedVertexVectorSearch:
+          switch (json['ragManagedVertexVectorSearch']) {
+            null => null,
+            Object $1 =>
+              RagVectorDbConfig_RagManagedVertexVectorSearch.fromJson($1),
+          },
       apiAuth: switch (json['apiAuth']) {
         null => null,
         Object $1 => ApiAuth.fromJson($1),
@@ -102577,6 +103892,8 @@ final class RagVectorDbConfig extends ProtoMessage {
       'vertexFeatureStore': vertexFeatureStore.toJson(),
     if (vertexVectorSearch case final vertexVectorSearch?)
       'vertexVectorSearch': vertexVectorSearch.toJson(),
+    if (ragManagedVertexVectorSearch case final ragManagedVertexVectorSearch?)
+      'ragManagedVertexVectorSearch': ragManagedVertexVectorSearch.toJson(),
     if (apiAuth case final apiAuth?) 'apiAuth': apiAuth.toJson(),
     if (ragEmbeddingModelConfig case final ragEmbeddingModelConfig?)
       'ragEmbeddingModelConfig': ragEmbeddingModelConfig.toJson(),
@@ -102870,6 +104187,43 @@ final class RagVectorDbConfig_VertexVectorSearch extends ProtoMessage {
   }
 }
 
+/// The config for the RAG-managed Vertex Vector Search 2.0.
+final class RagVectorDbConfig_RagManagedVertexVectorSearch
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagVectorDbConfig.RagManagedVertexVectorSearch';
+
+  /// Output only. The resource name of the Vector Search 2.0 Collection that
+  /// RAG Created for the corpus. Only populated after the corpus is
+  /// successfully created. Format:
+  /// `projects/{project}/locations/{location}/collections/{collection_id}`
+  final String collectionName;
+
+  RagVectorDbConfig_RagManagedVertexVectorSearch({this.collectionName = ''})
+    : super(fullyQualifiedName);
+
+  factory RagVectorDbConfig_RagManagedVertexVectorSearch.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagVectorDbConfig_RagManagedVertexVectorSearch(
+      collectionName: switch (json['collectionName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (collectionName.isNotDefault) 'collectionName': collectionName,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['collectionName=$collectionName'].join(',');
+    return 'RagManagedVertexVectorSearch(${$contents})';
+  }
+}
+
 /// RagFile status.
 final class FileStatus extends ProtoMessage {
   static const String fullyQualifiedName =
@@ -103083,6 +104437,9 @@ final class RagCorpus extends ProtoMessage {
   final CorpusStatus? corpusStatus;
 
   /// Output only. Number of RagFiles in the RagCorpus.
+  ///
+  /// NOTE: This field is not populated in the response of
+  /// `VertexRagDataService.ListRagCorpora`.
   final int ragFilesCount;
 
   /// Optional. Immutable. The CMEK key name used to encrypt at-rest data related
@@ -103093,6 +104450,12 @@ final class RagCorpus extends ProtoMessage {
 
   /// Optional. The corpus type config of the RagCorpus.
   final RagCorpus_CorpusTypeConfig? corpusTypeConfig;
+
+  /// Output only. Reserved for future use.
+  final bool satisfiesPzs;
+
+  /// Output only. Reserved for future use.
+  final bool satisfiesPzi;
 
   RagCorpus({
     this.vectorDbConfig,
@@ -103108,6 +104471,8 @@ final class RagCorpus extends ProtoMessage {
     this.ragFilesCount = 0,
     this.encryptionSpec,
     this.corpusTypeConfig,
+    this.satisfiesPzs = false,
+    this.satisfiesPzi = false,
   }) : super(fullyQualifiedName);
 
   factory RagCorpus.fromJson(Object? j) {
@@ -103165,6 +104530,14 @@ final class RagCorpus extends ProtoMessage {
         null => null,
         Object $1 => RagCorpus_CorpusTypeConfig.fromJson($1),
       },
+      satisfiesPzs: switch (json['satisfiesPzs']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+      satisfiesPzi: switch (json['satisfiesPzi']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
     );
   }
 
@@ -103190,6 +104563,8 @@ final class RagCorpus extends ProtoMessage {
       'encryptionSpec': encryptionSpec.toJson(),
     if (corpusTypeConfig case final corpusTypeConfig?)
       'corpusTypeConfig': corpusTypeConfig.toJson(),
+    if (satisfiesPzs.isNotDefault) 'satisfiesPzs': satisfiesPzs,
+    if (satisfiesPzi.isNotDefault) 'satisfiesPzi': satisfiesPzi,
   };
 
   @override
@@ -103199,6 +104574,8 @@ final class RagCorpus extends ProtoMessage {
       'displayName=$displayName',
       'description=$description',
       'ragFilesCount=$ragFilesCount',
+      'satisfiesPzs=$satisfiesPzs',
+      'satisfiesPzi=$satisfiesPzi',
     ].join(',');
     return 'RagCorpus(${$contents})';
   }
@@ -103343,7 +104720,7 @@ final class RagFile extends ProtoMessage {
   /// Output only. State of the RagFile.
   final FileStatus? fileStatus;
 
-  /// Output only. The metadata for metadata search. The contents will be
+  /// Output only. The metadata for metadata search. The user_metadata Needs to
   /// be in JSON format.
   final String userMetadata;
 
@@ -103978,13 +105355,13 @@ final class RagFileMetadataConfig extends ProtoMessage {
   /// well as entire Google Cloud Storage directories. Sample formats:
   /// - `gs://bucket_name/my_directory/object_name/metadata_schema.json`
   /// - `gs://bucket_name/my_directory`
-  /// If providing a directory, the metadata schema will be read from
+  /// If the user provides a directory, the metadata schema will be read from
   /// the files that ends with "metadata_schema.json" in the directory.
   final GcsSource? gcsMetadataSchemaSource;
 
   /// Google Drive location. Supports importing individual files as
   /// well as Google Drive folders.
-  /// If providing a folder, the metadata schema will be read from
+  /// If the user provides a folder, the metadata schema will be read from
   /// the files that ends with "metadata_schema.json" in the directory.
   final GoogleDriveSource? googleDriveMetadataSchemaSource;
 
@@ -103995,13 +105372,13 @@ final class RagFileMetadataConfig extends ProtoMessage {
   /// well as entire Google Cloud Storage directories. Sample formats:
   /// - `gs://bucket_name/my_directory/object_name/metadata.json`
   /// - `gs://bucket_name/my_directory`
-  /// If providing a directory, the metadata will be read from
+  /// If the user provides a directory, the metadata will be read from
   /// the files that ends with "metadata.json" in the directory.
   final GcsSource? gcsMetadataSource;
 
   /// Google Drive location. Supports importing individual files as
   /// well as Google Drive folders.
-  /// If providing a directory, the metadata will be read from
+  /// If the user provides a directory, the metadata will be read from
   /// the files that ends with "metadata.json" in the directory.
   final GoogleDriveSource? googleDriveMetadataSource;
 
@@ -104370,12 +105747,11 @@ final class RagManagedDbConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig';
 
-  /// Deprecated: Please use `Scaled` tier instead.
-  /// Sets the RagManagedDb to the Enterprise tier. This is the default tier
-  /// if not explicitly chosen.
+  /// Sets the RagManagedDb to the Enterprise tier.
   final RagManagedDbConfig_Enterprise? enterprise;
 
-  /// Sets the RagManagedDb to the Scaled tier.
+  /// Sets the RagManagedDb to the Scaled tier. This is the default tier
+  /// if not explicitly chosen.
   final RagManagedDbConfig_Scaled? scaled;
 
   /// Sets the RagManagedDb to the Basic tier.
@@ -104426,7 +105802,6 @@ final class RagManagedDbConfig extends ProtoMessage {
   String toString() => 'RagManagedDbConfig()';
 }
 
-/// Deprecated: Please use `Scaled` tier instead.
 /// Enterprise tier offers production grade performance along with
 /// autoscaling functionality. It is suitable for customers with large
 /// amounts of data or performance sensitive workloads.
@@ -107600,6 +108975,12 @@ final class DeploymentStage extends ProtoEnum {
 
   /// The deployment has terminated.
   static const deploymentTerminated = DeploymentStage('DEPLOYMENT_TERMINATED');
+
+  /// The deployment has succeeded.
+  static const successfullyDeployed = DeploymentStage('SUCCESSFULLY_DEPLOYED');
+
+  /// The deployment has failed.
+  static const failedToDeploy = DeploymentStage('FAILED_TO_DEPLOY');
 
   /// The default value for [DeploymentStage].
   static const $default = deploymentStageUnspecified;
