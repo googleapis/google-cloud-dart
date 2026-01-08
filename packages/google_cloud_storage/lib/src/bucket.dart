@@ -35,7 +35,7 @@ Bucket create({
   locationType: locationType,
   timeCreated: timeCreated,
 );
-// https://github.com/googleapis/googleapis/blob/211d22fa6dfabfa52cbda04d1aee852a01301edf/google/storage/v2/storage.proto
+
 Bucket fromJson(Map<String, dynamic> json, StorageService storageService) =>
     Bucket._(
       name: json['name'] as String,
