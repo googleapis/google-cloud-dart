@@ -13,8 +13,9 @@
 // limitations under the License.
 
 @TestOn('vm')
-/// Test using the Showcase
-/// [`Compliance` service](https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto).
+/// Test using the Showcase [`Compliance` service][conformance].
+///
+/// [conformance]: https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto
 library;
 
 import 'package:google_cloud_showcase_v1beta1/showcase.dart';
@@ -26,9 +27,11 @@ import 'package:test_utils/matchers.dart';
 import 'showcase_server.dart';
 
 /// Tests one of the `Repeat*` methods of the Showcase
-/// [`Compliance` service](https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto).
+/// [`Compliance` service][conformance].
 ///
 /// `repeatMethodFactory` is a function that returns a `Repeat*` method.
+///
+/// [conformance]: https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto
 void testRepeatMethod(
   Future<RepeatResponse> Function(RepeatRequest) Function() repeatMethodFactory,
 ) {
