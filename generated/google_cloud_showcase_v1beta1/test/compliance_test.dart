@@ -25,12 +25,18 @@ import 'package:test_utils/matchers.dart';
 
 import 'showcase_server.dart';
 
-void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
+/// Tests one of the `Repeat*` methods of the Showcase
+/// [`Compliance` service](https://github.com/googleapis/gapic-showcase/blob/main/schema/google/showcase/v1beta1/compliance.proto).
+///
+/// `repeatMethodFactory` is a function that returns a `Repeat*` method.
+void testRepeatMethod(
+  Future<RepeatResponse> Function(RepeatRequest) Function() repeatMethodFactory,
+) {
   group('client verified', () {
     group('double', () {
       test('simple value', () async {
         final complianceData = ComplianceData(fDouble: 1.0);
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(name: 'double', info: complianceData),
         );
         expect(response.request!.info, messageEquals(complianceData));
@@ -39,7 +45,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
 
       test('NaN', () async {
         final complianceData = ComplianceData(fDouble: double.nan);
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(name: 'double', info: complianceData),
         );
         expect(response.request!.info, messageEquals(complianceData));
@@ -48,7 +54,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
 
       test('infinity', () async {
         final complianceData = ComplianceData(fDouble: double.infinity);
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(name: 'double', info: complianceData),
         );
         expect(response.request!.info, messageEquals(complianceData));
@@ -57,7 +63,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
 
       test('-infinity', () async {
         final complianceData = ComplianceData(fDouble: double.negativeInfinity);
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(name: 'double', info: complianceData),
         );
         expect(response.request!.info, messageEquals(complianceData));
@@ -100,7 +106,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
           pBool: true,
           pKingdom: ComplianceData_LifeKingdom.plantae,
         );
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name: 'Basic data types',
             info: complianceData,
@@ -128,7 +134,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
           fKingdom: ComplianceData_LifeKingdom.animalia,
           fChild: ComplianceDataChild(fString: 'second/bool/salutation'),
         );
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name: 'Basic types, no optional fields',
             info: complianceData,
@@ -163,7 +169,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
             pBool: false,
             pKingdom: ComplianceData_LifeKingdom.lifeKingdomUnspecified,
           );
-          final response = await method()(
+          final response = await repeatMethodFactory()(
             RepeatRequest(
               name: 'Zero values for non-string fields',
               info: complianceData,
@@ -185,7 +191,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
             pBool: false,
             pKingdom: ComplianceData_LifeKingdom.lifeKingdomUnspecified,
           );
-          final response = await method()(
+          final response = await repeatMethodFactory()(
             RepeatRequest(
               name: 'Zero values for non-string fields',
               info: complianceData,
@@ -219,7 +225,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
           pDouble: 1.7976931348623157e+308,
           pBool: false,
         );
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name: 'Extreme values',
             info: complianceData,
@@ -231,7 +237,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
 
       test('Strings with spaces', () async {
         final complianceData = ComplianceData(fString: 'Hello there');
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name: 'Strings with spaces',
             info: complianceData,
@@ -243,7 +249,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
 
       test('Strings with quotes', () async {
         final complianceData = ComplianceData(fString: 'Hello "You"');
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name: 'Strings with quotes',
             info: complianceData,
@@ -255,7 +261,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
 
       test('Strings with percents', () async {
         final complianceData = ComplianceData(fString: 'Hello 100%');
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name: 'Strings with percents',
             info: complianceData,
@@ -274,7 +280,7 @@ void foo(Future<RepeatResponse> Function(RepeatRequest) Function() method) {
           pBool: true,
           fChild: ComplianceDataChild(fString: 'second/zzz/bool/true'),
         );
-        final response = await method()(
+        final response = await repeatMethodFactory()(
           RepeatRequest(
             name:
                 'Strings with slashes and values that resemble subsequent '
@@ -306,13 +312,42 @@ void main() async {
     });
 
     group('repeatDataBody', () {
-      foo(() => complianceService.repeatDataBody);
+      testRepeatMethod(() => complianceService.repeatDataBody);
     });
     group('repeatDataBodyInfo', () {
-      foo(() => complianceService.repeatDataBodyInfo);
+      testRepeatMethod(() => complianceService.repeatDataBodyInfo);
     });
     group('repeatDataQuery', () {
-      foo(() => complianceService.repeatDataQuery);
+      testRepeatMethod(() => complianceService.repeatDataQuery);
+    });
+    group(
+      'RepeatDataSimplePath',
+      () {
+        testRepeatMethod(() => complianceService.repeatDataSimplePath);
+      },
+      skip: 'TODO(https://github.com/googleapis/google-cloud-dart/issues/104)',
+    );
+    group(
+      'RepeatDataPathResource',
+      () {
+        testRepeatMethod(() => complianceService.repeatDataPathResource);
+      },
+      skip: 'TODO(https://github.com/googleapis/google-cloud-dart/issues/105)',
+    );
+    group(
+      'RepeatDataPathTrailingResource',
+      () {
+        testRepeatMethod(
+          () => complianceService.repeatDataPathTrailingResource,
+        );
+      },
+      skip: 'TODO(https://github.com/googleapis/google-cloud-dart/issues/105)',
+    );
+    group('RepeatDataBodyPut', () {
+      testRepeatMethod(() => complianceService.repeatDataBodyPut);
+    });
+    group('RepeatDataBodyPatch', () {
+      testRepeatMethod(() => complianceService.repeatDataBodyPatch);
     });
   });
 }
