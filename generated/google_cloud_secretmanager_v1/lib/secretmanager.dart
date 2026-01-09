@@ -286,7 +286,7 @@ final class SecretManagerService {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });

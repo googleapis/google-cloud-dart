@@ -370,10 +370,10 @@ final class DatasetService {
     final url =
         Uri.https(_host, '/v1beta1/${request.dataset}:searchDataItems', {
           if (request.orderByDataItem case final $1?) 'orderByDataItem': $1,
-          if (request.orderByAnnotation!.savedQuery case final $1
+          if (request.orderByAnnotation?.savedQuery case final $1?
               when $1.isNotDefault)
             'orderByAnnotation.savedQuery': $1,
-          if (request.orderByAnnotation!.orderBy case final $1
+          if (request.orderByAnnotation?.orderBy case final $1?
               when $1.isNotDefault)
             'orderByAnnotation.orderBy': $1,
           if (request.savedQuery case final $1 when $1.isNotDefault)
@@ -3415,12 +3415,12 @@ final class FeatureRegistryService {
   /// any reason.
   Future<Feature> getFeature(GetFeatureRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
-      if (request.featureStatsAndAnomalySpec!.latestStatsCount case final $1?)
+      if (request.featureStatsAndAnomalySpec?.latestStatsCount case final $1?)
         'featureStatsAndAnomalySpec.latestStatsCount': '${$1}',
-      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime
+      if (request.featureStatsAndAnomalySpec?.statsTimeRange?.startTime
           case final $1?)
         'featureStatsAndAnomalySpec.statsTimeRange.startTime': $1.toJson(),
-      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime
+      if (request.featureStatsAndAnomalySpec?.statsTimeRange?.endTime
           case final $1?)
         'featureStatsAndAnomalySpec.statsTimeRange.endTime': $1.toJson(),
     });
@@ -4359,12 +4359,12 @@ final class FeaturestoreService {
   /// any reason.
   Future<Feature> getFeature(GetFeatureRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
-      if (request.featureStatsAndAnomalySpec!.latestStatsCount case final $1?)
+      if (request.featureStatsAndAnomalySpec?.latestStatsCount case final $1?)
         'featureStatsAndAnomalySpec.latestStatsCount': '${$1}',
-      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.startTime
+      if (request.featureStatsAndAnomalySpec?.statsTimeRange?.startTime
           case final $1?)
         'featureStatsAndAnomalySpec.statsTimeRange.startTime': $1.toJson(),
-      if (request.featureStatsAndAnomalySpec!.statsTimeRange!.endTime
+      if (request.featureStatsAndAnomalySpec?.statsTimeRange?.endTime
           case final $1?)
         'featureStatsAndAnomalySpec.statsTimeRange.endTime': $1.toJson(),
     });
