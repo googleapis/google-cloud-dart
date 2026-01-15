@@ -325,6 +325,11 @@ extension TimestampExtension on Timestamp {
   /// The maximum value for [seconds]; corresponds to `'9999-12-31T23:59:59Z'`.
   static const int maxSeconds = 253402300799;
 
+  DateTime toDateTime() => DateTime.fromMicrosecondsSinceEpoch(
+    seconds * 1_000_000 + nanos ~/ 1000,
+    isUtc: true,
+  );
+
   void _validate() {
     if (seconds < minSeconds || seconds > maxSeconds) {
       throw ArgumentError('seconds out of range');
