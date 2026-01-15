@@ -10,7 +10,7 @@ final class ObjectMetadata {
   final String? contentType;
   final DateTime? updated;
 
-  ObjectMetadata(
+  ObjectMetadata({
     this.bucket,
     this.name,
     this.size,
@@ -18,7 +18,7 @@ final class ObjectMetadata {
     this.metageneration,
     this.contentType,
     this.updated,
-  );
+  });
 
   // TODO: Allow replacement of all fields.
   ObjectMetadata replace({String? bucket, String? name}) =>
