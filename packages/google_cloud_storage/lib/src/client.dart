@@ -38,6 +38,8 @@ final class ObjectMetadata {
 // where the term `Client` refers to the underlying (HTTP) transport and the
 // abstraction around it has the suffix "Service".
 final class StorageService {
+  // TODO: Write good documentation.
+
   Future<ObjectMetadata> objectMetadata(
     String bucketName,
     String objectName, {
@@ -51,6 +53,11 @@ final class StorageService {
     // TODO: Add the remaining options.
   }) => throw UnimplementedError('objectMetadata');
 
+  /// TODO: Explain this better.
+  ///
+  /// Replaces the entire Object metadata with `metadata`. Any fields not not
+  /// included in the request will be cleared or set to their default values.
+  ///
   /// Only fields accepted by the `Objects: update` API are used,
   /// all other fields are ignored. In particular, [ObjectMetadata.bucket] and
   /// [ObjectMetadata.name] are ignored in favor of the `bucketName` and
@@ -61,7 +68,24 @@ final class StorageService {
     ObjectMetadata metadata, {
     int? generation,
     // TODO: Add the remaining options.
-  }) => throw UnimplementedError('objectMetadata');
+  }) => throw UnimplementedError('updateObjectMetadata');
+
+  /// TODO: Explain this better.
+  ///
+  /// Modifies only the specific metadata fields provided by `metadata`.
+  /// Any fields not specified remain unchanged.
+  ///
+  /// Only fields accepted by the `Objects: patch` API are used,
+  /// all other fields are ignored. In particular, [ObjectMetadata.bucket] and
+  /// [ObjectMetadata.name] are ignored in favor of the `bucketName` and
+  /// `objectName` parameters.
+  Future<ObjectMetadata> patchObjectMetadata(
+    String bucketName,
+    String objectName,
+    ObjectMetadata metadata, {
+    int? generation,
+    // TODO: Add the remaining options.
+  }) => throw UnimplementedError('patchObjectMetadata');
 
   // TODO: Implement about 100 more methods.
 }
