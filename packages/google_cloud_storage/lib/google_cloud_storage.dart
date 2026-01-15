@@ -15,7 +15,8 @@
 /// Stores and retrieves potentially large, immutable data objects.
 library;
 
-export 'package:google_cloud_rpc/exceptions.dart';
+import 'package:googleapis/storage/v1.dart' as storage_v1;
 
-export 'src/bucket.dart' show Bucket;
-export 'src/storage.dart' show StorageService;
+export 'package:google_cloud_rpc/exceptions.dart';
+part 'src/bucket.dart';
+part 'src/storage.dart';

@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud_protobuf/protobuf.dart';
-import 'package:http/http.dart' as http;
-
-import '../google_cloud_storage.dart';
-import 'retry.dart';
+part of '../google_cloud_storage.dart';
 
 Bucket create({
   required String name,

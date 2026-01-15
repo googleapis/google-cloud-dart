@@ -25,6 +25,7 @@ resolution: workspace
 dependencies:
   google_cloud_protobuf: ^0.4.0
   google_cloud_rpc: ^0.4.0
+  googleapis: ^15.0.0
   http: ^1.6.0
 
 dev_dependencies:

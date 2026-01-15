@@ -12,13 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:convert';
-
-import 'package:http/http.dart' as http;
-
-import '../google_cloud_storage.dart';
-import 'bucket.dart' as bucket;
-import 'retry.dart';
+part of '../google_cloud_storage.dart';
 
 // https://github.com/googleapis/googleapis/blob/211d22fa6dfabfa52cbda04d1aee852a01301edf/google/storage/v2/storage.proto
 // https://github.com/invertase/dart_firebase_admin/tree/googleapis-storage/packages/googleapis_storage
@@ -31,9 +25,9 @@ import 'retry.dart';
 final class StorageService {
   static const _host = 'storage.googleapis.com';
 
-  final http.Client client;
+  final storage_v1.StorageApi storageApi;
 
-  StorageService(this.client);
+  StorageService(this.storageApi);
 
   Future<bool> bucketExists(
     String bucketName, {
@@ -48,11 +42,11 @@ final class StorageService {
     }
   }
 
-  Future<Bucket> createBucket({
-    required String bucketName,
-    String? project,
-    Retry retry = defaultRetry,
-  }) async {
+  Future<Bucket> createBucket({required String bucketName}) async {
+    final bucket = storageApi.buckets.insert(
+      storage_v1.Bucket(name: bucketName),
+      'projects/$projectId',
+    );
     final query = {if (project != null) 'project': project};
 
     final url = Uri.https(_host, 'storage/v1/b', query);
