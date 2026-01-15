@@ -21,8 +21,8 @@ final class ObjectMetadata {
   );
 
   // TODO: Allow replacement of all fields.
-  ObjectMetadata replace({String? bucket, String? name}) =>
-      throw UnimplementedError('replace');
+  ObjectMetadata copyWith({String? bucket, String? name}) =>
+      throw UnimplementedError('copyWith');
 }
 
 /// Stores and retrieves potentially large, immutable data objects.
