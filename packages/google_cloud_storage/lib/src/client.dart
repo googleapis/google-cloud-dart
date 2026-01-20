@@ -1,91 +1,24 @@
-final class Retry {}
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
 
-final class ObjectMetadata {
-  // TODO: Add all fields.
-  final String? bucket;
-  final String? name;
-  final int? size;
-  final int? generation;
-  final int? metageneration;
-  final String? contentType;
-  final DateTime? updated;
-
-  ObjectMetadata({
-    this.bucket,
-    this.name,
-    this.size,
-    this.generation,
-    this.metageneration,
-    this.contentType,
-    this.updated,
-  });
-
-  // TODO: Allow replacement of all fields.
-  ObjectMetadata copyWith({String? bucket, String? name}) =>
-      throw UnimplementedError('copyWith');
-}
+import 'object_metadata.dart';
 
 /// Stores and retrieves potentially large, immutable data objects.
-// Design Notes:
-//
-// This implementation is based on the official Google Cloud Storage C++ client:
-// https://github.com/googleapis/google-cloud-cpp/blob/113d8fa65360e53e61cba7b90935418557512d4e/google/cloud/storage/client.h#L263
-//
-// The biggest change is that the `options` varargs are replaced by optional
-// named parameters.
-//
-// The name `StorageService` is used to be consistent with the generated APIs,
-// where the term `Client` refers to the underlying (HTTP) transport and the
-// abstraction around it has the suffix "Service".
-final class StorageService {
-  // TODO: Write good documentation.
-
-  Future<ObjectMetadata> objectMetadata(
-    String bucketName,
-    String objectName, {
-    int? generation,
-    int? ifMetagenerationMatch,
-    int? ifMetagenerationNotMatch,
-    int? ifGenerationMatch,
-    int? ifGenerationNotMatch,
-    bool softDeleted = false,
-    Retry? retry,
-    // TODO: Add the remaining options.
-  }) => throw UnimplementedError('objectMetadata');
-
-  /// TODO: Explain this better.
+final class StorageClient {
+  /// Information about a [[Google Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
   ///
-  /// Replaces the entire Object metadata with `metadata`. Any fields not not
-  /// included in the request will be cleared or set to their default values.
-  ///
-  /// Only fields accepted by the `Objects: update` API are used,
-  /// all other fields are ignored. In particular, [ObjectMetadata.bucket] and
-  /// [ObjectMetadata.name] are ignored in favor of the `bucketName` and
-  /// `objectName` parameters.
-  Future<ObjectMetadata> updateObjectMetadata(
-    String bucketName,
-    String objectName,
-    ObjectMetadata metadata, {
-    int? generation,
-    // TODO: Add the remaining options.
-  }) => throw UnimplementedError('updateObjectMetadata');
-
-  /// TODO: Explain this better.
-  ///
-  /// Modifies only the specific metadata fields provided by `metadata`.
-  /// Any fields not specified remain unchanged.
-  ///
-  /// Only fields accepted by the `Objects: patch` API are used,
-  /// all other fields are ignored. In particular, [ObjectMetadata.bucket] and
-  /// [ObjectMetadata.name] are ignored in favor of the `bucketName` and
-  /// `objectName` parameters.
-  Future<ObjectMetadata> patchObjectMetadata(
-    String bucketName,
-    String objectName,
-    ObjectMetadata metadata, {
-    int? generation,
-    // TODO: Add the remaining options.
-  }) => throw UnimplementedError('patchObjectMetadata');
-
-  // TODO: Implement about 100 more methods.
+  /// This operation is read-only and always idempotent.
+  Future<ObjectMetadata> objectMetadata(String bucket, String object) async =>
+      throw UnimplementedError('objectMetadata');
 }
