@@ -33,15 +33,6 @@ final class ProjectTeam {
   String toString() =>
       'ProjectTeam(projectNumber: $projectNumber, team: $team)';
 
-  @override
-  int get hashCode => [projectNumber, team].hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is ProjectTeam &&
-      other.projectNumber == projectNumber &&
-      other.team == team;
-
   /// Creates a new [ProjectTeam] with the given non-`null` fields replaced.
   ProjectTeam copyWith({String? projectNumber, String? team}) => ProjectTeam(
     projectNumber: projectNumber ?? this.projectNumber,
@@ -161,40 +152,6 @@ final class ObjectAccessControl {
       'entity: $entity, entityId: $entityId, etag: $etag, '
       'generation: $generation, id: $id, kind: $kind, object: $object, '
       'projectTeam: $projectTeam, role: $role, selfLink: $selfLink)';
-
-  @override
-  int get hashCode => [
-    bucket,
-    domain,
-    email,
-    entity,
-    entityId,
-    etag,
-    generation,
-    id,
-    kind,
-    object,
-    projectTeam,
-    role,
-    selfLink,
-  ].hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is ObjectAccessControl &&
-      other.bucket == bucket &&
-      other.domain == domain &&
-      other.email == email &&
-      other.entity == entity &&
-      other.entityId == entityId &&
-      other.etag == etag &&
-      other.generation == generation &&
-      other.id == id &&
-      other.kind == kind &&
-      other.object == object &&
-      other.projectTeam == projectTeam &&
-      other.role == role &&
-      other.selfLink == selfLink;
 
   /// Creates a new [ObjectAccessControl] with the given non-`null` fields
   /// replaced.

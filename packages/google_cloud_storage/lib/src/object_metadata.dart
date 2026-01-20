@@ -33,15 +33,6 @@ final class CustomerEncryption {
       'CustomerEncryption(encryptionAlgorithm: $encryptionAlgorithm, '
       'keySha256: $keySha256)';
 
-  @override
-  int get hashCode => [encryptionAlgorithm, keySha256.hashCode].hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is CustomerEncryption &&
-      other.encryptionAlgorithm == encryptionAlgorithm &&
-      other.keySha256 == keySha256;
-
   /// Creates a new [CustomerEncryption] with the given non-`null` fields
   /// replaced.
   CustomerEncryption copyWith({
@@ -74,13 +65,6 @@ final class Owner {
 
   @override
   String toString() => 'Owner(entity: $entity, entityId: $entityId)';
-
-  @override
-  int get hashCode => [entity, entityId.hashCode].hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is Owner && other.entity == entity && other.entityId == entityId;
 
   /// Creates a new [Owner] with the given non-`null` fields replaced.
   Owner copyWith({String? entity, String? entityId}) =>
@@ -119,15 +103,6 @@ final class ObjectRetention {
   String toString() =>
       'ObjectRetention(mode: $mode, retainUntilTime: $retainUntilTime)';
 
-  @override
-  int get hashCode => [mode, retainUntilTime.hashCode].hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is ObjectRetention &&
-      other.mode == mode &&
-      other.retainUntilTime == retainUntilTime;
-
   /// Creates a new [ObjectRetention] with the given non-`null` fields replaced.
   ObjectRetention copyWith({String? mode, Timestamp? retainUntilTime}) =>
       ObjectRetention(
@@ -157,14 +132,6 @@ class ObjectContexts {
   @override
   String toString() => 'ObjectContexts(custom: $custom)';
 
-  @override
-  int get hashCode => custom.hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is ObjectContexts &&
-      const DeepCollectionEquality().equals(other.custom, custom);
-
   /// Creates a new [ObjectContexts] with the given non-`null` fields replaced.
   ObjectContexts copyWith({Map<String, ObjectCustomContextPayload>? custom}) =>
       ObjectContexts(custom: custom ?? this.custom);
@@ -185,7 +152,7 @@ class ObjectCustomContextPayload {
   /// The value of the object context.
   final String? value;
 
-  ObjectCustomContextPayload(this.createTime, this.updateTime, this.value);
+  ObjectCustomContextPayload({this.createTime, this.updateTime, this.value});
 }
 
 /// Information about a [Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
@@ -442,88 +409,6 @@ final class ObjectMetadata {
       'storageClass: $storageClass, temporaryHold: $temporaryHold, '
       'timeCreated: $timeCreated, timeDeleted: $timeDeleted, '
       'timeStorageClassUpdated: $timeStorageClassUpdated, updated: $updated)';
-
-  @override
-  int get hashCode => [
-    acl,
-    bucket,
-    cacheControl,
-    componentCount,
-    contentDisposition,
-    contentEncoding,
-    contentLanguage,
-    contentType,
-    contexts,
-    crc32c,
-    customerEncryption,
-    customTime,
-    etag,
-    eventBasedHold,
-    generation,
-    hardDeleteTime,
-    id,
-    kind,
-    kmsKeyName,
-    md5Hash,
-    mediaLink,
-    metadata,
-    metageneration,
-    name,
-    owner,
-    restoreToken,
-    retention,
-    retentionExpirationTime,
-    selfLink,
-    size,
-    softDeleteTime,
-    storageClass,
-    temporaryHold,
-    timeCreated,
-    timeDeleted,
-    timeStorageClassUpdated,
-    updated,
-  ].hashCode;
-
-  @override
-  bool operator ==(Object other) =>
-      other is ObjectMetadata &&
-      const DeepCollectionEquality().equals(other.acl, acl) &&
-      other.bucket == bucket &&
-      other.cacheControl == cacheControl &&
-      other.componentCount == componentCount &&
-      other.contentDisposition == contentDisposition &&
-      other.contentEncoding == contentEncoding &&
-      other.contentLanguage == contentLanguage &&
-      other.contentType == contentType &&
-      other.contexts == contexts &&
-      other.crc32c == crc32c &&
-      other.customerEncryption == customerEncryption &&
-      other.customTime == customTime &&
-      other.etag == etag &&
-      other.eventBasedHold == eventBasedHold &&
-      other.generation == generation &&
-      other.hardDeleteTime == hardDeleteTime &&
-      other.id == id &&
-      other.kind == kind &&
-      other.kmsKeyName == kmsKeyName &&
-      other.md5Hash == md5Hash &&
-      other.mediaLink == mediaLink &&
-      const DeepCollectionEquality().equals(other.metadata, metadata) &&
-      other.metageneration == metageneration &&
-      other.name == name &&
-      other.owner == owner &&
-      other.restoreToken == restoreToken &&
-      other.retention == retention &&
-      other.retentionExpirationTime == retentionExpirationTime &&
-      other.selfLink == selfLink &&
-      other.size == size &&
-      other.softDeleteTime == softDeleteTime &&
-      other.storageClass == storageClass &&
-      other.temporaryHold == temporaryHold &&
-      other.timeCreated == timeCreated &&
-      other.timeDeleted == timeDeleted &&
-      other.timeStorageClassUpdated == timeStorageClassUpdated &&
-      other.updated == updated;
 
   /// Creates a new [ObjectMetadata] with the given non-`null` fields replaced.
   ObjectMetadata copyWith({
