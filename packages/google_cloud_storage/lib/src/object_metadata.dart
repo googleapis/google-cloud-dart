@@ -188,15 +188,44 @@ class ObjectCustomContextPayload {
   ObjectCustomContextPayload(this.createTime, this.updateTime, this.value);
 }
 
-// https://docs.cloud.google.com/storage/docs/json_api/v1/objects#resource
+/// Information about a [Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
+///
+/// For detailed information on the meaning of each field, see
+/// [Object resource](https://docs.cloud.google.com/storage/docs/json_api/v1/objects#resource).
 final class ObjectMetadata {
+  /// Access controls on the object.
+  ///
+  /// Only requests that use the `projection=full` query parameter return this
+  /// field in the response.
+  ///
+  /// If `iamConfiguration.uniformBucketLevelAccess.enabled` is set to true,
+  /// this field does not apply, and requests that specify it fail.
   final List<ObjectAccessControl>? acl;
+
+  /// The name of the bucket containing this object.
   final String? bucket;
+
+  /// Cache-Control directive for the object data.
+  ///
+  /// If omitted, and the object is accessible to all anonymous users, the
+  /// default will be `"public, max-age=3600"`.
   final String? cacheControl;
+
+  /// Number of underlying components that make up this object. Components are
+  /// accumulated by compose operations.
   final int? componentCount;
+
+  /// Content-Disposition of the object data.
   final String? contentDisposition;
+
+  /// Content-Encoding of the object data.
   final String? contentEncoding;
+
+  /// Content-Language of the object data.
   final String? contentLanguage;
+
+  /// Content-Type of the object data. If an object is stored without a
+  /// Content-Type, it is served as `application/octet-stream`.
   final String? contentType;
 
   /// Contexts attached to an object, in key-value pairs.
@@ -205,22 +234,91 @@ final class ObjectMetadata {
   /// [Object contexts overview](https://cloud.google.com/storage/docs/object-contexts).
   final ObjectContexts? contexts;
 
+  /// CRC32c checksum, as described in RFC 4960, Appendix B; encoded using
+  /// base64 in big-endian byte order.
+  ///
+  /// For more information about using the CRC32c checksum, see
+  /// [Data Validation and Change Detection](https://cloud.google.com/storage/docs/data-validation).
   final String? crc32c;
+
+  /// A timestamp specified by the user for an object.
   final Timestamp? customTime;
+
+  /// Metadata of customer-supplied encryption key, if the object is encrypted by
+  /// such a key.
   final CustomerEncryption? customerEncryption;
+
+  /// HTTP 1.1 Entity tag for the object.
   final String? etag;
+
+  /// Whether an object is under event-based hold.
+  ///
+  /// Event-based hold is a way to retain objects until an event occurs, which
+  /// is signified by the hold's release (i.e. this value is set to false).
+  ///
+  /// After being released (set to false), such objects will be subject to
+  /// bucket-level retention (if any).
+  ///
+  /// One sample use case of this flag is for banks to hold loan documents for
+  /// at least 3 years after loan is paid in full. Here, bucket-level retention
+  /// is 3 years and the event is the loan being paid in full. In this example,
+  /// these objects will be held intact for any number of years until the event
+  /// has occurred (event-based hold on the object is released) and then 3 more
+  /// years after that. That means retention duration of the objects begins from
+  /// the moment event-based hold transitioned from true to false.
   final bool? eventBasedHold;
+
+  /// The content generation of this object. Used for object versioning.
   final int? generation;
+
+  /// This is the time (in the future) when the soft-deleted object will no
+  /// longer be restorable.
+  ///
+  /// It is equal to the soft delete time plus the current soft delete retention
+  /// duration of the bucket.
   final Timestamp? hardDeleteTime;
+
+  /// The ID of the object, including the bucket name, object name, and
+  /// generation number.
   final String? id;
+
+  /// The kind of item this is. For objects, this is always storage#object.
   final String? kind;
+
+  /// Not currently supported. Specifying the parameter causes the request to
+  /// fail with status code 400 - Bad Request.
   final String? kmsKeyName;
+
+  /// MD5 hash of the data; encoded using base64.
+  ///
+  /// For more information about using the MD5 hash, see
+  /// [Data Validation and Change Detection](https://cloud.google.com/storage/docs/data-validation).
   final String? md5Hash;
+
+  /// Media download link.
   final Uri? mediaLink;
+
+  /// User-provided metadata, in key/value pairs.
   final Map<String, String>? metadata;
+
+  /// The version of the metadata for this object at this generation.
+  ///
+  /// Used for preconditions and for detecting changes in metadata. A
+  /// metageneration number is only meaningful in the context of a particular
+  /// generation of a particular object.
   final int? metageneration;
+
+  /// The name of the object. Required if not specified by URL parameter.
   final String? name;
+
+  /// The owner of the object. This will always be the uploader of the object.
   final Owner? owner;
+
+  /// Restore token used to differentiate deleted objects with the same name and
+  /// generation.
+  ///
+  /// This field is only returned for deleted objects in hierarchical namespace
+  /// buckets.
   final String? restoreToken;
 
   /// The object's [retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
@@ -228,15 +326,62 @@ final class ObjectMetadata {
   /// This defines the earliest datetime that the object can be deleted or
   /// replaced.
   final ObjectRetention? retention;
+
+  /// A server-determined value that specifies the earliest time that the
+  /// object's retention period expires.
+  ///
+  /// Note 1: This field is not provided for objects with an active event-based
+  /// hold, since retention expiration is unknown until the hold is removed.
+  ///
+  /// Note 2: This value can be provided even when temporary hold is set (so
+  /// that the user can reason about policy without having to first unset the
+  /// temporary hold).
   final Timestamp? retentionExpirationTime;
+
+  /// The link to this object.
   final Uri? selfLink;
+
+  /// Content-Length of the data in bytes.
   final int? size;
+
+  /// The time at which the object became soft-deleted.
   final Timestamp? softDeleteTime;
+
+  /// Storage class of the object.
   final String? storageClass;
+
+  /// Whether an object is under temporary hold.
+  ///
+  /// While this flag is set to true, the object is protected against deletion
+  /// and overwrites. A common use case of this flag is regulatory
+  /// investigations where objects need to be retained while the investigation
+  /// is ongoing.
+  ///
+  /// Note that unlike event-based hold, temporary hold does not impact
+  /// retention expiration time of an object.
   final bool? temporaryHold;
+
+  /// The creation time of the object.
   final Timestamp? timeCreated;
+
+  /// The time at which the object became noncurrent.
+  ///
+  /// Will be returned if and only if this version of the object has been
+  /// deleted.
   final Timestamp? timeDeleted;
+
+  /// The time at which the object's storage class was last changed.
+  ///
+  /// When the object is initially created, it will be set to timeCreated.
   final Timestamp? timeStorageClassUpdated;
+
+  /// The modification time of the object metadata.
+  ///
+  /// Set initially to object creation time and then updated whenever any
+  /// metadata of the object changes. This includes changes made by a requester,
+  /// such as modifying custom metadata, as well as changes made by Cloud
+  /// Storage on behalf of a requester, such as changing the storage class based
+  /// on an Object Lifecycle Configuration.
   final Timestamp? updated;
 
   ObjectMetadata({
@@ -380,7 +525,6 @@ final class ObjectMetadata {
       other.timeStorageClassUpdated == timeStorageClassUpdated &&
       other.updated == updated;
 
-  /// Creates a new [ObjectMetadata] with the given non-`null` fields replaced.
   /// Creates a new [ObjectMetadata] with the given non-`null` fields replaced.
   ObjectMetadata copyWith({
     List<ObjectAccessControl>? acl,
