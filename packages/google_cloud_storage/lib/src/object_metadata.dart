@@ -12,7 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:collection/collection.dart';
 import 'package:google_cloud_protobuf/protobuf.dart';
 
 import 'object_access_controls.dart';
