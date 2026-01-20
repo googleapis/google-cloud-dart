@@ -2800,6 +2800,14 @@ final class Tool extends ProtoMessage {
   /// Optional. Tool to support URL context retrieval.
   final UrlContext? urlContext;
 
+  /// Optional. FileSearch tool type.
+  /// Tool to retrieve knowledge from Semantic Retrieval corpora.
+  final FileSearch? fileSearch;
+
+  /// Optional. Tool that allows grounding the model's response with geospatial
+  /// context related to the user's query.
+  final GoogleMaps? googleMaps;
+
   Tool({
     this.functionDeclarations = const [],
     this.googleSearchRetrieval,
@@ -2807,6 +2815,8 @@ final class Tool extends ProtoMessage {
     this.googleSearch,
     this.computerUse,
     this.urlContext,
+    this.fileSearch,
+    this.googleMaps,
   }) : super(fullyQualifiedName);
 
   factory Tool.fromJson(Object? j) {
@@ -2841,6 +2851,14 @@ final class Tool extends ProtoMessage {
         null => null,
         Object $1 => UrlContext.fromJson($1),
       },
+      fileSearch: switch (json['fileSearch']) {
+        null => null,
+        Object $1 => FileSearch.fromJson($1),
+      },
+      googleMaps: switch (json['googleMaps']) {
+        null => null,
+        Object $1 => GoogleMaps.fromJson($1),
+      },
     );
   }
 
@@ -2859,6 +2877,8 @@ final class Tool extends ProtoMessage {
     if (computerUse case final computerUse?)
       'computerUse': computerUse.toJson(),
     if (urlContext case final urlContext?) 'urlContext': urlContext.toJson(),
+    if (fileSearch case final fileSearch?) 'fileSearch': fileSearch.toJson(),
+    if (googleMaps case final googleMaps?) 'googleMaps': googleMaps.toJson(),
   };
 
   @override
@@ -2976,6 +2996,41 @@ final class Tool_ComputerUse_Environment extends ProtoEnum {
   String toString() => 'Environment.$value';
 }
 
+/// The GoogleMaps Tool that provides geospatial context for the user's query.
+final class GoogleMaps extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GoogleMaps';
+
+  /// Optional. Whether to return a widget context token in the GroundingMetadata
+  /// of the response. Developers can use the widget context token to render a
+  /// Google Maps widget with geospatial context related to the places that the
+  /// model references in the response.
+  final bool enableWidget;
+
+  GoogleMaps({this.enableWidget = false}) : super(fullyQualifiedName);
+
+  factory GoogleMaps.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GoogleMaps(
+      enableWidget: switch (json['enableWidget']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (enableWidget.isNotDefault) 'enableWidget': enableWidget,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['enableWidget=$enableWidget'].join(',');
+    return 'GoogleMaps(${$contents})';
+  }
+}
+
 /// Tool to support URL context retrieval.
 final class UrlContext extends ProtoMessage {
   static const String fullyQualifiedName =
@@ -2990,6 +3045,128 @@ final class UrlContext extends ProtoMessage {
 
   @override
   String toString() => 'UrlContext()';
+}
+
+/// The FileSearch tool that retrieves knowledge from Semantic Retrieval corpora.
+/// Files are imported to Semantic Retrieval corpora using the ImportFile API.
+final class FileSearch extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FileSearch';
+
+  /// Required. Semantic retrieval resources to retrieve from.
+  /// Currently only supports one corpus. In the future we may open up multiple
+  /// corpora support.
+  final List<FileSearch_RetrievalResource> retrievalResources;
+
+  /// Optional. The configuration for the retrieval.
+  final FileSearch_RetrievalConfig? retrievalConfig;
+
+  FileSearch({required this.retrievalResources, this.retrievalConfig})
+    : super(fullyQualifiedName);
+
+  factory FileSearch.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FileSearch(
+      retrievalResources: switch (json['retrievalResources']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) FileSearch_RetrievalResource.fromJson(i),
+        ],
+        _ => throw const FormatException('"retrievalResources" is not a list'),
+      },
+      retrievalConfig: switch (json['retrievalConfig']) {
+        null => null,
+        Object $1 => FileSearch_RetrievalConfig.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'retrievalResources': [for (final i in retrievalResources) i.toJson()],
+    if (retrievalConfig case final retrievalConfig?)
+      'retrievalConfig': retrievalConfig.toJson(),
+  };
+
+  @override
+  String toString() => 'FileSearch()';
+}
+
+/// The semantic retrieval resource to retrieve from.
+final class FileSearch_RetrievalResource extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FileSearch.RetrievalResource';
+
+  /// Required. The name of the semantic retrieval resource to retrieve from.
+  /// Example: `ragStores/my-rag-store-123`
+  final String ragStoreName;
+
+  FileSearch_RetrievalResource({required this.ragStoreName})
+    : super(fullyQualifiedName);
+
+  factory FileSearch_RetrievalResource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FileSearch_RetrievalResource(
+      ragStoreName: switch (json['ragStoreName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'ragStoreName': ragStoreName};
+
+  @override
+  String toString() {
+    final $contents = ['ragStoreName=$ragStoreName'].join(',');
+    return 'RetrievalResource(${$contents})';
+  }
+}
+
+/// Semantic retrieval configuration.
+final class FileSearch_RetrievalConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.FileSearch.RetrievalConfig';
+
+  /// Optional. The number of semantic retrieval chunks to retrieve.
+  final int? topK;
+
+  /// Optional. Metadata filter to apply to the semantic retrieval documents
+  /// and chunks.
+  final String metadataFilter;
+
+  FileSearch_RetrievalConfig({this.topK, this.metadataFilter = ''})
+    : super(fullyQualifiedName);
+
+  factory FileSearch_RetrievalConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return FileSearch_RetrievalConfig(
+      topK: switch (json['topK']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      metadataFilter: switch (json['metadataFilter']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (topK case final topK?) 'topK': topK,
+    if (metadataFilter.isNotDefault) 'metadataFilter': metadataFilter,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (topK != null) 'topK=$topK',
+      'metadataFilter=$metadataFilter',
+    ].join(',');
+    return 'RetrievalConfig(${$contents})';
+  }
 }
 
 /// Tool to retrieve public web data for grounding, powered by Google.
@@ -3124,7 +3301,11 @@ final class ToolConfig extends ProtoMessage {
   /// Optional. Function calling config.
   final FunctionCallingConfig? functionCallingConfig;
 
-  ToolConfig({this.functionCallingConfig}) : super(fullyQualifiedName);
+  /// Optional. Retrieval config.
+  final RetrievalConfig? retrievalConfig;
+
+  ToolConfig({this.functionCallingConfig, this.retrievalConfig})
+    : super(fullyQualifiedName);
 
   factory ToolConfig.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -3133,6 +3314,10 @@ final class ToolConfig extends ProtoMessage {
         null => null,
         Object $1 => FunctionCallingConfig.fromJson($1),
       },
+      retrievalConfig: switch (json['retrievalConfig']) {
+        null => null,
+        Object $1 => RetrievalConfig.fromJson($1),
+      },
     );
   }
 
@@ -3140,10 +3325,55 @@ final class ToolConfig extends ProtoMessage {
   Object toJson() => {
     if (functionCallingConfig case final functionCallingConfig?)
       'functionCallingConfig': functionCallingConfig.toJson(),
+    if (retrievalConfig case final retrievalConfig?)
+      'retrievalConfig': retrievalConfig.toJson(),
   };
 
   @override
   String toString() => 'ToolConfig()';
+}
+
+/// Retrieval config.
+final class RetrievalConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.RetrievalConfig';
+
+  /// Optional. The location of the user.
+  final LatLng? latLng;
+
+  /// Optional. The language code of the user.
+  /// Language code for content. Use language tags defined by
+  /// [BCP47](https://www.rfc-editor.org/rfc/bcp/bcp47.txt).
+  final String languageCode;
+
+  RetrievalConfig({this.latLng, this.languageCode = ''})
+    : super(fullyQualifiedName);
+
+  factory RetrievalConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RetrievalConfig(
+      latLng: switch (json['latLng']) {
+        null => null,
+        Object $1 => LatLng.fromJson($1),
+      },
+      languageCode: switch (json['languageCode']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (latLng case final latLng?) 'latLng': latLng.toJson(),
+    if (languageCode.isNotDefault) 'languageCode': languageCode,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['languageCode=$languageCode'].join(',');
+    return 'RetrievalConfig(${$contents})';
+  }
 }
 
 /// Configuration for specifying function calling behavior.
@@ -4928,7 +5158,6 @@ final class DownloadFileResponse extends ProtoMessage {
 }
 
 /// Request to generate a completion from the model.
-/// NEXT ID: 18
 final class GenerateContentRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.GenerateContentRequest';
@@ -5359,7 +5588,6 @@ final class ImageConfig extends ProtoMessage {
 
 /// Configuration options for model generation and outputs. Not all parameters
 /// are configurable for every model.
-/// Next ID: 29
 final class GenerationConfig extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.ai.generativelanguage.v1beta.GenerationConfig';
@@ -6985,12 +7213,19 @@ final class GroundingMetadata extends ProtoMessage {
   /// Web search queries for the following-up web search.
   final List<String> webSearchQueries;
 
+  /// Optional. Resource name of the Google Maps widget context token that can be
+  /// used with the PlacesContextElement widget in order to render contextual
+  /// data. Only populated in the case that grounding with Google Maps is
+  /// enabled.
+  final String? googleMapsWidgetContextToken;
+
   GroundingMetadata({
     this.searchEntryPoint,
     this.groundingChunks = const [],
     this.groundingSupports = const [],
     this.retrievalMetadata,
     this.webSearchQueries = const [],
+    this.googleMapsWidgetContextToken,
   }) : super(fullyQualifiedName);
 
   factory GroundingMetadata.fromJson(Object? j) {
@@ -7019,6 +7254,11 @@ final class GroundingMetadata extends ProtoMessage {
         List<Object?> $1 => [for (final i in $1) decodeString(i)],
         _ => throw const FormatException('"webSearchQueries" is not a list'),
       },
+      googleMapsWidgetContextToken:
+          switch (json['googleMapsWidgetContextToken']) {
+            null => null,
+            Object $1 => decodeString($1),
+          },
     );
   }
 
@@ -7033,10 +7273,18 @@ final class GroundingMetadata extends ProtoMessage {
     if (retrievalMetadata case final retrievalMetadata?)
       'retrievalMetadata': retrievalMetadata.toJson(),
     if (webSearchQueries.isNotDefault) 'webSearchQueries': webSearchQueries,
+    if (googleMapsWidgetContextToken case final googleMapsWidgetContextToken?)
+      'googleMapsWidgetContextToken': googleMapsWidgetContextToken,
   };
 
   @override
-  String toString() => 'GroundingMetadata()';
+  String toString() {
+    final $contents = [
+      if (googleMapsWidgetContextToken != null)
+        'googleMapsWidgetContextToken=$googleMapsWidgetContextToken',
+    ].join(',');
+    return 'GroundingMetadata(${$contents})';
+  }
 }
 
 /// Google search entry point.
@@ -7094,7 +7342,14 @@ final class GroundingChunk extends ProtoMessage {
   /// Grounding chunk from the web.
   final GroundingChunk_Web? web;
 
-  GroundingChunk({this.web}) : super(fullyQualifiedName);
+  /// Optional. Grounding chunk from context retrieved by the file search tool.
+  final GroundingChunk_RetrievedContext? retrievedContext;
+
+  /// Optional. Grounding chunk from Google Maps.
+  final GroundingChunk_Maps? maps;
+
+  GroundingChunk({this.web, this.retrievedContext, this.maps})
+    : super(fullyQualifiedName);
 
   factory GroundingChunk.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -7103,11 +7358,24 @@ final class GroundingChunk extends ProtoMessage {
         null => null,
         Object $1 => GroundingChunk_Web.fromJson($1),
       },
+      retrievedContext: switch (json['retrievedContext']) {
+        null => null,
+        Object $1 => GroundingChunk_RetrievedContext.fromJson($1),
+      },
+      maps: switch (json['maps']) {
+        null => null,
+        Object $1 => GroundingChunk_Maps.fromJson($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {if (web case final web?) 'web': web.toJson()};
+  Object toJson() => {
+    if (web case final web?) 'web': web.toJson(),
+    if (retrievedContext case final retrievedContext?)
+      'retrievedContext': retrievedContext.toJson(),
+    if (maps case final maps?) 'maps': maps.toJson(),
+  };
 
   @override
   String toString() => 'GroundingChunk()';
@@ -7153,6 +7421,240 @@ final class GroundingChunk_Web extends ProtoMessage {
       if (title != null) 'title=$title',
     ].join(',');
     return 'Web(${$contents})';
+  }
+}
+
+/// Chunk from context retrieved by the file search tool.
+final class GroundingChunk_RetrievedContext extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingChunk.RetrievedContext';
+
+  /// Optional. URI reference of the semantic retrieval document.
+  final String? uri;
+
+  /// Optional. Title of the document.
+  final String? title;
+
+  /// Optional. Text of the chunk.
+  final String? text;
+
+  GroundingChunk_RetrievedContext({this.uri, this.title, this.text})
+    : super(fullyQualifiedName);
+
+  factory GroundingChunk_RetrievedContext.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk_RetrievedContext(
+      uri: switch (json['uri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (uri case final uri?) 'uri': uri,
+    if (title case final title?) 'title': title,
+    if (text case final text?) 'text': text,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (uri != null) 'uri=$uri',
+      if (title != null) 'title=$title',
+      if (text != null) 'text=$text',
+    ].join(',');
+    return 'RetrievedContext(${$contents})';
+  }
+}
+
+/// A grounding chunk from Google Maps. A Maps chunk corresponds to a single
+/// place.
+final class GroundingChunk_Maps extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingChunk.Maps';
+
+  /// URI reference of the place.
+  final String? uri;
+
+  /// Title of the place.
+  final String? title;
+
+  /// Text description of the place answer.
+  final String? text;
+
+  /// This ID of the place, in `places/{place_id}` format. A user can use this
+  /// ID to look up that place.
+  final String? placeId;
+
+  /// Sources that provide answers about the features of a given place in
+  /// Google Maps.
+  final GroundingChunk_Maps_PlaceAnswerSources? placeAnswerSources;
+
+  GroundingChunk_Maps({
+    this.uri,
+    this.title,
+    this.text,
+    this.placeId,
+    this.placeAnswerSources,
+  }) : super(fullyQualifiedName);
+
+  factory GroundingChunk_Maps.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk_Maps(
+      uri: switch (json['uri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      text: switch (json['text']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      placeId: switch (json['placeId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      placeAnswerSources: switch (json['placeAnswerSources']) {
+        null => null,
+        Object $1 => GroundingChunk_Maps_PlaceAnswerSources.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (uri case final uri?) 'uri': uri,
+    if (title case final title?) 'title': title,
+    if (text case final text?) 'text': text,
+    if (placeId case final placeId?) 'placeId': placeId,
+    if (placeAnswerSources case final placeAnswerSources?)
+      'placeAnswerSources': placeAnswerSources.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (uri != null) 'uri=$uri',
+      if (title != null) 'title=$title',
+      if (text != null) 'text=$text',
+      if (placeId != null) 'placeId=$placeId',
+    ].join(',');
+    return 'Maps(${$contents})';
+  }
+}
+
+/// Collection of sources that provide answers about the features of a given
+/// place in Google Maps. Each PlaceAnswerSources message corresponds to a
+/// specific place in Google Maps. The Google Maps tool used these sources in
+/// order to answer questions about features of the place (e.g: "does Bar Foo
+/// have Wifi" or "is Foo Bar wheelchair accessible?"). Currently we only
+/// support review snippets as sources.
+final class GroundingChunk_Maps_PlaceAnswerSources extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingChunk.Maps.PlaceAnswerSources';
+
+  /// Snippets of reviews that are used to generate answers about the
+  /// features of a given place in Google Maps.
+  final List<GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet>
+  reviewSnippets;
+
+  GroundingChunk_Maps_PlaceAnswerSources({this.reviewSnippets = const []})
+    : super(fullyQualifiedName);
+
+  factory GroundingChunk_Maps_PlaceAnswerSources.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk_Maps_PlaceAnswerSources(
+      reviewSnippets: switch (json['reviewSnippets']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1)
+            GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet.fromJson(i),
+        ],
+        _ => throw const FormatException('"reviewSnippets" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (reviewSnippets.isNotDefault)
+      'reviewSnippets': [for (final i in reviewSnippets) i.toJson()],
+  };
+
+  @override
+  String toString() => 'PlaceAnswerSources()';
+}
+
+/// Encapsulates a snippet of a user review that answers a question about
+/// the features of a specific place in Google Maps.
+final class GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet
+    extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.ai.generativelanguage.v1beta.GroundingChunk.Maps.PlaceAnswerSources.ReviewSnippet';
+
+  /// The ID of the review snippet.
+  final String? reviewId;
+
+  /// A link that corresponds to the user review on Google Maps.
+  final String? googleMapsUri;
+
+  /// Title of the review.
+  final String? title;
+
+  GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet({
+    this.reviewId,
+    this.googleMapsUri,
+    this.title,
+  }) : super(fullyQualifiedName);
+
+  factory GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet.fromJson(
+    Object? j,
+  ) {
+    final json = j as Map<String, Object?>;
+    return GroundingChunk_Maps_PlaceAnswerSources_ReviewSnippet(
+      reviewId: switch (json['reviewId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      googleMapsUri: switch (json['googleMapsUri']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (reviewId case final reviewId?) 'reviewId': reviewId,
+    if (googleMapsUri case final googleMapsUri?) 'googleMapsUri': googleMapsUri,
+    if (title case final title?) 'title': title,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (reviewId != null) 'reviewId=$reviewId',
+      if (googleMapsUri != null) 'googleMapsUri=$googleMapsUri',
+      if (title != null) 'title=$title',
+    ].join(',');
+    return 'ReviewSnippet(${$contents})';
   }
 }
 

@@ -118,117 +118,117 @@ final class Compliance {
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
     final url = Uri.https(_host, '/v1beta1/repeat:query', {
       if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.info!.fString case final $1 when $1.isNotDefault)
+      if (request.info?.fString case final $1? when $1.isNotDefault)
         'info.fString': $1,
-      if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+      if (request.info?.fInt32 case final $1? when $1.isNotDefault)
         'info.fInt32': '${$1}',
-      if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+      if (request.info?.fSint32 case final $1? when $1.isNotDefault)
         'info.fSint32': '${$1}',
-      if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+      if (request.info?.fSfixed32 case final $1? when $1.isNotDefault)
         'info.fSfixed32': '${$1}',
-      if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+      if (request.info?.fUint32 case final $1? when $1.isNotDefault)
         'info.fUint32': '${$1}',
-      if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+      if (request.info?.fFixed32 case final $1? when $1.isNotDefault)
         'info.fFixed32': '${$1}',
-      if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+      if (request.info?.fInt64 case final $1? when $1.isNotDefault)
         'info.fInt64': '${$1}',
-      if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+      if (request.info?.fSint64 case final $1? when $1.isNotDefault)
         'info.fSint64': '${$1}',
-      if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+      if (request.info?.fSfixed64 case final $1? when $1.isNotDefault)
         'info.fSfixed64': '${$1}',
-      if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+      if (request.info?.fUint64 case final $1? when $1.isNotDefault)
         'info.fUint64': '${$1}',
-      if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+      if (request.info?.fFixed64 case final $1? when $1.isNotDefault)
         'info.fFixed64': '${$1}',
-      if (request.info!.fDouble case final $1 when $1.isNotDefault)
+      if (request.info?.fDouble case final $1? when $1.isNotDefault)
         'info.fDouble': '${$1}',
-      if (request.info!.fFloat case final $1 when $1.isNotDefault)
+      if (request.info?.fFloat case final $1? when $1.isNotDefault)
         'info.fFloat': '${$1}',
-      if (request.info!.fBool case final $1 when $1.isNotDefault)
+      if (request.info?.fBool case final $1? when $1.isNotDefault)
         'info.fBool': '${$1}',
-      if (request.info!.fBytes case final $1 when $1.isNotDefault)
+      if (request.info?.fBytes case final $1? when $1.isNotDefault)
         'info.fBytes': encodeBytes($1)!,
-      if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+      if (request.info?.fKingdom case final $1? when $1.isNotDefault)
         'info.fKingdom': $1.value,
-      if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+      if (request.info?.fChild?.fString case final $1? when $1.isNotDefault)
         'info.fChild.fString': $1,
-      if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+      if (request.info?.fChild?.fFloat case final $1? when $1.isNotDefault)
         'info.fChild.fFloat': '${$1}',
-      if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+      if (request.info?.fChild?.fDouble case final $1? when $1.isNotDefault)
         'info.fChild.fDouble': '${$1}',
-      if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+      if (request.info?.fChild?.fBool case final $1? when $1.isNotDefault)
         'info.fChild.fBool': '${$1}',
-      if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+      if (request.info?.fChild?.fContinent case final $1? when $1.isNotDefault)
         'info.fChild.fContinent': $1.value,
-      if (request.info!.fChild!.fChild!.fString case final $1
+      if (request.info?.fChild?.fChild?.fString case final $1?
           when $1.isNotDefault)
         'info.fChild.fChild.fString': $1,
-      if (request.info!.fChild!.fChild!.fDouble case final $1
+      if (request.info?.fChild?.fChild?.fDouble case final $1?
           when $1.isNotDefault)
         'info.fChild.fChild.fDouble': '${$1}',
-      if (request.info!.fChild!.fChild!.fBool case final $1
+      if (request.info?.fChild?.fChild?.fBool case final $1?
           when $1.isNotDefault)
         'info.fChild.fChild.fBool': '${$1}',
-      if (request.info!.fChild!.pString case final $1?)
+      if (request.info?.fChild?.pString case final $1?)
         'info.fChild.pString': $1,
-      if (request.info!.fChild!.pFloat case final $1?)
+      if (request.info?.fChild?.pFloat case final $1?)
         'info.fChild.pFloat': '${$1}',
-      if (request.info!.fChild!.pDouble case final $1?)
+      if (request.info?.fChild?.pDouble case final $1?)
         'info.fChild.pDouble': '${$1}',
-      if (request.info!.fChild!.pBool case final $1?)
+      if (request.info?.fChild?.pBool case final $1?)
         'info.fChild.pBool': '${$1}',
-      if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+      if (request.info?.fChild?.pContinent case final $1? when $1.isNotDefault)
         'info.fChild.pContinent': $1.value,
-      if (request.info!.fChild!.pChild!.fString case final $1
+      if (request.info?.fChild?.pChild?.fString case final $1?
           when $1.isNotDefault)
         'info.fChild.pChild.fString': $1,
-      if (request.info!.fChild!.pChild!.fDouble case final $1
+      if (request.info?.fChild?.pChild?.fDouble case final $1?
           when $1.isNotDefault)
         'info.fChild.pChild.fDouble': '${$1}',
-      if (request.info!.fChild!.pChild!.fBool case final $1
+      if (request.info?.fChild?.pChild?.fBool case final $1?
           when $1.isNotDefault)
         'info.fChild.pChild.fBool': '${$1}',
-      if (request.info!.pString case final $1?) 'info.pString': $1,
-      if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
-      if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
-      if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
-      if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
-      if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+      if (request.info?.pString case final $1?) 'info.pString': $1,
+      if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+      if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
+      if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
+      if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+      if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
         'info.pChild.fString': $1,
-      if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+      if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
         'info.pChild.fFloat': '${$1}',
-      if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+      if (request.info?.pChild?.fDouble case final $1? when $1.isNotDefault)
         'info.pChild.fDouble': '${$1}',
-      if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+      if (request.info?.pChild?.fBool case final $1? when $1.isNotDefault)
         'info.pChild.fBool': '${$1}',
-      if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+      if (request.info?.pChild?.fContinent case final $1? when $1.isNotDefault)
         'info.pChild.fContinent': $1.value,
-      if (request.info!.pChild!.fChild!.fString case final $1
+      if (request.info?.pChild?.fChild?.fString case final $1?
           when $1.isNotDefault)
         'info.pChild.fChild.fString': $1,
-      if (request.info!.pChild!.fChild!.fDouble case final $1
+      if (request.info?.pChild?.fChild?.fDouble case final $1?
           when $1.isNotDefault)
         'info.pChild.fChild.fDouble': '${$1}',
-      if (request.info!.pChild!.fChild!.fBool case final $1
+      if (request.info?.pChild?.fChild?.fBool case final $1?
           when $1.isNotDefault)
         'info.pChild.fChild.fBool': '${$1}',
-      if (request.info!.pChild!.pString case final $1?)
+      if (request.info?.pChild?.pString case final $1?)
         'info.pChild.pString': $1,
-      if (request.info!.pChild!.pFloat case final $1?)
+      if (request.info?.pChild?.pFloat case final $1?)
         'info.pChild.pFloat': '${$1}',
-      if (request.info!.pChild!.pDouble case final $1?)
+      if (request.info?.pChild?.pDouble case final $1?)
         'info.pChild.pDouble': '${$1}',
-      if (request.info!.pChild!.pBool case final $1?)
+      if (request.info?.pChild?.pBool case final $1?)
         'info.pChild.pBool': '${$1}',
-      if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+      if (request.info?.pChild?.pContinent case final $1? when $1.isNotDefault)
         'info.pChild.pContinent': $1.value,
-      if (request.info!.pChild!.pChild!.fString case final $1
+      if (request.info?.pChild?.pChild?.fString case final $1?
           when $1.isNotDefault)
         'info.pChild.pChild.fString': $1,
-      if (request.info!.pChild!.pChild!.fDouble case final $1
+      if (request.info?.pChild?.pChild?.fDouble case final $1?
           when $1.isNotDefault)
         'info.pChild.pChild.fDouble': '${$1}',
-      if (request.info!.pChild!.pChild!.fBool case final $1
+      if (request.info?.pChild?.pChild?.fBool case final $1?
           when $1.isNotDefault)
         'info.pChild.pChild.fBool': '${$1}',
       if (request.serverVerify case final $1 when $1.isNotDefault)
@@ -259,117 +259,121 @@ final class Compliance {
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fInt32}/${request.info!.fDouble}/${request.info!.fBool}/${request.info!.fKingdom}:simplepath',
       {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-        if (request.info!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.fString case final $1? when $1.isNotDefault)
           'info.fString': $1,
-        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+        if (request.info?.fInt32 case final $1? when $1.isNotDefault)
           'info.fInt32': '${$1}',
-        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+        if (request.info?.fSint32 case final $1? when $1.isNotDefault)
           'info.fSint32': '${$1}',
-        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+        if (request.info?.fSfixed32 case final $1? when $1.isNotDefault)
           'info.fSfixed32': '${$1}',
-        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+        if (request.info?.fUint32 case final $1? when $1.isNotDefault)
           'info.fUint32': '${$1}',
-        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+        if (request.info?.fFixed32 case final $1? when $1.isNotDefault)
           'info.fFixed32': '${$1}',
-        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+        if (request.info?.fInt64 case final $1? when $1.isNotDefault)
           'info.fInt64': '${$1}',
-        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+        if (request.info?.fSint64 case final $1? when $1.isNotDefault)
           'info.fSint64': '${$1}',
-        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+        if (request.info?.fSfixed64 case final $1? when $1.isNotDefault)
           'info.fSfixed64': '${$1}',
-        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+        if (request.info?.fUint64 case final $1? when $1.isNotDefault)
           'info.fUint64': '${$1}',
-        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+        if (request.info?.fFixed64 case final $1? when $1.isNotDefault)
           'info.fFixed64': '${$1}',
-        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.fDouble case final $1? when $1.isNotDefault)
           'info.fDouble': '${$1}',
-        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.fFloat case final $1? when $1.isNotDefault)
           'info.fFloat': '${$1}',
-        if (request.info!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.fBool case final $1? when $1.isNotDefault)
           'info.fBool': '${$1}',
-        if (request.info!.fBytes case final $1 when $1.isNotDefault)
+        if (request.info?.fBytes case final $1? when $1.isNotDefault)
           'info.fBytes': encodeBytes($1)!,
-        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+        if (request.info?.fKingdom case final $1? when $1.isNotDefault)
           'info.fKingdom': $1.value,
-        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fString case final $1? when $1.isNotDefault)
           'info.fChild.fString': $1,
-        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fFloat case final $1? when $1.isNotDefault)
           'info.fChild.fFloat': '${$1}',
-        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fDouble case final $1? when $1.isNotDefault)
           'info.fChild.fDouble': '${$1}',
-        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fBool case final $1? when $1.isNotDefault)
           'info.fChild.fBool': '${$1}',
-        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fContinent case final $1?
+            when $1.isNotDefault)
           'info.fChild.fContinent': $1.value,
-        if (request.info!.fChild!.fChild!.fString case final $1
+        if (request.info?.fChild?.fChild?.fString case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fString': $1,
-        if (request.info!.fChild!.fChild!.fDouble case final $1
+        if (request.info?.fChild?.fChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fDouble': '${$1}',
-        if (request.info!.fChild!.fChild!.fBool case final $1
+        if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info!.fChild!.pString case final $1?)
+        if (request.info?.fChild?.pString case final $1?)
           'info.fChild.pString': $1,
-        if (request.info!.fChild!.pFloat case final $1?)
+        if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
-        if (request.info!.fChild!.pDouble case final $1?)
+        if (request.info?.fChild?.pDouble case final $1?)
           'info.fChild.pDouble': '${$1}',
-        if (request.info!.fChild!.pBool case final $1?)
+        if (request.info?.fChild?.pBool case final $1?)
           'info.fChild.pBool': '${$1}',
-        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.pContinent case final $1?
+            when $1.isNotDefault)
           'info.fChild.pContinent': $1.value,
-        if (request.info!.fChild!.pChild!.fString case final $1
+        if (request.info?.fChild?.pChild?.fString case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fString': $1,
-        if (request.info!.fChild!.pChild!.fDouble case final $1
+        if (request.info?.fChild?.pChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fDouble': '${$1}',
-        if (request.info!.fChild!.pChild!.fBool case final $1
+        if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info!.pString case final $1?) 'info.pString': $1,
-        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
-        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
-        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
-        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.pString case final $1?) 'info.pString': $1,
+        if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
-        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
           'info.pChild.fFloat': '${$1}',
-        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fDouble case final $1? when $1.isNotDefault)
           'info.pChild.fDouble': '${$1}',
-        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fBool case final $1? when $1.isNotDefault)
           'info.pChild.fBool': '${$1}',
-        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fContinent case final $1?
+            when $1.isNotDefault)
           'info.pChild.fContinent': $1.value,
-        if (request.info!.pChild!.fChild!.fString case final $1
+        if (request.info?.pChild?.fChild?.fString case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fString': $1,
-        if (request.info!.pChild!.fChild!.fDouble case final $1
+        if (request.info?.pChild?.fChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fDouble': '${$1}',
-        if (request.info!.pChild!.fChild!.fBool case final $1
+        if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info!.pChild!.pString case final $1?)
+        if (request.info?.pChild?.pString case final $1?)
           'info.pChild.pString': $1,
-        if (request.info!.pChild!.pFloat case final $1?)
+        if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
-        if (request.info!.pChild!.pDouble case final $1?)
+        if (request.info?.pChild?.pDouble case final $1?)
           'info.pChild.pDouble': '${$1}',
-        if (request.info!.pChild!.pBool case final $1?)
+        if (request.info?.pChild?.pBool case final $1?)
           'info.pChild.pBool': '${$1}',
-        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.pContinent case final $1?
+            when $1.isNotDefault)
           'info.pChild.pContinent': $1.value,
-        if (request.info!.pChild!.pChild!.fString case final $1
+        if (request.info?.pChild?.pChild?.fString case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fString': $1,
-        if (request.info!.pChild!.pChild!.fDouble case final $1
+        if (request.info?.pChild?.pChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fDouble': '${$1}',
-        if (request.info!.pChild!.pChild!.fBool case final $1
+        if (request.info?.pChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
@@ -401,117 +405,121 @@ final class Compliance {
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}/bool/${request.info!.fBool}:pathresource',
       {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-        if (request.info!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.fString case final $1? when $1.isNotDefault)
           'info.fString': $1,
-        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+        if (request.info?.fInt32 case final $1? when $1.isNotDefault)
           'info.fInt32': '${$1}',
-        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+        if (request.info?.fSint32 case final $1? when $1.isNotDefault)
           'info.fSint32': '${$1}',
-        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+        if (request.info?.fSfixed32 case final $1? when $1.isNotDefault)
           'info.fSfixed32': '${$1}',
-        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+        if (request.info?.fUint32 case final $1? when $1.isNotDefault)
           'info.fUint32': '${$1}',
-        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+        if (request.info?.fFixed32 case final $1? when $1.isNotDefault)
           'info.fFixed32': '${$1}',
-        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+        if (request.info?.fInt64 case final $1? when $1.isNotDefault)
           'info.fInt64': '${$1}',
-        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+        if (request.info?.fSint64 case final $1? when $1.isNotDefault)
           'info.fSint64': '${$1}',
-        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+        if (request.info?.fSfixed64 case final $1? when $1.isNotDefault)
           'info.fSfixed64': '${$1}',
-        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+        if (request.info?.fUint64 case final $1? when $1.isNotDefault)
           'info.fUint64': '${$1}',
-        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+        if (request.info?.fFixed64 case final $1? when $1.isNotDefault)
           'info.fFixed64': '${$1}',
-        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.fDouble case final $1? when $1.isNotDefault)
           'info.fDouble': '${$1}',
-        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.fFloat case final $1? when $1.isNotDefault)
           'info.fFloat': '${$1}',
-        if (request.info!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.fBool case final $1? when $1.isNotDefault)
           'info.fBool': '${$1}',
-        if (request.info!.fBytes case final $1 when $1.isNotDefault)
+        if (request.info?.fBytes case final $1? when $1.isNotDefault)
           'info.fBytes': encodeBytes($1)!,
-        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+        if (request.info?.fKingdom case final $1? when $1.isNotDefault)
           'info.fKingdom': $1.value,
-        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fString case final $1? when $1.isNotDefault)
           'info.fChild.fString': $1,
-        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fFloat case final $1? when $1.isNotDefault)
           'info.fChild.fFloat': '${$1}',
-        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fDouble case final $1? when $1.isNotDefault)
           'info.fChild.fDouble': '${$1}',
-        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fBool case final $1? when $1.isNotDefault)
           'info.fChild.fBool': '${$1}',
-        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fContinent case final $1?
+            when $1.isNotDefault)
           'info.fChild.fContinent': $1.value,
-        if (request.info!.fChild!.fChild!.fString case final $1
+        if (request.info?.fChild?.fChild?.fString case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fString': $1,
-        if (request.info!.fChild!.fChild!.fDouble case final $1
+        if (request.info?.fChild?.fChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fDouble': '${$1}',
-        if (request.info!.fChild!.fChild!.fBool case final $1
+        if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info!.fChild!.pString case final $1?)
+        if (request.info?.fChild?.pString case final $1?)
           'info.fChild.pString': $1,
-        if (request.info!.fChild!.pFloat case final $1?)
+        if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
-        if (request.info!.fChild!.pDouble case final $1?)
+        if (request.info?.fChild?.pDouble case final $1?)
           'info.fChild.pDouble': '${$1}',
-        if (request.info!.fChild!.pBool case final $1?)
+        if (request.info?.fChild?.pBool case final $1?)
           'info.fChild.pBool': '${$1}',
-        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.pContinent case final $1?
+            when $1.isNotDefault)
           'info.fChild.pContinent': $1.value,
-        if (request.info!.fChild!.pChild!.fString case final $1
+        if (request.info?.fChild?.pChild?.fString case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fString': $1,
-        if (request.info!.fChild!.pChild!.fDouble case final $1
+        if (request.info?.fChild?.pChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fDouble': '${$1}',
-        if (request.info!.fChild!.pChild!.fBool case final $1
+        if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info!.pString case final $1?) 'info.pString': $1,
-        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
-        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
-        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
-        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.pString case final $1?) 'info.pString': $1,
+        if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
-        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
           'info.pChild.fFloat': '${$1}',
-        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fDouble case final $1? when $1.isNotDefault)
           'info.pChild.fDouble': '${$1}',
-        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fBool case final $1? when $1.isNotDefault)
           'info.pChild.fBool': '${$1}',
-        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fContinent case final $1?
+            when $1.isNotDefault)
           'info.pChild.fContinent': $1.value,
-        if (request.info!.pChild!.fChild!.fString case final $1
+        if (request.info?.pChild?.fChild?.fString case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fString': $1,
-        if (request.info!.pChild!.fChild!.fDouble case final $1
+        if (request.info?.pChild?.fChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fDouble': '${$1}',
-        if (request.info!.pChild!.fChild!.fBool case final $1
+        if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info!.pChild!.pString case final $1?)
+        if (request.info?.pChild?.pString case final $1?)
           'info.pChild.pString': $1,
-        if (request.info!.pChild!.pFloat case final $1?)
+        if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
-        if (request.info!.pChild!.pDouble case final $1?)
+        if (request.info?.pChild?.pDouble case final $1?)
           'info.pChild.pDouble': '${$1}',
-        if (request.info!.pChild!.pBool case final $1?)
+        if (request.info?.pChild?.pBool case final $1?)
           'info.pChild.pBool': '${$1}',
-        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.pContinent case final $1?
+            when $1.isNotDefault)
           'info.pChild.pContinent': $1.value,
-        if (request.info!.pChild!.pChild!.fString case final $1
+        if (request.info?.pChild?.pChild?.fString case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fString': $1,
-        if (request.info!.pChild!.pChild!.fDouble case final $1
+        if (request.info?.pChild?.pChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fDouble': '${$1}',
-        if (request.info!.pChild!.pChild!.fBool case final $1
+        if (request.info?.pChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
@@ -545,117 +553,121 @@ final class Compliance {
       '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}:pathtrailingresource',
       {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-        if (request.info!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.fString case final $1? when $1.isNotDefault)
           'info.fString': $1,
-        if (request.info!.fInt32 case final $1 when $1.isNotDefault)
+        if (request.info?.fInt32 case final $1? when $1.isNotDefault)
           'info.fInt32': '${$1}',
-        if (request.info!.fSint32 case final $1 when $1.isNotDefault)
+        if (request.info?.fSint32 case final $1? when $1.isNotDefault)
           'info.fSint32': '${$1}',
-        if (request.info!.fSfixed32 case final $1 when $1.isNotDefault)
+        if (request.info?.fSfixed32 case final $1? when $1.isNotDefault)
           'info.fSfixed32': '${$1}',
-        if (request.info!.fUint32 case final $1 when $1.isNotDefault)
+        if (request.info?.fUint32 case final $1? when $1.isNotDefault)
           'info.fUint32': '${$1}',
-        if (request.info!.fFixed32 case final $1 when $1.isNotDefault)
+        if (request.info?.fFixed32 case final $1? when $1.isNotDefault)
           'info.fFixed32': '${$1}',
-        if (request.info!.fInt64 case final $1 when $1.isNotDefault)
+        if (request.info?.fInt64 case final $1? when $1.isNotDefault)
           'info.fInt64': '${$1}',
-        if (request.info!.fSint64 case final $1 when $1.isNotDefault)
+        if (request.info?.fSint64 case final $1? when $1.isNotDefault)
           'info.fSint64': '${$1}',
-        if (request.info!.fSfixed64 case final $1 when $1.isNotDefault)
+        if (request.info?.fSfixed64 case final $1? when $1.isNotDefault)
           'info.fSfixed64': '${$1}',
-        if (request.info!.fUint64 case final $1 when $1.isNotDefault)
+        if (request.info?.fUint64 case final $1? when $1.isNotDefault)
           'info.fUint64': '${$1}',
-        if (request.info!.fFixed64 case final $1 when $1.isNotDefault)
+        if (request.info?.fFixed64 case final $1? when $1.isNotDefault)
           'info.fFixed64': '${$1}',
-        if (request.info!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.fDouble case final $1? when $1.isNotDefault)
           'info.fDouble': '${$1}',
-        if (request.info!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.fFloat case final $1? when $1.isNotDefault)
           'info.fFloat': '${$1}',
-        if (request.info!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.fBool case final $1? when $1.isNotDefault)
           'info.fBool': '${$1}',
-        if (request.info!.fBytes case final $1 when $1.isNotDefault)
+        if (request.info?.fBytes case final $1? when $1.isNotDefault)
           'info.fBytes': encodeBytes($1)!,
-        if (request.info!.fKingdom case final $1 when $1.isNotDefault)
+        if (request.info?.fKingdom case final $1? when $1.isNotDefault)
           'info.fKingdom': $1.value,
-        if (request.info!.fChild!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fString case final $1? when $1.isNotDefault)
           'info.fChild.fString': $1,
-        if (request.info!.fChild!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fFloat case final $1? when $1.isNotDefault)
           'info.fChild.fFloat': '${$1}',
-        if (request.info!.fChild!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fDouble case final $1? when $1.isNotDefault)
           'info.fChild.fDouble': '${$1}',
-        if (request.info!.fChild!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fBool case final $1? when $1.isNotDefault)
           'info.fChild.fBool': '${$1}',
-        if (request.info!.fChild!.fContinent case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.fContinent case final $1?
+            when $1.isNotDefault)
           'info.fChild.fContinent': $1.value,
-        if (request.info!.fChild!.fChild!.fString case final $1
+        if (request.info?.fChild?.fChild?.fString case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fString': $1,
-        if (request.info!.fChild!.fChild!.fDouble case final $1
+        if (request.info?.fChild?.fChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fDouble': '${$1}',
-        if (request.info!.fChild!.fChild!.fBool case final $1
+        if (request.info?.fChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.fChild.fBool': '${$1}',
-        if (request.info!.fChild!.pString case final $1?)
+        if (request.info?.fChild?.pString case final $1?)
           'info.fChild.pString': $1,
-        if (request.info!.fChild!.pFloat case final $1?)
+        if (request.info?.fChild?.pFloat case final $1?)
           'info.fChild.pFloat': '${$1}',
-        if (request.info!.fChild!.pDouble case final $1?)
+        if (request.info?.fChild?.pDouble case final $1?)
           'info.fChild.pDouble': '${$1}',
-        if (request.info!.fChild!.pBool case final $1?)
+        if (request.info?.fChild?.pBool case final $1?)
           'info.fChild.pBool': '${$1}',
-        if (request.info!.fChild!.pContinent case final $1 when $1.isNotDefault)
+        if (request.info?.fChild?.pContinent case final $1?
+            when $1.isNotDefault)
           'info.fChild.pContinent': $1.value,
-        if (request.info!.fChild!.pChild!.fString case final $1
+        if (request.info?.fChild?.pChild?.fString case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fString': $1,
-        if (request.info!.fChild!.pChild!.fDouble case final $1
+        if (request.info?.fChild?.pChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fDouble': '${$1}',
-        if (request.info!.fChild!.pChild!.fBool case final $1
+        if (request.info?.fChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.fChild.pChild.fBool': '${$1}',
-        if (request.info!.pString case final $1?) 'info.pString': $1,
-        if (request.info!.pInt32 case final $1?) 'info.pInt32': '${$1}',
-        if (request.info!.pDouble case final $1?) 'info.pDouble': '${$1}',
-        if (request.info!.pBool case final $1?) 'info.pBool': '${$1}',
-        if (request.info!.pKingdom case final $1?) 'info.pKingdom': $1.value,
-        if (request.info!.pChild!.fString case final $1 when $1.isNotDefault)
+        if (request.info?.pString case final $1?) 'info.pString': $1,
+        if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
           'info.pChild.fString': $1,
-        if (request.info!.pChild!.fFloat case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
           'info.pChild.fFloat': '${$1}',
-        if (request.info!.pChild!.fDouble case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fDouble case final $1? when $1.isNotDefault)
           'info.pChild.fDouble': '${$1}',
-        if (request.info!.pChild!.fBool case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fBool case final $1? when $1.isNotDefault)
           'info.pChild.fBool': '${$1}',
-        if (request.info!.pChild!.fContinent case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.fContinent case final $1?
+            when $1.isNotDefault)
           'info.pChild.fContinent': $1.value,
-        if (request.info!.pChild!.fChild!.fString case final $1
+        if (request.info?.pChild?.fChild?.fString case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fString': $1,
-        if (request.info!.pChild!.fChild!.fDouble case final $1
+        if (request.info?.pChild?.fChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fDouble': '${$1}',
-        if (request.info!.pChild!.fChild!.fBool case final $1
+        if (request.info?.pChild?.fChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.fChild.fBool': '${$1}',
-        if (request.info!.pChild!.pString case final $1?)
+        if (request.info?.pChild?.pString case final $1?)
           'info.pChild.pString': $1,
-        if (request.info!.pChild!.pFloat case final $1?)
+        if (request.info?.pChild?.pFloat case final $1?)
           'info.pChild.pFloat': '${$1}',
-        if (request.info!.pChild!.pDouble case final $1?)
+        if (request.info?.pChild?.pDouble case final $1?)
           'info.pChild.pDouble': '${$1}',
-        if (request.info!.pChild!.pBool case final $1?)
+        if (request.info?.pChild?.pBool case final $1?)
           'info.pChild.pBool': '${$1}',
-        if (request.info!.pChild!.pContinent case final $1 when $1.isNotDefault)
+        if (request.info?.pChild?.pContinent case final $1?
+            when $1.isNotDefault)
           'info.pChild.pContinent': $1.value,
-        if (request.info!.pChild!.pChild!.fString case final $1
+        if (request.info?.pChild?.pChild?.fString case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fString': $1,
-        if (request.info!.pChild!.pChild!.fDouble case final $1
+        if (request.info?.pChild?.pChild?.fDouble case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fDouble': '${$1}',
-        if (request.info!.pChild!.pChild!.fBool case final $1
+        if (request.info?.pChild?.pChild?.fBool case final $1?
             when $1.isNotDefault)
           'info.pChild.pChild.fBool': '${$1}',
         if (request.serverVerify case final $1 when $1.isNotDefault)
@@ -729,7 +741,7 @@ final class Compliance {
   /// any reason.
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
     final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.request!.unknownEnum case final $1 when $1.isNotDefault)
+      if (request.request?.unknownEnum case final $1? when $1.isNotDefault)
         'request.unknownEnum': '${$1}',
       if (request.continent case final $1 when $1.isNotDefault)
         'continent': $1.value,
@@ -785,7 +797,7 @@ final class Compliance {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });
@@ -1093,7 +1105,7 @@ final class Echo {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });
@@ -1317,7 +1329,7 @@ final class Identity {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });
@@ -1647,7 +1659,7 @@ final class Messaging {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });
@@ -1886,7 +1898,7 @@ final class SequenceService {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });
@@ -2168,7 +2180,7 @@ final class Testing {
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
     final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options!.requestedPolicyVersion case final $1
+      if (request.options?.requestedPolicyVersion case final $1?
           when $1.isNotDefault)
         'options.requestedPolicyVersion': '${$1}',
     });

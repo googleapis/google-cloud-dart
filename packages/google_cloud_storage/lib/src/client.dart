@@ -16,7 +16,7 @@ import 'object_metadata.dart';
 
 /// Stores and retrieves potentially large, immutable data objects.
 final class StorageClient {
-  /// Information about a [[Google Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
+  /// Information about a [Google Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
   ///
   /// This operation is read-only and always idempotent.
   Future<ObjectMetadata> objectMetadata(String bucket, String object) async =>

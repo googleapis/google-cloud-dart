@@ -18,8 +18,8 @@ specification-format = 'protobuf'
 
 [source]
 roots                   = 'googleapis'
-googleapis-root         = 'https://github.com/googleapis/googleapis/archive/fef700942b6a3ef8bbaf253306a0a652a1858552.tar.gz'
-googleapis-sha256       = 'df47fc8368ce3e02f12e857dbb73d0631c35a5860527629cc37214e307a726f3'
+googleapis-root         = 'https://github.com/googleapis/googleapis/archive/211d22fa6dfabfa52cbda04d1aee852a01301edf.tar.gz'
+googleapis-sha256       = '9aa6e5167f76b869b53b71f9fe963e6e17ec58b2cbdeb30715ef95b92faabfc5'
 protobuf-extracted-name = 'protobuf-29.3'
 protobuf-root           = 'https://github.com/protocolbuffers/protobuf/releases/download/v29.3/protobuf-29.3.tar.gz'
 protobuf-sha256         = '008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e'
