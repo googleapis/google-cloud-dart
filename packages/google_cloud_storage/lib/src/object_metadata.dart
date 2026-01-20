@@ -244,8 +244,8 @@ final class ObjectMetadata {
   /// A timestamp specified by the user for an object.
   final Timestamp? customTime;
 
-  /// Metadata of customer-supplied encryption key, if the object is encrypted by
-  /// such a key.
+  /// Metadata of customer-supplied encryption key, if the object is encrypted
+  /// by such a key.
   final CustomerEncryption? customerEncryption;
 
   /// HTTP 1.1 Entity tag for the object.
