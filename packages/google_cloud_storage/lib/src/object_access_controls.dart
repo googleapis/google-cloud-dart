@@ -14,17 +14,16 @@
 
 import 'package:google_cloud_rpc/exceptions.dart';
 
-/// Represents the Viewers, Editors, or Owners of a given project.
+/// The viewers, editors, or owners of a given project.
 ///
 /// See [Cloud Storage &gt; Guides &gt; Projects](https://docs.cloud.google.com/storage/docs/projects)
 final class ProjectTeam {
-  /// The automatically generated unique identifier for the project, such as
-  /// `"123456789876"`.
+  /// The automatically generated unique identifier for the project.
   final String? projectNumber;
 
   /// The team.
   ///
-  /// Acceptable values are `"editors"`, `"owners"`, and `"viewers"`.
+  /// The value *must* be one of `"editors"`, `"owners"`, or `"viewers"`.
   final String? team;
 
   ProjectTeam({this.projectNumber, this.team});
@@ -33,7 +32,10 @@ final class ProjectTeam {
   String toString() =>
       'ProjectTeam(projectNumber: $projectNumber, team: $team)';
 
-  /// Creates a new [ProjectTeam] with the given non-`null` fields replaced.
+  /// Creates a new [ProjectTeam] with the given property values.
+  ///
+  /// If an argument is omitted or `null`, the value of the property in this
+  /// team is used.
   ProjectTeam copyWith({String? projectNumber, String? team}) => ProjectTeam(
     projectNumber: projectNumber ?? this.projectNumber,
     team: team ?? this.team,
@@ -47,23 +49,22 @@ final class ProjectTeam {
       );
 }
 
-/// The ObjectAccessControls resources represent the Access Control Lists (ACLs)
-/// for objects within Cloud Storage.
+/// An Access Control List (ACL) for objects within Cloud Storage.
 ///
 /// ACLs let you specify who has access to your data and to what extent.
 ///
 /// [!IMPORTANT]
-/// The methods for this resource fail with a [BadRequestException] exception
-/// for buckets with uniform bucket-level access enabled. Use
-/// `storage.buckets.getIamPolicy` and `storage.buckets.setIamPolicy` to
+/// The methods that modify ACLs for this object will fail with
+/// [BadRequestException] for buckets with uniform bucket-level access enabled.
+/// Use `storage.buckets.getIamPolicy` and `storage.buckets.setIamPolicy` to
 /// control access instead.
 ///
-/// There are two roles that can be assigned to an entity:
+/// There are two roles that can be assigned to an object:
 /// 1. `READER` can get an object, though the `acl` property will not be
 ///    revealed.
-/// 2. `OWNER` are `READER`s, and they can get the `acl` property, update an
-///    object, and call all objectAccessControls methods on the object. The
-///    owner of an object is always an `OWNER`.
+/// 2. `OWNER` are `READER`s, and they can get the `acl` property, update the
+///    object's metadata, and call all [ObjectAccessControl]-related methods on
+///    the object. The owner of an object is always an `OWNER`.
 ///
 /// For more information, see
 /// [Access Control](https://docs.cloud.google.com/storage/docs/access-control),
@@ -83,12 +84,14 @@ final class ObjectAccessControl {
 
   /// The entity holding the permission.
   ///
-  /// It can be in one of the following forms:
-  /// - `user-email`
-  /// - `group-groupId`
-  /// - `group-email`
-  /// - `domain-domain`
-  /// - `project-team-projectId`
+  /// Must be either a tag followed by a dash and a value, or one of the
+  /// non-parameterized tag.
+  ///
+  /// - `user-<email address>`
+  /// - `group-<group id>`
+  /// - `group-<email address>`
+  /// - `domain-<domain>`
+  /// - `project-team-<project id>`
   /// - `allUsers`
   /// - `allAuthenticatedUsers`
   ///
@@ -103,13 +106,18 @@ final class ObjectAccessControl {
   /// The ID for the entity, if any.
   final String? entityId;
 
-  /// HTTP 1.1 Entity tag for the access-control entry.
+  /// [HTTP 1.1 Entity tag](https://tools.ietf.org/html/rfc7232#section-2.3)
+  /// for the access-control entry.
   final String? etag;
 
-  /// The content generation of the object, if applied to an object.
+  /// The content generation of the object.
+  ///
+  /// Used for
+  /// [object versioning](https://docs.cloud.google.com/storage/docs/object-versioning)
+  /// and [soft delete](https://cloud.google.com/storage/docs/soft-delete).
   final String? generation;
 
-  /// The ID of the access-control entry.
+  /// The ID of this access-control entry.
   final String? id;
 
   /// The kind of item this is. For object access control entries, this is

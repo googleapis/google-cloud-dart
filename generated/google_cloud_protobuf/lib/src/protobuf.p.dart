@@ -325,7 +325,7 @@ extension TimestampExtension on Timestamp {
   /// The maximum value for [seconds]; corresponds to `'9999-12-31T23:59:59Z'`.
   static const int maxSeconds = 253402300799;
 
-  /// Converts a [Timestamp] to a `dart:core` [DateTime].
+  /// This timestamp as a [DateTime].
   ///
   /// The [DateTime] will be in UTC and the nanoseconds precision of the
   /// [Timestamp] will be reduced to microsecond precision.

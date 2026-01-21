@@ -162,6 +162,11 @@ void main() {
       expect(timestamp.toDateTime(), DateTime.utc(9999, 12, 31, 23, 59, 59));
     });
 
+    test('round past max', () {
+      final timestamp = Timestamp.fromJson('9999-12-31T23:59:59.999999999Z');
+      expect(timestamp.toDateTime(), DateTime.utc(10000, 1, 1, 0, 0, 0));
+    });
+
     test('with nanos', () {
       final timestamp = Timestamp.fromJson('2024-10-19T12:34:56.123456789Z');
       expect(

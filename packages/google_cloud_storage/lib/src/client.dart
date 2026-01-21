@@ -14,11 +14,15 @@
 
 import 'object_metadata.dart';
 
-/// Stores and retrieves potentially large, immutable data objects.
-final class StorageClient {
-  /// Information about a [Google Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
+/// API for storing and retrieving potentially large, immutable data objects.
+///
+/// See [Google Cloud Storage](https://cloud.google.com/storage).
+final class Storage {
+  /// Information about a [Google Cloud Storage object].
   ///
   /// This operation is read-only and always idempotent.
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
   Future<ObjectMetadata> objectMetadata(String bucket, String object) async =>
       throw UnimplementedError('objectMetadata');
 }
