@@ -23,7 +23,7 @@ import 'object_metadata.dart';
 /// When enabled, controls the storage class of objects based on how and when
 /// the objects are accessed.
 final class BucketAutoclass {
-  /// Whether or not Autoclass is enabled on this bucket.
+  /// Whether Autoclass is enabled on this bucket.
   ///
   /// By default, this boolean is not set, and Autoclass is disabled.
   final bool? enabled;
@@ -253,8 +253,8 @@ final class BucketAccessControl {
 /// Encryption configuration for a bucket.
 final class BucketEncryption {
   /// The [Cloud KMS key](https://docs.cloud.google.com/kms/docs/resource-hierarchy#keys)
-  /// that will be used to encrypt objects inserted into this bucket, if no
-  /// object encryption method is specified.
+  /// to use to encrypt objects inserted into this bucket, if no object
+  /// encryption method is specified.
   final String? defaultKmsKeyName;
 
   BucketEncryption({this.defaultKmsKeyName});
@@ -300,7 +300,7 @@ final class BucketCorsConfiguration {
   /// header used in preflight responses.
   final int? maxAgeSeconds;
 
-  /// The list of HTTP methods on which to include CORS response headers,
+  /// The list of HTTP methods on which to include CORS response headers.
   ///
   /// You can specify methods explicitly (`"GET"`, `"OPTIONS"`, `"POST"`, etc)
   /// or use `"*"` to permit all methods.
@@ -456,7 +456,7 @@ final class BucketIamConfiguration {
 /// [Uniform bucket-level access](https://cloud.google.com/storage/docs/uniform-bucket-level-access)
 /// configuration.
 final class UniformBucketLevelAccess {
-  /// Whether or not the bucket uses uniform bucket-level access.
+  /// Whether the bucket uses uniform bucket-level access.
   ///
   /// If set, access checks only use bucket-level IAM policies or above.
   final bool? enabled;
@@ -924,7 +924,7 @@ final class BucketRetentionPolicy {
   /// The time from which the retention policy was effective.
   final Timestamp? effectiveTime;
 
-  /// Whether or not the retention policy is locked.
+  /// Whether the retention policy is locked.
   ///
   /// If `true`, the retention policy cannot be removed and the retention period
   /// cannot be reduced.
@@ -1165,7 +1165,8 @@ final class BucketMetadata {
   /// Object data for objects in the bucket resides in physical storage within
   /// this location. Defaults to `"US"`.
   ///
-  /// See [Cloud Storage bucket locations](https://docs.cloud.google.com/storage/docs/locations) for the authoritative list.
+  /// See [Cloud Storage bucket locations](https://docs.cloud.google.com/storage/docs/locations)
+  /// for the authoritative list.
   final String? location;
 
   /// The type of location that the bucket resides in.
