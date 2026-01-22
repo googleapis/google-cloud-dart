@@ -23,9 +23,11 @@ import 'object_metadata.dart';
 ///
 /// [Autoclass]: https://docs.cloud.google.com/storage/docs/autoclass
 final class BucketAutoclass {
-  /// Whether Autoclass is enabled on this bucket.
+  /// Whether [Autoclass][] is enabled on this bucket.
   ///
   /// By default, this boolean is not set, and Autoclass is disabled.
+  ///
+  /// [Autoclass]: https://docs.cloud.google.com/storage/docs/autoclass
   final bool? enabled;
 
   /// The storage class that objects in the bucket eventually transition to if
