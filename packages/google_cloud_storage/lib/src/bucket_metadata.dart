@@ -955,7 +955,7 @@ final class BucketRetentionPolicy {
 
   @override
   String toString() =>
-      'RetentionPolicy(effectiveTime: $effectiveTime, isLocked: $isLocked, '
+      'BucketRetentionPolicy(effectiveTime: $effectiveTime, isLocked: $isLocked, '
       'retentionPeriod: $retentionPeriod)';
 
   BucketRetentionPolicy copyWith({
