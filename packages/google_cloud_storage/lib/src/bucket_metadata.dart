@@ -878,7 +878,8 @@ final class BucketLoggingConfiguration {
 
   @override
   String toString() =>
-      'BucketLoggingConfiguration(logBucket: $logBucket, logObjectPrefix: $logObjectPrefix)';
+      'BucketLoggingConfiguration(logBucket: $logBucket, '
+      'logObjectPrefix: $logObjectPrefix)';
 
   BucketLoggingConfiguration copyWith({
     String? logBucket,
@@ -955,8 +956,8 @@ final class BucketRetentionPolicy {
 
   @override
   String toString() =>
-      'BucketRetentionPolicy(effectiveTime: $effectiveTime, isLocked: $isLocked, '
-      'retentionPeriod: $retentionPeriod)';
+      'BucketRetentionPolicy(effectiveTime: $effectiveTime, '
+      'isLocked: $isLocked, retentionPeriod: $retentionPeriod)';
 
   BucketRetentionPolicy copyWith({
     Timestamp? effectiveTime,
@@ -1141,6 +1142,9 @@ final class BucketMetadata {
   /// [HTTP 1.1 Entity tag]: https://tools.ietf.org/html/rfc7232#section-2.3
   final String? etag;
 
+  /// The version of the bucket.
+  final int? generation;
+
   /// The bucket's hierarchical namespace configuration.
   final BucketHierarchicalNamespace? hierarchicalNamespace;
 
@@ -1154,9 +1158,6 @@ final class BucketMetadata {
   ///
   /// [IP filter]: https://docs.cloud.google.com/storage/docs/ip-filtering-overview
   final BucketIpFilter? ipFilter;
-
-  /// The version of the bucket.
-  final int? generation;
 
   /// The time when a soft-deleted bucket is permanently deleted and can no
   /// longer be restored.
@@ -1238,6 +1239,9 @@ final class BucketMetadata {
   /// [soft-deleted]: https://docs.cloud.google.com/storage/docs/soft-delete
   final Timestamp? softDeleteTime;
 
+  /// The URI of this bucket.
+  final Uri? selfLink;
+
   /// The bucket's default storage class, used whenever no
   /// [ObjectMetadata.storageClass] is specified for a newly-created object.
   ///
@@ -1245,9 +1249,6 @@ final class BucketMetadata {
   /// to `"STANDARD"`. For available storage classes, see
   /// [Storage classes](https://docs.cloud.google.com/storage/docs/storage-classes).
   final String? storageClass;
-
-  /// The URI of this bucket.
-  final Uri? selfLink;
 
   /// The creation time of the bucket.
   final Timestamp? timeCreated;
@@ -1290,10 +1291,10 @@ final class BucketMetadata {
     this.projectNumber,
     this.retentionPolicy,
     this.rpo,
+    this.selfLink,
     this.softDeletePolicy,
     this.softDeleteTime,
     this.storageClass,
-    this.selfLink,
     this.timeCreated,
     this.updated,
     this.versioning,
@@ -1315,9 +1316,9 @@ final class BucketMetadata {
       'metageneration: $metageneration, name: $name, '
       'objectRetention: $objectRetention, owner: $owner, '
       'projectNumber: $projectNumber, retentionPolicy: $retentionPolicy, '
-      'rpo: $rpo, softDeletePolicy: $softDeletePolicy, '
+      'rpo: $rpo, selfLink: $selfLink, softDeletePolicy: $softDeletePolicy, '
       'softDeleteTime: $softDeleteTime, storageClass: $storageClass, '
-      'selfLink: $selfLink, timeCreated: $timeCreated, updated: $updated, '
+      'timeCreated: $timeCreated, updated: $updated, '
       'versioning: $versioning, website: $website)';
 
   /// Creates a new [BucketMetadata] with the given non-`null` fields replaced.
