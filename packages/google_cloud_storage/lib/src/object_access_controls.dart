@@ -16,7 +16,9 @@ import 'package:google_cloud_rpc/exceptions.dart';
 
 /// The viewers, editors, or owners of a given project.
 ///
-/// See [Cloud Storage &gt; Guides &gt; Projects](https://docs.cloud.google.com/storage/docs/projects)
+/// See [Cloud Storage &gt; Guides &gt; Projects][].
+///
+/// [Cloud Storage &gt; Guides &gt; Projects]: https://docs.cloud.google.com/storage/docs/projects
 final class ProjectTeam {
   /// The automatically generated unique identifier for the project.
   final String? projectNumber;
@@ -66,12 +68,13 @@ final class ProjectTeam {
 ///    object's metadata, and call all [ObjectAccessControl]-related methods on
 ///    the object. The owner of an object is always an `OWNER`.
 ///
-/// For more information, see
-/// [Access Control](https://docs.cloud.google.com/storage/docs/access-control),
-/// with the caveat that this API uses `READER` and `OWNER` instead of `READ`
-/// and `FULL_CONTROL`.
+/// For more information, see [Access Control][], with the caveat that this API
+/// uses `READER` and `OWNER` instead of `READ` and `FULL_CONTROL`.
 ///
-/// See [ObjectAccessControls](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls).
+/// See [ObjectAccessControls][].
+///
+/// [Access Control]: https://docs.cloud.google.com/storage/docs/access-control
+/// [ObjectAccessControls]: https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls
 final class ObjectAccessControl {
   /// The name of the bucket that the access control applies to.
   final String? bucket;
@@ -112,9 +115,10 @@ final class ObjectAccessControl {
 
   /// The content generation of the object.
   ///
-  /// Used for
-  /// [object versioning](https://docs.cloud.google.com/storage/docs/object-versioning)
-  /// and [soft delete](https://cloud.google.com/storage/docs/soft-delete).
+  /// Used for [object versioning][] and [soft delete][].
+  ///
+  /// [object versioning]: https://docs.cloud.google.com/storage/docs/object-versioning
+  /// [soft delete]: https://cloud.google.com/storage/docs/soft-delete
   final String? generation;
 
   /// The ID of this access-control entry.

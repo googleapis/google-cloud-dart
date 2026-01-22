@@ -76,10 +76,12 @@ final class Owner {
   );
 }
 
-/// The object's [retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
+/// The object's [retention configuration][].
 ///
 /// This defines the earliest datetime that the object can be deleted or
 /// replaced.
+///
+/// [retention configuration]: https://docs.cloud.google.com/storage/docs/object-lock
 final class ObjectRetention {
   /// The mode of the retention configuration, which can be either `"Unlocked"`
   /// or `"Locked"`.
@@ -122,7 +124,9 @@ final class ObjectRetention {
 /// Contexts attached to an object, in key-value pairs.
 ///
 /// For more information about object contexts, see
-/// [Object contexts overview](https://cloud.google.com/storage/docs/object-contexts).
+/// [Object contexts overview][].
+///
+/// [Object contexts overview]: https://cloud.google.com/storage/docs/object-contexts
 class ObjectContexts {
   final Map<String, ObjectCustomContextPayload>? custom;
 
@@ -154,10 +158,13 @@ class ObjectCustomContextPayload {
   ObjectCustomContextPayload({this.createTime, this.updateTime, this.value});
 }
 
-/// Information about a [Cloud Storage object](https://docs.cloud.google.com/storage/docs/objects).
+/// Information about a [Cloud Storage object][].
 ///
 /// For detailed information on the meaning of each field, see
-/// [Object resource](https://docs.cloud.google.com/storage/docs/json_api/v1/objects#resource).
+/// [Object resource][].
+///
+/// [Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+/// [Object resource]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects#resource
 final class ObjectMetadata {
   /// Access controls on the object.
   ///
@@ -197,14 +204,18 @@ final class ObjectMetadata {
   /// Contexts attached to an object, in key-value pairs.
   ///
   /// For more information about object contexts, see
-  /// [Object contexts overview](https://cloud.google.com/storage/docs/object-contexts).
+  /// [Object contexts overview][].
+  ///
+  /// [Object contexts overview]: https://cloud.google.com/storage/docs/object-contexts
   final ObjectContexts? contexts;
 
   /// CRC32c checksum, as described in RFC 4960, Appendix B; encoded using
   /// base64 in big-endian byte order.
   ///
   /// For more information about using the CRC32c checksum, see
-  /// [Data Validation and Change Detection](https://cloud.google.com/storage/docs/data-validation).
+  /// [Data Validation and Change Detection][].
+  ///
+  /// [Data Validation and Change Detection]: https://cloud.google.com/storage/docs/data-validation
   final String? crc32c;
 
   /// A timestamp specified by the user for an object.
@@ -258,7 +269,9 @@ final class ObjectMetadata {
   /// MD5 hash of the data; encoded using base64.
   ///
   /// For more information about using the MD5 hash, see
-  /// [Data Validation and Change Detection](https://cloud.google.com/storage/docs/data-validation).
+  /// [Data Validation and Change Detection][].
+  ///
+  /// [Data Validation and Change Detection]: https://cloud.google.com/storage/docs/data-validation
   final String? md5Hash;
 
   /// Media download link.
@@ -287,7 +300,9 @@ final class ObjectMetadata {
   /// buckets.
   final String? restoreToken;
 
-  /// The object's [retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
+  /// The object's [retention configuration][].
+  ///
+  /// [retention configuration]: https://docs.cloud.google.com/storage/docs/object-lock
   ///
   /// This defines the earliest datetime that the object can be deleted or
   /// replaced.
