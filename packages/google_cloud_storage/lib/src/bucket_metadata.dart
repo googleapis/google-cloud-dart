@@ -602,8 +602,7 @@ final class PublicNetworkSource {
 /// [lifecycle](https://docs.cloud.google.com/storage/docs/lifecycle)
 /// configuration.
 final class Lifecycle {
-  /// A lifecycle management rule, which is made of an action to take and the
-  /// condition(s) under which the action will be taken.
+  /// The lifecycle rules to follow.
   final List<Rule>? rule;
 
   Lifecycle({this.rule});
@@ -617,12 +616,13 @@ final class Lifecycle {
       Lifecycle(rule: rule ? null : this.rule);
 }
 
-/// A lifecycle Rule.
+/// A lifecycle management rule, which is made of an action to take and the
+/// conditions under which the action is taken.
 final class Rule {
   /// The action to take.
   final Action? action;
 
-  /// The condition(s) under which the action will be taken.
+  /// The conditions under which the action will be taken.
   final Condition? condition;
 
   Rule({this.action, this.condition});
@@ -643,12 +643,18 @@ final class Rule {
 
 /// The action to take for a lifecycle rule.
 final class Action {
-  /// The target storage class.
+  /// The new storage class when action.type is `"SetStorageClass"`.
   ///
-  /// Required iff the type of the action is SetStorageClass.
+  /// See
+  /// [lifecycle actions](https://docs.cloud.google.com/storage/docs/lifecycle#actions)
+  /// for a table of supported storage class transitions.
   final String? storageClass;
 
   /// The type of the action.
+  ///
+  /// See
+  /// [lifecycle actions](https://docs.cloud.google.com/storage/docs/lifecycle#actions)
+  /// for a table of supported actions.
   final String? type;
 
   Action({this.storageClass, this.type});
@@ -669,47 +675,47 @@ final class Action {
 
 /// The condition(s) under which a lifecycle rule action will be taken.
 final class Condition {
-  /// Age of an object (in days).
-  ///
-  /// This condition is satisfied when an object reaches the specified age.
+  /// The age of an object in days.
   final int? age;
 
-  /// A date in RFC 3339 format with only the date part (for instance,
-  /// "2013-01-15").
+  /// A date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format
+  /// with only the date part (for instance, "2013-01-15").
   ///
   /// This condition is satisfied when an object is created before midnight of
   /// the specified date in UTC.
   final String? createdBefore;
 
-  /// A date in RFC 3339 format with only the date part (for instance,
-  /// "2013-01-15").
+  /// A date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339)
+  /// format with only the date part (for instance, "2013-01-15").
   ///
-  /// This condition is satisfied when the custom time on an object is before
+  /// This condition is satisfied when the `customTime` on an object is before
   /// this date in UTC.
   final String? customTimeBefore;
 
-  /// Number of days elapsed since the user-specified custom time.
+  /// Days since the date set in the `customTime` metadata for the object.
+  ///
+  /// This condition is satisfied when the current date and time is at least
+  /// the specified number of days after the `customTime`.
   final int? daysSinceCustomTime;
 
   /// Number of days elapsed since the noncurrent timestamp of an object.
   ///
-  /// The condition is satisfied if the days elapsed is at least this number.
-  ///
-  /// This condition is relevant only for versioned objects. The value of the
-  /// field must be a nonnegative integer. If it's zero, the object version
-  /// will satisfy the condition immediately upon becoming noncurrent.
+  /// This condition is relevant only for versioned objects. This condition is
+  /// satisfied when an object has been noncurrent for more than the specified
+  /// number of days.
   final int? daysSinceNoncurrentTime;
 
-  /// Relevant only for versioned objects.
+  /// Whether the condition matches live objects (`true`) or non-live objects
+  /// (`false`).
   ///
-  /// If the value is `true`, this condition matches live objects; if the value
-  /// is `false`, it matches archived objects.
+  /// This condition is relevant only for versioned objects.
   final bool? isLive;
 
   /// List of object name prefixes.
   ///
-  /// This condition will be satisfied when at least one of the prefixes exactly
-  /// matches the beginning of the object name.
+  /// This condition is satisfied when the beginning of an object's name is an
+  /// exact case-sensitive match with the prefix. The prefix must meet
+  /// [object naming requirements](https://cloud.google.com/storage/docs/naming#objectnaming).
   final List<String>? matchesPrefix;
 
   /// Objects having any of the storage classes specified by this condition will
@@ -721,24 +727,23 @@ final class Condition {
 
   /// List of object name suffixes.
   ///
-  /// This condition will be satisfied when at least one of the suffixes exactly
-  /// matches the end of the object name.
+  /// This condition is satisfied when the end of an object's name is an exact
+  /// case-sensitive match with the suffix. The suffix must meet
+  /// [object naming requirements](https://cloud.google.com/storage/docs/naming#objectnaming).
   final List<String>? matchesSuffix;
 
-  /// A date in RFC 3339 format with only the date part (for instance,
-  /// "2013-01-15").
+  /// A date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339)
+  /// format with only the date part (for instance, "2013-01-15").
   ///
-  /// This condition is satisfied when the noncurrent time on an object is
-  /// before this date in UTC.
-  ///
-  /// This condition is relevant only for versioned objects.
+  /// This condition is satisfied for objects that became noncurrent on a date
+  /// prior to the one specified in this condition.
   final String? noncurrentTimeBefore;
 
-  /// Relevant only for versioned objects.
-  ///
   /// If the value is N, this condition is satisfied when there are at least N
   /// versions (including the live version) newer than this version of the
   /// object.
+  ///
+  /// Relevant only for versioned objects.
   final int? numNewerVersions;
 
   Condition({
@@ -1063,7 +1068,9 @@ final class BucketMetadata {
   /// The location of the bucket.
   ///
   /// Object data for objects in the bucket resides in physical storage within
-  /// this region.
+  /// this location. Defaults to `"US"`.
+  ///
+  /// See [Cloud Storage bucket locations](https://docs.cloud.google.com/storage/docs/locations) for the authoritative list.
   final String? location;
 
   /// The type of the bucket location.
