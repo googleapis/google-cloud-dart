@@ -61,6 +61,10 @@ jobs:
       - name: "generated/**_test.dart"
         run: dart test -p ${{ matrix.platform }} .
         working-directory: generated
+      - name: "packages/**_test.dart"
+        if: ${{ matrix.platform != 'chrome' }}
+        run: dart test -p ${{ matrix.platform }} .
+        working-directory: packages
 
   generator:
     name: Generators
