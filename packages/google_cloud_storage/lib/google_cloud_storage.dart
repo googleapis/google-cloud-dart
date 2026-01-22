@@ -17,6 +17,7 @@ library;
 
 export 'package:google_cloud_rpc/exceptions.dart';
 
+export 'src/bucket_metadata.dart';
 export 'src/client.dart';
 export 'src/object_access_controls.dart';
 export 'src/object_metadata.dart';

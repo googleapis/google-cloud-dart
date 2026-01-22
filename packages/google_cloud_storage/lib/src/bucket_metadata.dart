@@ -14,14 +14,13 @@
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'object_access_controls.dart';
-import 'object_metadata.dart';
 
-/// The bucket's
-/// [Autoclass](https://docs.cloud.google.com/storage/docs/autoclass)
-/// configuration.
+/// The bucket's [Autoclass][] configuration.
 ///
 /// When enabled, controls the storage class of objects based on how and when
 /// the objects are accessed.
+///
+/// [Autoclass]: https://docs.cloud.google.com/storage/docs/autoclass
 final class BucketAutoclass {
   /// Whether Autoclass is enabled on this bucket.
   ///
@@ -86,8 +85,9 @@ final class BucketAutoclass {
 
 /// The bucket's billing configuration.
 final class BucketBilling {
-  /// Whether [Requester Pays](https://docs.cloud.google.com/storage/docs/requester-pays)
-  /// is enabled for this bucket.
+  /// Whether [Requester Pays][] is enabled for this bucket.
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   final bool? requesterPays;
 
   BucketBilling({this.requesterPays});
@@ -252,9 +252,10 @@ final class BucketAccessControl {
 
 /// Encryption configuration for a bucket.
 final class BucketEncryption {
-  /// The [Cloud KMS key](https://docs.cloud.google.com/kms/docs/resource-hierarchy#keys)
-  /// to use to encrypt objects inserted into this bucket, if no object
-  /// encryption method is specified.
+  /// The [Cloud KMS key][] to use to encrypt objects inserted into this bucket,
+  /// if no object encryption method is specified.
+  ///
+  /// [Cloud KMS key]: https://docs.cloud.google.com/kms/docs/resource-hierarchy#keys
   final String? defaultKmsKeyName;
 
   BucketEncryption({this.defaultKmsKeyName});
@@ -292,12 +293,14 @@ final class BucketObjectRetention {
       BucketObjectRetention(mode: mode ? null : this.mode);
 }
 
-/// The [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-/// configuration for a bucket.
+/// The [Cross-Origin Resource Sharing (CORS)][] configuration for a bucket.
+///
+/// [Cross-Origin Resource Sharing (CORS)]: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
 final class BucketCorsConfiguration {
-  /// The value, in seconds, to return in the
-  /// [`Access-Control-Max-Age`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age)
+  /// The value, in seconds, to return in the [`Access-Control-Max-Age`][]
   /// header used in preflight responses.
+  ///
+  /// [`Access-Control-Max-Age`]: https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age
   final int? maxAgeSeconds;
 
   /// The list of HTTP methods on which to include CORS response headers.
@@ -312,9 +315,10 @@ final class BucketCorsConfiguration {
   /// You can specify origins explicitly or use `"*"` to permit all origins.
   final List<String>? origin;
 
-  /// The list of HTTP headers, other than the
-  /// [safe response headers](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_response_headers),
+  /// The list of HTTP headers, other than the [safe response headers][],
   /// to give permission to the user-agent to share across domains.
+  ///
+  /// [safe response headers]: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS#simple_response_headers
   final List<String>? responseHeader;
 
   BucketCorsConfiguration({
@@ -356,8 +360,9 @@ final class BucketCorsConfiguration {
 
 /// The bucket's custom placement configuration.
 ///
-/// This is only relevant for
-/// [Configurable dual regions](https://docs.cloud.google.com/storage/docs/locations#location-dr).
+/// This is only relevant for [Configurable dual regions][].
+///
+/// [Configurable dual regions]: https://docs.cloud.google.com/storage/docs/locations#location-dr
 final class BucketCustomPlacementConfig {
   /// The list of individual regions that comprise a configurable dual-region
   /// bucket.
@@ -385,9 +390,9 @@ final class BucketCustomPlacementConfig {
 
 /// The bucket's hierarchical namespace configuration.
 final class BucketHierarchicalNamespace {
-  /// Whether or not
-  /// [Hierarchical namespace](https://docs.cloud.google.com/storage/docs/hns-overview)
-  /// is enabled on this bucket.
+  /// Whether [Hierarchical namespace][] is enabled on this bucket.
+  ///
+  /// [Hierarchical namespace]: https://docs.cloud.google.com/storage/docs/hns-overview
   final bool? enabled;
 
   BucketHierarchicalNamespace({this.enabled});
@@ -404,19 +409,20 @@ final class BucketHierarchicalNamespace {
 
 /// The bucket's IAM configuration.
 final class BucketIamConfiguration {
-  /// The bucket's
-  /// [Public access prevention](https://docs.cloud.google.com/storage/docs/public-access-prevention)
-  /// configuration.
+  /// The bucket's [Public access prevention][] configuration.
   ///
   /// Must be `"inherited"` or `"enforced"`. If `"inherited"`, the bucket uses
   /// public access prevention only if the bucket is subject to the
-  /// [public access prevention organization policy constraint](https://docs.cloud.google.com/storage/docs/org-policy-constraints#public-access-prevention).
+  /// [public access prevention organization policy constraint][].
   /// Defaults to `"inherited"`.
+  ///
+  /// [Public access prevention]: https://docs.cloud.google.com/storage/docs/public-access-prevention
+  /// [public access prevention organization policy constraint]: https://docs.cloud.google.com/storage/docs/org-policy-constraints#public-access-prevention
   final String? publicAccessPrevention;
 
-  /// The bucket's
-  /// [Uniform bucket-level access](https://cloud.google.com/storage/docs/uniform-bucket-level-access)
-  /// configuration.
+  /// The bucket's [Uniform bucket-level access][] configuration.
+  ///
+  /// [Uniform bucket-level access]: https://cloud.google.com/storage/docs/uniform-bucket-level-access
   final UniformBucketLevelAccess? uniformBucketLevelAccess;
 
   BucketIamConfiguration({
@@ -452,9 +458,9 @@ final class BucketIamConfiguration {
   );
 }
 
-/// The bucket's
-/// [Uniform bucket-level access](https://cloud.google.com/storage/docs/uniform-bucket-level-access)
-/// configuration.
+/// The bucket's [Uniform bucket-level access][] configuration.
+///
+/// [Uniform bucket-level access]: https://cloud.google.com/storage/docs/uniform-bucket-level-access
 final class UniformBucketLevelAccess {
   /// Whether the bucket uses uniform bucket-level access.
   ///
@@ -489,19 +495,20 @@ final class UniformBucketLevelAccess {
   );
 }
 
-/// The bucket's
-/// [IP filter](https://docs.cloud.google.com/storage/docs/ip-filtering-overview)
-/// configuration.
+/// The bucket's [IP filter][] configuration.
 ///
 /// Specifies the network sources that can access the bucket, as well as its
 /// underlying objects.
+///
+/// [IP filter]: https://docs.cloud.google.com/storage/docs/ip-filtering-overview
 final class BucketIpFilter {
-  /// Whether to allow
-  /// [service agent](https://docs.cloud.google.com/iam/docs/service-agents)
-  /// access to the bucket, regardless of the IP filter configuration.
+  /// Whether to allow [service agent][] access to the bucket, regardless of the
+  /// IP filter configuration.
   ///
   /// If the value is true, other Google Cloud services can use service agents
   /// to access the bucket without IP-based validation.
+  ///
+  /// [service agent]: https://docs.cloud.google.com/iam/docs/service-agents
   final bool? allowAllServiceAgentAccess;
 
   /// Whether to allow VPC networks that are defined in `vpcNetworkSources` to
@@ -608,9 +615,9 @@ final class BucketPublicNetworkSource {
       );
 }
 
-/// The bucket's
-/// [lifecycle](https://docs.cloud.google.com/storage/docs/lifecycle)
-/// configuration.
+/// The bucket's [lifecycle][] configuration.
+///
+/// [lifecycle]: https://docs.cloud.google.com/storage/docs/lifecycle
 final class Lifecycle {
   /// The lifecycle rules to follow.
   final List<LifecycleRule>? rule;
@@ -660,16 +667,17 @@ final class LifecycleRule {
 final class LifecycleRuleAction {
   /// The new storage class when action.type is `"SetStorageClass"`.
   ///
-  /// See
-  /// [lifecycle actions](https://docs.cloud.google.com/storage/docs/lifecycle#actions)
-  /// for a table of supported storage class transitions.
+  /// See [lifecycle actions][] for a table of supported storage class
+  /// transitions.
+  ///
+  /// [lifecycle actions]: https://docs.cloud.google.com/storage/docs/lifecycle#actions
   final String? storageClass;
 
   /// The type of the action.
   ///
-  /// See
-  /// [lifecycle actions](https://docs.cloud.google.com/storage/docs/lifecycle#actions)
-  /// for a table of supported actions.
+  /// See [lifecycle actions][] for a table of supported actions.
+  ///
+  /// [lifecycle actions]: https://docs.cloud.google.com/storage/docs/lifecycle#actions
   final String? type;
 
   LifecycleRuleAction({this.storageClass, this.type});
@@ -853,8 +861,9 @@ final class LifecycleRuleCondition {
 /// The bucket's logging configuration.
 ///
 /// Defines the destination bucket and optional name prefix for the current
-/// bucket's
-/// [usage logs and storage logs](https://docs.cloud.google.com/storage/docs/access-logs).
+/// bucket's [usage logs and storage logs][].
+///
+/// [usage logs and storage logs]: https://docs.cloud.google.com/storage/docs/access-logs
 final class BucketLoggingConfiguration {
   /// The destination bucket where the current bucket's logs should be placed.
   final String? logBucket;
@@ -969,13 +978,14 @@ final class BucketRetentionPolicy {
   );
 }
 
-/// The bucket's
-/// [soft delete policy](https://docs.cloud.google.com/storage/docs/soft-delete).
+/// The bucket's [soft delete policy][].
 ///
 /// Defines the period of time during which objects in the bucket are retained
 /// in a soft-deleted state after being deleted. Objects in a soft-deleted state
 /// cannot be permanently deleted, and are restorable until their
 /// [ObjectMetadata.hardDeleteTime].
+///
+/// [soft delete policy]: https://docs.cloud.google.com/storage/docs/soft-delete
 final class BucketSoftDeletePolicy {
   /// The time from which the soft delete policy was effective.
   ///
@@ -1020,8 +1030,9 @@ final class BucketSoftDeletePolicy {
 
 /// The bucket's versioning configuration.
 ///
-/// For more information, see
-/// [Object Versioning](https://docs.cloud.google.com/storage/docs/object-versioning).
+/// For more information, see [Object Versioning][].
+///
+/// [Object Versioning]: https://docs.cloud.google.com/storage/docs/object-versioning
 final class BucketVersioning {
   /// Whether versioning is enabled for this bucket.
   final bool? enabled;
@@ -1041,8 +1052,9 @@ final class BucketVersioning {
 /// The bucket's website configuration, controlling how the service behaves when
 /// accessing bucket contents as a web site.
 ///
-/// For more information, see
-/// [Static Website Examples](https://docs.cloud.google.com/storage/docs/static-website).
+/// For more information, see [Static Website Examples][].
+///
+/// [Static Website Examples]: https://docs.cloud.google.com/storage/docs/static-website
 final class BucketWebsiteConfiguration {
   /// If the requested object path is missing, the service will ensure the path
   /// has a trailing '/', appends this suffix, and attempts to retrieve the
@@ -1099,20 +1111,22 @@ final class BucketMetadata {
   /// The bucket's billing configuration.
   final BucketBilling? billing;
 
-  /// The bucket's
-  /// [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
-  /// configuration.
+  /// The bucket's [Cross-Origin Resource Sharing (CORS)][] configuration.
+  ///
+  /// [Cross-Origin Resource Sharing (CORS)]: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
   final List<BucketCorsConfiguration>? cors;
 
   /// The bucket's custom placement configuration.
   ///
-  /// This is only relevant for
-  /// [Configurable dual regions](https://docs.cloud.google.com/storage/docs/locations#location-dr).
+  /// This is only relevant for [Configurable dual regions][].
+  ///
+  /// [Configurable dual regions]: https://docs.cloud.google.com/storage/docs/locations#location-dr
   final BucketCustomPlacementConfig? customPlacementConfig;
 
-  /// Whether or not to automatically apply an
-  /// [`eventBasedHold`](https://docs.cloud.google.com/storage/docs/object-holds#hold-types)
-  /// to new objects added to the bucket.
+  /// Whether to automatically apply an [`eventBasedHold`][] to new objects
+  /// added to the bucket.
+  ///
+  /// [`eventBasedHold`]: https://docs.cloud.google.com/storage/docs/object-holds#hold-types
   final bool? defaultEventBasedHold;
 
   /// Default access controls to apply to new objects when no ACL is provided.
@@ -1121,8 +1135,9 @@ final class BucketMetadata {
   /// Encryption configuration for a bucket.
   final BucketEncryption? encryption;
 
-  /// [HTTP 1.1 Entity tag](https://tools.ietf.org/html/rfc7232#section-2.3)
-  /// for the bucket.
+  /// [HTTP 1.1 Entity tag][] for the bucket.
+  ///
+  /// [HTTP 1.1 Entity tag]: https://tools.ietf.org/html/rfc7232#section-2.3
   final String? etag;
 
   /// The bucket's hierarchical namespace configuration.
@@ -1134,9 +1149,9 @@ final class BucketMetadata {
   /// The ID of the bucket.
   final String? id;
 
-  /// The bucket's
-  /// [IP filter](https://docs.cloud.google.com/storage/docs/ip-filtering-overview)
-  /// configuration.
+  /// The bucket's [IP filter][] configuration.
+  ///
+  /// [IP filter]: https://docs.cloud.google.com/storage/docs/ip-filtering-overview
   final BucketIpFilter? ipFilter;
 
   /// The version of the bucket.
@@ -1155,9 +1170,9 @@ final class BucketMetadata {
   /// User-provided labels, in key/value pairs.
   final Map<String, String>? labels;
 
-  /// The bucket's
-  /// [lifecycle](https://docs.cloud.google.com/storage/docs/lifecycle)
-  /// configuration.
+  /// The bucket's [lifecycle][] configuration.
+  ///
+  /// [lifecycle]: https://docs.cloud.google.com/storage/docs/lifecycle
   final Lifecycle? lifecycle;
 
   /// The location of the bucket.
@@ -1183,8 +1198,9 @@ final class BucketMetadata {
   /// The name of the bucket.
   final String? name;
 
-  /// The bucket's
-  /// [object retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
+  /// The bucket's [object retention configuration][].
+  ///
+  /// [object retention configuration]: https://docs.cloud.google.com/storage/docs/object-lock
   final BucketObjectRetention? objectRetention;
 
   /// The owner of the bucket.
@@ -1211,12 +1227,14 @@ final class BucketMetadata {
   /// [redundancy across regions](https://docs.cloud.google.com/storage/docs/availability-durability#cross-region-redundancy).
   final String? rpo;
 
-  /// The bucket's
-  /// [soft delete policy](https://docs.cloud.google.com/storage/docs/soft-delete).
+  /// The bucket's [soft delete policy][].
+  ///
+  /// [soft delete policy]: https://docs.cloud.google.com/storage/docs/soft-delete
   final BucketSoftDeletePolicy? softDeletePolicy;
 
-  /// The time at which the bucket became
-  /// [soft-deleted](https://docs.cloud.google.com/storage/docs/soft-delete).
+  /// The time at which the bucket became [soft-deleted][].
+  ///
+  /// [soft-deleted]: https://docs.cloud.google.com/storage/docs/soft-delete
   final Timestamp? softDeleteTime;
 
   /// The bucket's default storage class, used whenever no
