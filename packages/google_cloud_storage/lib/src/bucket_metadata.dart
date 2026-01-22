@@ -1255,8 +1255,7 @@ final class BucketMetadata {
   /// The time at which the bucket's metadata or IAM policy was last updated
   final Timestamp? updated;
 
-  /// The bucket's versioning configuration, controlling how the service
-  /// behaves when accessing bucket contents as a web site.
+  /// The bucket's versioning configuration.
   final BucketVersioning? versioning;
 
   /// The bucket's website configuration.
