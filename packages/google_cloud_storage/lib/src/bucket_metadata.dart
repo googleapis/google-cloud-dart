@@ -273,9 +273,11 @@ final class BucketEncryption {
       );
 }
 
-/// The object retention configuration for the bucket.
+/// The bucket's
+/// [object retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
 final class BucketObjectRetention {
-  /// The object retention mode.
+  /// When set to `"Enabled"`, retention configurations can be set on objects
+  /// in the bucket.
   final String? mode;
 
   BucketObjectRetention({this.mode});
@@ -831,88 +833,145 @@ final class Condition {
 }
 
 /// The bucket's logging configuration.
-final class Logging {
+///
+/// Defines the destination bucket and optional name prefix for the current
+/// bucket's
+/// [usage logs and storage logs](https://docs.cloud.google.com/storage/docs/access-logs).
+final class BucketLoggingConfiguration {
   /// The destination bucket where the current bucket's logs should be placed.
   final String? logBucket;
 
   /// A prefix for log object names.
+  ///
+  /// The default prefix is the bucket name.
   final String? logObjectPrefix;
 
-  Logging({this.logBucket, this.logObjectPrefix});
+  BucketLoggingConfiguration({this.logBucket, this.logObjectPrefix});
 
   @override
   String toString() =>
       'Logging(logBucket: $logBucket, logObjectPrefix: $logObjectPrefix)';
 
-  Logging copyWith({String? logBucket, String? logObjectPrefix}) => Logging(
+  BucketLoggingConfiguration copyWith({
+    String? logBucket,
+    String? logObjectPrefix,
+  }) => BucketLoggingConfiguration(
     logBucket: logBucket ?? this.logBucket,
     logObjectPrefix: logObjectPrefix ?? this.logObjectPrefix,
   );
 
-  Logging copyWithout({bool logBucket = false, bool logObjectPrefix = false}) =>
-      Logging(
-        logBucket: logBucket ? null : this.logBucket,
-        logObjectPrefix: logObjectPrefix ? null : this.logObjectPrefix,
+  BucketLoggingConfiguration copyWithout({
+    bool logBucket = false,
+    bool logObjectPrefix = false,
+  }) => BucketLoggingConfiguration(
+    logBucket: logBucket ? null : this.logBucket,
+    logObjectPrefix: logObjectPrefix ? null : this.logObjectPrefix,
+  );
+}
+
+/// The owner of the bucket.
+///
+/// This is always the project team's owner group.
+final class BucketOwner {
+  /// The entity, in the form `"project-owner-<projectId>"`.
+  final String? entity;
+
+  /// The ID for the entity.
+  final String? entityId;
+
+  BucketOwner({this.entity, this.entityId});
+
+  @override
+  String toString() => 'BucketOwner(entity: $entity, entityId: $entityId)';
+
+  /// Creates a new [BucketOwner] with the given non-`null` fields replaced.
+  BucketOwner copyWith({String? entity, String? entityId}) => BucketOwner(
+    entity: entity ?? this.entity,
+    entityId: entityId ?? this.entityId,
+  );
+
+  /// Creates a new [BucketOwner] with the given fields set to `null`.
+  BucketOwner copyWithout({bool entity = false, bool entityId = false}) =>
+      BucketOwner(
+        entity: entity ? null : this.entity,
+        entityId: entityId ? null : this.entityId,
       );
 }
 
-/// The bucket's retention policy.
+/// The bucket's [retention policy](https://docs.cloud.google.com/storage/docs/bucket-lock#retention-policy).
 ///
-/// The retention policy enforces a minimum retention time for all objects
-/// contained in the bucket.
-final class RetentionPolicy {
+/// Defines the minimum age an object in the bucket must reach before it can be
+/// deleted or replaced.
+final class BucketRetentionPolicy {
   /// The time from which the retention policy was effective.
   final Timestamp? effectiveTime;
 
   /// Whether or not the retention policy is locked.
   ///
-  /// If true, the retention policy cannot be removed and the retention period
+  /// If `true`, the retention policy cannot be removed and the retention period
   /// cannot be reduced.
   final bool? isLocked;
 
-  /// The duration in seconds that objects need to be retained.
+  /// The period of time, in seconds, that objects in the bucket must be
+  /// retained and cannot be deleted, replaced, or made noncurrent.
   ///
-  /// Retention duration must be greater than zero and less than 100 years.
-  /// Note that enforcement of retention periods less than 1 day is not
-  /// guaranteed.
-  final int? retentionPeriod; // unsigned long
+  /// The value must be greater than 0 seconds and less than 3,155,760,000
+  /// seconds (100 years).
+  final int? retentionPeriod;
 
-  RetentionPolicy({this.effectiveTime, this.isLocked, this.retentionPeriod});
+  BucketRetentionPolicy({
+    this.effectiveTime,
+    this.isLocked,
+    this.retentionPeriod,
+  });
 
   @override
   String toString() =>
       'RetentionPolicy(effectiveTime: $effectiveTime, isLocked: $isLocked, '
       'retentionPeriod: $retentionPeriod)';
 
-  RetentionPolicy copyWith({
+  BucketRetentionPolicy copyWith({
     Timestamp? effectiveTime,
     bool? isLocked,
     int? retentionPeriod,
-  }) => RetentionPolicy(
+  }) => BucketRetentionPolicy(
     effectiveTime: effectiveTime ?? this.effectiveTime,
     isLocked: isLocked ?? this.isLocked,
     retentionPeriod: retentionPeriod ?? this.retentionPeriod,
   );
 
-  RetentionPolicy copyWithout({
+  BucketRetentionPolicy copyWithout({
     bool effectiveTime = false,
     bool isLocked = false,
     bool retentionPeriod = false,
-  }) => RetentionPolicy(
+  }) => BucketRetentionPolicy(
     effectiveTime: effectiveTime ? null : this.effectiveTime,
     isLocked: isLocked ? null : this.isLocked,
     retentionPeriod: retentionPeriod ? null : this.retentionPeriod,
   );
 }
 
-/// The bucket's soft delete policy.
+/// The bucket's
+/// [soft delete policy](https://docs.cloud.google.com/storage/docs/soft-delete).
+///
+/// Defines the period of time during which objects in the bucket are retained
+/// in a soft-deleted state after being deleted. Objects in a soft-deleted state
+/// cannot be permanently deleted, and are restorable until their
+/// [ObjectMetadata.hardDeleteTime].
 final class SoftDeletePolicy {
   /// The time from which the soft delete policy was effective.
+  ///
+  /// [effectiveTime] is updated whenever [retentionDurationSeconds] is
+  /// increased.
   final Timestamp? effectiveTime;
 
-  /// The duration in seconds that soft-deleted objects in the bucket will be
-  /// retained and cannot be permanently deleted.
-  final int? retentionDurationSeconds; // long
+  /// The period of time during which a soft-deleted object is retained and
+  /// cannot be permanently deleted, in seconds.
+  ///
+  /// The value must be greater than or equal to `604800` (7 days) and less than
+  /// `7776000` (90 days). The value can also be set to `0`, which disables the
+  /// soft delete policy.
+  final int? retentionDurationSeconds;
 
   SoftDeletePolicy({this.effectiveTime, this.retentionDurationSeconds});
 
@@ -942,8 +1001,11 @@ final class SoftDeletePolicy {
 }
 
 /// The bucket's versioning configuration.
+///
+/// For more information, see
+/// [Object Versioning](https://docs.cloud.google.com/storage/docs/object-versioning).
 final class Versioning {
-  /// While set to true, versioning is fully enabled for this bucket.
+  /// Whether versioning is enabled for this bucket.
   final bool? enabled;
 
   Versioning({this.enabled});
@@ -958,35 +1020,46 @@ final class Versioning {
       Versioning(enabled: enabled ? null : this.enabled);
 }
 
-/// The bucket's website configuration.
-final class Website {
+/// The bucket's website configuration, controlling how the service behaves when
+/// accessing bucket contents as a web site.
+///
+/// For more information, see
+/// [Static Website Examples](https://docs.cloud.google.com/storage/docs/static-website).
+final class BucketWebsiteConfiguration {
   /// If the requested object path is missing, the service will ensure the path
-  /// has a trailing '/', append this suffix, and attempt to retrieve the
+  /// has a trailing '/', appends this suffix, and attempts to retrieve the
   /// resulting object.
   ///
   /// This allows the creation of `index.html` objects to represent directory
   /// pages.
   final String? mainPageSuffix;
 
-  /// If the requested object is not found, the service will return an error
-  /// page from this object.
+  /// If the requested object path is missing, and any [mainPageSuffix] object
+  /// is missing, if applicable, the service returns the named object from this
+  /// bucket as the content for a
+  /// [`404 Not Found`](https://datatracker.ietf.org/doc/html/rfc7231#section-6.5.4)
+  /// result.
   final String? notFoundPage;
 
-  Website({this.mainPageSuffix, this.notFoundPage});
+  BucketWebsiteConfiguration({this.mainPageSuffix, this.notFoundPage});
 
   @override
   String toString() =>
-      'Website(mainPageSuffix: $mainPageSuffix, notFoundPage: $notFoundPage)';
+      'BucketWebsiteConfiguration(mainPageSuffix: $mainPageSuffix, '
+      'notFoundPage: $notFoundPage)';
 
-  Website copyWith({String? mainPageSuffix, String? notFoundPage}) => Website(
+  BucketWebsiteConfiguration copyWith({
+    String? mainPageSuffix,
+    String? notFoundPage,
+  }) => BucketWebsiteConfiguration(
     mainPageSuffix: mainPageSuffix ?? this.mainPageSuffix,
     notFoundPage: notFoundPage ?? this.notFoundPage,
   );
 
-  Website copyWithout({
+  BucketWebsiteConfiguration copyWithout({
     bool mainPageSuffix = false,
     bool notFoundPage = false,
-  }) => Website(
+  }) => BucketWebsiteConfiguration(
     mainPageSuffix: mainPageSuffix ? null : this.mainPageSuffix,
     notFoundPage: notFoundPage ? null : this.notFoundPage,
   );
@@ -1051,7 +1124,11 @@ final class BucketMetadata {
   /// The version of the bucket.
   final int? generation;
 
-  /// The time at which the bucket will be permanently deleted.
+  /// The time when a soft-deleted bucket is permanently deleted and can no
+  /// longer be restored.
+  ///
+  /// This time is always equal to or later than the latest `hardDeleteTime` of
+  /// any soft-deleted object within the bucket.
   final Timestamp? hardDeleteTime;
 
   /// The kind of item this is. For buckets, this is always `storage#bucket`.
@@ -1073,11 +1150,13 @@ final class BucketMetadata {
   /// See [Cloud Storage bucket locations](https://docs.cloud.google.com/storage/docs/locations) for the authoritative list.
   final String? location;
 
-  /// The type of the bucket location.
+  /// The type of location that the bucket resides in.
+  ///
+  /// Possible values include `"region"`, `"dual-region"`, and `"multi-region"`.
   final String? locationType;
 
   /// The bucket's logging configuration.
-  final Logging? logging;
+  final BucketLoggingConfiguration? logging;
 
   /// The metadata generation of this bucket.
   final int? metageneration;
@@ -1085,36 +1164,48 @@ final class BucketMetadata {
   /// The name of the bucket.
   final String? name;
 
-  /// The bucket's object retention configuration.
+  /// The bucket's
+  /// [object retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
   final BucketObjectRetention? objectRetention;
 
   /// The owner of the bucket.
   ///
   /// This will always be the project team's owner group.
-  final Owner? owner;
+  final BucketOwner? owner;
 
   /// The project number of the project the bucket belongs to.
   final String? projectNumber;
 
   /// The bucket's retention policy.
-  final RetentionPolicy? retentionPolicy;
+  final BucketRetentionPolicy? retentionPolicy;
 
-  /// The Recovery Point Objective (RPO) of this bucket.
+  /// The recovery point objective for cross-region replication of the bucket.
   ///
-  /// Set to `ASYNC_TURBO` to turn on Turbo Replication for a bucket.
+  /// Applicable only for dual- and multi-region buckets. `"DEFAULT"` uses
+  /// default replication. `"ASYNC_TURBO"` enables turbo replication,
+  /// which is valid for dual-region buckets only.
+  ///
+  /// If rpo is not specified when the bucket is created, it defaults to
+  /// `"DEFAULT"`.
+  ///
+  /// For more information, see
+  /// [redundancy across regions](https://docs.cloud.google.com/storage/docs/availability-durability#cross-region-redundancy).
   final String? rpo;
 
-  /// The bucket's soft delete policy.
+  /// The bucket's
+  /// [soft delete policy](https://docs.cloud.google.com/storage/docs/soft-delete).
   final SoftDeletePolicy? softDeletePolicy;
 
-  /// The time at which the bucket became soft-deleted.
+  /// The time at which the bucket became
+  /// [soft-deleted](https://docs.cloud.google.com/storage/docs/soft-delete).
   final Timestamp? softDeleteTime;
 
-  /// The bucket's default storage class, used whenever no storageClass is
-  /// specified for a newly-created object.
+  /// The bucket's default storage class, used whenever no
+  /// [ObjectMetadata.storageClass] is specified for a newly-created object.
   ///
-  /// This defines how objects in the bucket are stored and determines the SLA
-  /// and the cost of storage.
+  /// If `storageClass` is not specified when the bucket is created, it defaults
+  /// to `"STANDARD"`. For available storage classes, see
+  /// [Storage classes](https://docs.cloud.google.com/storage/docs/storage-classes).
   final String? storageClass;
 
   /// The URI of this bucket.
@@ -1123,14 +1214,15 @@ final class BucketMetadata {
   /// The creation time of the bucket.
   final Timestamp? timeCreated;
 
-  /// The modification time of the bucket.
+  /// The time at which the bucket's metadata or IAM policy was last updated
   final Timestamp? updated;
 
-  /// The bucket's versioning configuration.
+  /// The bucket's versioning configuration, controlling how the service
+  /// behaves when accessing bucket contents as a web site.
   final Versioning? versioning;
 
   /// The bucket's website configuration.
-  final Website? website;
+  final BucketWebsiteConfiguration? website;
 
   BucketMetadata({
     this.acl,
@@ -1213,13 +1305,13 @@ final class BucketMetadata {
     Lifecycle? lifecycle,
     String? location,
     String? locationType,
-    Logging? logging,
+    BucketLoggingConfiguration? logging,
     int? metageneration,
     String? name,
     BucketObjectRetention? objectRetention,
-    Owner? owner,
+    BucketOwner? owner,
     String? projectNumber,
-    RetentionPolicy? retentionPolicy,
+    BucketRetentionPolicy? retentionPolicy,
     String? rpo,
     SoftDeletePolicy? softDeletePolicy,
     Timestamp? softDeleteTime,
@@ -1228,7 +1320,7 @@ final class BucketMetadata {
     Timestamp? timeCreated,
     Timestamp? updated,
     Versioning? versioning,
-    Website? website,
+    BucketWebsiteConfiguration? website,
   }) => BucketMetadata(
     acl: acl ?? this.acl,
     autoclass: autoclass ?? this.autoclass,
