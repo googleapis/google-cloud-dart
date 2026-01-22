@@ -22,7 +22,7 @@ import 'object_metadata.dart';
 ///
 /// When enabled, controls the storage class of objects based on how and when
 /// the objects are accessed.
-final class Autoclass {
+final class BucketAutoclass {
   /// Whether or not Autoclass is enabled on this bucket.
   ///
   /// By default, this boolean is not set, and Autoclass is disabled.
@@ -40,7 +40,7 @@ final class Autoclass {
   /// The time at which Autoclass was last enabled or disabled.
   final Timestamp? toggleTime;
 
-  Autoclass({
+  BucketAutoclass({
     this.enabled,
     this.terminalStorageClass,
     this.terminalStorageClassUpdateTime,
@@ -49,17 +49,17 @@ final class Autoclass {
 
   @override
   String toString() =>
-      'Autoclass(enabled: $enabled, '
+      'BucketAutoclass(enabled: $enabled, '
       'terminalStorageClass: $terminalStorageClass, '
       'terminalStorageClassUpdateTime: $terminalStorageClassUpdateTime, '
       'toggleTime: $toggleTime)';
 
-  Autoclass copyWith({
+  BucketAutoclass copyWith({
     bool? enabled,
     String? terminalStorageClass,
     Timestamp? terminalStorageClassUpdateTime,
     Timestamp? toggleTime,
-  }) => Autoclass(
+  }) => BucketAutoclass(
     enabled: enabled ?? this.enabled,
     terminalStorageClass: terminalStorageClass ?? this.terminalStorageClass,
     terminalStorageClassUpdateTime:
@@ -67,12 +67,12 @@ final class Autoclass {
     toggleTime: toggleTime ?? this.toggleTime,
   );
 
-  Autoclass copyWithout({
+  BucketAutoclass copyWithout({
     bool enabled = false,
     bool terminalStorageClass = false,
     bool terminalStorageClassUpdateTime = false,
     bool toggleTime = false,
-  }) => Autoclass(
+  }) => BucketAutoclass(
     enabled: enabled ? null : this.enabled,
     terminalStorageClass: terminalStorageClass
         ? null
@@ -85,21 +85,21 @@ final class Autoclass {
 }
 
 /// The bucket's billing configuration.
-final class Billing {
+final class BucketBilling {
   /// Whether [Requester Pays](https://docs.cloud.google.com/storage/docs/requester-pays)
   /// is enabled for this bucket.
   final bool? requesterPays;
 
-  Billing({this.requesterPays});
+  BucketBilling({this.requesterPays});
 
   @override
-  String toString() => 'Billing(requesterPays: $requesterPays)';
+  String toString() => 'BucketBilling(requesterPays: $requesterPays)';
 
-  Billing copyWith({bool? requesterPays}) =>
-      Billing(requesterPays: requesterPays ?? this.requesterPays);
+  BucketBilling copyWith({bool? requesterPays}) =>
+      BucketBilling(requesterPays: requesterPays ?? this.requesterPays);
 
-  Billing copyWithout({bool requesterPays = false}) =>
-      Billing(requesterPays: requesterPays ? null : this.requesterPays);
+  BucketBilling copyWithout({bool requesterPays = false}) =>
+      BucketBilling(requesterPays: requesterPays ? null : this.requesterPays);
 }
 
 /// An Access Control List (ACL) entry for a bucket.
@@ -294,7 +294,7 @@ final class BucketObjectRetention {
 
 /// The [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
 /// configuration for a bucket.
-final class Cors {
+final class BucketCorsConfiguration {
   /// The value, in seconds, to return in the
   /// [`Access-Control-Max-Age`](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Access-Control-Max-Age)
   /// header used in preflight responses.
@@ -317,31 +317,36 @@ final class Cors {
   /// to give permission to the user-agent to share across domains.
   final List<String>? responseHeader;
 
-  Cors({this.maxAgeSeconds, this.method, this.origin, this.responseHeader});
+  BucketCorsConfiguration({
+    this.maxAgeSeconds,
+    this.method,
+    this.origin,
+    this.responseHeader,
+  });
 
   @override
   String toString() =>
-      'Cors(maxAgeSeconds: $maxAgeSeconds, method: $method, '
+      'BucketCorsConfiguration(maxAgeSeconds: $maxAgeSeconds, method: $method, '
       'origin: $origin, responseHeader: $responseHeader)';
 
-  Cors copyWith({
+  BucketCorsConfiguration copyWith({
     int? maxAgeSeconds,
     List<String>? method,
     List<String>? origin,
     List<String>? responseHeader,
-  }) => Cors(
+  }) => BucketCorsConfiguration(
     maxAgeSeconds: maxAgeSeconds ?? this.maxAgeSeconds,
     method: method ?? this.method,
     origin: origin ?? this.origin,
     responseHeader: responseHeader ?? this.responseHeader,
   );
 
-  Cors copyWithout({
+  BucketCorsConfiguration copyWithout({
     bool maxAgeSeconds = false,
     bool method = false,
     bool origin = false,
     bool responseHeader = false,
-  }) => Cors(
+  }) => BucketCorsConfiguration(
     maxAgeSeconds: maxAgeSeconds ? null : this.maxAgeSeconds,
     method: method ? null : this.method,
     origin: origin ? null : this.origin,
@@ -353,7 +358,7 @@ final class Cors {
 ///
 /// This is only relevant for
 /// [Configurable dual regions](https://docs.cloud.google.com/storage/docs/locations#location-dr).
-final class CustomPlacementConfig {
+final class BucketCustomPlacementConfig {
   /// The list of individual regions that comprise a configurable dual-region
   /// bucket.
   ///
@@ -361,41 +366,44 @@ final class CustomPlacementConfig {
   /// for a list of acceptable regions.
   final List<String>? dataLocations;
 
-  CustomPlacementConfig({this.dataLocations});
+  BucketCustomPlacementConfig({this.dataLocations});
 
   @override
-  String toString() => 'CustomPlacementConfig(dataLocations: $dataLocations)';
+  String toString() =>
+      'BucketCustomPlacementConfig(dataLocations: $dataLocations)';
 
-  CustomPlacementConfig copyWith({List<String>? dataLocations}) =>
-      CustomPlacementConfig(dataLocations: dataLocations ?? this.dataLocations);
+  BucketCustomPlacementConfig copyWith({List<String>? dataLocations}) =>
+      BucketCustomPlacementConfig(
+        dataLocations: dataLocations ?? this.dataLocations,
+      );
 
-  CustomPlacementConfig copyWithout({bool dataLocations = false}) =>
-      CustomPlacementConfig(
+  BucketCustomPlacementConfig copyWithout({bool dataLocations = false}) =>
+      BucketCustomPlacementConfig(
         dataLocations: dataLocations ? null : this.dataLocations,
       );
 }
 
 /// The bucket's hierarchical namespace configuration.
-final class HierarchicalNamespace {
+final class BucketHierarchicalNamespace {
   /// Whether or not
   /// [Hierarchical namespace](https://docs.cloud.google.com/storage/docs/hns-overview)
   /// is enabled on this bucket.
   final bool? enabled;
 
-  HierarchicalNamespace({this.enabled});
+  BucketHierarchicalNamespace({this.enabled});
 
   @override
-  String toString() => 'HierarchicalNamespace(enabled: $enabled)';
+  String toString() => 'BucketHierarchicalNamespace(enabled: $enabled)';
 
-  HierarchicalNamespace copyWith({bool? enabled}) =>
-      HierarchicalNamespace(enabled: enabled ?? this.enabled);
+  BucketHierarchicalNamespace copyWith({bool? enabled}) =>
+      BucketHierarchicalNamespace(enabled: enabled ?? this.enabled);
 
-  HierarchicalNamespace copyWithout({bool enabled = false}) =>
-      HierarchicalNamespace(enabled: enabled ? null : this.enabled);
+  BucketHierarchicalNamespace copyWithout({bool enabled = false}) =>
+      BucketHierarchicalNamespace(enabled: enabled ? null : this.enabled);
 }
 
 /// The bucket's IAM configuration.
-final class IamConfiguration {
+final class BucketIamConfiguration {
   /// The bucket's
   /// [Public access prevention](https://docs.cloud.google.com/storage/docs/public-access-prevention)
   /// configuration.
@@ -411,30 +419,30 @@ final class IamConfiguration {
   /// configuration.
   final UniformBucketLevelAccess? uniformBucketLevelAccess;
 
-  IamConfiguration({
+  BucketIamConfiguration({
     this.publicAccessPrevention,
     this.uniformBucketLevelAccess,
   });
 
   @override
   String toString() =>
-      'IamConfiguration(publicAccessPrevention: $publicAccessPrevention, '
+      'BucketIamConfiguration(publicAccessPrevention: $publicAccessPrevention, '
       'uniformBucketLevelAccess: $uniformBucketLevelAccess)';
 
-  IamConfiguration copyWith({
+  BucketIamConfiguration copyWith({
     String? publicAccessPrevention,
     UniformBucketLevelAccess? uniformBucketLevelAccess,
-  }) => IamConfiguration(
+  }) => BucketIamConfiguration(
     publicAccessPrevention:
         publicAccessPrevention ?? this.publicAccessPrevention,
     uniformBucketLevelAccess:
         uniformBucketLevelAccess ?? this.uniformBucketLevelAccess,
   );
 
-  IamConfiguration copyWithout({
+  BucketIamConfiguration copyWithout({
     bool publicAccessPrevention = false,
     bool uniformBucketLevelAccess = false,
-  }) => IamConfiguration(
+  }) => BucketIamConfiguration(
     publicAccessPrevention: publicAccessPrevention
         ? null
         : this.publicAccessPrevention,
@@ -487,7 +495,7 @@ final class UniformBucketLevelAccess {
 ///
 /// Specifies the network sources that can access the bucket, as well as its
 /// underlying objects.
-final class IpFilter {
+final class BucketIpFilter {
   /// Whether to allow
   /// [service agent](https://docs.cloud.google.com/iam/docs/service-agents)
   /// access to the bucket, regardless of the IP filter configuration.
@@ -515,13 +523,13 @@ final class IpFilter {
 
   /// The public network IP address ranges that can access the bucket and its
   /// data.
-  final PublicNetworkSource? publicNetworkSource;
+  final BucketPublicNetworkSource? publicNetworkSource;
 
   /// The list of [VPC networks](https://docs.cloud.google.com/vpc/docs/vpc)
   /// that can access the bucket.
-  final List<PublicNetworkSource>? vpcNetworkSources;
+  final List<BucketPublicNetworkSource>? vpcNetworkSources;
 
-  IpFilter({
+  BucketIpFilter({
     this.allowAllServiceAgentAccess,
     this.allowCrossOrgVpcs,
     this.mode,
@@ -531,18 +539,18 @@ final class IpFilter {
 
   @override
   String toString() =>
-      'IpFilter(allowAllServiceAgentAccess: $allowAllServiceAgentAccess, '
+      'BucketIpFilter(allowAllServiceAgentAccess: $allowAllServiceAgentAccess, '
       'allowCrossOrgVpcs: $allowCrossOrgVpcs, mode: $mode, '
       'publicNetworkSource: $publicNetworkSource, '
       'vpcNetworkSources: $vpcNetworkSources)';
 
-  IpFilter copyWith({
+  BucketIpFilter copyWith({
     bool? allowAllServiceAgentAccess,
     bool? allowCrossOrgVpcs,
     String? mode,
-    PublicNetworkSource? publicNetworkSource,
-    List<PublicNetworkSource>? vpcNetworkSources,
-  }) => IpFilter(
+    BucketPublicNetworkSource? publicNetworkSource,
+    List<BucketPublicNetworkSource>? vpcNetworkSources,
+  }) => BucketIpFilter(
     allowAllServiceAgentAccess:
         allowAllServiceAgentAccess ?? this.allowAllServiceAgentAccess,
     allowCrossOrgVpcs: allowCrossOrgVpcs ?? this.allowCrossOrgVpcs,
@@ -551,13 +559,13 @@ final class IpFilter {
     vpcNetworkSources: vpcNetworkSources ?? this.vpcNetworkSources,
   );
 
-  IpFilter copyWithout({
+  BucketIpFilter copyWithout({
     bool allowAllServiceAgentAccess = false,
     bool allowCrossOrgVpcs = false,
     bool mode = false,
     bool publicNetworkSource = false,
     bool vpcNetworkSources = false,
-  }) => IpFilter(
+  }) => BucketIpFilter(
     allowAllServiceAgentAccess: allowAllServiceAgentAccess
         ? null
         : this.allowAllServiceAgentAccess,
@@ -570,7 +578,7 @@ final class IpFilter {
 
 /// The public network IP address ranges that can access the bucket and its
 /// data.
-final class PublicNetworkSource {
+final class BucketPublicNetworkSource {
   /// The list of public IPv4 and IPv6 CIDR ranges that can access the bucket
   /// and its data.
   ///
@@ -581,19 +589,19 @@ final class PublicNetworkSource {
   /// whereas `2001:db8::1/32` is not.
   final List<String>? allowedIpCidrRanges;
 
-  PublicNetworkSource({this.allowedIpCidrRanges});
+  BucketPublicNetworkSource({this.allowedIpCidrRanges});
 
   @override
   String toString() =>
-      'PublicNetworkSource(allowedIpCidrRanges: $allowedIpCidrRanges)';
+      'BucketPublicNetworkSource(allowedIpCidrRanges: $allowedIpCidrRanges)';
 
-  PublicNetworkSource copyWith({List<String>? allowedIpCidrRanges}) =>
-      PublicNetworkSource(
+  BucketPublicNetworkSource copyWith({List<String>? allowedIpCidrRanges}) =>
+      BucketPublicNetworkSource(
         allowedIpCidrRanges: allowedIpCidrRanges ?? this.allowedIpCidrRanges,
       );
 
-  PublicNetworkSource copyWithout({bool allowedIpCidrRanges = false}) =>
-      PublicNetworkSource(
+  BucketPublicNetworkSource copyWithout({bool allowedIpCidrRanges = false}) =>
+      BucketPublicNetworkSource(
         allowedIpCidrRanges: allowedIpCidrRanges
             ? null
             : this.allowedIpCidrRanges,
@@ -605,14 +613,15 @@ final class PublicNetworkSource {
 /// configuration.
 final class Lifecycle {
   /// The lifecycle rules to follow.
-  final List<Rule>? rule;
+  final List<LifecycleRule>? rule;
 
   Lifecycle({this.rule});
 
   @override
   String toString() => 'Lifecycle(rule: $rule)';
 
-  Lifecycle copyWith({List<Rule>? rule}) => Lifecycle(rule: rule ?? this.rule);
+  Lifecycle copyWith({List<LifecycleRule>? rule}) =>
+      Lifecycle(rule: rule ?? this.rule);
 
   Lifecycle copyWithout({bool rule = false}) =>
       Lifecycle(rule: rule ? null : this.rule);
@@ -620,31 +629,35 @@ final class Lifecycle {
 
 /// A lifecycle management rule, which is made of an action to take and the
 /// conditions under which the action is taken.
-final class Rule {
+final class LifecycleRule {
   /// The action to take.
-  final Action? action;
+  final LifecycleRuleAction? action;
 
   /// The conditions under which the action will be taken.
-  final Condition? condition;
+  final LifecycleRuleCondition? condition;
 
-  Rule({this.action, this.condition});
+  LifecycleRule({this.action, this.condition});
 
   @override
-  String toString() => 'Rule(action: $action, condition: $condition)';
+  String toString() => 'LifecycleRule(action: $action, condition: $condition)';
 
-  Rule copyWith({Action? action, Condition? condition}) => Rule(
+  LifecycleRule copyWith({
+    LifecycleRuleAction? action,
+    LifecycleRuleCondition? condition,
+  }) => LifecycleRule(
     action: action ?? this.action,
     condition: condition ?? this.condition,
   );
 
-  Rule copyWithout({bool action = false, bool condition = false}) => Rule(
-    action: action ? null : this.action,
-    condition: condition ? null : this.condition,
-  );
+  LifecycleRule copyWithout({bool action = false, bool condition = false}) =>
+      LifecycleRule(
+        action: action ? null : this.action,
+        condition: condition ? null : this.condition,
+      );
 }
 
 /// The action to take for a lifecycle rule.
-final class Action {
+final class LifecycleRuleAction {
   /// The new storage class when action.type is `"SetStorageClass"`.
   ///
   /// See
@@ -659,24 +672,29 @@ final class Action {
   /// for a table of supported actions.
   final String? type;
 
-  Action({this.storageClass, this.type});
+  LifecycleRuleAction({this.storageClass, this.type});
 
   @override
-  String toString() => 'Action(storageClass: $storageClass, type: $type)';
+  String toString() =>
+      'LifecycleRuleAction(storageClass: $storageClass, type: $type)';
 
-  Action copyWith({String? storageClass, String? type}) => Action(
-    storageClass: storageClass ?? this.storageClass,
-    type: type ?? this.type,
-  );
+  LifecycleRuleAction copyWith({String? storageClass, String? type}) =>
+      LifecycleRuleAction(
+        storageClass: storageClass ?? this.storageClass,
+        type: type ?? this.type,
+      );
 
-  Action copyWithout({bool storageClass = false, bool type = false}) => Action(
+  LifecycleRuleAction copyWithout({
+    bool storageClass = false,
+    bool type = false,
+  }) => LifecycleRuleAction(
     storageClass: storageClass ? null : this.storageClass,
     type: type ? null : this.type,
   );
 }
 
 /// The condition(s) under which a lifecycle rule action will be taken.
-final class Condition {
+final class LifecycleRuleCondition {
   /// The age of an object in days.
   final int? age;
 
@@ -748,7 +766,7 @@ final class Condition {
   /// Relevant only for versioned objects.
   final int? numNewerVersions;
 
-  Condition({
+  LifecycleRuleCondition({
     this.age,
     this.createdBefore,
     this.customTimeBefore,
@@ -764,7 +782,7 @@ final class Condition {
 
   @override
   String toString() =>
-      'Condition(age: $age, createdBefore: $createdBefore, '
+      'LifecycleRuleCondition(age: $age, createdBefore: $createdBefore, '
       'customTimeBefore: $customTimeBefore, '
       'daysSinceCustomTime: $daysSinceCustomTime, '
       'daysSinceNoncurrentTime: $daysSinceNoncurrentTime, '
@@ -774,7 +792,7 @@ final class Condition {
       'noncurrentTimeBefore: $noncurrentTimeBefore, '
       'numNewerVersions: $numNewerVersions)';
 
-  Condition copyWith({
+  LifecycleRuleCondition copyWith({
     int? age,
     String? createdBefore,
     String? customTimeBefore,
@@ -786,7 +804,7 @@ final class Condition {
     List<String>? matchesSuffix,
     String? noncurrentTimeBefore,
     int? numNewerVersions,
-  }) => Condition(
+  }) => LifecycleRuleCondition(
     age: age ?? this.age,
     createdBefore: createdBefore ?? this.createdBefore,
     customTimeBefore: customTimeBefore ?? this.customTimeBefore,
@@ -801,7 +819,7 @@ final class Condition {
     numNewerVersions: numNewerVersions ?? this.numNewerVersions,
   );
 
-  Condition copyWithout({
+  LifecycleRuleCondition copyWithout({
     bool age = false,
     bool createdBefore = false,
     bool customTimeBefore = false,
@@ -813,7 +831,7 @@ final class Condition {
     bool matchesSuffix = false,
     bool noncurrentTimeBefore = false,
     bool numNewerVersions = false,
-  }) => Condition(
+  }) => LifecycleRuleCondition(
     age: age ? null : this.age,
     createdBefore: createdBefore ? null : this.createdBefore,
     customTimeBefore: customTimeBefore ? null : this.customTimeBefore,
@@ -958,7 +976,7 @@ final class BucketRetentionPolicy {
 /// in a soft-deleted state after being deleted. Objects in a soft-deleted state
 /// cannot be permanently deleted, and are restorable until their
 /// [ObjectMetadata.hardDeleteTime].
-final class SoftDeletePolicy {
+final class BucketSoftDeletePolicy {
   /// The time from which the soft delete policy was effective.
   ///
   /// [effectiveTime] is updated whenever [retentionDurationSeconds] is
@@ -973,26 +991,26 @@ final class SoftDeletePolicy {
   /// soft delete policy.
   final int? retentionDurationSeconds;
 
-  SoftDeletePolicy({this.effectiveTime, this.retentionDurationSeconds});
+  BucketSoftDeletePolicy({this.effectiveTime, this.retentionDurationSeconds});
 
   @override
   String toString() =>
-      'SoftDeletePolicy(effectiveTime: $effectiveTime, '
+      'BucketSoftDeletePolicy(effectiveTime: $effectiveTime, '
       'retentionDurationSeconds: $retentionDurationSeconds)';
 
-  SoftDeletePolicy copyWith({
+  BucketSoftDeletePolicy copyWith({
     Timestamp? effectiveTime,
     int? retentionDurationSeconds,
-  }) => SoftDeletePolicy(
+  }) => BucketSoftDeletePolicy(
     effectiveTime: effectiveTime ?? this.effectiveTime,
     retentionDurationSeconds:
         retentionDurationSeconds ?? this.retentionDurationSeconds,
   );
 
-  SoftDeletePolicy copyWithout({
+  BucketSoftDeletePolicy copyWithout({
     bool effectiveTime = false,
     bool retentionDurationSeconds = false,
-  }) => SoftDeletePolicy(
+  }) => BucketSoftDeletePolicy(
     effectiveTime: effectiveTime ? null : this.effectiveTime,
     retentionDurationSeconds: retentionDurationSeconds
         ? null
@@ -1004,20 +1022,20 @@ final class SoftDeletePolicy {
 ///
 /// For more information, see
 /// [Object Versioning](https://docs.cloud.google.com/storage/docs/object-versioning).
-final class Versioning {
+final class BucketVersioning {
   /// Whether versioning is enabled for this bucket.
   final bool? enabled;
 
-  Versioning({this.enabled});
+  BucketVersioning({this.enabled});
 
   @override
-  String toString() => 'Versioning(enabled: $enabled)';
+  String toString() => 'BucketVersioning(enabled: $enabled)';
 
-  Versioning copyWith({bool? enabled}) =>
-      Versioning(enabled: enabled ?? this.enabled);
+  BucketVersioning copyWith({bool? enabled}) =>
+      BucketVersioning(enabled: enabled ?? this.enabled);
 
-  Versioning copyWithout({bool enabled = false}) =>
-      Versioning(enabled: enabled ? null : this.enabled);
+  BucketVersioning copyWithout({bool enabled = false}) =>
+      BucketVersioning(enabled: enabled ? null : this.enabled);
 }
 
 /// The bucket's website configuration, controlling how the service behaves when
@@ -1076,21 +1094,21 @@ final class BucketMetadata {
   final List<BucketAccessControl>? acl;
 
   /// The bucket's Autoclass configuration.
-  final Autoclass? autoclass;
+  final BucketAutoclass? autoclass;
 
   /// The bucket's billing configuration.
-  final Billing? billing;
+  final BucketBilling? billing;
 
   /// The bucket's
   /// [Cross-Origin Resource Sharing (CORS)](https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS)
   /// configuration.
-  final List<Cors>? cors;
+  final List<BucketCorsConfiguration>? cors;
 
   /// The bucket's custom placement configuration.
   ///
   /// This is only relevant for
   /// [Configurable dual regions](https://docs.cloud.google.com/storage/docs/locations#location-dr).
-  final CustomPlacementConfig? customPlacementConfig;
+  final BucketCustomPlacementConfig? customPlacementConfig;
 
   /// Whether or not to automatically apply an
   /// [`eventBasedHold`](https://docs.cloud.google.com/storage/docs/object-holds#hold-types)
@@ -1108,10 +1126,10 @@ final class BucketMetadata {
   final String? etag;
 
   /// The bucket's hierarchical namespace configuration.
-  final HierarchicalNamespace? hierarchicalNamespace;
+  final BucketHierarchicalNamespace? hierarchicalNamespace;
 
   /// The bucket's IAM configuration.
-  final IamConfiguration? iamConfiguration;
+  final BucketIamConfiguration? iamConfiguration;
 
   /// The ID of the bucket.
   final String? id;
@@ -1119,7 +1137,7 @@ final class BucketMetadata {
   /// The bucket's
   /// [IP filter](https://docs.cloud.google.com/storage/docs/ip-filtering-overview)
   /// configuration.
-  final IpFilter? ipFilter;
+  final BucketIpFilter? ipFilter;
 
   /// The version of the bucket.
   final int? generation;
@@ -1194,7 +1212,7 @@ final class BucketMetadata {
 
   /// The bucket's
   /// [soft delete policy](https://docs.cloud.google.com/storage/docs/soft-delete).
-  final SoftDeletePolicy? softDeletePolicy;
+  final BucketSoftDeletePolicy? softDeletePolicy;
 
   /// The time at which the bucket became
   /// [soft-deleted](https://docs.cloud.google.com/storage/docs/soft-delete).
@@ -1219,7 +1237,7 @@ final class BucketMetadata {
 
   /// The bucket's versioning configuration, controlling how the service
   /// behaves when accessing bucket contents as a web site.
-  final Versioning? versioning;
+  final BucketVersioning? versioning;
 
   /// The bucket's website configuration.
   final BucketWebsiteConfiguration? website;
@@ -1286,20 +1304,20 @@ final class BucketMetadata {
   /// Creates a new [BucketMetadata] with the given non-`null` fields replaced.
   BucketMetadata copyWith({
     List<BucketAccessControl>? acl,
-    Autoclass? autoclass,
-    Billing? billing,
-    List<Cors>? cors,
-    CustomPlacementConfig? customPlacementConfig,
+    BucketAutoclass? autoclass,
+    BucketBilling? billing,
+    List<BucketCorsConfiguration>? cors,
+    BucketCustomPlacementConfig? customPlacementConfig,
     bool? defaultEventBasedHold,
     List<ObjectAccessControl>? defaultObjectAcl,
     BucketEncryption? encryption,
     String? etag,
     int? generation,
     Timestamp? hardDeleteTime,
-    HierarchicalNamespace? hierarchicalNamespace,
-    IamConfiguration? iamConfiguration,
+    BucketHierarchicalNamespace? hierarchicalNamespace,
+    BucketIamConfiguration? iamConfiguration,
     String? id,
-    IpFilter? ipFilter,
+    BucketIpFilter? ipFilter,
     String? kind,
     Map<String, String>? labels,
     Lifecycle? lifecycle,
@@ -1313,13 +1331,13 @@ final class BucketMetadata {
     String? projectNumber,
     BucketRetentionPolicy? retentionPolicy,
     String? rpo,
-    SoftDeletePolicy? softDeletePolicy,
+    BucketSoftDeletePolicy? softDeletePolicy,
     Timestamp? softDeleteTime,
     String? storageClass,
     Uri? selfLink,
     Timestamp? timeCreated,
     Timestamp? updated,
-    Versioning? versioning,
+    BucketVersioning? versioning,
     BucketWebsiteConfiguration? website,
   }) => BucketMetadata(
     acl: acl ?? this.acl,
