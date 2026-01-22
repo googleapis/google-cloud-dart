@@ -52,7 +52,7 @@ final class CustomerEncryption {
   );
 }
 
-/// The owner of the object. This will always be the uploader of the object
+/// The owner of the object. This will always be the uploader of the object.
 final class Owner {
   /// The entity, in the form user-userId.
   final String? entity;
@@ -302,10 +302,10 @@ final class ObjectMetadata {
 
   /// The object's [retention configuration][].
   ///
-  /// [retention configuration]: https://docs.cloud.google.com/storage/docs/object-lock
-  ///
   /// This defines the earliest datetime that the object can be deleted or
   /// replaced.
+  ///
+  /// [retention configuration]: https://docs.cloud.google.com/storage/docs/object-lock
   final ObjectRetention? retention;
 
   /// A server-determined value that specifies the earliest time that the

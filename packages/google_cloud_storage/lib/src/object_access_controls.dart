@@ -109,8 +109,9 @@ final class ObjectAccessControl {
   /// The ID for the entity, if any.
   final String? entityId;
 
-  /// [HTTP 1.1 Entity tag](https://tools.ietf.org/html/rfc7232#section-2.3)
-  /// for the access-control entry.
+  /// [HTTP 1.1 Entity tag][] for the access-control entry.
+  ///
+  /// [HTTP 1.1 Entity tag]: https://tools.ietf.org/html/rfc7232#section-2.3
   final String? etag;
 
   /// The content generation of the object.
