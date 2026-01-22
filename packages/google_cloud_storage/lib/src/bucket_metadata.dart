@@ -878,7 +878,7 @@ final class BucketLoggingConfiguration {
 
   @override
   String toString() =>
-      'Logging(logBucket: $logBucket, logObjectPrefix: $logObjectPrefix)';
+      'BucketLoggingConfiguration(logBucket: $logBucket, logObjectPrefix: $logObjectPrefix)';
 
   BucketLoggingConfiguration copyWith({
     String? logBucket,
