@@ -87,7 +87,7 @@ final class BucketAutoclass {
   );
 }
 
-/// The bucket's billing configuration.
+/// A bucket's billing configuration.
 final class BucketBilling {
   /// Whether [Requester Pays][] is enabled for this bucket.
   ///
