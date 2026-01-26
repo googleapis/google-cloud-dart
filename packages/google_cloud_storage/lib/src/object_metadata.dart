@@ -76,7 +76,7 @@ final class Owner {
   );
 }
 
-/// The object's [retention configuration][].
+/// An object's [retention configuration][].
 ///
 /// This defines the earliest datetime that the object can be deleted or
 /// replaced.
