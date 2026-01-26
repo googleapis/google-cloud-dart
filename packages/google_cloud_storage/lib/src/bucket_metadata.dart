@@ -362,7 +362,7 @@ final class BucketCorsConfiguration {
   );
 }
 
-/// The bucket's custom placement configuration.
+/// A bucket's custom placement configuration.
 ///
 /// This is only relevant for [Configurable dual regions][].
 ///
