@@ -278,7 +278,7 @@ final class BucketEncryption {
       );
 }
 
-/// The bucket's
+/// A bucket's
 /// [object retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
 final class BucketObjectRetention {
   /// When set to `"Enabled"`, retention configurations can be set on objects
