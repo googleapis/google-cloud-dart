@@ -1033,7 +1033,7 @@ final class BucketSoftDeletePolicy {
   );
 }
 
-/// The bucket's versioning configuration.
+/// A bucket's versioning configuration.
 ///
 /// For more information, see [Object Versioning][].
 ///
