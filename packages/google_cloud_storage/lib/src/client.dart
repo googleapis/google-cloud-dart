@@ -12,12 +12,29 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'object_metadata.dart';
+import 'package:googleapis/storage/v1.dart' as storage;
+
+import '../google_cloud_storage.dart';
+import 'googleapis_converters.dart';
 
 /// API for storing and retrieving potentially large, immutable data objects.
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
 final class Storage {
+  final storage.StorageApi _api;
+
+  Storage(this._api);
+
+  Future<BucketMetadata> bucketMetadata(
+    String bucket, {
+    BucketMetadata? metadata,
+  }) async {
+    if (metadata != null) {
+      return fromBucket(await _api.buckets.patch(toBucket(metadata), bucket));
+    }
+    return fromBucket(await _api.buckets.get(bucket));
+  }
+
   /// Information about a [Google Cloud Storage object].
   ///
   /// This operation is read-only and always idempotent.
