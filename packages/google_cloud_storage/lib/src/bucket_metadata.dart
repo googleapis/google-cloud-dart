@@ -1219,7 +1219,7 @@ final class BucketMetadata {
   /// The bucket's retention policy.
   final BucketRetentionPolicy? retentionPolicy;
 
-  /// The recovery point objective for cross-region replication of the bucket.
+  /// The recovery point objective for cross-region replication of a bucket.
   ///
   /// Applicable only for dual- and multi-region buckets. `"DEFAULT"` uses
   /// default replication. `"ASYNC_TURBO"` enables turbo replication,
