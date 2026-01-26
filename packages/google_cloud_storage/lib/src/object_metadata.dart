@@ -53,7 +53,7 @@ final class CustomerEncryption {
 }
 
 /// The owner of an object.
-/// 
+///
 /// This will always be the uploader of the object.
 final class Owner {
   /// The entity, in the form user-userId.
