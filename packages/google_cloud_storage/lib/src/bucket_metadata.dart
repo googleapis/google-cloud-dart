@@ -1054,7 +1054,7 @@ final class BucketVersioning {
       BucketVersioning(enabled: enabled ? null : this.enabled);
 }
 
-/// The bucket's website configuration, controlling how the service behaves when
+/// A bucket's website configuration, controlling how the service behaves when
 /// accessing bucket contents as a web site.
 ///
 /// For more information, see [Static Website Examples][].
