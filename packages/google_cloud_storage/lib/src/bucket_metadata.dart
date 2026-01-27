@@ -13,8 +13,9 @@
 // limitations under the License.
 
 import 'package:google_cloud_protobuf/protobuf.dart';
-import 'object_access_controls.dart';
+
 import 'object_metadata.dart';
+import 'project_team.dart';
 
 /// The bucket's [Autoclass][] configuration.
 ///
@@ -86,7 +87,7 @@ final class BucketAutoclass {
   );
 }
 
-/// The bucket's billing configuration.
+/// A bucket's billing configuration.
 final class BucketBilling {
   /// Whether [Requester Pays][] is enabled for this bucket.
   ///
@@ -277,7 +278,7 @@ final class BucketEncryption {
       );
 }
 
-/// The bucket's
+/// A bucket's
 /// [object retention configuration](https://docs.cloud.google.com/storage/docs/object-lock).
 final class BucketObjectRetention {
   /// When set to `"Enabled"`, retention configurations can be set on objects
@@ -361,7 +362,7 @@ final class BucketCorsConfiguration {
   );
 }
 
-/// The bucket's custom placement configuration.
+/// A bucket's custom placement configuration.
 ///
 /// This is only relevant for [Configurable dual regions][].
 ///
@@ -1032,7 +1033,7 @@ final class BucketSoftDeletePolicy {
   );
 }
 
-/// The bucket's versioning configuration.
+/// A bucket's versioning configuration.
 ///
 /// For more information, see [Object Versioning][].
 ///
@@ -1053,7 +1054,7 @@ final class BucketVersioning {
       BucketVersioning(enabled: enabled ? null : this.enabled);
 }
 
-/// The bucket's website configuration, controlling how the service behaves when
+/// A bucket's website configuration, controlling how the service behaves when
 /// accessing bucket contents as a web site.
 ///
 /// For more information, see [Static Website Examples][].
@@ -1218,7 +1219,7 @@ final class BucketMetadata {
   /// The bucket's retention policy.
   final BucketRetentionPolicy? retentionPolicy;
 
-  /// The recovery point objective for cross-region replication of the bucket.
+  /// The recovery point objective for cross-region replication of a bucket.
   ///
   /// Applicable only for dual- and multi-region buckets. `"DEFAULT"` uses
   /// default replication. `"ASYNC_TURBO"` enables turbo replication,
