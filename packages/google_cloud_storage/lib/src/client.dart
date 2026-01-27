@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'package:googleapis/storage/v1.dart' as storage;
+import 'package:http/http.dart' as http;
 
 import '../google_cloud_storage.dart';
 import 'googleapis_converters.dart';
@@ -22,17 +23,15 @@ import 'googleapis_converters.dart';
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
 final class Storage {
   final storage.StorageApi _api;
+  final String projectId;
 
-  Storage(this._api);
+  Storage({required http.Client client, required this.projectId})
+    : _api = storage.StorageApi(client);
 
-  Future<BucketMetadata> bucketMetadata(
-    String bucket, {
-    BucketMetadata? metadata,
-  }) async {
-    if (metadata != null) {
-      return fromBucket(await _api.buckets.patch(toBucket(metadata), bucket));
-    }
-    return fromBucket(await _api.buckets.get(bucket));
+  Future<BucketMetadata> createBucket(BucketMetadata metadata) async {
+    return fromGoogleApisBucket(
+      await _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
+    );
   }
 
   /// Information about a [Google Cloud Storage object].

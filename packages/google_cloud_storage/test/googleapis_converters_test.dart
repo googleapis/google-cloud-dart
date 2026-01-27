@@ -13,11 +13,12 @@
 // limitations under the License.
 
 import 'package:google_cloud_protobuf/protobuf.dart';
-import 'package:google_cloud_storage/src/bucket_metadata.dart';
-import 'package:google_cloud_storage/src/googleapis_converters.dart';
-import 'package:google_cloud_storage/src/object_access_controls.dart';
+import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis/storage/v1.dart' as storage;
+
 import 'package:test/test.dart';
+
+import '../lib/src/googleapis_converters.dart';
 
 void main() {
   group('BucketMetadata Converters', () {
@@ -91,7 +92,7 @@ void main() {
         ),
       );
 
-      final bucket = toBucket(metadata);
+      final bucket = toGoogleApisBucket(metadata);
 
       expect(bucket.id, 'bucket-id');
       expect(bucket.name, 'bucket-name');
@@ -210,7 +211,7 @@ void main() {
         ),
       );
 
-      final metadata = fromBucket(bucket);
+      final metadata = fromGoogleApisBucket(bucket);
 
       expect(metadata.id, 'bucket-id');
       expect(metadata.name, 'bucket-name');
@@ -264,7 +265,7 @@ void main() {
           isUtc: true,
         ),
       );
-      final metadata = fromBucket(bucket);
+      final metadata = fromGoogleApisBucket(bucket);
       expect(metadata.timeCreated?.seconds, 1600000000);
       expect(metadata.updated?.seconds, 1600000000);
     });
@@ -275,7 +276,7 @@ void main() {
         timeCreated: Timestamp(seconds: 1600000000, nanos: 0),
         updated: Timestamp(seconds: 1600000000, nanos: 0),
       );
-      final bucket = toBucket(metadata);
+      final bucket = toGoogleApisBucket(metadata);
       expect(bucket.timeCreated?.isUtc, isTrue);
       expect(bucket.timeCreated?.year, 2020);
       expect(bucket.updated?.isUtc, isTrue);

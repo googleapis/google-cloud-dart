@@ -16,9 +16,10 @@ import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:googleapis/storage/v1.dart' as storage;
 
 import 'bucket_metadata.dart';
-import 'object_access_controls.dart';
+import 'object_metadata.dart';
+import 'project_team.dart';
 
-storage.Bucket toBucket(BucketMetadata metadata) => storage.Bucket(
+storage.Bucket toGoogleApisBucket(BucketMetadata metadata) => storage.Bucket(
   acl: metadata.acl?.map(toBucketAccessControl).toList(),
   autoclass: metadata.autoclass == null
       ? null
@@ -79,7 +80,7 @@ storage.Bucket toBucket(BucketMetadata metadata) => storage.Bucket(
   website: metadata.website == null ? null : toWebsite(metadata.website!),
 );
 
-BucketMetadata fromBucket(storage.Bucket bucket) => BucketMetadata(
+BucketMetadata fromGoogleApisBucket(storage.Bucket bucket) => BucketMetadata(
   acl: bucket.acl?.map(fromBucketAccessControl).toList(),
   autoclass: bucket.autoclass == null ? null : fromAutoclass(bucket.autoclass!),
   billing: bucket.billing == null ? null : fromBilling(bucket.billing!),
