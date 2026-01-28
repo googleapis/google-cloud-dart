@@ -28,10 +28,10 @@ const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 String uniqueBucketName() {
   final random = Random();
-  return List.generate(
-    32,
-    (index) => bucketChars[random.nextInt(bucketChars.length)],
-  ).join();
+  return [
+    for (int i = 0; i < 32; i++)
+      bucketChars[random.nextInt(bucketChars.length)],
+  ].join();
 }
 
 void main() async {

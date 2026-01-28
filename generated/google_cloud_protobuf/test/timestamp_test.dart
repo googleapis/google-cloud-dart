@@ -209,7 +209,7 @@ void main() {
       test('not utc', () {
         expect(
           () => DateTime(2024, 10, 19, 12, 34, 56).toTimestamp(),
-          throwsArgumentError,
+          throwsStateError,
         );
       });
     });

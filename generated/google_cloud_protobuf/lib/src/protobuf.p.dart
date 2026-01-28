@@ -348,7 +348,7 @@ extension DateTimeToTimestampExtension on DateTime {
   /// This UTC `DateTime` as a [Timestamp].
   Timestamp toTimestamp() {
     if (!isUtc) {
-      throw ArgumentError('DateTime must be in UTC');
+      throw StateError('DateTime must be in UTC');
     }
     return Timestamp(
       seconds: microsecondsSinceEpoch ~/ 1_000_000,
