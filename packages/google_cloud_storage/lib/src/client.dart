@@ -30,11 +30,10 @@ final class Storage {
     : _client = client,
       _api = storage.StorageApi(client);
 
-  Future<BucketMetadata> createBucket(BucketMetadata metadata) async {
-    return fromGoogleApisBucket(
-      await _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
-    );
-  }
+  Future<BucketMetadata> createBucket(BucketMetadata metadata) async =>
+      fromGoogleApisBucket(
+        await _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
+      );
 
   /// Information about a [Google Cloud Storage object].
   ///

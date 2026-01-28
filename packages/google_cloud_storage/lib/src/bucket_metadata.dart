@@ -827,7 +827,7 @@ final class LifecycleRuleCondition {
     matchesPrefix: matchesPrefix ?? this.matchesPrefix,
     matchesStorageClass: matchesStorageClass ?? this.matchesStorageClass,
     matchesSuffix: matchesSuffix ?? this.matchesSuffix,
-    noncurrentTimeBefore: noncurrentTimeBefore,
+    noncurrentTimeBefore: noncurrentTimeBefore ?? this.noncurrentTimeBefore,
     numNewerVersions: numNewerVersions ?? this.numNewerVersions,
   );
 
