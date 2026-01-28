@@ -16,17 +16,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 28 Jan 2026 00:51:10 GMT",
+        "date": "Wed, 28 Jan 2026 23:23:11 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "937",
-        "x-guploader-uploadid": "AJRbA5XZ5t8duOCFTU-xBYaaL2VM76Ol18cgFIdGQOpPm3Ov5iXeBJqbuvGYpAz3iGcC9561Wqw1hA",
+        "x-guploader-uploadid": "AJRbA5W9i2zJvsAkkugluBg-gFLWt5Yz5xLggGaAfaDHB_EMPNER4wezqSWx8wsoqGlph8I",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_name_only\",\n  \"id\": \"create_bucket_with_metadata_name_only\",\n  \"name\": \"create_bucket_with_metadata_name_only\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1769561470267870851\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-28T00:51:10.637Z\",\n  \"updated\": \"2026-01-28T00:51:10.637Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-28T00:51:10.637Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T00:51:10.637Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T00:51:10.637Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_name_only\",\n  \"id\": \"create_bucket_with_metadata_name_only\",\n  \"name\": \"create_bucket_with_metadata_name_only\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1769642591369060454\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-28T23:23:11.638Z\",\n  \"updated\": \"2026-01-28T23:23:11.638Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-28T23:23:11.638Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T23:23:11.638Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T23:23:11.638Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   }
