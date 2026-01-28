@@ -47,4 +47,13 @@ final class ProjectTeam {
         projectNumber: projectNumber ? null : this.projectNumber,
         team: team ? null : this.team,
       );
+
+  @override
+  bool operator ==(Object other) =>
+      other is ProjectTeam &&
+      projectNumber == other.projectNumber &&
+      team == other.team;
+
+  @override
+  int get hashCode => Object.hash(projectNumber, team);
 }

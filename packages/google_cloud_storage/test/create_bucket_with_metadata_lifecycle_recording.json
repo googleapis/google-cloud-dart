@@ -1,0 +1,33 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421&alt=json",
+      "method": "POST",
+      "headers": {
+        "user-agent": "google-api-dart-client/15.0.0",
+        "x-goog-api-client": "gl-dart/3.10.3 gdcl/15.0.0",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "143"
+      },
+      "body": "eyJsaWZlY3ljbGUiOnsicnVsZSI6W3siYWN0aW9uIjp7InR5cGUiOiJEZWxldGUifSwiY29uZGl0aW9uIjp7ImNyZWF0ZWRCZWZvcmUiOiIyMDI1LTEyLTExIn19XX0sIm5hbWUiOiJjcmVhdGVfYnVja2V0X3dpdGhfbWV0YWRhdGFfbGlmZWN5Y2xlIn0="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 28 Jan 2026 00:51:12 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "1126",
+        "x-guploader-uploadid": "AJRbA5XOH4D6tDJKtPNDQOzhpn06eFWm9hcB5_fHDOMOLfu91gMvQtKA6IS-tK8q7JwXcIwzlgD0wno",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_lifecycle\",\n  \"id\": \"create_bucket_with_metadata_lifecycle\",\n  \"name\": \"create_bucket_with_metadata_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1769561471495123519\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-28T00:51:12.064Z\",\n  \"updated\": \"2026-01-28T00:51:12.064Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"createdBefore\": \"2025-12-11\"\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-28T00:51:12.064Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T00:51:12.064Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T00:51:12.064Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]

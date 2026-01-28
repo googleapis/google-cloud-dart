@@ -710,19 +710,19 @@ final class LifecycleRuleCondition {
   /// The age of an object in days.
   final int? age;
 
-  /// A date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339) format
-  /// with only the date part (for instance, "2013-01-15").
-  ///
   /// This condition is satisfied when an object is created before midnight of
   /// the specified date in UTC.
-  final String? createdBefore;
-
-  /// A date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339)
-  /// format with only the date part (for instance, "2013-01-15").
   ///
+  /// For example, if the date were `DateTime(2025, 12, 11)`, then the condition
+  /// would trigger for any object created on or before December 10th, 2025.
+  final DateTime? createdBefore;
+
   /// This condition is satisfied when the `customTime` on an object is before
   /// this date in UTC.
-  final String? customTimeBefore;
+  ///
+  /// For example, if the date were `DateTime(2025, 12, 11)`, then the condition
+  /// would trigger for any object created on or before December 10th, 2025.
+  final DateTime? customTimeBefore;
 
   /// Days since the date set in the `customTime` metadata for the object.
   ///
@@ -764,12 +764,12 @@ final class LifecycleRuleCondition {
   /// [object naming requirements](https://cloud.google.com/storage/docs/naming#objectnaming).
   final List<String>? matchesSuffix;
 
-  /// A date in [RFC 3339](https://datatracker.ietf.org/doc/html/rfc3339)
-  /// format with only the date part (for instance, "2013-01-15").
-  ///
   /// This condition is satisfied for objects that became noncurrent on a date
   /// prior to the one specified in this condition.
-  final String? noncurrentTimeBefore;
+  ///
+  /// For example, if the date were `DateTime(2025, 12, 11)`, then the condition
+  /// would trigger for any object created on or before December 10th, 2025.
+  final DateTime? noncurrentTimeBefore;
 
   /// If the value is N, this condition is satisfied when there are at least N
   /// versions (including the live version) newer than this version of the
@@ -806,15 +806,15 @@ final class LifecycleRuleCondition {
 
   LifecycleRuleCondition copyWith({
     int? age,
-    String? createdBefore,
-    String? customTimeBefore,
+    DateTime? createdBefore,
+    DateTime? customTimeBefore,
     int? daysSinceCustomTime,
     int? daysSinceNoncurrentTime,
     bool? isLive,
     List<String>? matchesPrefix,
     List<String>? matchesStorageClass,
     List<String>? matchesSuffix,
-    String? noncurrentTimeBefore,
+    DateTime? noncurrentTimeBefore,
     int? numNewerVersions,
   }) => LifecycleRuleCondition(
     age: age ?? this.age,
@@ -827,7 +827,7 @@ final class LifecycleRuleCondition {
     matchesPrefix: matchesPrefix ?? this.matchesPrefix,
     matchesStorageClass: matchesStorageClass ?? this.matchesStorageClass,
     matchesSuffix: matchesSuffix ?? this.matchesSuffix,
-    noncurrentTimeBefore: noncurrentTimeBefore ?? this.noncurrentTimeBefore,
+    noncurrentTimeBefore: noncurrentTimeBefore,
     numNewerVersions: numNewerVersions ?? this.numNewerVersions,
   );
 

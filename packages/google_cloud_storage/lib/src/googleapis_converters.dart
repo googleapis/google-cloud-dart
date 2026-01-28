@@ -427,53 +427,33 @@ storage.BucketLifecycleRuleCondition _toLifecycleRuleCondition(
   LifecycleRuleCondition condition,
 ) => storage.BucketLifecycleRuleCondition(
   age: condition.age,
-  createdBefore: condition.createdBefore == null
-      ? null
-      : DateTime.parse(condition.createdBefore!),
-  customTimeBefore: condition.customTimeBefore == null
-      ? null
-      : DateTime.parse(condition.customTimeBefore!),
+  createdBefore: condition.createdBefore,
+  customTimeBefore: condition.customTimeBefore,
   daysSinceCustomTime: condition.daysSinceCustomTime,
   daysSinceNoncurrentTime: condition.daysSinceNoncurrentTime,
   isLive: condition.isLive,
   matchesPrefix: condition.matchesPrefix,
   matchesStorageClass: condition.matchesStorageClass,
   matchesSuffix: condition.matchesSuffix,
-  noncurrentTimeBefore: condition.noncurrentTimeBefore == null
-      ? null
-      : DateTime.parse(condition.noncurrentTimeBefore!),
+  noncurrentTimeBefore: condition.noncurrentTimeBefore,
   numNewerVersions: condition.numNewerVersions,
 );
 
 LifecycleRuleCondition _fromLifecycleRuleCondition(
   storage.BucketLifecycleRuleCondition condition,
-) {
-  print(condition.createdBefore);
-  return LifecycleRuleCondition(
-    age: condition.age,
-
-    /// XXX which midnight????
-    createdBefore: condition.createdBefore == null
-        ? null
-        : _toRfc3339Date(condition.createdBefore!),
-    customTimeBefore: condition.customTimeBefore == null
-        ? null
-        : _toRfc3339Date(condition.customTimeBefore!),
-    daysSinceCustomTime: condition.daysSinceCustomTime,
-    daysSinceNoncurrentTime: condition.daysSinceNoncurrentTime,
-    isLive: condition.isLive,
-    matchesPrefix: condition.matchesPrefix,
-    matchesStorageClass: condition.matchesStorageClass,
-    matchesSuffix: condition.matchesSuffix,
-    noncurrentTimeBefore: condition.noncurrentTimeBefore == null
-        ? null
-        : _toRfc3339Date(condition.noncurrentTimeBefore!),
-    numNewerVersions: condition.numNewerVersions,
-  );
-}
-
-String _toRfc3339Date(DateTime dateTime) =>
-    dateTime.toIso8601String().substring(0, 10);
+) => LifecycleRuleCondition(
+  age: condition.age,
+  createdBefore: condition.createdBefore,
+  customTimeBefore: condition.customTimeBefore,
+  daysSinceCustomTime: condition.daysSinceCustomTime,
+  daysSinceNoncurrentTime: condition.daysSinceNoncurrentTime,
+  isLive: condition.isLive,
+  matchesPrefix: condition.matchesPrefix,
+  matchesStorageClass: condition.matchesStorageClass,
+  matchesSuffix: condition.matchesSuffix,
+  noncurrentTimeBefore: condition.noncurrentTimeBefore,
+  numNewerVersions: condition.numNewerVersions,
+);
 
 storage.BucketLogging _toLogging(BucketLoggingConfiguration logging) =>
     storage.BucketLogging(

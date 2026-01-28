@@ -130,13 +130,20 @@ void main() async {
       );
       expect(actualMetadata.softDeleteTime, isNull);
       expect(actualMetadata.storageClass, 'STANDARD');
-      expect(
-        actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-        allOf(
-          greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
-          lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
-        ),
-      );
+      if (TestHttpClient.isReplaying) {
+        expect(
+          actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+          greaterThan(0),
+        );
+      } else {
+        expect(
+          actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+          allOf(
+            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+          ),
+        );
+      }
       expect(
         actualMetadata.updated?.toDateTime(),
         actualMetadata.timeCreated?.toDateTime(),
@@ -145,24 +152,25 @@ void main() async {
       expect(actualMetadata.website, isNull);
     });
 
-    test('create_bucket_with_metadata_name_only', () async {
+    test('create_bucket_with_metadata_lifecycle', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'create_bucket_with_metadata_name_only',
+        'create_bucket_with_metadata_lifecycle',
       );
       addTearDown(testClient.endTest);
       final bucketName =
           TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_name_only'
+          ? 'create_bucket_with_metadata_lifecycle'
           : uniqueBucketName();
 
-      print('bucketName: $bucketName');
       final requestMetadata = BucketMetadata(
         name: bucketName,
         lifecycle: Lifecycle(
           rule: [
             LifecycleRule(
-              condition: LifecycleRuleCondition(createdBefore: '2026-01-27'),
+              condition: LifecycleRuleCondition(
+                createdBefore: DateTime(2025, 12, 11),
+              ),
               action: LifecycleRuleAction(type: 'Delete'),
             ),
           ],
@@ -174,7 +182,7 @@ void main() async {
       expect(actualMetadata.lifecycle!.rule!.length, 1);
       expect(
         actualMetadata.lifecycle!.rule![0].condition!.createdBefore,
-        '2026-01-27',
+        DateTime(2025, 12, 11),
       );
       expect(actualMetadata.lifecycle!.rule![0].action!.type, 'Delete');
     });
