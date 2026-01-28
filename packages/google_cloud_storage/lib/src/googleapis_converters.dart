@@ -20,81 +20,83 @@ import 'object_metadata.dart';
 import 'project_team.dart';
 
 storage.Bucket toGoogleApisBucket(BucketMetadata metadata) => storage.Bucket(
-  acl: metadata.acl?.map(toBucketAccessControl).toList(),
+  acl: metadata.acl?.map(_toBucketAccessControl).toList(),
   autoclass: metadata.autoclass == null
       ? null
-      : toAutoclass(metadata.autoclass!),
-  billing: metadata.billing == null ? null : toBilling(metadata.billing!),
-  cors: metadata.cors?.map(toCors).toList(),
+      : _toAutoclass(metadata.autoclass!),
+  billing: metadata.billing == null ? null : _toBilling(metadata.billing!),
+  cors: metadata.cors?.map(_toCors).toList(),
   customPlacementConfig: metadata.customPlacementConfig == null
       ? null
-      : toCustomPlacementConfig(metadata.customPlacementConfig!),
+      : _toCustomPlacementConfig(metadata.customPlacementConfig!),
   defaultEventBasedHold: metadata.defaultEventBasedHold,
   defaultObjectAcl: metadata.defaultObjectAcl
-      ?.map(toObjectAccessControl)
+      ?.map(_toObjectAccessControl)
       .toList(),
   encryption: metadata.encryption == null
       ? null
-      : toEncryption(metadata.encryption!),
+      : _toEncryption(metadata.encryption!),
   etag: metadata.etag,
   generation: metadata.generation?.toString(),
   hardDeleteTime: metadata.hardDeleteTime?.toDateTime(),
   hierarchicalNamespace: metadata.hierarchicalNamespace == null
       ? null
-      : toHierarchicalNamespace(metadata.hierarchicalNamespace!),
+      : _toHierarchicalNamespace(metadata.hierarchicalNamespace!),
   iamConfiguration: metadata.iamConfiguration == null
       ? null
-      : toIamConfiguration(metadata.iamConfiguration!),
+      : _toIamConfiguration(metadata.iamConfiguration!),
   id: metadata.id,
-  ipFilter: metadata.ipFilter == null ? null : toIpFilter(metadata.ipFilter!),
+  ipFilter: metadata.ipFilter == null ? null : _toIpFilter(metadata.ipFilter!),
   kind: metadata.kind,
   labels: metadata.labels,
   lifecycle: metadata.lifecycle == null
       ? null
-      : toLifecycle(metadata.lifecycle!),
+      : _toLifecycle(metadata.lifecycle!),
   location: metadata.location,
   locationType: metadata.locationType,
-  logging: metadata.logging == null ? null : toLogging(metadata.logging!),
+  logging: metadata.logging == null ? null : _toLogging(metadata.logging!),
   metageneration: metadata.metageneration?.toString(),
   name: metadata.name,
   objectRetention: metadata.objectRetention == null
       ? null
-      : toObjectRetention(metadata.objectRetention!),
-  owner: metadata.owner == null ? null : toOwner(metadata.owner!),
+      : _toObjectRetention(metadata.objectRetention!),
+  owner: metadata.owner == null ? null : _toOwner(metadata.owner!),
   projectNumber: metadata.projectNumber,
   retentionPolicy: metadata.retentionPolicy == null
       ? null
-      : toRetentionPolicy(metadata.retentionPolicy!),
+      : _toRetentionPolicy(metadata.retentionPolicy!),
   rpo: metadata.rpo,
   selfLink: metadata.selfLink?.toString(),
   softDeletePolicy: metadata.softDeletePolicy == null
       ? null
-      : toSoftDeletePolicy(metadata.softDeletePolicy!),
+      : _toSoftDeletePolicy(metadata.softDeletePolicy!),
   softDeleteTime: metadata.softDeleteTime?.toDateTime(),
   storageClass: metadata.storageClass,
   timeCreated: metadata.timeCreated?.toDateTime(),
   updated: metadata.updated?.toDateTime(),
   versioning: metadata.versioning == null
       ? null
-      : toVersioning(metadata.versioning!),
-  website: metadata.website == null ? null : toWebsite(metadata.website!),
+      : _toVersioning(metadata.versioning!),
+  website: metadata.website == null ? null : _toWebsite(metadata.website!),
 );
 
 BucketMetadata fromGoogleApisBucket(storage.Bucket bucket) => BucketMetadata(
-  acl: bucket.acl?.map(fromBucketAccessControl).toList(),
-  autoclass: bucket.autoclass == null ? null : fromAutoclass(bucket.autoclass!),
-  billing: bucket.billing == null ? null : fromBilling(bucket.billing!),
-  cors: bucket.cors?.map(fromCors).toList(),
+  acl: bucket.acl?.map(_fromBucketAccessControl).toList(),
+  autoclass: bucket.autoclass == null
+      ? null
+      : _fromAutoclass(bucket.autoclass!),
+  billing: bucket.billing == null ? null : _fromBilling(bucket.billing!),
+  cors: bucket.cors?.map(_fromCors).toList(),
   customPlacementConfig: bucket.customPlacementConfig == null
       ? null
-      : fromCustomPlacementConfig(bucket.customPlacementConfig!),
+      : _fromCustomPlacementConfig(bucket.customPlacementConfig!),
   defaultEventBasedHold: bucket.defaultEventBasedHold,
   defaultObjectAcl: bucket.defaultObjectAcl
-      ?.map(fromObjectAccessControl)
+      ?.map(_fromObjectAccessControl)
       .toList(),
   encryption: bucket.encryption == null
       ? null
-      : fromEncryption(bucket.encryption!),
+      : _fromEncryption(bucket.encryption!),
   etag: bucket.etag,
   generation: bucket.generation == null ? null : int.parse(bucket.generation!),
   hardDeleteTime: bucket.hardDeleteTime == null
@@ -102,35 +104,37 @@ BucketMetadata fromGoogleApisBucket(storage.Bucket bucket) => BucketMetadata(
       : _timestampFromDateTime(bucket.hardDeleteTime!),
   hierarchicalNamespace: bucket.hierarchicalNamespace == null
       ? null
-      : fromHierarchicalNamespace(bucket.hierarchicalNamespace!),
+      : _fromHierarchicalNamespace(bucket.hierarchicalNamespace!),
   iamConfiguration: bucket.iamConfiguration == null
       ? null
-      : fromIamConfiguration(bucket.iamConfiguration!),
+      : _fromIamConfiguration(bucket.iamConfiguration!),
   id: bucket.id,
-  ipFilter: bucket.ipFilter == null ? null : fromIpFilter(bucket.ipFilter!),
+  ipFilter: bucket.ipFilter == null ? null : _fromIpFilter(bucket.ipFilter!),
   kind: bucket.kind,
   labels: bucket.labels,
-  lifecycle: bucket.lifecycle == null ? null : fromLifecycle(bucket.lifecycle!),
+  lifecycle: bucket.lifecycle == null
+      ? null
+      : _fromLifecycle(bucket.lifecycle!),
   location: bucket.location,
   locationType: bucket.locationType,
-  logging: bucket.logging == null ? null : fromLogging(bucket.logging!),
+  logging: bucket.logging == null ? null : _fromLogging(bucket.logging!),
   metageneration: bucket.metageneration == null
       ? null
       : int.parse(bucket.metageneration!),
   name: bucket.name,
   objectRetention: bucket.objectRetention == null
       ? null
-      : fromObjectRetention(bucket.objectRetention!),
-  owner: bucket.owner == null ? null : fromOwner(bucket.owner!),
+      : _fromObjectRetention(bucket.objectRetention!),
+  owner: bucket.owner == null ? null : _fromOwner(bucket.owner!),
   projectNumber: bucket.projectNumber?.toString(),
   retentionPolicy: bucket.retentionPolicy == null
       ? null
-      : fromRetentionPolicy(bucket.retentionPolicy!),
+      : _fromRetentionPolicy(bucket.retentionPolicy!),
   rpo: bucket.rpo,
   selfLink: bucket.selfLink == null ? null : Uri.parse(bucket.selfLink!),
   softDeletePolicy: bucket.softDeletePolicy == null
       ? null
-      : fromSoftDeletePolicy(bucket.softDeletePolicy!),
+      : _fromSoftDeletePolicy(bucket.softDeletePolicy!),
   softDeleteTime: bucket.softDeleteTime == null
       ? null
       : _timestampFromDateTime(bucket.softDeleteTime!),
@@ -143,11 +147,11 @@ BucketMetadata fromGoogleApisBucket(storage.Bucket bucket) => BucketMetadata(
       : _timestampFromDateTime(bucket.updated!),
   versioning: bucket.versioning == null
       ? null
-      : fromVersioning(bucket.versioning!),
-  website: bucket.website == null ? null : fromWebsite(bucket.website!),
+      : _fromVersioning(bucket.versioning!),
+  website: bucket.website == null ? null : _fromWebsite(bucket.website!),
 );
 
-storage.BucketAutoclass toAutoclass(BucketAutoclass autoclass) =>
+storage.BucketAutoclass _toAutoclass(BucketAutoclass autoclass) =>
     storage.BucketAutoclass(
       enabled: autoclass.enabled,
       terminalStorageClass: autoclass.terminalStorageClass,
@@ -156,7 +160,7 @@ storage.BucketAutoclass toAutoclass(BucketAutoclass autoclass) =>
       toggleTime: autoclass.toggleTime?.toDateTime(),
     );
 
-BucketAutoclass fromAutoclass(storage.BucketAutoclass autoclass) =>
+BucketAutoclass _fromAutoclass(storage.BucketAutoclass autoclass) =>
     BucketAutoclass(
       enabled: autoclass.enabled,
       terminalStorageClass: autoclass.terminalStorageClass,
@@ -169,13 +173,13 @@ BucketAutoclass fromAutoclass(storage.BucketAutoclass autoclass) =>
           : _timestampFromDateTime(autoclass.toggleTime!),
     );
 
-storage.BucketBilling toBilling(BucketBilling billing) =>
+storage.BucketBilling _toBilling(BucketBilling billing) =>
     storage.BucketBilling(requesterPays: billing.requesterPays);
 
-BucketBilling fromBilling(storage.BucketBilling billing) =>
+BucketBilling _fromBilling(storage.BucketBilling billing) =>
     BucketBilling(requesterPays: billing.requesterPays);
 
-storage.BucketAccessControl toBucketAccessControl(BucketAccessControl acl) =>
+storage.BucketAccessControl _toBucketAccessControl(BucketAccessControl acl) =>
     storage.BucketAccessControl(
       bucket: acl.bucket,
       domain: acl.domain,
@@ -187,12 +191,12 @@ storage.BucketAccessControl toBucketAccessControl(BucketAccessControl acl) =>
       kind: acl.kind,
       projectTeam: acl.projectTeam == null
           ? null
-          : toProjectTeam(acl.projectTeam!),
+          : _toProjectTeam(acl.projectTeam!),
       role: acl.role,
       selfLink: acl.selfLink?.toString(),
     );
 
-BucketAccessControl fromBucketAccessControl(storage.BucketAccessControl acl) =>
+BucketAccessControl _fromBucketAccessControl(storage.BucketAccessControl acl) =>
     BucketAccessControl(
       bucket: acl.bucket,
       domain: acl.domain,
@@ -204,21 +208,21 @@ BucketAccessControl fromBucketAccessControl(storage.BucketAccessControl acl) =>
       kind: acl.kind,
       projectTeam: acl.projectTeam == null
           ? null
-          : fromProjectTeam(acl.projectTeam!),
+          : _fromProjectTeam(acl.projectTeam!),
       role: acl.role,
       selfLink: acl.selfLink == null ? null : Uri.parse(acl.selfLink!),
     );
 
-storage.BucketAccessControlProjectTeam toProjectTeam(ProjectTeam team) =>
+storage.BucketAccessControlProjectTeam _toProjectTeam(ProjectTeam team) =>
     storage.BucketAccessControlProjectTeam(
       projectNumber: team.projectNumber,
       team: team.team,
     );
 
-ProjectTeam fromProjectTeam(storage.BucketAccessControlProjectTeam team) =>
+ProjectTeam _fromProjectTeam(storage.BucketAccessControlProjectTeam team) =>
     ProjectTeam(projectNumber: team.projectNumber, team: team.team);
 
-storage.ObjectAccessControl toObjectAccessControl(ObjectAccessControl acl) =>
+storage.ObjectAccessControl _toObjectAccessControl(ObjectAccessControl acl) =>
     storage.ObjectAccessControl(
       bucket: acl.bucket,
       domain: acl.domain,
@@ -232,12 +236,12 @@ storage.ObjectAccessControl toObjectAccessControl(ObjectAccessControl acl) =>
       object: acl.object,
       projectTeam: acl.projectTeam == null
           ? null
-          : toObjectProjectTeam(acl.projectTeam!),
+          : _toObjectProjectTeam(acl.projectTeam!),
       role: acl.role,
       selfLink: acl.selfLink?.toString(),
     );
 
-ObjectAccessControl fromObjectAccessControl(storage.ObjectAccessControl acl) =>
+ObjectAccessControl _fromObjectAccessControl(storage.ObjectAccessControl acl) =>
     ObjectAccessControl(
       bucket: acl.bucket,
       domain: acl.domain,
@@ -251,35 +255,35 @@ ObjectAccessControl fromObjectAccessControl(storage.ObjectAccessControl acl) =>
       object: acl.object,
       projectTeam: acl.projectTeam == null
           ? null
-          : fromObjectProjectTeam(acl.projectTeam!),
+          : _fromObjectProjectTeam(acl.projectTeam!),
       role: acl.role,
       selfLink: acl.selfLink == null ? null : Uri.parse(acl.selfLink!),
     );
 
-storage.ObjectAccessControlProjectTeam toObjectProjectTeam(ProjectTeam team) =>
+storage.ObjectAccessControlProjectTeam _toObjectProjectTeam(ProjectTeam team) =>
     storage.ObjectAccessControlProjectTeam(
       projectNumber: team.projectNumber,
       team: team.team,
     );
 
-ProjectTeam fromObjectProjectTeam(
+ProjectTeam _fromObjectProjectTeam(
   storage.ObjectAccessControlProjectTeam team,
 ) => ProjectTeam(projectNumber: team.projectNumber, team: team.team);
 
-storage.BucketEncryption toEncryption(BucketEncryption encryption) =>
+storage.BucketEncryption _toEncryption(BucketEncryption encryption) =>
     storage.BucketEncryption(defaultKmsKeyName: encryption.defaultKmsKeyName);
 
-BucketEncryption fromEncryption(storage.BucketEncryption encryption) =>
+BucketEncryption _fromEncryption(storage.BucketEncryption encryption) =>
     BucketEncryption(defaultKmsKeyName: encryption.defaultKmsKeyName);
 
-storage.BucketCors toCors(BucketCorsConfiguration cors) => storage.BucketCors(
+storage.BucketCors _toCors(BucketCorsConfiguration cors) => storage.BucketCors(
   maxAgeSeconds: cors.maxAgeSeconds,
   method: cors.method,
   origin: cors.origin,
   responseHeader: cors.responseHeader,
 );
 
-BucketCorsConfiguration fromCors(storage.BucketCors cors) =>
+BucketCorsConfiguration _fromCors(storage.BucketCors cors) =>
     BucketCorsConfiguration(
       maxAgeSeconds: cors.maxAgeSeconds,
       method: cors.method,
@@ -287,48 +291,48 @@ BucketCorsConfiguration fromCors(storage.BucketCors cors) =>
       responseHeader: cors.responseHeader,
     );
 
-storage.BucketCustomPlacementConfig toCustomPlacementConfig(
+storage.BucketCustomPlacementConfig _toCustomPlacementConfig(
   BucketCustomPlacementConfig config,
 ) => storage.BucketCustomPlacementConfig(dataLocations: config.dataLocations);
 
-BucketCustomPlacementConfig fromCustomPlacementConfig(
+BucketCustomPlacementConfig _fromCustomPlacementConfig(
   storage.BucketCustomPlacementConfig config,
 ) => BucketCustomPlacementConfig(dataLocations: config.dataLocations);
 
-storage.BucketHierarchicalNamespace toHierarchicalNamespace(
+storage.BucketHierarchicalNamespace _toHierarchicalNamespace(
   BucketHierarchicalNamespace config,
 ) => storage.BucketHierarchicalNamespace(enabled: config.enabled);
 
-BucketHierarchicalNamespace fromHierarchicalNamespace(
+BucketHierarchicalNamespace _fromHierarchicalNamespace(
   storage.BucketHierarchicalNamespace config,
 ) => BucketHierarchicalNamespace(enabled: config.enabled);
 
-storage.BucketIamConfiguration toIamConfiguration(
+storage.BucketIamConfiguration _toIamConfiguration(
   BucketIamConfiguration config,
 ) => storage.BucketIamConfiguration(
   publicAccessPrevention: config.publicAccessPrevention,
   uniformBucketLevelAccess: config.uniformBucketLevelAccess == null
       ? null
-      : toUniformBucketLevelAccess(config.uniformBucketLevelAccess!),
+      : _toUniformBucketLevelAccess(config.uniformBucketLevelAccess!),
 );
 
-BucketIamConfiguration fromIamConfiguration(
+BucketIamConfiguration _fromIamConfiguration(
   storage.BucketIamConfiguration config,
 ) => BucketIamConfiguration(
   publicAccessPrevention: config.publicAccessPrevention,
   uniformBucketLevelAccess: config.uniformBucketLevelAccess == null
       ? null
-      : fromUniformBucketLevelAccess(config.uniformBucketLevelAccess!),
+      : _fromUniformBucketLevelAccess(config.uniformBucketLevelAccess!),
 );
 
 storage.BucketIamConfigurationUniformBucketLevelAccess
-toUniformBucketLevelAccess(UniformBucketLevelAccess config) =>
+_toUniformBucketLevelAccess(UniformBucketLevelAccess config) =>
     storage.BucketIamConfigurationUniformBucketLevelAccess(
       enabled: config.enabled,
       lockedTime: config.lockedTime?.toDateTime(),
     );
 
-UniformBucketLevelAccess fromUniformBucketLevelAccess(
+UniformBucketLevelAccess _fromUniformBucketLevelAccess(
   storage.BucketIamConfigurationUniformBucketLevelAccess config,
 ) => UniformBucketLevelAccess(
   enabled: config.enabled,
@@ -337,89 +341,89 @@ UniformBucketLevelAccess fromUniformBucketLevelAccess(
       : _timestampFromDateTime(config.lockedTime!),
 );
 
-storage.BucketIpFilter toIpFilter(BucketIpFilter config) =>
+storage.BucketIpFilter _toIpFilter(BucketIpFilter config) =>
     storage.BucketIpFilter(
       allowAllServiceAgentAccess: config.allowAllServiceAgentAccess,
       allowCrossOrgVpcs: config.allowCrossOrgVpcs,
       mode: config.mode,
       publicNetworkSource: config.publicNetworkSource == null
           ? null
-          : toPublicNetworkSource(config.publicNetworkSource!),
+          : _toPublicNetworkSource(config.publicNetworkSource!),
       vpcNetworkSources: config.vpcNetworkSources
-          ?.map(toVpcNetworkSource)
+          ?.map(_toVpcNetworkSource)
           .toList(),
     );
 
-BucketIpFilter fromIpFilter(storage.BucketIpFilter config) => BucketIpFilter(
+BucketIpFilter _fromIpFilter(storage.BucketIpFilter config) => BucketIpFilter(
   allowAllServiceAgentAccess: config.allowAllServiceAgentAccess,
   allowCrossOrgVpcs: config.allowCrossOrgVpcs,
   mode: config.mode,
   publicNetworkSource: config.publicNetworkSource == null
       ? null
-      : fromPublicNetworkSource(config.publicNetworkSource!),
+      : _fromPublicNetworkSource(config.publicNetworkSource!),
   vpcNetworkSources: config.vpcNetworkSources
-      ?.map(fromVpcNetworkSource)
+      ?.map(_fromVpcNetworkSource)
       .toList(),
 );
 
-storage.BucketIpFilterPublicNetworkSource toPublicNetworkSource(
+storage.BucketIpFilterPublicNetworkSource _toPublicNetworkSource(
   BucketPublicNetworkSource source,
 ) => storage.BucketIpFilterPublicNetworkSource(
   allowedIpCidrRanges: source.allowedIpCidrRanges,
 );
 
-BucketPublicNetworkSource fromPublicNetworkSource(
+BucketPublicNetworkSource _fromPublicNetworkSource(
   storage.BucketIpFilterPublicNetworkSource source,
 ) => BucketPublicNetworkSource(allowedIpCidrRanges: source.allowedIpCidrRanges);
 
-storage.BucketIpFilterVpcNetworkSources toVpcNetworkSource(
+storage.BucketIpFilterVpcNetworkSources _toVpcNetworkSource(
   BucketPublicNetworkSource source,
 ) => storage.BucketIpFilterVpcNetworkSources(
   allowedIpCidrRanges: source.allowedIpCidrRanges,
 );
 
-BucketPublicNetworkSource fromVpcNetworkSource(
+BucketPublicNetworkSource _fromVpcNetworkSource(
   storage.BucketIpFilterVpcNetworkSources source,
 ) => BucketPublicNetworkSource(allowedIpCidrRanges: source.allowedIpCidrRanges);
 
-storage.BucketLifecycle toLifecycle(Lifecycle lifecycle) =>
+storage.BucketLifecycle _toLifecycle(Lifecycle lifecycle) =>
     storage.BucketLifecycle(
-      rule: lifecycle.rule?.map(toLifecycleRule).toList(),
+      rule: lifecycle.rule?.map(_toLifecycleRule).toList(),
     );
 
-Lifecycle fromLifecycle(storage.BucketLifecycle lifecycle) =>
-    Lifecycle(rule: lifecycle.rule?.map(fromLifecycleRule).toList());
+Lifecycle _fromLifecycle(storage.BucketLifecycle lifecycle) =>
+    Lifecycle(rule: lifecycle.rule?.map(_fromLifecycleRule).toList());
 
-storage.BucketLifecycleRule toLifecycleRule(LifecycleRule rule) =>
+storage.BucketLifecycleRule _toLifecycleRule(LifecycleRule rule) =>
     storage.BucketLifecycleRule(
-      action: rule.action == null ? null : toLifecycleRuleAction(rule.action!),
+      action: rule.action == null ? null : _toLifecycleRuleAction(rule.action!),
       condition: rule.condition == null
           ? null
-          : toLifecycleRuleCondition(rule.condition!),
+          : _toLifecycleRuleCondition(rule.condition!),
     );
 
-LifecycleRule fromLifecycleRule(storage.BucketLifecycleRule rule) =>
+LifecycleRule _fromLifecycleRule(storage.BucketLifecycleRule rule) =>
     LifecycleRule(
       action: rule.action == null
           ? null
-          : fromLifecycleRuleAction(rule.action!),
+          : _fromLifecycleRuleAction(rule.action!),
       condition: rule.condition == null
           ? null
-          : fromLifecycleRuleCondition(rule.condition!),
+          : _fromLifecycleRuleCondition(rule.condition!),
     );
 
-storage.BucketLifecycleRuleAction toLifecycleRuleAction(
+storage.BucketLifecycleRuleAction _toLifecycleRuleAction(
   LifecycleRuleAction action,
 ) => storage.BucketLifecycleRuleAction(
   storageClass: action.storageClass,
   type: action.type,
 );
 
-LifecycleRuleAction fromLifecycleRuleAction(
+LifecycleRuleAction _fromLifecycleRuleAction(
   storage.BucketLifecycleRuleAction action,
 ) => LifecycleRuleAction(storageClass: action.storageClass, type: action.type);
 
-storage.BucketLifecycleRuleCondition toLifecycleRuleCondition(
+storage.BucketLifecycleRuleCondition _toLifecycleRuleCondition(
   LifecycleRuleCondition condition,
 ) => storage.BucketLifecycleRuleCondition(
   age: condition.age,
@@ -441,57 +445,63 @@ storage.BucketLifecycleRuleCondition toLifecycleRuleCondition(
   numNewerVersions: condition.numNewerVersions,
 );
 
-LifecycleRuleCondition fromLifecycleRuleCondition(
+LifecycleRuleCondition _fromLifecycleRuleCondition(
   storage.BucketLifecycleRuleCondition condition,
-) => LifecycleRuleCondition(
-  age: condition.age,
-  createdBefore: condition.createdBefore == null
-      ? null
-      : _toRfc3339Date(condition.createdBefore!),
-  customTimeBefore: condition.customTimeBefore == null
-      ? null
-      : _toRfc3339Date(condition.customTimeBefore!),
-  daysSinceCustomTime: condition.daysSinceCustomTime,
-  daysSinceNoncurrentTime: condition.daysSinceNoncurrentTime,
-  isLive: condition.isLive,
-  matchesPrefix: condition.matchesPrefix,
-  matchesStorageClass: condition.matchesStorageClass,
-  matchesSuffix: condition.matchesSuffix,
-  noncurrentTimeBefore: condition.noncurrentTimeBefore == null
-      ? null
-      : _toRfc3339Date(condition.noncurrentTimeBefore!),
-  numNewerVersions: condition.numNewerVersions,
-);
+) {
+  print(condition.createdBefore);
+  return LifecycleRuleCondition(
+    age: condition.age,
+
+    /// XXX which midnight????
+    createdBefore: condition.createdBefore == null
+        ? null
+        : _toRfc3339Date(condition.createdBefore!),
+    customTimeBefore: condition.customTimeBefore == null
+        ? null
+        : _toRfc3339Date(condition.customTimeBefore!),
+    daysSinceCustomTime: condition.daysSinceCustomTime,
+    daysSinceNoncurrentTime: condition.daysSinceNoncurrentTime,
+    isLive: condition.isLive,
+    matchesPrefix: condition.matchesPrefix,
+    matchesStorageClass: condition.matchesStorageClass,
+    matchesSuffix: condition.matchesSuffix,
+    noncurrentTimeBefore: condition.noncurrentTimeBefore == null
+        ? null
+        : _toRfc3339Date(condition.noncurrentTimeBefore!),
+    numNewerVersions: condition.numNewerVersions,
+  );
+}
 
 String _toRfc3339Date(DateTime dateTime) =>
     dateTime.toIso8601String().substring(0, 10);
 
-storage.BucketLogging toLogging(BucketLoggingConfiguration logging) =>
+storage.BucketLogging _toLogging(BucketLoggingConfiguration logging) =>
     storage.BucketLogging(
       logBucket: logging.logBucket,
       logObjectPrefix: logging.logObjectPrefix,
     );
 
-BucketLoggingConfiguration fromLogging(storage.BucketLogging logging) =>
+BucketLoggingConfiguration _fromLogging(storage.BucketLogging logging) =>
     BucketLoggingConfiguration(
       logBucket: logging.logBucket,
       logObjectPrefix: logging.logObjectPrefix,
     );
 
-storage.BucketOwner toOwner(BucketOwner owner) =>
+storage.BucketOwner _toOwner(BucketOwner owner) =>
     storage.BucketOwner(entity: owner.entity, entityId: owner.entityId);
 
-BucketOwner fromOwner(storage.BucketOwner owner) =>
+BucketOwner _fromOwner(storage.BucketOwner owner) =>
     BucketOwner(entity: owner.entity, entityId: owner.entityId);
 
-storage.BucketRetentionPolicy toRetentionPolicy(BucketRetentionPolicy policy) =>
-    storage.BucketRetentionPolicy(
-      effectiveTime: policy.effectiveTime?.toDateTime(),
-      isLocked: policy.isLocked,
-      retentionPeriod: policy.retentionPeriod?.toString(),
-    );
+storage.BucketRetentionPolicy _toRetentionPolicy(
+  BucketRetentionPolicy policy,
+) => storage.BucketRetentionPolicy(
+  effectiveTime: policy.effectiveTime?.toDateTime(),
+  isLocked: policy.isLocked,
+  retentionPeriod: policy.retentionPeriod?.toString(),
+);
 
-BucketRetentionPolicy fromRetentionPolicy(
+BucketRetentionPolicy _fromRetentionPolicy(
   storage.BucketRetentionPolicy policy,
 ) => BucketRetentionPolicy(
   effectiveTime: policy.effectiveTime == null
@@ -503,14 +513,14 @@ BucketRetentionPolicy fromRetentionPolicy(
       : int.parse(policy.retentionPeriod!),
 );
 
-storage.BucketSoftDeletePolicy toSoftDeletePolicy(
+storage.BucketSoftDeletePolicy _toSoftDeletePolicy(
   BucketSoftDeletePolicy policy,
 ) => storage.BucketSoftDeletePolicy(
   effectiveTime: policy.effectiveTime?.toDateTime(),
   retentionDurationSeconds: policy.retentionDurationSeconds?.toString(),
 );
 
-BucketSoftDeletePolicy fromSoftDeletePolicy(
+BucketSoftDeletePolicy _fromSoftDeletePolicy(
   storage.BucketSoftDeletePolicy policy,
 ) => BucketSoftDeletePolicy(
   effectiveTime: policy.effectiveTime == null
@@ -521,29 +531,29 @@ BucketSoftDeletePolicy fromSoftDeletePolicy(
       : int.parse(policy.retentionDurationSeconds!),
 );
 
-storage.BucketVersioning toVersioning(BucketVersioning versioning) =>
+storage.BucketVersioning _toVersioning(BucketVersioning versioning) =>
     storage.BucketVersioning(enabled: versioning.enabled);
 
-BucketVersioning fromVersioning(storage.BucketVersioning versioning) =>
+BucketVersioning _fromVersioning(storage.BucketVersioning versioning) =>
     BucketVersioning(enabled: versioning.enabled);
 
-storage.BucketWebsite toWebsite(BucketWebsiteConfiguration website) =>
+storage.BucketWebsite _toWebsite(BucketWebsiteConfiguration website) =>
     storage.BucketWebsite(
       mainPageSuffix: website.mainPageSuffix,
       notFoundPage: website.notFoundPage,
     );
 
-BucketWebsiteConfiguration fromWebsite(storage.BucketWebsite website) =>
+BucketWebsiteConfiguration _fromWebsite(storage.BucketWebsite website) =>
     BucketWebsiteConfiguration(
       mainPageSuffix: website.mainPageSuffix,
       notFoundPage: website.notFoundPage,
     );
 
-storage.BucketObjectRetention toObjectRetention(
+storage.BucketObjectRetention _toObjectRetention(
   BucketObjectRetention objectRetention,
 ) => storage.BucketObjectRetention(mode: objectRetention.mode);
 
-BucketObjectRetention fromObjectRetention(
+BucketObjectRetention _fromObjectRetention(
   storage.BucketObjectRetention objectRetention,
 ) => BucketObjectRetention(mode: objectRetention.mode);
 

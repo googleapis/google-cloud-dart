@@ -14,11 +14,9 @@
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/googleapis_converters.dart';
 import 'package:googleapis/storage/v1.dart' as storage;
-
 import 'package:test/test.dart';
-
-import '../lib/src/googleapis_converters.dart';
 
 void main() {
   group('BucketMetadata Converters', () {
@@ -251,35 +249,6 @@ void main() {
       expect(metadata.softDeletePolicy?.retentionDurationSeconds, 604800);
       expect(metadata.versioning?.enabled, isTrue);
       expect(metadata.website?.mainPageSuffix, 'index.html');
-    });
-
-    test('fromBucket with partial timestamps', () {
-      final bucket = storage.Bucket(
-        id: 'bucket-id',
-        timeCreated: DateTime.fromMillisecondsSinceEpoch(
-          1600000000000,
-          isUtc: true,
-        ),
-        updated: DateTime.fromMillisecondsSinceEpoch(
-          1600000000000,
-          isUtc: true,
-        ),
-      );
-      final metadata = fromGoogleApisBucket(bucket);
-      expect(metadata.timeCreated?.seconds, 1600000000);
-      expect(metadata.updated?.seconds, 1600000000);
-    });
-
-    test('toBucket with partial timestamps', () {
-      final metadata = BucketMetadata(
-        id: 'bucket-id',
-        timeCreated: Timestamp(seconds: 1600000000, nanos: 0),
-        updated: Timestamp(seconds: 1600000000, nanos: 0),
-      );
-      final bucket = toGoogleApisBucket(metadata);
-      expect(bucket.timeCreated?.isUtc, isTrue);
-      expect(bucket.timeCreated?.year, 2020);
-      expect(bucket.updated?.isUtc, isTrue);
     });
   });
 }

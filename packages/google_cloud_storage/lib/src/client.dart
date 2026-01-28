@@ -24,9 +24,11 @@ import 'googleapis_converters.dart';
 final class Storage {
   final storage.StorageApi _api;
   final String projectId;
+  final http.Client _client;
 
   Storage({required http.Client client, required this.projectId})
-    : _api = storage.StorageApi(client);
+    : _client = client,
+      _api = storage.StorageApi(client);
 
   Future<BucketMetadata> createBucket(BucketMetadata metadata) async {
     return fromGoogleApisBucket(
@@ -41,4 +43,9 @@ final class Storage {
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
   Future<ObjectMetadata> objectMetadata(String bucket, String object) async =>
       throw UnimplementedError('objectMetadata');
+
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _client.close();
 }
