@@ -174,5 +174,44 @@ void main() {
         DateTime.utc(2024, 10, 19, 12, 34, 56, 123, 457),
       );
     });
+
+    group('toTimestamp', () {
+      test('about now', () {
+        final timestamp = DateTime.utc(
+          2024,
+          10,
+          19,
+          12,
+          34,
+          56,
+          123,
+          457,
+        ).toTimestamp();
+        expect(
+          timestamp.seconds,
+          DateTime.utc(2024, 10, 19, 12, 34, 56).millisecondsSinceEpoch ~/ 1000,
+        );
+        expect(timestamp.nanos, 123_457_000);
+      });
+
+      test('min', () {
+        final timestamp = DateTime.utc(1, 1, 1).toTimestamp();
+        expect(timestamp.seconds, TimestampExtension.minSeconds);
+        expect(timestamp.nanos, 0);
+      });
+
+      test('max', () {
+        final timestamp = DateTime.utc(9999, 12, 31, 23, 59, 59).toTimestamp();
+        expect(timestamp.seconds, TimestampExtension.maxSeconds);
+        expect(timestamp.nanos, 0);
+      });
+
+      test('not utc', () {
+        expect(
+          () => DateTime(2024, 10, 19, 12, 34, 56).toTimestamp(),
+          throwsArgumentError,
+        );
+      });
+    });
   });
 }

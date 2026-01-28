@@ -19,6 +19,453 @@ import 'package:googleapis/storage/v1.dart' as storage;
 import 'package:test/test.dart';
 
 void main() {
+  group('fromGoogleApisBucket', () {
+    test('acl', () {
+      final bucket = storage.Bucket(
+        acl: [
+          storage.BucketAccessControl(
+            bucket: 'bucket-name',
+            domain: 'domain',
+            email: 'email',
+            entity: 'user-test',
+            id: 'id',
+            kind: 'kind',
+            projectTeam: storage.BucketAccessControlProjectTeam(
+              projectNumber: 'projectNumber',
+              team: 'team',
+            ),
+            role: 'READER',
+            selfLink: 'https://www.googleapis.com/storage',
+          ),
+        ],
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.acl, hasLength(1));
+      final acl = metadata.acl![0];
+      expect(acl.bucket, 'bucket-name');
+      expect(acl.domain, 'domain');
+      expect(acl.email, 'email');
+      expect(acl.entity, 'user-test');
+      expect(acl.id, 'id');
+      expect(acl.kind, 'kind');
+      expect(acl.projectTeam?.projectNumber, 'projectNumber');
+      expect(acl.projectTeam?.team, 'team');
+      expect(acl.role, 'READER');
+      expect(acl.selfLink, Uri.https('www.googleapis.com', '/storage'));
+    });
+
+    test('autoclass', () {
+      final bucket = storage.Bucket(
+        autoclass: storage.BucketAutoclass(
+          enabled: true,
+          terminalStorageClass: 'ARCHIVE',
+          terminalStorageClassUpdateTime: DateTime.utc(2022, 1, 1),
+          toggleTime: DateTime.utc(2022, 2, 2),
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.autoclass?.enabled, isTrue);
+      expect(metadata.autoclass?.terminalStorageClass, 'ARCHIVE');
+      expect(
+        metadata.autoclass?.terminalStorageClassUpdateTime?.toDateTime(),
+        DateTime.utc(2022, 1, 1),
+      );
+      expect(
+        metadata.autoclass?.toggleTime?.toDateTime(),
+        DateTime.utc(2022, 2, 2),
+      );
+    });
+
+    test('billing', () {
+      final bucket = storage.Bucket(
+        billing: storage.BucketBilling(requesterPays: true),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.billing?.requesterPays, isTrue);
+    });
+
+    test('cors', () {
+      final bucket = storage.Bucket(
+        cors: [
+          storage.BucketCors(
+            maxAgeSeconds: 3600,
+            method: ['GET'],
+            origin: ['*'],
+            responseHeader: ['Content-Type'],
+          ),
+        ],
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.cors, hasLength(1));
+      final cors = metadata.cors![0];
+      expect(cors.maxAgeSeconds, 3600);
+      expect(cors.method, ['GET']);
+      expect(cors.origin, ['*']);
+      expect(cors.responseHeader, ['Content-Type']);
+    });
+
+    test('customPlacementConfig', () {
+      final bucket = storage.Bucket(
+        customPlacementConfig: storage.BucketCustomPlacementConfig(
+          dataLocations: ['US-EAST1'],
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.customPlacementConfig?.dataLocations, ['US-EAST1']);
+    });
+
+    test('defaultEventBasedHold', () {
+      final bucket = storage.Bucket(defaultEventBasedHold: true);
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.defaultEventBasedHold, isTrue);
+    });
+
+    test('defaultObjectAcl', () {
+      final bucket = storage.Bucket(
+        defaultObjectAcl: [
+          storage.ObjectAccessControl(
+            bucket: 'bucket-name',
+            domain: 'domain',
+            email: 'email',
+            entity: 'user-test',
+            entityId: 'entityId',
+            etag: 'etag',
+            generation: '1',
+            id: 'id',
+            kind: 'kind',
+            object: 'object',
+            projectTeam: storage.ObjectAccessControlProjectTeam(
+              projectNumber: 'projectNumber',
+              team: 'team',
+            ),
+            role: 'READER',
+            selfLink: 'https://www.googleapis.com/storage',
+          ),
+        ],
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.defaultObjectAcl, hasLength(1));
+      final acl = metadata.defaultObjectAcl![0];
+      expect(acl.bucket, 'bucket-name');
+      expect(acl.domain, 'domain');
+      expect(acl.email, 'email');
+      expect(acl.entity, 'user-test');
+      expect(acl.entityId, 'entityId');
+      expect(acl.etag, 'etag');
+      expect(acl.generation, '1');
+      expect(acl.id, 'id');
+      expect(acl.kind, 'kind');
+      expect(acl.object, 'object');
+      expect(acl.projectTeam?.projectNumber, 'projectNumber');
+      expect(acl.projectTeam?.team, 'team');
+      expect(acl.role, 'READER');
+      expect(acl.selfLink, Uri.https('www.googleapis.com', '/storage'));
+    });
+
+    test('encryption', () {
+      final bucket = storage.Bucket(
+        encryption: storage.BucketEncryption(defaultKmsKeyName: 'key-name'),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.encryption?.defaultKmsKeyName, 'key-name');
+    });
+
+    test('etag', () {
+      final bucket = storage.Bucket(etag: 'etag');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.etag, 'etag');
+    });
+
+    test('generation', () {
+      final bucket = storage.Bucket(generation: '1');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.generation, 1);
+    });
+
+    test('hardDeleteTime', () {
+      final bucket = storage.Bucket(hardDeleteTime: DateTime.utc(2022, 1, 1));
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.hardDeleteTime?.toDateTime(), DateTime.utc(2022, 1, 1));
+    });
+
+    test('hierarchicalNamespace', () {
+      final bucket = storage.Bucket(
+        hierarchicalNamespace: storage.BucketHierarchicalNamespace(
+          enabled: true,
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.hierarchicalNamespace?.enabled, isTrue);
+    });
+
+    test('iamConfiguration', () {
+      final bucket = storage.Bucket(
+        iamConfiguration: storage.BucketIamConfiguration(
+          publicAccessPrevention: 'enforced',
+          uniformBucketLevelAccess:
+              storage.BucketIamConfigurationUniformBucketLevelAccess(
+                enabled: true,
+                lockedTime: DateTime.utc(2022, 1, 1),
+              ),
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.iamConfiguration?.publicAccessPrevention, 'enforced');
+      expect(
+        metadata.iamConfiguration?.uniformBucketLevelAccess?.enabled,
+        isTrue,
+      );
+      expect(
+        metadata.iamConfiguration?.uniformBucketLevelAccess?.lockedTime
+            ?.toDateTime(),
+        DateTime.utc(2022, 1, 1),
+      );
+    });
+
+    test('id', () {
+      final bucket = storage.Bucket(id: 'id');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.id, 'id');
+    });
+
+    test('ipFilter', () {
+      final bucket = storage.Bucket(
+        ipFilter: storage.BucketIpFilter(
+          allowAllServiceAgentAccess: true,
+          allowCrossOrgVpcs: true,
+          mode: 'Enabled',
+          publicNetworkSource: storage.BucketIpFilterPublicNetworkSource(
+            allowedIpCidrRanges: ['0.0.0.0/0'],
+          ),
+          vpcNetworkSources: [
+            storage.BucketIpFilterVpcNetworkSources(
+              allowedIpCidrRanges: ['10.0.0.0/8'],
+            ),
+          ],
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.ipFilter?.allowAllServiceAgentAccess, isTrue);
+      expect(metadata.ipFilter?.allowCrossOrgVpcs, isTrue);
+      expect(metadata.ipFilter?.mode, 'Enabled');
+      expect(metadata.ipFilter?.publicNetworkSource?.allowedIpCidrRanges, [
+        '0.0.0.0/0',
+      ]);
+      expect(metadata.ipFilter?.vpcNetworkSources, hasLength(1));
+      expect(metadata.ipFilter?.vpcNetworkSources![0].allowedIpCidrRanges, [
+        '10.0.0.0/8',
+      ]);
+    });
+
+    test('kind', () {
+      final bucket = storage.Bucket(kind: 'storage#bucket');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.kind, 'storage#bucket');
+    });
+
+    test('labels', () {
+      final bucket = storage.Bucket(labels: {'key': 'value'});
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.labels, {'key': 'value'});
+    });
+
+    test('lifecycle', () {
+      final bucket = storage.Bucket(
+        lifecycle: storage.BucketLifecycle(
+          rule: [
+            storage.BucketLifecycleRule(
+              action: storage.BucketLifecycleRuleAction(
+                storageClass: 'ARCHIVE',
+                type: 'SetStorageClass',
+              ),
+              condition: storage.BucketLifecycleRuleCondition(
+                age: 30,
+                createdBefore: DateTime.utc(2022, 1, 1),
+                customTimeBefore: DateTime.utc(2022, 2, 2),
+                daysSinceCustomTime: 10,
+                daysSinceNoncurrentTime: 20,
+                isLive: true,
+                matchesPrefix: ['prefix'],
+                matchesStorageClass: ['STANDARD'],
+                matchesSuffix: ['suffix'],
+                noncurrentTimeBefore: DateTime.utc(2022, 3, 3),
+                numNewerVersions: 3,
+              ),
+            ),
+          ],
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.lifecycle?.rule, hasLength(1));
+      final rule = metadata.lifecycle!.rule![0];
+      expect(rule.action?.storageClass, 'ARCHIVE');
+      expect(rule.action?.type, 'SetStorageClass');
+      expect(rule.condition?.age, 30);
+      expect(rule.condition?.createdBefore, DateTime.utc(2022, 1, 1));
+      expect(rule.condition?.customTimeBefore, DateTime.utc(2022, 2, 2));
+      expect(rule.condition?.daysSinceCustomTime, 10);
+      expect(rule.condition?.daysSinceNoncurrentTime, 20);
+      expect(rule.condition?.isLive, isTrue);
+      expect(rule.condition?.matchesPrefix, ['prefix']);
+      expect(rule.condition?.matchesStorageClass, ['STANDARD']);
+      expect(rule.condition?.matchesSuffix, ['suffix']);
+      expect(rule.condition?.noncurrentTimeBefore, DateTime.utc(2022, 3, 3));
+      expect(rule.condition?.numNewerVersions, 3);
+    });
+
+    test('location', () {
+      final bucket = storage.Bucket(location: 'US');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.location, 'US');
+    });
+
+    test('locationType', () {
+      final bucket = storage.Bucket(locationType: 'multi-region');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.locationType, 'multi-region');
+    });
+
+    test('logging', () {
+      final bucket = storage.Bucket(
+        logging: storage.BucketLogging(
+          logBucket: 'log-bucket',
+          logObjectPrefix: 'log-prefix',
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.logging?.logBucket, 'log-bucket');
+      expect(metadata.logging?.logObjectPrefix, 'log-prefix');
+    });
+
+    test('metageneration', () {
+      final bucket = storage.Bucket(metageneration: '1');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.metageneration, 1);
+    });
+
+    test('name', () {
+      final bucket = storage.Bucket(name: 'bucket-name');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.name, 'bucket-name');
+    });
+
+    test('objectRetention', () {
+      final bucket = storage.Bucket(
+        objectRetention: storage.BucketObjectRetention(mode: 'Enabled'),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.objectRetention?.mode, 'Enabled');
+    });
+
+    test('owner', () {
+      final bucket = storage.Bucket(
+        owner: storage.BucketOwner(entity: 'entity', entityId: 'entityId'),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.owner?.entity, 'entity');
+      expect(metadata.owner?.entityId, 'entityId');
+    });
+
+    test('projectNumber', () {
+      final bucket = storage.Bucket(projectNumber: '123456');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.projectNumber, '123456');
+    });
+
+    test('retentionPolicy', () {
+      final bucket = storage.Bucket(
+        retentionPolicy: storage.BucketRetentionPolicy(
+          effectiveTime: DateTime.utc(2022, 1, 1),
+          isLocked: true,
+          retentionPeriod: '3600',
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(
+        metadata.retentionPolicy?.effectiveTime?.toDateTime(),
+        DateTime.utc(2022, 1, 1),
+      );
+      expect(metadata.retentionPolicy?.isLocked, isTrue);
+      expect(metadata.retentionPolicy?.retentionPeriod, 3600);
+    });
+
+    test('rpo', () {
+      final bucket = storage.Bucket(rpo: 'DEFAULT');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.rpo, 'DEFAULT');
+    });
+
+    test('selfLink', () {
+      final bucket = storage.Bucket(
+        selfLink: 'https://www.googleapis.com/storage/v1/b/bucket',
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(
+        metadata.selfLink,
+        Uri.parse('https://www.googleapis.com/storage/v1/b/bucket'),
+      );
+    });
+
+    test('softDeletePolicy', () {
+      final bucket = storage.Bucket(
+        softDeletePolicy: storage.BucketSoftDeletePolicy(
+          effectiveTime: DateTime.utc(2022, 1, 1),
+          retentionDurationSeconds: '604800',
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(
+        metadata.softDeletePolicy?.effectiveTime?.toDateTime(),
+        DateTime.utc(2022, 1, 1),
+      );
+      expect(metadata.softDeletePolicy?.retentionDurationSeconds, 604800);
+    });
+
+    test('softDeleteTime', () {
+      final bucket = storage.Bucket(softDeleteTime: DateTime.utc(2022, 1, 1));
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.softDeleteTime?.toDateTime(), DateTime.utc(2022, 1, 1));
+    });
+
+    test('storageClass', () {
+      final bucket = storage.Bucket(storageClass: 'STANDARD');
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.storageClass, 'STANDARD');
+    });
+
+    test('timeCreated', () {
+      final bucket = storage.Bucket(timeCreated: DateTime.utc(2022, 1, 1));
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.timeCreated?.toDateTime(), DateTime.utc(2022, 1, 1));
+    });
+
+    test('updated', () {
+      final bucket = storage.Bucket(updated: DateTime.utc(2022, 1, 1));
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.updated?.toDateTime(), DateTime.utc(2022, 1, 1));
+    });
+
+    test('versioning', () {
+      final bucket = storage.Bucket(
+        versioning: storage.BucketVersioning(enabled: true),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.versioning?.enabled, isTrue);
+    });
+
+    test('website', () {
+      final bucket = storage.Bucket(
+        website: storage.BucketWebsite(
+          mainPageSuffix: 'index.html',
+          notFoundPage: '404.html',
+        ),
+      );
+      final metadata = fromGoogleApisBucket(bucket);
+      expect(metadata.website?.mainPageSuffix, 'index.html');
+      expect(metadata.website?.notFoundPage, '404.html');
+    });
+  });
+
   group('toGoogleApisBucket', () {
     test('acl', () {
       final metadata = BucketMetadata(
@@ -59,10 +506,12 @@ void main() {
         autoclass: BucketAutoclass(
           enabled: true,
           terminalStorageClass: 'ARCHIVE',
-          terminalStorageClassUpdateTime: _timestampFromDateTime(
-            DateTime.utc(2022, 1, 1),
-          ),
-          toggleTime: _timestampFromDateTime(DateTime.utc(2022, 2, 2)),
+          terminalStorageClassUpdateTime: DateTime.utc(
+            2022,
+            1,
+            1,
+          ).toTimestamp(),
+          toggleTime: DateTime.utc(2022, 2, 2).toTimestamp(),
         ),
       );
       final bucket = toGoogleApisBucket(metadata);
@@ -183,7 +632,7 @@ void main() {
 
     test('hardDeleteTime', () {
       final metadata = BucketMetadata(
-        hardDeleteTime: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+        hardDeleteTime: DateTime.utc(2022, 1, 1).toTimestamp(),
       );
       final bucket = toGoogleApisBucket(metadata);
       expect(bucket.hardDeleteTime, DateTime.utc(2022, 1, 1));
@@ -203,7 +652,7 @@ void main() {
           publicAccessPrevention: 'enforced',
           uniformBucketLevelAccess: UniformBucketLevelAccess(
             enabled: true,
-            lockedTime: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+            lockedTime: DateTime.utc(2022, 1, 1).toTimestamp(),
           ),
         ),
       );
@@ -370,7 +819,7 @@ void main() {
     test('retentionPolicy', () {
       final metadata = BucketMetadata(
         retentionPolicy: BucketRetentionPolicy(
-          effectiveTime: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+          effectiveTime: DateTime.utc(2022, 1, 1).toTimestamp(),
           isLocked: true,
           retentionPeriod: 3600,
         ),
@@ -398,7 +847,7 @@ void main() {
     test('softDeletePolicy', () {
       final metadata = BucketMetadata(
         softDeletePolicy: BucketSoftDeletePolicy(
-          effectiveTime: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+          effectiveTime: DateTime.utc(2022, 1, 1).toTimestamp(),
           retentionDurationSeconds: 604800,
         ),
       );
@@ -409,7 +858,7 @@ void main() {
 
     test('softDeleteTime', () {
       final metadata = BucketMetadata(
-        softDeleteTime: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+        softDeleteTime: DateTime.utc(2022, 1, 1).toTimestamp(),
       );
       final bucket = toGoogleApisBucket(metadata);
       expect(bucket.softDeleteTime, DateTime.utc(2022, 1, 1));
@@ -423,7 +872,7 @@ void main() {
 
     test('timeCreated', () {
       final metadata = BucketMetadata(
-        timeCreated: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+        timeCreated: DateTime.utc(2022, 1, 1).toTimestamp(),
       );
       final bucket = toGoogleApisBucket(metadata);
       expect(bucket.timeCreated, DateTime.utc(2022, 1, 1));
@@ -431,7 +880,7 @@ void main() {
 
     test('updated', () {
       final metadata = BucketMetadata(
-        updated: _timestampFromDateTime(DateTime.utc(2022, 1, 1)),
+        updated: DateTime.utc(2022, 1, 1).toTimestamp(),
       );
       final bucket = toGoogleApisBucket(metadata);
       expect(bucket.updated, DateTime.utc(2022, 1, 1));
@@ -458,8 +907,3 @@ void main() {
     });
   });
 }
-
-Timestamp _timestampFromDateTime(DateTime dateTime) => Timestamp(
-  seconds: (dateTime.millisecondsSinceEpoch / 1000).floor(),
-  nanos: (dateTime.microsecondsSinceEpoch % 1000000) * 1000,
-);

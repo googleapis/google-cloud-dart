@@ -344,6 +344,19 @@ extension TimestampExtension on Timestamp {
   }
 }
 
+extension DateTimeToTimestampExtension on DateTime {
+  /// This UTC `DateTime` as a [Timestamp].
+  Timestamp toTimestamp() {
+    if (!isUtc) {
+      throw ArgumentError('DateTime must be in UTC');
+    }
+    return Timestamp(
+      seconds: microsecondsSinceEpoch ~/ 1_000_000,
+      nanos: microsecondsSinceEpoch % 1_000_000 * 1000,
+    );
+  }
+}
+
 class _TimestampHelper {
   static final RegExp _rfc3339 = RegExp(
     //
