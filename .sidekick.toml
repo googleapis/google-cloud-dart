@@ -28,7 +28,7 @@ protobuf-subdir         = 'src'
 # showcase 0.36.2
 showcase-extracted-name = 'gapic-showcase-69bdd62035d793f3d23a0c960dee547023c1c5ac'
 showcase-root           = 'https://github.com/googleapis/gapic-showcase/archive/69bdd62035d793f3d23a0c960dee547023c1c5ac.tar.gz'
-showcase-sha256         = '0914bdbb088713aa087a53b355ff6631ad95e4769afd8bbd97d5d9e78d4cdf09'
+showcase-sha256         = '96491310ba1b5c0c71738d3d80327a95196c1b6ac16f033e3fa440870efbbf5c'
 conformance-extracted-name = 'protobuf-b407e8416e3893036aee5af9a12bd9b6a0e2b2e6'
 conformance-root           = 'https://github.com/protocolbuffers/protobuf/archive/b407e8416e3893036aee5af9a12bd9b6a0e2b2e6.tar.gz'
 conformance-sha256         = '55912546338433f465a552e9ef09930c63b9eb697053937416890cff83a8622d'
