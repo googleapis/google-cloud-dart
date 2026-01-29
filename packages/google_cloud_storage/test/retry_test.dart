@@ -81,7 +81,7 @@ void main() {
     });
   });
 
-  group('DefaultRetry', () {
+  group('ExponentialRetry', () {
     test('first try succeeds', () async {
       expect(await const ExponentialRetry().run(() async => 5), 5);
     });
