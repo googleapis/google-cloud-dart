@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
+
 import 'package:googleapis/storage/v1.dart' as storage;
 import 'package:http/http.dart' as http;
 
@@ -30,10 +32,27 @@ final class Storage {
     : _client = client,
       _api = storage.StorageApi(client);
 
-  Future<BucketMetadata> createBucket(BucketMetadata metadata) async =>
-      fromGoogleApisBucket(
+  /// Create a new Google Cloud Storage bucket.
+  ///
+  /// This operation is always idempotent. Throws [ConflictException] if the
+  /// bucket already exists.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
+  Future<BucketMetadata> createBucket(BucketMetadata metadata) async {
+    try {
+      return fromGoogleApisBucket(
         await _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
       );
+    } on storage.DetailedApiRequestError catch (e) {
+      final responseBody = jsonEncode(e.jsonResponse);
+      final response = http.Response(
+        responseBody,
+        e.status!,
+        headers: {'content-type': 'application/json'},
+      );
+      throw ServiceException.fromHttpResponse(response, responseBody);
+    }
+  }
 
   /// Information about a [Google Cloud Storage object].
   ///

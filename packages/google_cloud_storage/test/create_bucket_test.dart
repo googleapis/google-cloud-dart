@@ -186,5 +186,31 @@ void main() async {
       );
       expect(actualMetadata.lifecycle!.rule![0].action!.type, 'Delete');
     });
+
+    test('create_bucket_with_metadata_duplicate', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_duplicate',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_duplicate'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(name: bucketName);
+
+      await storage.createBucket(requestMetadata);
+      expect(
+        () => storage.createBucket(requestMetadata),
+        throwsA(
+          isA<ConflictException>().having(
+            (e) => e.status?.code,
+            'e.status?.code',
+            409,
+          ),
+        ),
+      );
+    });
   });
 }
