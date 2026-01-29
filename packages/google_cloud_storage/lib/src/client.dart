@@ -20,6 +20,20 @@ import 'package:http/http.dart' as http;
 import '../google_cloud_storage.dart';
 import 'googleapis_converters.dart';
 
+Future<T> _translateException<T>(Future<T> Function() body) async {
+  try {
+    return await body();
+  } on storage.DetailedApiRequestError catch (e) {
+    final responseBody = jsonEncode(e.jsonResponse);
+    final response = http.Response(
+      responseBody,
+      e.status!,
+      headers: {'content-type': 'application/json'},
+    );
+    throw ServiceException.fromHttpResponse(response, responseBody);
+  }
+}
+
 /// API for storing and retrieving potentially large, immutable data objects.
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
@@ -38,21 +52,16 @@ final class Storage {
   /// bucket already exists.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
-  Future<BucketMetadata> createBucket(BucketMetadata metadata) async {
-    try {
-      return fromGoogleApisBucket(
-        await _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
-      );
-    } on storage.DetailedApiRequestError catch (e) {
-      final responseBody = jsonEncode(e.jsonResponse);
-      final response = http.Response(
-        responseBody,
-        e.status!,
-        headers: {'content-type': 'application/json'},
-      );
-      throw ServiceException.fromHttpResponse(response, responseBody);
-    }
-  }
+  Future<BucketMetadata> createBucket(
+    BucketMetadata metadata, {
+    RetryRunner retry = defaultRetry,
+  }) async => fromGoogleApisBucket(
+    await retry.run(
+      () => _translateException(
+        () => _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
+      ),
+    ),
+  );
 
   /// Information about a [Google Cloud Storage object].
   ///

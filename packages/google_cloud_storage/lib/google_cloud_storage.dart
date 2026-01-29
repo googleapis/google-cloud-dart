@@ -21,3 +21,4 @@ export 'src/bucket_metadata.dart';
 export 'src/client.dart';
 export 'src/object_metadata.dart';
 export 'src/project_team.dart';
+export 'src/retry.dart' hide delaySequence;
