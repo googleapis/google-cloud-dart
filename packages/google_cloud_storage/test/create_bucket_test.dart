@@ -20,6 +20,8 @@ import 'dart:math';
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
@@ -185,6 +187,67 @@ void main() async {
         DateTime(2025, 12, 11),
       );
       expect(actualMetadata.lifecycle!.rule![0].action!.type, 'Delete');
+    });
+
+    test(
+      'create_bucket_with_metadata_default_retry_transport_failure',
+      () async {
+        var count = 0;
+        final mockClient = MockClient((request) async {
+          count++;
+          if (count == 1) {
+            throw http.ClientException('Some transport failure');
+          } else if (count == 2) {
+            return http.Response(
+              '{"name": "create_bucket_with_metadata_retry"}',
+              200,
+              headers: {'content-type': 'application/json; charset=UTF-8'},
+            );
+          } else {
+            throw StateError('Unexpected call count: $count');
+          }
+        });
+
+        final storage = Storage(client: mockClient, projectId: projectId);
+
+        final requestMetadata = BucketMetadata(
+          name: 'create_bucket_with_metadata_retry',
+        );
+
+        final actualMetadata = await storage.createBucket(requestMetadata);
+        expect(actualMetadata.name, 'create_bucket_with_metadata_retry');
+      },
+    );
+
+    test('create_bucket_with_metadata_default_retry_429', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          return http.Response(
+            '{"error":{"code":429,"message":"Too many requests.","errors":[]}}',
+            429, // Too many requests
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+          );
+        } else if (count == 2) {
+          return http.Response(
+            '{"name": "create_bucket_with_metadata_retry"}',
+            200,
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+          );
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: projectId);
+
+      final requestMetadata = BucketMetadata(
+        name: 'create_bucket_with_metadata_retry',
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+      expect(actualMetadata.name, 'create_bucket_with_metadata_retry');
     });
 
     test('create_bucket_with_metadata_duplicate', () async {
