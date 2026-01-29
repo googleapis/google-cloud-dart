@@ -23,7 +23,7 @@ googleapis-sha256       = '9aa6e5167f76b869b53b71f9fe963e6e17ec58b2cbdeb30715ef9
 # protobuf 29.3
 protobuf-extracted-name = 'protobuf-b407e8416e3893036aee5af9a12bd9b6a0e2b2e6'
 protobuf-root           = 'https://github.com/protocolbuffers/protobuf/archive/b407e8416e3893036aee5af9a12bd9b6a0e2b2e6.tar.gz'
-protobuf-sha256         = '008a11cc56f9b96679b4c285fd05f46d317d685be3ab524b2a310be0fbad987e'
+protobuf-sha256         = '55912546338433f465a552e9ef09930c63b9eb697053937416890cff83a8622d'
 protobuf-subdir         = 'src'
 # showcase 0.36.2
 showcase-extracted-name = 'gapic-showcase-69bdd62035d793f3d23a0c960dee547023c1c5ac'
