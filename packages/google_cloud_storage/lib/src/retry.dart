@@ -25,6 +25,28 @@ sealed class RetryRunner {
   Future<T> run<T>(Future<T> Function() body);
 }
 
+/// Generates a sequence of delays for exponential backoff.
+///
+/// For example:
+///
+/// ```dart
+/// delaySequence(
+///     maxRetries: 6,
+///     initialDelay: Duration(seconds: 1),
+///     maxDelay: Duration(seconds: 10),
+///     delayMultiplier: 2);
+/// // [
+/// //   Duration(seconds: 1),
+/// //   Duration(seconds: 2),
+/// //   Duration(seconds: 4),
+/// //   Duration(seconds: 8),
+/// //   Duration(seconds: 10),
+/// //   Duration(seconds: 10),
+/// // ]
+/// ```
+///
+/// If `maxRetryInterval` is set then the sequence must be iterated-over in
+/// real time.
 @visibleForTesting
 Iterable<Duration> delaySequence({
   int? maxRetries,
@@ -65,9 +87,13 @@ Iterable<Duration> delaySequence({
 /// See [Retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy).
 final class ExponentialRetry implements RetryRunner {
   /// The maximim number of times to retry before failing.
+  ///
+  /// A `null` value indicates that the number of retries is unlimited.
   final int? maxRetries;
 
   /// The maximum amount of total time to retry before failing.
+  ///
+  /// A `null` value indicates that the total retry time is unlimited.
   final Duration? maxRetryInterval;
 
   /// The minimum amount of time to wait before retrying.
@@ -102,7 +128,7 @@ final class ExponentialRetry implements RetryRunner {
       delayMultiplier: delayMultiplier,
     ).iterator;
 
-    for (var i = 0; true; ++i) {
+    while (true) {
       try {
         return await body();
       } catch (e) {
