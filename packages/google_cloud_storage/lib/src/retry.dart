@@ -25,6 +25,13 @@ sealed class RetryRunner {
   Future<T> run<T>(Future<T> Function() body);
 }
 
+final class NoRetry implements RetryRunner {
+  const NoRetry();
+
+  @override
+  Future<T> run<T>(Future<T> Function() body) => body();
+}
+
 /// Generates a sequence of delays for exponential backoff.
 ///
 /// For example:
@@ -160,3 +167,4 @@ final class ExponentialRetry implements RetryRunner {
 ///
 /// See [Retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy).
 const defaultRetry = ExponentialRetry();
+const noRetry = NoRetry();

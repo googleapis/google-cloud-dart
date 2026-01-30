@@ -63,6 +63,52 @@ final class Storage {
     ),
   );
 
+  /// Update a Google Cloud Storage bucket.
+  /// [BadRequestException]
+  /// [NotFoundException]
+  /// [PreconditionFailedException]
+  Future<BucketMetadata> patchBucket(
+    String bucketName,
+    BucketMetadata metadata, {
+    int? ifMetagenerationMatch,
+    // TODO(b/272262512): Support ifMetagenerationNotMatch.
+    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
+    // status code and an empty body. This will cause `buckets.patch` to throw
+    // `TypeError` during JSON deserialization.
+    RetryRunner retry = noRetry,
+  }) async => fromGoogleApisBucket(
+    await retry.run(
+      () => _translateException(
+        () => _api.buckets.patch(
+          toGoogleApisBucket(metadata),
+          bucketName,
+          ifMetagenerationMatch: ifMetagenerationMatch?.toString(),
+        ),
+      ),
+    ),
+  );
+
+  /// Delete a Google Cloud Storage bucket.
+  ///
+  /// This operation is idempotent. Throws [NotFoundException] if the bucket does
+  /// not exist.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/delete).
+  Future<void> deleteBucket(
+    String bucketName, {
+    int? ifMetagenerationMatch,
+    int? ifMetagenerationNotMatch,
+    RetryRunner retry = defaultRetry,
+  }) async => retry.run(
+    () => _translateException(
+      () => _api.buckets.delete(
+        bucketName,
+        ifMetagenerationMatch: ifMetagenerationMatch?.toString(),
+        ifMetagenerationNotMatch: ifMetagenerationNotMatch?.toString(),
+      ),
+    ),
+  );
+
   /// Information about a [Google Cloud Storage object].
   ///
   /// This operation is read-only and always idempotent.
