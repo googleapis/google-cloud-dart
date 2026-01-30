@@ -225,5 +225,89 @@ void main() async {
         throwsA(isA<PreconditionFailedException>()),
       );
     });
+
+    test(
+      'patch_bucket_with_predefined_acl',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'patch_bucket_with_predefined_acl',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName =
+            TestHttpClient.isRecording || TestHttpClient.isReplaying
+            ? 'patch_bucket_with_metadata'
+            : uniqueBucketName();
+
+        await storage.createBucket(
+          BucketMetadata(
+            name: bucketName,
+            iamConfiguration: BucketIamConfiguration(
+              uniformBucketLevelAccess: UniformBucketLevelAccess(
+                enabled: false,
+              ),
+            ),
+          ),
+        );
+
+        final actualMetadata = await storage.patchBucket(
+          bucketName,
+          predefinedAcl: 'projectPrivate',
+          projection: 'full',
+        );
+
+        expect(actualMetadata.acl?.first.role, 'OWNER');
+        expect(
+          actualMetadata.updated!.toDateTime().isAfter(
+            actualMetadata.timeCreated!.toDateTime(),
+          ),
+          isTrue,
+        );
+        expect(actualMetadata.metageneration, 2);
+      },
+      skip: 'test project does not support uniform bucket level access',
+    );
+
+    test(
+      'patch_bucket_with_predefined_acl',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'patch_bucket_with_predefined_acl',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName =
+            TestHttpClient.isRecording || TestHttpClient.isReplaying
+            ? 'patch_bucket_with_metadata'
+            : uniqueBucketName();
+
+        await storage.createBucket(
+          BucketMetadata(
+            name: bucketName,
+            iamConfiguration: BucketIamConfiguration(
+              uniformBucketLevelAccess: UniformBucketLevelAccess(
+                enabled: false,
+              ),
+            ),
+          ),
+        );
+
+        final actualMetadata = await storage.patchBucket(
+          bucketName,
+          predefinedAcl: 'projectPrivate',
+          projection: 'full',
+        );
+
+        expect(actualMetadata.acl?.first.role, 'OWNER');
+        expect(
+          actualMetadata.updated!.toDateTime().isAfter(
+            actualMetadata.timeCreated!.toDateTime(),
+          ),
+          isTrue,
+        );
+        expect(actualMetadata.metageneration, 2);
+      },
+      skip: 'test project does not support uniform bucket level access',
+    );
   });
 }

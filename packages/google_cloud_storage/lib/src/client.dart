@@ -64,15 +64,35 @@ final class Storage {
   );
 
   /// Update a Google Cloud Storage bucket.
-  /// [BadRequestException]
-  /// [NotFoundException]
-  /// [PreconditionFailedException]
+  ///
+  /// If set, 'ifMetagenerationMatch` makes returning the bucket metadata
+  /// conditional on whether the bucket's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If set, `prefinedAcl` applies a predefined set of access controls to the
+  /// bucket, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument but be set for [Requester Pays] buckets.
+  ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<BucketMetadata> patchBucket(
     String bucketName, {
     BucketMetadata? metadata,
     int? ifMetagenerationMatch,
-    // TODO(b/272262512): Support ifMetagenerationNotMatch.
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
+    // support ifMetagenerationNotMatch.
+    //
     // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
     // status code and an empty body. This will cause `buckets.patch` to throw
     // `TypeError` during JSON deserialization.
@@ -93,27 +113,6 @@ final class Storage {
           projection: projection,
           userProject: userProject,
         ),
-      ),
-    ),
-  );
-
-  /// Delete a Google Cloud Storage bucket.
-  ///
-  /// This operation is idempotent. Throws [NotFoundException] if the bucket does
-  /// not exist.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/delete).
-  Future<void> deleteBucket(
-    String bucketName, {
-    int? ifMetagenerationMatch,
-    int? ifMetagenerationNotMatch,
-    RetryRunner retry = defaultRetry,
-  }) async => retry.run(
-    () => _translateException(
-      () => _api.buckets.delete(
-        bucketName,
-        ifMetagenerationMatch: ifMetagenerationMatch?.toString(),
-        ifMetagenerationNotMatch: ifMetagenerationNotMatch?.toString(),
       ),
     ),
   );
