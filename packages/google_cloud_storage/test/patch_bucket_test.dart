@@ -20,6 +20,8 @@ import 'dart:math';
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
@@ -309,5 +311,55 @@ void main() async {
       },
       skip: 'test project does not support uniform bucket level access',
     );
+
+    test('patch_bucket_idempotent_transport_failure', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          throw http.ClientException('Some transport failure');
+        } else if (count == 2) {
+          return http.Response(
+            '{"name": "new_name"}',
+            200,
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+          );
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: projectId);
+
+      final requestMetadata = BucketMetadata(name: 'new_name');
+
+      final actualMetadata = await storage.patchBucket(
+        'bucket',
+        metadata: requestMetadata,
+        ifMetagenerationMatch: 1,
+      );
+      expect(actualMetadata.name, 'new_name');
+    });
+
+    test('patch_bucket_non_idempotent_transport_failure', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          throw http.ClientException('Some transport failure');
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: projectId);
+
+      final requestMetadata = BucketMetadata(name: 'new_name');
+
+      expect(
+        () => storage.patchBucket('bucket', metadata: requestMetadata),
+        throwsA(isA<http.ClientException>()),
+      );
+    });
   });
 }

@@ -1,0 +1,32 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/non_existant_bucket?alt=json",
+      "method": "PATCH",
+      "headers": {
+        "user-agent": "google-api-dart-client/15.0.0",
+        "x-goog-api-client": "gl-dart/3.10.8 gdcl/15.0.0",
+        "content-type": "application/json; charset=utf-8",
+        "content-length": "31"
+      },
+      "body": "eyJ2ZXJzaW9uaW5nIjp7ImVuYWJsZWQiOnRydWV9fQ=="
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 30 Jan 2026 20:21:35 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "247",
+        "x-guploader-uploadid": "AJRbA5XKbWtv4a0LKwBbJ1Di4lP54cmUpupEUutWSAGbd5Rma9Z4YLvJnJ14FAiw4dBimnY",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
+    }
+  }
+]

@@ -60,6 +60,7 @@ final class Storage {
       () => _translateException(
         () => _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
       ),
+      isIdempotent: true,
     ),
   );
 
@@ -83,6 +84,8 @@ final class Storage {
   /// If set, `userProject` is the project to be billed for this request. This
   /// argument but be set for [Requester Pays] buckets.
   ///
+  /// This operation is only idempotent if `ifMetagenerationMatch` is set.
+  ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
   ///
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
@@ -100,7 +103,7 @@ final class Storage {
     String? predefinedDefaultObjectAcl,
     String? projection,
     String? userProject,
-    RetryRunner retry = noRetry,
+    RetryRunner retry = defaultRetry,
   }) async => fromGoogleApisBucket(
     await retry.run(
       () => _translateException(
@@ -114,6 +117,7 @@ final class Storage {
           userProject: userProject,
         ),
       ),
+      isIdempotent: ifMetagenerationMatch != null,
     ),
   );
 
