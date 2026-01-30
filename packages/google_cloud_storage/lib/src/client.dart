@@ -67,22 +67,31 @@ final class Storage {
   /// [BadRequestException]
   /// [NotFoundException]
   /// [PreconditionFailedException]
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
   Future<BucketMetadata> patchBucket(
-    String bucketName,
-    BucketMetadata metadata, {
+    String bucketName, {
+    BucketMetadata? metadata,
     int? ifMetagenerationMatch,
     // TODO(b/272262512): Support ifMetagenerationNotMatch.
     // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
     // status code and an empty body. This will cause `buckets.patch` to throw
     // `TypeError` during JSON deserialization.
+    String? predefinedAcl,
+    String? predefinedDefaultObjectAcl,
+    String? projection,
+    String? userProject,
     RetryRunner retry = noRetry,
   }) async => fromGoogleApisBucket(
     await retry.run(
       () => _translateException(
         () => _api.buckets.patch(
-          toGoogleApisBucket(metadata),
+          toGoogleApisBucket(metadata ?? BucketMetadata()),
           bucketName,
           ifMetagenerationMatch: ifMetagenerationMatch?.toString(),
+          predefinedAcl: predefinedAcl,
+          predefinedDefaultObjectAcl: predefinedDefaultObjectAcl,
+          projection: projection,
+          userProject: userProject,
         ),
       ),
     ),

@@ -73,7 +73,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
-        patchMetadata,
+        metadata: patchMetadata,
       );
 
       expect(actualMetadata.versioning?.enabled, isTrue);
@@ -103,7 +103,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
-        patchMetadata,
+        metadata: patchMetadata,
       );
 
       expect(
@@ -130,7 +130,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
-        createMetadata,
+        metadata: createMetadata,
       );
       expect(actualMetadata.metageneration, 2);
     });
@@ -147,7 +147,8 @@ void main() async {
       );
 
       expect(
-        () => storage.patchBucket('non_existant_bucket', patchMetadata),
+        () =>
+            storage.patchBucket('non_existant_bucket', metadata: patchMetadata),
         throwsA(isA<NotFoundException>()),
       );
     });
@@ -168,7 +169,7 @@ void main() async {
       final patchMetadata = BucketMetadata(name: 'new_name');
 
       expect(
-        () => storage.patchBucket(bucketName, patchMetadata),
+        () => storage.patchBucket(bucketName, metadata: patchMetadata),
         throwsA(isA<BadRequestException>()),
       );
     });
@@ -193,7 +194,7 @@ void main() async {
       );
       final patchedMetadata = await storage.patchBucket(
         bucketName,
-        patchMetadata,
+        metadata: patchMetadata,
         ifMetagenerationMatch: metageneration,
       );
       expect(patchedMetadata.metageneration, 2);
@@ -218,7 +219,7 @@ void main() async {
       expect(
         () => storage.patchBucket(
           bucketName,
-          patchMetadata,
+          metadata: patchMetadata,
           ifMetagenerationMatch: 0,
         ),
         throwsA(isA<PreconditionFailedException>()),
