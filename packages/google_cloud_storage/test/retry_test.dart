@@ -83,7 +83,10 @@ void main() {
 
   group('ExponentialRetry', () {
     test('first try succeeds', () async {
-      expect(await const ExponentialRetry().run(() async => 5), 5);
+      expect(
+        await const ExponentialRetry().run(() async => 5, isIdempotent: true),
+        5,
+      );
     });
 
     test('first try fails, unretryable failure', () async {
@@ -94,8 +97,24 @@ void main() {
             response: http.Response('bad request', 400),
             responseBody: '',
           ),
+          isIdempotent: true,
         ),
         throwsA(isA<BadRequestException>()),
+      );
+    });
+
+    test('first try fails, non-idempotent', () async {
+      var count = 0;
+      expect(
+        () => const ExponentialRetry(maxRetries: 5).run(() async {
+          ++count;
+          if (count == 1) {
+            throw http.ClientException('transport failure');
+          } else {
+            fail('unexpected retry: $count');
+          }
+        }, isIdempotent: false),
+        throwsA(isA<http.ClientException>()),
       );
     });
 
@@ -109,7 +128,7 @@ void main() {
           } else {
             fail('unexpected retry: $count');
           }
-        }),
+        }, isIdempotent: true),
         throwsA(isA<http.ClientException>()),
       );
     });
@@ -126,7 +145,7 @@ void main() {
           } else {
             fail('unexpected retry: $count');
           }
-        }),
+        }, isIdempotent: true),
         5,
       );
     });
