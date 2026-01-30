@@ -66,12 +66,12 @@ final class Storage {
 
   /// Update a Google Cloud Storage bucket.
   ///
-  /// If set, 'ifMetagenerationMatch` makes returning the bucket metadata
+  /// If set, `ifMetagenerationMatch` makes returning the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
   /// value. If the metageneration does not match, a
   /// [PreconditionFailedException] is thrown.
   ///
-  /// If set, `prefinedAcl` applies a predefined set of access controls to the
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// bucket, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
   /// [BadRequestException].
@@ -82,9 +82,7 @@ final class Storage {
   /// properties.
   ///
   /// If set, `userProject` is the project to be billed for this request. This
-  /// argument but be set for [Requester Pays] buckets.
-  ///
-  /// This operation is only idempotent if `ifMetagenerationMatch` is set.
+  /// argument must be set for [Requester Pays] buckets.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
   ///

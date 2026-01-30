@@ -271,11 +271,11 @@ void main() async {
     );
 
     test(
-      'patch_bucket_with_predefined_acl',
+      'patch_bucket_with_predefined_default_object_acl',
       () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'patch_bucket_with_predefined_acl',
+          'patch_bucket_with_predefined_default_object_acl',
         );
         addTearDown(testClient.endTest);
         final bucketName =
@@ -296,7 +296,7 @@ void main() async {
 
         final actualMetadata = await storage.patchBucket(
           bucketName,
-          predefinedAcl: 'projectPrivate',
+          predefinedDefaultObjectAcl: 'projectPrivate',
           projection: 'full',
         );
 
