@@ -66,7 +66,7 @@ final class Storage {
 
   /// Update a Google Cloud Storage bucket.
   ///
-  /// If set, `ifMetagenerationMatch` makes returning the bucket metadata
+  /// If set, `ifMetagenerationMatch` makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
   /// value. If the metageneration does not match, a
   /// [PreconditionFailedException] is thrown.
