@@ -20,12 +20,12 @@ import 'object_metadata.dart';
 import 'project_team.dart';
 
 storage.Bucket toGoogleApisBucket(BucketMetadata metadata) => storage.Bucket(
-  acl: metadata.acl?.map(_toBucketAccessControl).toList(),
+  acl: metadata.acl?.map(toBucketAccessControl).toList(),
   autoclass: metadata.autoclass == null
       ? null
-      : _toAutoclass(metadata.autoclass!),
+      : toAutoclass(metadata.autoclass!),
   billing: metadata.billing == null ? null : _toBilling(metadata.billing!),
-  cors: metadata.cors?.map(_toCors).toList(),
+  cors: metadata.cors?.map(toCors).toList(),
   customPlacementConfig: metadata.customPlacementConfig == null
       ? null
       : _toCustomPlacementConfig(metadata.customPlacementConfig!),
@@ -151,7 +151,7 @@ BucketMetadata fromGoogleApisBucket(storage.Bucket bucket) => BucketMetadata(
   website: bucket.website == null ? null : _fromWebsite(bucket.website!),
 );
 
-storage.BucketAutoclass _toAutoclass(BucketAutoclass autoclass) =>
+storage.BucketAutoclass toAutoclass(BucketAutoclass autoclass) =>
     storage.BucketAutoclass(
       enabled: autoclass.enabled,
       terminalStorageClass: autoclass.terminalStorageClass,
@@ -179,7 +179,7 @@ storage.BucketBilling _toBilling(BucketBilling billing) =>
 BucketBilling _fromBilling(storage.BucketBilling billing) =>
     BucketBilling(requesterPays: billing.requesterPays);
 
-storage.BucketAccessControl _toBucketAccessControl(BucketAccessControl acl) =>
+storage.BucketAccessControl toBucketAccessControl(BucketAccessControl acl) =>
     storage.BucketAccessControl(
       bucket: acl.bucket,
       domain: acl.domain,
@@ -276,7 +276,7 @@ storage.BucketEncryption _toEncryption(BucketEncryption encryption) =>
 BucketEncryption _fromEncryption(storage.BucketEncryption encryption) =>
     BucketEncryption(defaultKmsKeyName: encryption.defaultKmsKeyName);
 
-storage.BucketCors _toCors(BucketCorsConfiguration cors) => storage.BucketCors(
+storage.BucketCors toCors(BucketCorsConfiguration cors) => storage.BucketCors(
   maxAgeSeconds: cors.maxAgeSeconds,
   method: cors.method,
   origin: cors.origin,
