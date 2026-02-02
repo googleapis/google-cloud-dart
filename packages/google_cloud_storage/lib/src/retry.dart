@@ -136,9 +136,7 @@ final class ExponentialRetry implements RetryRunner {
       try {
         return await body();
       } catch (e) {
-        if (!isIdempotent) {
-          rethrow;
-        }
+        if (!isIdempotent) rethrow;
         switch (e) {
           // Taken from:
           // https://github.com/googleapis/python-storage/blob/e730bf50c4584f737ab86b2e409ddb27b40d2cec/google/cloud/storage/retry.py#L62
