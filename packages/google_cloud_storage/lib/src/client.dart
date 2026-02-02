@@ -60,6 +60,62 @@ final class Storage {
       () => _translateException(
         () => _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
       ),
+      isIdempotent: true,
+    ),
+  );
+
+  /// Update a Google Cloud Storage bucket.
+  ///
+  /// If set, `ifMetagenerationMatch` makes updating the bucket metadata
+  /// conditional on whether the bucket's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// bucket, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<BucketMetadata> patchBucket(
+    String bucketName, {
+    BucketMetadata? metadata,
+    int? ifMetagenerationMatch,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
+    // support ifMetagenerationNotMatch.
+    //
+    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
+    // status code and an empty body. This will cause `buckets.patch` to throw
+    // `TypeError` during JSON deserialization.
+    String? predefinedAcl,
+    String? predefinedDefaultObjectAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) async => fromGoogleApisBucket(
+    await retry.run(
+      () => _translateException(
+        () => _api.buckets.patch(
+          toGoogleApisBucket(metadata ?? BucketMetadata()),
+          bucketName,
+          ifMetagenerationMatch: ifMetagenerationMatch?.toString(),
+          predefinedAcl: predefinedAcl,
+          predefinedDefaultObjectAcl: predefinedDefaultObjectAcl,
+          projection: projection,
+          userProject: userProject,
+        ),
+      ),
+      isIdempotent: ifMetagenerationMatch != null,
     ),
   );
 
