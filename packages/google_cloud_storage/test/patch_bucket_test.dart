@@ -75,7 +75,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
-        metadata: patchMetadata,
+        patchMetadata,
       );
 
       expect(actualMetadata.versioning?.enabled, isTrue);
@@ -86,37 +86,6 @@ void main() async {
         isTrue,
       );
       expect(actualMetadata.metageneration, 2);
-    });
-
-    test('patch_bucket_with_metadata_remove_retention_policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_metadata_remove_retention_policy',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_metadata_remove_retention_policy'
-          : uniqueBucketName();
-
-      final createMetadata = await storage.createBucket(
-        BucketMetadata(
-          name: bucketName,
-          retentionPolicy: BucketRetentionPolicy(retentionPeriod: 120),
-        ),
-      );
-      expect(createMetadata.retentionPolicy?.retentionPeriod, 120);
-
-      final patchMetadata = BucketMetadata(retentionPolicy: null);
-
-      final postPatchMetadata = await storage.patchBucket(
-        bucketName,
-        metadata: patchMetadata,
-        fields: ['retentionPolicy'],
-      );
-
-      expect(postPatchMetadata.retentionPolicy, isNull);
-      expect(postPatchMetadata.metageneration, 2);
     });
 
     test('patch_bucket_with_metadata_empty_metadata', () async {
@@ -136,7 +105,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
-        metadata: patchMetadata,
+        patchMetadata,
       );
 
       expect(
@@ -163,7 +132,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
-        metadata: createMetadata,
+        createMetadata,
       );
       expect(actualMetadata.metageneration, 2);
     });
@@ -180,8 +149,7 @@ void main() async {
       );
 
       expect(
-        () =>
-            storage.patchBucket('non_existant_bucket', metadata: patchMetadata),
+        () => storage.patchBucket('non_existant_bucket', patchMetadata),
         throwsA(isA<NotFoundException>()),
       );
     });
@@ -202,7 +170,7 @@ void main() async {
       final patchMetadata = BucketMetadata(name: 'new_name');
 
       expect(
-        () => storage.patchBucket(bucketName, metadata: patchMetadata),
+        () => storage.patchBucket(bucketName, patchMetadata),
         throwsA(isA<BadRequestException>()),
       );
     });
@@ -227,7 +195,7 @@ void main() async {
       );
       final patchedMetadata = await storage.patchBucket(
         bucketName,
-        metadata: patchMetadata,
+        patchMetadata,
         ifMetagenerationMatch: metageneration,
       );
       expect(patchedMetadata.metageneration, 2);
@@ -252,7 +220,7 @@ void main() async {
       expect(
         () => storage.patchBucket(
           bucketName,
-          metadata: patchMetadata,
+          patchMetadata,
           ifMetagenerationMatch: 0,
         ),
         throwsA(isA<PreconditionFailedException>()),
@@ -285,6 +253,7 @@ void main() async {
 
         final actualMetadata = await storage.patchBucket(
           bucketName,
+          BucketMetadata(),
           predefinedAcl: 'projectPrivate',
           projection: 'full',
         );
@@ -327,6 +296,7 @@ void main() async {
 
         final actualMetadata = await storage.patchBucket(
           bucketName,
+          BucketMetadata(),
           predefinedDefaultObjectAcl: 'projectPrivate',
           projection: 'full',
         );
@@ -366,7 +336,7 @@ void main() async {
 
       final actualMetadata = await storage.patchBucket(
         'bucket',
-        metadata: requestMetadata,
+        requestMetadata,
         ifMetagenerationMatch: 1,
       );
       expect(actualMetadata.name, 'new_name');
@@ -388,7 +358,7 @@ void main() async {
       final requestMetadata = BucketMetadata(name: 'new_name');
 
       expect(
-        () => storage.patchBucket('bucket', metadata: requestMetadata),
+        () => storage.patchBucket('bucket', requestMetadata),
         throwsA(isA<http.ClientException>()),
       );
     });

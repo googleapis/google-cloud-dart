@@ -22,7 +22,7 @@ import 'package:meta/meta.dart';
 /// An abstract class for running a function with retry logic.
 sealed class RetryRunner {
   /// Runs the given function with retry logic.
-  Future<T> run<T>(Future<T> Function() body);
+  Future<T> run<T>(Future<T> Function() body, {required bool isIdempotent});
 }
 
 /// Generates a sequence of delays for exponential backoff.
@@ -81,8 +81,9 @@ Iterable<Duration> delaySequence({
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the
-/// function throws an recoverable exception, such as [RequestTimeoutException],
-/// it will retry the function with increasing wait times between attempts.
+/// function throws an recoverable exception
+/// (such as [RequestTimeoutException]) and the function is idempotent, it
+/// will retry the function with increasing wait times between attempts.
 ///
 /// See [Retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy).
 final class ExponentialRetry implements RetryRunner {
@@ -119,7 +120,10 @@ final class ExponentialRetry implements RetryRunner {
   });
 
   @override
-  Future<T> run<T>(Future<T> Function() body) async {
+  Future<T> run<T>(
+    Future<T> Function() body, {
+    required bool isIdempotent,
+  }) async {
     final delays = delaySequence(
       maxRetries: maxRetries,
       maxRetryInterval: maxRetryInterval,
@@ -132,6 +136,7 @@ final class ExponentialRetry implements RetryRunner {
       try {
         return await body();
       } catch (e) {
+        if (!isIdempotent) rethrow;
         switch (e) {
           // Taken from:
           // https://github.com/googleapis/python-storage/blob/e730bf50c4584f737ab86b2e409ddb27b40d2cec/google/cloud/storage/retry.py#L62
@@ -156,7 +161,11 @@ final class ExponentialRetry implements RetryRunner {
   }
 }
 
-/// The default retry policy.
+/// The default retry strategy.
+///
+/// This strategy implements exponential backoff for [idempotent operations].
 ///
 /// See [Retry strategy](https://docs.cloud.google.com/storage/docs/retry-strategy).
+///
+/// [idempotent operations]: https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency-operations
 const defaultRetry = ExponentialRetry();
