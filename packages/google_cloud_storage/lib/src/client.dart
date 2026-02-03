@@ -48,7 +48,7 @@ final class Storage {
     BucketMetadata metadata, {
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri.parse('https://storage.googleapis.com/storage/v1/b');
+    final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
     final queryParams = {'project': projectId};
 
     final j = await _client.post(
@@ -97,8 +97,10 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri.parse(
-      'https://storage.googleapis.com/storage/v1/b/$bucketName',
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucketName],
     );
     final queryParams = {
       'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
