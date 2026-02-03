@@ -154,6 +154,53 @@ void main() async {
       expect(actualMetadata.website, isNull);
     });
 
+    test('create_bucket_with_metadata_autoclass', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_autoclass',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_autoclass'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        autoclass: BucketAutoclass(
+          enabled: true,
+          terminalStorageClass: 'NEARLINE',
+          terminalStorageClassUpdateTime: DateTime.now().toUtc().toTimestamp(),
+          toggleTime: DateTime.now().toUtc().toTimestamp(),
+        ),
+      );
+
+      final beforeRequestTime = DateTime.now().toUtc();
+      final actualMetadata = await storage.createBucket(requestMetadata);
+      final afterRequestTime = DateTime.now().toUtc();
+
+      expect(actualMetadata.autoclass!.enabled, true);
+      expect(actualMetadata.autoclass!.terminalStorageClass, 'NEARLINE');
+      if (TestHttpClient.isReplaying) {
+        expect(
+          actualMetadata.autoclass!.terminalStorageClassUpdateTime
+              ?.toDateTime()
+              .microsecondsSinceEpoch,
+          greaterThan(0),
+        );
+      } else {
+        expect(
+          actualMetadata.autoclass!.terminalStorageClassUpdateTime
+              ?.toDateTime()
+              .microsecondsSinceEpoch,
+          allOf(
+            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+          ),
+        );
+      }
+    });
+
     test('create_bucket_with_metadata_lifecycle', () async {
       await testClient.startTest(
         'google_cloud_storage',
