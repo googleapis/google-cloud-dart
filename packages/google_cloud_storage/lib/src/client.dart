@@ -12,11 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:convert';
-
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/service_client.dart';
-import 'package:googleapis/storage/v1.dart' as storage;
 import 'package:http/http.dart' as http;
 
 import '../google_cloud_storage.dart';
@@ -100,15 +97,18 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri.parse('https://storage.googleapis.com/storage/v1/b');
+    final url = Uri.parse(
+      'https://storage.googleapis.com/storage/v1/b/$bucketName',
+    );
     final queryParams = {
-      'predefinedAcl': predefinedAcl,
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      'project': projectId,
+      'predefinedAcl': ?predefinedAcl,
       'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
       'projection': ?projection,
       'userProject': ?userProject,
     };
-
-    final j = await _client.post(
+    final j = await _client.patch(
       url.replace(queryParameters: queryParams),
       body: _DummyEncodeable(bucketMetadataToJson(metadata)),
     );
