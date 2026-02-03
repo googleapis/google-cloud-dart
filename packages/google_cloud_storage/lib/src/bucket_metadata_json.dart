@@ -37,15 +37,12 @@ Map<String, Object?>? bucketAutoclassToJson(BucketAutoclass? instance) {
     return null;
   }
   return {
-    if (instance.enabled != null) 'enabled': instance.enabled,
-    if (instance.terminalStorageClass != null)
-      'terminalStorageClass': instance.terminalStorageClass,
-    if (instance.terminalStorageClassUpdateTime != null)
-      'terminalStorageClassUpdateTime': _timestampToJson(
-        instance.terminalStorageClassUpdateTime,
-      ),
-    if (instance.toggleTime != null)
-      'toggleTime': _timestampToJson(instance.toggleTime),
+    'enabled': ?instance.enabled,
+    'terminalStorageClass': ?instance.terminalStorageClass,
+    'terminalStorageClassUpdateTime': ?_timestampToJson(
+      instance.terminalStorageClassUpdateTime,
+    ),
+    'toggleTime': ?_timestampToJson(instance.toggleTime),
   };
 }
 
@@ -60,9 +57,7 @@ Map<String, Object?>? bucketBillingToJson(BucketBilling? instance) {
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.requesterPays != null) 'requesterPays': instance.requesterPays,
-  };
+  return {'requesterPays': ?instance.requesterPays};
 }
 
 BucketAccessControl? bucketAccessControlFromJson(Map<String, Object?>? json) {
@@ -93,18 +88,17 @@ Map<String, Object?>? bucketAccessControlToJson(BucketAccessControl? instance) {
     return null;
   }
   return {
-    if (instance.bucket != null) 'bucket': instance.bucket,
-    if (instance.domain != null) 'domain': instance.domain,
-    if (instance.email != null) 'email': instance.email,
-    if (instance.entity != null) 'entity': instance.entity,
-    if (instance.entityId != null) 'entityId': instance.entityId,
-    if (instance.etag != null) 'etag': instance.etag,
-    if (instance.id != null) 'id': instance.id,
-    if (instance.kind != null) 'kind': instance.kind,
-    if (instance.projectTeam != null)
-      'projectTeam': _projectTeamToJson(instance.projectTeam),
-    if (instance.role != null) 'role': instance.role,
-    if (instance.selfLink != null) 'selfLink': instance.selfLink.toString(),
+    'bucket': ?instance.bucket,
+    'domain': ?instance.domain,
+    'email': ?instance.email,
+    'entity': ?instance.entity,
+    'entityId': ?instance.entityId,
+    'etag': ?instance.etag,
+    'id': ?instance.id,
+    'kind': ?instance.kind,
+    'projectTeam': ?_projectTeamToJson(instance.projectTeam),
+    'role': ?instance.role,
+    'selfLink': ?instance.selfLink.toString(),
   };
 }
 
@@ -121,10 +115,7 @@ Map<String, Object?>? bucketEncryptionToJson(BucketEncryption? instance) {
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.defaultKmsKeyName != null)
-      'defaultKmsKeyName': instance.defaultKmsKeyName,
-  };
+  return {'defaultKmsKeyName': ?instance.defaultKmsKeyName};
 }
 
 BucketObjectRetention? bucketObjectRetentionFromJson(
@@ -142,7 +133,7 @@ Map<String, Object?>? bucketObjectRetentionToJson(
   if (instance == null) {
     return null;
   }
-  return {if (instance.mode != null) 'mode': instance.mode};
+  return {'mode': ?instance.mode};
 }
 
 BucketCorsConfiguration? bucketCorsConfigurationFromJson(
@@ -166,11 +157,10 @@ Map<String, Object?>? bucketCorsConfigurationToJson(
     return null;
   }
   return {
-    if (instance.maxAgeSeconds != null) 'maxAgeSeconds': instance.maxAgeSeconds,
-    if (instance.method != null) 'method': instance.method,
-    if (instance.origin != null) 'origin': instance.origin,
-    if (instance.responseHeader != null)
-      'responseHeader': instance.responseHeader,
+    'maxAgeSeconds': ?instance.maxAgeSeconds,
+    'method': ?instance.method,
+    'origin': ?instance.origin,
+    'responseHeader': ?instance.responseHeader,
   };
 }
 
@@ -191,9 +181,7 @@ Map<String, Object?>? bucketCustomPlacementConfigToJson(
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.dataLocations != null) 'dataLocations': instance.dataLocations,
-  };
+  return {'dataLocations': ?instance.dataLocations};
 }
 
 BucketHierarchicalNamespace? bucketHierarchicalNamespaceFromJson(
@@ -211,7 +199,7 @@ Map<String, Object?>? bucketHierarchicalNamespaceToJson(
   if (instance == null) {
     return null;
   }
-  return {if (instance.enabled != null) 'enabled': instance.enabled};
+  return {'enabled': ?instance.enabled};
 }
 
 BucketIamConfiguration? bucketIamConfigurationFromJson(
@@ -235,12 +223,10 @@ Map<String, Object?>? bucketIamConfigurationToJson(
     return null;
   }
   return {
-    if (instance.publicAccessPrevention != null)
-      'publicAccessPrevention': instance.publicAccessPrevention,
-    if (instance.uniformBucketLevelAccess != null)
-      'uniformBucketLevelAccess': uniformBucketLevelAccessToJson(
-        instance.uniformBucketLevelAccess,
-      ),
+    'publicAccessPrevention': ?instance.publicAccessPrevention,
+    'uniformBucketLevelAccess': ?uniformBucketLevelAccessToJson(
+      instance.uniformBucketLevelAccess,
+    ),
   };
 }
 
@@ -263,9 +249,8 @@ Map<String, Object?>? uniformBucketLevelAccessToJson(
     return null;
   }
   return {
-    if (instance.enabled != null) 'enabled': instance.enabled,
-    if (instance.lockedTime != null)
-      'lockedTime': _timestampToJson(instance.lockedTime),
+    'enabled': ?instance.enabled,
+    'lockedTime': ?_timestampToJson(instance.lockedTime),
   };
 }
 
@@ -293,19 +278,15 @@ Map<String, Object?>? bucketIpFilterToJson(BucketIpFilter? instance) {
     return null;
   }
   return {
-    if (instance.allowAllServiceAgentAccess != null)
-      'allowAllServiceAgentAccess': instance.allowAllServiceAgentAccess,
-    if (instance.allowCrossOrgVpcs != null)
-      'allowCrossOrgVpcs': instance.allowCrossOrgVpcs,
-    if (instance.mode != null) 'mode': instance.mode,
-    if (instance.publicNetworkSource != null)
-      'publicNetworkSource': bucketPublicNetworkSourceToJson(
-        instance.publicNetworkSource,
-      ),
-    if (instance.vpcNetworkSources != null)
-      'vpcNetworkSources': instance.vpcNetworkSources!
-          .map(bucketPublicNetworkSourceToJson)
-          .toList(),
+    'allowAllServiceAgentAccess': ?instance.allowAllServiceAgentAccess,
+    'allowCrossOrgVpcs': ?instance.allowCrossOrgVpcs,
+    'mode': ?instance.mode,
+    'publicNetworkSource': ?bucketPublicNetworkSourceToJson(
+      instance.publicNetworkSource,
+    ),
+    'vpcNetworkSources': ?instance.vpcNetworkSources
+        ?.map(bucketPublicNetworkSourceToJson)
+        .toList(),
   };
 }
 
@@ -327,10 +308,7 @@ Map<String, Object?>? bucketPublicNetworkSourceToJson(
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.allowedIpCidrRanges != null)
-      'allowedIpCidrRanges': instance.allowedIpCidrRanges,
-  };
+  return {'allowedIpCidrRanges': ?instance.allowedIpCidrRanges};
 }
 
 Lifecycle? lifecycleFromJson(Map<String, Object?>? json) {
@@ -348,10 +326,7 @@ Map<String, Object?>? lifecycleToJson(Lifecycle? instance) {
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.rule != null)
-      'rule': instance.rule!.map(lifecycleRuleToJson).toList(),
-  };
+  return {'rule': ?instance.rule?.map(lifecycleRuleToJson).toList()};
 }
 
 LifecycleRule? lifecycleRuleFromJson(Map<String, Object?>? json) {
@@ -373,10 +348,8 @@ Map<String, Object?>? lifecycleRuleToJson(LifecycleRule? instance) {
     return null;
   }
   return {
-    if (instance.action != null)
-      'action': lifecycleRuleActionToJson(instance.action),
-    if (instance.condition != null)
-      'condition': lifecycleRuleConditionToJson(instance.condition),
+    'action': ?lifecycleRuleActionToJson(instance.action),
+    'condition': ?lifecycleRuleConditionToJson(instance.condition),
   };
 }
 
@@ -394,10 +367,7 @@ Map<String, Object?>? lifecycleRuleActionToJson(LifecycleRuleAction? instance) {
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.storageClass != null) 'storageClass': instance.storageClass,
-    if (instance.type != null) 'type': instance.type,
-  };
+  return {'storageClass': ?instance.storageClass, 'type': ?instance.type};
 }
 
 LifecycleRuleCondition? lifecycleRuleConditionFromJson(
@@ -429,24 +399,17 @@ Map<String, Object?>? lifecycleRuleConditionToJson(
     return null;
   }
   return {
-    if (instance.age != null) 'age': instance.age,
-    if (instance.createdBefore != null)
-      'createdBefore': _dateToJson(instance.createdBefore),
-    if (instance.customTimeBefore != null)
-      'customTimeBefore': _dateToJson(instance.customTimeBefore),
-    if (instance.daysSinceCustomTime != null)
-      'daysSinceCustomTime': instance.daysSinceCustomTime,
-    if (instance.daysSinceNoncurrentTime != null)
-      'daysSinceNoncurrentTime': instance.daysSinceNoncurrentTime,
-    if (instance.isLive != null) 'isLive': instance.isLive,
-    if (instance.matchesPrefix != null) 'matchesPrefix': instance.matchesPrefix,
-    if (instance.matchesStorageClass != null)
-      'matchesStorageClass': instance.matchesStorageClass,
-    if (instance.matchesSuffix != null) 'matchesSuffix': instance.matchesSuffix,
-    if (instance.noncurrentTimeBefore != null)
-      'noncurrentTimeBefore': _dateToJson(instance.noncurrentTimeBefore),
-    if (instance.numNewerVersions != null)
-      'numNewerVersions': instance.numNewerVersions,
+    'age': ?instance.age,
+    'createdBefore': ?_dateToJson(instance.createdBefore),
+    'customTimeBefore': ?_dateToJson(instance.customTimeBefore),
+    'daysSinceCustomTime': ?instance.daysSinceCustomTime,
+    'daysSinceNoncurrentTime': ?instance.daysSinceNoncurrentTime,
+    'isLive': ?instance.isLive,
+    'matchesPrefix': ?instance.matchesPrefix,
+    'matchesStorageClass': ?instance.matchesStorageClass,
+    'matchesSuffix': ?instance.matchesSuffix,
+    'noncurrentTimeBefore': ?_dateToJson(instance.noncurrentTimeBefore),
+    'numNewerVersions': ?instance.numNewerVersions,
   };
 }
 
@@ -469,9 +432,8 @@ Map<String, Object?>? bucketLoggingConfigurationToJson(
     return null;
   }
   return {
-    if (instance.logBucket != null) 'logBucket': instance.logBucket,
-    if (instance.logObjectPrefix != null)
-      'logObjectPrefix': instance.logObjectPrefix,
+    'logBucket': ?instance.logBucket,
+    'logObjectPrefix': ?instance.logObjectPrefix,
   };
 }
 
@@ -489,10 +451,7 @@ Map<String, Object?>? bucketOwnerToJson(BucketOwner? instance) {
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.entity != null) 'entity': instance.entity,
-    if (instance.entityId != null) 'entityId': instance.entityId,
-  };
+  return {'entity': ?instance.entity, 'entityId': ?instance.entityId};
 }
 
 BucketRetentionPolicy? bucketRetentionPolicyFromJson(
@@ -515,11 +474,9 @@ Map<String, Object?>? bucketRetentionPolicyToJson(
     return null;
   }
   return {
-    if (instance.effectiveTime != null)
-      'effectiveTime': _timestampToJson(instance.effectiveTime),
-    if (instance.isLocked != null) 'isLocked': instance.isLocked,
-    if (instance.retentionPeriod != null)
-      'retentionPeriod': _int64ToJson(instance.retentionPeriod),
+    'effectiveTime': ?_timestampToJson(instance.effectiveTime),
+    'isLocked': ?instance.isLocked,
+    'retentionPeriod': ?_int64ToJson(instance.retentionPeriod),
   };
 }
 
@@ -542,12 +499,10 @@ Map<String, Object?>? bucketSoftDeletePolicyToJson(
     return null;
   }
   return {
-    if (instance.effectiveTime != null)
-      'effectiveTime': _timestampToJson(instance.effectiveTime),
-    if (instance.retentionDurationSeconds != null)
-      'retentionDurationSeconds': _int64ToJson(
-        instance.retentionDurationSeconds,
-      ),
+    'effectiveTime': ?_timestampToJson(instance.effectiveTime),
+    'retentionDurationSeconds': ?_int64ToJson(
+      instance.retentionDurationSeconds,
+    ),
   };
 }
 
@@ -562,7 +517,7 @@ Map<String, Object?>? bucketVersioningToJson(BucketVersioning? instance) {
   if (instance == null) {
     return null;
   }
-  return {if (instance.enabled != null) 'enabled': instance.enabled};
+  return {'enabled': ?instance.enabled};
 }
 
 BucketWebsiteConfiguration? bucketWebsiteConfigurationFromJson(
@@ -584,9 +539,8 @@ Map<String, Object?>? bucketWebsiteConfigurationToJson(
     return null;
   }
   return {
-    if (instance.mainPageSuffix != null)
-      'mainPageSuffix': instance.mainPageSuffix,
-    if (instance.notFoundPage != null) 'notFoundPage': instance.notFoundPage,
+    'mainPageSuffix': ?instance.mainPageSuffix,
+    'notFoundPage': ?instance.notFoundPage,
   };
 }
 
@@ -664,71 +618,48 @@ BucketMetadata bucketMetadataFromJson(
 );
 
 Map<String, Object?> bucketMetadataToJson(BucketMetadata instance) => {
-  if (instance.acl != null)
-    'acl': instance.acl!.map(bucketAccessControlToJson).toList(),
-  if (instance.autoclass != null)
-    'autoclass': bucketAutoclassToJson(instance.autoclass),
-  if (instance.billing != null)
-    'billing': bucketBillingToJson(instance.billing),
-  if (instance.cors != null)
-    'cors': instance.cors!.map(bucketCorsConfigurationToJson).toList(),
-  if (instance.customPlacementConfig != null)
-    'customPlacementConfig': bucketCustomPlacementConfigToJson(
-      instance.customPlacementConfig,
-    ),
-  if (instance.defaultEventBasedHold != null)
-    'defaultEventBasedHold': instance.defaultEventBasedHold,
-  if (instance.defaultObjectAcl != null)
-    'defaultObjectAcl': instance.defaultObjectAcl!
-        .map(_objectAccessControlToJson)
-        .toList(),
-  if (instance.encryption != null)
-    'encryption': bucketEncryptionToJson(instance.encryption),
-  if (instance.etag != null) 'etag': instance.etag,
-  if (instance.generation != null)
-    'generation': _int64ToJson(instance.generation),
-  if (instance.hardDeleteTime != null)
-    'hardDeleteTime': _timestampToJson(instance.hardDeleteTime),
-  if (instance.hierarchicalNamespace != null)
-    'hierarchicalNamespace': bucketHierarchicalNamespaceToJson(
-      instance.hierarchicalNamespace,
-    ),
-  if (instance.iamConfiguration != null)
-    'iamConfiguration': bucketIamConfigurationToJson(instance.iamConfiguration),
-  if (instance.id != null) 'id': instance.id,
-  if (instance.ipFilter != null)
-    'ipFilter': bucketIpFilterToJson(instance.ipFilter),
-  if (instance.kind != null) 'kind': instance.kind,
-  if (instance.labels != null) 'labels': instance.labels,
-  if (instance.lifecycle != null)
-    'lifecycle': lifecycleToJson(instance.lifecycle),
-  if (instance.location != null) 'location': instance.location,
-  if (instance.locationType != null) 'locationType': instance.locationType,
-  if (instance.logging != null)
-    'logging': bucketLoggingConfigurationToJson(instance.logging),
-  if (instance.metageneration != null)
-    'metageneration': _int64ToJson(instance.metageneration),
-  if (instance.name != null) 'name': instance.name,
-  if (instance.objectRetention != null)
-    'objectRetention': bucketObjectRetentionToJson(instance.objectRetention),
-  if (instance.owner != null) 'owner': bucketOwnerToJson(instance.owner),
-  if (instance.projectNumber != null) 'projectNumber': instance.projectNumber,
-  if (instance.retentionPolicy != null)
-    'retentionPolicy': bucketRetentionPolicyToJson(instance.retentionPolicy),
-  if (instance.rpo != null) 'rpo': instance.rpo,
-  if (instance.selfLink != null) 'selfLink': instance.selfLink.toString(),
-  if (instance.softDeletePolicy != null)
-    'softDeletePolicy': bucketSoftDeletePolicyToJson(instance.softDeletePolicy),
-  if (instance.softDeleteTime != null)
-    'softDeleteTime': _timestampToJson(instance.softDeleteTime),
-  if (instance.storageClass != null) 'storageClass': instance.storageClass,
-  if (instance.timeCreated != null)
-    'timeCreated': _timestampToJson(instance.timeCreated),
-  if (instance.updated != null) 'updated': _timestampToJson(instance.updated),
-  if (instance.versioning != null)
-    'versioning': bucketVersioningToJson(instance.versioning),
-  if (instance.website != null)
-    'website': bucketWebsiteConfigurationToJson(instance.website),
+  'acl': ?instance.acl?.map(bucketAccessControlToJson).toList(),
+  'autoclass': ?bucketAutoclassToJson(instance.autoclass),
+  'billing': ?bucketBillingToJson(instance.billing),
+  'cors': ?instance.cors?.map(bucketCorsConfigurationToJson).toList(),
+  'customPlacementConfig': ?bucketCustomPlacementConfigToJson(
+    instance.customPlacementConfig,
+  ),
+  'defaultEventBasedHold': ?instance.defaultEventBasedHold,
+  'defaultObjectAcl': ?instance.defaultObjectAcl
+      ?.map(_objectAccessControlToJson)
+      .toList(),
+  'encryption': ?bucketEncryptionToJson(instance.encryption),
+  'etag': ?instance.etag,
+  'generation': ?_int64ToJson(instance.generation),
+  'hardDeleteTime': ?_timestampToJson(instance.hardDeleteTime),
+  'hierarchicalNamespace': ?bucketHierarchicalNamespaceToJson(
+    instance.hierarchicalNamespace,
+  ),
+  'iamConfiguration': ?bucketIamConfigurationToJson(instance.iamConfiguration),
+  'id': ?instance.id,
+  'ipFilter': ?bucketIpFilterToJson(instance.ipFilter),
+  'kind': ?instance.kind,
+  'labels': ?instance.labels,
+  'lifecycle': ?lifecycleToJson(instance.lifecycle),
+  'location': ?instance.location,
+  'locationType': ?instance.locationType,
+  'logging': ?bucketLoggingConfigurationToJson(instance.logging),
+  'metageneration': ?_int64ToJson(instance.metageneration),
+  'name': ?instance.name,
+  'objectRetention': ?bucketObjectRetentionToJson(instance.objectRetention),
+  'owner': ?bucketOwnerToJson(instance.owner),
+  'projectNumber': ?instance.projectNumber,
+  'retentionPolicy': ?bucketRetentionPolicyToJson(instance.retentionPolicy),
+  'rpo': ?instance.rpo,
+  'selfLink': ?instance.selfLink.toString(),
+  'softDeletePolicy': ?bucketSoftDeletePolicyToJson(instance.softDeletePolicy),
+  'softDeleteTime': ?_timestampToJson(instance.softDeleteTime),
+  'storageClass': ?instance.storageClass,
+  'timeCreated': ?_timestampToJson(instance.timeCreated),
+  'updated': ?_timestampToJson(instance.updated),
+  'versioning': ?bucketVersioningToJson(instance.versioning),
+  'website': ?bucketWebsiteConfigurationToJson(instance.website),
 };
 
 // Private helpers
@@ -747,10 +678,7 @@ Map<String, Object?>? _projectTeamToJson(ProjectTeam? instance) {
   if (instance == null) {
     return null;
   }
-  return {
-    if (instance.projectNumber != null) 'projectNumber': instance.projectNumber,
-    if (instance.team != null) 'team': instance.team,
-  };
+  return {'projectNumber': ?instance.projectNumber, 'team': ?instance.team};
 }
 
 ObjectAccessControl? _objectAccessControlFromJson(Map<String, Object?>? json) {
@@ -787,20 +715,19 @@ Map<String, Object?>? _objectAccessControlToJson(
     return null;
   }
   return {
-    if (instance.bucket != null) 'bucket': instance.bucket,
-    if (instance.domain != null) 'domain': instance.domain,
-    if (instance.email != null) 'email': instance.email,
-    if (instance.entity != null) 'entity': instance.entity,
-    if (instance.entityId != null) 'entityId': instance.entityId,
-    if (instance.etag != null) 'etag': instance.etag,
-    if (instance.generation != null) 'generation': instance.generation,
-    if (instance.id != null) 'id': instance.id,
-    if (instance.kind != null) 'kind': instance.kind,
-    if (instance.object != null) 'object': instance.object,
-    if (instance.projectTeam != null)
-      'projectTeam': _projectTeamToJson(instance.projectTeam),
-    if (instance.role != null) 'role': instance.role,
-    if (instance.selfLink != null) 'selfLink': instance.selfLink.toString(),
+    'bucket': ?instance.bucket,
+    'domain': ?instance.domain,
+    'email': ?instance.email,
+    'entity': ?instance.entity,
+    'entityId': ?instance.entityId,
+    'etag': ?instance.etag,
+    'generation': ?instance.generation,
+    'id': ?instance.id,
+    'kind': ?instance.kind,
+    'object': ?instance.object,
+    'projectTeam': ?_projectTeamToJson(instance.projectTeam),
+    'role': ?instance.role,
+    'selfLink': ?instance.selfLink.toString(),
   };
 }
 
@@ -808,21 +735,14 @@ Timestamp? _timestampFromJson(Object? json) {
   if (json == null) {
     return null;
   }
-  if (json is String) {
-    final dateTime = DateTime.parse(json);
-    return Timestamp(
-      seconds: (dateTime.millisecondsSinceEpoch / 1000).floor(),
-      nanos: (dateTime.microsecondsSinceEpoch % 1000000) * 1000,
-    );
-  }
-  throw ArgumentError.value(json, 'json', 'Expected String for Timestamp');
+  return Timestamp.fromJson(json);
 }
 
 Object? _timestampToJson(Timestamp? instance) {
   if (instance == null) {
     return null;
   }
-  return instance.toDateTime().toUtc().toIso8601String();
+  return instance.toJson();
 }
 
 int? _int64FromJson(Object? json) {

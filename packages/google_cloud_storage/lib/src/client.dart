@@ -19,10 +19,10 @@ import 'package:http/http.dart' as http;
 import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
 
-class _DummyEncodeable implements JsonEncodable {
+class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
 
-  _DummyEncodeable(this.json);
+  _JsonEncodableWrapper(this.json);
 
   @override
   Object? toJson() => json;
@@ -53,7 +53,7 @@ final class Storage {
 
     final j = await _client.post(
       url.replace(queryParameters: queryParams),
-      body: _DummyEncodeable(bucketMetadataToJson(metadata)),
+      body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
@@ -110,7 +110,7 @@ final class Storage {
     };
     final j = await _client.patch(
       url.replace(queryParameters: queryParams),
-      body: _DummyEncodeable(bucketMetadataToJson(metadata)),
+      body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
