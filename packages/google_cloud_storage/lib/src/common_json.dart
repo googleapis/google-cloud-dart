@@ -18,9 +18,7 @@ import 'object_metadata.dart';
 import 'project_team.dart';
 
 ProjectTeam? projectTeamFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return ProjectTeam(
     projectNumber: json['projectNumber'] as String?,
     team: json['team'] as String?,
@@ -28,16 +26,12 @@ ProjectTeam? projectTeamFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? projectTeamToJson(ProjectTeam? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'projectNumber': ?instance.projectNumber, 'team': ?instance.team};
 }
 
 ObjectAccessControl? objectAccessControlFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return ObjectAccessControl(
     bucket: json['bucket'] as String?,
     domain: json['domain'] as String?,
@@ -64,9 +58,7 @@ ObjectAccessControl? objectAccessControlFromJson(Map<String, Object?>? json) {
 Map<String, Object?>? objectAccessControlToJson(
   ObjectAccessControl? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'bucket': ?instance.bucket,
     'domain': ?instance.domain,
@@ -85,23 +77,17 @@ Map<String, Object?>? objectAccessControlToJson(
 }
 
 Timestamp? timestampFromJson(Object? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return Timestamp.fromJson(json);
 }
 
 Object? timestampToJson(Timestamp? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return instance.toJson();
 }
 
 int? int64FromJson(Object? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   if (json is String) {
     return int.parse(json);
   }
@@ -112,16 +98,12 @@ int? int64FromJson(Object? json) {
 }
 
 Object? int64ToJson(int? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return instance.toString();
 }
 
 DateTime? dateFromJson(Object? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   if (json is String) {
     return DateTime.parse(json);
   }
@@ -129,9 +111,7 @@ DateTime? dateFromJson(Object? json) {
 }
 
 String? dateToJson(DateTime? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return '${instance.year.toString().padLeft(4, '0')}-'
       '${instance.month.toString().padLeft(2, '0')}-'
       '${instance.day.toString().padLeft(2, '0')}';

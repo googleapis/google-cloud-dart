@@ -17,9 +17,7 @@ import 'common_json.dart';
 import 'object_metadata.dart';
 
 BucketAutoclass? bucketAutoclassFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketAutoclass(
     enabled: json['enabled'] as bool?,
     terminalStorageClass: json['terminalStorageClass'] as String?,
@@ -31,9 +29,7 @@ BucketAutoclass? bucketAutoclassFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? bucketAutoclassToJson(BucketAutoclass? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'enabled': ?instance.enabled,
     'terminalStorageClass': ?instance.terminalStorageClass,
@@ -45,23 +41,17 @@ Map<String, Object?>? bucketAutoclassToJson(BucketAutoclass? instance) {
 }
 
 BucketBilling? bucketBillingFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketBilling(requesterPays: json['requesterPays'] as bool?);
 }
 
 Map<String, Object?>? bucketBillingToJson(BucketBilling? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'requesterPays': ?instance.requesterPays};
 }
 
 BucketAccessControl? bucketAccessControlFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketAccessControl(
     bucket: json['bucket'] as String?,
     domain: json['domain'] as String?,
@@ -82,9 +72,7 @@ BucketAccessControl? bucketAccessControlFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? bucketAccessControlToJson(BucketAccessControl? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'bucket': ?instance.bucket,
     'domain': ?instance.domain,
@@ -101,45 +89,35 @@ Map<String, Object?>? bucketAccessControlToJson(BucketAccessControl? instance) {
 }
 
 BucketEncryption? bucketEncryptionFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketEncryption(
     defaultKmsKeyName: json['defaultKmsKeyName'] as String?,
   );
 }
 
 Map<String, Object?>? bucketEncryptionToJson(BucketEncryption? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'defaultKmsKeyName': ?instance.defaultKmsKeyName};
 }
 
 BucketObjectRetention? bucketObjectRetentionFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketObjectRetention(mode: json['mode'] as String?);
 }
 
 Map<String, Object?>? bucketObjectRetentionToJson(
   BucketObjectRetention? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'mode': ?instance.mode};
 }
 
 BucketCorsConfiguration? bucketCorsConfigurationFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketCorsConfiguration(
     maxAgeSeconds: json['maxAgeSeconds'] as int?,
     method: (json['method'] as List<Object?>?)?.cast<String>(),
@@ -151,9 +129,7 @@ BucketCorsConfiguration? bucketCorsConfigurationFromJson(
 Map<String, Object?>? bucketCorsConfigurationToJson(
   BucketCorsConfiguration? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'maxAgeSeconds': ?instance.maxAgeSeconds,
     'method': ?instance.method,
@@ -165,9 +141,7 @@ Map<String, Object?>? bucketCorsConfigurationToJson(
 BucketCustomPlacementConfig? bucketCustomPlacementConfigFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketCustomPlacementConfig(
     dataLocations: (json['dataLocations'] as List<Object?>?)?.cast<String>(),
   );
@@ -176,36 +150,28 @@ BucketCustomPlacementConfig? bucketCustomPlacementConfigFromJson(
 Map<String, Object?>? bucketCustomPlacementConfigToJson(
   BucketCustomPlacementConfig? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'dataLocations': ?instance.dataLocations};
 }
 
 BucketHierarchicalNamespace? bucketHierarchicalNamespaceFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketHierarchicalNamespace(enabled: json['enabled'] as bool?);
 }
 
 Map<String, Object?>? bucketHierarchicalNamespaceToJson(
   BucketHierarchicalNamespace? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'enabled': ?instance.enabled};
 }
 
 BucketIamConfiguration? bucketIamConfigurationFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketIamConfiguration(
     publicAccessPrevention: json['publicAccessPrevention'] as String?,
     uniformBucketLevelAccess: uniformBucketLevelAccessFromJson(
@@ -217,9 +183,7 @@ BucketIamConfiguration? bucketIamConfigurationFromJson(
 Map<String, Object?>? bucketIamConfigurationToJson(
   BucketIamConfiguration? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'publicAccessPrevention': ?instance.publicAccessPrevention,
     'uniformBucketLevelAccess': ?uniformBucketLevelAccessToJson(
@@ -231,9 +195,7 @@ Map<String, Object?>? bucketIamConfigurationToJson(
 UniformBucketLevelAccess? uniformBucketLevelAccessFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return UniformBucketLevelAccess(
     enabled: json['enabled'] as bool?,
     lockedTime: timestampFromJson(json['lockedTime']),
@@ -243,9 +205,7 @@ UniformBucketLevelAccess? uniformBucketLevelAccessFromJson(
 Map<String, Object?>? uniformBucketLevelAccessToJson(
   UniformBucketLevelAccess? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'enabled': ?instance.enabled,
     'lockedTime': ?timestampToJson(instance.lockedTime),
@@ -253,9 +213,7 @@ Map<String, Object?>? uniformBucketLevelAccessToJson(
 }
 
 BucketIpFilter? bucketIpFilterFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketIpFilter(
     allowAllServiceAgentAccess: json['allowAllServiceAgentAccess'] as bool?,
     allowCrossOrgVpcs: json['allowCrossOrgVpcs'] as bool?,
@@ -272,9 +230,7 @@ BucketIpFilter? bucketIpFilterFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? bucketIpFilterToJson(BucketIpFilter? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'allowAllServiceAgentAccess': ?instance.allowAllServiceAgentAccess,
     'allowCrossOrgVpcs': ?instance.allowCrossOrgVpcs,
@@ -291,9 +247,7 @@ Map<String, Object?>? bucketIpFilterToJson(BucketIpFilter? instance) {
 BucketPublicNetworkSource? bucketPublicNetworkSourceFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketPublicNetworkSource(
     allowedIpCidrRanges: (json['allowedIpCidrRanges'] as List<Object?>?)
         ?.cast<String>(),
@@ -303,16 +257,12 @@ BucketPublicNetworkSource? bucketPublicNetworkSourceFromJson(
 Map<String, Object?>? bucketPublicNetworkSourceToJson(
   BucketPublicNetworkSource? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'allowedIpCidrRanges': ?instance.allowedIpCidrRanges};
 }
 
 Lifecycle? lifecycleFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return Lifecycle(
     rule: (json['rule'] as List<Object?>?)
         ?.map((e) => lifecycleRuleFromJson(e as Map<String, Object?>?)!)
@@ -321,16 +271,12 @@ Lifecycle? lifecycleFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? lifecycleToJson(Lifecycle? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'rule': ?instance.rule?.map(lifecycleRuleToJson).toList()};
 }
 
 LifecycleRule? lifecycleRuleFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return LifecycleRule(
     action: lifecycleRuleActionFromJson(
       json['action'] as Map<String, Object?>?,
@@ -342,9 +288,7 @@ LifecycleRule? lifecycleRuleFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? lifecycleRuleToJson(LifecycleRule? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'action': ?lifecycleRuleActionToJson(instance.action),
     'condition': ?lifecycleRuleConditionToJson(instance.condition),
@@ -352,9 +296,7 @@ Map<String, Object?>? lifecycleRuleToJson(LifecycleRule? instance) {
 }
 
 LifecycleRuleAction? lifecycleRuleActionFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return LifecycleRuleAction(
     storageClass: json['storageClass'] as String?,
     type: json['type'] as String?,
@@ -362,18 +304,14 @@ LifecycleRuleAction? lifecycleRuleActionFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? lifecycleRuleActionToJson(LifecycleRuleAction? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'storageClass': ?instance.storageClass, 'type': ?instance.type};
 }
 
 LifecycleRuleCondition? lifecycleRuleConditionFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return LifecycleRuleCondition(
     age: json['age'] as int?,
     createdBefore: dateFromJson(json['createdBefore']),
@@ -393,9 +331,7 @@ LifecycleRuleCondition? lifecycleRuleConditionFromJson(
 Map<String, Object?>? lifecycleRuleConditionToJson(
   LifecycleRuleCondition? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'age': ?instance.age,
     'createdBefore': ?dateToJson(instance.createdBefore),
@@ -414,9 +350,7 @@ Map<String, Object?>? lifecycleRuleConditionToJson(
 BucketLoggingConfiguration? bucketLoggingConfigurationFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketLoggingConfiguration(
     logBucket: json['logBucket'] as String?,
     logObjectPrefix: json['logObjectPrefix'] as String?,
@@ -426,9 +360,7 @@ BucketLoggingConfiguration? bucketLoggingConfigurationFromJson(
 Map<String, Object?>? bucketLoggingConfigurationToJson(
   BucketLoggingConfiguration? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'logBucket': ?instance.logBucket,
     'logObjectPrefix': ?instance.logObjectPrefix,
@@ -436,9 +368,7 @@ Map<String, Object?>? bucketLoggingConfigurationToJson(
 }
 
 BucketOwner? bucketOwnerFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketOwner(
     entity: json['entity'] as String?,
     entityId: json['entityId'] as String?,
@@ -446,18 +376,14 @@ BucketOwner? bucketOwnerFromJson(Map<String, Object?>? json) {
 }
 
 Map<String, Object?>? bucketOwnerToJson(BucketOwner? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'entity': ?instance.entity, 'entityId': ?instance.entityId};
 }
 
 BucketRetentionPolicy? bucketRetentionPolicyFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketRetentionPolicy(
     effectiveTime: timestampFromJson(json['effectiveTime']),
     isLocked: json['isLocked'] as bool?,
@@ -468,9 +394,7 @@ BucketRetentionPolicy? bucketRetentionPolicyFromJson(
 Map<String, Object?>? bucketRetentionPolicyToJson(
   BucketRetentionPolicy? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'effectiveTime': ?timestampToJson(instance.effectiveTime),
     'isLocked': ?instance.isLocked,
@@ -481,9 +405,7 @@ Map<String, Object?>? bucketRetentionPolicyToJson(
 BucketSoftDeletePolicy? bucketSoftDeletePolicyFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketSoftDeletePolicy(
     effectiveTime: timestampFromJson(json['effectiveTime']),
     retentionDurationSeconds: int64FromJson(json['retentionDurationSeconds']),
@@ -493,9 +415,7 @@ BucketSoftDeletePolicy? bucketSoftDeletePolicyFromJson(
 Map<String, Object?>? bucketSoftDeletePolicyToJson(
   BucketSoftDeletePolicy? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'effectiveTime': ?timestampToJson(instance.effectiveTime),
     'retentionDurationSeconds': ?int64ToJson(instance.retentionDurationSeconds),
@@ -503,25 +423,19 @@ Map<String, Object?>? bucketSoftDeletePolicyToJson(
 }
 
 BucketVersioning? bucketVersioningFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketVersioning(enabled: json['enabled'] as bool?);
 }
 
 Map<String, Object?>? bucketVersioningToJson(BucketVersioning? instance) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {'enabled': ?instance.enabled};
 }
 
 BucketWebsiteConfiguration? bucketWebsiteConfigurationFromJson(
   Map<String, Object?>? json,
 ) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return BucketWebsiteConfiguration(
     mainPageSuffix: json['mainPageSuffix'] as String?,
     notFoundPage: json['notFoundPage'] as String?,
@@ -531,9 +445,7 @@ BucketWebsiteConfiguration? bucketWebsiteConfigurationFromJson(
 Map<String, Object?>? bucketWebsiteConfigurationToJson(
   BucketWebsiteConfiguration? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'mainPageSuffix': ?instance.mainPageSuffix,
     'notFoundPage': ?instance.notFoundPage,
@@ -659,9 +571,7 @@ Map<String, Object?> bucketMetadataToJson(BucketMetadata instance) => {
 // Private helpers
 
 ObjectAccessControl? _objectAccessControlFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
+  if (json == null) return null;
   return ObjectAccessControl(
     bucket: json['bucket'] as String?,
     domain: json['domain'] as String?,
@@ -688,9 +598,7 @@ ObjectAccessControl? _objectAccessControlFromJson(Map<String, Object?>? json) {
 Map<String, Object?>? _objectAccessControlToJson(
   ObjectAccessControl? instance,
 ) {
-  if (instance == null) {
-    return null;
-  }
+  if (instance == null) return null;
   return {
     'bucket': ?instance.bucket,
     'domain': ?instance.domain,
