@@ -12,11 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:google_cloud_protobuf/protobuf.dart';
-
 import 'bucket_metadata.dart';
+import 'common_json.dart';
 import 'object_metadata.dart';
-import 'project_team.dart';
 
 BucketAutoclass? bucketAutoclassFromJson(Map<String, Object?>? json) {
   if (json == null) {
@@ -25,10 +23,10 @@ BucketAutoclass? bucketAutoclassFromJson(Map<String, Object?>? json) {
   return BucketAutoclass(
     enabled: json['enabled'] as bool?,
     terminalStorageClass: json['terminalStorageClass'] as String?,
-    terminalStorageClassUpdateTime: _timestampFromJson(
+    terminalStorageClassUpdateTime: timestampFromJson(
       json['terminalStorageClassUpdateTime'],
     ),
-    toggleTime: _timestampFromJson(json['toggleTime']),
+    toggleTime: timestampFromJson(json['toggleTime']),
   );
 }
 
@@ -39,10 +37,10 @@ Map<String, Object?>? bucketAutoclassToJson(BucketAutoclass? instance) {
   return {
     'enabled': ?instance.enabled,
     'terminalStorageClass': ?instance.terminalStorageClass,
-    'terminalStorageClassUpdateTime': ?_timestampToJson(
+    'terminalStorageClassUpdateTime': ?timestampToJson(
       instance.terminalStorageClassUpdateTime,
     ),
-    'toggleTime': ?_timestampToJson(instance.toggleTime),
+    'toggleTime': ?timestampToJson(instance.toggleTime),
   };
 }
 
@@ -73,7 +71,7 @@ BucketAccessControl? bucketAccessControlFromJson(Map<String, Object?>? json) {
     etag: json['etag'] as String?,
     id: json['id'] as String?,
     kind: json['kind'] as String?,
-    projectTeam: _projectTeamFromJson(
+    projectTeam: projectTeamFromJson(
       json['projectTeam'] as Map<String, Object?>?,
     ),
     role: json['role'] as String?,
@@ -96,7 +94,7 @@ Map<String, Object?>? bucketAccessControlToJson(BucketAccessControl? instance) {
     'etag': ?instance.etag,
     'id': ?instance.id,
     'kind': ?instance.kind,
-    'projectTeam': ?_projectTeamToJson(instance.projectTeam),
+    'projectTeam': ?projectTeamToJson(instance.projectTeam),
     'role': ?instance.role,
     'selfLink': ?instance.selfLink?.toString(),
   };
@@ -238,7 +236,7 @@ UniformBucketLevelAccess? uniformBucketLevelAccessFromJson(
   }
   return UniformBucketLevelAccess(
     enabled: json['enabled'] as bool?,
-    lockedTime: _timestampFromJson(json['lockedTime']),
+    lockedTime: timestampFromJson(json['lockedTime']),
   );
 }
 
@@ -250,7 +248,7 @@ Map<String, Object?>? uniformBucketLevelAccessToJson(
   }
   return {
     'enabled': ?instance.enabled,
-    'lockedTime': ?_timestampToJson(instance.lockedTime),
+    'lockedTime': ?timestampToJson(instance.lockedTime),
   };
 }
 
@@ -378,8 +376,8 @@ LifecycleRuleCondition? lifecycleRuleConditionFromJson(
   }
   return LifecycleRuleCondition(
     age: json['age'] as int?,
-    createdBefore: _dateFromJson(json['createdBefore']),
-    customTimeBefore: _dateFromJson(json['customTimeBefore']),
+    createdBefore: dateFromJson(json['createdBefore']),
+    customTimeBefore: dateFromJson(json['customTimeBefore']),
     daysSinceCustomTime: json['daysSinceCustomTime'] as int?,
     daysSinceNoncurrentTime: json['daysSinceNoncurrentTime'] as int?,
     isLive: json['isLive'] as bool?,
@@ -387,7 +385,7 @@ LifecycleRuleCondition? lifecycleRuleConditionFromJson(
     matchesStorageClass: (json['matchesStorageClass'] as List<Object?>?)
         ?.cast<String>(),
     matchesSuffix: (json['matchesSuffix'] as List<Object?>?)?.cast<String>(),
-    noncurrentTimeBefore: _dateFromJson(json['noncurrentTimeBefore']),
+    noncurrentTimeBefore: dateFromJson(json['noncurrentTimeBefore']),
     numNewerVersions: json['numNewerVersions'] as int?,
   );
 }
@@ -400,15 +398,15 @@ Map<String, Object?>? lifecycleRuleConditionToJson(
   }
   return {
     'age': ?instance.age,
-    'createdBefore': ?_dateToJson(instance.createdBefore),
-    'customTimeBefore': ?_dateToJson(instance.customTimeBefore),
+    'createdBefore': ?dateToJson(instance.createdBefore),
+    'customTimeBefore': ?dateToJson(instance.customTimeBefore),
     'daysSinceCustomTime': ?instance.daysSinceCustomTime,
     'daysSinceNoncurrentTime': ?instance.daysSinceNoncurrentTime,
     'isLive': ?instance.isLive,
     'matchesPrefix': ?instance.matchesPrefix,
     'matchesStorageClass': ?instance.matchesStorageClass,
     'matchesSuffix': ?instance.matchesSuffix,
-    'noncurrentTimeBefore': ?_dateToJson(instance.noncurrentTimeBefore),
+    'noncurrentTimeBefore': ?dateToJson(instance.noncurrentTimeBefore),
     'numNewerVersions': ?instance.numNewerVersions,
   };
 }
@@ -461,9 +459,9 @@ BucketRetentionPolicy? bucketRetentionPolicyFromJson(
     return null;
   }
   return BucketRetentionPolicy(
-    effectiveTime: _timestampFromJson(json['effectiveTime']),
+    effectiveTime: timestampFromJson(json['effectiveTime']),
     isLocked: json['isLocked'] as bool?,
-    retentionPeriod: _int64FromJson(json['retentionPeriod']),
+    retentionPeriod: int64FromJson(json['retentionPeriod']),
   );
 }
 
@@ -474,9 +472,9 @@ Map<String, Object?>? bucketRetentionPolicyToJson(
     return null;
   }
   return {
-    'effectiveTime': ?_timestampToJson(instance.effectiveTime),
+    'effectiveTime': ?timestampToJson(instance.effectiveTime),
     'isLocked': ?instance.isLocked,
-    'retentionPeriod': ?_int64ToJson(instance.retentionPeriod),
+    'retentionPeriod': ?int64ToJson(instance.retentionPeriod),
   };
 }
 
@@ -487,8 +485,8 @@ BucketSoftDeletePolicy? bucketSoftDeletePolicyFromJson(
     return null;
   }
   return BucketSoftDeletePolicy(
-    effectiveTime: _timestampFromJson(json['effectiveTime']),
-    retentionDurationSeconds: _int64FromJson(json['retentionDurationSeconds']),
+    effectiveTime: timestampFromJson(json['effectiveTime']),
+    retentionDurationSeconds: int64FromJson(json['retentionDurationSeconds']),
   );
 }
 
@@ -499,10 +497,8 @@ Map<String, Object?>? bucketSoftDeletePolicyToJson(
     return null;
   }
   return {
-    'effectiveTime': ?_timestampToJson(instance.effectiveTime),
-    'retentionDurationSeconds': ?_int64ToJson(
-      instance.retentionDurationSeconds,
-    ),
+    'effectiveTime': ?timestampToJson(instance.effectiveTime),
+    'retentionDurationSeconds': ?int64ToJson(instance.retentionDurationSeconds),
   };
 }
 
@@ -568,8 +564,8 @@ BucketMetadata bucketMetadataFromJson(
     json['encryption'] as Map<String, Object?>?,
   ),
   etag: json['etag'] as String?,
-  generation: _int64FromJson(json['generation']),
-  hardDeleteTime: _timestampFromJson(json['hardDeleteTime']),
+  generation: int64FromJson(json['generation']),
+  hardDeleteTime: timestampFromJson(json['hardDeleteTime']),
   hierarchicalNamespace: bucketHierarchicalNamespaceFromJson(
     json['hierarchicalNamespace'] as Map<String, Object?>?,
   ),
@@ -586,7 +582,7 @@ BucketMetadata bucketMetadataFromJson(
   logging: bucketLoggingConfigurationFromJson(
     json['logging'] as Map<String, Object?>?,
   ),
-  metageneration: _int64FromJson(json['metageneration']),
+  metageneration: int64FromJson(json['metageneration']),
   name: json['name'] as String?,
   objectRetention: bucketObjectRetentionFromJson(
     json['objectRetention'] as Map<String, Object?>?,
@@ -603,10 +599,10 @@ BucketMetadata bucketMetadataFromJson(
   softDeletePolicy: bucketSoftDeletePolicyFromJson(
     json['softDeletePolicy'] as Map<String, Object?>?,
   ),
-  softDeleteTime: _timestampFromJson(json['softDeleteTime']),
+  softDeleteTime: timestampFromJson(json['softDeleteTime']),
   storageClass: json['storageClass'] as String?,
-  timeCreated: _timestampFromJson(json['timeCreated']),
-  updated: _timestampFromJson(json['updated']),
+  timeCreated: timestampFromJson(json['timeCreated']),
+  updated: timestampFromJson(json['updated']),
   versioning: bucketVersioningFromJson(
     json['versioning'] as Map<String, Object?>?,
   ),
@@ -629,8 +625,8 @@ Map<String, Object?> bucketMetadataToJson(BucketMetadata instance) => {
       .toList(),
   'encryption': ?bucketEncryptionToJson(instance.encryption),
   'etag': ?instance.etag,
-  'generation': ?_int64ToJson(instance.generation),
-  'hardDeleteTime': ?_timestampToJson(instance.hardDeleteTime),
+  'generation': ?int64ToJson(instance.generation),
+  'hardDeleteTime': ?timestampToJson(instance.hardDeleteTime),
   'hierarchicalNamespace': ?bucketHierarchicalNamespaceToJson(
     instance.hierarchicalNamespace,
   ),
@@ -643,7 +639,7 @@ Map<String, Object?> bucketMetadataToJson(BucketMetadata instance) => {
   'location': ?instance.location,
   'locationType': ?instance.locationType,
   'logging': ?bucketLoggingConfigurationToJson(instance.logging),
-  'metageneration': ?_int64ToJson(instance.metageneration),
+  'metageneration': ?int64ToJson(instance.metageneration),
   'name': ?instance.name,
   'objectRetention': ?bucketObjectRetentionToJson(instance.objectRetention),
   'owner': ?bucketOwnerToJson(instance.owner),
@@ -652,32 +648,15 @@ Map<String, Object?> bucketMetadataToJson(BucketMetadata instance) => {
   'rpo': ?instance.rpo,
   'selfLink': ?instance.selfLink?.toString(),
   'softDeletePolicy': ?bucketSoftDeletePolicyToJson(instance.softDeletePolicy),
-  'softDeleteTime': ?_timestampToJson(instance.softDeleteTime),
+  'softDeleteTime': ?timestampToJson(instance.softDeleteTime),
   'storageClass': ?instance.storageClass,
-  'timeCreated': ?_timestampToJson(instance.timeCreated),
-  'updated': ?_timestampToJson(instance.updated),
+  'timeCreated': ?timestampToJson(instance.timeCreated),
+  'updated': ?timestampToJson(instance.updated),
   'versioning': ?bucketVersioningToJson(instance.versioning),
   'website': ?bucketWebsiteConfigurationToJson(instance.website),
 };
 
 // Private helpers
-
-ProjectTeam? _projectTeamFromJson(Map<String, Object?>? json) {
-  if (json == null) {
-    return null;
-  }
-  return ProjectTeam(
-    projectNumber: json['projectNumber'] as String?,
-    team: json['team'] as String?,
-  );
-}
-
-Map<String, Object?>? _projectTeamToJson(ProjectTeam? instance) {
-  if (instance == null) {
-    return null;
-  }
-  return {'projectNumber': ?instance.projectNumber, 'team': ?instance.team};
-}
 
 ObjectAccessControl? _objectAccessControlFromJson(Map<String, Object?>? json) {
   if (json == null) {
@@ -696,7 +675,7 @@ ObjectAccessControl? _objectAccessControlFromJson(Map<String, Object?>? json) {
     id: json['id'] as String?,
     kind: json['kind'] as String?,
     object: json['object'] as String?,
-    projectTeam: _projectTeamFromJson(
+    projectTeam: projectTeamFromJson(
       json['projectTeam'] as Map<String, Object?>?,
     ),
     role: json['role'] as String?,
@@ -723,61 +702,8 @@ Map<String, Object?>? _objectAccessControlToJson(
     'id': ?instance.id,
     'kind': ?instance.kind,
     'object': ?instance.object,
-    'projectTeam': ?_projectTeamToJson(instance.projectTeam),
+    'projectTeam': ?projectTeamToJson(instance.projectTeam),
     'role': ?instance.role,
     'selfLink': ?instance.selfLink?.toString(),
   };
-}
-
-Timestamp? _timestampFromJson(Object? json) {
-  if (json == null) {
-    return null;
-  }
-  return Timestamp.fromJson(json);
-}
-
-Object? _timestampToJson(Timestamp? instance) {
-  if (instance == null) {
-    return null;
-  }
-  return instance.toJson();
-}
-
-int? _int64FromJson(Object? json) {
-  if (json == null) {
-    return null;
-  }
-  if (json is String) {
-    return int.parse(json);
-  }
-  if (json is int) {
-    return json;
-  }
-  throw ArgumentError.value(json, 'json', 'Expected String or int for int64');
-}
-
-Object? _int64ToJson(int? instance) {
-  if (instance == null) {
-    return null;
-  }
-  return instance.toString();
-}
-
-DateTime? _dateFromJson(Object? json) {
-  if (json == null) {
-    return null;
-  }
-  if (json is String) {
-    return DateTime.parse(json);
-  }
-  throw ArgumentError.value(json, 'json', 'Expected String for DateTime');
-}
-
-String? _dateToJson(DateTime? instance) {
-  if (instance == null) {
-    return null;
-  }
-  return '${instance.year.toString().padLeft(4, '0')}-'
-      '${instance.month.toString().padLeft(2, '0')}-'
-      '${instance.day.toString().padLeft(2, '0')}';
 }
