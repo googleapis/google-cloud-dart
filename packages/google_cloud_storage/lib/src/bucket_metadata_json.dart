@@ -98,7 +98,7 @@ Map<String, Object?>? bucketAccessControlToJson(BucketAccessControl? instance) {
     'kind': ?instance.kind,
     'projectTeam': ?_projectTeamToJson(instance.projectTeam),
     'role': ?instance.role,
-    'selfLink': ?instance.selfLink.toString(),
+    'selfLink': ?instance.selfLink?.toString(),
   };
 }
 
@@ -592,9 +592,7 @@ BucketMetadata bucketMetadataFromJson(
     json['objectRetention'] as Map<String, Object?>?,
   ),
   owner: bucketOwnerFromJson(json['owner'] as Map<String, Object?>?),
-  projectNumber: _int64ToString(
-    json['projectNumber'],
-  ), // Handle int/string ambiguity for projectNumber
+  projectNumber: json['projectNumber'] as String?,
   retentionPolicy: bucketRetentionPolicyFromJson(
     json['retentionPolicy'] as Map<String, Object?>?,
   ),
@@ -652,7 +650,7 @@ Map<String, Object?> bucketMetadataToJson(BucketMetadata instance) => {
   'projectNumber': ?instance.projectNumber,
   'retentionPolicy': ?bucketRetentionPolicyToJson(instance.retentionPolicy),
   'rpo': ?instance.rpo,
-  'selfLink': ?instance.selfLink.toString(),
+  'selfLink': ?instance.selfLink?.toString(),
   'softDeletePolicy': ?bucketSoftDeletePolicyToJson(instance.softDeletePolicy),
   'softDeleteTime': ?_timestampToJson(instance.softDeleteTime),
   'storageClass': ?instance.storageClass,
@@ -727,7 +725,7 @@ Map<String, Object?>? _objectAccessControlToJson(
     'object': ?instance.object,
     'projectTeam': ?_projectTeamToJson(instance.projectTeam),
     'role': ?instance.role,
-    'selfLink': ?instance.selfLink.toString(),
+    'selfLink': ?instance.selfLink?.toString(),
   };
 }
 
@@ -763,19 +761,6 @@ Object? _int64ToJson(int? instance) {
     return null;
   }
   return instance.toString();
-}
-
-String? _int64ToString(Object? json) {
-  if (json == null) {
-    return null;
-  }
-  if (json is String) {
-    return json;
-  }
-  if (json is int) {
-    return json.toString();
-  }
-  throw ArgumentError.value(json, 'json', 'Expected String or int for String');
 }
 
 DateTime? _dateFromJson(Object? json) {
