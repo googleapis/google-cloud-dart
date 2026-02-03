@@ -1,0 +1,31 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJhdXRvY2xhc3MiOnsiZW5hYmxlZCI6dHJ1ZSwidGVybWluYWxTdG9yYWdlQ2xhc3MiOiJORUFSTElORSJ9LCJuYW1lIjoiY3JlYXRlX2J1Y2tldF93aXRoX21ldGFkYXRhX2F1dG9jbGFzcyJ9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 03 Feb 2026 18:05:03 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "1131",
+        "x-guploader-uploadid": "AJRbA5V3BleuNG6E3j2CJ2jCafpj7d3NI0yWE5EEtABd80UbV_VU9aDONnBJvc2A78qxWfOmOtInEA",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_autoclass\",\n  \"id\": \"create_bucket_with_metadata_autoclass\",\n  \"name\": \"create_bucket_with_metadata_autoclass\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770141902561904472\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-03T18:05:03.208Z\",\n  \"updated\": \"2026-02-03T18:05:03.208Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-03T18:05:03.208Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:03.208Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:03.208Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\",\n  \"autoclass\": {\n    \"enabled\": true,\n    \"toggleTime\": \"2026-02-03T18:05:03.208Z\",\n    \"terminalStorageClass\": \"NEARLINE\",\n    \"terminalStorageClassUpdateTime\": \"2026-02-03T18:05:03.208Z\"\n  }\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]

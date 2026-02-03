@@ -1,0 +1,87 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJuYW1lIjoiY3JlYXRlX2J1Y2tldF93aXRoX21ldGFkYXRhX3ZlcnNpb25pbmciLCJ2ZXJzaW9uaW5nIjp7ImVuYWJsZWQiOnRydWV9fQ=="
+    },
+    "response": {
+      "statusCode": 429,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 03 Feb 2026 18:05:15 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "411",
+        "x-guploader-uploadid": "AJRbA5XZGXU1uPWcgJ-oH76LoqYrQvCyCHCKuTe8aseh4gQM0Zxbb_6HAYv_OJALCGs_4KbrlqVNeA",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Create Bucket quota limit limit exceeded on the Google Cloud project. Please slow down execution and try again.\",\n    \"errors\": [\n      {\n        \"message\": \"Create Bucket quota limit limit exceeded on the Google Cloud project. Please slow down execution and try again.\",\n        \"domain\": \"usageLimits\",\n        \"reason\": \"rateLimitExceeded\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Too Many Requests"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJuYW1lIjoiY3JlYXRlX2J1Y2tldF93aXRoX21ldGFkYXRhX3ZlcnNpb25pbmciLCJ2ZXJzaW9uaW5nIjp7ImVuYWJsZWQiOnRydWV9fQ=="
+    },
+    "response": {
+      "statusCode": 429,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 03 Feb 2026 18:05:16 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "411",
+        "x-guploader-uploadid": "AJRbA5UQLZwelq1D59zRXgIvE2GXDrIAbtOa8waF8O6_Jd4QDadnSc0iUlIw1dptKyA6tvlwNk4ZTg",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 429,\n    \"message\": \"Create Bucket quota limit limit exceeded on the Google Cloud project. Please slow down execution and try again.\",\n    \"errors\": [\n      {\n        \"message\": \"Create Bucket quota limit limit exceeded on the Google Cloud project. Please slow down execution and try again.\",\n        \"domain\": \"usageLimits\",\n        \"reason\": \"rateLimitExceeded\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Too Many Requests"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJuYW1lIjoiY3JlYXRlX2J1Y2tldF93aXRoX21ldGFkYXRhX3ZlcnNpb25pbmciLCJ2ZXJzaW9uaW5nIjp7ImVuYWJsZWQiOnRydWV9fQ=="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 03 Feb 2026 18:05:18 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "983",
+        "x-guploader-uploadid": "AJRbA5UJKZqkcvo0wGQcpzP7QeTWylW--1jfsLE-YyW6siEwRMMS7RB7xInvYE_F7TWshD2xgQHut_aUx-7-",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_versioning\",\n  \"id\": \"create_bucket_with_metadata_versioning\",\n  \"name\": \"create_bucket_with_metadata_versioning\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770141918536345660\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-03T18:05:18.914Z\",\n  \"updated\": \"2026-02-03T18:05:18.914Z\",\n  \"versioning\": {\n    \"enabled\": true\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-03T18:05:18.914Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:18.914Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:18.914Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]

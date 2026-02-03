@@ -170,8 +170,6 @@ void main() async {
         autoclass: BucketAutoclass(
           enabled: true,
           terminalStorageClass: 'NEARLINE',
-          terminalStorageClassUpdateTime: DateTime.now().toUtc().toTimestamp(),
-          toggleTime: DateTime.now().toUtc().toTimestamp(),
         ),
       );
 
