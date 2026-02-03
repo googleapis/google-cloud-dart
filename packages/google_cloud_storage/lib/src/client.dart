@@ -14,11 +14,13 @@
 
 import 'dart:convert';
 
+import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_rpc/service_client.dart';
 import 'package:googleapis/storage/v1.dart' as storage;
 import 'package:http/http.dart' as http;
 
 import '../google_cloud_storage.dart';
-import 'googleapis_converters.dart';
+import 'bucket_metadata_json.dart';
 
 Future<T> _translateException<T>(Future<T> Function() body) async {
   try {
@@ -34,17 +36,37 @@ Future<T> _translateException<T>(Future<T> Function() body) async {
   }
 }
 
+class Foo implements JsonEncodable {
+  final Object json;
+
+  Foo(this.json);
+
+  @override
+  Object? toJson() => json;
+}
+
 /// API for storing and retrieving potentially large, immutable data objects.
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
 final class Storage {
-  final storage.StorageApi _api;
+  final ServiceClient _client;
   final String projectId;
-  final http.Client _client;
 
   Storage({required http.Client client, required this.projectId})
-    : _client = client,
-      _api = storage.StorageApi(client);
+    : _client = ServiceClient(client: client);
+
+  Future<BucketMetadata> c(BucketMetadata metadata) async {
+    final url = Uri.parse('https://storage.googleapis.com/storage/v1/b');
+    final queryParams = {
+      'project': [projectId],
+    };
+
+    final j = await _client.post(
+      url.replace(queryParameters: queryParams),
+      body: Foo(bucketMetadataToJson(metadata)),
+    );
+    return bucketMetadataFromJson(j as Map<String, Object?>);
+  }
 
   /// Create a new Google Cloud Storage bucket.
   ///
@@ -55,13 +77,7 @@ final class Storage {
   Future<BucketMetadata> createBucket(
     BucketMetadata metadata, {
     RetryRunner retry = defaultRetry,
-  }) async => fromGoogleApisBucket(
-    await retry.run(
-      () => _translateException(
-        () => _api.buckets.insert(toGoogleApisBucket(metadata), projectId),
-      ),
-    ),
-  );
+  }) async => await retry.run(() => c(metadata));
 
   /// Information about a [Google Cloud Storage object].
   ///
