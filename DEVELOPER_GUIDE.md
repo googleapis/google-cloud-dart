@@ -13,9 +13,9 @@ The dependency graph for the current set of packages:
 
 ## Developing
 
-### Sidekick
+### Librarian
 
-[Sidekick](https://github.com/googleapis/librarian/blob/main/doc/sidekick.md)
+[Librarian](https://github.com/googleapis/librarian/blob/main/README.md)
 is the tool used to generate Dart packages from API descriptions.
 
 #### Regenerating the Dart packages
@@ -23,48 +23,54 @@ is the tool used to generate Dart packages from API descriptions.
 From the root of the project:
 
 ```bash
-go run github.com/googleapis/librarian/cmd/sidekick@main refreshall
+go run github.com/googleapis/librarian/cmd/librarian@main generate -all
 ```
 
 > [!NOTE]
-> You will have to [update Sidekick](#updating-sidekick) if you want to merge these changes.
+> You will have to [update Librarian](#updating-librarian) if you want to merge these changes.
 
-#### Regenerating from a locally modified Sidekick
+#### Regenerating from a locally modified Librarian
 
 Clone https://github.com/googleapis/librarian as a sibling directory to this
-repo, make any desired changes to Sidekick, then - from the root of the
+repo, make any desired changes to Librarian, then - from the root of the
 project - run:
 
 ```bash
-go -C ../librarian run ./cmd/sidekick refreshall -project-root $PWD
+# Build the binary
+go -C ../librarian build -o ../librarian/librarian ./cmd/librarian
+# Run library regeneration
+../librarian/librarian generate -all -f
 ```
+> [!NOTE]
+> Use `-f` to ignore the librarian version check since the local version is likely not the same
+> as the one in [librarian.yaml](librarian.yaml).
 
-#### Updating Sidekick
+#### Updating Librarian
 
 [Workflow automation](.github/workflows/dart_checks.yaml) ensures that all
 generated code matches what the generator would actually produce.
 
-To prevent Sidekick changes from causing workflow automation failures in this
-repository, the version of Sidekick used by this automation is pinned.
+To prevent Librarian changes from causing workflow automation failures in this
+repository, the version of Librarian used by this automation is pinned.
 
-After making changes to Sidekick you must 
+After making changes to Librarian you must 
 [regenerate the Dart packages](#regenerating-the-dart-packages) and update
-the version of Sidekick used in the automation:
-1. Find the head version of Sidekick by running this command:
+the version of Librarian used in the automation:
+1. Find the head version of Librarian by running this command:
    
    `GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main`
-2. Modify the Sidekick invocation in [.github/workflows/dart_checks.yaml](.github/workflows/dart_checks.yaml)
+2. Modify the Librarian invocation in [.github/workflows/dart_checks.yaml](.github/workflows/dart_checks.yaml)
 
 #### Updating API sources
 
-Configuration for API source descriptions is found in the `[source]`
-section of the root [`.sidekick.toml`](.sidekick.toml).
+Configuration for API source descriptions is found in the `[sources]`
+section of the root [`librarian.yaml`](librarian.yaml).
 
 You can update these sources to their latest versions by running
 (from the root of the project):
 
 ```bash
-go run github.com/googleapis/librarian/cmd/sidekick@main update
+go run github.com/googleapis/librarian/cmd/librarian@main update -all
 ```
 
 ### Testing
