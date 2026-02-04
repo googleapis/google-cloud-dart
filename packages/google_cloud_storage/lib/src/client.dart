@@ -82,7 +82,7 @@ final class Storage {
   ///
   /// For example:
   ///
-  /// `dart
+  /// ```dart
   ///  final patchMetadata = BucketMetadataPatchBuilder()
   ///    ..autoclass = null
   ///    ..versioning = BucketVersioning(enabled: true);
@@ -90,6 +90,7 @@ final class Storage {
   ///    'my-bucket',
   ///    patchMetadata,
   ///  );
+  /// ```
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
   ///
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
