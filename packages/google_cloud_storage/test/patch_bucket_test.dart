@@ -800,44 +800,6 @@ void main() async {
       expect(actualMetadata.metageneration, 2);
     });
 
-    test('remove soft delete policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_soft_delete_policy',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_soft_delete_policy'
-          : uniqueBucketName();
-
-      await storage.createBucket(
-        BucketMetadata(
-          name: bucketName,
-          softDeletePolicy: BucketSoftDeletePolicy(
-            retentionDurationSeconds: 604800,
-          ),
-        ),
-      );
-
-      final patchMetadata = BucketMetadataPatchBuilder()
-        ..softDeletePolicy = null;
-
-      final actualMetadata = await storage.patchBucket(
-        bucketName,
-        patchMetadata,
-      );
-
-      expect(actualMetadata.softDeletePolicy?.retentionDurationSeconds, 604800);
-      expect(
-        actualMetadata.updated!.toDateTime().isAfter(
-          actualMetadata.timeCreated!.toDateTime(),
-        ),
-        isTrue,
-      );
-      expect(actualMetadata.metageneration, 2);
-    });
-
     test('change versioning', () async {
       await testClient.startTest(
         'google_cloud_storage',

@@ -99,8 +99,12 @@ final class BucketMetadataPatchBuilder {
 
   /// The bucket's [soft delete policy][].
   ///
+  /// You can [disable soft delete][] by setting
+  /// [BucketSoftDeletePolicy.retentionDurationSeconds] to `0`.
+  ///
   /// [soft delete policy]: https://docs.cloud.google.com/storage/docs/soft-delete
-  set softDeletePolicy(BucketSoftDeletePolicy? value) {
+  /// [disable soft delete]: https://docs.cloud.google.com/storage/docs/disable-soft-delete#disable-soft-delete-on-specific-bucket
+  set softDeletePolicy(BucketSoftDeletePolicy value) {
     _json['softDeletePolicy'] = bucketSoftDeletePolicyToJson(value);
   }
 
