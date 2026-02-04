@@ -1,13 +1,11 @@
 [
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/non_existant_bucket?alt=json",
+      "url": "https://storage.googleapis.com/storage/v1/b/non_existant_bucket?project=skilful-orb-203421",
       "method": "PATCH",
       "headers": {
-        "user-agent": "google-api-dart-client/15.0.0",
-        "x-goog-api-client": "gl-dart/3.10.8 gdcl/15.0.0",
-        "content-type": "application/json; charset=utf-8",
-        "content-length": "31"
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "eyJ2ZXJzaW9uaW5nIjp7ImVuYWJsZWQiOnRydWV9fQ=="
     },
@@ -16,10 +14,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 30 Jan 2026 21:59:29 GMT",
+        "date": "Tue, 03 Feb 2026 18:02:47 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AJRbA5UcxuZrnLgQSH9eBsJ6PbXjn7qIx3WPohJI8Xg6iaASRRwZz69pYH1HL6qNX0VdNuOk1_GYEc8",
+        "x-guploader-uploadid": "AJRbA5UmJowEYuh7tlbz5c1SkZFLAE6faEf75_gEfcsICdsCaPypwNl8mXx6hMW79WZNoEVPcK7p74U",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",

@@ -1,13 +1,11 @@
 [
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421&alt=json",
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
       "method": "POST",
       "headers": {
-        "user-agent": "google-api-dart-client/15.0.0",
-        "x-goog-api-client": "gl-dart/3.10.3 gdcl/15.0.0",
-        "content-type": "application/json; charset=utf-8",
-        "content-length": "143"
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "eyJsaWZlY3ljbGUiOnsicnVsZSI6W3siYWN0aW9uIjp7InR5cGUiOiJEZWxldGUifSwiY29uZGl0aW9uIjp7ImNyZWF0ZWRCZWZvcmUiOiIyMDI1LTEyLTExIn19XX0sIm5hbWUiOiJjcmVhdGVfYnVja2V0X3dpdGhfbWV0YWRhdGFfbGlmZWN5Y2xlIn0="
     },
@@ -16,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 28 Jan 2026 23:23:12 GMT",
+        "date": "Tue, 03 Feb 2026 18:05:04 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "1126",
-        "x-guploader-uploadid": "AJRbA5X2vzh43k14wMe_5QGSiuk4DgXx9LLcERRnhoS4g-bc9nkI4_nwZn2LENHPxaYDAY8",
+        "x-guploader-uploadid": "AJRbA5XmPlcFSxeNHUQookWhOzMGy-kXAPOsoF2K4gVUxaZmjHmqVrGZKKmJ7ds97Skoa7WDzDsXTw",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_lifecycle\",\n  \"id\": \"create_bucket_with_metadata_lifecycle\",\n  \"name\": \"create_bucket_with_metadata_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1769642592403222806\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-01-28T23:23:12.768Z\",\n  \"updated\": \"2026-01-28T23:23:12.768Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"createdBefore\": \"2025-12-11\"\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-01-28T23:23:12.768Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T23:23:12.768Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-04-28T23:23:12.768Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_lifecycle\",\n  \"id\": \"create_bucket_with_metadata_lifecycle\",\n  \"name\": \"create_bucket_with_metadata_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770141903911268971\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-03T18:05:04.531Z\",\n  \"updated\": \"2026-02-03T18:05:04.531Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"createdBefore\": \"2025-12-11\"\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-03T18:05:04.531Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:04.531Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:04.531Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   }

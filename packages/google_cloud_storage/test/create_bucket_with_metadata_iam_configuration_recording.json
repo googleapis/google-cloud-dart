@@ -1,0 +1,31 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJpYW1Db25maWd1cmF0aW9uIjp7InB1YmxpY0FjY2Vzc1ByZXZlbnRpb24iOiJlbmZvcmNlZCIsInVuaWZvcm1CdWNrZXRMZXZlbEFjY2VzcyI6eyJlbmFibGVkIjp0cnVlfX0sIm5hbWUiOiJjcmVhdGVfYnVja2V0X3dpdGhfbWV0YWRhdGFfaWFtX2NvbmZpZ3VyYXRpb24ifQ=="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 03 Feb 2026 18:05:09 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "960",
+        "x-guploader-uploadid": "AJRbA5XXhymG0U6iNOR6mcOfUlkHEpK9gz-aVabKmKz8lzIta8kJcE3kx56ohXtlaxdztjHS7_WHWKE",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_iam_configuration\",\n  \"id\": \"create_bucket_with_metadata_iam_configuration\",\n  \"name\": \"create_bucket_with_metadata_iam_configuration\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770141908942058055\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-03T18:05:09.563Z\",\n  \"updated\": \"2026-02-03T18:05:09.563Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-03T18:05:09.563Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:09.563Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-04T18:05:09.563Z\"\n    },\n    \"publicAccessPrevention\": \"enforced\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]
