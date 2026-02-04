@@ -36,8 +36,14 @@ repo, make any desired changes to Librarian, then - from the root of the
 project - run:
 
 ```bash
-go -C ../librarian run ./cmd/librarian generate -all
+# Build the binary
+go -C ../librarian build -o ../librarian/librarian ./cmd/librarian
+# Run library regeneration
+../librarian/librarian generate -all -f
 ```
+> [!NOTE]
+> Use `-f` to ignore the librarian version check since the local version is likely not the same
+> as the one in [librarian.yaml](librarian.yaml).
 
 #### Updating Librarian
 
