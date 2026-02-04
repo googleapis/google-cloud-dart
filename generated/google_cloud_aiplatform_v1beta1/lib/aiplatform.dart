@@ -28,6 +28,7 @@ library;
 // ignore_for_file: lines_longer_than_80_chars
 // ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
+// ignore_for_file: use_null_aware_elements
 
 import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_iam_v1/iam.dart';
@@ -13882,6 +13883,8 @@ final class VertexRagDataService {
   ) async {
     final url = Uri.https(_host, '/v1beta1/${request.name}', {
       if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
+      if (request.forceDelete case final $1 when $1.isNotDefault)
+        'forceDelete': '${$1}',
     });
     final response = await _client.delete(url);
     return Operation.fromJson(
@@ -105750,21 +105753,33 @@ final class RagManagedDbConfig extends ProtoMessage {
   /// Sets the RagManagedDb to the Enterprise tier.
   final RagManagedDbConfig_Enterprise? enterprise;
 
-  /// Sets the RagManagedDb to the Scaled tier. This is the default tier
-  /// if not explicitly chosen.
+  /// Deprecated: Use `mode` instead to set the tier under Spanner.
+  /// Sets the RagManagedDb to the Scaled tier.
   final RagManagedDbConfig_Scaled? scaled;
 
+  /// Deprecated: Use `mode` instead to set the tier under Spanner.
   /// Sets the RagManagedDb to the Basic tier.
   final RagManagedDbConfig_Basic? basic;
 
+  /// Deprecated: Use `mode` instead to set the tier under Spanner.
   /// Sets the RagManagedDb to the Unprovisioned tier.
   final RagManagedDbConfig_Unprovisioned? unprovisioned;
+
+  /// Sets the backend to be the serverless mode offered by RAG Engine.
+  final RagManagedDbConfig_Serverless? serverless;
+
+  /// Sets the RAG Engine backend to be RagManagedDb, built on top of Spanner.
+  ///
+  /// NOTE: This is the default mode (w/ Basic Tier) if not explicitly chosen.
+  final RagManagedDbConfig_Spanner? spanner;
 
   RagManagedDbConfig({
     this.enterprise,
     this.scaled,
     this.basic,
     this.unprovisioned,
+    this.serverless,
+    this.spanner,
   }) : super(fullyQualifiedName);
 
   factory RagManagedDbConfig.fromJson(Object? j) {
@@ -105786,6 +105801,14 @@ final class RagManagedDbConfig extends ProtoMessage {
         null => null,
         Object $1 => RagManagedDbConfig_Unprovisioned.fromJson($1),
       },
+      serverless: switch (json['serverless']) {
+        null => null,
+        Object $1 => RagManagedDbConfig_Serverless.fromJson($1),
+      },
+      spanner: switch (json['spanner']) {
+        null => null,
+        Object $1 => RagManagedDbConfig_Spanner.fromJson($1),
+      },
     );
   }
 
@@ -105796,6 +105819,8 @@ final class RagManagedDbConfig extends ProtoMessage {
     if (basic case final basic?) 'basic': basic.toJson(),
     if (unprovisioned case final unprovisioned?)
       'unprovisioned': unprovisioned.toJson(),
+    if (serverless case final serverless?) 'serverless': serverless.toJson(),
+    if (spanner case final spanner?) 'spanner': spanner.toJson(),
   };
 
   @override
@@ -105847,7 +105872,7 @@ final class RagManagedDbConfig_Scaled extends ProtoMessage {
 /// * Latency insensitive workload.
 /// * Only using RAG Engine with external vector DBs.
 ///
-/// NOTE: This is the default tier if not explicitly chosen.
+/// NOTE: This is the default tier under Spanner mode if not explicitly chosen.
 final class RagManagedDbConfig_Basic extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Basic';
@@ -105884,6 +105909,71 @@ final class RagManagedDbConfig_Unprovisioned extends ProtoMessage {
 
   @override
   String toString() => 'Unprovisioned()';
+}
+
+/// Message to configure the Spanner database used by RagManagedDb.
+final class RagManagedDbConfig_Spanner extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Spanner';
+
+  /// Sets the RagManagedDb to the Scaled tier.
+  final RagManagedDbConfig_Scaled? scaled;
+
+  /// Sets the RagManagedDb to the Basic tier. This is the default tier for
+  /// Spanner mode if not explicitly chosen.
+  final RagManagedDbConfig_Basic? basic;
+
+  /// Sets the RagManagedDb to the Unprovisioned tier.
+  final RagManagedDbConfig_Unprovisioned? unprovisioned;
+
+  RagManagedDbConfig_Spanner({this.scaled, this.basic, this.unprovisioned})
+    : super(fullyQualifiedName);
+
+  factory RagManagedDbConfig_Spanner.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagManagedDbConfig_Spanner(
+      scaled: switch (json['scaled']) {
+        null => null,
+        Object $1 => RagManagedDbConfig_Scaled.fromJson($1),
+      },
+      basic: switch (json['basic']) {
+        null => null,
+        Object $1 => RagManagedDbConfig_Basic.fromJson($1),
+      },
+      unprovisioned: switch (json['unprovisioned']) {
+        null => null,
+        Object $1 => RagManagedDbConfig_Unprovisioned.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (scaled case final scaled?) 'scaled': scaled.toJson(),
+    if (basic case final basic?) 'basic': basic.toJson(),
+    if (unprovisioned case final unprovisioned?)
+      'unprovisioned': unprovisioned.toJson(),
+  };
+
+  @override
+  String toString() => 'Spanner()';
+}
+
+/// Message to configure the serverless mode offered by RAG Engine.
+final class RagManagedDbConfig_Serverless extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagManagedDbConfig.Serverless';
+
+  RagManagedDbConfig_Serverless() : super(fullyQualifiedName);
+
+  factory RagManagedDbConfig_Serverless.fromJson(Object? j) =>
+      RagManagedDbConfig_Serverless();
+
+  @override
+  Object toJson() => {};
+
+  @override
+  String toString() => 'Serverless()';
 }
 
 /// Config for RagEngine.
@@ -106132,8 +106222,15 @@ final class DeleteRagCorpusRequest extends ProtoMessage {
   /// RagFiles.
   final bool force;
 
-  DeleteRagCorpusRequest({required this.name, this.force = false})
-    : super(fullyQualifiedName);
+  /// Optional. If set to true, any errors generated by external vector database
+  /// during the deletion will be ignored. The default value is false.
+  final bool forceDelete;
+
+  DeleteRagCorpusRequest({
+    required this.name,
+    this.force = false,
+    this.forceDelete = false,
+  }) : super(fullyQualifiedName);
 
   factory DeleteRagCorpusRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -106146,15 +106243,27 @@ final class DeleteRagCorpusRequest extends ProtoMessage {
         null => false,
         Object $1 => decodeBool($1),
       },
+      forceDelete: switch (json['forceDelete']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
     );
   }
 
   @override
-  Object toJson() => {'name': name, if (force.isNotDefault) 'force': force};
+  Object toJson() => {
+    'name': name,
+    if (force.isNotDefault) 'force': force,
+    if (forceDelete.isNotDefault) 'forceDelete': forceDelete,
+  };
 
   @override
   String toString() {
-    final $contents = ['name=$name', 'force=$force'].join(',');
+    final $contents = [
+      'name=$name',
+      'force=$force',
+      'forceDelete=$forceDelete',
+    ].join(',');
     return 'DeleteRagCorpusRequest(${$contents})';
   }
 }
