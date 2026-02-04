@@ -26,26 +26,89 @@ class BucketMetadataPatchBuilderJsonEncodable implements JsonEncodable {
   Object? toJson() => _builder._json;
 }
 
+/// A set of fields to update on a [Cloud Storage bucket].
+///
+/// Fields set to `null` are cleared.
+///
+/// For detailed information on the meaning of each field, see
+/// [Bucket resource](https://docs.cloud.google.com/storage/docs/json_api/v1/buckets#resource).
+///
+/// [Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
 final class BucketMetadataPatchBuilder {
+  // Keep field documention in sync with [BucketMetadata].
   final _json = <String, Object?>{};
 
+  /// Access controls on the bucket.
   set acl(List<BucketAccessControl>? value) {
     _json['acl'] = value?.map(bucketAccessControlToJson).toList();
   }
 
+  /// The bucket's [Autoclass][] configuration.
+  ///
+  /// [Autoclass]: https://docs.cloud.google.com/storage/docs/autoclass
   set autoclass(BucketAutoclass? value) {
     _json['autoclass'] = bucketAutoclassToJson(value);
   }
 
+  /// The bucket's [Cross-Origin Resource Sharing (CORS)][] configuration.
+  ///
+  /// [Cross-Origin Resource Sharing (CORS)]: https://developer.mozilla.org/en-US/docs/Web/HTTP/CORS
   set cors(List<BucketCorsConfiguration>? value) {
     _json['cors'] = value?.map(bucketCorsConfigurationToJson).toList();
   }
 
+  /// The bucket's [hierarchical namespace][] configuration.
+  ///
+  /// [hierarchical namespace]: https://docs.cloud.google.com/storage/docs/hns-overview
   set hierarchicalNamespace(BucketHierarchicalNamespace? value) {
     _json['hierarchicalNamespace'] = bucketHierarchicalNamespaceToJson(value);
   }
 
+  /// The bucket's [IP filter][] configuration.
+  ///
+  /// [IP filter]: https://docs.cloud.google.com/storage/docs/ip-filtering-overview
+  set ipFilter(BucketIpFilter? value) {
+    _json['ipFilter'] = bucketIpFilterToJson(value);
+  }
+
+  /// User-provided labels, in key/value pairs.
+  set labels(Map<String, String>? value) {
+    _json['labels'] = value;
+  }
+
+  /// The bucket's [lifecycle][] configuration.
+  ///
+  /// [lifecycle]: https://docs.cloud.google.com/storage/docs/lifecycle
+  set lifecycle(Lifecycle? value) {
+    _json['lifecycle'] = lifecycleToJson(value);
+  }
+
+  /// The bucket's logging configuration.
+  set logging(BucketLoggingConfiguration? value) {
+    _json['logging'] = bucketLoggingConfigurationToJson(value);
+  }
+
+  /// The bucket's [object retention configuration][].
+  ///
+  /// [object retention configuration]: https://docs.cloud.google.com/storage/docs/object-lock
+  set retentionPolicy(BucketRetentionPolicy? value) {
+    _json['retentionPolicy'] = bucketRetentionPolicyToJson(value);
+  }
+
+  /// The bucket's [soft delete policy][].
+  ///
+  /// [soft delete policy]: https://docs.cloud.google.com/storage/docs/soft-delete
+  set softDeletePolicy(BucketSoftDeletePolicy? value) {
+    _json['softDeletePolicy'] = bucketSoftDeletePolicyToJson(value);
+  }
+
+  /// The bucket's versioning configuration.
   set versioning(BucketVersioning? value) {
     _json['versioning'] = bucketVersioningToJson(value);
+  }
+
+  /// The bucket's website configuration.
+  set website(BucketWebsiteConfiguration? value) {
+    _json['website'] = bucketWebsiteConfigurationToJson(value);
   }
 }

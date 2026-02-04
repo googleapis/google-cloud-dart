@@ -80,6 +80,16 @@ final class Storage {
   /// If set, `userProject` is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
   ///
+  /// For example:
+  ///
+  /// `dart
+  ///  final patchMetadata = BucketMetadataPatchBuilder()
+  ///    ..autoclass = null
+  ///    ..versioning = BucketVersioning(enabled: true);
+  ///  await storage.patchBucket(
+  ///    'my-bucket',
+  ///    patchMetadata,
+  ///  );
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
   ///
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays

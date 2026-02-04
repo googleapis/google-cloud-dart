@@ -56,7 +56,78 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('patch_bucket_change_versioning', () async {
+    test('change autoclass', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_autoclass',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_autoclass'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          autoclass: BucketAutoclass(enabled: true),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..autoclass = BucketAutoclass(enabled: false);
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.autoclass?.enabled, isFalse);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove autoclass', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_autoclass',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_autoclass'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          autoclass: BucketAutoclass(enabled: false),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..autoclass = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.autoclass, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change versioning', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_change_versioning',
@@ -92,7 +163,7 @@ void main() async {
       expect(actualMetadata.metageneration, 2);
     });
 
-    test('patch_bucket_same_versioning', () async {
+    test('same versioning', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_same_versioning',
@@ -128,7 +199,7 @@ void main() async {
       expect(actualMetadata.metageneration, 2);
     });
 
-    test('patch_bucket_remove_versioning', () async {
+    test('remove versioning', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_remove_versioning',
@@ -163,7 +234,7 @@ void main() async {
       expect(actualMetadata.metageneration, 2);
     });
 
-    test('patch_bucket_no_change', () async {
+    test('no change', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_with_metadata_empty_metadata',
@@ -196,7 +267,7 @@ void main() async {
       expect(actualMetadata.metageneration, 1);
     });
 
-    test('patch_bucket_non_existant', () async {
+    test('non existant', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_non_existant',
@@ -212,7 +283,7 @@ void main() async {
       );
     });
 
-    test('patch_bucket_with_if_metageneration_match_success', () async {
+    test('with if metageneration match success', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_with_if_metageneration_match_success',
@@ -237,7 +308,7 @@ void main() async {
       expect(patchedMetadata.metageneration, 2);
     });
 
-    test('patch_bucket_with_if_metageneration_match_failure', () async {
+    test('with if metageneration match failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_with_if_metageneration_match_failure',
@@ -263,7 +334,7 @@ void main() async {
     });
 
     test(
-      'patch_bucket_with_predefined_acl',
+      'with predefined acl',
       () async {
         await testClient.startTest(
           'google_cloud_storage',
@@ -306,7 +377,7 @@ void main() async {
     );
 
     test(
-      'patch_bucket_with_predefined_default_object_acl',
+      'with predefined default object acl',
       () async {
         await testClient.startTest(
           'google_cloud_storage',
@@ -348,7 +419,7 @@ void main() async {
       skip: 'test project does not support uniform bucket level access',
     );
 
-    test('patch_bucket_idempotent_transport_failure', () async {
+    test('idempotent transport failure', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
