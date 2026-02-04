@@ -92,6 +92,42 @@ void main() async {
       expect(actualMetadata.metageneration, 2);
     });
 
+    test('patch_bucket_same_versioning', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_same_versioning',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_same_versioning'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          versioning: BucketVersioning(enabled: true),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: true);
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.versioning?.enabled, isTrue);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
     test('patch_bucket_remove_versioning', () async {
       await testClient.startTest(
         'google_cloud_storage',
