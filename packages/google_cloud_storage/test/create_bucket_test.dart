@@ -154,6 +154,51 @@ void main() async {
       expect(actualMetadata.website, isNull);
     });
 
+    test('create_bucket_with_metadata_autoclass', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_autoclass',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_autoclass'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        autoclass: BucketAutoclass(
+          enabled: true,
+          terminalStorageClass: 'NEARLINE',
+        ),
+      );
+
+      final beforeRequestTime = DateTime.now().toUtc();
+      final actualMetadata = await storage.createBucket(requestMetadata);
+      final afterRequestTime = DateTime.now().toUtc();
+
+      expect(actualMetadata.autoclass!.enabled, true);
+      expect(actualMetadata.autoclass!.terminalStorageClass, 'NEARLINE');
+      if (TestHttpClient.isReplaying) {
+        expect(
+          actualMetadata.autoclass!.terminalStorageClassUpdateTime
+              ?.toDateTime()
+              .microsecondsSinceEpoch,
+          greaterThan(0),
+        );
+      } else {
+        expect(
+          actualMetadata.autoclass!.terminalStorageClassUpdateTime
+              ?.toDateTime()
+              .microsecondsSinceEpoch,
+          allOf(
+            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+          ),
+        );
+      }
+    });
+
     test('create_bucket_with_metadata_lifecycle', () async {
       await testClient.startTest(
         'google_cloud_storage',
@@ -187,6 +232,244 @@ void main() async {
         DateTime(2025, 12, 11),
       );
       expect(actualMetadata.lifecycle!.rule![0].action!.type, 'Delete');
+    });
+
+    test('create_bucket_with_metadata_billing', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_billing',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_billing'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        billing: BucketBilling(requesterPays: true),
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.billing?.requesterPays, isTrue);
+    });
+
+    test('create_bucket_with_metadata_cors', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_cors',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_cors'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        cors: [
+          BucketCorsConfiguration(
+            maxAgeSeconds: 3600,
+            method: ['GET'],
+            origin: ['*'],
+            responseHeader: ['Content-Type'],
+          ),
+        ],
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.cors, hasLength(1));
+      expect(actualMetadata.cors![0].maxAgeSeconds, 3600);
+      expect(actualMetadata.cors![0].method, ['GET']);
+      expect(actualMetadata.cors![0].origin, ['*']);
+      expect(actualMetadata.cors![0].responseHeader, ['Content-Type']);
+    });
+
+    test('create_bucket_with_metadata_default_event_based_hold', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_default_event_based_hold',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_default_event_based_hold'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        defaultEventBasedHold: true,
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.defaultEventBasedHold, isTrue);
+    });
+
+    test('create_bucket_with_metadata_iam_configuration', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_iam_configuration',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_iam_configuration'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        iamConfiguration: BucketIamConfiguration(
+          publicAccessPrevention: 'enforced',
+          uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: true),
+        ),
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(
+        actualMetadata.iamConfiguration?.publicAccessPrevention,
+        'enforced',
+      );
+      expect(
+        actualMetadata.iamConfiguration?.uniformBucketLevelAccess?.enabled,
+        isTrue,
+      );
+    });
+
+    test('create_bucket_with_metadata_labels', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_labels',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_labels'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        labels: {'key': 'value'},
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.labels, {'key': 'value'});
+    });
+
+    test('create_bucket_with_metadata_retention_policy', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_retention_policy',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_retention_policy'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        retentionPolicy: BucketRetentionPolicy(retentionPeriod: 100),
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.retentionPolicy?.retentionPeriod, 100);
+      expect(actualMetadata.retentionPolicy?.effectiveTime, isNotNull);
+    });
+
+    test('create_bucket_with_metadata_soft_delete_policy', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_soft_delete_policy',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_soft_delete_policy'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        softDeletePolicy: BucketSoftDeletePolicy(
+          retentionDurationSeconds: 604800,
+        ), // 7 days min
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.softDeletePolicy?.retentionDurationSeconds, 604800);
+    });
+
+    test('create_bucket_with_metadata_storage_class', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_storage_class',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_storage_class'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        storageClass: 'NEARLINE',
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.storageClass, 'NEARLINE');
+    });
+
+    test('create_bucket_with_metadata_versioning', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_versioning',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_versioning'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        versioning: BucketVersioning(enabled: true),
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.versioning?.enabled, isTrue);
+    });
+
+    test('create_bucket_with_metadata_website', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'create_bucket_with_metadata_website',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'create_bucket_with_metadata_website'
+          : uniqueBucketName();
+
+      final requestMetadata = BucketMetadata(
+        name: bucketName,
+        website: BucketWebsiteConfiguration(
+          mainPageSuffix: 'index.html',
+          notFoundPage: '404.html',
+        ),
+      );
+
+      final actualMetadata = await storage.createBucket(requestMetadata);
+
+      expect(actualMetadata.website?.mainPageSuffix, 'index.html');
+      expect(actualMetadata.website?.notFoundPage, '404.html');
     });
 
     test(

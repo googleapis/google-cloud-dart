@@ -27,7 +27,6 @@ dependencies:
   collection: ^1.19.1
   google_cloud_protobuf: ^0.4.0
   google_cloud_rpc: ^0.4.0
-  googleapis: ^15.0.0
   http: ^1.6.0
   meta: ^1.18.1
 
