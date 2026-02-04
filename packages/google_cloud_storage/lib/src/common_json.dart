@@ -55,9 +55,7 @@ ObjectAccessControl? objectAccessControlFromJson(Map<String, Object?>? json) {
   );
 }
 
-Map<String, Object?>? objectAccessControlToJson(
-  ObjectAccessControl? instance,
-) {
+Map<String, Object?>? objectAccessControlToJson(ObjectAccessControl? instance) {
   if (instance == null) return null;
   return {
     'bucket': ?instance.bucket,
