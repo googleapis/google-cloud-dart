@@ -56,29 +56,33 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('patch_bucket_with_metadata', () async {
+    test('patch_bucket_change_versioning', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_bucket_with_metadata',
+        'patch_bucket_change_versioning',
       );
       addTearDown(testClient.endTest);
       final bucketName =
           TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_metadata'
+          ? 'patch_bucket_change_versioning'
           : uniqueBucketName();
 
-      await storage.createBucket(BucketMetadata(name: bucketName));
-
-      final patchMetadata = BucketMetadata(
-        versioning: BucketVersioning(enabled: true),
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          versioning: BucketVersioning(enabled: true),
+        ),
       );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: false);
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
         patchMetadata,
       );
 
-      expect(actualMetadata.versioning?.enabled, isTrue);
+      expect(actualMetadata.versioning?.enabled, isFalse);
       expect(
         actualMetadata.updated!.toDateTime().isAfter(
           actualMetadata.timeCreated!.toDateTime(),
@@ -88,7 +92,42 @@ void main() async {
       expect(actualMetadata.metageneration, 2);
     });
 
-    test('patch_bucket_with_metadata_empty_metadata', () async {
+    test('patch_bucket_remove_versioning', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_versioning',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_versioning'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          versioning: BucketVersioning(enabled: true),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..versioning = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.versioning, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('patch_bucket_no_change', () async {
       await testClient.startTest(
         'google_cloud_storage',
         'patch_bucket_with_metadata_empty_metadata',
@@ -99,42 +138,26 @@ void main() async {
           ? 'patch_bucket_with_metadata_empty_metadata'
           : uniqueBucketName();
 
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          versioning: BucketVersioning(enabled: true),
+        ),
+      );
 
-      final patchMetadata = BucketMetadata();
+      final patchMetadata = BucketMetadataPatchBuilder();
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
         patchMetadata,
       );
 
+      expect(actualMetadata.versioning?.enabled, isTrue);
       expect(
         actualMetadata.updated?.toDateTime(),
         actualMetadata.timeCreated?.toDateTime(),
       );
       expect(actualMetadata.metageneration, 1);
-    });
-
-    test('patch_bucket_with_metadata_same_metadata', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_metadata_same_metadata',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_metadata_same_metadata'
-          : uniqueBucketName();
-
-      final createMetadata = await storage.createBucket(
-        BucketMetadata(name: bucketName),
-      );
-
-      final actualMetadata = await storage.patchBucket(
-        bucketName,
-        createMetadata,
-      );
-      expect(actualMetadata.metageneration, 2);
     });
 
     test('patch_bucket_non_existant', () async {
@@ -144,34 +167,12 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final patchMetadata = BucketMetadata(
-        versioning: BucketVersioning(enabled: true),
-      );
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: true);
 
       expect(
         () => storage.patchBucket('non_existant_bucket', patchMetadata),
         throwsA(isA<NotFoundException>()),
-      );
-    });
-
-    test('patch_bucket_with_metadata_change_immutable_data', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_metadata_change_immutable_data',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_metadata_change_immutable_data'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
-
-      final patchMetadata = BucketMetadata(name: 'new_name');
-
-      expect(
-        () => storage.patchBucket(bucketName, patchMetadata),
-        throwsA(isA<BadRequestException>()),
       );
     });
 
@@ -190,9 +191,8 @@ void main() async {
       final createdMetadata = await storage.createBucket(requestMetadata);
       final metageneration = createdMetadata.metageneration;
 
-      var patchMetadata = BucketMetadata(
-        versioning: BucketVersioning(enabled: true),
-      );
+      var patchMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: true);
       final patchedMetadata = await storage.patchBucket(
         bucketName,
         patchMetadata,
@@ -214,9 +214,8 @@ void main() async {
 
       await storage.createBucket(BucketMetadata(name: bucketName));
 
-      var patchMetadata = BucketMetadata(
-        versioning: BucketVersioning(enabled: true),
-      );
+      var patchMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: true);
       expect(
         () => storage.patchBucket(
           bucketName,
@@ -253,7 +252,7 @@ void main() async {
 
         final actualMetadata = await storage.patchBucket(
           bucketName,
-          BucketMetadata(),
+          BucketMetadataPatchBuilder(),
           predefinedAcl: 'projectPrivate',
           projection: 'full',
         );
@@ -296,7 +295,7 @@ void main() async {
 
         final actualMetadata = await storage.patchBucket(
           bucketName,
-          BucketMetadata(),
+          BucketMetadataPatchBuilder(),
           predefinedDefaultObjectAcl: 'projectPrivate',
           projection: 'full',
         );
@@ -321,7 +320,7 @@ void main() async {
           throw http.ClientException('Some transport failure');
         } else if (count == 2) {
           return http.Response(
-            '{"name": "new_name"}',
+            '{"versioning": {"enabled": true}}',
             200,
             headers: {'content-type': 'application/json; charset=UTF-8'},
           );
@@ -332,14 +331,15 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: projectId);
 
-      final requestMetadata = BucketMetadata(name: 'new_name');
+      final requestMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: true);
 
       final actualMetadata = await storage.patchBucket(
         'bucket',
         requestMetadata,
         ifMetagenerationMatch: 1,
       );
-      expect(actualMetadata.name, 'new_name');
+      expect(actualMetadata.versioning?.enabled, isTrue);
     });
 
     test('patch_bucket_non_idempotent_transport_failure', () async {
@@ -355,7 +355,8 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: projectId);
 
-      final requestMetadata = BucketMetadata(name: 'new_name');
+      final requestMetadata = BucketMetadataPatchBuilder()
+        ..versioning = BucketVersioning(enabled: true);
 
       expect(
         () => storage.patchBucket('bucket', requestMetadata),

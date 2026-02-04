@@ -12,11 +12,19 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:google_cloud_protobuf/protobuf.dart';
+
 import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
 
-Map<String, Object?> getJson(BucketMetadataPatchBuilder builder) =>
-    builder._json;
+class BucketMetadataPatchBuilderJsonEncodable implements JsonEncodable {
+  final BucketMetadataPatchBuilder _builder;
+
+  BucketMetadataPatchBuilderJsonEncodable(this._builder);
+
+  @override
+  Object? toJson() => _builder._json;
+}
 
 final class BucketMetadataPatchBuilder {
   final _json = <String, Object?>{};
@@ -37,7 +45,7 @@ final class BucketMetadataPatchBuilder {
     _json['hierarchicalNamespace'] = bucketHierarchicalNamespaceToJson(value);
   }
 
-  set name(String? value) {
-    _json['name'] = value;
+  set versioning(BucketVersioning? value) {
+    _json['versioning'] = bucketVersioningToJson(value);
   }
 }

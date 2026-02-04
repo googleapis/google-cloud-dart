@@ -18,6 +18,8 @@ import 'package:http/http.dart' as http;
 
 import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
+import 'bucket_metadata_patch_builder.dart'
+    show BucketMetadataPatchBuilderJsonEncodable;
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -83,7 +85,7 @@ final class Storage {
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<BucketMetadata> patchBucket(
     String bucketName,
-    BucketMetadata metadata, {
+    BucketMetadataPatchBuilder metadata, {
     int? ifMetagenerationMatch,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
     // support ifMetagenerationNotMatch.
@@ -112,7 +114,7 @@ final class Storage {
     };
     final j = await _client.patch(
       url.replace(queryParameters: queryParams),
-      body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
+      body: BucketMetadataPatchBuilderJsonEncodable(metadata),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
