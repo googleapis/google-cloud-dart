@@ -1,0 +1,98 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJhdXRvY2xhc3MiOnsiZW5hYmxlZCI6dHJ1ZX0sIm5hbWUiOiJwYXRjaF9idWNrZXRfY2hhbmdlX2F1dG9jbGFzcyJ9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "date": "Wed, 04 Feb 2026 22:28:36 GMT",
+        "vary": "Origin,X-Origin",
+        "x-guploader-upload-result": "success",
+        "x-google-security-signals": "FRAMEWORK=HTTPSERVER2,BUILD=GOOGLE3,BUILD_DEBUG=cl:858396562,ENV=borg,ENV_DEBUG=borg_user:blobstore-api-frontend;borg_job:api_frontend_locationless",
+        "x-google-backends": "/bns/pnlaxl/borg/pnlaxl/bns/blobstore-api-frontend/api_frontend_locationless/0.scotty,/bns/ncsfoa/borg/ncsfoa/bns/blue-layer1-gfe-prod-edge/prod.blue-layer1-gfe.sfo03s26/38",
+        "x-google-gfe-response-code-details-trace": "response_code_set_by_backend",
+        "x-guploader-uploadid": "AJRbA5VgSqgQrJ2JxjTJixELndXaf3fWlaXWWCP2Oj0rHvU1baOEAilCTUZvJ1QJw43aW4Dr9BOVLvFLqK9z",
+        "x-google-shellfish-status": "CA0gBEBJ",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "x-google-gfe-request-trace": "acsfom4:443,/bns/pnlaxl/borg/pnlaxl/bns/blobstore-api-frontend/api_frontend_locationless/0.scotty,acsfom4:443",
+        "x-google-gfe-service-trace": "cloud-storage",
+        "x-google-gfe-version": "2.966.1",
+        "content-length": "1107",
+        "x-guploader-customer": "apiary_cloudstorage_metadata",
+        "etag": "CAE=",
+        "x-google-dos-service-trace": "main:cloud-storage,main:apps-upload-cloud-storage-unified",
+        "x-google-gfe-cloud-project-number": "747575106375",
+        "x-google-gfe-rls-trace": "gslb:/blade:grpc.lookup.v1.gcsroutelookupservice-prod?rpc_service_name=GcsRouteLookupService&traffic_class=AF3&subset=20&lb=WeightedRoundRobin&tsp=RocksteadierSubsetTargetSelectionPolicy;gcs-http-prod-locationless",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "content-type": "application/json; charset=UTF-8",
+        "x-google-service": "cloud-storage",
+        "x-guploader-request-result": "success",
+        "x-google-gfe-handshake-trace": "GFE: /bns/ncsfoa/borg/ncsfoa/bns/blue-layer1-gfe-prod-edge/prod.blue-layer1-gfe.sfo03s26/38,Mentat oracle: [2002:a05:7308:6211:b0:251:8001:8a83]:9801",
+        "x-guploader-request-class": "LATENCY_SENSITIVE",
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "x-google-gfe-backend-request-info": "eid=E8iDabW6BMKB1cUPudnjgQ8",
+        "x-google-netmon-label": "/bns/pnlaxl/borg/pnlaxl/bns/blobstore-api-frontend/api_frontend_locationless/0:caf3",
+        "x-google-rls-data": "CgIIAQ",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_change_autoclass\",\n  \"id\": \"patch_bucket_change_autoclass\",\n  \"name\": \"patch_bucket_change_autoclass\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770244115498338379\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-04T22:28:36.172Z\",\n  \"updated\": \"2026-02-04T22:28:36.172Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-04T22:28:36.172Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T22:28:36.172Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T22:28:36.172Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\",\n  \"autoclass\": {\n    \"enabled\": true,\n    \"toggleTime\": \"2026-02-04T22:28:36.172Z\",\n    \"terminalStorageClass\": \"NEARLINE\",\n    \"terminalStorageClassUpdateTime\": \"2026-02-04T22:28:36.172Z\"\n  }\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/patch_bucket_change_autoclass?project=skilful-orb-203421",
+      "method": "PATCH",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJhdXRvY2xhc3MiOnsiZW5hYmxlZCI6ZmFsc2V9fQ=="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "date": "Wed, 04 Feb 2026 22:28:36 GMT",
+        "vary": "Origin,X-Origin",
+        "x-guploader-upload-result": "success",
+        "x-google-security-signals": "FRAMEWORK=HTTPSERVER2,BUILD=GOOGLE3,BUILD_DEBUG=cl:861661941,ENV=borg,ENV_DEBUG=borg_user:blobstore-api-frontend;borg_job:api_frontend_us_default_default",
+        "x-google-backends": "/bns/hh/borg/hh/bns/blobstore-api-frontend/api_frontend_us_default_default/74.scotty,/bns/ncsfoa/borg/ncsfoa/bns/blue-layer1-gfe-prod-edge/prod.blue-layer1-gfe.sfo03s26/38",
+        "x-google-gfe-response-code-details-trace": "response_code_set_by_backend",
+        "x-guploader-uploadid": "AJRbA5WRT1K8N4pSwDJseAn0_nmD2_m4Zkn33qo1TRqlLwxn5LQGPtCIho58Fy5ue4y-5CFpR_21J6w",
+        "x-google-shellfish-status": "CA0gBEBJ",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "x-google-gfe-request-trace": "acsfom4:443,/bns/hh/borg/hh/bns/blobstore-api-frontend/api_frontend_us_default_default/74.scotty,acsfom4:443",
+        "x-google-gfe-service-trace": "cloud-storage",
+        "x-google-gfe-version": "2.966.1",
+        "content-length": "1002",
+        "x-guploader-customer": "apiary_cloudstorage_metadata",
+        "etag": "CAI=",
+        "x-google-dos-service-trace": "main:cloud-storage,main:apps-upload-cloud-storage-unified",
+        "x-google-gfe-cloud-project-number": "747575106375",
+        "x-google-gfe-rls-trace": "gslb:/blade:grpc.lookup.v1.gcsroutelookupservice-prod?rpc_service_name=GcsRouteLookupService&traffic_class=AF3&subset=20&lb=WeightedRoundRobin&tsp=RocksteadierSubsetTargetSelectionPolicy;gcs-http-prod-us-default-default-spillable",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "content-type": "application/json; charset=UTF-8",
+        "x-google-service": "cloud-storage",
+        "x-guploader-request-result": "success",
+        "x-google-gfe-handshake-trace": "GFE: /bns/ncsfoa/borg/ncsfoa/bns/blue-layer1-gfe-prod-edge/prod.blue-layer1-gfe.sfo03s26/38,Mentat oracle: [2002:a05:7308:6211:b0:251:8001:8a83]:9801",
+        "x-guploader-request-class": "LATENCY_SENSITIVE",
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "x-google-gfe-backend-request-info": "eid=FMiDaYirE-fCmAaSzbqABw",
+        "x-google-netmon-label": "/bns/hh/borg/hh/bns/blobstore-api-frontend/api_frontend_us_default_default/74",
+        "x-google-rls-data": "CjoIABI2Ch8KHXBhdGNoX2J1Y2tldF9jaGFuZ2VfYXV0b2NsYXNzEMuQhLDN9MrIGBgBIMe2y_fgFTAA",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_change_autoclass\",\n  \"id\": \"patch_bucket_change_autoclass\",\n  \"name\": \"patch_bucket_change_autoclass\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770244115498338379\",\n  \"metageneration\": \"2\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAI=\",\n  \"timeCreated\": \"2026-02-04T22:28:36.172Z\",\n  \"updated\": \"2026-02-04T22:28:36.723Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-04T22:28:36.172Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T22:28:36.172Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T22:28:36.172Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\",\n  \"autoclass\": {\n    \"enabled\": false,\n    \"toggleTime\": \"2026-02-04T22:28:36.723Z\"\n  }\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]
