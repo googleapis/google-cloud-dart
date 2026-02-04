@@ -1,0 +1,60 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJsYWJlbHMiOnsia2V5IjoidmFsdWUifSwibmFtZSI6InBhdGNoX2J1Y2tldF9yZW1vdmVfbGFiZWxzIn0="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 04 Feb 2026 21:21:30 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "942",
+        "x-guploader-uploadid": "AJRbA5XNqlk4sgz6kE7Z7tY4e9n6eNt__lao0y4NC4tDy6bQREdmfyYLMbObJCKvtK81HbSUxpTLM-A",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_remove_labels\",\n  \"id\": \"patch_bucket_remove_labels\",\n  \"name\": \"patch_bucket_remove_labels\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770240089348760462\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-04T21:21:30.022Z\",\n  \"updated\": \"2026-02-04T21:21:30.022Z\",\n  \"labels\": {\n    \"key\": \"value\"\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-04T21:21:30.022Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:30.022Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:30.022Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/patch_bucket_remove_labels?project=skilful-orb-203421",
+      "method": "PATCH",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJsYWJlbHMiOm51bGx9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 04 Feb 2026 21:21:30 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "904",
+        "x-guploader-uploadid": "AJRbA5U-5I0U7sEdcH4p71ZOAoLfzITnrh6EIOAsJHfVb5tGBTCsWyoG6HpfSoz-YLhrRr8wbx-x0fk",
+        "etag": "CAI=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_remove_labels\",\n  \"id\": \"patch_bucket_remove_labels\",\n  \"name\": \"patch_bucket_remove_labels\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770240089348760462\",\n  \"metageneration\": \"2\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAI=\",\n  \"timeCreated\": \"2026-02-04T21:21:30.022Z\",\n  \"updated\": \"2026-02-04T21:21:30.505Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-04T21:21:30.022Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:30.022Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:30.022Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]

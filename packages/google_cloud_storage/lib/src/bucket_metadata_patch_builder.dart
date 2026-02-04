@@ -13,10 +13,12 @@
 // limitations under the License.
 
 import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:meta/meta.dart';
 
 import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
 
+@internal
 class BucketMetadataPatchBuilderJsonEncodable implements JsonEncodable {
   final BucketMetadataPatchBuilder _builder;
 
@@ -35,7 +37,7 @@ class BucketMetadataPatchBuilderJsonEncodable implements JsonEncodable {
 ///
 /// [Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
 final class BucketMetadataPatchBuilder {
-  // Keep field documention in sync with [BucketMetadata].
+  // Keep field documentation in sync with [BucketMetadata].
   final _json = <String, Object?>{};
 
   /// Access controls on the bucket.

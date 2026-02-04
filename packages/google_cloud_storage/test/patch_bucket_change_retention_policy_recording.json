@@ -1,0 +1,60 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJuYW1lIjoicGF0Y2hfYnVja2V0X2NoYW5nZV9yZXRlbnRpb25fcG9saWN5IiwicmV0ZW50aW9uUG9saWN5Ijp7InJldGVudGlvblBlcmlvZCI6IjEwIn19"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 04 Feb 2026 21:21:42 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "1039",
+        "x-guploader-uploadid": "AJRbA5Xj5cBSQo7V2MPhooezZ958qZ7ahCaroVsccBT253OA0OGKILx777WHiI80wNe2TnOQAaE3wIU",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_change_retention_policy\",\n  \"id\": \"patch_bucket_change_retention_policy\",\n  \"name\": \"patch_bucket_change_retention_policy\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770240101644346852\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-04T21:21:42.050Z\",\n  \"updated\": \"2026-02-04T21:21:42.050Z\",\n  \"retentionPolicy\": {\n    \"retentionPeriod\": \"10\",\n    \"effectiveTime\": \"2026-02-04T21:21:42.050Z\"\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-04T21:21:42.050Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:42.050Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:42.050Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/patch_bucket_change_retention_policy?project=skilful-orb-203421",
+      "method": "PATCH",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJyZXRlbnRpb25Qb2xpY3kiOnsicmV0ZW50aW9uUGVyaW9kIjoiMjAifX0="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 04 Feb 2026 21:21:42 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "1039",
+        "x-guploader-uploadid": "AJRbA5W6Fg3GCbi0UeAfgV-nLYmNxqUxj5XnFW6-gwLub3heEOL1pCRmiIaANpXxPLFC8YAKY0rQWSw",
+        "etag": "CAI=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_change_retention_policy\",\n  \"id\": \"patch_bucket_change_retention_policy\",\n  \"name\": \"patch_bucket_change_retention_policy\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770240101644346852\",\n  \"metageneration\": \"2\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAI=\",\n  \"timeCreated\": \"2026-02-04T21:21:42.050Z\",\n  \"updated\": \"2026-02-04T21:21:42.609Z\",\n  \"retentionPolicy\": {\n    \"retentionPeriod\": \"20\",\n    \"effectiveTime\": \"2026-02-04T21:21:42.050Z\"\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-04T21:21:42.050Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:42.050Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-05T21:21:42.050Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]
