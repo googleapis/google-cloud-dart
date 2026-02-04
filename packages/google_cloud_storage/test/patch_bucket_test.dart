@@ -56,6 +56,77 @@ void main() async {
 
     tearDown(() => storage.close());
 
+    test('change acl', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_acl',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_acl'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          acl: [BucketAccessControl(role: 'READER', entity: 'allUsers')],
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..acl = [BucketAccessControl(role: 'OWNER', entity: 'allUsers')];
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.acl?.first.role, 'OWNER');
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    }, skip: 'not supported by test project (UBLA)');
+
+    test('remove acl', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_acl',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_acl'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          acl: [BucketAccessControl(role: 'READER', entity: 'allUsers')],
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..acl = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.acl, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    }, skip: 'not supported by test project (UBLA)');
+
     test('change autoclass', () async {
       await testClient.startTest(
         'google_cloud_storage',
@@ -118,6 +189,646 @@ void main() async {
       );
 
       expect(actualMetadata.autoclass, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change cors', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_cors',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_cors'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          cors: [BucketCorsConfiguration(maxAgeSeconds: 3600)],
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..cors = [BucketCorsConfiguration(maxAgeSeconds: 7200)];
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.cors?.first.maxAgeSeconds, 7200);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove cors', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_cors',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_cors'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          cors: [BucketCorsConfiguration(maxAgeSeconds: 3600)],
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..cors = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.cors, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test(
+      'change hierarchical namespace',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'patch_bucket_change_hierarchical_namespace',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName =
+            TestHttpClient.isRecording || TestHttpClient.isReplaying
+            ? 'patch_bucket_change_hierarchical_namespace'
+            : uniqueBucketName();
+
+        await storage.createBucket(
+          BucketMetadata(
+            name: bucketName,
+            hierarchicalNamespace: BucketHierarchicalNamespace(enabled: true),
+          ),
+        );
+
+        final patchMetadata = BucketMetadataPatchBuilder()
+          ..hierarchicalNamespace = BucketHierarchicalNamespace(enabled: false);
+
+        final actualMetadata = await storage.patchBucket(
+          bucketName,
+          patchMetadata,
+        );
+
+        expect(actualMetadata.hierarchicalNamespace?.enabled, isFalse);
+        expect(
+          actualMetadata.updated!.toDateTime().isAfter(
+            actualMetadata.timeCreated!.toDateTime(),
+          ),
+          isTrue,
+        );
+        expect(actualMetadata.metageneration, 2);
+      },
+      skip: 'not supported by test project (UBLA)',
+    );
+
+    test(
+      'remove hierarchical namespace',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'patch_bucket_remove_hierarchical_namespace',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName =
+            TestHttpClient.isRecording || TestHttpClient.isReplaying
+            ? 'patch_bucket_remove_hierarchical_namespace'
+            : uniqueBucketName();
+
+        await storage.createBucket(
+          BucketMetadata(
+            name: bucketName,
+            hierarchicalNamespace: BucketHierarchicalNamespace(enabled: true),
+          ),
+        );
+
+        final patchMetadata = BucketMetadataPatchBuilder()
+          ..hierarchicalNamespace = null;
+
+        final actualMetadata = await storage.patchBucket(
+          bucketName,
+          patchMetadata,
+        );
+
+        expect(actualMetadata.hierarchicalNamespace, isNull);
+        expect(
+          actualMetadata.updated!.toDateTime().isAfter(
+            actualMetadata.timeCreated!.toDateTime(),
+          ),
+          isTrue,
+        );
+        expect(actualMetadata.metageneration, 2);
+      },
+      skip: 'not supported by test project (UBLA)',
+    );
+
+    test('change ip filter', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_ip_filter',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_ip_filter'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          ipFilter: BucketIpFilter(
+            mode: 'Enabled',
+            allowAllServiceAgentAccess: false,
+            publicNetworkSource: BucketPublicNetworkSource(
+              allowedIpCidrRanges: ['0.0.0.0/0'],
+            ),
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..ipFilter = BucketIpFilter(mode: 'Disabled');
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.ipFilter?.mode, 'Disabled');
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    }, skip: 'requires storage.buckets.setIpFilter permission');
+
+    test('remove ip filter', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_ip_filter',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_ip_filter'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          ipFilter: BucketIpFilter(
+            mode: 'Enabled',
+            allowAllServiceAgentAccess: false,
+            publicNetworkSource: BucketPublicNetworkSource(
+              allowedIpCidrRanges: ['0.0.0.0/0'],
+            ),
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..ipFilter = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.ipFilter, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    }, skip: 'requires storage.buckets.setIpFilter permission');
+
+    test('change labels', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_labels',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_labels'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(name: bucketName, labels: {'key': 'value'}),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..labels = {'key': 'newvalue'};
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.labels, {'key': 'newvalue'});
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove labels', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_labels',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_labels'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(name: bucketName, labels: {'key': 'value'}),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..labels = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.labels, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change lifecycle', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_lifecycle',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_lifecycle'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          lifecycle: Lifecycle(
+            rule: [
+              LifecycleRule(
+                action: LifecycleRuleAction(type: 'Delete'),
+                condition: LifecycleRuleCondition(age: 1),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..lifecycle = Lifecycle(
+          rule: [
+            LifecycleRule(
+              action: LifecycleRuleAction(type: 'Delete'),
+              condition: LifecycleRuleCondition(age: 2),
+            ),
+          ],
+        );
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.lifecycle?.rule?.first.condition?.age, 2);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove lifecycle', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_lifecycle',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_lifecycle'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          lifecycle: Lifecycle(
+            rule: [
+              LifecycleRule(
+                action: LifecycleRuleAction(type: 'Delete'),
+                condition: LifecycleRuleCondition(age: 1),
+              ),
+            ],
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..lifecycle = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.lifecycle, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change logging', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_logging',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_logging'
+          : uniqueBucketName();
+
+      // Need a bucket to log to.
+      final logBucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_logging_logs'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: logBucketName));
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          logging: BucketLoggingConfiguration(
+            logBucket: logBucketName,
+            logObjectPrefix: 'prefix',
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..logging = BucketLoggingConfiguration(
+          logBucket: logBucketName,
+          logObjectPrefix: 'new-prefix',
+        );
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.logging?.logObjectPrefix, 'new-prefix');
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove logging', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_logging',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_logging'
+          : uniqueBucketName();
+
+      // Need a bucket to log to.
+      final logBucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_logging_logs'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: logBucketName));
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          logging: BucketLoggingConfiguration(
+            logBucket: logBucketName,
+            logObjectPrefix: 'prefix',
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..logging = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.logging, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change retention policy', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_retention_policy',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_retention_policy'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          retentionPolicy: BucketRetentionPolicy(retentionPeriod: 10),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..retentionPolicy = BucketRetentionPolicy(retentionPeriod: 20);
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.retentionPolicy?.retentionPeriod, 20);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove retention policy', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_retention_policy',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_retention_policy'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          retentionPolicy: BucketRetentionPolicy(retentionPeriod: 10),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..retentionPolicy = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.retentionPolicy, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change soft delete policy', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_soft_delete_policy',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_soft_delete_policy'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          softDeletePolicy: BucketSoftDeletePolicy(
+            retentionDurationSeconds: 604800,
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..softDeletePolicy = BucketSoftDeletePolicy(
+          retentionDurationSeconds: 604800 * 2,
+        );
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(
+        actualMetadata.softDeletePolicy?.retentionDurationSeconds,
+        604800 * 2,
+      );
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove soft delete policy', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_soft_delete_policy',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_soft_delete_policy'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          softDeletePolicy: BucketSoftDeletePolicy(
+            retentionDurationSeconds: 604800,
+          ),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..softDeletePolicy = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.softDeletePolicy?.retentionDurationSeconds, 604800);
       expect(
         actualMetadata.updated!.toDateTime().isAfter(
           actualMetadata.timeCreated!.toDateTime(),
@@ -225,6 +936,77 @@ void main() async {
       );
 
       expect(actualMetadata.versioning, isNull);
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('change website', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_change_website',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_change_website'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          website: BucketWebsiteConfiguration(mainPageSuffix: 'index.html'),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()
+        ..website = BucketWebsiteConfiguration(mainPageSuffix: 'home.html');
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.website?.mainPageSuffix, 'home.html');
+      expect(
+        actualMetadata.updated!.toDateTime().isAfter(
+          actualMetadata.timeCreated!.toDateTime(),
+        ),
+        isTrue,
+      );
+      expect(actualMetadata.metageneration, 2);
+    });
+
+    test('remove website', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_bucket_remove_website',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'patch_bucket_remove_website'
+          : uniqueBucketName();
+
+      await storage.createBucket(
+        BucketMetadata(
+          name: bucketName,
+          website: BucketWebsiteConfiguration(mainPageSuffix: 'index.html'),
+        ),
+      );
+
+      final patchMetadata = BucketMetadataPatchBuilder()..website = null;
+
+      final actualMetadata = await storage.patchBucket(
+        bucketName,
+        patchMetadata,
+      );
+
+      expect(actualMetadata.website, isNull);
       expect(
         actualMetadata.updated!.toDateTime().isAfter(
           actualMetadata.timeCreated!.toDateTime(),
