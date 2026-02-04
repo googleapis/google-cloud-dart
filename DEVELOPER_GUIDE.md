@@ -58,7 +58,7 @@ the version of Librarian used in the automation:
 #### Updating API sources
 
 Configuration for API source descriptions is found in the `[sources]`
-section of the root [`librarian`](librarian.yaml).
+section of the root [`librarian.yaml`](librarian.yaml).
 
 You can update these sources to their latest versions by running
 (from the root of the project):
