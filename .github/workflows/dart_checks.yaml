@@ -94,7 +94,7 @@ jobs:
       # the inputs should be pinned, including the generator version and the
       # googleapis SHA.
       - name: Regenerate existing clients
-        # The current head version of sidekick can be generated with:
+        # The current head version of librarian can be generated with:
         # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
         run: go run github.com/googleapis/librarian/cmd/librarian@v0.8.1-0.20260204203405-fef01ca62071 generate -all
       - name: Regenerate dependency graph
