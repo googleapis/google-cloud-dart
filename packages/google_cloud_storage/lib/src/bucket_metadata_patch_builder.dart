@@ -30,7 +30,7 @@ class BucketMetadataPatchBuilderJsonEncodable implements JsonEncodable {
 
 /// A set of fields to update on a [Cloud Storage bucket].
 ///
-/// Fields set to `null` are cleared.
+/// Fields explicitly set to `null` are cleared.
 ///
 /// For detailed information on the meaning of each field, see
 /// [Bucket resource](https://docs.cloud.google.com/storage/docs/json_api/v1/buckets#resource).
