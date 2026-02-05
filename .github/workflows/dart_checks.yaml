@@ -81,7 +81,11 @@ jobs:
         run: dart test --coverage=coverage
         working-directory: packages/google_cloud_storage
       - name: Format coverage
-        run: dart pub global run coverage:format_coverage --lcov --in=packages/google_cloud_storage/coverage --out=packages/google_cloud_storage/coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=packages/google_cloud_storage/lib --base-directory=${{ github.workspace }}
+        run: dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=lib --base-directory=.
+        working-directory: packages/google_cloud_storage
+      - name: Fix coverage paths
+        run: sed -i 's|^SF:lib/|SF:packages/google_cloud_storage/lib/|' coverage/lcov.info
+        working-directory: packages/google_cloud_storage
       - name: Upload coverage
         uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e
         with:
