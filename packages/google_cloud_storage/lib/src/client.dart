@@ -165,7 +165,7 @@ final class Storage {
   /// If set, `userProject` is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
   ///
-/// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
   ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
