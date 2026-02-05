@@ -87,19 +87,6 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: packages/google_cloud_storage/coverage/lcov.info
-          flag-name: google_cloud_storage
-          parallel: true
-
-  coverage_finish:
-    needs: coverage
-    runs-on: ubuntu-latest
-    steps:
-      - name: Upload coverage
-        uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          parallel-finished: true
-          carryforward: google_cloud_storage
 
   generator:
     name: Generators
