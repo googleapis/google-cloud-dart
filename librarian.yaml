@@ -72,8 +72,6 @@ libraries:
       - test/generative_streamed_recording.json
       - test/model_list_recording.json
       - test/model_test.dart
-    output: generated/google_cloud_ai_generativelanguage_v1beta
-    specification_format: protobuf
     dart:
       api_keys_environment_variables: GOOGLE_API_KEY,GEMINI_API_KEY
       dev_dependencies: googleapis_auth,test,test_utils
@@ -152,15 +150,11 @@ libraries:
         ```
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_ai_generativelanguage_v1beta
   - name: google_cloud_aiplatform_v1beta1
-    apis:
-      - path: google/cloud/aiplatform/v1beta1
     copyright_year: "2025"
     keep:
       - example/main.dart
       - test/generate_test.dart
       - test/generative_streamed_recording.json
-    output: generated/google_cloud_aiplatform_v1beta1
-    specification_format: protobuf
     dart:
       api_keys_environment_variables: GOOGLE_API_KEY
       dev_dependencies: googleapis_auth,test,test_utils
@@ -266,51 +260,31 @@ libraries:
     apis:
       - path: google/api
     copyright_year: "2025"
-    output: generated/google_cloud_api
-    specification_format: protobuf
     dart:
       name_override: api
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_api
   - name: google_cloud_common
-    apis:
-      - path: google/cloud/common
     copyright_year: "2025"
     description_override: Additional metadata for operations.
-    output: generated/google_cloud_common
-    specification_format: protobuf
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_common
   - name: google_cloud_functions_v2
-    apis:
-      - path: google/cloud/functions/v2
     copyright_year: "2025"
-    output: generated/google_cloud_functions_v2
-    specification_format: protobuf
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_functions_v2
   - name: google_cloud_iam_v1
     apis:
       - path: google/iam/v1
     copyright_year: "2025"
-    output: generated/google_cloud_iam_v1
-    specification_format: protobuf
     dart:
       name_override: iam
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_iam_v1
   - name: google_cloud_language_v2
-    apis:
-      - path: google/cloud/language/v2
     copyright_year: "2025"
-    output: generated/google_cloud_language_v2
-    specification_format: protobuf
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_language_v2
   - name: google_cloud_location
-    apis:
-      - path: google/cloud/location
     copyright_year: "2025"
-    output: generated/google_cloud_location
-    specification_format: protobuf
     dart:
       name_override: location
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_location
@@ -318,8 +292,6 @@ libraries:
     apis:
       - path: google/logging/type
     copyright_year: "2025"
-    output: generated/google_cloud_logging_type
-    specification_format: protobuf
     dart:
       name_override: logging_type
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_type
@@ -332,8 +304,6 @@ libraries:
       - test/write_log_entries_partial_errors_recording.json
       - test/write_log_entries_recording.json
       - test/write_log_test.dart
-    output: generated/google_cloud_logging_v2
-    specification_format: protobuf
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_logging_v2
@@ -355,8 +325,6 @@ libraries:
     keep:
       - test/operation_test.dart
       - lib/src/longrunning.p.dart
-    output: generated/google_cloud_longrunning
-    specification_format: protobuf
     dart:
       dev_dependencies: test
       extra_imports: package:google_cloud_rpc/rpc.dart
@@ -377,10 +345,8 @@ libraries:
       - test/timestamp_test.dart
       - test/wrappers_test.dart
       - lib/src/protobuf.p.dart
-    output: generated/google_cloud_protobuf
     roots:
       - protobuf-src
-    specification_format: protobuf
     dart:
       dev_dependencies: test
       include_list:
@@ -406,7 +372,6 @@ libraries:
     roots:
       - conformance
     skip_publish: true
-    specification_format: protobuf
     dart:
       dev_dependencies: path,test,test_utils
       include_list:
@@ -428,22 +393,16 @@ libraries:
       - test/exceptions_test.dart
       - test/status_test.dart
       - lib/src/rpc.p.dart
-    output: generated/google_cloud_rpc
-    specification_format: protobuf
     dart:
       dependencies: googleapis_auth,http
       dev_dependencies: test
       part_file: src/rpc.p.dart
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_rpc
   - name: google_cloud_secretmanager_v1
-    apis:
-      - path: google/cloud/secretmanager/v1
     copyright_year: "2025"
     keep:
       - test/create_and_update_recording.json
       - test/secret_test.dart
-    output: generated/google_cloud_secretmanager_v1
-    specification_format: protobuf
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_secretmanager_v1
@@ -456,12 +415,10 @@ libraries:
       - test/compliance_test.dart
       - test/echo_test.dart
       - test/showcase_server.dart
-    output: generated/google_cloud_showcase_v1beta1
     roots:
       - showcase
       - googleapis
     skip_publish: true
-    specification_format: protobuf
     dart:
       dev_dependencies: path,test,test_utils
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_showcase_v1beta1
@@ -469,7 +426,5 @@ libraries:
     apis:
       - path: google/type
     copyright_year: "2025"
-    output: generated/google_cloud_type
-    specification_format: protobuf
     dart:
       repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_type
