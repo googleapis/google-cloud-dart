@@ -14,6 +14,7 @@
 
 import 'dart:convert';
 import 'dart:math';
+import 'dart:typed_data';
 
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
@@ -78,7 +79,7 @@ Future<ObjectMetadata> uploadFile(
     'contentType': contentType,
   };
 
-  final multipartBody = <int>[];
+  final multipartBody = BytesBuilder(copy: false);
   final metadataPart = utf8.encode(
     '--$boundary\r\n'
     'Content-Type: application/json; charset=UTF-8\r\n'
@@ -89,14 +90,16 @@ Future<ObjectMetadata> uploadFile(
     '\r\n',
   );
   multipartBody
-    ..addAll(metadataPart)
-    ..addAll(data)
-    ..addAll(utf8.encode('\r\n--$boundary--\r\n'));
+    ..add(metadataPart)
+    ..add(data)
+    ..add(utf8.encode('\r\n--$boundary--\r\n'));
+
+  final bodyBytes = multipartBody.takeBytes();
 
   final request = http.Request('POST', url);
   request.headers['Content-Type'] = 'multipart/related; boundary=$boundary';
-  request.headers['Content-Length'] = multipartBody.length.toString();
-  request.bodyBytes = multipartBody;
+  request.headers['Content-Length'] = bodyBytes.length.toString();
+  request.bodyBytes = bodyBytes;
 
   final response = await client.send(request);
   final responseBody = await response.stream.bytesToString();
