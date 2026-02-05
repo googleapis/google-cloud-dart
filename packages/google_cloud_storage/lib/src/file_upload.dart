@@ -18,6 +18,7 @@ import 'dart:typed_data';
 
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'common_json.dart';
 import 'object_metadata.dart';
@@ -29,6 +30,8 @@ final _random = Random.secure();
 // See https://datatracker.ietf.org/doc/html/rfc2046
 const _boundaryChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
+/// A fixed boundary string to use in tests.
+@visibleForTesting
 String? fixedBoundaryString;
 
 String _boundaryString() {
