@@ -20,6 +20,7 @@ import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
+import 'file_upload.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -34,11 +35,13 @@ class _JsonEncodableWrapper implements JsonEncodable {
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
 final class Storage {
-  final ServiceClient _client;
+  final ServiceClient _serviceClient;
+  final http.Client _httpClient;
   final String projectId;
 
   Storage({required http.Client client, required this.projectId})
-    : _client = ServiceClient(client: client);
+    : _httpClient = client,
+      _serviceClient = ServiceClient(client: client);
 
   /// Create a new Google Cloud Storage bucket.
   ///
@@ -53,7 +56,7 @@ final class Storage {
     final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
     final queryParams = {'project': projectId};
 
-    final j = await _client.post(
+    final j = await _serviceClient.post(
       url.replace(queryParameters: queryParams),
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
     );
@@ -123,7 +126,7 @@ final class Storage {
       'projection': ?projection,
       'userProject': ?userProject,
     };
-    final j = await _client.patch(
+    final j = await _serviceClient.patch(
       url.replace(queryParameters: queryParams),
       body: BucketMetadataPatchBuilderJsonEncodable(metadata),
     );
@@ -138,8 +141,68 @@ final class Storage {
   Future<ObjectMetadata> objectMetadata(String bucket, String object) async =>
       throw UnimplementedError('objectMetadata');
 
+  /// Creates or updates the content of a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `ifGenerationMatch` is set.
+  ///
+  /// `contentType` is the media-type of the given content. It is used in the
+  /// `Content-Type` header when serving the object over HTTP.
+  ///
+  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// on whether the objects's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/isnert).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> insertObject(
+    String bucket,
+    String object,
+    List<int> content, {
+    String contentType = 'application/octet-stream',
+    int? ifGenerationMatch,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
+    // support ifMetagenerationNotMatch.
+    //
+    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
+    // status code and an empty body. This will cause `buckets.patch` to throw
+    // `TypeError` during JSON deserialization.
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(
+    () async => uploadFile(
+      _httpClient,
+      projectId,
+      bucket,
+      object,
+      content,
+      contentType: contentType,
+      ifGenerationMatch: ifGenerationMatch,
+      predefinedAcl: predefinedAcl,
+      projection: projection,
+      userProject: userProject,
+    ),
+    isIdempotent: ifGenerationMatch != null,
+  );
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
-  void close() => _client.close();
+  void close() => _serviceClient.close();
 }

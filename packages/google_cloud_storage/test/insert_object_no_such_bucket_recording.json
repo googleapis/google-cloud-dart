@@ -1,0 +1,30 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/upload/storage/v1/b/insert_object_no_such_bucket/o?uploadType=multipart&name=object1&project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "multipart/related; boundary=boundary",
+        "Content-Length": "204"
+      },
+      "body": "LS1ib3VuZGFyeQ0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29uOyBjaGFyc2V0PVVURi04DQoNCnsibmFtZSI6Im9iamVjdDEiLCJjb250ZW50VHlwZSI6ImFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbSJ9DQotLWJvdW5kYXJ5DQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbQ0KDQpIZWxsbyBXb3JsZCENCi0tYm91bmRhcnktLQ0K"
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Thu, 05 Feb 2026 21:31:59 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "247",
+        "x-guploader-uploadid": "AJRbA5WrYc4dOl0CCQn89PW9oShe8O5hO_tRs324S_lqOToiSz0M0h4esRRfIigUfX501tIvfGYi00E",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
+    }
+  }
+]
