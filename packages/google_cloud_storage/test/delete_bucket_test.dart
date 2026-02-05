@@ -72,7 +72,7 @@ void main() async {
 
       // Verify bucket is deleted.
       expect(
-        () => storage.patchBucket(bucketName, BucketMetadata()),
+        () => storage.patchBucket(bucketName, BucketMetadataPatchBuilder()),
         throwsA(isA<NotFoundException>()),
       );
     });
@@ -115,7 +115,7 @@ void main() async {
 
       // Verify bucket is deleted.
       expect(
-        () => storage.patchBucket(bucketName, BucketMetadata()),
+        () => storage.patchBucket(bucketName, BucketMetadataPatchBuilder()),
         throwsA(isA<NotFoundException>()),
       );
     });
