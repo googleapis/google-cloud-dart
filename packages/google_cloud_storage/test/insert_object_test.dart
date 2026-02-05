@@ -22,6 +22,8 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart'
     show fixedBoundaryString;
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
@@ -179,6 +181,52 @@ void main() async {
           ifGenerationMatch: 1234,
         ),
         throwsA(isA<PreconditionFailedException>()),
+      );
+    });
+
+    test('idempotent transport failure', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          throw http.ClientException('Some transport failure');
+        } else if (count == 2) {
+          return http.Response(
+            '{"name": "object"}',
+            200,
+            headers: {'content-type': 'application/json; charset=UTF-8'},
+          );
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: projectId);
+
+      final actualMetadata = await storage.insertObject('bucket', 'object', [
+        1,
+        2,
+        3,
+      ], ifGenerationMatch: 1);
+      expect(actualMetadata.name, 'object');
+    });
+
+    test('non-idempotent transport failure', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          throw http.ClientException('Some transport failure');
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: projectId);
+
+      expect(
+        () => storage.insertObject('bucket', 'object', [1, 2, 3]),
+        throwsA(isA<http.ClientException>()),
       );
     });
   });
