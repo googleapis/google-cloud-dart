@@ -1107,10 +1107,14 @@ final class BucketWebsiteConfiguration {
 ///
 /// [Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
 final class BucketMetadata {
+  // Keep field documentation in sync with [BucketMetadataPatchBuilder].
+
   /// Access controls on the bucket.
   final List<BucketAccessControl>? acl;
 
-  /// The bucket's Autoclass configuration.
+  /// The bucket's [Autoclass][] configuration.
+  ///
+  /// [Autoclass]: https://docs.cloud.google.com/storage/docs/autoclass
   final BucketAutoclass? autoclass;
 
   /// The bucket's billing configuration.
@@ -1148,7 +1152,9 @@ final class BucketMetadata {
   /// The version of the bucket.
   final int? generation;
 
-  /// The bucket's hierarchical namespace configuration.
+  /// The bucket's [hierarchical namespace][] configuration.
+  ///
+  /// [hierarchical namespace]: https://docs.cloud.google.com/storage/docs/hns-overview
   final BucketHierarchicalNamespace? hierarchicalNamespace;
 
   /// The bucket's IAM configuration.
