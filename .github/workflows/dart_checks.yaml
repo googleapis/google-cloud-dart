@@ -82,11 +82,20 @@ jobs:
         working-directory: packages/google_cloud_storage
       - name: Format coverage
         run: dart pub global run coverage:format_coverage --lcov --in=packages/google_cloud_storage/coverage --out=packages/google_cloud_storage/coverage/lcov.info --packages=.dart_tool/package_config.json --report-on=packages/google_cloud_storage/lib --base-directory=.
+      - name: Debug Coverage
+        run: |
+          echo "--- LCOV INFO ---"
+          cat packages/google_cloud_storage/coverage/lcov.info
+          echo "--- FILE LIST ---"
+          find packages/google_cloud_storage/lib -maxdepth 2
+      - name: Move coverage report
+        run: mv packages/google_cloud_storage/coverage/lcov.info lcov.info
       - name: Upload coverage
         uses: coverallsapp/github-action@5cbfd81b66ca5d10c19b062c04de0199c215fb6e
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: packages/google_cloud_storage/coverage/lcov.info
+          path-to-lcov: lcov.info
+          flag-name: google_cloud_storage
 
   generator:
     name: Generators
