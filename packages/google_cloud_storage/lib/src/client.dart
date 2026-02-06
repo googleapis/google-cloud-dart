@@ -95,7 +95,7 @@ final class Storage {
       'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
       'userProject': ?userProject,
     };
-    await _client.delete(url.replace(queryParameters: queryParams));
+    await _serviceClient.delete(url.replace(queryParameters: queryParams));
   }, isIdempotent: ifMetagenerationMatch != null);
 
   /// Update a Google Cloud Storage bucket.
