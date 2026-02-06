@@ -59,15 +59,12 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'insert_object_success',
-      );
+    test('new', () async {
+      await testClient.startTest('google_cloud_storage', 'insert_object_new');
       addTearDown(testClient.endTest);
       final bucketName =
           TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_success'
+          ? 'insert_object_new'
           : uniqueBucketName();
 
       await storage.createBucket(BucketMetadata(name: bucketName));
@@ -75,6 +72,7 @@ void main() async {
         bucketName,
         'object1',
         utf8.encode('Hello World!'),
+        ifGenerationMatch: 0,
         contentType: 'text/plain',
       );
       expect(objectMetadata.contentType, 'text/plain');
