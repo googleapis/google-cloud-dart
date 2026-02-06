@@ -12,10 +12,12 @@ String uniqueBucketName() => [
     _bucketChars[_random.nextInt(_bucketChars.length)],
 ].join();
 
-String bucketName(String name) =>
-    TestHttpClient.isRecording || TestHttpClient.isReplaying
-    ? name
-    : '$name-${uniqueBucketName()}'.substring(0, 60);
+String bucketName(String name) {
+  assert(name.length < 55, '"$name" is too long to append a random suffix.');
+  return TestHttpClient.isRecording || TestHttpClient.isReplaying
+      ? name
+      : '$name-${uniqueBucketName()}'.substring(0, 60);
+}
 
 String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = bucketName(name);
