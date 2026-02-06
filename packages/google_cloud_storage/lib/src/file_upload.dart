@@ -25,9 +25,10 @@ import 'object_metadata.dart';
 
 final _random = Random.secure();
 
-// The acceptable boundary characters are defined in Appendix A of RFC 2046.
-// These characters are a subset of those.
-// See https://datatracker.ietf.org/doc/html/rfc2046
+/// A subset of the acceptable boundary characters as defined in Appendix A of
+/// RFC 2046.
+///
+/// See https://datatracker.ietf.org/doc/html/rfc2046
 const _boundaryChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 /// The boundary string to use when seperating parts of a multipart request.
