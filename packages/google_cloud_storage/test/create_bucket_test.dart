@@ -15,8 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:math';
-
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
