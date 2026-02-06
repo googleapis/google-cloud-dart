@@ -60,7 +60,44 @@ final class Storage {
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
+  /// Deletes an already-empty Google Cloud Storage bucket.
+  ///
+  /// This operation is idempotent if `ifMetagenerationMatch` is set.
+  ///
+  /// Throws [NotFoundException] if the bucket does not exist. Throws
+  /// [ConflictException] if the bucket is not empty.
+  ///
+  /// If set, `ifMetagenerationMatch` makes deleting the bucket conditional on
+  /// whether the bucket's metageneration matches the provided value. If the
+  /// metageneration does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/delete).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<void> deleteBucket(
+    String bucketName, {
+    int? ifMetagenerationMatch,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) async => await retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucketName],
+    );
+    final queryParams = {
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      'userProject': ?userProject,
+    };
+    await _client.delete(url.replace(queryParameters: queryParams));
+  }, isIdempotent: ifMetagenerationMatch != null);
+
   /// Update a Google Cloud Storage bucket.
+  ///
+  /// This operation is idempotent if `ifMetagenerationMatch` is set.
   ///
   /// If set, `ifMetagenerationMatch` makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
