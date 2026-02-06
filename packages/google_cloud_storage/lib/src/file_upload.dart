@@ -30,7 +30,11 @@ final _random = Random.secure();
 // See https://datatracker.ietf.org/doc/html/rfc2046
 const _boundaryChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-/// A fixed boundary string to use in tests.
+/// The boundary string to use when seperating parts of a multipart request.
+///
+/// If `null` then the boundary string will be generated randomly. Setting this
+/// to a fixed value is useful for testing because it results in a deterministic
+/// request body.
 @visibleForTesting
 String? fixedBoundaryString;
 

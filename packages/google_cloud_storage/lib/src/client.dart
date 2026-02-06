@@ -175,8 +175,10 @@ final class Storage {
   /// This operation is read-only and always idempotent.
   ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
-  Future<ObjectMetadata> objectMetadata(String bucket, String object) async =>
-      throw UnimplementedError('objectMetadata');
+  Future<ObjectMetadata> objectMetadata(
+    String bucketName,
+    String objectName,
+  ) async => throw UnimplementedError('objectMetadata');
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
   ///
@@ -208,8 +210,8 @@ final class Storage {
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<ObjectMetadata> insertObject(
-    String bucket,
-    String object,
+    String bucketName,
+    String objectName,
     List<int> content, {
     String contentType = 'application/octet-stream',
     int? ifGenerationMatch,
@@ -227,8 +229,8 @@ final class Storage {
     () async => uploadFile(
       _httpClient,
       projectId,
-      bucket,
-      object,
+      bucketName,
+      objectName,
       content,
       contentType: contentType,
       ifGenerationMatch: ifGenerationMatch,
