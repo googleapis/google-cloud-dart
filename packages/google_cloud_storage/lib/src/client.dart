@@ -209,6 +209,18 @@ final class Storage {
   ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// final metadata = await storage.insertObject(
+  ///   'my-bucket',
+  ///   'hello.txt',
+  ///   utf8.encode('Hello, World!'),
+  ///   contentType: 'text/plain',
+  ///   ifGenerationMatch: 0, // Only insert if the object doesn't exist.
+  /// );
+  /// ```
   Future<ObjectMetadata> insertObject(
     String bucketName,
     String objectName,
