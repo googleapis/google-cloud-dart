@@ -15,6 +15,7 @@
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
@@ -59,6 +60,47 @@ final class Storage {
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
+
+  /// A stream of buckets in the project.
+  ///
+  /// `prefix` filters the returned buckets to those whose names begin with the
+  /// specified prefix.
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// `softDeleted` filters the returned buckets to those that are soft deleted.
+  ///
+  /// `maxResults` limits the number of buckets returned in a single response.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
+  Stream<BucketMetadata> listBuckets({
+    String? prefix,
+    String? projection,
+    bool? softDeleted,
+    @visibleForTesting int? maxResults,
+  }) async* {
+    String? nextPageToken;
+
+    do {
+      final url = Uri.https('storage.googleapis.com', '/storage/v1/b', {
+        'maxResults': ?maxResults?.toString(),
+        'project': projectId,
+        'pageToken': ?nextPageToken,
+        'projection': ?projection,
+        'prefix': ?prefix,
+        'softDeleted': ?softDeleted,
+      });
+      final json = await _client.get(url);
+      nextPageToken = json['nextPageToken'] as String?;
+
+      for (final bucket in json['items'] as List<Object?>? ?? const []) {
+        yield bucketMetadataFromJson(bucket as Map<String, Object?>);
+      }
+    } while (nextPageToken != null);
+  }
 
   /// Update a Google Cloud Storage bucket.
   ///
