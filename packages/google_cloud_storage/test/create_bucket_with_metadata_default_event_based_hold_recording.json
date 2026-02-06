@@ -1,0 +1,58 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJkZWZhdWx0RXZlbnRCYXNlZEhvbGQiOnRydWUsIm5hbWUiOiJjcmVhdGVfYnVja2V0X3dpdGhfbWV0YWRhdGFfZGVmYXVsdF9ldmVudF9iYXNlZF9ob2xkIn0="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 06 Feb 2026 21:10:05 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "1015",
+        "x-guploader-uploadid": "AJRbA5UMc-4zZ0uaDM9gr8dSQNGV-VB87aZK8PZ-44GW3E_fpJdKAdNlPpQluYfE3a6vlqU6fFVRUSnv4xDL",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_default_event_based_hold\",\n  \"id\": \"create_bucket_with_metadata_default_event_based_hold\",\n  \"name\": \"create_bucket_with_metadata_default_event_based_hold\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770412205062586343\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"defaultEventBasedHold\": true,\n  \"timeCreated\": \"2026-02-06T21:10:05.381Z\",\n  \"updated\": \"2026-02-06T21:10:05.381Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-06T21:10:05.381Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:10:05.381Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:10:05.381Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/create_bucket_with_metadata_default_event_based_hold?",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 06 Feb 2026 21:10:06 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AJRbA5VrpZJ6RsRLeBrH1xveQBTHc7vkWy9b3XNmK7zwg3Zl11VzWinj8N4BDQC1VsgMfIpi_3LkZG0",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
+    }
+  }
+]

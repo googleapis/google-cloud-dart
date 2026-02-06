@@ -4,7 +4,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b/delete_bucket_non_existent?",
       "method": "DELETE",
       "headers": {
-        "x-goog-api-client": "gl-dart/3.10.8 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": ""
     },
@@ -13,10 +13,37 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 04 Feb 2026 23:11:25 GMT",
+        "date": "Fri, 06 Feb 2026 21:10:45 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AJRbA5XQmx4dbiUNhJ6JJIzyfFLT3nhnYAbHFEfd7LcOeSmYgwMlr3Abdel5C3pSa6oJQ3KLlEPY_Q",
+        "x-guploader-uploadid": "AJRbA5UU--LAa0z8MBieoyjinW8-8CQZsPNgOBPROECK9kXE-EqRCtKMgDl1Yjxuu96wU4zg44Gv0CqwrgtB",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/delete_bucket_non_existent?",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 06 Feb 2026 21:10:45 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "247",
+        "x-guploader-uploadid": "AJRbA5Vw3O_XcqtH7-dc1VsuqXBdche829c-fNY9mzpSGlJWK1KJ4WgLZ4bKXFU-uTsOg4-vf8--4d0",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",

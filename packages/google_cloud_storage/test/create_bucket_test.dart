@@ -28,16 +28,6 @@ import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String uniqueBucketName() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
-  ].join();
-}
-
 void main() async {
   late Storage storage;
   late TestHttpClient testClient;
@@ -64,7 +54,7 @@ void main() async {
         'create_bucket_with_metadata_name_only',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_name_only',
       );
@@ -162,7 +152,7 @@ void main() async {
         'create_bucket_with_metadata_autoclass',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_autoclass',
       );
@@ -207,7 +197,7 @@ void main() async {
         'create_bucket_with_metadata_lifecycle',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_lifecycle',
       );
@@ -242,7 +232,7 @@ void main() async {
         'create_bucket_with_metadata_billing',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_billing',
       );
@@ -263,7 +253,7 @@ void main() async {
         'create_bucket_with_metadata_cors',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_cors',
       );
@@ -295,7 +285,7 @@ void main() async {
         'create_bucket_with_metadata_default_event_based_hold',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_default_event_based_hold',
       );
@@ -316,7 +306,7 @@ void main() async {
         'create_bucket_with_metadata_iam_configuration',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_iam_configuration',
       );
@@ -347,7 +337,7 @@ void main() async {
         'create_bucket_with_metadata_labels',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_labels',
       );
@@ -368,7 +358,7 @@ void main() async {
         'create_bucket_with_metadata_retention_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_retention_policy',
       );
@@ -390,7 +380,7 @@ void main() async {
         'create_bucket_with_metadata_soft_delete_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_soft_delete_policy',
       );
@@ -413,7 +403,7 @@ void main() async {
         'create_bucket_with_metadata_storage_class',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_storage_class',
       );
@@ -434,7 +424,7 @@ void main() async {
         'create_bucket_with_metadata_versioning',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_versioning',
       );
@@ -455,7 +445,7 @@ void main() async {
         'create_bucket_with_metadata_website',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithCleanup(
+      final bucketName = bucketNameWithTearDown(
         storage,
         'create_bucket_with_metadata_website',
       );

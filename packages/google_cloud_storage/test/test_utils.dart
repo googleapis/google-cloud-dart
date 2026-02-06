@@ -8,22 +8,23 @@ const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 final _random = Random();
 
 String uniqueBucketName() => [
-  for (int i = 0; i < 32; i++)
+  for (int i = 0; i < 60; i++)
     _bucketChars[_random.nextInt(_bucketChars.length)],
 ].join();
 
-String bucketName(String name) {
-  final bucketName = TestHttpClient.isRecording || TestHttpClient.isReplaying
-      ? name
-      : uniqueBucketName();
+String bucketName(String name) =>
+    TestHttpClient.isRecording || TestHttpClient.isReplaying
+    ? name
+    : '$name-${uniqueBucketName()}'.substring(0, 60);
 
-  return bucketName;
-}
-
-String bucketNameWithCleanup(Storage storage, String name) {
+String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = bucketName(name);
-
-  addTearDown(() => storage.deleteBucket(generatedName));
-
+  addTearDown(() async {
+    try {
+      await storage.deleteBucket(generatedName);
+    } on NotFoundException {
+      // Ignore.
+    }
+  });
   return generatedName;
 }

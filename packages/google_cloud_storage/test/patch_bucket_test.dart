@@ -26,15 +26,7 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String uniqueBucketName() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
-  ].join();
-}
+import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
@@ -62,10 +54,10 @@ void main() async {
         'patch_bucket_change_acl',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_acl'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_acl',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -98,10 +90,10 @@ void main() async {
         'patch_bucket_remove_acl',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_acl'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_acl',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -133,10 +125,10 @@ void main() async {
         'patch_bucket_change_autoclass',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_autoclass'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_autoclass',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -169,10 +161,10 @@ void main() async {
         'patch_bucket_remove_autoclass',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_autoclass'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_autoclass',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -204,10 +196,10 @@ void main() async {
         'patch_bucket_change_cors',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_cors'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_cors',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -240,10 +232,10 @@ void main() async {
         'patch_bucket_remove_cors',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_cors'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_cors',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -277,10 +269,10 @@ void main() async {
           'patch_bucket_change_hierarchical_namespace',
         );
         addTearDown(testClient.endTest);
-        final bucketName =
-            TestHttpClient.isRecording || TestHttpClient.isReplaying
-            ? 'patch_bucket_change_hierarchical_namespace'
-            : uniqueBucketName();
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'patch_bucket_change_hierarchical_namespace',
+        );
 
         await storage.createBucket(
           BucketMetadata(
@@ -317,10 +309,10 @@ void main() async {
           'patch_bucket_remove_hierarchical_namespace',
         );
         addTearDown(testClient.endTest);
-        final bucketName =
-            TestHttpClient.isRecording || TestHttpClient.isReplaying
-            ? 'patch_bucket_remove_hierarchical_namespace'
-            : uniqueBucketName();
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'patch_bucket_remove_hierarchical_namespace',
+        );
 
         await storage.createBucket(
           BucketMetadata(
@@ -355,10 +347,10 @@ void main() async {
         'patch_bucket_change_ip_filter',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_ip_filter'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_ip_filter',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -397,10 +389,10 @@ void main() async {
         'patch_bucket_remove_ip_filter',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_ip_filter'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_ip_filter',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -438,10 +430,10 @@ void main() async {
         'patch_bucket_change_labels',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_labels'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_labels',
+      );
 
       await storage.createBucket(
         BucketMetadata(name: bucketName, labels: {'key': 'value'}),
@@ -471,10 +463,10 @@ void main() async {
         'patch_bucket_remove_labels',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_labels'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_labels',
+      );
 
       await storage.createBucket(
         BucketMetadata(name: bucketName, labels: {'key': 'value'}),
@@ -503,10 +495,10 @@ void main() async {
         'patch_bucket_change_lifecycle',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_lifecycle'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_lifecycle',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -553,10 +545,10 @@ void main() async {
         'patch_bucket_remove_lifecycle',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_lifecycle'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_lifecycle',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -595,10 +587,10 @@ void main() async {
         'patch_bucket_change_logging',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_logging'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_logging',
+      );
 
       // Need a bucket to log to.
       final logBucketName =
@@ -645,16 +637,16 @@ void main() async {
         'patch_bucket_remove_logging',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_logging'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_logging',
+      );
 
       // Need a bucket to log to.
-      final logBucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_logging_logs'
-          : uniqueBucketName();
+      final logBucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_logging_logs',
+      );
 
       await storage.createBucket(BucketMetadata(name: logBucketName));
 
@@ -691,10 +683,10 @@ void main() async {
         'patch_bucket_change_retention_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_retention_policy'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_retention_policy',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -727,10 +719,10 @@ void main() async {
         'patch_bucket_remove_retention_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_retention_policy'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_retention_policy',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -763,10 +755,10 @@ void main() async {
         'patch_bucket_change_soft_delete_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_soft_delete_policy'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_soft_delete_policy',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -806,10 +798,10 @@ void main() async {
         'patch_bucket_change_versioning',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_versioning'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_versioning',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -842,10 +834,10 @@ void main() async {
         'patch_bucket_same_versioning',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_same_versioning'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_same_versioning',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -878,10 +870,10 @@ void main() async {
         'patch_bucket_remove_versioning',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_versioning'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_versioning',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -913,10 +905,10 @@ void main() async {
         'patch_bucket_change_website',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_website'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_website',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -949,10 +941,10 @@ void main() async {
         'patch_bucket_remove_website',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_remove_website'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_remove_website',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -984,10 +976,10 @@ void main() async {
         'patch_bucket_with_metadata_empty_metadata',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_metadata_empty_metadata'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_with_metadata_empty_metadata',
+      );
 
       await storage.createBucket(
         BucketMetadata(
@@ -1033,10 +1025,10 @@ void main() async {
         'patch_bucket_with_if_metageneration_match_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_if_metageneration_match_success'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_with_if_metageneration_match_success',
+      );
 
       final requestMetadata = BucketMetadata(name: bucketName);
       final createdMetadata = await storage.createBucket(requestMetadata);
@@ -1058,10 +1050,10 @@ void main() async {
         'patch_bucket_with_if_metageneration_match_failure',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_with_if_metageneration_match_failure'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_with_if_metageneration_match_failure',
+      );
 
       await storage.createBucket(BucketMetadata(name: bucketName));
 
@@ -1085,10 +1077,10 @@ void main() async {
           'patch_bucket_with_predefined_acl',
         );
         addTearDown(testClient.endTest);
-        final bucketName =
-            TestHttpClient.isRecording || TestHttpClient.isReplaying
-            ? 'patch_bucket_with_metadata'
-            : uniqueBucketName();
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'patch_bucket_with_predefined_acl',
+        );
 
         await storage.createBucket(
           BucketMetadata(
@@ -1128,10 +1120,10 @@ void main() async {
           'patch_bucket_with_predefined_default_object_acl',
         );
         addTearDown(testClient.endTest);
-        final bucketName =
-            TestHttpClient.isRecording || TestHttpClient.isReplaying
-            ? 'patch_bucket_with_metadata'
-            : uniqueBucketName();
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'patch_bucket_with_predefined_default_object_acl',
+        );
 
         await storage.createBucket(
           BucketMetadata(
