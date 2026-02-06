@@ -66,11 +66,11 @@ libraries:
       - example/application_default_credentials.dart
       - example/main.dart
       - example/streamed_response.dart
-      - test/embeddings_embed_content_recording.json
+      - test/http_recordings/embeddings_embed_content_recording.json
       - test/embeddings_test.dart
       - test/generate_test.dart
-      - test/generative_streamed_recording.json
-      - test/model_list_recording.json
+      - test/http_recordings/generative_streamed_recording.json
+      - test/http_recordings/model_list_recording.json
       - test/model_test.dart
     dart:
       api_keys_environment_variables: GOOGLE_API_KEY,GEMINI_API_KEY
@@ -154,7 +154,7 @@ libraries:
     keep:
       - example/main.dart
       - test/generate_test.dart
-      - test/generative_streamed_recording.json
+      - test/http_recordings/generative_streamed_recording.json
     dart:
       api_keys_environment_variables: GOOGLE_API_KEY
       dev_dependencies: googleapis_auth,test,test_utils
@@ -301,8 +301,8 @@ libraries:
       - path: google/logging/v2
     copyright_year: "2025"
     keep:
-      - test/write_log_entries_partial_errors_recording.json
-      - test/write_log_entries_recording.json
+      - test/http_recordings/write_log_entries_partial_errors_recording.json
+      - test/http_recordings/write_log_entries_recording.json
       - test/write_log_test.dart
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
@@ -401,7 +401,7 @@ libraries:
   - name: google_cloud_secretmanager_v1
     copyright_year: "2025"
     keep:
-      - test/create_and_update_recording.json
+      - test/http_recordings/create_and_update_recording.json
       - test/secret_test.dart
     dart:
       dev_dependencies: googleapis_auth,test,test_utils
