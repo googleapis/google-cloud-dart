@@ -21,7 +21,9 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
 import 'common_json.dart';
+import 'crc32c.dart';
 import 'object_metadata.dart';
+import 'package:crypto/crypto.dart' as crypto;
 
 final _random = Random.secure();
 
@@ -82,9 +84,12 @@ Future<ObjectMetadata> uploadFile(
 
   final boundary = _boundaryString();
 
+  final crc32c = Crc32c()..update(data);
   final metadataJson = <String, dynamic>{
     'name': object,
     'contentType': contentType,
+    'crc32c': crc32c.toBase64(),
+    'md5Hash': base64Encode(crypto.md5.convert(data).bytes),
   };
 
   final multipartBody = BytesBuilder(copy: false);
