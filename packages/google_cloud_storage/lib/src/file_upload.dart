@@ -88,6 +88,8 @@ Future<ObjectMetadata> uploadFile(
   final metadataJson = <String, dynamic>{
     'name': object,
     'contentType': contentType,
+    // For the meaning of the hashes, see:
+    // https://docs.cloud.google.com/storage/docs/data-validation#server-validation
     'crc32c': crc32c.toBase64(),
     'md5Hash': base64Encode(crypto.md5.convert(data).bytes),
   };
