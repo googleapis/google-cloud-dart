@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:09:59 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:11 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "1126",
-        "x-guploader-uploadid": "AJRbA5WHutsL8LMXJrmqJefpPnwC_NQCqCS6NYyF__4WI5TE89vn9RP7JnubDspQEdh8esSPfdg-3HY",
+        "x-guploader-uploadid": "AJRbA5VajmyXSOzivFmyRJnG6UgJYzN19G3utustHbd4is19JVuURsGHfuwHarF5yygFN-S7e2ki_HA",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_lifecycle\",\n  \"id\": \"create_bucket_with_metadata_lifecycle\",\n  \"name\": \"create_bucket_with_metadata_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770412198904581319\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-06T21:09:59.335Z\",\n  \"updated\": \"2026-02-06T21:09:59.335Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"createdBefore\": \"2025-12-11\"\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-06T21:09:59.335Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:09:59.335Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:09:59.335Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_lifecycle\",\n  \"id\": \"create_bucket_with_metadata_lifecycle\",\n  \"name\": \"create_bucket_with_metadata_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770670571203079655\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-09T20:56:11.475Z\",\n  \"updated\": \"2026-02-09T20:56:11.475Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"createdBefore\": \"2025-12-11\"\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-09T20:56:11.475Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:11.475Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:11.475Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -42,10 +42,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:10:00 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:12 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AJRbA5WGVn4rT7gsTz8rEw-wy21Z4rdS5KXg8iZ-vhsuCFYumr1756lGMJjBOexcw_qtit5rQBBVYug",
+        "x-guploader-uploadid": "AJRbA5UezK50Dgr5CKjQxGUICLvMOweo_BRBMrGpgw5Eu0vuRWLZYVsFl9uhF4z1ae01Bc8An8-DeoM",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",

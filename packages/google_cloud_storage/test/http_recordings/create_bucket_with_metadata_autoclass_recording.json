@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:09:57 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:09 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "1131",
-        "x-guploader-uploadid": "AJRbA5U9_-0YPO1yfOEfumLsTYXqHKJi9LSVKKIJdHjzSIGSqqKSgFMuqjYvXYvvNDlcQJpesr3ngjw",
+        "x-guploader-uploadid": "AJRbA5Ud63eumHNQmB_wIUkdVqsXs6S3AqI1x1Hw5DcUDD3qYy8-9PUcKKBOUTn5rphjnX25792ZD1U",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_autoclass\",\n  \"id\": \"create_bucket_with_metadata_autoclass\",\n  \"name\": \"create_bucket_with_metadata_autoclass\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770412196937376522\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-06T21:09:57.366Z\",\n  \"updated\": \"2026-02-06T21:09:57.366Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-06T21:09:57.366Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:09:57.366Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:09:57.366Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\",\n  \"autoclass\": {\n    \"enabled\": true,\n    \"toggleTime\": \"2026-02-06T21:09:57.366Z\",\n    \"terminalStorageClass\": \"NEARLINE\",\n    \"terminalStorageClassUpdateTime\": \"2026-02-06T21:09:57.366Z\"\n  }\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_autoclass\",\n  \"id\": \"create_bucket_with_metadata_autoclass\",\n  \"name\": \"create_bucket_with_metadata_autoclass\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770670569052441160\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-09T20:56:09.452Z\",\n  \"updated\": \"2026-02-09T20:56:09.452Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-09T20:56:09.452Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:09.452Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:09.452Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\",\n  \"autoclass\": {\n    \"enabled\": true,\n    \"toggleTime\": \"2026-02-09T20:56:09.452Z\",\n    \"terminalStorageClass\": \"NEARLINE\",\n    \"terminalStorageClassUpdateTime\": \"2026-02-09T20:56:09.452Z\"\n  }\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -42,10 +42,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:09:58 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:10 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AJRbA5V4lskSPKKQScxHo0QaLDJN5TLidG2AA8tLc1dYvplR44bXO7CwPG8YyoYbFDXR4XaZupGKbWo",
+        "x-guploader-uploadid": "AJRbA5XHj339Qn7LRkWZRkXMg6NfAf7otO9JAUPECDLF7zUrfGtuj9t6oICYJBylUMNdi9ZS527ICWs",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",

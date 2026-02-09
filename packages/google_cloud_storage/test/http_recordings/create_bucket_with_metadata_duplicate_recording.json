@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:10:24 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:35 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "937",
-        "x-guploader-uploadid": "AJRbA5UBlrQYULPCW3QsjOlyxqvEGbiJyUXfDl5Q7yWVtumF_BoCmLDg-mHveeq9HNFmH2SdMJbx_w",
+        "x-guploader-uploadid": "AJRbA5WsvZLNb8ppO9rwc0diWpIaQBdBF2ozmtuyuFJ5gRMY7QMdtKEXnrYDj6efJrs7boqP_1lPzIU",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_duplicate\",\n  \"id\": \"create_bucket_with_metadata_duplicate\",\n  \"name\": \"create_bucket_with_metadata_duplicate\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770412223661072956\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-06T21:10:24.091Z\",\n  \"updated\": \"2026-02-06T21:10:24.091Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-06T21:10:24.091Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:10:24.091Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:10:24.091Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_duplicate\",\n  \"id\": \"create_bucket_with_metadata_duplicate\",\n  \"name\": \"create_bucket_with_metadata_duplicate\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770670595434869821\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-09T20:56:35.699Z\",\n  \"updated\": \"2026-02-09T20:56:35.699Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-09T20:56:35.699Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:35.699Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:35.699Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -43,10 +43,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:10:24 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:36 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "339",
-        "x-guploader-uploadid": "AJRbA5UwdAGHMOSyflKi-QlUUri9wHiFzfy2_buAYfCEjP05J75UHoHkrcSveciw3nqb2_o30vM3KP8",
+        "x-guploader-uploadid": "AJRbA5UvoXczNZuedyZYeIEkvUc9v06N_3IoKTbzOnnms0hHRrdc6donYNVCR9EZvFE_akpnbh1GevA",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
@@ -54,6 +54,33 @@
       },
       "body": "{\n  \"error\": {\n    \"code\": 409,\n    \"message\": \"Your previous request to create the named bucket succeeded and you already own it.\",\n    \"errors\": [\n      {\n        \"message\": \"Your previous request to create the named bucket succeeded and you already own it.\",\n        \"domain\": \"global\",\n        \"reason\": \"conflict\"\n      }\n    ]\n  }\n}\n",
       "reasonPhrase": "Conflict"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/create_bucket_with_metadata_duplicate?",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Mon, 09 Feb 2026 20:56:37 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AJRbA5UnFiVwTVexO8cL6qxh6OJUynHeAoE657fBzx2LHmPcoZoXfg0Lq6Fvq-cFIQ90gKFlCSVACGg",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
     }
   }
 ]

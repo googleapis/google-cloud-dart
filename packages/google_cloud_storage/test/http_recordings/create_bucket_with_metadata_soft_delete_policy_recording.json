@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:10:13 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:25 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "964",
-        "x-guploader-uploadid": "AJRbA5WTgr7ZwhanGaoPoLjTJ6Xpc8C_ky2VRHnW_ddfCB8JW0y7dcgxbh9uMj8dZi4IDIXlxPGOw4I",
+        "x-guploader-uploadid": "AJRbA5UrZ9pLAflOv1u_9P6JVXRTH_mfzwmdOCdHUar1dZtpy2fzUgPN2S3kS1ublWUA54mDY-x2P6Brr_mE",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_soft_delete_policy\",\n  \"id\": \"create_bucket_with_metadata_soft_delete_policy\",\n  \"name\": \"create_bucket_with_metadata_soft_delete_policy\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770412212833673052\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-06T21:10:13.174Z\",\n  \"updated\": \"2026-02-06T21:10:13.174Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-06T21:10:13.174Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:10:13.174Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-07T21:10:13.174Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_soft_delete_policy\",\n  \"id\": \"create_bucket_with_metadata_soft_delete_policy\",\n  \"name\": \"create_bucket_with_metadata_soft_delete_policy\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770670584963826114\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-09T20:56:25.273Z\",\n  \"updated\": \"2026-02-09T20:56:25.273Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-09T20:56:25.273Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:25.273Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-10T20:56:25.273Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -42,10 +42,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 06 Feb 2026 21:10:14 GMT",
+        "date": "Mon, 09 Feb 2026 20:56:26 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AJRbA5XNh6Jj5PhiXkOsSb-tbM5IV-VxNHSDEY9kuXe5DAVmLP5fVdhLjsUR_2KWcS_sk3RuBlYAwSc",
+        "x-guploader-uploadid": "AJRbA5UpzRXNHuEk2VbdPZgnqHe8g-e1GDXKKjSaeL-Z6BtR2DVodu-N25T3v-eGoouKeBOTEPCRmMM",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",
