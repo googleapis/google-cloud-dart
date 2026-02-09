@@ -182,8 +182,6 @@ final class Storage {
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
   ///
-  /// Creates of updates the object named `object` in the bucket named `bucket`.
-  ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
   /// `contentType` is the media-type of the given content. It is used in the
@@ -225,7 +223,7 @@ final class Storage {
   /// ```
   Future<ObjectMetadata> insertObject(
     String bucket,
-    String object,
+    String name,
     List<int> content, {
     String contentType = 'application/octet-stream',
     int? ifGenerationMatch,
@@ -244,7 +242,7 @@ final class Storage {
       _httpClient,
       projectId,
       bucket,
-      object,
+      name,
       content,
       contentType: contentType,
       ifGenerationMatch: ifGenerationMatch,
