@@ -1193,7 +1193,7 @@ void main() async {
       expect(actualMetadata.versioning?.enabled, isTrue);
     });
 
-    test('patch_bucket_non_idempotent_transport_failure', () async {
+    test('non-idempotent transport failure', () async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
