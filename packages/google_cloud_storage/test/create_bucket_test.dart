@@ -529,10 +529,10 @@ void main() async {
         'create_bucket_with_metadata_duplicate',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_duplicate'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_duplicate',
+      );
 
       final requestMetadata = BucketMetadata(name: bucketName);
 

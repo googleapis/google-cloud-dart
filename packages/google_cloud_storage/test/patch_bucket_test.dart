@@ -591,10 +591,10 @@ void main() async {
       );
 
       // Need a bucket to log to.
-      final logBucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'patch_bucket_change_logging_logs'
-          : uniqueBucketName();
+      final logBucketName = bucketNameWithTearDown(
+        storage,
+        'patch_bucket_change_logging_logs',
+      );
 
       await storage.createBucket(BucketMetadata(name: logBucketName));
 

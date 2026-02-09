@@ -20,7 +20,7 @@ String _bucketName(String name) {
 }
 
 String bucketNameWithTearDown(Storage storage, String name) {
-  final generatedName = bucketName(name);
+  final generatedName = _bucketName(name);
   addTearDown(() async {
     try {
       await storage.deleteBucket(generatedName);
