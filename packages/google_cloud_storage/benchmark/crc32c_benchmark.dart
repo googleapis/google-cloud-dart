@@ -17,13 +17,13 @@ import 'dart:typed_data';
 import 'package:benchmark_harness/benchmark_harness.dart';
 import 'package:google_cloud_storage/src/crc32c.dart';
 
-class Crc32Benchmark extends BenchmarkBase {
+class Crc32CBenchmark extends BenchmarkBase {
   final int size;
   final int count;
   late Uint8List data;
 
-  Crc32Benchmark(this.size, this.count)
-    : super('Crc32Benchmark: $size bytes x $count');
+  Crc32CBenchmark(this.size, this.count)
+    : super('Crc32CBenchmark: $size bytes × $count');
 
   @override
   void setup() {
@@ -44,8 +44,8 @@ class Crc32Benchmark extends BenchmarkBase {
 }
 
 void main() {
-  Crc32Benchmark(1024, 1).report();
-  Crc32Benchmark(1024 * 1024, 1).report();
-  Crc32Benchmark(1024, 1024).report();
-  Crc32Benchmark(10 * 1024 * 1024, 1).report();
+  Crc32CBenchmark(1024, 1).report();
+  Crc32CBenchmark(1024 * 1024, 1).report();
+  Crc32CBenchmark(1024, 1024).report();
+  Crc32CBenchmark(10 * 1024 * 1024, 1).report();
 }
