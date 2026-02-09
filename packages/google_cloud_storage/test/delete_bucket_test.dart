@@ -15,8 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:math';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
@@ -25,15 +23,7 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String uniqueBucketName() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
-  ].join();
-}
+import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
@@ -61,10 +51,10 @@ void main() async {
         'delete_bucket_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'delete_bucket_success'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'delete_bucket_success',
+      );
 
       await storage.createBucket(BucketMetadata(name: bucketName));
 
@@ -83,10 +73,10 @@ void main() async {
         'delete_bucket_non_existent',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'delete_bucket_non_existent'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'delete_bucket_non_existent',
+      );
       expect(
         () => storage.deleteBucket(bucketName),
         throwsA(isA<NotFoundException>()),
@@ -99,10 +89,10 @@ void main() async {
         'delete_bucket_with_if_metageneration_match_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'delete_bucket_with_if_metageneration_match_success'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'delete_bucket_with_if_metageneration_match_success',
+      );
 
       final metadata = await storage.createBucket(
         BucketMetadata(name: bucketName),
@@ -126,10 +116,10 @@ void main() async {
         'delete_bucket_with_if_metageneration_match_failure',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'delete_bucket_with_if_metageneration_match_failure'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'delete_bucket_with_if_metageneration_match_failure',
+      );
 
       await storage.createBucket(BucketMetadata(name: bucketName));
 
