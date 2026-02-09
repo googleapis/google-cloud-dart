@@ -274,7 +274,7 @@ final _crcTable = Uint32List.fromList([
   0xad7d5351,
 ]);
 
-/// Computes the [CRC-32C][] hash of the given bytes
+/// Computes the [CRC-32C][] hash of the given bytes.
 ///
 /// [CRC-32C]: https://datatracker.ietf.org/doc/html/rfc4960#appendix-B
 class Crc32c {
