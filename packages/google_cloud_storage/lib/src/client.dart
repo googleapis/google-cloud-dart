@@ -81,7 +81,7 @@ final class Storage {
   ///
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<void> deleteBucket(
-    String bucketName, {
+    String bucket, {
     int? ifMetagenerationMatch,
     String? userProject,
     RetryRunner retry = defaultRetry,
@@ -89,7 +89,7 @@ final class Storage {
     final url = Uri(
       scheme: 'https',
       host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucketName],
+      pathSegments: ['storage', 'v1', 'b', bucket],
     );
     final queryParams = {
       'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
@@ -135,7 +135,7 @@ final class Storage {
   ///
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<BucketMetadata> patchBucket(
-    String bucketName,
+    String bucket,
     BucketMetadataPatchBuilder metadata, {
     int? ifMetagenerationMatch,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
@@ -153,7 +153,7 @@ final class Storage {
     final url = Uri(
       scheme: 'https',
       host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucketName],
+      pathSegments: ['storage', 'v1', 'b', bucket],
     );
     final queryParams = {
       'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
@@ -181,6 +181,8 @@ final class Storage {
   ) async => throw UnimplementedError('objectMetadata');
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
+  ///
+  /// Creates of updates the object named `object` in the bucket named `bucket`.
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
@@ -222,8 +224,8 @@ final class Storage {
   /// );
   /// ```
   Future<ObjectMetadata> insertObject(
-    String bucketName,
-    String objectName,
+    String bucket,
+    String object,
     List<int> content, {
     String contentType = 'application/octet-stream',
     int? ifGenerationMatch,
@@ -241,8 +243,8 @@ final class Storage {
     () async => uploadFile(
       _httpClient,
       projectId,
-      bucketName,
-      objectName,
+      bucket,
+      object,
       content,
       contentType: contentType,
       ifGenerationMatch: ifGenerationMatch,
