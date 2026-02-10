@@ -153,7 +153,7 @@ void main() async {
       addTearDown(() => storage.deleteBucket(bucket5));
 
       await expectLater(
-        storage.listBuckets(prefix: prefix).map((b) => b.name),
+        storage.listBuckets(prefix: prefix, maxResults: 2).map((b) => b.name),
         emitsInOrder([
           emits(bucket1),
           emits(bucket2),
