@@ -15,7 +15,6 @@
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
