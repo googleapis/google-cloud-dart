@@ -21,8 +21,6 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
-import 'bucket_metadata.dart';
-import 'common_json.dart';
 import 'crc32c.dart';
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
