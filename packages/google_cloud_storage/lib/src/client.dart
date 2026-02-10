@@ -184,7 +184,7 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// If `metadata` is set, it will be used as the objects metadata. If
+  /// If `metadata` is set, it will be used as the object's metadata. If
   /// `metadata.name` does not match the `name` parameter, a
   /// [BadRequestException] is thrown.
   ///
