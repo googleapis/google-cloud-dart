@@ -184,9 +184,8 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// If `metadata` is set, it will be used as the object's metadata. If
-  /// `metadata.name` does not match the `name` parameter, a
-  /// [BadRequestException] is thrown.
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
   /// If set, `ifGenerationMatch` makes updating the object content conditional
   /// on whether the objects's generation matches the provided value. If the
