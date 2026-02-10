@@ -100,17 +100,17 @@ final class Storage {
 
   /// A stream of buckets in the project in lexicographical order by name.
   ///
-  /// `prefix` filters the returned buckets to those whose names begin with the
+  /// [prefix] filters the returned buckets to those whose names begin with the
   /// specified prefix.
   ///
-  /// `projection` controls the level of detail returned in the response. A
+  /// [projection] controls the level of detail returned in the response. A
   /// value of `"full"` returns all bucket properties, while a value of
   /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
   /// properties.
   ///
-  /// `softDeleted` filters the returned buckets to those that are soft deleted.
+  /// [softDeleted] filters the returned buckets to those that are soft deleted.
   ///
-  /// `maxResults` limits the number of buckets returned in a single response.
+  /// [maxResults] limits the number of buckets returned in a single response.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
   Stream<BucketMetadata> listBuckets({
