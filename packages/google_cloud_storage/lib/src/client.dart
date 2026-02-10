@@ -64,47 +64,6 @@ final class Storage {
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
-  /// A stream of buckets in the project.
-  ///
-  /// `prefix` filters the returned buckets to those whose names begin with the
-  /// specified prefix.
-  ///
-  /// `projection` controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
-  ///
-  /// `softDeleted` filters the returned buckets to those that are soft deleted.
-  ///
-  /// `maxResults` limits the number of buckets returned in a single response.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
-  Stream<BucketMetadata> listBuckets({
-    String? prefix,
-    String? projection,
-    bool? softDeleted,
-    @visibleForTesting int? maxResults,
-  }) async* {
-    String? nextPageToken;
-
-    do {
-      final url = Uri.https('storage.googleapis.com', '/storage/v1/b', {
-        'maxResults': ?maxResults?.toString(),
-        'project': projectId,
-        'pageToken': ?nextPageToken,
-        'projection': ?projection,
-        'prefix': ?prefix,
-        'softDeleted': ?softDeleted,
-      });
-      final json = await _client.get(url);
-      nextPageToken = json['nextPageToken'] as String?;
-
-      for (final bucket in json['items'] as List<Object?>? ?? const []) {
-        yield bucketMetadataFromJson(bucket as Map<String, Object?>);
-      }
-    } while (nextPageToken != null);
-  }
-
   /// Deletes an already-empty Google Cloud Storage bucket.
   ///
   /// This operation is idempotent if `ifMetagenerationMatch` is set.
@@ -139,6 +98,47 @@ final class Storage {
     };
     await _serviceClient.delete(url.replace(queryParameters: queryParams));
   }, isIdempotent: ifMetagenerationMatch != null);
+
+  /// A stream of buckets in the project.
+  ///
+  /// `prefix` filters the returned buckets to those whose names begin with the
+  /// specified prefix.
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// `softDeleted` filters the returned buckets to those that are soft deleted.
+  ///
+  /// `maxResults` limits the number of buckets returned in a single response.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
+  Stream<BucketMetadata> listBuckets({
+    String? prefix,
+    String? projection,
+    bool? softDeleted,
+    int? maxResults,
+  }) async* {
+    String? nextPageToken;
+
+    do {
+      final url = Uri.https('storage.googleapis.com', '/storage/v1/b', {
+        'maxResults': ?maxResults?.toString(),
+        'project': projectId,
+        'pageToken': ?nextPageToken,
+        'projection': ?projection,
+        'prefix': ?prefix,
+        'softDeleted': ?softDeleted?.toString(),
+      });
+      final json = await _serviceClient.get(url);
+      nextPageToken = json['nextPageToken'] as String?;
+
+      for (final bucket in json['items'] as List<Object?>? ?? const []) {
+        yield bucketMetadataFromJson(bucket as Map<String, Object?>);
+      }
+    } while (nextPageToken != null);
+  }
 
   /// Update a Google Cloud Storage bucket.
   ///

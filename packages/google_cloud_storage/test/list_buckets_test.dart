@@ -23,13 +23,15 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+import 'test_utils.dart';
 
-String uniqueBucketName() {
+const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
+
+String _uniquePrefix() {
   final random = Random();
   return [
     for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
+      _bucketChars[random.nextInt(_bucketChars.length)],
   ].join();
 }
 
@@ -60,11 +62,7 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final prefix = TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'list_buckets_no_buckets'
-          : uniqueBucketName();
-
-      expect(storage.listBuckets(prefix: prefix), emitsDone);
+      expect(storage.listBuckets(prefix: 'nobuckethasthisprefix'), emitsDone);
     });
 
     test('single bucket', () async {
@@ -74,48 +72,57 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'list_buckets_single_bucket'
-          : uniqueBucketName();
-
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'list_buckets_single_bucket',
+      );
       await storage.createBucket(BucketMetadata(name: bucketName));
 
-      expect(
-        storage.listBuckets(prefix: bucketName).map((b) => b.name),
-        emitsInOrder([emits(bucketName), emitsDone]),
-      );
-    });
-
-    test('soft deleted bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_soft_deleted_bucket',
-      );
-      addTearDown(testClient.endTest);
-
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'list_buckets_soft_deleted_bucket'
-          : uniqueBucketName();
-
-      await storage.createBucket(
-        BucketMetadata(
-          name: bucketName,
-          softDeletePolicy: BucketSoftDeletePolicy(
-            retentionDurationSeconds: 60,
-          ),
-        ),
-      );
-      await storage.deleteBucket(bucketName);
-
-      expect(
+      await expectLater(
         storage
-            .listBuckets(prefix: bucketName, softDeleted: true)
+            .listBuckets(prefix: 'list_buckets_single_bucket')
             .map((b) => b.name),
         emitsInOrder([emits(bucketName), emitsDone]),
       );
     });
+
+    test(
+      'soft deleted bucket',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'list_buckets_soft_deleted_bucket',
+        );
+        addTearDown(testClient.endTest);
+
+        final prefix = _uniquePrefix();
+        final softDeletedBucket = bucketNameWithTearDown(storage, prefix);
+
+        await storage.createBucket(
+          BucketMetadata(
+            name: softDeletedBucket,
+            softDeletePolicy: BucketSoftDeletePolicy(
+              retentionDurationSeconds: const Duration(days: 7).inSeconds,
+            ),
+          ),
+        );
+
+        await storage.deleteBucket(softDeletedBucket);
+
+        final notDeletedBucket = bucketNameWithTearDown(storage, prefix);
+        await storage.createBucket(BucketMetadata(name: notDeletedBucket));
+
+        await expectLater(
+          storage
+              .listBuckets(prefix: softDeletedBucket, softDeleted: true)
+              .map((b) => b.name),
+          emitsInOrder([emits(softDeletedBucket), emitsDone]),
+        );
+      },
+      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'not available when recording/replaying'
+          : false,
+    );
 
     test('pagination', () async {
       await testClient.startTest(
@@ -126,7 +133,7 @@ void main() async {
 
       final prefix = TestHttpClient.isRecording || TestHttpClient.isReplaying
           ? 'list_buckets_pagination'
-          : uniqueBucketName();
+          : _uniquePrefix();
 
       final bucket1 = '${prefix}_1';
       final bucket2 = '${prefix}_2';
@@ -135,12 +142,17 @@ void main() async {
       final bucket5 = '${prefix}_5';
 
       await storage.createBucket(BucketMetadata(name: bucket1));
+      addTearDown(() => storage.deleteBucket(bucket1));
       await storage.createBucket(BucketMetadata(name: bucket2));
+      addTearDown(() => storage.deleteBucket(bucket2));
       await storage.createBucket(BucketMetadata(name: bucket3));
+      addTearDown(() => storage.deleteBucket(bucket3));
       await storage.createBucket(BucketMetadata(name: bucket4));
+      addTearDown(() => storage.deleteBucket(bucket4));
       await storage.createBucket(BucketMetadata(name: bucket5));
+      addTearDown(() => storage.deleteBucket(bucket5));
 
-      expect(
+      await expectLater(
         storage.listBuckets(prefix: prefix).map((b) => b.name),
         emitsInOrder([
           emits(bucket1),
