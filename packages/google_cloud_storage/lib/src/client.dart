@@ -98,7 +98,7 @@ final class Storage {
     await _serviceClient.delete(url.replace(queryParameters: queryParams));
   }, isIdempotent: ifMetagenerationMatch != null);
 
-  /// A stream of buckets in the project.
+  /// A stream of buckets in the project in lexicographical order by name.
   ///
   /// `prefix` filters the returned buckets to those whose names begin with the
   /// specified prefix.
