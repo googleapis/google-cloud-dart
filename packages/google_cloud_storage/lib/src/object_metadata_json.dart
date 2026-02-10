@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'package:meta/meta.dart';
-
 import '../google_cloud_storage.dart';
 import 'common_json.dart';
 
@@ -28,7 +26,7 @@ Map<String, Object?> objectMetadataToJson(ObjectMetadata instance) => {
   'contentType': ?instance.contentType,
   'contexts': ?_objectContextsToJson(instance.contexts),
   'crc32c': ?instance.crc32c,
-  'customerEncryption': ?customerEncryptionToJson(instance.customerEncryption),
+  'customerEncryption': ?_customerEncryptionToJson(instance.customerEncryption),
   'customTime': ?timestampToJson(instance.customTime),
   'etag': ?instance.etag,
   'eventBasedHold': ?instance.eventBasedHold,
@@ -73,7 +71,7 @@ ObjectMetadata objectMetadataFromJson(
   contentType: json['contentType'] as String?,
   contexts: _objectContextsFromJson(json['contexts'] as Map<String, Object?>?),
   crc32c: json['crc32c'] as String?,
-  customerEncryption: customerEncryptionFromJson(
+  customerEncryption: _customerEncryptionFromJson(
     json['customerEncryption'] as Map<String, Object?>?,
   ),
   customTime: timestampFromJson(json['customTime']),
@@ -110,8 +108,7 @@ ObjectMetadata objectMetadataFromJson(
   updated: timestampFromJson(json['updated']),
 );
 
-@visibleForTesting
-CustomerEncryption? customerEncryptionFromJson(Map<String, Object?>? json) {
+CustomerEncryption? _customerEncryptionFromJson(Map<String, Object?>? json) {
   if (json == null) return null;
   return CustomerEncryption(
     encryptionAlgorithm: json['encryptionAlgorithm'] as String?,
@@ -119,8 +116,7 @@ CustomerEncryption? customerEncryptionFromJson(Map<String, Object?>? json) {
   );
 }
 
-@visibleForTesting
-Map<String, Object?>? customerEncryptionToJson(CustomerEncryption? instance) {
+Map<String, Object?>? _customerEncryptionToJson(CustomerEncryption? instance) {
   if (instance == null) return null;
   return {
     'encryptionAlgorithm': ?instance.encryptionAlgorithm,
