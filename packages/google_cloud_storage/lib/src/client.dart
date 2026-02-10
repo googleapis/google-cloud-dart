@@ -225,8 +225,8 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// `contentType` is the media-type of the given content. It is used in the
-  /// `Content-Type` header when serving the object over HTTP.
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
   /// If set, `ifGenerationMatch` makes updating the object content conditional
   /// on whether the objects's generation matches the provided value. If the
@@ -266,7 +266,7 @@ final class Storage {
     String bucket,
     String name,
     List<int> content, {
-    String contentType = 'application/octet-stream',
+    ObjectMetadata? metadata,
     int? ifGenerationMatch,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
     // support ifMetagenerationNotMatch.
@@ -285,7 +285,7 @@ final class Storage {
       bucket,
       name,
       content,
-      contentType: contentType,
+      metadata: metadata,
       ifGenerationMatch: ifGenerationMatch,
       predefinedAcl: predefinedAcl,
       projection: projection,

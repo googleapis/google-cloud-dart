@@ -18,6 +18,7 @@ library;
 import 'dart:convert';
 import 'dart:math';
 
+import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart'
     show fixedBoundaryString;
@@ -59,7 +60,7 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('new', () async {
+    test('new, no metadata', () async {
       await testClient.startTest('google_cloud_storage', 'insert_object_new');
       addTearDown(testClient.endTest);
       final bucketName =
@@ -68,19 +69,226 @@ void main() async {
           : uniqueBucketName();
 
       await storage.createBucket(BucketMetadata(name: bucketName));
+
+      final beforeRequestTime = DateTime.now().toUtc();
+
       final objectMetadata = await storage.insertObject(
         bucketName,
         'object1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: 0,
-        contentType: 'text/plain',
       );
-      expect(objectMetadata.contentType, 'text/plain');
-      expect(objectMetadata.kind, 'storage#object');
+      final afterRequestTime = DateTime.now().toUtc();
+      expect(objectMetadata.acl, isNull);
+      expect(objectMetadata.bucket, bucketName);
+      expect(objectMetadata.cacheControl, isNull);
+      expect(objectMetadata.componentCount, isNull);
+      expect(objectMetadata.contentDisposition, isNull);
+      expect(objectMetadata.contentEncoding, isNull);
+      expect(objectMetadata.contentLanguage, isNull);
+      expect(objectMetadata.contentType, 'application/octet-stream');
+      expect(objectMetadata.contexts, isNull);
+      expect(objectMetadata.crc32c, '/mzx3A==');
+      expect(objectMetadata.customTime, isNull);
+      expect(objectMetadata.customerEncryption, isNull);
+      expect(objectMetadata.etag, isNotEmpty);
+      expect(objectMetadata.eventBasedHold, isNull);
       expect(objectMetadata.generation, isNotNull);
+      expect(objectMetadata.hardDeleteTime, isNull);
+      expect(objectMetadata.id, isNotEmpty);
+      expect(objectMetadata.kind, 'storage#object');
+      expect(objectMetadata.kmsKeyName, isNull);
+      expect(
+        objectMetadata.mediaLink?.toString(),
+        startsWith(
+          'https://storage.googleapis.com/download/storage/v1/b/$bucketName/o/'
+          'object1',
+        ),
+      );
+      expect(objectMetadata.metadata, isNull);
+      expect(objectMetadata.md5Hash, isNotEmpty);
       expect(objectMetadata.metageneration, 1);
       expect(objectMetadata.name, 'object1');
+      expect(objectMetadata.owner, isNull);
+      expect(objectMetadata.restoreToken, isNull);
+      expect(objectMetadata.retentionExpirationTime, isNull);
+      expect(
+        objectMetadata.selfLink,
+        Uri(
+          scheme: 'https',
+          host: 'www.googleapis.com',
+          path: '/storage/v1/b/$bucketName/o/object1',
+        ),
+      );
       expect(objectMetadata.size, 12);
+      expect(objectMetadata.softDeleteTime, isNull);
+      expect(objectMetadata.storageClass, 'STANDARD');
+      expect(objectMetadata.temporaryHold, isNull);
+      if (TestHttpClient.isReplaying) {
+        expect(
+          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+          greaterThan(0),
+        );
+      } else {
+        expect(
+          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+          allOf(
+            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+          ),
+        );
+      }
+      expect(objectMetadata.timeDeleted, isNull);
+      expect(objectMetadata.timeStorageClassUpdated, isNotNull);
+      expect(
+        objectMetadata.updated?.toDateTime(),
+        objectMetadata.timeCreated?.toDateTime(),
+      );
+    });
+
+    test('new with content-type', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_content_type',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_content_type'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      final objectMetadata = await storage.insertObject(
+        bucketName,
+        'object1',
+        utf8.encode('Hello World!'),
+        metadata: ObjectMetadata(contentType: 'text/plain'),
+        ifGenerationMatch: 0,
+      );
+
+      expect(objectMetadata.contentType, 'text/plain');
+    });
+
+    test('new with crc32c', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_crc32c',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_crc32c'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      final objectMetadata = await storage.insertObject(
+        bucketName,
+        'object1',
+        utf8.encode('Hello World!'),
+        metadata: ObjectMetadata(crc32c: '/mzx3A=='),
+        ifGenerationMatch: 0,
+      );
+      expect(objectMetadata.crc32c, '/mzx3A==');
+    });
+
+    test('new with invalid crc32c', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_invalid_crc32c',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_invalid_crc32c'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      expect(
+        () => storage.insertObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+          metadata: ObjectMetadata(crc32c: 'invalid'),
+          ifGenerationMatch: 0,
+        ),
+        throwsA(isA<BadRequestException>()),
+      );
+    });
+
+    test('new with md5', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_md5',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_md5'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      final objectMetadata = await storage.insertObject(
+        bucketName,
+        'object1',
+        utf8.encode('Hello World!'),
+        metadata: ObjectMetadata(md5Hash: '7Qdih1MuhjZehB6Sv8UNjA=='),
+        ifGenerationMatch: 0,
+      );
+      expect(objectMetadata.md5Hash, '7Qdih1MuhjZehB6Sv8UNjA==');
+    });
+
+    test('new with invalid md5', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_invalid_md5',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_invalid_md5'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      expect(
+        () => storage.insertObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+          metadata: ObjectMetadata(md5Hash: 'invalid'),
+          ifGenerationMatch: 0,
+        ),
+        throwsA(isA<BadRequestException>()),
+      );
+    });
+
+    test('parameter name and metadata name mismatch', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_parameter_name_and_metadata_name_mismatch',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_name_mismatch'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      expect(
+        () => storage.insertObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+          metadata: ObjectMetadata(name: 'object2'),
+          ifGenerationMatch: 0,
+        ),
+        throwsA(isA<BadRequestException>()),
+      );
     });
 
     test('no such bucket', () async {
