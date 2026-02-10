@@ -1,23 +1,23 @@
 [
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/non_existant_bucket?project=skilful-orb-203421",
-      "method": "PATCH",
+      "url": "https://storage.googleapis.com/upload/storage/v1/b/insert_object_no_such_bucket/o?uploadType=multipart&name=object1&project=skilful-orb-203421",
+      "method": "POST",
       "headers": {
-        "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "Content-Type": "multipart/related; boundary=boundary",
+        "Content-Length": "261"
       },
-      "body": "eyJ2ZXJzaW9uaW5nIjp7ImVuYWJsZWQiOnRydWV9fQ=="
+      "body": "LS1ib3VuZGFyeQ0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29uOyBjaGFyc2V0PVVURi04DQoNCnsibmFtZSI6Im9iamVjdDEiLCJjb250ZW50VHlwZSI6ImFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbSIsImNyYzMyYyI6Ii9tengzQT09IiwibWQ1SGFzaCI6IjdRZGloMU11aGpaZWhCNlN2OFVOakE9PSJ9DQotLWJvdW5kYXJ5DQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbQ0KDQpIZWxsbyBXb3JsZCENCi0tYm91bmRhcnktLQ0K"
     },
     "response": {
       "statusCode": 404,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Mon, 09 Feb 2026 20:55:49 GMT",
+        "date": "Mon, 09 Feb 2026 19:46:15 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AJRbA5UmZSP-GpaLteUd-odnBpsQZY1TV5zg6OUPQkzlXsAyeb7iGY4FytxKEuz9TJkTrNLdx-mS8HU",
+        "x-guploader-uploadid": "AJRbA5U5u6AJ2GX2Uf3DWwkrRe0jzAZp4tiqXiaQX6FAEwyaemNu5-S5srhaTicWSEJs9gweNyezOA",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",

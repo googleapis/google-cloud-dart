@@ -15,8 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:math';
-
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
@@ -26,15 +24,7 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String uniqueBucketName() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
-  ].join();
-}
+import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
@@ -62,10 +52,10 @@ void main() async {
         'create_bucket_with_metadata_name_only',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_name_only'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_name_only',
+      );
 
       final requestMetadata = BucketMetadata(name: bucketName);
 
@@ -160,10 +150,10 @@ void main() async {
         'create_bucket_with_metadata_autoclass',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_autoclass'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_autoclass',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -205,10 +195,10 @@ void main() async {
         'create_bucket_with_metadata_lifecycle',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_lifecycle'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_lifecycle',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -240,10 +230,10 @@ void main() async {
         'create_bucket_with_metadata_billing',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_billing'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_billing',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -261,10 +251,10 @@ void main() async {
         'create_bucket_with_metadata_cors',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_cors'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_cors',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -293,10 +283,10 @@ void main() async {
         'create_bucket_with_metadata_default_event_based_hold',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_default_event_based_hold'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_default_event_based_hold',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -314,10 +304,10 @@ void main() async {
         'create_bucket_with_metadata_iam_configuration',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_iam_configuration'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_iam_configuration',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -345,10 +335,10 @@ void main() async {
         'create_bucket_with_metadata_labels',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_labels'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_labels',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -366,10 +356,10 @@ void main() async {
         'create_bucket_with_metadata_retention_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_retention_policy'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_retention_policy',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -388,10 +378,10 @@ void main() async {
         'create_bucket_with_metadata_soft_delete_policy',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_soft_delete_policy'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_soft_delete_policy',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -411,10 +401,10 @@ void main() async {
         'create_bucket_with_metadata_storage_class',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_storage_class'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_storage_class',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -432,10 +422,10 @@ void main() async {
         'create_bucket_with_metadata_versioning',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_versioning'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_versioning',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -453,10 +443,10 @@ void main() async {
         'create_bucket_with_metadata_website',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_website'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_website',
+      );
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -539,10 +529,10 @@ void main() async {
         'create_bucket_with_metadata_duplicate',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'create_bucket_with_metadata_duplicate'
-          : uniqueBucketName();
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'create_bucket_with_metadata_duplicate',
+      );
 
       final requestMetadata = BucketMetadata(name: bucketName);
 
