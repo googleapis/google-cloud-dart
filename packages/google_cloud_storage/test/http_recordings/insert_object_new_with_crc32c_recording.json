@@ -1,0 +1,60 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJuYW1lIjoiaW5zZXJ0X29iamVjdF9uZXdfd2l0aF9jcmMzMmMifQ=="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 10 Feb 2026 22:02:25 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "913",
+        "x-guploader-uploadid": "AJRbA5W8B4t5WOCu9OYu3iLU6PkDsMHboxkl3xUVtbveo81PMv2qN00Pji4IHJTxbNbWN49oelmERMePfbCb",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/insert_object_new_with_crc32c\",\n  \"id\": \"insert_object_new_with_crc32c\",\n  \"name\": \"insert_object_new_with_crc32c\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770760945489008065\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-10T22:02:25.894Z\",\n  \"updated\": \"2026-02-10T22:02:25.894Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-10T22:02:25.894Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-11T22:02:25.894Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-11T22:02:25.894Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/upload/storage/v1/b/insert_object_new_with_crc32c/o?uploadType=multipart&name=object1&project=skilful-orb-203421&ifGenerationMatch=0",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "multipart/related; boundary=boundary",
+        "Content-Length": "203"
+      },
+      "body": "LS1ib3VuZGFyeQ0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29uOyBjaGFyc2V0PVVURi04DQoNCnsiY3JjMzJjIjoiL216eDNBPT0iLCJtZDVIYXNoIjoiN1FkaWgxTXVoalplaEI2U3Y4VU5qQT09In0NCi0tYm91bmRhcnkNCkNvbnRlbnQtVHlwZTogYXBwbGljYXRpb24vb2N0ZXQtc3RyZWFtDQoNCkhlbGxvIFdvcmxkIQ0KLS1ib3VuZGFyeS0tDQo="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Tue, 10 Feb 2026 22:02:26 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "846",
+        "x-guploader-uploadid": "AJRbA5UMLp19ziCLjN1XaPF5_P2WntzxcBudfeB8Kw-T6S1vr6b23rZOSQOAW2pl2Lwx9bEm08lZDtA",
+        "etag": "CMH+wMn2z5IDEAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#object\",\n  \"id\": \"insert_object_new_with_crc32c/object1/1770760946335553\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/insert_object_new_with_crc32c/o/object1\",\n  \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/insert_object_new_with_crc32c/o/object1?generation=1770760946335553&alt=media\",\n  \"name\": \"object1\",\n  \"bucket\": \"insert_object_new_with_crc32c\",\n  \"generation\": \"1770760946335553\",\n  \"metageneration\": \"1\",\n  \"contentType\": \"application/octet-stream\",\n  \"storageClass\": \"STANDARD\",\n  \"size\": \"12\",\n  \"md5Hash\": \"7Qdih1MuhjZehB6Sv8UNjA==\",\n  \"crc32c\": \"/mzx3A==\",\n  \"etag\": \"CMH+wMn2z5IDEAE=\",\n  \"timeCreated\": \"2026-02-10T22:02:26.384Z\",\n  \"updated\": \"2026-02-10T22:02:26.384Z\",\n  \"timeStorageClassUpdated\": \"2026-02-10T22:02:26.384Z\",\n  \"timeFinalized\": \"2026-02-10T22:02:26.384Z\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]
