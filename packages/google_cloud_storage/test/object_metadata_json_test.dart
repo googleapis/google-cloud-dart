@@ -20,74 +20,9 @@ import 'package:test/test.dart';
 void main() {
   group('objectMetadataToJson', () {
     group('acl', () {
-      group('from json', () {
-        test('acl', () {
-          final metadata = objectMetadataFromJson({
-            'acl': [
-              {
-                'bucket': 'bucket',
-                'domain': 'domain',
-                'email': 'email',
-                'entity': 'entity',
-                'entityId': 'entityId',
-                'etag': 'etag',
-                'generation': 'generation',
-                'id': 'id',
-                'kind': 'kind',
-                'object': 'object',
-                'projectTeam': {
-                  'projectNumber': 'projectNumber',
-                  'team': 'team',
-                },
-                'role': 'role',
-                'selfLink': 'http://example.com/selfLink',
-              },
-            ],
-          });
-          final acl = metadata.acl!.first;
-          expect(acl.bucket, 'bucket');
-          expect(acl.domain, 'domain');
-          expect(acl.email, 'email');
-          expect(acl.entity, 'entity');
-          expect(acl.entityId, 'entityId');
-          expect(acl.etag, 'etag');
-          expect(acl.generation, 'generation');
-          expect(acl.id, 'id');
-          expect(acl.kind, 'kind');
-          expect(acl.object, 'object');
-          expect(acl.projectTeam?.projectNumber, 'projectNumber');
-          expect(acl.projectTeam?.team, 'team');
-          expect(acl.role, 'role');
-          expect(acl.selfLink, Uri.parse('http://example.com/selfLink'));
-        });
-      });
-      group('to json', () {
-        test('acl', () {
-          final json = objectMetadataToJson(
-            ObjectMetadata(
-              acl: [
-                ObjectAccessControl(
-                  bucket: 'bucket',
-                  domain: 'domain',
-                  email: 'email',
-                  entity: 'entity',
-                  entityId: 'entityId',
-                  etag: 'etag',
-                  generation: 'generation',
-                  id: 'id',
-                  kind: 'kind',
-                  object: 'object',
-                  projectTeam: ProjectTeam(
-                    projectNumber: 'projectNumber',
-                    team: 'team',
-                  ),
-                  role: 'role',
-                  selfLink: Uri.parse('http://example.com/selfLink'),
-                ),
-              ],
-            ),
-          );
-          expect(json['acl'], [
+      test('from json', () {
+        final metadata = objectMetadataFromJson({
+          'acl': [
             {
               'bucket': 'bucket',
               'domain': 'domain',
@@ -103,8 +38,66 @@ void main() {
               'role': 'role',
               'selfLink': 'http://example.com/selfLink',
             },
-          ]);
+          ],
         });
+        final acl = metadata.acl!.first;
+        expect(acl.bucket, 'bucket');
+        expect(acl.domain, 'domain');
+        expect(acl.email, 'email');
+        expect(acl.entity, 'entity');
+        expect(acl.entityId, 'entityId');
+        expect(acl.etag, 'etag');
+        expect(acl.generation, 'generation');
+        expect(acl.id, 'id');
+        expect(acl.kind, 'kind');
+        expect(acl.object, 'object');
+        expect(acl.projectTeam?.projectNumber, 'projectNumber');
+        expect(acl.projectTeam?.team, 'team');
+        expect(acl.role, 'role');
+        expect(acl.selfLink, Uri.parse('http://example.com/selfLink'));
+      });
+      test('to json', () {
+        final json = objectMetadataToJson(
+          ObjectMetadata(
+            acl: [
+              ObjectAccessControl(
+                bucket: 'bucket',
+                domain: 'domain',
+                email: 'email',
+                entity: 'entity',
+                entityId: 'entityId',
+                etag: 'etag',
+                generation: 'generation',
+                id: 'id',
+                kind: 'kind',
+                object: 'object',
+                projectTeam: ProjectTeam(
+                  projectNumber: 'projectNumber',
+                  team: 'team',
+                ),
+                role: 'role',
+                selfLink: Uri.parse('http://example.com/selfLink'),
+              ),
+            ],
+          ),
+        );
+        expect(json['acl'], [
+          {
+            'bucket': 'bucket',
+            'domain': 'domain',
+            'email': 'email',
+            'entity': 'entity',
+            'entityId': 'entityId',
+            'etag': 'etag',
+            'generation': 'generation',
+            'id': 'id',
+            'kind': 'kind',
+            'object': 'object',
+            'projectTeam': {'projectNumber': 'projectNumber', 'team': 'team'},
+            'role': 'role',
+            'selfLink': 'http://example.com/selfLink',
+          },
+        ]);
       });
     });
 
@@ -272,38 +265,28 @@ void main() {
     });
 
     group('customerEncryption', () {
-      group('from json', () {
-        test('encryptionAlgorithm', () {
-          final metadata = objectMetadataFromJson({
-            'customerEncryption': {'encryptionAlgorithm': 'AES256'},
-          });
-          expect(metadata.customerEncryption?.encryptionAlgorithm, 'AES256');
+      test('from json', () {
+        final metadata = objectMetadataFromJson({
+          'customerEncryption': {
+            'encryptionAlgorithm': 'AES256',
+            'keySha256': 'keySha256',
+          },
         });
-        test('keySha256', () {
-          final metadata = objectMetadataFromJson({
-            'customerEncryption': {'keySha256': 'keySha256'},
-          });
-          expect(metadata.customerEncryption?.keySha256, 'keySha256');
-        });
+        expect(metadata.customerEncryption?.encryptionAlgorithm, 'AES256');
+        expect(metadata.customerEncryption?.keySha256, 'keySha256');
       });
-      group('to json', () {
-        test('encryptionAlgorithm', () {
-          final json = objectMetadataToJson(
-            ObjectMetadata(
-              customerEncryption: CustomerEncryption(
-                encryptionAlgorithm: 'AES256',
-              ),
+      test('to json', () {
+        final json = objectMetadataToJson(
+          ObjectMetadata(
+            customerEncryption: CustomerEncryption(
+              encryptionAlgorithm: 'AES256',
+              keySha256: 'keySha256',
             ),
-          );
-          expect(json['customerEncryption'], {'encryptionAlgorithm': 'AES256'});
-        });
-        test('keySha256', () {
-          final json = objectMetadataToJson(
-            ObjectMetadata(
-              customerEncryption: CustomerEncryption(keySha256: 'keySha256'),
-            ),
-          );
-          expect(json['customerEncryption'], {'keySha256': 'keySha256'});
+          ),
+        );
+        expect(json['customerEncryption'], {
+          'encryptionAlgorithm': 'AES256',
+          'keySha256': 'keySha256',
         });
       });
     });
