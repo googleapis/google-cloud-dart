@@ -110,7 +110,10 @@ final class Storage {
   ///
   /// [softDeleted] filters the returned buckets to those that are soft deleted.
   ///
-  /// [maxResults] limits the number of buckets returned in a single response.
+  /// [maxResults] limits the number of buckets returned in a single API
+  /// response. This does not affect the output but does affect the trade-off
+  /// between latency and memory usage; a larger value will result in fewer
+  /// network requests but higher memory usage.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
   Stream<BucketMetadata> listBuckets({
