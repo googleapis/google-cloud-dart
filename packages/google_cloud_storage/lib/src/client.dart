@@ -184,8 +184,9 @@ final class Storage {
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
   ///
-  /// `contentType` is the media-type of the given content. It is used in the
-  /// `Content-Type` header when serving the object over HTTP.
+  /// If `metadata` is set, it will be used as the objects metadata. If
+  /// `metadata.name` does not match the `name` parameter, a
+  /// [BadRequestException] is thrown.
   ///
   /// If set, `ifGenerationMatch` makes updating the object content conditional
   /// on whether the objects's generation matches the provided value. If the

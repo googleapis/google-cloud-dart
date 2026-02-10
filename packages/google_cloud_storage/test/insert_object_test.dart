@@ -266,6 +266,31 @@ void main() async {
       );
     });
 
+    test('parameter name and metadata name mismatch', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'insert_object_new_with_parameter_name_and_metadata_name_mismatch',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName =
+          TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'insert_object_new_with_name_mismatch'
+          : uniqueBucketName();
+
+      await storage.createBucket(BucketMetadata(name: bucketName));
+
+      expect(
+        () => storage.insertObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+          metadata: ObjectMetadata(name: 'object2'),
+          ifGenerationMatch: 0,
+        ),
+        throwsA(isA<BadRequestException>()),
+      );
+    });
+
     test('no such bucket', () async {
       await testClient.startTest(
         'google_cloud_storage',
