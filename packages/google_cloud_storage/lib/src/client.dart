@@ -225,7 +225,7 @@ final class Storage {
     String bucket,
     String name,
     List<int> content, {
-    String contentType = 'application/octet-stream',
+    ObjectMetadata? metadata,
     int? ifGenerationMatch,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
     // support ifMetagenerationNotMatch.
@@ -244,7 +244,7 @@ final class Storage {
       bucket,
       name,
       content,
-      contentType: contentType,
+      metadata: metadata,
       ifGenerationMatch: ifGenerationMatch,
       predefinedAcl: predefinedAcl,
       projection: projection,

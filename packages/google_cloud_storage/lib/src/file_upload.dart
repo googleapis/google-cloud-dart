@@ -21,9 +21,11 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import 'bucket_metadata.dart';
 import 'common_json.dart';
 import 'crc32c.dart';
 import 'object_metadata.dart';
+import 'object_metadata_json.dart';
 
 final _random = Random.secure();
 
@@ -65,7 +67,7 @@ Future<ObjectMetadata> uploadFile(
   String bucket,
   String object,
   List<int> data, {
-  String contentType = 'application/octet-stream',
+  ObjectMetadata? metadata,
   int? ifGenerationMatch,
   String? predefinedAcl,
   String? projection,
@@ -84,15 +86,18 @@ Future<ObjectMetadata> uploadFile(
 
   final boundary = _boundaryString();
 
-  final crc32c = Crc32c()..update(data);
-  final metadataJson = <String, dynamic>{
-    'name': object,
-    'contentType': contentType,
-    // For the meaning of the hashes, see:
-    // https://docs.cloud.google.com/storage/docs/data-validation#server-validation
-    'crc32c': crc32c.toBase64(),
-    'md5Hash': base64Encode(crypto.md5.convert(data).bytes),
-  };
+  final metadataJson = metadata == null
+      ? <String, Object?>{}
+      : objectMetadataToJson(metadata);
+
+  if (metadata?.crc32c == null) {
+    final crc32c = Crc32c()..update(data);
+    metadataJson['crc32c'] = crc32c.toBase64();
+  }
+  if (metadata?.md5Hash == null) {
+    metadataJson['md5Hash'] = base64Encode(crypto.md5.convert(data).bytes);
+  }
+  final contentType = metadata?.contentType ?? 'application/octet-stream';
 
   final multipartBody = BytesBuilder(copy: false);
   final metadataPart = utf8.encode(
@@ -127,14 +132,3 @@ Future<ObjectMetadata> uploadFile(
     jsonDecode(responseBody) as Map<String, Object?>,
   );
 }
-
-// TODO: Complete this deserialization and move it to its own file.
-ObjectMetadata objectMetadataFromJson(Map<String, Object?> json) =>
-    ObjectMetadata(
-      contentType: json['contentType'] as String?,
-      generation: int64FromJson(json['generation']),
-      kind: json['kind'] as String?,
-      metageneration: int64FromJson(json['metageneration']),
-      name: json['name'] as String?,
-      size: int64FromJson(json['size']),
-    );
