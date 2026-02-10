@@ -120,7 +120,9 @@ void main() async {
         );
       },
       skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'not available when recording/replaying'
+          ? 'soft deleted buckets cannot be deleted before their retention '
+                'period has expired, which makes it impossible to use fixed '
+                'bucket names'
           : false,
     );
 
