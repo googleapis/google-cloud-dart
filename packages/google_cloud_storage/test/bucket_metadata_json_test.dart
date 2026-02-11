@@ -236,22 +236,80 @@ void main() {
         final json = bucketMetadataToJson(
           BucketMetadata(
             defaultObjectAcl: [
-              ObjectAccessControl(entity: 'user-1', role: 'READER'),
+              ObjectAccessControl(
+                bucket: 'bucket',
+                domain: 'domain',
+                email: 'email',
+                entity: 'entity',
+                entityId: 'entityId',
+                etag: 'etag',
+                generation: 'generation',
+                id: 'id',
+                kind: 'kind',
+                object: 'object',
+                projectTeam: ProjectTeam(
+                  projectNumber: 'projectNumber',
+                  team: 'team',
+                ),
+                role: 'READER',
+                selfLink: Uri.parse('http://example.com/selfLink'),
+              ),
             ],
           ),
         );
         expect(json['defaultObjectAcl'], [
-          {'entity': 'user-1', 'role': 'READER'},
+          {
+            'bucket': 'bucket',
+            'domain': 'domain',
+            'email': 'email',
+            'entity': 'entity',
+            'entityId': 'entityId',
+            'etag': 'etag',
+            'generation': 'generation',
+            'id': 'id',
+            'kind': 'kind',
+            'object': 'object',
+            'projectTeam': {'projectNumber': 'projectNumber', 'team': 'team'},
+            'role': 'READER',
+            'selfLink': 'http://example.com/selfLink',
+          },
         ]);
       });
       test('from json', () {
         final metadata = bucketMetadataFromJson({
           'defaultObjectAcl': [
-            {'entity': 'user-1', 'role': 'READER'},
+            {
+              'bucket': 'bucket',
+              'domain': 'domain',
+              'email': 'email',
+              'entity': 'entity',
+              'entityId': 'entityId',
+              'etag': 'etag',
+              'generation': 'generation',
+              'id': 'id',
+              'kind': 'kind',
+              'object': 'object',
+              'projectTeam': {'projectNumber': 'projectNumber', 'team': 'team'},
+              'role': 'READER',
+              'selfLink': 'http://example.com/selfLink',
+            },
           ],
         });
-        expect(metadata.defaultObjectAcl?.first.entity, 'user-1');
-        expect(metadata.defaultObjectAcl?.first.role, 'READER');
+        final acl = metadata.defaultObjectAcl!.first;
+        expect(acl.bucket, 'bucket');
+        expect(acl.domain, 'domain');
+        expect(acl.email, 'email');
+        expect(acl.entity, 'entity');
+        expect(acl.entityId, 'entityId');
+        expect(acl.etag, 'etag');
+        expect(acl.generation, 'generation');
+        expect(acl.id, 'id');
+        expect(acl.kind, 'kind');
+        expect(acl.object, 'object');
+        expect(acl.projectTeam?.projectNumber, 'projectNumber');
+        expect(acl.projectTeam?.team, 'team');
+        expect(acl.role, 'READER');
+        expect(acl.selfLink, Uri.parse('http://example.com/selfLink'));
       });
     });
 
