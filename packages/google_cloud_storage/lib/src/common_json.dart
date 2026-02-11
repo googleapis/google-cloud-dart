@@ -84,7 +84,23 @@ Object? timestampToJson(Timestamp? instance) {
   return instance.toJson();
 }
 
-int? int64FromJson(Object? json) {
+BigInt? int64FromJson(Object? json) {
+  if (json == null) return null;
+  if (json is String) {
+    return BigInt.parse(json);
+  }
+  if (json is int) {
+    return BigInt.from(json);
+  }
+  throw ArgumentError.value(json, 'json', 'Expected String or int for int64');
+}
+
+Object? int64ToJson(BigInt? instance) {
+  if (instance == null) return null;
+  return instance.toString();
+}
+
+int? intFromJson(Object? json) {
   if (json == null) return null;
   if (json is String) {
     return int.parse(json);
@@ -92,10 +108,14 @@ int? int64FromJson(Object? json) {
   if (json is int) {
     return json;
   }
-  throw ArgumentError.value(json, 'json', 'Expected String or int for int64');
+  throw ArgumentError.value(
+    json,
+    'json',
+    'Expected String or int for unsigned integer',
+  );
 }
 
-Object? int64ToJson(int? instance) {
+String? intToJson(int? instance) {
   if (instance == null) return null;
   return instance.toString();
 }

@@ -428,7 +428,7 @@ final class ObjectMetadata {
   final bool? eventBasedHold;
 
   /// The content generation of this object. Used for object versioning.
-  final int? generation;
+  final BigInt? generation;
 
   /// This is the time (in the future) when the soft-deleted object will no
   /// longer be restorable.
@@ -467,7 +467,7 @@ final class ObjectMetadata {
   /// Used for preconditions and for detecting changes in metadata. A
   /// metageneration number is only meaningful in the context of a particular
   /// generation of a particular object.
-  final int? metageneration;
+  final BigInt? metageneration;
 
   /// The name of the object. Required if not specified by URL parameter.
   final String? name;
@@ -505,7 +505,7 @@ final class ObjectMetadata {
   final Uri? selfLink;
 
   /// Content-Length of the data in bytes.
-  final int? size;
+  final BigInt? size;
 
   /// The time at which the object became soft-deleted.
   final Timestamp? softDeleteTime;
@@ -622,7 +622,7 @@ final class ObjectMetadata {
     Timestamp? customTime,
     String? etag,
     bool? eventBasedHold,
-    int? generation,
+    BigInt? generation,
     Timestamp? hardDeleteTime,
     String? id,
     String? kind,
@@ -630,14 +630,14 @@ final class ObjectMetadata {
     String? md5Hash,
     Uri? mediaLink,
     Map<String, String>? metadata,
-    int? metageneration,
+    BigInt? metageneration,
     String? name,
     Owner? owner,
     String? restoreToken,
     ObjectRetention? retention,
     Timestamp? retentionExpirationTime,
     Uri? selfLink,
-    int? size,
+    BigInt? size,
     Timestamp? softDeleteTime,
     String? storageClass,
     bool? temporaryHold,

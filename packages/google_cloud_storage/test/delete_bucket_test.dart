@@ -124,7 +124,10 @@ void main() async {
       await storage.createBucket(BucketMetadata(name: bucketName));
 
       expect(
-        () => storage.deleteBucket(bucketName, ifMetagenerationMatch: 0),
+        () => storage.deleteBucket(
+          bucketName,
+          ifMetagenerationMatch: BigInt.zero,
+        ),
         throwsA(isA<PreconditionFailedException>()),
       );
 
@@ -147,7 +150,7 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: projectId);
 
-      await storage.deleteBucket('bucket', ifMetagenerationMatch: 1);
+      await storage.deleteBucket('bucket', ifMetagenerationMatch: BigInt.one);
       expect(count, 2);
     });
 
