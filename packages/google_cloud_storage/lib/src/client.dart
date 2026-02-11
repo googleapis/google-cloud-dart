@@ -145,24 +145,24 @@ final class Storage {
 
   /// Update a Google Cloud Storage bucket.
   ///
-  /// This operation is idempotent if `ifMetagenerationMatch` is set.
+  /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
-  /// If set, `ifMetagenerationMatch` makes updating the bucket metadata
+  /// If set, [ifMetagenerationMatch] makes updating the bucket metadata
   /// conditional on whether the bucket's metageneration matches the provided
   /// value. If the metageneration does not match, a
   /// [PreconditionFailedException] is thrown.
   ///
-  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// If set, [predefinedAcl] applies a predefined set of access controls to the
   /// bucket, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
   /// `true`, then setting `predefinedAcl` will result in a
   /// [BadRequestException].
   ///
-  /// `projection` controls the level of detail returned in the response. A
+  /// [projection] controls the level of detail returned in the response. A
   /// value of `"full"` returns all bucket properties, while a value of
   /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
   /// properties.
   ///
-  /// If set, `userProject` is the project to be billed for this request. This
+  /// If set, [userProject] is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
   ///
   /// For example:
@@ -219,9 +219,31 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
+  /// If non-null, [generation] returns a specific version of the object
+  /// instead of the latest version.
+  ///
+  /// If non-null, [ifGenerationMatch] makes retrieving the object metadata
+  /// conditional on whether the object's generation matches the provided
+  /// value. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If non-null, [ifMetagenerationMatch] makes retrieving the object metadata
+  /// conditional on whether the object's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/get).
   ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<ObjectMetadata> objectMetadata(
     String bucket,
     String object, {
