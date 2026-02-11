@@ -133,10 +133,10 @@ void main() async {
       expect(metadataV2.size, 12);
     });
 
-    test('with if metageneration match success', () async {
+    test('with if generation match success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'object_metadata_with_if_metageneration_match_success',
+        'object_metadata_with_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName =
@@ -160,10 +160,10 @@ void main() async {
       expect(metadata.generation, obj.generation);
     });
 
-    test('with if metageneration match failure', () async {
+    test('with if generation match failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'object_metadata_with_if_metageneration_match_failure',
+        'object_metadata_with_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName =
