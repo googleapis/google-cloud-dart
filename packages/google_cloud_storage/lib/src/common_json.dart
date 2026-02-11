@@ -95,7 +95,7 @@ BigInt? int64FromJson(Object? json) {
   throw ArgumentError.value(json, 'json', 'Expected String or int for int64');
 }
 
-Object? int64ToJson(BigInt? instance) {
+String? int64ToJson(BigInt? instance) {
   if (instance == null) return null;
   return instance.toString();
 }
