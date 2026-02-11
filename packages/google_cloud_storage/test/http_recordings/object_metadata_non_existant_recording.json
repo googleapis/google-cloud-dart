@@ -1,0 +1,58 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "eyJuYW1lIjoib2JqZWN0X21ldGFkYXRhX25vbl9leGlzdGFudCJ9"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 11 Feb 2026 01:57:42 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "910",
+        "x-guploader-uploadid": "AJRbA5UEMLBLTz2d7YTqpbE1ABzwpverzJexkEuZ_cxRd66Im4rSU5U8MIorW_TUNH8h7Uh_jm1VY7gYUy4b",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/object_metadata_non_existant\",\n  \"id\": \"object_metadata_non_existant\",\n  \"name\": \"object_metadata_non_existant\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770775062235117828\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-11T01:57:42.568Z\",\n  \"updated\": \"2026-02-11T01:57:42.568Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-11T01:57:42.568Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-12T01:57:42.568Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-12T01:57:42.568Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/object_metadata_non_existant/o/non-existent.txt?",
+      "method": "GET",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Wed, 11 Feb 2026 01:57:42 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "297",
+        "x-guploader-uploadid": "AJRbA5VeiEtYOCEacFW6CYJ5p8336guF_A5rHlpBLvQLzvcwYcFK3iBbTP7uuLCPUeXbhCRMphlwo-c",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"No such object: object_metadata_non_existant/non-existent.txt\",\n    \"errors\": [\n      {\n        \"message\": \"No such object: object_metadata_non_existant/non-existent.txt\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
+    }
+  }
+]
