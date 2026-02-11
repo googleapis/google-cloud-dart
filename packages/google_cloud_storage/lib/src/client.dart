@@ -21,6 +21,7 @@ import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
 import 'file_upload.dart';
+import 'object_metadata_json.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -193,7 +194,7 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) async => await retry.run(() async {
+  }) async => retry.run(() async {
     final url = Uri(
       scheme: 'https',
       host: 'storage.googleapis.com',
@@ -221,8 +222,33 @@ final class Storage {
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
   Future<ObjectMetadata> objectMetadata(
     String bucketName,
-    String objectName,
-  ) async => throw UnimplementedError('objectMetadata');
+    String objectName, {
+    int? generation,
+    int? ifGenerationMatch,
+    int? ifGenerationNotMatch,
+    int? ifMetagenerationMatch,
+    int? ifMetagenerationNotMatch,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) async => await retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucketName, 'o', objectName],
+      queryParameters: {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifGenerationNotMatch': ?ifGenerationNotMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'ifMetagenerationNotMatch': ?ifMetagenerationNotMatch?.toString(),
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
+    );
+    final j = await _serviceClient.get(url);
+    return objectMetadataFromJson(j as Map<String, Object?>);
+  }, isIdempotent: true);
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
   ///
@@ -296,6 +322,45 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
   );
+
+  /// Deletes a data blob object.
+  ///
+  /// This operation is idempotent if `generation` or `ifGenerationMatch` is
+  /// set.
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// If set, `generation` selects a specific revision of this object (as
+  /// opposed to the latest version, the default).
+  ///
+  /// If set, `ifGenerationMatch` makes the operation conditional on whether the
+  /// object's current generation matches the given value. Setting to 0 makes
+  /// the operation succeed only if there are no live versions of the object.
+  ///
+  /// If set, `ifMetagenerationMatch` makes the operation conditional on whether
+  /// the object's current metageneration matches the given value.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/delete).
+  Future<void> deleteObject(
+    String bucket,
+    String object, {
+    int? generation,
+    int? ifGenerationMatch,
+    int? ifMetagenerationMatch,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+    );
+    final queryParams = {
+      'generation': ?generation?.toString(),
+      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+    };
+    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+  }, isIdempotent: ifGenerationMatch != null || generation != null);
 
   /// Closes the client and cleans up any resources associated with it.
   ///
