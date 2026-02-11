@@ -19,6 +19,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -44,6 +45,7 @@ void main() async {
 
   group('object metadata', () {
     setUp(() async {
+      fixedBoundaryString = 'boundary';
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
