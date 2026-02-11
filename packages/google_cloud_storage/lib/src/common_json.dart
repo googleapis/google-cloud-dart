@@ -111,7 +111,7 @@ int? intFromJson(Object? json) {
   throw ArgumentError.value(
     json,
     'json',
-    'Expected String or int for unsigned integer',
+    'Expected String or int for int',
   );
 }
 
