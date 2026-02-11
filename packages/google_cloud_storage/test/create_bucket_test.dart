@@ -72,7 +72,7 @@ void main() async {
       expect(actualMetadata.defaultObjectAcl, isNull);
       expect(actualMetadata.encryption, isNull);
       expect(actualMetadata.etag, isNotEmpty);
-      expect(actualMetadata.generation, greaterThan(0));
+      expect(actualMetadata.generation, greaterThan(BigInt.zero));
       expect(actualMetadata.hardDeleteTime, isNull);
       expect(actualMetadata.hierarchicalNamespace, isNull);
       expect(actualMetadata.iamConfiguration, isNotNull);
@@ -99,7 +99,7 @@ void main() async {
       expect(actualMetadata.location, 'US');
       expect(actualMetadata.locationType, 'multi-region');
       expect(actualMetadata.logging, isNull);
-      expect(actualMetadata.metageneration, 1);
+      expect(actualMetadata.metageneration, BigInt.one);
       expect(actualMetadata.name, bucketName);
       expect(actualMetadata.objectRetention, isNull);
       expect(actualMetadata.owner, isNull);

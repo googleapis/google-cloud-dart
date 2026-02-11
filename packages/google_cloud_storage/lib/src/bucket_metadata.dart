@@ -1150,7 +1150,7 @@ final class BucketMetadata {
   final String? etag;
 
   /// The version of the bucket.
-  final int? generation;
+  final BigInt? generation;
 
   /// The bucket's [hierarchical namespace][] configuration.
   ///
@@ -1204,7 +1204,7 @@ final class BucketMetadata {
   final BucketLoggingConfiguration? logging;
 
   /// The metadata generation of this bucket.
-  final int? metageneration;
+  final BigInt? metageneration;
 
   /// The name of the bucket.
   final String? name;
@@ -1341,7 +1341,7 @@ final class BucketMetadata {
     List<ObjectAccessControl>? defaultObjectAcl,
     BucketEncryption? encryption,
     String? etag,
-    int? generation,
+    BigInt? generation,
     Timestamp? hardDeleteTime,
     BucketHierarchicalNamespace? hierarchicalNamespace,
     BucketIamConfiguration? iamConfiguration,
@@ -1353,7 +1353,7 @@ final class BucketMetadata {
     String? location,
     String? locationType,
     BucketLoggingConfiguration? logging,
-    int? metageneration,
+    BigInt? metageneration,
     String? name,
     BucketObjectRetention? objectRetention,
     BucketOwner? owner,

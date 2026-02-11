@@ -66,7 +66,7 @@ Future<ObjectMetadata> uploadFile(
   String object,
   List<int> data, {
   ObjectMetadata? metadata,
-  int? ifGenerationMatch,
+  BigInt? ifGenerationMatch,
   String? predefinedAcl,
   String? projection,
   String? userProject,

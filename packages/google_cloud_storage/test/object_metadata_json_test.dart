@@ -315,12 +315,14 @@ void main() {
 
     group('generation', () {
       test('to json', () {
-        final json = objectMetadataToJson(ObjectMetadata(generation: 123));
+        final json = objectMetadataToJson(
+          ObjectMetadata(generation: BigInt.from(123)),
+        );
         expect(json['generation'], '123');
       });
       test('from json', () {
         final metadata = objectMetadataFromJson({'generation': '123'});
-        expect(metadata.generation, 123);
+        expect(metadata.generation, BigInt.from(123));
       });
     });
 
@@ -415,12 +417,14 @@ void main() {
 
     group('metageneration', () {
       test('to json', () {
-        final json = objectMetadataToJson(ObjectMetadata(metageneration: 456));
+        final json = objectMetadataToJson(
+          ObjectMetadata(metageneration: BigInt.from(456)),
+        );
         expect(json['metageneration'], '456');
       });
       test('from json', () {
         final metadata = objectMetadataFromJson({'metageneration': '456'});
-        expect(metadata.metageneration, 456);
+        expect(metadata.metageneration, BigInt.from(456));
       });
     });
 
@@ -550,12 +554,14 @@ void main() {
 
     group('size', () {
       test('to json', () {
-        final json = objectMetadataToJson(ObjectMetadata(size: 1024));
+        final json = objectMetadataToJson(
+          ObjectMetadata(size: BigInt.from(1024)),
+        );
         expect(json['size'], '1024');
       });
       test('from json', () {
         final metadata = objectMetadataFromJson({'size': '1024'});
-        expect(metadata.size, 1024);
+        expect(metadata.size, BigInt.from(1024));
       });
     });
 
