@@ -219,6 +219,8 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
   /// If non-null, [generation] returns a specific version of the object
   /// instead of the latest version.
   ///
