@@ -108,11 +108,7 @@ int? intFromJson(Object? json) {
   if (json is int) {
     return json;
   }
-  throw ArgumentError.value(
-    json,
-    'json',
-    'Expected String or int for int',
-  );
+  throw ArgumentError.value(json, 'json', 'Expected String or int for int');
 }
 
 String? intToJson(int? instance) {
