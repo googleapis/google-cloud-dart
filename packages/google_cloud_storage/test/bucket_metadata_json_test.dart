@@ -343,12 +343,14 @@ void main() {
 
     group('generation', () {
       test('to json', () {
-        final json = bucketMetadataToJson(BucketMetadata(generation: 123));
+        final json = bucketMetadataToJson(
+          BucketMetadata(generation: BigInt.from(123)),
+        );
         expect(json['generation'], '123');
       });
       test('from json', () {
         final metadata = bucketMetadataFromJson({'generation': '123'});
-        expect(metadata.generation, 123);
+        expect(metadata.generation, BigInt.from(123));
       });
     });
 
@@ -681,12 +683,14 @@ void main() {
 
     group('metageneration', () {
       test('to json', () {
-        final json = bucketMetadataToJson(BucketMetadata(metageneration: 1));
+        final json = bucketMetadataToJson(
+          BucketMetadata(metageneration: BigInt.one),
+        );
         expect(json['metageneration'], '1');
       });
       test('from json', () {
         final metadata = bucketMetadataFromJson({'metageneration': '1'});
-        expect(metadata.metageneration, 1);
+        expect(metadata.metageneration, BigInt.one);
       });
     });
 
