@@ -249,9 +249,9 @@ final class Storage {
   Future<ObjectMetadata> objectMetadata(
     String bucket,
     String object, {
-    int? generation,
-    int? ifGenerationMatch,
-    int? ifMetagenerationMatch,
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
