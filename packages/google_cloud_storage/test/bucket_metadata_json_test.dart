@@ -224,7 +224,9 @@ void main() {
         expect(json['defaultEventBasedHold'], true);
       });
       test('from json', () {
-        final metadata = bucketMetadataFromJson({'defaultEventBasedHold': true});
+        final metadata = bucketMetadataFromJson({
+          'defaultEventBasedHold': true,
+        });
         expect(metadata.defaultEventBasedHold, true);
       });
     });
@@ -295,9 +297,7 @@ void main() {
     group('hardDeleteTime', () {
       test('to json', () {
         final json = bucketMetadataToJson(
-          BucketMetadata(
-            hardDeleteTime: Timestamp(seconds: 1000, nanos: 0),
-          ),
+          BucketMetadata(hardDeleteTime: Timestamp(seconds: 1000, nanos: 0)),
         );
         expect(json['hardDeleteTime'], '1970-01-01T00:16:40Z');
       });
@@ -357,16 +357,16 @@ void main() {
             },
           },
         });
-        expect(
-          metadata.iamConfiguration?.publicAccessPrevention,
-          'enforced',
-        );
+        expect(metadata.iamConfiguration?.publicAccessPrevention, 'enforced');
         expect(
           metadata.iamConfiguration?.uniformBucketLevelAccess?.enabled,
           true,
         );
         expect(
-          metadata.iamConfiguration?.uniformBucketLevelAccess?.lockedTime
+          metadata
+              .iamConfiguration
+              ?.uniformBucketLevelAccess
+              ?.lockedTime
               ?.seconds,
           1000,
         );
@@ -396,7 +396,9 @@ void main() {
                 allowedIpCidrRanges: ['10.0.0.0/24'],
               ),
               vpcNetworkSources: [
-                BucketPublicNetworkSource(allowedIpCidrRanges: ['192.168.0.0/24']),
+                BucketPublicNetworkSource(
+                  allowedIpCidrRanges: ['192.168.0.0/24'],
+                ),
               ],
             ),
           ),
@@ -434,10 +436,9 @@ void main() {
         expect(metadata.ipFilter?.allowAllServiceAgentAccess, true);
         expect(metadata.ipFilter?.allowCrossOrgVpcs, false);
         expect(metadata.ipFilter?.mode, 'Enabled');
-        expect(
-          metadata.ipFilter?.publicNetworkSource?.allowedIpCidrRanges,
-          ['10.0.0.0/24'],
-        );
+        expect(metadata.ipFilter?.publicNetworkSource?.allowedIpCidrRanges, [
+          '10.0.0.0/24',
+        ]);
         expect(
           metadata.ipFilter?.vpcNetworkSources?.first.allowedIpCidrRanges,
           ['192.168.0.0/24'],
@@ -503,10 +504,7 @@ void main() {
         expect(json['lifecycle'], {
           'rule': [
             {
-              'action': {
-                'storageClass': 'NEARLINE',
-                'type': 'SetStorageClass',
-              },
+              'action': {'storageClass': 'NEARLINE', 'type': 'SetStorageClass'},
               'condition': {
                 'age': 30,
                 'createdBefore': '2026-02-03',
@@ -780,9 +778,7 @@ void main() {
     group('softDeleteTime', () {
       test('to json', () {
         final json = bucketMetadataToJson(
-          BucketMetadata(
-            softDeleteTime: Timestamp(seconds: 1000, nanos: 0),
-          ),
+          BucketMetadata(softDeleteTime: Timestamp(seconds: 1000, nanos: 0)),
         );
         expect(json['softDeleteTime'], '1970-01-01T00:16:40Z');
       });
@@ -810,9 +806,7 @@ void main() {
     group('timeCreated', () {
       test('to json', () {
         final json = bucketMetadataToJson(
-          BucketMetadata(
-            timeCreated: Timestamp(seconds: 1000, nanos: 0),
-          ),
+          BucketMetadata(timeCreated: Timestamp(seconds: 1000, nanos: 0)),
         );
         expect(json['timeCreated'], '1970-01-01T00:16:40Z');
       });
