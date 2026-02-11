@@ -31,14 +31,26 @@ void main() {
 
     test('int64FromJson', () {
       expect(int64FromJson(null), isNull);
-      expect(int64FromJson('123'), 123);
-      expect(int64FromJson(456), 456);
+      expect(int64FromJson('123'), BigInt.from(123));
+      expect(int64FromJson(456), BigInt.from(456));
       expect(() => int64FromJson(true), throwsArgumentError);
     });
 
     test('int64ToJson', () {
       expect(int64ToJson(null), isNull);
-      expect(int64ToJson(123), '123');
+      expect(int64ToJson(BigInt.from(123)), '123');
+    });
+
+    test('intFromJson', () {
+      expect(intFromJson(null), isNull);
+      expect(intFromJson('123'), 123);
+      expect(intFromJson(456), 456);
+      expect(() => intFromJson(true), throwsArgumentError);
+    });
+
+    test('intToJson', () {
+      expect(intToJson(null), isNull);
+      expect(intToJson(123), '123');
     });
 
     test('timestampFromJson', () {
