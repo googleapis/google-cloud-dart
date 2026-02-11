@@ -18,6 +18,7 @@ library;
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -33,6 +34,7 @@ void main() async {
 
   group('delete object', () {
     setUp(() async {
+      fixedBoundaryString = 'boundary';
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
