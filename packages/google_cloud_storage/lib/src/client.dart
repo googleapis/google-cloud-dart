@@ -21,6 +21,7 @@ import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
 import 'file_upload.dart';
+import 'object_metadata_json.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -218,11 +219,34 @@ final class Storage {
   ///
   /// This operation is read-only and always idempotent.
   ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/get).
+  ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
   Future<ObjectMetadata> objectMetadata(
-    String bucketName,
-    String objectName,
-  ) async => throw UnimplementedError('objectMetadata');
+    String bucket,
+    String object, {
+    int? generation,
+    int? ifGenerationMatch,
+    int? ifMetagenerationMatch,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) async => await retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+      queryParameters: {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
+    );
+    final j = await _serviceClient.get(url);
+    return objectMetadataFromJson(j as Map<String, Object?>);
+  }, isIdempotent: true);
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
   ///
