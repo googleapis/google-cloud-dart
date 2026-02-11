@@ -299,9 +299,6 @@ final class Storage {
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
   ///
-  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
-  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  ///
   /// For example:
   ///
   /// ```dart
@@ -313,6 +310,9 @@ final class Storage {
   ///   ifGenerationMatch: 0, // Only insert if the object doesn't exist.
   /// );
   /// ```
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<ObjectMetadata> insertObject(
     String bucket,
     String name,
@@ -345,7 +345,7 @@ final class Storage {
     isIdempotent: ifGenerationMatch != null,
   );
 
-  /// Deletes a data blob object.
+  /// Deletes a [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if `generation` or `ifGenerationMatch` is
   /// set.
@@ -353,16 +353,19 @@ final class Storage {
   /// Throws [NotFoundException] if the object does not exist.
   ///
   /// If set, `generation` selects a specific revision of this object (as
-  /// opposed to the latest version, the default).
+  /// opposed to the latest version) to delete.
   ///
   /// If set, `ifGenerationMatch` makes the operation conditional on whether the
-  /// object's current generation matches the given value. Setting to 0 makes
-  /// the operation succeed only if there are no live versions of the object.
+  /// object's current generation matches the given value. If the generation
+  /// does not match, a [PreconditionFailedException] is thrown.
   ///
   /// If set, `ifMetagenerationMatch` makes the operation conditional on whether
-  /// the object's current metageneration matches the given value.
+  /// the object's current metageneration matches the given value. If the
+  /// metageneration does not match, a [PreconditionFailedException] is thrown.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/delete).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
   Future<void> deleteObject(
     String bucket,
     String object, {
