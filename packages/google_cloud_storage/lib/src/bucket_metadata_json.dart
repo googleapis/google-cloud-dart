@@ -387,7 +387,7 @@ BucketRetentionPolicy? bucketRetentionPolicyFromJson(
   return BucketRetentionPolicy(
     effectiveTime: timestampFromJson(json['effectiveTime']),
     isLocked: json['isLocked'] as bool?,
-    retentionPeriod: int64FromJson(json['retentionPeriod']),
+    retentionPeriod: intFromJson(json['retentionPeriod']),
   );
 }
 
@@ -398,7 +398,7 @@ Map<String, Object?>? bucketRetentionPolicyToJson(
   return {
     'effectiveTime': ?timestampToJson(instance.effectiveTime),
     'isLocked': ?instance.isLocked,
-    'retentionPeriod': ?int64ToJson(instance.retentionPeriod),
+    'retentionPeriod': ?intToJson(instance.retentionPeriod),
   };
 }
 
@@ -408,7 +408,7 @@ BucketSoftDeletePolicy? bucketSoftDeletePolicyFromJson(
   if (json == null) return null;
   return BucketSoftDeletePolicy(
     effectiveTime: timestampFromJson(json['effectiveTime']),
-    retentionDurationSeconds: int64FromJson(json['retentionDurationSeconds']),
+    retentionDurationSeconds: intFromJson(json['retentionDurationSeconds']),
   );
 }
 
@@ -418,7 +418,7 @@ Map<String, Object?>? bucketSoftDeletePolicyToJson(
   if (instance == null) return null;
   return {
     'effectiveTime': ?timestampToJson(instance.effectiveTime),
-    'retentionDurationSeconds': ?int64ToJson(instance.retentionDurationSeconds),
+    'retentionDurationSeconds': ?intToJson(instance.retentionDurationSeconds),
   };
 }
 

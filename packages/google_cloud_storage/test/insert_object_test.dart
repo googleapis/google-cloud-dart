@@ -76,7 +76,7 @@ void main() async {
         bucketName,
         'object1',
         utf8.encode('Hello World!'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
       final afterRequestTime = DateTime.now().toUtc();
       expect(objectMetadata.acl, isNull);
@@ -107,7 +107,7 @@ void main() async {
       );
       expect(objectMetadata.metadata, isNull);
       expect(objectMetadata.md5Hash, isNotEmpty);
-      expect(objectMetadata.metageneration, 1);
+      expect(objectMetadata.metageneration, BigInt.one);
       expect(objectMetadata.name, 'object1');
       expect(objectMetadata.owner, isNull);
       expect(objectMetadata.restoreToken, isNull);
@@ -120,7 +120,7 @@ void main() async {
           path: '/storage/v1/b/$bucketName/o/object1',
         ),
       );
-      expect(objectMetadata.size, 12);
+      expect(objectMetadata.size, BigInt.from(12));
       expect(objectMetadata.softDeleteTime, isNull);
       expect(objectMetadata.storageClass, 'STANDARD');
       expect(objectMetadata.temporaryHold, isNull);
@@ -164,7 +164,7 @@ void main() async {
         'object1',
         utf8.encode('Hello World!'),
         metadata: ObjectMetadata(contentType: 'text/plain'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       expect(objectMetadata.contentType, 'text/plain');
@@ -188,7 +188,7 @@ void main() async {
         'object1',
         utf8.encode('Hello World!'),
         metadata: ObjectMetadata(crc32c: '/mzx3A=='),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
       expect(objectMetadata.crc32c, '/mzx3A==');
     });
@@ -212,7 +212,7 @@ void main() async {
           'object1',
           utf8.encode('Hello World!'),
           metadata: ObjectMetadata(crc32c: 'invalid'),
-          ifGenerationMatch: 0,
+          ifGenerationMatch: BigInt.zero,
         ),
         throwsA(isA<BadRequestException>()),
       );
@@ -236,7 +236,7 @@ void main() async {
         'object1',
         utf8.encode('Hello World!'),
         metadata: ObjectMetadata(md5Hash: '7Qdih1MuhjZehB6Sv8UNjA=='),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
       expect(objectMetadata.md5Hash, '7Qdih1MuhjZehB6Sv8UNjA==');
     });
@@ -260,7 +260,7 @@ void main() async {
           'object1',
           utf8.encode('Hello World!'),
           metadata: ObjectMetadata(md5Hash: 'invalid'),
-          ifGenerationMatch: 0,
+          ifGenerationMatch: BigInt.zero,
         ),
         throwsA(isA<BadRequestException>()),
       );
@@ -285,7 +285,7 @@ void main() async {
           'object1',
           utf8.encode('Hello World!'),
           metadata: ObjectMetadata(name: 'object2'),
-          ifGenerationMatch: 0,
+          ifGenerationMatch: BigInt.zero,
         ),
         throwsA(isA<BadRequestException>()),
       );
@@ -384,7 +384,7 @@ void main() async {
           bucketName,
           'object1',
           utf8.encode('Goodbye World!'),
-          ifGenerationMatch: 1234,
+          ifGenerationMatch: BigInt.from(1234),
         ),
         throwsA(isA<PreconditionFailedException>()),
       );
@@ -413,7 +413,7 @@ void main() async {
         1,
         2,
         3,
-      ], ifGenerationMatch: 1);
+      ], ifGenerationMatch: BigInt.one);
       expect(actualMetadata.name, 'object');
     });
 

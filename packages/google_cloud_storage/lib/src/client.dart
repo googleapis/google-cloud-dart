@@ -83,7 +83,7 @@ final class Storage {
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<void> deleteBucket(
     String bucket, {
-    int? ifMetagenerationMatch,
+    BigInt? ifMetagenerationMatch,
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
@@ -182,7 +182,7 @@ final class Storage {
   Future<BucketMetadata> patchBucket(
     String bucket,
     BucketMetadataPatchBuilder metadata, {
-    int? ifMetagenerationMatch,
+    BigInt? ifMetagenerationMatch,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
     // support ifMetagenerationNotMatch.
     //
@@ -249,9 +249,9 @@ final class Storage {
   Future<ObjectMetadata> objectMetadata(
     String bucket,
     String object, {
-    int? generation,
-    int? ifGenerationMatch,
-    int? ifMetagenerationMatch,
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
@@ -318,7 +318,7 @@ final class Storage {
     String name,
     List<int> content, {
     ObjectMetadata? metadata,
-    int? ifGenerationMatch,
+    BigInt? ifGenerationMatch,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
     // support ifMetagenerationNotMatch.
     //

@@ -79,7 +79,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     }, skip: 'not supported by test project (UBLA)');
 
     test('remove acl', () async {
@@ -114,7 +114,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     }, skip: 'not supported by test project (UBLA)');
 
     test('change autoclass', () async {
@@ -150,7 +150,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove autoclass', () async {
@@ -185,7 +185,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change cors', () async {
@@ -221,7 +221,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove cors', () async {
@@ -256,7 +256,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test(
@@ -294,7 +294,7 @@ void main() async {
           ),
           isTrue,
         );
-        expect(actualMetadata.metageneration, 2);
+        expect(actualMetadata.metageneration, BigInt.from(2));
       },
       skip: 'not supported by test project (UBLA)',
     );
@@ -334,7 +334,7 @@ void main() async {
           ),
           isTrue,
         );
-        expect(actualMetadata.metageneration, 2);
+        expect(actualMetadata.metageneration, BigInt.from(2));
       },
       skip: 'not supported by test project (UBLA)',
     );
@@ -378,7 +378,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('remove ip filter', () async {
@@ -419,7 +419,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('change labels', () async {
@@ -452,7 +452,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove labels', () async {
@@ -484,7 +484,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change lifecycle', () async {
@@ -534,7 +534,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove lifecycle', () async {
@@ -576,7 +576,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change logging', () async {
@@ -626,7 +626,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove logging', () async {
@@ -672,7 +672,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change retention policy', () async {
@@ -708,7 +708,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove retention policy', () async {
@@ -744,7 +744,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change soft delete policy', () async {
@@ -787,7 +787,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change versioning', () async {
@@ -823,7 +823,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('same versioning', () async {
@@ -859,7 +859,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove versioning', () async {
@@ -894,7 +894,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change website', () async {
@@ -930,7 +930,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('remove website', () async {
@@ -965,7 +965,7 @@ void main() async {
         ),
         isTrue,
       );
-      expect(actualMetadata.metageneration, 2);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('no change', () async {
@@ -998,7 +998,7 @@ void main() async {
         actualMetadata.updated?.toDateTime(),
         actualMetadata.timeCreated?.toDateTime(),
       );
-      expect(actualMetadata.metageneration, 1);
+      expect(actualMetadata.metageneration, BigInt.one);
     });
 
     test('non existant', () async {
@@ -1039,7 +1039,7 @@ void main() async {
         patchMetadata,
         ifMetagenerationMatch: metageneration,
       );
-      expect(patchedMetadata.metageneration, 2);
+      expect(patchedMetadata.metageneration, BigInt.from(2));
     });
 
     test('with if metageneration match failure', () async {
@@ -1061,7 +1061,7 @@ void main() async {
         () => storage.patchBucket(
           bucketName,
           patchMetadata,
-          ifMetagenerationMatch: 0,
+          ifMetagenerationMatch: BigInt.zero,
         ),
         throwsA(isA<PreconditionFailedException>()),
       );
@@ -1105,7 +1105,7 @@ void main() async {
           ),
           isTrue,
         );
-        expect(actualMetadata.metageneration, 2);
+        expect(actualMetadata.metageneration, BigInt.from(2));
       },
       skip: 'test project does not support uniform bucket level access',
     );
@@ -1148,7 +1148,7 @@ void main() async {
           ),
           isTrue,
         );
-        expect(actualMetadata.metageneration, 2);
+        expect(actualMetadata.metageneration, BigInt.from(2));
       },
       skip: 'test project does not support uniform bucket level access',
     );
@@ -1178,7 +1178,7 @@ void main() async {
       final actualMetadata = await storage.patchBucket(
         'bucket',
         requestMetadata,
-        ifMetagenerationMatch: 1,
+        ifMetagenerationMatch: BigInt.one,
       );
       expect(actualMetadata.versioning?.enabled, isTrue);
     });

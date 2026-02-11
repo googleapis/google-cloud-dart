@@ -74,13 +74,13 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       final metadata = await storage.objectMetadata(bucketName, 'object.txt');
       expect(metadata.name, 'object.txt');
       expect(metadata.bucket, bucketName);
-      expect(metadata.size, 7);
+      expect(metadata.size, BigInt.from(7));
     });
 
     test('with generation', () async {
@@ -105,7 +105,7 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('Hello'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
       final obj2 = await storage.insertObject(
         bucketName,
@@ -122,7 +122,7 @@ void main() async {
         generation: obj1.generation,
       );
       expect(metadataV1.generation, obj1.generation);
-      expect(metadataV1.size, 5);
+      expect(metadataV1.size, BigInt.from(5));
 
       final metadataV2 = await storage.objectMetadata(
         bucketName,
@@ -130,7 +130,7 @@ void main() async {
         generation: obj2.generation,
       );
       expect(metadataV2.generation, obj2.generation);
-      expect(metadataV2.size, 12);
+      expect(metadataV2.size, BigInt.from(12));
     });
 
     test('with if generation match success', () async {
@@ -149,7 +149,7 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       final metadata = await storage.objectMetadata(
@@ -176,14 +176,14 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       expect(
         () => storage.objectMetadata(
           bucketName,
           'object.txt',
-          ifGenerationMatch: obj.generation! + 1,
+          ifGenerationMatch: obj.generation! + BigInt.one,
         ),
         throwsA(isA<PreconditionFailedException>()),
       );
