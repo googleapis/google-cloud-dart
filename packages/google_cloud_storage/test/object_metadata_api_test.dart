@@ -27,8 +27,6 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-import 'test_utils.dart';
-
 const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
 String uniqueBucketName() {
