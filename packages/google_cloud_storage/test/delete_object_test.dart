@@ -215,6 +215,7 @@ void main() async {
         utf8.encode('content'),
         ifGenerationMatch: BigInt.zero,
       );
+      addTearDown(() => storage.deleteObject(bucketName, 'object.txt'));
 
       expect(
         () => storage.deleteObject(
