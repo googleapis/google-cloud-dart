@@ -63,7 +63,7 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       await storage.deleteObject(bucketName, 'object.txt');
@@ -182,7 +182,7 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       await storage.deleteObject(
@@ -213,14 +213,14 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
-        ifGenerationMatch: 0,
+        ifGenerationMatch: BigInt.zero,
       );
 
       expect(
         () => storage.deleteObject(
           bucketName,
           'object.txt',
-          ifGenerationMatch: obj.generation! + 1,
+          ifGenerationMatch: obj.generation! + BigInt.one,
         ),
         throwsA(isA<PreconditionFailedException>()),
       );
@@ -248,7 +248,11 @@ void main() async {
       final storage = Storage(client: mockClient, projectId: projectId);
 
       // Should retry because generation is specified
-      await storage.deleteObject('bucket', 'object', generation: 123);
+      await storage.deleteObject(
+        'bucket',
+        'object',
+        generation: BigInt.from(123),
+      );
       expect(count, 2);
     });
 
