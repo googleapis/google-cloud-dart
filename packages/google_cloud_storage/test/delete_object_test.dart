@@ -97,22 +97,20 @@ void main() async {
         'delete_object_with_generation',
       );
       addTearDown(testClient.endTest);
-      final bucketName = testBucketName('delete_object_with_generation');
-      await storage.createBucket(
-        BucketMetadata(
-          name: bucketName,
-          versioning: BucketVersioning(enabled: true),
-        ),
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'delete_object_with_generation',
+        metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
       final obj1 = await storage.insertObject(
         bucketName,
         'object.txt',
-        utf8.encode('v1'),
+        utf8.encode('Text'),
       );
       final obj2 = await storage.insertObject(
         bucketName,
         'object.txt',
-        utf8.encode('v2'),
+        utf8.encode('More text'),
       );
 
       // Verify both exist

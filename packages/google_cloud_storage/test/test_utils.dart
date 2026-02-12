@@ -23,6 +23,11 @@ String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = testBucketName(name);
   addTearDown(() async {
     try {
+      // Disable bucket versioning so that `deleteObject` deletes all versions.
+      await storage.patchBucket(
+        generatedName,
+        BucketMetadataPatchBuilder()..versioning = null,
+      );
       for (final object in await storage.listObjects(generatedName).toList()) {
         await storage.deleteObject(generatedName, object.name!);
       }

@@ -79,9 +79,7 @@ void main() async {
       await storage.createBucket(BucketMetadata(name: bucketName));
 
       await expectLater(
-        storage
-            .listBuckets(prefix: 'list_buckets_single_bucket')
-            .map((b) => b.name),
+        storage.listBuckets(prefix: bucketName).map((b) => b.name),
         emitsInOrder([emits(bucketName), emitsDone]),
       );
     });

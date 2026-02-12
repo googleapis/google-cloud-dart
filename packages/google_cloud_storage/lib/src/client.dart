@@ -176,7 +176,6 @@ final class Storage {
     String? projection,
     String? userProject,
     int? maxResults,
-    RetryRunner retry = defaultRetry,
   }) async* {
     String? nextPageToken;
 

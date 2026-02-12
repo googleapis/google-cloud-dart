@@ -1,35 +1,6 @@
 [
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421",
-      "method": "POST",
-      "headers": {
-        "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
-      },
-      "body": "eyJuYW1lIjoibGlzdF9idWNrZXRzX3NpbmdsZV9idWNrZXQifQ=="
-    },
-    "response": {
-      "statusCode": 200,
-      "headers": {
-        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 12 Feb 2026 02:26:16 GMT",
-        "vary": "Origin,X-Origin",
-        "content-length": "904",
-        "x-guploader-uploadid": "AJRbA5XVlUZkqrpHFZV3s-_2V0dLzARpQJahzzKr2shbMQA3ZWwm0-HIlR1OcH_ETxFS8-COqTUyMg",
-        "etag": "CAE=",
-        "pragma": "no-cache",
-        "content-type": "application/json; charset=UTF-8",
-        "server": "UploadServer",
-        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
-      },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/list_buckets_single_bucket\",\n  \"id\": \"list_buckets_single_bucket\",\n  \"name\": \"list_buckets_single_bucket\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770863175697428291\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-12T02:26:15.979Z\",\n  \"updated\": \"2026-02-12T02:26:15.979Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-12T02:26:15.979Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-13T02:26:15.979Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-13T02:26:15.979Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
-      "reasonPhrase": "OK"
-    }
-  },
-  {
-    "request": {
       "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421&prefix=list_buckets_single_bucket",
       "method": "GET",
       "headers": {
@@ -42,69 +13,44 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "private, max-age=0, must-revalidate, no-transform",
-        "date": "Thu, 12 Feb 2026 02:26:16 GMT",
-        "vary": "Origin,X-Origin",
-        "content-length": "1078",
-        "x-guploader-uploadid": "AJRbA5UEv0BgkWIjzlLlzAnR6Fj8ijcjXJjIe8YKWaBIIHCQKpO9kxqXCgJSlqEWwDvyoJRHIbuhGqM",
-        "content-type": "application/json; charset=UTF-8",
-        "server": "UploadServer",
-        "expires": "Thu, 12 Feb 2026 02:26:16 GMT"
-      },
-      "body": "{\n  \"kind\": \"storage#buckets\",\n  \"items\": [\n    {\n      \"kind\": \"storage#bucket\",\n      \"selfLink\": \"https://www.googleapis.com/storage/v1/b/list_buckets_single_bucket\",\n      \"id\": \"list_buckets_single_bucket\",\n      \"name\": \"list_buckets_single_bucket\",\n      \"projectNumber\": \"747575106375\",\n      \"generation\": \"1770863175697428291\",\n      \"metageneration\": \"1\",\n      \"location\": \"US\",\n      \"storageClass\": \"STANDARD\",\n      \"etag\": \"CAE=\",\n      \"timeCreated\": \"2026-02-12T02:26:15.979Z\",\n      \"updated\": \"2026-02-12T02:26:15.979Z\",\n      \"softDeletePolicy\": {\n        \"retentionDurationSeconds\": \"604800\",\n        \"effectiveTime\": \"2026-02-12T02:26:15.979Z\"\n      },\n      \"iamConfiguration\": {\n        \"bucketPolicyOnly\": {\n          \"enabled\": true,\n          \"lockedTime\": \"2026-05-13T02:26:15.979Z\"\n        },\n        \"uniformBucketLevelAccess\": {\n          \"enabled\": true,\n          \"lockedTime\": \"2026-05-13T02:26:15.979Z\"\n        },\n        \"publicAccessPrevention\": \"inherited\"\n      },\n      \"locationType\": \"multi-region\",\n      \"rpo\": \"DEFAULT\"\n    }\n  ]\n}\n",
-      "reasonPhrase": "OK"
-    }
-  },
-  {
-    "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/list_buckets_single_bucket/o?",
-      "method": "GET",
-      "headers": {
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
-      },
-      "body": ""
-    },
-    "response": {
-      "statusCode": 200,
-      "headers": {
-        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
-        "cache-control": "private, max-age=0, must-revalidate, no-transform",
-        "date": "Thu, 12 Feb 2026 02:26:16 GMT",
+        "date": "Thu, 12 Feb 2026 18:29:20 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "32",
-        "x-guploader-uploadid": "AJRbA5UQygLBW2DXuxUKlEpkhCcqHtusBWizZYhcsjBmAbIuZAN37q_xT7-QdpUvdO3wfjhS",
+        "x-guploader-uploadid": "AJRbA5UqpCdOzIXTEwbpiOj6BnbU3Ack6bjDi4aJde5Fa7mJ_KGZu-LTkQVqaa555Fkbi62nSa2AKGdq6DAH",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
-        "expires": "Thu, 12 Feb 2026 02:26:16 GMT"
+        "expires": "Thu, 12 Feb 2026 18:29:20 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#objects\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#buckets\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/list_buckets_single_bucket?",
-      "method": "DELETE",
+      "url": "https://storage.googleapis.com/storage/v1/b/list_buckets_single_bucket?project=skilful-orb-203421",
+      "method": "PATCH",
       "headers": {
+        "content-type": "application/json",
         "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
-      "body": ""
+      "body": "eyJ2ZXJzaW9uaW5nIjpudWxsfQ=="
     },
     "response": {
-      "statusCode": 204,
+      "statusCode": 404,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 12 Feb 2026 02:26:17 GMT",
+        "date": "Thu, 12 Feb 2026 18:29:20 GMT",
         "vary": "Origin,X-Origin",
-        "content-length": "0",
-        "x-guploader-uploadid": "AJRbA5Ujvp7QzPXlMicw2YMOp68lIeLwp3cgxlOdI7-fk5EawCJAZZJDGUqR1mKlkVhgTGC8ZW4YeQo",
-        "content-type": "application/json",
+        "content-length": "247",
+        "x-guploader-uploadid": "AJRbA5Xz8fAYUlp9eyoI8WGGVsBk1P5ANkVQlsd57a1p-T9GbVBKj2e9ZudcEnit25E0FKKHsVYMG9lwMuc1",
+        "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "",
-      "reasonPhrase": "No Content"
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
     }
   }
 ]
