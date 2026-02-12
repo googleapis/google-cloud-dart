@@ -345,6 +345,84 @@ final class Storage {
     isIdempotent: ifGenerationMatch != null,
   );
 
+  /// Deletes a data blob object.
+  ///
+  /// This operation is idempotent if [generation] or [ifGenerationMatch] is
+  /// set.
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// If set, [generation] selects a specific revision of this object (as
+  /// opposed to the latest version, the default).
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether the
+  /// object's current generation matches the given value. Setting to 0 makes
+  /// the operation succeed only if there are no live versions of the object.
+  ///
+  /// If set, [ifMetagenerationMatch] makes the operation conditional on whether
+  /// the object's current metageneration matches the given value.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/delete).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<void> deleteObject(
+    String bucket,
+    String object, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+    );
+    final queryParams = {
+      'generation': ?generation?.toString(),
+      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      'userProject': ?userProject,
+    };
+    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+  }, isIdempotent: ifGenerationMatch != null || generation != null);
+
+  Stream<ObjectMetadata> listObjects(
+    String bucket, {
+    bool? softDeleted,
+    BigInt? maxResults,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) async* {
+    String? nextPageToken;
+
+    do {
+      final url = Uri(
+        scheme: 'https',
+        host: 'storage.googleapis.com',
+        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
+        queryParameters: {
+          'softDeleted': ?softDeleted?.toString(),
+          'maxResults': ?maxResults?.toString(),
+          'pageToken': ?nextPageToken,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      );
+      final json = await _serviceClient.get(url);
+      nextPageToken = json['nextPageToken'] as String?;
+
+      for (final object in json['items'] as List<Object?>? ?? const []) {
+        yield objectMetadataFromJson(object as Map<String, Object?>);
+      }
+    } while (nextPageToken != null);
+  }
+
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
