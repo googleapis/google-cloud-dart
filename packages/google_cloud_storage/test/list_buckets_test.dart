@@ -93,26 +93,23 @@ void main() async {
         );
         addTearDown(testClient.endTest);
 
-        final prefix = _uniquePrefix();
-        final softDeletedBucket = bucketNameWithTearDown(storage, prefix);
-
-        await storage.createBucket(
-          BucketMetadata(
-            name: softDeletedBucket,
+        final prefix = testBucketName('list_buckets_soft_deleted_bucket');
+        final softDeletedBucket = await createBucketWithTearDown(
+          storage,
+          '${prefix}_soft',
+          metadata: BucketMetadata(
             softDeletePolicy: BucketSoftDeletePolicy(
               retentionDurationSeconds: const Duration(days: 7).inSeconds,
             ),
           ),
         );
-
         await storage.deleteBucket(softDeletedBucket);
 
-        final notDeletedBucket = bucketNameWithTearDown(storage, prefix);
-        await storage.createBucket(BucketMetadata(name: notDeletedBucket));
+        await createBucketWithTearDown(storage, '${prefix}_no_soft');
 
         await expectLater(
           storage
-              .listBuckets(prefix: softDeletedBucket, softDeleted: true)
+              .listBuckets(prefix: prefix, softDeleted: true)
               .map((b) => b.name),
           emitsInOrder([emits(softDeletedBucket), emitsDone]),
         );
@@ -131,26 +128,13 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final prefix = TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'list_buckets_pagination'
-          : _uniquePrefix();
+      final prefix = testBucketName('list_buckets_pagination');
 
-      final bucket1 = '${prefix}_1';
-      final bucket2 = '${prefix}_2';
-      final bucket3 = '${prefix}_3';
-      final bucket4 = '${prefix}_4';
-      final bucket5 = '${prefix}_5';
-
-      await storage.createBucket(BucketMetadata(name: bucket1));
-      addTearDown(() => storage.deleteBucket(bucket1));
-      await storage.createBucket(BucketMetadata(name: bucket2));
-      addTearDown(() => storage.deleteBucket(bucket2));
-      await storage.createBucket(BucketMetadata(name: bucket3));
-      addTearDown(() => storage.deleteBucket(bucket3));
-      await storage.createBucket(BucketMetadata(name: bucket4));
-      addTearDown(() => storage.deleteBucket(bucket4));
-      await storage.createBucket(BucketMetadata(name: bucket5));
-      addTearDown(() => storage.deleteBucket(bucket5));
+      final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
+      final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');
+      final bucket3 = await createBucketWithTearDown(storage, '${prefix}_3');
+      final bucket4 = await createBucketWithTearDown(storage, '${prefix}_4');
+      final bucket5 = await createBucketWithTearDown(storage, '${prefix}_5');
 
       await expectLater(
         storage.listBuckets(prefix: prefix, maxResults: 2).map((b) => b.name),
