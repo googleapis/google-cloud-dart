@@ -40,7 +40,7 @@ void main() {
                   team: 'team',
                 ),
                 role: 'role',
-                selfLink: Uri.parse('http://example.com/selfLink'),
+                selfLink: Uri.http('example.com', 'selfLink'),
               ),
             ],
           ),
