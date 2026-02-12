@@ -25,16 +25,6 @@ import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
-const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String _uniquePrefix() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      _bucketChars[random.nextInt(_bucketChars.length)],
-  ].join();
-}
-
 void main() async {
   late Storage storage;
   late TestHttpClient testClient;
