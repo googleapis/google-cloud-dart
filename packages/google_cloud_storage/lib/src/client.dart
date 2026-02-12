@@ -194,7 +194,7 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) async => retry.run(() async {
+  }) => retry.run(() async {
     final url = Uri(
       scheme: 'https',
       host: 'storage.googleapis.com',
