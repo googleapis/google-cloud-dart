@@ -194,7 +194,7 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) async => await retry.run(() async {
+  }) => retry.run(() async {
     final url = Uri(
       scheme: 'https',
       host: 'storage.googleapis.com',
@@ -299,9 +299,6 @@ final class Storage {
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
   ///
-  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
-  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  ///
   /// For example:
   ///
   /// ```dart
@@ -313,6 +310,9 @@ final class Storage {
   ///   ifGenerationMatch: 0, // Only insert if the object doesn't exist.
   /// );
   /// ```
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<ObjectMetadata> insertObject(
     String bucket,
     String name,
@@ -344,6 +344,48 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
   );
+
+  /// Deletes a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `generation` or `ifGenerationMatch` is
+  /// set.
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// If set, `generation` selects a specific revision of this object (as
+  /// opposed to the latest version) to delete.
+  ///
+  /// If set, `ifGenerationMatch` makes the operation conditional on whether the
+  /// object's current generation matches the given value. If the generation
+  /// does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, `ifMetagenerationMatch` makes the operation conditional on whether
+  /// the object's current metageneration matches the given value. If the
+  /// metageneration does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/delete).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  Future<void> deleteObject(
+    String bucket,
+    String object, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+    );
+    final queryParams = {
+      'generation': ?generation?.toString(),
+      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+    };
+    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+  }, isIdempotent: ifGenerationMatch != null || generation != null);
 
   /// Closes the client and cleans up any resources associated with it.
   ///
