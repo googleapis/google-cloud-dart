@@ -309,7 +309,7 @@ void main() {
         expect(acl.projectTeam?.projectNumber, 'projectNumber');
         expect(acl.projectTeam?.team, 'team');
         expect(acl.role, 'READER');
-        expect(acl.selfLink, Uri.parse('http://example.com/selfLink'));
+        expect(acl.selfLink, Uri.http('example.com', 'selfLink'));
       });
     });
 
