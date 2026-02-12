@@ -47,71 +47,30 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('list objects', () async {
+    test('no objects', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_objects_success',
+        'list_objects_no_objects',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
-        'list_objects_success',
+        'list_objects_no_objects',
       );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
-      await storage.insertObject(
-        bucketName,
-        'object1.txt',
-        utf8.encode('content1'),
-        ifGenerationMatch: BigInt.zero,
-      );
-      await storage.insertObject(
-        bucketName,
-        'object2.txt',
-        utf8.encode('content2'),
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      final objects = await storage.listObjects(bucketName).toList();
-      expect(objects, hasLength(2));
-      expect(
-        objects.map((o) => o.name),
-        containsAll(['object1.txt', 'object2.txt']),
-      );
-
-      await storage.deleteObject(bucketName, 'object1.txt');
-      await storage.deleteObject(bucketName, 'object2.txt');
+      expect(storage.listObjects(bucketName), emitsDone);
     });
 
-    test('list objects empty bucket', () async {
+    test('single object', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_objects_empty_bucket',
+        'list_objects_single_object',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
-        'list_objects_empty_bucket',
+        'list_objects_single_object',
       );
 
-      await storage.createBucket(BucketMetadata(name: bucketName));
-
-      final objects = await storage.listObjects(bucketName).toList();
-      expect(objects, isEmpty);
-    });
-
-    test('list objects with projection full', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_with_projection_full',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'list_objects_with_projection_full',
-      );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
       await storage.insertObject(
         bucketName,
         'object1.txt',
@@ -119,54 +78,98 @@ void main() async {
         ifGenerationMatch: BigInt.zero,
       );
 
-      final objects = await storage
-          .listObjects(bucketName, projection: 'full')
-          .toList();
-      expect(objects, hasLength(1));
-      expect(objects.first.name, 'object1.txt');
-      // expect(objects.first.acl, isNotNull); // acl is only returned with full projection
-
-      await storage.deleteObject(bucketName, 'object1.txt');
+      await expectLater(
+        storage.listObjects(bucketName).map((o) => o.name),
+        emitsInOrder([emits('object1.txt'), emitsDone]),
+      );
     });
 
-    test('list objects with maxResults', () async {
+    test('soft deleted bucket, list soft deleted objects', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_objects_with_max_results',
+        'list_objects_soft_deleted_bucket_soft',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+
+      final softDeletedBucket = await createBucketWithTearDown(
         storage,
-        'list_objects_with_max_results',
+        'list_objects_soft_deleted_bucket_soft',
+        metadata: BucketMetadata(
+          softDeletePolicy: BucketSoftDeletePolicy(
+            retentionDurationSeconds: const Duration(days: 7).inSeconds,
+          ),
+        ),
       );
 
-      await storage.createBucket(BucketMetadata(name: bucketName));
-      await storage.insertObject(
-        bucketName,
-        'object1.txt',
-        utf8.encode('content1'),
-        ifGenerationMatch: BigInt.zero,
+      await storage.insertObject(softDeletedBucket, 'object1.txt', [0]);
+      await storage.deleteObject(softDeletedBucket, 'object1.txt');
+      await storage.insertObject(softDeletedBucket, 'object2.txt', [1]);
+
+      await expectLater(
+        storage
+            .listObjects(softDeletedBucket, softDeleted: true)
+            .map((b) => b.name),
+        emitsInOrder([emits('object1.txt'), emitsDone]),
       );
-      await storage.insertObject(
-        bucketName,
-        'object2.txt',
-        utf8.encode('content2'),
-        ifGenerationMatch: BigInt.zero,
+    });
+
+    test('soft deleted bucket, list non-soft deleted objects', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'list_objects_soft_deleted_bucket_no_soft',
+      );
+      addTearDown(testClient.endTest);
+
+      final softDeletedBucket = await createBucketWithTearDown(
+        storage,
+        'list_objects_soft_deleted_bucket_no_soft',
+        metadata: BucketMetadata(
+          softDeletePolicy: BucketSoftDeletePolicy(
+            retentionDurationSeconds: const Duration(days: 7).inSeconds,
+          ),
+        ),
       );
 
-      final objects = await storage
-          .listObjects(bucketName, maxResults: BigInt.one)
-          .toList();
-      // listObjects handles pagination internally, so we should still get all results
-      // even with maxResults set to 1 per page.
-      expect(objects, hasLength(2));
-      expect(
-        objects.map((o) => o.name),
-        containsAll(['object1.txt', 'object2.txt']),
+      await storage.insertObject(softDeletedBucket, 'object1.txt', [0]);
+      await storage.deleteObject(softDeletedBucket, 'object1.txt');
+      await storage.insertObject(softDeletedBucket, 'object2.txt', [1]);
+
+      await expectLater(
+        storage
+            .listObjects(softDeletedBucket, softDeleted: false)
+            .map((b) => b.name),
+        emitsInOrder([emits('object2.txt'), emitsDone]),
+      );
+    });
+
+    test('pagination', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'list_objects_pagination',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'list_objects_pagination',
       );
 
-      await storage.deleteObject(bucketName, 'object1.txt');
-      await storage.deleteObject(bucketName, 'object2.txt');
+      await storage.insertObject(bucketName, 'object1.txt', [1]);
+      await storage.insertObject(bucketName, 'object2.txt', [2]);
+      await storage.insertObject(bucketName, 'object3.txt', [3]);
+      await storage.insertObject(bucketName, 'object4.txt', [4]);
+      await storage.insertObject(bucketName, 'object5.txt', [5]);
+
+      await expectLater(
+        storage.listObjects(bucketName, maxResults: 2).map((b) => b.name),
+        emitsInOrder([
+          emits('object1.txt'),
+          emits('object2.txt'),
+          emits('object3.txt'),
+          emits('object4.txt'),
+          emits('object5.txt'),
+          emitsDone,
+        ]),
+      );
     });
   });
 }
