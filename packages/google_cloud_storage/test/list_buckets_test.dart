@@ -60,11 +60,10 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
         'list_buckets_single_bucket',
       );
-      await storage.createBucket(BucketMetadata(name: bucketName));
 
       await expectLater(
         storage.listBuckets(prefix: bucketName).map((b) => b.name),
