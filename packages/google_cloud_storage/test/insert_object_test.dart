@@ -16,7 +16,6 @@
 library;
 
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -29,15 +28,7 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String uniqueBucketName() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
-  ].join();
-}
+import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
@@ -63,12 +54,10 @@ void main() async {
     test('new, no metadata', () async {
       await testClient.startTest('google_cloud_storage', 'insert_object_new');
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new',
+      );
 
       final beforeRequestTime = DateTime.now().toUtc();
 
@@ -152,12 +141,10 @@ void main() async {
         'insert_object_new_with_content_type',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new_with_content_type'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new_with_content_type',
+      );
 
       final objectMetadata = await storage.insertObject(
         bucketName,
@@ -176,12 +163,10 @@ void main() async {
         'insert_object_new_with_crc32c',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new_with_crc32c'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new_with_crc32c',
+      );
 
       final objectMetadata = await storage.insertObject(
         bucketName,
@@ -199,12 +184,10 @@ void main() async {
         'insert_object_new_with_invalid_crc32c',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new_with_invalid_crc32c'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new_with_invalid_crc32c',
+      );
 
       expect(
         () => storage.insertObject(
@@ -224,12 +207,10 @@ void main() async {
         'insert_object_new_with_md5',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new_with_md5'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new_with_md5',
+      );
 
       final objectMetadata = await storage.insertObject(
         bucketName,
@@ -247,12 +228,10 @@ void main() async {
         'insert_object_new_with_invalid_md5',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new_with_invalid_md5'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new_with_invalid_md5',
+      );
 
       expect(
         () => storage.insertObject(
@@ -272,12 +251,10 @@ void main() async {
         'insert_object_new_with_parameter_name_and_metadata_name_mismatch',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_new_with_name_mismatch'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_new_with_name_mismatch',
+      );
 
       expect(
         () => storage.insertObject(
@@ -315,12 +292,11 @@ void main() async {
         'insert_object_overwrite',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_overwrite'
-          : uniqueBucketName();
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_overwrite',
+      );
 
-      await storage.createBucket(BucketMetadata(name: bucketName));
       final oldGeneration = (await storage.insertObject(
         bucketName,
         'object1',
@@ -340,12 +316,10 @@ void main() async {
         'insert_object_overwrite_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_overwrite_if_generation_match_success'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_overwrite_if_generation_match_success',
+      );
 
       final oldGeneration = (await storage.insertObject(
         bucketName,
@@ -367,12 +341,10 @@ void main() async {
         'insert_object_overwrite_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'insert_object_overwrite_if_generation_match_failure'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'insert_object_overwrite_if_generation_match_failure',
+      );
 
       await storage.insertObject(
         bucketName,

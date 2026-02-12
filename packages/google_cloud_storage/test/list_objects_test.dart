@@ -72,7 +72,10 @@ void main() async {
 
       final objects = await storage.listObjects(bucketName).toList();
       expect(objects, hasLength(2));
-      expect(objects.map((o) => o.name), containsAll(['object1.txt', 'object2.txt']));
+      expect(
+        objects.map((o) => o.name),
+        containsAll(['object1.txt', 'object2.txt']),
+      );
 
       await storage.deleteObject(bucketName, 'object1.txt');
       await storage.deleteObject(bucketName, 'object2.txt');
@@ -114,10 +117,9 @@ void main() async {
         ifGenerationMatch: BigInt.zero,
       );
 
-      final objects = await storage.listObjects(
-        bucketName,
-        projection: 'full',
-      ).toList();
+      final objects = await storage
+          .listObjects(bucketName, projection: 'full')
+          .toList();
       expect(objects, hasLength(1));
       expect(objects.first.name, 'object1.txt');
       // expect(objects.first.acl, isNotNull); // acl is only returned with full projection
@@ -150,14 +152,16 @@ void main() async {
         ifGenerationMatch: BigInt.zero,
       );
 
-      final objects = await storage.listObjects(
-        bucketName,
-        maxResults: BigInt.one,
-      ).toList();
+      final objects = await storage
+          .listObjects(bucketName, maxResults: BigInt.one)
+          .toList();
       // listObjects handles pagination internally, so we should still get all results
       // even with maxResults set to 1 per page.
       expect(objects, hasLength(2));
-      expect(objects.map((o) => o.name), containsAll(['object1.txt', 'object2.txt']));
+      expect(
+        objects.map((o) => o.name),
+        containsAll(['object1.txt', 'object2.txt']),
+      );
 
       await storage.deleteObject(bucketName, 'object1.txt');
       await storage.deleteObject(bucketName, 'object2.txt');

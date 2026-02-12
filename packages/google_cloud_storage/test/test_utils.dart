@@ -12,7 +12,7 @@ String _randomSuffix(int length) => [
     _bucketChars[_random.nextInt(_bucketChars.length)],
 ].join();
 
-String _bucketName(String name) {
+String testBucketName(String name) {
   assert(name.length < 55, '"$name" is too long to append a random suffix.');
   return TestHttpClient.isRecording || TestHttpClient.isReplaying
       ? name
@@ -20,8 +20,11 @@ String _bucketName(String name) {
 }
 
 String bucketNameWithTearDown(Storage storage, String name) {
-  final generatedName = _bucketName(name);
+  final generatedName = testBucketName(name);
   addTearDown(() async {
+    for (final object in await storage.listObjects(generatedName).toList()) {
+      await storage.deleteObject(generatedName, object.name!);
+    }
     try {
       await storage.deleteBucket(generatedName);
     } on NotFoundException {
@@ -29,4 +32,17 @@ String bucketNameWithTearDown(Storage storage, String name) {
     }
   });
   return generatedName;
+}
+
+Future<String> createBucketWithTearDown(
+  Storage storage,
+  String name, {
+  BucketMetadata? metadata,
+}) async {
+  final bucketName = bucketNameWithTearDown(storage, name);
+  final meta = (metadata == null)
+      ? BucketMetadata(name: bucketName)
+      : metadata.copyWith(name: bucketName);
+  await storage.createBucket(meta);
+  return bucketName;
 }

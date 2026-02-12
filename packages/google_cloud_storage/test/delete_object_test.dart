@@ -55,12 +55,10 @@ void main() async {
         'delete_object_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_success',
       );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
       await storage.insertObject(
         bucketName,
         'object.txt',
@@ -82,12 +80,10 @@ void main() async {
         'delete_object_not_found',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_not_found',
       );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
 
       expect(
         () => storage.deleteObject(bucketName, 'non-existent.txt'),
@@ -101,18 +97,13 @@ void main() async {
         'delete_object_with_generation',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'delete_object_with_generation',
-      );
-
+      final bucketName = testBucketName('delete_object_with_generation');
       await storage.createBucket(
         BucketMetadata(
           name: bucketName,
           versioning: BucketVersioning(enabled: true),
         ),
       );
-
       final obj1 = await storage.insertObject(
         bucketName,
         'object.txt',
@@ -159,13 +150,6 @@ void main() async {
         'object.txt',
         generation: obj2.generation,
       );
-
-      // Cleanup v2
-      await storage.deleteObject(
-        bucketName,
-        'object.txt',
-        generation: obj2.generation,
-      );
     });
 
     test('with ifGenerationMatch success', () async {
@@ -174,12 +158,10 @@ void main() async {
         'delete_object_with_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_with_if_generation_match_success',
       );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
       final obj = await storage.insertObject(
         bucketName,
         'object.txt',
@@ -205,12 +187,10 @@ void main() async {
         'delete_object_with_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_with_if_generation_match_failure',
       );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
       final obj = await storage.insertObject(
         bucketName,
         'object.txt',
