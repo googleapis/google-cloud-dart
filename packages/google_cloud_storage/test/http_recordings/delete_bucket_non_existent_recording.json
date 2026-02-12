@@ -13,10 +13,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 11 Feb 2026 23:26:39 GMT",
+        "date": "Thu, 12 Feb 2026 02:23:02 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AJRbA5UCQOwuxSko80NMKGkGJc7AB9hR-cve3AZ8GfTStgVjngZ5WX-2anLylFT1Gr1eZ1qeBnmabfo",
+        "x-guploader-uploadid": "AJRbA5WGjPEbIl4wM_stJPrZnF6F8z2lTMC4mPWJBTdEkvQ5U82BNHkhjXw15qKq8YlWyIx1fkxdeyQ",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
@@ -28,8 +28,8 @@
   },
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/delete_bucket_non_existent?",
-      "method": "DELETE",
+      "url": "https://storage.googleapis.com/storage/v1/b/delete_bucket_non_existent/o?",
+      "method": "GET",
       "headers": {
         "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
@@ -40,10 +40,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 11 Feb 2026 23:26:39 GMT",
+        "date": "Thu, 12 Feb 2026 02:23:02 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AJRbA5UJovy5MDs_XfGQclPgljU6BXmM4XTmNNuudEOkfC0-W7C4es8VyLQxjgqLYiQT8lT99U57aUM",
+        "x-guploader-uploadid": "AJRbA5WxlP76HXpPfBKHuTllhpeSj7tE1RmQi_-MFUWMiJDADjDeG9DBd83fVqPpYPhcXe8e3JvgcQ",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",

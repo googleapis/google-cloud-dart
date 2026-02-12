@@ -22,10 +22,10 @@ String testBucketName(String name) {
 String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = testBucketName(name);
   addTearDown(() async {
-    for (final object in await storage.listObjects(generatedName).toList()) {
-      await storage.deleteObject(generatedName, object.name!);
-    }
     try {
+      for (final object in await storage.listObjects(generatedName).toList()) {
+        await storage.deleteObject(generatedName, object.name!);
+      }
       await storage.deleteBucket(generatedName);
     } on NotFoundException {
       // Ignore.

@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Tue, 10 Feb 2026 22:02:32 GMT",
+        "date": "Thu, 12 Feb 2026 02:25:51 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "934",
-        "x-guploader-uploadid": "AJRbA5VNwW5EEbU-sqrrZbQbUZ8GkQfU5NHfHDxsxEoC9bYQK9G1yHjm_K1tJJ8wbzKBMTRshuDf7KE",
+        "x-guploader-uploadid": "AJRbA5UGJOc60fq17vHBM5cPJ8lSyeZfDF3YTo77-V8U63XnpFNbq6sMI6b-spYDVlWZc3xoHD8SM_8",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/insert_object_new_with_name_mismatch\",\n  \"id\": \"insert_object_new_with_name_mismatch\",\n  \"name\": \"insert_object_new_with_name_mismatch\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770760952300100176\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-10T22:02:32.800Z\",\n  \"updated\": \"2026-02-10T22:02:32.800Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-10T22:02:32.800Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-11T22:02:32.800Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-11T22:02:32.800Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/insert_object_new_with_name_mismatch\",\n  \"id\": \"insert_object_new_with_name_mismatch\",\n  \"name\": \"insert_object_new_with_name_mismatch\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1770863150501496095\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-12T02:25:50.938Z\",\n  \"updated\": \"2026-02-12T02:25:50.938Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-12T02:25:50.938Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-13T02:25:50.938Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-13T02:25:50.938Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -43,10 +43,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Tue, 10 Feb 2026 22:02:32 GMT",
+        "date": "Thu, 12 Feb 2026 02:25:51 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "513",
-        "x-guploader-uploadid": "AJRbA5XgIndFuWr0VNlbLCAx7ZDmy4Si5BS_BfSgOGtbbIUr3CyJzLA9KyGmuJfYR-9Ky4QlKfAR-SI",
+        "x-guploader-uploadid": "AJRbA5UscOBgoaNIHsr-wwiMJGiMDCGTjSHI0EBfcsHzF-SPQgeOyzE7vWLSiGKMMf1SHTsCROaz6SI",
         "content-type": "text/html; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
@@ -54,6 +54,59 @@
       },
       "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"Value 'object2' in content does not agree with value 'object1'. This can happen when a value set through a parameter is inconsistent with a value set in the request.\",\n    \"errors\": [\n      {\n        \"message\": \"Value 'object2' in content does not agree with value 'object1'. This can happen when a value set through a parameter is inconsistent with a value set in the request.\",\n        \"domain\": \"global\",\n        \"reason\": \"invalidParameter\"\n      }\n    ]\n  }\n}\n",
       "reasonPhrase": "Bad Request"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/insert_object_new_with_name_mismatch/o?",
+      "method": "GET",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "private, max-age=0, must-revalidate, no-transform",
+        "date": "Thu, 12 Feb 2026 02:25:51 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "32",
+        "x-guploader-uploadid": "AJRbA5WOLERXg4n2CJCWSJe9J7LXe7uVbEI_WzZu0B4mLQ5AbrzeaiqYk7e-puoc1zi_nqRA8J-WxMM",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Thu, 12 Feb 2026 02:25:51 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#objects\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/insert_object_new_with_name_mismatch?",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Thu, 12 Feb 2026 02:25:52 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AJRbA5XyTmyD5hX00Wxg0gbVgdVxGMPX8CH3T5R9ZcmB67h1cIy2s-aY0IKu5BljO_efif_HDu0FsG8",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
     }
   }
 ]
