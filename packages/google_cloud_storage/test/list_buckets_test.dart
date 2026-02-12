@@ -15,8 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:math';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
@@ -24,16 +22,6 @@ import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
-
-const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String _uniquePrefix() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      _bucketChars[random.nextInt(_bucketChars.length)],
-  ].join();
-}
 
 void main() async {
   late Storage storage;
@@ -72,16 +60,13 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final bucketName = bucketNameWithTearDown(
+      final bucketName = await createBucketWithTearDown(
         storage,
         'list_buckets_single_bucket',
       );
-      await storage.createBucket(BucketMetadata(name: bucketName));
 
       await expectLater(
-        storage
-            .listBuckets(prefix: 'list_buckets_single_bucket')
-            .map((b) => b.name),
+        storage.listBuckets(prefix: bucketName).map((b) => b.name),
         emitsInOrder([emits(bucketName), emitsDone]),
       );
     });
@@ -95,26 +80,23 @@ void main() async {
         );
         addTearDown(testClient.endTest);
 
-        final prefix = _uniquePrefix();
-        final softDeletedBucket = bucketNameWithTearDown(storage, prefix);
-
-        await storage.createBucket(
-          BucketMetadata(
-            name: softDeletedBucket,
+        final prefix = testBucketName('list_buckets_soft_deleted_bucket');
+        final softDeletedBucket = await createBucketWithTearDown(
+          storage,
+          '${prefix}_soft',
+          metadata: BucketMetadata(
             softDeletePolicy: BucketSoftDeletePolicy(
               retentionDurationSeconds: const Duration(days: 7).inSeconds,
             ),
           ),
         );
-
         await storage.deleteBucket(softDeletedBucket);
 
-        final notDeletedBucket = bucketNameWithTearDown(storage, prefix);
-        await storage.createBucket(BucketMetadata(name: notDeletedBucket));
+        await createBucketWithTearDown(storage, '${prefix}_no_soft');
 
         await expectLater(
           storage
-              .listBuckets(prefix: softDeletedBucket, softDeleted: true)
+              .listBuckets(prefix: prefix, softDeleted: true)
               .map((b) => b.name),
           emitsInOrder([emits(softDeletedBucket), emitsDone]),
         );
@@ -133,26 +115,13 @@ void main() async {
       );
       addTearDown(testClient.endTest);
 
-      final prefix = TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'list_buckets_pagination'
-          : _uniquePrefix();
+      final prefix = testBucketName('list_buckets_pagination');
 
-      final bucket1 = '${prefix}_1';
-      final bucket2 = '${prefix}_2';
-      final bucket3 = '${prefix}_3';
-      final bucket4 = '${prefix}_4';
-      final bucket5 = '${prefix}_5';
-
-      await storage.createBucket(BucketMetadata(name: bucket1));
-      addTearDown(() => storage.deleteBucket(bucket1));
-      await storage.createBucket(BucketMetadata(name: bucket2));
-      addTearDown(() => storage.deleteBucket(bucket2));
-      await storage.createBucket(BucketMetadata(name: bucket3));
-      addTearDown(() => storage.deleteBucket(bucket3));
-      await storage.createBucket(BucketMetadata(name: bucket4));
-      addTearDown(() => storage.deleteBucket(bucket4));
-      await storage.createBucket(BucketMetadata(name: bucket5));
-      addTearDown(() => storage.deleteBucket(bucket5));
+      final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
+      final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');
+      final bucket3 = await createBucketWithTearDown(storage, '${prefix}_3');
+      final bucket4 = await createBucketWithTearDown(storage, '${prefix}_4');
+      final bucket5 = await createBucketWithTearDown(storage, '${prefix}_5');
 
       await expectLater(
         storage.listBuckets(prefix: prefix, maxResults: 2).map((b) => b.name),

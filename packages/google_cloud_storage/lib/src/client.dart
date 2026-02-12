@@ -109,7 +109,9 @@ final class Storage {
   /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
   /// properties.
   ///
-  /// [softDeleted] filters the returned buckets to those that are soft deleted.
+  /// If [softDeleted] is `true`, then the stream will include **only**
+  /// [soft-deleted buckets][]. If `false`, then the stream will not include
+  /// soft-deleted buckets.
   ///
   /// [maxResults] limits the number of buckets returned in a single API
   /// response. This does not affect the output but does affect the trade-off
@@ -117,6 +119,8 @@ final class Storage {
   /// network requests but higher memory usage.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/list).
+  ///
+  /// [soft-deleted buckets]: https://cloud.google.com/storage/docs/soft-delete
   Stream<BucketMetadata> listBuckets({
     String? prefix,
     String? projection,
@@ -139,6 +143,60 @@ final class Storage {
 
       for (final bucket in json['items'] as List<Object?>? ?? const []) {
         yield bucketMetadataFromJson(bucket as Map<String, Object?>);
+      }
+    } while (nextPageToken != null);
+  }
+
+  /// A stream of objects contained in [bucket] in lexicographical order by
+  /// name.
+  ///
+  /// If [softDeleted] is `true`, then the stream will include **only**
+  /// [soft-deleted objects][]. If `false`, then the stream will not include
+  /// soft-deleted objects.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// [maxResults] limits the number of objects returned in a single API
+  /// response. This does not affect the output but does affect the trade-off
+  /// between latency and memory usage; a larger value will result in fewer
+  /// network requests but higher memory usage.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/list).
+  ///
+  /// [soft-deleted objects]: https://cloud.google.com/storage/docs/soft-delete
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Stream<ObjectMetadata> listObjects(
+    String bucket, {
+    bool? softDeleted,
+    String? projection,
+    String? userProject,
+    int? maxResults,
+  }) async* {
+    String? nextPageToken;
+
+    do {
+      final url = Uri(
+        scheme: 'https',
+        host: 'storage.googleapis.com',
+        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
+        queryParameters: {
+          'softDeleted': ?softDeleted?.toString(),
+          'maxResults': ?maxResults?.toString(),
+          'pageToken': ?nextPageToken,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      );
+      final json = await _serviceClient.get(url);
+      nextPageToken = json['nextPageToken'] as String?;
+
+      for (final object in json['items'] as List<Object?>? ?? const []) {
+        yield objectMetadataFromJson(object as Map<String, Object?>);
       }
     } while (nextPageToken != null);
   }

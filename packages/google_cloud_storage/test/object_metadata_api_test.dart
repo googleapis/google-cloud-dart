@@ -16,7 +16,6 @@
 library;
 
 import 'dart:convert';
-import 'dart:math';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart';
@@ -27,15 +26,7 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
 
-const bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
-
-String uniqueBucketName() {
-  final random = Random();
-  return [
-    for (int i = 0; i < 32; i++)
-      bucketChars[random.nextInt(bucketChars.length)],
-  ].join();
-}
+import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
@@ -64,12 +55,11 @@ void main() async {
         'object_metadata_simple',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'object_metadata_simple'
-          : uniqueBucketName();
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'object_metadata_simple',
+      );
 
-      await storage.createBucket(BucketMetadata(name: bucketName));
       await storage.insertObject(
         bucketName,
         'object.txt',
@@ -89,11 +79,7 @@ void main() async {
         'object_metadata_with_generation',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'object_metadata_with_generation'
-          : uniqueBucketName();
-
+      final bucketName = testBucketName('object_metadata_with_generation');
       await storage.createBucket(
         BucketMetadata(
           name: bucketName,
@@ -139,12 +125,10 @@ void main() async {
         'object_metadata_with_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'object_metadata_with_if_metageneration_match_success'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'object_metadata_with_if_generation_match_success',
+      );
       final obj = await storage.insertObject(
         bucketName,
         'object.txt',
@@ -166,12 +150,10 @@ void main() async {
         'object_metadata_with_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'object_metadata_with_if_metageneration_match_failure'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'object_metadata_with_if_generation_match_failure',
+      );
       final obj = await storage.insertObject(
         bucketName,
         'object.txt',
@@ -195,12 +177,10 @@ void main() async {
         'object_metadata_non_existant',
       );
       addTearDown(testClient.endTest);
-      final bucketName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'object_metadata_non_existant'
-          : uniqueBucketName();
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'object_metadata_non_existant',
+      );
 
       expect(
         () => storage.objectMetadata(bucketName, 'non-existent.txt'),
