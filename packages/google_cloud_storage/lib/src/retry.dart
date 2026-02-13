@@ -19,6 +19,8 @@ import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import '../google_cloud_storage.dart';
+
 /// An abstract class for running a function with retry logic.
 sealed class RetryRunner {
   /// Runs the given function with retry logic.
@@ -146,7 +148,10 @@ final class ExponentialRetry implements RetryRunner {
           case ServiceUnavailableException():
           case GatewayTimeoutException():
           case RequestTimeoutException():
+          // Transport-level errors.
           case http.ClientException():
+          // Checksum validation errors.
+          case ChecksumValidationException():
             break;
           default:
             rethrow;

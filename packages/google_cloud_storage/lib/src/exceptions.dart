@@ -12,15 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Stores and retrieves potentially large, immutable data objects.
-library;
+/// Exception thrown when the server-calculated checksum does not match the
+/// checksum calculated by the client.
+class ChecksumValidationException implements Exception {
+  final String message;
 
-export 'package:google_cloud_rpc/exceptions.dart';
+  ChecksumValidationException(this.message);
 
-export 'src/bucket_metadata.dart';
-export 'src/bucket_metadata_patch_builder.dart' show BucketMetadataPatchBuilder;
-export 'src/client.dart';
-export 'src/exceptions.dart';
-export 'src/object_metadata.dart';
-export 'src/project_team.dart';
-export 'src/retry.dart' hide delaySequence;
+  @override
+  String toString() => 'ChecksumValidationException: $message';
+}

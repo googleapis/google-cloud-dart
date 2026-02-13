@@ -20,6 +20,7 @@ import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
+import 'file_download.dart';
 import 'file_upload.dart';
 import 'object_metadata_json.dart';
 
@@ -56,7 +57,6 @@ final class Storage {
   }) async => await retry.run(() async {
     final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
     final queryParams = {'project': projectId};
-
     final j = await _serviceClient.post(
       url.replace(queryParameters: queryParams),
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
@@ -272,6 +272,28 @@ final class Storage {
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
+
+  /// ChecksumValidationException
+  Future<Uint8List> downloadObject(
+    String bucket,
+    String object, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(
+    () async => await downloadFile(
+      _httpClient,
+      bucket,
+      object,
+      generation,
+      ifGenerationMatch,
+      ifMetagenerationMatch,
+      userProject,
+    ),
+    isIdempotent: true,
+  );
 
   /// Information about a [Google Cloud Storage object].
   ///
