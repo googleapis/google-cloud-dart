@@ -55,6 +55,10 @@ Future<Uint8List> downloadFile(
     },
   );
   final response = await client.get(url);
+  if (response.statusCode < 200 || response.statusCode >= 300) {
+    throw ServiceException.fromHttpResponse(response, response.body);
+  }
+
   final data = response.bodyBytes;
 
   // The "x-goog-hash" header is a comma separated list of hash values.
@@ -84,6 +88,5 @@ Future<Uint8List> downloadFile(
       );
     }
   }
-
   return data;
 }

@@ -273,7 +273,30 @@ final class Storage {
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
 
-  /// ChecksumValidationException
+  /// Download the content of a [Google Cloud Storage object][] as bytes.
+  ///
+  /// This operation is read-only and always idempotent.
+  ///
+  /// If non-null, [generation] downloads a specific version of the object
+  /// instead of the latest version.
+  ///
+  /// If non-null, [ifGenerationMatch] makes retrieving the object's data
+  /// conditional on whether the object's generation matches the provided
+  /// value. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If non-null, [ifMetagenerationMatch] makes retrieving the object's data
+  /// conditional on whether the object's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/get).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<Uint8List> downloadObject(
     String bucket,
     String object, {
