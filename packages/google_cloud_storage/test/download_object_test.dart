@@ -18,7 +18,6 @@ library;
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart'
     show fixedBoundaryString;
