@@ -15,7 +15,6 @@
 import 'dart:math';
 
 import 'package:clock/clock.dart';
-import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 

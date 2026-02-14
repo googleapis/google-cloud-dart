@@ -68,9 +68,7 @@ Future<Uint8List> downloadFile(
 
   final crc32c = parsedHashes['crc32c'];
   if (crc32c != null) {
-    final calculatedCrc32c = Crc32c()
-      ..update(data)
-      ..toBase64();
+    final calculatedCrc32c = Crc32c()..update(data);
     if (calculatedCrc32c.toBase64() != crc32c) {
       throw ChecksumValidationException(
         'header crc32c value "$crc32c" is different from calculated value '

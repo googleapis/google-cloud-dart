@@ -306,7 +306,7 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(
-    () async => await downloadFile(
+    () => downloadFile(
       _httpClient,
       bucket,
       object,

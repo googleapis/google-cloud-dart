@@ -255,17 +255,16 @@ void main() async {
       var count = 0;
       final mockClient = MockClient((request) async {
         count++;
+        final headers = {'content-type': 'text/plain; charset=UTF-8'};
         if (count == 1) {
-          throw ChecksumValidationException('Hash mismatch');
+          headers['x-goog-hash'] = 'crc32c=/BAD';
         } else if (count == 2) {
-          return http.Response(
-            'Hello World!',
-            200,
-            headers: {'content-type': 'text/plain; charset=UTF-8'},
-          );
+          headers['x-goog-hash'] = 'md5=/BAD';
         } else {
-          throw StateError('Unexpected call count: $count');
+          headers['x-goog-hash'] =
+              'crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA==';
         }
+        return http.Response('Hello World!', 200, headers: headers);
       });
 
       final storage = Storage(client: mockClient, projectId: projectId);
