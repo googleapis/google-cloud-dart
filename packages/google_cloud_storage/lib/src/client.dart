@@ -20,6 +20,7 @@ import '../google_cloud_storage.dart';
 import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
+import 'file_download.dart';
 import 'file_upload.dart';
 import 'object_metadata_json.dart';
 
@@ -56,7 +57,6 @@ final class Storage {
   }) async => await retry.run(() async {
     final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
     final queryParams = {'project': projectId};
-
     final j = await _serviceClient.post(
       url.replace(queryParameters: queryParams),
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
@@ -272,6 +272,51 @@ final class Storage {
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
+
+  /// Download the content of a [Google Cloud Storage object][] as bytes.
+  ///
+  /// This operation is read-only and always idempotent.
+  ///
+  /// If non-null, [generation] downloads a specific version of the object
+  /// instead of the latest version.
+  ///
+  /// If non-null, [ifGenerationMatch] makes retrieving the object's data
+  /// conditional on whether the object's generation matches the provided
+  /// value. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If non-null, [ifMetagenerationMatch] makes retrieving the object's data
+  /// conditional on whether the object's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/get).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<Uint8List> downloadObject(
+    String bucket,
+    String object, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(
+    () => downloadFile(
+      _httpClient,
+      bucket,
+      object,
+      generation,
+      ifGenerationMatch,
+      ifMetagenerationMatch,
+      userProject,
+    ),
+    isIdempotent: true,
+  );
 
   /// Information about a [Google Cloud Storage object].
   ///

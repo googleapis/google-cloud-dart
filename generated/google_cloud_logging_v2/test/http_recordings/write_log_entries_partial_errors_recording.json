@@ -5,19 +5,19 @@
       "method": "POST",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.3 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
-      "body": "eyJlbnRyaWVzIjpbeyJsb2dOYW1lIjoiaW52YWxpZCBsb2cgbmFtZSIsInJlc291cmNlIjp7InR5cGUiOiJnY2VfaW5zdGFuY2UifSwidGV4dFBheWxvYWQiOiJIZWxsbyBXb3JsZCEiLCJzZXZlcml0eSI6IkNSSVRJQ0FMIn1dLCJwYXJ0aWFsU3VjY2VzcyI6dHJ1ZX0="
+      "body": "{\"entries\":[{\"logName\":\"invalid log name\",\"resource\":{\"type\":\"gce_instance\"},\"textPayload\":\"Hello World!\",\"severity\":\"CRITICAL\"}],\"partialSuccess\":true}"
     },
     "response": {
       "statusCode": 400,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "transfer-encoding": "chunked",
-        "date": "Tue, 06 Jan 2026 01:21:34 GMT",
+        "date": "Sat, 14 Feb 2026 01:36:38 GMT",
         "vary": "Origin,X-Origin,Referer",
         "content-encoding": "gzip",
-        "server-timing": "gfet4t7; dur=53",
+        "server-timing": "gfet4t7; dur=54",
         "content-type": "application/json; charset=UTF-8",
         "x-frame-options": "SAMEORIGIN",
         "x-xss-protection": "0",
