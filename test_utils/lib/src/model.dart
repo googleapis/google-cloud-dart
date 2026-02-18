@@ -27,19 +27,33 @@ class RecordedRequest {
     required this.body,
   });
 
-  RecordedRequest.fromJson(Map<String, dynamic> json)
-    : url = Uri.parse(json['url'] as String),
-      method = json['method'] as String,
-      headers = (json['headers'] as Map<String, dynamic>)
-          .cast<String, String>(),
-      body = base64.decode(json['body'] as String);
+  factory RecordedRequest.fromJson(Map<String, dynamic> json) {
+    final headers = (json['headers'] as Map<String, dynamic>)
+        .cast<String, String>();
+    return RecordedRequest(
+      url: Uri.parse(json['url'] as String),
+      method: json['method'] as String,
+      headers: headers,
+      body: _isText(headers)
+          ? utf8.encode(json['body'] as String)
+          : base64.decode(json['body'] as String),
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'url': url.toString(),
     'method': method,
     'headers': headers,
-    'body': base64.encode(body),
+    'body': _isText(headers) ? utf8.decode(body) : base64.encode(body),
   };
+}
+
+bool _isText(Map<String, String> headers) {
+  final contentType = headers['content-type'];
+  if (contentType == null) return false;
+  return contentType.contains('text') ||
+      contentType.contains('json') ||
+      contentType.contains('xml');
 }
 
 class RecordedResponse {
@@ -55,19 +69,23 @@ class RecordedResponse {
     this.reasonPhrase,
   });
 
-  factory RecordedResponse.fromJson(Map<String, dynamic> json) =>
-      RecordedResponse(
-        statusCode: json['statusCode'] as int,
-        headers: (json['headers'] as Map<String, dynamic>)
-            .cast<String, String>(),
-        body: utf8.encode(json['body'] as String),
-        reasonPhrase: json['reasonPhrase'] as String?,
-      );
+  factory RecordedResponse.fromJson(Map<String, dynamic> json) {
+    final headers = (json['headers'] as Map<String, dynamic>)
+        .cast<String, String>();
+    return RecordedResponse(
+      statusCode: json['statusCode'] as int,
+      headers: headers,
+      body: _isText(headers)
+          ? utf8.encode(json['body'] as String)
+          : base64.decode(json['body'] as String),
+      reasonPhrase: json['reasonPhrase'] as String?,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     'statusCode': statusCode,
     'headers': headers,
-    'body': utf8.decode(body),
+    'body': _isText(headers) ? utf8.decode(body) : base64.encode(body),
     'reasonPhrase': reasonPhrase,
   };
 }

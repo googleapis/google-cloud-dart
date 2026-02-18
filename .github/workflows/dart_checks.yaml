@@ -26,7 +26,7 @@ on:
 env:
   DART_VERSION: 3.9.2
   GOOGLE_CLOUD_PROJECT: skilful-orb-203421
-
+  LIBRARIAN_VERSION: v0.8.1-0.20260205213641-1548234aed09
 name: Dart Checks
 jobs:
   analyze_and_format:
@@ -96,7 +96,9 @@ jobs:
       - name: Regenerate existing clients
         # The current head version of librarian can be generated with:
         # GOPROXY=direct go list -m -u -f '{{.Version}}' github.com/googleapis/librarian@main
-        run: go run github.com/googleapis/librarian/cmd/librarian@v0.8.1-0.20260204203405-fef01ca62071 generate -all
+        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} generate -all
+      - name: Format librarian configuration
+        run: go run github.com/googleapis/librarian/cmd/librarian@${{ env.LIBRARIAN_VERSION }} tidy
       - name: Regenerate dependency graph
         run: dart run tool/deps_diagram.dart
       - name: Generated Diff

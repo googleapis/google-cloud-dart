@@ -70,22 +70,22 @@ void main() {
         bucket: 'test-bucket',
         name: 'test-object',
         contentType: 'text/plain',
-        size: 1024,
+        size: BigInt.from(1024),
       );
 
       final copy = original.copyWith(
         contentType: 'application/json',
-        size: 2048,
+        size: BigInt.from(2048),
       );
 
       expect(copy.bucket, 'test-bucket');
       expect(copy.name, 'test-object');
       expect(copy.contentType, 'application/json');
-      expect(copy.size, 2048);
+      expect(copy.size, BigInt.from(2048));
 
       // Original should remain unchanged
       expect(original.contentType, 'text/plain');
-      expect(original.size, 1024);
+      expect(original.size, BigInt.from(1024));
     });
 
     test('copyWithout', () {

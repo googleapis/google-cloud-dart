@@ -1,0 +1,58 @@
+[
+  {
+    "request": {
+      "url": "https://secretmanager.googleapis.com/v1/projects/skilful-orb-203421/secrets?secretId=mysecret",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "{\"replication\":{\"automatic\":{}},\"ttl\":\"120s\"}"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Sat, 14 Feb 2026 01:35:58 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "{\n  \"name\": \"projects/747575106375/secrets/mysecret\",\n  \"replication\": {\n    \"automatic\": {}\n  },\n  \"createTime\": \"2026-02-14T01:35:58.269914Z\",\n  \"expireTime\": \"2026-02-14T01:37:58.233992810Z\",\n  \"etag\": \"\\\"164abebe610146\\\"\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://secretmanager.googleapis.com/v1/projects/747575106375/secrets/mysecret?updateMask=annotations",
+      "method": "PATCH",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "{\"name\":\"projects/747575106375/secrets/mysecret\",\"labels\":{\"x\":\"y\"},\"annotations\":{\"a\":\"b\"}}"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Sat, 14 Feb 2026 01:35:58 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "{\n  \"name\": \"projects/747575106375/secrets/mysecret\",\n  \"replication\": {\n    \"automatic\": {}\n  },\n  \"createTime\": \"2026-02-14T01:35:58.269914Z\",\n  \"expireTime\": \"2026-02-14T01:37:58.233992810Z\",\n  \"etag\": \"\\\"164abebe660655\\\"\",\n  \"annotations\": {\n    \"a\": \"b\"\n  }\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]

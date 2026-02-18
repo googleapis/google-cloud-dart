@@ -1,0 +1,31 @@
+[
+  {
+    "request": {
+      "url": "https://logging.googleapis.com/v2/entries:write",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "{\"entries\":[{\"logName\":\"invalid log name\",\"resource\":{\"type\":\"gce_instance\"},\"textPayload\":\"Hello World!\",\"severity\":\"CRITICAL\"}],\"partialSuccess\":true}"
+    },
+    "response": {
+      "statusCode": 400,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "transfer-encoding": "chunked",
+        "date": "Sat, 14 Feb 2026 01:36:38 GMT",
+        "vary": "Origin,X-Origin,Referer",
+        "content-encoding": "gzip",
+        "server-timing": "gfet4t7; dur=54",
+        "content-type": "application/json; charset=UTF-8",
+        "x-frame-options": "SAMEORIGIN",
+        "x-xss-protection": "0",
+        "x-content-type-options": "nosniff",
+        "server": "ESF"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 400,\n    \"message\": \"LogEntry.logName: Name \\\"invalid log name\\\" is missing the parent component. Expected the form projects/[PROJECT_ID]/logs/[ID]\",\n    \"status\": \"INVALID_ARGUMENT\",\n    \"details\": [\n      {\n        \"@type\": \"type.googleapis.com/google.logging.v2.WriteLogEntriesPartialErrors\",\n        \"logEntryErrors\": {\n          \"0\": {\n            \"code\": 3,\n            \"message\": \"LogEntry.logName: Name \\\"invalid log name\\\" is missing the parent component. Expected the form projects/[PROJECT_ID]/logs/[ID]\"\n          }\n        }\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Bad Request"
+    }
+  }
+]
