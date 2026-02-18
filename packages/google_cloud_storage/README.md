@@ -17,7 +17,7 @@ A Dart client for Google Cloud Storage.
 > feedback, suggestions, and comments, please file an issue in the
 > [bug tracker](https://github.com/googleapis/google-cloud-dart/issues).
 
-## Using
+## Using Google Cloud Storage
 
 All access to Google Cloud Storage is made through the `Storage` class.
 
