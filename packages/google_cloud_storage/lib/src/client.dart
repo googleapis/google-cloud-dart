@@ -78,10 +78,15 @@ final class Storage {
       scheme: 'https',
       host: 'storage.googleapis.com',
       pathSegments: ['storage', 'v1', 'b', bucket],
+      queryParameters: {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
     );
     final j = await _serviceClient.get(url);
     return bucketMetadataFromJson(j as Map<String, Object?>);
-  });
+  }, isIdempotent: true);
 
   /// Create a new Google Cloud Storage bucket.
   ///
