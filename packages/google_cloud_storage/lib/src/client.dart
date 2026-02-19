@@ -448,6 +448,78 @@ final class Storage {
     isIdempotent: ifGenerationMatch != null,
   );
 
+  /// Updates the metadata associated with a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `ifMetagenerationMatch` is set.
+  ///
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
+  ///
+  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// on whether the objects's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  /// A value of `0` indicates that the object must not already exist.
+  ///
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/patch).
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// final metadata = await storage.insertObject(
+  ///   'my-bucket',
+  ///   'hello.txt',
+  ///   utf8.encode('Hello, World!'),
+  ///   contentType: 'text/plain',
+  ///   ifGenerationMatch: 0, // Only insert if the object doesn't exist.
+  /// );
+  /// ```
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> patchObject(
+    String bucket,
+    String name,
+    ObjectMetadataPatchBuilder metadata, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', name],
+    );
+    final queryParams = {
+      'generation': ?generation?.toString(),
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      'predefinedAcl': ?predefinedAcl,
+      'projection': ?projection,
+      'userProject': ?userProject,
+    };
+    final j = await _serviceClient.patch(
+      url.replace(queryParameters: queryParams),
+      body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
+    );
+    return objectMetadataFromJson(j as Map<String, Object?>);
+  }, isIdempotent: ifMetagenerationMatch != null);
+
   /// Deletes a [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if `generation` or `ifGenerationMatch` is
