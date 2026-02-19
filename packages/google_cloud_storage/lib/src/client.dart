@@ -45,6 +45,44 @@ final class Storage {
     : _httpClient = client,
       _serviceClient = ServiceClient(client: client);
 
+  /// Information about a [Google Cloud Storage bucket][].
+  ///
+  /// This operation is read-only and always idempotent.
+  ///
+  /// Throws [NotFoundException] if the bucket does not exist.
+  ///
+  /// If non-null, [ifMetagenerationMatch] makes retrieving the bucket metadata
+  /// conditional on whether the bucket's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/get).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<BucketMetadata> bucketMetadata(String bucket, {
+    BigInt? ifMetagenerationMatch,
+    String? userProject,
+    String? projection,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket],
+    );
+    final j = await _serviceClient.get(url);
+    return bucketMetadataFromJson(j as Map<String, Object?>);
+  });
+
   /// Create a new Google Cloud Storage bucket.
   ///
   /// This operation is always idempotent. Throws [ConflictException] if the
