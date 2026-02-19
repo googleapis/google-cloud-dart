@@ -42,7 +42,7 @@ Map<String, Object?> objectMetadataToJson(ObjectMetadata instance) => {
   'name': ?instance.name,
   'owner': ?_ownerToJson(instance.owner),
   'restoreToken': ?instance.restoreToken,
-  'retention': ?_objectRetentionToJson(instance.retention),
+  'retention': ?objectRetentionToJson(instance.retention),
   'retentionExpirationTime': ?timestampToJson(instance.retentionExpirationTime),
   'selfLink': ?instance.selfLink?.toString(),
   'size': ?int64ToJson(instance.size),
@@ -145,7 +145,7 @@ ObjectRetention? _objectRetentionFromJson(Map<String, Object?>? json) {
   );
 }
 
-Map<String, Object?>? _objectRetentionToJson(ObjectRetention? instance) {
+Map<String, Object?>? objectRetentionToJson(ObjectRetention? instance) {
   if (instance == null) return null;
   return {
     'mode': ?instance.mode,

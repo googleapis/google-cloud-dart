@@ -23,6 +23,8 @@ import 'bucket_metadata_patch_builder.dart'
 import 'file_download.dart';
 import 'file_upload.dart';
 import 'object_metadata_json.dart';
+import 'object_metadata_patch_builder.dart'
+    show ObjectMetadataPatchBuilderJsonEncodable;
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -456,21 +458,32 @@ final class Storage {
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
   /// If set, `ifGenerationMatch` makes updating the object content conditional
-  /// on whether the objects's generation matches the provided value. If the
-  /// generation does not match, a [PreconditionFailedException] is thrown.
-  /// A value of `0` indicates that the object must not already exist.
+  /// Update a Google Cloud Storage object's metadata.
   ///
-  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// This operation is idempotent if [ifGenerationMatch] or
+  /// [ifMetagenerationMatch] is set.
+  ///
+  /// If set, [generation] selects a specific revision of this object (as
+  /// opposed to the latest version) to patch.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether the
+  /// object's current generation matches the given value. If the generation
+  /// does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, [ifMetagenerationMatch] makes the operation conditional on whether
+  /// the object's current metageneration matches the given value. If the
+  /// metageneration does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, [predefinedAcl] applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
-  /// `true`, then setting `predefinedAcl` will result in a
+  /// `true`, then setting [predefinedAcl] will result in a
   /// [BadRequestException].
   ///
-  /// `projection` controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
   ///
-  /// If set, `userProject` is the project to be billed for this request. This
+  /// If set, [userProject] is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/patch).
@@ -478,16 +491,17 @@ final class Storage {
   /// For example:
   ///
   /// ```dart
-  /// final metadata = await storage.insertObject(
-  ///   'my-bucket',
-  ///   'hello.txt',
-  ///   utf8.encode('Hello, World!'),
-  ///   contentType: 'text/plain',
-  ///   ifGenerationMatch: 0, // Only insert if the object doesn't exist.
-  /// );
+  ///  final patchMetadata = ObjectMetadataPatchBuilder()
+  ///    ..contentType = 'text/plain'
+  ///    ..metadata = {'key': 'value'};
+  ///  await storage.patchObject(
+  ///    'my-bucket',
+  ///    'my-object',
+  ///    patchMetadata,
+  ///  );
   /// ```
   ///
-  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<ObjectMetadata> patchObject(
     String bucket,
@@ -508,6 +522,7 @@ final class Storage {
     );
     final queryParams = {
       'generation': ?generation?.toString(),
+      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
       'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
       'predefinedAcl': ?predefinedAcl,
       'projection': ?projection,
@@ -518,7 +533,7 @@ final class Storage {
       body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
     );
     return objectMetadataFromJson(j as Map<String, Object?>);
-  }, isIdempotent: ifMetagenerationMatch != null);
+  }, isIdempotent: ifGenerationMatch != null || ifMetagenerationMatch != null);
 
   /// Deletes a [Google Cloud Storage object][].
   ///
