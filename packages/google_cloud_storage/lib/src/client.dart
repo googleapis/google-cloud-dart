@@ -68,7 +68,8 @@ final class Storage {
   ///
   /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  Future<BucketMetadata> bucketMetadata(String bucket, {
+  Future<BucketMetadata> bucketMetadata(
+    String bucket, {
     BigInt? ifMetagenerationMatch,
     String? userProject,
     String? projection,
