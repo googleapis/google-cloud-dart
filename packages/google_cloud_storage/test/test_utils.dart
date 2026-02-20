@@ -29,6 +29,13 @@ String bucketNameWithTearDown(Storage storage, String name) {
         BucketMetadataPatchBuilder()..versioning = null,
       );
       for (final object in await storage.listObjects(generatedName).toList()) {
+        await storage.patchObject(
+          generatedName,
+          object.name!,
+          ObjectMetadataPatchBuilder()
+            ..eventBasedHold = false
+            ..temporaryHold = false,
+        );
         await storage.deleteObject(generatedName, object.name!);
       }
       await storage.deleteBucket(generatedName);
@@ -43,11 +50,15 @@ Future<String> createBucketWithTearDown(
   Storage storage,
   String name, {
   BucketMetadata? metadata,
+  bool enableObjectRetention = false,
 }) async {
   final bucketName = bucketNameWithTearDown(storage, name);
   final meta = (metadata == null)
       ? BucketMetadata(name: bucketName)
       : metadata.copyWith(name: bucketName);
-  await storage.createBucket(meta);
+  await storage.createBucket(
+    meta,
+    enableObjectRetention: enableObjectRetention,
+  );
   return bucketName;
 }

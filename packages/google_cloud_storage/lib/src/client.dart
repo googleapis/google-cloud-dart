@@ -55,10 +55,14 @@ final class Storage {
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   Future<BucketMetadata> createBucket(
     BucketMetadata metadata, {
+    bool enableObjectRetention = false,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
     final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
-    final queryParams = {'project': projectId};
+    final queryParams = {
+      'project': projectId,
+      'enableObjectRetention': enableObjectRetention.toString(),
+    };
     final j = await _serviceClient.post(
       url.replace(queryParameters: queryParams),
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),

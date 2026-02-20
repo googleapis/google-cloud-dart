@@ -76,7 +76,13 @@ final class ObjectMetadataPatchBuilder {
   }
 
   /// A timestamp specified by the user for an object.
-  set customTime(Timestamp? value) {
+  ///
+  /// After you set a custom time on an object, the custom time cannot be
+  /// removed and cannot be set to an earlier datetime. For more information
+  /// about how to use the custom time, see [custom time metadata][].
+  ///
+  /// [custom time metadata]: https://docs.cloud.google.com/storage/docs/metadata#custom-time
+  set customTime(Timestamp value) {
     _json['customTime'] = timestampToJson(value);
   }
 
@@ -114,10 +120,8 @@ final class ObjectMetadataPatchBuilder {
     _json['retention'] = objectRetentionToJson(value);
   }
 
-  /// Storage class of the object.
-  set storageClass(String? value) {
-    _json['storageClass'] = value;
-  }
+  // `storageClass` is not supported for patch operations.
+  // See https://docs.cloud.google.com/storage/docs/changing-storage-classes
 
   /// Whether an object is under temporary hold.
   set temporaryHold(bool? value) {
