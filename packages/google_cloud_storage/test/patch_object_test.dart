@@ -592,6 +592,9 @@ void main() async {
         retainUntilTime.seconds,
       );
       expect(actualMetadata.metageneration, BigInt.from(2));
+
+      // Wait for the retention period to expire so teardown can delete it.
+      await Future<void>.delayed(const Duration(seconds: 1));
     });
 
     test('remove retention', () async {
@@ -689,6 +692,50 @@ void main() async {
       );
 
       expect(actualMetadata.metageneration, BigInt.two);
+    });
+
+    test('with generation', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_object_with_generation',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'patch_object_with_generation',
+        metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
+      );
+
+      final obj1 = await storage.insertObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('v1'),
+      );
+      final obj2 = await storage.insertObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('v2'),
+      );
+
+      final patchMetadata = ObjectMetadataPatchBuilder()
+        ..metadata = {'version': '1'};
+
+      final patchedMetadata = await storage.patchObject(
+        bucketName,
+        'object.txt',
+        patchMetadata,
+        generation: obj1.generation,
+      );
+
+      expect(patchedMetadata.generation, obj1.generation);
+      expect(patchedMetadata.metadata, {'version': '1'});
+
+      final metadataV2 = await storage.objectMetadata(
+        bucketName,
+        'object.txt',
+        generation: obj2.generation,
+      );
+      expect(metadataV2.metadata, isNull);
     });
 
     test('non existant', () async {

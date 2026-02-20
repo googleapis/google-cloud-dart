@@ -23,20 +23,26 @@ String bucketNameWithTearDown(Storage storage, String name) {
   final generatedName = testBucketName(name);
   addTearDown(() async {
     try {
-      // Disable bucket versioning so that `deleteObject` deletes all versions.
-      await storage.patchBucket(
+      // Use `versions: true` to get all versions of all objects.
+      await for (final object in storage.listObjects(
         generatedName,
-        BucketMetadataPatchBuilder()..versioning = null,
-      );
-      for (final object in await storage.listObjects(generatedName).toList()) {
-        await storage.patchObject(
+        versions: true,
+      )) {
+        if (object.eventBasedHold == true || object.temporaryHold == true) {
+          await storage.patchObject(
+            generatedName,
+            object.name!,
+            ObjectMetadataPatchBuilder()
+              ..eventBasedHold = false
+              ..temporaryHold = false,
+            generation: object.generation,
+          );
+        }
+        await storage.deleteObject(
           generatedName,
           object.name!,
-          ObjectMetadataPatchBuilder()
-            ..eventBasedHold = false
-            ..temporaryHold = false,
+          generation: object.generation,
         );
-        await storage.deleteObject(generatedName, object.name!);
       }
       await storage.deleteBucket(generatedName);
     } on NotFoundException {

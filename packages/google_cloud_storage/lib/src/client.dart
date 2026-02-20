@@ -160,6 +160,9 @@ final class Storage {
   /// [soft-deleted objects][]. If `false`, then the stream will not include
   /// soft-deleted objects.
   ///
+  /// If [versions] is `true`, then the stream will include all versions of
+  /// each object in increasing order by version number.
+  ///
   /// [projection] controls the level of detail returned in the response. A
   /// value of `"full"` returns all object properties, while a value of
   /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
@@ -179,6 +182,7 @@ final class Storage {
   Stream<ObjectMetadata> listObjects(
     String bucket, {
     bool? softDeleted,
+    bool? versions,
     String? projection,
     String? userProject,
     int? maxResults,
@@ -192,6 +196,7 @@ final class Storage {
         pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
         queryParameters: {
           'softDeleted': ?softDeleted?.toString(),
+          'versions': ?versions?.toString(),
           'maxResults': ?maxResults?.toString(),
           'pageToken': ?nextPageToken,
           'projection': ?projection,
