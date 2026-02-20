@@ -828,6 +828,65 @@ void main() async {
       );
     });
 
+    test('with if generation match success', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_object_with_if_generation_match_success',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'patch_object_with_if_generation_match_success',
+      );
+      final obj = await storage.insertObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('content'),
+      );
+
+      final patchMetadata = ObjectMetadataPatchBuilder()
+        ..contentType = 'text/plain';
+
+      final actualMetadata = await storage.patchObject(
+        bucketName,
+        'object.txt',
+        patchMetadata,
+        ifGenerationMatch: obj.generation,
+      );
+
+      expect(actualMetadata.metageneration, BigInt.from(2));
+    });
+
+    test('with if generation match failure', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'patch_object_with_if_generation_match_failure',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'patch_object_with_if_generation_match_failure',
+      );
+      final obj = await storage.insertObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('content'),
+      );
+
+      final patchMetadata = ObjectMetadataPatchBuilder()
+        ..contentType = 'text/plain';
+
+      expect(
+        () => storage.patchObject(
+          bucketName,
+          'object.txt',
+          patchMetadata,
+          ifGenerationMatch: obj.generation! + BigInt.one,
+        ),
+        throwsA(isA<PreconditionFailedException>()),
+      );
+    });
+
     test(
       'with predefined acl',
       () async {
