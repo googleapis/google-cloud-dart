@@ -19,6 +19,7 @@ import 'dart:convert';
 
 import 'package:google_cloud_protobuf/protobuf.dart' hide Duration;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
@@ -34,6 +35,7 @@ void main() async {
 
   group('patch object', () {
     setUp(() async {
+      fixedBoundaryString = 'boundary';
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
@@ -47,7 +49,7 @@ void main() async {
     });
 
     tearDown(() => storage.close());
-    
+
     test('change acl', () async {
       await testClient.startTest(
         'google_cloud_storage',
@@ -419,7 +421,7 @@ void main() async {
         utf8.encode('content'),
       );
 
-      final customTime = DateTime.now().toUtc().toTimestamp();
+      final customTime = Timestamp(seconds: 1234567890);
       final patchMetadata = ObjectMetadataPatchBuilder()
         ..customTime = customTime;
 
@@ -429,11 +431,7 @@ void main() async {
         patchMetadata,
       );
 
-      // Precision might be lost
-      expect(
-        actualMetadata.customTime?.seconds,
-        closeTo(customTime.seconds.toDouble(), 1),
-      );
+      expect(actualMetadata.customTime?.seconds, customTime.seconds);
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
@@ -552,92 +550,104 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change retention', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_retention',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'patch_object_change_retention',
-        enableObjectRetention: true,
-      );
-
-      await storage.insertObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-      );
-
-      final retainUntilTime = DateTime.now()
-          .add(const Duration(seconds: 1))
-          .toUtc()
-          .toTimestamp();
-      final patchMetadata = ObjectMetadataPatchBuilder()
-        ..retention = ObjectRetention(
-          mode: 'Unlocked',
-          retainUntilTime: retainUntilTime,
+    test(
+      'change retention',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'patch_object_change_retention',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'patch_object_change_retention',
+          enableObjectRetention: true,
         );
 
-      final actualMetadata = await storage.patchObject(
-        bucketName,
-        'object.txt',
-        patchMetadata,
-      );
+        await storage.insertObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
 
-      expect(actualMetadata.retention?.mode, 'Unlocked');
-      expect(
-        actualMetadata.retention?.retainUntilTime?.seconds,
-        retainUntilTime.seconds,
-      );
-      expect(actualMetadata.metageneration, BigInt.from(2));
-
-      // Wait for the retention period to expire so teardown can delete it.
-      await Future<void>.delayed(const Duration(seconds: 1));
-    });
-
-    test('remove retention', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_retention',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'patch_object_remove_retention',
-        enableObjectRetention: true,
-      );
-
-      final retainUntilTime = DateTime.now()
-          .add(const Duration(seconds: 1))
-          .toUtc()
-          .toTimestamp();
-
-      await storage.insertObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-        metadata: ObjectMetadata(
-          retention: ObjectRetention(
+        final retainUntilTime = DateTime.now()
+            .add(const Duration(seconds: 1))
+            .toUtc()
+            .toTimestamp();
+        final patchMetadata = ObjectMetadataPatchBuilder()
+          ..retention = ObjectRetention(
             mode: 'Unlocked',
             retainUntilTime: retainUntilTime,
+          );
+
+        final actualMetadata = await storage.patchObject(
+          bucketName,
+          'object.txt',
+          patchMetadata,
+        );
+
+        expect(actualMetadata.retention?.mode, 'Unlocked');
+        expect(
+          actualMetadata.retention?.retainUntilTime?.seconds,
+          retainUntilTime.seconds,
+        );
+        expect(actualMetadata.metageneration, BigInt.from(2));
+
+        // Wait for the retention period to expire so teardown can delete it.
+        await Future<void>.delayed(const Duration(seconds: 1));
+      },
+      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'Cannot set relative timestamp when replaying'
+          : false,
+    );
+
+    test(
+      'remove retention',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'patch_object_remove_retention',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'patch_object_remove_retention',
+          enableObjectRetention: true,
+        );
+
+        final retainUntilTime = DateTime.now()
+            .add(const Duration(seconds: 1))
+            .toUtc()
+            .toTimestamp();
+
+        await storage.insertObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+          metadata: ObjectMetadata(
+            retention: ObjectRetention(
+              mode: 'Unlocked',
+              retainUntilTime: retainUntilTime,
+            ),
           ),
-        ),
-      );
+        );
 
-      final patchMetadata = ObjectMetadataPatchBuilder()..retention = null;
-      // Wait for the retention period to expire.
-      await Future<void>.delayed(const Duration(seconds: 1));
-      final actualMetadata = await storage.patchObject(
-        bucketName,
-        'object.txt',
-        patchMetadata,
-      );
+        final patchMetadata = ObjectMetadataPatchBuilder()..retention = null;
+        // Wait for the retention period to expire.
+        await Future<void>.delayed(const Duration(seconds: 1));
+        final actualMetadata = await storage.patchObject(
+          bucketName,
+          'object.txt',
+          patchMetadata,
+        );
 
-      expect(actualMetadata.retention, isNull);
-      expect(actualMetadata.metageneration, BigInt.from(2));
-    });
+        expect(actualMetadata.retention, isNull);
+        expect(actualMetadata.metageneration, BigInt.from(2));
+      },
+      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'Cannot set relative timestamp when replaying'
+          : false,
+    );
 
     test('change temporary hold', () async {
       await testClient.startTest(
