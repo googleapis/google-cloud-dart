@@ -47,7 +47,7 @@ void main() async {
     });
 
     tearDown(() => storage.close());
-    /*
+    
     test('change acl', () async {
       await testClient.startTest(
         'google_cloud_storage',
@@ -551,7 +551,7 @@ void main() async {
       expect(actualMetadata.metadata, isNull);
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
-*/
+
     test('change retention', () async {
       await testClient.startTest(
         'google_cloud_storage',

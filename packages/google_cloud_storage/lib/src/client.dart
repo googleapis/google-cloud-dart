@@ -464,8 +464,7 @@ final class Storage {
   /// If set, `ifGenerationMatch` makes updating the object content conditional
   /// Update a Google Cloud Storage object's metadata.
   ///
-  /// This operation is idempotent if [ifGenerationMatch] or
-  /// [ifMetagenerationMatch] is set.
+  /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
   /// If set, [generation] selects a specific revision of this object (as
   /// opposed to the latest version) to patch.
@@ -537,7 +536,7 @@ final class Storage {
       body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
     );
     return objectMetadataFromJson(j as Map<String, Object?>);
-  }, isIdempotent: ifGenerationMatch != null || ifMetagenerationMatch != null);
+  }, isIdempotent: ifMetagenerationMatch != null);
 
   /// Deletes a [Google Cloud Storage object][].
   ///
