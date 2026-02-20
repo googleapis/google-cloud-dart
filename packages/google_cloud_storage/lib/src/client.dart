@@ -461,14 +461,6 @@ final class Storage {
 
   /// Updates the metadata associated with a [Google Cloud Storage object][].
   ///
-  /// This operation is idempotent if `ifMetagenerationMatch` is set.
-  ///
-  /// If [metadata] is non-null, it will be used as the object's metadata. If
-  /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
-  ///
-  /// If set, `ifGenerationMatch` makes updating the object content conditional
-  /// Update a Google Cloud Storage object's metadata.
-  ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
   /// If set, [generation] selects a specific revision of this object (as
