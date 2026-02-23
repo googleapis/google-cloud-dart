@@ -16,6 +16,7 @@
 library;
 
 import 'dart:convert';
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -104,6 +105,33 @@ void main() async {
         expect(downloadedData, uploadedData);
       });
     }
+
+    test('gzipped', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'download_object_gzipped',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'download_object_gzipped',
+      );
+
+      await storage.insertObject(
+        bucketName,
+        'object1',
+        gzip.encode(utf8.encode('Hello World!')),
+        metadata: ObjectMetadata(
+          contentType: 'text/plain',
+          contentEncoding: 'gzip',
+        ),
+        ifGenerationMatch: BigInt.zero,
+      );
+
+      final data = await storage.downloadObject(bucketName, 'object1');
+
+      expect(data, utf8.encode('Hello World!'));
+    });
 
     test('with generation', () async {
       await testClient.startTest(
