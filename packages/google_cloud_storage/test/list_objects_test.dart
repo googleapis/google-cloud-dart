@@ -84,6 +84,47 @@ void main() async {
       );
     });
 
+    test('versions', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'list_objects_versions',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'list_objects_versions',
+        metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
+      );
+
+      final obj1v1 = await storage.insertObject(
+        bucketName,
+        'object1.txt',
+        utf8.encode('v1'),
+      );
+      final obj1v2 = await storage.insertObject(
+        bucketName,
+        'object1.txt',
+        utf8.encode('v2'),
+      );
+
+      final obj2v1 = await storage.insertObject(
+        bucketName,
+        'object2.txt',
+        utf8.encode('v1'),
+      );
+
+      final objects = await storage
+          .listObjects(bucketName, versions: true)
+          .map((o) => (o.name, o.generation))
+          .toList();
+
+      expect(objects, [
+        ('object1.txt', obj1v1.generation),
+        ('object1.txt', obj1v2.generation),
+        ('object2.txt', obj2v1.generation),
+      ]);
+    });
+
     test('soft deleted bucket, list soft deleted objects', () async {
       await testClient.startTest(
         'google_cloud_storage',
