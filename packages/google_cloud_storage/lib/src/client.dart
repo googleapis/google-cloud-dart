@@ -23,6 +23,8 @@ import 'bucket_metadata_patch_builder.dart'
 import 'file_download.dart';
 import 'file_upload.dart';
 import 'object_metadata_json.dart';
+import 'object_metadata_patch_builder.dart'
+    show ObjectMetadataPatchBuilderJsonEncodable;
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -97,10 +99,14 @@ final class Storage {
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   Future<BucketMetadata> createBucket(
     BucketMetadata metadata, {
+    bool enableObjectRetention = false,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
     final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
-    final queryParams = {'project': projectId};
+    final queryParams = {
+      'project': projectId,
+      'enableObjectRetention': enableObjectRetention.toString(),
+    };
     final j = await _serviceClient.post(
       url.replace(queryParameters: queryParams),
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
@@ -198,6 +204,9 @@ final class Storage {
   /// [soft-deleted objects][]. If `false`, then the stream will not include
   /// soft-deleted objects.
   ///
+  /// If [versions] is `true`, then the stream will include all versions of
+  /// each object in increasing order by version number.
+  ///
   /// [projection] controls the level of detail returned in the response. A
   /// value of `"full"` returns all object properties, while a value of
   /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
@@ -217,6 +226,7 @@ final class Storage {
   Stream<ObjectMetadata> listObjects(
     String bucket, {
     bool? softDeleted,
+    bool? versions,
     String? projection,
     String? userProject,
     int? maxResults,
@@ -230,6 +240,7 @@ final class Storage {
         pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
         queryParameters: {
           'softDeleted': ?softDeleted?.toString(),
+          'versions': ?versions?.toString(),
           'maxResults': ?maxResults?.toString(),
           'pageToken': ?nextPageToken,
           'projection': ?projection,
@@ -491,6 +502,82 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
   );
+
+  /// Updates the metadata associated with a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if [ifMetagenerationMatch] is set.
+  ///
+  /// If set, [generation] selects a specific revision of this object (as
+  /// opposed to the latest version) to patch.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether the
+  /// object's current generation matches the given value. If the generation
+  /// does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, [ifMetagenerationMatch] makes the operation conditional on whether
+  /// the object's current metageneration matches the given value. If the
+  /// metageneration does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, [predefinedAcl] applies a predefined set of access controls to the
+  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting [predefinedAcl] will result in a
+  /// [BadRequestException].
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/patch).
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  ///  final patchMetadata = ObjectMetadataPatchBuilder()
+  ///    ..contentType = 'text/plain'
+  ///    ..metadata = {'key': 'value'};
+  ///  await storage.patchObject(
+  ///    'my-bucket',
+  ///    'my-object',
+  ///    patchMetadata,
+  ///  );
+  /// ```
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> patchObject(
+    String bucket,
+    String name,
+    ObjectMetadataPatchBuilder metadata, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', name],
+    );
+    final queryParams = {
+      'generation': ?generation?.toString(),
+      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      'predefinedAcl': ?predefinedAcl,
+      'projection': ?projection,
+      'userProject': ?userProject,
+    };
+    final j = await _serviceClient.patch(
+      url.replace(queryParameters: queryParams),
+      body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
+    );
+    return objectMetadataFromJson(j as Map<String, Object?>);
+  }, isIdempotent: ifMetagenerationMatch != null);
 
   /// Deletes a [Google Cloud Storage object][].
   ///
