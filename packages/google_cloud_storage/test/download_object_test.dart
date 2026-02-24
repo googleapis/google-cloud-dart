@@ -106,31 +106,33 @@ void main() async {
       });
     }
 
-    test('gzipped', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_gzipped',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'download_object_gzipped',
-      );
+    test(
+      'gzipped',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'download_object_gzipped',
+        );
+        addTearDown(testClient.endTest);
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'download_object_gzipped',
+        );
 
-      await storage.insertObject(
-        bucketName,
-        'object1',
-        gzip.encode(utf8.encode('Hello World!')),
-        metadata: ObjectMetadata(
-          contentType: 'text/plain',
-          contentEncoding: 'gzip',
-        ),
-        ifGenerationMatch: BigInt.zero,
-      );
+        await storage.insertObject(
+          bucketName,
+          'object1',
+          gzip.encode(utf8.encode('Hello World!')),
+          metadata: ObjectMetadata(
+            contentType: 'text/plain',
+            contentEncoding: 'gzip',
+          ),
+          ifGenerationMatch: BigInt.zero,
+        );
 
-      final data = await storage.downloadObject(bucketName, 'object1');
+        final data = await storage.downloadObject(bucketName, 'object1');
 
-      expect(data, utf8.encode('Hello World!'));
+        expect(data, utf8.encode('Hello World!'));
       },
       skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
           ? 'gzip does not have a 1:1 mapping between input and output'
