@@ -131,7 +131,11 @@ void main() async {
       final data = await storage.downloadObject(bucketName, 'object1');
 
       expect(data, utf8.encode('Hello World!'));
-    });
+      },
+      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? 'gzip does not have a 1:1 mapping between input and output'
+          : false,
+    );
 
     test('with generation', () async {
       await testClient.startTest(
