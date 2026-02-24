@@ -12,17 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:meta/meta.dart';
+
 import '../google_cloud_storage.dart';
 
-/// A [Cloud Storage bucket].
+@internal
+Bucket newBucket(Storage storage, String name) => Bucket._(storage, name);
+
+/// A [Google Cloud Storage bucket].
 ///
-/// [Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+/// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
 final class Bucket {
   final Storage storage;
   final String name;
 
   Bucket._(this.storage, this.name);
 
+  /// Create a new Google Cloud Storage bucket.
+  ///
+  /// This operation is always idempotent. Throws [ConflictException] if the
+  /// bucket already exists.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
   Future<BucketMetadata> create({
     BucketMetadata? metadata,
     bool enableObjectRetention = false,
@@ -30,17 +41,6 @@ final class Bucket {
   }) => storage.createBucket(
     metadata ?? BucketMetadata(name: name),
     enableObjectRetention: enableObjectRetention,
-    retry: retry,
-  );
-
-  Future<void> delete({
-    BigInt? ifMetagenerationMatch,
-    String? userProject,
-    RetryRunner retry = defaultRetry,
-  }) => storage.deleteBucket(
-    name,
-    ifMetagenerationMatch: ifMetagenerationMatch,
-    userProject: userProject,
     retry: retry,
   );
 }
