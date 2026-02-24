@@ -35,25 +35,8 @@ Map<String, String> _parseHashes(List<String> hashes) {
 
 Future<Uint8List> downloadFile(
   http.Client client,
-  String bucket,
-  String object,
-  BigInt? generation,
-  BigInt? ifGenerationMatch,
-  BigInt? ifMetagenerationMatch,
-  String? userProject,
+  Uri url,
 ) async {
-  final url = Uri(
-    scheme: 'https',
-    host: 'storage.googleapis.com',
-    pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
-    queryParameters: {
-      'alt': 'media',
-      'generation': ?generation?.toString(),
-      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'userProject': ?userProject,
-    },
-  );
   final response = await client.get(url);
   if (response.statusCode < 200 || response.statusCode >= 300) {
     throw ServiceException.fromHttpResponse(response, response.body);

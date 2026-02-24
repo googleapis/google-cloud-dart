@@ -61,26 +61,10 @@ String _boundaryString() {
 /// See [Upload an object to a bucket](https://docs.cloud.google.com/storage/docs/uploading-objects#uploading-an-object)
 Future<ObjectMetadata> uploadFile(
   http.Client client,
-  String projectId,
-  String bucket,
-  String object,
+  Uri url,
   List<int> data, {
   ObjectMetadata? metadata,
-  BigInt? ifGenerationMatch,
-  String? predefinedAcl,
-  String? projection,
-  String? userProject,
 }) async {
-  final url =
-      Uri.https('storage.googleapis.com', '/upload/storage/v1/b/$bucket/o', {
-        'uploadType': 'multipart',
-        'name': object,
-        'project': projectId,
-        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-        'predefinedAcl': ?predefinedAcl,
-        'projection': ?projection,
-        'userProject': ?userProject,
-      });
 
   final boundary = _boundaryString();
 

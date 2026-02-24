@@ -35,6 +35,9 @@ class _JsonEncodableWrapper implements JsonEncodable {
   Object? toJson() => json;
 }
 
+// // Set STORAGE_EMULATOR_HOST environment variable.
+// err := os.Setenv("STORAGE_EMULATOR_HOST", "localhost:9000")
+
 /// API for storing and retrieving potentially large, immutable data objects.
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
@@ -42,10 +45,35 @@ final class Storage {
   final ServiceClient _serviceClient;
   final http.Client _httpClient;
   final String projectId;
+  final Uri _baseUrl;
 
-  Storage({required http.Client client, required this.projectId})
-    : _httpClient = client,
-      _serviceClient = ServiceClient(client: client);
+  static Uri calculateBaseUrl(
+    String? apiEndpoint,
+    bool useAuthWithCustomEndpoint,
+  ) {
+    if (apiEndpoint != null) {
+      if (useAuthWithCustomEndpoint) return Uri.https(apiEndpoint);
+      return Uri.http(apiEndpoint);
+    }
+    return Uri.https('storage.googleapis.com');
+  }
+
+  Storage({
+    required http.Client client,
+    required this.projectId,
+    String? apiEndpoint,
+    bool useAuthWithCustomEndpoint = true,
+  }) : _httpClient = client,
+       _serviceClient = ServiceClient(client: client),
+       _baseUrl = calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
+
+  Uri _requestUrl(
+    Iterable<String>? pathSegments,
+    Map<String, dynamic>? queryParameters,
+  ) => _baseUrl.replace(
+    pathSegments: pathSegments,
+    queryParameters: queryParameters,
+  );
 
   /// Information about a [Google Cloud Storage bucket][].
   ///
@@ -77,11 +105,9 @@ final class Storage {
     String? projection,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket],
-      queryParameters: {
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
         'projection': ?projection,
         'userProject': ?userProject,
@@ -102,13 +128,15 @@ final class Storage {
     bool enableObjectRetention = false,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
-    final queryParams = {
-      'project': projectId,
-      'enableObjectRetention': enableObjectRetention.toString(),
-    };
+    final url = _requestUrl(
+      ['storage', 'v1', 'b'],
+      {
+        'project': projectId,
+        'enableObjectRetention': enableObjectRetention.toString(),
+      },
+    );
     final j = await _serviceClient.post(
-      url.replace(queryParameters: queryParams),
+      url,
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
@@ -137,16 +165,14 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'userProject': ?userProject,
+      },
     );
-    final queryParams = {
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'userProject': ?userProject,
-    };
-    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+    await _serviceClient.delete(url);
   }, isIdempotent: ifMetagenerationMatch != null);
 
   /// A stream of buckets in the project in lexicographical order by name.
@@ -180,14 +206,17 @@ final class Storage {
     String? nextPageToken;
 
     do {
-      final url = Uri.https('storage.googleapis.com', '/storage/v1/b', {
-        'maxResults': ?maxResults?.toString(),
-        'project': projectId,
-        'pageToken': ?nextPageToken,
-        'projection': ?projection,
-        'prefix': ?prefix,
-        'softDeleted': ?softDeleted?.toString(),
-      });
+      final url = _requestUrl(
+        ['storage', 'v1', 'b'],
+        {
+          'maxResults': ?maxResults?.toString(),
+          'project': projectId,
+          'pageToken': ?nextPageToken,
+          'projection': ?projection,
+          'prefix': ?prefix,
+          'softDeleted': ?softDeleted?.toString(),
+        },
+      );
       final json = await _serviceClient.get(url);
       nextPageToken = json['nextPageToken'] as String?;
 
@@ -234,11 +263,9 @@ final class Storage {
     String? nextPageToken;
 
     do {
-      final url = Uri(
-        scheme: 'https',
-        host: 'storage.googleapis.com',
-        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
-        queryParameters: {
+      final url = _requestUrl(
+        ['storage', 'v1', 'b', bucket, 'o'],
+        {
           'softDeleted': ?softDeleted?.toString(),
           'versions': ?versions?.toString(),
           'maxResults': ?maxResults?.toString(),
@@ -308,21 +335,19 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'project': projectId,
+        'predefinedAcl': ?predefinedAcl,
+        'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
     );
-    final queryParams = {
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'project': projectId,
-      'predefinedAcl': ?predefinedAcl,
-      'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
-      'projection': ?projection,
-      'userProject': ?userProject,
-    };
     final j = await _serviceClient.patch(
-      url.replace(queryParameters: queryParams),
+      url,
       body: BucketMetadataPatchBuilderJsonEncodable(metadata),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
@@ -363,12 +388,16 @@ final class Storage {
   }) => retry.run(
     () => downloadFile(
       _httpClient,
-      bucket,
-      object,
-      generation,
-      ifGenerationMatch,
-      ifMetagenerationMatch,
-      userProject,
+      _requestUrl(
+        ['storage', 'v1', 'b', bucket, 'o', object],
+        {
+          'alt': 'media',
+          'generation': ?generation?.toString(),
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+          'userProject': ?userProject,
+        },
+      ),
     ),
     isIdempotent: true,
   );
@@ -414,11 +443,9 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
-      queryParameters: {
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', object],
+      {
         'generation': ?generation?.toString(),
         'ifGenerationMatch': ?ifGenerationMatch?.toString(),
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
@@ -490,15 +517,20 @@ final class Storage {
   }) => retry.run(
     () async => uploadFile(
       _httpClient,
-      projectId,
-      bucket,
-      name,
+      _requestUrl(
+        ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+        {
+          'uploadType': 'multipart',
+          'name': name,
+          'project': projectId,
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'predefinedAcl': ?predefinedAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      ),
       content,
       metadata: metadata,
-      ifGenerationMatch: ifGenerationMatch,
-      predefinedAcl: predefinedAcl,
-      projection: projection,
-      userProject: userProject,
     ),
     isIdempotent: ifGenerationMatch != null,
   );
@@ -559,21 +591,19 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', name],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', name],
+      {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'predefinedAcl': ?predefinedAcl,
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
     );
-    final queryParams = {
-      'generation': ?generation?.toString(),
-      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'predefinedAcl': ?predefinedAcl,
-      'projection': ?projection,
-      'userProject': ?userProject,
-    };
     final j = await _serviceClient.patch(
-      url.replace(queryParameters: queryParams),
+      url,
       body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
     );
     return objectMetadataFromJson(j as Map<String, Object?>);
@@ -608,17 +638,15 @@ final class Storage {
     BigInt? ifMetagenerationMatch,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', object],
+      {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      },
     );
-    final queryParams = {
-      'generation': ?generation?.toString(),
-      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-    };
-    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+    await _serviceClient.delete(url);
   }, isIdempotent: ifGenerationMatch != null || generation != null);
 
   /// Closes the client and cleans up any resources associated with it.
