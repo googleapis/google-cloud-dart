@@ -21,6 +21,8 @@ Bucket newBucket(Storage storage, String name) => Bucket._(storage, name);
 
 /// A [Google Cloud Storage bucket].
 ///
+/// [Bucket] instances are created with [Storage.bucket].
+///
 /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
 final class Bucket {
   final Storage storage;
