@@ -72,7 +72,7 @@ Future<Uint8List> downloadFile(
   // The "x-goog-hash" header is a comma separated list of hash values.
   // Example: "crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA=="
   //
-  // For now, only support content that is transmitted without encoding.
+// For now, checksum validation is only performed for content that is not compressed in storage.
   final hashes = response.headersSplitValues['x-goog-hash'] ?? [];
   final parsedHashes = _parseHashes(hashes);
 
