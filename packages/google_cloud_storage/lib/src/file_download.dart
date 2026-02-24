@@ -69,8 +69,7 @@ Future<Uint8List> downloadFile(
   // `http.Client` automatically decompresses gzip encoded responses and
   // doesn't provide any way to access to original response body.
   //
-  // So content validation can only be done if the content was not compressed
-  // at rest in storage.
+  // For now, only support content that is transmitted without encoding.
   final hashes = response.headersSplitValues['x-goog-hash'] ?? [];
   final parsedHashes = _parseHashes(hashes);
 
