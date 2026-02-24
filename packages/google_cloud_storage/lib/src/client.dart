@@ -365,65 +365,6 @@ final class Storage {
     isIdempotent: true,
   );
 
-  /// A stream of objects contained in [bucket] in lexicographical order by
-  /// name.
-  ///
-  /// If [softDeleted] is `true`, then the stream will include **only**
-  /// [soft-deleted objects][]. If `false`, then the stream will not include
-  /// soft-deleted objects.
-  ///
-  /// If [versions] is `true`, then the stream will include all versions of
-  /// each object in increasing order by version number.
-  ///
-  /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all object properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
-  ///
-  /// If set, [userProject] is the project to be billed for this request. This
-  /// argument must be set for [Requester Pays] buckets.
-  ///
-  /// [maxResults] limits the number of objects returned in a single API
-  /// response. This does not affect the output but does affect the trade-off
-  /// between latency and memory usage; a larger value will result in fewer
-  /// network requests but higher memory usage.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/list).
-  ///
-  /// [soft-deleted objects]: https://cloud.google.com/storage/docs/soft-delete
-  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  Stream<ObjectMetadata> listObjects(
-    String bucket, {
-    bool? softDeleted,
-    bool? versions,
-    String? projection,
-    String? userProject,
-    int? maxResults,
-  }) async* {
-    String? nextPageToken;
-
-    do {
-      final url = Uri(
-        scheme: 'https',
-        host: 'storage.googleapis.com',
-        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
-        queryParameters: {
-          'softDeleted': ?softDeleted?.toString(),
-          'versions': ?versions?.toString(),
-          'maxResults': ?maxResults?.toString(),
-          'pageToken': ?nextPageToken,
-          'projection': ?projection,
-          'userProject': ?userProject,
-        },
-      );
-      final json = await _serviceClient.get(url);
-      nextPageToken = json['nextPageToken'] as String?;
-
-      for (final object in json['items'] as List<Object?>? ?? const []) {
-        yield objectMetadataFromJson(object as Map<String, Object?>);
-      }
-    } while (nextPageToken != null);
-  }
-
   /// Creates or updates the content of a [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
@@ -496,6 +437,66 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
   );
+
+
+  /// A stream of objects contained in [bucket] in lexicographical order by
+  /// name.
+  ///
+  /// If [softDeleted] is `true`, then the stream will include **only**
+  /// [soft-deleted objects][]. If `false`, then the stream will not include
+  /// soft-deleted objects.
+  ///
+  /// If [versions] is `true`, then the stream will include all versions of
+  /// each object in increasing order by version number.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// [maxResults] limits the number of objects returned in a single API
+  /// response. This does not affect the output but does affect the trade-off
+  /// between latency and memory usage; a larger value will result in fewer
+  /// network requests but higher memory usage.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/list).
+  ///
+  /// [soft-deleted objects]: https://cloud.google.com/storage/docs/soft-delete
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Stream<ObjectMetadata> listObjects(
+    String bucket, {
+    bool? softDeleted,
+    bool? versions,
+    String? projection,
+    String? userProject,
+    int? maxResults,
+  }) async* {
+    String? nextPageToken;
+
+    do {
+      final url = Uri(
+        scheme: 'https',
+        host: 'storage.googleapis.com',
+        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
+        queryParameters: {
+          'softDeleted': ?softDeleted?.toString(),
+          'versions': ?versions?.toString(),
+          'maxResults': ?maxResults?.toString(),
+          'pageToken': ?nextPageToken,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      );
+      final json = await _serviceClient.get(url);
+      nextPageToken = json['nextPageToken'] as String?;
+
+      for (final object in json['items'] as List<Object?>? ?? const []) {
+        yield objectMetadataFromJson(object as Map<String, Object?>);
+      }
+    } while (nextPageToken != null);
+  }
 
   /// Information about a [Google Cloud Storage object].
   ///
