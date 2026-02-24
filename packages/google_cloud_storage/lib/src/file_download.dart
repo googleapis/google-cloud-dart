@@ -80,7 +80,7 @@ Future<Uint8List> downloadFile(
   final storedContentEncoding =
       response.headers['x-goog-stored-content-encoding'];
 
-  if (storedContentEncoding == 'identity') {
+  if (storedContentEncoding == null || storedContentEncoding == 'identity') {
     final crc32c = parsedHashes['crc32c'];
     if (crc32c != null) {
       final calculatedCrc32c = Crc32c()..update(data);
