@@ -69,6 +69,9 @@ Future<Uint8List> downloadFile(
   // `http.Client` automatically decompresses gzip encoded responses and
   // doesn't provide any way to access to original response body.
   //
+  // The "x-goog-hash" header is a comma separated list of hash values.
+  // Example: "crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA=="
+  //
   // For now, only support content that is transmitted without encoding.
   final hashes = response.headersSplitValues['x-goog-hash'] ?? [];
   final parsedHashes = _parseHashes(hashes);
