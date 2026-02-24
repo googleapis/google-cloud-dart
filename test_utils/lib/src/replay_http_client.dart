@@ -79,10 +79,16 @@ class ReplayHttpClient extends TestHttpClient {
       );
     }
 
-    if (!const ListEquality<void>().equals(recordedRequest.body, body)) {
+    final List<int> recordedBody;
+    if (recordedHeaders['content-encoding'] == 'gzip') {
+      recordedBody = gzip.decode(recordedRequest.body);
+    } else {
+      recordedBody = recordedRequest.body;
+    }
+    if (!const ListEquality<void>().equals(recordedBody, body)) {
       try {
         throw StateError(
-          'recorded body ${utf8.decode(recordedRequest.body)} '
+          'recorded body ${utf8.decode(recordedBody)} '
           'does not match ${utf8.decode(body)}',
         );
       } on FormatException {
