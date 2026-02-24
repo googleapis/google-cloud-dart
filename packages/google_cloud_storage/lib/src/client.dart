@@ -518,9 +518,8 @@ final class Storage {
   /// [PreconditionFailedException] is thrown.
   ///
   /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
   ///
   /// If set, [userProject] is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
