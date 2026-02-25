@@ -65,7 +65,6 @@ Future<ObjectMetadata> uploadFile(
   List<int> data, {
   ObjectMetadata? metadata,
 }) async {
-
   final boundary = _boundaryString();
 
   final metadataJson = metadata == null
