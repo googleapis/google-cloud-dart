@@ -48,6 +48,13 @@ final class Storage {
     : _httpClient = client,
       _serviceClient = ServiceClient(client: client);
 
+  /// Closes the client and cleans up any resources associated with it.
+  ///
+  /// Once [close] is called, no other methods should be called.
+  void close() => _serviceClient.close();
+
+  // Bucket-related methods, keep alphabetized.
+
   /// A [Google Cloud Storage bucket][] with the given [name].
   ///
   /// [name] should be a valid [bucket name][].
@@ -209,65 +216,6 @@ final class Storage {
     } while (nextPageToken != null);
   }
 
-  /// A stream of objects contained in [bucket] in lexicographical order by
-  /// name.
-  ///
-  /// If [softDeleted] is `true`, then the stream will include **only**
-  /// [soft-deleted objects][]. If `false`, then the stream will not include
-  /// soft-deleted objects.
-  ///
-  /// If [versions] is `true`, then the stream will include all versions of
-  /// each object in increasing order by version number.
-  ///
-  /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all object properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
-  ///
-  /// If set, [userProject] is the project to be billed for this request. This
-  /// argument must be set for [Requester Pays] buckets.
-  ///
-  /// [maxResults] limits the number of objects returned in a single API
-  /// response. This does not affect the output but does affect the trade-off
-  /// between latency and memory usage; a larger value will result in fewer
-  /// network requests but higher memory usage.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/list).
-  ///
-  /// [soft-deleted objects]: https://cloud.google.com/storage/docs/soft-delete
-  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  Stream<ObjectMetadata> listObjects(
-    String bucket, {
-    bool? softDeleted,
-    bool? versions,
-    String? projection,
-    String? userProject,
-    int? maxResults,
-  }) async* {
-    String? nextPageToken;
-
-    do {
-      final url = Uri(
-        scheme: 'https',
-        host: 'storage.googleapis.com',
-        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
-        queryParameters: {
-          'softDeleted': ?softDeleted?.toString(),
-          'versions': ?versions?.toString(),
-          'maxResults': ?maxResults?.toString(),
-          'pageToken': ?nextPageToken,
-          'projection': ?projection,
-          'userProject': ?userProject,
-        },
-      );
-      final json = await _serviceClient.get(url);
-      nextPageToken = json['nextPageToken'] as String?;
-
-      for (final object in json['items'] as List<Object?>? ?? const []) {
-        yield objectMetadataFromJson(object as Map<String, Object?>);
-      }
-    } while (nextPageToken != null);
-  }
-
   /// Update a Google Cloud Storage bucket.
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
@@ -340,6 +288,50 @@ final class Storage {
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
 
+  // Object-related methods, keep alphabetized.
+
+  /// Deletes a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `generation` or `ifGenerationMatch` is
+  /// set.
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// If set, `generation` selects a specific revision of this object (as
+  /// opposed to the latest version) to delete.
+  ///
+  /// If set, `ifGenerationMatch` makes the operation conditional on whether the
+  /// object's current generation matches the given value. If the generation
+  /// does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// If set, `ifMetagenerationMatch` makes the operation conditional on whether
+  /// the object's current metageneration matches the given value. If the
+  /// metageneration does not match, a [PreconditionFailedException] is thrown.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/delete).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  Future<void> deleteObject(
+    String bucket,
+    String object, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+    );
+    final queryParams = {
+      'generation': ?generation?.toString(),
+      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+    };
+    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+  }, isIdempotent: ifGenerationMatch != null || generation != null);
+
   /// Download the content of a [Google Cloud Storage object][] as bytes.
   ///
   /// This operation is read-only and always idempotent.
@@ -384,63 +376,6 @@ final class Storage {
     ),
     isIdempotent: true,
   );
-
-  /// Information about a [Google Cloud Storage object].
-  ///
-  /// This operation is read-only and always idempotent.
-  ///
-  /// Throws [NotFoundException] if the object does not exist.
-  ///
-  /// If non-null, [generation] returns a specific version of the object
-  /// instead of the latest version.
-  ///
-  /// If non-null, [ifGenerationMatch] makes retrieving the object metadata
-  /// conditional on whether the object's generation matches the provided
-  /// value. If the generation does not match, a
-  /// [PreconditionFailedException] is thrown.
-  ///
-  /// If non-null, [ifMetagenerationMatch] makes retrieving the object metadata
-  /// conditional on whether the object's metageneration matches the provided
-  /// value. If the metageneration does not match, a
-  /// [PreconditionFailedException] is thrown.
-  ///
-  /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
-  ///
-  /// If set, [userProject] is the project to be billed for this request. This
-  /// argument must be set for [Requester Pays] buckets.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/get).
-  ///
-  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
-  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  Future<ObjectMetadata> objectMetadata(
-    String bucket,
-    String object, {
-    BigInt? generation,
-    BigInt? ifGenerationMatch,
-    BigInt? ifMetagenerationMatch,
-    String? projection,
-    String? userProject,
-    RetryRunner retry = defaultRetry,
-  }) async => await retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
-      queryParameters: {
-        'generation': ?generation?.toString(),
-        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-        'projection': ?projection,
-        'userProject': ?userProject,
-      },
-    );
-    final j = await _serviceClient.get(url);
-    return objectMetadataFromJson(j as Map<String, Object?>);
-  }, isIdempotent: true);
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
   ///
@@ -514,6 +449,121 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
   );
+
+  /// A stream of objects contained in [bucket] in lexicographical order by
+  /// name.
+  ///
+  /// If [softDeleted] is `true`, then the stream will include **only**
+  /// [soft-deleted objects][]. If `false`, then the stream will not include
+  /// soft-deleted objects.
+  ///
+  /// If [versions] is `true`, then the stream will include all versions of
+  /// each object in increasing order by version number.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// [maxResults] limits the number of objects returned in a single API
+  /// response. This does not affect the output but does affect the trade-off
+  /// between latency and memory usage; a larger value will result in fewer
+  /// network requests but higher memory usage.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/list).
+  ///
+  /// [soft-deleted objects]: https://cloud.google.com/storage/docs/soft-delete
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Stream<ObjectMetadata> listObjects(
+    String bucket, {
+    bool? softDeleted,
+    bool? versions,
+    String? projection,
+    String? userProject,
+    int? maxResults,
+  }) async* {
+    String? nextPageToken;
+
+    do {
+      final url = Uri(
+        scheme: 'https',
+        host: 'storage.googleapis.com',
+        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
+        queryParameters: {
+          'softDeleted': ?softDeleted?.toString(),
+          'versions': ?versions?.toString(),
+          'maxResults': ?maxResults?.toString(),
+          'pageToken': ?nextPageToken,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      );
+      final json = await _serviceClient.get(url);
+      nextPageToken = json['nextPageToken'] as String?;
+
+      for (final object in json['items'] as List<Object?>? ?? const []) {
+        yield objectMetadataFromJson(object as Map<String, Object?>);
+      }
+    } while (nextPageToken != null);
+  }
+
+  /// Information about a [Google Cloud Storage object].
+  ///
+  /// This operation is read-only and always idempotent.
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// If non-null, [generation] returns a specific version of the object
+  /// instead of the latest version.
+  ///
+  /// If non-null, [ifGenerationMatch] makes retrieving the object metadata
+  /// conditional on whether the object's generation matches the provided
+  /// value. If the generation does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// If non-null, [ifMetagenerationMatch] makes retrieving the object metadata
+  /// conditional on whether the object's metageneration matches the provided
+  /// value. If the metageneration does not match, a
+  /// [PreconditionFailedException] is thrown.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/get).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> objectMetadata(
+    String bucket,
+    String object, {
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) async => await retry.run(() async {
+    final url = Uri(
+      scheme: 'https',
+      host: 'storage.googleapis.com',
+      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+      queryParameters: {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
+    );
+    final j = await _serviceClient.get(url);
+    return objectMetadataFromJson(j as Map<String, Object?>);
+  }, isIdempotent: true);
 
   /// Updates the metadata associated with a [Google Cloud Storage object][].
   ///
@@ -590,51 +640,4 @@ final class Storage {
     );
     return objectMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
-
-  /// Deletes a [Google Cloud Storage object][].
-  ///
-  /// This operation is idempotent if `generation` or `ifGenerationMatch` is
-  /// set.
-  ///
-  /// Throws [NotFoundException] if the object does not exist.
-  ///
-  /// If set, `generation` selects a specific revision of this object (as
-  /// opposed to the latest version) to delete.
-  ///
-  /// If set, `ifGenerationMatch` makes the operation conditional on whether the
-  /// object's current generation matches the given value. If the generation
-  /// does not match, a [PreconditionFailedException] is thrown.
-  ///
-  /// If set, `ifMetagenerationMatch` makes the operation conditional on whether
-  /// the object's current metageneration matches the given value. If the
-  /// metageneration does not match, a [PreconditionFailedException] is thrown.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/delete).
-  ///
-  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
-  Future<void> deleteObject(
-    String bucket,
-    String object, {
-    BigInt? generation,
-    BigInt? ifGenerationMatch,
-    BigInt? ifMetagenerationMatch,
-    RetryRunner retry = defaultRetry,
-  }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
-    );
-    final queryParams = {
-      'generation': ?generation?.toString(),
-      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-    };
-    await _serviceClient.delete(url.replace(queryParameters: queryParams));
-  }, isIdempotent: ifGenerationMatch != null || generation != null);
-
-  /// Closes the client and cleans up any resources associated with it.
-  ///
-  /// Once [close] is called, no other methods should be called.
-  void close() => _serviceClient.close();
 }
