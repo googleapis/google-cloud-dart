@@ -49,20 +49,50 @@ final class Storage {
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint,
   ) {
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/149):
-    // Support the STORAGE_EMULATOR_HOST environment variable.
     if (apiEndpoint != null) {
       if (useAuthWithCustomEndpoint) return Uri.https(apiEndpoint);
       return Uri.http(apiEndpoint);
     }
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/149):
+    // Support the STORAGE_EMULATOR_HOST environment variable.
     return Uri.https('storage.googleapis.com');
   }
 
+  /// Constructs a client used to communicate with [Google Cloud Storage][].
+  ///
+  /// By default, the client will use your [default application credentials][]
+  /// to communicate with the production [Google Cloud Storage][] service and
+  /// use the project inferred from the environment.
+  ///
+  /// You can explicitly provide a project ID by passing [projectId].
+  ///
+  /// To target an emulator, you can set the `'STORAGE_EMULATOR_HOST'`
+  /// environment variable to the address at which your emulator is running.
+  /// For example, set `STORAGE_EMULATOR_HOST=127.0.0.1:9199` to use the
+  /// [Cloud Storage for Firebase Emulator][] with its default settings.
+  ///
+  /// You can also change the API endpoint by passing [apiEndpoint]. For
+  /// example, `'localhost:9199'`. If the endpoint does not require credentials
+  /// or TLS (e.g. the emulator) then set [useAuthWithCustomEndpoint] to
+  /// `false`.
+  ///
+  /// To disable authentication (e.g. if you only wish to access public data) or
+  /// to use authentication other than the default application credentials, you
+  /// can provide your own [client].
+  ///
+  /// [Google Cloud Storage]: https://cloud.google.com/storage
+  /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/storage/emulator
+  /// [default application credentials]: https://docs.cloud.google.com/docs/authentication/application-default-credentials
   Storage({
-    required http.Client client,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/150):
+    // Infer the project ID from the environment.
     required this.projectId,
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/151):
+    // Make `client` optional and use application default credentials by
+    // default.
+    required http.Client client,
   }) : _httpClient = client,
        _serviceClient = ServiceClient(client: client),
        _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
