@@ -17,6 +17,7 @@ import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
 
 import '../google_cloud_storage.dart';
+import 'bucket.dart';
 import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
@@ -53,6 +54,17 @@ final class Storage {
   void close() => _serviceClient.close();
 
   // Bucket-related methods, keep alphabetized.
+
+  /// A [Google Cloud Storage bucket][] with the given [name].
+  ///
+  /// [name] should be a valid [bucket name][].
+  ///
+  /// The bucket need not actually exist on Google Cloud Storage. This method
+  /// does not perform any network operations.
+  ///
+  /// [bucket name]: https://cloud.google.com/storage/docs/bucket-naming
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
+  Bucket bucket(String name) => newBucket(this, name);
 
   /// Information about a [Google Cloud Storage bucket][].
   ///
@@ -437,7 +449,6 @@ final class Storage {
     ),
     isIdempotent: ifGenerationMatch != null,
   );
-
 
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
