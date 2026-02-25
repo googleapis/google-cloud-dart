@@ -63,7 +63,7 @@ jobs:
         working-directory: generated
       - name: "packages/**_test.dart"
         if: ${{ matrix.platform != 'chrome' }}
-        run: dart test -p ${{ matrix.platform }} .
+        run: dart test -p ${{ matrix.platform }} -x firebase-emulator .
         working-directory: packages
 
   generator:
