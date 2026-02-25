@@ -53,5 +53,24 @@ void main() async {
       addTearDown(() => storage.deleteBucket(bucketName));
       expect(metadata.name, bucketName);
     });
+
+    test('create with contradictory name metadata', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'bucket_create_contradictory_name_metadata',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'dart_bucket_create_contradictory_name_metadata',
+      );
+
+      final bucket = storage.bucket(bucketName);
+      final metadata = await bucket.create(
+        metadata: BucketMetadata(name: 'other-name'),
+      );
+      addTearDown(() => storage.deleteBucket(bucketName));
+      expect(metadata.name, bucketName);
+    });
   });
 }

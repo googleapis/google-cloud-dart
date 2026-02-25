@@ -7,30 +7,30 @@
         "content-type": "application/json",
         "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
-      "body": "{\"name\":\"dart_bucket_create\"}"
+      "body": "{\"name\":\"dart_bucket_create_contradictory_name_metadata\"}"
     },
     "response": {
       "statusCode": 200,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 25 Feb 2026 23:02:14 GMT",
+        "date": "Wed, 25 Feb 2026 23:02:16 GMT",
         "vary": "Origin,X-Origin",
-        "content-length": "880",
-        "x-guploader-uploadid": "AGQBYWw7Csos_S8FZ5n1ik5ZR6P13S6JTW5HPMggjw3QsNBPj8DOzLLvYBUAP8kDApY7teKJ",
+        "content-length": "964",
+        "x-guploader-uploadid": "AGQBYWwJy6c6d0PJjkAbuLxbkdY1j6zLDGib12IEvoqmhD90cbE1I2DtxOeu5JFOQazER5Hi",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart_bucket_create\",\n  \"id\": \"dart_bucket_create\",\n  \"name\": \"dart_bucket_create\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772060534180865036\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-25T23:02:14.545Z\",\n  \"updated\": \"2026-02-25T23:02:14.545Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-25T23:02:14.545Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-26T23:02:14.545Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-26T23:02:14.545Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart_bucket_create_contradictory_name_metadata\",\n  \"id\": \"dart_bucket_create_contradictory_name_metadata\",\n  \"name\": \"dart_bucket_create_contradictory_name_metadata\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772060536350985409\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-25T23:02:16.611Z\",\n  \"updated\": \"2026-02-25T23:02:16.611Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-25T23:02:16.611Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-26T23:02:16.611Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-26T23:02:16.611Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_create?",
+      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_create_contradictory_name_metadata?",
       "method": "DELETE",
       "headers": {
         "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
@@ -42,10 +42,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 25 Feb 2026 23:02:15 GMT",
+        "date": "Wed, 25 Feb 2026 23:02:17 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AGQBYWw-3z6aH7W47sfsZaqScHQOEKqEBz5H73T02JIEOyQWeowbCboXPqGDddEjxRoiY9YSwLBbdwQ",
+        "x-guploader-uploadid": "AGQBYWxMn83J2Vd4U3Bo5JliE_CsWaDJEQcgSOFQ6o7GCuIivKKRIjdMoRHlr72CKHFcymhcfVggJxE",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",
@@ -57,7 +57,7 @@
   },
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_create/o?versions=true",
+      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_create_contradictory_name_metadata/o?versions=true",
       "method": "GET",
       "headers": {
         "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
@@ -69,10 +69,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Wed, 25 Feb 2026 23:02:15 GMT",
+        "date": "Wed, 25 Feb 2026 23:02:17 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AGQBYWz7KKF_FATXFzl2eESGrU32ke35xzPyQy_D6RFKiwNiMr_4ZKw6xL0RmOvj-Gz2fWB4H3M7pWE",
+        "x-guploader-uploadid": "AGQBYWwMR5TAFsU5LhCPdHQV_-vvB692CFtYf_nIB9gjnE3Uqv4XnmgGqbk0fihpkL7Ur7LBmIxB3A",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
