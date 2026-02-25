@@ -9,7 +9,8 @@ Google Cloud Storage API.
 
 ## Running Tests Locally
 
-To run these tests on your machine, you need to have the emulator running in one terminal session and execute the tests in another.
+To run these tests on your machine, you need to have the emulator running in
+one terminal session and execute the tests in another.
 
 ### 1. Start the Firebase Emulator
 
@@ -22,9 +23,12 @@ firebase emulators:start
 
 ### 2. Run the Tests
 
-In a separate terminal, navigate to the root of the `google_cloud_storage` package and run the tests:
+In a separate terminal, navigate to the root of the `google_cloud_storage`
+package and run the tests:
 
 ```bash
 # From packages/google_cloud_storage
 dart test emulator_test
 ```
+
+[Firebase Storage Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
