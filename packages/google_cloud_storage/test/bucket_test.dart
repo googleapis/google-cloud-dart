@@ -50,7 +50,6 @@ void main() async {
 
       final bucket = storage.bucket(bucketName);
       final metadata = await bucket.create();
-      addTearDown(() => storage.deleteBucket(bucketName));
       expect(metadata.name, bucketName);
     });
 
@@ -69,7 +68,6 @@ void main() async {
       final metadata = await bucket.create(
         metadata: BucketMetadata(name: 'other-name'),
       );
-      addTearDown(() => storage.deleteBucket(bucketName));
       expect(metadata.name, bucketName);
     });
   });
