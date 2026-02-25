@@ -373,7 +373,9 @@ final class ObjectMetadata {
   /// Content-Disposition of the object data.
   final String? contentDisposition;
 
-  /// Content-Encoding of the object data.
+  /// [Content-Encoding][] of the object data.
+  ///
+  /// [Content-Encoding]: https://docs.cloud.google.com/storage/docs/metadata#content-encoding
   final String? contentEncoding;
 
   /// Content-Language of the object data.
