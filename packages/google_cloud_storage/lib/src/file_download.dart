@@ -81,8 +81,7 @@ Future<Uint8List> downloadFile(
       response.headers['x-goog-stored-content-encoding'];
 
   if (storedContentEncoding == null || storedContentEncoding == 'identity') {
-    final crc32c = parsedHashes['crc32c'];
-    if (crc32c != null) {
+    if (parsedHashes['crc32c'] case final crc32c?) {
       final calculatedCrc32c = Crc32c()..update(data);
       if (calculatedCrc32c.toBase64() != crc32c) {
         throw ChecksumValidationException(
@@ -91,7 +90,6 @@ Future<Uint8List> downloadFile(
         );
       }
     }
-    final md5 = parsedHashes['md5'];
     if (parsedHashes['md5'] case final md5?) {
       final calculatedMd5 = base64Encode(crypto.md5.convert(data).bytes);
       if (calculatedMd5 != md5) {
