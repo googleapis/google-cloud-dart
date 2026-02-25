@@ -32,6 +32,10 @@ on:
 env:
   DART_VERSION: 3.9.2
 
+defaults:
+  run:
+    working-directory: packages/google_cloud_storage/emulator_test
+
 name: Google Cloud Storage Emulator Tests
 jobs:
   gcs-emulator-tests:
