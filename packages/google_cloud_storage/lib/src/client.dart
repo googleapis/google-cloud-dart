@@ -35,9 +35,6 @@ class _JsonEncodableWrapper implements JsonEncodable {
   Object? toJson() => json;
 }
 
-// // Set STORAGE_EMULATOR_HOST environment variable.
-// err := os.Setenv("STORAGE_EMULATOR_HOST", "localhost:9000")
-
 /// API for storing and retrieving potentially large, immutable data objects.
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
@@ -47,10 +44,12 @@ final class Storage {
   final String projectId;
   final Uri _baseUrl;
 
-  static Uri calculateBaseUrl(
+  static Uri _calculateBaseUrl(
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint,
   ) {
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/149):
+    // Support the STORAGE_EMULATOR_HOST environment variable.
     if (apiEndpoint != null) {
       if (useAuthWithCustomEndpoint) return Uri.https(apiEndpoint);
       return Uri.http(apiEndpoint);
@@ -65,7 +64,7 @@ final class Storage {
     bool useAuthWithCustomEndpoint = true,
   }) : _httpClient = client,
        _serviceClient = ServiceClient(client: client),
-       _baseUrl = calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
+       _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
 
   Uri _requestUrl(
     Iterable<String>? pathSegments,
