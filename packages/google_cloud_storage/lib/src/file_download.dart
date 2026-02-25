@@ -92,7 +92,7 @@ Future<Uint8List> downloadFile(
       }
     }
     final md5 = parsedHashes['md5'];
-    if (md5 != null) {
+    if (parsedHashes['md5'] case final md5?) {
       final calculatedMd5 = base64Encode(crypto.md5.convert(data).bytes);
       if (calculatedMd5 != md5) {
         throw ChecksumValidationException(
