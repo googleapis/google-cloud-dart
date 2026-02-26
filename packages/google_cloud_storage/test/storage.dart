@@ -16,8 +16,6 @@
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:google_cloud_storage/src/file_upload.dart'
-    show fixedBoundaryString;
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
@@ -31,7 +29,6 @@ void main() async {
 
   group('storage', () {
     setUp(() async {
-      fixedBoundaryString = 'boundary';
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
