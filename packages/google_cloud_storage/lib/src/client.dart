@@ -110,12 +110,14 @@ final class Storage {
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
-  /// Create a new Google Cloud Storage bucket.
+  /// Create a new [Google Cloud Storage bucket][].
   ///
   /// This operation is always idempotent. Throws [ConflictException] if the
   /// bucket already exists.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/insert).
+  ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
   Future<BucketMetadata> createBucket(
     BucketMetadata metadata, {
     bool enableObjectRetention = false,
@@ -133,7 +135,7 @@ final class Storage {
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
-  /// Deletes an already-empty Google Cloud Storage bucket.
+  /// Deletes an already-empty [Google Cloud Storage bucket][].
   ///
   /// This operation is idempotent if `ifMetagenerationMatch` is set.
   ///
@@ -149,6 +151,7 @@ final class Storage {
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/delete).
   ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<void> deleteBucket(
     String bucket, {
@@ -216,7 +219,7 @@ final class Storage {
     } while (nextPageToken != null);
   }
 
-  /// Update a Google Cloud Storage bucket.
+  /// Update a [Google Cloud Storage bucket][].
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
   ///
@@ -251,6 +254,7 @@ final class Storage {
   /// ```
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/buckets/patch).
   ///
+  /// [Google Cloud Storage bucket]: https://docs.cloud.google.com/storage/docs/buckets
   /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
   Future<BucketMetadata> patchBucket(
     String bucket,

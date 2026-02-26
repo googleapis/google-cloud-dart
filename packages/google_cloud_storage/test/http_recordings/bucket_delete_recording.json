@@ -1,0 +1,112 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421&enableObjectRetention=false",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "{\"name\":\"dart_bucket_delete\"}"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Thu, 26 Feb 2026 00:13:24 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "880",
+        "x-guploader-uploadid": "AGQBYWyfWj3LAR8kDY6qPVMULk-0w_oUlSBIitU2cJPJhSCad24Ttt0HtJVi_ZNgIFcJotEh",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/dart_bucket_delete\",\n  \"id\": \"dart_bucket_delete\",\n  \"name\": \"dart_bucket_delete\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772064803726036175\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-26T00:13:24.095Z\",\n  \"updated\": \"2026-02-26T00:13:24.095Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-26T00:13:24.095Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-27T00:13:24.095Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-27T00:13:24.095Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_delete?",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Thu, 26 Feb 2026 00:13:24 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AGQBYWyO7muJwnTaRRSVBwwx1WmC8QhVzSblf9zA0K8zz5TExR77yqaGsF1RJBFOoRYng7aNLUXltfw",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_delete?",
+      "method": "GET",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Thu, 26 Feb 2026 00:13:25 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "247",
+        "x-guploader-uploadid": "AGQBYWwg-tfPIcX5ylvKv-gXgN1oYa0sBxvymQSdPW4KSb3OVxaCQlzDokmdWUBGAMgSWwoGVtcqHwg",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dart_bucket_delete/o?versions=true",
+      "method": "GET",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 404,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Thu, 26 Feb 2026 00:13:25 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "247",
+        "x-guploader-uploadid": "AGQBYWx2vxVv1UimwkPK3pDQYPM3X3WGVRBhZ0Zb4wJ6JvsX8WVuZ3wbihFG42lXYmIyhb0czLyOT2s",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 404,\n    \"message\": \"The specified bucket does not exist.\",\n    \"errors\": [\n      {\n        \"message\": \"The specified bucket does not exist.\",\n        \"domain\": \"global\",\n        \"reason\": \"notFound\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Not Found"
+    }
+  }
+]
