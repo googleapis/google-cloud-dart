@@ -5,19 +5,19 @@
       "method": "POST",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.2 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
-      "body": "eyJtb2RlbCI6Im1vZGVscy9nZW1pbmktZW1iZWRkaW5nLTAwMSIsImNvbnRlbnQiOnsicGFydHMiOlt7InRleHQiOiJXaGF0IGlzIHRoZSBtZWFuaW5nIG9mIGxpZmU/In0seyJ0ZXh0IjoiV2hhdCBpcyB0aGUgcHVycG9zZSBvZiBleGlzdGVuY2U/In0seyJ0ZXh0IjoiSG93IGRvIEkgYmFrZSBhIGNha2U/In1dfX0="
+      "body": "{\"model\":\"models/gemini-embedding-001\",\"content\":{\"parts\":[{\"text\":\"What is the meaning of life?\"},{\"text\":\"What is the purpose of existence?\"},{\"text\":\"How do I bake a cake?\"}]}}"
     },
     "response": {
       "statusCode": 200,
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "transfer-encoding": "chunked",
-        "date": "Thu, 04 Dec 2025 03:21:22 GMT",
+        "date": "Sat, 14 Feb 2026 01:53:34 GMT",
         "vary": "Origin,X-Origin,Referer",
         "content-encoding": "gzip",
-        "server-timing": "gfet4t7; dur=217",
+        "server-timing": "gfet4t7; dur=182",
         "content-type": "application/json; charset=UTF-8",
         "x-frame-options": "SAMEORIGIN",
         "x-xss-protection": "0",

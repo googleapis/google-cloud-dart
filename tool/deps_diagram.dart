@@ -63,7 +63,9 @@ void main() {
     final packageName = packageMap['name'] as String;
     final packageVersion = packageMap['version'] as String;
     if (packageName.startsWith('google_cloud') &&
-        packageVersion != noPublishVersion) {
+        packageVersion != noPublishVersion &&
+        // `package:google_cloud` is not (yet!) part of this workspace.
+        packageName != 'google_cloud') {
       final package = Package.putIfAbsent(packageName);
       final dependencies = (packageMap['directDependencies'] as List)
           .cast<String>();
