@@ -70,5 +70,46 @@ void main() async {
       );
       expect(metadata.name, bucketName);
     });
+
+    test('delete', () async {
+      await testClient.startTest('google_cloud_storage', 'bucket_delete');
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'dart_bucket_delete',
+      );
+
+      final bucket = storage.bucket(bucketName);
+      await bucket.delete();
+      await expectLater(bucket.metadata, throwsA(isA<NotFoundException>()));
+    });
+
+    test('metadata', () async {
+      await testClient.startTest('google_cloud_storage', 'bucket_metadata');
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'dart_bucket_metadata',
+      );
+
+      final bucket = storage.bucket(bucketName);
+      final metadata = await bucket.metadata();
+      expect(metadata.name, bucketName);
+    });
+
+    test('patch', () async {
+      await testClient.startTest('google_cloud_storage', 'bucket_patch');
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'dart_bucket_patch',
+      );
+
+      final bucket = storage.bucket(bucketName);
+      final metadata = await bucket.patch(
+        BucketMetadataPatchBuilder()..labels = {'foo': 'bar'},
+      );
+      expect(metadata.labels, {'foo': 'bar'});
+    });
   });
 }
