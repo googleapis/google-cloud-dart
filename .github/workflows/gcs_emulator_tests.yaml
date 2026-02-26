@@ -1,0 +1,61 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+permissions: read-all
+
+# Run on PRs and pushes to the default branch that touch the GCS package.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'packages/google_cloud_storage/**'
+      - '.github/workflows/gcs_emulator_tests.yaml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'packages/google_cloud_storage/**'
+      - '.github/workflows/gcs_emulator_tests.yaml'
+
+# We use a specific Dart SDK version here in order to have hermetic,
+# reproducable builds (formatting can change between SDK versions, ...).
+env:
+  DART_VERSION: 3.9.2
+
+defaults:
+  run:
+    working-directory: packages/google_cloud_storage
+
+name: Google Cloud Storage Emulator Tests
+jobs:
+  gcs-emulator-tests:
+    name: Google Cloud Storage Emulator Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+      - uses: actions/setup-node@1d0ff469b7ec7b3cb9d8673fde0c81c44821de2a
+      - uses: actions/setup-java@f2beeb24e141e01a676f977032f5a29d81c9e27e
+        with:
+          distribution: 'zulu'
+          java-version: '25'
+      - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
+        with:
+          sdk: ${{ env.DART_VERSION }}
+      - run: dart pub get
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+      - name: Run Emulators
+        run: firebase emulators:start &
+        working-directory: packages/google_cloud_storage/emulator_test
+      - name: Run Tests
+        run: dart test emulator_test

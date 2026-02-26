@@ -43,10 +43,67 @@ final class Storage {
   final ServiceClient _serviceClient;
   final http.Client _httpClient;
   final String projectId;
+  final Uri _baseUrl;
 
-  Storage({required http.Client client, required this.projectId})
-    : _httpClient = client,
-      _serviceClient = ServiceClient(client: client);
+  static Uri _calculateBaseUrl(
+    String? apiEndpoint,
+    bool useAuthWithCustomEndpoint,
+  ) {
+    if (apiEndpoint != null) {
+      if (useAuthWithCustomEndpoint) return Uri.https(apiEndpoint);
+      return Uri.http(apiEndpoint);
+    }
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/149):
+    // Support the STORAGE_EMULATOR_HOST environment variable.
+    return Uri.https('storage.googleapis.com');
+  }
+
+  /// Constructs a client used to communicate with [Google Cloud Storage][].
+  ///
+  /// By default, the client will use your [default application credentials][]
+  /// to communicate with the production [Google Cloud Storage][] service and
+  /// use the project inferred from the environment.
+  ///
+  /// You can explicitly provide a project ID by passing [projectId].
+  ///
+  /// To target an emulator, you can set the `'STORAGE_EMULATOR_HOST'`
+  /// environment variable to the address at which your emulator is running.
+  /// For example, set `STORAGE_EMULATOR_HOST=127.0.0.1:9199` to use the
+  /// [Cloud Storage for Firebase Emulator][] with its default settings.
+  ///
+  /// You can also change the API endpoint by passing [apiEndpoint]. For
+  /// example, `'localhost:9199'`. If the endpoint does not require credentials
+  /// or TLS (e.g. the emulator) then set [useAuthWithCustomEndpoint] to
+  /// `false`.
+  ///
+  /// To disable authentication (e.g. if you only wish to access public data) or
+  /// to use authentication other than the default application credentials, you
+  /// can provide your own [client].
+  ///
+  /// [Google Cloud Storage]: https://cloud.google.com/storage
+  /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
+  /// [default application credentials]: https://docs.cloud.google.com/docs/authentication/application-default-credentials
+  Storage({
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/150):
+    // Infer the project ID from the environment.
+    required this.projectId,
+    String? apiEndpoint,
+    bool useAuthWithCustomEndpoint = true,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/151):
+    // Make `client` optional and use application default credentials by
+    // default.
+    required http.Client client,
+  }) : _httpClient = client,
+       _serviceClient = ServiceClient(client: client),
+       _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
+
+  Uri _requestUrl(
+    Iterable<String>? pathSegments,
+    Map<String, dynamic>? queryParameters,
+  ) => _baseUrl.replace(
+    pathSegments: pathSegments,
+    queryParameters: queryParameters,
+  );
 
   /// Closes the client and cleans up any resources associated with it.
   ///
@@ -96,11 +153,9 @@ final class Storage {
     String? projection,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket],
-      queryParameters: {
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
         'projection': ?projection,
         'userProject': ?userProject,
@@ -123,13 +178,15 @@ final class Storage {
     bool enableObjectRetention = false,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri.https('storage.googleapis.com', '/storage/v1/b');
-    final queryParams = {
-      'project': projectId,
-      'enableObjectRetention': enableObjectRetention.toString(),
-    };
+    final url = _requestUrl(
+      ['storage', 'v1', 'b'],
+      {
+        'project': projectId,
+        'enableObjectRetention': enableObjectRetention.toString(),
+      },
+    );
     final j = await _serviceClient.post(
-      url.replace(queryParameters: queryParams),
+      url,
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
@@ -159,16 +216,14 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'userProject': ?userProject,
+      },
     );
-    final queryParams = {
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'userProject': ?userProject,
-    };
-    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+    await _serviceClient.delete(url);
   }, isIdempotent: ifMetagenerationMatch != null);
 
   /// A stream of buckets in the project in lexicographical order by name.
@@ -202,14 +257,17 @@ final class Storage {
     String? nextPageToken;
 
     do {
-      final url = Uri.https('storage.googleapis.com', '/storage/v1/b', {
-        'maxResults': ?maxResults?.toString(),
-        'project': projectId,
-        'pageToken': ?nextPageToken,
-        'projection': ?projection,
-        'prefix': ?prefix,
-        'softDeleted': ?softDeleted?.toString(),
-      });
+      final url = _requestUrl(
+        ['storage', 'v1', 'b'],
+        {
+          'maxResults': ?maxResults?.toString(),
+          'project': projectId,
+          'pageToken': ?nextPageToken,
+          'projection': ?projection,
+          'prefix': ?prefix,
+          'softDeleted': ?softDeleted?.toString(),
+        },
+      );
       final json = await _serviceClient.get(url);
       nextPageToken = json['nextPageToken'] as String?;
 
@@ -272,21 +330,19 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket],
+      {
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'project': projectId,
+        'predefinedAcl': ?predefinedAcl,
+        'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
     );
-    final queryParams = {
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'project': projectId,
-      'predefinedAcl': ?predefinedAcl,
-      'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
-      'projection': ?projection,
-      'userProject': ?userProject,
-    };
     final j = await _serviceClient.patch(
-      url.replace(queryParameters: queryParams),
+      url,
       body: BucketMetadataPatchBuilderJsonEncodable(metadata),
     );
     return bucketMetadataFromJson(j as Map<String, Object?>);
@@ -323,17 +379,15 @@ final class Storage {
     BigInt? ifMetagenerationMatch,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', object],
+      {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+      },
     );
-    final queryParams = {
-      'generation': ?generation?.toString(),
-      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-    };
-    await _serviceClient.delete(url.replace(queryParameters: queryParams));
+    await _serviceClient.delete(url);
   }, isIdempotent: ifGenerationMatch != null || generation != null);
 
   /// Download the content of a [Google Cloud Storage object][] as bytes.
@@ -371,12 +425,16 @@ final class Storage {
   }) => retry.run(
     () => downloadFile(
       _httpClient,
-      bucket,
-      object,
-      generation,
-      ifGenerationMatch,
-      ifMetagenerationMatch,
-      userProject,
+      _requestUrl(
+        ['storage', 'v1', 'b', bucket, 'o', object],
+        {
+          'alt': 'media',
+          'generation': ?generation?.toString(),
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+          'userProject': ?userProject,
+        },
+      ),
     ),
     isIdempotent: true,
   );
@@ -441,15 +499,20 @@ final class Storage {
   }) => retry.run(
     () async => uploadFile(
       _httpClient,
-      projectId,
-      bucket,
-      name,
+      _requestUrl(
+        ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+        {
+          'uploadType': 'multipart',
+          'name': name,
+          'project': projectId,
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'predefinedAcl': ?predefinedAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      ),
       content,
       metadata: metadata,
-      ifGenerationMatch: ifGenerationMatch,
-      predefinedAcl: predefinedAcl,
-      projection: projection,
-      userProject: userProject,
     ),
     isIdempotent: ifGenerationMatch != null,
   );
@@ -491,11 +554,9 @@ final class Storage {
     String? nextPageToken;
 
     do {
-      final url = Uri(
-        scheme: 'https',
-        host: 'storage.googleapis.com',
-        pathSegments: ['storage', 'v1', 'b', bucket, 'o'],
-        queryParameters: {
+      final url = _requestUrl(
+        ['storage', 'v1', 'b', bucket, 'o'],
+        {
           'softDeleted': ?softDeleted?.toString(),
           'versions': ?versions?.toString(),
           'maxResults': ?maxResults?.toString(),
@@ -533,8 +594,9 @@ final class Storage {
   /// [PreconditionFailedException] is thrown.
   ///
   /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all object properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  /// value of `"full"` returns all bucket properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
+  /// properties.
   ///
   /// If set, [userProject] is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
@@ -553,11 +615,9 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) async => await retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', object],
-      queryParameters: {
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', object],
+      {
         'generation': ?generation?.toString(),
         'ifGenerationMatch': ?ifGenerationMatch?.toString(),
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
@@ -625,21 +685,19 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
-    final url = Uri(
-      scheme: 'https',
-      host: 'storage.googleapis.com',
-      pathSegments: ['storage', 'v1', 'b', bucket, 'o', name],
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', name],
+      {
+        'generation': ?generation?.toString(),
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
+        'predefinedAcl': ?predefinedAcl,
+        'projection': ?projection,
+        'userProject': ?userProject,
+      },
     );
-    final queryParams = {
-      'generation': ?generation?.toString(),
-      'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-      'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-      'predefinedAcl': ?predefinedAcl,
-      'projection': ?projection,
-      'userProject': ?userProject,
-    };
     final j = await _serviceClient.patch(
-      url.replace(queryParameters: queryParams),
+      url,
       body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
     );
     return objectMetadataFromJson(j as Map<String, Object?>);
