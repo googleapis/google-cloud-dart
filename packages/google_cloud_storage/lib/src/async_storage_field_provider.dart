@@ -6,7 +6,7 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
 class AsyncStorageFieldProvider {
-  FutureOr<ServiceClient>? _cachedServiceClient;
+  ServiceClient? _cachedServiceClient;
   final FutureOr<http.Client> _httpClient;
   final FutureOr<String> _projectId;
 
@@ -61,15 +61,14 @@ class AsyncStorageFieldProvider {
       case null:
         switch (_httpClient) {
           case final Future<http.Client> future:
-            future.then((client) => client.close());
+            // Swallow any asynchronous errors because there is nothing that we
+            // can do about it always.
+            future.then((client) => client.close(), onError: (_) {});
             break;
           case final http.Client client:
             client.close();
             break;
         }
-      case final Future<ServiceClient> future:
-        future.then((serviceClient) => serviceClient.close());
-        break;
       case final ServiceClient serviceClient:
         serviceClient.close();
         break;
