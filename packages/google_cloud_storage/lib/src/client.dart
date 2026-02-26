@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:async';
+
+import 'package:google_cloud/google_cloud.dart' show computeProjectId;
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/service_client.dart';
 import 'package:http/http.dart' as http;
@@ -42,7 +45,7 @@ class _JsonEncodableWrapper implements JsonEncodable {
 final class Storage {
   final ServiceClient _serviceClient;
   final http.Client _httpClient;
-  final String projectId;
+  final FutureOr<String> _projectId;
   final Uri _baseUrl;
 
   static Uri _calculateBaseUrl(
@@ -57,6 +60,9 @@ final class Storage {
     // Support the STORAGE_EMULATOR_HOST environment variable.
     return Uri.https('storage.googleapis.com');
   }
+
+  static FutureOr<String> _calculateProjectId(String? projectId) =>
+      projectId ?? computeProjectId();
 
   /// Constructs a client used to communicate with [Google Cloud Storage][].
   ///
@@ -84,16 +90,15 @@ final class Storage {
   /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
   /// [default application credentials]: https://docs.cloud.google.com/docs/authentication/application-default-credentials
   Storage({
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/150):
-    // Infer the project ID from the environment.
-    required this.projectId,
+    String? projectId,
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/151):
     // Make `client` optional and use application default credentials by
     // default.
     required http.Client client,
-  }) : _httpClient = client,
+  }) : _projectId = _calculateProjectId(projectId),
+       _httpClient = client,
        _serviceClient = ServiceClient(client: client),
        _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
 
@@ -181,7 +186,7 @@ final class Storage {
     final url = _requestUrl(
       ['storage', 'v1', 'b'],
       {
-        'project': projectId,
+        'project': await _projectId,
         'enableObjectRetention': enableObjectRetention.toString(),
       },
     );
@@ -261,7 +266,7 @@ final class Storage {
         ['storage', 'v1', 'b'],
         {
           'maxResults': ?maxResults?.toString(),
-          'project': projectId,
+          'project': await _projectId,
           'pageToken': ?nextPageToken,
           'projection': ?projection,
           'prefix': ?prefix,
@@ -334,7 +339,7 @@ final class Storage {
       ['storage', 'v1', 'b', bucket],
       {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-        'project': projectId,
+        'project': await _projectId,
         'predefinedAcl': ?predefinedAcl,
         'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
         'projection': ?projection,
@@ -504,7 +509,7 @@ final class Storage {
         {
           'uploadType': 'multipart',
           'name': name,
-          'project': projectId,
+          'project': await _projectId,
           'ifGenerationMatch': ?ifGenerationMatch?.toString(),
           'predefinedAcl': ?predefinedAcl,
           'projection': ?projection,
