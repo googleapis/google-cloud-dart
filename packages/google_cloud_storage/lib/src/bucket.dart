@@ -32,6 +32,9 @@ final class Bucket {
 
   /// Create a new [Google Cloud Storage bucket][].
   ///
+  /// If [metadata] is provided, it's [BucketMetadata.name] is ignored and
+  /// [name] is used instead.
+  ///
   /// This operation is always idempotent. Throws [ConflictException] if the
   /// bucket already exists.
   ///
@@ -43,7 +46,7 @@ final class Bucket {
     bool enableObjectRetention = false,
     RetryRunner retry = defaultRetry,
   }) => storage.createBucket(
-    metadata ?? BucketMetadata(name: name),
+    metadata?.copyWith(name: name) ?? BucketMetadata(name: name),
     enableObjectRetention: enableObjectRetention,
     retry: retry,
   );
