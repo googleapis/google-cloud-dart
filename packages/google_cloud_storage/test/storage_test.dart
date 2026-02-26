@@ -65,7 +65,7 @@ void main() async {
       storage = Storage(client: testClient, projectId: projectId);
       addTearDown(storage.close);
 
-      // There is no easy way to verify that the project id was used, other than
+      // There is no easy way to verify that the project ID was used, other than
       // to create a bucket and assume that it is associated with the correct
       // project.
       await createBucketWithTearDown(storage, 'storage_with_project_id');
