@@ -53,21 +53,24 @@ void main() async {
     tearDown(() => storage.close());
 
     test('empty object', () async {
-      await testClient.startTest('google_cloud_storage', 'download_blob_empty');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'download_object_empty',
+      );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_blob_empty',
+        'download_object_empty',
       );
 
       await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         [],
         ifGenerationMatch: BigInt.zero,
       );
 
-      final data = await storage.downloadObject(bucketName, 'blob1');
+      final data = await storage.downloadObject(bucketName, 'object1');
 
       expect(data, isEmpty);
     });
@@ -76,12 +79,12 @@ void main() async {
       test('object of size $i bytes', () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'download_blob_size_$i',
+          'download_object_size_$i',
         );
         addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'download_blob_size_$i',
+          'download_object_size_$i',
         );
 
         final uploadedData = Uint8List(i);
@@ -90,13 +93,13 @@ void main() async {
         }
         await storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           uploadedData,
           ifGenerationMatch: BigInt.zero,
         );
         final downloadedData = await storage.downloadObject(
           bucketName,
-          'blob1',
+          'object1',
         );
 
         expect(downloadedData, uploadedData);
@@ -108,17 +111,17 @@ void main() async {
       () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'download_blob_gzipped',
+          'download_object_gzipped',
         );
         addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'download_blob_gzipped',
+          'download_object_gzipped',
         );
 
         await storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           gzip.encode(utf8.encode('Hello World!')),
           metadata: ObjectMetadata(
             contentType: 'text/plain',
@@ -127,7 +130,7 @@ void main() async {
           ifGenerationMatch: BigInt.zero,
         );
 
-        final data = await storage.downloadObject(bucketName, 'blob1');
+        final data = await storage.downloadObject(bucketName, 'object1');
 
         expect(data, utf8.encode('Hello World!'));
       },
@@ -139,47 +142,47 @@ void main() async {
     test('with generation', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'download_blob_generation',
+        'download_object_generation',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_blob_generation',
+        'download_object_generation',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
-      final metadataV1 = await storage.insertObject(bucketName, 'blob1', [
+      final metadataV1 = await storage.insertObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
       addTearDown(
         () => storage.deleteObject(
           bucketName,
-          'blob1',
+          'object1',
           generation: metadataV1.generation,
         ),
       );
 
-      final metadataV2 = await storage.insertObject(bucketName, 'blob1', [
+      final metadataV2 = await storage.insertObject(bucketName, 'object1', [
         2,
       ], ifGenerationMatch: metadataV1.generation);
       addTearDown(
         () => storage.deleteObject(
           bucketName,
-          'blob1',
+          'object1',
           generation: metadataV2.generation,
         ),
       );
 
       final v1Data = await storage.downloadObject(
         bucketName,
-        'blob1',
+        'object1',
         generation: metadataV1.generation,
       );
       expect(v1Data, [1]);
 
       final v2Data = await storage.downloadObject(
         bucketName,
-        'blob1',
+        'object1',
         generation: metadataV2.generation,
       );
       expect(v2Data, [2]);
@@ -188,22 +191,22 @@ void main() async {
     test('with ifGenerationMatch success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'download_blob_if_generation_match_success',
+        'download_object_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_blob_if_generation_match_success',
+        'download_object_if_generation_match_success',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'blob1', [
+      final metadata = await storage.insertObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
       // Success case
       await storage.downloadObject(
         bucketName,
-        'blob1',
+        'object1',
         ifGenerationMatch: metadata.generation,
       );
     });
@@ -211,15 +214,15 @@ void main() async {
     test('with ifGenerationMatch failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'download_blob_if_generation_match_failure',
+        'download_object_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_blob_if_generation_match_failure',
+        'download_object_if_generation_match_failure',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'blob1', [
+      final metadata = await storage.insertObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
@@ -227,7 +230,7 @@ void main() async {
       await expectLater(
         () => storage.downloadObject(
           bucketName,
-          'blob1',
+          'object1',
           ifGenerationMatch: metadata.generation! + BigInt.one,
         ),
         throwsA(isA<PreconditionFailedException>()),
@@ -237,21 +240,21 @@ void main() async {
     test('with ifMetagenerationMatch success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'download_blob_if_metageneration_match_success',
+        'download_object_if_metageneration_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_blob_if_metageneration_match_success',
+        'download_object_if_metageneration_match_success',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'blob1', [
+      final metadata = await storage.insertObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
       await storage.downloadObject(
         bucketName,
-        'blob1',
+        'object1',
         ifMetagenerationMatch: metadata.metageneration,
       );
     });
@@ -259,15 +262,15 @@ void main() async {
     test('with ifMetagenerationMatch failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'download_blob_if_metageneration_match_failure',
+        'download_object_if_metageneration_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_blob_if_metageneration_match_failure',
+        'download_object_if_metageneration_match_failure',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'blob1', [
+      final metadata = await storage.insertObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
@@ -275,7 +278,7 @@ void main() async {
       await expectLater(
         () => storage.downloadObject(
           bucketName,
-          'blob1',
+          'object1',
           ifMetagenerationMatch: metadata.metageneration! + BigInt.one,
         ),
         throwsA(isA<PreconditionFailedException>()),
