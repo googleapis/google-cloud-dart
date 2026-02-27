@@ -40,20 +40,22 @@ void main() async {
       testClient = await TestHttpClient.fromEnvironment(authClient);
     });
 
-    test('no constuctor arguments', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_no_arguments',
-      );
-      addTearDown(testClient.endTest);
+    test(
+      'no constuctor arguments',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'storage_no_arguments',
+        );
+        addTearDown(testClient.endTest);
 
-      storage = Storage();
-      addTearDown(storage.close);
+        storage = Storage();
+        addTearDown(storage.close);
 
-      // There is no easy way to verify that the project ID was used, other than
-      // to create a bucket and assume that it is associated with the correct
-      // project.
-      await createBucketWithTearDown(storage, 'storage_no_arguments');
+        // There is no easy way to verify that the project ID was used, other than
+        // to create a bucket and assume that it is associated with the correct
+        // project.
+        await createBucketWithTearDown(storage, 'storage_no_arguments');
       },
       skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
           ? '"gcloud auth login" is required for tests using application '
@@ -74,20 +76,22 @@ void main() async {
       await createBucketWithTearDown(storage, 'storage_with_client');
     });
 
-    test('constructor with project id', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_with_project_id',
-      );
-      addTearDown(testClient.endTest);
+    test(
+      'constructor with project id',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'storage_with_project_id',
+        );
+        addTearDown(testClient.endTest);
 
-      storage = Storage(projectId: projectId);
-      addTearDown(storage.close);
+        storage = Storage(projectId: projectId);
+        addTearDown(storage.close);
 
-      // There is no easy way to verify that the project ID was used, other than
-      // to create a bucket and assume that it is associated with the correct
-      // project.
-      await createBucketWithTearDown(storage, 'storage_with_project_id');
+        // There is no easy way to verify that the project ID was used, other than
+        // to create a bucket and assume that it is associated with the correct
+        // project.
+        await createBucketWithTearDown(storage, 'storage_with_project_id');
       },
       skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
           ? '"gcloud auth login" is required for tests using application '
