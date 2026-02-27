@@ -52,18 +52,18 @@ void main() async {
     tearDown(() => storage.close());
 
     test('new, no metadata', () async {
-      await testClient.startTest('google_cloud_storage', 'insert_blob_new');
+      await testClient.startTest('google_cloud_storage', 'insert_object_new');
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new',
+        'insert_object_new',
       );
 
       final beforeRequestTime = DateTime.now().toUtc();
 
       final objectMetadata = await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
@@ -91,13 +91,13 @@ void main() async {
         objectMetadata.mediaLink?.toString(),
         startsWith(
           'https://storage.googleapis.com/download/storage/v1/b/$bucketName/o/'
-          'blob1',
+          'object1',
         ),
       );
       expect(objectMetadata.metadata, isNull);
       expect(objectMetadata.md5Hash, isNotEmpty);
       expect(objectMetadata.metageneration, BigInt.one);
-      expect(objectMetadata.name, 'blob1');
+      expect(objectMetadata.name, 'object1');
       expect(objectMetadata.owner, isNull);
       expect(objectMetadata.restoreToken, isNull);
       expect(objectMetadata.retentionExpirationTime, isNull);
@@ -138,17 +138,17 @@ void main() async {
     test('new with content-type', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_new_with_content_type',
+        'insert_object_new_with_content_type',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new_with_content_type',
+        'insert_object_new_with_content_type',
       );
 
       final objectMetadata = await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
         metadata: ObjectMetadata(contentType: 'text/plain'),
         ifGenerationMatch: BigInt.zero,
@@ -160,17 +160,17 @@ void main() async {
     test('new with crc32c', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_new_with_crc32c',
+        'insert_object_new_with_crc32c',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new_with_crc32c',
+        'insert_object_new_with_crc32c',
       );
 
       final objectMetadata = await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
         metadata: ObjectMetadata(crc32c: '/mzx3A=='),
         ifGenerationMatch: BigInt.zero,
@@ -181,18 +181,18 @@ void main() async {
     test('new with invalid crc32c', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_new_with_invalid_crc32c',
+        'insert_object_new_with_invalid_crc32c',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new_with_invalid_crc32c',
+        'insert_object_new_with_invalid_crc32c',
       );
 
       expect(
         () => storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           utf8.encode('Hello World!'),
           metadata: ObjectMetadata(crc32c: 'invalid'),
           ifGenerationMatch: BigInt.zero,
@@ -204,17 +204,17 @@ void main() async {
     test('new with md5', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_new_with_md5',
+        'insert_object_new_with_md5',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new_with_md5',
+        'insert_object_new_with_md5',
       );
 
       final objectMetadata = await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
         metadata: ObjectMetadata(md5Hash: '7Qdih1MuhjZehB6Sv8UNjA=='),
         ifGenerationMatch: BigInt.zero,
@@ -225,18 +225,18 @@ void main() async {
     test('new with invalid md5', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_new_with_invalid_md5',
+        'insert_object_new_with_invalid_md5',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new_with_invalid_md5',
+        'insert_object_new_with_invalid_md5',
       );
 
       expect(
         () => storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           utf8.encode('Hello World!'),
           metadata: ObjectMetadata(md5Hash: 'invalid'),
           ifGenerationMatch: BigInt.zero,
@@ -248,20 +248,20 @@ void main() async {
     test('parameter name and metadata name mismatch', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_new_with_parameter_name_and_metadata_name_mismatch',
+        'insert_object_new_with_parameter_name_and_metadata_name_mismatch',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_new_with_name_mismatch',
+        'insert_object_new_with_name_mismatch',
       );
 
       expect(
         () => storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           utf8.encode('Hello World!'),
-          metadata: ObjectMetadata(name: 'blob2'),
+          metadata: ObjectMetadata(name: 'object2'),
           ifGenerationMatch: BigInt.zero,
         ),
         throwsA(isA<BadRequestException>()),
@@ -271,15 +271,15 @@ void main() async {
     test('no such bucket', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_no_such_bucket',
+        'insert_object_no_such_bucket',
       );
       addTearDown(testClient.endTest);
-      const bucketName = 'insert_blob_no_such_bucket';
+      const bucketName = 'insert_object_no_such_bucket';
 
       expect(
         () => storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           utf8.encode('Hello World!'),
         ),
         throwsA(isA<NotFoundException>()),
@@ -289,22 +289,22 @@ void main() async {
     test('overwrite', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_overwrite',
+        'insert_object_overwrite',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_overwrite',
+        'insert_object_overwrite',
       );
 
       final oldGeneration = (await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
       )).generation;
       final newGeneration = (await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Goodbye World!'),
       )).generation;
       expect(newGeneration, isNot(oldGeneration));
@@ -313,22 +313,22 @@ void main() async {
     test('with if generation match success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_overwrite_if_generation_match_success',
+        'insert_object_overwrite_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_overwrite_if_generation_match_success',
+        'insert_object_overwrite_if_generation_match_success',
       );
 
       final oldGeneration = (await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
       )).generation;
       final newGeneration = (await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Goodbye World!'),
         ifGenerationMatch: oldGeneration,
       )).generation;
@@ -338,23 +338,23 @@ void main() async {
     test('with if generation match failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'insert_blob_overwrite_if_generation_match_failure',
+        'insert_object_overwrite_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'insert_blob_overwrite_if_generation_match_failure',
+        'insert_object_overwrite_if_generation_match_failure',
       );
 
       await storage.insertObject(
         bucketName,
-        'blob1',
+        'object1',
         utf8.encode('Hello World!'),
       );
       expect(
         () => storage.insertObject(
           bucketName,
-          'blob1',
+          'object1',
           utf8.encode('Goodbye World!'),
           ifGenerationMatch: BigInt.from(1234),
         ),

@@ -31,6 +31,15 @@ final class Bucket {
 
   Bucket._(this.storage, this.name);
 
+  /// A [Google Cloud Storage object][] with the given [name].
+  ///
+  /// [name] should be a valid [object name][].
+  ///
+  /// The object need not actually exist on Google Cloud Storage. This method
+  /// does not perform any network operations.
+  ///
+  /// [object name]: https://docs.cloud.google.com/storage/docs/objects#naming
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
   Blob blob(String name) => newBlob(storage, this.name, name);
 
   /// Create a new [Google Cloud Storage bucket][].

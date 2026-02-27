@@ -8,6 +8,11 @@ import '../google_cloud_storage.dart';
 Blob newBlob(Storage storage, String bucketName, String name) =>
     Blob._(storage, bucketName, name);
 
+/// A [Google Cloud Storage object][].
+///
+/// [Blob] instances are created with [Bucket.blob].
+///
+/// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
 final class Blob {
   final Storage storage;
   final String bucketName;

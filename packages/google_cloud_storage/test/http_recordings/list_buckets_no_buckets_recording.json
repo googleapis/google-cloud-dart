@@ -1,0 +1,28 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421&prefix=nobuckethasthisprefix",
+      "method": "GET",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "private, max-age=0, must-revalidate, no-transform",
+        "date": "Fri, 27 Feb 2026 23:39:28 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "32",
+        "x-guploader-uploadid": "AGQBYWz9zv5OLslJ2lslEg1RIu0UgL2iGULGmZkWoCoi9cCI1dbSh57Du-eoTQGpM9AgaoS9DVrzRik",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Fri, 27 Feb 2026 23:39:28 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#buckets\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  }
+]

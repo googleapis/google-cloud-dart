@@ -52,23 +52,23 @@ void main() async {
     test('simple', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'blob_metadata_simple',
+        'object_metadata_simple',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'blob_metadata_simple',
+        'object_metadata_simple',
       );
 
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         ifGenerationMatch: BigInt.zero,
       );
 
-      final metadata = await storage.objectMetadata(bucketName, 'blob.txt');
-      expect(metadata.name, 'blob.txt');
+      final metadata = await storage.objectMetadata(bucketName, 'object.txt');
+      expect(metadata.name, 'object.txt');
       expect(metadata.bucket, bucketName);
       expect(metadata.size, BigInt.from(7));
     });
@@ -76,10 +76,10 @@ void main() async {
     test('with generation', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'blob_metadata_with_generation',
+        'object_metadata_with_generation',
       );
       addTearDown(testClient.endTest);
-      final bucketName = testBucketName('blob_metadata_with_generation');
+      final bucketName = testBucketName('object_metadata_with_generation');
       await storage.createBucket(
         BucketMetadata(
           name: bucketName,
@@ -89,13 +89,13 @@ void main() async {
 
       final obj1 = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('Hello'),
         ifGenerationMatch: BigInt.zero,
       );
       final obj2 = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('Hello World!'),
       );
 
@@ -104,7 +104,7 @@ void main() async {
 
       final metadataV1 = await storage.objectMetadata(
         bucketName,
-        'blob.txt',
+        'object.txt',
         generation: obj1.generation,
       );
       expect(metadataV1.generation, obj1.generation);
@@ -112,7 +112,7 @@ void main() async {
 
       final metadataV2 = await storage.objectMetadata(
         bucketName,
-        'blob.txt',
+        'object.txt',
         generation: obj2.generation,
       );
       expect(metadataV2.generation, obj2.generation);
@@ -122,23 +122,23 @@ void main() async {
     test('with if generation match success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'blob_metadata_with_if_generation_match_success',
+        'object_metadata_with_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'blob_metadata_with_if_generation_match_success',
+        'object_metadata_with_if_generation_match_success',
       );
       final obj = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         ifGenerationMatch: BigInt.zero,
       );
 
       final metadata = await storage.objectMetadata(
         bucketName,
-        'blob.txt',
+        'object.txt',
         ifGenerationMatch: obj.generation,
       );
       expect(metadata.generation, obj.generation);
@@ -147,16 +147,16 @@ void main() async {
     test('with if generation match failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'blob_metadata_with_if_generation_match_failure',
+        'object_metadata_with_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'blob_metadata_with_if_generation_match_failure',
+        'object_metadata_with_if_generation_match_failure',
       );
       final obj = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         ifGenerationMatch: BigInt.zero,
       );
@@ -164,7 +164,7 @@ void main() async {
       expect(
         () => storage.objectMetadata(
           bucketName,
-          'blob.txt',
+          'object.txt',
           ifGenerationMatch: obj.generation! + BigInt.one,
         ),
         throwsA(isA<PreconditionFailedException>()),
@@ -174,12 +174,12 @@ void main() async {
     test('non-existant object', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'blob_metadata_non_existant',
+        'object_metadata_non_existant',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'blob_metadata_non_existant',
+        'object_metadata_non_existant',
       );
 
       expect(
@@ -207,8 +207,8 @@ void main() async {
 
       final storage = Storage(client: mockClient, projectId: projectId);
 
-      final metadata = await storage.objectMetadata('bucket', 'blob.txt');
-      expect(metadata.name, 'blob.txt');
+      final metadata = await storage.objectMetadata('bucket', 'object.txt');
+      expect(metadata.name, 'object.txt');
     });
   });
 }
