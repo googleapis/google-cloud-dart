@@ -13,10 +13,12 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:io';
 
 import 'package:google_cloud/google_cloud.dart' show computeProjectId;
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/service_client.dart';
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
 import '../google_cloud_storage.dart';
@@ -43,10 +45,44 @@ class _JsonEncodableWrapper implements JsonEncodable {
 ///
 /// See [Google Cloud Storage](https://cloud.google.com/storage).
 final class Storage {
-  final ServiceClient _serviceClient;
-  final http.Client _httpClient;
+  ServiceClient? _cachedServiceClient;
+  final FutureOr<http.Client> _httpClient;
   final FutureOr<String> _projectId;
   final Uri _baseUrl;
+
+  static final _httpPattern = RegExp(r'^https?://');
+
+  static String? _getStorageEmulatorHost() =>
+      Platform.environment['STORAGE_EMULATOR_HOST'];
+
+  static FutureOr<http.Client> _calculateClient(
+    http.Client? client,
+    String? emulatorHost,
+  ) => switch ((client, emulatorHost)) {
+    (final client?, _) => client,
+    (null, _?) => http.Client(),
+    (null, null) => auth.clientViaApplicationDefaultCredentials(
+      scopes: [
+        'https://www.googleapis.com/auth/iam',
+        'https://www.googleapis.com/auth/cloud-platform',
+        'https://www.googleapis.com/auth/devstorage.full_control',
+      ],
+    ),
+  };
+
+  static FutureOr<String> _calculateProjectId(
+    String? projectId,
+    String? emulatorHost,
+  ) => switch ((projectId, emulatorHost)) {
+    (final String projectId, _) => projectId,
+    // This is the default project ID used by the Python client:
+    // https://github.com/googleapis/python-storage/blob/4d98e32c82811b4925367d2fee134cb0b2c0dae7/google/cloud/storage/client.py#L152
+    (null, _?) => '<none>',
+    (null, null) => computeProjectId(),
+  };
+
+  FutureOr<ServiceClient> get _serviceClient async =>
+      _cachedServiceClient ??= ServiceClient(client: await _httpClient);
 
   static Uri _calculateBaseUrl(
     String? apiEndpoint,
@@ -56,13 +92,16 @@ final class Storage {
       if (useAuthWithCustomEndpoint) return Uri.https(apiEndpoint);
       return Uri.http(apiEndpoint);
     }
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/149):
-    // Support the STORAGE_EMULATOR_HOST environment variable.
+
+    if (_getStorageEmulatorHost() case String host) {
+      if (_httpPattern.hasMatch(host)) {
+        return Uri.parse(host);
+      }
+      return Uri.http(host);
+    }
+
     return Uri.https('storage.googleapis.com');
   }
-
-  static FutureOr<String> _calculateProjectId(String? projectId) =>
-      projectId ?? computeProjectId();
 
   /// Constructs a client used to communicate with [Google Cloud Storage][].
   ///
@@ -93,13 +132,9 @@ final class Storage {
     String? projectId,
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/151):
-    // Make `client` optional and use application default credentials by
-    // default.
-    required http.Client client,
-  }) : _projectId = _calculateProjectId(projectId),
-       _httpClient = client,
-       _serviceClient = ServiceClient(client: client),
+    http.Client? client,
+  }) : _projectId = _calculateProjectId(projectId, _getStorageEmulatorHost()),
+       _httpClient = _calculateClient(client, _getStorageEmulatorHost()),
        _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
 
   Uri _requestUrl(
@@ -113,7 +148,21 @@ final class Storage {
   /// Closes the client and cleans up any resources associated with it.
   ///
   /// Once [close] is called, no other methods should be called.
-  void close() => _serviceClient.close();
+  void close() {
+    if (_cachedServiceClient case final serviceClient?) {
+      serviceClient.close();
+      return;
+    }
+
+    switch (_httpClient) {
+      case final Future<http.Client> future:
+        // Swallow any asynchronous errors because there is nothing that we
+        // can do about it always.
+        future.then((client) => client.close(), onError: (_) {});
+      case final http.Client client:
+        client.close();
+    }
+  }
 
   // Bucket-related methods, keep alphabetized.
 
@@ -158,6 +207,7 @@ final class Storage {
     String? projection,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket],
       {
@@ -166,7 +216,7 @@ final class Storage {
         'userProject': ?userProject,
       },
     );
-    final j = await _serviceClient.get(url);
+    final j = await serviceClient.get(url);
     return bucketMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
@@ -182,7 +232,8 @@ final class Storage {
     BucketMetadata metadata, {
     bool enableObjectRetention = false,
     RetryRunner retry = defaultRetry,
-  }) async => await retry.run(() async {
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b'],
       {
@@ -190,7 +241,7 @@ final class Storage {
         'enableObjectRetention': enableObjectRetention.toString(),
       },
     );
-    final j = await _serviceClient.post(
+    final j = await serviceClient.post(
       url,
       body: _JsonEncodableWrapper(bucketMetadataToJson(metadata)),
     );
@@ -220,7 +271,8 @@ final class Storage {
     BigInt? ifMetagenerationMatch,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) async => await retry.run(() async {
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket],
       {
@@ -228,7 +280,7 @@ final class Storage {
         'userProject': ?userProject,
       },
     );
-    await _serviceClient.delete(url);
+    await serviceClient.delete(url);
   }, isIdempotent: ifMetagenerationMatch != null);
 
   /// A stream of buckets in the project in lexicographical order by name.
@@ -262,6 +314,7 @@ final class Storage {
     String? nextPageToken;
 
     do {
+      final serviceClient = await _serviceClient;
       final url = _requestUrl(
         ['storage', 'v1', 'b'],
         {
@@ -273,7 +326,7 @@ final class Storage {
           'softDeleted': ?softDeleted?.toString(),
         },
       );
-      final json = await _serviceClient.get(url);
+      final json = await serviceClient.get(url);
       nextPageToken = json['nextPageToken'] as String?;
 
       for (final bucket in json['items'] as List<Object?>? ?? const []) {
@@ -335,6 +388,7 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket],
       {
@@ -346,7 +400,7 @@ final class Storage {
         'userProject': ?userProject,
       },
     );
-    final j = await _serviceClient.patch(
+    final j = await serviceClient.patch(
       url,
       body: BucketMetadataPatchBuilderJsonEncodable(metadata),
     );
@@ -384,6 +438,7 @@ final class Storage {
     BigInt? ifMetagenerationMatch,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket, 'o', object],
       {
@@ -392,7 +447,7 @@ final class Storage {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
       },
     );
-    await _serviceClient.delete(url);
+    await serviceClient.delete(url);
   }, isIdempotent: ifGenerationMatch != null || generation != null);
 
   /// Download the content of a [Google Cloud Storage object][] as bytes.
@@ -428,8 +483,8 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(
-    () => downloadFile(
-      _httpClient,
+    () async => downloadFile(
+      await _httpClient,
       _requestUrl(
         ['storage', 'v1', 'b', bucket, 'o', object],
         {
@@ -503,7 +558,7 @@ final class Storage {
     RetryRunner retry = defaultRetry,
   }) => retry.run(
     () async => uploadFile(
-      _httpClient,
+      await _httpClient,
       _requestUrl(
         ['upload', 'storage', 'v1', 'b', bucket, 'o'],
         {
@@ -559,6 +614,7 @@ final class Storage {
     String? nextPageToken;
 
     do {
+      final serviceClient = await _serviceClient;
       final url = _requestUrl(
         ['storage', 'v1', 'b', bucket, 'o'],
         {
@@ -570,7 +626,7 @@ final class Storage {
           'userProject': ?userProject,
         },
       );
-      final json = await _serviceClient.get(url);
+      final json = await serviceClient.get(url);
       nextPageToken = json['nextPageToken'] as String?;
 
       for (final object in json['items'] as List<Object?>? ?? const []) {
@@ -619,7 +675,8 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) async => await retry.run(() async {
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket, 'o', object],
       {
@@ -630,7 +687,7 @@ final class Storage {
         'userProject': ?userProject,
       },
     );
-    final j = await _serviceClient.get(url);
+    final j = await serviceClient.get(url);
     return objectMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
@@ -690,6 +747,7 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket, 'o', name],
       {
@@ -701,7 +759,7 @@ final class Storage {
         'userProject': ?userProject,
       },
     );
-    final j = await _serviceClient.patch(
+    final j = await serviceClient.patch(
       url,
       body: ObjectMetadataPatchBuilderJsonEncodable(metadata),
     );
