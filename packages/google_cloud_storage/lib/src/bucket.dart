@@ -15,6 +15,7 @@
 import 'package:meta/meta.dart';
 
 import '../google_cloud_storage.dart';
+import 'blob.dart' show newBlob;
 
 @internal
 Bucket newBucket(Storage storage, String name) => Bucket._(storage, name);
@@ -29,6 +30,8 @@ final class Bucket {
   final String name;
 
   Bucket._(this.storage, this.name);
+
+  Blob blob(String name) => newBlob(storage, this.name, name);
 
   /// Create a new [Google Cloud Storage bucket][].
   ///
