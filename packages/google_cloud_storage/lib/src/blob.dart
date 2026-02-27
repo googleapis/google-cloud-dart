@@ -66,4 +66,42 @@ final class Blob {
     userProject: userProject,
     retry: retry,
   );
+
+  Future<ObjectMetadata> metadata({
+    BigInt? generation,
+    BigInt? ifGenerationMatch,
+    BigInt? ifMetagenerationMatch,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => storage.objectMetadata(
+    bucketName,
+    name,
+    generation: generation,
+    ifGenerationMatch: ifGenerationMatch,
+    ifMetagenerationMatch: ifMetagenerationMatch,
+    projection: projection,
+    userProject: userProject,
+    retry: retry,
+  );
+
+  Future<ObjectMetadata> upload(
+    List<int> content, {
+    ObjectMetadata? metadata,
+    BigInt? ifGenerationMatch,
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => storage.insertObject(
+    bucketName,
+    name,
+    content,
+    metadata: metadata,
+    ifGenerationMatch: ifGenerationMatch,
+    predefinedAcl: predefinedAcl,
+    projection: projection,
+    userProject: userProject,
+    retry: retry,
+  );
 }
