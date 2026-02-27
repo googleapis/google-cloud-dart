@@ -77,7 +77,7 @@ final class Storage {
     (final String projectId, _) => projectId,
     // This is the default project ID used by the Python client:
     // https://github.com/googleapis/python-storage/blob/4d98e32c82811b4925367d2fee134cb0b2c0dae7/google/cloud/storage/client.py#L152
-    (null, final String _) => '<none>',
+    (null, _?) => '<none>',
     (null, null) => computeProjectId(),
   };
 
