@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:google_cloud/google_cloud.dart' show computeProjectId;
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -31,6 +30,7 @@ import 'file_upload.dart';
 import 'object_metadata_json.dart';
 import 'object_metadata_patch_builder.dart'
     show ObjectMetadataPatchBuilderJsonEncodable;
+import 'storage_emulator_host_vm.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -51,9 +51,6 @@ final class Storage {
   final Uri _baseUrl;
 
   static final _httpPattern = RegExp(r'^https?://');
-
-  static String? _getStorageEmulatorHost() =>
-      Platform.environment['STORAGE_EMULATOR_HOST'];
 
   static FutureOr<http.Client> _calculateClient(
     http.Client? client,
@@ -93,7 +90,7 @@ final class Storage {
       return Uri.http(apiEndpoint);
     }
 
-    if (_getStorageEmulatorHost() case String host) {
+    if (getStorageEmulatorHost() case String host) {
       if (_httpPattern.hasMatch(host)) {
         return Uri.parse(host);
       }
@@ -133,8 +130,8 @@ final class Storage {
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
     http.Client? client,
-  }) : _projectId = _calculateProjectId(projectId, _getStorageEmulatorHost()),
-       _httpClient = _calculateClient(client, _getStorageEmulatorHost()),
+  }) : _projectId = _calculateProjectId(projectId, getStorageEmulatorHost()),
+       _httpClient = _calculateClient(client, getStorageEmulatorHost()),
        _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
 
   Uri _requestUrl(
