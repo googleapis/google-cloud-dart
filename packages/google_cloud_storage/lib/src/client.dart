@@ -50,6 +50,8 @@ final class Storage {
   final FutureOr<String> _projectId;
   final Uri _baseUrl;
 
+  static final _httpPattern = RegExp(r'^https?://');
+
   static String? _getStorageEmulatorHost() =>
       Platform.environment['STORAGE_EMULATOR_HOST'];
 
@@ -92,7 +94,7 @@ final class Storage {
     }
 
     if (_getStorageEmulatorHost() case String host) {
-      if (RegExp(r'^https?://').hasMatch(host)) {
+      if (_httpPattern.hasMatch(host)) {
         return Uri.parse(host);
       }
       return Uri.http(host);
@@ -147,21 +149,18 @@ final class Storage {
   ///
   /// Once [close] is called, no other methods should be called.
   void close() {
-    switch (_cachedServiceClient) {
-      case null:
-        switch (_httpClient) {
-          case final Future<http.Client> future:
-            // Swallow any asynchronous errors because there is nothing that we
-            // can do about it always.
-            future.then((client) => client.close(), onError: (_) {});
-            break;
-          case final http.Client client:
-            client.close();
-            break;
-        }
-      case final ServiceClient serviceClient:
-        serviceClient.close();
-        break;
+    if (_cachedServiceClient case final serviceClient?) {
+      serviceClient.close();
+      return;
+    }
+
+    switch (_httpClient) {
+      case final Future<http.Client> future:
+        // Swallow any asynchronous errors because there is nothing that we
+        // can do about it always.
+        future.then((client) => client.close(), onError: (_) {});
+      case final http.Client client:
+        client.close();
     }
   }
 
