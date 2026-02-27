@@ -83,6 +83,7 @@ void main() async {
       final bytes = await blob.download();
       expect(bytes, utf8.encode('Hello World!'));
     });
+
     test('metadata', () async {
       await testClient.startTest('google_cloud_storage', 'blob_metadata');
       addTearDown(testClient.endTest);
