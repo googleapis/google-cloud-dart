@@ -54,12 +54,12 @@ void main() async {
       final bucketName = await createBucketWithTearDown(storage, 'blob_delete');
       await storage.insertObject(
         bucketName,
-        'object1',
+        'blob1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).blob('object1');
+      final blob = storage.bucket(bucketName).blob('blob1');
       await blob.delete();
 
       await expectLater(blob.metadata, throwsA(isA<NotFoundException>()));
@@ -74,12 +74,12 @@ void main() async {
       );
       await storage.insertObject(
         bucketName,
-        'object1',
+        'blob1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).blob('object1');
+      final blob = storage.bucket(bucketName).blob('blob1');
       final bytes = await blob.download();
       expect(bytes, utf8.encode('Hello World!'));
     });
@@ -93,14 +93,14 @@ void main() async {
       );
       await storage.insertObject(
         bucketName,
-        'object1',
+        'blob1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).blob('object1');
+      final blob = storage.bucket(bucketName).blob('blob1');
       final metadata = await blob.metadata();
-      expect(metadata.name, 'object1');
+      expect(metadata.name, 'blob1');
     });
 
     test('patch', () async {
@@ -109,11 +109,11 @@ void main() async {
       final bucketName = await createBucketWithTearDown(storage, 'blob_patch');
       await storage.insertObject(
         bucketName,
-        'object1',
+        'blob1',
         utf8.encode('Hello World!'),
       );
 
-      final blob = storage.bucket(bucketName).blob('object1');
+      final blob = storage.bucket(bucketName).blob('blob1');
       final metadata = await blob.patch(
         ObjectMetadataPatchBuilder()..contentType = 'text/plain',
       );
@@ -125,12 +125,12 @@ void main() async {
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(storage, 'blob_upload');
 
-      final blob = storage.bucket(bucketName).blob('object1');
+      final blob = storage.bucket(bucketName).blob('blob1');
       final metadata = await blob.upload(
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
-      expect(metadata.name, 'object1');
+      expect(metadata.name, 'blob1');
       expect(metadata.contentType, 'application/octet-stream');
     });
   });
