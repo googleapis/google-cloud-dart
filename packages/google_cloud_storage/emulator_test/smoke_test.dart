@@ -19,28 +19,39 @@ library;
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 void main() async {
-  late Storage storage;
-  late http.Client client;
-
   group('smoke tests', () {
-    setUp(() async {
-      client = http.Client();
-      storage = Storage(
-        client: client,
+    test('STORAGE_EMULATOR_HOST configuration', () async {
+      final storage = Storage();
+      addTearDown(storage.close);
+
+      const bucketName = 'storage_emulator_host';
+
+      final objectMetadata = await storage.insertObject(
+        bucketName,
+        'object1',
+        utf8.encode('Hello World!'),
+        ifGenerationMatch: BigInt.zero,
+      );
+      expect(objectMetadata.size, BigInt.from(12));
+
+      expect(
+        await storage.downloadObject(bucketName, 'object1'),
+        utf8.encode('Hello World!'),
+      );
+    });
+
+    test('explicit configuration', () async {
+      final storage = Storage(
         projectId: 'test-project',
         apiEndpoint: '127.0.0.1:9199',
         useAuthWithCustomEndpoint: false,
       );
-    });
+      addTearDown(storage.close);
 
-    tearDown(() => storage.close());
-
-    test('upload and download object', () async {
-      const bucketName = 'insert_object_new';
+      const bucketName = 'explicit_configuration';
 
       final objectMetadata = await storage.insertObject(
         bucketName,

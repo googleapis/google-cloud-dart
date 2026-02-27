@@ -27,7 +27,7 @@ void main() async {
   late Storage storage;
   late TestHttpClient testClient;
 
-  group('storage', () {
+  group('storage constructors', () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

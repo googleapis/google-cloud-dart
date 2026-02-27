@@ -28,7 +28,7 @@ package and run the tests:
 
 ```bash
 # From packages/google_cloud_storage
-dart test emulator_test
+STORAGE_EMULATOR_HOST=127.0.0.1:9199 dart test emulator_test
 ```
 
 [Firebase Storage Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
