@@ -234,11 +234,10 @@ final class Storage {
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
     final serviceClient = await _serviceClient;
-    final projectId = await _projectId;
     final url = _requestUrl(
       ['storage', 'v1', 'b'],
       {
-        'project': projectId,
+        'project': await _projectId,
         'enableObjectRetention': enableObjectRetention.toString(),
       },
     );
@@ -316,12 +315,11 @@ final class Storage {
 
     do {
       final serviceClient = await _serviceClient;
-      final projectId = await _projectId;
       final url = _requestUrl(
         ['storage', 'v1', 'b'],
         {
           'maxResults': ?maxResults?.toString(),
-          'project': projectId,
+          'project': await _projectId,
           'pageToken': ?nextPageToken,
           'projection': ?projection,
           'prefix': ?prefix,
@@ -391,12 +389,11 @@ final class Storage {
     RetryRunner retry = defaultRetry,
   }) => retry.run(() async {
     final serviceClient = await _serviceClient;
-    final projectId = await _projectId;
     final url = _requestUrl(
       ['storage', 'v1', 'b', bucket],
       {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-        'project': projectId,
+        'project': await _projectId,
         'predefinedAcl': ?predefinedAcl,
         'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
         'projection': ?projection,
@@ -559,16 +556,15 @@ final class Storage {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => retry.run(() async {
-    final projectId = await _projectId;
-    return uploadFile(
+  }) => retry.run(
+    () async => uploadFile(
       await _httpClient,
       _requestUrl(
         ['upload', 'storage', 'v1', 'b', bucket, 'o'],
         {
           'uploadType': 'multipart',
           'name': name,
-          'project': projectId,
+          'project': await _projectId,
           'ifGenerationMatch': ?ifGenerationMatch?.toString(),
           'predefinedAcl': ?predefinedAcl,
           'projection': ?projection,
@@ -577,8 +573,9 @@ final class Storage {
       ),
       content,
       metadata: metadata,
-    );
-  }, isIdempotent: ifGenerationMatch != null);
+    ),
+    isIdempotent: ifGenerationMatch != null,
+  );
 
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
