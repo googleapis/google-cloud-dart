@@ -59,8 +59,8 @@ final class Storage {
     http.Client? client,
     String? emulatorHost,
   ) => switch ((client, emulatorHost)) {
-    (final http.Client client, _) => client,
-    (null, final String _) => http.Client(),
+    (final client?, _) => client,
+    (null, _?) => http.Client(),
     (null, null) => auth.clientViaApplicationDefaultCredentials(
       scopes: [
         'https://www.googleapis.com/auth/iam',
