@@ -61,8 +61,9 @@ final class Storage {
     (null, final String _) => http.Client(),
     (null, null) => auth.clientViaApplicationDefaultCredentials(
       scopes: [
+        'https://www.googleapis.com/auth/iam',
         'https://www.googleapis.com/auth/cloud-platform',
-        'https://www.googleapis.com/auth/devstorage.read_write',
+        'https://www.googleapis.com/auth/devstorage.full_control',
       ],
     ),
   };
