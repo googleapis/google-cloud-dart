@@ -53,16 +53,16 @@ void main() async {
     test('change acl', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_acl',
+        'patch_object_change_acl',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_acl',
+        'patch_object_change_acl',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -71,7 +71,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
         projection: 'full',
       );
@@ -83,16 +83,16 @@ void main() async {
     test('remove acl', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_acl',
+        'patch_object_remove_acl',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_acl',
+        'patch_object_remove_acl',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -100,7 +100,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
         projection: 'full',
       );
@@ -112,16 +112,16 @@ void main() async {
     test('change cache control', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_cache_control',
+        'patch_object_change_cache_control',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_cache_control',
+        'patch_object_change_cache_control',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -130,7 +130,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -141,16 +141,16 @@ void main() async {
     test('remove cache control', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_cache_control',
+        'patch_object_remove_cache_control',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_cache_control',
+        'patch_object_change_cache_control',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(cacheControl: 'no-cache'),
       );
@@ -159,7 +159,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -170,16 +170,16 @@ void main() async {
     test('change content disposition', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_content_disposition',
+        'patch_object_change_content_disposition',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_content_disposition',
+        'patch_object_change_content_disposition',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -188,7 +188,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -202,16 +202,16 @@ void main() async {
     test('remove content disposition', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_content_disposition',
+        'patch_object_remove_content_disposition',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_content_disposition',
+        'patch_object_remove_content_disposition',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(contentDisposition: 'attachment'),
       );
@@ -221,7 +221,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -232,16 +232,16 @@ void main() async {
     test('change content encoding', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_content_encoding',
+        'patch_object_change_content_encoding',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_content_encoding',
+        'patch_object_change_content_encoding',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -250,7 +250,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -261,16 +261,16 @@ void main() async {
     test('remove content encoding', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_content_encoding',
+        'patch_object_remove_content_encoding',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_content_encoding',
+        'patch_object_remove_content_encoding',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(contentEncoding: 'gzip'),
       );
@@ -280,7 +280,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -291,16 +291,16 @@ void main() async {
     test('change content language', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_content_language',
+        'patch_object_change_content_language',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_content_language',
+        'patch_object_change_content_language',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -309,7 +309,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -320,16 +320,16 @@ void main() async {
     test('remove content language', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_content_language',
+        'patch_object_remove_content_language',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_content_language',
+        'patch_object_remove_content_language',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(contentLanguage: 'en'),
       );
@@ -339,7 +339,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -350,16 +350,16 @@ void main() async {
     test('change content type', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_content_type',
+        'patch_object_change_content_type',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_content_type',
+        'patch_object_change_content_type',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -368,7 +368,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -379,16 +379,16 @@ void main() async {
     test('remove content type', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_content_type',
+        'patch_object_remove_content_type',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_content_type',
+        'patch_object_remove_content_type',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(contentType: 'text/html'),
       );
@@ -397,7 +397,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -408,16 +408,16 @@ void main() async {
     test('change custom time', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_custom_time',
+        'patch_object_change_custom_time',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_custom_time',
+        'patch_object_change_custom_time',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -427,7 +427,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -438,16 +438,16 @@ void main() async {
     test('change event based hold', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_event_based_hold',
+        'patch_object_change_event_based_hold',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_event_based_hold',
+        'patch_object_change_event_based_hold',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -455,7 +455,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -466,16 +466,16 @@ void main() async {
     test('remove event based hold', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_event_based_hold',
+        'patch_object_remove_event_based_hold',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_event_based_hold',
+        'patch_object_remove_event_based_hold',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(eventBasedHold: true),
       );
@@ -484,7 +484,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -495,16 +495,16 @@ void main() async {
     test('change metadata', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_metadata',
+        'patch_object_change_metadata',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_metadata',
+        'patch_object_change_metadata',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -513,7 +513,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -524,16 +524,16 @@ void main() async {
     test('remove metadata', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_remove_metadata',
+        'patch_object_remove_metadata',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_remove_metadata',
+        'patch_object_remove_metadata',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
         metadata: ObjectMetadata(metadata: {'key': 'value'}),
       );
@@ -542,7 +542,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -555,18 +555,18 @@ void main() async {
       () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'patch_blob_change_retention',
+          'patch_object_change_retention',
         );
         addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_blob_change_retention',
+          'patch_object_change_retention',
           enableObjectRetention: true,
         );
 
         await storage.insertObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           utf8.encode('content'),
         );
 
@@ -582,7 +582,7 @@ void main() async {
 
         final actualMetadata = await storage.patchObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           patchMetadata,
         );
 
@@ -606,12 +606,12 @@ void main() async {
       () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'patch_blob_remove_retention',
+          'patch_object_remove_retention',
         );
         addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_blob_remove_retention',
+          'patch_object_remove_retention',
           enableObjectRetention: true,
         );
 
@@ -622,7 +622,7 @@ void main() async {
 
         await storage.insertObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           utf8.encode('content'),
           metadata: ObjectMetadata(
             retention: ObjectRetention(
@@ -637,7 +637,7 @@ void main() async {
         await Future<void>.delayed(const Duration(seconds: 1));
         final actualMetadata = await storage.patchObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           patchMetadata,
         );
 
@@ -652,16 +652,16 @@ void main() async {
     test('change temporary hold', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_change_temporary_hold',
+        'patch_object_change_temporary_hold',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_change_temporary_hold',
+        'patch_object_change_temporary_hold',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -669,7 +669,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -680,16 +680,16 @@ void main() async {
     test('no change', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_no_change',
+        'patch_object_no_change',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_no_change',
+        'patch_object_no_change',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -697,7 +697,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
       );
 
@@ -707,23 +707,23 @@ void main() async {
     test('with generation', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_with_generation',
+        'patch_object_with_generation',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_with_generation',
+        'patch_object_with_generation',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
       final obj1 = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('v1'),
       );
       final obj2 = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('v2'),
       );
 
@@ -732,7 +732,7 @@ void main() async {
 
       final patchedMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
         generation: obj1.generation,
       );
@@ -742,7 +742,7 @@ void main() async {
 
       final metadataV2 = await storage.objectMetadata(
         bucketName,
-        'blob.txt',
+        'object.txt',
         generation: obj2.generation,
       );
       expect(metadataV2.metadata, isNull);
@@ -751,12 +751,12 @@ void main() async {
     test('non existant', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_non_existant',
+        'patch_object_non_existant',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_non_existant',
+        'patch_object_non_existant',
       );
 
       final patchMetadata = ObjectMetadataPatchBuilder()
@@ -772,16 +772,16 @@ void main() async {
     test('with if metageneration match success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_with_if_metageneration_match_success',
+        'patch_object_with_if_metageneration_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_with_if_metageneration_match_success',
+        'patch_object_with_if_metageneration_match_success',
       );
       final obj = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -790,7 +790,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
         ifMetagenerationMatch: obj.metageneration,
       );
@@ -801,16 +801,16 @@ void main() async {
     test('with if metageneration match failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_with_if_metageneration_match_failure',
+        'patch_object_with_if_metageneration_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_with_if_metageneration_match_failure',
+        'patch_object_with_if_metageneration_match_failure',
       );
       await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -820,7 +820,7 @@ void main() async {
       expect(
         () => storage.patchObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           patchMetadata,
           ifMetagenerationMatch: BigInt.zero,
         ),
@@ -831,16 +831,16 @@ void main() async {
     test('with if generation match success', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_with_if_generation_match_success',
+        'patch_object_with_if_generation_match_success',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_with_if_generation_match_success',
+        'patch_object_with_if_generation_match_success',
       );
       final obj = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -849,7 +849,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         patchMetadata,
         ifGenerationMatch: obj.generation,
       );
@@ -860,16 +860,16 @@ void main() async {
     test('with if generation match failure', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'patch_blob_with_if_generation_match_failure',
+        'patch_object_with_if_generation_match_failure',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_blob_with_if_generation_match_failure',
+        'patch_object_with_if_generation_match_failure',
       );
       final obj = await storage.insertObject(
         bucketName,
-        'blob.txt',
+        'object.txt',
         utf8.encode('content'),
       );
 
@@ -879,7 +879,7 @@ void main() async {
       expect(
         () => storage.patchObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           patchMetadata,
           ifGenerationMatch: obj.generation! + BigInt.one,
         ),
@@ -892,22 +892,22 @@ void main() async {
       () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'patch_blob_with_predefined_acl',
+          'patch_object_with_predefined_acl',
         );
         addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_blob_with_predefined_acl',
+          'patch_object_with_predefined_acl',
         );
         await storage.insertObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           utf8.encode('content'),
         );
 
         final actualMetadata = await storage.patchObject(
           bucketName,
-          'blob.txt',
+          'object.txt',
           ObjectMetadataPatchBuilder(),
           predefinedAcl: 'projectPrivate',
           projection: 'full',
@@ -943,7 +943,7 @@ void main() async {
 
       final actualMetadata = await storage.patchObject(
         'bucket',
-        'blob.txt',
+        'object.txt',
         patchMetadata,
         ifMetagenerationMatch: BigInt.one,
       );
@@ -967,7 +967,7 @@ void main() async {
         ..contentType = 'text/plain';
 
       expect(
-        () => storage.patchObject('bucket', 'blob.txt', patchMetadata),
+        () => storage.patchObject('bucket', 'object.txt', patchMetadata),
         throwsA(isA<http.ClientException>()),
       );
     });

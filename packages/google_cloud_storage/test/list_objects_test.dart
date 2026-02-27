@@ -50,12 +50,12 @@ void main() async {
     test('no objects', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_blobs_no_objects',
+        'list_objects_no_objects',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_blobs_no_objects',
+        'list_objects_no_objects',
       );
       expect(storage.listObjects(bucketName), emitsDone);
     });
@@ -63,12 +63,12 @@ void main() async {
     test('single object', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_blobs_single_object',
+        'list_objects_single_object',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_blobs_single_object',
+        'list_objects_single_object',
       );
 
       await storage.insertObject(
@@ -85,11 +85,14 @@ void main() async {
     });
 
     test('versions', () async {
-      await testClient.startTest('google_cloud_storage', 'list_blobs_versions');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'list_objects_versions',
+      );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_blobs_versions',
+        'list_objects_versions',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
@@ -125,13 +128,13 @@ void main() async {
     test('soft deleted bucket, list soft deleted objects', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_blobs_soft_deleted_bucket_soft',
+        'list_objects_soft_deleted_bucket_soft',
       );
       addTearDown(testClient.endTest);
 
       final softDeletedBucket = await createBucketWithTearDown(
         storage,
-        'list_blobs_soft_deleted_bucket_soft',
+        'list_objects_soft_deleted_bucket_soft',
         metadata: BucketMetadata(
           softDeletePolicy: BucketSoftDeletePolicy(
             retentionDurationSeconds: const Duration(days: 7).inSeconds,
@@ -154,13 +157,13 @@ void main() async {
     test('soft deleted bucket, list non-soft deleted objects', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_blobs_soft_deleted_bucket_no_soft',
+        'list_objects_soft_deleted_bucket_no_soft',
       );
       addTearDown(testClient.endTest);
 
       final softDeletedBucket = await createBucketWithTearDown(
         storage,
-        'list_blobs_soft_deleted_bucket_no_soft',
+        'list_objects_soft_deleted_bucket_no_soft',
         metadata: BucketMetadata(
           softDeletePolicy: BucketSoftDeletePolicy(
             retentionDurationSeconds: const Duration(days: 7).inSeconds,
@@ -183,12 +186,12 @@ void main() async {
     test('pagination', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'list_blobs_pagination',
+        'list_objects_pagination',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_blobs_pagination',
+        'list_objects_pagination',
       );
 
       await storage.insertObject(bucketName, 'object1.txt', [1]);
