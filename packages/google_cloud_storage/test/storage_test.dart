@@ -54,11 +54,15 @@ void main() async {
       // to create a bucket and assume that it is associated with the correct
       // project.
       await createBucketWithTearDown(storage, 'storage_no_arguments');
-    });
+      },
+      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? '"gcloud auth login" is required for tests using application '
+                'default credentials'
+          : false,
+    );
 
     test('constructor with client', () async {
-      await testClient.startTest('google_cloud_storage', 'storage_with_client',
-      );
+      await testClient.startTest('google_cloud_storage', 'storage_with_client');
       addTearDown(testClient.endTest);
 
       storage = Storage(client: testClient);
@@ -84,7 +88,12 @@ void main() async {
       // to create a bucket and assume that it is associated with the correct
       // project.
       await createBucketWithTearDown(storage, 'storage_with_project_id');
-    });
+      },
+      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+          ? '"gcloud auth login" is required for tests using application '
+                'default credentials'
+          : false,
+    );
 
     test('constructor with client and project id', () async {
       await testClient.startTest(
