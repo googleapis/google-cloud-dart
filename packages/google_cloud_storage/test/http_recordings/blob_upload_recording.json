@@ -1,0 +1,140 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b?project=skilful-orb-203421&enableObjectRetention=false",
+      "method": "POST",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "{\"name\":\"blob_upload\"}"
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 27 Feb 2026 23:54:49 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "859",
+        "x-guploader-uploadid": "AGQBYWzslcmuRJ3NKwJXwik0F0p_BHWkE-xyLAxW6ZHV_HIC2U19-rv101Fb0-RhaPvNZTf1",
+        "etag": "CAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/blob_upload\",\n  \"id\": \"blob_upload\",\n  \"name\": \"blob_upload\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772236489283969230\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-27T23:54:49.890Z\",\n  \"updated\": \"2026-02-27T23:54:49.890Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-27T23:54:49.890Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-28T23:54:49.890Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-28T23:54:49.890Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/upload/storage/v1/b/blob_upload/o?uploadType=multipart&name=blob1&project=skilful-orb-203421&ifGenerationMatch=0",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "multipart/related; boundary=boundary",
+        "Content-Length": "203"
+      },
+      "body": "LS1ib3VuZGFyeQ0KQ29udGVudC1UeXBlOiBhcHBsaWNhdGlvbi9qc29uOyBjaGFyc2V0PVVURi04DQoNCnsiY3JjMzJjIjoiL216eDNBPT0iLCJtZDVIYXNoIjoiN1FkaWgxTXVoalplaEI2U3Y4VU5qQT09In0NCi0tYm91bmRhcnkNCkNvbnRlbnQtVHlwZTogYXBwbGljYXRpb24vb2N0ZXQtc3RyZWFtDQoNCkhlbGxvIFdvcmxkIQ0KLS1ib3VuZGFyeS0tDQo="
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 27 Feb 2026 23:54:50 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "766",
+        "x-guploader-uploadid": "AGQBYWwrOxWHwsVm0d5atytQIpS_hzLaHVI3NtEh1B2GZBUblCTwNCuLxFZvwz1BYJGaUITO0-VeOgg",
+        "etag": "CJa/27Pv+pIDEAE=",
+        "pragma": "no-cache",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#object\",\n  \"id\": \"blob_upload/blob1/1772236490334102\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/blob_upload/o/blob1\",\n  \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/blob_upload/o/blob1?generation=1772236490334102&alt=media\",\n  \"name\": \"blob1\",\n  \"bucket\": \"blob_upload\",\n  \"generation\": \"1772236490334102\",\n  \"metageneration\": \"1\",\n  \"contentType\": \"application/octet-stream\",\n  \"storageClass\": \"STANDARD\",\n  \"size\": \"12\",\n  \"md5Hash\": \"7Qdih1MuhjZehB6Sv8UNjA==\",\n  \"crc32c\": \"/mzx3A==\",\n  \"etag\": \"CJa/27Pv+pIDEAE=\",\n  \"timeCreated\": \"2026-02-27T23:54:50.375Z\",\n  \"updated\": \"2026-02-27T23:54:50.375Z\",\n  \"timeStorageClassUpdated\": \"2026-02-27T23:54:50.375Z\",\n  \"timeFinalized\": \"2026-02-27T23:54:50.375Z\"\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/blob_upload/o?versions=true",
+      "method": "GET",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 200,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "private, max-age=0, must-revalidate, no-transform",
+        "date": "Fri, 27 Feb 2026 23:54:50 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "896",
+        "x-guploader-uploadid": "AGQBYWz-AVPfgsaAJXZJ1BEOhjmujZLlLlgPqJPOrJQBlhlZM-bqRcIz_rr22eWjGAIkm057d4p6l1k",
+        "content-type": "application/json; charset=UTF-8",
+        "server": "UploadServer",
+        "expires": "Fri, 27 Feb 2026 23:54:50 GMT"
+      },
+      "body": "{\n  \"kind\": \"storage#objects\",\n  \"items\": [\n    {\n      \"kind\": \"storage#object\",\n      \"id\": \"blob_upload/blob1/1772236490334102\",\n      \"selfLink\": \"https://www.googleapis.com/storage/v1/b/blob_upload/o/blob1\",\n      \"mediaLink\": \"https://storage.googleapis.com/download/storage/v1/b/blob_upload/o/blob1?generation=1772236490334102&alt=media\",\n      \"name\": \"blob1\",\n      \"bucket\": \"blob_upload\",\n      \"generation\": \"1772236490334102\",\n      \"metageneration\": \"1\",\n      \"contentType\": \"application/octet-stream\",\n      \"storageClass\": \"STANDARD\",\n      \"size\": \"12\",\n      \"md5Hash\": \"7Qdih1MuhjZehB6Sv8UNjA==\",\n      \"crc32c\": \"/mzx3A==\",\n      \"etag\": \"CJa/27Pv+pIDEAE=\",\n      \"timeCreated\": \"2026-02-27T23:54:50.375Z\",\n      \"updated\": \"2026-02-27T23:54:50.375Z\",\n      \"timeStorageClassUpdated\": \"2026-02-27T23:54:50.375Z\",\n      \"timeFinalized\": \"2026-02-27T23:54:50.375Z\"\n    }\n  ]\n}\n",
+      "reasonPhrase": "OK"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/blob_upload/o/blob1?generation=1772236490334102",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 27 Feb 2026 23:54:51 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AGQBYWwcRfqLki5WV6UTxgbyl6MDtUyawyouZFZS9EzPoDc1E2nt6EdXcjyTJhBILLJH95_XrdJEMxI",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/blob_upload?",
+      "method": "DELETE",
+      "headers": {
+        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": ""
+    },
+    "response": {
+      "statusCode": 204,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 27 Feb 2026 23:54:52 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "0",
+        "x-guploader-uploadid": "AGQBYWxkGaY46WBYrYB7umqOt08VgCr7GWmsl2JNK8h6iKsO9LgclIrOYED1kFhjqz4ww5L9tzggnUo",
+        "content-type": "application/json",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "",
+      "reasonPhrase": "No Content"
+    }
+  }
+]
