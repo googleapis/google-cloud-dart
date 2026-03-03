@@ -58,7 +58,10 @@ jobs:
       - name: Install Firebase CLI
         run: npm install -g firebase-tools
       - name: Run Emulators
-        run: firebase emulators:start &
+        run: |
+          const { spawn } = require('child_process');
+          spawn('firebase', ['emulators:start'], { stdio: 'ignore', detached: true }).unref();
+        shell: node {0}
         working-directory: packages/google_cloud_storage/emulator_test
       - name: Run Tests
         env:
