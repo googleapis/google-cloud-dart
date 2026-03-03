@@ -40,6 +40,7 @@ name: Google Cloud Storage Emulator Tests
 jobs:
   tests:
     strategy:
+      fail-fast: false
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
     runs-on: ${{ matrix.os }}
