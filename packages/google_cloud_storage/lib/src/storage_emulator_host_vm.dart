@@ -39,9 +39,12 @@ String? _getPosixEnvironmentVariable(String name) => using((arena) {
 });
 
 String? _getWindowsEnvironmentVariable(String name) => using((arena) {
+  print('name: $name');
+  print('${Platform.environment}');
   final namePtr = name.toNativeUtf16(allocator: arena);
   // First call to determine size
   final size = _getEnvironmentVariableW(namePtr, nullptr, 0);
+  print('size: $size');
   if (size == 0) {
     return null; // Error or empty.
   }
