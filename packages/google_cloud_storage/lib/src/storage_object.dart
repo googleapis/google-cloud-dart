@@ -16,7 +16,10 @@ import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
 
-import '../google_cloud_storage.dart';
+import 'client.dart';
+import 'object_metadata.dart';
+import 'object_metadata_patch_builder.dart';
+import 'retry.dart';
 
 @internal
 StorageObject newObject(Storage storage, String bucketName, String name) =>
