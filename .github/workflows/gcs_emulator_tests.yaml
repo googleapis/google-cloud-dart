@@ -38,7 +38,7 @@ defaults:
 
 name: Google Cloud Storage Emulator Tests
 jobs:
-  gcs-emulator-tests:
+  tests:
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
@@ -60,4 +60,6 @@ jobs:
         run: firebase emulators:start &
         working-directory: packages/google_cloud_storage/emulator_test
       - name: Run Tests
-        run: STORAGE_EMULATOR_HOST=127.0.0.1:9199 dart test emulator_test
+        env:
+          STORAGE_EMULATOR_HOST: 127.0.0.1:9199
+        run: dart test emulator_test

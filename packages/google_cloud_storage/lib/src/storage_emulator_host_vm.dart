@@ -62,6 +62,12 @@ String? _getEnvironmentVariable(String name) {
   }
 }
 
+/// Returns the host and port of the Google Cloud Storage emulator, if set.
+///
+/// Reads the `STORAGE_EMULATOR_HOST` environment variable directly using native
+/// code. [Platform.environment] is not used because it is cached and immutable
+/// and the emulator configuration might not be available until the application
+/// is launched (e.g. when running with the Firebase emulator).
 String? getStorageEmulatorHost() {
   final host = _getEnvironmentVariable('STORAGE_EMULATOR_HOST');
   if (host?.isEmpty ?? true) return null;
