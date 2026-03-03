@@ -61,7 +61,10 @@ jobs:
         run: |
           const { spawn } = require('child_process');
           const cmd = process.platform === 'win32' ? 'npx.cmd' : 'npx';
-          spawn(cmd, ['firebase', 'emulators:start'], { stdio: 'ignore', detached: true }).unref();
+          spawn(
+            cmd,
+            ['firebase', 'emulators:start'],
+            { stdio: 'ignore', detached: true, shell: process.platform === 'win32' }).unref();
         shell: node {0}
         working-directory: packages/google_cloud_storage/emulator_test
       - name: Run Tests
