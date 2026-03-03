@@ -79,7 +79,10 @@ void main() async {
         'object_metadata_with_generation',
       );
       addTearDown(testClient.endTest);
-      final bucketName = testBucketName('object_metadata_with_generation');
+      final bucketName = bucketNameWithTearDown(
+        storage,
+        'object_metadata_with_generation',
+      );
       await storage.createBucket(
         BucketMetadata(
           name: bucketName,
