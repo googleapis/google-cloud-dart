@@ -30,28 +30,28 @@ final _getEnvironmentVariableW = DynamicLibrary.open('kernel32.dll')
     >('GetEnvironmentVariableW');
 
 String? _getPosixEnvironmentVariable(String name) => using((arena) {
-    final namePtr = name.toNativeUtf8(allocator: arena);
+  final namePtr = name.toNativeUtf8(allocator: arena);
   final valuePtr = _getenv(namePtr);
-    if (valuePtr == nullptr) {
-      return null;
-    }
-    return valuePtr.toDartString();
+  if (valuePtr == nullptr) {
+    return null;
+  }
+  return valuePtr.toDartString();
 });
 
 String? _getWindowsEnvironmentVariable(String name) => using((arena) {
-    final namePtr = name.toNativeUtf16(allocator: arena);
-    // First call to determine size
+  final namePtr = name.toNativeUtf16(allocator: arena);
+  // First call to determine size
   final size = _getEnvironmentVariableW(namePtr, nullptr, 0);
-    if (size == 0) {
-      return null; // Error or empty.
-    }
+  if (size == 0) {
+    return null; // Error or empty.
+  }
 
-    final buffer = arena<Uint16>(size).cast<Utf16>();
+  final buffer = arena<Uint16>(size).cast<Utf16>();
   final finalSize = _getEnvironmentVariableW(namePtr, buffer, size);
-    if (finalSize == 0 || finalSize > size) {
-      return null; // Error or race condition where variable grew?
-    }
-    return buffer.toDartString();
+  if (finalSize == 0 || finalSize > size) {
+    return null; // Error or race condition where variable grew?
+  }
+  return buffer.toDartString();
 });
 
 String? _getEnvironmentVariable(String name) {
