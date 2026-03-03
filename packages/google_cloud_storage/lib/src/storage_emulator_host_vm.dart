@@ -54,6 +54,7 @@ String? _getWindowsEnvironmentVariable(String name) => using((arena) {
   if (finalSize == 0 || finalSize > size) {
     return null; // Error or race condition where variable grew?
   }
+  print(buffer.toDartString());
   return buffer.toDartString();
 });
 
