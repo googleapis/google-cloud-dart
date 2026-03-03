@@ -39,7 +39,6 @@ defaults:
 name: Google Cloud Storage Emulator Tests
 jobs:
   gcs-emulator-tests:
-    name: Google Cloud Storage Emulator Tests
     strategy:
       matrix:
         os: [macos-latest, windows-latest, ubuntu-latest]
