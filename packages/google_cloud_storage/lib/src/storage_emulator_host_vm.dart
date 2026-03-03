@@ -17,46 +17,42 @@ import 'dart:io';
 
 import 'package:ffi/ffi.dart';
 
-String? _getPosixEnvironmentVariable(String name) {
-  final getenv = DynamicLibrary.process()
-      .lookupFunction<
-        Pointer<Utf8> Function(Pointer<Utf8>),
-        Pointer<Utf8> Function(Pointer<Utf8>)
-      >('getenv');
-  return using((arena) {
+final _getenv = DynamicLibrary.process()
+    .lookupFunction<
+      Pointer<Utf8> Function(Pointer<Utf8>),
+      Pointer<Utf8> Function(Pointer<Utf8>)
+    >('getenv');
+
+final _getEnvironmentVariableW = DynamicLibrary.open('kernel32.dll')
+    .lookupFunction<
+      Int32 Function(Pointer<Utf16>, Pointer<Utf16>, Int32),
+      int Function(Pointer<Utf16>, Pointer<Utf16>, int)
+    >('GetEnvironmentVariableW');
+
+String? _getPosixEnvironmentVariable(String name) => using((arena) {
     final namePtr = name.toNativeUtf8(allocator: arena);
-    final valuePtr = getenv(namePtr);
+  final valuePtr = _getenv(namePtr);
     if (valuePtr == nullptr) {
       return null;
     }
     return valuePtr.toDartString();
-  });
-}
+});
 
-String? _getWindowsEnvironmentVariable(String name) {
-  final kernel32 = DynamicLibrary.open('kernel32.dll');
-  final getEnvironmentVariableW = kernel32
-      .lookupFunction<
-        Int32 Function(Pointer<Utf16>, Pointer<Utf16>, Int32),
-        int Function(Pointer<Utf16>, Pointer<Utf16>, int)
-      >('GetEnvironmentVariableW');
-
-  return using((arena) {
+String? _getWindowsEnvironmentVariable(String name) => using((arena) {
     final namePtr = name.toNativeUtf16(allocator: arena);
     // First call to determine size
-    final size = getEnvironmentVariableW(namePtr, nullptr, 0);
+  final size = _getEnvironmentVariableW(namePtr, nullptr, 0);
     if (size == 0) {
       return null; // Error or empty.
     }
 
     final buffer = arena<Uint16>(size).cast<Utf16>();
-    final finalSize = getEnvironmentVariableW(namePtr, buffer, size);
+  final finalSize = _getEnvironmentVariableW(namePtr, buffer, size);
     if (finalSize == 0 || finalSize > size) {
       return null; // Error or race condition where variable grew?
     }
     return buffer.toDartString();
-  });
-}
+});
 
 String? _getEnvironmentVariable(String name) {
   if (Platform.isWindows) {
