@@ -17,7 +17,6 @@ library;
 
 export 'package:google_cloud_rpc/exceptions.dart';
 
-export 'src/storage_object.dart' hide newObject;
 export 'src/bucket.dart' hide newBucket;
 export 'src/bucket_metadata.dart';
 export 'src/bucket_metadata_patch_builder.dart' show BucketMetadataPatchBuilder;
@@ -27,3 +26,4 @@ export 'src/object_metadata.dart';
 export 'src/object_metadata_patch_builder.dart' show ObjectMetadataPatchBuilder;
 export 'src/project_team.dart';
 export 'src/retry.dart' hide delaySequence;
+export 'src/storage_object.dart' hide newObject;
