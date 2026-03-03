@@ -1,3 +1,17 @@
+// Copyright 2026 Google LLC
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     https://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 import 'dart:typed_data';
 
 import 'package:meta/meta.dart';
@@ -5,20 +19,20 @@ import 'package:meta/meta.dart';
 import '../google_cloud_storage.dart';
 
 @internal
-Blob newBlob(Storage storage, String bucketName, String name) =>
-    Blob._(storage, bucketName, name);
+StorageObject newObject(Storage storage, String bucketName, String name) =>
+    StorageObject._(storage, bucketName, name);
 
 /// A [Google Cloud Storage object][].
 ///
-/// [Blob] instances are created with [Bucket.blob].
+/// [StorageObject] instances are created with [Bucket.object].
 ///
 /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
-final class Blob {
+final class StorageObject {
   final Storage storage;
   final String bucketName;
   final String name;
 
-  Blob._(this.storage, this.bucketName, this.name);
+  StorageObject._(this.storage, this.bucketName, this.name);
 
   /// Deletes this [Google Cloud Storage object][].
   ///

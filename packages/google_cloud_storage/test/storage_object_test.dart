@@ -31,7 +31,7 @@ void main() async {
   late Storage storage;
   late TestHttpClient testClient;
 
-  group('blob', () {
+  group('storage object', () {
     setUp(() async {
       fixedBoundaryString = 'boundary';
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
@@ -49,9 +49,15 @@ void main() async {
     tearDown(() => storage.close());
 
     test('delete', () async {
-      await testClient.startTest('google_cloud_storage', 'blob_delete');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_delete',
+      );
       addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(storage, 'blob_delete');
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'storage_object_delete',
+      );
       await storage.insertObject(
         bucketName,
         'blob1',
@@ -59,18 +65,21 @@ void main() async {
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).blob('blob1');
+      final blob = storage.bucket(bucketName).object('blob1');
       await blob.delete();
 
       await expectLater(blob.metadata, throwsA(isA<NotFoundException>()));
     });
 
     test('download', () async {
-      await testClient.startTest('google_cloud_storage', 'blob_download');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_download',
+      );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'blob_download',
+        'storage_object_download',
       );
       await storage.insertObject(
         bucketName,
@@ -79,17 +88,20 @@ void main() async {
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).blob('blob1');
+      final blob = storage.bucket(bucketName).object('blob1');
       final bytes = await blob.download();
       expect(bytes, utf8.encode('Hello World!'));
     });
 
     test('metadata', () async {
-      await testClient.startTest('google_cloud_storage', 'blob_metadata');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_metadata',
+      );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'blob_metadata',
+        'storage_object_metadata',
       );
       await storage.insertObject(
         bucketName,
@@ -98,22 +110,28 @@ void main() async {
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).blob('blob1');
+      final blob = storage.bucket(bucketName).object('blob1');
       final metadata = await blob.metadata();
       expect(metadata.name, 'blob1');
     });
 
     test('patch', () async {
-      await testClient.startTest('google_cloud_storage', 'blob_patch');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_patch',
+      );
       addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(storage, 'blob_patch');
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'storage_object_patch',
+      );
       await storage.insertObject(
         bucketName,
         'blob1',
         utf8.encode('Hello World!'),
       );
 
-      final blob = storage.bucket(bucketName).blob('blob1');
+      final blob = storage.bucket(bucketName).object('blob1');
       final metadata = await blob.patch(
         ObjectMetadataPatchBuilder()..contentType = 'text/plain',
       );
@@ -121,11 +139,17 @@ void main() async {
     });
 
     test('upload', () async {
-      await testClient.startTest('google_cloud_storage', 'blob_upload');
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_upload',
+      );
       addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(storage, 'blob_upload');
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'storage_object_upload',
+      );
 
-      final blob = storage.bucket(bucketName).blob('blob1');
+      final blob = storage.bucket(bucketName).object('blob1');
       final metadata = await blob.upload(
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
