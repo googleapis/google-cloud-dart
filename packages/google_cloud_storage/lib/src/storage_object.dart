@@ -14,8 +14,11 @@
 
 import 'dart:typed_data';
 
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:meta/meta.dart';
 
+import 'bucket.dart';
+import 'bucket_metadata.dart';
 import 'client.dart';
 import 'object_metadata.dart';
 import 'object_metadata_patch_builder.dart';
