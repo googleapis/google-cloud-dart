@@ -25,7 +25,7 @@ void main() async {
   // Create a bucket.
   final bucket = await storage.createBucket(
     BucketMetadata(
-      name: 'put-your-bucket-name-here6',
+      name: 'put-your-bucket-name-here',
       defaultObjectAcl: [
         ObjectAccessControl(entity: 'allUsers', role: 'READER'),
       ],
