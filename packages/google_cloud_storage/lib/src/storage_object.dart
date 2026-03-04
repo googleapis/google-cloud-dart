@@ -188,9 +188,8 @@ final class StorageObject {
   /// [PreconditionFailedException] is thrown.
   ///
   /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
   ///
   /// If set, [userProject] is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
@@ -225,7 +224,7 @@ final class StorageObject {
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
   /// If set, `ifGenerationMatch` makes updating the object content conditional
-  /// on whether the objects's generation matches the provided value. If the
+  /// on whether the object's generation matches the provided value. If the
   /// generation does not match, a [PreconditionFailedException] is thrown.
   /// A value of `0` indicates that the object must not already exist.
   ///
@@ -235,9 +234,8 @@ final class StorageObject {
   /// [BadRequestException].
   ///
   /// `projection` controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
   ///
   /// If set, `userProject` is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
