@@ -22,31 +22,40 @@ A Dart client for Google Cloud Storage.
 All access to Google Cloud Storage is made through the `Storage` class.
 
 ```dart
+import 'dart:convert';
+
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart';
 
 void main() async {
-  // Obtain an authenticated client.
-  final client = await clientViaApplicationDefaultCredentials(
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-  );
-
-  final storage = Storage(client: client, projectId: 'my-project');
+  // By default, the `Storage` class will use the currently configured project
+  // and automatically attempt to authenticate using Application Default
+  // Credentials.
+  final storage = Storage();
 
   // Create a bucket.
   final bucket = await storage.createBucket(
-    BucketMetadata(name: 'my-new-bucket'),
+    BucketMetadata(
+      name: 'put-your-bucket-name-here6',
+      defaultObjectAcl: [
+        ObjectAccessControl(entity: 'allUsers', role: 'READER'),
+      ],
+      website: BucketWebsiteConfiguration(mainPageSuffix: 'index.html'),
+    ),
   );
-  print('Created bucket: ${bucket.name}');
-
+  await storage.insertObject(
+    bucket.name!,
+    'index.html',
+    utf8.encode('<h1>Hello World!</h1>'),
+    metadata: ObjectMetadata(contentType: 'text/html'),
+  );
+  print('Your website is available at ${bucket.selfLink}');
   storage.close();
 }
 ```
 
 > [!NOTE]
-> You will need to add
-> [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth)
-> to your dependencies to authenticate.
+> You must [set up authentication][] before using this package outside of 
+> Google Cloud.
 
 ## Retries
 
@@ -82,5 +91,5 @@ void main() async {
   storage.close();
 }
 ```
-
+[set up authentication]: https://docs.cloud.google.com/storage/docs/reference/libraries#authentication
 [idempotent Google Cloud Storage operations]: https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency

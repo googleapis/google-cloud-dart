@@ -533,8 +533,8 @@ final class Storage {
   ///   'my-bucket',
   ///   'hello.txt',
   ///   utf8.encode('Hello, World!'),
-  ///   contentType: 'text/plain',
-  ///   ifGenerationMatch: 0, // Only insert if the object doesn't exist.
+  ///   metadata: ObjectMetadata(contentType: 'text/plain'),
+  ///   ifGenerationMatch: BigInt.zero, // Only insert if the object doesn't exist.
   /// );
   /// ```
   ///
