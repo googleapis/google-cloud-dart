@@ -29,7 +29,7 @@ final _getEnvironmentVariableW = DynamicLibrary.open('kernel32.dll')
       int Function(Pointer<Utf16>, Pointer<Utf16>, int)
     >('GetEnvironmentVariableW');
 
-String? _getPosixEnvironmentVariable(String name) => using((arena) {
+String? _posixEnvironmentVariable(String name) => using((arena) {
   final namePtr = name.toNativeUtf8(allocator: arena);
   final valuePtr = _getenv(namePtr);
   if (valuePtr == nullptr) {
@@ -38,7 +38,7 @@ String? _getPosixEnvironmentVariable(String name) => using((arena) {
   return valuePtr.toDartString();
 });
 
-String? _getWindowsEnvironmentVariable(String name) => using((arena) {
+String? _windowsEnvironmentVariable(String name) => using((arena) {
   final namePtr = name.toNativeUtf16(allocator: arena);
   // First call to determine size
   final size = _getEnvironmentVariableW(namePtr, nullptr, 0);
@@ -54,11 +54,11 @@ String? _getWindowsEnvironmentVariable(String name) => using((arena) {
   return buffer.toDartString();
 });
 
-String? _getEnvironmentVariable(String name) {
+String? _environmentVariable(String name) {
   if (Platform.isWindows) {
-    return _getWindowsEnvironmentVariable(name);
+    return _windowsEnvironmentVariable(name);
   } else {
-    return _getPosixEnvironmentVariable(name);
+    return _posixEnvironmentVariable(name);
   }
 }
 
@@ -68,8 +68,8 @@ String? _getEnvironmentVariable(String name) {
 /// code. [Platform.environment] is not used because it is cached and immutable
 /// and the emulator configuration might not be available until the application
 /// is launched (e.g. when running with the Firebase emulator).
-String? getStorageEmulatorHost() {
-  final host = _getEnvironmentVariable('STORAGE_EMULATOR_HOST');
+String? get storageEmulatorHost {
+  final host = _environmentVariable('STORAGE_EMULATOR_HOST');
   if (host?.isEmpty ?? true) return null;
   return host;
 }
