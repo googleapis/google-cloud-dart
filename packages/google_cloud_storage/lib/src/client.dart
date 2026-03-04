@@ -504,7 +504,7 @@ final class Storage {
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
   /// If set, `ifGenerationMatch` makes updating the object content conditional
-  /// on whether the objects's generation matches the provided value. If the
+  /// on whether the object's generation matches the provided value. If the
   /// generation does not match, a [PreconditionFailedException] is thrown.
   /// A value of `0` indicates that the object must not already exist.
   ///
@@ -514,9 +514,8 @@ final class Storage {
   /// [BadRequestException].
   ///
   /// `projection` controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
   ///
   /// If set, `userProject` is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
@@ -547,7 +546,7 @@ final class Storage {
     // support ifMetagenerationNotMatch.
     //
     // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `buckets.patch` to throw
+    // status code and an empty body. This will cause `objects.insert` to throw
     // `TypeError` during JSON deserialization.
     String? predefinedAcl,
     String? projection,
@@ -652,9 +651,8 @@ final class Storage {
   /// [PreconditionFailedException] is thrown.
   ///
   /// [projection] controls the level of detail returned in the response. A
-  /// value of `"full"` returns all bucket properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner`, `acl`, and `defaultObjectAcl`
-  /// properties.
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
   ///
   /// If set, [userProject] is the project to be billed for this request. This
   /// argument must be set for [Requester Pays] buckets.
