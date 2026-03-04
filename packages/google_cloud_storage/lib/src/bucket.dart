@@ -44,7 +44,7 @@ final class Bucket {
 
   /// Create a new [Google Cloud Storage bucket][].
   ///
-  /// If [metadata] is provided, it's [BucketMetadata.name] is ignored and
+  /// If [metadata] is provided, its [BucketMetadata.name] is ignored and
   /// [name] is used instead.
   ///
   /// This operation is always idempotent. Throws [ConflictException] if the
