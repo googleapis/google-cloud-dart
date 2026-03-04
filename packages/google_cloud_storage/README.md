@@ -39,7 +39,6 @@ void main() async {
       defaultObjectAcl: [
         ObjectAccessControl(entity: 'allUsers', role: 'READER'),
       ],
-      website: BucketWebsiteConfiguration(mainPageSuffix: 'index.html'),
     ),
   );
   await storage.insertObject(
@@ -48,7 +47,10 @@ void main() async {
     utf8.encode('<h1>Hello World!</h1>'),
     metadata: ObjectMetadata(contentType: 'text/html'),
   );
-  print('Your website is available at ${bucket.selfLink}');
+  print(
+    'Your website is available at:\n'
+    'https://storage.googleapis.com/${bucket.name}/index.html',
+  );
   storage.close();
 }
 ```
