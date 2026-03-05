@@ -400,7 +400,6 @@ final class Storage {
       ['storage', 'v1', 'b', bucket],
       {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-        'project': await _projectId,
         'predefinedAcl': ?predefinedAcl,
         'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
         'projection': ?projection,
@@ -570,7 +569,6 @@ final class Storage {
         {
           'uploadType': 'multipart',
           'name': name,
-          'project': await _projectId,
           'ifGenerationMatch': ?ifGenerationMatch?.toString(),
           'predefinedAcl': ?predefinedAcl,
           'projection': ?projection,
