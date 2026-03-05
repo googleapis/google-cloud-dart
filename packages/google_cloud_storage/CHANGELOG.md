@@ -1,4 +1,4 @@
-## 0.6.0
+## 0.5.1
 
 * Add support for using a `Future<Client>` in the `Storage` factory.
 
