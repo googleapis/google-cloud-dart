@@ -79,8 +79,9 @@ final class BucketMetadataPatchBuilder {
   /// a label, set its value to `null`.
   ///
   /// For example:
+  ///
   /// ```dart
-  /// final bucket = await storage.createBucket(
+  /// await storage.createBucket(
   ///   BucketMetadata(
   ///     name: bucketName,
   ///     labels: {'animal': 'dog', 'color': 'red', 'shape': 'circle'},
@@ -88,10 +89,7 @@ final class BucketMetadataPatchBuilder {
   /// );
   /// final patch = BucketMetadataPatchBuilder()
   ///   ..labels = {'animal': 'cat', 'color': null};
-  /// final actualMetadata = await storage.patchBucket(
-  ///      bucketName,
-  ///      patchMetadata,
-  ///    );
+  /// await storage.patchBucket(bucketName, patch);
   /// // The labels will be {'animal': 'cat', 'shape': 'circle'}.
   /// ```
   set labels(Map<String, String?>? value) {
