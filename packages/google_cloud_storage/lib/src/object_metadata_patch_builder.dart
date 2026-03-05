@@ -106,7 +106,7 @@ final class ObjectMetadataPatchBuilder {
   }
 
   /// User-provided metadata, in key/value pairs.
-  set metadata(Map<String, String>? value) {
+  set metadata(Map<String, String?>? value) {
     _json['metadata'] = value;
   }
 

@@ -506,10 +506,13 @@ void main() async {
         bucketName,
         'object.txt',
         utf8.encode('content'),
+        metadata: ObjectMetadata(
+          metadata: {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'},
+        ),
       );
 
       final patchMetadata = ObjectMetadataPatchBuilder()
-        ..metadata = {'key': 'value'};
+        ..metadata = {'key1': 'newvalue1'};
 
       final actualMetadata = await storage.patchObject(
         bucketName,
@@ -517,7 +520,7 @@ void main() async {
         patchMetadata,
       );
 
-      expect(actualMetadata.metadata, {'key': 'value'});
+      expect(actualMetadata.metadata, {'key1': 'newvalue1', 'key3': 'value3'});
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
