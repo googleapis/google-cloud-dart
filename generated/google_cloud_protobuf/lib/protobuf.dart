@@ -42,6 +42,11 @@ part 'src/protobuf.p.dart';
 /// sometimes simply referred to as "APIs" in other contexts, such as the name of
 /// this message itself. See https://cloud.google.com/apis/design/glossary for
 /// detailed terminology.
+///
+/// New usages of this message as an alternative to ServiceDescriptorProto are
+/// strongly discouraged. This message does not reliability preserve all
+/// information necessary to model the schema and preserve semantics. Instead
+/// make use of FileDescriptorSet which preserves the necessary information.
 final class Api extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Api';
 
@@ -86,6 +91,9 @@ final class Api extends ProtoMessage {
   /// The source syntax of the service.
   final Syntax syntax;
 
+  /// The source edition string, only valid when syntax is SYNTAX_EDITIONS.
+  final String edition;
+
   Api({
     this.name = '',
     this.methods = const [],
@@ -94,6 +102,7 @@ final class Api extends ProtoMessage {
     this.sourceContext,
     this.mixins = const [],
     this.syntax = Syntax.$default,
+    this.edition = '',
   }) : super(fullyQualifiedName);
 
   factory Api.fromJson(Object? j) {
@@ -130,6 +139,10 @@ final class Api extends ProtoMessage {
         null => Syntax.$default,
         Object $1 => Syntax.fromJson($1),
       },
+      edition: switch (json['edition']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -143,6 +156,7 @@ final class Api extends ProtoMessage {
       'sourceContext': sourceContext.toJson(),
     if (mixins.isNotDefault) 'mixins': [for (final i in mixins) i.toJson()],
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+    if (edition.isNotDefault) 'edition': edition,
   };
 
   @override
@@ -151,12 +165,18 @@ final class Api extends ProtoMessage {
       'name=$name',
       'version=$version',
       'syntax=$syntax',
+      'edition=$edition',
     ].join(',');
     return 'Api(${$contents})';
   }
 }
 
 /// Method represents a method of an API interface.
+///
+/// New usages of this message as an alternative to MethodDescriptorProto are
+/// strongly discouraged. This message does not reliability preserve all
+/// information necessary to model the schema and preserve semantics. Instead
+/// make use of FileDescriptorSet which preserves the necessary information.
 final class Method extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Method';
 
@@ -179,7 +199,16 @@ final class Method extends ProtoMessage {
   final List<Option> options;
 
   /// The source syntax of this method.
+  ///
+  /// This field should be ignored, instead the syntax should be inherited from
+  /// Api. This is similar to Field and EnumValue.
   final Syntax syntax;
+
+  /// The source edition string, only valid when syntax is SYNTAX_EDITIONS.
+  ///
+  /// This field should be ignored, instead the edition should be inherited from
+  /// Api. This is similar to Field and EnumValue.
+  final String edition;
 
   Method({
     this.name = '',
@@ -189,6 +218,7 @@ final class Method extends ProtoMessage {
     this.responseStreaming = false,
     this.options = const [],
     this.syntax = Syntax.$default,
+    this.edition = '',
   }) : super(fullyQualifiedName);
 
   factory Method.fromJson(Object? j) {
@@ -223,6 +253,10 @@ final class Method extends ProtoMessage {
         null => Syntax.$default,
         Object $1 => Syntax.fromJson($1),
       },
+      edition: switch (json['edition']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -235,6 +269,7 @@ final class Method extends ProtoMessage {
     if (responseStreaming.isNotDefault) 'responseStreaming': responseStreaming,
     if (options.isNotDefault) 'options': [for (final i in options) i.toJson()],
     if (syntax.isNotDefault) 'syntax': syntax.toJson(),
+    if (edition.isNotDefault) 'edition': edition,
   };
 
   @override
@@ -246,6 +281,7 @@ final class Method extends ProtoMessage {
       'responseTypeUrl=$responseTypeUrl',
       'responseStreaming=$responseStreaming',
       'syntax=$syntax',
+      'edition=$edition',
     ].join(',');
     return 'Method(${$contents})';
   }
@@ -591,24 +627,22 @@ final class Empty extends ProtoMessage {
 /// An implementation may provide options to override this default behavior for
 /// repeated and message fields.
 ///
-/// In order to reset a field's value to the default, the field must
-/// be in the mask and set to the default value in the provided resource.
-/// Hence, in order to reset all fields of a resource, provide a default
-/// instance of the resource and set all fields in the mask, or do
-/// not provide a mask as described below.
+/// Note that libraries which implement FieldMask resolution have various
+/// different behaviors in the face of empty masks or the special "*" mask.
+/// When implementing a service you should confirm these cases have the
+/// appropriate behavior in the underlying FieldMask library that you desire,
+/// and you may need to special case those cases in your application code if
+/// the underlying field mask library behavior differs from your intended
+/// service semantics.
 ///
-/// If a field mask is not present on update, the operation applies to
-/// all fields (as if a field mask of all fields has been specified).
-/// Note that in the presence of schema evolution, this may mean that
-/// fields the client does not know and has therefore not filled into
-/// the request will be reset to their default. If this is unwanted
-/// behavior, a specific service may require a client to always specify
-/// a field mask, producing an error if not.
+/// Update methods implementing https://google.aip.dev/134
+/// - MUST support the special value * meaning "full replace"
+/// - MUST treat an omitted field mask as "replace fields which are present".
 ///
-/// As with get operations, the location of the resource which
-/// describes the updated values in the request message depends on the
-/// operation kind. In any case, the effect of the field mask is
-/// required to be honored by the API.
+/// Other methods implementing https://google.aip.dev/157
+/// - SHOULD support the special value "*" to mean "get all".
+/// - MUST treat an omitted field mask to mean "get all", unless otherwise
+/// documented.
 ///
 /// ## Considerations for HTTP REST
 ///
@@ -843,8 +877,8 @@ final class ListValue extends ProtoMessage {
 /// {hour}, {min}, and {sec} are zero-padded to two digits each. The fractional
 /// seconds, which can go up to 9 digits (i.e. up to 1 nanosecond resolution),
 /// are optional. The "Z" suffix indicates the timezone ("UTC"); the timezone
-/// is required. A proto3 JSON serializer should always use UTC (as indicated by
-/// "Z") when printing the Timestamp type and a proto3 JSON parser should be
+/// is required. A ProtoJSON serializer should always use UTC (as indicated by
+/// "Z") when printing the Timestamp type and a ProtoJSON parser should be
 /// able to accept both UTC and other timezones (as indicated by an offset).
 ///
 /// For example, "2017-01-15T01:30:15.01Z" encodes 15.01 seconds past
@@ -863,14 +897,15 @@ final class ListValue extends ProtoMessage {
 final class Timestamp extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Timestamp';
 
-  /// Represents seconds of UTC time since Unix epoch
-  /// 1970-01-01T00:00:00Z. Must be from 0001-01-01T00:00:00Z to
-  /// 9999-12-31T23:59:59Z inclusive.
+  /// Represents seconds of UTC time since Unix epoch 1970-01-01T00:00:00Z. Must
+  /// be between -62135596800 and 253402300799 inclusive (which corresponds to
+  /// 0001-01-01T00:00:00Z to 9999-12-31T23:59:59Z).
   final int seconds;
 
-  /// Non-negative fractions of a second at nanosecond resolution. Negative
-  /// second values with fractions must still have non-negative nanos values
-  /// that count forward in time. Must be from 0 to 999,999,999
+  /// Non-negative fractions of a second at nanosecond resolution. This field is
+  /// the nanosecond portion of the duration, not an alternative to seconds.
+  /// Negative second values with fractions must still have non-negative nanos
+  /// values that count forward in time. Must be between 0 and 999,999,999
   /// inclusive.
   final int nanos;
 
@@ -891,6 +926,11 @@ final class Timestamp extends ProtoMessage {
 }
 
 /// A protocol buffer message type.
+///
+/// New usages of this message as an alternative to DescriptorProto are strongly
+/// discouraged. This message does not reliability preserve all information
+/// necessary to model the schema and preserve semantics. Instead make use of
+/// FileDescriptorSet which preserves the necessary information.
 final class Type extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Type';
 
@@ -986,6 +1026,11 @@ final class Type extends ProtoMessage {
 }
 
 /// A single field of a message type.
+///
+/// New usages of this message as an alternative to FieldDescriptorProto are
+/// strongly discouraged. This message does not reliability preserve all
+/// information necessary to model the schema and preserve semantics. Instead
+/// make use of FileDescriptorSet which preserves the necessary information.
 final class Field extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Field';
 
@@ -1213,6 +1258,11 @@ final class Field_Cardinality extends ProtoEnum {
 }
 
 /// Enum type definition.
+///
+/// New usages of this message as an alternative to EnumDescriptorProto are
+/// strongly discouraged. This message does not reliability preserve all
+/// information necessary to model the schema and preserve semantics. Instead
+/// make use of FileDescriptorSet which preserves the necessary information.
 final class Enum extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Enum';
 
@@ -1299,6 +1349,11 @@ final class Enum extends ProtoMessage {
 }
 
 /// Enum value definition.
+///
+/// New usages of this message as an alternative to EnumValueDescriptorProto are
+/// strongly discouraged. This message does not reliability preserve all
+/// information necessary to model the schema and preserve semantics. Instead
+/// make use of FileDescriptorSet which preserves the necessary information.
 final class EnumValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.EnumValue';
 
@@ -1349,6 +1404,10 @@ final class EnumValue extends ProtoMessage {
 
 /// A protocol buffer option, which can be attached to a message, field,
 /// enumeration, etc.
+///
+/// New usages of this message as an alternative to FileOptions, MessageOptions,
+/// FieldOptions, EnumOptions, EnumValueOptions, ServiceOptions, or MethodOptions
+/// are strongly discouraged.
 final class Option extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Option';
 
@@ -1396,6 +1455,9 @@ final class Option extends ProtoMessage {
 /// Wrapper message for `double`.
 ///
 /// The JSON representation for `DoubleValue` is JSON number.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class DoubleValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.DoubleValue';
 
@@ -1419,6 +1481,9 @@ final class DoubleValue extends ProtoMessage {
 /// Wrapper message for `float`.
 ///
 /// The JSON representation for `FloatValue` is JSON number.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class FloatValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.FloatValue';
 
@@ -1442,6 +1507,9 @@ final class FloatValue extends ProtoMessage {
 /// Wrapper message for `int64`.
 ///
 /// The JSON representation for `Int64Value` is JSON string.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class Int64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Int64Value';
 
@@ -1465,6 +1533,9 @@ final class Int64Value extends ProtoMessage {
 /// Wrapper message for `uint64`.
 ///
 /// The JSON representation for `UInt64Value` is JSON string.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class Uint64Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt64Value';
 
@@ -1490,6 +1561,9 @@ final class Uint64Value extends ProtoMessage {
 /// Wrapper message for `int32`.
 ///
 /// The JSON representation for `Int32Value` is JSON number.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class Int32Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Int32Value';
 
@@ -1513,6 +1587,9 @@ final class Int32Value extends ProtoMessage {
 /// Wrapper message for `uint32`.
 ///
 /// The JSON representation for `UInt32Value` is JSON number.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class Uint32Value extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.UInt32Value';
 
@@ -1536,6 +1613,9 @@ final class Uint32Value extends ProtoMessage {
 /// Wrapper message for `bool`.
 ///
 /// The JSON representation for `BoolValue` is JSON `true` and `false`.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class BoolValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BoolValue';
 
@@ -1559,6 +1639,9 @@ final class BoolValue extends ProtoMessage {
 /// Wrapper message for `string`.
 ///
 /// The JSON representation for `StringValue` is JSON string.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class StringValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.StringValue';
 
@@ -1582,6 +1665,9 @@ final class StringValue extends ProtoMessage {
 /// Wrapper message for `bytes`.
 ///
 /// The JSON representation for `BytesValue` is JSON string.
+///
+/// Not recommended for use in new APIs, but still useful for legacy APIs and
+/// has no plan to be removed.
 final class BytesValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.BytesValue';
 

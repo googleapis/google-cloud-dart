@@ -191,6 +191,16 @@ final class Compliance {
         'info.fChild.pChild.fBool': '${$1}',
       if (request.info?.pString case final $1?) 'info.pString': $1,
       if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+      if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
+      if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
+      if (request.info?.pUint32 case final $1?) 'info.pUint32': '${$1}',
+      if (request.info?.pFixed32 case final $1?) 'info.pFixed32': '${$1}',
+      if (request.info?.pInt64 case final $1?) 'info.pInt64': '${$1}',
+      if (request.info?.pSint64 case final $1?) 'info.pSint64': '${$1}',
+      if (request.info?.pSfixed64 case final $1?) 'info.pSfixed64': '${$1}',
+      if (request.info?.pUint64 case final $1?) 'info.pUint64': '${$1}',
+      if (request.info?.pFixed64 case final $1?) 'info.pFixed64': '${$1}',
+      if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
       if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
       if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
       if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
@@ -334,6 +344,16 @@ final class Compliance {
           'info.fChild.pChild.fBool': '${$1}',
         if (request.info?.pString case final $1?) 'info.pString': $1,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
+        if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
+        if (request.info?.pUint32 case final $1?) 'info.pUint32': '${$1}',
+        if (request.info?.pFixed32 case final $1?) 'info.pFixed32': '${$1}',
+        if (request.info?.pInt64 case final $1?) 'info.pInt64': '${$1}',
+        if (request.info?.pSint64 case final $1?) 'info.pSint64': '${$1}',
+        if (request.info?.pSfixed64 case final $1?) 'info.pSfixed64': '${$1}',
+        if (request.info?.pUint64 case final $1?) 'info.pUint64': '${$1}',
+        if (request.info?.pFixed64 case final $1?) 'info.pFixed64': '${$1}',
+        if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
         if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
@@ -480,6 +500,16 @@ final class Compliance {
           'info.fChild.pChild.fBool': '${$1}',
         if (request.info?.pString case final $1?) 'info.pString': $1,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
+        if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
+        if (request.info?.pUint32 case final $1?) 'info.pUint32': '${$1}',
+        if (request.info?.pFixed32 case final $1?) 'info.pFixed32': '${$1}',
+        if (request.info?.pInt64 case final $1?) 'info.pInt64': '${$1}',
+        if (request.info?.pSint64 case final $1?) 'info.pSint64': '${$1}',
+        if (request.info?.pSfixed64 case final $1?) 'info.pSfixed64': '${$1}',
+        if (request.info?.pUint64 case final $1?) 'info.pUint64': '${$1}',
+        if (request.info?.pFixed64 case final $1?) 'info.pFixed64': '${$1}',
+        if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
         if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
@@ -628,6 +658,16 @@ final class Compliance {
           'info.fChild.pChild.fBool': '${$1}',
         if (request.info?.pString case final $1?) 'info.pString': $1,
         if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
+        if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
+        if (request.info?.pUint32 case final $1?) 'info.pUint32': '${$1}',
+        if (request.info?.pFixed32 case final $1?) 'info.pFixed32': '${$1}',
+        if (request.info?.pInt64 case final $1?) 'info.pInt64': '${$1}',
+        if (request.info?.pSint64 case final $1?) 'info.pSint64': '${$1}',
+        if (request.info?.pSfixed64 case final $1?) 'info.pSfixed64': '${$1}',
+        if (request.info?.pUint64 case final $1?) 'info.pUint64': '${$1}',
+        if (request.info?.pFixed64 case final $1?) 'info.pFixed64': '${$1}',
+        if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
         if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
         if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
         if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
@@ -1748,6 +1788,8 @@ final class Messaging {
   void close() => _client.close();
 }
 
+/// A service that enables testing of unary and server streaming calls
+/// by specifying a specific, predictable sequence of responses from the service
 final class SequenceService {
   static const _host = 'localhost:7469';
 
@@ -1776,7 +1818,7 @@ final class SequenceService {
   factory SequenceService.fromApiKey([String? apiKey]) =>
       SequenceService(client: httpClientFromApiKey(apiKey, _apiKeys));
 
-  /// Creates a sequence.
+  /// Create a sequence of responses to be returned as unary calls
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -1787,7 +1829,7 @@ final class SequenceService {
     return Sequence.fromJson(response);
   }
 
-  /// Creates a sequence.
+  /// Creates a sequence of responses to be returned in a server streaming call
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -1800,7 +1842,8 @@ final class SequenceService {
     return StreamingSequence.fromJson(response);
   }
 
-  /// Retrieves a sequence.
+  /// Retrieves a sequence report which can be used to retrieve information about a
+  /// sequence of unary calls.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -1813,7 +1856,8 @@ final class SequenceService {
     return SequenceReport.fromJson(response);
   }
 
-  /// Retrieves a sequence.
+  /// Retrieves a sequence report which can be used to retrieve information
+  /// about a sequences of responses in a server streaming call.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -1826,7 +1870,7 @@ final class SequenceService {
     return StreamingSequenceReport.fromJson(response);
   }
 
-  /// Attempts a sequence.
+  /// Attempts a sequence of unary responses.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
   /// the API service. Throws a [ServiceException] if the API method failed for
@@ -1836,7 +1880,8 @@ final class SequenceService {
     await _client.post(url, body: request);
   }
 
-  /// Attempts a streaming sequence.
+  /// Attempts a server streaming call with a sequence of responses
+  /// Can be used to test retries and stream resumption logic
   /// May not function as expected in HTTP mode due to when http statuses are sent
   /// See https://github.com/googleapis/gapic-showcase/issues/1377 for more details
   ///
@@ -2557,6 +2602,26 @@ final class ComplianceData extends ProtoMessage {
 
   final int? pInt32;
 
+  final int? pSint32;
+
+  final int? pSfixed32;
+
+  final int? pUint32;
+
+  final int? pFixed32;
+
+  final int? pInt64;
+
+  final int? pSint64;
+
+  final int? pSfixed64;
+
+  final BigInt? pUint64;
+
+  final BigInt? pFixed64;
+
+  final double? pFloat;
+
   final double? pDouble;
 
   final bool? pBool;
@@ -2585,6 +2650,16 @@ final class ComplianceData extends ProtoMessage {
     this.fChild,
     this.pString,
     this.pInt32,
+    this.pSint32,
+    this.pSfixed32,
+    this.pUint32,
+    this.pFixed32,
+    this.pInt64,
+    this.pSint64,
+    this.pSfixed64,
+    this.pUint64,
+    this.pFixed64,
+    this.pFloat,
     this.pDouble,
     this.pBool,
     this.pKingdom,
@@ -2673,6 +2748,46 @@ final class ComplianceData extends ProtoMessage {
         null => null,
         Object $1 => decodeInt($1),
       },
+      pSint32: switch (json['pSint32']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      pSfixed32: switch (json['pSfixed32']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      pUint32: switch (json['pUint32']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      pFixed32: switch (json['pFixed32']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      pInt64: switch (json['pInt64']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+      pSint64: switch (json['pSint64']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+      pSfixed64: switch (json['pSfixed64']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+      pUint64: switch (json['pUint64']) {
+        null => null,
+        Object $1 => decodeUint64($1),
+      },
+      pFixed64: switch (json['pFixed64']) {
+        null => null,
+        Object $1 => decodeUint64($1),
+      },
+      pFloat: switch (json['pFloat']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
       pDouble: switch (json['pDouble']) {
         null => null,
         Object $1 => decodeDouble($1),
@@ -2713,6 +2828,16 @@ final class ComplianceData extends ProtoMessage {
     if (fChild case final fChild?) 'fChild': fChild.toJson(),
     if (pString case final pString?) 'pString': pString,
     if (pInt32 case final pInt32?) 'pInt32': pInt32,
+    if (pSint32 case final pSint32?) 'pSint32': pSint32,
+    if (pSfixed32 case final pSfixed32?) 'pSfixed32': pSfixed32,
+    if (pUint32 case final pUint32?) 'pUint32': pUint32,
+    if (pFixed32 case final pFixed32?) 'pFixed32': pFixed32,
+    if (pInt64 case final pInt64?) 'pInt64': pInt64.toString(),
+    if (pSint64 case final pSint64?) 'pSint64': pSint64.toString(),
+    if (pSfixed64 case final pSfixed64?) 'pSfixed64': pSfixed64.toString(),
+    if (pUint64 case final pUint64?) 'pUint64': pUint64.toString(),
+    if (pFixed64 case final pFixed64?) 'pFixed64': pFixed64.toString(),
+    if (pFloat case final pFloat?) 'pFloat': encodeDouble(pFloat),
     if (pDouble case final pDouble?) 'pDouble': encodeDouble(pDouble),
     if (pBool case final pBool?) 'pBool': pBool,
     if (pKingdom case final pKingdom?) 'pKingdom': pKingdom.toJson(),
@@ -2740,6 +2865,16 @@ final class ComplianceData extends ProtoMessage {
       'fKingdom=$fKingdom',
       if (pString != null) 'pString=$pString',
       if (pInt32 != null) 'pInt32=$pInt32',
+      if (pSint32 != null) 'pSint32=$pSint32',
+      if (pSfixed32 != null) 'pSfixed32=$pSfixed32',
+      if (pUint32 != null) 'pUint32=$pUint32',
+      if (pFixed32 != null) 'pFixed32=$pFixed32',
+      if (pInt64 != null) 'pInt64=$pInt64',
+      if (pSint64 != null) 'pSint64=$pSint64',
+      if (pSfixed64 != null) 'pSfixed64=$pSfixed64',
+      if (pUint64 != null) 'pUint64=$pUint64',
+      if (pFixed64 != null) 'pFixed64=$pFixed64',
+      if (pFloat != null) 'pFloat=$pFloat',
       if (pDouble != null) 'pDouble=$pDouble',
       if (pBool != null) 'pBool=$pBool',
       if (pKingdom != null) 'pKingdom=$pKingdom',
@@ -5395,6 +5530,7 @@ final class RestError_Status extends ProtoMessage {
   }
 }
 
+/// A sequence of responses to be returned in order for each unary call attempt
 final class Sequence extends ProtoMessage {
   static const String fullyQualifiedName = 'google.showcase.v1beta1.Sequence';
 
@@ -5473,13 +5609,17 @@ final class Sequence_Response extends ProtoMessage {
   String toString() => 'Response()';
 }
 
+/// A sequence of responses to be returned in order at the delay specified
+/// as part of the server streaming call
 final class StreamingSequence extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.StreamingSequence';
 
+  /// The name of the streaming sequence.
   final String name;
 
-  /// The Content that the stream will send
+  /// The content that the stream will send
+  /// this was specified when the sequence was created
   final String content;
 
   /// Sequence of responses to return in order for each attempt. If empty, the
@@ -5539,7 +5679,7 @@ final class StreamingSequence_Response extends ProtoMessage {
   /// The amount of time to delay sending the response.
   final Duration? delay;
 
-  /// The index that the status should be sent
+  /// The index that the status should be sent at
   final int responseIndex;
 
   StreamingSequence_Response({this.status, this.delay, this.responseIndex = 0})
@@ -5577,6 +5717,7 @@ final class StreamingSequence_Response extends ProtoMessage {
   }
 }
 
+/// A report of the results of a streaming sequence.
 final class StreamingSequenceReport extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.StreamingSequenceReport';
@@ -5695,6 +5836,7 @@ final class StreamingSequenceReport_Attempt extends ProtoMessage {
   }
 }
 
+/// A report of the results of a sequence of unary responses
 final class SequenceReport extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.SequenceReport';
@@ -5813,6 +5955,7 @@ final class SequenceReport_Attempt extends ProtoMessage {
   }
 }
 
+/// Request message for creating a sequence of unary calls
 final class CreateSequenceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.CreateSequenceRequest';
@@ -5840,6 +5983,7 @@ final class CreateSequenceRequest extends ProtoMessage {
   String toString() => 'CreateSequenceRequest()';
 }
 
+/// Request message for the sequences of responses to be sent in a server streaming call
 final class CreateStreamingSequenceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.CreateStreamingSequenceRequest';
@@ -5869,6 +6013,7 @@ final class CreateStreamingSequenceRequest extends ProtoMessage {
   String toString() => 'CreateStreamingSequenceRequest()';
 }
 
+/// Request message for the unary AttemptSequence method
 final class AttemptSequenceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.AttemptSequenceRequest';
@@ -5897,6 +6042,7 @@ final class AttemptSequenceRequest extends ProtoMessage {
   }
 }
 
+/// Request message for the AttemptStreamingSequence method.
 final class AttemptStreamingSequenceRequest extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.AttemptStreamingSequenceRequest';
@@ -5938,7 +6084,7 @@ final class AttemptStreamingSequenceRequest extends ProtoMessage {
   }
 }
 
-/// The response message for the Echo methods.
+/// The response message for the AttemptStreamingSequence method.
 final class AttemptStreamingSequenceResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.showcase.v1beta1.AttemptStreamingSequenceResponse';

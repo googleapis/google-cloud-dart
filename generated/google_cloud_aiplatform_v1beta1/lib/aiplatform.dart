@@ -14252,6 +14252,49 @@ final class VertexRagService {
     return CorroborateContentResponse.fromJson(response);
   }
 
+  /// Agentic Retrieval Ask API for RAG.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<AskContextsResponse> askContexts(AskContextsRequest request) async {
+    final url = Uri.https(_host, '/v1beta1/${request.parent}:askContexts');
+    final response = await _client.post(url, body: request);
+    return AskContextsResponse.fromJson(response);
+  }
+
+  /// Asynchronous API to retrieves relevant contexts for a query.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<
+    Operation<
+      AsyncRetrieveContextsResponse,
+      AsyncRetrieveContextsOperationMetadata
+    >
+  >
+  asyncRetrieveContexts(AsyncRetrieveContextsRequest request) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.parent}:asyncRetrieveContexts',
+    );
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        AsyncRetrieveContextsResponse.fromJson,
+        AsyncRetrieveContextsOperationMetadata.fromJson,
+      ),
+    );
+  }
+
   /// Lists information about the supported locations for this service.
   ///
   /// Throws a [http.ClientException] if there were problems communicating with
@@ -15782,6 +15825,10 @@ final class BatchPredictionJob_InputConfig extends ProtoMessage {
   /// be ignored.
   final BigQuerySource? bigquerySource;
 
+  /// A Vertex Managed Dataset. Currently, only datasets of type Multimodal
+  /// are supported.
+  final VertexMultimodalDatasetSource? vertexMultimodalDatasetSource;
+
   /// Required. The format in which instances are given, must be one of the
   /// [Model's][google.cloud.aiplatform.v1beta1.BatchPredictionJob.model]
   /// `supported_input_storage_formats`.
@@ -15790,6 +15837,7 @@ final class BatchPredictionJob_InputConfig extends ProtoMessage {
   BatchPredictionJob_InputConfig({
     this.gcsSource,
     this.bigquerySource,
+    this.vertexMultimodalDatasetSource,
     required this.instancesFormat,
   }) : super(fullyQualifiedName);
 
@@ -15804,6 +15852,11 @@ final class BatchPredictionJob_InputConfig extends ProtoMessage {
         null => null,
         Object $1 => BigQuerySource.fromJson($1),
       },
+      vertexMultimodalDatasetSource:
+          switch (json['vertexMultimodalDatasetSource']) {
+            null => null,
+            Object $1 => VertexMultimodalDatasetSource.fromJson($1),
+          },
       instancesFormat: switch (json['instancesFormat']) {
         null => '',
         Object $1 => decodeString($1),
@@ -15816,6 +15869,8 @@ final class BatchPredictionJob_InputConfig extends ProtoMessage {
     if (gcsSource case final gcsSource?) 'gcsSource': gcsSource.toJson(),
     if (bigquerySource case final bigquerySource?)
       'bigquerySource': bigquerySource.toJson(),
+    if (vertexMultimodalDatasetSource case final vertexMultimodalDatasetSource?)
+      'vertexMultimodalDatasetSource': vertexMultimodalDatasetSource.toJson(),
     'instancesFormat': instancesFormat,
   };
 
@@ -16031,6 +16086,10 @@ final class BatchPredictionJob_OutputConfig extends ProtoMessage {
   /// represented as a STRUCT, and containing only `code` and `message`.
   final BigQueryDestination? bigqueryDestination;
 
+  /// The details for a Vertex Multimodal Dataset that will be created for
+  /// the output.
+  final VertexMultimodalDatasetDestination? vertexMultimodalDatasetDestination;
+
   /// Required. The format in which Vertex AI gives the predictions, must be
   /// one of the
   /// [Model's][google.cloud.aiplatform.v1beta1.BatchPredictionJob.model]
@@ -16040,6 +16099,7 @@ final class BatchPredictionJob_OutputConfig extends ProtoMessage {
   BatchPredictionJob_OutputConfig({
     this.gcsDestination,
     this.bigqueryDestination,
+    this.vertexMultimodalDatasetDestination,
     required this.predictionsFormat,
   }) : super(fullyQualifiedName);
 
@@ -16054,6 +16114,11 @@ final class BatchPredictionJob_OutputConfig extends ProtoMessage {
         null => null,
         Object $1 => BigQueryDestination.fromJson($1),
       },
+      vertexMultimodalDatasetDestination:
+          switch (json['vertexMultimodalDatasetDestination']) {
+            null => null,
+            Object $1 => VertexMultimodalDatasetDestination.fromJson($1),
+          },
       predictionsFormat: switch (json['predictionsFormat']) {
         null => '',
         Object $1 => decodeString($1),
@@ -16067,6 +16132,10 @@ final class BatchPredictionJob_OutputConfig extends ProtoMessage {
       'gcsDestination': gcsDestination.toJson(),
     if (bigqueryDestination case final bigqueryDestination?)
       'bigqueryDestination': bigqueryDestination.toJson(),
+    if (vertexMultimodalDatasetDestination
+        case final vertexMultimodalDatasetDestination?)
+      'vertexMultimodalDatasetDestination': vertexMultimodalDatasetDestination
+          .toJson(),
     'predictionsFormat': predictionsFormat,
   };
 
@@ -16093,6 +16162,11 @@ final class BatchPredictionJob_OutputInfo extends ProtoMessage {
   /// format, into which the prediction output is written.
   final String? bigqueryOutputDataset;
 
+  /// Output only. The resource name of the Vertex Managed Dataset created,
+  /// into which the prediction output is written. Format:
+  /// `projects/{project}/locations/{location}/datasets/{dataset}`
+  final String? vertexMultimodalDatasetName;
+
   /// Output only. The name of the BigQuery table created, in
   /// `predictions_<timestamp>`
   /// format, into which the prediction output is written.
@@ -16102,6 +16176,7 @@ final class BatchPredictionJob_OutputInfo extends ProtoMessage {
   BatchPredictionJob_OutputInfo({
     this.gcsOutputDirectory,
     this.bigqueryOutputDataset,
+    this.vertexMultimodalDatasetName,
     this.bigqueryOutputTable = '',
   }) : super(fullyQualifiedName);
 
@@ -16116,6 +16191,11 @@ final class BatchPredictionJob_OutputInfo extends ProtoMessage {
         null => null,
         Object $1 => decodeString($1),
       },
+      vertexMultimodalDatasetName:
+          switch (json['vertexMultimodalDatasetName']) {
+            null => null,
+            Object $1 => decodeString($1),
+          },
       bigqueryOutputTable: switch (json['bigqueryOutputTable']) {
         null => '',
         Object $1 => decodeString($1),
@@ -16129,6 +16209,8 @@ final class BatchPredictionJob_OutputInfo extends ProtoMessage {
       'gcsOutputDirectory': gcsOutputDirectory,
     if (bigqueryOutputDataset case final bigqueryOutputDataset?)
       'bigqueryOutputDataset': bigqueryOutputDataset,
+    if (vertexMultimodalDatasetName case final vertexMultimodalDatasetName?)
+      'vertexMultimodalDatasetName': vertexMultimodalDatasetName,
     if (bigqueryOutputTable.isNotDefault)
       'bigqueryOutputTable': bigqueryOutputTable,
   };
@@ -16139,6 +16221,8 @@ final class BatchPredictionJob_OutputInfo extends ProtoMessage {
       if (gcsOutputDirectory != null) 'gcsOutputDirectory=$gcsOutputDirectory',
       if (bigqueryOutputDataset != null)
         'bigqueryOutputDataset=$bigqueryOutputDataset',
+      if (vertexMultimodalDatasetName != null)
+        'vertexMultimodalDatasetName=$vertexMultimodalDatasetName',
       'bigqueryOutputTable=$bigqueryOutputTable',
     ].join(',');
     return 'OutputInfo(${$contents})';
@@ -20960,6 +21044,8 @@ final class Dataset extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.Dataset';
 
   /// Output only. Identifier. The resource name of the Dataset.
+  /// Format:
+  /// `projects/{project}/locations/{location}/datasets/{dataset}`
   final String name;
 
   /// Required. The user-defined name of the Dataset.
@@ -23945,6 +24031,10 @@ final class GeminiExample extends ProtoMessage {
   /// Enforced on GenerateContentResponse.candidates.
   final List<SafetySetting> safetySettings;
 
+  /// Optional. Settings for prompt and response sanitization using the Model
+  /// Armor service. If supplied, safety_settings must not be supplied.
+  final ModelArmorConfig? modelArmorConfig;
+
   /// Optional. Generation config.
   final GenerationConfig? generationConfig;
 
@@ -23957,6 +24047,7 @@ final class GeminiExample extends ProtoMessage {
     this.toolConfig,
     this.labels = const {},
     this.safetySettings = const [],
+    this.modelArmorConfig,
     this.generationConfig,
   }) : super(fullyQualifiedName);
 
@@ -24002,6 +24093,10 @@ final class GeminiExample extends ProtoMessage {
         List<Object?> $1 => [for (final i in $1) SafetySetting.fromJson(i)],
         _ => throw const FormatException('"safetySettings" is not a list'),
       },
+      modelArmorConfig: switch (json['modelArmorConfig']) {
+        null => null,
+        Object $1 => ModelArmorConfig.fromJson($1),
+      },
       generationConfig: switch (json['generationConfig']) {
         null => null,
         Object $1 => GenerationConfig.fromJson($1),
@@ -24021,6 +24116,8 @@ final class GeminiExample extends ProtoMessage {
     if (labels.isNotDefault) 'labels': labels,
     if (safetySettings.isNotDefault)
       'safetySettings': [for (final i in safetySettings) i.toJson()],
+    if (modelArmorConfig case final modelArmorConfig?)
+      'modelArmorConfig': modelArmorConfig.toJson(),
     if (generationConfig case final generationConfig?)
       'generationConfig': generationConfig.toJson(),
   };
@@ -24155,6 +24252,8 @@ final class DatasetVersion extends ProtoMessage {
       'google.cloud.aiplatform.v1beta1.DatasetVersion';
 
   /// Output only. Identifier. The resource name of the DatasetVersion.
+  /// Format:
+  /// `projects/{project}/locations/{location}/datasets/{dataset}/datasetVersions/{dataset_version}`
   final String name;
 
   /// Output only. Timestamp when this DatasetVersion was created.
@@ -27937,16 +28036,16 @@ final class EvaluateDatasetOperationMetadata extends ProtoMessage {
   String toString() => 'EvaluateDatasetOperationMetadata()';
 }
 
-/// Response in LRO for EvaluationService.EvaluateDataset.
+/// The results from an evaluation run performed by the EvaluationService.
 final class EvaluateDatasetResponse extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.EvaluateDatasetResponse';
 
   /// Output only. Aggregation statistics derived from results of
-  /// EvaluationService.EvaluateDataset.
+  /// EvaluationService.
   final AggregationOutput? aggregationOutput;
 
-  /// Output only. Output info for EvaluationService.EvaluateDataset.
+  /// Output only. Output info for EvaluationService.
   final OutputInfo? outputInfo;
 
   EvaluateDatasetResponse({this.aggregationOutput, this.outputInfo})
@@ -27977,7 +28076,7 @@ final class EvaluateDatasetResponse extends ProtoMessage {
   String toString() => 'EvaluateDatasetResponse()';
 }
 
-/// Describes the info for output of EvaluationService.EvaluateDataset.
+/// Describes the info for output of EvaluationService.
 final class OutputInfo extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.OutputInfo';
@@ -28244,10 +28343,19 @@ final class OutputConfig extends ProtoMessage {
   String toString() => 'OutputConfig()';
 }
 
-/// The metric used for dataset level evaluation.
+/// The metric used for running evaluations.
 final class Metric extends ProtoMessage {
   static const String fullyQualifiedName =
       'google.cloud.aiplatform.v1beta1.Metric';
+
+  /// The spec for a pre-defined metric.
+  final PredefinedMetricSpec? predefinedMetricSpec;
+
+  /// Spec for a computation based metric.
+  final ComputationBasedMetricSpec? computationBasedMetricSpec;
+
+  /// Spec for an LLM based metric.
+  final LlmbasedMetricSpec? llmBasedMetricSpec;
 
   /// Spec for pointwise metric.
   final PointwiseMetricSpec? pointwiseMetricSpec;
@@ -28268,6 +28376,9 @@ final class Metric extends ProtoMessage {
   final List<Metric_AggregationMetric> aggregationMetrics;
 
   Metric({
+    this.predefinedMetricSpec,
+    this.computationBasedMetricSpec,
+    this.llmBasedMetricSpec,
     this.pointwiseMetricSpec,
     this.pairwiseMetricSpec,
     this.exactMatchSpec,
@@ -28279,6 +28390,18 @@ final class Metric extends ProtoMessage {
   factory Metric.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
     return Metric(
+      predefinedMetricSpec: switch (json['predefinedMetricSpec']) {
+        null => null,
+        Object $1 => PredefinedMetricSpec.fromJson($1),
+      },
+      computationBasedMetricSpec: switch (json['computationBasedMetricSpec']) {
+        null => null,
+        Object $1 => ComputationBasedMetricSpec.fromJson($1),
+      },
+      llmBasedMetricSpec: switch (json['llmBasedMetricSpec']) {
+        null => null,
+        Object $1 => LlmbasedMetricSpec.fromJson($1),
+      },
       pointwiseMetricSpec: switch (json['pointwiseMetricSpec']) {
         null => null,
         Object $1 => PointwiseMetricSpec.fromJson($1),
@@ -28311,6 +28434,12 @@ final class Metric extends ProtoMessage {
 
   @override
   Object toJson() => {
+    if (predefinedMetricSpec case final predefinedMetricSpec?)
+      'predefinedMetricSpec': predefinedMetricSpec.toJson(),
+    if (computationBasedMetricSpec case final computationBasedMetricSpec?)
+      'computationBasedMetricSpec': computationBasedMetricSpec.toJson(),
+    if (llmBasedMetricSpec case final llmBasedMetricSpec?)
+      'llmBasedMetricSpec': llmBasedMetricSpec.toJson(),
     if (pointwiseMetricSpec case final pointwiseMetricSpec?)
       'pointwiseMetricSpec': pointwiseMetricSpec.toJson(),
     if (pairwiseMetricSpec case final pairwiseMetricSpec?)
@@ -28327,7 +28456,8 @@ final class Metric extends ProtoMessage {
   String toString() => 'Metric()';
 }
 
-/// The aggregation metrics supported by EvaluationService.EvaluateDataset.
+/// The per-metric statistics on evaluation results supported by
+/// `EvaluationService.EvaluateDataset`.
 final class Metric_AggregationMetric extends ProtoEnum {
   /// Unspecified aggregation metric.
   static const aggregationMetricUnspecified = Metric_AggregationMetric(
@@ -28997,6 +29127,11 @@ final class EvaluateInstancesResponse extends ProtoMessage {
   final RubricBasedInstructionFollowingResult?
   rubricBasedInstructionFollowingResult;
 
+  /// Metric results for each instance.
+  /// The order of the metric results is guaranteed to be the same as the order
+  /// of the instances in the request.
+  final List<MetricResult> metricResults;
+
   EvaluateInstancesResponse({
     this.exactMatchResults,
     this.bleuResults,
@@ -29030,6 +29165,7 @@ final class EvaluateInstancesResponse extends ProtoMessage {
     this.trajectoryRecallResults,
     this.trajectorySingleToolUseResults,
     this.rubricBasedInstructionFollowingResult,
+    this.metricResults = const [],
   }) : super(fullyQualifiedName);
 
   factory EvaluateInstancesResponse.fromJson(Object? j) {
@@ -29178,6 +29314,11 @@ final class EvaluateInstancesResponse extends ProtoMessage {
             null => null,
             Object $1 => RubricBasedInstructionFollowingResult.fromJson($1),
           },
+      metricResults: switch (json['metricResults']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetricResult.fromJson(i)],
+        _ => throw const FormatException('"metricResults" is not a list'),
+      },
     );
   }
 
@@ -29263,10 +29404,284 @@ final class EvaluateInstancesResponse extends ProtoMessage {
         case final rubricBasedInstructionFollowingResult?)
       'rubricBasedInstructionFollowingResult':
           rubricBasedInstructionFollowingResult.toJson(),
+    if (metricResults.isNotDefault)
+      'metricResults': [for (final i in metricResults) i.toJson()],
   };
 
   @override
   String toString() => 'EvaluateInstancesResponse()';
+}
+
+/// Result for a single metric on a single instance.
+final class MetricResult extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MetricResult';
+
+  /// Output only. The score for the metric.
+  /// Please refer to each metric's documentation for the meaning of the score.
+  final double? score;
+
+  /// Output only. The explanation for the metric result.
+  final String? explanation;
+
+  /// Output only. The error status for the metric result.
+  final Status? error;
+
+  MetricResult({this.score, this.explanation, this.error})
+    : super(fullyQualifiedName);
+
+  factory MetricResult.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetricResult(
+      score: switch (json['score']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      explanation: switch (json['explanation']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      error: switch (json['error']) {
+        null => null,
+        Object $1 => Status.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (score case final score?) 'score': encodeDouble(score),
+    if (explanation case final explanation?) 'explanation': explanation,
+    if (error case final error?) 'error': error.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (score != null) 'score=$score',
+      if (explanation != null) 'explanation=$explanation',
+    ].join(',');
+    return 'MetricResult(${$contents})';
+  }
+}
+
+/// The spec for a pre-defined metric.
+final class PredefinedMetricSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.PredefinedMetricSpec';
+
+  /// Required. The name of a pre-defined metric, such as
+  /// "instruction_following_v1" or "text_quality_v1".
+  final String metricSpecName;
+
+  /// Optional. The parameters needed to run the pre-defined metric.
+  final protobuf.Struct? metricSpecParameters;
+
+  PredefinedMetricSpec({
+    required this.metricSpecName,
+    this.metricSpecParameters,
+  }) : super(fullyQualifiedName);
+
+  factory PredefinedMetricSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return PredefinedMetricSpec(
+      metricSpecName: switch (json['metricSpecName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      metricSpecParameters: switch (json['metricSpecParameters']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'metricSpecName': metricSpecName,
+    if (metricSpecParameters case final metricSpecParameters?)
+      'metricSpecParameters': metricSpecParameters.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['metricSpecName=$metricSpecName'].join(',');
+    return 'PredefinedMetricSpec(${$contents})';
+  }
+}
+
+/// Specification for a computation based metric.
+final class ComputationBasedMetricSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ComputationBasedMetricSpec';
+
+  /// Required. The type of the computation based metric.
+  final ComputationBasedMetricSpec_ComputationBasedMetricType? type;
+
+  /// Optional. A map of parameters for the metric, e.g. {"rouge_type":
+  /// "rougeL"}.
+  final protobuf.Struct? parameters;
+
+  ComputationBasedMetricSpec({required this.type, this.parameters})
+    : super(fullyQualifiedName);
+
+  factory ComputationBasedMetricSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ComputationBasedMetricSpec(
+      type: switch (json['type']) {
+        null => null,
+        Object $1 =>
+          ComputationBasedMetricSpec_ComputationBasedMetricType.fromJson($1),
+      },
+      parameters: switch (json['parameters']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (type case final type?) 'type': type.toJson(),
+    if (parameters case final parameters?) 'parameters': parameters.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [if (type != null) 'type=$type'].join(',');
+    return 'ComputationBasedMetricSpec(${$contents})';
+  }
+}
+
+/// Types of computation based metrics.
+final class ComputationBasedMetricSpec_ComputationBasedMetricType
+    extends ProtoEnum {
+  /// Unspecified computation based metric type.
+  static const computationBasedMetricTypeUnspecified =
+      ComputationBasedMetricSpec_ComputationBasedMetricType(
+        'COMPUTATION_BASED_METRIC_TYPE_UNSPECIFIED',
+      );
+
+  /// Exact match metric.
+  static const exactMatch =
+      ComputationBasedMetricSpec_ComputationBasedMetricType('EXACT_MATCH');
+
+  /// BLEU metric.
+  static const bleu = ComputationBasedMetricSpec_ComputationBasedMetricType(
+    'BLEU',
+  );
+
+  /// ROUGE metric.
+  static const rouge = ComputationBasedMetricSpec_ComputationBasedMetricType(
+    'ROUGE',
+  );
+
+  /// The default value for [ComputationBasedMetricSpec_ComputationBasedMetricType].
+  static const $default = computationBasedMetricTypeUnspecified;
+
+  const ComputationBasedMetricSpec_ComputationBasedMetricType(super.value);
+
+  factory ComputationBasedMetricSpec_ComputationBasedMetricType.fromJson(
+    Object? json,
+  ) => ComputationBasedMetricSpec_ComputationBasedMetricType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'ComputationBasedMetricType.$value';
+}
+
+/// Specification for an LLM based metric.
+final class LlmbasedMetricSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.LLMBasedMetricSpec';
+
+  /// Use a pre-defined group of rubrics associated with the input.
+  /// Refers to a key in the rubric_groups map of EvaluationInstance.
+  final String? rubricGroupKey;
+
+  /// Dynamically generate rubrics using a predefined spec.
+  final PredefinedMetricSpec? predefinedRubricGenerationSpec;
+
+  /// Required. Template for the prompt sent to the judge model.
+  final String? metricPromptTemplate;
+
+  /// Optional. System instructions for the judge model.
+  final String? systemInstruction;
+
+  /// Optional. Optional configuration for the judge LLM (Autorater).
+  final AutoraterConfig? judgeAutoraterConfig;
+
+  /// Optional. Optional additional configuration for the metric.
+  final protobuf.Struct? additionalConfig;
+
+  LlmbasedMetricSpec({
+    this.rubricGroupKey,
+    this.predefinedRubricGenerationSpec,
+    required this.metricPromptTemplate,
+    this.systemInstruction,
+    this.judgeAutoraterConfig,
+    this.additionalConfig,
+  }) : super(fullyQualifiedName);
+
+  factory LlmbasedMetricSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return LlmbasedMetricSpec(
+      rubricGroupKey: switch (json['rubricGroupKey']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      predefinedRubricGenerationSpec:
+          switch (json['predefinedRubricGenerationSpec']) {
+            null => null,
+            Object $1 => PredefinedMetricSpec.fromJson($1),
+          },
+      metricPromptTemplate: switch (json['metricPromptTemplate']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      systemInstruction: switch (json['systemInstruction']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      judgeAutoraterConfig: switch (json['judgeAutoraterConfig']) {
+        null => null,
+        Object $1 => AutoraterConfig.fromJson($1),
+      },
+      additionalConfig: switch (json['additionalConfig']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (rubricGroupKey case final rubricGroupKey?)
+      'rubricGroupKey': rubricGroupKey,
+    if (predefinedRubricGenerationSpec
+        case final predefinedRubricGenerationSpec?)
+      'predefinedRubricGenerationSpec': predefinedRubricGenerationSpec.toJson(),
+    if (metricPromptTemplate case final metricPromptTemplate?)
+      'metricPromptTemplate': metricPromptTemplate,
+    if (systemInstruction case final systemInstruction?)
+      'systemInstruction': systemInstruction,
+    if (judgeAutoraterConfig case final judgeAutoraterConfig?)
+      'judgeAutoraterConfig': judgeAutoraterConfig.toJson(),
+    if (additionalConfig case final additionalConfig?)
+      'additionalConfig': additionalConfig.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (rubricGroupKey != null) 'rubricGroupKey=$rubricGroupKey',
+      if (metricPromptTemplate != null)
+        'metricPromptTemplate=$metricPromptTemplate',
+      if (systemInstruction != null) 'systemInstruction=$systemInstruction',
+    ].join(',');
+    return 'LLMBasedMetricSpec(${$contents})';
+  }
 }
 
 /// Input for exact match metric.
@@ -56576,6 +56991,84 @@ final class BigQueryDestination extends ProtoMessage {
   String toString() {
     final $contents = ['outputUri=$outputUri'].join(',');
     return 'BigQueryDestination(${$contents})';
+  }
+}
+
+/// The Vertex Multimodal Dataset for the input content.
+final class VertexMultimodalDatasetSource extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.VertexMultimodalDatasetSource';
+
+  /// Required. The resource name of the Vertex Dataset.
+  /// Format: `projects/{project}/locations/{location}/datasets/{dataset}`
+  final String datasetName;
+
+  VertexMultimodalDatasetSource({required this.datasetName})
+    : super(fullyQualifiedName);
+
+  factory VertexMultimodalDatasetSource.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VertexMultimodalDatasetSource(
+      datasetName: switch (json['datasetName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'datasetName': datasetName};
+
+  @override
+  String toString() {
+    final $contents = ['datasetName=$datasetName'].join(',');
+    return 'VertexMultimodalDatasetSource(${$contents})';
+  }
+}
+
+/// The details for a Vertex Multimodal Dataset output.
+final class VertexMultimodalDatasetDestination extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.VertexMultimodalDatasetDestination';
+
+  /// Optional. The destination of the underlying BigQuery table that will be
+  /// created for the output Multimodal Dataset. If not specified, the BigQuery
+  /// table will be created in a default BigQuery dataset.
+  final BigQueryDestination? bigqueryDestination;
+
+  /// Optional. Display name of the output dataset.
+  final String displayName;
+
+  VertexMultimodalDatasetDestination({
+    this.bigqueryDestination,
+    this.displayName = '',
+  }) : super(fullyQualifiedName);
+
+  factory VertexMultimodalDatasetDestination.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return VertexMultimodalDatasetDestination(
+      bigqueryDestination: switch (json['bigqueryDestination']) {
+        null => null,
+        Object $1 => BigQueryDestination.fromJson($1),
+      },
+      displayName: switch (json['displayName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (bigqueryDestination case final bigqueryDestination?)
+      'bigqueryDestination': bigqueryDestination.toJson(),
+    if (displayName.isNotDefault) 'displayName': displayName,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['displayName=$displayName'].join(',');
+    return 'VertexMultimodalDatasetDestination(${$contents})';
   }
 }
 
@@ -88450,10 +88943,14 @@ final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
   /// Configuration for a Python application.
   final ReasoningEngineSpec_SourceCodeSpec_PythonSpec? pythonSpec;
 
+  /// Optional. Configuration for building an image with custom config file.
+  final ReasoningEngineSpec_SourceCodeSpec_ImageSpec? imageSpec;
+
   ReasoningEngineSpec_SourceCodeSpec({
     this.inlineSource,
     this.developerConnectSource,
     this.pythonSpec,
+    this.imageSpec,
   }) : super(fullyQualifiedName);
 
   factory ReasoningEngineSpec_SourceCodeSpec.fromJson(Object? j) {
@@ -88476,6 +88973,10 @@ final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
         null => null,
         Object $1 => ReasoningEngineSpec_SourceCodeSpec_PythonSpec.fromJson($1),
       },
+      imageSpec: switch (json['imageSpec']) {
+        null => null,
+        Object $1 => ReasoningEngineSpec_SourceCodeSpec_ImageSpec.fromJson($1),
+      },
     );
   }
 
@@ -88486,6 +88987,7 @@ final class ReasoningEngineSpec_SourceCodeSpec extends ProtoMessage {
     if (developerConnectSource case final developerConnectSource?)
       'developerConnectSource': developerConnectSource.toJson(),
     if (pythonSpec case final pythonSpec?) 'pythonSpec': pythonSpec.toJson(),
+    if (imageSpec case final imageSpec?) 'imageSpec': imageSpec.toJson(),
   };
 
   @override
@@ -88524,6 +89026,40 @@ final class ReasoningEngineSpec_SourceCodeSpec_InlineSource
     final $contents = ['sourceArchive=$sourceArchive'].join(',');
     return 'InlineSource(${$contents})';
   }
+}
+
+/// The image spec for building an image (within a single build step), based
+/// on the config file (i.e. Dockerfile) in the source directory.
+final class ReasoningEngineSpec_SourceCodeSpec_ImageSpec extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ReasoningEngineSpec.SourceCodeSpec.ImageSpec';
+
+  /// Optional. Build arguments to be used. They will be passed through
+  /// --build-arg flags.
+  final Map<String, String> buildArgs;
+
+  ReasoningEngineSpec_SourceCodeSpec_ImageSpec({this.buildArgs = const {}})
+    : super(fullyQualifiedName);
+
+  factory ReasoningEngineSpec_SourceCodeSpec_ImageSpec.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ReasoningEngineSpec_SourceCodeSpec_ImageSpec(
+      buildArgs: switch (json['buildArgs']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"buildArgs" is not an object'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {if (buildArgs.isNotDefault) 'buildArgs': buildArgs};
+
+  @override
+  String toString() => 'ImageSpec()';
 }
 
 /// Specifies the configuration for fetching source code from a Git
@@ -89925,6 +90461,13 @@ final class Schedule extends ProtoMessage {
   /// execution of the operations/jobs created by the requests (if applicable).
   final int maxConcurrentRunCount;
 
+  /// Optional. Specifies the maximum number of active runs that can be executed
+  /// concurrently for this Schedule. This limits the number of runs that can be
+  /// in a non-terminal state at the same time.
+  /// Currently, this field is only supported for requests of type
+  /// CreatePipelineJobRequest.
+  final int maxConcurrentActiveRunCount;
+
   /// Optional. Whether new scheduled runs can be queued when max_concurrent_runs
   /// limit is reached. If set to true, new runs will be queued instead of
   /// skipped. Default to false.
@@ -89959,6 +90502,7 @@ final class Schedule extends ProtoMessage {
     this.lastPauseTime,
     this.lastResumeTime,
     required this.maxConcurrentRunCount,
+    this.maxConcurrentActiveRunCount = 0,
     this.allowQueueing = false,
     this.catchUp = false,
     this.lastScheduledRunResponse,
@@ -90037,6 +90581,11 @@ final class Schedule extends ProtoMessage {
         null => 0,
         Object $1 => decodeInt64($1),
       },
+      maxConcurrentActiveRunCount:
+          switch (json['maxConcurrentActiveRunCount']) {
+            null => 0,
+            Object $1 => decodeInt64($1),
+          },
       allowQueueing: switch (json['allowQueueing']) {
         null => false,
         Object $1 => decodeBool($1),
@@ -90082,6 +90631,8 @@ final class Schedule extends ProtoMessage {
     if (lastResumeTime case final lastResumeTime?)
       'lastResumeTime': lastResumeTime.toJson(),
     'maxConcurrentRunCount': maxConcurrentRunCount.toString(),
+    if (maxConcurrentActiveRunCount.isNotDefault)
+      'maxConcurrentActiveRunCount': maxConcurrentActiveRunCount.toString(),
     if (allowQueueing.isNotDefault) 'allowQueueing': allowQueueing,
     if (catchUp.isNotDefault) 'catchUp': catchUp,
     if (lastScheduledRunResponse case final lastScheduledRunResponse?)
@@ -90098,6 +90649,7 @@ final class Schedule extends ProtoMessage {
       'startedRunCount=$startedRunCount',
       'state=$state',
       'maxConcurrentRunCount=$maxConcurrentRunCount',
+      'maxConcurrentActiveRunCount=$maxConcurrentActiveRunCount',
       'allowQueueing=$allowQueueing',
       'catchUp=$catchUp',
     ].join(',');
@@ -90957,9 +91509,11 @@ final class Session extends ProtoMessage {
   /// Optional. Timestamp of when this session is considered expired.
   /// This is *always* provided on output, regardless of what was sent
   /// on input.
+  /// The minimum value is 24 hours from the time of creation.
   final protobuf.Timestamp? expireTime;
 
   /// Optional. Input only. The TTL for this session.
+  /// The minimum value is 24 hours.
   final protobuf.Duration? ttl;
 
   /// Identifier. The resource name of the session.
@@ -90976,6 +91530,15 @@ final class Session extends ProtoMessage {
   /// Optional. The display name of the session.
   final String displayName;
 
+  /// The labels with user-defined metadata to organize your Sessions.
+  ///
+  /// Label keys and values can be no longer than 64 characters
+  /// (Unicode codepoints), can only contain lowercase letters, numeric
+  /// characters, underscores and dashes. International characters are allowed.
+  ///
+  /// See https://goo.gl/xmQnxf for more information and examples of labels.
+  final Map<String, String> labels;
+
   /// Optional. Session specific memory which stores key conversation points.
   final protobuf.Struct? sessionState;
 
@@ -90989,6 +91552,7 @@ final class Session extends ProtoMessage {
     this.createTime,
     this.updateTime,
     this.displayName = '',
+    this.labels = const {},
     this.sessionState,
     required this.userId,
   }) : super(fullyQualifiedName);
@@ -91020,6 +91584,14 @@ final class Session extends ProtoMessage {
         null => '',
         Object $1 => decodeString($1),
       },
+      labels: switch (json['labels']) {
+        null => {},
+        Map<String, Object?> $1 => {
+          for (final e in $1.entries)
+            decodeString(e.key): decodeString(e.value),
+        },
+        _ => throw const FormatException('"labels" is not an object'),
+      },
       sessionState: switch (json['sessionState']) {
         null => null,
         Object $1 => protobuf.Struct.fromJson($1),
@@ -91039,6 +91611,7 @@ final class Session extends ProtoMessage {
     if (createTime case final createTime?) 'createTime': createTime.toJson(),
     if (updateTime case final updateTime?) 'updateTime': updateTime.toJson(),
     if (displayName.isNotDefault) 'displayName': displayName,
+    if (labels.isNotDefault) 'labels': labels,
     if (sessionState case final sessionState?)
       'sessionState': sessionState.toJson(),
     'userId': userId,
@@ -91205,6 +91778,12 @@ final class EventMetadata extends ProtoMessage {
   /// The custom metadata of the LlmResponse.
   final protobuf.Struct? customMetadata;
 
+  /// Optional. Audio transcription of user input.
+  final Transcription? inputTranscription;
+
+  /// Optional. Audio transcription of model output.
+  final Transcription? outputTranscription;
+
   EventMetadata({
     this.groundingMetadata,
     this.partial = false,
@@ -91213,6 +91792,8 @@ final class EventMetadata extends ProtoMessage {
     this.longRunningToolIds = const [],
     this.branch = '',
     this.customMetadata,
+    this.inputTranscription,
+    this.outputTranscription,
   }) : super(fullyQualifiedName);
 
   factory EventMetadata.fromJson(Object? j) {
@@ -91247,6 +91828,14 @@ final class EventMetadata extends ProtoMessage {
         null => null,
         Object $1 => protobuf.Struct.fromJson($1),
       },
+      inputTranscription: switch (json['inputTranscription']) {
+        null => null,
+        Object $1 => Transcription.fromJson($1),
+      },
+      outputTranscription: switch (json['outputTranscription']) {
+        null => null,
+        Object $1 => Transcription.fromJson($1),
+      },
     );
   }
 
@@ -91262,6 +91851,10 @@ final class EventMetadata extends ProtoMessage {
     if (branch.isNotDefault) 'branch': branch,
     if (customMetadata case final customMetadata?)
       'customMetadata': customMetadata.toJson(),
+    if (inputTranscription case final inputTranscription?)
+      'inputTranscription': inputTranscription.toJson(),
+    if (outputTranscription case final outputTranscription?)
+      'outputTranscription': outputTranscription.toJson(),
   };
 
   @override
@@ -91366,6 +91959,47 @@ final class EventActions extends ProtoMessage {
       'transferAgent=$transferAgent',
     ].join(',');
     return 'EventActions(${$contents})';
+  }
+}
+
+/// Audio transcription in Server Content.
+final class Transcription extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.Transcription';
+
+  /// Optional. Transcription text.
+  final String text;
+
+  /// Optional. The bool indicates the end of the transcription.
+  final bool finished;
+
+  Transcription({this.text = '', this.finished = false})
+    : super(fullyQualifiedName);
+
+  factory Transcription.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return Transcription(
+      text: switch (json['text']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      finished: switch (json['finished']) {
+        null => false,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (text.isNotDefault) 'text': text,
+    if (finished.isNotDefault) 'finished': finished,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['text=$text', 'finished=$finished'].join(',');
+    return 'Transcription(${$contents})';
   }
 }
 
@@ -91506,8 +92140,9 @@ final class ListSessionsRequest extends ProtoMessage {
   /// Supported fields:
   ///    * `display_name`
   ///    * `user_id`
+  ///    * `labels`
   ///
-  /// Example: `display_name="abc"`, `user_id="123"`.
+  /// Example: `display_name="abc"`, `user_id="123"`, `labels.key="value"`.
   final String filter;
 
   /// Optional. A comma-separated list of fields to order by, sorted in ascending
@@ -102410,10 +103045,15 @@ final class EvaluationConfig extends ProtoMessage {
   /// Optional. Autorater config for evaluation.
   final AutoraterConfig? autoraterConfig;
 
+  /// Optional. Configuration options for inference generation and outputs.
+  /// If not set, default generation parameters are used.
+  final GenerationConfig? inferenceGenerationConfig;
+
   EvaluationConfig({
     required this.metrics,
     required this.outputConfig,
     this.autoraterConfig,
+    this.inferenceGenerationConfig,
   }) : super(fullyQualifiedName);
 
   factory EvaluationConfig.fromJson(Object? j) {
@@ -102432,6 +103072,10 @@ final class EvaluationConfig extends ProtoMessage {
         null => null,
         Object $1 => AutoraterConfig.fromJson($1),
       },
+      inferenceGenerationConfig: switch (json['inferenceGenerationConfig']) {
+        null => null,
+        Object $1 => GenerationConfig.fromJson($1),
+      },
     );
   }
 
@@ -102442,6 +103086,8 @@ final class EvaluationConfig extends ProtoMessage {
       'outputConfig': outputConfig.toJson(),
     if (autoraterConfig case final autoraterConfig?)
       'autoraterConfig': autoraterConfig.toJson(),
+    if (inferenceGenerationConfig case final inferenceGenerationConfig?)
+      'inferenceGenerationConfig': inferenceGenerationConfig.toJson(),
   };
 
   @override
@@ -102457,11 +103103,15 @@ final class EvaluateDatasetRun extends ProtoMessage {
   /// `projects/{project}/locations/{location}/operations/{operation_id}`.
   final String operationName;
 
+  /// Output only. The resource name of the evaluation run. Format:
+  /// `projects/{project}/locations/{location}/evaluationRuns/{evaluation_run_id}`.
+  final String evaluationRun;
+
   /// Output only. The checkpoint id used in the evaluation run. Only populated
   /// when evaluating checkpoints.
   final String checkpointId;
 
-  /// Output only. Results for EvaluationService.EvaluateDataset.
+  /// Output only. Results for EvaluationService.
   final EvaluateDatasetResponse? evaluateDatasetResponse;
 
   /// Output only. The error of the evaluation run if any.
@@ -102469,6 +103119,7 @@ final class EvaluateDatasetRun extends ProtoMessage {
 
   EvaluateDatasetRun({
     this.operationName = '',
+    this.evaluationRun = '',
     this.checkpointId = '',
     this.evaluateDatasetResponse,
     this.error,
@@ -102478,6 +103129,10 @@ final class EvaluateDatasetRun extends ProtoMessage {
     final json = j as Map<String, Object?>;
     return EvaluateDatasetRun(
       operationName: switch (json['operationName']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      evaluationRun: switch (json['evaluationRun']) {
         null => '',
         Object $1 => decodeString($1),
       },
@@ -102499,6 +103154,7 @@ final class EvaluateDatasetRun extends ProtoMessage {
   @override
   Object toJson() => {
     if (operationName.isNotDefault) 'operationName': operationName,
+    if (evaluationRun.isNotDefault) 'evaluationRun': evaluationRun,
     if (checkpointId.isNotDefault) 'checkpointId': checkpointId,
     if (evaluateDatasetResponse case final evaluateDatasetResponse?)
       'evaluateDatasetResponse': evaluateDatasetResponse.toJson(),
@@ -102509,6 +103165,7 @@ final class EvaluateDatasetRun extends ProtoMessage {
   String toString() {
     final $contents = [
       'operationName=$operationName',
+      'evaluationRun=$evaluationRun',
       'checkpointId=$checkpointId',
     ].join(',');
     return 'EvaluateDatasetRun(${$contents})';
@@ -107864,6 +108521,224 @@ final class Claim extends ProtoMessage {
     ].join(',');
     return 'Claim(${$contents})';
   }
+}
+
+/// Agentic Retrieval Ask API for RAG.
+/// Request message for
+/// `VertexRagService.AskContexts`.
+final class AskContextsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AskContextsRequest';
+
+  /// Required. The resource name of the Location from which to retrieve
+  /// RagContexts. The users must have permission to make a call in the project.
+  /// Format:
+  /// `projects/{project}/locations/{location}`.
+  final String parent;
+
+  /// Required. Single RAG retrieve query.
+  final RagQuery? query;
+
+  /// Optional. The tools to use for AskContexts.
+  final List<Tool> tools;
+
+  AskContextsRequest({
+    required this.parent,
+    required this.query,
+    this.tools = const [],
+  }) : super(fullyQualifiedName);
+
+  factory AskContextsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AskContextsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      query: switch (json['query']) {
+        null => null,
+        Object $1 => RagQuery.fromJson($1),
+      },
+      tools: switch (json['tools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tools" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (query case final query?) 'query': query.toJson(),
+    if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'AskContextsRequest(${$contents})';
+  }
+}
+
+/// Response message for
+/// `VertexRagService.AskContexts`.
+final class AskContextsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AskContextsResponse';
+
+  /// The Retrieval Response.
+  final String response;
+
+  /// The contexts of the query.
+  final RagContexts? contexts;
+
+  AskContextsResponse({this.response = '', this.contexts})
+    : super(fullyQualifiedName);
+
+  factory AskContextsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AskContextsResponse(
+      response: switch (json['response']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      contexts: switch (json['contexts']) {
+        null => null,
+        Object $1 => RagContexts.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (response.isNotDefault) 'response': response,
+    if (contexts case final contexts?) 'contexts': contexts.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['response=$response'].join(',');
+    return 'AskContextsResponse(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagService.AsyncRetrieveContexts`.
+final class AsyncRetrieveContextsRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AsyncRetrieveContextsRequest';
+
+  /// Required. The resource name of the Location from which to retrieve
+  /// RagContexts. The users must have permission to make a call in the project.
+  /// Format:
+  /// `projects/{project}/locations/{location}`.
+  final String parent;
+
+  /// Required. Single RAG retrieve query.
+  final RagQuery? query;
+
+  /// Optional. The tools to use for AskContexts.
+  final List<Tool> tools;
+
+  AsyncRetrieveContextsRequest({
+    required this.parent,
+    required this.query,
+    this.tools = const [],
+  }) : super(fullyQualifiedName);
+
+  factory AsyncRetrieveContextsRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AsyncRetrieveContextsRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      query: switch (json['query']) {
+        null => null,
+        Object $1 => RagQuery.fromJson($1),
+      },
+      tools: switch (json['tools']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Tool.fromJson(i)],
+        _ => throw const FormatException('"tools" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (query case final query?) 'query': query.toJson(),
+    if (tools.isNotDefault) 'tools': [for (final i in tools) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'AsyncRetrieveContextsRequest(${$contents})';
+  }
+}
+
+/// Response message for
+/// `VertexRagService.AsyncRetrieveContexts`.
+final class AsyncRetrieveContextsResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AsyncRetrieveContextsResponse';
+
+  /// The contexts of the query.
+  final RagContexts? contexts;
+
+  AsyncRetrieveContextsResponse({this.contexts}) : super(fullyQualifiedName);
+
+  factory AsyncRetrieveContextsResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AsyncRetrieveContextsResponse(
+      contexts: switch (json['contexts']) {
+        null => null,
+        Object $1 => RagContexts.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (contexts case final contexts?) 'contexts': contexts.toJson(),
+  };
+
+  @override
+  String toString() => 'AsyncRetrieveContextsResponse()';
+}
+
+/// Metadata for AsyncRetrieveContextsOperation.
+final class AsyncRetrieveContextsOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.AsyncRetrieveContextsOperationMetadata';
+
+  /// The operation generic information.
+  final GenericOperationMetadata? genericMetadata;
+
+  AsyncRetrieveContextsOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory AsyncRetrieveContextsOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return AsyncRetrieveContextsOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (genericMetadata case final genericMetadata?)
+      'genericMetadata': genericMetadata.toJson(),
+  };
+
+  @override
+  String toString() => 'AsyncRetrieveContextsOperationMetadata()';
 }
 
 /// Request message for
