@@ -1,4 +1,4 @@
-## 0.5.0-wip
+## 0.5.0
 
 * Initial release for Dart 3. Support for basic Google Cloud Storage features:
   * Buckets (create, delete, get metadata, list, patch metadata)
