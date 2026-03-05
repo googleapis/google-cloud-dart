@@ -117,5 +117,33 @@ void main() async {
         'storage_with_client_and_project_id',
       );
     });
+
+    test(
+      'noProject throws StateError on project-requiring operations',
+      () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'storage_no_project',
+        );
+        addTearDown(testClient.endTest);
+
+        storage = Storage(client: testClient, projectId: Storage.noProject);
+        addTearDown(storage.close);
+
+        expect(
+          storage.createBucket(BucketMetadata(name: 'dummy-bucket')),
+          throwsStateError,
+        );
+        expect(storage.listBuckets().toList(), throwsStateError);
+        expect(
+          storage.patchBucket('dummy-bucket', BucketMetadataPatchBuilder()),
+          throwsStateError,
+        );
+        expect(
+          storage.insertObject('dummy-bucket', 'dummy-object', []),
+          throwsStateError,
+        );
+      },
+    );
   });
 }
