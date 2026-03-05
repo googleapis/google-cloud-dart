@@ -14,23 +14,23 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 05 Mar 2026 00:54:55 GMT",
+        "date": "Thu, 05 Mar 2026 18:05:33 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "1081",
-        "x-guploader-uploadid": "AGQBYWyBXh9T3GBB4JLP4DV6TGppzsF145yD0_DEQQwjVugtAU5Ub_RpDjsGf3VntJyCpI-MLqTcVLo",
+        "x-guploader-uploadid": "AGQBYWwmJNssfSZMwvUZAaAjj-6U39nZri35vXe2zRkohpfQWMnWLFbAJSd5a-XFqxR1X_7ODUztHA",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_remove_lifecycle\",\n  \"id\": \"patch_bucket_remove_lifecycle\",\n  \"name\": \"patch_bucket_remove_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772672095340246423\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-03-05T00:54:55.666Z\",\n  \"updated\": \"2026-03-05T00:54:55.666Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"age\": 1\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-03-05T00:54:55.666Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T00:54:55.666Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T00:54:55.666Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_remove_lifecycle\",\n  \"id\": \"patch_bucket_remove_lifecycle\",\n  \"name\": \"patch_bucket_remove_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772733932880585128\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-03-05T18:05:33.169Z\",\n  \"updated\": \"2026-03-05T18:05:33.169Z\",\n  \"lifecycle\": {\n    \"rule\": [\n      {\n        \"action\": {\n          \"type\": \"Delete\"\n        },\n        \"condition\": {\n          \"age\": 1\n        }\n      }\n    ]\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-03-05T18:05:33.169Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:05:33.169Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:05:33.169Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/patch_bucket_remove_lifecycle?project=skilful-orb-203421",
+      "url": "https://storage.googleapis.com/storage/v1/b/patch_bucket_remove_lifecycle?",
       "method": "PATCH",
       "headers": {
         "content-type": "application/json",
@@ -43,17 +43,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 05 Mar 2026 00:54:56 GMT",
+        "date": "Thu, 05 Mar 2026 18:05:33 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "913",
-        "x-guploader-uploadid": "AGQBYWxpY98ku-V-LuYpy9vYWvbNk8wb2PIpD3j0MpMtwCVPJrQRrg63WH31OIN9O41GnyaymrO430s",
+        "x-guploader-uploadid": "AGQBYWz6Ny47QFRAZJP4Pukj4CJQIsu9zxGtST2wvX3ZKZ5pk0Q8y58Tgl1oLLzAs_p9ZUak2_VBoIQ",
         "etag": "CAI=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_remove_lifecycle\",\n  \"id\": \"patch_bucket_remove_lifecycle\",\n  \"name\": \"patch_bucket_remove_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772672095340246423\",\n  \"metageneration\": \"2\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAI=\",\n  \"timeCreated\": \"2026-03-05T00:54:55.666Z\",\n  \"updated\": \"2026-03-05T00:54:56.144Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-03-05T00:54:55.666Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T00:54:55.666Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T00:54:55.666Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_bucket_remove_lifecycle\",\n  \"id\": \"patch_bucket_remove_lifecycle\",\n  \"name\": \"patch_bucket_remove_lifecycle\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772733932880585128\",\n  \"metageneration\": \"2\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAI=\",\n  \"timeCreated\": \"2026-03-05T18:05:33.169Z\",\n  \"updated\": \"2026-03-05T18:05:33.658Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-03-05T18:05:33.169Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:05:33.169Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:05:33.169Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -71,13 +71,13 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "private, max-age=0, must-revalidate, no-transform",
-        "date": "Thu, 05 Mar 2026 00:54:56 GMT",
+        "date": "Thu, 05 Mar 2026 18:05:33 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "32",
-        "x-guploader-uploadid": "AGQBYWw-IQy_06rBeKThUKmE6Nxv8j3ojQDYaMhr-i6eLEYmsFiUJFZ4jHxNiNF5KnYO5HvJci0SXMk",
+        "x-guploader-uploadid": "AGQBYWz3tbjDnhpuNXl1vcwmHlUQ5gL-oYxPeJsVaytB71LJnmSlWp7xcmKuPCy5z8jFN0bfQIqTZlI",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
-        "expires": "Thu, 05 Mar 2026 00:54:56 GMT"
+        "expires": "Thu, 05 Mar 2026 18:05:33 GMT"
       },
       "body": "{\n  \"kind\": \"storage#objects\"\n}\n",
       "reasonPhrase": "OK"
@@ -97,10 +97,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 05 Mar 2026 00:54:57 GMT",
+        "date": "Thu, 05 Mar 2026 18:05:34 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AGQBYWy11jUb0ZzJWlEllHE6CwhGl1bvY2ZG-hkQ8h5ESnPYvFD5DniNam_MPyHlegA7TeA_bmE8mmQ",
+        "x-guploader-uploadid": "AGQBYWyq53raT_TG5bgiNiHzjSaZJMAbzUpF6r8Xlv76VuZFmewO9OYShWGrNCuaFHr17H2dLN0mykw",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",
