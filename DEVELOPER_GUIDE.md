@@ -70,7 +70,7 @@ You can update these sources to their latest versions by running
 (from the root of the project):
 
 ```bash
-go run github.com/googleapis/librarian/cmd/librarian@main update -all
+go run github.com/googleapis/librarian/cmd/librarian@main update conformance googleapis protobuf showcase
 ```
 
 ### Testing
