@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:google_cloud/google_cloud.dart' show computeProjectId;
 import 'package:google_cloud_protobuf/protobuf.dart';
@@ -31,6 +30,7 @@ import 'file_upload.dart';
 import 'object_metadata_json.dart';
 import 'object_metadata_patch_builder.dart'
     show ObjectMetadataPatchBuilderJsonEncodable;
+import 'storage_emulator_host_vm.dart';
 
 class _JsonEncodableWrapper implements JsonEncodable {
   final Object json;
@@ -51,9 +51,6 @@ final class Storage {
   final Uri _baseUrl;
 
   static final _httpPattern = RegExp(r'^https?://');
-
-  static String? _getStorageEmulatorHost() =>
-      Platform.environment['STORAGE_EMULATOR_HOST'];
 
   static FutureOr<http.Client> _calculateClient(
     http.Client? client,
@@ -87,13 +84,14 @@ final class Storage {
   static Uri _calculateBaseUrl(
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint,
+    String? emulatorHost,
   ) {
     if (apiEndpoint != null) {
       if (useAuthWithCustomEndpoint) return Uri.https(apiEndpoint);
       return Uri.http(apiEndpoint);
     }
 
-    if (_getStorageEmulatorHost() case String host) {
+    if (emulatorHost case String host) {
       if (_httpPattern.hasMatch(host)) {
         return Uri.parse(host);
       }
@@ -102,6 +100,8 @@ final class Storage {
 
     return Uri.https('storage.googleapis.com');
   }
+
+  Storage._(this._projectId, this._baseUrl, this._httpClient);
 
   /// Constructs a client used to communicate with [Google Cloud Storage][].
   ///
@@ -128,14 +128,21 @@ final class Storage {
   /// [Google Cloud Storage]: https://cloud.google.com/storage
   /// [Cloud Storage for Firebase Emulator]: https://firebase.google.com/docs/emulator-suite/connect_storage
   /// [default application credentials]: https://docs.cloud.google.com/docs/authentication/application-default-credentials
-  Storage({
+  factory Storage({
     String? projectId,
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
     http.Client? client,
-  }) : _projectId = _calculateProjectId(projectId, _getStorageEmulatorHost()),
-       _httpClient = _calculateClient(client, _getStorageEmulatorHost()),
-       _baseUrl = _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint);
+  }) {
+    // Ensure that the same value of `storageEmulatorHost` is used everywhere in
+    // the constructor.
+    final emulatorHost = storageEmulatorHost;
+    return Storage._(
+      _calculateProjectId(projectId, emulatorHost),
+      _calculateBaseUrl(apiEndpoint, useAuthWithCustomEndpoint, emulatorHost),
+      _calculateClient(client, emulatorHost),
+    );
+  }
 
   Uri _requestUrl(
     Iterable<String>? pathSegments,
