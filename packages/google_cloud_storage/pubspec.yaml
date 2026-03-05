@@ -15,7 +15,7 @@
 name: google_cloud_storage
 description: A Dart client for Google Cloud Storage.
 version: 0.5.0
-publish_to: none
+repository: https://github.com/googleapis/google-cloud-dart/tree/main/packages/google_cloud_storage
 
 environment:
   sdk: ^3.9.0
