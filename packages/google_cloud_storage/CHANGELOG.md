@@ -1,6 +1,6 @@
 ## 0.6.0
 
-* Add support for using a `Future<Client>` in the `Storage` constructor.
+* Add support for using a `Future<Client>` in the `Storage` factory.
 
 ## 0.5.0
 
