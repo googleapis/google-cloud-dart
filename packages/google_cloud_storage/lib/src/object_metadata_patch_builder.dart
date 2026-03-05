@@ -106,6 +106,26 @@ final class ObjectMetadataPatchBuilder {
   }
 
   /// User-provided metadata, in key/value pairs.
+  ///
+  /// The metadata will be merged with the existing metadata on the object. To
+  /// clear a metadata key, set its value to `null`.
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// await storage.insertObject(
+  ///   bucketName,
+  ///   objectName,
+  ///   content,
+  ///   metadata: ObjectMetadata(
+  ///     metadata: {'animal': 'dog', 'color': 'red', 'shape': 'circle'},
+  ///   ),
+  /// );
+  /// final patch = ObjectMetadataPatchBuilder()
+  ///   ..metadata = {'animal': 'cat', 'color': null};
+  /// await storage.patchObject(bucketName, objectName, patch);
+  /// // The metadata will be {'animal': 'cat', 'shape': 'circle'}.
+  /// ```
   set metadata(Map<String, String?>? value) {
     _json['metadata'] = value;
   }

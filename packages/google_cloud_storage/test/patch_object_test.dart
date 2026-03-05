@@ -512,7 +512,7 @@ void main() async {
       );
 
       final patchMetadata = ObjectMetadataPatchBuilder()
-        ..metadata = {'key1': 'newvalue1'};
+        ..metadata = {'key1': 'newvalue1', 'key2': null};
 
       final actualMetadata = await storage.patchObject(
         bucketName,
