@@ -74,7 +74,25 @@ final class BucketMetadataPatchBuilder {
   }
 
   /// User-provided labels, in key/value pairs.
-  set labels(Map<String, String>? value) {
+  ///
+  /// The labels will be merged with the existing labels on the bucket. To clear
+  /// a label, set its value to `null`.
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// await storage.createBucket(
+  ///   BucketMetadata(
+  ///     name: bucketName,
+  ///     labels: {'animal': 'dog', 'color': 'red', 'shape': 'circle'},
+  ///   ),
+  /// );
+  /// final patch = BucketMetadataPatchBuilder()
+  ///   ..labels = {'animal': 'cat', 'color': null};
+  /// await storage.patchBucket(bucketName, patch);
+  /// // The labels will be {'animal': 'cat', 'shape': 'circle'}.
+  /// ```
+  set labels(Map<String, String?>? value) {
     _json['labels'] = value;
   }
 

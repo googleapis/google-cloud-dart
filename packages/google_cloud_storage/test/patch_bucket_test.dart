@@ -434,18 +434,21 @@ void main() async {
       );
 
       await storage.createBucket(
-        BucketMetadata(name: bucketName, labels: {'key': 'value'}),
+        BucketMetadata(
+          name: bucketName,
+          labels: {'key1': 'value1', 'key2': 'value2', 'key3': 'value3'},
+        ),
       );
 
       final patchMetadata = BucketMetadataPatchBuilder()
-        ..labels = {'key': 'newvalue'};
+        ..labels = {'key1': 'newvalue1', 'key2': null};
 
       final actualMetadata = await storage.patchBucket(
         bucketName,
         patchMetadata,
       );
 
-      expect(actualMetadata.labels, {'key': 'newvalue'});
+      expect(actualMetadata.labels, {'key1': 'newvalue1', 'key3': 'value3'});
       expect(
         actualMetadata.updated!.toDateTime().isAfter(
           actualMetadata.timeCreated!.toDateTime(),
