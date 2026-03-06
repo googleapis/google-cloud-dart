@@ -50,7 +50,21 @@ final class Storage {
   final FutureOr<String> _projectId;
   final Uri _baseUrl;
 
+  /// A value that can be passed to [projectId] to explicitly indicate that
+  /// there is no project.
+  ///
+  /// Any requests that require a project ID will fail with a [StateError].
+  static const String noProject = '';
+
   static final _httpPattern = RegExp(r'^https?://');
+
+  Future<String> get _requiredProjectId async {
+    final id = await _projectId;
+    if (id == noProject) {
+      throw StateError('A project ID is required for this operation.');
+    }
+    return id;
+  }
 
   static FutureOr<http.Client> _calculateClient(
     FutureOr<http.Client>? client,
@@ -244,7 +258,7 @@ final class Storage {
     final url = _requestUrl(
       ['storage', 'v1', 'b'],
       {
-        'project': await _projectId,
+        'project': await _requiredProjectId,
         'enableObjectRetention': enableObjectRetention.toString(),
       },
     );
@@ -326,7 +340,7 @@ final class Storage {
         ['storage', 'v1', 'b'],
         {
           'maxResults': ?maxResults?.toString(),
-          'project': await _projectId,
+          'project': await _requiredProjectId,
           'pageToken': ?nextPageToken,
           'projection': ?projection,
           'prefix': ?prefix,
