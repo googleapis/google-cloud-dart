@@ -5,7 +5,7 @@
       "method": "POST",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "{\"name\":\"patch_object_non_existant\"}"
     },
@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Sat, 28 Feb 2026 00:01:46 GMT",
+        "date": "Thu, 05 Mar 2026 18:07:36 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "901",
-        "x-guploader-uploadid": "AGQBYWwbw1JYehopCABQSKzjaVvmr1sxNYWxptEs6P4zUdEP6mc7vxlp1LQLUGIDXAYaTrYP",
+        "x-guploader-uploadid": "AGQBYWx1RjNf9j6LvVA4n-61htZ9nVwUUH__c7Xpx4Ncl7kZkJ-bu75WROYPJdCe4tWpInt4mf-Mx2s",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_object_non_existant\",\n  \"id\": \"patch_object_non_existant\",\n  \"name\": \"patch_object_non_existant\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772236905827890657\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-28T00:01:46.148Z\",\n  \"updated\": \"2026-02-28T00:01:46.148Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-28T00:01:46.148Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-29T00:01:46.148Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-29T00:01:46.148Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/patch_object_non_existant\",\n  \"id\": \"patch_object_non_existant\",\n  \"name\": \"patch_object_non_existant\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772734056630249472\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-03-05T18:07:36.872Z\",\n  \"updated\": \"2026-03-05T18:07:36.872Z\",\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-03-05T18:07:36.872Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:07:36.872Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:07:36.872Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -34,7 +34,7 @@
       "method": "PATCH",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "{\"contentType\":\"text/plain\"}"
     },
@@ -43,10 +43,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Sat, 28 Feb 2026 00:01:46 GMT",
+        "date": "Thu, 05 Mar 2026 18:07:37 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "291",
-        "x-guploader-uploadid": "AGQBYWxm7XPoDHZsl8Tr4jBCFBjYvveiUpSHr_Yn0GQeot6AoIhqAqk_OhXIlTC5wo4h0tvMCLtucWM",
+        "x-guploader-uploadid": "AGQBYWwy9uOKAtsP7KWAT95unwaTEgbNYKdz254YZ7GoCxqDpMif_HIoAXotANgGvq0qGcMKcA-kYYg",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
@@ -61,7 +61,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b/patch_object_non_existant/o?versions=true",
       "method": "GET",
       "headers": {
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": ""
     },
@@ -70,13 +70,13 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "private, max-age=0, must-revalidate, no-transform",
-        "date": "Sat, 28 Feb 2026 00:01:46 GMT",
+        "date": "Thu, 05 Mar 2026 18:07:37 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "32",
-        "x-guploader-uploadid": "AGQBYWz6ltiZOImOiT0BL5RWCIzPr15m4-q377oMjqtnyildTUQp92aifSgacnO0lrGBuYIRr1g8S9Q",
+        "x-guploader-uploadid": "AGQBYWwxpfg0Abg8MRuCtuixTm3ZXmjFzUTewKetyqYRnJwq9EClVp-zE2hbAg03rmvZUoeAeFxUrWo",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
-        "expires": "Sat, 28 Feb 2026 00:01:46 GMT"
+        "expires": "Thu, 05 Mar 2026 18:07:37 GMT"
       },
       "body": "{\n  \"kind\": \"storage#objects\"\n}\n",
       "reasonPhrase": "OK"
@@ -87,7 +87,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b/patch_object_non_existant?",
       "method": "DELETE",
       "headers": {
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": ""
     },
@@ -96,10 +96,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Sat, 28 Feb 2026 00:01:47 GMT",
+        "date": "Thu, 05 Mar 2026 18:07:37 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AGQBYWwNYhnlDzIo-v6WQzY9dMX0Mxo-n0ey8r_SqPCMYSUVTdlyZRasoU_KaIpBGmSXuar6Xtj-Iwg",
+        "x-guploader-uploadid": "AGQBYWyOX2PoGgH9Rnbq6XlYiHVGceFw6PXK-NOK1Nfk_MUIisYskFVFw6XKKWXvpJZBx0ksX4HEmOk",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",

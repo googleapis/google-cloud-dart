@@ -73,14 +73,9 @@ For example:
 
 ```dart
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart';
 
 void main() async {
-  final client = await clientViaApplicationDefaultCredentials(
-    scopes: ['https://www.googleapis.com/auth/cloud-platform'],
-  );
-
-  final storage = Storage(client: client, projectId: 'my-project');
+  final storage = Storage();
 
   // This operation is only idempotent if `ifMetagenerationMatch` is provided.
   await storage.patchBucket(

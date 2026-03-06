@@ -5,7 +5,7 @@
       "method": "POST",
       "headers": {
         "content-type": "application/json",
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": "{\"labels\":{\"key\":\"value\"},\"name\":\"create_bucket_with_metadata_labels\"}"
     },
@@ -14,17 +14,17 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 27 Feb 2026 23:55:42 GMT",
+        "date": "Thu, 05 Mar 2026 18:02:40 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "966",
-        "x-guploader-uploadid": "AGQBYWxY-st-89wVoPDXLUlcQez3JMFNMoNhyZnh10JxlRaWDZ1jRXBYG5BpNO2JsLVo7oJnSqZhBQ",
+        "x-guploader-uploadid": "AGQBYWx2VV5IoGrn8gx4IahqtqMI7M8y4xNGzIcCRg8KhULaOLyrvC96Vda_e_lkyGF3KiC07urEYIo",
         "etag": "CAE=",
         "pragma": "no-cache",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
         "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
       },
-      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_labels\",\n  \"id\": \"create_bucket_with_metadata_labels\",\n  \"name\": \"create_bucket_with_metadata_labels\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772236541574994374\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-02-27T23:55:42.048Z\",\n  \"updated\": \"2026-02-27T23:55:42.048Z\",\n  \"labels\": {\n    \"key\": \"value\"\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-02-27T23:55:42.048Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-28T23:55:42.048Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-05-28T23:55:42.048Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
+      "body": "{\n  \"kind\": \"storage#bucket\",\n  \"selfLink\": \"https://www.googleapis.com/storage/v1/b/create_bucket_with_metadata_labels\",\n  \"id\": \"create_bucket_with_metadata_labels\",\n  \"name\": \"create_bucket_with_metadata_labels\",\n  \"projectNumber\": \"747575106375\",\n  \"generation\": \"1772733760271224847\",\n  \"metageneration\": \"1\",\n  \"location\": \"US\",\n  \"storageClass\": \"STANDARD\",\n  \"etag\": \"CAE=\",\n  \"timeCreated\": \"2026-03-05T18:02:40.541Z\",\n  \"updated\": \"2026-03-05T18:02:40.541Z\",\n  \"labels\": {\n    \"key\": \"value\"\n  },\n  \"softDeletePolicy\": {\n    \"retentionDurationSeconds\": \"604800\",\n    \"effectiveTime\": \"2026-03-05T18:02:40.541Z\"\n  },\n  \"iamConfiguration\": {\n    \"bucketPolicyOnly\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:02:40.541Z\"\n    },\n    \"uniformBucketLevelAccess\": {\n      \"enabled\": true,\n      \"lockedTime\": \"2026-06-03T18:02:40.541Z\"\n    },\n    \"publicAccessPrevention\": \"inherited\"\n  },\n  \"locationType\": \"multi-region\",\n  \"rpo\": \"DEFAULT\"\n}\n",
       "reasonPhrase": "OK"
     }
   },
@@ -33,7 +33,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b/create_bucket_with_metadata_labels/o?versions=true",
       "method": "GET",
       "headers": {
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": ""
     },
@@ -42,13 +42,13 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "private, max-age=0, must-revalidate, no-transform",
-        "date": "Fri, 27 Feb 2026 23:55:42 GMT",
+        "date": "Thu, 05 Mar 2026 18:02:40 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "32",
-        "x-guploader-uploadid": "AGQBYWztFLJAUJHlVj3jBvtMSSYEt5s8MYbe6yC4SDxU0WdlAyoeiTt3XWxDg8mdhGAhZp2c3p2MLS0",
+        "x-guploader-uploadid": "AGQBYWz7CZYUZy1xiNSEJL-sfV1bdnPq35phchzjwULiRCjGK2hIFs-7NYQXYDZlEgiaYK0K9u4IdKg",
         "content-type": "application/json; charset=UTF-8",
         "server": "UploadServer",
-        "expires": "Fri, 27 Feb 2026 23:55:42 GMT"
+        "expires": "Thu, 05 Mar 2026 18:02:40 GMT"
       },
       "body": "{\n  \"kind\": \"storage#objects\"\n}\n",
       "reasonPhrase": "OK"
@@ -59,7 +59,7 @@
       "url": "https://storage.googleapis.com/storage/v1/b/create_bucket_with_metadata_labels?",
       "method": "DELETE",
       "headers": {
-        "x-goog-api-client": "gl-dart/3.10.9 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
       },
       "body": ""
     },
@@ -68,10 +68,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Fri, 27 Feb 2026 23:55:43 GMT",
+        "date": "Thu, 05 Mar 2026 18:02:41 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "0",
-        "x-guploader-uploadid": "AGQBYWycaPimQnQnv88HKnS8wBTu4bW_py_CWF89zjtCzQny5fYm8uK3gMAkpOjqnvRMaUL6ZQZfmeQ",
+        "x-guploader-uploadid": "AGQBYWzmQY1NHe1JvXXrHjv0ZGp8-ObtpeotZeyLomGbweRY3xor_L7YDNTBqzYxaqPkZzBcT2AqIpU",
         "content-type": "application/json",
         "pragma": "no-cache",
         "server": "UploadServer",

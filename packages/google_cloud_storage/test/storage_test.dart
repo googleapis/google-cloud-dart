@@ -76,6 +76,22 @@ void main() async {
       await createBucketWithTearDown(storage, 'storage_with_client');
     });
 
+    test('constructor with future client', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_with_future_client',
+      );
+      addTearDown(testClient.endTest);
+
+      storage = Storage(client: Future.value(testClient));
+      addTearDown(storage.close);
+
+      // There is no easy way to verify that the project ID was used, other than
+      // to create a bucket and assume that it is associated with the correct
+      // project.
+      await createBucketWithTearDown(storage, 'storage_with_future_client');
+    });
+
     test(
       'constructor with project id',
       () async {

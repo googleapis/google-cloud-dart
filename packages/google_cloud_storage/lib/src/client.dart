@@ -67,7 +67,7 @@ final class Storage {
   }
 
   static FutureOr<http.Client> _calculateClient(
-    http.Client? client,
+    FutureOr<http.Client>? client,
     String? emulatorHost,
   ) => switch ((client, emulatorHost)) {
     (final client?, _) => client,
@@ -146,7 +146,7 @@ final class Storage {
     String? projectId,
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
-    http.Client? client,
+    FutureOr<http.Client>? client,
   }) {
     // Ensure that the same value of `storageEmulatorHost` is used everywhere in
     // the constructor.
@@ -414,7 +414,6 @@ final class Storage {
       ['storage', 'v1', 'b', bucket],
       {
         'ifMetagenerationMatch': ?ifMetagenerationMatch?.toString(),
-        'project': await _requiredProjectId,
         'predefinedAcl': ?predefinedAcl,
         'predefinedDefaultObjectAcl': ?predefinedDefaultObjectAcl,
         'projection': ?projection,
@@ -584,7 +583,6 @@ final class Storage {
         {
           'uploadType': 'multipart',
           'name': name,
-          'project': await _requiredProjectId,
           'ifGenerationMatch': ?ifGenerationMatch?.toString(),
           'predefinedAcl': ?predefinedAcl,
           'projection': ?projection,

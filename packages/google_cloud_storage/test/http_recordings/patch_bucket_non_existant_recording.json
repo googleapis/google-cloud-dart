@@ -1,7 +1,7 @@
 [
   {
     "request": {
-      "url": "https://storage.googleapis.com/storage/v1/b/non_existant_bucket?project=skilful-orb-203421",
+      "url": "https://storage.googleapis.com/storage/v1/b/non_existant_bucket?",
       "method": "PATCH",
       "headers": {
         "content-type": "application/json",
@@ -14,10 +14,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 05 Mar 2026 00:55:30 GMT",
+        "date": "Thu, 05 Mar 2026 18:06:06 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AGQBYWx8V-YADq2J0HNR8EWi7apawWx2VmTlLef6wBKPe5khHAXSZqKVwRdybjnGKbZLC4Bai5kelFg",
+        "x-guploader-uploadid": "AGQBYWxs30E2OLkBqpXFR9LhLV79q9AuMs69R5UL6eUNnIA2790-J4UU-ryv-sVrrYzuWV2avg51ErA",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",
