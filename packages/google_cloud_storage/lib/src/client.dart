@@ -53,7 +53,7 @@ final class Storage {
   static final _httpPattern = RegExp(r'^https?://');
 
   static FutureOr<http.Client> _calculateClient(
-    http.Client? client,
+    FutureOr<http.Client>? client,
     String? emulatorHost,
   ) => switch ((client, emulatorHost)) {
     (final client?, _) => client,
@@ -132,7 +132,7 @@ final class Storage {
     String? projectId,
     String? apiEndpoint,
     bool useAuthWithCustomEndpoint = true,
-    http.Client? client,
+    FutureOr<http.Client>? client,
   }) {
     // Ensure that the same value of `storageEmulatorHost` is used everywhere in
     // the constructor.

@@ -1,3 +1,7 @@
+## 0.5.1
+
+* Add support for using a `Future<Client>` in the `Storage` factory.
+
 ## 0.5.0
 
 * Initial release for Dart 3. Support for basic Google Cloud Storage features:
