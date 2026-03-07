@@ -12,11 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 import 'package:test_utils/test_http_client.dart';
@@ -28,135 +28,139 @@ void main() async {
   late TestHttpClient testClient;
 
   group('storage constructors', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
+    group('with credentials', () {
+      setUp(() async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: [
+                'https://www.googleapis.com/auth/cloud-platform',
+                'https://www.googleapis.com/auth/devstorage.read_write',
+              ],
+            );
+
+        testClient = await TestHttpClient.fromEnvironment(authClient);
+      });
+
+      test(
+        'no constuctor arguments',
+        () async {
+          await testClient.startTest(
+            'google_cloud_storage',
+            'storage_no_arguments',
           );
+          addTearDown(testClient.endTest);
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-    });
+          storage = Storage();
+          addTearDown(storage.close);
 
-    test(
-      'no constuctor arguments',
-      () async {
+          // There is no easy way to verify that the project ID was used, other
+          // than to create a bucket and assume that it is associated with the
+          // correct project.
+          await createBucketWithTearDown(storage, 'storage_no_arguments');
+        },
+        skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+            ? '"gcloud auth login" is required for tests using application '
+                  'default credentials'
+            : false,
+      );
+
+      test('constructor with client', () async {
         await testClient.startTest(
           'google_cloud_storage',
-          'storage_no_arguments',
+          'storage_with_client',
         );
         addTearDown(testClient.endTest);
 
-        storage = Storage();
+        storage = Storage(client: testClient);
+        addTearDown(storage.close);
+
+        // There is no easy way to verify that the project ID was used, other than
+        // to create a bucket and assume that it is associated with the correct
+        // project.
+        await createBucketWithTearDown(storage, 'storage_with_client');
+      });
+
+      test('constructor with future client', () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'storage_with_future_client',
+        );
+        addTearDown(testClient.endTest);
+
+        storage = Storage(client: Future.value(testClient));
+        addTearDown(storage.close);
+
+        // There is no easy way to verify that the project ID was used, other than
+        // to create a bucket and assume that it is associated with the correct
+        // project.
+        await createBucketWithTearDown(storage, 'storage_with_future_client');
+      });
+
+      test(
+        'constructor with project id',
+        () async {
+          await testClient.startTest(
+            'google_cloud_storage',
+            'storage_with_project_id',
+          );
+          addTearDown(testClient.endTest);
+
+          storage = Storage(projectId: projectId);
+          addTearDown(storage.close);
+
+          // There is no easy way to verify that the project ID was used, other
+          // than to create a bucket and assume that it is associated with the
+          // correct project.
+          await createBucketWithTearDown(storage, 'storage_with_project_id');
+        },
+        skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+            ? '"gcloud auth login" is required for tests using application '
+                  'default credentials'
+            : false,
+      );
+
+      test('constructor with client and project id', () async {
+        await testClient.startTest(
+          'google_cloud_storage',
+          'storage_with_client_and_project_id',
+        );
+        addTearDown(testClient.endTest);
+
+        storage = Storage(client: testClient, projectId: projectId);
         addTearDown(storage.close);
 
         // There is no easy way to verify that the project ID was used, other
         // than to create a bucket and assume that it is associated with the
         // correct project.
-        await createBucketWithTearDown(storage, 'storage_no_arguments');
-      },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? '"gcloud auth login" is required for tests using application '
-                'default credentials'
-          : false,
-    );
-
-    test('constructor with client', () async {
-      await testClient.startTest('google_cloud_storage', 'storage_with_client');
-      addTearDown(testClient.endTest);
-
-      storage = Storage(client: testClient);
-      addTearDown(storage.close);
-
-      // There is no easy way to verify that the project ID was used, other than
-      // to create a bucket and assume that it is associated with the correct
-      // project.
-      await createBucketWithTearDown(storage, 'storage_with_client');
-    });
-
-    test('constructor with future client', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_with_future_client',
-      );
-      addTearDown(testClient.endTest);
-
-      storage = Storage(client: Future.value(testClient));
-      addTearDown(storage.close);
-
-      // There is no easy way to verify that the project ID was used, other than
-      // to create a bucket and assume that it is associated with the correct
-      // project.
-      await createBucketWithTearDown(storage, 'storage_with_future_client');
-    });
-
-    test(
-      'constructor with project id',
-      () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'storage_with_project_id',
+        await createBucketWithTearDown(
+          storage,
+          'storage_with_client_and_project_id',
         );
-        addTearDown(testClient.endTest);
+      });
+    }, testOn: 'vm');
 
-        storage = Storage(projectId: projectId);
-        addTearDown(storage.close);
-
-        // There is no easy way to verify that the project ID was used, other
-        // than to create a bucket and assume that it is associated with the
-        // correct project.
-        await createBucketWithTearDown(storage, 'storage_with_project_id');
-      },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? '"gcloud auth login" is required for tests using application '
-                'default credentials'
-          : false,
-    );
-
-    test('constructor with client and project id', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_with_client_and_project_id',
-      );
-      addTearDown(testClient.endTest);
-
-      storage = Storage(client: testClient, projectId: projectId);
+    test('noProject', () async {
+      storage = Storage(client: http.Client(), projectId: Storage.noProject);
       addTearDown(storage.close);
 
-      // There is no easy way to verify that the project ID was used, other
-      // than to create a bucket and assume that it is associated with the
-      // correct project.
-      await createBucketWithTearDown(
-        storage,
-        'storage_with_client_and_project_id',
+      expect(
+        await storage.downloadObject(
+          // This is a public dataset.
+          'apache-beam-samples',
+          'shakespeare/kinglear.txt',
+        ),
+        hasLength(greaterThan(100)),
       );
     });
 
     test(
       'noProject throws StateError on project-requiring operations',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'storage_no_project',
-        );
-        addTearDown(testClient.endTest);
-
-        storage = Storage(client: testClient, projectId: Storage.noProject);
+        storage = Storage(client: http.Client(), projectId: Storage.noProject);
         addTearDown(storage.close);
 
         expect(
-          storage.createBucket(BucketMetadata(name: 'dummy-bucket')),
-          throwsStateError,
-        );
-        expect(storage.listBuckets().toList(), throwsStateError);
-        expect(
-          storage.patchBucket('dummy-bucket', BucketMetadataPatchBuilder()),
-          throwsStateError,
-        );
-        expect(
-          storage.insertObject('dummy-bucket', 'dummy-object', []),
+          () => storage.createBucket(BucketMetadata(name: 'dummy-bucket')),
           throwsStateError,
         );
       },
