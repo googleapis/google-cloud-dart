@@ -65,7 +65,7 @@ final class Storage {
   Future<String> get _requiredProjectId async {
     final id = await _projectId;
     if (id == noProject) {
-      throw StateError('A project ID is required for this operation.');
+      throw StateError('a project ID is required');
     }
     return id;
   }
