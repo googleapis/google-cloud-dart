@@ -15,8 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:convert';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
