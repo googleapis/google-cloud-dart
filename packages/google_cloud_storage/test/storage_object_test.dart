@@ -157,5 +157,25 @@ void main() async {
       expect(metadata.name, 'blob1');
       expect(metadata.contentType, 'application/octet-stream');
     });
+
+    test('uploadAsString', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_upload_as_string',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'storage_object_upload_as_string',
+      );
+
+      final blob = storage.bucket(bucketName).object('blob1');
+      final metadata = await blob.uploadAsString(
+        'Hello World!',
+        ifGenerationMatch: BigInt.zero,
+      );
+      expect(metadata.name, 'blob1');
+      expect(metadata.contentType, 'text/plain');
+    });
   });
 }
