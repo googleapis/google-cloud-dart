@@ -1,3 +1,9 @@
+## 0.6.0-wip
+
+* **BREAKING:** Rename `Storage.insertObject` to `Storage.uploadObject`.
+* Add `Storage.uploadObjectFromString`.
+* Add `StorageObject.uploadFromString`.
+
 ## 0.5.1
 
 * Add support for using a `Future<Client>` in the `Storage` factory.
