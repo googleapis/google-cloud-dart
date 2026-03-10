@@ -13,5 +13,8 @@
 // limitations under the License.
 
 import 'package:google_cloud/google_cloud.dart' show computeProjectId;
+import 'package:meta/meta.dart';
 
+/// The default project id to use when no project id is provided.
+@internal
 Future<String> defaultProjectId() => computeProjectId();

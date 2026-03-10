@@ -12,6 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'package:meta/meta.dart';
+
 import 'client.dart' show Storage;
 
+/// The default project id to use when no project id is provided.
+@internal
 Future<String> defaultProjectId() async => Storage.noProject;

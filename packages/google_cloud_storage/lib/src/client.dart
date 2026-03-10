@@ -53,11 +53,12 @@ final class Storage {
   final FutureOr<String> _projectId;
   final Uri _baseUrl;
 
-  /// A value that can be passed as `projectId` to explicitly indicate that
-  /// there is no project.
+  /// A value that can be passed as the `projectId` parameter to the [Storage]
+  /// constructor to explicitly indicate that there is no project.
   ///
   /// Any requests that require a project ID will fail with a [StateError].
-  static const String noProject = '';
+  // Valid project ids cannot contain '<' or '>' and must start with a letter.
+  static const String noProject = '<none>';
 
   static final _httpPattern = RegExp(r'^https?://');
 

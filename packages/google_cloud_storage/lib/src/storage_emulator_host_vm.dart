@@ -16,6 +16,7 @@ import 'dart:ffi';
 import 'dart:io';
 
 import 'package:ffi/ffi.dart';
+import 'package:meta/meta.dart';
 
 final _getenv = DynamicLibrary.process()
     .lookupFunction<
@@ -62,12 +63,13 @@ String? _environmentVariable(String name) {
   }
 }
 
-/// Returns the host and port of the Google Cloud Storage emulator, if set.
+/// The host and port of the Google Cloud Storage emulator, if set.
 ///
 /// Reads the `STORAGE_EMULATOR_HOST` environment variable directly using native
 /// code. [Platform.environment] is not used because it is cached and immutable
 /// and the emulator configuration might not be available until the application
 /// is launched (e.g. when running with the Firebase emulator).
+@internal
 String? get storageEmulatorHost {
   final host = _environmentVariable('STORAGE_EMULATOR_HOST');
   if (host?.isEmpty ?? true) return null;

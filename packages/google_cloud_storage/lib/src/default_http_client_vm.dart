@@ -14,7 +14,12 @@
 
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
+/// The default HTTP client to use when no HTTP client is provided.
+///
+/// Uses Application Default Credentials to authenticate.
+@internal
 Future<http.Client> defaultHttpClient() =>
     auth.clientViaApplicationDefaultCredentials(
       scopes: [

@@ -12,7 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/// Returns the host and port of the Google Cloud Storage emulator, if set.
+import 'package:meta/meta.dart';
+
+/// The host and port of the Google Cloud Storage emulator, if set.
 ///
 /// Will never be set on the web.
+@internal
 String? get storageEmulatorHost => null;

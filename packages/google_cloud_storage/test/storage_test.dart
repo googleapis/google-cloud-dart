@@ -152,16 +152,24 @@ void main() async {
     });
 
     test(
-      'noProject throws StateError on project-requiring operations',
-      () async {
-        storage = Storage(client: http.Client(), projectId: Storage.noProject);
-        addTearDown(storage.close);
+      'noProject throws StateError on createBucket', () async {
+      storage = Storage(client: http.Client(), projectId: Storage.noProject);
+      addTearDown(storage.close);
 
-        expect(
-          () => storage.createBucket(BucketMetadata(name: 'dummy-bucket')),
-          throwsStateError,
-        );
-      },
-    );
+      expect(
+        () => storage.createBucket(BucketMetadata(name: 'dummy-bucket')),
+        throwsStateError,
+      );
+    });
+
+    test('noProject throws StateError on listBuckets', () async {
+      storage = Storage(client: http.Client(), projectId: Storage.noProject);
+      addTearDown(storage.close);
+
+      await expectLater(
+        storage.listBuckets(),
+        emitsInOrder([emitsError(isA<StateError>()), emitsDone]),
+      );
+    });
   });
 }

@@ -13,5 +13,10 @@
 // limitations under the License.
 
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
+/// The default HTTP client to use when no HTTP client is provided.
+///
+/// On the web, the [http.Client] will not provide credentials.
+@internal
 Future<http.Client> defaultHttpClient() => Future.value(http.Client());
