@@ -31,7 +31,7 @@ void main() async {
   late Storage storage;
   late TestHttpClient testClient;
 
-  group('storage object', () {
+  group('upload object from string', () {
     setUp(() async {
       fixedBoundaryString = 'boundary';
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
@@ -48,114 +48,79 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('delete', () async {
+    test('metadata is not set', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'storage_object_delete',
+        'upload_object_from_string_no_metadata',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'storage_object_delete',
+        'upload_object_from_string_no_metadata',
       );
-      await storage.uploadObject(
+
+      final metadata = await storage.uploadObjectFromString(
         bucketName,
-        'blob1',
-        utf8.encode('Hello World!'),
+        'my-object',
+        'Hello, World!',
         ifGenerationMatch: BigInt.zero,
       );
 
-      final blob = storage.bucket(bucketName).object('blob1');
-      await blob.delete();
-
-      await expectLater(blob.metadata, throwsA(isA<NotFoundException>()));
-    });
-
-    test('download', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_object_download',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_download',
-      );
-      await storage.uploadObject(
-        bucketName,
-        'blob1',
-        utf8.encode('Hello World!'),
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      final blob = storage.bucket(bucketName).object('blob1');
-      final bytes = await blob.download();
-      expect(bytes, utf8.encode('Hello World!'));
-    });
-
-    test('metadata', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_object_metadata',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_metadata',
-      );
-      await storage.uploadObject(
-        bucketName,
-        'blob1',
-        utf8.encode('Hello World!'),
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      final blob = storage.bucket(bucketName).object('blob1');
-      final metadata = await blob.metadata();
-      expect(metadata.name, 'blob1');
-    });
-
-    test('patch', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'storage_object_patch',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_patch',
-      );
-      await storage.uploadObject(
-        bucketName,
-        'blob1',
-        utf8.encode('Hello World!'),
-      );
-
-      final blob = storage.bucket(bucketName).object('blob1');
-      final metadata = await blob.patch(
-        ObjectMetadataPatchBuilder()..contentType = 'text/plain',
-      );
       expect(metadata.contentType, 'text/plain');
+
+      final downloaded = await storage.downloadObject(bucketName, 'my-object');
+      expect(utf8.decode(downloaded), 'Hello, World!');
     });
 
-    test('upload', () async {
+    test('metadata is set without contentType', () async {
       await testClient.startTest(
         'google_cloud_storage',
-        'storage_object_upload',
+        'upload_object_from_string_custom_metadata',
       );
       addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'storage_object_upload',
+        'upload_object_from_string_custom_metadata',
       );
 
-      final blob = storage.bucket(bucketName).object('blob1');
-      final metadata = await blob.upload(
-        utf8.encode('Hello World!'),
+      final metadata = await storage.uploadObjectFromString(
+        bucketName,
+        'my-object',
+        'Hello, World!',
+        metadata: ObjectMetadata(metadata: {'customMetadata': 'value'}),
         ifGenerationMatch: BigInt.zero,
       );
-      expect(metadata.name, 'blob1');
-      expect(metadata.contentType, 'application/octet-stream');
+
+      expect(metadata.contentType, 'text/plain');
+      expect(metadata.metadata?['customMetadata'], 'value');
+
+      final downloaded = await storage.downloadObject(bucketName, 'my-object');
+      expect(utf8.decode(downloaded), 'Hello, World!');
+    });
+
+    test('metadata is set with contentType', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'upload_object_from_string_custom_content_type',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'upload_object_from_string_custom_content_type',
+      );
+
+      final metadata = await storage.uploadObjectFromString(
+        bucketName,
+        'my-object',
+        'Hello, World!',
+        metadata: ObjectMetadata(contentType: 'text/html'),
+        ifGenerationMatch: BigInt.zero,
+      );
+
+      expect(metadata.contentType, 'text/html');
+
+      final downloaded = await storage.downloadObject(bucketName, 'my-object');
+      expect(utf8.decode(downloaded), 'Hello, World!');
     });
   });
 }

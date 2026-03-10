@@ -252,7 +252,7 @@ final class StorageObject {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => storage.insertObject(
+  }) => storage.uploadObject(
     bucketName,
     name,
     content,

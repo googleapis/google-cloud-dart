@@ -71,7 +71,7 @@ void main() async {
         'list_objects_single_object',
       );
 
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object1.txt',
         utf8.encode('content1'),
@@ -96,18 +96,18 @@ void main() async {
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
-      final obj1v1 = await storage.insertObject(
+      final obj1v1 = await storage.uploadObject(
         bucketName,
         'object1.txt',
         utf8.encode('v1'),
       );
-      final obj1v2 = await storage.insertObject(
+      final obj1v2 = await storage.uploadObject(
         bucketName,
         'object1.txt',
         utf8.encode('v2'),
       );
 
-      final obj2v1 = await storage.insertObject(
+      final obj2v1 = await storage.uploadObject(
         bucketName,
         'object2.txt',
         utf8.encode('v1'),
@@ -142,9 +142,9 @@ void main() async {
         ),
       );
 
-      await storage.insertObject(softDeletedBucket, 'object1.txt', [0]);
+      await storage.uploadObject(softDeletedBucket, 'object1.txt', [0]);
       await storage.deleteObject(softDeletedBucket, 'object1.txt');
-      await storage.insertObject(softDeletedBucket, 'object2.txt', [1]);
+      await storage.uploadObject(softDeletedBucket, 'object2.txt', [1]);
 
       await expectLater(
         storage
@@ -171,9 +171,9 @@ void main() async {
         ),
       );
 
-      await storage.insertObject(softDeletedBucket, 'object1.txt', [0]);
+      await storage.uploadObject(softDeletedBucket, 'object1.txt', [0]);
       await storage.deleteObject(softDeletedBucket, 'object1.txt');
-      await storage.insertObject(softDeletedBucket, 'object2.txt', [1]);
+      await storage.uploadObject(softDeletedBucket, 'object2.txt', [1]);
 
       await expectLater(
         storage
@@ -194,11 +194,11 @@ void main() async {
         'list_objects_pagination',
       );
 
-      await storage.insertObject(bucketName, 'object1.txt', [1]);
-      await storage.insertObject(bucketName, 'object2.txt', [2]);
-      await storage.insertObject(bucketName, 'object3.txt', [3]);
-      await storage.insertObject(bucketName, 'object4.txt', [4]);
-      await storage.insertObject(bucketName, 'object5.txt', [5]);
+      await storage.uploadObject(bucketName, 'object1.txt', [1]);
+      await storage.uploadObject(bucketName, 'object2.txt', [2]);
+      await storage.uploadObject(bucketName, 'object3.txt', [3]);
+      await storage.uploadObject(bucketName, 'object4.txt', [4]);
+      await storage.uploadObject(bucketName, 'object5.txt', [5]);
 
       await expectLater(
         storage.listObjects(bucketName, maxResults: 2).map((b) => b.name),

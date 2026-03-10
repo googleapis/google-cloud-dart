@@ -59,7 +59,7 @@ void main() async {
         storage,
         'delete_object_success',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -102,12 +102,12 @@ void main() async {
         'delete_object_with_generation',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
-      final obj1 = await storage.insertObject(
+      final obj1 = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('Text'),
       );
-      final obj2 = await storage.insertObject(
+      final obj2 = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('More text'),
@@ -160,7 +160,7 @@ void main() async {
         storage,
         'delete_object_with_if_generation_match_success',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -189,7 +189,7 @@ void main() async {
         storage,
         'delete_object_with_if_generation_match_failure',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
