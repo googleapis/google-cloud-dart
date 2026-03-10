@@ -28,3 +28,10 @@ builds themselves.
 We have chosen Terraform to manage these resources. That makes it easy to audit
 them, recreate the resources when needed, and we can always change to a
 different IaaC platform if needed.
+
+## Initial Setup
+
+Before the Google Cloud Build triggers and configurations can be applied, you must bootstrap the Terraform state bucket.
+
+1.  Follow the instructions in `bootstrap/README.md` to create the initial Terraform state bucket (`dart-sdk-testing-terraform`).
+2.  Once the state bucket is created, follow the instructions in `builds/README.md` to set up the build resources and triggers.
