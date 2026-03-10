@@ -151,8 +151,7 @@ void main() async {
       );
     });
 
-    test(
-      'noProject throws StateError on createBucket', () async {
+    test('noProject throws StateError on createBucket', () async {
       storage = Storage(client: http.Client(), projectId: Storage.noProject);
       addTearDown(storage.close);
 
