@@ -53,7 +53,7 @@ final class Storage {
   final FutureOr<String> _projectId;
   final Uri _baseUrl;
 
-  /// A value that can be passed to [projectId] to explicitly indicate that
+  /// A value that can be passed as `projectId` to explicitly indicate that
   /// there is no project.
   ///
   /// Any requests that require a project ID will fail with a [StateError].

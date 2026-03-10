@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-library;
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
@@ -74,9 +72,9 @@ void main() async {
         storage = Storage(client: testClient);
         addTearDown(storage.close);
 
-        // There is no easy way to verify that the project ID was used, other than
-        // to create a bucket and assume that it is associated with the correct
-        // project.
+        // There is no easy way to verify that the project ID was used, other
+        // than to create a bucket and assume that it is associated with the
+        // correct project.
         await createBucketWithTearDown(storage, 'storage_with_client');
       });
 
@@ -90,9 +88,9 @@ void main() async {
         storage = Storage(client: Future.value(testClient));
         addTearDown(storage.close);
 
-        // There is no easy way to verify that the project ID was used, other than
-        // to create a bucket and assume that it is associated with the correct
-        // project.
+        // There is no easy way to verify that the project ID was used, other
+        // than to create a bucket and assume that it is associated with the
+        // correct project.
         await createBucketWithTearDown(storage, 'storage_with_future_client');
       });
 
