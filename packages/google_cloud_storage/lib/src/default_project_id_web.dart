@@ -12,6 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-Future<String> defaultProjectId() => throw StateError(
-  '`projectId` must be provided when running in the browser.',
-);
+import 'client.dart' show Storage;
+
+Future<String> defaultProjectId() async => Storage.noProject;
