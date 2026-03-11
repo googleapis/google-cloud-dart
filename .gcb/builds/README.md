@@ -33,6 +33,6 @@ It assumes you have already created the remote state bucket as described in `../
 The configuration is broken up into several modules:
 
 -   `services`: Enables required Google Cloud APIs for testing (e.g., Storage, Secret Manager, AI Platform, etc.).
--   `resources`: Provisions integration testing resources, including the `dart-sdk-pool` worker pool and the `build-cache` Cloud Storage bucket.
--   `grants`: Configures IAM permissions for the integration test runner service account, ensuring it has adequate access to the build cache and artifacts.
+-   `resources`: Provisions integration testing resources, including the `dart-sdk-pool` worker pool.
+-   `grants`: Configures IAM permissions for the integration test runner service account, ensuring it has adequate access to the testing resources.
 -   `triggers`: Sets up the Google Cloud Build triggers attached to the GitHub repository. It defines triggers for pull requests, post-merge builds, and a periodic Terraform synchronization job.

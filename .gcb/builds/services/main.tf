@@ -15,73 +15,73 @@
 variable "project" {}
 
 resource "google_project_service" "aiplatform" {
-  project = var.project
-  service = "aiplatform.googleapis.com"
+  project                    = var.project
+  service                    = "aiplatform.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "generativelanguage" {
-  project = var.project
-  service = "generativelanguage.googleapis.com"
+  project                    = var.project
+  service                    = "generativelanguage.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "cloudfunctions" {
-  project = var.project
-  service = "cloudfunctions.googleapis.com"
+  project                    = var.project
+  service                    = "cloudfunctions.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "iam" {
-  project = var.project
-  service = "iam.googleapis.com"
+  project                    = var.project
+  service                    = "iam.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "identitytoolkit" {
-  project = var.project
-  service = "identitytoolkit.googleapis.com"
+  project                    = var.project
+  service                    = "identitytoolkit.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "language" {
-  project = var.project
-  service = "language.googleapis.com"
+  project                    = var.project
+  service                    = "language.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "logging" {
-  project = var.project
-  service = "logging.googleapis.com"
+  project                    = var.project
+  service                    = "logging.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "secretmanager" {
-  project = var.project
-  service = "secretmanager.googleapis.com"
+  project                    = var.project
+  service                    = "secretmanager.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "storage" {
-  project = var.project
-  service = "storage.googleapis.com"
+  project                    = var.project
+  service                    = "storage.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "translate" {
-  project = var.project
-  service = "translate.googleapis.com"
+  project                    = var.project
+  service                    = "translate.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "cloudbuild" {
-  project = var.project
-  service = "cloudbuild.googleapis.com"
+  project                    = var.project
+  service                    = "cloudbuild.googleapis.com"
   disable_dependent_services = true
 }
 
 resource "google_project_service" "cloudscheduler" {
-  project = var.project
-  service = "cloudscheduler.googleapis.com"
+  project                    = var.project
+  service                    = "cloudscheduler.googleapis.com"
   disable_dependent_services = true
 }

@@ -16,23 +16,12 @@ variable "project" {
   type = string
 }
 
-variable "build_cache" {
-  type = string
-}
-
 data "google_project" "project" {
 }
 
 # This service account is created externally. It is used for all the builds.
 data "google_service_account" "integration-test-runner" {
   account_id = "integration-test-runner"
-}
-
-# The service account will need to read and write into the build cache.
-resource "google_storage_bucket_iam_member" "sa-can-use-build-cache" {
-  bucket = var.build_cache
-  role   = "roles/storage.admin"
-  member = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
 }
 
 output "runner" {

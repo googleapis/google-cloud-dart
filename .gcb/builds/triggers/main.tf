@@ -18,7 +18,7 @@ variable "service_account" {}
 
 locals {
   gcb_app_installation_id = 1168573
-  gcb_secret_name = "projects/${var.project}/secrets/GitHub-github-oauthtoken-da481a/versions/latest"
+  gcb_secret_name         = "projects/${var.project}/secrets/GitHub-github-oauthtoken-da481a/versions/latest"
 
   common_builds = {
     integration = {

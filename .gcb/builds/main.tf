@@ -44,9 +44,8 @@ module "resources" {
 # Create the service account needed for GCB and grant it the necessary
 # permissions.
 module "grants" {
-  source      = "./grants"
-  project     = var.project
-  build_cache = module.resources.build-cache
+  source  = "./grants"
+  project = var.project
 }
 
 # Create the GCB triggers.
