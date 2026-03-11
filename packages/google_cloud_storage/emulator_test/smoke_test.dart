@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @Tags(['firebase-emulator'])
-@TestOn('vm')
 library;
 
 import 'dart:convert';
@@ -41,7 +40,7 @@ void main() async {
         await storage.downloadObject(bucketName, 'object1'),
         utf8.encode('Hello World!'),
       );
-    });
+    }, testOn: 'vm');
 
     test('explicit configuration', () async {
       final storage = Storage(
