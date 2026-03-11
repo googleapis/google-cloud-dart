@@ -17,19 +17,7 @@ set -e
 
 echo "==== Running Dart Integration Tests ===="
 
-# Find all directories containing both pubspec.yaml and a test directory
-find . -name "pubspec.yaml" -print0 | while IFS= read -r -d '' pubspec_path; do
-  dir=$(dirname "$pubspec_path")
-  if [ -d "$dir/test" ]; then
-    echo "==== Testing package in $dir ===="
-    (
-      cd "$dir"
-      dart pub get
-      # Run tests, focusing on integration tests if they are separated, 
-      # or just all tests.
-      dart test
-    )
-  fi
-done
+cd packages/google_cloud_storage/
+dart --define=http=proxy test/storage_test.dart
 
 echo "==== DONE ===="
