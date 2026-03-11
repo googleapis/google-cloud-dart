@@ -28,13 +28,6 @@ data "google_service_account" "integration-test-runner" {
   account_id = "integration-test-runner"
 }
 
-# The service account will need to read tarballs uploaded by `gcloud submit`.
-resource "google_storage_bucket_iam_member" "sa-can-read-build-tarballs" {
-  bucket = "${var.project}_cloudbuild"
-  role   = "roles/storage.objectViewer"
-  member = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
-}
-
 # The service account will need to read and write into the build cache.
 resource "google_storage_bucket_iam_member" "sa-can-use-build-cache" {
   bucket = var.build_cache
