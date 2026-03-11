@@ -18,6 +18,7 @@ set -e
 echo "==== Running Dart Integration Tests ===="
 
 cd packages/google_cloud_storage/
+dart pub get
 dart --define=http=proxy test/storage_test.dart
 
 echo "==== DONE ===="
