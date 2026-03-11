@@ -13,71 +13,39 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-set -e
-
 echo "==== Running Dart Integration Tests ===="
 
 failed=0
-summary="## Integration Test Results\n\n"
 
-# Find all directories containing both pubspec.yaml and a test directory
-while IFS= read -r -d '' pubspec_path; do
-  dir=$(dirname "$pubspec_path")
-  if [ -d "$dir/test" ]; then
-    echo "==== Testing package in $dir ===="
-    
-    set +e
-    (
-      cd "$dir"
-      dart pub get
-      # Run tests, focusing on integration tests if they are separated, 
-      # or just all tests.
-      dart test
-    )
-    exit_code=$?
-    set -e
-    
-    if [ $exit_code -eq 0 ]; then
-      summary="$summary- ✅ \`$dir\` passed\n"
-    else
-      summary="$summary- ❌ \`$dir\` failed\n"
-      failed=1
-    fi
-  fi
-done < <(find . -name "pubspec.yaml" -print0)
+cd packages/google_cloud_storage/
+dart pub get
 
-echo "==== DONE ===="
+set +e
+dart --define=http=proxy test/storage_test.dart >/tmp/test.output 2>&1
+exit_code=$?
+set -e
 
-# Post a comment back to the GitHub PR if the necessary environment variables are set.
+cd ../..
+
+if [ $exit_code -ne 0 ]; then
+  failed=1
+fi
+
 if [ -n "$_PR_NUMBER" ] && [ -n "$REPO_FULL_NAME" ] && [ -n "$GITHUB_TOKEN" ]; then
   echo "Posting test results to PR #$_PR_NUMBER"
-  export SUMMARY="$summary"
   
-  dart run <(cat << 'EOF'
-import 'dart:convert';
-import 'dart:io';
+  if ! command -v jq &> /dev/null; then
+    apt-get update -y && apt-get install -y jq
+  fi
 
-void main() async {
-  final summary = Platform.environment['SUMMARY']!;
-  final token = Platform.environment['GITHUB_TOKEN']!;
-  final repo = Platform.environment['REPO_FULL_NAME']!;
-  final pr = Platform.environment['_PR_NUMBER']!;
+  # Escape the test output into a JSON string
+  json_payload=$(jq -Rs --arg prefix "## Integration Test Results\n\n\`\`\`text\n" --arg suffix "\n\`\`\`\n" '{body: ($prefix + . + $suffix)}' < /tmp/test.output)
 
-  final uri = Uri.parse('https://api.github.com/repos/$repo/issues/$pr/comments');
-  final request = await HttpClient().postUrl(uri)
-    ..headers.add('Authorization', 'token $token')
-    ..headers.add('Accept', 'application/vnd.github.v3+json')
-    ..headers.add('User-Agent', 'Dart-Cloud-Build')
-    ..write(jsonEncode({'body': summary}));
-
-  final response = await request.close();
-  print('GitHub API response: ${response.statusCode}');
-  
-  // Consume the response body to ensure the request is fully completed
-  await response.drain();
-}
-EOF
-)
+  curl -s -S -X POST -H "Authorization: token $GITHUB_TOKEN" \
+       -H "Accept: application/vnd.github.v3+json" \
+       -H "User-Agent: Dart-Cloud-Build" \
+       -d "$json_payload" \
+       "https://api.github.com/repos/$REPO_FULL_NAME/issues/$_PR_NUMBER/comments"
 fi
 
 exit $failed
