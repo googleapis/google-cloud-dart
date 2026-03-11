@@ -848,10 +848,11 @@ final class Storage {
     String? userProject,
     RetryRunner retry = defaultRetry,
   }) {
-    var md = metadata ?? ObjectMetadata(contentType: 'text/plain');
-    if (md.contentType == null) {
-      md = md.copyWith(contentType: 'text/plain');
-    }
+    final md = switch (metadata) {
+      ObjectMetadata(contentType: _?) => metadata,
+      ObjectMetadata() => metadata.copyWith(contentType: 'text/plain'),
+      null => ObjectMetadata(contentType: 'text/plain'),
+    };
     return uploadObject(
       bucket,
       name,
