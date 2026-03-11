@@ -58,7 +58,7 @@ void main() async {
         storage,
         'storage_object_delete',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'blob1',
         utf8.encode('Hello World!'),
@@ -81,7 +81,7 @@ void main() async {
         storage,
         'storage_object_download',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'blob1',
         utf8.encode('Hello World!'),
@@ -103,7 +103,7 @@ void main() async {
         storage,
         'storage_object_metadata',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'blob1',
         utf8.encode('Hello World!'),
@@ -125,7 +125,7 @@ void main() async {
         storage,
         'storage_object_patch',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'blob1',
         utf8.encode('Hello World!'),
@@ -156,6 +156,26 @@ void main() async {
       );
       expect(metadata.name, 'blob1');
       expect(metadata.contentType, 'application/octet-stream');
+    });
+
+    test('uploadAsString', () async {
+      await testClient.startTest(
+        'google_cloud_storage',
+        'storage_object_upload_as_string',
+      );
+      addTearDown(testClient.endTest);
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'storage_object_upload_as_string',
+      );
+
+      final blob = storage.bucket(bucketName).object('blob1');
+      final metadata = await blob.uploadAsString(
+        'Hello World!',
+        ifGenerationMatch: BigInt.zero,
+      );
+      expect(metadata.name, 'blob1');
+      expect(metadata.contentType, 'text/plain');
     });
   });
 }

@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @Tags(['firebase-emulator'])
-@TestOn('vm')
 library;
 
 import 'dart:convert';
@@ -29,10 +28,10 @@ void main() async {
 
       const bucketName = 'storage_emulator_host';
 
-      final objectMetadata = await storage.insertObject(
+      final objectMetadata = await storage.uploadObjectFromString(
         bucketName,
         'object1',
-        utf8.encode('Hello World!'),
+        'Hello World!',
         ifGenerationMatch: BigInt.zero,
       );
       expect(objectMetadata.size, BigInt.from(12));
@@ -41,7 +40,7 @@ void main() async {
         await storage.downloadObject(bucketName, 'object1'),
         utf8.encode('Hello World!'),
       );
-    });
+    }, testOn: 'vm');
 
     test('explicit configuration', () async {
       final storage = Storage(
@@ -53,10 +52,10 @@ void main() async {
 
       const bucketName = 'explicit_configuration';
 
-      final objectMetadata = await storage.insertObject(
+      final objectMetadata = await storage.uploadObjectFromString(
         bucketName,
         'object1',
-        utf8.encode('Hello World!'),
+        'Hello World!',
         ifGenerationMatch: BigInt.zero,
       );
       expect(objectMetadata.size, BigInt.from(12));

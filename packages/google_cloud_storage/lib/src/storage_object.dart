@@ -252,7 +252,57 @@ final class StorageObject {
     String? projection,
     String? userProject,
     RetryRunner retry = defaultRetry,
-  }) => storage.insertObject(
+  }) => storage.uploadObject(
+    bucketName,
+    name,
+    content,
+    metadata: metadata,
+    ifGenerationMatch: ifGenerationMatch,
+    predefinedAcl: predefinedAcl,
+    projection: projection,
+    userProject: userProject,
+    retry: retry,
+  );
+
+  /// Creates or updates the content of a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `ifGenerationMatch` is set.
+  ///
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
+  /// will be `'text/plain'`. If `metadata.name` does not match [name], a
+  /// [BadRequestException] is thrown.
+  ///
+  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// on whether the object's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  /// A value of `0` indicates that the object must not already exist.
+  ///
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> uploadAsString(
+    String content, {
+    ObjectMetadata? metadata,
+    BigInt? ifGenerationMatch,
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => storage.uploadObjectFromString(
     bucketName,
     name,
     content,

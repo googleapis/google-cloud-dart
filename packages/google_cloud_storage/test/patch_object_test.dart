@@ -60,7 +60,7 @@ void main() async {
         storage,
         'patch_object_change_acl',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -90,7 +90,7 @@ void main() async {
         storage,
         'patch_object_remove_acl',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -119,7 +119,7 @@ void main() async {
         storage,
         'patch_object_change_cache_control',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -148,7 +148,7 @@ void main() async {
         storage,
         'patch_object_change_cache_control',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -177,7 +177,7 @@ void main() async {
         storage,
         'patch_object_change_content_disposition',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -209,7 +209,7 @@ void main() async {
         storage,
         'patch_object_remove_content_disposition',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -239,7 +239,7 @@ void main() async {
         storage,
         'patch_object_change_content_encoding',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -268,7 +268,7 @@ void main() async {
         storage,
         'patch_object_remove_content_encoding',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -298,7 +298,7 @@ void main() async {
         storage,
         'patch_object_change_content_language',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -327,7 +327,7 @@ void main() async {
         storage,
         'patch_object_remove_content_language',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -357,7 +357,7 @@ void main() async {
         storage,
         'patch_object_change_content_type',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -386,7 +386,7 @@ void main() async {
         storage,
         'patch_object_remove_content_type',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -415,7 +415,7 @@ void main() async {
         storage,
         'patch_object_change_custom_time',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -445,7 +445,7 @@ void main() async {
         storage,
         'patch_object_change_event_based_hold',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -473,7 +473,7 @@ void main() async {
         storage,
         'patch_object_remove_event_based_hold',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -502,7 +502,7 @@ void main() async {
         storage,
         'patch_object_change_metadata',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -534,7 +534,7 @@ void main() async {
         storage,
         'patch_object_remove_metadata',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -567,7 +567,7 @@ void main() async {
           enableObjectRetention: true,
         );
 
-        await storage.insertObject(
+        await storage.uploadObject(
           bucketName,
           'object.txt',
           utf8.encode('content'),
@@ -623,7 +623,7 @@ void main() async {
             .toUtc()
             .toTimestamp();
 
-        await storage.insertObject(
+        await storage.uploadObject(
           bucketName,
           'object.txt',
           utf8.encode('content'),
@@ -662,7 +662,7 @@ void main() async {
         storage,
         'patch_object_change_temporary_hold',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -690,7 +690,7 @@ void main() async {
         storage,
         'patch_object_no_change',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -719,12 +719,12 @@ void main() async {
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
-      final obj1 = await storage.insertObject(
+      final obj1 = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('v1'),
       );
-      final obj2 = await storage.insertObject(
+      final obj2 = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('v2'),
@@ -782,7 +782,7 @@ void main() async {
         storage,
         'patch_object_with_if_metageneration_match_success',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -811,7 +811,7 @@ void main() async {
         storage,
         'patch_object_with_if_metageneration_match_failure',
       );
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -841,7 +841,7 @@ void main() async {
         storage,
         'patch_object_with_if_generation_match_success',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -870,7 +870,7 @@ void main() async {
         storage,
         'patch_object_with_if_generation_match_failure',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObject(
         bucketName,
         'object.txt',
         utf8.encode('content'),
@@ -902,7 +902,7 @@ void main() async {
           storage,
           'patch_object_with_predefined_acl',
         );
-        await storage.insertObject(
+        await storage.uploadObject(
           bucketName,
           'object.txt',
           utf8.encode('content'),

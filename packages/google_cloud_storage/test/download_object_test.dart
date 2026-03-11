@@ -63,7 +63,7 @@ void main() async {
         'download_object_empty',
       );
 
-      await storage.insertObject(
+      await storage.uploadObject(
         bucketName,
         'object1',
         [],
@@ -91,7 +91,7 @@ void main() async {
         for (var j = 0; j < i; j++) {
           uploadedData[j] = j % 256;
         }
-        await storage.insertObject(
+        await storage.uploadObject(
           bucketName,
           'object1',
           uploadedData,
@@ -119,7 +119,7 @@ void main() async {
           'download_object_gzipped',
         );
 
-        await storage.insertObject(
+        await storage.uploadObject(
           bucketName,
           'object1',
           gzip.encode(utf8.encode('Hello World!')),
@@ -151,7 +151,7 @@ void main() async {
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
-      final metadataV1 = await storage.insertObject(bucketName, 'object1', [
+      final metadataV1 = await storage.uploadObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
       addTearDown(
@@ -162,7 +162,7 @@ void main() async {
         ),
       );
 
-      final metadataV2 = await storage.insertObject(bucketName, 'object1', [
+      final metadataV2 = await storage.uploadObject(bucketName, 'object1', [
         2,
       ], ifGenerationMatch: metadataV1.generation);
       addTearDown(
@@ -199,7 +199,7 @@ void main() async {
         'download_object_if_generation_match_success',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'object1', [
+      final metadata = await storage.uploadObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
@@ -222,7 +222,7 @@ void main() async {
         'download_object_if_generation_match_failure',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'object1', [
+      final metadata = await storage.uploadObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
@@ -248,7 +248,7 @@ void main() async {
         'download_object_if_metageneration_match_success',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'object1', [
+      final metadata = await storage.uploadObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 
@@ -270,7 +270,7 @@ void main() async {
         'download_object_if_metageneration_match_failure',
       );
 
-      final metadata = await storage.insertObject(bucketName, 'object1', [
+      final metadata = await storage.uploadObject(bucketName, 'object1', [
         1,
       ], ifGenerationMatch: BigInt.zero);
 

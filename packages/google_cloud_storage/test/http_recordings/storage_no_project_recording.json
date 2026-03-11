@@ -1,0 +1,58 @@
+[
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/storage/v1/b/dummy-bucket?",
+      "method": "PATCH",
+      "headers": {
+        "content-type": "application/json",
+        "x-goog-api-client": "gl-dart/3.11.1 gax/0.2.0 rest/0.2.0 gapic/0.2.0"
+      },
+      "body": "{}"
+    },
+    "response": {
+      "statusCode": 403,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 06 Mar 2026 01:49:19 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "518",
+        "x-guploader-uploadid": "AGQBYWygUXHIMbQpOllkJD7jgGP1S0awf6b5fbWPIFSwRLLWQhwi5zzyYSw-2AYi3-qH8QYX",
+        "content-type": "application/json; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"bquinlan@google.com does not have storage.buckets.get access to the Google Cloud Storage bucket. Permission 'storage.buckets.get' denied on resource (or it may not exist).\",\n    \"errors\": [\n      {\n        \"message\": \"bquinlan@google.com does not have storage.buckets.get access to the Google Cloud Storage bucket. Permission 'storage.buckets.get' denied on resource (or it may not exist).\",\n        \"domain\": \"global\",\n        \"reason\": \"forbidden\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Forbidden"
+    }
+  },
+  {
+    "request": {
+      "url": "https://storage.googleapis.com/upload/storage/v1/b/dummy-bucket/o?uploadType=multipart&name=dummy-object",
+      "method": "POST",
+      "headers": {
+        "Content-Type": "multipart/related; boundary=http-boundary-7kulj5d94pfqwgz1un91xr2bmo2wfttkvy2w24d3u4am3krrs0bylnnm",
+        "Content-Length": "377"
+      },
+      "body": "LS1odHRwLWJvdW5kYXJ5LTdrdWxqNWQ5NHBmcXdnejF1bjkxeHIyYm1vMndmdHRrdnkydzI0ZDN1NGFtM2tycnMwYnlsbm5tDQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL2pzb247IGNoYXJzZXQ9VVRGLTgNCg0KeyJjcmMzMmMiOiJBQUFBQUE9PSIsIm1kNUhhc2giOiIxQjJNMlk4QXNnVHBnQW1ZN1BoQ2ZnPT0ifQ0KLS1odHRwLWJvdW5kYXJ5LTdrdWxqNWQ5NHBmcXdnejF1bjkxeHIyYm1vMndmdHRrdnkydzI0ZDN1NGFtM2tycnMwYnlsbm5tDQpDb250ZW50LVR5cGU6IGFwcGxpY2F0aW9uL29jdGV0LXN0cmVhbQ0KDQoNCi0taHR0cC1ib3VuZGFyeS03a3VsajVkOTRwZnF3Z3oxdW45MXhyMmJtbzJ3ZnR0a3Z5MncyNGQzdTRhbTNrcnJzMGJ5bG5ubS0tDQo="
+    },
+    "response": {
+      "statusCode": 403,
+      "headers": {
+        "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
+        "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
+        "date": "Fri, 06 Mar 2026 01:49:19 GMT",
+        "vary": "Origin,X-Origin",
+        "content-length": "393",
+        "x-guploader-uploadid": "AGQBYWwcr71UxkFIQfkkJxvaGaS7m2jATb_sad-ogPPC7jPEmeC42pPd5KwoGrMlYqvFo4DZ",
+        "content-type": "text/html; charset=UTF-8",
+        "pragma": "no-cache",
+        "server": "UploadServer",
+        "expires": "Mon, 01 Jan 1990 00:00:00 GMT"
+      },
+      "body": "{\n  \"error\": {\n    \"code\": 403,\n    \"message\": \"The billing account for the owning project is disabled in state closed\",\n    \"errors\": [\n      {\n        \"message\": \"The billing account for the owning project is disabled in state closed\",\n        \"domain\": \"global\",\n        \"reason\": \"accountDisabled\",\n        \"locationType\": \"header\",\n        \"location\": \"Authorization\"\n      }\n    ]\n  }\n}\n",
+      "reasonPhrase": "Forbidden"
+    }
+  }
+]
