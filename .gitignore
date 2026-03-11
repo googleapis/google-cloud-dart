@@ -14,3 +14,13 @@
 
 .dart_tool/
 pubspec.lock
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.backup
+*.tfstate.lock.info
+*.tplan
+*.tfvars
+*.tfvars.json
+.terraform.lock.hcl
