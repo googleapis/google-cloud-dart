@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:convert';
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_rpc/service_client.dart';
@@ -526,82 +527,6 @@ final class Storage {
     isIdempotent: true,
   );
 
-  /// Creates or updates the content of a [Google Cloud Storage object][].
-  ///
-  /// This operation is idempotent if `ifGenerationMatch` is set.
-  ///
-  /// If [metadata] is non-null, it will be used as the object's metadata. If
-  /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
-  ///
-  /// If set, `ifGenerationMatch` makes updating the object content conditional
-  /// on whether the object's generation matches the provided value. If the
-  /// generation does not match, a [PreconditionFailedException] is thrown.
-  /// A value of `0` indicates that the object must not already exist.
-  ///
-  /// If set, `predefinedAcl` applies a predefined set of access controls to the
-  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
-  /// `true`, then setting `predefinedAcl` will result in a
-  /// [BadRequestException].
-  ///
-  /// `projection` controls the level of detail returned in the response. A
-  /// value of `"full"` returns all object properties, while a value of
-  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
-  ///
-  /// If set, `userProject` is the project to be billed for this request. This
-  /// argument must be set for [Requester Pays] buckets.
-  ///
-  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
-  ///
-  /// For example:
-  ///
-  /// ```dart
-  /// final metadata = await storage.insertObject(
-  ///   'my-bucket',
-  ///   'hello.txt',
-  ///   utf8.encode('Hello, World!'),
-  ///   metadata: ObjectMetadata(contentType: 'text/plain'),
-  ///   ifGenerationMatch: BigInt.zero, // Only insert if the object doesn't exist.
-  /// );
-  /// ```
-  ///
-  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
-  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
-  Future<ObjectMetadata> insertObject(
-    String bucket,
-    String name,
-    List<int> content, {
-    ObjectMetadata? metadata,
-    BigInt? ifGenerationMatch,
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
-    // support ifMetagenerationNotMatch.
-    //
-    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
-    // status code and an empty body. This will cause `objects.insert` to throw
-    // `TypeError` during JSON deserialization.
-    String? predefinedAcl,
-    String? projection,
-    String? userProject,
-    RetryRunner retry = defaultRetry,
-  }) => retry.run(
-    () async => uploadFile(
-      await _httpClient,
-      _requestUrl(
-        ['upload', 'storage', 'v1', 'b', bucket, 'o'],
-        {
-          'uploadType': 'multipart',
-          'name': name,
-          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
-          'predefinedAcl': ?predefinedAcl,
-          'projection': ?projection,
-          'userProject': ?userProject,
-        },
-      ),
-      content,
-      metadata: metadata,
-    ),
-    isIdempotent: ifGenerationMatch != null,
-  );
-
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
   ///
@@ -789,4 +714,155 @@ final class Storage {
     );
     return objectMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: ifMetagenerationMatch != null);
+
+  /// Creates or updates the content of a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `ifGenerationMatch` is set.
+  ///
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
+  ///
+  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// on whether the object's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  /// A value of `0` indicates that the object must not already exist.
+  ///
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// final metadata = await storage.uploadObject(
+  ///   'my-bucket',
+  ///   'hello.txt',
+  ///   [1, 2, 3],
+  ///   ifGenerationMatch: BigInt.zero, // Only insert if the object doesn't exist.
+  /// );
+  /// ```
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> uploadObject(
+    String bucket,
+    String name,
+    List<int> content, {
+    ObjectMetadata? metadata,
+    BigInt? ifGenerationMatch,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
+    // support ifMetagenerationNotMatch.
+    //
+    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
+    // status code and an empty body. This will cause `objects.insert` to throw
+    // `TypeError` during JSON deserialization.
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(
+    () async => uploadFile(
+      await _httpClient,
+      _requestUrl(
+        ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+        {
+          'uploadType': 'multipart',
+          'name': name,
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'predefinedAcl': ?predefinedAcl,
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      ),
+      content,
+      metadata: metadata,
+    ),
+    isIdempotent: ifGenerationMatch != null,
+  );
+
+  /// Creates or updates the content of a [Google Cloud Storage object][].
+  ///
+  /// This operation is idempotent if `ifGenerationMatch` is set.
+  ///
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
+  /// will be `'text/plain'`. If `metadata.name` does not match [name], a
+  /// [BadRequestException] is thrown.
+  ///
+  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// on whether the object's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  /// A value of `0` indicates that the object must not already exist.
+  ///
+  /// If set, `predefinedAcl` applies a predefined set of access controls to the
+  /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
+  /// `true`, then setting `predefinedAcl` will result in a
+  /// [BadRequestException].
+  ///
+  /// `projection` controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, `userProject` is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/insert).
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// final metadata = await storage.uploadObjectFromString(
+  ///   'my-bucket',
+  ///   'hello.txt',
+  ///   'Hello, World!',
+  ///   ifGenerationMatch: BigInt.zero, // Only insert if the object doesn't exist.
+  /// );
+  /// ```
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> uploadObjectFromString(
+    String bucket,
+    String name,
+    String content, {
+    ObjectMetadata? metadata,
+    BigInt? ifGenerationMatch,
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/115):
+    // support ifMetagenerationNotMatch.
+    //
+    // If `ifMetagenerationNotMatch` is set, the server will respond with a 304
+    // status code and an empty body. This will cause `objects.insert` to throw
+    // `TypeError` during JSON deserialization.
+    String? predefinedAcl,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) {
+    final md = switch (metadata) {
+      ObjectMetadata(contentType: _?) => metadata,
+      ObjectMetadata() => metadata.copyWith(contentType: 'text/plain'),
+      null => ObjectMetadata(contentType: 'text/plain'),
+    };
+    return uploadObject(
+      bucket,
+      name,
+      utf8.encode(content),
+      metadata: md,
+      ifGenerationMatch: ifGenerationMatch,
+      predefinedAcl: predefinedAcl,
+      projection: projection,
+      userProject: userProject,
+      retry: retry,
+    );
+  }
 }

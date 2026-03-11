@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:convert';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
@@ -31,10 +29,10 @@ void main() async {
       ],
     ),
   );
-  await storage.insertObject(
+  await storage.uploadObjectFromString(
     bucket.name!,
     'index.html',
-    utf8.encode('<h1>Hello World!</h1>'),
+    '<h1>Hello World!</h1>',
     metadata: ObjectMetadata(contentType: 'text/html'),
   );
   print(

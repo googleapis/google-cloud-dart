@@ -28,10 +28,10 @@ void main() async {
 
       const bucketName = 'storage_emulator_host';
 
-      final objectMetadata = await storage.insertObject(
+      final objectMetadata = await storage.uploadObjectFromString(
         bucketName,
         'object1',
-        utf8.encode('Hello World!'),
+        'Hello World!',
         ifGenerationMatch: BigInt.zero,
       );
       expect(objectMetadata.size, BigInt.from(12));
@@ -52,10 +52,10 @@ void main() async {
 
       const bucketName = 'explicit_configuration';
 
-      final objectMetadata = await storage.insertObject(
+      final objectMetadata = await storage.uploadObjectFromString(
         bucketName,
         'object1',
-        utf8.encode('Hello World!'),
+        'Hello World!',
         ifGenerationMatch: BigInt.zero,
       );
       expect(objectMetadata.size, BigInt.from(12));

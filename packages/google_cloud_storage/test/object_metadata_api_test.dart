@@ -15,8 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:convert';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
@@ -60,10 +58,10 @@ void main() async {
         'object_metadata_simple',
       );
 
-      await storage.insertObject(
+      await storage.uploadObjectFromString(
         bucketName,
         'object.txt',
-        utf8.encode('content'),
+        'content',
         ifGenerationMatch: BigInt.zero,
       );
 
@@ -90,16 +88,16 @@ void main() async {
         ),
       );
 
-      final obj1 = await storage.insertObject(
+      final obj1 = await storage.uploadObjectFromString(
         bucketName,
         'object.txt',
-        utf8.encode('Hello'),
+        'Hello',
         ifGenerationMatch: BigInt.zero,
       );
-      final obj2 = await storage.insertObject(
+      final obj2 = await storage.uploadObjectFromString(
         bucketName,
         'object.txt',
-        utf8.encode('Hello World!'),
+        'Hello World!',
       );
 
       // Verify we have two versions
@@ -132,10 +130,10 @@ void main() async {
         storage,
         'object_metadata_with_if_generation_match_success',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObjectFromString(
         bucketName,
         'object.txt',
-        utf8.encode('content'),
+        'content',
         ifGenerationMatch: BigInt.zero,
       );
 
@@ -157,10 +155,10 @@ void main() async {
         storage,
         'object_metadata_with_if_generation_match_failure',
       );
-      final obj = await storage.insertObject(
+      final obj = await storage.uploadObjectFromString(
         bucketName,
         'object.txt',
-        utf8.encode('content'),
+        'content',
         ifGenerationMatch: BigInt.zero,
       );
 

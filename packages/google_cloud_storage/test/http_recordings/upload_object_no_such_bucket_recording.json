@@ -1,7 +1,7 @@
 [
   {
     "request": {
-      "url": "https://storage.googleapis.com/upload/storage/v1/b/insert_object_no_such_bucket/o?uploadType=multipart&name=object1",
+      "url": "https://storage.googleapis.com/upload/storage/v1/b/upload_object_no_such_bucket/o?uploadType=multipart&name=object1",
       "method": "POST",
       "headers": {
         "Content-Type": "multipart/related; boundary=boundary",
@@ -14,10 +14,10 @@
       "headers": {
         "alt-svc": "h3=\":443\"; ma=2592000,h3-29=\":443\"; ma=2592000",
         "cache-control": "no-cache, no-store, max-age=0, must-revalidate",
-        "date": "Thu, 05 Mar 2026 18:03:36 GMT",
+        "date": "Tue, 10 Mar 2026 22:20:28 GMT",
         "vary": "Origin,X-Origin",
         "content-length": "247",
-        "x-guploader-uploadid": "AGQBYWyxmMSpE5kvWbh5FC1_dUEhU2uKOJwK8qsEYVpLbntxu0w4Q07vvSJAtBFwstsR7_sURlhUzg",
+        "x-guploader-uploadid": "AGQBYWwgwRsWj2n5qWVfOYFwkU6Wb1ik27zD3dYU2obQtHQ4EHv59tVqJ-ykfOnL5mkfacZp",
         "content-type": "application/json; charset=UTF-8",
         "pragma": "no-cache",
         "server": "UploadServer",

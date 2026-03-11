@@ -22,8 +22,6 @@ A Dart client for Google Cloud Storage.
 All access to Google Cloud Storage is made through the `Storage` class.
 
 ```dart
-import 'dart:convert';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 
 void main() async {
@@ -41,10 +39,10 @@ void main() async {
       ],
     ),
   );
-  await storage.insertObject(
+  await storage.uploadObjectFromString(
     bucket.name!,
     'index.html',
-    utf8.encode('<h1>Hello World!</h1>'),
+    '<h1>Hello World!</h1>',
     metadata: ObjectMetadata(contentType: 'text/html'),
   );
   print(
