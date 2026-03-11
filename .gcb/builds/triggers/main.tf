@@ -12,9 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project" {}
-variable "region" {}
-variable "service_account" {}
+variable "project" { type = string }
+variable "region" { type = string }
+variable "service_account" { type = string }
 
 locals {
   gcb_app_installation_id = 1168573
@@ -29,11 +29,6 @@ locals {
   pr_builds = local.common_builds
   pm_builds = local.common_builds
 }
-
-data "google_project" "project" {
-}
-
-
 
 resource "google_cloudbuildv2_connection" "github" {
   project  = var.project

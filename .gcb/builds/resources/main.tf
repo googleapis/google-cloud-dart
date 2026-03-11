@@ -22,7 +22,7 @@ variable "region" {
 
 resource "google_cloudbuild_worker_pool" "pool" {
   name     = "dart-sdk-pool"
-  location = "us-central1"
+  location = var.region
   worker_config {
     disk_size_gb   = 100
     machine_type   = "e2-standard-4"

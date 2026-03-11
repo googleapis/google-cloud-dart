@@ -21,4 +21,4 @@ steps:
   - name: 'hashicorp/terraform:latest'
     entrypoint: '/bin/sh'
     dir: '.gcb/builds'
-    args: ['-c', 'terraform init && terraform plan -out /tmp/bootstrap.tplan && terraform apply -auto-approve /tmp/bootstrap.tplan']
+    args: ['-c', 'terraform init && terraform plan -out /tmp/builds.tplan && terraform apply -auto-approve /tmp/builds.tplan']

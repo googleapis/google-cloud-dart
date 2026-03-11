@@ -23,4 +23,3 @@ pubspec.lock
 *.tplan
 *.tfvars
 *.tfvars.json
-.terraform.lock.hcl

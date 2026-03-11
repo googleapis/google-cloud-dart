@@ -16,9 +16,6 @@ variable "project" {
   type = string
 }
 
-data "google_project" "project" {
-}
-
 # This service account is created externally. It is used for all the builds.
 data "google_service_account" "integration-test-runner" {
   account_id = "integration-test-runner"

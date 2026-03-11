@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project" {}
+variable "project" { type = string }
 
 resource "google_project_service" "aiplatform" {
   project                    = var.project
