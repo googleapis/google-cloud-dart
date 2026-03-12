@@ -88,9 +88,6 @@ void main() async {
     });
 
     test('pagination', () async {
-      // Don't use testBucketName for the prefix, since createBucketWithTearDown
-      // also calls testBucketName under the hood. Let createBucketWithTearDown
-      // generate unique names and we'll just use a short prefix.
       final prefix = 'page_bkt_${radomBucketCharacters(5)}';
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
