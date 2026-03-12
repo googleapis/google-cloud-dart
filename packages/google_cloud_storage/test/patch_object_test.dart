@@ -31,7 +31,6 @@ import 'package:test_utils/cloud.dart';
 import 'test_utils.dart';
 
 void main() async {
-
   late Storage storage;
   late http.Client client;
 

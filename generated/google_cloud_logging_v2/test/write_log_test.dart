@@ -15,7 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:io';
 import 'dart:math';
 
 import 'package:google_cloud_api/api.dart';
@@ -30,7 +29,6 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
 void main() async {
-
   late LoggingServiceV2 logService;
   late http.Client client;
 

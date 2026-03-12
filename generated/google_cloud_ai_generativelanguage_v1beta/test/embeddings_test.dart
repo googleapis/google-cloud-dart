@@ -15,6 +15,8 @@
 @TestOn('vm')
 library;
 
+import 'dart:io';
+
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
@@ -28,7 +30,11 @@ void main() async {
     'embeddings',
     tags: ['integration'],
     skip:
-        'Service Account authentication generally fails with insufficient_scope on generativelanguage.googleapis.com',
+        Platform.environment.containsKey(
+          'GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB',
+        )
+        ? 'service accounts not supported by this API'
+        : false,
     () {
       setUp(() async {
         Future<auth.AutoRefreshingAuthClient> authClient() async =>

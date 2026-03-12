@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import 'dart:io';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
@@ -22,14 +20,22 @@ import 'package:test_utils/cloud.dart';
 
 import 'test_utils.dart';
 
-@Tags(['integration'])
 void main() async {
   late Storage storage;
-  late http.Client client;
 
   group('storage constructors', () {
     group('with credentials', tags: ['integration'], () {
-      setUp(() async {
+      test('no constuctor arguments', () async {
+        storage = Storage();
+        addTearDown(storage.close);
+
+        // There is no easy way to verify that the project ID was used, other
+        // than to create a bucket and assume that it is associated with the
+        // correct project.
+        await createBucketWithTearDown(storage, 'stg_no_args');
+      });
+
+      test('constructor with client', () async {
         Future<auth.AutoRefreshingAuthClient> authClient() async =>
             await auth.clientViaApplicationDefaultCredentials(
               scopes: [
@@ -37,28 +43,8 @@ void main() async {
                 'https://www.googleapis.com/auth/devstorage.read_write',
               ],
             );
+        final client = await authClient();
 
-        client = await authClient();
-      });
-
-      test(
-        'no constuctor arguments',
-        () async {
-          storage = Storage();
-          addTearDown(storage.close);
-
-          // There is no easy way to verify that the project ID was used, other
-          // than to create a bucket and assume that it is associated with the
-          // correct project.
-          await createBucketWithTearDown(storage, 'stg_no_args');
-        },
-        skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
-            ? '"gcloud auth login" is required for tests using application '
-                  'default credentials'
-            : false,
-      );
-
-      test('constructor with client', () async {
         storage = Storage(client: client);
         addTearDown(storage.close);
 
@@ -69,7 +55,16 @@ void main() async {
       });
 
       test('constructor with future client', () async {
-        storage = Storage(client: Future.value(client));
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: [
+                'https://www.googleapis.com/auth/cloud-platform',
+                'https://www.googleapis.com/auth/devstorage.read_write',
+              ],
+            );
+        final client = authClient();
+
+        storage = Storage(client: client);
         addTearDown(storage.close);
 
         // There is no easy way to verify that the project ID was used, other
@@ -89,6 +84,15 @@ void main() async {
       });
 
       test('constructor with client and project id', () async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: [
+                'https://www.googleapis.com/auth/cloud-platform',
+                'https://www.googleapis.com/auth/devstorage.read_write',
+              ],
+            );
+        final client = await authClient();
+
         storage = Storage(client: client, projectId: projectId);
         addTearDown(storage.close);
 

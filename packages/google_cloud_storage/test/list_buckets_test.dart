@@ -16,32 +16,17 @@
 @Tags(['integration'])
 library;
 
-import 'dart:io';
-
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late http.Client client;
 
   group('list buckets', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      client = await authClient();
-      storage = Storage(client: client, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());

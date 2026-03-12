@@ -20,30 +20,19 @@ import 'dart:io';
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
+import 'package:http/testing.dart' show MockClient;
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
+import 'package:test_utils/cloud.dart' show projectId;
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late http.Client client;
 
   group('create bucket', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      client = await authClient();
-      storage = Storage(client: client, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
@@ -221,7 +210,8 @@ void main() async {
 
       final actualMetadata = await storage.createBucket(requestMetadata);
 
-      // Manually add teardown with userProject to delete a Requester Pays bucket.
+      // Manually add teardown with userProject to delete a Requester Pays
+      // bucket.
       addTearDown(
         () => storage.deleteBucket(bucketName, userProject: projectId),
       );

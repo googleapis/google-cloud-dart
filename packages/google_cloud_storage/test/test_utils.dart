@@ -2,7 +2,6 @@ import 'dart:math';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart' show projectId;
 
 const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 final _random = Random();
@@ -25,7 +24,6 @@ String bucketNameWithTearDown(Storage storage, String name) {
       await for (final object in storage.listObjects(
         generatedName,
         versions: true,
-        userProject: projectId, // For requester-pays buckets.
       )) {
         if (object.eventBasedHold == true || object.temporaryHold == true) {
           await storage.patchObject(

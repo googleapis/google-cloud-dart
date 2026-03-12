@@ -15,7 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:io';
 import 'dart:math';
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
@@ -26,7 +25,6 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
 void main() async {
-
   late SecretManagerService secretManagerService;
   late http.Client client;
 

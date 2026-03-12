@@ -16,8 +16,6 @@
 @Tags(['integration'])
 library;
 
-import 'dart:io';
-
 import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
@@ -25,7 +23,6 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
 void main() async {
-
   late PredictionService predictionService;
   late http.Client client;
 
@@ -33,9 +30,7 @@ void main() async {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-            ],
+            scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
 
       client = await authClient();

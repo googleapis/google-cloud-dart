@@ -1,3 +1,5 @@
+test-randomize-ordering-seed: random
+
 tags:
   integration:
   firebase-emulator:
