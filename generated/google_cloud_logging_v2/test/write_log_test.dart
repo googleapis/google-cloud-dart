@@ -96,9 +96,7 @@ void main() async {
           ],
         ),
       );
-      // Writes are not always committed instantly. Uses a fixed delay instead
-      // of polling in order to cause recordings to make a deterministic
-      // number of requests.
+      // Writes are not always committed instantly.
       await Future<void>.delayed(const Duration(seconds: 15));
       addTearDown(
         () => logService.deleteLog(DeleteLogRequest(logName: logName)),
