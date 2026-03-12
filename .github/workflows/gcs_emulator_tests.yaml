@@ -71,4 +71,4 @@ jobs:
       - name: Run Tests
         env:
           STORAGE_EMULATOR_HOST: 127.0.0.1:9199
-        run: dart test -p ${{ matrix.platform }} emulator_test
+        run: dart test -p ${{ matrix.platform }} emulator_test -P firebase-emulator
