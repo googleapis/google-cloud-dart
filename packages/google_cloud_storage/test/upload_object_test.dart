@@ -57,10 +57,7 @@ void main() async {
     tearDown(() => storage.close());
 
     test('new, no metadata', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'upload_object_new',
-      );
+      final bucketName = await createBucketWithTearDown(storage, 'ul_obj_new');
 
       final beforeRequestTime = DateTime.now().toUtc().subtract(
         const Duration(seconds: 1), // Add some buffer for clock skew.
@@ -119,12 +116,12 @@ void main() async {
       expect(objectMetadata.softDeleteTime, isNull);
       expect(objectMetadata.storageClass, 'STANDARD');
       expect(objectMetadata.temporaryHold, isNull);
-        expect(
-          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-          allOf(
-            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
-            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
-          ),
+      expect(
+        objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+        allOf(
+          greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+          lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+        ),
       );
       expect(objectMetadata.timeDeleted, isNull);
       expect(objectMetadata.timeStorageClassUpdated, isNotNull);
@@ -137,7 +134,7 @@ void main() async {
     test('new with content-type', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_content_type',
+        'ul_obj_new_w_cnt_typ',
       );
 
       final objectMetadata = await storage.uploadObject(
@@ -154,7 +151,7 @@ void main() async {
     test('new with crc32c', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_crc32c',
+        'ul_obj_new_w_crc32c',
       );
 
       final objectMetadata = await storage.uploadObject(
@@ -170,7 +167,7 @@ void main() async {
     test('new with invalid crc32c', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_invalid_crc32c',
+        'ul_obj_new_w_invalid_crc32c',
       );
 
       expect(
@@ -188,7 +185,7 @@ void main() async {
     test('new with md5', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_md5',
+        'ul_obj_new_w_md5',
       );
 
       final objectMetadata = await storage.uploadObject(
@@ -204,7 +201,7 @@ void main() async {
     test('new with invalid md5', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_invalid_md5',
+        'ul_obj_new_w_invalid_md5',
       );
 
       expect(
@@ -222,7 +219,7 @@ void main() async {
     test('parameter name and metadata name mismatch', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_name_mismatch',
+        'ul_obj_new_w_name_mismatch',
       );
 
       expect(
@@ -253,7 +250,7 @@ void main() async {
     test('overwrite', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_overwrite',
+        'ul_obj_overwrite',
       );
 
       final oldGeneration = (await storage.uploadObject(
@@ -272,7 +269,7 @@ void main() async {
     test('with if generation match success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_overwrite_if_generation_match_success',
+        'ul_obj_overwrite_if_gen_match_ok',
       );
 
       final oldGeneration = (await storage.uploadObject(
@@ -292,7 +289,7 @@ void main() async {
     test('with if generation match failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_overwrite_if_generation_match_failure',
+        'ul_obj_overwrite_if_gen_match_fail',
       );
 
       await storage.uploadObject(

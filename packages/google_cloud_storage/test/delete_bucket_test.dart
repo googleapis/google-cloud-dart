@@ -52,10 +52,7 @@ void main() async {
     tearDown(() => storage.close());
 
     test('success', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'delete_bucket_success',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'del_bkt_ok');
 
       await storage.createBucket(BucketMetadata(name: bucketName));
 
@@ -71,7 +68,7 @@ void main() async {
     test('delete non-existent bucket', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'delete_bucket_non_existent',
+        'del_bkt_non_existent',
       );
       expect(
         () => storage.deleteBucket(bucketName),
@@ -82,7 +79,7 @@ void main() async {
     test('delete bucket with ifMetagenerationMatch success', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'delete_bucket_with_if_metageneration_match_success',
+        'del_bkt_w_if_mgen_match_ok',
       );
 
       final metadata = await storage.createBucket(
@@ -104,7 +101,7 @@ void main() async {
     test('delete bucket with ifMetagenerationMatch failure', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'delete_bucket_with_if_metageneration_match_failure',
+        'del_bkt_w_if_mgen_match_fail',
       );
 
       await storage.createBucket(BucketMetadata(name: bucketName));

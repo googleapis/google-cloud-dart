@@ -54,7 +54,7 @@ void main() async {
           // There is no easy way to verify that the project ID was used, other
           // than to create a bucket and assume that it is associated with the
           // correct project.
-          await createBucketWithTearDown(storage, 'storage_no_arguments');
+          await createBucketWithTearDown(storage, 'stg_no_args');
         },
         skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
             ? '"gcloud auth login" is required for tests using application '
@@ -69,7 +69,7 @@ void main() async {
         // There is no easy way to verify that the project ID was used, other
         // than to create a bucket and assume that it is associated with the
         // correct project.
-        await createBucketWithTearDown(storage, 'storage_with_client');
+        await createBucketWithTearDown(storage, 'stg_w_cl');
       });
 
       test('constructor with future client', () async {
@@ -79,19 +79,17 @@ void main() async {
         // There is no easy way to verify that the project ID was used, other
         // than to create a bucket and assume that it is associated with the
         // correct project.
-        await createBucketWithTearDown(storage, 'storage_with_future_client');
+        await createBucketWithTearDown(storage, 'stg_w_fut_cl');
       });
 
-      test(
-        'constructor with project id',
-        () async {
-          storage = Storage(projectId: projectId);
-          addTearDown(storage.close);
+      test('constructor with project id', () async {
+        storage = Storage(projectId: projectId);
+        addTearDown(storage.close);
 
-          // There is no easy way to verify that the project ID was used, other
-          // than to create a bucket and assume that it is associated with the
-          // correct project.
-          await createBucketWithTearDown(storage, 'storage_with_project_id');
+        // There is no easy way to verify that the project ID was used, other
+        // than to create a bucket and assume that it is associated with the
+        // correct project.
+        await createBucketWithTearDown(storage, 'stg_w_proj_id');
       });
 
       test('constructor with client and project id', () async {
@@ -101,10 +99,7 @@ void main() async {
         // There is no easy way to verify that the project ID was used, other
         // than to create a bucket and assume that it is associated with the
         // correct project.
-        await createBucketWithTearDown(
-          storage,
-          'storage_with_client_and_project_id',
-        );
+        await createBucketWithTearDown(storage, 'stg_w_cl_and_proj_id');
       });
     }, testOn: 'vm');
 

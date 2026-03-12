@@ -55,10 +55,7 @@ void main() async {
     tearDown(() => storage.close());
 
     test('success', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'delete_object_success',
-      );
+      final bucketName = await createBucketWithTearDown(storage, 'del_obj_ok');
       await storage.uploadObject(
         bucketName,
         'object.txt',
@@ -77,7 +74,7 @@ void main() async {
     test('not found', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'delete_object_not_found',
+        'del_obj_not_found',
       );
 
       expect(
@@ -89,7 +86,7 @@ void main() async {
     test('with generation success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'delete_object_with_generation',
+        'del_obj_w_gen',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
       final obj1 = await storage.uploadObject(
@@ -143,7 +140,7 @@ void main() async {
     test('with ifGenerationMatch success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'delete_object_with_if_generation_match_success',
+        'del_obj_w_if_gen_match_ok',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -167,7 +164,7 @@ void main() async {
     test('with ifGenerationMatch failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'delete_object_with_if_generation_match_failure',
+        'del_obj_w_if_gen_match_fail',
       );
       final obj = await storage.uploadObject(
         bucketName,

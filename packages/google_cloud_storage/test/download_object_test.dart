@@ -59,7 +59,7 @@ void main() async {
     test('empty object', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_object_empty',
+        'dl_obj_empty',
       );
 
       await storage.uploadObject(
@@ -78,7 +78,7 @@ void main() async {
       test('object of size $i bytes', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'download_object_size_$i',
+          'dl_obj_sz_$i',
         );
 
         final uploadedData = Uint8List(i);
@@ -105,7 +105,7 @@ void main() async {
       () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'download_object_gzipped',
+          'dl_obj_gzipped',
         );
 
         await storage.uploadObject(
@@ -131,7 +131,7 @@ void main() async {
     test('with generation', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_object_generation',
+        'dl_obj_gen',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
@@ -175,7 +175,7 @@ void main() async {
     test('with ifGenerationMatch success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_object_if_generation_match_success',
+        'dl_obj_if_gen_match_ok',
       );
 
       final metadata = await storage.uploadObject(bucketName, 'object1', [
@@ -193,7 +193,7 @@ void main() async {
     test('with ifGenerationMatch failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_object_if_generation_match_failure',
+        'dl_obj_if_gen_match_fail',
       );
 
       final metadata = await storage.uploadObject(bucketName, 'object1', [
@@ -214,7 +214,7 @@ void main() async {
     test('with ifMetagenerationMatch success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_object_if_metageneration_match_success',
+        'dl_obj_if_mgen_match_ok',
       );
 
       final metadata = await storage.uploadObject(bucketName, 'object1', [
@@ -231,7 +231,7 @@ void main() async {
     test('with ifMetagenerationMatch failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'download_object_if_metageneration_match_failure',
+        'dl_obj_if_mgen_match_fail',
       );
 
       final metadata = await storage.uploadObject(bucketName, 'object1', [

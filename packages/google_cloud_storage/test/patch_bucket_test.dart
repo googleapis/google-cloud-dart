@@ -53,10 +53,7 @@ void main() async {
     tearDown(() => storage.close());
 
     test('change acl', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_acl',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_acl');
 
       await storage.createBucket(
         BucketMetadata(
@@ -84,10 +81,7 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('remove acl', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_acl',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_acl');
 
       await storage.createBucket(
         BucketMetadata(
@@ -116,7 +110,7 @@ void main() async {
     test('change autoclass', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_autoclass',
+        'pch_bkt_chg_autoclass',
       );
 
       await storage.createBucket(
@@ -147,7 +141,7 @@ void main() async {
     test('remove autoclass', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_autoclass',
+        'pch_bkt_remove_autoclass',
       );
 
       await storage.createBucket(
@@ -175,10 +169,7 @@ void main() async {
     });
 
     test('change cors', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_cors',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_cors');
 
       await storage.createBucket(
         BucketMetadata(
@@ -206,10 +197,7 @@ void main() async {
     });
 
     test('remove cors', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_cors',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_cors');
 
       await storage.createBucket(
         BucketMetadata(
@@ -240,7 +228,7 @@ void main() async {
       () async {
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_change_hierarchical_namespace',
+          'pch_bkt_chg_hierarchical_namespace',
         );
 
         await storage.createBucket(
@@ -275,7 +263,7 @@ void main() async {
       () async {
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_remove_hierarchical_namespace',
+          'pch_bkt_remove_hierarchical_namespace',
         );
 
         await storage.createBucket(
@@ -308,7 +296,7 @@ void main() async {
     test('change ip filter', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_ip_filter',
+        'pch_bkt_chg_ip_filter',
       );
 
       await storage.createBucket(
@@ -345,7 +333,7 @@ void main() async {
     test('remove ip filter', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_ip_filter',
+        'pch_bkt_remove_ip_filter',
       );
 
       await storage.createBucket(
@@ -379,10 +367,7 @@ void main() async {
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('change labels', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_labels',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_labels');
 
       await storage.createBucket(
         BucketMetadata(
@@ -412,7 +397,7 @@ void main() async {
     test('remove labels', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_labels',
+        'pch_bkt_remove_labels',
       );
 
       await storage.createBucket(
@@ -439,7 +424,7 @@ void main() async {
     test('change lifecycle', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_lifecycle',
+        'pch_bkt_chg_lifecycle',
       );
 
       await storage.createBucket(
@@ -484,7 +469,7 @@ void main() async {
     test('remove lifecycle', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_lifecycle',
+        'pch_bkt_remove_lifecycle',
       );
 
       await storage.createBucket(
@@ -519,15 +504,12 @@ void main() async {
     });
 
     test('change logging', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_logging',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_logging');
 
       // Need a bucket to log to.
       final logBucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_logging_logs',
+        'pch_bkt_chg_logging_logs',
       );
 
       await storage.createBucket(BucketMetadata(name: logBucketName));
@@ -566,13 +548,13 @@ void main() async {
     test('remove logging', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_logging',
+        'pch_bkt_remove_logging',
       );
 
       // Need a bucket to log to.
       final logBucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_logging_logs',
+        'pch_bkt_remove_logging_logs',
       );
 
       await storage.createBucket(BucketMetadata(name: logBucketName));
@@ -605,10 +587,7 @@ void main() async {
     });
 
     test('change retention policy', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_retention_policy',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_ret_pol');
 
       await storage.createBucket(
         BucketMetadata(
@@ -638,7 +617,7 @@ void main() async {
     test('remove retention policy', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_retention_policy',
+        'pch_bkt_remove_ret_pol',
       );
 
       await storage.createBucket(
@@ -669,7 +648,7 @@ void main() async {
     test('change soft delete policy', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_soft_delete_policy',
+        'pch_bkt_chg_sft_del_pol',
       );
 
       await storage.createBucket(
@@ -705,10 +684,7 @@ void main() async {
     });
 
     test('change versioning', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_vers');
 
       await storage.createBucket(
         BucketMetadata(
@@ -736,10 +712,7 @@ void main() async {
     });
 
     test('same versioning', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_same_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_same_vers');
 
       await storage.createBucket(
         BucketMetadata(
@@ -767,10 +740,7 @@ void main() async {
     });
 
     test('remove versioning', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_vers');
 
       await storage.createBucket(
         BucketMetadata(
@@ -797,10 +767,7 @@ void main() async {
     });
 
     test('change website', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_website',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_web');
 
       await storage.createBucket(
         BucketMetadata(
@@ -828,10 +795,7 @@ void main() async {
     });
 
     test('remove website', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_website',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_web');
 
       await storage.createBucket(
         BucketMetadata(
@@ -860,7 +824,7 @@ void main() async {
     test('no change', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_with_metadata_empty_metadata',
+        'pch_bkt_w_meta_empty_meta',
       );
 
       await storage.createBucket(
@@ -898,7 +862,7 @@ void main() async {
     test('with if metageneration match success', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_with_if_metageneration_match_success',
+        'pch_bkt_w_if_mgen_match_ok',
       );
 
       final requestMetadata = BucketMetadata(name: bucketName);
@@ -918,7 +882,7 @@ void main() async {
     test('with if metageneration match failure', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_with_if_metageneration_match_failure',
+        'pch_bkt_w_if_mgen_match_fail',
       );
 
       await storage.createBucket(BucketMetadata(name: bucketName));
@@ -940,7 +904,7 @@ void main() async {
       () async {
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_with_predefined_acl',
+          'pch_bkt_w_predefined_acl',
         );
 
         await storage.createBucket(
@@ -978,7 +942,7 @@ void main() async {
       () async {
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_with_predefined_default_object_acl',
+          'pch_bkt_w_predefined_default_obj_acl',
         );
 
         await storage.createBucket(

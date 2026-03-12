@@ -55,10 +55,7 @@ void main() async {
     tearDown(() => storage.close());
 
     test('delete', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_delete',
-      );
+      final bucketName = await createBucketWithTearDown(storage, 'stg_obj_del');
       await storage.uploadObject(
         bucketName,
         'blob1',
@@ -73,10 +70,7 @@ void main() async {
     });
 
     test('download', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_download',
-      );
+      final bucketName = await createBucketWithTearDown(storage, 'stg_obj_dl');
       await storage.uploadObject(
         bucketName,
         'blob1',
@@ -92,7 +86,7 @@ void main() async {
     test('metadata', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'storage_object_metadata',
+        'stg_obj_meta',
       );
       await storage.uploadObject(
         bucketName,
@@ -107,10 +101,7 @@ void main() async {
     });
 
     test('patch', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_patch',
-      );
+      final bucketName = await createBucketWithTearDown(storage, 'stg_obj_pch');
       await storage.uploadObject(
         bucketName,
         'blob1',
@@ -125,10 +116,7 @@ void main() async {
     });
 
     test('upload', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'storage_object_upload',
-      );
+      final bucketName = await createBucketWithTearDown(storage, 'stg_obj_ul');
 
       final blob = storage.bucket(bucketName).object('blob1');
       final metadata = await blob.upload(
@@ -142,7 +130,7 @@ void main() async {
     test('uploadAsString', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'storage_object_upload_as_string',
+        'stg_obj_ul_as_str',
       );
 
       final blob = storage.bucket(bucketName).object('blob1');

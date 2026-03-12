@@ -51,7 +51,7 @@ void main() async {
     tearDown(() => storage.close());
 
     test('create', () async {
-      final bucketName = bucketNameWithTearDown(storage, 'dart_bucket_create');
+      final bucketName = bucketNameWithTearDown(storage, 'dart_bkt_crt');
 
       final bucket = storage.bucket(bucketName);
       final metadata = await bucket.create();
@@ -61,7 +61,7 @@ void main() async {
     test('create with contradictory name metadata', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'dart_bucket_create_contradictory_name_metadata',
+        'dart_bkt_crt_contradictory_name_meta',
       );
 
       final bucket = storage.bucket(bucketName);
@@ -74,7 +74,7 @@ void main() async {
     test('delete', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'dart_bucket_delete',
+        'dart_bkt_del',
       );
 
       final bucket = storage.bucket(bucketName);
@@ -85,7 +85,7 @@ void main() async {
     test('metadata', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'dart_bucket_metadata',
+        'dart_bkt_meta',
       );
 
       final bucket = storage.bucket(bucketName);
@@ -96,7 +96,7 @@ void main() async {
     test('patch', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'dart_bucket_patch',
+        'dart_bkt_pch',
       );
 
       final bucket = storage.bucket(bucketName);

@@ -55,7 +55,7 @@ void main() async {
     test('create_bucket_with_metadata_name_only', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_name_only',
+        'crt_bkt_w_meta_name_only',
       );
 
       final requestMetadata = BucketMetadata(name: bucketName);
@@ -148,7 +148,7 @@ void main() async {
     test('create_bucket_with_metadata_autoclass', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_autoclass',
+        'crt_bkt_w_meta_autoclass',
       );
 
       final requestMetadata = BucketMetadata(
@@ -188,7 +188,7 @@ void main() async {
     test('create_bucket_with_metadata_lifecycle', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_lifecycle',
+        'crt_bkt_w_meta_lifecycle',
       );
 
       final requestMetadata = BucketMetadata(
@@ -218,7 +218,7 @@ void main() async {
     test('create_bucket_with_metadata_billing', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_billing',
+        'crt_bkt_w_meta_billing',
       );
 
       final requestMetadata = BucketMetadata(
@@ -232,10 +232,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_cors', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_cors',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_cors');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -261,7 +258,7 @@ void main() async {
     test('create_bucket_with_metadata_default_event_based_hold', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_default_event_based_hold',
+        'crt_bkt_w_meta_default_evt_bsd_hld',
       );
 
       final requestMetadata = BucketMetadata(
@@ -277,7 +274,7 @@ void main() async {
     test('create_bucket_with_metadata_iam_configuration', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_iam_configuration',
+        'crt_bkt_w_meta_iam_configuration',
       );
 
       final requestMetadata = BucketMetadata(
@@ -303,7 +300,7 @@ void main() async {
     test('create_bucket_with_metadata_labels', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_labels',
+        'crt_bkt_w_meta_labels',
       );
 
       final requestMetadata = BucketMetadata(
@@ -319,7 +316,7 @@ void main() async {
     test('create_bucket_with_metadata_retention_policy', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_retention_policy',
+        'crt_bkt_w_meta_ret_pol',
       );
 
       final requestMetadata = BucketMetadata(
@@ -336,7 +333,7 @@ void main() async {
     test('create_bucket_with_metadata_soft_delete_policy', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_soft_delete_policy',
+        'crt_bkt_w_meta_sft_del_pol',
       );
 
       final requestMetadata = BucketMetadata(
@@ -354,7 +351,7 @@ void main() async {
     test('create_bucket_with_metadata_storage_class', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_storage_class',
+        'crt_bkt_w_meta_stg_class',
       );
 
       final requestMetadata = BucketMetadata(
@@ -368,10 +365,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_versioning', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_vers');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -384,10 +378,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_website', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_website',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_web');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -467,7 +458,7 @@ void main() async {
     test('create_bucket_with_metadata_duplicate', () async {
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_duplicate',
+        'crt_bkt_w_meta_duplicate',
       );
 
       final requestMetadata = BucketMetadata(name: bucketName);

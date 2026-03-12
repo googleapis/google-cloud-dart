@@ -58,7 +58,7 @@ void main() async {
     test('change acl', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_acl',
+        'pch_obj_chg_acl',
       );
       await storage.uploadObject(
         bucketName,
@@ -83,7 +83,7 @@ void main() async {
     test('remove acl', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_acl',
+        'pch_obj_remove_acl',
       );
       await storage.uploadObject(
         bucketName,
@@ -107,7 +107,7 @@ void main() async {
     test('change cache control', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_cache_control',
+        'pch_obj_chg_cch_ctrl',
       );
       await storage.uploadObject(
         bucketName,
@@ -131,7 +131,7 @@ void main() async {
     test('remove cache control', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_cache_control',
+        'pch_obj_chg_cch_ctrl',
       );
       await storage.uploadObject(
         bucketName,
@@ -155,7 +155,7 @@ void main() async {
     test('change content disposition', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_disposition',
+        'pch_obj_chg_cnt_disp',
       );
       await storage.uploadObject(
         bucketName,
@@ -182,7 +182,7 @@ void main() async {
     test('remove content disposition', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_disposition',
+        'pch_obj_remove_cnt_disp',
       );
       await storage.uploadObject(
         bucketName,
@@ -207,7 +207,7 @@ void main() async {
     test('change content encoding', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_encoding',
+        'pch_obj_chg_cnt_enc',
       );
       await storage.uploadObject(
         bucketName,
@@ -231,7 +231,7 @@ void main() async {
     test('remove content encoding', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_encoding',
+        'pch_obj_remove_cnt_enc',
       );
       await storage.uploadObject(
         bucketName,
@@ -256,7 +256,7 @@ void main() async {
     test('change content language', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_language',
+        'pch_obj_chg_cnt_lang',
       );
       await storage.uploadObject(
         bucketName,
@@ -280,7 +280,7 @@ void main() async {
     test('remove content language', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_language',
+        'pch_obj_remove_cnt_lang',
       );
       await storage.uploadObject(
         bucketName,
@@ -305,7 +305,7 @@ void main() async {
     test('change content type', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_type',
+        'pch_obj_chg_cnt_typ',
       );
       await storage.uploadObject(
         bucketName,
@@ -329,7 +329,7 @@ void main() async {
     test('remove content type', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_type',
+        'pch_obj_remove_cnt_typ',
       );
       await storage.uploadObject(
         bucketName,
@@ -353,7 +353,7 @@ void main() async {
     test('change custom time', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_custom_time',
+        'pch_obj_chg_cust_tm',
       );
       await storage.uploadObject(
         bucketName,
@@ -378,7 +378,7 @@ void main() async {
     test('change event based hold', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_event_based_hold',
+        'pch_obj_chg_evt_bsd_hld',
       );
       await storage.uploadObject(
         bucketName,
@@ -401,7 +401,7 @@ void main() async {
     test('remove event based hold', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_event_based_hold',
+        'pch_obj_remove_evt_bsd_hld',
       );
       await storage.uploadObject(
         bucketName,
@@ -425,7 +425,7 @@ void main() async {
     test('change metadata', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_metadata',
+        'pch_obj_chg_meta',
       );
       await storage.uploadObject(
         bucketName,
@@ -452,7 +452,7 @@ void main() async {
     test('remove metadata', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_metadata',
+        'pch_obj_remove_meta',
       );
       await storage.uploadObject(
         bucketName,
@@ -478,7 +478,7 @@ void main() async {
       () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_object_change_retention',
+          'pch_obj_chg_ret',
           enableObjectRetention: true,
         );
 
@@ -519,49 +519,47 @@ void main() async {
           : false,
     );
 
-    test(
-      'remove retention',
-      () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'patch_object_remove_retention',
-          enableObjectRetention: true,
-        );
+    test('remove retention', () async {
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'pch_obj_remove_ret',
+        enableObjectRetention: true,
+      );
 
-        final retainUntilTime = DateTime.now()
-            .add(const Duration(seconds: 1))
-            .toUtc()
-            .toTimestamp();
+      final retainUntilTime = DateTime.now()
+          .add(const Duration(seconds: 1))
+          .toUtc()
+          .toTimestamp();
 
-        await storage.uploadObject(
-          bucketName,
-          'object.txt',
-          utf8.encode('content'),
-          metadata: ObjectMetadata(
-            retention: ObjectRetention(
-              mode: 'Unlocked',
-              retainUntilTime: retainUntilTime,
-            ),
+      await storage.uploadObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('content'),
+        metadata: ObjectMetadata(
+          retention: ObjectRetention(
+            mode: 'Unlocked',
+            retainUntilTime: retainUntilTime,
           ),
-        );
+        ),
+      );
 
-        final patchMetadata = ObjectMetadataPatchBuilder()..retention = null;
-        // Wait for the retention period to expire.
-        await Future<void>.delayed(const Duration(seconds: 1));
-        final actualMetadata = await storage.patchObject(
-          bucketName,
-          'object.txt',
-          patchMetadata,
-        );
+      final patchMetadata = ObjectMetadataPatchBuilder()..retention = null;
+      // Wait for the retention period to expire.
+      await Future<void>.delayed(const Duration(seconds: 1));
+      final actualMetadata = await storage.patchObject(
+        bucketName,
+        'object.txt',
+        patchMetadata,
+      );
 
-        expect(actualMetadata.retention, isNull);
-        expect(actualMetadata.metageneration, BigInt.from(2));
+      expect(actualMetadata.retention, isNull);
+      expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
     test('change temporary hold', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_temporary_hold',
+        'pch_obj_chg_tmp_hld',
       );
       await storage.uploadObject(
         bucketName,
@@ -584,7 +582,7 @@ void main() async {
     test('no change', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_no_change',
+        'pch_obj_no_chg',
       );
       await storage.uploadObject(
         bucketName,
@@ -606,7 +604,7 @@ void main() async {
     test('with generation', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_generation',
+        'pch_obj_w_gen',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
@@ -645,7 +643,7 @@ void main() async {
     test('non existant', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_non_existant',
+        'pch_obj_non_existant',
       );
 
       final patchMetadata = ObjectMetadataPatchBuilder()
@@ -661,7 +659,7 @@ void main() async {
     test('with if metageneration match success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_metageneration_match_success',
+        'pch_obj_w_if_mgen_match_ok',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -685,7 +683,7 @@ void main() async {
     test('with if metageneration match failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_metageneration_match_failure',
+        'pch_obj_w_if_mgen_match_fail',
       );
       await storage.uploadObject(
         bucketName,
@@ -710,7 +708,7 @@ void main() async {
     test('with if generation match success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_generation_match_success',
+        'pch_obj_w_if_gen_match_ok',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -734,7 +732,7 @@ void main() async {
     test('with if generation match failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_generation_match_failure',
+        'pch_obj_w_if_gen_match_fail',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -761,7 +759,7 @@ void main() async {
       () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_object_with_predefined_acl',
+          'pch_obj_w_predefined_acl',
         );
         await storage.uploadObject(
           bucketName,

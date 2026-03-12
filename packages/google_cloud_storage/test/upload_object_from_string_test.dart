@@ -57,7 +57,7 @@ void main() async {
     test('metadata is not set', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_from_string_no_metadata',
+        'ul_obj_from_str_no_meta',
       );
 
       final metadata = await storage.uploadObjectFromString(
@@ -76,7 +76,7 @@ void main() async {
     test('metadata is set without contentType', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_from_string_custom_metadata',
+        'ul_obj_from_str_cust_meta',
       );
 
       final metadata = await storage.uploadObjectFromString(
@@ -97,7 +97,7 @@ void main() async {
     test('metadata is set with contentType', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_from_string_custom_content_type',
+        'ul_obj_from_str_cust_cnt_typ',
       );
 
       final metadata = await storage.uploadObjectFromString(

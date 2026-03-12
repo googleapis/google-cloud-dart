@@ -64,7 +64,7 @@ void main() async {
     test('single object', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_objects_single_object',
+        'list_objects_single_obj',
       );
 
       await storage.uploadObject(
@@ -119,7 +119,7 @@ void main() async {
     test('soft deleted bucket, list soft deleted objects', () async {
       final softDeletedBucket = await createBucketWithTearDown(
         storage,
-        'list_objects_soft_deleted_bucket_soft',
+        'list_objects_sft_del_bkt_sft',
         metadata: BucketMetadata(
           softDeletePolicy: BucketSoftDeletePolicy(
             retentionDurationSeconds: const Duration(days: 7).inSeconds,
@@ -142,7 +142,7 @@ void main() async {
     test('soft deleted bucket, list non-soft deleted objects', () async {
       final softDeletedBucket = await createBucketWithTearDown(
         storage,
-        'list_objects_soft_deleted_bucket_no_soft',
+        'list_objects_sft_del_bkt_no_sft',
         metadata: BucketMetadata(
           softDeletePolicy: BucketSoftDeletePolicy(
             retentionDurationSeconds: const Duration(days: 7).inSeconds,
@@ -165,7 +165,7 @@ void main() async {
     test('pagination', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_objects_pagination',
+        'list_objects_page',
       );
 
       await storage.uploadObject(bucketName, 'object1.txt', [1]);

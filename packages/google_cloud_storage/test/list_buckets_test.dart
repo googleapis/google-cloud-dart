@@ -57,7 +57,7 @@ void main() async {
     test('single bucket', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_buckets_single_bucket',
+        'list_buckets_single_bkt',
       );
 
       await expectLater(
@@ -67,7 +67,7 @@ void main() async {
     });
 
     test('soft deleted bucket', () async {
-      final prefix = testBucketName('list_soft_deleted_bucket');
+      final prefix = testBucketName('list_sft_del_bkt');
       final softDeletedBucket = await storage.createBucket(
         BucketMetadata(
           name: '${prefix}_soft',
@@ -92,7 +92,7 @@ void main() async {
     });
 
     test('pagination', () async {
-      final prefix = testBucketName('list_buckets_pagination');
+      final prefix = testBucketName('list_buckets_page');
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
       final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');

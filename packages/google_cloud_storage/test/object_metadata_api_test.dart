@@ -56,7 +56,7 @@ void main() async {
     test('simple', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_simple',
+        'obj_meta_simple',
       );
 
       await storage.uploadObjectFromString(
@@ -73,10 +73,7 @@ void main() async {
     });
 
     test('with generation', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'object_metadata_with_generation',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'obj_meta_w_gen');
       await storage.createBucket(
         BucketMetadata(
           name: bucketName,
@@ -119,7 +116,7 @@ void main() async {
     test('with if generation match success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_with_if_generation_match_success',
+        'obj_meta_w_if_gen_match_ok',
       );
       final obj = await storage.uploadObjectFromString(
         bucketName,
@@ -139,7 +136,7 @@ void main() async {
     test('with if generation match failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_with_if_generation_match_failure',
+        'obj_meta_w_if_gen_match_fail',
       );
       final obj = await storage.uploadObjectFromString(
         bucketName,
@@ -161,7 +158,7 @@ void main() async {
     test('non-existant object', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_non_existant',
+        'obj_meta_non_existant',
       );
 
       expect(

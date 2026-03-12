@@ -54,7 +54,7 @@ void main() async {
     test('simple', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'bucket_metadata_simple',
+        'bkt_meta_simple',
       );
 
       final metadata = await storage.bucketMetadata(bucketName);
@@ -65,7 +65,7 @@ void main() async {
     test('with if metageneration match success', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'bucket_metadata_with_if_metageneration_match_success',
+        'bkt_meta_w_if_mgen_match_ok',
       );
 
       final metadata = await storage.bucketMetadata(bucketName);
@@ -80,7 +80,7 @@ void main() async {
     test('with if metageneration match failure', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'bucket_metadata_with_if_metageneration_match_failure',
+        'bkt_meta_w_if_mgen_match_fail',
       );
 
       final metadata = await storage.bucketMetadata(bucketName);
