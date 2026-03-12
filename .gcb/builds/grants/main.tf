@@ -1,4 +1,4 @@
-# Copyright 2026 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,13 +12,20 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-variable "project" {
-  type = string
+data "google_project" "project" {
 }
 
 # This service account is created externally. It is used for all the builds.
 data "google_service_account" "integration-test-runner" {
   account_id = "integration-test-runner"
+}
+
+# The service account will need to bill requests to the project for Requester
+# Pays bucket operations.
+resource "google_project_iam_member" "sa-can-use-service-usage" {
+  project = data.google_project.project.id
+  role    = "roles/serviceusage.serviceUsageConsumer"
+  member  = "serviceAccount:${data.google_service_account.integration-test-runner.email}"
 }
 
 output "runner" {
