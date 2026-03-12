@@ -26,11 +26,17 @@ import 'package:google_cloud_rpc/rpc.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late LoggingServiceV2 logService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('LoggingServiceV2', () {
     setUp(() async {
@@ -39,18 +45,13 @@ void main() async {
             scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      logService = LoggingServiceV2(client: testClient);
+      client = await authClient();
+      logService = LoggingServiceV2(client: client);
     });
 
     tearDown(() => logService.close());
 
     test('writeLogEntries - partial errors', () async {
-      await testClient.startTest(
-        'google_cloud_logging_v2',
-        'write_log_entries_partial_errors',
-      );
-
       await expectLater(
         logService.writeLogEntries(
           WriteLogEntriesRequest(
@@ -81,16 +82,10 @@ void main() async {
           ),
         ),
       );
-      await testClient.endTest();
     });
 
     test('writeLogEntries', () async {
-      await testClient.startTest(
-        'google_cloud_logging_v2',
-        'write_log_entries',
-      );
-
-      final logId = TestHttpClient.isRecording || TestHttpClient.isReplaying
+      final logId = Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
           ? '1234'
           : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
       final logName = 'projects/$projectId/logs/logging_test_$logId';
@@ -108,7 +103,7 @@ void main() async {
         ),
       );
 
-      if (!TestHttpClient.isReplaying) {
+      if (Platform.environment['GOOGLE_CLOUD_PROJECT'] != null) {
         // Writes are not always committed instantly. Uses a fixed delay instead
         // of polling in order to cause recordings to make a deterministic
         // number of requests.
@@ -129,8 +124,6 @@ void main() async {
       expect(list.entries, hasLength(1));
       expect(list.entries[0].severity, LogSeverity.critical);
       expect(list.entries[0].textPayload, 'Hello World!');
-
-      await testClient.endTest();
     });
   });
 }

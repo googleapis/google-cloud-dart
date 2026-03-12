@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
-
-# Copyright 2026 Google LLC
+# Copyright 2024 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -16,6 +15,31 @@
 
 set -e
 
-cd packages/google_cloud_storage/
-dart pub get
-dart --define=http=proxy test/storage_test.dart
+echo "==== Running Dart Integration Tests ===="
+
+failed=0
+
+# Find all directories containing both pubspec.yaml and a test directory
+while IFS= read -r -d '' pubspec_path; do
+  dir=$(dirname "$pubspec_path")
+  if [ -d "$dir/test" ]; then
+    echo "==== Testing package in $dir ===="
+    
+    set +e
+    (
+      cd "$dir"
+      dart pub get
+      dart test
+    )
+    exit_code=$?
+    set -e
+    
+    if [ $exit_code -ne 0 ]; then
+      failed=1
+    fi
+  fi
+done < <(find . -name "pubspec.yaml" -print0)
+
+echo "==== DONE ===="
+
+exit $failed

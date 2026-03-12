@@ -18,11 +18,12 @@ library;
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void main() async {
   late GenerativeService generativeService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('embeddings', () {
     setUp(() async {
@@ -34,17 +35,12 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      generativeService = GenerativeService(client: testClient);
+      client = await authClient();
+      generativeService = GenerativeService(client: client);
     });
 
     tearDown(() => generativeService.close());
     test('embedContent', () async {
-      await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
-        'embeddings_embed_content',
-      );
-
       final request = EmbedContentRequest(
         model: 'models/gemini-embedding-001',
         content: Content(
@@ -58,8 +54,6 @@ void main() async {
 
       final response = await generativeService.embedContent(request);
       expect(response.embedding?.values, hasLength(greaterThan(1000)));
-
-      await testClient.endTest();
     }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

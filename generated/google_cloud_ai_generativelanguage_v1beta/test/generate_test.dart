@@ -18,11 +18,12 @@ library;
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void main() async {
   late GenerativeService generativeService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('generative', () {
     setUp(() async {
@@ -34,17 +35,12 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      generativeService = GenerativeService(client: testClient);
+      client = await authClient();
+      generativeService = GenerativeService(client: client);
     });
 
     tearDown(() => generativeService.close());
     test('streamed', () async {
-      await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
-        'generative_streamed',
-      );
-
       final request = GenerateContentRequest(
         model: 'models/gemini-2.5-flash',
         contents: [
@@ -65,7 +61,6 @@ void main() async {
         }
       }
       expect(text.toString(), hasLength(greaterThan(1000)));
-      await testClient.endTest();
     }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

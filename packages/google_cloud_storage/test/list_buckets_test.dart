@@ -19,13 +19,19 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('list buckets', () {
     setUp(() async {
@@ -37,29 +43,17 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('no buckets', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_no_buckets',
-      );
-      addTearDown(testClient.endTest);
-
       expect(storage.listBuckets(prefix: 'nobuckethasthisprefix'), emitsDone);
     });
 
     test('single bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_single_bucket',
-      );
-      addTearDown(testClient.endTest);
-
       final bucketName = await createBucketWithTearDown(
         storage,
         'list_buckets_single_bucket',
@@ -74,12 +68,6 @@ void main() async {
     test(
       'soft deleted bucket',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'list_buckets_soft_deleted_bucket',
-        );
-        addTearDown(testClient.endTest);
-
         final prefix = testBucketName('list_buckets_soft_deleted_bucket');
         final softDeletedBucket = await createBucketWithTearDown(
           storage,
@@ -101,7 +89,7 @@ void main() async {
           emitsInOrder([emits(softDeletedBucket), emitsDone]),
         );
       },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+      skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
           ? 'soft deleted buckets cannot be deleted before their retention '
                 'period has expired, which makes it impossible to use fixed '
                 'bucket names'
@@ -109,12 +97,6 @@ void main() async {
     );
 
     test('pagination', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_pagination',
-      );
-      addTearDown(testClient.endTest);
-
       final prefix = testBucketName('list_buckets_pagination');
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');

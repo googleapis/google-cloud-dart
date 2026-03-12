@@ -22,13 +22,19 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('patch bucket', () {
     setUp(() async {
@@ -40,18 +46,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('change acl', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_acl',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_acl',
@@ -83,11 +84,6 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('remove acl', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_acl',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_acl',
@@ -118,11 +114,6 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('change autoclass', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_autoclass',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_autoclass',
@@ -154,11 +145,6 @@ void main() async {
     });
 
     test('remove autoclass', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_autoclass',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_autoclass',
@@ -189,11 +175,6 @@ void main() async {
     });
 
     test('change cors', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_cors',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_cors',
@@ -225,11 +206,6 @@ void main() async {
     });
 
     test('remove cors', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_cors',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_cors',
@@ -262,11 +238,6 @@ void main() async {
     test(
       'change hierarchical namespace',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_change_hierarchical_namespace',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
           'patch_bucket_change_hierarchical_namespace',
@@ -302,11 +273,6 @@ void main() async {
     test(
       'remove hierarchical namespace',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_remove_hierarchical_namespace',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
           'patch_bucket_remove_hierarchical_namespace',
@@ -340,11 +306,6 @@ void main() async {
     );
 
     test('change ip filter', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_ip_filter',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_ip_filter',
@@ -382,11 +343,6 @@ void main() async {
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('remove ip filter', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_ip_filter',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_ip_filter',
@@ -423,11 +379,6 @@ void main() async {
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('change labels', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_labels',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_labels',
@@ -459,11 +410,6 @@ void main() async {
     });
 
     test('remove labels', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_labels',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_labels',
@@ -491,11 +437,6 @@ void main() async {
     });
 
     test('change lifecycle', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_lifecycle',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_lifecycle',
@@ -541,11 +482,6 @@ void main() async {
     });
 
     test('remove lifecycle', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_lifecycle',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_lifecycle',
@@ -583,11 +519,6 @@ void main() async {
     });
 
     test('change logging', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_logging',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_logging',
@@ -633,11 +564,6 @@ void main() async {
     });
 
     test('remove logging', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_logging',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_logging',
@@ -679,11 +605,6 @@ void main() async {
     });
 
     test('change retention policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_retention_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_retention_policy',
@@ -715,11 +636,6 @@ void main() async {
     });
 
     test('remove retention policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_retention_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_retention_policy',
@@ -751,11 +667,6 @@ void main() async {
     });
 
     test('change soft delete policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_soft_delete_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_soft_delete_policy',
@@ -794,11 +705,6 @@ void main() async {
     });
 
     test('change versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_versioning',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_versioning',
@@ -830,11 +736,6 @@ void main() async {
     });
 
     test('same versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_same_versioning',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_same_versioning',
@@ -866,11 +767,6 @@ void main() async {
     });
 
     test('remove versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_versioning',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_versioning',
@@ -901,11 +797,6 @@ void main() async {
     });
 
     test('change website', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_website',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_change_website',
@@ -937,11 +828,6 @@ void main() async {
     });
 
     test('remove website', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_website',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_remove_website',
@@ -972,11 +858,6 @@ void main() async {
     });
 
     test('no change', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_metadata_empty_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_with_metadata_empty_metadata',
@@ -1005,12 +886,6 @@ void main() async {
     });
 
     test('non existant', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_non_existant',
-      );
-      addTearDown(testClient.endTest);
-
       final patchMetadata = BucketMetadataPatchBuilder()
         ..versioning = BucketVersioning(enabled: true);
 
@@ -1021,11 +896,6 @@ void main() async {
     });
 
     test('with if metageneration match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_with_if_metageneration_match_success',
@@ -1046,11 +916,6 @@ void main() async {
     });
 
     test('with if metageneration match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
         'patch_bucket_with_if_metageneration_match_failure',
@@ -1073,11 +938,6 @@ void main() async {
     test(
       'with predefined acl',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_with_predefined_acl',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
           'patch_bucket_with_predefined_acl',
@@ -1116,11 +976,6 @@ void main() async {
     test(
       'with predefined default object acl',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_with_predefined_default_object_acl',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
           'patch_bucket_with_predefined_default_object_acl',

@@ -21,13 +21,19 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('bucket metadata', () {
     setUp(() async {
@@ -39,18 +45,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('simple', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_simple',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'bucket_metadata_simple',
@@ -62,11 +63,6 @@ void main() async {
     });
 
     test('with if metageneration match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_with_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'bucket_metadata_with_if_metageneration_match_success',
@@ -82,11 +78,6 @@ void main() async {
     });
 
     test('with if metageneration match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_with_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'bucket_metadata_with_if_metageneration_match_failure',
@@ -104,12 +95,6 @@ void main() async {
     });
 
     test('non-existant bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_non_existant',
-      );
-      addTearDown(testClient.endTest);
-
       expect(
         () => storage.bucketMetadata('non-existent-bucket-name'),
         throwsA(isA<NotFoundException>()),

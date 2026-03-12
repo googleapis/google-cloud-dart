@@ -19,11 +19,17 @@ import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late PredictionService predictionService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('generative', () {
     setUp(() async {
@@ -35,16 +41,12 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      predictionService = PredictionService(client: testClient);
+      client = await authClient();
+      predictionService = PredictionService(client: client);
     });
 
     tearDown(() => predictionService.close());
     test('streamed', () async {
-      await testClient.startTest(
-        'google_cloud_aiplatform_v1beta1',
-        'generative_streamed',
-      );
       final request = GenerateContentRequest(
         model:
             'projects/$projectId/locations/global/'
@@ -68,7 +70,6 @@ void main() async {
         }
       }
       expect(text.toString(), hasLength(greaterThan(1000)));
-      await testClient.endTest();
     }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

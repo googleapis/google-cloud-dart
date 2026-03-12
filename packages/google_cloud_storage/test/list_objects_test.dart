@@ -22,13 +22,19 @@ import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('list objects', () {
     setUp(() async {
@@ -41,18 +47,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('no objects', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_no_objects',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'list_objects_no_objects',
@@ -61,11 +62,6 @@ void main() async {
     });
 
     test('single object', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_single_object',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'list_objects_single_object',
@@ -85,11 +81,6 @@ void main() async {
     });
 
     test('versions', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_versions',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'list_objects_versions',
@@ -126,12 +117,6 @@ void main() async {
     });
 
     test('soft deleted bucket, list soft deleted objects', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_soft_deleted_bucket_soft',
-      );
-      addTearDown(testClient.endTest);
-
       final softDeletedBucket = await createBucketWithTearDown(
         storage,
         'list_objects_soft_deleted_bucket_soft',
@@ -155,12 +140,6 @@ void main() async {
     });
 
     test('soft deleted bucket, list non-soft deleted objects', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_soft_deleted_bucket_no_soft',
-      );
-      addTearDown(testClient.endTest);
-
       final softDeletedBucket = await createBucketWithTearDown(
         storage,
         'list_objects_soft_deleted_bucket_no_soft',
@@ -184,11 +163,6 @@ void main() async {
     });
 
     test('pagination', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_objects_pagination',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'list_objects_pagination',

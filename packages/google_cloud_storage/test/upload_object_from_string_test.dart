@@ -23,13 +23,19 @@ import 'package:google_cloud_storage/src/file_upload.dart'
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('upload object from string', () {
     setUp(() async {
@@ -42,18 +48,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('metadata is not set', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_from_string_no_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_from_string_no_metadata',
@@ -73,11 +74,6 @@ void main() async {
     });
 
     test('metadata is set without contentType', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_from_string_custom_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_from_string_custom_metadata',
@@ -99,11 +95,6 @@ void main() async {
     });
 
     test('metadata is set with contentType', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_from_string_custom_content_type',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_from_string_custom_content_type',

@@ -27,13 +27,19 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('download object', () {
     setUp(() async {
@@ -46,18 +52,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('empty object', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_empty',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'download_object_empty',
@@ -77,11 +78,6 @@ void main() async {
 
     for (var i = 1; i <= 16_777_216; i *= 4) {
       test('object of size $i bytes', () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'download_object_size_$i',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
           'download_object_size_$i',
@@ -109,11 +105,6 @@ void main() async {
     test(
       'gzipped',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'download_object_gzipped',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
           'download_object_gzipped',
@@ -134,17 +125,12 @@ void main() async {
 
         expect(data, utf8.encode('Hello World!'));
       },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+      skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
           ? 'gzip does not have a 1:1 mapping between input and output'
           : false,
     );
 
     test('with generation', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_generation',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'download_object_generation',
@@ -189,11 +175,6 @@ void main() async {
     });
 
     test('with ifGenerationMatch success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_if_generation_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'download_object_if_generation_match_success',
@@ -212,11 +193,6 @@ void main() async {
     });
 
     test('with ifGenerationMatch failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_if_generation_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'download_object_if_generation_match_failure',
@@ -238,11 +214,6 @@ void main() async {
     });
 
     test('with ifMetagenerationMatch success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'download_object_if_metageneration_match_success',
@@ -260,11 +231,6 @@ void main() async {
     });
 
     test('with ifMetagenerationMatch failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'download_object_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'download_object_if_metageneration_match_failure',

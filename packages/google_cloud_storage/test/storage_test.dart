@@ -17,13 +17,19 @@ import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('storage constructors', () {
     group('with credentials', () {
@@ -36,18 +42,12 @@ void main() async {
               ],
             );
 
-        testClient = await TestHttpClient.fromEnvironment(authClient);
+        client = await authClient();
       });
 
       test(
         'no constuctor arguments',
         () async {
-          await testClient.startTest(
-            'google_cloud_storage',
-            'storage_no_arguments',
-          );
-          addTearDown(testClient.endTest);
-
           storage = Storage();
           addTearDown(storage.close);
 
@@ -56,20 +56,14 @@ void main() async {
           // correct project.
           await createBucketWithTearDown(storage, 'storage_no_arguments');
         },
-        skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+        skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
             ? '"gcloud auth login" is required for tests using application '
                   'default credentials'
             : false,
       );
 
       test('constructor with client', () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'storage_with_client',
-        );
-        addTearDown(testClient.endTest);
-
-        storage = Storage(client: testClient);
+        storage = Storage(client: client);
         addTearDown(storage.close);
 
         // There is no easy way to verify that the project ID was used, other
@@ -79,13 +73,7 @@ void main() async {
       });
 
       test('constructor with future client', () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'storage_with_future_client',
-        );
-        addTearDown(testClient.endTest);
-
-        storage = Storage(client: Future.value(testClient));
+        storage = Storage(client: Future.value(client));
         addTearDown(storage.close);
 
         // There is no easy way to verify that the project ID was used, other
@@ -97,12 +85,6 @@ void main() async {
       test(
         'constructor with project id',
         () async {
-          await testClient.startTest(
-            'google_cloud_storage',
-            'storage_with_project_id',
-          );
-          addTearDown(testClient.endTest);
-
           storage = Storage(projectId: projectId);
           addTearDown(storage.close);
 
@@ -111,20 +93,14 @@ void main() async {
           // correct project.
           await createBucketWithTearDown(storage, 'storage_with_project_id');
         },
-        skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
+        skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
             ? '"gcloud auth login" is required for tests using application '
                   'default credentials'
             : false,
       );
 
       test('constructor with client and project id', () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'storage_with_client_and_project_id',
-        );
-        addTearDown(testClient.endTest);
-
-        storage = Storage(client: testClient, projectId: projectId);
+        storage = Storage(client: client, projectId: projectId);
         addTearDown(storage.close);
 
         // There is no easy way to verify that the project ID was used, other

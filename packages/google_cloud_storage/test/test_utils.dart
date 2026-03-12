@@ -1,8 +1,8 @@
+import 'dart:io';
 import 'dart:math';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
 
 const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 final _random = Random();
@@ -14,7 +14,7 @@ String _randomSuffix(int length) => [
 
 String testBucketName(String name) {
   assert(name.length < 55, '"$name" is too long to append a random suffix.');
-  return TestHttpClient.isRecording || TestHttpClient.isReplaying
+  return Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
       ? name
       : '$name-${_randomSuffix(59 - name.length)}';
 }

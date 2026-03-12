@@ -26,13 +26,19 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('upload object', () {
     setUp(() async {
@@ -45,15 +51,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('new, no metadata', () async {
-      await testClient.startTest('google_cloud_storage', 'upload_object_new');
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new',
@@ -113,7 +117,7 @@ void main() async {
       expect(objectMetadata.softDeleteTime, isNull);
       expect(objectMetadata.storageClass, 'STANDARD');
       expect(objectMetadata.temporaryHold, isNull);
-      if (TestHttpClient.isReplaying) {
+      if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
         expect(
           objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
           greaterThan(0),
@@ -136,11 +140,6 @@ void main() async {
     });
 
     test('new with content-type', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_content_type',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new_with_content_type',
@@ -158,11 +157,6 @@ void main() async {
     });
 
     test('new with crc32c', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_crc32c',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new_with_crc32c',
@@ -179,11 +173,6 @@ void main() async {
     });
 
     test('new with invalid crc32c', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_invalid_crc32c',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new_with_invalid_crc32c',
@@ -202,11 +191,6 @@ void main() async {
     });
 
     test('new with md5', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_md5',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new_with_md5',
@@ -223,11 +207,6 @@ void main() async {
     });
 
     test('new with invalid md5', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_invalid_md5',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new_with_invalid_md5',
@@ -246,11 +225,6 @@ void main() async {
     });
 
     test('parameter name and metadata name mismatch', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_parameter_name_and_metadata_name_mismatch',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_new_with_name_mismatch',
@@ -269,11 +243,6 @@ void main() async {
     });
 
     test('no such bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_no_such_bucket',
-      );
-      addTearDown(testClient.endTest);
       const bucketName = 'upload_object_no_such_bucket';
 
       expect(
@@ -287,11 +256,6 @@ void main() async {
     });
 
     test('overwrite', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_overwrite',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_overwrite',
@@ -311,11 +275,6 @@ void main() async {
     });
 
     test('with if generation match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_overwrite_if_generation_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_overwrite_if_generation_match_success',
@@ -336,11 +295,6 @@ void main() async {
     });
 
     test('with if generation match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_overwrite_if_generation_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'upload_object_overwrite_if_generation_match_failure',

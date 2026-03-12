@@ -24,13 +24,19 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
 void main() async {
+  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
+    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
+    return;
+  }
+
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('delete object', () {
     setUp(() async {
@@ -43,18 +49,13 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_object_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_success',
@@ -75,11 +76,6 @@ void main() async {
     });
 
     test('not found', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_object_not_found',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_not_found',
@@ -92,11 +88,6 @@ void main() async {
     });
 
     test('with generation success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_object_with_generation',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_with_generation',
@@ -151,11 +142,6 @@ void main() async {
     });
 
     test('with ifGenerationMatch success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_object_with_if_generation_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_with_if_generation_match_success',
@@ -180,11 +166,6 @@ void main() async {
     });
 
     test('with ifGenerationMatch failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_object_with_if_generation_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
         'delete_object_with_if_generation_match_failure',

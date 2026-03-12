@@ -18,11 +18,12 @@ library;
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 
 void main() async {
   late ModelService modelService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('model', () {
     setUp(() async {
@@ -34,24 +35,17 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      modelService = ModelService(client: testClient);
+      client = await authClient();
+      modelService = ModelService(client: client);
     });
 
     tearDown(() => modelService.close());
 
     test('list', () async {
-      await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
-        'model_list',
-      );
-
       final request = ListModelsRequest();
 
       final result = await modelService.listModels(request);
       expect(result.models.first.name, isNotEmpty);
-
-      await testClient.endTest();
     });
   });
 }
