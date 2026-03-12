@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:io';
@@ -28,7 +29,6 @@ void main() async {
 
   group(
     'embeddings',
-    tags: ['google-cloud'],
     skip:
         Platform.environment.containsKey(
           'GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB',

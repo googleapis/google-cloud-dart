@@ -24,7 +24,7 @@ void main() async {
   late Storage storage;
 
   group('storage constructors', () {
-    group('with credentials', tags: ['google-cloud'], () {
+    group('with credentials', tags: ['google-cloud'], testOn: 'vm', () {
       test('no constuctor arguments', () async {
         storage = Storage();
         addTearDown(storage.close);
@@ -101,7 +101,7 @@ void main() async {
         // correct project.
         await createBucketWithTearDown(storage, 'stg_w_cl_and_proj_id');
       });
-    }, testOn: 'vm');
+    });
 
     test('noProject', () async {
       storage = Storage(client: http.Client(), projectId: Storage.noProject);

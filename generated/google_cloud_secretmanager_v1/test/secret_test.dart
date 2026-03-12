@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:math';
@@ -28,7 +29,7 @@ void main() async {
   late SecretManagerService secretManagerService;
   late http.Client client;
 
-  group('secret', tags: ['google-cloud'], () {
+  group('secret', () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

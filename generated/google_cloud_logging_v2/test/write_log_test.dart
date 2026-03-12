@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:math';
@@ -29,10 +29,11 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
 void main() async {
+
   late LoggingServiceV2 logService;
   late http.Client client;
 
-  group('LoggingServiceV2', tags: ['google-cloud'], () {
+  group('LoggingServiceV2', () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
