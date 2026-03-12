@@ -63,7 +63,7 @@ void main() async {
     });
 
     test('soft deleted bucket', () async {
-      final prefix = 'sft_del_bkt_${DateTime.now().millisecondsSinceEpoch}';
+      final prefix = 'sft_del_bkt_${radomBucketCharacters(5)}';
       final softDeletedBucket = await storage.createBucket(
         BucketMetadata(
           name: testBucketName('${prefix}_soft'),
@@ -91,7 +91,7 @@ void main() async {
       // Don't use testBucketName for the prefix, since createBucketWithTearDown
       // also calls testBucketName under the hood. Let createBucketWithTearDown
       // generate unique names and we'll just use a short prefix.
-      final prefix = 'page_bkt_${DateTime.now().millisecondsSinceEpoch}';
+      final prefix = 'page_bkt_${radomBucketCharacters(5)}';
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
       final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');
