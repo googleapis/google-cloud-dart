@@ -30,8 +30,6 @@ void main() async {
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
               'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/generative-language',
-              'https://www.googleapis.com/auth/generative-language.retriever',
             ],
           );
 
