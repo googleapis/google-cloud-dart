@@ -24,7 +24,7 @@ void main() async {
   late ModelService modelService;
   late http.Client client;
 
-  group('model', () {
+  group('model', tags: ['integration'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

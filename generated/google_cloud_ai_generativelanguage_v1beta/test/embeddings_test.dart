@@ -24,7 +24,7 @@ void main() async {
   late GenerativeService generativeService;
   late http.Client client;
 
-  group('embeddings', () {
+  group('embeddings', tags: ['integration'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

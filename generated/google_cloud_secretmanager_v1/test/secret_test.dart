@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['integration'])
 library;
 
 import 'dart:io';
@@ -31,7 +30,7 @@ void main() async {
   late SecretManagerService secretManagerService;
   late http.Client client;
 
-  group('secret', () {
+  group('secret', tags: ['integration'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

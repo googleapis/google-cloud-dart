@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['integration'])
 library;
 
 import 'dart:io';
@@ -35,7 +34,7 @@ void main() async {
   late LoggingServiceV2 logService;
   late http.Client client;
 
-  group('LoggingServiceV2', () {
+  group('LoggingServiceV2', tags: ['integration'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

@@ -29,7 +29,7 @@ void main() async {
   late PredictionService predictionService;
   late http.Client client;
 
-  group('generative', () {
+  group('generative', tags: ['integration'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
