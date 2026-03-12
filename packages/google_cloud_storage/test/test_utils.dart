@@ -13,8 +13,8 @@ String _randomSuffix(int length) => [
 ].join();
 
 String testBucketName(String name) {
-  assert(name.length < 55, '"$name" is too long to append a random suffix.');
-  return '$name-${_randomSuffix(59 - name.length)}';
+  assert(name.length < 40, '"$name" is too long to append a random suffix.');
+  return '$name-${_randomSuffix(45 - name.length)}';
 }
 
 String bucketNameWithTearDown(Storage storage, String name) {
