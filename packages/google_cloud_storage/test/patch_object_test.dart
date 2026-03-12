@@ -556,11 +556,7 @@ void main() async {
 
         expect(actualMetadata.retention, isNull);
         expect(actualMetadata.metageneration, BigInt.from(2));
-      },
-      skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
-          ? 'Cannot set relative timestamp when replaying'
-          : false,
-    );
+    });
 
     test('change temporary hold', () async {
       final bucketName = await createBucketWithTearDown(
