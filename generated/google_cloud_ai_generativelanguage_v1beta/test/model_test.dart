@@ -24,26 +24,30 @@ void main() async {
   late ModelService modelService;
   late http.Client client;
 
-  group('model', tags: ['integration'], () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-            ],
-          );
+  group(
+    'model',
+    tags: ['integration'],
+    skip:
+        'Service Account authentication generally fails with insufficient_scope on generativelanguage.googleapis.com',
+    () {
+      setUp(() async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+            );
 
-      client = await authClient();
-      modelService = ModelService(client: client);
-    });
+        client = await authClient();
+        modelService = ModelService(client: client);
+      });
 
-    tearDown(() => modelService.close());
+      tearDown(() => modelService.close());
 
-    test('list', () async {
-      final request = ListModelsRequest();
+      test('list', () async {
+        final request = ListModelsRequest();
 
-      final result = await modelService.listModels(request);
-      expect(result.models.first.name, isNotEmpty);
-    });
-  });
+        final result = await modelService.listModels(request);
+        expect(result.models.first.name, isNotEmpty);
+      });
+    },
+  );
 }

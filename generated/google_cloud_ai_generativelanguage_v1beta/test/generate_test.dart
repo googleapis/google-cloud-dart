@@ -24,41 +24,45 @@ void main() async {
   late GenerativeService generativeService;
   late http.Client client;
 
-  group('generative', tags: ['integration'], () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-            ],
-          );
+  group(
+    'generative',
+    tags: ['integration'],
+    skip:
+        'Service Account authentication generally fails with insufficient_scope on generativelanguage.googleapis.com',
+    () {
+      setUp(() async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+            );
 
-      client = await authClient();
-      generativeService = GenerativeService(client: client);
-    });
+        client = await authClient();
+        generativeService = GenerativeService(client: client);
+      });
 
-    tearDown(() => generativeService.close());
-    test('streamed', () async {
-      final request = GenerateContentRequest(
-        model: 'models/gemini-2.5-flash',
-        contents: [
-          Content(
-            parts: [Part(text: 'Explain how AI works in extensive detail')],
-          ),
-        ],
-      );
+      tearDown(() => generativeService.close());
+      test('streamed', () async {
+        final request = GenerateContentRequest(
+          model: 'models/gemini-2.5-flash',
+          contents: [
+            Content(
+              parts: [Part(text: 'Explain how AI works in extensive detail')],
+            ),
+          ],
+        );
 
-      final results = generativeService.streamGenerateContent(request);
-      final text = StringBuffer();
-      await for (final result in results) {
-        final parts = result.candidates.firstOrNull?.content?.parts;
-        if (parts != null) {
-          for (final p in parts) {
-            text.write(p.text ?? '');
+        final results = generativeService.streamGenerateContent(request);
+        final text = StringBuffer();
+        await for (final result in results) {
+          final parts = result.candidates.firstOrNull?.content?.parts;
+          if (parts != null) {
+            for (final p in parts) {
+              text.write(p.text ?? '');
+            }
           }
         }
-      }
-      expect(text.toString(), hasLength(greaterThan(1000)));
-    }, timeout: const Timeout(Duration(seconds: 60)));
-  });
+        expect(text.toString(), hasLength(greaterThan(1000)));
+      }, timeout: const Timeout(Duration(seconds: 60)));
+    },
+  );
 }

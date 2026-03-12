@@ -24,34 +24,38 @@ void main() async {
   late GenerativeService generativeService;
   late http.Client client;
 
-  group('embeddings', tags: ['integration'], () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
+  group(
+    'embeddings',
+    tags: ['integration'],
+    skip:
+        'Service Account authentication generally fails with insufficient_scope on generativelanguage.googleapis.com',
+    () {
+      setUp(() async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+            );
+
+        client = await authClient();
+        generativeService = GenerativeService(client: client);
+      });
+
+      tearDown(() => generativeService.close());
+      test('embedContent', () async {
+        final request = EmbedContentRequest(
+          model: 'models/gemini-embedding-001',
+          content: Content(
+            parts: [
+              Part(text: 'What is the meaning of life?'),
+              Part(text: 'What is the purpose of existence?'),
+              Part(text: 'How do I bake a cake?'),
             ],
-          );
+          ),
+        );
 
-      client = await authClient();
-      generativeService = GenerativeService(client: client);
-    });
-
-    tearDown(() => generativeService.close());
-    test('embedContent', () async {
-      final request = EmbedContentRequest(
-        model: 'models/gemini-embedding-001',
-        content: Content(
-          parts: [
-            Part(text: 'What is the meaning of life?'),
-            Part(text: 'What is the purpose of existence?'),
-            Part(text: 'How do I bake a cake?'),
-          ],
-        ),
-      );
-
-      final response = await generativeService.embedContent(request);
-      expect(response.embedding?.values, hasLength(greaterThan(1000)));
-    }, timeout: const Timeout(Duration(seconds: 60)));
-  });
+        final response = await generativeService.embedContent(request);
+        expect(response.embedding?.values, hasLength(greaterThan(1000)));
+      }, timeout: const Timeout(Duration(seconds: 60)));
+    },
+  );
 }

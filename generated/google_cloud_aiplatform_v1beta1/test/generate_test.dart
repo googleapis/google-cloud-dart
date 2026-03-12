@@ -35,7 +35,6 @@ void main() async {
           await auth.clientViaApplicationDefaultCredentials(
             scopes: [
               'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/generative-language.retriever',
             ],
           );
 
@@ -47,7 +46,7 @@ void main() async {
     test('streamed', () async {
       final request = GenerateContentRequest(
         model:
-            'projects/$projectId/locations/global/'
+            'projects/$projectId/locations/us-central1/'
             'publishers/google/models/gemini-2.5-flash',
         contents: [
           Content(
