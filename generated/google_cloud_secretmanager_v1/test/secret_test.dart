@@ -15,15 +15,15 @@
 @TestOn('vm')
 library;
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_secretmanager_v1/secretmanager.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 void main() async {
   if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {

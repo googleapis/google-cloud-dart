@@ -27,8 +27,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 

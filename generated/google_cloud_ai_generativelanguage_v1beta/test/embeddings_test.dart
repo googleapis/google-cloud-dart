@@ -17,9 +17,8 @@ library;
 
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
-import 'package:test/test.dart';
-import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:test/test.dart';
 
 void main() async {
   late GenerativeService generativeService;

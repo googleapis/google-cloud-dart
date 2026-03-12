@@ -16,6 +16,7 @@
 library;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:google_cloud_protobuf/protobuf.dart' hide Duration;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -25,8 +26,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
