@@ -20,8 +20,8 @@ data "google_service_account" "integration-test-runner" {
   account_id = "integration-test-runner"
 }
 
-# The service account will need to bill requests to the project for Requester
-# Pays bucket operations.
+# The service account will need to bill requests to the project for Google
+# Cloud Storage Requester Pays bucket operations.
 resource "google_project_iam_member" "sa-can-use-service-usage" {
   project = data.google_project.project.id
   role    = "roles/serviceusage.serviceUsageConsumer"
