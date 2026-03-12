@@ -15,12 +15,13 @@
 @TestOn('vm')
 library;
 
+import 'dart:io';
+
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
@@ -88,13 +89,7 @@ void main() async {
               .map((b) => b.name),
           emitsInOrder([emits(softDeletedBucket), emitsDone]),
         );
-      },
-      skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
-          ? 'soft deleted buckets cannot be deleted before their retention '
-                'period has expired, which makes it impossible to use fixed '
-                'bucket names'
-          : false,
-    );
+    });
 
     test('pagination', () async {
       final prefix = testBucketName('list_buckets_pagination');

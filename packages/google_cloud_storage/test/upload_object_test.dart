@@ -16,8 +16,9 @@
 library;
 
 import 'dart:convert';
+import 'dart:io';
 
-import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart'
     show fixedBoundaryString;
@@ -26,8 +27,6 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 import 'test_utils.dart';
 
@@ -63,15 +62,18 @@ void main() async {
         'upload_object_new',
       );
 
-      final beforeRequestTime = DateTime.now().toUtc();
-
+      final beforeRequestTime = DateTime.now().toUtc().subtract(
+        const Duration(seconds: 1), // Add some buffer for clock skew.
+      );
       final objectMetadata = await storage.uploadObject(
         bucketName,
         'object1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
-      final afterRequestTime = DateTime.now().toUtc();
+      final afterRequestTime = DateTime.now().toUtc().add(
+        const Duration(seconds: 1), // Add some buffer for clock skew.
+      );
       expect(objectMetadata.acl, isNull);
       expect(objectMetadata.bucket, bucketName);
       expect(objectMetadata.cacheControl, isNull);
@@ -117,20 +119,13 @@ void main() async {
       expect(objectMetadata.softDeleteTime, isNull);
       expect(objectMetadata.storageClass, 'STANDARD');
       expect(objectMetadata.temporaryHold, isNull);
-      if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
-        expect(
-          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-          greaterThan(0),
-        );
-      } else {
         expect(
           objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
           allOf(
             greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
             lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
           ),
-        );
-      }
+      );
       expect(objectMetadata.timeDeleted, isNull);
       expect(objectMetadata.timeStorageClassUpdated, isNotNull);
       expect(

@@ -15,6 +15,7 @@
 @TestOn('vm')
 library;
 
+import 'dart:io';
 import 'dart:math';
 
 import 'package:google_cloud_api/api.dart';
@@ -24,10 +25,9 @@ import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'dart:io';
-import 'package:http/http.dart' as http;
 
 void main() async {
   if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
@@ -85,9 +85,8 @@ void main() async {
     });
 
     test('writeLogEntries', () async {
-      final logId = Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
-          ? '1234'
-          : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
+      final logId =
+          '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
       final logName = 'projects/$projectId/logs/logging_test_$logId';
 
       await logService.writeLogEntries(
@@ -102,17 +101,13 @@ void main() async {
           ],
         ),
       );
-
-      if (Platform.environment['GOOGLE_CLOUD_PROJECT'] != null) {
-        // Writes are not always committed instantly. Uses a fixed delay instead
-        // of polling in order to cause recordings to make a deterministic
-        // number of requests.
-        await Future<void>.delayed(const Duration(seconds: 15));
-
-        addTearDown(
-          () => logService.deleteLog(DeleteLogRequest(logName: logName)),
-        );
-      }
+      // Writes are not always committed instantly. Uses a fixed delay instead
+      // of polling in order to cause recordings to make a deterministic
+      // number of requests.
+      await Future<void>.delayed(const Duration(seconds: 15));
+      addTearDown(
+        () => logService.deleteLog(DeleteLogRequest(logName: logName)),
+      );
 
       final list = await logService.listLogEntries(
         ListLogEntriesRequest(
