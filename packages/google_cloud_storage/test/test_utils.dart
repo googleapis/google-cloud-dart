@@ -25,7 +25,6 @@ String bucketNameWithTearDown(Storage storage, String name) {
       await for (final object in storage.listObjects(
         generatedName,
         versions: true,
-        userProject: projectId, // For requester-pays buckets.
       )) {
         if (object.eventBasedHold == true || object.temporaryHold == true) {
           await storage.patchObject(

@@ -47,9 +47,8 @@ void main() async {
 
     tearDown(() => secretManagerService.close());
     test('create_and_update', () async {
-      final secretName = Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
-          ? 'mysecret'
-          : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
+      final secretName =
+          '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
 
       final createdSecret = await secretManagerService.createSecret(
         CreateSecretRequest(
