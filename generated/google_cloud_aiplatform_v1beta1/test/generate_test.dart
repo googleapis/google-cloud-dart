@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['integration'])
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
@@ -26,7 +26,7 @@ void main() async {
   late PredictionService predictionService;
   late http.Client client;
 
-  group('generative', tags: ['integration'], () {
+  group('generative', tags: ['google-cloud'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

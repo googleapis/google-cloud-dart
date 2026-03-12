@@ -28,7 +28,7 @@ void main() async {
   late SecretManagerService secretManagerService;
   late http.Client client;
 
-  group('secret', tags: ['integration'], () {
+  group('secret', tags: ['google-cloud'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

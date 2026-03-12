@@ -13,7 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['integration'])
+@Tags(['google-cloud'])
 library;
 
 import 'dart:io';

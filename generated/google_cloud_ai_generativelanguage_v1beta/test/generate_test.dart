@@ -28,7 +28,7 @@ void main() async {
 
   group(
     'generative',
-    tags: ['integration'],
+    tags: ['google-cloud'],
     skip:
         Platform.environment.containsKey(
           'GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB',

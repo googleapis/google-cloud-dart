@@ -16,5 +16,5 @@
 set -e
 
 dart pub get
-dart test . -P integration
+dart test . -P google-cloud
 

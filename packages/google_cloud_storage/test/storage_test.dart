@@ -24,7 +24,7 @@ void main() async {
   late Storage storage;
 
   group('storage constructors', () {
-    group('with credentials', tags: ['integration'], () {
+    group('with credentials', tags: ['google-cloud'], () {
       test('no constuctor arguments', () async {
         storage = Storage();
         addTearDown(storage.close);

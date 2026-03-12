@@ -32,7 +32,7 @@ void main() async {
   late LoggingServiceV2 logService;
   late http.Client client;
 
-  group('LoggingServiceV2', tags: ['integration'], () {
+  group('LoggingServiceV2', tags: ['google-cloud'], () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(

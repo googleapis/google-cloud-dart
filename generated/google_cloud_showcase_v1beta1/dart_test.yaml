@@ -1,8 +1,8 @@
 tags:
-  integration:
+  google-cloud:
   firebase-emulator:
-exclude_tags: integration || firebase-emulator
+exclude_tags: google-cloud || firebase-emulator
 
 presets:
-  integration:
-    include_tags: integration
+  google-cloud:
+    include_tags: google-cloud
