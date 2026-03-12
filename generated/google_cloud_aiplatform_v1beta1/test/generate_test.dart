@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['integration'])
 library;
 
 import 'dart:io';
@@ -24,10 +25,6 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
 void main() async {
-  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
-    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
-    return;
-  }
 
   late PredictionService predictionService;
   late http.Client client;

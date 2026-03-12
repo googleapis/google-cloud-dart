@@ -22,17 +22,13 @@ import 'package:test_utils/cloud.dart';
 
 import 'test_utils.dart';
 
+@Tags(['integration'])
 void main() async {
-  if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
-    test('skip', () {}, skip: 'Requires GOOGLE_CLOUD_PROJECT');
-    return;
-  }
-
   late Storage storage;
   late http.Client client;
 
   group('storage constructors', () {
-    group('with credentials', () {
+    group('with credentials', tags: ['integration'], () {
       setUp(() async {
         Future<auth.AutoRefreshingAuthClient> authClient() async =>
             await auth.clientViaApplicationDefaultCredentials(

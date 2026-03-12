@@ -1,6 +1,7 @@
 tags:
   integration:
   firebase-emulator:
+  firebase-emulator:
 exclude_tags: integration || firebase-emulator
 
 presets:

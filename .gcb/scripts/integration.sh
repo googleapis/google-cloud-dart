@@ -29,7 +29,8 @@ while IFS= read -r -d '' pubspec_path; do
     (
       cd "$dir"
       dart pub get
-      dart test
+      # Run only integration tests using the 'integration' preset defined in dart_test.yaml
+      dart test -P integration
     )
     exit_code=$?
     set -e
