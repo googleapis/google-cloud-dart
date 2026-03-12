@@ -66,29 +66,29 @@ void main() async {
       );
     });
 
-    test(
-      'soft deleted bucket',
-      () async {
-        final prefix = testBucketName('list_buckets_soft_deleted_bucket');
-        final softDeletedBucket = await createBucketWithTearDown(
-          storage,
-          '${prefix}_soft',
-          metadata: BucketMetadata(
-            softDeletePolicy: BucketSoftDeletePolicy(
-              retentionDurationSeconds: const Duration(days: 7).inSeconds,
-            ),
+    test('soft deleted bucket', () async {
+      final prefix = testBucketName('list_soft_deleted_bucket');
+      final softDeletedBucket = await storage.createBucket(
+        BucketMetadata(
+          name: '${prefix}_soft',
+          softDeletePolicy: BucketSoftDeletePolicy(
+            retentionDurationSeconds: const Duration(days: 7).inSeconds,
           ),
-        );
-        await storage.deleteBucket(softDeletedBucket);
+        ),
+      );
+      await storage.deleteBucket(softDeletedBucket.name!);
 
-        await createBucketWithTearDown(storage, '${prefix}_no_soft');
+      final nonSoftDeletedBucket = await storage.createBucket(
+        BucketMetadata(name: '${prefix}_no_soft'),
+      );
+      addTearDown(() => storage.deleteBucket(nonSoftDeletedBucket.name!));
 
-        await expectLater(
-          storage
-              .listBuckets(prefix: prefix, softDeleted: true)
-              .map((b) => b.name),
-          emitsInOrder([emits(softDeletedBucket), emitsDone]),
-        );
+      await expectLater(
+        storage
+            .listBuckets(prefix: prefix, softDeleted: true)
+            .map((b) => b.name),
+        emitsInOrder([emits(softDeletedBucket.name), emitsDone]),
+      );
     });
 
     test('pagination', () async {
