@@ -27,7 +27,6 @@ import 'package:test_utils/cloud.dart';
 import 'test_utils.dart';
 
 void main() async {
-
   late Storage storage;
   late http.Client client;
 
@@ -64,10 +63,10 @@ void main() async {
     });
 
     test('soft deleted bucket', () async {
-      final prefix = testBucketName('list_sft_del_bkt');
+      final prefix = 'sft_del_bkt_${DateTime.now().millisecondsSinceEpoch}';
       final softDeletedBucket = await storage.createBucket(
         BucketMetadata(
-          name: '${prefix}_soft',
+          name: testBucketName('${prefix}_soft'),
           softDeletePolicy: BucketSoftDeletePolicy(
             retentionDurationSeconds: const Duration(days: 7).inSeconds,
           ),
@@ -76,7 +75,7 @@ void main() async {
       await storage.deleteBucket(softDeletedBucket.name!);
 
       final nonSoftDeletedBucket = await storage.createBucket(
-        BucketMetadata(name: '${prefix}_no_soft'),
+        BucketMetadata(name: testBucketName('${prefix}_no_soft')),
       );
       addTearDown(() => storage.deleteBucket(nonSoftDeletedBucket.name!));
 
@@ -89,7 +88,10 @@ void main() async {
     });
 
     test('pagination', () async {
-      final prefix = testBucketName('list_buckets_page');
+      // Don't use testBucketName for the prefix, since createBucketWithTearDown
+      // also calls testBucketName under the hood. Let createBucketWithTearDown
+      // generate unique names and we'll just use a short prefix.
+      final prefix = 'page_bkt_${DateTime.now().millisecondsSinceEpoch}';
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
       final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');

@@ -29,7 +29,6 @@ import 'package:test_utils/cloud.dart';
 import 'test_utils.dart';
 
 void main() async {
-
   late Storage storage;
   late http.Client client;
 
@@ -213,10 +212,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_billing', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'crt_bkt_w_meta_billing',
-      );
+      final bucketName = testBucketName('crt_bkt_w_meta_billing');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -224,6 +220,11 @@ void main() async {
       );
 
       final actualMetadata = await storage.createBucket(requestMetadata);
+
+      // Manually add teardown with userProject to delete a Requester Pays bucket.
+      addTearDown(
+        () => storage.deleteBucket(bucketName, userProject: projectId),
+      );
 
       expect(actualMetadata.billing?.requesterPays, isTrue);
     });
