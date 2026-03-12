@@ -1,4 +1,4 @@
-# Copyright 2025 Google LLC
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.dart_tool/
-pubspec.lock
-
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.backup
-*.tfstate.lock.info
-*.tplan
-*.tfvars
-*.tfvars.json
+options:
+  dynamic_substitutions: true
+  substitutionOption: 'ALLOW_LOOSE'
+  logging: CLOUD_LOGGING_ONLY
+serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/terraform-runner@${PROJECT_ID}.iam.gserviceaccount.com'
+steps:
+  - name: 'hashicorp/terraform:latest'
+    entrypoint: '/bin/sh'
+    dir: '.gcb/builds'
+    args: ['-c', 'terraform init && terraform plan -out /tmp/builds.tplan && terraform apply -auto-approve /tmp/builds.tplan']

@@ -1,4 +1,6 @@
-# Copyright 2025 Google LLC
+#!/usr/bin/env bash
+
+# Copyright 2026 Google LLC
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,14 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-.dart_tool/
-pubspec.lock
+set -e
 
-# Terraform
-.terraform/
-*.tfstate
-*.tfstate.backup
-*.tfstate.lock.info
-*.tplan
-*.tfvars
-*.tfvars.json
+cd packages/google_cloud_storage/
+dart pub get
+dart --define=http=proxy test/storage_test.dart

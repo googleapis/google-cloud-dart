@@ -1,0 +1,41 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+options:
+  dynamic_substitutions: true
+  substitutionOption: 'ALLOW_LOOSE'
+  logging: CLOUD_LOGGING_ONLY
+  env:
+    - GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB=1
+    - GOOGLE_CLOUD_PROJECT=${PROJECT_ID}
+    - GOOGLE_CLOUD_DART_TEST_SERVICE_ACCOUNT=dart-sdk-test@${PROJECT_ID}.iam.gserviceaccount.com
+  workerPool: 'projects/${PROJECT_ID}/locations/${_POOL_REGION}/workerPools/${_POOL_ID}'
+serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/integration-test-runner@${PROJECT_ID}.iam.gserviceaccount.com'
+steps:
+  - id: Run integration tests
+    name: 'dart:stable'
+    args: ['.gcb/scripts/integration.sh']
+    secretEnv: ['GITHUB_TOKEN']
+    env:
+      - _PR_NUMBER=${_PR_NUMBER}
+      - REPO_FULL_NAME=${REPO_FULL_NAME}
+
+substitutions:
+  _POOL_REGION: us-central1
+  _POOL_ID: dart-sdk-pool
+
+availableSecrets:
+  secretManager:
+    - versionName: projects/${PROJECT_ID}/secrets/GitHub-github-oauthtoken-da481a/versions/latest
+      env: GITHUB_TOKEN
