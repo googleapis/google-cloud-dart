@@ -15,32 +15,6 @@
 
 set -e
 
-echo "==== Running Dart Integration Tests ===="
+dart pub get
+dart test . -P integration
 
-failed=0
-
-# Find all directories containing both pubspec.yaml and a test directory
-while IFS= read -r -d '' pubspec_path; do
-  dir=$(dirname "$pubspec_path")
-  if [ -d "$dir/test" ]; then
-    echo "==== Testing package in $dir ===="
-    
-    set +e
-    (
-      cd "$dir"
-      dart pub get
-      # Run only integration tests using the 'integration' preset defined in dart_test.yaml
-      dart test -P integration
-    )
-    exit_code=$?
-    set -e
-    
-    if [ $exit_code -ne 0 ]; then
-      failed=1
-    fi
-  fi
-done < <(find . -name "pubspec.yaml" -print0)
-
-echo "==== DONE ===="
-
-exit $failed
