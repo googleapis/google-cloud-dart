@@ -13,7 +13,9 @@
 # limitations under the License.
 
 name: google_cloud_storage
-description: A Dart client for Google Cloud Storage.
+description: >-
+  A client for Google Cloud Storage, a managed service for storing, archiving,
+  and serving unstructured data of any size.
 version: 0.6.0-wip
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/packages/google_cloud_storage
 
