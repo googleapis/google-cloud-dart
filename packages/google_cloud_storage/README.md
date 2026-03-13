@@ -86,5 +86,46 @@ void main() async {
   storage.close();
 }
 ```
+
+## Feature Support
+
+| Category | Feature Name | Supported | Supported by Firebase Storage Emulator |
+| :--- | :--- | :---: | :---: |
+| **Bucket APIs** | Create Bucket | ✅ | ❌ |
+| | Delete Bucket | ✅ | ❌ |
+| | Get Bucket Metadata | ✅ | ❌ |
+| | List Buckets | ✅ | ❌ |
+| | Update Bucket Metadata (Patch) | ✅ | ❌ |
+| | Get / Set IAM Policy | ❌ | ❌ |
+| | Test IAM Permissions | ❌ | ❌ |
+| | Manage Bucket ACLs | ✅ | ❌ |
+| | Manage Pub/Sub Notifications | ❌ | ❌ |
+| **Object APIs** | Simple Upload (from memory bytes) | ✅ | ✅ |
+| | Simple Upload (from string) | ✅ | ✅ |
+| | Simple Upload (from `dart:io` File) | ❌ | ✅ |
+| | Streaming Upload | ❌ | ✅ |
+| | Resumable Upload | ❌ | ✅ |
+| | Download Object (to memory bytes) | ✅ | ✅ |
+| | Download Object (as Stream) | ❌ | ✅ |
+| | Download Object (Byte Range) | ❌ | ✅ |
+| | Download Object (to `dart:io` File) | ❌ | ✅ |
+| | Delete Object | ✅ | ✅ |
+| | Get Object Metadata | ✅ | ✅ |
+| | Update Object Metadata (Patch) | ✅ | ✅ |
+| | Copy Object | ❌ | ✅ |
+| | Move / Rename Object | ❌ | ✅ |
+| | Compose / Combine Objects | ❌ | ❌ |
+| | Restore Soft-Deleted Object | ❌ | ✅ |
+| | Manage Object ACLs | ✅ | ✅ |
+| | Make Object Public / Private | ❌ | ✅ |
+| **Security & Auth**| Generate Signed URLs | ❌ | ❌ |
+| | Generate Signed Policy Documents | ❌ | ❌ |
+| | Manage HMAC Keys | ❌ | ❌ |
+| | Get Project Service Account | ❌ | ❌ |
+| | Customer-Supplied Encryption Keys (CSEK) | ❌ | ❌ |
+| **Client Features**| Automatic Retries | ✅ | ✅ |
+| | Transfer Manager (Parallel Uploads) | ❌ | ✅ |
+| | Transfer Manager (Parallel Downloads) | ❌ | ✅ |
+
 [set up authentication]: https://docs.cloud.google.com/storage/docs/reference/libraries#authentication
 [idempotent Google Cloud Storage operations]: https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency
