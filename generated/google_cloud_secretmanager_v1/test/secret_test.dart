@@ -13,6 +13,7 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:math';
@@ -20,13 +21,13 @@ import 'dart:math';
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_secretmanager_v1/secretmanager.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 void main() async {
   late SecretManagerService secretManagerService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('secret', () {
     setUp(() async {
@@ -35,21 +36,14 @@ void main() async {
             scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      secretManagerService = SecretManagerService(client: testClient);
+      client = await authClient();
+      secretManagerService = SecretManagerService(client: client);
     });
 
     tearDown(() => secretManagerService.close());
     test('create_and_update', () async {
-      await testClient.startTest(
-        'google_cloud_secretmanager_v1',
-        'create_and_update',
-      );
-
       final secretName =
-          TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'mysecret'
-          : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
+          '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
 
       final createdSecret = await secretManagerService.createSecret(
         CreateSecretRequest(
@@ -76,8 +70,6 @@ void main() async {
       expect(updatedSecret.name, endsWith(secretName));
       expect(updatedSecret.annotations, {'a': 'b'});
       expect(updatedSecret.labels, isEmpty); // Not in `updateMask`.
-
-      await testClient.endTest();
     });
   });
 }

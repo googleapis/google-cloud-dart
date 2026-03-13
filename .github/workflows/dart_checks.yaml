@@ -55,15 +55,7 @@ jobs:
         with:
           sdk: ${{ env.DART_VERSION }}
       - run: dart pub get
-      - name: "tests"
-        run: dart test -p ${{ matrix.platform }}
-        working-directory: tests
-      - name: "generated/**_test.dart"
         run: dart test -p ${{ matrix.platform }} .
-        working-directory: generated
-      - name: "packages/**_test.dart"
-        run: dart test -p ${{ matrix.platform }} -x firebase-emulator .
-        working-directory: packages
 
   generator:
     name: Generators

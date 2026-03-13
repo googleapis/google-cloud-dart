@@ -13,48 +13,29 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('delete bucket', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_bucket_success',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'delete_bucket_success',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'del_bkt_ok');
 
       await storage.createBucket(BucketMetadata(name: bucketName));
 
@@ -68,14 +49,9 @@ void main() async {
     });
 
     test('delete non-existent bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_bucket_non_existent',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'delete_bucket_non_existent',
+        'del_bkt_non_existent',
       );
       expect(
         () => storage.deleteBucket(bucketName),
@@ -84,14 +60,9 @@ void main() async {
     });
 
     test('delete bucket with ifMetagenerationMatch success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_bucket_with_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'delete_bucket_with_if_metageneration_match_success',
+        'del_bkt_w_if_mgen_match_ok',
       );
 
       final metadata = await storage.createBucket(
@@ -111,14 +82,9 @@ void main() async {
     });
 
     test('delete bucket with ifMetagenerationMatch failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'delete_bucket_with_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'delete_bucket_with_if_metageneration_match_failure',
+        'del_bkt_w_if_mgen_match_fail',
       );
 
       await storage.createBucket(BucketMetadata(name: bucketName));
