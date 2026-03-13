@@ -13,40 +13,26 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('bucket', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('create', () async {
-      await testClient.startTest('google_cloud_storage', 'bucket_create');
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(storage, 'dart_bucket_create');
+      final bucketName = bucketNameWithTearDown(storage, 'dart_bkt_crt');
 
       final bucket = storage.bucket(bucketName);
       final metadata = await bucket.create();
@@ -54,14 +40,9 @@ void main() async {
     });
 
     test('create with contradictory name metadata', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_create_contradictory_name_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'dart_bucket_create_contradictory_name_metadata',
+        'dart_bkt_crt_contradictory_name_meta',
       );
 
       final bucket = storage.bucket(bucketName);
@@ -72,11 +53,9 @@ void main() async {
     });
 
     test('delete', () async {
-      await testClient.startTest('google_cloud_storage', 'bucket_delete');
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'dart_bucket_delete',
+        'dart_bkt_del',
       );
 
       final bucket = storage.bucket(bucketName);
@@ -85,11 +64,9 @@ void main() async {
     });
 
     test('metadata', () async {
-      await testClient.startTest('google_cloud_storage', 'bucket_metadata');
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'dart_bucket_metadata',
+        'dart_bkt_meta',
       );
 
       final bucket = storage.bucket(bucketName);
@@ -98,11 +75,9 @@ void main() async {
     });
 
     test('patch', () async {
-      await testClient.startTest('google_cloud_storage', 'bucket_patch');
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'dart_bucket_patch',
+        'dart_bkt_pch',
       );
 
       final bucket = storage.bucket(bucketName);

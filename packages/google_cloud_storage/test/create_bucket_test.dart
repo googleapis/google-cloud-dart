@@ -13,48 +13,34 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
+
+import 'dart:io';
 
 import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
+import 'package:http/testing.dart' show MockClient;
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
+import 'package:test_utils/cloud.dart' show projectId;
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('create bucket', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('create_bucket_with_metadata_name_only', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_name_only',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_name_only',
+        'crt_bkt_w_meta_name_only',
       );
 
       final requestMetadata = BucketMetadata(name: bucketName);
@@ -122,20 +108,13 @@ void main() async {
       );
       expect(actualMetadata.softDeleteTime, isNull);
       expect(actualMetadata.storageClass, 'STANDARD');
-      if (TestHttpClient.isReplaying) {
-        expect(
-          actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-          greaterThan(0),
-        );
-      } else {
         expect(
           actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
           allOf(
             greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
             lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
           ),
-        );
-      }
+      );
       expect(
         actualMetadata.updated?.toDateTime(),
         actualMetadata.timeCreated?.toDateTime(),
@@ -145,14 +124,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_autoclass', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_autoclass',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_autoclass',
+        'crt_bkt_w_meta_autoclass',
       );
 
       final requestMetadata = BucketMetadata(
@@ -169,14 +143,6 @@ void main() async {
 
       expect(actualMetadata.autoclass!.enabled, true);
       expect(actualMetadata.autoclass!.terminalStorageClass, 'NEARLINE');
-      if (TestHttpClient.isReplaying) {
-        expect(
-          actualMetadata.autoclass!.terminalStorageClassUpdateTime
-              ?.toDateTime()
-              .microsecondsSinceEpoch,
-          greaterThan(0),
-        );
-      } else {
         expect(
           actualMetadata.autoclass!.terminalStorageClassUpdateTime
               ?.toDateTime()
@@ -185,19 +151,13 @@ void main() async {
             greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
             lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
           ),
-        );
-      }
+      );
     });
 
     test('create_bucket_with_metadata_lifecycle', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_lifecycle',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_lifecycle',
+        'crt_bkt_w_meta_lifecycle',
       );
 
       final requestMetadata = BucketMetadata(
@@ -225,15 +185,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_billing', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_billing',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_billing',
-      );
+      final bucketName = testBucketName('crt_bkt_w_meta_billing');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -242,19 +194,17 @@ void main() async {
 
       final actualMetadata = await storage.createBucket(requestMetadata);
 
+      // Manually add teardown with userProject to delete a Requester Pays
+      // bucket.
+      addTearDown(
+        () => storage.deleteBucket(bucketName, userProject: projectId),
+      );
+
       expect(actualMetadata.billing?.requesterPays, isTrue);
     });
 
     test('create_bucket_with_metadata_cors', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_cors',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_cors',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_cors');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -278,14 +228,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_default_event_based_hold', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_default_event_based_hold',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_default_event_based_hold',
+        'crt_bkt_w_meta_default_evt_bsd_hld',
       );
 
       final requestMetadata = BucketMetadata(
@@ -299,14 +244,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_iam_configuration', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_iam_configuration',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_iam_configuration',
+        'crt_bkt_w_meta_iam_configuration',
       );
 
       final requestMetadata = BucketMetadata(
@@ -330,14 +270,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_labels', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_labels',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_labels',
+        'crt_bkt_w_meta_labels',
       );
 
       final requestMetadata = BucketMetadata(
@@ -351,14 +286,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_retention_policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_retention_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_retention_policy',
+        'crt_bkt_w_meta_ret_pol',
       );
 
       final requestMetadata = BucketMetadata(
@@ -373,14 +303,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_soft_delete_policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_soft_delete_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_soft_delete_policy',
+        'crt_bkt_w_meta_sft_del_pol',
       );
 
       final requestMetadata = BucketMetadata(
@@ -396,14 +321,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_storage_class', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_storage_class',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_storage_class',
+        'crt_bkt_w_meta_stg_class',
       );
 
       final requestMetadata = BucketMetadata(
@@ -417,15 +337,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_versioning',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_vers');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -438,15 +350,7 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_website', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_website',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'create_bucket_with_metadata_website',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_web');
 
       final requestMetadata = BucketMetadata(
         name: bucketName,
@@ -524,14 +428,9 @@ void main() async {
     });
 
     test('create_bucket_with_metadata_duplicate', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'create_bucket_with_metadata_duplicate',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'create_bucket_with_metadata_duplicate',
+        'crt_bkt_w_meta_duplicate',
       );
 
       final requestMetadata = BucketMetadata(name: bucketName);

@@ -16,6 +16,5 @@
 
 set -e
 
-cd packages/google_cloud_storage/
 dart pub get
-dart --define=http=proxy test/storage_test.dart
+dart test . -P google-cloud

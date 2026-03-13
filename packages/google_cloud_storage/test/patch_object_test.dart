@@ -13,9 +13,11 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:google_cloud_protobuf/protobuf.dart' hide Duration;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -25,13 +27,12 @@ import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('patch object', () {
     setUp(() async {
@@ -44,21 +45,16 @@ void main() async {
             ],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      client = await authClient();
+      storage = Storage(client: client, projectId: projectId);
     });
 
     tearDown(() => storage.close());
 
     test('change acl', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_acl',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_acl',
+        'pch_obj_chg_acl',
       );
       await storage.uploadObject(
         bucketName,
@@ -81,14 +77,9 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('remove acl', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_acl',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_acl',
+        'pch_obj_remove_acl',
       );
       await storage.uploadObject(
         bucketName,
@@ -110,14 +101,9 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('change cache control', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_cache_control',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_cache_control',
+        'pch_obj_chg_cch_ctrl',
       );
       await storage.uploadObject(
         bucketName,
@@ -139,14 +125,9 @@ void main() async {
     });
 
     test('remove cache control', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_cache_control',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_cache_control',
+        'pch_obj_chg_cch_ctrl',
       );
       await storage.uploadObject(
         bucketName,
@@ -168,14 +149,9 @@ void main() async {
     });
 
     test('change content disposition', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_content_disposition',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_disposition',
+        'pch_obj_chg_cnt_disp',
       );
       await storage.uploadObject(
         bucketName,
@@ -200,14 +176,9 @@ void main() async {
     });
 
     test('remove content disposition', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_content_disposition',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_disposition',
+        'pch_obj_remove_cnt_disp',
       );
       await storage.uploadObject(
         bucketName,
@@ -230,14 +201,9 @@ void main() async {
     });
 
     test('change content encoding', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_content_encoding',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_encoding',
+        'pch_obj_chg_cnt_enc',
       );
       await storage.uploadObject(
         bucketName,
@@ -259,14 +225,9 @@ void main() async {
     });
 
     test('remove content encoding', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_content_encoding',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_encoding',
+        'pch_obj_remove_cnt_enc',
       );
       await storage.uploadObject(
         bucketName,
@@ -289,14 +250,9 @@ void main() async {
     });
 
     test('change content language', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_content_language',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_language',
+        'pch_obj_chg_cnt_lang',
       );
       await storage.uploadObject(
         bucketName,
@@ -318,14 +274,9 @@ void main() async {
     });
 
     test('remove content language', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_content_language',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_language',
+        'pch_obj_remove_cnt_lang',
       );
       await storage.uploadObject(
         bucketName,
@@ -348,14 +299,9 @@ void main() async {
     });
 
     test('change content type', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_content_type',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_content_type',
+        'pch_obj_chg_cnt_typ',
       );
       await storage.uploadObject(
         bucketName,
@@ -377,14 +323,9 @@ void main() async {
     });
 
     test('remove content type', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_content_type',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_content_type',
+        'pch_obj_remove_cnt_typ',
       );
       await storage.uploadObject(
         bucketName,
@@ -406,14 +347,9 @@ void main() async {
     });
 
     test('change custom time', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_custom_time',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_custom_time',
+        'pch_obj_chg_cust_tm',
       );
       await storage.uploadObject(
         bucketName,
@@ -436,14 +372,9 @@ void main() async {
     });
 
     test('change event based hold', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_event_based_hold',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_event_based_hold',
+        'pch_obj_chg_evt_bsd_hld',
       );
       await storage.uploadObject(
         bucketName,
@@ -464,14 +395,9 @@ void main() async {
     });
 
     test('remove event based hold', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_event_based_hold',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_event_based_hold',
+        'pch_obj_remove_evt_bsd_hld',
       );
       await storage.uploadObject(
         bucketName,
@@ -493,14 +419,9 @@ void main() async {
     });
 
     test('change metadata', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_metadata',
+        'pch_obj_chg_meta',
       );
       await storage.uploadObject(
         bucketName,
@@ -525,14 +446,9 @@ void main() async {
     });
 
     test('remove metadata', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_remove_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_remove_metadata',
+        'pch_obj_remove_meta',
       );
       await storage.uploadObject(
         bucketName,
@@ -556,14 +472,9 @@ void main() async {
     test(
       'change retention',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_object_change_retention',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_object_change_retention',
+          'pch_obj_chg_ret',
           enableObjectRetention: true,
         );
 
@@ -598,69 +509,49 @@ void main() async {
 
         // Wait for the retention period to expire so teardown can delete it.
         await Future<void>.delayed(const Duration(seconds: 1));
-      },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'Cannot set relative timestamp when replaying'
-          : false,
-    );
+    });
 
-    test(
-      'remove retention',
-      () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_object_remove_retention',
-        );
-        addTearDown(testClient.endTest);
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'patch_object_remove_retention',
-          enableObjectRetention: true,
-        );
-
-        final retainUntilTime = DateTime.now()
-            .add(const Duration(seconds: 1))
-            .toUtc()
-            .toTimestamp();
-
-        await storage.uploadObject(
-          bucketName,
-          'object.txt',
-          utf8.encode('content'),
-          metadata: ObjectMetadata(
-            retention: ObjectRetention(
-              mode: 'Unlocked',
-              retainUntilTime: retainUntilTime,
-            ),
-          ),
-        );
-
-        final patchMetadata = ObjectMetadataPatchBuilder()..retention = null;
-        // Wait for the retention period to expire.
-        await Future<void>.delayed(const Duration(seconds: 1));
-        final actualMetadata = await storage.patchObject(
-          bucketName,
-          'object.txt',
-          patchMetadata,
-        );
-
-        expect(actualMetadata.retention, isNull);
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'Cannot set relative timestamp when replaying'
-          : false,
-    );
-
-    test('change temporary hold', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_change_temporary_hold',
-      );
-      addTearDown(testClient.endTest);
+    test('remove retention', () async {
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_change_temporary_hold',
+        'pch_obj_remove_ret',
+        enableObjectRetention: true,
+      );
+
+      final retainUntilTime = DateTime.now()
+          .add(const Duration(seconds: 1))
+          .toUtc()
+          .toTimestamp();
+
+      await storage.uploadObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('content'),
+        metadata: ObjectMetadata(
+          retention: ObjectRetention(
+            mode: 'Unlocked',
+            retainUntilTime: retainUntilTime,
+          ),
+        ),
+      );
+
+      final patchMetadata = ObjectMetadataPatchBuilder()..retention = null;
+      // Wait for the retention period to expire.
+      await Future<void>.delayed(const Duration(seconds: 1));
+      final actualMetadata = await storage.patchObject(
+        bucketName,
+        'object.txt',
+        patchMetadata,
+      );
+
+      expect(actualMetadata.retention, isNull);
+      expect(actualMetadata.metageneration, BigInt.from(2));
+    });
+
+    test('change temporary hold', () async {
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'pch_obj_chg_tmp_hld',
       );
       await storage.uploadObject(
         bucketName,
@@ -681,14 +572,9 @@ void main() async {
     });
 
     test('no change', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_no_change',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_no_change',
+        'pch_obj_no_chg',
       );
       await storage.uploadObject(
         bucketName,
@@ -708,14 +594,9 @@ void main() async {
     });
 
     test('with generation', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_with_generation',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_generation',
+        'pch_obj_w_gen',
         metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
       );
 
@@ -752,14 +633,9 @@ void main() async {
     });
 
     test('non existant', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_non_existant',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_non_existant',
+        'pch_obj_non_existant',
       );
 
       final patchMetadata = ObjectMetadataPatchBuilder()
@@ -773,14 +649,9 @@ void main() async {
     });
 
     test('with if metageneration match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_with_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_metageneration_match_success',
+        'pch_obj_w_if_mgen_match_ok',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -802,14 +673,9 @@ void main() async {
     });
 
     test('with if metageneration match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_with_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_metageneration_match_failure',
+        'pch_obj_w_if_mgen_match_fail',
       );
       await storage.uploadObject(
         bucketName,
@@ -832,14 +698,9 @@ void main() async {
     });
 
     test('with if generation match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_with_if_generation_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_generation_match_success',
+        'pch_obj_w_if_gen_match_ok',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -861,14 +722,9 @@ void main() async {
     });
 
     test('with if generation match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_object_with_if_generation_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'patch_object_with_if_generation_match_failure',
+        'pch_obj_w_if_gen_match_fail',
       );
       final obj = await storage.uploadObject(
         bucketName,
@@ -893,14 +749,9 @@ void main() async {
     test(
       'with predefined acl',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_object_with_predefined_acl',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = await createBucketWithTearDown(
           storage,
-          'patch_object_with_predefined_acl',
+          'pch_obj_w_predefined_acl',
         );
         await storage.uploadObject(
           bucketName,

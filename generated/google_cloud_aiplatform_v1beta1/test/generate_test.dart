@@ -13,41 +13,35 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_aiplatform_v1beta1/aiplatform.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 void main() async {
   late PredictionService predictionService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('generative', () {
     setUp(() async {
       Future<auth.AutoRefreshingAuthClient> authClient() async =>
           await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/generative-language.retriever',
-            ],
+            scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      predictionService = PredictionService(client: testClient);
+      client = await authClient();
+      predictionService = PredictionService(client: client);
     });
 
     tearDown(() => predictionService.close());
     test('streamed', () async {
-      await testClient.startTest(
-        'google_cloud_aiplatform_v1beta1',
-        'generative_streamed',
-      );
       final request = GenerateContentRequest(
         model:
-            'projects/$projectId/locations/global/'
+            'projects/$projectId/locations/us-central1/'
             'publishers/google/models/gemini-2.5-flash',
         contents: [
           Content(
@@ -68,7 +62,6 @@ void main() async {
         }
       }
       expect(text.toString(), hasLength(greaterThan(1000)));
-      await testClient.endTest();
     }, timeout: const Timeout(Duration(seconds: 60)));
   });
 }

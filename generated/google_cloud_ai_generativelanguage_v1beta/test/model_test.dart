@@ -13,45 +13,47 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
+
+import 'dart:io';
 
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
 
 void main() async {
   late ModelService modelService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
-  group('model', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/generative-language.retriever',
-            ],
-          );
+  group(
+    'model',
+    skip:
+        Platform.environment.containsKey(
+          'GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB',
+        )
+        ? 'service accounts not supported by this API'
+        : false,
+    () {
+      setUp(() async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+            );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      modelService = ModelService(client: testClient);
-    });
+        client = await authClient();
+        modelService = ModelService(client: client);
+      });
 
-    tearDown(() => modelService.close());
+      tearDown(() => modelService.close());
 
-    test('list', () async {
-      await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
-        'model_list',
-      );
+      test('list', () async {
+        final request = ListModelsRequest();
 
-      final request = ListModelsRequest();
-
-      final result = await modelService.listModels(request);
-      expect(result.models.first.name, isNotEmpty);
-
-      await testClient.endTest();
-    });
-  });
+        final result = await modelService.listModels(request);
+        expect(result.models.first.name, isNotEmpty);
+      });
+    },
+  );
 }

@@ -13,49 +13,30 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_protobuf/protobuf.dart';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('patch bucket', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('change acl', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_acl',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_acl',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_acl');
 
       await storage.createBucket(
         BucketMetadata(
@@ -83,15 +64,7 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('remove acl', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_acl',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_acl',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_acl');
 
       await storage.createBucket(
         BucketMetadata(
@@ -118,14 +91,9 @@ void main() async {
     }, skip: 'not supported by test project (UBLA)');
 
     test('change autoclass', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_autoclass',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_autoclass',
+        'pch_bkt_chg_autoclass',
       );
 
       await storage.createBucket(
@@ -154,14 +122,9 @@ void main() async {
     });
 
     test('remove autoclass', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_autoclass',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_autoclass',
+        'pch_bkt_remove_autoclass',
       );
 
       await storage.createBucket(
@@ -189,15 +152,7 @@ void main() async {
     });
 
     test('change cors', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_cors',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_cors',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_cors');
 
       await storage.createBucket(
         BucketMetadata(
@@ -225,15 +180,7 @@ void main() async {
     });
 
     test('remove cors', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_cors',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_cors',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_cors');
 
       await storage.createBucket(
         BucketMetadata(
@@ -262,14 +209,9 @@ void main() async {
     test(
       'change hierarchical namespace',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_change_hierarchical_namespace',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_change_hierarchical_namespace',
+          'pch_bkt_chg_hierarchical_namespace',
         );
 
         await storage.createBucket(
@@ -302,14 +244,9 @@ void main() async {
     test(
       'remove hierarchical namespace',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_remove_hierarchical_namespace',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_remove_hierarchical_namespace',
+          'pch_bkt_remove_hierarchical_namespace',
         );
 
         await storage.createBucket(
@@ -340,14 +277,9 @@ void main() async {
     );
 
     test('change ip filter', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_ip_filter',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_ip_filter',
+        'pch_bkt_chg_ip_filter',
       );
 
       await storage.createBucket(
@@ -382,14 +314,9 @@ void main() async {
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('remove ip filter', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_ip_filter',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_ip_filter',
+        'pch_bkt_remove_ip_filter',
       );
 
       await storage.createBucket(
@@ -423,15 +350,7 @@ void main() async {
     }, skip: 'requires storage.buckets.setIpFilter permission');
 
     test('change labels', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_labels',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_labels',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_labels');
 
       await storage.createBucket(
         BucketMetadata(
@@ -459,14 +378,9 @@ void main() async {
     });
 
     test('remove labels', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_labels',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_labels',
+        'pch_bkt_remove_labels',
       );
 
       await storage.createBucket(
@@ -491,14 +405,9 @@ void main() async {
     });
 
     test('change lifecycle', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_lifecycle',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_lifecycle',
+        'pch_bkt_chg_lifecycle',
       );
 
       await storage.createBucket(
@@ -541,14 +450,9 @@ void main() async {
     });
 
     test('remove lifecycle', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_lifecycle',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_lifecycle',
+        'pch_bkt_remove_lifecycle',
       );
 
       await storage.createBucket(
@@ -583,20 +487,12 @@ void main() async {
     });
 
     test('change logging', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_logging',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_logging',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_logging');
 
       // Need a bucket to log to.
       final logBucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_logging_logs',
+        'pch_bkt_chg_logging_logs',
       );
 
       await storage.createBucket(BucketMetadata(name: logBucketName));
@@ -633,20 +529,15 @@ void main() async {
     });
 
     test('remove logging', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_logging',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_logging',
+        'pch_bkt_remove_logging',
       );
 
       // Need a bucket to log to.
       final logBucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_logging_logs',
+        'pch_bkt_remove_logging_logs',
       );
 
       await storage.createBucket(BucketMetadata(name: logBucketName));
@@ -679,15 +570,7 @@ void main() async {
     });
 
     test('change retention policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_retention_policy',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_retention_policy',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_ret_pol');
 
       await storage.createBucket(
         BucketMetadata(
@@ -715,14 +598,9 @@ void main() async {
     });
 
     test('remove retention policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_retention_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_remove_retention_policy',
+        'pch_bkt_remove_ret_pol',
       );
 
       await storage.createBucket(
@@ -751,14 +629,9 @@ void main() async {
     });
 
     test('change soft delete policy', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_soft_delete_policy',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_change_soft_delete_policy',
+        'pch_bkt_chg_sft_del_pol',
       );
 
       await storage.createBucket(
@@ -794,15 +667,7 @@ void main() async {
     });
 
     test('change versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_versioning',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_vers');
 
       await storage.createBucket(
         BucketMetadata(
@@ -830,15 +695,7 @@ void main() async {
     });
 
     test('same versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_same_versioning',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_same_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_same_vers');
 
       await storage.createBucket(
         BucketMetadata(
@@ -866,15 +723,7 @@ void main() async {
     });
 
     test('remove versioning', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_versioning',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_versioning',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_vers');
 
       await storage.createBucket(
         BucketMetadata(
@@ -901,15 +750,7 @@ void main() async {
     });
 
     test('change website', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_change_website',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_change_website',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_web');
 
       await storage.createBucket(
         BucketMetadata(
@@ -937,15 +778,7 @@ void main() async {
     });
 
     test('remove website', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_remove_website',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'patch_bucket_remove_website',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_remove_web');
 
       await storage.createBucket(
         BucketMetadata(
@@ -972,14 +805,9 @@ void main() async {
     });
 
     test('no change', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_metadata_empty_metadata',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_with_metadata_empty_metadata',
+        'pch_bkt_w_meta_empty_meta',
       );
 
       await storage.createBucket(
@@ -1005,12 +833,6 @@ void main() async {
     });
 
     test('non existant', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_non_existant',
-      );
-      addTearDown(testClient.endTest);
-
       final patchMetadata = BucketMetadataPatchBuilder()
         ..versioning = BucketVersioning(enabled: true);
 
@@ -1021,14 +843,9 @@ void main() async {
     });
 
     test('with if metageneration match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_with_if_metageneration_match_success',
+        'pch_bkt_w_if_mgen_match_ok',
       );
 
       final requestMetadata = BucketMetadata(name: bucketName);
@@ -1046,14 +863,9 @@ void main() async {
     });
 
     test('with if metageneration match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'patch_bucket_with_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = bucketNameWithTearDown(
         storage,
-        'patch_bucket_with_if_metageneration_match_failure',
+        'pch_bkt_w_if_mgen_match_fail',
       );
 
       await storage.createBucket(BucketMetadata(name: bucketName));
@@ -1073,14 +885,9 @@ void main() async {
     test(
       'with predefined acl',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_with_predefined_acl',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_with_predefined_acl',
+          'pch_bkt_w_predefined_acl',
         );
 
         await storage.createBucket(
@@ -1116,14 +923,9 @@ void main() async {
     test(
       'with predefined default object acl',
       () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'patch_bucket_with_predefined_default_object_acl',
-        );
-        addTearDown(testClient.endTest);
         final bucketName = bucketNameWithTearDown(
           storage,
-          'patch_bucket_with_predefined_default_object_acl',
+          'pch_bkt_w_predefined_default_obj_acl',
         );
 
         await storage.createBucket(
