@@ -13,56 +13,32 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('list buckets', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('no buckets', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_no_buckets',
-      );
-      addTearDown(testClient.endTest);
-
       expect(storage.listBuckets(prefix: 'nobuckethasthisprefix'), emitsDone);
     });
 
     test('single bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_single_bucket',
-      );
-      addTearDown(testClient.endTest);
-
       final bucketName = await createBucketWithTearDown(
         storage,
-        'list_buckets_single_bucket',
+        'list_buckets_single_bkt',
       );
 
       await expectLater(
@@ -71,51 +47,33 @@ void main() async {
       );
     });
 
-    test(
-      'soft deleted bucket',
-      () async {
-        await testClient.startTest(
-          'google_cloud_storage',
-          'list_buckets_soft_deleted_bucket',
-        );
-        addTearDown(testClient.endTest);
-
-        final prefix = testBucketName('list_buckets_soft_deleted_bucket');
-        final softDeletedBucket = await createBucketWithTearDown(
-          storage,
-          '${prefix}_soft',
-          metadata: BucketMetadata(
-            softDeletePolicy: BucketSoftDeletePolicy(
-              retentionDurationSeconds: const Duration(days: 7).inSeconds,
-            ),
+    test('soft deleted bucket', () async {
+      final prefix = 'sft_del_bkt_${randomBucketCharacters(5)}';
+      final softDeletedBucket = await storage.createBucket(
+        BucketMetadata(
+          name: testBucketName('${prefix}_soft'),
+          softDeletePolicy: BucketSoftDeletePolicy(
+            retentionDurationSeconds: const Duration(days: 7).inSeconds,
           ),
-        );
-        await storage.deleteBucket(softDeletedBucket);
+        ),
+      );
+      await storage.deleteBucket(softDeletedBucket.name!);
 
-        await createBucketWithTearDown(storage, '${prefix}_no_soft');
+      final nonSoftDeletedBucket = await storage.createBucket(
+        BucketMetadata(name: testBucketName('${prefix}_no_soft')),
+      );
+      addTearDown(() => storage.deleteBucket(nonSoftDeletedBucket.name!));
 
-        await expectLater(
-          storage
-              .listBuckets(prefix: prefix, softDeleted: true)
-              .map((b) => b.name),
-          emitsInOrder([emits(softDeletedBucket), emitsDone]),
-        );
-      },
-      skip: TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? 'soft deleted buckets cannot be deleted before their retention '
-                'period has expired, which makes it impossible to use fixed '
-                'bucket names'
-          : false,
-    );
+      await expectLater(
+        storage
+            .listBuckets(prefix: prefix, softDeleted: true)
+            .map((b) => b.name),
+        emitsInOrder([emits(softDeletedBucket.name), emitsDone]),
+      );
+    });
 
     test('pagination', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'list_buckets_pagination',
-      );
-      addTearDown(testClient.endTest);
-
-      final prefix = testBucketName('list_buckets_pagination');
+      final prefix = 'page_bkt_${randomBucketCharacters(5)}';
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
       final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');

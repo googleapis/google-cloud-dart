@@ -13,59 +13,62 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
+
+import 'dart:io';
 
 import 'package:google_cloud_ai_generativelanguage_v1beta/generativelanguage.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
-import 'package:test_utils/test_http_client.dart';
 
 void main() async {
   late GenerativeService generativeService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
-  group('generative', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/generative-language.retriever',
-            ],
-          );
+  group(
+    'generative',
+    skip:
+        Platform.environment.containsKey(
+          'GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB',
+        )
+        ? 'service accounts not supported by this API'
+        : false,
+    () {
+      setUp(() async {
+        Future<auth.AutoRefreshingAuthClient> authClient() async =>
+            await auth.clientViaApplicationDefaultCredentials(
+              scopes: ['https://www.googleapis.com/auth/cloud-platform'],
+            );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      generativeService = GenerativeService(client: testClient);
-    });
+        client = await authClient();
+        generativeService = GenerativeService(client: client);
+      });
 
-    tearDown(() => generativeService.close());
-    test('streamed', () async {
-      await testClient.startTest(
-        'google_cloud_ai_generativelanguage_v1beta',
-        'generative_streamed',
-      );
+      tearDown(() => generativeService.close());
+      test('streamed', () async {
+        final request = GenerateContentRequest(
+          model: 'models/gemini-2.5-flash',
+          contents: [
+            Content(
+              parts: [Part(text: 'Explain how AI works in extensive detail')],
+            ),
+          ],
+        );
 
-      final request = GenerateContentRequest(
-        model: 'models/gemini-2.5-flash',
-        contents: [
-          Content(
-            parts: [Part(text: 'Explain how AI works in extensive detail')],
-          ),
-        ],
-      );
-
-      final results = generativeService.streamGenerateContent(request);
-      final text = StringBuffer();
-      await for (final result in results) {
-        final parts = result.candidates.firstOrNull?.content?.parts;
-        if (parts != null) {
-          for (final p in parts) {
-            text.write(p.text ?? '');
+        final results = generativeService.streamGenerateContent(request);
+        final text = StringBuffer();
+        await for (final result in results) {
+          final parts = result.candidates.firstOrNull?.content?.parts;
+          if (parts != null) {
+            for (final p in parts) {
+              text.write(p.text ?? '');
+            }
           }
         }
-      }
-      expect(text.toString(), hasLength(greaterThan(1000)));
-      await testClient.endTest();
-    }, timeout: const Timeout(Duration(seconds: 60)));
-  });
+        expect(text.toString(), hasLength(greaterThan(1000)));
+      }, timeout: const Timeout(Duration(seconds: 60)));
+    },
+  );
 }

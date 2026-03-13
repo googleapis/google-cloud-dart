@@ -13,49 +13,33 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('object metadata', () {
     setUp(() async {
       fixedBoundaryString = 'boundary';
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('simple', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'object_metadata_simple',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_simple',
+        'obj_meta_simple',
       );
 
       await storage.uploadObjectFromString(
@@ -72,15 +56,7 @@ void main() async {
     });
 
     test('with generation', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'object_metadata_with_generation',
-      );
-      addTearDown(testClient.endTest);
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'object_metadata_with_generation',
-      );
+      final bucketName = bucketNameWithTearDown(storage, 'obj_meta_w_gen');
       await storage.createBucket(
         BucketMetadata(
           name: bucketName,
@@ -121,14 +97,9 @@ void main() async {
     });
 
     test('with if generation match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'object_metadata_with_if_generation_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_with_if_generation_match_success',
+        'obj_meta_w_if_gen_match_ok',
       );
       final obj = await storage.uploadObjectFromString(
         bucketName,
@@ -146,14 +117,9 @@ void main() async {
     });
 
     test('with if generation match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'object_metadata_with_if_generation_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_with_if_generation_match_failure',
+        'obj_meta_w_if_gen_match_fail',
       );
       final obj = await storage.uploadObjectFromString(
         bucketName,
@@ -173,14 +139,9 @@ void main() async {
     });
 
     test('non-existant object', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'object_metadata_non_existant',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'object_metadata_non_existant',
+        'obj_meta_non_existant',
       );
 
       expect(

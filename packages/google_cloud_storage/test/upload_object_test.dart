@@ -13,61 +13,48 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:convert';
 
-import 'package:google_cloud_protobuf/protobuf.dart';
+import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart'
     show fixedBoundaryString;
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('upload object', () {
-    setUp(() async {
+    setUp(() {
       fixedBoundaryString = 'boundary';
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('new, no metadata', () async {
-      await testClient.startTest('google_cloud_storage', 'upload_object_new');
-      addTearDown(testClient.endTest);
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'upload_object_new',
+      final bucketName = await createBucketWithTearDown(storage, 'ul_obj_new');
+
+      final beforeRequestTime = DateTime.now().toUtc().subtract(
+        const Duration(seconds: 1), // Add some buffer for clock skew.
       );
-
-      final beforeRequestTime = DateTime.now().toUtc();
-
       final objectMetadata = await storage.uploadObject(
         bucketName,
         'object1',
         utf8.encode('Hello World!'),
         ifGenerationMatch: BigInt.zero,
       );
-      final afterRequestTime = DateTime.now().toUtc();
+      final afterRequestTime = DateTime.now().toUtc().add(
+        const Duration(seconds: 1), // Add some buffer for clock skew.
+      );
       expect(objectMetadata.acl, isNull);
       expect(objectMetadata.bucket, bucketName);
       expect(objectMetadata.cacheControl, isNull);
@@ -113,20 +100,13 @@ void main() async {
       expect(objectMetadata.softDeleteTime, isNull);
       expect(objectMetadata.storageClass, 'STANDARD');
       expect(objectMetadata.temporaryHold, isNull);
-      if (TestHttpClient.isReplaying) {
-        expect(
-          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-          greaterThan(0),
-        );
-      } else {
-        expect(
-          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-          allOf(
-            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
-            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
-          ),
-        );
-      }
+      expect(
+        objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+        allOf(
+          greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+          lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+        ),
+      );
       expect(objectMetadata.timeDeleted, isNull);
       expect(objectMetadata.timeStorageClassUpdated, isNotNull);
       expect(
@@ -136,14 +116,9 @@ void main() async {
     });
 
     test('new with content-type', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_content_type',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_content_type',
+        'ul_obj_new_w_cnt_typ',
       );
 
       final objectMetadata = await storage.uploadObject(
@@ -158,14 +133,9 @@ void main() async {
     });
 
     test('new with crc32c', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_crc32c',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_crc32c',
+        'ul_obj_new_w_crc32c',
       );
 
       final objectMetadata = await storage.uploadObject(
@@ -179,14 +149,9 @@ void main() async {
     });
 
     test('new with invalid crc32c', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_invalid_crc32c',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_invalid_crc32c',
+        'ul_obj_new_w_invalid_crc32c',
       );
 
       expect(
@@ -202,14 +167,9 @@ void main() async {
     });
 
     test('new with md5', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_md5',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_md5',
+        'ul_obj_new_w_md5',
       );
 
       final objectMetadata = await storage.uploadObject(
@@ -223,14 +183,9 @@ void main() async {
     });
 
     test('new with invalid md5', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_invalid_md5',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_invalid_md5',
+        'ul_obj_new_w_invalid_md5',
       );
 
       expect(
@@ -246,14 +201,9 @@ void main() async {
     });
 
     test('parameter name and metadata name mismatch', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_new_with_parameter_name_and_metadata_name_mismatch',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_new_with_name_mismatch',
+        'ul_obj_new_w_name_mismatch',
       );
 
       expect(
@@ -269,11 +219,6 @@ void main() async {
     });
 
     test('no such bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_no_such_bucket',
-      );
-      addTearDown(testClient.endTest);
       const bucketName = 'upload_object_no_such_bucket';
 
       expect(
@@ -287,14 +232,9 @@ void main() async {
     });
 
     test('overwrite', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_overwrite',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_overwrite',
+        'ul_obj_overwrite',
       );
 
       final oldGeneration = (await storage.uploadObject(
@@ -311,14 +251,9 @@ void main() async {
     });
 
     test('with if generation match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_overwrite_if_generation_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_overwrite_if_generation_match_success',
+        'ul_obj_overwrite_if_gen_match_ok',
       );
 
       final oldGeneration = (await storage.uploadObject(
@@ -336,14 +271,9 @@ void main() async {
     });
 
     test('with if generation match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'upload_object_overwrite_if_generation_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'upload_object_overwrite_if_generation_match_failure',
+        'ul_obj_overwrite_if_gen_match_fail',
       );
 
       await storage.uploadObject(

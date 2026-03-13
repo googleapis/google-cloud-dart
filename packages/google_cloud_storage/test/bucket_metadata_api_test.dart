@@ -13,47 +13,31 @@
 // limitations under the License.
 
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late TestHttpClient testClient;
 
   group('bucket metadata', () {
-    setUp(() async {
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      storage = Storage(client: testClient, projectId: projectId);
+    setUp(() {
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
 
     test('simple', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_simple',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'bucket_metadata_simple',
+        'bkt_meta_simple',
       );
 
       final metadata = await storage.bucketMetadata(bucketName);
@@ -62,14 +46,9 @@ void main() async {
     });
 
     test('with if metageneration match success', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_with_if_metageneration_match_success',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'bucket_metadata_with_if_metageneration_match_success',
+        'bkt_meta_w_if_mgen_match_ok',
       );
 
       final metadata = await storage.bucketMetadata(bucketName);
@@ -82,14 +61,9 @@ void main() async {
     });
 
     test('with if metageneration match failure', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_with_if_metageneration_match_failure',
-      );
-      addTearDown(testClient.endTest);
       final bucketName = await createBucketWithTearDown(
         storage,
-        'bucket_metadata_with_if_metageneration_match_failure',
+        'bkt_meta_w_if_mgen_match_fail',
       );
 
       final metadata = await storage.bucketMetadata(bucketName);
@@ -104,12 +78,6 @@ void main() async {
     });
 
     test('non-existant bucket', () async {
-      await testClient.startTest(
-        'google_cloud_storage',
-        'bucket_metadata_non_existant',
-      );
-      addTearDown(testClient.endTest);
-
       expect(
         () => storage.bucketMetadata('non-existent-bucket-name'),
         throwsA(isA<NotFoundException>()),

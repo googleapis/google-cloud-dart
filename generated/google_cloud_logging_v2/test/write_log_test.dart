@@ -11,8 +11,8 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
 @TestOn('vm')
+@Tags(['google-cloud'])
 library;
 
 import 'dart:math';
@@ -24,13 +24,14 @@ import 'package:google_cloud_protobuf/protobuf.dart' as protobuf;
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:google_cloud_rpc/rpc.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
-import 'package:test_utils/test_http_client.dart';
 
 void main() async {
+
   late LoggingServiceV2 logService;
-  late TestHttpClient testClient;
+  late http.Client client;
 
   group('LoggingServiceV2', () {
     setUp(() async {
@@ -39,18 +40,13 @@ void main() async {
             scopes: ['https://www.googleapis.com/auth/cloud-platform'],
           );
 
-      testClient = await TestHttpClient.fromEnvironment(authClient);
-      logService = LoggingServiceV2(client: testClient);
+      client = await authClient();
+      logService = LoggingServiceV2(client: client);
     });
 
     tearDown(() => logService.close());
 
     test('writeLogEntries - partial errors', () async {
-      await testClient.startTest(
-        'google_cloud_logging_v2',
-        'write_log_entries_partial_errors',
-      );
-
       await expectLater(
         logService.writeLogEntries(
           WriteLogEntriesRequest(
@@ -81,18 +77,11 @@ void main() async {
           ),
         ),
       );
-      await testClient.endTest();
     });
 
     test('writeLogEntries', () async {
-      await testClient.startTest(
-        'google_cloud_logging_v2',
-        'write_log_entries',
-      );
-
-      final logId = TestHttpClient.isRecording || TestHttpClient.isReplaying
-          ? '1234'
-          : '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
+      final logId =
+          '${Random().nextInt(999999999)}${Random().nextInt(999999999)}';
       final logName = 'projects/$projectId/logs/logging_test_$logId';
 
       await logService.writeLogEntries(
@@ -107,17 +96,11 @@ void main() async {
           ],
         ),
       );
-
-      if (!TestHttpClient.isReplaying) {
-        // Writes are not always committed instantly. Uses a fixed delay instead
-        // of polling in order to cause recordings to make a deterministic
-        // number of requests.
-        await Future<void>.delayed(const Duration(seconds: 15));
-
-        addTearDown(
-          () => logService.deleteLog(DeleteLogRequest(logName: logName)),
-        );
-      }
+      // Writes are not always committed instantly.
+      await Future<void>.delayed(const Duration(seconds: 15));
+      addTearDown(
+        () => logService.deleteLog(DeleteLogRequest(logName: logName)),
+      );
 
       final list = await logService.listLogEntries(
         ListLogEntriesRequest(
@@ -129,8 +112,6 @@ void main() async {
       expect(list.entries, hasLength(1));
       expect(list.entries[0].severity, LogSeverity.critical);
       expect(list.entries[0].textPayload, 'Hello World!');
-
-      await testClient.endTest();
     });
   });
 }
