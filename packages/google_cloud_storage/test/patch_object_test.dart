@@ -509,11 +509,7 @@ void main() async {
 
         // Wait for the retention period to expire so teardown can delete it.
         await Future<void>.delayed(const Duration(seconds: 1));
-      },
-      skip: Platform.environment['GOOGLE_CLOUD_PROJECT'] == null
-          ? 'Cannot set relative timestamp when replaying'
-          : false,
-    );
+    });
 
     test('remove retention', () async {
       final bucketName = await createBucketWithTearDown(

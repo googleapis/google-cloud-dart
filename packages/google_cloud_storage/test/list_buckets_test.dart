@@ -48,7 +48,7 @@ void main() async {
     });
 
     test('soft deleted bucket', () async {
-      final prefix = 'sft_del_bkt_${radomBucketCharacters(5)}';
+      final prefix = 'sft_del_bkt_${randomBucketCharacters(5)}';
       final softDeletedBucket = await storage.createBucket(
         BucketMetadata(
           name: testBucketName('${prefix}_soft'),
@@ -73,7 +73,7 @@ void main() async {
     });
 
     test('pagination', () async {
-      final prefix = 'page_bkt_${radomBucketCharacters(5)}';
+      final prefix = 'page_bkt_${randomBucketCharacters(5)}';
 
       final bucket1 = await createBucketWithTearDown(storage, '${prefix}_1');
       final bucket2 = await createBucketWithTearDown(storage, '${prefix}_2');

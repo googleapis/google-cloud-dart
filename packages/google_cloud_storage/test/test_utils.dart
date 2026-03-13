@@ -20,14 +20,14 @@ import 'package:test/test.dart';
 const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 final _random = Random();
 
-String radomBucketCharacters(int length) => [
+String randomBucketCharacters(int length) => [
   for (int i = 0; i < length; i++)
     _bucketChars[_random.nextInt(_bucketChars.length)],
 ].join();
 
 String testBucketName(String name) {
   assert(name.length < 40, '"$name" is too long to append a random suffix.');
-  return '$name-${radomBucketCharacters(45 - name.length)}';
+  return '$name-${randomBucketCharacters(45 - name.length)}';
 }
 
 String bucketNameWithTearDown(Storage storage, String name) {

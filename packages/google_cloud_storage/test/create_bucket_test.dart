@@ -108,20 +108,13 @@ void main() async {
       );
       expect(actualMetadata.softDeleteTime, isNull);
       expect(actualMetadata.storageClass, 'STANDARD');
-      if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
-        expect(
-          actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-          greaterThan(0),
-        );
-      } else {
         expect(
           actualMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
           allOf(
             greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
             lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
           ),
-        );
-      }
+      );
       expect(
         actualMetadata.updated?.toDateTime(),
         actualMetadata.timeCreated?.toDateTime(),
@@ -150,14 +143,6 @@ void main() async {
 
       expect(actualMetadata.autoclass!.enabled, true);
       expect(actualMetadata.autoclass!.terminalStorageClass, 'NEARLINE');
-      if (Platform.environment['GOOGLE_CLOUD_PROJECT'] == null) {
-        expect(
-          actualMetadata.autoclass!.terminalStorageClassUpdateTime
-              ?.toDateTime()
-              .microsecondsSinceEpoch,
-          greaterThan(0),
-        );
-      } else {
         expect(
           actualMetadata.autoclass!.terminalStorageClassUpdateTime
               ?.toDateTime()
@@ -166,8 +151,7 @@ void main() async {
             greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
             lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
           ),
-        );
-      }
+      );
     });
 
     test('create_bucket_with_metadata_lifecycle', () async {
