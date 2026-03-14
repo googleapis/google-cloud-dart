@@ -86,5 +86,12 @@ void main() async {
   storage.close();
 }
 ```
+
+## Feature Planning
+
+<a href="https://github.com/orgs/googleapis/projects/37/views/1"
+   target="_blank"
+   rel="noopener noreferrer">Open Planning Board...</a>
+
 [set up authentication]: https://docs.cloud.google.com/storage/docs/reference/libraries#authentication
 [idempotent Google Cloud Storage operations]: https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency
