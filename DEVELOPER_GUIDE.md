@@ -25,19 +25,20 @@ To run these tests:
     $ gcloud config set project <project-id>
     ```
 
-    > [!NOTE]
-    > You can create a new Google Cloud project for testing using the
-    > [Google Cloud Console].
+> [!NOTE]
+> You can create a new Google Cloud project for testing using the
+> [Google Cloud Console].
 
 2.  **Authenticate:**
     ```bash
     $ gcloud auth application-default login
     ```
-    > [!NOTE]
-    > Some tests may require additional scopes. For example:
-    > ```bash
-    > $ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language
-    > ```
+
+> [!NOTE]
+> Some tests may require additional scopes. For example:
+> ```bash
+> $ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language
+> ```
 
 3.  **Run the tests:**
     ```bash
