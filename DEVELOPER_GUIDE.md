@@ -11,6 +11,50 @@ The dependency graph for the current set of packages:
 
 ![Dependency Graph](deps.png)
 
+## Testing
+
+### Running against Google Cloud
+
+Some integration tests require access to a real Google Cloud project. These tests are tagged with `@Tags(['google-cloud'])` and are not run by default,
+i.e., `dart test` will not run them.
+
+To run these tests locally (they are automatically run for PRs using
+[Google Cloud Build](.gcb)):
+
+1.  **Configure your project:**
+    ```bash
+    $ gcloud config set project <project-id>
+    ```
+
+> [!NOTE]
+> You can create a new Google Cloud project for testing using the
+> [Google Cloud Console].
+
+2.  **Authenticate:**
+    ```bash
+    $ gcloud auth application-default login
+    ```
+
+> [!NOTE]
+> Some tests may require additional scopes. For example:
+> ```bash
+> $ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language
+> ```
+
+3.  **Run the tests:**
+    ```bash
+    $ # NOTE: you can run this command in the repository root directory (to
+    $ # run all tests) or in any subdirectory (to run only the tests in that
+    $ # subdirectory).
+    $ GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
+    ```
+
+#### Troubleshooting
+
+*   **Missing Scopes:** If a test fails with `insufficient_scope`, check the error message for the required scope URL and re-authenticate with that scope.
+*   **Disabled APIs:** If a test fails with a `ForbiddenException` stating an API has not been used, follow the URL in the error message to enable the API in the Google Cloud Console.
+
+
 ## Developing
 
 ### Librarian
@@ -73,17 +117,4 @@ You can update these sources to their latest versions by running
 go run github.com/googleapis/librarian/cmd/librarian@main update conformance googleapis protobuf showcase
 ```
 
-### Testing
-
-Some generated packages contain integration tests, e.g.,
-[`package:google_cloud_ai_generativelanguage_v1beta`](generated/google_cloud_ai_generativelanguage_v1beta/test/).
-
-By default, these tests use a recorded version of the interation between the
-API client and the server.
-
-If new tests are added or the communication between the API client and the
-server changes, these changes must be regenerated with:
-
-```bash
-cd generated && dart --define=http=record test . -c vm:source
-```
+[Google Cloud Console]: https://console.cloud.google.com/
