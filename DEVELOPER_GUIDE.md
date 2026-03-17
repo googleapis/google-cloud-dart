@@ -18,7 +18,8 @@ The dependency graph for the current set of packages:
 Some integration tests require access to a real Google Cloud project. These tests are tagged with `@Tags(['google-cloud'])` and are not run by default,
 i.e., `dart test` will not run them.
 
-To run these tests:
+To run these tests locally (they are automatically run for PRs using
+[Google Cloud Build](.gcb)):
 
 1.  **Configure your project:**
     ```bash
