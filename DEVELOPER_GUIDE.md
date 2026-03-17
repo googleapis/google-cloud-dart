@@ -13,60 +13,45 @@ The dependency graph for the current set of packages:
 
 ## Testing
 
-### Integration tests that require a Google Cloud Project
+### Running against Google Cloud
 
-Many integration tests require access to a Google Cloud project. These
-tests are **not** run by default by `dart test`.
+Some integration tests require access to a real Google Cloud project. These tests are tagged with `@Tags(['google-cloud'])` and are not run by default,
+i.e., `dart test` will not run them.
 
-For example,
-[packages/google_cloud_storage/test/list_buckets_test.dart](packages/google_cloud_storage/test/list_buckets_test.dart). Note the
-`@Tags(['google-cloud'])` annotation near the top of the file.
+To run these tests:
 
-To run these tests locally, you must:
-1. Create a Google Cloud project.
-2. Set that project as your default project:
-   ```bash
-   $ gcloud config set project <project-id>
-   ```
-3. Authenticate with the project:
-   ```bash
-   $ gcloud auth application-default login
-   ```
+1.  **Configure your project:**
+    ```bash
+    $ gcloud config set project <project-id>
+    ```
 
-Some tests may require additional authentication scopes. For example, the
-tests in generated/google_cloud_ai_generativelanguage_v1beta require the 
-"https://www.googleapis.com/auth/generative-language" scope. You can add
-additional scopes by passing the `--scopes` flag to `gcloud auth application-default login`. For example:
+    > [!NOTE] You can create a new Google Cloud project for testing using the
+    > [Google Cloud Console].
+    
 
-```bash
-$ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language
-```
+2.  **Authenticate:**
+    ```bash
+    $ gcloud auth application-default login
+    ```
+    > [!NOTE] Some tests may require additional scopes.
+    >
+    > For example:
+    > ```bash
+    > $ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language
+    > ```
 
-The most practical way of determining missing scopes is to just run the tests
-and look at the failures messages. For example:
+3.  **Run the tests:**
+    ```bash
+    $ # NOTE: you can run this command in the repository root directory (to
+    $ # run all tests) or in any subdirectory (to run only the tests in that
+    $ # subdirectory).
+    $ GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
+    ```
 
-```
-Access was denied (www-authenticate header was: Bearer realm="https://accounts.google.com/", error="insufficient_scope", scope="https://www.googleapis.com/auth/generative-language https://www.googleapis.com/auth/generative-language.tuning https://www.googleapis.com/auth/generative-language.tuning.readonly https://www.googleapis.com/auth/generative-language.retriever https://www.googleapis.com/auth/generative-language.retriever.readonly").
-```
+#### Troubleshooting
 
-Likewise, some tests may require additional services to be enabled in the Google Cloud project. For example, the tests in generated/google_cloud_logging_v2/test/require the Cloud Logging API to be enabled.
-
-Once again, you can determine missing services by running the tests and looking at the failure messages, which will contain a URL where the service can be enabled:
-
-```
-  ForbiddenException: Cloud Logging API has not been used in project <project id> before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/logging.googleapis.com/overview?project=<project id> then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
-```
-
-
-You can then run the tests with:
-
-```bash
-$ # You can run all of the tests from the repository root or from any package
-$ # directory to run the integration tests in that directory. Running all of
-$ # the tests may take a long time.
-$ GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
-```
-
+*   **Missing Scopes:** If a test fails with `insufficient_scope`, check the error message for the required scope URL and re-authenticate with that scope.
+*   **Disabled APIs:** If a test fails with a `ForbiddenException` stating an API has not been used, follow the URL in the error message to enable the API in the Google Cloud Console.
 
 
 ## Developing
@@ -131,17 +116,4 @@ You can update these sources to their latest versions by running
 go run github.com/googleapis/librarian/cmd/librarian@main update conformance googleapis protobuf showcase
 ```
 
-### Testing
-
-Some generated packages contain integration tests, e.g.,
-[`package:google_cloud_ai_generativelanguage_v1beta`](generated/google_cloud_ai_generativelanguage_v1beta/test/).
-
-By default, these tests use a recorded version of the interation between the
-API client and the server.
-
-If new tests are added or the communication between the API client and the
-server changes, these changes must be regenerated with:
-
-```bash
-cd generated && dart --define=http=record test . -c vm:source
-```
+[Google Cloud Console]: https://console.cloud.google.com/
