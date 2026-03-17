@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['google-cloud'])
 library;
 
 import 'dart:convert';
@@ -51,56 +50,66 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('change acl', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'pch_obj_chg_acl',
-      );
-      await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-      );
+    test(
+      'change acl',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'pch_obj_chg_acl',
+        );
+        await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
 
-      final patchMetadata = ObjectMetadataPatchBuilder()
-        ..acl = [ObjectAccessControl(role: 'OWNER', entity: 'allUsers')];
+        final patchMetadata = ObjectMetadataPatchBuilder()
+          ..acl = [ObjectAccessControl(role: 'OWNER', entity: 'allUsers')];
 
-      final actualMetadata = await storage.patchObject(
-        bucketName,
-        'object.txt',
-        patchMetadata,
-        projection: 'full',
-      );
+        final actualMetadata = await storage.patchObject(
+          bucketName,
+          'object.txt',
+          patchMetadata,
+          projection: 'full',
+        );
 
-      expect(actualMetadata.acl?.first.role, 'OWNER');
-      expect(actualMetadata.metageneration, BigInt.from(2));
-    }, skip: 'not supported by test project (UBLA)');
+        expect(actualMetadata.acl?.first.role, 'OWNER');
+        expect(actualMetadata.metageneration, BigInt.from(2));
+      },
+      skip: 'not supported by test project (UBLA)',
+    );
 
-    test('remove acl', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'pch_obj_remove_acl',
-      );
-      await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-      );
+    test(
+      'remove acl',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'pch_obj_remove_acl',
+        );
+        await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
 
-      final patchMetadata = ObjectMetadataPatchBuilder()..acl = null;
+        final patchMetadata = ObjectMetadataPatchBuilder()..acl = null;
 
-      final actualMetadata = await storage.patchObject(
-        bucketName,
-        'object.txt',
-        patchMetadata,
-        projection: 'full',
-      );
+        final actualMetadata = await storage.patchObject(
+          bucketName,
+          'object.txt',
+          patchMetadata,
+          projection: 'full',
+        );
 
-      expect(actualMetadata.acl, isNull);
-      expect(actualMetadata.metageneration, BigInt.from(2));
-    }, skip: 'not supported by test project (UBLA)');
+        expect(actualMetadata.acl, isNull);
+        expect(actualMetadata.metageneration, BigInt.from(2));
+      },
+      skip: 'not supported by test project (UBLA)',
+    );
 
-    test('change cache control', () async {
+    test('change cache control', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cch_ctrl',
@@ -124,7 +133,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove cache control', () async {
+    test('remove cache control', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cch_ctrl',
@@ -148,7 +157,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change content disposition', () async {
+    test('change content disposition', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cnt_disp',
@@ -175,7 +184,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove content disposition', () async {
+    test('remove content disposition', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_cnt_disp',
@@ -200,7 +209,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change content encoding', () async {
+    test('change content encoding', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cnt_enc',
@@ -224,7 +233,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove content encoding', () async {
+    test('remove content encoding', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_cnt_enc',
@@ -249,7 +258,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change content language', () async {
+    test('change content language', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cnt_lang',
@@ -273,7 +282,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove content language', () async {
+    test('remove content language', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_cnt_lang',
@@ -298,7 +307,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change content type', () async {
+    test('change content type', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cnt_typ',
@@ -322,7 +331,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove content type', () async {
+    test('remove content type', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_cnt_typ',
@@ -346,7 +355,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change custom time', () async {
+    test('change custom time', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_cust_tm',
@@ -371,7 +380,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change event based hold', () async {
+    test('change event based hold', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_evt_bsd_hld',
@@ -394,7 +403,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove event based hold', () async {
+    test('remove event based hold', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_evt_bsd_hld',
@@ -418,7 +427,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change metadata', () async {
+    test('change metadata', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_meta',
@@ -445,7 +454,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('remove metadata', () async {
+    test('remove metadata', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_meta',
@@ -469,49 +478,47 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test(
-      'change retention',
-      () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'pch_obj_chg_ret',
-          enableObjectRetention: true,
+    test('change retention', tags: ['google-cloud'], () async {
+      final bucketName = await createBucketWithTearDown(
+        storage,
+        'pch_obj_chg_ret',
+        enableObjectRetention: true,
+      );
+
+      await storage.uploadObject(
+        bucketName,
+        'object.txt',
+        utf8.encode('content'),
+      );
+
+      final retainUntilTime = DateTime.now()
+          .add(const Duration(seconds: 1))
+          .toUtc()
+          .toTimestamp();
+      final patchMetadata = ObjectMetadataPatchBuilder()
+        ..retention = ObjectRetention(
+          mode: 'Unlocked',
+          retainUntilTime: retainUntilTime,
         );
 
-        await storage.uploadObject(
-          bucketName,
-          'object.txt',
-          utf8.encode('content'),
-        );
+      final actualMetadata = await storage.patchObject(
+        bucketName,
+        'object.txt',
+        patchMetadata,
+      );
 
-        final retainUntilTime = DateTime.now()
-            .add(const Duration(seconds: 1))
-            .toUtc()
-            .toTimestamp();
-        final patchMetadata = ObjectMetadataPatchBuilder()
-          ..retention = ObjectRetention(
-            mode: 'Unlocked',
-            retainUntilTime: retainUntilTime,
-          );
+      expect(actualMetadata.retention?.mode, 'Unlocked');
+      expect(
+        actualMetadata.retention?.retainUntilTime?.seconds,
+        retainUntilTime.seconds,
+      );
+      expect(actualMetadata.metageneration, BigInt.from(2));
 
-        final actualMetadata = await storage.patchObject(
-          bucketName,
-          'object.txt',
-          patchMetadata,
-        );
-
-        expect(actualMetadata.retention?.mode, 'Unlocked');
-        expect(
-          actualMetadata.retention?.retainUntilTime?.seconds,
-          retainUntilTime.seconds,
-        );
-        expect(actualMetadata.metageneration, BigInt.from(2));
-
-        // Wait for the retention period to expire so teardown can delete it.
-        await Future<void>.delayed(const Duration(seconds: 1));
+      // Wait for the retention period to expire so teardown can delete it.
+      await Future<void>.delayed(const Duration(seconds: 1));
     });
 
-    test('remove retention', () async {
+    test('remove retention', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_remove_ret',
@@ -548,7 +555,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('change temporary hold', () async {
+    test('change temporary hold', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_chg_tmp_hld',
@@ -571,7 +578,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('no change', () async {
+    test('no change', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_no_chg',
@@ -593,7 +600,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.two);
     });
 
-    test('with generation', () async {
+    test('with generation', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_w_gen',
@@ -632,7 +639,7 @@ void main() async {
       expect(metadataV2.metadata, isNull);
     });
 
-    test('non existant', () async {
+    test('non existant', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_non_existant',
@@ -648,56 +655,64 @@ void main() async {
       );
     });
 
-    test('with if metageneration match success', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'pch_obj_w_if_mgen_match_ok',
-      );
-      final obj = await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-      );
+    test(
+      'with if metageneration match success',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'pch_obj_w_if_mgen_match_ok',
+        );
+        final obj = await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
 
-      final patchMetadata = ObjectMetadataPatchBuilder()
-        ..contentType = 'text/plain';
+        final patchMetadata = ObjectMetadataPatchBuilder()
+          ..contentType = 'text/plain';
 
-      final actualMetadata = await storage.patchObject(
-        bucketName,
-        'object.txt',
-        patchMetadata,
-        ifMetagenerationMatch: obj.metageneration,
-      );
-
-      expect(actualMetadata.metageneration, BigInt.from(2));
-    });
-
-    test('with if metageneration match failure', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'pch_obj_w_if_mgen_match_fail',
-      );
-      await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-      );
-
-      final patchMetadata = ObjectMetadataPatchBuilder()
-        ..contentType = 'text/plain';
-
-      expect(
-        () => storage.patchObject(
+        final actualMetadata = await storage.patchObject(
           bucketName,
           'object.txt',
           patchMetadata,
-          ifMetagenerationMatch: BigInt.zero,
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
-    });
+          ifMetagenerationMatch: obj.metageneration,
+        );
 
-    test('with if generation match success', () async {
+        expect(actualMetadata.metageneration, BigInt.from(2));
+      },
+    );
+
+    test(
+      'with if metageneration match failure',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'pch_obj_w_if_mgen_match_fail',
+        );
+        await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
+
+        final patchMetadata = ObjectMetadataPatchBuilder()
+          ..contentType = 'text/plain';
+
+        expect(
+          () => storage.patchObject(
+            bucketName,
+            'object.txt',
+            patchMetadata,
+            ifMetagenerationMatch: BigInt.zero,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+      },
+    );
+
+    test('with if generation match success', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_w_if_gen_match_ok',
@@ -721,7 +736,7 @@ void main() async {
       expect(actualMetadata.metageneration, BigInt.from(2));
     });
 
-    test('with if generation match failure', () async {
+    test('with if generation match failure', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'pch_obj_w_if_gen_match_fail',
@@ -748,6 +763,7 @@ void main() async {
 
     test(
       'with predefined acl',
+      tags: ['google-cloud'],
       () async {
         final bucketName = await createBucketWithTearDown(
           storage,

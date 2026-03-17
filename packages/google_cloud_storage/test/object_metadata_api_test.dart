@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -36,7 +35,7 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('simple', () async {
+    test('simple', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'obj_meta_simple',
@@ -55,7 +54,7 @@ void main() async {
       expect(metadata.size, BigInt.from(7));
     });
 
-    test('with generation', () async {
+    test('with generation', tags: ['google-cloud'], () async {
       final bucketName = bucketNameWithTearDown(storage, 'obj_meta_w_gen');
       await storage.createBucket(
         BucketMetadata(
@@ -96,7 +95,7 @@ void main() async {
       expect(metadataV2.size, BigInt.from(12));
     });
 
-    test('with if generation match success', () async {
+    test('with if generation match success', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'obj_meta_w_if_gen_match_ok',
@@ -116,7 +115,7 @@ void main() async {
       expect(metadata.generation, obj.generation);
     });
 
-    test('with if generation match failure', () async {
+    test('with if generation match failure', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'obj_meta_w_if_gen_match_fail',
@@ -138,7 +137,7 @@ void main() async {
       );
     });
 
-    test('non-existant object', () async {
+    test('non-existant object', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'obj_meta_non_existant',
