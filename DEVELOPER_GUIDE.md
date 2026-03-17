@@ -11,6 +11,64 @@ The dependency graph for the current set of packages:
 
 ![Dependency Graph](deps.png)
 
+## Testing
+
+### Integration tests that require a Google Cloud Project
+
+Many integration tests require access to a Google Cloud project. These
+tests are **not** run by default by `dart test`.
+
+For example,
+[packages/google_cloud_storage/test/list_buckets_test.dart](packages/google_cloud_storage/test/list_buckets_test.dart). Note the
+`@Tags(['google-cloud'])` annotation near the top of the file.
+
+To run these tests locally, you must:
+1. Create a Google Cloud project.
+2. Set that project as your default project:
+   ```bash
+   $ gcloud config set project <project-id>
+   ```
+3. Authenticate with the project:
+   ```bash
+   $ gcloud auth application-default login
+   ```
+
+Some tests may require additional authentication scopes. For example, the
+tests in generated/google_cloud_ai_generativelanguage_v1beta require the 
+"https://www.googleapis.com/auth/generative-language" scope. You can add
+additional scopes by passing the `--scopes` flag to `gcloud auth application-default login`. For example:
+
+```bash
+$ gcloud auth application-default login --scopes=https://www.googleapis.com/auth/cloud-platform,https://www.googleapis.com/auth/generative-language
+```
+
+The most practical way of determining missing scopes is to just run the tests
+and look at the failures messages. For example:
+
+```
+Access was denied (www-authenticate header was: Bearer realm="https://accounts.google.com/", error="insufficient_scope", scope="https://www.googleapis.com/auth/generative-language https://www.googleapis.com/auth/generative-language.tuning https://www.googleapis.com/auth/generative-language.tuning.readonly https://www.googleapis.com/auth/generative-language.retriever https://www.googleapis.com/auth/generative-language.retriever.readonly").
+```
+
+Likewise, some tests may require additional services to be enabled in the Google Cloud project. For example, the tests in generated/google_cloud_logging_v2/test/require the Cloud Logging API to be enabled.
+
+Once again, you can determine missing services by running the tests and looking at the failure messages, which will contain a URL where the service can be enabled:
+
+```
+  ForbiddenException: Cloud Logging API has not been used in project <project id> before or it is disabled. Enable it by visiting https://console.developers.google.com/apis/api/logging.googleapis.com/overview?project=<project id> then retry. If you enabled this API recently, wait a few minutes for the action to propagate to our systems and retry.
+```
+
+
+You can then run the tests with:
+
+```bash
+$ # You can run all of the tests from the repository root or from any package
+$ # directory to run the integration tests in that directory. Running all of
+$ # the tests may take a long time.
+$ GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
+```
+
+
+
 ## Developing
 
 ### Librarian
