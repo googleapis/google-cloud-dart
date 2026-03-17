@@ -12,9 +12,7 @@
   confirmation before running these tests at least once per session. These
   tests can be run with:
 
-  ```bash
-    GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
-  ```
+GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
 - Try to fix any test failures before declaring yourself done.
 - Add or update tests for the code you change, even if nobody asked.
 
