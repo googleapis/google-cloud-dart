@@ -29,7 +29,6 @@ import 'package:test/test.dart';
 import 'package:test_utils/cloud.dart';
 
 void main() async {
-
   late LoggingServiceV2 logService;
   late http.Client client;
 

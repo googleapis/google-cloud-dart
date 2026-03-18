@@ -774,56 +774,56 @@ void main() async {
     );
   });
 
-    test('idempotent transport failure', () async {
-      var count = 0;
-      final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1) {
-          throw http.ClientException('Some transport failure');
-        } else if (count == 2) {
-          return http.Response(
-            '{"contentType": "text/plain"}',
-            200,
-            headers: {'content-type': 'application/json; charset=UTF-8'},
-          );
-        } else {
-          throw StateError('Unexpected call count: $count');
-        }
-      });
-
-    final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      final patchMetadata = ObjectMetadataPatchBuilder()
-        ..contentType = 'text/plain';
-
-      final actualMetadata = await storage.patchObject(
-        'bucket',
-        'object.txt',
-        patchMetadata,
-        ifMetagenerationMatch: BigInt.one,
-      );
-      expect(actualMetadata.contentType, 'text/plain');
+  test('idempotent transport failure', () async {
+    var count = 0;
+    final mockClient = MockClient((request) async {
+      count++;
+      if (count == 1) {
+        throw http.ClientException('Some transport failure');
+      } else if (count == 2) {
+        return http.Response(
+          '{"contentType": "text/plain"}',
+          200,
+          headers: {'content-type': 'application/json; charset=UTF-8'},
+        );
+      } else {
+        throw StateError('Unexpected call count: $count');
+      }
     });
 
-    test('non-idempotent transport failure', () async {
-      var count = 0;
-      final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1) {
-          throw http.ClientException('Some transport failure');
-        } else {
-          throw StateError('Unexpected call count: $count');
-        }
-      });
+    final storage = Storage(client: mockClient, projectId: 'fake project');
+
+    final patchMetadata = ObjectMetadataPatchBuilder()
+      ..contentType = 'text/plain';
+
+    final actualMetadata = await storage.patchObject(
+      'bucket',
+      'object.txt',
+      patchMetadata,
+      ifMetagenerationMatch: BigInt.one,
+    );
+    expect(actualMetadata.contentType, 'text/plain');
+  });
+
+  test('non-idempotent transport failure', () async {
+    var count = 0;
+    final mockClient = MockClient((request) async {
+      count++;
+      if (count == 1) {
+        throw http.ClientException('Some transport failure');
+      } else {
+        throw StateError('Unexpected call count: $count');
+      }
+    });
 
     final storage = Storage(client: mockClient, projectId: 'fake project');
 
-      final patchMetadata = ObjectMetadataPatchBuilder()
-        ..contentType = 'text/plain';
+    final patchMetadata = ObjectMetadataPatchBuilder()
+      ..contentType = 'text/plain';
 
-      expect(
-        () => storage.patchObject('bucket', 'object.txt', patchMetadata),
-        throwsA(isA<http.ClientException>()),
+    expect(
+      () => storage.patchObject('bucket', 'object.txt', patchMetadata),
+      throwsA(isA<http.ClientException>()),
     );
   });
 }
