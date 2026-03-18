@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -34,7 +33,7 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('success', () async {
+    test('success', tags: ['google-cloud'], () async {
       final bucketName = bucketNameWithTearDown(storage, 'del_bkt_ok');
 
       await storage.createBucket(BucketMetadata(name: bucketName));
@@ -48,7 +47,7 @@ void main() async {
       );
     });
 
-    test('delete non-existent bucket', () async {
+    test('delete non-existent bucket', tags: ['google-cloud'], () async {
       final bucketName = bucketNameWithTearDown(
         storage,
         'del_bkt_non_existent',
@@ -59,47 +58,55 @@ void main() async {
       );
     });
 
-    test('delete bucket with ifMetagenerationMatch success', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'del_bkt_w_if_mgen_match_ok',
-      );
+    test(
+      'delete bucket with ifMetagenerationMatch success',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'del_bkt_w_if_mgen_match_ok',
+        );
 
-      final metadata = await storage.createBucket(
-        BucketMetadata(name: bucketName),
-      );
+        final metadata = await storage.createBucket(
+          BucketMetadata(name: bucketName),
+        );
 
-      await storage.deleteBucket(
-        bucketName,
-        ifMetagenerationMatch: metadata.metageneration,
-      );
-
-      // Verify bucket is deleted.
-      expect(
-        () => storage.patchBucket(bucketName, BucketMetadataPatchBuilder()),
-        throwsA(isA<NotFoundException>()),
-      );
-    });
-
-    test('delete bucket with ifMetagenerationMatch failure', () async {
-      final bucketName = bucketNameWithTearDown(
-        storage,
-        'del_bkt_w_if_mgen_match_fail',
-      );
-
-      await storage.createBucket(BucketMetadata(name: bucketName));
-
-      expect(
-        () => storage.deleteBucket(
+        await storage.deleteBucket(
           bucketName,
-          ifMetagenerationMatch: BigInt.zero,
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
+          ifMetagenerationMatch: metadata.metageneration,
+        );
 
-      // Clean up.
-      await storage.deleteBucket(bucketName);
-    });
+        // Verify bucket is deleted.
+        expect(
+          () => storage.patchBucket(bucketName, BucketMetadataPatchBuilder()),
+          throwsA(isA<NotFoundException>()),
+        );
+      },
+    );
+
+    test(
+      'delete bucket with ifMetagenerationMatch failure',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'del_bkt_w_if_mgen_match_fail',
+        );
+
+        await storage.createBucket(BucketMetadata(name: bucketName));
+
+        expect(
+          () => storage.deleteBucket(
+            bucketName,
+            ifMetagenerationMatch: BigInt.zero,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+
+        // Clean up.
+        await storage.deleteBucket(bucketName);
+      },
+    );
 
     test('idempotent transport failure', () async {
       var count = 0;

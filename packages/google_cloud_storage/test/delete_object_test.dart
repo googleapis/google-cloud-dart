@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['google-cloud'])
 library;
 
 import 'dart:convert';
@@ -38,7 +37,7 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('success', () async {
+    test('success', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(storage, 'del_obj_ok');
       await storage.uploadObject(
         bucketName,
@@ -55,7 +54,7 @@ void main() async {
       );
     });
 
-    test('not found', () async {
+    test('not found', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'del_obj_not_found',
@@ -67,7 +66,7 @@ void main() async {
       );
     });
 
-    test('with generation success', () async {
+    test('with generation success', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'del_obj_w_gen',
@@ -121,7 +120,7 @@ void main() async {
       );
     });
 
-    test('with ifGenerationMatch success', () async {
+    test('with ifGenerationMatch success', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'del_obj_w_if_gen_match_ok',
@@ -145,7 +144,7 @@ void main() async {
       );
     });
 
-    test('with ifGenerationMatch failure', () async {
+    test('with ifGenerationMatch failure', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'del_obj_w_if_gen_match_fail',

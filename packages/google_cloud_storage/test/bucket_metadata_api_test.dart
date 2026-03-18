@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['google-cloud'])
 library;
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -34,7 +33,7 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('simple', () async {
+    test('simple', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'bkt_meta_simple',
@@ -45,39 +44,47 @@ void main() async {
       expect(metadata.metageneration, BigInt.one);
     });
 
-    test('with if metageneration match success', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'bkt_meta_w_if_mgen_match_ok',
-      );
+    test(
+      'with if metageneration match success',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'bkt_meta_w_if_mgen_match_ok',
+        );
 
-      final metadata = await storage.bucketMetadata(bucketName);
+        final metadata = await storage.bucketMetadata(bucketName);
 
-      final metadataWithMatch = await storage.bucketMetadata(
-        bucketName,
-        ifMetagenerationMatch: metadata.metageneration,
-      );
-      expect(metadataWithMatch.metageneration, metadata.metageneration);
-    });
-
-    test('with if metageneration match failure', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'bkt_meta_w_if_mgen_match_fail',
-      );
-
-      final metadata = await storage.bucketMetadata(bucketName);
-
-      expect(
-        () => storage.bucketMetadata(
+        final metadataWithMatch = await storage.bucketMetadata(
           bucketName,
-          ifMetagenerationMatch: metadata.metageneration! + BigInt.one,
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
-    });
+          ifMetagenerationMatch: metadata.metageneration,
+        );
+        expect(metadataWithMatch.metageneration, metadata.metageneration);
+      },
+    );
 
-    test('non-existant bucket', () async {
+    test(
+      'with if metageneration match failure',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'bkt_meta_w_if_mgen_match_fail',
+        );
+
+        final metadata = await storage.bucketMetadata(bucketName);
+
+        expect(
+          () => storage.bucketMetadata(
+            bucketName,
+            ifMetagenerationMatch: metadata.metageneration! + BigInt.one,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+      },
+    );
+
+    test('non-existant bucket', tags: ['google-cloud'], () async {
       expect(
         () => storage.bucketMetadata('non-existent-bucket-name'),
         throwsA(isA<NotFoundException>()),

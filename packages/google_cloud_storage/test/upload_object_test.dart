@@ -13,7 +13,6 @@
 // limitations under the License.
 
 @TestOn('vm')
-@Tags(['google-cloud'])
 library;
 
 import 'dart:convert';
@@ -40,7 +39,7 @@ void main() async {
 
     tearDown(() => storage.close());
 
-    test('new, no metadata', () async {
+    test('new, no metadata', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(storage, 'ul_obj_new');
 
       final beforeRequestTime = DateTime.now().toUtc().subtract(
@@ -115,7 +114,7 @@ void main() async {
       );
     });
 
-    test('new with content-type', () async {
+    test('new with content-type', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_new_w_cnt_typ',
@@ -132,7 +131,7 @@ void main() async {
       expect(objectMetadata.contentType, 'text/plain');
     });
 
-    test('new with crc32c', () async {
+    test('new with crc32c', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_new_w_crc32c',
@@ -148,7 +147,7 @@ void main() async {
       expect(objectMetadata.crc32c, '/mzx3A==');
     });
 
-    test('new with invalid crc32c', () async {
+    test('new with invalid crc32c', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_new_w_invalid_crc32c',
@@ -166,7 +165,7 @@ void main() async {
       );
     });
 
-    test('new with md5', () async {
+    test('new with md5', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_new_w_md5',
@@ -182,7 +181,7 @@ void main() async {
       expect(objectMetadata.md5Hash, '7Qdih1MuhjZehB6Sv8UNjA==');
     });
 
-    test('new with invalid md5', () async {
+    test('new with invalid md5', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_new_w_invalid_md5',
@@ -200,25 +199,29 @@ void main() async {
       );
     });
 
-    test('parameter name and metadata name mismatch', () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_new_w_name_mismatch',
-      );
+    test(
+      'parameter name and metadata name mismatch',
+      tags: ['google-cloud'],
+      () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new_w_name_mismatch',
+        );
 
-      expect(
-        () => storage.uploadObject(
-          bucketName,
-          'object1',
-          utf8.encode('Hello World!'),
-          metadata: ObjectMetadata(name: 'object2'),
-          ifGenerationMatch: BigInt.zero,
-        ),
-        throwsA(isA<BadRequestException>()),
-      );
-    });
+        expect(
+          () => storage.uploadObject(
+            bucketName,
+            'object1',
+            utf8.encode('Hello World!'),
+            metadata: ObjectMetadata(name: 'object2'),
+            ifGenerationMatch: BigInt.zero,
+          ),
+          throwsA(isA<BadRequestException>()),
+        );
+      },
+    );
 
-    test('no such bucket', () async {
+    test('no such bucket', tags: ['google-cloud'], () async {
       const bucketName = 'upload_object_no_such_bucket';
 
       expect(
@@ -231,7 +234,7 @@ void main() async {
       );
     });
 
-    test('overwrite', () async {
+    test('overwrite', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_overwrite',
@@ -250,7 +253,7 @@ void main() async {
       expect(newGeneration, isNot(oldGeneration));
     });
 
-    test('with if generation match success', () async {
+    test('with if generation match success', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_overwrite_if_gen_match_ok',
@@ -270,7 +273,7 @@ void main() async {
       expect(newGeneration, isNot(oldGeneration));
     });
 
-    test('with if generation match failure', () async {
+    test('with if generation match failure', tags: ['google-cloud'], () async {
       final bucketName = await createBucketWithTearDown(
         storage,
         'ul_obj_overwrite_if_gen_match_fail',
