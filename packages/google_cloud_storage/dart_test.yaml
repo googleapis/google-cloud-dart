@@ -12,6 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+platforms: [vm, chrome]
+
+test-randomize-ordering-seed: random
+# Keeping concurrency low helps limit load timeouts on chrome tests.
+concurrency: 1
+
 tags:
   google-cloud:
   firebase-emulator:
@@ -20,5 +26,9 @@ exclude_tags: google-cloud || firebase-emulator
 presets:
   google-cloud:
     include_tags: google-cloud
+    # Currently tests that require a configured Google Cloud project are only
+    # runnable on the VM because the browser does not have access to
+    # application default credentials.
+    platforms: [vm]
   firebase-emulator:
     include_tags: firebase-emulator
