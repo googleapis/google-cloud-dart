@@ -13,9 +13,14 @@ The dependency graph for the current set of packages:
 
 ## Testing
 
+Code changes should be covered by tests. Prefer integration tests to mocks
+when writing tests for code that communicates directly with Google Cloud
+services.
+
 ### Running against Google Cloud
 
-Some integration tests require access to a real Google Cloud project. These tests are tagged with `@Tags(['google-cloud'])` and are not run by default,
+Some integration tests require access to a real Google Cloud project. These
+tests are tagged with `@Tags(['google-cloud'])` and are not run by default,
 i.e., `dart test` will not run them.
 
 To run these tests locally (they are automatically run for PRs using
@@ -54,6 +59,13 @@ To run these tests locally (they are automatically run for PRs using
 *   **Missing Scopes:** If a test fails with `insufficient_scope`, check the error message for the required scope URL and re-authenticate with that scope.
 *   **Disabled APIs:** If a test fails with a `ForbiddenException` stating an API has not been used, follow the URL in the error message to enable the API in the Google Cloud Console.
 
+## Pull Requests
+
+* PRs should follow [Conventional Commits][]
+* If the PR applies to a single package, then the package name, with the
+  "google_cloud" prefix removed, should be included in the PR scope. For
+  example, for a documentation changes to `package:google_cloud_storage`,
+  `docs(storage): clarify retry logic`.
 
 ## Developing
 
@@ -118,3 +130,4 @@ go run github.com/googleapis/librarian/cmd/librarian@main update conformance goo
 ```
 
 [Google Cloud Console]: https://console.cloud.google.com/
+[Conventional Commits]: https://www.conventionalcommits.org/
