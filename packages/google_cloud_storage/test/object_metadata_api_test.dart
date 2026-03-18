@@ -24,125 +24,127 @@ void main() async {
   late Storage storage;
 
   group('object metadata', () {
-    setUp(() async {
-      fixedBoundaryString = 'boundary';
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], () {
+      setUp(() async {
+        fixedBoundaryString = 'boundary';
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test('simple', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'obj_meta_simple',
-      );
+      test('simple', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'obj_meta_simple',
+        );
 
-      await storage.uploadObjectFromString(
-        bucketName,
-        'object.txt',
-        'content',
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      final metadata = await storage.objectMetadata(bucketName, 'object.txt');
-      expect(metadata.name, 'object.txt');
-      expect(metadata.bucket, bucketName);
-      expect(metadata.size, BigInt.from(7));
-    });
-
-    test('with generation', tags: ['google-cloud'], () async {
-      final bucketName = bucketNameWithTearDown(storage, 'obj_meta_w_gen');
-      await storage.createBucket(
-        BucketMetadata(
-          name: bucketName,
-          versioning: BucketVersioning(enabled: true),
-        ),
-      );
-
-      final obj1 = await storage.uploadObjectFromString(
-        bucketName,
-        'object.txt',
-        'Hello',
-        ifGenerationMatch: BigInt.zero,
-      );
-      final obj2 = await storage.uploadObjectFromString(
-        bucketName,
-        'object.txt',
-        'Hello World!',
-      );
-
-      // Verify we have two versions
-      expect(obj1.generation, isNot(obj2.generation));
-
-      final metadataV1 = await storage.objectMetadata(
-        bucketName,
-        'object.txt',
-        generation: obj1.generation,
-      );
-      expect(metadataV1.generation, obj1.generation);
-      expect(metadataV1.size, BigInt.from(5));
-
-      final metadataV2 = await storage.objectMetadata(
-        bucketName,
-        'object.txt',
-        generation: obj2.generation,
-      );
-      expect(metadataV2.generation, obj2.generation);
-      expect(metadataV2.size, BigInt.from(12));
-    });
-
-    test('with if generation match success', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'obj_meta_w_if_gen_match_ok',
-      );
-      final obj = await storage.uploadObjectFromString(
-        bucketName,
-        'object.txt',
-        'content',
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      final metadata = await storage.objectMetadata(
-        bucketName,
-        'object.txt',
-        ifGenerationMatch: obj.generation,
-      );
-      expect(metadata.generation, obj.generation);
-    });
-
-    test('with if generation match failure', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'obj_meta_w_if_gen_match_fail',
-      );
-      final obj = await storage.uploadObjectFromString(
-        bucketName,
-        'object.txt',
-        'content',
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      expect(
-        () => storage.objectMetadata(
+        await storage.uploadObjectFromString(
           bucketName,
           'object.txt',
-          ifGenerationMatch: obj.generation! + BigInt.one,
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
-    });
+          'content',
+          ifGenerationMatch: BigInt.zero,
+        );
 
-    test('non-existant object', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'obj_meta_non_existant',
-      );
+        final metadata = await storage.objectMetadata(bucketName, 'object.txt');
+        expect(metadata.name, 'object.txt');
+        expect(metadata.bucket, bucketName);
+        expect(metadata.size, BigInt.from(7));
+      });
 
-      expect(
-        () => storage.objectMetadata(bucketName, 'non-existent.txt'),
-        throwsA(isA<NotFoundException>()),
-      );
+      test('with generation', () async {
+        final bucketName = bucketNameWithTearDown(storage, 'obj_meta_w_gen');
+        await storage.createBucket(
+          BucketMetadata(
+            name: bucketName,
+            versioning: BucketVersioning(enabled: true),
+          ),
+        );
+
+        final obj1 = await storage.uploadObjectFromString(
+          bucketName,
+          'object.txt',
+          'Hello',
+          ifGenerationMatch: BigInt.zero,
+        );
+        final obj2 = await storage.uploadObjectFromString(
+          bucketName,
+          'object.txt',
+          'Hello World!',
+        );
+
+        // Verify we have two versions
+        expect(obj1.generation, isNot(obj2.generation));
+
+        final metadataV1 = await storage.objectMetadata(
+          bucketName,
+          'object.txt',
+          generation: obj1.generation,
+        );
+        expect(metadataV1.generation, obj1.generation);
+        expect(metadataV1.size, BigInt.from(5));
+
+        final metadataV2 = await storage.objectMetadata(
+          bucketName,
+          'object.txt',
+          generation: obj2.generation,
+        );
+        expect(metadataV2.generation, obj2.generation);
+        expect(metadataV2.size, BigInt.from(12));
+      });
+
+      test('with if generation match success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'obj_meta_w_if_gen_match_ok',
+        );
+        final obj = await storage.uploadObjectFromString(
+          bucketName,
+          'object.txt',
+          'content',
+          ifGenerationMatch: BigInt.zero,
+        );
+
+        final metadata = await storage.objectMetadata(
+          bucketName,
+          'object.txt',
+          ifGenerationMatch: obj.generation,
+        );
+        expect(metadata.generation, obj.generation);
+      });
+
+      test('with if generation match failure', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'obj_meta_w_if_gen_match_fail',
+        );
+        final obj = await storage.uploadObjectFromString(
+          bucketName,
+          'object.txt',
+          'content',
+          ifGenerationMatch: BigInt.zero,
+        );
+
+        expect(
+          () => storage.objectMetadata(
+            bucketName,
+            'object.txt',
+            ifGenerationMatch: obj.generation! + BigInt.one,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+      });
+
+      test('non-existant object', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'obj_meta_non_existant',
+        );
+
+        expect(
+          () => storage.objectMetadata(bucketName, 'non-existent.txt'),
+          throwsA(isA<NotFoundException>()),
+        );
+      });
     });
 
     test('retry on transport failure', () async {

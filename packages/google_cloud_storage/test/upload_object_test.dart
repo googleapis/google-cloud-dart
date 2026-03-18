@@ -28,177 +28,178 @@ void main() async {
   late Storage storage;
 
   group('upload object', () {
-    setUp(() {
-      fixedBoundaryString = 'boundary';
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], () {
+      setUp(() {
+        fixedBoundaryString = 'boundary';
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test('new, no metadata', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(storage, 'ul_obj_new');
+      test('new, no metadata', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new',
+        );
 
-      final beforeRequestTime = DateTime.now().toUtc().subtract(
-        const Duration(seconds: 1), // Add some buffer for clock skew.
-      );
-      final objectMetadata = await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-        ifGenerationMatch: BigInt.zero,
-      );
-      final afterRequestTime = DateTime.now().toUtc().add(
-        const Duration(seconds: 1), // Add some buffer for clock skew.
-      );
-      expect(objectMetadata.acl, isNull);
-      expect(objectMetadata.bucket, bucketName);
-      expect(objectMetadata.cacheControl, isNull);
-      expect(objectMetadata.componentCount, isNull);
-      expect(objectMetadata.contentDisposition, isNull);
-      expect(objectMetadata.contentEncoding, isNull);
-      expect(objectMetadata.contentLanguage, isNull);
-      expect(objectMetadata.contentType, 'application/octet-stream');
-      expect(objectMetadata.contexts, isNull);
-      expect(objectMetadata.crc32c, '/mzx3A==');
-      expect(objectMetadata.customTime, isNull);
-      expect(objectMetadata.customerEncryption, isNull);
-      expect(objectMetadata.etag, isNotEmpty);
-      expect(objectMetadata.eventBasedHold, isNull);
-      expect(objectMetadata.generation, isNotNull);
-      expect(objectMetadata.hardDeleteTime, isNull);
-      expect(objectMetadata.id, isNotEmpty);
-      expect(objectMetadata.kind, 'storage#object');
-      expect(objectMetadata.kmsKeyName, isNull);
-      expect(
-        objectMetadata.mediaLink?.toString(),
-        startsWith(
-          'https://storage.googleapis.com/download/storage/v1/b/$bucketName/o/'
-          'object1',
-        ),
-      );
-      expect(objectMetadata.metadata, isNull);
-      expect(objectMetadata.md5Hash, isNotEmpty);
-      expect(objectMetadata.metageneration, BigInt.one);
-      expect(objectMetadata.name, 'object1');
-      expect(objectMetadata.owner, isNull);
-      expect(objectMetadata.restoreToken, isNull);
-      expect(objectMetadata.retentionExpirationTime, isNull);
-      expect(
-        objectMetadata.selfLink,
-        Uri(
-          scheme: 'https',
-          host: 'www.googleapis.com',
-          path: '/storage/v1/b/$bucketName/o/object1',
-        ),
-      );
-      expect(objectMetadata.size, BigInt.from(12));
-      expect(objectMetadata.softDeleteTime, isNull);
-      expect(objectMetadata.storageClass, 'STANDARD');
-      expect(objectMetadata.temporaryHold, isNull);
-      expect(
-        objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
-        allOf(
-          greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
-          lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
-        ),
-      );
-      expect(objectMetadata.timeDeleted, isNull);
-      expect(objectMetadata.timeStorageClassUpdated, isNotNull);
-      expect(
-        objectMetadata.updated?.toDateTime(),
-        objectMetadata.timeCreated?.toDateTime(),
-      );
-    });
-
-    test('new with content-type', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_new_w_cnt_typ',
-      );
-
-      final objectMetadata = await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-        metadata: ObjectMetadata(contentType: 'text/plain'),
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      expect(objectMetadata.contentType, 'text/plain');
-    });
-
-    test('new with crc32c', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_new_w_crc32c',
-      );
-
-      final objectMetadata = await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-        metadata: ObjectMetadata(crc32c: '/mzx3A=='),
-        ifGenerationMatch: BigInt.zero,
-      );
-      expect(objectMetadata.crc32c, '/mzx3A==');
-    });
-
-    test('new with invalid crc32c', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_new_w_invalid_crc32c',
-      );
-
-      expect(
-        () => storage.uploadObject(
+        final beforeRequestTime = DateTime.now().toUtc().subtract(
+          const Duration(seconds: 1), // Add some buffer for clock skew.
+        );
+        final objectMetadata = await storage.uploadObject(
           bucketName,
           'object1',
           utf8.encode('Hello World!'),
-          metadata: ObjectMetadata(crc32c: 'invalid'),
           ifGenerationMatch: BigInt.zero,
-        ),
-        throwsA(isA<BadRequestException>()),
-      );
-    });
+        );
+        final afterRequestTime = DateTime.now().toUtc().add(
+          const Duration(seconds: 1), // Add some buffer for clock skew.
+        );
+        expect(objectMetadata.acl, isNull);
+        expect(objectMetadata.bucket, bucketName);
+        expect(objectMetadata.cacheControl, isNull);
+        expect(objectMetadata.componentCount, isNull);
+        expect(objectMetadata.contentDisposition, isNull);
+        expect(objectMetadata.contentEncoding, isNull);
+        expect(objectMetadata.contentLanguage, isNull);
+        expect(objectMetadata.contentType, 'application/octet-stream');
+        expect(objectMetadata.contexts, isNull);
+        expect(objectMetadata.crc32c, '/mzx3A==');
+        expect(objectMetadata.customTime, isNull);
+        expect(objectMetadata.customerEncryption, isNull);
+        expect(objectMetadata.etag, isNotEmpty);
+        expect(objectMetadata.eventBasedHold, isNull);
+        expect(objectMetadata.generation, isNotNull);
+        expect(objectMetadata.hardDeleteTime, isNull);
+        expect(objectMetadata.id, isNotEmpty);
+        expect(objectMetadata.kind, 'storage#object');
+        expect(objectMetadata.kmsKeyName, isNull);
+        expect(
+          objectMetadata.mediaLink?.toString(),
+          startsWith(
+            'https://storage.googleapis.com/download/storage/v1/b/$bucketName/o/'
+            'object1',
+          ),
+        );
+        expect(objectMetadata.metadata, isNull);
+        expect(objectMetadata.md5Hash, isNotEmpty);
+        expect(objectMetadata.metageneration, BigInt.one);
+        expect(objectMetadata.name, 'object1');
+        expect(objectMetadata.owner, isNull);
+        expect(objectMetadata.restoreToken, isNull);
+        expect(objectMetadata.retentionExpirationTime, isNull);
+        expect(
+          objectMetadata.selfLink,
+          Uri(
+            scheme: 'https',
+            host: 'www.googleapis.com',
+            path: '/storage/v1/b/$bucketName/o/object1',
+          ),
+        );
+        expect(objectMetadata.size, BigInt.from(12));
+        expect(objectMetadata.softDeleteTime, isNull);
+        expect(objectMetadata.storageClass, 'STANDARD');
+        expect(objectMetadata.temporaryHold, isNull);
+        expect(
+          objectMetadata.timeCreated?.toDateTime().microsecondsSinceEpoch,
+          allOf(
+            greaterThanOrEqualTo(beforeRequestTime.microsecondsSinceEpoch),
+            lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
+          ),
+        );
+        expect(objectMetadata.timeDeleted, isNull);
+        expect(objectMetadata.timeStorageClassUpdated, isNotNull);
+        expect(
+          objectMetadata.updated?.toDateTime(),
+          objectMetadata.timeCreated?.toDateTime(),
+        );
+      });
 
-    test('new with md5', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_new_w_md5',
-      );
+      test('new with content-type', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new_w_cnt_typ',
+        );
 
-      final objectMetadata = await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-        metadata: ObjectMetadata(md5Hash: '7Qdih1MuhjZehB6Sv8UNjA=='),
-        ifGenerationMatch: BigInt.zero,
-      );
-      expect(objectMetadata.md5Hash, '7Qdih1MuhjZehB6Sv8UNjA==');
-    });
-
-    test('new with invalid md5', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_new_w_invalid_md5',
-      );
-
-      expect(
-        () => storage.uploadObject(
+        final objectMetadata = await storage.uploadObject(
           bucketName,
           'object1',
           utf8.encode('Hello World!'),
-          metadata: ObjectMetadata(md5Hash: 'invalid'),
+          metadata: ObjectMetadata(contentType: 'text/plain'),
           ifGenerationMatch: BigInt.zero,
-        ),
-        throwsA(isA<BadRequestException>()),
-      );
-    });
+        );
 
-    test(
-      'parameter name and metadata name mismatch',
-      tags: ['google-cloud'],
-      () async {
+        expect(objectMetadata.contentType, 'text/plain');
+      });
+
+      test('new with crc32c', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new_w_crc32c',
+        );
+
+        final objectMetadata = await storage.uploadObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+          metadata: ObjectMetadata(crc32c: '/mzx3A=='),
+          ifGenerationMatch: BigInt.zero,
+        );
+        expect(objectMetadata.crc32c, '/mzx3A==');
+      });
+
+      test('new with invalid crc32c', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new_w_invalid_crc32c',
+        );
+
+        expect(
+          () => storage.uploadObject(
+            bucketName,
+            'object1',
+            utf8.encode('Hello World!'),
+            metadata: ObjectMetadata(crc32c: 'invalid'),
+            ifGenerationMatch: BigInt.zero,
+          ),
+          throwsA(isA<BadRequestException>()),
+        );
+      });
+
+      test('new with md5', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new_w_md5',
+        );
+
+        final objectMetadata = await storage.uploadObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+          metadata: ObjectMetadata(md5Hash: '7Qdih1MuhjZehB6Sv8UNjA=='),
+          ifGenerationMatch: BigInt.zero,
+        );
+        expect(objectMetadata.md5Hash, '7Qdih1MuhjZehB6Sv8UNjA==');
+      });
+
+      test('new with invalid md5', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_new_w_invalid_md5',
+        );
+
+        expect(
+          () => storage.uploadObject(
+            bucketName,
+            'object1',
+            utf8.encode('Hello World!'),
+            metadata: ObjectMetadata(md5Hash: 'invalid'),
+            ifGenerationMatch: BigInt.zero,
+          ),
+          throwsA(isA<BadRequestException>()),
+        );
+      });
+
+      test('parameter name and metadata name mismatch', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'ul_obj_new_w_name_mismatch',
@@ -214,81 +215,81 @@ void main() async {
           ),
           throwsA(isA<BadRequestException>()),
         );
-      },
-    );
+      });
 
-    test('no such bucket', tags: ['google-cloud'], () async {
-      const bucketName = 'upload_object_no_such_bucket';
+      test('no such bucket', () async {
+        const bucketName = 'upload_object_no_such_bucket';
 
-      expect(
-        () => storage.uploadObject(
+        expect(
+          () => storage.uploadObject(
+            bucketName,
+            'object1',
+            utf8.encode('Hello World!'),
+          ),
+          throwsA(isA<NotFoundException>()),
+        );
+      });
+
+      test('overwrite', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_overwrite',
+        );
+
+        final oldGeneration = (await storage.uploadObject(
           bucketName,
           'object1',
           utf8.encode('Hello World!'),
-        ),
-        throwsA(isA<NotFoundException>()),
-      );
-    });
-
-    test('overwrite', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_overwrite',
-      );
-
-      final oldGeneration = (await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-      )).generation;
-      final newGeneration = (await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Goodbye World!'),
-      )).generation;
-      expect(newGeneration, isNot(oldGeneration));
-    });
-
-    test('with if generation match success', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_overwrite_if_gen_match_ok',
-      );
-
-      final oldGeneration = (await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-      )).generation;
-      final newGeneration = (await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Goodbye World!'),
-        ifGenerationMatch: oldGeneration,
-      )).generation;
-      expect(newGeneration, isNot(oldGeneration));
-    });
-
-    test('with if generation match failure', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'ul_obj_overwrite_if_gen_match_fail',
-      );
-
-      await storage.uploadObject(
-        bucketName,
-        'object1',
-        utf8.encode('Hello World!'),
-      );
-      expect(
-        () => storage.uploadObject(
+        )).generation;
+        final newGeneration = (await storage.uploadObject(
           bucketName,
           'object1',
           utf8.encode('Goodbye World!'),
-          ifGenerationMatch: BigInt.from(1234),
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
+        )).generation;
+        expect(newGeneration, isNot(oldGeneration));
+      });
+
+      test('with if generation match success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_overwrite_if_gen_match_ok',
+        );
+
+        final oldGeneration = (await storage.uploadObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+        )).generation;
+        final newGeneration = (await storage.uploadObject(
+          bucketName,
+          'object1',
+          utf8.encode('Goodbye World!'),
+          ifGenerationMatch: oldGeneration,
+        )).generation;
+        expect(newGeneration, isNot(oldGeneration));
+      });
+
+      test('with if generation match failure', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_overwrite_if_gen_match_fail',
+        );
+
+        await storage.uploadObject(
+          bucketName,
+          'object1',
+          utf8.encode('Hello World!'),
+        );
+        expect(
+          () => storage.uploadObject(
+            bucketName,
+            'object1',
+            utf8.encode('Goodbye World!'),
+            ifGenerationMatch: BigInt.from(1234),
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+      });
     });
 
     test('idempotent transport failure', () async {
