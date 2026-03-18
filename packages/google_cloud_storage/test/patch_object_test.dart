@@ -17,11 +17,9 @@ import 'dart:convert';
 import 'package:google_cloud_protobuf/protobuf.dart' hide Duration;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart';
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
 
 import 'test_utils.dart';
 
