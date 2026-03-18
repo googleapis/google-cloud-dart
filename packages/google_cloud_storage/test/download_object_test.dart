@@ -22,31 +22,19 @@ import 'dart:typed_data';
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:google_cloud_storage/src/file_upload.dart'
     show fixedBoundaryString;
-import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
 
 import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late http.Client client;
 
   group('download object', () {
     setUp(() async {
       fixedBoundaryString = 'boundary';
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      client = await authClient();
-      storage = Storage(client: client, projectId: projectId);
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
@@ -262,7 +250,7 @@ void main() async {
         return http.Response('Hello World!', 200, headers: headers);
       });
 
-      final storage = Storage(client: mockClient, projectId: projectId);
+      final storage = Storage(client: mockClient, projectId: 'fake project');
 
       final actualData = await storage.downloadObject('bucket', 'object');
       expect(actualData, utf8.encode('Hello World!'));

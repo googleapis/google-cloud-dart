@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-library;
-
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -22,7 +19,6 @@ import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
-import 'package:test_utils/cloud.dart';
 
 import 'test_utils.dart';
 
@@ -186,7 +182,7 @@ void main() async {
         }
       });
 
-      final storage = Storage(client: mockClient, projectId: projectId);
+      final storage = Storage(client: mockClient, projectId: 'fake project');
 
       // Should retry because generation is specified
       await storage.deleteObject(
@@ -208,7 +204,7 @@ void main() async {
         }
       });
 
-      final storage = Storage(client: mockClient, projectId: projectId);
+      final storage = Storage(client: mockClient, projectId: 'fake project');
 
       // Should not retry because no generation/ifGenerationMatch specified
       await expectLater(

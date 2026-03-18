@@ -12,11 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-library;
-
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:google_cloud_protobuf/protobuf.dart' hide Duration;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
@@ -31,21 +27,11 @@ import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
-  late http.Client client;
 
   group('patch object', () {
     setUp(() async {
       fixedBoundaryString = 'boundary';
-      Future<auth.AutoRefreshingAuthClient> authClient() async =>
-          await auth.clientViaApplicationDefaultCredentials(
-            scopes: [
-              'https://www.googleapis.com/auth/cloud-platform',
-              'https://www.googleapis.com/auth/devstorage.read_write',
-            ],
-          );
-
-      client = await authClient();
-      storage = Storage(client: client, projectId: projectId);
+      storage = Storage();
     });
 
     tearDown(() => storage.close());
@@ -788,6 +774,7 @@ void main() async {
       },
       skip: 'test project does not support uniform bucket level access',
     );
+  });
 
     test('idempotent transport failure', () async {
       var count = 0;
@@ -806,7 +793,7 @@ void main() async {
         }
       });
 
-      final storage = Storage(client: mockClient, projectId: projectId);
+    final storage = Storage(client: mockClient, projectId: 'fake project');
 
       final patchMetadata = ObjectMetadataPatchBuilder()
         ..contentType = 'text/plain';
@@ -831,7 +818,7 @@ void main() async {
         }
       });
 
-      final storage = Storage(client: mockClient, projectId: projectId);
+    final storage = Storage(client: mockClient, projectId: 'fake project');
 
       final patchMetadata = ObjectMetadataPatchBuilder()
         ..contentType = 'text/plain';
@@ -839,7 +826,6 @@ void main() async {
       expect(
         () => storage.patchObject('bucket', 'object.txt', patchMetadata),
         throwsA(isA<http.ClientException>()),
-      );
-    });
+    );
   });
 }
