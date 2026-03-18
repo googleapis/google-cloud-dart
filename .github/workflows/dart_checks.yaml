@@ -55,7 +55,7 @@ jobs:
         with:
           sdk: ${{ env.DART_VERSION }}
       - run: dart pub get
-        run: dart test -p ${{ matrix.platform }} .
+      - run: dart test -p ${{ matrix.platform }} .
 
   generator:
     name: Generators
