@@ -760,14 +760,19 @@ final class SourceContext extends ProtoMessage {
   }
 }
 
-/// `Struct` represents a structured data value, consisting of fields
-/// which map to dynamically typed values. In some languages, `Struct`
-/// might be supported by a native representation. For example, in
-/// scripting languages like JS a struct is represented as an
-/// object. The details of that representation are described together
-/// with the proto support for the language.
+/// Represents a JSON object.
 ///
-/// The JSON representation for `Struct` is JSON object.
+/// An unordered key-value map, intending to perfectly capture the semantics of a
+/// JSON object. This enables parsing any arbitrary JSON payload as a message
+/// field in ProtoJSON format.
+///
+/// This follows RFC 8259 guidelines for interoperable JSON: notably this type
+/// cannot represent large Int64 values or `NaN`/`Infinity` numbers,
+/// since the JSON format generally does not support those values in its number
+/// type.
+///
+/// If you do not intend to parse arbitrary JSON into your message, a custom
+/// typed message should be preferred instead of using this type.
 final class Struct extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.Struct';
 
@@ -785,9 +790,7 @@ final class Struct extends ProtoMessage {
   String toString() => 'Struct()';
 }
 
-/// `ListValue` is a wrapper around a repeated field of values.
-///
-/// The JSON representation for `ListValue` is JSON array.
+/// Represents a JSON array.
 final class ListValue extends ProtoMessage {
   static const String fullyQualifiedName = 'google.protobuf.ListValue';
 
@@ -1690,10 +1693,15 @@ final class BytesValue extends ProtoMessage {
   }
 }
 
-/// `NullValue` is a singleton enumeration to represent the null value for the
-/// `Value` type union.
+/// Represents a JSON `null`.
 ///
-/// The JSON representation for `NullValue` is JSON `null`.
+/// `NullValue` is a sentinel, using an enum with only one value to represent
+/// the null value for the `Value` type union.
+///
+/// A field of type `NullValue` with any value other than `0` is considered
+/// invalid. Most ProtoJSON serializers will emit a Value with a `null_value` set
+/// as a JSON `null` regardless of the integer value, and so will round trip to
+/// a `0` value.
 final class NullValue extends ProtoEnum {
   /// Null value.
   static const nullValue = NullValue('NULL_VALUE');

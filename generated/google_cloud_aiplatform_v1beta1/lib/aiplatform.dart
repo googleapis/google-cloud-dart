@@ -7287,7 +7287,9 @@ final class MemoryBankService {
   Future<Operation<Memory, CreateMemoryOperationMetadata>> createMemory(
     CreateMemoryRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.parent}/memories');
+    final url = Uri.https(_host, '/v1beta1/${request.parent}/memories', {
+      if (request.memoryId case final $1 when $1.isNotDefault) 'memoryId': $1,
+    });
     final response = await _client.post(url, body: request.memory);
     return Operation.fromJson(
       response,
@@ -12466,7 +12468,9 @@ final class SessionService {
   Future<Operation<Session, CreateSessionOperationMetadata>> createSession(
     CreateSessionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.parent}/sessions');
+    final url = Uri.https(_host, '/v1beta1/${request.parent}/sessions', {
+      if (request.sessionId case final $1 when $1.isNotDefault) 'sessionId': $1,
+    });
     final response = await _client.post(url, body: request.session);
     return Operation.fromJson(
       response,
@@ -14022,6 +14026,245 @@ final class VertexRagDataService {
     final url = Uri.https(_host, '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return RagEngineConfig.fromJson(response);
+  }
+
+  /// Creates a RagDataSchema.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<RagDataSchema> createRagDataSchema(
+    CreateRagDataSchemaRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta1/${request.parent}/ragDataSchemas', {
+      if (request.ragDataSchemaId case final $1?) 'ragDataSchemaId': $1,
+    });
+    final response = await _client.post(url, body: request.ragDataSchema);
+    return RagDataSchema.fromJson(response);
+  }
+
+  /// Batch Create one or more RagDataSchemas
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<
+    Operation<
+      BatchCreateRagDataSchemasResponse,
+      BatchCreateRagDataSchemasOperationMetadata
+    >
+  >
+  batchCreateRagDataSchemas(BatchCreateRagDataSchemasRequest request) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.parent}/ragDataSchemas:batchCreate',
+    );
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        BatchCreateRagDataSchemasResponse.fromJson,
+        BatchCreateRagDataSchemasOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Gets a RagDataSchema.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<RagDataSchema> getRagDataSchema(
+    GetRagDataSchemaRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final response = await _client.get(url);
+    return RagDataSchema.fromJson(response);
+  }
+
+  /// Lists RagDataSchemas in a Location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListRagDataSchemasResponse> listRagDataSchemas(
+    ListRagDataSchemasRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta1/${request.parent}/ragDataSchemas', {
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+    });
+    final response = await _client.get(url);
+    return ListRagDataSchemasResponse.fromJson(response);
+  }
+
+  /// Deletes a RagDataSchema.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> deleteRagDataSchema(DeleteRagDataSchemaRequest request) async {
+    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Batch Deletes one or more RagDataSchemas
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<protobuf.Empty, DeleteOperationMetadata>>
+  batchDeleteRagDataSchemas(BatchDeleteRagDataSchemasRequest request) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.parent}/ragDataSchemas:batchDelete',
+    );
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        protobuf.Empty.fromJson,
+        DeleteOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Creates a RagMetadata.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<RagMetadata> createRagMetadata(
+    CreateRagMetadataRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta1/${request.parent}/ragMetadata', {
+      if (request.ragMetadataId case final $1?) 'ragMetadataId': $1,
+    });
+    final response = await _client.post(url, body: request.ragMetadata);
+    return RagMetadata.fromJson(response);
+  }
+
+  /// Batch Create one or more RagMetadatas
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<
+    Operation<
+      BatchCreateRagMetadataResponse,
+      BatchCreateRagMetadataOperationMetadata
+    >
+  >
+  batchCreateRagMetadata(BatchCreateRagMetadataRequest request) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.parent}/ragMetadata:batchCreate',
+    );
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        BatchCreateRagMetadataResponse.fromJson,
+        BatchCreateRagMetadataOperationMetadata.fromJson,
+      ),
+    );
+  }
+
+  /// Updates a RagMetadata.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<RagMetadata> updateRagMetadata(
+    UpdateRagMetadataRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta1/${request.ragMetadata!.name}');
+    final response = await _client.patch(url, body: request.ragMetadata);
+    return RagMetadata.fromJson(response);
+  }
+
+  /// Gets a RagMetadata.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<RagMetadata> getRagMetadata(GetRagMetadataRequest request) async {
+    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final response = await _client.get(url);
+    return RagMetadata.fromJson(response);
+  }
+
+  /// Lists RagMetadata in a RagFile.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<ListRagMetadataResponse> listRagMetadata(
+    ListRagMetadataRequest request,
+  ) async {
+    final url = Uri.https(_host, '/v1beta1/${request.parent}/ragMetadata', {
+      if (request.pageSize case final $1 when $1.isNotDefault)
+        'pageSize': '${$1}',
+      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
+    });
+    final response = await _client.get(url);
+    return ListRagMetadataResponse.fromJson(response);
+  }
+
+  /// Deletes a RagMetadata.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  Future<void> deleteRagMetadata(DeleteRagMetadataRequest request) async {
+    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    await _client.delete(url);
+  }
+
+  /// Batch Deletes one or more RagMetadata.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  Future<Operation<protobuf.Empty, DeleteOperationMetadata>>
+  batchDeleteRagMetadata(BatchDeleteRagMetadataRequest request) async {
+    final url = Uri.https(
+      _host,
+      '/v1beta1/${request.parent}/ragMetadata:batchDelete',
+    );
+    final response = await _client.post(url, body: request);
+    return Operation.fromJson(
+      response,
+      OperationHelper(
+        protobuf.Empty.fromJson,
+        DeleteOperationMetadata.fromJson,
+      ),
+    );
   }
 
   /// Lists information about the supported locations for this service.
@@ -61846,8 +62089,20 @@ final class CreateMemoryRequest extends ProtoMessage {
   /// Required. The Memory to be created.
   final Memory? memory;
 
-  CreateMemoryRequest({required this.parent, required this.memory})
-    : super(fullyQualifiedName);
+  /// Optional. The user defined ID to use for memory, which will become the
+  /// final component of the memory resource name. If not provided, Vertex AI
+  /// will generate a value for this ID.
+  ///
+  /// This value may be up to 63 characters, and valid characters are
+  /// `[a-z0-9-]`. The first character must be a letter, and the last character
+  /// must be a letter or number.
+  final String memoryId;
+
+  CreateMemoryRequest({
+    required this.parent,
+    required this.memory,
+    this.memoryId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateMemoryRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -61860,6 +62115,10 @@ final class CreateMemoryRequest extends ProtoMessage {
         null => null,
         Object $1 => Memory.fromJson($1),
       },
+      memoryId: switch (json['memoryId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -61867,11 +62126,12 @@ final class CreateMemoryRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     if (memory case final memory?) 'memory': memory.toJson(),
+    if (memoryId.isNotDefault) 'memoryId': memoryId,
   };
 
   @override
   String toString() {
-    final $contents = ['parent=$parent'].join(',');
+    final $contents = ['parent=$parent', 'memoryId=$memoryId'].join(',');
     return 'CreateMemoryRequest(${$contents})';
   }
 }
@@ -87360,22 +87620,29 @@ final class EmbedContentRequest extends ProtoMessage {
   /// `projects/{project}/locations/{location}/publishers/*/models/*`
   final String? model;
 
-  /// Required. Input content to be embedded. Required.
+  /// Required. Input content to be embedded.
   final Content? content;
 
-  /// Optional. An optional title for the text.
+  /// Optional. Deprecated: Please use EmbedContentConfig.title instead.
+  /// The title for the text.
   final String? title;
 
-  /// Optional. The task type of the embedding.
+  /// Optional. Deprecated: Please use EmbedContentConfig.task_type instead.
+  /// The task type of the embedding.
   final EmbedContentRequest_EmbeddingTaskType? taskType;
 
-  /// Optional. Optional reduced dimension for the output embedding. If set,
-  /// excessive values in the output embedding are truncated from the end.
+  /// Optional. Deprecated: Please use EmbedContentConfig.output_dimensionality
+  /// instead. Reduced dimension for the output embedding. If set, excessive
+  /// values in the output embedding are truncated from the end.
   final int? outputDimensionality;
 
-  /// Optional. Whether to silently truncate the input content if it's longer
+  /// Optional. Deprecated: Please use EmbedContentConfig.auto_truncate instead.
+  /// Whether to silently truncate the input content if it's longer
   /// than the maximum sequence length.
   final bool? autoTruncate;
+
+  /// Optional. Configuration for the EmbedContent request.
+  final EmbedContentRequest_EmbedContentConfig? embedContentConfig;
 
   EmbedContentRequest({
     this.model,
@@ -87384,6 +87651,7 @@ final class EmbedContentRequest extends ProtoMessage {
     this.taskType,
     this.outputDimensionality,
     this.autoTruncate,
+    this.embedContentConfig,
   }) : super(fullyQualifiedName);
 
   factory EmbedContentRequest.fromJson(Object? j) {
@@ -87413,6 +87681,10 @@ final class EmbedContentRequest extends ProtoMessage {
         null => null,
         Object $1 => decodeBool($1),
       },
+      embedContentConfig: switch (json['embedContentConfig']) {
+        null => null,
+        Object $1 => EmbedContentRequest_EmbedContentConfig.fromJson($1),
+      },
     );
   }
 
@@ -87425,6 +87697,8 @@ final class EmbedContentRequest extends ProtoMessage {
     if (outputDimensionality case final outputDimensionality?)
       'outputDimensionality': outputDimensionality,
     if (autoTruncate case final autoTruncate?) 'autoTruncate': autoTruncate,
+    if (embedContentConfig case final embedContentConfig?)
+      'embedContentConfig': embedContentConfig.toJson(),
   };
 
   @override
@@ -87438,6 +87712,104 @@ final class EmbedContentRequest extends ProtoMessage {
       if (autoTruncate != null) 'autoTruncate=$autoTruncate',
     ].join(',');
     return 'EmbedContentRequest(${$contents})';
+  }
+}
+
+/// Configurations for the EmbedContent API.
+final class EmbedContentRequest_EmbedContentConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.EmbedContentRequest.EmbedContentConfig';
+
+  /// Optional. The title for the text.
+  ///
+  /// Only applicable to text-only embedding models.
+  final String? title;
+
+  /// Optional. The task type of the embedding.
+  ///
+  /// Only applicable to text-only embedding models.
+  final EmbedContentRequest_EmbeddingTaskType? taskType;
+
+  /// Optional. Whether to silently truncate the input content if it's longer
+  /// than the maximum sequence length.
+  ///
+  /// Only applicable to text-only embedding models.
+  final bool? autoTruncate;
+
+  /// Optional. Reduced dimension for the output embedding. If set, excessive
+  /// values in the output embedding are truncated from the end.
+  final int? outputDimensionality;
+
+  /// Optional. Whether to enable OCR for document content.
+  final bool? documentOcr;
+
+  /// Optional. Whether to extract audio from video content.
+  final bool? audioTrackExtraction;
+
+  EmbedContentRequest_EmbedContentConfig({
+    this.title,
+    this.taskType,
+    this.autoTruncate,
+    this.outputDimensionality,
+    this.documentOcr,
+    this.audioTrackExtraction,
+  }) : super(fullyQualifiedName);
+
+  factory EmbedContentRequest_EmbedContentConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return EmbedContentRequest_EmbedContentConfig(
+      title: switch (json['title']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      taskType: switch (json['taskType']) {
+        null => null,
+        Object $1 => EmbedContentRequest_EmbeddingTaskType.fromJson($1),
+      },
+      autoTruncate: switch (json['autoTruncate']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      outputDimensionality: switch (json['outputDimensionality']) {
+        null => null,
+        Object $1 => decodeInt($1),
+      },
+      documentOcr: switch (json['documentOcr']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      audioTrackExtraction: switch (json['audioTrackExtraction']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (title case final title?) 'title': title,
+    if (taskType case final taskType?) 'taskType': taskType.toJson(),
+    if (autoTruncate case final autoTruncate?) 'autoTruncate': autoTruncate,
+    if (outputDimensionality case final outputDimensionality?)
+      'outputDimensionality': outputDimensionality,
+    if (documentOcr case final documentOcr?) 'documentOcr': documentOcr,
+    if (audioTrackExtraction case final audioTrackExtraction?)
+      'audioTrackExtraction': audioTrackExtraction,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (title != null) 'title=$title',
+      if (taskType != null) 'taskType=$taskType',
+      if (autoTruncate != null) 'autoTruncate=$autoTruncate',
+      if (outputDimensionality != null)
+        'outputDimensionality=$outputDimensionality',
+      if (documentOcr != null) 'documentOcr=$documentOcr',
+      if (audioTrackExtraction != null)
+        'audioTrackExtraction=$audioTrackExtraction',
+    ].join(',');
+    return 'EmbedContentConfig(${$contents})';
   }
 }
 
@@ -87509,7 +87881,7 @@ final class EmbedContentResponse extends ProtoMessage {
   /// The embedding generated from the input content.
   final EmbedContentResponse_Embedding? embedding;
 
-  /// Metadata about the response(s).
+  /// Usage metadata about the response(s).
   final UsageMetadata? usageMetadata;
 
   /// Whether the input content was truncated before generating the embedding.
@@ -91662,6 +92034,9 @@ final class SessionEvent extends ProtoMessage {
   /// Optional. Metadata relating to this event.
   final EventMetadata? eventMetadata;
 
+  /// Optional. Weakly typed raw event data in proto struct format.
+  final protobuf.Struct? rawEvent;
+
   SessionEvent({
     this.name = '',
     required this.author,
@@ -91672,6 +92047,7 @@ final class SessionEvent extends ProtoMessage {
     this.errorCode = '',
     this.errorMessage = '',
     this.eventMetadata,
+    this.rawEvent,
   }) : super(fullyQualifiedName);
 
   factory SessionEvent.fromJson(Object? j) {
@@ -91713,6 +92089,10 @@ final class SessionEvent extends ProtoMessage {
         null => null,
         Object $1 => EventMetadata.fromJson($1),
       },
+      rawEvent: switch (json['rawEvent']) {
+        null => null,
+        Object $1 => protobuf.Struct.fromJson($1),
+      },
     );
   }
 
@@ -91728,6 +92108,7 @@ final class SessionEvent extends ProtoMessage {
     if (errorMessage.isNotDefault) 'errorMessage': errorMessage,
     if (eventMetadata case final eventMetadata?)
       'eventMetadata': eventMetadata.toJson(),
+    if (rawEvent case final rawEvent?) 'rawEvent': rawEvent.toJson(),
   };
 
   @override
@@ -92017,8 +92398,20 @@ final class CreateSessionRequest extends ProtoMessage {
   /// Required. The session to create.
   final Session? session;
 
-  CreateSessionRequest({required this.parent, required this.session})
-    : super(fullyQualifiedName);
+  /// Optional. The user defined ID to use for session, which will become the
+  /// final component of the session resource name. If not provided, Vertex AI
+  /// will generate a value for this ID.
+  ///
+  /// This value may be up to 63 characters, and valid characters are
+  /// `[a-z0-9-]`. The first character must be a letter, and the last character
+  /// must be a letter or number.
+  final String sessionId;
+
+  CreateSessionRequest({
+    required this.parent,
+    required this.session,
+    this.sessionId = '',
+  }) : super(fullyQualifiedName);
 
   factory CreateSessionRequest.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -92031,6 +92424,10 @@ final class CreateSessionRequest extends ProtoMessage {
         null => null,
         Object $1 => Session.fromJson($1),
       },
+      sessionId: switch (json['sessionId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -92038,11 +92435,12 @@ final class CreateSessionRequest extends ProtoMessage {
   Object toJson() => {
     'parent': parent,
     if (session case final session?) 'session': session.toJson(),
+    if (sessionId.isNotDefault) 'sessionId': sessionId,
   };
 
   @override
   String toString() {
-    final $contents = ['parent=$parent'].join(',');
+    final $contents = ['parent=$parent', 'sessionId=$sessionId'].join(',');
     return 'CreateSessionRequest(${$contents})';
   }
 }
@@ -105544,7 +105942,14 @@ final class RagChunk extends ProtoMessage {
   /// If populated, represents where the chunk starts and ends in the document.
   final RagChunk_PageSpan? pageSpan;
 
-  RagChunk({this.text = '', this.pageSpan}) : super(fullyQualifiedName);
+  /// The ID of the file that the chunk belongs to.
+  final String fileId;
+
+  /// The ID of the chunk.
+  final String chunkId;
+
+  RagChunk({this.text = '', this.pageSpan, this.fileId = '', this.chunkId = ''})
+    : super(fullyQualifiedName);
 
   factory RagChunk.fromJson(Object? j) {
     final json = j as Map<String, Object?>;
@@ -105557,6 +105962,14 @@ final class RagChunk extends ProtoMessage {
         null => null,
         Object $1 => RagChunk_PageSpan.fromJson($1),
       },
+      fileId: switch (json['fileId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      chunkId: switch (json['chunkId']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
     );
   }
 
@@ -105564,11 +105977,17 @@ final class RagChunk extends ProtoMessage {
   Object toJson() => {
     if (text.isNotDefault) 'text': text,
     if (pageSpan case final pageSpan?) 'pageSpan': pageSpan.toJson(),
+    if (fileId.isNotDefault) 'fileId': fileId,
+    if (chunkId.isNotDefault) 'chunkId': chunkId,
   };
 
   @override
   String toString() {
-    final $contents = ['text=$text'].join(',');
+    final $contents = [
+      'text=$text',
+      'fileId=$fileId',
+      'chunkId=$chunkId',
+    ].join(',');
     return 'RagChunk(${$contents})';
   }
 }
@@ -106126,9 +106545,10 @@ final class UploadRagFileConfig extends ProtoMessage {
   /// Specifies the transformation config for RagFiles.
   final RagFileTransformationConfig? ragFileTransformationConfig;
 
-  /// Specifies the metadata config for RagFiles.
+  /// Optional. Specifies the metadata config for RagFiles.
   /// Including paths for metadata schema and metadata.
   /// Alteratively, inline metadata schema and metadata can be provided.
+  /// Deprecated: Not in use.
   final RagFileMetadataConfig? ragFileMetadataConfig;
 
   /// Optional. Specifies the parsing config for RagFiles.
@@ -106241,6 +106661,7 @@ final class ImportRagFilesConfig extends ProtoMessage {
 
   /// Specifies the metadata config for RagFiles.
   /// Including paths for metadata schema and metadata.
+  /// Deprecated: Not in use.
   final RagFileMetadataConfig? ragFileMetadataConfig;
 
   /// Optional. The max number of queries per minute that this job is allowed to
@@ -106675,6 +107096,518 @@ final class RagEngineConfig extends ProtoMessage {
     final $contents = ['name=$name'].join(',');
     return 'RagEngineConfig(${$contents})';
   }
+}
+
+/// The schema of the user specified metadata.
+final class RagDataSchema extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagDataSchema';
+
+  /// Identifier. Resource name of the data schema in the form of:
+  /// `projects/{project_number}/locations/{location}/ragCorpora/{rag_corpus}/ragDataSchemas/{rag_data_schema}`
+  /// where the {rag_data_schema} part should be the same as the `key` field
+  /// below.
+  final String name;
+
+  /// Required. The key of this data schema. This key should be matching the key
+  /// of user specified metadata and unique inside corpus. This value can be up
+  /// to 63 characters, and valid characters are /[a-z][0-9]-/. The first
+  /// character must be a letter, the last could be a letter or a number.
+  final String key;
+
+  /// The schema details mapping to the key.
+  final RagMetadataSchemaDetails? schemaDetails;
+
+  RagDataSchema({this.name = '', required this.key, this.schemaDetails})
+    : super(fullyQualifiedName);
+
+  factory RagDataSchema.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagDataSchema(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      key: switch (json['key']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      schemaDetails: switch (json['schemaDetails']) {
+        null => null,
+        Object $1 => RagMetadataSchemaDetails.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    'key': key,
+    if (schemaDetails case final schemaDetails?)
+      'schemaDetails': schemaDetails.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['name=$name', 'key=$key'].join(',');
+    return 'RagDataSchema(${$contents})';
+  }
+}
+
+/// Data schema details indicates the data type and the data struct corresponding
+/// to the key of user specified metadata.
+final class RagMetadataSchemaDetails extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagMetadataSchemaDetails';
+
+  /// Type of the metadata.
+  final RagMetadataSchemaDetails_DataType? type;
+
+  /// Config for List data type.
+  final RagMetadataSchemaDetails_ListConfig? listConfig;
+
+  /// The granularity associated with this RagMetadataSchema.
+  final RagMetadataSchemaDetails_Granularity? granularity;
+
+  /// The search strategy for the metadata value of the `key`.
+  final RagMetadataSchemaDetails_SearchStrategy? searchStrategy;
+
+  RagMetadataSchemaDetails({
+    this.type,
+    this.listConfig,
+    this.granularity,
+    this.searchStrategy,
+  }) : super(fullyQualifiedName);
+
+  factory RagMetadataSchemaDetails.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagMetadataSchemaDetails(
+      type: switch (json['type']) {
+        null => null,
+        Object $1 => RagMetadataSchemaDetails_DataType.fromJson($1),
+      },
+      listConfig: switch (json['listConfig']) {
+        null => null,
+        Object $1 => RagMetadataSchemaDetails_ListConfig.fromJson($1),
+      },
+      granularity: switch (json['granularity']) {
+        null => null,
+        Object $1 => RagMetadataSchemaDetails_Granularity.fromJson($1),
+      },
+      searchStrategy: switch (json['searchStrategy']) {
+        null => null,
+        Object $1 => RagMetadataSchemaDetails_SearchStrategy.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (type case final type?) 'type': type.toJson(),
+    if (listConfig case final listConfig?) 'listConfig': listConfig.toJson(),
+    if (granularity case final granularity?)
+      'granularity': granularity.toJson(),
+    if (searchStrategy case final searchStrategy?)
+      'searchStrategy': searchStrategy.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (type != null) 'type=$type',
+      if (granularity != null) 'granularity=$granularity',
+    ].join(',');
+    return 'RagMetadataSchemaDetails(${$contents})';
+  }
+}
+
+/// Config for List data type.
+final class RagMetadataSchemaDetails_ListConfig extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagMetadataSchemaDetails.ListConfig';
+
+  /// The value's data type in the list.
+  final RagMetadataSchemaDetails? valueSchema;
+
+  RagMetadataSchemaDetails_ListConfig({this.valueSchema})
+    : super(fullyQualifiedName);
+
+  factory RagMetadataSchemaDetails_ListConfig.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagMetadataSchemaDetails_ListConfig(
+      valueSchema: switch (json['valueSchema']) {
+        null => null,
+        Object $1 => RagMetadataSchemaDetails.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (valueSchema case final valueSchema?)
+      'valueSchema': valueSchema.toJson(),
+  };
+
+  @override
+  String toString() => 'ListConfig()';
+}
+
+/// The search strategy for the metadata value of the `key`.
+final class RagMetadataSchemaDetails_SearchStrategy extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagMetadataSchemaDetails.SearchStrategy';
+
+  /// The search strategy type to be applied on the metadata key.
+  final RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType?
+  searchStrategyType;
+
+  RagMetadataSchemaDetails_SearchStrategy({this.searchStrategyType})
+    : super(fullyQualifiedName);
+
+  factory RagMetadataSchemaDetails_SearchStrategy.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagMetadataSchemaDetails_SearchStrategy(
+      searchStrategyType: switch (json['searchStrategyType']) {
+        null => null,
+        Object $1 =>
+          RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType.fromJson(
+            $1,
+          ),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (searchStrategyType case final searchStrategyType?)
+      'searchStrategyType': searchStrategyType.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (searchStrategyType != null) 'searchStrategyType=$searchStrategyType',
+    ].join(',');
+    return 'SearchStrategy(${$contents})';
+  }
+}
+
+/// The types of search strategies to be applied on the metadata key.
+final class RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType
+    extends ProtoEnum {
+  /// Unspecified search strategy type.
+  static const searchStrategyTypeUnspecified =
+      RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType(
+        'SEARCH_STRATEGY_TYPE_UNSPECIFIED',
+      );
+
+  /// metadata values of the `key` above will not be searchable.
+  static const noSearch =
+      RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType('NO_SEARCH');
+
+  /// When searching with `key`, the value must be exactly as the metadata
+  /// value that has been ingested.
+  static const exactSearch =
+      RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType(
+        'EXACT_SEARCH',
+      );
+
+  /// The default value for [RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType].
+  static const $default = searchStrategyTypeUnspecified;
+
+  const RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType(super.value);
+
+  factory RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType.fromJson(
+    Object? json,
+  ) => RagMetadataSchemaDetails_SearchStrategy_SearchStrategyType(
+    json as String,
+  );
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'SearchStrategyType.$value';
+}
+
+/// Data type of the metadata.
+final class RagMetadataSchemaDetails_DataType extends ProtoEnum {
+  /// Unspecified type.
+  static const dataTypeUnspecified = RagMetadataSchemaDetails_DataType(
+    'DATA_TYPE_UNSPECIFIED',
+  );
+
+  /// Integer type.
+  static const integer = RagMetadataSchemaDetails_DataType('INTEGER');
+
+  /// Float type.
+  static const float = RagMetadataSchemaDetails_DataType('FLOAT');
+
+  /// String type.
+  static const string = RagMetadataSchemaDetails_DataType('STRING');
+
+  /// Supported formats:
+  /// %Y-%m-%dT%H:%M:%E*S%E*z (absl::RFC3339_full)
+  /// %Y-%m-%dT%H:%M:%E*S
+  /// %Y-%m-%dT%H:%M%E*z
+  /// %Y-%m-%dT%H:%M
+  /// %Y-%m-%dT%H%E*z
+  /// %Y-%m-%dT%H
+  /// %Y-%m-%d%E*z
+  /// %Y-%m-%d
+  /// %Y-%m
+  /// %Y
+  static const datetime = RagMetadataSchemaDetails_DataType('DATETIME');
+
+  /// Boolean type.
+  static const boolean = RagMetadataSchemaDetails_DataType('BOOLEAN');
+
+  /// List type.
+  ///  - Each element in the list must be of the exact same data schema;
+  ///    otherwise, they are invalid arguments.
+  ///  - Elements cannot be another list (no list of list).
+  static const list = RagMetadataSchemaDetails_DataType('LIST');
+
+  /// The default value for [RagMetadataSchemaDetails_DataType].
+  static const $default = dataTypeUnspecified;
+
+  const RagMetadataSchemaDetails_DataType(super.value);
+
+  factory RagMetadataSchemaDetails_DataType.fromJson(Object? json) =>
+      RagMetadataSchemaDetails_DataType(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'DataType.$value';
+}
+
+/// The granularity of metadata under this DataSchema.
+final class RagMetadataSchemaDetails_Granularity extends ProtoEnum {
+  /// Unspecified granularity.
+  static const granularityUnspecified = RagMetadataSchemaDetails_Granularity(
+    'GRANULARITY_UNSPECIFIED',
+  );
+
+  /// RagFile-level granularity.
+  static const granularityFileLevel = RagMetadataSchemaDetails_Granularity(
+    'GRANULARITY_FILE_LEVEL',
+  );
+
+  /// The default value for [RagMetadataSchemaDetails_Granularity].
+  static const $default = granularityUnspecified;
+
+  const RagMetadataSchemaDetails_Granularity(super.value);
+
+  factory RagMetadataSchemaDetails_Granularity.fromJson(Object? json) =>
+      RagMetadataSchemaDetails_Granularity(json as String);
+
+  bool get isNotDefault => this != $default;
+
+  @override
+  String toString() => 'Granularity.$value';
+}
+
+/// Metadata for RagFile provided by users.
+final class RagMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.RagMetadata';
+
+  /// Identifier. Resource name of the RagMetadata.
+  /// Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}/ragMetadata/{rag_metadata}`
+  final String name;
+
+  /// User provided metadata.
+  final UserSpecifiedMetadata? userSpecifiedMetadata;
+
+  RagMetadata({this.name = '', this.userSpecifiedMetadata})
+    : super(fullyQualifiedName);
+
+  factory RagMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return RagMetadata(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      userSpecifiedMetadata: switch (json['userSpecifiedMetadata']) {
+        null => null,
+        Object $1 => UserSpecifiedMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (name.isNotDefault) 'name': name,
+    if (userSpecifiedMetadata case final userSpecifiedMetadata?)
+      'userSpecifiedMetadata': userSpecifiedMetadata.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'RagMetadata(${$contents})';
+  }
+}
+
+/// Metadata provided by users.
+final class UserSpecifiedMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.UserSpecifiedMetadata';
+
+  /// Required. Key of the metadata. The key must be set with type by
+  /// CreateRagDataSchema.
+  final String key;
+
+  /// Value of the metadata. The value must be able to convert
+  /// to the type according to the data schema.
+  final MetadataValue? value;
+
+  UserSpecifiedMetadata({required this.key, this.value})
+    : super(fullyQualifiedName);
+
+  factory UserSpecifiedMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UserSpecifiedMetadata(
+      key: switch (json['key']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      value: switch (json['value']) {
+        null => null,
+        Object $1 => MetadataValue.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'key': key,
+    if (value case final value?) 'value': value.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = ['key=$key'].join(',');
+    return 'UserSpecifiedMetadata(${$contents})';
+  }
+}
+
+/// Value of Metadata, including all types available in data schema.
+final class MetadataValue extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MetadataValue';
+
+  /// Value of int type metadata.
+  final int? intValue;
+
+  /// Value of float type metadata.
+  final double? floatValue;
+
+  /// Value of string type metadata.
+  final String? strValue;
+
+  /// Value of date time type metadata.
+  final String? datetimeValue;
+
+  /// Value of boolean type metadata.
+  final bool? boolValue;
+
+  /// Value of list type metadata.
+  final MetadataList? listValue;
+
+  MetadataValue({
+    this.intValue,
+    this.floatValue,
+    this.strValue,
+    this.datetimeValue,
+    this.boolValue,
+    this.listValue,
+  }) : super(fullyQualifiedName);
+
+  factory MetadataValue.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetadataValue(
+      intValue: switch (json['intValue']) {
+        null => null,
+        Object $1 => decodeInt64($1),
+      },
+      floatValue: switch (json['floatValue']) {
+        null => null,
+        Object $1 => decodeDouble($1),
+      },
+      strValue: switch (json['strValue']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      datetimeValue: switch (json['datetimeValue']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+      boolValue: switch (json['boolValue']) {
+        null => null,
+        Object $1 => decodeBool($1),
+      },
+      listValue: switch (json['listValue']) {
+        null => null,
+        Object $1 => MetadataList.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (intValue case final intValue?) 'intValue': intValue.toString(),
+    if (floatValue case final floatValue?)
+      'floatValue': encodeDouble(floatValue),
+    if (strValue case final strValue?) 'strValue': strValue,
+    if (datetimeValue case final datetimeValue?) 'datetimeValue': datetimeValue,
+    if (boolValue case final boolValue?) 'boolValue': boolValue,
+    if (listValue case final listValue?) 'listValue': listValue.toJson(),
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      if (intValue != null) 'intValue=$intValue',
+      if (floatValue != null) 'floatValue=$floatValue',
+      if (strValue != null) 'strValue=$strValue',
+      if (datetimeValue != null) 'datetimeValue=$datetimeValue',
+      if (boolValue != null) 'boolValue=$boolValue',
+    ].join(',');
+    return 'MetadataValue(${$contents})';
+  }
+}
+
+/// List representation in metadata.
+final class MetadataList extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.MetadataList';
+
+  /// The values of `LIST` data type metadata.
+  final List<MetadataValue> values;
+
+  MetadataList({this.values = const []}) : super(fullyQualifiedName);
+
+  factory MetadataList.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return MetadataList(
+      values: switch (json['values']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) MetadataValue.fromJson(i)],
+        _ => throw const FormatException('"values" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (values.isNotDefault) 'values': [for (final i in values) i.toJson()],
+  };
+
+  @override
+  String toString() => 'MetadataList()';
 }
 
 /// Request message for
@@ -107606,6 +108539,846 @@ final class UpdateRagEngineConfigOperationMetadata extends ProtoMessage {
 
   @override
   String toString() => 'UpdateRagEngineConfigOperationMetadata()';
+}
+
+/// Runtime operation information for
+/// `VertexRagDataService.BatchCreateRagDataSchemas`.
+final class BatchCreateRagDataSchemasOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchCreateRagDataSchemasOperationMetadata';
+
+  /// The operation generic information.
+  final GenericOperationMetadata? genericMetadata;
+
+  BatchCreateRagDataSchemasOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory BatchCreateRagDataSchemasOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateRagDataSchemasOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (genericMetadata case final genericMetadata?)
+      'genericMetadata': genericMetadata.toJson(),
+  };
+
+  @override
+  String toString() => 'BatchCreateRagDataSchemasOperationMetadata()';
+}
+
+/// Runtime operation information for
+/// `VertexRagDataService.BatchCreateRagMetadata`.
+final class BatchCreateRagMetadataOperationMetadata extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchCreateRagMetadataOperationMetadata';
+
+  /// The operation generic information.
+  final GenericOperationMetadata? genericMetadata;
+
+  BatchCreateRagMetadataOperationMetadata({this.genericMetadata})
+    : super(fullyQualifiedName);
+
+  factory BatchCreateRagMetadataOperationMetadata.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateRagMetadataOperationMetadata(
+      genericMetadata: switch (json['genericMetadata']) {
+        null => null,
+        Object $1 => GenericOperationMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (genericMetadata case final genericMetadata?)
+      'genericMetadata': genericMetadata.toJson(),
+  };
+
+  @override
+  String toString() => 'BatchCreateRagMetadataOperationMetadata()';
+}
+
+/// Response message for
+/// `VertexRagDataService.BatchCreateRagDataSchemas`.
+final class BatchCreateRagDataSchemasResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchCreateRagDataSchemasResponse';
+
+  /// RagDataSchemas created.
+  final List<RagDataSchema> ragDataSchemas;
+
+  BatchCreateRagDataSchemasResponse({this.ragDataSchemas = const []})
+    : super(fullyQualifiedName);
+
+  factory BatchCreateRagDataSchemasResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateRagDataSchemasResponse(
+      ragDataSchemas: switch (json['ragDataSchemas']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RagDataSchema.fromJson(i)],
+        _ => throw const FormatException('"ragDataSchemas" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (ragDataSchemas.isNotDefault)
+      'ragDataSchemas': [for (final i in ragDataSchemas) i.toJson()],
+  };
+
+  @override
+  String toString() => 'BatchCreateRagDataSchemasResponse()';
+}
+
+/// Response message for
+/// `VertexRagDataService.BatchCreateRagMetadata`.
+final class BatchCreateRagMetadataResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchCreateRagMetadataResponse';
+
+  /// RagMetadata created.
+  final List<RagMetadata> ragMetadata;
+
+  BatchCreateRagMetadataResponse({this.ragMetadata = const []})
+    : super(fullyQualifiedName);
+
+  factory BatchCreateRagMetadataResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateRagMetadataResponse(
+      ragMetadata: switch (json['ragMetadata']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RagMetadata.fromJson(i)],
+        _ => throw const FormatException('"ragMetadata" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (ragMetadata.isNotDefault)
+      'ragMetadata': [for (final i in ragMetadata) i.toJson()],
+  };
+
+  @override
+  String toString() => 'BatchCreateRagMetadataResponse()';
+}
+
+/// Request message for
+/// `VertexRagDataService.CreateRagDataSchema`.
+final class CreateRagDataSchemaRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CreateRagDataSchemaRequest';
+
+  /// Required. The resource name of the RagCorpus to create the RagDataSchema
+  /// in. Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}`
+  final String parent;
+
+  /// Required. The RagDataSchema to create.
+  final RagDataSchema? ragDataSchema;
+
+  /// Optional. The ID to use for the RagDataSchema, which will become the final
+  /// component of the RagDataSchema's resource name if the user chooses to
+  /// specify. Otherwise, RagDataSchema id will be generated by system.
+  ///
+  /// This value should be up to 63 characters, and valid characters
+  /// are /[a-z][0-9]-/. The first character must be a letter, the last could be
+  /// a letter or a number.
+  final String? ragDataSchemaId;
+
+  CreateRagDataSchemaRequest({
+    required this.parent,
+    required this.ragDataSchema,
+    this.ragDataSchemaId,
+  }) : super(fullyQualifiedName);
+
+  factory CreateRagDataSchemaRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateRagDataSchemaRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      ragDataSchema: switch (json['ragDataSchema']) {
+        null => null,
+        Object $1 => RagDataSchema.fromJson($1),
+      },
+      ragDataSchemaId: switch (json['ragDataSchemaId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (ragDataSchema case final ragDataSchema?)
+      'ragDataSchema': ragDataSchema.toJson(),
+    if (ragDataSchemaId case final ragDataSchemaId?)
+      'ragDataSchemaId': ragDataSchemaId,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parent=$parent',
+      if (ragDataSchemaId != null) 'ragDataSchemaId=$ragDataSchemaId',
+    ].join(',');
+    return 'CreateRagDataSchemaRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.BatchCreateRagDataSchemas`.
+final class BatchCreateRagDataSchemasRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchCreateRagDataSchemasRequest';
+
+  /// Required. The resource name of the RagCorpus to create the RagDataSchemas
+  /// in. Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}`
+  final String parent;
+
+  /// Required. The request messages for
+  /// `VertexRagDataService.CreateRagDataSchema`.
+  /// A maximum of 500 schemas can be created in a batch.
+  final List<CreateRagDataSchemaRequest> requests;
+
+  BatchCreateRagDataSchemasRequest({
+    required this.parent,
+    required this.requests,
+  }) : super(fullyQualifiedName);
+
+  factory BatchCreateRagDataSchemasRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateRagDataSchemasRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) CreateRagDataSchemaRequest.fromJson(i),
+        ],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    'requests': [for (final i in requests) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchCreateRagDataSchemasRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.GetRagDataSchema`
+final class GetRagDataSchemaRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GetRagDataSchemaRequest';
+
+  /// Required. The name of the RagDataSchema resource.
+  /// Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragDataSchemas/{rag_data_schema}`
+  final String name;
+
+  GetRagDataSchemaRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetRagDataSchemaRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetRagDataSchemaRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'GetRagDataSchemaRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.ListRagDataSchemas`.
+final class ListRagDataSchemasRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListRagDataSchemasRequest';
+
+  /// Required. The resource name of the RagCorpus from which to list the
+  /// RagDataSchemas. Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}`
+  final String parent;
+
+  /// Optional. The standard list page size. The maximum value is 100. If not
+  /// specified, a default value of 100 will be used.
+  final int pageSize;
+
+  /// Optional. The standard list page token.
+  /// Typically obtained via
+  /// `ListRagDataSchemasResponse.next_page_token`
+  /// of the previous
+  /// `VertexRagDataService.ListRagDataSchemas`
+  /// call.
+  final String pageToken;
+
+  ListRagDataSchemasRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListRagDataSchemasRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRagDataSchemasRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parent=$parent',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+    ].join(',');
+    return 'ListRagDataSchemasRequest(${$contents})';
+  }
+}
+
+/// Response message for
+/// `VertexRagDataService.ListRagDataSchemas`.
+final class ListRagDataSchemasResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListRagDataSchemasResponse';
+
+  /// List of RagDataSchemas in the requested page.
+  final List<RagDataSchema> ragDataSchemas;
+
+  /// A token to retrieve the next page of results.
+  /// Pass to
+  /// `ListRagDataSchemasRequest.page_token`
+  /// to obtain that page.
+  final String nextPageToken;
+
+  ListRagDataSchemasResponse({
+    this.ragDataSchemas = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListRagDataSchemasResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRagDataSchemasResponse(
+      ragDataSchemas: switch (json['ragDataSchemas']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RagDataSchema.fromJson(i)],
+        _ => throw const FormatException('"ragDataSchemas" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (ragDataSchemas.isNotDefault)
+      'ragDataSchemas': [for (final i in ragDataSchemas) i.toJson()],
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListRagDataSchemasResponse(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.BatchDeleteRagDataSchemas`.
+final class BatchDeleteRagDataSchemasRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchDeleteRagDataSchemasRequest';
+
+  /// Required. The resource name of the RagCorpus from which to delete the
+  /// RagDataSchemas. Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}`
+  final String parent;
+
+  /// Required. The RagDataSchemas to delete.
+  /// A maximum of 500 schemas can be deleted in a batch.
+  /// Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragDataSchemas/{rag_data_schema}`
+  final List<String> names;
+
+  BatchDeleteRagDataSchemasRequest({required this.parent, required this.names})
+    : super(fullyQualifiedName);
+
+  factory BatchDeleteRagDataSchemasRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchDeleteRagDataSchemasRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      names: switch (json['names']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"names" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'parent': parent, 'names': names};
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchDeleteRagDataSchemasRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.DeleteRagDataSchema`.
+final class DeleteRagDataSchemaRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.DeleteRagDataSchemaRequest';
+
+  /// Required. The name of the RagDataSchema resource to be deleted.
+  /// Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragDataSchemas/{rag_data_schema}`
+  final String name;
+
+  DeleteRagDataSchemaRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeleteRagDataSchemaRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteRagDataSchemaRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteRagDataSchemaRequest(${$contents})';
+  }
+}
+
+/// Request message for CreateRagMetadata.
+final class CreateRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.CreateRagMetadataRequest';
+
+  /// Required. The parent resource where this metadata will be created.
+  /// Format:
+  /// `projects/{project_number}/locations/{location_id}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}`
+  final String parent;
+
+  /// Required. The metadata to create.
+  final RagMetadata? ragMetadata;
+
+  /// Optional. The ID to use for the metadata, which will become the final
+  /// component of the metadata's resource name if the user chooses to specify.
+  /// Otherwise, metadata id will be generated by system.
+  ///
+  /// This value should be up to 63 characters, and valid characters
+  /// are /[a-z][0-9]-/. The first character must be a letter, the last could be
+  /// a letter or a number.
+  final String? ragMetadataId;
+
+  CreateRagMetadataRequest({
+    required this.parent,
+    required this.ragMetadata,
+    this.ragMetadataId,
+  }) : super(fullyQualifiedName);
+
+  factory CreateRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return CreateRagMetadataRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      ragMetadata: switch (json['ragMetadata']) {
+        null => null,
+        Object $1 => RagMetadata.fromJson($1),
+      },
+      ragMetadataId: switch (json['ragMetadataId']) {
+        null => null,
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (ragMetadata case final ragMetadata?)
+      'ragMetadata': ragMetadata.toJson(),
+    if (ragMetadataId case final ragMetadataId?) 'ragMetadataId': ragMetadataId,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parent=$parent',
+      if (ragMetadataId != null) 'ragMetadataId=$ragMetadataId',
+    ].join(',');
+    return 'CreateRagMetadataRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.BatchCreateRagMetadata`.
+final class BatchCreateRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchCreateRagMetadataRequest';
+
+  /// Required. The parent resource where the RagMetadata will be created.
+  /// Format:
+  /// `projects/{project_number}/locations/{location_id}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}`
+  final String parent;
+
+  /// Required. The request messages for
+  /// `VertexRagDataService.CreateRagMetadata`.
+  /// A maximum of 500 rag file metadata can be created in a batch.
+  final List<CreateRagMetadataRequest> requests;
+
+  BatchCreateRagMetadataRequest({required this.parent, required this.requests})
+    : super(fullyQualifiedName);
+
+  factory BatchCreateRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchCreateRagMetadataRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      requests: switch (json['requests']) {
+        null => [],
+        List<Object?> $1 => [
+          for (final i in $1) CreateRagMetadataRequest.fromJson(i),
+        ],
+        _ => throw const FormatException('"requests" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    'requests': [for (final i in requests) i.toJson()],
+  };
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchCreateRagMetadataRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.UpdateRagMetadata`.
+final class UpdateRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.UpdateRagMetadataRequest';
+
+  /// Required. The RagMetadata which replaces the resource on the server.
+  final RagMetadata? ragMetadata;
+
+  UpdateRagMetadataRequest({required this.ragMetadata})
+    : super(fullyQualifiedName);
+
+  factory UpdateRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return UpdateRagMetadataRequest(
+      ragMetadata: switch (json['ragMetadata']) {
+        null => null,
+        Object $1 => RagMetadata.fromJson($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (ragMetadata case final ragMetadata?)
+      'ragMetadata': ragMetadata.toJson(),
+  };
+
+  @override
+  String toString() => 'UpdateRagMetadataRequest()';
+}
+
+/// Request message for
+/// `VertexRagDataService.GetRagMetadata`
+final class GetRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.GetRagMetadataRequest';
+
+  /// Required. The name of the RagMetadata resource.
+  /// Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}/ragMetadata/{rag_metadata}`
+  final String name;
+
+  GetRagMetadataRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory GetRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return GetRagMetadataRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'GetRagMetadataRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.ListRagMetadata`.
+final class ListRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListRagMetadataRequest';
+
+  /// Required. The resource name of the RagFile from which to list the
+  /// RagMetadata. Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}`
+  final String parent;
+
+  /// Optional. The standard list page size. The maximum value is 100. If not
+  /// specified, a default value of 100 will be used.
+  final int pageSize;
+
+  /// Optional. The standard list page token.
+  /// Typically obtained via
+  /// `ListRagMetadataResponse.next_page_token`
+  /// of the previous
+  /// `VertexRagDataService.ListRagMetadata`
+  /// call.
+  final String pageToken;
+
+  ListRagMetadataRequest({
+    required this.parent,
+    this.pageSize = 0,
+    this.pageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRagMetadataRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      pageSize: switch (json['pageSize']) {
+        null => 0,
+        Object $1 => decodeInt($1),
+      },
+      pageToken: switch (json['pageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    'parent': parent,
+    if (pageSize.isNotDefault) 'pageSize': pageSize,
+    if (pageToken.isNotDefault) 'pageToken': pageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = [
+      'parent=$parent',
+      'pageSize=$pageSize',
+      'pageToken=$pageToken',
+    ].join(',');
+    return 'ListRagMetadataRequest(${$contents})';
+  }
+}
+
+/// Response message for
+/// `VertexRagDataService.ListRagMetadata`.
+final class ListRagMetadataResponse extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.ListRagMetadataResponse';
+
+  /// List of RagMetadata in the requested page.
+  final List<RagMetadata> ragMetadata;
+
+  /// A token to retrieve the next page of results.
+  /// Pass to
+  /// `ListRagMetadataRequest.page_token`
+  /// to obtain that page.
+  final String nextPageToken;
+
+  ListRagMetadataResponse({
+    this.ragMetadata = const [],
+    this.nextPageToken = '',
+  }) : super(fullyQualifiedName);
+
+  factory ListRagMetadataResponse.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return ListRagMetadataResponse(
+      ragMetadata: switch (json['ragMetadata']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) RagMetadata.fromJson(i)],
+        _ => throw const FormatException('"ragMetadata" is not a list'),
+      },
+      nextPageToken: switch (json['nextPageToken']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {
+    if (ragMetadata.isNotDefault)
+      'ragMetadata': [for (final i in ragMetadata) i.toJson()],
+    if (nextPageToken.isNotDefault) 'nextPageToken': nextPageToken,
+  };
+
+  @override
+  String toString() {
+    final $contents = ['nextPageToken=$nextPageToken'].join(',');
+    return 'ListRagMetadataResponse(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.DeleteRagMetadata`.
+final class DeleteRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.DeleteRagMetadataRequest';
+
+  /// Required. The name of the RagMetadata resource to be deleted.
+  /// Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}/ragMetadata/{rag_metadata}`
+  final String name;
+
+  DeleteRagMetadataRequest({required this.name}) : super(fullyQualifiedName);
+
+  factory DeleteRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return DeleteRagMetadataRequest(
+      name: switch (json['name']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'name': name};
+
+  @override
+  String toString() {
+    final $contents = ['name=$name'].join(',');
+    return 'DeleteRagMetadataRequest(${$contents})';
+  }
+}
+
+/// Request message for
+/// `VertexRagDataService.BatchDeleteRagMetadata`.
+final class BatchDeleteRagMetadataRequest extends ProtoMessage {
+  static const String fullyQualifiedName =
+      'google.cloud.aiplatform.v1beta1.BatchDeleteRagMetadataRequest';
+
+  /// Required. The resource name of the RagFile from which to delete the
+  /// RagMetadata. Format:
+  /// `projects/{project}/locations/{location}/ragCorpora/{rag_corpus}/ragFiles/{rag_file}`
+  final String parent;
+
+  /// Required. The RagMetadata to delete.
+  /// A maximum of 500 rag metadata can be deleted in a batch.
+  final List<String> names;
+
+  BatchDeleteRagMetadataRequest({required this.parent, required this.names})
+    : super(fullyQualifiedName);
+
+  factory BatchDeleteRagMetadataRequest.fromJson(Object? j) {
+    final json = j as Map<String, Object?>;
+    return BatchDeleteRagMetadataRequest(
+      parent: switch (json['parent']) {
+        null => '',
+        Object $1 => decodeString($1),
+      },
+      names: switch (json['names']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) decodeString(i)],
+        _ => throw const FormatException('"names" is not a list'),
+      },
+    );
+  }
+
+  @override
+  Object toJson() => {'parent': parent, 'names': names};
+
+  @override
+  String toString() {
+    final $contents = ['parent=$parent'].join(',');
+    return 'BatchDeleteRagMetadataRequest(${$contents})';
+  }
 }
 
 /// A query to retrieve relevant contexts.

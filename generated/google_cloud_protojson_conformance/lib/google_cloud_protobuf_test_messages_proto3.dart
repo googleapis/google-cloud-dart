@@ -43,6 +43,7 @@ final class TestAllTypesProto3 extends ProtoMessage {
       'protobuf_test_messages.proto3.TestAllTypesProto3';
 
   /// Singular
+  /// test [kotlin] comment
   final int optionalInt32;
 
   final int optionalInt64;
@@ -300,6 +301,8 @@ final class TestAllTypesProto3 extends ProtoMessage {
 
   final NullValue optionalNullValue;
 
+  final Empty? optionalEmpty;
+
   final List<Duration> repeatedDuration;
 
   final List<Timestamp> repeatedTimestamp;
@@ -313,6 +316,8 @@ final class TestAllTypesProto3 extends ProtoMessage {
   final List<Value> repeatedValue;
 
   final List<ListValue> repeatedListValue;
+
+  final List<Empty> repeatedEmpty;
 
   /// Test field-name-to-JSON-name convention.
   /// (protobuf says names can be any valid C/C++ identifier.)
@@ -479,6 +484,7 @@ final class TestAllTypesProto3 extends ProtoMessage {
     this.optionalAny,
     this.optionalValue,
     this.optionalNullValue = NullValue.$default,
+    this.optionalEmpty,
     this.repeatedDuration = const [],
     this.repeatedTimestamp = const [],
     this.repeatedFieldmask = const [],
@@ -486,6 +492,7 @@ final class TestAllTypesProto3 extends ProtoMessage {
     this.repeatedAny = const [],
     this.repeatedValue = const [],
     this.repeatedListValue = const [],
+    this.repeatedEmpty = const [],
     this.fieldname1 = 0,
     this.fieldName2 = 0,
     this.FieldName3 = 0,
@@ -1188,6 +1195,10 @@ final class TestAllTypesProto3 extends ProtoMessage {
         null => NullValue.$default,
         Object $1 => NullValue.fromJson($1),
       },
+      optionalEmpty: switch (json['optionalEmpty']) {
+        null => null,
+        Object $1 => Empty.fromJson($1),
+      },
       repeatedDuration: switch (json['repeatedDuration']) {
         null => [],
         List<Object?> $1 => [for (final i in $1) Duration.fromJson(i)],
@@ -1222,6 +1233,11 @@ final class TestAllTypesProto3 extends ProtoMessage {
         null => [],
         List<Object?> $1 => [for (final i in $1) ListValue.fromJson(i)],
         _ => throw const FormatException('"repeatedListValue" is not a list'),
+      },
+      repeatedEmpty: switch (json['repeatedEmpty']) {
+        null => [],
+        List<Object?> $1 => [for (final i in $1) Empty.fromJson(i)],
+        _ => throw const FormatException('"repeatedEmpty" is not a list'),
       },
       fieldname1: switch (json['fieldname1']) {
         null => 0,
@@ -1581,6 +1597,8 @@ final class TestAllTypesProto3 extends ProtoMessage {
       'optionalValue': optionalValue.toJson(),
     if (optionalNullValue.isNotDefault)
       'optionalNullValue': optionalNullValue.toJson(),
+    if (optionalEmpty case final optionalEmpty?)
+      'optionalEmpty': optionalEmpty.toJson(),
     if (repeatedDuration.isNotDefault)
       'repeatedDuration': [for (final i in repeatedDuration) i.toJson()],
     if (repeatedTimestamp.isNotDefault)
@@ -1595,6 +1613,8 @@ final class TestAllTypesProto3 extends ProtoMessage {
       'repeatedValue': [for (final i in repeatedValue) i.toJson()],
     if (repeatedListValue.isNotDefault)
       'repeatedListValue': [for (final i in repeatedListValue) i.toJson()],
+    if (repeatedEmpty.isNotDefault)
+      'repeatedEmpty': [for (final i in repeatedEmpty) i.toJson()],
     if (fieldname1.isNotDefault) 'fieldname1': fieldname1,
     if (fieldName2.isNotDefault) 'fieldName2': fieldName2,
     if (FieldName3.isNotDefault) 'FieldName3': FieldName3,
