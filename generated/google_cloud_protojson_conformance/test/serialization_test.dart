@@ -2224,6 +2224,17 @@ void main() async {
         });
       });
 
+      group('google.protobuf.Empty', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(optionalEmpty: Empty()),
+            {'optionalEmpty': <void, void>{}},
+            (m) => m.optionalEmpty,
+            Empty(),
+          );
+        });
+      });
+
       group('repeated Duration', () {
         test('empty', () {
           checkField(
@@ -2453,6 +2464,30 @@ void main() async {
             },
             (m) => m.repeatedListValue,
             [l1, l2],
+          );
+        });
+      });
+
+      group('repeated Empty', () {
+        test('empty', () {
+          checkField(
+            TestAllTypesProto3(repeatedEmpty: []),
+            {},
+            (m) => m.repeatedEmpty,
+            isEmpty,
+          );
+        });
+
+        test('non-empty', () {
+          final e1 = Empty();
+          final e2 = Empty();
+          checkField(
+            TestAllTypesProto3(repeatedEmpty: [e1, e2]),
+            {
+              'repeatedEmpty': [<void, void>{}, <void, void>{}],
+            },
+            (m) => m.repeatedEmpty,
+            [e1, e2],
           );
         });
       });
