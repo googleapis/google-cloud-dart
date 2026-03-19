@@ -95,7 +95,7 @@ project - run:
 # Build the binary
 go -C ../librarian build -o ../librarian/librarian ./cmd/librarian
 # Run library regeneration
-../librarian/librarian generate -all -f
+../librarian/librarian generate -all
 ```
 > [!NOTE]
 > Use `-f` to ignore the librarian version check since the local version is likely not the same

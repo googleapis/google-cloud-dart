@@ -11,37 +11,36 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
 language: dart
 version: v0.8.4-0.20260217145709-57aa4a2d7d9f
 sources:
   conformance:
-    commit: b407e8416e3893036aee5af9a12bd9b6a0e2b2e6
-    sha256: 55912546338433f465a552e9ef09930c63b9eb697053937416890cff83a8622d
+    commit: db1c40f3fd8bde2be8c246b9bc3fc394c11ad5a2
+    sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
   googleapis:
-    commit: e8a3d84236cc27875073b1f817e49d7faee11f0d
-    sha256: 400a88fa6f6f6c5585d019e23cd55b78b71fb57e4d92cc6195c54ee21468f5fc
+    commit: c063f49852ce7fc08c722c87f3a6f676209985a2
+    sha256: 46a581333b5b5be41a545db13e0bd0519d1b322e5b1ed73331ad6ec9633f0e5e
   protobuf:
-    commit: 5597e304fbca9843904c2dda6f2aafbb94362ee3
-    sha256: 20b4c80c76f2e9191ade82152368c1fd5cef0a9a89874766386fe136684aceb2
+    commit: db1c40f3fd8bde2be8c246b9bc3fc394c11ad5a2
+    sha256: a030bff1e5b696affcb89240deb20a34325d9d2c23f82c1623332e820a3cf2ab
     subpath: src
   showcase:
-    commit: 33f8a8c31918d6ead871ec82006cdc87fa3d70d6
-    sha256: 7047c0a9f5303e3582adbff63998369693b209963be7c89ea5e477aad886a0b6
+    commit: 7d5b4ab7839ce346428ae6882b60ce15ab493297
+    sha256: 146a5a3d26f3c8abef8862f4d6122674f2c4d0d362a5981fc283c1cc1c52339a
 default:
   output: generated/
   dart:
     api_keys_environment_variables: GOOGLE_API_KEY
     issue_tracker_url: https://github.com/googleapis/google-cloud-dart/issues
     packages:
-      package:google_cloud_api: ^0.5.0
-      package:google_cloud_iam_v1: ^0.5.0
-      package:google_cloud_location: ^0.5.0
-      package:google_cloud_logging_type: ^0.5.0
-      package:google_cloud_longrunning: ^0.5.0
-      package:google_cloud_protobuf: ^0.5.0
-      package:google_cloud_rpc: ^0.5.0
-      package:google_cloud_type: ^0.5.0
+      package:google_cloud_api: ^0.5.1
+      package:google_cloud_iam_v1: ^0.5.1
+      package:google_cloud_location: ^0.5.1
+      package:google_cloud_logging_type: ^0.5.1
+      package:google_cloud_longrunning: ^0.5.1
+      package:google_cloud_protobuf: ^0.5.1
+      package:google_cloud_rpc: ^0.5.1
+      package:google_cloud_type: ^0.5.1
       package:googleapis_auth: ^2.0.0
       package:http: ^1.3.0
     prefixes:
@@ -56,7 +55,7 @@ default:
       proto:google.protobuf: package:google_cloud_protobuf/protobuf.dart
       proto:google.rpc: package:google_cloud_rpc/rpc.dart
       proto:google.type: package:google_cloud_type/type.dart
-    version: 0.5.0
+    version: 0.5.1
 libraries:
   - name: google_cloud_ai_generativelanguage_v1beta
     apis:
