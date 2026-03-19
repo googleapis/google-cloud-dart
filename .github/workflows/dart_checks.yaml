@@ -48,7 +48,10 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        platform: ["vm", "chrome"]
+        # TODO(https://github.com/googleapis/google-cloud-dart/issues/206):
+        # Re-enable chrome tests when they pass for
+        # package:google_cloud_storage
+        platform: ["vm"]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
