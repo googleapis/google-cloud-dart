@@ -17,7 +17,7 @@ one terminal session and execute the tests in another.
 Navigate to this directory and start the storage emulator:
 
 ```bash
-# From packages/google_cloud_storage/emulator_test
+# From pkgs/google_cloud_storage/emulator_test
 firebase emulators:start
 ```
 
@@ -27,7 +27,7 @@ In a separate terminal, navigate to the root of the `google_cloud_storage`
 package and run the tests:
 
 ```bash
-# From packages/google_cloud_storage
+# From pkgs/google_cloud_storage
 STORAGE_EMULATOR_HOST=127.0.0.1:9199 dart test emulator_test
 ```
 

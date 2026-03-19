@@ -23,27 +23,25 @@ void main() async {
   late Storage storage;
 
   group('bucket metadata', () {
-    setUp(() {
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], () {
+      setUp(() {
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test('simple', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'bkt_meta_simple',
-      );
+      test('simple', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'bkt_meta_simple',
+        );
 
-      final metadata = await storage.bucketMetadata(bucketName);
-      expect(metadata.name, bucketName);
-      expect(metadata.metageneration, BigInt.one);
-    });
+        final metadata = await storage.bucketMetadata(bucketName);
+        expect(metadata.name, bucketName);
+        expect(metadata.metageneration, BigInt.one);
+      });
 
-    test(
-      'with if metageneration match success',
-      tags: ['google-cloud'],
-      () async {
+      test('with if metageneration match success', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'bkt_meta_w_if_mgen_match_ok',
@@ -56,13 +54,9 @@ void main() async {
           ifMetagenerationMatch: metadata.metageneration,
         );
         expect(metadataWithMatch.metageneration, metadata.metageneration);
-      },
-    );
+      });
 
-    test(
-      'with if metageneration match failure',
-      tags: ['google-cloud'],
-      () async {
+      test('with if metageneration match failure', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'bkt_meta_w_if_mgen_match_fail',
@@ -77,14 +71,14 @@ void main() async {
           ),
           throwsA(isA<PreconditionFailedException>()),
         );
-      },
-    );
+      });
 
-    test('non-existant bucket', tags: ['google-cloud'], () async {
-      expect(
-        () => storage.bucketMetadata('non-existent-bucket-name'),
-        throwsA(isA<NotFoundException>()),
-      );
+      test('non-existant bucket', () async {
+        expect(
+          () => storage.bucketMetadata('non-existent-bucket-name'),
+          throwsA(isA<NotFoundException>()),
+        );
+      });
     });
 
     test('retry on transport failure', () async {
