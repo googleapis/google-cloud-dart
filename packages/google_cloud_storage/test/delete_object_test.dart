@@ -26,144 +26,148 @@ void main() async {
   late Storage storage;
 
   group('delete object', () {
-    setUp(() {
-      fixedBoundaryString = 'boundary';
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], () {
+      setUp(() {
+        fixedBoundaryString = 'boundary';
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test('success', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(storage, 'del_obj_ok');
-      await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-        ifGenerationMatch: BigInt.zero,
-      );
+      test('success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'del_obj_ok',
+        );
+        await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+          ifGenerationMatch: BigInt.zero,
+        );
 
-      await storage.deleteObject(bucketName, 'object.txt');
+        await storage.deleteObject(bucketName, 'object.txt');
 
-      expect(
-        () => storage.objectMetadata(bucketName, 'object.txt'),
-        throwsA(isA<NotFoundException>()),
-      );
-    });
+        expect(
+          () => storage.objectMetadata(bucketName, 'object.txt'),
+          throwsA(isA<NotFoundException>()),
+        );
+      });
 
-    test('not found', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'del_obj_not_found',
-      );
+      test('not found', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'del_obj_not_found',
+        );
 
-      expect(
-        () => storage.deleteObject(bucketName, 'non-existent.txt'),
-        throwsA(isA<NotFoundException>()),
-      );
-    });
+        expect(
+          () => storage.deleteObject(bucketName, 'non-existent.txt'),
+          throwsA(isA<NotFoundException>()),
+        );
+      });
 
-    test('with generation success', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'del_obj_w_gen',
-        metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
-      );
-      final obj1 = await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('Text'),
-      );
-      final obj2 = await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('More text'),
-      );
+      test('with generation success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'del_obj_w_gen',
+          metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
+        );
+        final obj1 = await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('Text'),
+        );
+        final obj2 = await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('More text'),
+        );
 
-      // Verify both exist
-      await storage.objectMetadata(
-        bucketName,
-        'object.txt',
-        generation: obj1.generation,
-      );
-      await storage.objectMetadata(
-        bucketName,
-        'object.txt',
-        generation: obj2.generation,
-      );
-
-      // Delete v1
-      await storage.deleteObject(
-        bucketName,
-        'object.txt',
-        generation: obj1.generation,
-      );
-
-      // Verify v1 is gone
-      expect(
-        () => storage.objectMetadata(
+        // Verify both exist
+        await storage.objectMetadata(
           bucketName,
           'object.txt',
           generation: obj1.generation,
-        ),
-        throwsA(isA<NotFoundException>()),
-      );
-
-      // Verify v2 still exists
-      await storage.objectMetadata(
-        bucketName,
-        'object.txt',
-        generation: obj2.generation,
-      );
-    });
-
-    test('with ifGenerationMatch success', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'del_obj_w_if_gen_match_ok',
-      );
-      final obj = await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      await storage.deleteObject(
-        bucketName,
-        'object.txt',
-        ifGenerationMatch: obj.generation,
-      );
-
-      expect(
-        () => storage.objectMetadata(bucketName, 'object.txt'),
-        throwsA(isA<NotFoundException>()),
-      );
-    });
-
-    test('with ifGenerationMatch failure', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'del_obj_w_if_gen_match_fail',
-      );
-      final obj = await storage.uploadObject(
-        bucketName,
-        'object.txt',
-        utf8.encode('content'),
-        ifGenerationMatch: BigInt.zero,
-      );
-      addTearDown(() => storage.deleteObject(bucketName, 'object.txt'));
-
-      expect(
-        () => storage.deleteObject(
+        );
+        await storage.objectMetadata(
           bucketName,
           'object.txt',
-          ifGenerationMatch: obj.generation! + BigInt.one,
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
+          generation: obj2.generation,
+        );
 
-      // Verify object still exists
-      await storage.objectMetadata(bucketName, 'object.txt');
+        // Delete v1
+        await storage.deleteObject(
+          bucketName,
+          'object.txt',
+          generation: obj1.generation,
+        );
+
+        // Verify v1 is gone
+        expect(
+          () => storage.objectMetadata(
+            bucketName,
+            'object.txt',
+            generation: obj1.generation,
+          ),
+          throwsA(isA<NotFoundException>()),
+        );
+
+        // Verify v2 still exists
+        await storage.objectMetadata(
+          bucketName,
+          'object.txt',
+          generation: obj2.generation,
+        );
+      });
+
+      test('with ifGenerationMatch success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'del_obj_w_if_gen_match_ok',
+        );
+        final obj = await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+          ifGenerationMatch: BigInt.zero,
+        );
+
+        await storage.deleteObject(
+          bucketName,
+          'object.txt',
+          ifGenerationMatch: obj.generation,
+        );
+
+        expect(
+          () => storage.objectMetadata(bucketName, 'object.txt'),
+          throwsA(isA<NotFoundException>()),
+        );
+      });
+      test('with ifGenerationMatch failure', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'del_obj_w_if_gen_match_fail',
+        );
+        final obj = await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+          ifGenerationMatch: BigInt.zero,
+        );
+        addTearDown(() => storage.deleteObject(bucketName, 'object.txt'));
+
+        expect(
+          () => storage.deleteObject(
+            bucketName,
+            'object.txt',
+            ifGenerationMatch: obj.generation! + BigInt.one,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+
+        // Verify object still exists
+        await storage.objectMetadata(bucketName, 'object.txt');
+      });
     });
 
     test('idempotent transport failure', () async {

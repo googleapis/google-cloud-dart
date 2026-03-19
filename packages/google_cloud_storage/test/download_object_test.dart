@@ -32,166 +32,163 @@ void main() async {
   late Storage storage;
 
   group('download object', () {
-    setUp(() async {
-      fixedBoundaryString = 'boundary';
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], () {
+      setUp(() async {
+        fixedBoundaryString = 'boundary';
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test('empty object', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'dl_obj_empty',
-      );
-
-      await storage.uploadObject(
-        bucketName,
-        'object1',
-        [],
-        ifGenerationMatch: BigInt.zero,
-      );
-
-      final data = await storage.downloadObject(bucketName, 'object1');
-
-      expect(data, isEmpty);
-    });
-
-    for (var i = 1; i <= 16_777_216; i *= 4) {
-      test('object of size $i bytes', tags: ['google-cloud'], () async {
+      test('empty object', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'dl_obj_sz_$i',
+          'dl_obj_empty',
         );
 
-        final uploadedData = Uint8List(i);
-        for (var j = 0; j < i; j++) {
-          uploadedData[j] = j % 256;
-        }
         await storage.uploadObject(
           bucketName,
           'object1',
-          uploadedData,
+          [],
           ifGenerationMatch: BigInt.zero,
         );
-        final downloadedData = await storage.downloadObject(
-          bucketName,
-          'object1',
+
+        final data = await storage.downloadObject(bucketName, 'object1');
+
+        expect(data, isEmpty);
+      });
+      for (var i = 1; i <= 16_777_216; i *= 4) {
+        test('object of size $i bytes', () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'dl_obj_sz_$i',
+          );
+
+          final uploadedData = Uint8List(i);
+          for (var j = 0; j < i; j++) {
+            uploadedData[j] = j % 256;
+          }
+          await storage.uploadObject(
+            bucketName,
+            'object1',
+            uploadedData,
+            ifGenerationMatch: BigInt.zero,
+          );
+          final downloadedData = await storage.downloadObject(
+            bucketName,
+            'object1',
+          );
+
+          expect(downloadedData, uploadedData);
+        });
+      }
+
+      test('gzipped', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'dl_obj_gzipped',
         );
 
-        expect(downloadedData, uploadedData);
+        await storage.uploadObject(
+          bucketName,
+          'object1',
+          gzip.encode(utf8.encode('Hello World!')),
+          metadata: ObjectMetadata(
+            contentType: 'text/plain',
+            contentEncoding: 'gzip',
+          ),
+          ifGenerationMatch: BigInt.zero,
+        );
+
+        final data = await storage.downloadObject(bucketName, 'object1');
+
+        expect(data, utf8.encode('Hello World!'));
       });
-    }
 
-    test('gzipped', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'dl_obj_gzipped',
-      );
+      test('with generation', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'dl_obj_gen',
+          metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
+        );
 
-      await storage.uploadObject(
-        bucketName,
-        'object1',
-        gzip.encode(utf8.encode('Hello World!')),
-        metadata: ObjectMetadata(
-          contentType: 'text/plain',
-          contentEncoding: 'gzip',
-        ),
-        ifGenerationMatch: BigInt.zero,
-      );
+        final metadataV1 = await storage.uploadObject(bucketName, 'object1', [
+          1,
+        ], ifGenerationMatch: BigInt.zero);
+        addTearDown(
+          () => storage.deleteObject(
+            bucketName,
+            'object1',
+            generation: metadataV1.generation,
+          ),
+        );
 
-      final data = await storage.downloadObject(bucketName, 'object1');
+        final metadataV2 = await storage.uploadObject(bucketName, 'object1', [
+          2,
+        ], ifGenerationMatch: metadataV1.generation);
+        addTearDown(
+          () => storage.deleteObject(
+            bucketName,
+            'object1',
+            generation: metadataV2.generation,
+          ),
+        );
 
-      expect(data, utf8.encode('Hello World!'));
-    });
-
-    test('with generation', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'dl_obj_gen',
-        metadata: BucketMetadata(versioning: BucketVersioning(enabled: true)),
-      );
-
-      final metadataV1 = await storage.uploadObject(bucketName, 'object1', [
-        1,
-      ], ifGenerationMatch: BigInt.zero);
-      addTearDown(
-        () => storage.deleteObject(
+        final v1Data = await storage.downloadObject(
           bucketName,
           'object1',
           generation: metadataV1.generation,
-        ),
-      );
+        );
+        expect(v1Data, [1]);
 
-      final metadataV2 = await storage.uploadObject(bucketName, 'object1', [
-        2,
-      ], ifGenerationMatch: metadataV1.generation);
-      addTearDown(
-        () => storage.deleteObject(
+        final v2Data = await storage.downloadObject(
           bucketName,
           'object1',
           generation: metadataV2.generation,
-        ),
-      );
+        );
+        expect(v2Data, [2]);
+      });
 
-      final v1Data = await storage.downloadObject(
-        bucketName,
-        'object1',
-        generation: metadataV1.generation,
-      );
-      expect(v1Data, [1]);
+      test('with ifGenerationMatch success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'dl_obj_if_gen_match_ok',
+        );
 
-      final v2Data = await storage.downloadObject(
-        bucketName,
-        'object1',
-        generation: metadataV2.generation,
-      );
-      expect(v2Data, [2]);
-    });
+        final metadata = await storage.uploadObject(bucketName, 'object1', [
+          1,
+        ], ifGenerationMatch: BigInt.zero);
 
-    test('with ifGenerationMatch success', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'dl_obj_if_gen_match_ok',
-      );
-
-      final metadata = await storage.uploadObject(bucketName, 'object1', [
-        1,
-      ], ifGenerationMatch: BigInt.zero);
-
-      // Success case
-      await storage.downloadObject(
-        bucketName,
-        'object1',
-        ifGenerationMatch: metadata.generation,
-      );
-    });
-
-    test('with ifGenerationMatch failure', tags: ['google-cloud'], () async {
-      final bucketName = await createBucketWithTearDown(
-        storage,
-        'dl_obj_if_gen_match_fail',
-      );
-
-      final metadata = await storage.uploadObject(bucketName, 'object1', [
-        1,
-      ], ifGenerationMatch: BigInt.zero);
-
-      // Failure case
-      await expectLater(
-        () => storage.downloadObject(
+        // Success case
+        await storage.downloadObject(
           bucketName,
           'object1',
-          ifGenerationMatch: metadata.generation! + BigInt.one,
-        ),
-        throwsA(isA<PreconditionFailedException>()),
-      );
-    });
+          ifGenerationMatch: metadata.generation,
+        );
+      });
 
-    test(
-      'with ifMetagenerationMatch success',
-      tags: ['google-cloud'],
-      () async {
+      test('with ifGenerationMatch failure', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'dl_obj_if_gen_match_fail',
+        );
+
+        final metadata = await storage.uploadObject(bucketName, 'object1', [
+          1,
+        ], ifGenerationMatch: BigInt.zero);
+
+        // Failure case
+        await expectLater(
+          () => storage.downloadObject(
+            bucketName,
+            'object1',
+            ifGenerationMatch: metadata.generation! + BigInt.one,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+      });
+
+      test('with ifMetagenerationMatch success', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'dl_obj_if_mgen_match_ok',
@@ -206,13 +203,9 @@ void main() async {
           'object1',
           ifMetagenerationMatch: metadata.metageneration,
         );
-      },
-    );
+      });
 
-    test(
-      'with ifMetagenerationMatch failure',
-      tags: ['google-cloud'],
-      () async {
+      test('with ifMetagenerationMatch failure', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'dl_obj_if_mgen_match_fail',
@@ -231,8 +224,8 @@ void main() async {
           ),
           throwsA(isA<PreconditionFailedException>()),
         );
-      },
-    );
+      });
+    });
 
     test('hash failure', () async {
       var count = 0;

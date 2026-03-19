@@ -25,16 +25,14 @@ void main() async {
   late Storage storage;
 
   group('create bucket', () {
-    setUp(() {
-      storage = Storage();
-    });
+    group('google-cloud', tags: ['google-cloud'], () {
+      setUp(() {
+        storage = Storage();
+      });
 
-    tearDown(() => storage.close());
+      tearDown(() => storage.close());
 
-    test(
-      'create_bucket_with_metadata_name_only',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_name_only', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_name_only',
@@ -120,13 +118,9 @@ void main() async {
         );
         expect(actualMetadata.versioning, isNull);
         expect(actualMetadata.website, isNull);
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_autoclass',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_autoclass', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_autoclass',
@@ -155,13 +149,9 @@ void main() async {
             lessThanOrEqualTo(afterRequestTime.microsecondsSinceEpoch),
           ),
         );
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_lifecycle',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_lifecycle', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_lifecycle',
@@ -189,13 +179,9 @@ void main() async {
           DateTime(2025, 12, 11),
         );
         expect(actualMetadata.lifecycle!.rule![0].action!.type, 'Delete');
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_billing',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_billing', () async {
         final bucketName = testBucketName('crt_bkt_w_meta_billing');
 
         final requestMetadata = BucketMetadata(
@@ -212,37 +198,36 @@ void main() async {
         );
 
         expect(actualMetadata.billing?.requesterPays, isTrue);
-      },
-    );
+      });
 
-    test('create_bucket_with_metadata_cors', tags: ['google-cloud'], () async {
-      final bucketName = bucketNameWithTearDown(storage, 'crt_bkt_w_meta_cors');
+      test('create_bucket_with_metadata_cors', () async {
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'crt_bkt_w_meta_cors',
+        );
 
-      final requestMetadata = BucketMetadata(
-        name: bucketName,
-        cors: [
-          BucketCorsConfiguration(
-            maxAgeSeconds: 3600,
-            method: ['GET'],
-            origin: ['*'],
-            responseHeader: ['Content-Type'],
-          ),
-        ],
-      );
+        final requestMetadata = BucketMetadata(
+          name: bucketName,
+          cors: [
+            BucketCorsConfiguration(
+              maxAgeSeconds: 3600,
+              method: ['GET'],
+              origin: ['*'],
+              responseHeader: ['Content-Type'],
+            ),
+          ],
+        );
 
-      final actualMetadata = await storage.createBucket(requestMetadata);
+        final actualMetadata = await storage.createBucket(requestMetadata);
 
-      expect(actualMetadata.cors, hasLength(1));
-      expect(actualMetadata.cors![0].maxAgeSeconds, 3600);
-      expect(actualMetadata.cors![0].method, ['GET']);
-      expect(actualMetadata.cors![0].origin, ['*']);
-      expect(actualMetadata.cors![0].responseHeader, ['Content-Type']);
-    });
+        expect(actualMetadata.cors, hasLength(1));
+        expect(actualMetadata.cors![0].maxAgeSeconds, 3600);
+        expect(actualMetadata.cors![0].method, ['GET']);
+        expect(actualMetadata.cors![0].origin, ['*']);
+        expect(actualMetadata.cors![0].responseHeader, ['Content-Type']);
+      });
 
-    test(
-      'create_bucket_with_metadata_default_event_based_hold',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_default_event_based_hold', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_default_evt_bsd_hld',
@@ -256,13 +241,9 @@ void main() async {
         final actualMetadata = await storage.createBucket(requestMetadata);
 
         expect(actualMetadata.defaultEventBasedHold, isTrue);
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_iam_configuration',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_iam_configuration', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_iam_configuration',
@@ -286,13 +267,9 @@ void main() async {
           actualMetadata.iamConfiguration?.uniformBucketLevelAccess?.enabled,
           isTrue,
         );
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_labels',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_labels', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_labels',
@@ -306,13 +283,9 @@ void main() async {
         final actualMetadata = await storage.createBucket(requestMetadata);
 
         expect(actualMetadata.labels, {'key': 'value'});
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_retention_policy',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_retention_policy', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_ret_pol',
@@ -327,13 +300,9 @@ void main() async {
 
         expect(actualMetadata.retentionPolicy?.retentionPeriod, 100);
         expect(actualMetadata.retentionPolicy?.effectiveTime, isNotNull);
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_soft_delete_policy',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_soft_delete_policy', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_sft_del_pol',
@@ -352,13 +321,9 @@ void main() async {
           actualMetadata.softDeletePolicy?.retentionDurationSeconds,
           604800,
         );
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_storage_class',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_storage_class', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_stg_class',
@@ -372,13 +337,9 @@ void main() async {
         final actualMetadata = await storage.createBucket(requestMetadata);
 
         expect(actualMetadata.storageClass, 'NEARLINE');
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_versioning',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_versioning', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_vers',
@@ -392,13 +353,9 @@ void main() async {
         final actualMetadata = await storage.createBucket(requestMetadata);
 
         expect(actualMetadata.versioning?.enabled, isTrue);
-      },
-    );
+      });
 
-    test(
-      'create_bucket_with_metadata_website',
-      tags: ['google-cloud'],
-      () async {
+      test('create_bucket_with_metadata_website', () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'crt_bkt_w_meta_web',
@@ -416,8 +373,29 @@ void main() async {
 
         expect(actualMetadata.website?.mainPageSuffix, 'index.html');
         expect(actualMetadata.website?.notFoundPage, '404.html');
-      },
-    );
+      });
+
+      test('create_bucket_with_metadata_duplicate', () async {
+        final bucketName = bucketNameWithTearDown(
+          storage,
+          'crt_bkt_w_meta_duplicate',
+        );
+
+        final requestMetadata = BucketMetadata(name: bucketName);
+
+        await storage.createBucket(requestMetadata);
+        expect(
+          () => storage.createBucket(requestMetadata),
+          throwsA(
+            isA<ConflictException>().having(
+              (e) => e.status?.code,
+              'e.status?.code',
+              409,
+            ),
+          ),
+        );
+      });
+    });
 
     test(
       'create_bucket_with_metadata_default_retry_transport_failure',
@@ -479,30 +457,5 @@ void main() async {
       final actualMetadata = await storage.createBucket(requestMetadata);
       expect(actualMetadata.name, 'create_bucket_with_metadata_retry');
     });
-
-    test(
-      'create_bucket_with_metadata_duplicate',
-      tags: ['google-cloud'],
-      () async {
-        final bucketName = bucketNameWithTearDown(
-          storage,
-          'crt_bkt_w_meta_duplicate',
-        );
-
-        final requestMetadata = BucketMetadata(name: bucketName);
-
-        await storage.createBucket(requestMetadata);
-        expect(
-          () => storage.createBucket(requestMetadata),
-          throwsA(
-            isA<ConflictException>().having(
-              (e) => e.status?.code,
-              'e.status?.code',
-              409,
-            ),
-          ),
-        );
-      },
-    );
   });
 }
