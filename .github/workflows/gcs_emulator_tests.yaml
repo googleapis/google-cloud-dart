@@ -19,12 +19,12 @@ on:
   push:
     branches: [main]
     paths:
-      - 'packages/google_cloud_storage/**'
+      - 'pkgs/google_cloud_storage/**'
       - '.github/workflows/gcs_emulator_tests.yaml'
   pull_request:
     branches: [main]
     paths:
-      - 'packages/google_cloud_storage/**'
+      - 'pkgs/google_cloud_storage/**'
       - '.github/workflows/gcs_emulator_tests.yaml'
 
 # We use a specific Dart SDK version here in order to have hermetic,
@@ -34,7 +34,7 @@ env:
 
 defaults:
   run:
-    working-directory: packages/google_cloud_storage
+    working-directory: pkgs/google_cloud_storage
 
 name: Google Cloud Storage Emulator Tests
 jobs:
@@ -67,7 +67,7 @@ jobs:
             ['firebase', 'emulators:start'],
             { stdio: 'ignore', detached: true, shell: process.platform === 'win32' }).unref();
         shell: node {0}
-        working-directory: packages/google_cloud_storage/emulator_test
+        working-directory: pkgs/google_cloud_storage/emulator_test
       - name: Run Tests
         env:
           STORAGE_EMULATOR_HOST: 127.0.0.1:9199
