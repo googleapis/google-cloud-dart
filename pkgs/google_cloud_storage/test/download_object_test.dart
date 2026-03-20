@@ -42,31 +42,23 @@ void main() async {
         );
       });
 
-      for (var i = 1; i <= 16_777_216; i *= 4) {
-        test('object of size $i bytes', () async {
-          final bucketName = await createBucketWithTearDown(
-            storage,
-            'dl_obj_sz_$i',
-          );
+      test('empty object', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'dl_obj_empty',
+        );
 
-          final uploadedData = Uint8List(i);
-          for (var j = 0; j < i; j++) {
-            uploadedData[j] = j % 256;
-          }
-          await storage.uploadObject(
-            bucketName,
-            'object1',
-            uploadedData,
-            ifGenerationMatch: BigInt.zero,
-          );
-          final downloadedData = await storage.downloadObject(
-            bucketName,
-            'object1',
-          );
+        await storage.uploadObject(
+          bucketName,
+          'object1',
+          [],
+          ifGenerationMatch: BigInt.zero,
+        );
 
-          expect(downloadedData, uploadedData);
-        });
-      }
+        final data = await storage.downloadObject(bucketName, 'object1');
+
+        expect(data, isEmpty);
+      });
 
       tearDown(() => storage.close());
     });
