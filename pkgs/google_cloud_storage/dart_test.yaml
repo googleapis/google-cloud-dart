@@ -35,3 +35,4 @@ presets:
     include_tags: firebase-emulator
   storage-testbench:
     include_tags: storage-testbench
+    platforms: [vm]

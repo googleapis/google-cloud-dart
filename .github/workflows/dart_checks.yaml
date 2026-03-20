@@ -60,9 +60,6 @@ jobs:
   storage_testbench_tests:
     name: Storage Testbench Tests
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: ["chrome", "vm"]
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
       - uses: dart-lang/setup-dart@e51d8e571e22473a2ddebf0ef8a2123f0ab2c02c
@@ -70,7 +67,7 @@ jobs:
           sdk: ${{ env.DART_VERSION }}
       - run: dart pub get
       - run: docker run -d --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest
-      - run: dart test -p ${{ matrix.platform }} -P storage-testbench .
+      - run: dart test -P storage-testbench .
 
   generator:
     name: Generators
