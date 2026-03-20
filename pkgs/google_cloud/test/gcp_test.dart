@@ -12,7 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+@TestOn('vm')
+library;
+
 import 'dart:io';
+import 'dart:isolate';
 
 import 'package:google_cloud/constants.dart';
 import 'package:test/test.dart';
@@ -21,7 +25,24 @@ import 'package:test_process/test_process.dart';
 
 void main() {
   group('currentProjectId', () {
-    const projectIdPrint = 'test/src/project_id_print.dart';
+    late String projectIdPrint;
+    late String projectIdLocalNoCachePrint;
+    late String projectIdMetadataCachePrint;
+
+    setUpAll(() async {
+      final packageUri = await Isolate.resolvePackageUri(
+        Uri.parse('package:google_cloud/'),
+      );
+      projectIdPrint = packageUri!
+          .resolve('../test/src/project_id_print.dart')
+          .toFilePath();
+      projectIdLocalNoCachePrint = packageUri
+          .resolve('../test/src/project_id_local_no_cache_print.dart')
+          .toFilePath();
+      projectIdMetadataCachePrint = packageUri
+          .resolve('../test/src/project_id_metadata_cache_print.dart')
+          .toFilePath();
+    });
 
     test(
       'not environment',
@@ -400,7 +421,7 @@ void main() {
 
       // First call - should discover original value
       final proc1 = await _run(
-        'test/src/project_id_local_no_cache_print.dart',
+        projectIdLocalNoCachePrint,
         environment: {
           credentialsPathEnvironmentVariable: d.path('credentials.json'),
         },
@@ -430,7 +451,7 @@ void main() {
 
       try {
         final proc = await _run(
-          'test/src/project_id_metadata_cache_print.dart',
+          projectIdMetadataCachePrint,
           environment: {
             'GCE_METADATA_HOST': '${server.address.address}:${server.port}',
             'PATH': '', // Prevent finding gcloud
@@ -462,8 +483,15 @@ void main() {
 
   group('metadata', () {
     test('gceMetadataHost respects environment', () async {
+      final packageUri = await Isolate.resolvePackageUri(
+        Uri.parse('package:google_cloud/'),
+      );
+      final metadataHostPrint = packageUri!
+          .resolve('../test/src/metadata_host_print.dart')
+          .toFilePath();
+
       final proc = await _run(
-        'test/src/metadata_host_print.dart',
+        metadataHostPrint,
         environment: {'GCE_METADATA_HOST': 'custom.metadata.internal'},
       );
 
@@ -475,7 +503,16 @@ void main() {
   });
 
   group('listenPort', () {
-    const listenPortPrint = 'test/src/listen_port_print.dart';
+    late String listenPortPrint;
+
+    setUpAll(() async {
+      final packageUri = await Isolate.resolvePackageUri(
+        Uri.parse('package:google_cloud/'),
+      );
+      listenPortPrint = packageUri!
+          .resolve('../test/src/listen_port_print.dart')
+          .toFilePath();
+    });
 
     test(
       'no environment',
@@ -506,7 +543,16 @@ void main() {
     'waitForTerminate',
     onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
     () {
-      const terminatePrint = 'test/src/terminate_print.dart';
+      late String terminatePrint;
+
+      setUpAll(() async {
+        final packageUri = await Isolate.resolvePackageUri(
+          Uri.parse('package:google_cloud/'),
+        );
+        terminatePrint = packageUri!
+            .resolve('../test/src/terminate_print.dart')
+            .toFilePath();
+      });
 
       test('sigint', () async {
         final proc = await _run(terminatePrint);
