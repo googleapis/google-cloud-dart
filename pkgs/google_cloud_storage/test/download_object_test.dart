@@ -32,6 +32,14 @@ void main() async {
   late Storage storage;
 
   group('download object', () {
+    group('storage-testbench', tags: ['storage-testbench'], () {
+      setUp(() async {
+        storage = Storage();
+      });
+
+      tearDown(() => storage.close());
+    });
+
     group('google-cloud', tags: ['google-cloud'], () {
       setUp(() async {
         fixedBoundaryString = 'boundary';
