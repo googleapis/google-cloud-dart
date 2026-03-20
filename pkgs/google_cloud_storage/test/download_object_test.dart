@@ -70,6 +70,7 @@ void main() async {
           }),
         );
         print(r.body);
+        final id = (jsonDecode(r.body) as Map<String, dynamic>)['id'] as String;
 
         final bucketName = await createBucketWithTearDown(
           storage,
@@ -83,7 +84,7 @@ void main() async {
           ifGenerationMatch: BigInt.zero,
         );
 
-        client.c1 = r.body;
+        client.c1 = id;
         final data = await storage.downloadObject(bucketName, 'object1');
 
         expect(data, isEmpty);
