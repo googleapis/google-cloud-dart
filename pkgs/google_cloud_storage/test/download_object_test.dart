@@ -34,8 +34,38 @@ void main() async {
   group('download object', () {
     group('storage-testbench', tags: ['storage-testbench'], () {
       setUp(() async {
-        storage = Storage();
+        storage = Storage(
+          projectId: 'test-project',
+          apiEndpoint: 'localhost:9000',
+          useAuthWithCustomEndpoint: false,
+        );
       });
+
+      for (var i = 1; i <= 16_777_216; i *= 4) {
+        test('object of size $i bytes', () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'dl_obj_sz_$i',
+          );
+
+          final uploadedData = Uint8List(i);
+          for (var j = 0; j < i; j++) {
+            uploadedData[j] = j % 256;
+          }
+          await storage.uploadObject(
+            bucketName,
+            'object1',
+            uploadedData,
+            ifGenerationMatch: BigInt.zero,
+          );
+          final downloadedData = await storage.downloadObject(
+            bucketName,
+            'object1',
+          );
+
+          expect(downloadedData, uploadedData);
+        });
+      }
 
       tearDown(() => storage.close());
     });

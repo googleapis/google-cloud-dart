@@ -14,19 +14,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# set -e
-set -o xtrace
-
-# Install docker if it is not already present.
-if ! command -v docker &> /dev/null
-then
-    apt-get update && apt-get install -y docker.io
-fi
-
-CONTAINER_ID=$(docker run -d --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest)
-trap "docker stop $CONTAINER_ID" EXIT
+set -e
 
 dart pub get
 dart test . -P google-cloud
-STORAGE_EMULATOR_HOST=localhost:9000 dart test . -P google-cloud
-
