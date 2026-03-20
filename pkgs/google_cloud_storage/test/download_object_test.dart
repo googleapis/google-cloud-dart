@@ -25,21 +25,52 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
+class ProxyHttpClient extends http.BaseClient {
+  final http.Client _client;
+  String c1 = '1';
+
+  ProxyHttpClient(this._client);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest originalRequest) {
+    originalRequest.headers['x-retry-test-id'] = c1;
+    return _client.send(originalRequest);
+  }
+
+  @override
+  void close() => _client.close();
+}
+
 void main() async {
   late Storage storage;
+  late ProxyHttpClient client;
 
   group('download object', () {
     group('storage-testbench', tags: ['storage-testbench'], () {
       setUp(() async {
+        client = ProxyHttpClient(http.Client());
         storage = Storage(
           projectId: 'test-project',
           apiEndpoint: 'localhost:9000',
           useAuthWithCustomEndpoint: false,
-          client: http.Client(),
+          client: client,
         );
       });
 
       test('empty object', () async {
+        final c2 = http.Client();
+        final r = await c2.post(
+          Uri.parse('http://localhost:9000/retry_test'),
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode({
+            'instructions': {
+              'storage.objects.get': ['return-503'],
+            },
+            'transport': 'HTTP',
+          }),
+        );
+        print(r.body);
+
         final bucketName = await createBucketWithTearDown(
           storage,
           'dl_obj_empty',
@@ -52,6 +83,7 @@ void main() async {
           ifGenerationMatch: BigInt.zero,
         );
 
+        client.c1 = r.body;
         final data = await storage.downloadObject(bucketName, 'object1');
 
         expect(data, isEmpty);
