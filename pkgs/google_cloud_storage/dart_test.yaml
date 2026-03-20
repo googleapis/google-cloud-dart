@@ -21,7 +21,8 @@ concurrency: 1
 tags:
   google-cloud:
   firebase-emulator:
-exclude_tags: google-cloud || firebase-emulator
+  storage-testbench:
+exclude_tags: google-cloud || firebase-emulator || storage-testbench
 
 presets:
   google-cloud:
@@ -32,3 +33,5 @@ presets:
     platforms: [vm]
   firebase-emulator:
     include_tags: firebase-emulator
+  storage-testbench:
+    include_tags: storage-testbench
