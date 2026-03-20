@@ -33,17 +33,7 @@ final _random = Random.secure();
 /// See https://datatracker.ietf.org/doc/html/rfc2046
 const _boundaryChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-/// The boundary string to use when seperating parts of a multipart request.
-///
-/// If `null` then the boundary string will be generated randomly. Setting this
-/// to a fixed value is useful for testing because it results in a deterministic
-/// request body.
-@visibleForTesting
-String? fixedBoundaryString;
-
 String _boundaryString() {
-  if (fixedBoundaryString case final boundary?) return boundary;
-
   // A boundary string has a maximum length of 70 characters.
   // See https://datatracker.ietf.org/doc/html/rfc2046#section-5.1
   var prefix = 'http-boundary-';
