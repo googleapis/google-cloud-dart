@@ -27,13 +27,15 @@ import 'test_utils.dart';
 
 class ProxyHttpClient extends http.BaseClient {
   final http.Client _client;
-  String c1 = '1';
+  String? c1;
 
   ProxyHttpClient(this._client);
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest originalRequest) {
-    originalRequest.headers['x-retry-test-id'] = c1;
+    if (c1 != null) {
+      originalRequest.headers['x-retry-test-id'] = c1!;
+    }
     return _client.send(originalRequest);
   }
 
@@ -86,7 +88,7 @@ void main() async {
 
         client.c1 = id;
         final data = await storage.downloadObject(bucketName, 'object1');
-
+        client.c1 = null;
         expect(data, isEmpty);
       });
 
