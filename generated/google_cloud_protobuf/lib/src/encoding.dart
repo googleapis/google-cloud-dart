@@ -49,7 +49,7 @@ double decodeDouble(Object? value) {
 
 /// Decodes: `INT32_TYPE`, `FIXED32_TYPE`, `SFIXED32_TYPE`, `SINT32_TYPE`,
 /// `UINT32_TYPE`.
-int decodeInt(Object? value) => value as int;
+int decodeInt(Object? value) => decodeInt64(value);
 
 /// Decodes: `INT64_TYPE`, `SINT64_TYPE`, `SFIXED64_TYPE`.
 int decodeInt64(Object? value) =>
