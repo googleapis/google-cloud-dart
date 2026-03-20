@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-library;
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -257,27 +254,26 @@ void main() async {
         );
       });
     });
+  });
 
-    test('hash failure', () async {
-      var count = 0;
-      final mockClient = MockClient((request) async {
-        count++;
-        final headers = {'content-type': 'text/plain; charset=UTF-8'};
-        if (count == 1) {
-          headers['x-goog-hash'] = 'crc32c=/BAD';
-        } else if (count == 2) {
-          headers['x-goog-hash'] = 'md5=/BAD';
-        } else {
-          headers['x-goog-hash'] =
-              'crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA==';
-        }
-        return http.Response('Hello World!', 200, headers: headers);
-      });
-
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      final actualData = await storage.downloadObject('bucket', 'object');
-      expect(actualData, utf8.encode('Hello World!'));
+  test('hash failure', () async {
+    var count = 0;
+    final mockClient = MockClient((request) async {
+      count++;
+      final headers = {'content-type': 'text/plain; charset=UTF-8'};
+      if (count == 1) {
+        headers['x-goog-hash'] = 'crc32c=/BAD';
+      } else if (count == 2) {
+        headers['x-goog-hash'] = 'md5=/BAD';
+      } else {
+        headers['x-goog-hash'] = 'crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA==';
+      }
+      return http.Response('Hello World!', 200, headers: headers);
     });
+
+    final storage = Storage(client: mockClient, projectId: 'fake project');
+
+    final actualData = await storage.downloadObject('bucket', 'object');
+    expect(actualData, utf8.encode('Hello World!'));
   });
 }
