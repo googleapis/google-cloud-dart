@@ -38,6 +38,7 @@ void main() async {
           projectId: 'test-project',
           apiEndpoint: 'localhost:9000',
           useAuthWithCustomEndpoint: false,
+          client: http.Client(),
         );
       });
 
