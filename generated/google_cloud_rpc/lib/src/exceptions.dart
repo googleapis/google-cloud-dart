@@ -203,7 +203,8 @@ final class ServiceException implements Exception {
     final Status status;
     print('responseBody: $responseBody');
     print('json: $json');
-    // {"error":{"code":"503","message":{"error":{"message":"Retry Test: Caused a 503"}}}}
+    // {"error":{"code":"503","message":{"error": 
+    // {"message":"Retry Test: Caused a 503"}}}}
 
     if (json case {
       'error': {'code': int _, 'message': String _, 'details': List<Object?> _},
