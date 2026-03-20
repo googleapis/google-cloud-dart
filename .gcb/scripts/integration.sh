@@ -16,5 +16,8 @@
 
 set -e
 
+docker run --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest
 dart pub get
 dart test . -P google-cloud
+STORAGE_EMULATOR_HOST=localhost:9000 dart test . -P google-cloud
+
