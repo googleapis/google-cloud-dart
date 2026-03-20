@@ -25,64 +25,22 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
-final class RetryHttpClient extends http.BaseClient {
-  final http.Client _client;
-  String? retryTestId;
-
-  RetryHttpClient(this._client);
-
-  @override
-  Future<http.StreamedResponse> send(http.BaseRequest originalRequest) {
-    if (retryTestId case final id?) {
-      originalRequest.headers['x-retry-test-id'] = id;
-    }
-    return _client.send(originalRequest);
-  }
-
-  @override
-  void close() => _client.close();
-}
-
-final class Foo {
-  final http.Client _client;
-  final List<String> _retryTests = [];
-
-  Foo(this._client);
-
-  Future<String> createRetryTest(Object test) async {
-    final id = (await _client.post(
-      Uri.http('localhost:9000', '/retry_test'),
-      headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(test),
-    )).body;
-    _retryTests.add(id);
-    return id;
-  }
-
-  Future<void> close() async {
-    for (var id in _retryTests) {
-      await _client.delete(Uri.http('localhost:9000', '/retry_test/$id'));
-    }
-    _client.close();
-  }
-}
-
 void main() async {
   late Storage storage;
-  late RetryHttpClient client;
-  late Foo retryCreator;
+  late RetryTestHttpClient client;
+  late RetryTestCreator retryCreator;
 
   group('download object', () {
     group('storage-testbench', tags: ['storage-testbench'], () {
       setUp(() async {
-        client = RetryHttpClient(http.Client());
+        client = RetryTestHttpClient(http.Client());
         storage = Storage(
           projectId: 'test-project',
           apiEndpoint: 'localhost:9000',
           useAuthWithCustomEndpoint: false,
           client: client,
         );
-        retryCreator = Foo(http.Client());
+        retryCreator = RetryTestCreator(http.Client());
       });
 
       tearDown(() async {
