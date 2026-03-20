@@ -200,18 +200,16 @@ final class ServiceException implements Exception {
       );
     }
 
-    Status? status;
+    final Status status;
     print('responseBody: $responseBody');
     print('json: $json');
     // {"error":{"code":"503","message":{"error":{"message":"Retry Test: Caused a 503"}}}}
-    if (json is Map<String, dynamic> && json['error'] is Map<String, dynamic>) {
-      try {
-        status = Status.fromJson(json['error'] as Map<String, dynamic>);
-      } on FormatException {
-        // ignore: empty_catches, avoid_catching_errors
-      } on TypeError {}
-    }
-    if (status == null) {
+
+    if (json case {
+      'error': {'code': int _, 'message': String _, 'details': List<Object?> _},
+    }) {
+      status = Status.fromJson(json['error'] as Map<String, dynamic>);
+    } else {
       return ServiceException._fromDecodedResponse(
         responseBody,
         response: response,
