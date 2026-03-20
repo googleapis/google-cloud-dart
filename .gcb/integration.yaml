@@ -25,6 +25,7 @@ serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/integration-test-runner@
 steps:
   - id: Run integration tests
     name: 'dart:stable'
+    entrypoint: 'bash'
     args: ['.gcb/scripts/integration.sh']
     secretEnv: ['GITHUB_TOKEN']
     env:

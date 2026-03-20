@@ -16,7 +16,15 @@
 
 set -e
 
-docker run --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest
+# Install docker if it is not already present.
+if ! command -v docker &> /dev/null
+then
+    apt-get update && apt-get install -y docker.io
+fi
+
+CONTAINER_ID=$(docker run -d --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest)
+trap "docker stop $CONTAINER_ID" EXIT
+
 dart pub get
 dart test . -P google-cloud
 STORAGE_EMULATOR_HOST=localhost:9000 dart test . -P google-cloud
