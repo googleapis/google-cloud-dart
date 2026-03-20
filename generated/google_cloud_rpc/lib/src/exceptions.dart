@@ -201,6 +201,7 @@ final class ServiceException implements Exception {
     }
 
     final Status status;
+    print('responseBody: $responseBody');
     print('json: $json');
     if (json is Map<String, dynamic> && json['error'] is Map<String, dynamic>) {
       status = Status.fromJson(json['error'] as Map<String, dynamic>);
