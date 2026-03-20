@@ -35,7 +35,6 @@ Map<String, String> _parseHashes(List<String> hashes) {
 
 Future<Uint8List> downloadFile(http.Client client, Uri url) async {
   final response = await client.get(url, headers: {'Accept-Encoding': 'gzip'});
-  print(response);
   if (response.statusCode < 200 || response.statusCode >= 300) {
     throw ServiceException.fromHttpResponse(response, response.body);
   }
