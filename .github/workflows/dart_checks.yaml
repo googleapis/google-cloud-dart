@@ -43,7 +43,7 @@ jobs:
       - name: Format
         run: dart format --output=none --set-exit-if-changed .
 
-  tests:
+  unit_tests:
     name: Unit Tests
     runs-on: ubuntu-latest
     strategy:
@@ -59,7 +59,7 @@ jobs:
       - run: docker run -d --rm -p 9000:9000 -p 8888:8888 gcr.io/cloud-devrel-public-resources/storage-testbench:latest
       - run: dart test -p ${{ matrix.platform }} -P storage-testbench .
 
-  tests:
+  storage_testbench_tests:
     name: Storage Testbench Tests
     runs-on: ubuntu-latest
     strategy:
