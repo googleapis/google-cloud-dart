@@ -108,11 +108,12 @@ final class RetryTestCreator {
   RetryTestCreator(this._client);
 
   Future<String> createRetryTest(Object test) async {
-    final id = (await _client.post(
+    final responseBody = (await _client.post(
       Uri.http('localhost:9000', '/retry_test'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(test),
     )).body;
+    final id = (jsonDecode(responseBody) as Map<String, dynamic>)['id'] as String;
     _retryTests.add(id);
     return id;
   }
