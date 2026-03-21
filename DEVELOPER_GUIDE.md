@@ -54,6 +54,11 @@ To run these tests locally (they are automatically run for PRs using
     $ GOOGLE_CLOUD_PROJECT=$(gcloud config get-value project) dart test . -P google-cloud
     ```
 
+#### Troubleshooting
+
+*   **Missing Scopes:** If a test fails with `insufficient_scope`, check the error message for the required scope URL and re-authenticate with that scope.
+*   **Disabled APIs:** If a test fails with a `ForbiddenException` stating an API has not been used, follow the URL in the error message to enable the API in the Google Cloud Console.
+
 ### Running against Storage Testbench
 
 Some integration tests in `package:google_cloud_storage` use the
@@ -74,11 +79,6 @@ To run these tests locally (they are automatically run for PRs using a
     ```bash
     $ dart test . -P storage-testbench
     ```
-
-#### Troubleshooting
-
-*   **Missing Scopes:** If a test fails with `insufficient_scope`, check the error message for the required scope URL and re-authenticate with that scope.
-*   **Disabled APIs:** If a test fails with a `ForbiddenException` stating an API has not been used, follow the URL in the error message to enable the API in the Google Cloud Console.
 
 ## Pull Requests
 
