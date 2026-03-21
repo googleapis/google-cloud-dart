@@ -201,7 +201,14 @@ final class ServiceException implements Exception {
     }
 
     final Status status;
-    if (json is Map<String, dynamic> && json['error'] is Map<String, dynamic>) {
+    // The Storage Testbench sometimes returns non-conformant `Status` responses
+    // with an object for the `'message'` field.
+    // See https://github.com/googleapis/storage-testbench
+    if (json is Map<String, dynamic> &&
+        json['error'] is Map<String, dynamic> &&
+        (json['error'] as Map<String, dynamic>)['code'] is int? &&
+        (json['error'] as Map<String, dynamic>)['message'] is String? &&
+        (json['error'] as Map<String, dynamic>)['details'] is List<Object?>?) {
       status = Status.fromJson(json['error'] as Map<String, dynamic>);
     } else {
       return ServiceException._fromDecodedResponse(

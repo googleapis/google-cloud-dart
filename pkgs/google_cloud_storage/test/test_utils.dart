@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import 'dart:convert';
 import 'dart:math';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 
 const _bucketChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
@@ -78,4 +80,55 @@ Future<String> createBucketWithTearDown(
     enableObjectRetention: enableObjectRetention,
   );
   return bucketName;
+}
+
+/// An HTTP client that can add a `x-retry-test-id` header to requests for
+/// testing with Storage Testbench.
+///
+/// See https://github.com/googleapis/storage-testbench.
+final class RetryTestHttpClient extends http.BaseClient {
+  final http.Client _client;
+  String? retryTestId;
+
+  RetryTestHttpClient(this._client);
+
+  @override
+  Future<http.StreamedResponse> send(http.BaseRequest originalRequest) {
+    if (retryTestId case final id?) {
+      originalRequest.headers['x-retry-test-id'] = id;
+    }
+    return _client.send(originalRequest);
+  }
+
+  @override
+  void close() => _client.close();
+}
+
+/// A client that can create Storage Testbench Retry Tests.
+///
+/// See https://github.com/googleapis/storage-testbench?tab=readme-ov-file#creating-a-new-retry-test
+final class RetryTestCreator {
+  final http.Client _client;
+  final List<String> _retryTests = [];
+
+  RetryTestCreator(this._client);
+
+  Future<String> createRetryTest(Object test) async {
+    final responseBody = (await _client.post(
+      Uri.http('localhost:9000', '/retry_test'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode(test),
+    )).body;
+    final id =
+        (jsonDecode(responseBody) as Map<String, dynamic>)['id'] as String;
+    _retryTests.add(id);
+    return id;
+  }
+
+  Future<void> close() async {
+    for (var id in _retryTests) {
+      await _client.delete(Uri.http('localhost:9000', '/retry_test/$id'));
+    }
+    _client.close();
+  }
 }

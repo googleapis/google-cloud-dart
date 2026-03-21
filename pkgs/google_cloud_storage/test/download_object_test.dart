@@ -12,9 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-@TestOn('vm')
-library;
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
@@ -30,8 +27,54 @@ import 'test_utils.dart';
 
 void main() async {
   late Storage storage;
+  late RetryTestHttpClient client;
+  late RetryTestCreator retryCreator;
 
   group('download object', () {
+    group('storage-testbench', tags: ['storage-testbench'], () {
+      setUp(() async {
+        client = RetryTestHttpClient(http.Client());
+        storage = Storage(
+          projectId: 'test-project',
+          apiEndpoint: 'localhost:9000',
+          useAuthWithCustomEndpoint: false,
+          client: client,
+        );
+        retryCreator = RetryTestCreator(http.Client());
+      });
+
+      tearDown(() async {
+        await retryCreator.close();
+        storage.close();
+      });
+
+      test('two 503s and then success', () async {
+        final id = await retryCreator.createRetryTest({
+          'instructions': {
+            'storage.objects.get': ['return-503', 'return-503'],
+          },
+          'transport': 'HTTP',
+        });
+
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'dl_obj_empty',
+        );
+
+        await storage.uploadObject(
+          bucketName,
+          'object1',
+          [],
+          ifGenerationMatch: BigInt.zero,
+        );
+
+        client.retryTestId = id;
+        final data = await storage.downloadObject(bucketName, 'object1');
+        client.retryTestId = null;
+        expect(data, isEmpty);
+      });
+    });
+
     group('google-cloud', tags: ['google-cloud'], () {
       setUp(() async {
         fixedBoundaryString = 'boundary';
@@ -226,27 +269,26 @@ void main() async {
         );
       });
     });
+  });
 
-    test('hash failure', () async {
-      var count = 0;
-      final mockClient = MockClient((request) async {
-        count++;
-        final headers = {'content-type': 'text/plain; charset=UTF-8'};
-        if (count == 1) {
-          headers['x-goog-hash'] = 'crc32c=/BAD';
-        } else if (count == 2) {
-          headers['x-goog-hash'] = 'md5=/BAD';
-        } else {
-          headers['x-goog-hash'] =
-              'crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA==';
-        }
-        return http.Response('Hello World!', 200, headers: headers);
-      });
-
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-
-      final actualData = await storage.downloadObject('bucket', 'object');
-      expect(actualData, utf8.encode('Hello World!'));
+  test('hash failure', () async {
+    var count = 0;
+    final mockClient = MockClient((request) async {
+      count++;
+      final headers = {'content-type': 'text/plain; charset=UTF-8'};
+      if (count == 1) {
+        headers['x-goog-hash'] = 'crc32c=/BAD';
+      } else if (count == 2) {
+        headers['x-goog-hash'] = 'md5=/BAD';
+      } else {
+        headers['x-goog-hash'] = 'crc32c=/mzx3A==,md5=7Qdih1MuhjZehB6Sv8UNjA==';
+      }
+      return http.Response('Hello World!', 200, headers: headers);
     });
+
+    final storage = Storage(client: mockClient, projectId: 'fake project');
+
+    final actualData = await storage.downloadObject('bucket', 'object');
+    expect(actualData, utf8.encode('Hello World!'));
   });
 }
