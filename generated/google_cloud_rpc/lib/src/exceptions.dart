@@ -201,11 +201,6 @@ final class ServiceException implements Exception {
     }
 
     final Status status;
-    print('responseBody: $responseBody');
-    print('json: $json');
-    // {"error":{"code":"503","message":{"error":
-    // {"message":"Retry Test: Caused a 503"}}}}
-
     // The Storage Testbench sometimes returns non-conformant `Status` responses
     // with an object for the `'message'` field.
     // See https://github.com/googleapis/storage-testbench
