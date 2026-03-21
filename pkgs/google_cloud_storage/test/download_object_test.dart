@@ -73,7 +73,6 @@ void main() async {
         client.retryTestId = null;
         expect(data, isEmpty);
       });
-
     });
 
     group('google-cloud', tags: ['google-cloud'], () {

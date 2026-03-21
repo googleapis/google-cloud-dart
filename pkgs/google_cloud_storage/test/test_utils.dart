@@ -82,7 +82,6 @@ Future<String> createBucketWithTearDown(
   return bucketName;
 }
 
-
 final class RetryTestHttpClient extends http.BaseClient {
   final http.Client _client;
   String? retryTestId;
