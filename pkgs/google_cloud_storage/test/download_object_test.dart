@@ -48,10 +48,10 @@ void main() async {
         storage.close();
       });
 
-      test('empty object', () async {
+      test('two 503s and then success', () async {
         final id = await retryCreator.createRetryTest({
           'instructions': {
-            'storage.objects.get': ['return-503'],
+            'storage.objects.get': ['return-503', 'return-503'],
           },
           'transport': 'HTTP',
         });

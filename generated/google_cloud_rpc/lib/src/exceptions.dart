@@ -206,6 +206,9 @@ final class ServiceException implements Exception {
     // {"error":{"code":"503","message":{"error":
     // {"message":"Retry Test: Caused a 503"}}}}
 
+    // The Storage Testbench sometimes returns non-conformant `Status` responses
+    // with an object for the `'message'` field.
+    // See https://github.com/googleapis/storage-testbench
     if (json is Map<String, dynamic> &&
         json['error'] is Map<String, dynamic> &&
         (json['error'] as Map<String, dynamic>)['code'] is int? &&

@@ -82,6 +82,10 @@ Future<String> createBucketWithTearDown(
   return bucketName;
 }
 
+/// An HTTP client that can add a `x-retry-test-id` header to requests for
+/// testing with Storage Testbench.
+///
+/// See https://github.com/googleapis/storage-testbench.
 final class RetryTestHttpClient extends http.BaseClient {
   final http.Client _client;
   String? retryTestId;
@@ -100,7 +104,9 @@ final class RetryTestHttpClient extends http.BaseClient {
   void close() => _client.close();
 }
 
-// https://github.com/googleapis/storage-testbench?tab=readme-ov-file#creating-a-new-retry-test
+/// A client that can create Storage Testbench Retry Tests.
+///
+/// See https://github.com/googleapis/storage-testbench?tab=readme-ov-file#creating-a-new-retry-test
 final class RetryTestCreator {
   final http.Client _client;
   final List<String> _retryTests = [];
@@ -113,7 +119,8 @@ final class RetryTestCreator {
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(test),
     )).body;
-    final id = (jsonDecode(responseBody) as Map<String, dynamic>)['id'] as String;
+    final id =
+        (jsonDecode(responseBody) as Map<String, dynamic>)['id'] as String;
     _retryTests.add(id);
     return id;
   }
