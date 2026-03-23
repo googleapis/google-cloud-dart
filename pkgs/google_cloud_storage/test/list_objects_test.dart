@@ -19,7 +19,6 @@ library;
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:google_cloud_storage/src/file_upload.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -29,7 +28,6 @@ void main() async {
 
   group('list objects', () {
     setUp(() {
-      fixedBoundaryString = 'boundary';
       storage = Storage();
     });
 

@@ -19,7 +19,6 @@ import 'dart:typed_data';
 import 'package:crypto/crypto.dart' as crypto;
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
-import 'package:meta/meta.dart';
 
 import 'crc32c.dart';
 import 'object_metadata.dart';
@@ -33,17 +32,7 @@ final _random = Random.secure();
 /// See https://datatracker.ietf.org/doc/html/rfc2046
 const _boundaryChars = 'abcdefghijklmnopqrstuvwxyz0123456789';
 
-/// The boundary string to use when seperating parts of a multipart request.
-///
-/// If `null` then the boundary string will be generated randomly. Setting this
-/// to a fixed value is useful for testing because it results in a deterministic
-/// request body.
-@visibleForTesting
-String? fixedBoundaryString;
-
 String _boundaryString() {
-  if (fixedBoundaryString case final boundary?) return boundary;
-
   // A boundary string has a maximum length of 70 characters.
   // See https://datatracker.ietf.org/doc/html/rfc2046#section-5.1
   var prefix = 'http-boundary-';
