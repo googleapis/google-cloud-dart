@@ -40,9 +40,13 @@ void main() async {
 
         final requestMetadata = BucketMetadata(name: bucketName);
 
-        final beforeRequestTime = DateTime.now().toUtc();
+        final beforeRequestTime = DateTime.now().toUtc().subtract(
+          const Duration(seconds: 1), // Add some buffer for clock skew.
+        );
         final actualMetadata = await storage.createBucket(requestMetadata);
-        final afterRequestTime = DateTime.now().toUtc();
+        final afterRequestTime = DateTime.now().toUtc().add(
+          const Duration(seconds: 1), // Add some buffer for clock skew.
+        );
 
         expect(actualMetadata.acl, isNull);
         expect(actualMetadata.autoclass, isNull);
@@ -134,9 +138,13 @@ void main() async {
           ),
         );
 
-        final beforeRequestTime = DateTime.now().toUtc();
+        final beforeRequestTime = DateTime.now().toUtc().subtract(
+          const Duration(seconds: 1), // Add some buffer for clock skew.
+        );
         final actualMetadata = await storage.createBucket(requestMetadata);
-        final afterRequestTime = DateTime.now().toUtc();
+        final afterRequestTime = DateTime.now().toUtc().add(
+          const Duration(seconds: 1), // Add some buffer for clock skew.
+        );
 
         expect(actualMetadata.autoclass!.enabled, true);
         expect(actualMetadata.autoclass!.terminalStorageClass, 'NEARLINE');
