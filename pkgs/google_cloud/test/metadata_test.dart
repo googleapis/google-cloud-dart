@@ -130,6 +130,11 @@ void main() {
   });
 
   group('serviceAccountEmailFromMetadataServer', () {
+    test('metadata server on cloud', tags: ['google-cloud'], () async {
+      final email = await serviceAccountEmailFromMetadataServer();
+      expect(email, 'test-sa@example.com');
+    });
+
     test('success', () async {
       final client = MockClient((request) async {
         if (request.url.path.endsWith(
