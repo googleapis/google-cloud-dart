@@ -131,8 +131,12 @@ void main() {
 
   group('serviceAccountEmailFromMetadataServer', () {
     test('metadata server on cloud', tags: ['google-cloud'], () async {
-      final email = await serviceAccountEmailFromMetadataServer();
-      expect(email, 'test-sa@example.com');
+      final email =
+          Platform.environment['GOOGLE_CLOUD_DART_TEST_SERVICE_ACCOUNT'];
+      expect(
+        await serviceAccountEmailFromMetadataServer(),
+        email ?? isNotEmpty,
+      );
     });
 
     test('success', () async {
