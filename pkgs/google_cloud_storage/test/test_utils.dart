@@ -113,6 +113,12 @@ final class RetryTestCreator {
 
   RetryTestCreator(this._client);
 
+  /// Creates a new retry test and returns the test id that can be used in the
+  /// `x-retry-test-id` header.
+  ///
+  /// The [test] object is a JSON-serializable object that describes the retry
+  /// test. See
+  /// https://github.com/googleapis/storage-testbench?tab=readme-ov-file#creating-a-new-retry-test
   Future<String> createRetryTest(Object test) async {
     final responseBody = (await _client.post(
       Uri.http('localhost:9000', '/retry_test'),
