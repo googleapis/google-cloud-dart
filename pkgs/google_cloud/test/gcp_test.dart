@@ -49,6 +49,7 @@ void main() {
     test('foo', tags: ['google-cloud'], () async {
       final projectId = projectIdFromEnvironmentVariables();
       final proc = await _run(projectIdPrint, environment: {});
+      print('projectId: $projectId');
 
       await expectLater(proc.stdout, emits(projectId));
       await expectLater(proc.stderr, emitsDone);
