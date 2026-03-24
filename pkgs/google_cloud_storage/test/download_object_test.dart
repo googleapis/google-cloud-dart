@@ -17,8 +17,6 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:google_cloud_storage/src/file_upload.dart'
-    show fixedBoundaryString;
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
@@ -77,7 +75,6 @@ void main() async {
 
     group('google-cloud', tags: ['google-cloud'], () {
       setUp(() async {
-        fixedBoundaryString = 'boundary';
         storage = Storage();
       });
 

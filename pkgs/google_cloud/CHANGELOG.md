@@ -1,4 +1,4 @@
-## 0.3.1-wip
+## 0.3.1
 
 - Fix a bug where `projectIdFromGcloudConfig()` used the incorrect gcloud shell
   command on Windows.
