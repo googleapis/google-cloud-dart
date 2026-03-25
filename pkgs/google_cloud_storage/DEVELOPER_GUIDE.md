@@ -17,6 +17,8 @@ To run these tests locally (they are automatically run for PRs using a
     ```
 
 2.  **Run the tests:**
+
+    From the root of the project:
     ```bash
     $ dart test pkgs/google_cloud_storage -P storage-testbench
     ```
