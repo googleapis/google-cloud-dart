@@ -1,6 +1,7 @@
 # Generated packages
 
-This directory contains the generated Google Cloud API packages.
+This directory contains Google Cloud API packages that are automatically
+generated from API descriptions.
 
 ## Developing
 
