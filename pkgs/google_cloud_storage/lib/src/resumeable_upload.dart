@@ -23,6 +23,9 @@ import 'package:meta/meta.dart';
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
 
+// Upload chunk sizes must be a multiple of 256KiB.
+//
+// See https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#chunked-upload
 const _minWriteSize = 256 * 1024;
 
 int _largestWriteSize(int number) => (number ~/ _minWriteSize) * _minWriteSize;
@@ -70,25 +73,11 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _writeBufferSize += data.length;
   }
 
-  ResumableUploadSink._(this._client, this._locationResponse);
-
-  @override
-  void add(List<int> event) {
-    if (_isClosing || _closedCompleter.isCompleted) {
-      throw StateError('ResumableUploadSink is already closed');
-    }
-    if (_isAddStream) {
-      throw StateError('ResumableUploadSink is already bound to a stream');
-    }
-
-    _addToBuffer(event);
-  }
-
   Future<void> _flush() async {
     final flushPoint = _largestWriteSize(_writeBufferSize);
     if (flushPoint == 0) return;
     final flushBuffer = _writeBuffer;
-    _writeBuffer = _writeBuffer.sublist(flushPoint, _writeBufferSize);
+    _writeBuffer = _writeBuffer.sublist(flushPoint);
     _writeBufferSize -= flushPoint;
 
     final newEnd = _nextExpectedByte + flushPoint;
@@ -106,6 +95,20 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/218):
     // Check the "range" headers to determine if any data must be resent.
     _nextExpectedByte = newEnd;
+  }
+
+  ResumableUploadSink._(this._client, this._locationResponse);
+
+  @override
+  void add(List<int> event) {
+    if (_isClosing || _closedCompleter.isCompleted) {
+      throw StateError('ResumableUploadSink is already closed');
+    }
+    if (_isAddStream) {
+      throw StateError('ResumableUploadSink is already bound to a stream');
+    }
+
+    _addToBuffer(event);
   }
 
   @override
