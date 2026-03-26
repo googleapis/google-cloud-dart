@@ -8,18 +8,18 @@ import 'package:http/http.dart' as http;
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
 
-class ResumableUpload implements StreamSink<List<int>> {
+class ResumableUploadSink implements StreamSink<List<int>> {
   static const _minWriteSize = 256 * 1024;
   bool _isClosing = false;
   bool _isAddStream = false;
-
+  final Completer<bool> _closedCompleter = Completer<bool>();
   final FutureOr<http.Client> _client;
   final Future<http.Response> _locationResponse;
   int _nextExpectedByte = 0;
   Uint8List _writeBuffer = Uint8List(_minWriteSize * 2);
   int _writeBufferSize = 0;
 
-  ResumableUpload._(this._client, this._locationResponse);
+  ResumableUploadSink._(this._client, this._locationResponse);
 
   Future<Uri> get _sessionUri async {
     final response = await _locationResponse;
@@ -55,8 +55,10 @@ class ResumableUpload implements StreamSink<List<int>> {
 
   @override
   void add(List<int> event) {
-    if (_isClosing) throw Exception('Cannot add to closed stream');
-    if (_isAddStream) throw Exception('Cannot add to stream after addStream');
+    if (_isClosing || _closedCompleter.isCompleted) {
+      throw StateError('Cannot add to closed stream');
+    }
+    if (_isAddStream) throw StateError('Cannot add to stream after addStream');
 
     addToBuffer(event);
   }
@@ -84,13 +86,15 @@ class ResumableUpload implements StreamSink<List<int>> {
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
-    // TODO: implement addError
+    throw UnsupportedError('addError not supported by ResumableUpload');
   }
 
   @override
   Future<dynamic> addStream(Stream<List<int>> stream) async {
-    if (_isClosing) throw Exception('Cannot add to closed stream');
-    if (_isAddStream) throw Exception('Cannot add to stream after addStream');
+    if (_isClosing || _closedCompleter.isCompleted) {
+      throw Exception('Cannot add to closed stream');
+    }
+    if (_isAddStream) throw StateError('Cannot add to stream after addStream');
 
     _isAddStream = true;
     try {
@@ -105,32 +109,36 @@ class ResumableUpload implements StreamSink<List<int>> {
 
   @override
   Future<dynamic> close() async {
-    if (_isAddStream) throw Exception('Cannot add to stream after addStream');
+    if (_isAddStream) throw StateError('Cannot add to stream after addStream');
     _isClosing = true;
 
-    final newEnd = _nextExpectedByte + _writeBufferSize;
-    final response = await (await _client).put(
-      await _sessionUri,
-      headers: {
-        'Content-Range': 'bytes $_nextExpectedByte-+${newEnd - 1}/$newEnd',
-      },
-      body: _writeBuffer.sublist(0, _writeBufferSize),
-    );
+    try {
+      final newEnd = _nextExpectedByte + _writeBufferSize;
+      final response = await (await _client).put(
+        await _sessionUri,
+        headers: {
+          'Content-Range': 'bytes $_nextExpectedByte-+${newEnd - 1}/$newEnd',
+        },
+        body: _writeBuffer.sublist(0, _writeBufferSize),
+      );
 
-    if (response.statusCode < 200 || response.statusCode >= 300) {
-      throw ServiceException.fromHttpResponse(response, response.body);
+      if (response.statusCode < 200 || response.statusCode >= 300) {
+        throw ServiceException.fromHttpResponse(response, response.body);
+      }
+      _closedCompleter.complete(true);
+    } finally {
+      _isClosing = false;
     }
   }
 
   @override
-  // TODO: implement done
-  Future<dynamic> get done => throw UnimplementedError();
+  Future<dynamic> get done => _closedCompleter.future;
 
   static int _largestWriteSize(int number) =>
       (number ~/ _minWriteSize) * _minWriteSize;
 }
 
-ResumableUpload uploadFileStream(
+ResumableUploadSink uploadFileStream(
   FutureOr<http.Client> client,
   Uri url, {
   ObjectMetadata? metadata,
@@ -152,5 +160,5 @@ ResumableUpload uploadFileStream(
     ),
   );
 
-  return ResumableUpload._(client, response);
+  return ResumableUploadSink._(client, response);
 }

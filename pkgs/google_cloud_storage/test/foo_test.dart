@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'dart:typed_data';
 
@@ -34,7 +35,7 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        final sink = storage.foo(bucketName, 'name')
+        final sink = storage.uploadObjectFromSink(bucketName, 'name')
           ..add([1, 2, 3])
           ..add([4, 5, 6]);
         await sink.close();
@@ -49,7 +50,7 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        final sink = storage.foo(bucketName, 'name')
+        final sink = storage.uploadObjectFromSink(bucketName, 'name')
           ..add(small)
           ..add(large)
           ..add(small);
@@ -65,7 +66,7 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        final sink = storage.foo(bucketName, 'name');
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
 
         await sink.addStream(
           Stream.fromIterable([
@@ -85,7 +86,7 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        final sink = storage.foo(bucketName, 'name');
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
 
         await sink.addStream(Stream.fromIterable([small, large, small]));
         await sink.close();
@@ -100,7 +101,7 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        final sink = storage.foo(bucketName, 'name')
+        final sink = storage.uploadObjectFromSink(bucketName, 'name')
           ..add([1, 2, 3])
           ..add([4, 5, 6]);
         await sink.addStream(
@@ -116,6 +117,58 @@ void main() async {
 
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, List.generate(18, (i) => i + 1));
+      });
+
+      test('addStream during addStream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+        final c = StreamController<List<int>>();
+        c.add([1, 2, 3]);
+
+        final addStream1Future = sink.addStream(c.stream);
+        expect(() => sink.add([1, 2, 3]), throwsStateError);
+        c.add([4, 5, 6]);
+        await c.close();
+
+        await addStream1Future;
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test('addStream during addStream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+        final c = StreamController<List<int>>();
+        c.add([1, 2, 3]);
+
+        final addStream1Future = sink.addStream(c.stream);
+        await expectLater(
+          sink.addStream(
+            Stream.fromIterable([
+              [1, 2, 3],
+              [4, 5, 6],
+            ]),
+          ),
+          throwsStateError,
+        );
+        c.add([4, 5, 6]);
+        await c.close();
+
+        await addStream1Future;
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, [1, 2, 3, 4, 5, 6]);
       });
     });
   });

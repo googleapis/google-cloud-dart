@@ -867,7 +867,7 @@ final class Storage {
     );
   }
 
-  ResumableUpload foo(
+  ResumableUploadSink uploadObjectFromSink(
     String bucket,
     String name, {
     ObjectMetadata? metadata,
