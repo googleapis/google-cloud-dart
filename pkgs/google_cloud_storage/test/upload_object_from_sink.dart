@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -21,7 +23,7 @@ void main() async {
   final small = randomUint8List(100);
   final large = randomUint8List(5_000_000);
 
-  group('upload object', () {
+  group('upload object from sink', () {
     group('google-cloud', tags: ['google-cloud'], () {
       setUp(() {
         storage = Storage();
@@ -169,6 +171,34 @@ void main() async {
 
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test('upload exactly 256KB via addStream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+        final exact = randomUint8List(256 * 1024);
+        await sink.addStream(Stream.fromIterable([exact]));
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, exact);
+      });
+
+      test('upload 0 bytes via close', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, isEmpty);
       });
     });
   });

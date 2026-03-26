@@ -871,13 +871,12 @@ final class Storage {
     String bucket,
     String name, {
     ObjectMetadata? metadata,
-  }) =>
-      uploadFileStream(
-        _httpClient,
+  }) => uploadFileStream(
+    _httpClient,
     _requestUrl(
       ['upload', 'storage', 'v1', 'b', bucket, 'o'],
       {'uploadType': 'resumable', 'name': name},
-        ),
+    ),
     metadata: metadata,
   );
 }

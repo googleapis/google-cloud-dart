@@ -73,7 +73,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     final newEnd = _nextExpectedByte + flushPoint;
     final response = await (await _client).put(
       await _sessionUri,
-      headers: {'Content-Range': 'bytes $_nextExpectedByte-+${newEnd - 1}/*'},
+      headers: {'Content-Range': 'bytes $_nextExpectedByte-${newEnd - 1}/*'},
       body: flushBuffer.sublist(0, flushPoint),
     );
 
@@ -114,11 +114,12 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
     try {
       final newEnd = _nextExpectedByte + _writeBufferSize;
+      final contentRange = _writeBufferSize == 0
+          ? 'bytes */$newEnd'
+          : 'bytes $_nextExpectedByte-${newEnd - 1}/$newEnd';
       final response = await (await _client).put(
         await _sessionUri,
-        headers: {
-          'Content-Range': 'bytes $_nextExpectedByte-+${newEnd - 1}/$newEnd',
-        },
+        headers: {'Content-Range': contentRange},
         body: _writeBuffer.sublist(0, _writeBufferSize),
       );
 
