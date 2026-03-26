@@ -1,10 +1,24 @@
+import 'dart:math';
+import 'dart:typed_data';
+
 import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
+Uint8List randomUint8List(int length, {int? seed}) {
+  final random = Random(seed);
+  final l = Uint8List(length);
+  for (var i = 0; i < length; ++i) {
+    l[i] = random.nextInt(255);
+  }
+  return l;
+}
+
 void main() async {
   late Storage storage;
+  final small = randomUint8List(100);
+  final large = randomUint8List(5_000_000);
 
   group('upload object', () {
     group('google-cloud', tags: ['google-cloud'], () {
@@ -20,18 +34,88 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        final x = storage.foo(
-          bucketName,
-          'name',
-          metadata: ObjectMetadata(contentType: 'text/plain'),
-        );
-
-        x.add([1, 2, 3]);
-        x.add([4, 5, 6]);
-        await x.close();
+        final sink = storage.foo(bucketName, 'name')
+          ..add([1, 2, 3])
+          ..add([4, 5, 6]);
+        await sink.close();
 
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test('small, large write', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.foo(bucketName, 'name')
+          ..add(small)
+          ..add(large)
+          ..add(small);
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, small + large + small);
+      });
+
+      test('stream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.foo(bucketName, 'name');
+
+        await sink.addStream(
+          Stream.fromIterable([
+            [1, 2, 3],
+            [4, 5, 6],
+          ]),
+        );
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test('stream 1', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.foo(bucketName, 'name');
+
+        await sink.addStream(Stream.fromIterable([small, large, small]));
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, small + large + small);
+      });
+
+      test('mixed', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_str_no_meta',
+        );
+
+        final sink = storage.foo(bucketName, 'name')
+          ..add([1, 2, 3])
+          ..add([4, 5, 6]);
+        await sink.addStream(
+          Stream.fromIterable([
+            [7, 8, 9],
+            [10, 11, 12],
+          ]),
+        );
+        sink
+          ..add([13, 14, 15])
+          ..add([16, 17, 18]);
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, List.generate(18, (i) => i + 1));
       });
     });
   });
