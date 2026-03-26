@@ -30,6 +30,7 @@ import 'default_project_id_web.dart'
     if (dart.library.io) 'default_project_id_vm.dart';
 import 'file_download.dart';
 import 'file_upload.dart';
+import 'foo.dart';
 import 'object_metadata_json.dart';
 import 'object_metadata_patch_builder.dart'
     show ObjectMetadataPatchBuilderJsonEncodable;
@@ -865,4 +866,21 @@ final class Storage {
       retry: retry,
     );
   }
+
+  Future<void> foo(
+    String bucket,
+    String name,
+    List<int> data,
+    List<int> data2, {
+    ObjectMetadata? metadata,
+  }) async => uploadFileStream(
+    await _httpClient,
+    _requestUrl(
+      ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+      {'uploadType': 'resumable', 'name': name},
+    ),
+    data,
+    data2,
+    metadata: metadata,
+  );
 }
