@@ -235,7 +235,7 @@ void main() async {
         expect(downloaded, List.generate(18, (i) => i + 1));
       });
 
-      test('addStream during addStream', () async {
+      test('add during addStream', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'ul_obj_from_sink_add_w_as',
