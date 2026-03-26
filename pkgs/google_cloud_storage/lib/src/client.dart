@@ -867,20 +867,17 @@ final class Storage {
     );
   }
 
-  Future<void> foo(
+  ResumableUpload foo(
     String bucket,
-    String name,
-    List<int> data,
-    List<int> data2, {
+    String name, {
     ObjectMetadata? metadata,
-  }) async => uploadFileStream(
-    await _httpClient,
+  }) =>
+      uploadFileStream(
+        _httpClient,
     _requestUrl(
       ['upload', 'storage', 'v1', 'b', bucket, 'o'],
       {'uploadType': 'resumable', 'name': name},
-    ),
-    data,
-    data2,
+        ),
     metadata: metadata,
   );
 }

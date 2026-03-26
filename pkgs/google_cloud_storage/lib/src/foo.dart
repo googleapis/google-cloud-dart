@@ -1,40 +1,41 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:typed_data';
 
+import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
 
-class ChunkWriter {
-  final http.Client _client;
-  final Uri sessionUri;
-  int _end;
-
-  ChunkWriter(this._client, this.sessionUri, this._end);
-
-  Future<void> write(List<int> data) async {
-    _client.put(
-      sessionUri,
-      headers: {'Content-Range': 'bytes 0-100/1000'},
-      body: data,
-    );
-  }
-}
-
 class ResumableUpload implements StreamSink<List<int>> {
-  final http.Client _client;
-  final Uri sessionUri;
+  final FutureOr<http.Client> _client;
+  final Future<http.Response> _locationResponse;
+  int _end = 0;
+  Uint8List buffer = Uint8List(256 * 1024 * 2);
+  int _nextBufferByte = 0;
 
-  ResumableUpload(this._client, this.sessionUri);
+  ResumableUpload(this._client, this._locationResponse);
+
+  Future<Uri> get _sessionUri async {
+    final response = await _locationResponse;
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw ServiceException.fromHttpResponse(response, response.body);
+    }
+    final location = response.headers['location'];
+    if (location == null) throw Exception('No location header');
+    return Uri.parse(location);
+  }
 
   @override
   void add(List<int> event) {
-    _client.put(
-      sessionUri,
-      headers: {'Content-Range': 'bytes 0-100/1000'},
-      body: event,
-    );
+    if (_nextBufferByte + event.length > buffer.length) {
+      final newBuffer = Uint8List(buffer.length * 2);
+      newBuffer.setRange(0, _nextBufferByte, buffer);
+      buffer = newBuffer;
+    }
+    buffer.setRange(_nextBufferByte, _nextBufferByte + event.length, event);
+    _nextBufferByte += event.length;
   }
 
   @override
@@ -49,9 +50,17 @@ class ResumableUpload implements StreamSink<List<int>> {
   }
 
   @override
-  Future<dynamic> close() {
-    // TODO: implement close
-    throw UnimplementedError();
+  Future<dynamic> close() async {
+    final newEnd = _end + _nextBufferByte;
+    final response = await (await _client).put(
+      await _sessionUri,
+      headers: {'Content-Range': 'bytes $_end-+${newEnd - 1}/$newEnd'},
+      body: buffer.sublist(0, _nextBufferByte),
+    );
+
+    if (response.statusCode < 200 || response.statusCode >= 300) {
+      throw ServiceException.fromHttpResponse(response, response.body);
+    }
   }
 
   @override
@@ -59,61 +68,27 @@ class ResumableUpload implements StreamSink<List<int>> {
   Future<dynamic> get done => throw UnimplementedError();
 }
 
-Future<void> uploadFileStream(
-  http.Client client,
-  Uri url,
-  List<int> data,
-  List<int> data2, {
+ResumableUpload uploadFileStream(
+  FutureOr<http.Client> client,
+  Uri url, {
   ObjectMetadata? metadata,
-}) async {
+}) {
   final metadataJson = metadata == null
       ? <String, Object?>{}
       : objectMetadataToJson(metadata);
 
-  final request = http.Request('POST', url);
-  request.headers['Content-Type'] = 'application/json';
-  request.body = jsonEncode(metadataJson);
-  request.headers['Content-Length'] = request.bodyBytes.length.toString();
+  final body = jsonEncode(metadataJson);
 
-  final response1 = await client.send(request);
-  print(response1.headers);
-  if (response1.statusCode != 200) {
-    throw Exception(response1.statusCode.toString());
-  }
-
-  final location = response1.headers['location'];
-  if (location == null) throw Exception('No location header');
-
-  final response2 = await client.put(
-    Uri.parse(location),
-    headers: {'Content-Range': 'bytes 0-${data.length - 1}/*'},
-    body: data,
+  final response = Future.value(client).then(
+    (client) => client.post(
+      url,
+      body: body,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': body.length.toString(),
+      },
+    ),
   );
-  print(response2.headers);
-  if (response2.statusCode != 308) {
-    throw Exception(response2.statusCode.toString());
-  }
 
-  final again = await client.put(
-    Uri.parse(location),
-    headers: {'Content-Range': 'bytes 0-${data.length - 1}/*'},
-    body: data,
-  );
-  print(again.headers);
-  if (again.statusCode != 308) {
-    throw Exception(again.statusCode.toString());
-  }
-
-  final response3 = await client.put(
-    Uri.parse(location),
-    headers: {
-      'Content-Range':
-          'bytes ${data.length}-${data.length + data2.length - 1}/${data.length + data2.length}',
-    },
-    body: data2,
-  );
-  print(response3.headers);
-  if (response3.statusCode != 200) {
-    throw Exception(response3.statusCode.toString());
-  }
+  return ResumableUpload(client, response);
 }

@@ -20,16 +20,18 @@ void main() async {
           'ul_obj_from_str_no_meta',
         );
 
-        await storage.foo(
+        final x = storage.foo(
           bucketName,
           'name',
-          List.generate(256 * 1024, (i) => i % 256),
-          [1, 2, 3],
           metadata: ObjectMetadata(contentType: 'text/plain'),
         );
 
+        x.add([1, 2, 3]);
+        x.add([4, 5, 6]);
+        await x.close();
+
         final downloaded = await storage.downloadObject(bucketName, 'name');
-        expect(downloaded, isEmpty);
+        expect(downloaded, [1, 2, 3, 4, 5, 6]);
       });
     });
   });
