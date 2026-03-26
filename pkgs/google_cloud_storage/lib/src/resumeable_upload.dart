@@ -111,7 +111,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   @override
   Future<dynamic> addStream(Stream<List<int>> stream) async {
     if (_isClosing || _closedCompleter.isCompleted) {
-      throw Exception('Cannot add to closed stream');
+      throw StateError('Cannot add to closed stream');
     }
     if (_isAddStream) throw StateError('Cannot add to stream after addStream');
 
