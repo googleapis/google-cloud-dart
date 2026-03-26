@@ -184,6 +184,21 @@ void main() async {
         expect(downloaded, small + large + small);
       });
 
+      test('stream with large, large, large', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_stream_l_l_l',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+
+        await sink.addStream(Stream.fromIterable([large, large, large]));
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, large + large + large);
+      });
+
       test('mixed adds and streams', () async {
         final bucketName = await createBucketWithTearDown(
           storage,

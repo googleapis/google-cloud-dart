@@ -72,9 +72,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _writeBufferSize -= flushPoint;
 
     final newEnd = _nextExpectedByte + flushPoint;
+    final contentRange = 'bytes $_nextExpectedByte-${newEnd - 1}/*';
     final response = await (await _client).put(
       await _sessionUri,
-      headers: {'Content-Range': 'bytes $_nextExpectedByte-${newEnd - 1}/*'},
+      headers: {'Content-Range': contentRange},
       body: flushBuffer.sublist(0, flushPoint),
     );
 
@@ -82,6 +83,8 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       throw ServiceException.fromHttpResponse(response, response.body);
     }
 
+    // TODO(https://github.com/googleapis/google-cloud-dart/issues/218):
+    // Check the "range" headers to determine if any data must be resent.
     _nextExpectedByte = newEnd;
   }
 
