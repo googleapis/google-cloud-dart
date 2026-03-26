@@ -23,9 +23,12 @@ import 'package:meta/meta.dart';
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
 
+const _minWriteSize = 256 * 1024;
+
+int _largestWriteSize(int number) => (number ~/ _minWriteSize) * _minWriteSize;
+
 /// A sink that can be used to upload an object using a resumable upload.
 class ResumableUploadSink implements StreamSink<List<int>> {
-  static const _minWriteSize = 256 * 1024;
   bool _isClosing = false;
   bool _isAddStream = false;
   final Completer<bool> _closedCompleter = Completer<bool>();
@@ -34,8 +37,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   int _nextExpectedByte = 0;
   Uint8List _writeBuffer = Uint8List(_minWriteSize * 2);
   int _writeBufferSize = 0;
-
-  ResumableUploadSink._(this._client, this._locationResponse);
 
   Future<Uri> get _sessionUri async {
     final response = await _locationResponse;
@@ -47,7 +48,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     return Uri.parse(location);
   }
 
-  void addToBuffer(List<int> data) {
+  void _addToBuffer(List<int> data) {
     final requiredCapacity = _writeBufferSize + data.length;
     if (requiredCapacity > _writeBuffer.length) {
       var newSize = _writeBuffer.length * 2;
@@ -69,14 +70,18 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _writeBufferSize += data.length;
   }
 
+  ResumableUploadSink._(this._client, this._locationResponse);
+
   @override
   void add(List<int> event) {
     if (_isClosing || _closedCompleter.isCompleted) {
-      throw StateError('Cannot add to closed stream');
+      throw StateError('ResumableUploadSink is already closed');
     }
-    if (_isAddStream) throw StateError('Cannot add to stream after addStream');
+    if (_isAddStream) {
+      throw StateError('ResumableUploadSink is already bound to a stream');
+    }
 
-    addToBuffer(event);
+    _addToBuffer(event);
   }
 
   Future<void> _flush() async {
@@ -105,20 +110,22 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   @override
   void addError(Object error, [StackTrace? stackTrace]) {
-    throw UnsupportedError('addError not supported by ResumableUpload');
+    throw UnsupportedError('ResumableUpload does not support addError');
   }
 
   @override
   Future<dynamic> addStream(Stream<List<int>> stream) async {
     if (_isClosing || _closedCompleter.isCompleted) {
-      throw StateError('Cannot add to closed stream');
+      throw StateError('ResumableUploadSink is already closed');
     }
-    if (_isAddStream) throw StateError('Cannot add to stream after addStream');
+    if (_isAddStream) {
+      throw StateError('ResumableUploadSink is already bound to a stream');
+    }
 
     _isAddStream = true;
     try {
       await for (final chunk in stream) {
-        addToBuffer(chunk);
+        _addToBuffer(chunk);
         await _flush();
       }
     } finally {
@@ -128,7 +135,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   @override
   Future<dynamic> close() async {
-    if (_isAddStream) throw StateError('Cannot add to stream after addStream');
+    if (_closedCompleter.isCompleted) return;
+    if (_isAddStream) {
+      throw StateError('ResumableUploadSink is bound to a stream');
+    }
     _isClosing = true;
 
     try {
@@ -153,9 +163,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   @override
   Future<dynamic> get done => _closedCompleter.future;
-
-  static int _largestWriteSize(int number) =>
-      (number ~/ _minWriteSize) * _minWriteSize;
 }
 
 @internal

@@ -235,6 +235,73 @@ void main() async {
         expect(downloaded, List.generate(18, (i) => i + 1));
       });
 
+      test('upload exactly 256KB via addStream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_chunk_size',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+        final exact = randomUint8List(256 * 1024);
+        await sink.addStream(Stream.fromIterable([exact]));
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, exact);
+      });
+
+      test('duplicate close', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_duplicate_close',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name')
+          ..add([1, 2, 3]);
+        await sink.close();
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, [1, 2, 3]);
+      });
+
+      test('add after close', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_add_after_close',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name')
+          ..add([1, 2, 3]);
+        await sink.close();
+        expect(() => sink.add([1, 2, 3]), throwsStateError);
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, [1, 2, 3]);
+      });
+
+      test('addStream after close', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_add_stream_after_close',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name')
+          ..add([1, 2, 3]);
+        await sink.close();
+        await expectLater(
+          () => sink.addStream(
+            Stream.fromIterable([
+              [1, 2, 3],
+            ]),
+          ),
+          throwsStateError,
+        );
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, [1, 2, 3]);
+      });
+
       test('add during addStream', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
@@ -283,21 +350,6 @@ void main() async {
 
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
-      });
-
-      test('upload exactly 256KB via addStream', () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'ul_obj_from_sink_chunk_size',
-        );
-
-        final sink = storage.uploadObjectFromSink(bucketName, 'name');
-        final exact = randomUint8List(256 * 1024);
-        await sink.addStream(Stream.fromIterable([exact]));
-        await sink.close();
-
-        final downloaded = await storage.downloadObject(bucketName, 'name');
-        expect(downloaded, exact);
       });
     });
   });
