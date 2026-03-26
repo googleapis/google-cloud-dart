@@ -30,7 +30,7 @@ import 'default_project_id_web.dart'
     if (dart.library.io) 'default_project_id_vm.dart';
 import 'file_download.dart';
 import 'file_upload.dart';
-import 'foo.dart';
+import 'resumeable_upload.dart';
 import 'object_metadata_json.dart';
 import 'object_metadata_patch_builder.dart'
     show ObjectMetadataPatchBuilderJsonEncodable;

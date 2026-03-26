@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
+import 'package:meta/meta.dart';
 
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
@@ -139,14 +140,21 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       (number ~/ _minWriteSize) * _minWriteSize;
 }
 
+@internal
 ResumableUploadSink uploadFileStream(
   FutureOr<http.Client> client,
   Uri url, {
   ObjectMetadata? metadata,
 }) {
-  final metadataJson = metadata == null
-      ? <String, Object?>{}
-      : objectMetadataToJson(metadata);
+  final md = switch (metadata) {
+    ObjectMetadata(contentType: _?) => metadata,
+    ObjectMetadata() => metadata.copyWith(
+      contentType: 'application/octet-stream',
+    ),
+    null => ObjectMetadata(contentType: 'application/octet-stream'),
+  };
+
+  final metadataJson = objectMetadataToJson(md);
 
   final body = jsonEncode(metadataJson);
 

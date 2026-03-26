@@ -31,10 +31,97 @@ void main() async {
 
       tearDown(() => storage.close());
 
-      test('new, no metadata', () async {
+      test('metadata is not set', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_no_meta',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object');
+        await sink.close();
+
+        final metadata = await storage.objectMetadata(bucketName, 'object');
+        expect(metadata.contentType, 'application/octet-stream');
+      });
+
+      test('metadata is set without contentType', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_cust_meta',
+        );
+
+        final sink = storage.uploadObjectFromSink(
+          bucketName,
+          'object',
+          metadata: ObjectMetadata(metadata: {'customMetadata': 'value'}),
+        );
+        await sink.close();
+
+        final metadata = await storage.objectMetadata(bucketName, 'object');
+        expect(metadata.contentType, 'application/octet-stream');
+        expect(metadata.metadata?['customMetadata'], 'value');
+      });
+
+      test('immediate close', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_immediate_close',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'name');
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'name');
+        expect(downloaded, isEmpty);
+      });
+
+      test('zero length adds', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_zero_length_adds',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object')
+          ..add([])
+          ..add([]);
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, isEmpty);
+      });
+
+      test('empty stream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_empty_stream',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object');
+        await sink.addStream(const Stream.empty());
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, isEmpty);
+      });
+
+      test('empty list stream', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_empty_list_stream',
+        );
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object');
+        await sink.addStream(Stream.fromIterable([[], []]));
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, isEmpty);
+      });
+
+      test('small adds', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_no_meta',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name')
@@ -46,10 +133,10 @@ void main() async {
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
       });
 
-      test('small, large write', () async {
+      test('small add, large add, small add', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_s_l_s',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name')
@@ -62,10 +149,10 @@ void main() async {
         expect(downloaded, small + large + small);
       });
 
-      test('stream', () async {
+      test('small stream', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_small_stream',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
@@ -82,10 +169,10 @@ void main() async {
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
       });
 
-      test('stream 1', () async {
+      test('stream with small, large, small', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_stream_s_l_s',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
@@ -97,10 +184,10 @@ void main() async {
         expect(downloaded, small + large + small);
       });
 
-      test('mixed', () async {
+      test('mixed adds and streams', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_mixed',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name')
@@ -124,7 +211,7 @@ void main() async {
       test('addStream during addStream', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_add_w_as',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
@@ -146,7 +233,7 @@ void main() async {
       test('addStream during addStream', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_as_w_as',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
@@ -176,7 +263,7 @@ void main() async {
       test('upload exactly 256KB via addStream', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_str_no_meta',
+          'ul_obj_from_sink_chunk_size',
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
@@ -186,19 +273,6 @@ void main() async {
 
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, exact);
-      });
-
-      test('upload 0 bytes via close', () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'ul_obj_from_str_no_meta',
-        );
-
-        final sink = storage.uploadObjectFromSink(bucketName, 'name');
-        await sink.close();
-
-        final downloaded = await storage.downloadObject(bucketName, 'name');
-        expect(downloaded, isEmpty);
       });
     });
   });
