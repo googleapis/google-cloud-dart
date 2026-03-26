@@ -50,7 +50,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   void addToBuffer(List<int> data) {
     final requiredCapacity = _writeBufferSize + data.length;
     if (requiredCapacity > _writeBuffer.length) {
-      int newSize = _writeBuffer.length * 2;
+      var newSize = _writeBuffer.length * 2;
       if (newSize < requiredCapacity) {
         newSize = requiredCapacity;
       }

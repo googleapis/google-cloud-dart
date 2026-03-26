@@ -242,8 +242,7 @@ void main() async {
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
-        final c = StreamController<List<int>>();
-        c.add([1, 2, 3]);
+        final c = StreamController<List<int>>()..add([1, 2, 3]);
 
         final addStream1Future = sink.addStream(c.stream);
         expect(() => sink.add([1, 2, 3]), throwsStateError);
@@ -264,8 +263,7 @@ void main() async {
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'name');
-        final c = StreamController<List<int>>();
-        c.add([1, 2, 3]);
+        final c = StreamController<List<int>>()..add([1, 2, 3]);
 
         final addStream1Future = sink.addStream(c.stream);
         await expectLater(
