@@ -36,7 +36,15 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   bool _isAddStream = false;
   final Completer<bool> _closedCompleter = Completer<bool>();
   final FutureOr<http.Client> _client;
+  // An HTTP response that will contain the "Location" header used to upload
+  // data to. There are two types of requests that will return the correct
+  // "Location" header:
+  // 1. The initial POST request to initiate the resumable upload:
+  //    https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#initiate-session
+  // 2. A status check request:
+  //    https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#check-status
   final Future<http.Response> _locationResponse;
+  // The next byte position expected by Google Cloud Storage.
   int _nextExpectedByte = 0;
   Uint8List _writeBuffer = Uint8List(_minWriteSize * 2);
   int _writeBufferSize = 0;
