@@ -14,7 +14,7 @@
 
 .dart_tool/
 pubspec.lock
-/.vscode/
+.vscode/
 
 # Terraform
 .terraform/
