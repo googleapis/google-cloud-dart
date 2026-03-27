@@ -32,15 +32,16 @@ import 'logger.dart';
 /// [payload] is an optional map of additional fields to include in the log
 /// entry. These fields will be merged into the JSON root.
 ///
-/// [traceId] is an optional trace ID to include in the log entry.
-///
 /// [stackTrace] is an optional stack trace to include in the log entry.
+/// It is serialized into the `stack_trace` field at the root of the JSON
+/// payload. Google Cloud Error Reporting automatically parses this specific
+/// field to group and track error events. See
+/// [Formatting error messages](https://cloud.google.com/error-reporting/docs/formatting-error-messages)
+/// for more details.
 String structuredLogEntry(
   Object message,
   LogSeverity severity, {
   Map<String, Object?>? payload,
-  Map<String, String>? labels,
-  String? traceId,
   StackTrace? stackTrace,
 }) {
   var actualMessage = message;
@@ -66,10 +67,7 @@ String structuredLogEntry(
         ...?innerPayload,
         if (innerMessage != '') 'message': innerMessage,
         'severity': severity,
-        if (labels != null && labels.isNotEmpty)
-          'logging.googleapis.com/labels': labels,
         if (stackTrace != null) 'stack_trace': formatStackTrace(stackTrace),
-        'logging.googleapis.com/trace': ?traceId,
         if (stackFrame != null)
           'logging.googleapis.com/sourceLocation': _sourceLocation(stackFrame),
       });
