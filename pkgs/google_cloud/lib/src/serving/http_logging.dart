@@ -202,18 +202,17 @@ final _loggerKey = Object();
 /// A [CloudLogger] that prints messages using Google Cloud structured
 /// logging.
 final class _CloudLogger extends CloudLogger {
-  final Zone _zone;
+  final Zone zone;
   final String? _traceId;
 
-  /// Creates a new [_CloudLogger] that prints structured logs to [_zone].
+  /// Creates a new [_CloudLogger] that prints structured logs to [this.zone].
   ///
   /// If [_traceId] is provided, it is included in the log entry.
-  _CloudLogger({Zone? zone, String? traceId})
-    : _zone = zone ?? Zone.current,
-      _traceId = traceId;
+  _CloudLogger({required this.zone, String? traceId}) : _traceId = traceId;
 
   /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
-  /// it is converted to a [String] and used as the log entry message.
+  /// it is passed directly to [structuredLogEntry], which handles
+  /// serialization.
   @override
   void log(
     Object message,
@@ -221,9 +220,9 @@ final class _CloudLogger extends CloudLogger {
     Map<String, Object?>? payload,
     Map<String, String>? labels,
     StackTrace? stackTrace,
-  }) => _zone.print(
+  }) => zone.print(
     structuredLogEntry(
-      message is Map ? message : '$message',
+      message,
       severity,
       payload: payload,
       labels: labels,
