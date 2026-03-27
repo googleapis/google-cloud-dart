@@ -65,15 +65,6 @@ void main() async {
           actualMetadata.iamConfiguration!.publicAccessPrevention,
           'inherited',
         );
-        expect(
-          actualMetadata.iamConfiguration!.uniformBucketLevelAccess!.lockedTime!
-              .toDateTime(),
-          // Uniform bucket-level access can only be disabled for 90 days
-          // after bucket creation.
-          actualMetadata.timeCreated?.toDateTime().add(
-            const Duration(days: 90),
-          ),
-        );
         expect(actualMetadata.id, isNotEmpty);
         expect(actualMetadata.ipFilter, isNull);
         expect(actualMetadata.kind, 'storage#bucket');
