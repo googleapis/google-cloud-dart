@@ -13,8 +13,6 @@ The dependency graph for the current set of packages:
 
 ![Dependency Graph](deps.png)
 
-
-
 ## Testing
 
 Code changes should be covered by tests. Prefer integration tests to mocks
