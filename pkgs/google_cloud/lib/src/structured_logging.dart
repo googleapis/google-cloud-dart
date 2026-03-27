@@ -19,7 +19,7 @@ import 'package:stack_trace/stack_trace.dart';
 import 'logger.dart';
 
 /// Creates a JSON-encoded log entry that conforms with
-/// [structured logs](https://cloud.google.com/functions/docs/monitoring/logging#writing_structured_logs).
+/// [structured logging](https://docs.cloud.google.com/logging/docs/structured-logging).
 ///
 /// [message] is the log message. If it is a [Map], it is treated as the base
 /// [payload], merging with any keys explicitly provided in the [payload]
