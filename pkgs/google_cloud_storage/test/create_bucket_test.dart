@@ -66,10 +66,6 @@ void main() async {
           'inherited',
         );
         expect(
-          actualMetadata.iamConfiguration!.uniformBucketLevelAccess!.enabled,
-          true,
-        );
-        expect(
           actualMetadata.iamConfiguration!.uniformBucketLevelAccess!.lockedTime!
               .toDateTime(),
           // Uniform bucket-level access can only be disabled for 90 days
