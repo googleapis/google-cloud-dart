@@ -198,7 +198,7 @@ final class _DefaultLogger extends CloudLogger {
     Map<String, String>? labels,
     StackTrace? stackTrace,
   }) {
-    final payloadStr = payload != null ? ' $payload' : '';
+    final payloadStr = payload != null && payload.isNotEmpty ? ' $payload' : '';
     final labelsStr = labels != null && labels.isNotEmpty ? ' $labels' : '';
     final traceStr = stackTrace != null
         ? '\n${formatStackTrace(stackTrace)}'
