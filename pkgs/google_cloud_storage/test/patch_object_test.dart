@@ -33,7 +33,7 @@ void main() async {
 
       tearDown(() => storage.close());
 
-      test('change acl', () async {
+      test('change acl', tags: ['no-ulba'], () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'pch_obj_chg_acl',
@@ -56,9 +56,9 @@ void main() async {
 
         expect(actualMetadata.acl?.first.role, 'OWNER');
         expect(actualMetadata.metageneration, BigInt.from(2));
-      }, skip: 'not supported by test project (UBLA)');
+      });
 
-      test('remove acl', () async {
+      test('remove acl', tags: ['no-ulba'], () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'pch_obj_remove_acl',
@@ -80,7 +80,7 @@ void main() async {
 
         expect(actualMetadata.acl, isNull);
         expect(actualMetadata.metageneration, BigInt.from(2));
-      }, skip: 'not supported by test project (UBLA)');
+      });
 
       test('change cache control', () async {
         final bucketName = await createBucketWithTearDown(
@@ -736,6 +736,7 @@ void main() async {
       });
       test(
         'with predefined acl',
+        tags: ['no-ulba'],
         () async {
           final bucketName = await createBucketWithTearDown(
             storage,
@@ -757,9 +758,7 @@ void main() async {
 
           expect(actualMetadata.acl?.first.role, 'OWNER');
           expect(actualMetadata.metageneration, BigInt.from(2));
-        },
-        skip: 'test project does not support uniform bucket level access',
-      );
+      });
     });
   });
 
