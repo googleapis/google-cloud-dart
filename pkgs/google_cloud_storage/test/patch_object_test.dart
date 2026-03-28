@@ -63,7 +63,7 @@ void main() async {
         },
       );
 
-      test('remove acl', tags: ['no-ulba'], skip: 'XXX', () async {
+      test('remove acl', tags: ['no-ulba'], () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'pch_obj_remove_acl',
@@ -83,7 +83,9 @@ void main() async {
           projection: 'full',
         );
 
-        expect(actualMetadata.acl, isNull);
+        // Clearing object ACLs is permitted but not all ACLs can be removed
+        // so there will still be set ACLs afterwards. See:
+        // https://docs.cloud.google.com/storage/docs/access-control/lists#modification-rules
         expect(actualMetadata.metageneration, BigInt.from(2));
       });
 
