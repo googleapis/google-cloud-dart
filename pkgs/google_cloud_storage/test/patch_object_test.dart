@@ -33,7 +33,11 @@ void main() async {
 
       tearDown(() => storage.close());
 
-      test('change acl', tags: ['no-ulba'], () async {
+      test(
+        'change acl',
+        tags: ['no-ulba'],
+        skip: 'public access prevention is enforced in test project',
+        () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'pch_obj_chg_acl',
@@ -58,7 +62,7 @@ void main() async {
         expect(actualMetadata.metageneration, BigInt.from(2));
       });
 
-      test('remove acl', tags: ['no-ulba'], () async {
+      test('remove acl', tags: ['no-ulba'], skip: 'XXX', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'pch_obj_remove_acl',

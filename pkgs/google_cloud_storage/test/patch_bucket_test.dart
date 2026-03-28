@@ -31,7 +31,11 @@ void main() async {
 
       tearDown(() => storage.close());
 
-      test('change acl', tags: ['no-ulba'], () async {
+      test(
+        'change acl',
+        tags: ['no-ulba'],
+        skip: 'public access prevention is enforced in test project',
+        () async {
         final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_acl');
 
         await storage.createBucket(
@@ -59,7 +63,11 @@ void main() async {
         expect(actualMetadata.metageneration, BigInt.from(2));
       });
 
-      test('remove acl', tags: ['no-ulba'], () async {
+      test(
+        'remove acl',
+        tags: ['no-ulba'],
+        skip: 'public access prevention is enforced in test project',
+        () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'pch_bkt_remove_acl',
@@ -217,6 +225,9 @@ void main() async {
         await storage.createBucket(
           BucketMetadata(
             name: bucketName,
+            iamConfiguration: BucketIamConfiguration(
+              uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: true),
+            ),
             hierarchicalNamespace: BucketHierarchicalNamespace(enabled: true),
           ),
         );
@@ -248,6 +259,9 @@ void main() async {
         await storage.createBucket(
           BucketMetadata(
             name: bucketName,
+            iamConfiguration: BucketIamConfiguration(
+              uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: true),
+            ),
             hierarchicalNamespace: BucketHierarchicalNamespace(enabled: true),
           ),
         );
@@ -270,7 +284,10 @@ void main() async {
         expect(actualMetadata.metageneration, BigInt.from(2));
       });
 
-      test('change ip filter', () async {
+      test(
+        'change ip filter',
+        skip: 'IP filtering condition enabled for test project',
+        () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'pch_bkt_chg_ip_filter',
@@ -307,7 +324,10 @@ void main() async {
         expect(actualMetadata.metageneration, BigInt.from(2));
       });
 
-      test('remove ip filter', () async {
+      test(
+        'remove ip filter',
+        skip: 'IP filtering condition enabled for test project',
+        () async {
         final bucketName = bucketNameWithTearDown(
           storage,
           'pch_bkt_remove_ip_filter',
