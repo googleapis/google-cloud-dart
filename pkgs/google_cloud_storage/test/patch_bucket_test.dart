@@ -36,66 +36,68 @@ void main() async {
         tags: ['no-ulba'],
         skip: 'public access prevention is enforced in test project',
         () async {
-        final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_acl');
+          final bucketName = bucketNameWithTearDown(storage, 'pch_bkt_chg_acl');
 
-        await storage.createBucket(
-          BucketMetadata(
-            name: bucketName,
-            acl: [BucketAccessControl(role: 'READER', entity: 'allUsers')],
-          ),
-        );
+          await storage.createBucket(
+            BucketMetadata(
+              name: bucketName,
+              acl: [BucketAccessControl(role: 'READER', entity: 'allUsers')],
+            ),
+          );
 
-        final patchMetadata = BucketMetadataPatchBuilder()
-          ..acl = [BucketAccessControl(role: 'OWNER', entity: 'allUsers')];
+          final patchMetadata = BucketMetadataPatchBuilder()
+            ..acl = [BucketAccessControl(role: 'OWNER', entity: 'allUsers')];
 
-        final actualMetadata = await storage.patchBucket(
-          bucketName,
-          patchMetadata,
-        );
+          final actualMetadata = await storage.patchBucket(
+            bucketName,
+            patchMetadata,
+          );
 
-        expect(actualMetadata.acl?.first.role, 'OWNER');
-        expect(
-          actualMetadata.updated!.toDateTime().isAfter(
-            actualMetadata.timeCreated!.toDateTime(),
-          ),
-          isTrue,
-        );
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      });
+          expect(actualMetadata.acl?.first.role, 'OWNER');
+          expect(
+            actualMetadata.updated!.toDateTime().isAfter(
+              actualMetadata.timeCreated!.toDateTime(),
+            ),
+            isTrue,
+          );
+          expect(actualMetadata.metageneration, BigInt.from(2));
+        },
+      );
 
       test(
         'remove acl',
         tags: ['no-ulba'],
         skip: 'public access prevention is enforced in test project',
         () async {
-        final bucketName = bucketNameWithTearDown(
-          storage,
-          'pch_bkt_remove_acl',
-        );
+          final bucketName = bucketNameWithTearDown(
+            storage,
+            'pch_bkt_remove_acl',
+          );
 
-        await storage.createBucket(
-          BucketMetadata(
-            name: bucketName,
-            acl: [BucketAccessControl(role: 'READER', entity: 'allUsers')],
-          ),
-        );
+          await storage.createBucket(
+            BucketMetadata(
+              name: bucketName,
+              acl: [BucketAccessControl(role: 'READER', entity: 'allUsers')],
+            ),
+          );
 
-        final patchMetadata = BucketMetadataPatchBuilder()..acl = null;
+          final patchMetadata = BucketMetadataPatchBuilder()..acl = null;
 
-        final actualMetadata = await storage.patchBucket(
-          bucketName,
-          patchMetadata,
-        );
+          final actualMetadata = await storage.patchBucket(
+            bucketName,
+            patchMetadata,
+          );
 
-        expect(actualMetadata.acl, isNull);
-        expect(
-          actualMetadata.updated!.toDateTime().isAfter(
-            actualMetadata.timeCreated!.toDateTime(),
-          ),
-          isTrue,
-        );
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      });
+          expect(actualMetadata.acl, isNull);
+          expect(
+            actualMetadata.updated!.toDateTime().isAfter(
+              actualMetadata.timeCreated!.toDateTime(),
+            ),
+            isTrue,
+          );
+          expect(actualMetadata.metageneration, BigInt.from(2));
+        },
+      );
 
       test('change autoclass', () async {
         final bucketName = bucketNameWithTearDown(
@@ -288,80 +290,82 @@ void main() async {
         'change ip filter',
         skip: 'IP filtering condition enabled for test project',
         () async {
-        final bucketName = bucketNameWithTearDown(
-          storage,
-          'pch_bkt_chg_ip_filter',
-        );
+          final bucketName = bucketNameWithTearDown(
+            storage,
+            'pch_bkt_chg_ip_filter',
+          );
 
-        await storage.createBucket(
-          BucketMetadata(
-            name: bucketName,
-            ipFilter: BucketIpFilter(
-              mode: 'Enabled',
-              allowAllServiceAgentAccess: false,
-              publicNetworkSource: BucketPublicNetworkSource(
-                allowedIpCidrRanges: ['0.0.0.0/0'],
+          await storage.createBucket(
+            BucketMetadata(
+              name: bucketName,
+              ipFilter: BucketIpFilter(
+                mode: 'Enabled',
+                allowAllServiceAgentAccess: false,
+                publicNetworkSource: BucketPublicNetworkSource(
+                  allowedIpCidrRanges: ['0.0.0.0/0'],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        final patchMetadata = BucketMetadataPatchBuilder()
-          ..ipFilter = BucketIpFilter(mode: 'Disabled');
+          final patchMetadata = BucketMetadataPatchBuilder()
+            ..ipFilter = BucketIpFilter(mode: 'Disabled');
 
-        final actualMetadata = await storage.patchBucket(
-          bucketName,
-          patchMetadata,
-        );
+          final actualMetadata = await storage.patchBucket(
+            bucketName,
+            patchMetadata,
+          );
 
-        expect(actualMetadata.ipFilter?.mode, 'Disabled');
-        expect(
-          actualMetadata.updated!.toDateTime().isAfter(
-            actualMetadata.timeCreated!.toDateTime(),
-          ),
-          isTrue,
-        );
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      });
+          expect(actualMetadata.ipFilter?.mode, 'Disabled');
+          expect(
+            actualMetadata.updated!.toDateTime().isAfter(
+              actualMetadata.timeCreated!.toDateTime(),
+            ),
+            isTrue,
+          );
+          expect(actualMetadata.metageneration, BigInt.from(2));
+        },
+      );
 
       test(
         'remove ip filter',
         skip: 'IP filtering condition enabled for test project',
         () async {
-        final bucketName = bucketNameWithTearDown(
-          storage,
-          'pch_bkt_remove_ip_filter',
-        );
+          final bucketName = bucketNameWithTearDown(
+            storage,
+            'pch_bkt_remove_ip_filter',
+          );
 
-        await storage.createBucket(
-          BucketMetadata(
-            name: bucketName,
-            ipFilter: BucketIpFilter(
-              mode: 'Enabled',
-              allowAllServiceAgentAccess: false,
-              publicNetworkSource: BucketPublicNetworkSource(
-                allowedIpCidrRanges: ['0.0.0.0/0'],
+          await storage.createBucket(
+            BucketMetadata(
+              name: bucketName,
+              ipFilter: BucketIpFilter(
+                mode: 'Enabled',
+                allowAllServiceAgentAccess: false,
+                publicNetworkSource: BucketPublicNetworkSource(
+                  allowedIpCidrRanges: ['0.0.0.0/0'],
+                ),
               ),
             ),
-          ),
-        );
+          );
 
-        final patchMetadata = BucketMetadataPatchBuilder()..ipFilter = null;
+          final patchMetadata = BucketMetadataPatchBuilder()..ipFilter = null;
 
-        final actualMetadata = await storage.patchBucket(
-          bucketName,
-          patchMetadata,
-        );
+          final actualMetadata = await storage.patchBucket(
+            bucketName,
+            patchMetadata,
+          );
 
-        expect(actualMetadata.ipFilter, isNull);
-        expect(
-          actualMetadata.updated!.toDateTime().isAfter(
-            actualMetadata.timeCreated!.toDateTime(),
-          ),
-          isTrue,
-        );
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      });
+          expect(actualMetadata.ipFilter, isNull);
+          expect(
+            actualMetadata.updated!.toDateTime().isAfter(
+              actualMetadata.timeCreated!.toDateTime(),
+            ),
+            isTrue,
+          );
+          expect(actualMetadata.metageneration, BigInt.from(2));
+        },
+      );
 
       test('change labels', () async {
         final bucketName = bucketNameWithTearDown(

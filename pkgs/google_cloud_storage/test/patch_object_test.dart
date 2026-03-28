@@ -38,29 +38,30 @@ void main() async {
         tags: ['no-ulba'],
         skip: 'public access prevention is enforced in test project',
         () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'pch_obj_chg_acl',
-        );
-        await storage.uploadObject(
-          bucketName,
-          'object.txt',
-          utf8.encode('content'),
-        );
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'pch_obj_chg_acl',
+          );
+          await storage.uploadObject(
+            bucketName,
+            'object.txt',
+            utf8.encode('content'),
+          );
 
-        final patchMetadata = ObjectMetadataPatchBuilder()
-          ..acl = [ObjectAccessControl(role: 'OWNER', entity: 'allUsers')];
+          final patchMetadata = ObjectMetadataPatchBuilder()
+            ..acl = [ObjectAccessControl(role: 'OWNER', entity: 'allUsers')];
 
-        final actualMetadata = await storage.patchObject(
-          bucketName,
-          'object.txt',
-          patchMetadata,
-          projection: 'full',
-        );
+          final actualMetadata = await storage.patchObject(
+            bucketName,
+            'object.txt',
+            patchMetadata,
+            projection: 'full',
+          );
 
-        expect(actualMetadata.acl?.first.role, 'OWNER');
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      });
+          expect(actualMetadata.acl?.first.role, 'OWNER');
+          expect(actualMetadata.metageneration, BigInt.from(2));
+        },
+      );
 
       test('remove acl', tags: ['no-ulba'], skip: 'XXX', () async {
         final bucketName = await createBucketWithTearDown(
@@ -738,30 +739,27 @@ void main() async {
           throwsA(isA<PreconditionFailedException>()),
         );
       });
-      test(
-        'with predefined acl',
-        tags: ['no-ulba'],
-        () async {
-          final bucketName = await createBucketWithTearDown(
-            storage,
-            'pch_obj_w_predefined_acl',
-          );
-          await storage.uploadObject(
-            bucketName,
-            'object.txt',
-            utf8.encode('content'),
-          );
+      test('with predefined acl', tags: ['no-ulba'], () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'pch_obj_w_predefined_acl',
+        );
+        await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
 
-          final actualMetadata = await storage.patchObject(
-            bucketName,
-            'object.txt',
-            ObjectMetadataPatchBuilder(),
-            predefinedAcl: 'projectPrivate',
-            projection: 'full',
-          );
+        final actualMetadata = await storage.patchObject(
+          bucketName,
+          'object.txt',
+          ObjectMetadataPatchBuilder(),
+          predefinedAcl: 'projectPrivate',
+          projection: 'full',
+        );
 
-          expect(actualMetadata.acl?.first.role, 'OWNER');
-          expect(actualMetadata.metageneration, BigInt.from(2));
+        expect(actualMetadata.acl?.first.role, 'OWNER');
+        expect(actualMetadata.metageneration, BigInt.from(2));
       });
     });
   });
