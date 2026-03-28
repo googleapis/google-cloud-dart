@@ -40,7 +40,6 @@
 ///
 /// {@canonicalFor bad_configuration_exception.BadConfigurationException}
 /// {@canonicalFor bad_request_exception.BadRequestException}
-/// {@canonicalFor http_logging.RequestLogger}
 /// {@canonicalFor http_logging.badRequestMiddleware}
 /// {@canonicalFor http_logging.cloudLoggingMiddleware}
 /// {@canonicalFor http_logging.createLoggingMiddleware}
@@ -50,13 +49,12 @@
 /// {@canonicalFor terminate.waitForTerminate}
 library;
 
+export 'src/logger.dart' show CloudLogger, LogSeverity;
 export 'src/serving/bad_configuration_exception.dart'
     show BadConfigurationException;
 export 'src/serving/bad_request_exception.dart' show BadRequestException;
 export 'src/serving/http_logging.dart'
     show
-        LogSeverity,
-        RequestLogger,
         badRequestMiddleware,
         cloudLoggingMiddleware,
         createLoggingMiddleware,

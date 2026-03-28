@@ -20,10 +20,11 @@ import 'package:io/ansi.dart';
 import 'package:shelf/shelf.dart';
 
 import '../constants.dart';
-import '../logging.dart';
+import '../logger.dart';
+import '../structured_logging.dart';
 import 'bad_request_exception.dart';
 
-export '../logging.dart';
+export '../structured_logging.dart';
 
 const _badRequestExceptionContextKey = 'google_cloud.bad_request_exception';
 const _badStackTraceContextKey = 'google_cloud.bad_stack_trace';
@@ -183,96 +184,50 @@ Middleware cloudLoggingMiddleware(String projectId) {
   return hostedLoggingMiddleware;
 }
 
-/// Returns the current [RequestLogger].
+/// Returns the current [CloudLogger].
 ///
-/// If called within a context configured with a [RequestLogger], the returned
-/// [RequestLogger] will be used.
+/// If called within a context configured with a [CloudLogger], the returned
+/// [CloudLogger] will be used.
 ///
-/// Otherwise, the returned [RequestLogger] will simply [print] log entries,
+/// Otherwise, the returned [CloudLogger] will simply [print] log entries,
 /// with entries having a [LogSeverity] different than
 /// [LogSeverity.defaultSeverity] being prefixed as such.
-RequestLogger get currentLogger =>
-    Zone.current[_loggerKey] as RequestLogger? ?? const _DefaultLogger();
+CloudLogger get currentLogger =>
+    Zone.current[_loggerKey] as CloudLogger? ??
+    const CloudLogger.defaultLogger();
 
-/// Used to represent the [RequestLogger] in [Zone] values.
+/// Used to represent the [CloudLogger] in [Zone] values.
 final _loggerKey = Object();
 
-/// Allows logging at a specified severity.
-///
-/// Compatible with the
-/// [log severities](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity)
-/// supported by Google Cloud.
-abstract final class RequestLogger {
-  /// Const constructor for subclasses.
-  const RequestLogger();
-
-  /// Logs [message] at the given [severity].
-  void log(Object message, LogSeverity severity);
-
-  /// Logs [message] at [LogSeverity.debug] severity.
-  void debug(Object message) => log(message, LogSeverity.debug);
-
-  /// Logs [message] at [LogSeverity.info] severity.
-  void info(Object message) => log(message, LogSeverity.info);
-
-  /// Logs [message] at [LogSeverity.notice] severity.
-  void notice(Object message) => log(message, LogSeverity.notice);
-
-  /// Logs [message] at [LogSeverity.warning] severity.
-  void warning(Object message) => log(message, LogSeverity.warning);
-
-  /// Logs [message] at [LogSeverity.error] severity.
-  void error(Object message) => log(message, LogSeverity.error);
-
-  /// Logs [message] at [LogSeverity.critical] severity.
-  void critical(Object message) => log(message, LogSeverity.critical);
-
-  /// Logs [message] at [LogSeverity.alert] severity.
-  void alert(Object message) => log(message, LogSeverity.alert);
-
-  /// Logs [message] at [LogSeverity.emergency] severity.
-  void emergency(Object message) => log(message, LogSeverity.emergency);
-}
-
-/// A [RequestLogger] that prints messages normally.
-///
-/// Any message that's not [LogSeverity.defaultSeverity] is prefixed by the
-/// [LogSeverity] name.
-final class _DefaultLogger extends RequestLogger {
-  /// Const constructor.
-  const _DefaultLogger();
-
-  @override
-  void log(Object message, LogSeverity severity) {
-    if (severity == LogSeverity.defaultSeverity) {
-      print(message);
-    } else {
-      print('${severity.name}: $message');
-    }
-  }
-}
-
-/// A [RequestLogger] that prints messages using Google Cloud structured
+/// A [CloudLogger] that prints messages using Google Cloud structured
 /// logging.
-final class _CloudLogger extends RequestLogger {
-  final Zone _zone;
+final class _CloudLogger extends CloudLogger {
+  final Zone zone;
   final String? _traceId;
 
-  /// Creates a new [_CloudLogger] that prints structured logs to [_zone].
+  /// Creates a new [_CloudLogger] that prints structured logs to [this.zone].
   ///
   /// If [_traceId] is provided, it is included in the log entry.
-  _CloudLogger({Zone? zone, String? traceId})
-    : _zone = zone ?? Zone.current,
-      _traceId = traceId;
+  _CloudLogger({required this.zone, String? traceId}) : _traceId = traceId;
 
   /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
-  /// it is converted to a [String] and used as the log entry message.
+  /// it is passed directly to [structuredLogEntry], which handles
+  /// serialization.
   @override
-  void log(Object message, LogSeverity severity) => _zone.print(
+  void log(
+    Object message,
+    LogSeverity severity, {
+    Map<String, Object?>? payload,
+    Map<String, String>? labels,
+    StackTrace? stackTrace,
+  }) => zone.print(
     structuredLogEntry(
-      message is Map ? message : '$message',
+      message,
       severity,
+      payload: payload,
+      labels: labels,
       traceId: _traceId,
+      stackTrace: stackTrace,
     ),
   );
 }

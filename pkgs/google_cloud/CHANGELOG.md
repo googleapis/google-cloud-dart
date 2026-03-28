@@ -1,3 +1,20 @@
+## 0.4.0-wip
+
+### BREAKING CHANGES
+
+- Renamed `RequestLogger` to `CloudLogger` and moved it to
+  `package:google_cloud/general.dart`.
+
+### New Features
+
+- `CloudLogger` is no longer abstract and has a default implementation that
+  prints to stdout.
+- Added `payload`, `labels`, and `stackTrace` named parameters to
+  `CloudLogger` functions as well as `structuredLogEntry`.
+- Hardened structured log JSON serialization with automatic fallback mechanisms
+  to safely handle native `toJson()` implementations and circular references
+  without failing.
+
 ## 0.3.1
 
 - Fix a bug where `projectIdFromGcloudConfig()` used the incorrect gcloud shell

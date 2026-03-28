@@ -15,7 +15,6 @@
 @TestOn('vm')
 library;
 
-import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
@@ -29,8 +28,7 @@ void main() {
     test('simple message', () {
       final entry = structuredLogEntry('hello', LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'hello'));
-      expect(map, containsPair('severity', 'INFO'));
+      expect(map, {'message': 'hello', 'severity': 'INFO'});
     });
 
     test('message with traceId', () {
@@ -40,25 +38,136 @@ void main() {
         traceId: 'trace-123',
       );
       final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'hello'));
-      expect(map, containsPair('severity', 'INFO'));
-      expect(map, containsPair('logging.googleapis.com/trace', 'trace-123'));
+      expect(map, {
+        'message': 'hello',
+        'severity': 'INFO',
+        'logging.googleapis.com/trace': 'trace-123',
+      });
     });
 
-    test('json encodable message', () {
+    test('list message remains in message key', () {
+      final message = ['foo', 'bar'];
+      final entry = structuredLogEntry(message, LogSeverity.info);
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {'message': message, 'severity': 'INFO'});
+    });
+
+    test('map message is merged into payload', () {
       final message = {'foo': 'bar', 'count': 42};
       final entry = structuredLogEntry(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', message));
-      expect(map, containsPair('severity', 'INFO'));
+      expect(map, {'foo': 'bar', 'count': 42, 'severity': 'INFO'});
+    });
+
+    test('map message with message key extracts message', () {
+      final message = {'foo': 'bar', 'message': 'my msg'};
+      final entry = structuredLogEntry(message, LogSeverity.info);
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {'foo': 'bar', 'message': 'my msg', 'severity': 'INFO'});
+    });
+
+    test('payload overrides map message', () {
+      final message = {'foo': 'bar', 'count': 42, 'message': 'original'};
+      final entry = structuredLogEntry(
+        message,
+        LogSeverity.info,
+        payload: {'count': 99, 'env': 'prod', 'message': 'overridden'},
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'foo': 'bar',
+        'count': 99,
+        'env': 'prod',
+        'message': 'overridden',
+        'severity': 'INFO',
+      });
     });
 
     test('non-encodable message is stringified', () {
       final message = _NonEncodable();
       final entry = structuredLogEntry(message, LogSeverity.info);
       final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'I am not encodable'));
-      expect(map, containsPair('severity', 'INFO'));
+      expect(map, {'message': 'I am not encodable', 'severity': 'INFO'});
+    });
+
+    test('with payload', () {
+      final entry = structuredLogEntry(
+        'hello',
+        LogSeverity.info,
+        payload: {'foo': 'bar', 'count': 42},
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'foo': 'bar',
+        'count': 42,
+        'message': 'hello',
+        'severity': 'INFO',
+      });
+    });
+
+    test('with empty message', () {
+      final entry = structuredLogEntry(
+        '',
+        LogSeverity.info,
+        payload: {'foo': 'bar', 'count': 42},
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {'foo': 'bar', 'count': 42, 'severity': 'INFO'});
+    });
+
+    test('with labels', () {
+      final entry = structuredLogEntry(
+        'hello',
+        LogSeverity.info,
+        labels: {'env': 'prod', 'region': 'us-central1'},
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'message': 'hello',
+        'severity': 'INFO',
+        'logging.googleapis.com/labels': {
+          'env': 'prod',
+          'region': 'us-central1',
+        },
+      });
+    });
+
+    test('payload does not override core fields', () {
+      final entry = structuredLogEntry(
+        'hello',
+        LogSeverity.info,
+        payload: {'message': 'overridden', 'severity': 'CRITICAL'},
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {'message': 'hello', 'severity': 'INFO'});
+    });
+
+    test('non-encodable payload is stringified', () {
+      final payload = {'foo': _NonEncodable()};
+      final entry = structuredLogEntry(
+        'hello',
+        LogSeverity.info,
+        payload: payload,
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {
+        'foo': 'I am not encodable',
+        'message': 'hello',
+        'severity': 'INFO',
+      });
+    });
+
+    test('cyclic payload drops payload and stringifies message', () {
+      final payload = <String, dynamic>{};
+      payload['cycle'] = payload;
+      final message = _NonEncodable();
+      final entry = structuredLogEntry(
+        message,
+        LogSeverity.info,
+        payload: payload,
+      );
+      final map = jsonDecode(entry) as Map<String, dynamic>;
+      expect(map, {'message': 'I am not encodable', 'severity': 'INFO'});
     });
   });
 
@@ -74,33 +183,38 @@ void main() {
     });
   });
 
-  group('RequestLogger (default)', () {
+  group('CloudLogger.defaultLogger()', () {
+    const logger = CloudLogger.defaultLogger();
+
     test('log with default severity', () {
-      final output = <String>[];
-      runZoned(
-        () => currentLogger.log('hello', LogSeverity.defaultSeverity),
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) => output.add(line),
-        ),
+      expect(
+        () => logger.log('hello', LogSeverity.defaultSeverity),
+        prints('hello\n'),
       );
-      expect(output, ['hello']);
     });
 
     test('log with explicit severity', () {
-      final output = <String>[];
-      runZoned(
-        () => currentLogger.log('hello', LogSeverity.error),
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) => output.add(line),
-        ),
+      expect(
+        () => logger.log('hello', LogSeverity.error),
+        prints('ERROR: hello\n'),
       );
-      expect(output, ['ERROR: hello']);
+    });
+
+    test('log with payload and labels', () {
+      expect(
+        () => logger.log(
+          'hello',
+          LogSeverity.error,
+          payload: {'foo': 'bar'},
+          labels: {'env': 'test'},
+        ),
+        prints('ERROR: hello {foo: bar} {env: test}\n'),
+      );
     });
   });
 
   group('middleware', () {
     test('cloudLoggingMiddleware logs structured entries', () async {
-      final output = <String>[];
       final handler = const Pipeline()
           .addMiddleware(cloudLoggingMiddleware('test-project'))
           .addHandler((request) {
@@ -108,7 +222,7 @@ void main() {
             return Response.ok('done');
           });
 
-      await runZoned(
+      await expectLater(
         () => handler(
           Request(
             'GET',
@@ -116,20 +230,14 @@ void main() {
             headers: {'x-cloud-trace-context': 'trace-456/123;o=1'},
           ),
         ),
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) => output.add(line),
-        ),
-      );
-
-      expect(output, hasLength(1));
-      final map = jsonDecode(output.single) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'inner log'));
-      expect(map, containsPair('severity', 'INFO'));
-      expect(
-        map,
-        containsPair(
-          'logging.googleapis.com/trace',
-          'projects/test-project/traces/trace-456',
+        prints(
+          predicate<String>((output) {
+            final map = jsonDecode(output) as Map<String, dynamic>;
+            return map['message'] == 'inner log' &&
+                map['severity'] == 'INFO' &&
+                map['logging.googleapis.com/trace'] ==
+                    'projects/test-project/traces/trace-456';
+          }),
         ),
       );
     });
