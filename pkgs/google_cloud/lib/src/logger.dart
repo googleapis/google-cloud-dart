@@ -75,7 +75,7 @@ abstract base class CloudLogger {
   /// Logs [message] at the given [severity].
   ///
   /// {@template google_cloud.CloudLogger.log_params}
-  /// Details on how the parameters are handled can be found depend on the
+  /// Details on how the parameters are handled can be found depending on the
   /// implementation.
   ///
   /// See [CloudLogger.defaultLogger] and [structuredLogEntry] for more
