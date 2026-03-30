@@ -1,8 +1,9 @@
-## 0.6.0-wip
+## 0.6.0
 
 * **BREAKING:** Rename `Storage.insertObject` to `Storage.uploadObject`.
 * Add `Storage.uploadObjectFromString`.
 * Add `StorageObject.uploadFromString`.
+* Required `google_cloud: '>=0.3.0 <0.5.0'`.
 
 ## 0.5.1
 
