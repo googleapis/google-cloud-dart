@@ -31,11 +31,11 @@ void main() {
       expect(map, {'message': 'hello', 'severity': 'INFO'});
     });
 
-    test('message with traceId', () {
+    test('message with traceId in payload', () {
       final entry = structuredLogEntry(
         'hello',
         LogSeverity.info,
-        traceId: 'trace-123',
+        payload: {'logging.googleapis.com/trace': 'trace-123'},
       );
       final map = jsonDecode(entry) as Map<String, dynamic>;
       expect(map, {
@@ -115,23 +115,6 @@ void main() {
       expect(map, {'foo': 'bar', 'count': 42, 'severity': 'INFO'});
     });
 
-    test('with labels', () {
-      final entry = structuredLogEntry(
-        'hello',
-        LogSeverity.info,
-        labels: {'env': 'prod', 'region': 'us-central1'},
-      );
-      final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, {
-        'message': 'hello',
-        'severity': 'INFO',
-        'logging.googleapis.com/labels': {
-          'env': 'prod',
-          'region': 'us-central1',
-        },
-      });
-    });
-
     test('payload does not override core fields', () {
       final entry = structuredLogEntry(
         'hello',
@@ -200,15 +183,10 @@ void main() {
       );
     });
 
-    test('log with payload and labels', () {
+    test('log with payload', () {
       expect(
-        () => logger.log(
-          'hello',
-          LogSeverity.error,
-          payload: {'foo': 'bar'},
-          labels: {'env': 'test'},
-        ),
-        prints('ERROR: hello {foo: bar} {env: test}\n'),
+        () => logger.log('hello', LogSeverity.error, payload: {'foo': 'bar'}),
+        prints('ERROR: hello {foo: bar}\n'),
       );
     });
   });
@@ -227,7 +205,10 @@ void main() {
           Request(
             'GET',
             Uri.parse('http://localhost/'),
-            headers: {'x-cloud-trace-context': 'trace-456/123;o=1'},
+            headers: {
+              'x-cloud-trace-context':
+                  '0123456789abcdef0123456789abcdef/123;o=1',
+            },
           ),
         ),
         prints(
@@ -236,7 +217,9 @@ void main() {
             return map['message'] == 'inner log' &&
                 map['severity'] == 'INFO' &&
                 map['logging.googleapis.com/trace'] ==
-                    'projects/test-project/traces/trace-456';
+                    'projects/test-project/traces/0123456789abcdef0123456789abcdef' &&
+                map['logging.googleapis.com/spanId'] == '000000000000007b' &&
+                map['logging.googleapis.com/trace_sampled'] == true;
           }),
         ),
       );
@@ -303,6 +286,111 @@ void main() {
         () => BadRequestException(400, ''),
         throwsA(isA<AssertionError>()),
       );
+    });
+  });
+
+  group('parseTraceContext', () {
+    test('parses full context', () {
+      final context = TraceContextData.parse(
+        projectId: 'test-project',
+        traceHeader: '0123456789abcdef0123456789abcdef/1054454457908058113;o=1',
+      );
+      expect(
+        context.traceId,
+        'projects/test-project/traces/0123456789abcdef0123456789abcdef',
+      );
+      expect(context.spanId, '0ea22cbe236fd801');
+      expect(context.traceSampled, true);
+    });
+
+    test('parses without sampled flag', () {
+      final context = TraceContextData.parse(
+        projectId: 'test-project',
+        traceHeader: '0123456789abcdef0123456789abcdef/123',
+      );
+      expect(
+        context.traceId,
+        'projects/test-project/traces/0123456789abcdef0123456789abcdef',
+      );
+      expect(context.spanId, '000000000000007b');
+      expect(context.traceSampled, isFalse);
+    });
+
+    test(
+      'parses format without trace options but trailing semicolon flag off',
+      () {
+        final context = TraceContextData.parse(
+          projectId: 'test-project',
+          traceHeader: '0123456789abcdef0123456789abcdef/123;o=0',
+        );
+        expect(
+          context.traceId,
+          'projects/test-project/traces/0123456789abcdef0123456789abcdef',
+        );
+        expect(context.spanId, '000000000000007b');
+        expect(context.traceSampled, false);
+      },
+    );
+
+    test('parses minimal trace', () {
+      final context = TraceContextData.parse(
+        projectId: 'test-project',
+        traceHeader: '0123456789abcdef0123456789abcdef',
+      );
+      expect(
+        context.traceId,
+        'projects/test-project/traces/0123456789abcdef0123456789abcdef',
+      );
+      expect(context.spanId, isNull);
+      expect(context.traceSampled, isFalse);
+    });
+  });
+
+  group('TraceContextData.asPayloadMap', () {
+    test('full context includes everything', () {
+      final context = TraceContextData(
+        traceId: 'test-trace',
+        spanId: 'test-span',
+        traceSampled: true,
+      );
+      expect(context.asPayloadMap(), {
+        'logging.googleapis.com/trace': 'test-trace',
+        'logging.googleapis.com/spanId': 'test-span',
+        'logging.googleapis.com/trace_sampled': true,
+      });
+    });
+
+    test('omits spanId when null', () {
+      final context = TraceContextData(traceId: 'test-trace');
+      expect(context.asPayloadMap(), {
+        'logging.googleapis.com/trace': 'test-trace',
+      });
+    });
+
+    test('omits traceSampled when false', () {
+      final context = TraceContextData(
+        traceId: 'test-trace',
+        spanId: 'test-span',
+        // traceSampled: false, // Default
+      );
+      expect(context.asPayloadMap(), {
+        'logging.googleapis.com/trace': 'test-trace',
+        'logging.googleapis.com/spanId': 'test-span',
+      });
+    });
+
+    test('merges with existing payload', () {
+      final context = TraceContextData(
+        traceId: 'test-trace',
+        spanId: 'test-span',
+      );
+      final payload = {'message': 'hello', 'count': 42};
+      expect(context.asPayloadMap(payload), {
+        'message': 'hello',
+        'count': 42,
+        'logging.googleapis.com/trace': 'test-trace',
+        'logging.googleapis.com/spanId': 'test-span',
+      });
     });
   });
 }

@@ -32,15 +32,16 @@ import 'logger.dart';
 /// [payload] is an optional map of additional fields to include in the log
 /// entry. These fields will be merged into the JSON root.
 ///
-/// [traceId] is an optional trace ID to include in the log entry.
-///
 /// [stackTrace] is an optional stack trace to include in the log entry.
+/// It is serialized into the `stack_trace` field at the root of the JSON
+/// payload. Google Cloud Error Reporting automatically parses this specific
+/// field to group and track error events. See
+/// [Formatting error messages](https://cloud.google.com/error-reporting/docs/formatting-error-messages)
+/// for more details.
 String structuredLogEntry(
   Object message,
   LogSeverity severity, {
   Map<String, Object?>? payload,
-  Map<String, String>? labels,
-  String? traceId,
   StackTrace? stackTrace,
 }) {
   var actualMessage = message;
@@ -58,20 +59,15 @@ String structuredLogEntry(
     }
   }
 
-  final stackFrame = _debugFrame(severity, stackTrace: stackTrace);
-
   // https://cloud.google.com/logging/docs/agent/logging/configuration#special-fields
   String encode(Object innerMessage, Map<String, Object?>? innerPayload) =>
       jsonEncode(toEncodable: _toEncodableFallback, <String, dynamic>{
         ...?innerPayload,
         if (innerMessage != '') 'message': innerMessage,
         'severity': severity,
-        if (labels != null && labels.isNotEmpty)
-          'logging.googleapis.com/labels': labels,
         if (stackTrace != null) 'stack_trace': formatStackTrace(stackTrace),
-        'logging.googleapis.com/trace': ?traceId,
-        if (stackFrame != null)
-          'logging.googleapis.com/sourceLocation': _sourceLocation(stackFrame),
+        if (stackTrace != null)
+          'logging.googleapis.com/sourceLocation': _sourceLocation(stackTrace),
       });
 
   try {
@@ -92,26 +88,21 @@ Object? _toEncodableFallback(Object? nonEncodable) {
   }
 }
 
-/// Returns a [Map] representing the source location of the given [frame].
+/// Returns a [Map] representing the source location of the given [trace].
 ///
 /// See https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#LogEntrySourceLocation
-Map<String, dynamic> _sourceLocation(Frame frame) => {
-  // TODO: Will need to fix `package:` URIs to file paths when possible
-  // GoogleCloudPlatform/functions-framework-dart#40
-  'file': frame.uri.toString(),
-  if (frame.line != null) 'line': frame.line.toString(),
-  'function': frame.member,
-};
+Map<String, dynamic> _sourceLocation(StackTrace trace) {
+  final frame = _debugFrame(trace);
+  return {
+    // TODO: Will need to fix `package:` URIs to file paths when possible
+    // GoogleCloudPlatform/functions-framework-dart#40
+    'file': frame.uri.toString(),
+    if (frame.line != null) 'line': frame.line.toString(),
+    'function': frame.member,
+  };
+}
 
-Frame? _debugFrame(LogSeverity severity, {StackTrace? stackTrace}) {
-  if (stackTrace == null) {
-    if (severity >= LogSeverity.warning) {
-      stackTrace = StackTrace.current;
-    } else {
-      return null;
-    }
-  }
-
+Frame _debugFrame(StackTrace stackTrace) {
   final chain = formatStackTrace(stackTrace);
   final stackFrame = chain.traces
       .expand((t) => t.frames)

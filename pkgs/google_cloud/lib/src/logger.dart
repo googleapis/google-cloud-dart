@@ -66,7 +66,7 @@ abstract base class CloudLogger {
   /// This logger prints messages to the console.
   ///
   /// The output format is:
-  /// `[SEVERITY_NAME: ]<message>[ payload][ labels][\nstack_trace]`
+  /// `[SEVERITY_NAME: ]<message>[ payload][\nstack_trace]`
   ///
   /// The `SEVERITY_NAME: ` prefix is omitted when the severity is
   /// [LogSeverity.defaultSeverity].
@@ -85,7 +85,6 @@ abstract base class CloudLogger {
     Object message,
     LogSeverity severity, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   });
 
@@ -95,15 +94,9 @@ abstract base class CloudLogger {
   void debug(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
-  }) => log(
-    message,
-    LogSeverity.debug,
-    payload: payload,
-    labels: labels,
-    stackTrace: stackTrace,
-  );
+  }) =>
+      log(message, LogSeverity.debug, payload: payload, stackTrace: stackTrace);
 
   /// Logs [message] at [LogSeverity.info] severity.
   ///
@@ -111,15 +104,9 @@ abstract base class CloudLogger {
   void info(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
-  }) => log(
-    message,
-    LogSeverity.info,
-    payload: payload,
-    labels: labels,
-    stackTrace: stackTrace,
-  );
+  }) =>
+      log(message, LogSeverity.info, payload: payload, stackTrace: stackTrace);
 
   /// Logs [message] at [LogSeverity.notice] severity.
   ///
@@ -127,13 +114,11 @@ abstract base class CloudLogger {
   void notice(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   }) => log(
     message,
     LogSeverity.notice,
     payload: payload,
-    labels: labels,
     stackTrace: stackTrace,
   );
 
@@ -143,13 +128,11 @@ abstract base class CloudLogger {
   void warning(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   }) => log(
     message,
     LogSeverity.warning,
     payload: payload,
-    labels: labels,
     stackTrace: stackTrace,
   );
 
@@ -159,15 +142,9 @@ abstract base class CloudLogger {
   void error(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
-  }) => log(
-    message,
-    LogSeverity.error,
-    payload: payload,
-    labels: labels,
-    stackTrace: stackTrace,
-  );
+  }) =>
+      log(message, LogSeverity.error, payload: payload, stackTrace: stackTrace);
 
   /// Logs [message] at [LogSeverity.critical] severity.
   ///
@@ -175,13 +152,11 @@ abstract base class CloudLogger {
   void critical(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   }) => log(
     message,
     LogSeverity.critical,
     payload: payload,
-    labels: labels,
     stackTrace: stackTrace,
   );
 
@@ -191,15 +166,9 @@ abstract base class CloudLogger {
   void alert(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
-  }) => log(
-    message,
-    LogSeverity.alert,
-    payload: payload,
-    labels: labels,
-    stackTrace: stackTrace,
-  );
+  }) =>
+      log(message, LogSeverity.alert, payload: payload, stackTrace: stackTrace);
 
   /// Logs [message] at [LogSeverity.emergency] severity.
   ///
@@ -207,13 +176,11 @@ abstract base class CloudLogger {
   void emergency(
     Object message, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   }) => log(
     message,
     LogSeverity.emergency,
     payload: payload,
-    labels: labels,
     stackTrace: stackTrace,
   );
 }
@@ -228,18 +195,16 @@ final class _DefaultLogger extends CloudLogger {
     Object message,
     LogSeverity severity, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   }) {
     final payloadStr = payload != null && payload.isNotEmpty ? ' $payload' : '';
-    final labelsStr = labels != null && labels.isNotEmpty ? ' $labels' : '';
     final traceStr = stackTrace != null
         ? '\n${formatStackTrace(stackTrace)}'
         : '';
     if (severity == LogSeverity.defaultSeverity) {
-      print('$message$payloadStr$labelsStr$traceStr');
+      print('$message$payloadStr$traceStr');
     } else {
-      print('${severity.name}: $message$payloadStr$labelsStr$traceStr');
+      print('${severity.name}: $message$payloadStr$traceStr');
     }
   }
 }
@@ -249,6 +214,5 @@ bool frameFolder(Frame frame) =>
     frame.isCore || frame.package == 'google_cloud';
 
 @internal
-Chain formatStackTrace(StackTrace? stackTrace) =>
-    (stackTrace == null ? Chain.current() : Chain.forTrace(stackTrace))
-        .foldFrames(frameFolder, terse: true);
+Chain formatStackTrace(StackTrace stackTrace) =>
+    Chain.forTrace(stackTrace).foldFrames(frameFolder, terse: true);

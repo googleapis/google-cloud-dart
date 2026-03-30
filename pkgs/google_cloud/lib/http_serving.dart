@@ -61,3 +61,4 @@ export 'src/serving/http_logging.dart'
         currentLogger;
 export 'src/serving/serve.dart' show listenPortFromEnvironment, serveHandler;
 export 'src/serving/terminate.dart' show waitForTerminate;
+export 'src/serving/trace_context_data.dart' show TraceContextData;

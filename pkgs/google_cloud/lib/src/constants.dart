@@ -55,10 +55,32 @@ const cloudTraceContextHeader = 'x-cloud-trace-context';
 const metadataFlavorHeaders = {'Metadata-Flavor': 'Google'};
 
 /// The name of the Cloud Run service being run.
+///
+/// See https://docs.cloud.google.com/run/docs/container-contract#services-env-vars
 const serviceEnvironmentVariable = 'K_SERVICE';
 
 /// The name of the Cloud Run revision being run.
+///
+/// See https://docs.cloud.google.com/run/docs/container-contract#services-env-vars
 const revisionEnvironmentVariable = 'K_REVISION';
 
 /// The name of the Cloud Run configuration being run.
+///
+/// See https://docs.cloud.google.com/run/docs/container-contract#services-env-vars
 const configurationEnvironmentVariable = 'K_CONFIGURATION';
+
+/// The `payload` key used to correlate log entries with Cloud Trace.
+///
+/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
+const logTraceKey = 'logging.googleapis.com/trace';
+
+/// The `payload` key used to correlate log entries with a specific span within
+/// a Cloud Trace.
+///
+/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
+const logSpanIdKey = 'logging.googleapis.com/spanId';
+
+/// The `payload` key used to indicate whether a trace is sampled.
+///
+/// See https://docs.cloud.google.com/logging/docs/agent/logging/configuration#special-fields
+const logTraceSampledKey = 'logging.googleapis.com/trace_sampled';

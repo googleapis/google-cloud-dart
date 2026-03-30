@@ -23,6 +23,7 @@ import '../constants.dart';
 import '../logger.dart';
 import '../structured_logging.dart';
 import 'bad_request_exception.dart';
+import 'trace_context_data.dart';
 
 export '../structured_logging.dart';
 
@@ -67,7 +68,7 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
       error,
       if (error.innerError != null)
         '${error.innerError} (${error.innerError.runtimeType})',
-      formatStackTrace(error.innerStack ?? stack),
+      if (error.innerStack ?? stack case final s?) formatStackTrace(s),
     ];
 
     final bob = output
@@ -101,12 +102,13 @@ Middleware cloudLoggingMiddleware(String projectId) {
     // Add log correlation to nest all log messages beneath request log in
     // Log Viewer.
 
-    String? traceValue;
-
     final traceHeader = request.headers[cloudTraceContextHeader];
-    if (traceHeader != null) {
-      traceValue = 'projects/$projectId/traces/${traceHeader.split('/')[0]}';
-    }
+    final traceContext = traceHeader != null
+        ? TraceContextData.tryParse(
+            projectId: projectId,
+            traceHeader: traceHeader,
+          )
+        : null;
 
     String createErrorLogEntryFromRequest(
       Object error,
@@ -115,7 +117,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     ) => structuredLogEntry(
       '$error'.trim(),
       logSeverity,
-      traceId: traceValue,
+      payload: traceContext?.asPayloadMap(),
       stackTrace: stackTrace,
     );
 
@@ -126,7 +128,10 @@ Middleware cloudLoggingMiddleware(String projectId) {
     Zone.current
         .fork(
           zoneValues: {
-            _loggerKey: _CloudLogger(zone: currentZone, traceId: traceValue),
+            _loggerKey: _CloudLogger(
+              zone: currentZone,
+              traceContext: traceContext,
+            ),
           },
           specification: ZoneSpecification(
             handleUncaughtError: (self, parent, zone, error, stackTrace) {
@@ -163,7 +168,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
               final logContent = structuredLogEntry(
                 line,
                 LogSeverity.info,
-                traceId: traceValue,
+                payload: traceContext?.asPayloadMap(),
               );
 
               // Serialize to a JSON string and output to parent zone.
@@ -203,12 +208,11 @@ final _loggerKey = Object();
 /// logging.
 final class _CloudLogger extends CloudLogger {
   final Zone zone;
-  final String? _traceId;
+
+  final TraceContextData? traceContext;
 
   /// Creates a new [_CloudLogger] that prints structured logs to [this.zone].
-  ///
-  /// If [_traceId] is provided, it is included in the log entry.
-  _CloudLogger({required this.zone, String? traceId}) : _traceId = traceId;
+  _CloudLogger({required this.zone, this.traceContext});
 
   /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
   /// it is passed directly to [structuredLogEntry], which handles
@@ -218,15 +222,12 @@ final class _CloudLogger extends CloudLogger {
     Object message,
     LogSeverity severity, {
     Map<String, Object?>? payload,
-    Map<String, String>? labels,
     StackTrace? stackTrace,
   }) => zone.print(
     structuredLogEntry(
       message,
       severity,
-      payload: payload,
-      labels: labels,
-      traceId: _traceId,
+      payload: traceContext?.asPayloadMap(payload) ?? payload,
       stackTrace: stackTrace,
     ),
   );
