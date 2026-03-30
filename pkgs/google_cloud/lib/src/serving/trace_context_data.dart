@@ -19,9 +19,8 @@ import '../constants.dart';
 /// See: https://cloud.google.com/trace/docs/setup#force-trace
 final _traceIdRegExp = RegExp(r'^[a-f0-9]{32}$', caseSensitive: false);
 
-/// Holds trace context data parsed by [TraceContextData.parse].
-///
-/// Used for structured logging.
+/// Holds trace context data for
+/// [structured logging](https://docs.cloud.google.com/logging/docs/structured-logging).
 final class TraceContextData {
   TraceContextData({
     required this.traceId,
