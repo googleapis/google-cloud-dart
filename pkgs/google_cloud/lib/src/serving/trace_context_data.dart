@@ -54,7 +54,6 @@ final class TraceContextData {
     required String traceHeader,
   }) {
     final parts = traceHeader.split('/');
-    if (parts.isEmpty) return null;
 
     final traceId = parts[0];
     if (!_traceIdRegExp.hasMatch(traceId)) return null;
@@ -99,7 +98,7 @@ final class TraceContextData {
       {
         ...?existingPayload,
         logTraceKey: traceId,
-        logSpanIdKey: spanId,
+        logSpanIdKey: ?spanId,
         if (traceSampled) logTraceSampledKey: true,
       };
 }

@@ -295,7 +295,6 @@ void main() {
         projectId: 'test-project',
         traceHeader: '0123456789abcdef0123456789abcdef/1054454457908058113;o=1',
       );
-      expect(context, isNotNull);
       expect(
         context.traceId,
         'projects/test-project/traces/0123456789abcdef0123456789abcdef',
@@ -309,7 +308,6 @@ void main() {
         projectId: 'test-project',
         traceHeader: '0123456789abcdef0123456789abcdef/123',
       );
-      expect(context, isNotNull);
       expect(
         context.traceId,
         'projects/test-project/traces/0123456789abcdef0123456789abcdef',
@@ -325,7 +323,6 @@ void main() {
           projectId: 'test-project',
           traceHeader: '0123456789abcdef0123456789abcdef/123;o=0',
         );
-        expect(context, isNotNull);
         expect(
           context.traceId,
           'projects/test-project/traces/0123456789abcdef0123456789abcdef',
@@ -340,13 +337,60 @@ void main() {
         projectId: 'test-project',
         traceHeader: '0123456789abcdef0123456789abcdef',
       );
-      expect(context, isNotNull);
       expect(
         context.traceId,
         'projects/test-project/traces/0123456789abcdef0123456789abcdef',
       );
       expect(context.spanId, isNull);
       expect(context.traceSampled, isFalse);
+    });
+  });
+
+  group('TraceContextData.asPayloadMap', () {
+    test('full context includes everything', () {
+      final context = TraceContextData(
+        traceId: 'test-trace',
+        spanId: 'test-span',
+        traceSampled: true,
+      );
+      expect(context.asPayloadMap(), {
+        'logging.googleapis.com/trace': 'test-trace',
+        'logging.googleapis.com/spanId': 'test-span',
+        'logging.googleapis.com/trace_sampled': true,
+      });
+    });
+
+    test('omits spanId when null', () {
+      final context = TraceContextData(traceId: 'test-trace');
+      expect(context.asPayloadMap(), {
+        'logging.googleapis.com/trace': 'test-trace',
+      });
+    });
+
+    test('omits traceSampled when false', () {
+      final context = TraceContextData(
+        traceId: 'test-trace',
+        spanId: 'test-span',
+        // traceSampled: false, // Default
+      );
+      expect(context.asPayloadMap(), {
+        'logging.googleapis.com/trace': 'test-trace',
+        'logging.googleapis.com/spanId': 'test-span',
+      });
+    });
+
+    test('merges with existing payload', () {
+      final context = TraceContextData(
+        traceId: 'test-trace',
+        spanId: 'test-span',
+      );
+      final payload = {'message': 'hello', 'count': 42};
+      expect(context.asPayloadMap(payload), {
+        'message': 'hello',
+        'count': 42,
+        'logging.googleapis.com/trace': 'test-trace',
+        'logging.googleapis.com/spanId': 'test-span',
+      });
     });
   });
 }
