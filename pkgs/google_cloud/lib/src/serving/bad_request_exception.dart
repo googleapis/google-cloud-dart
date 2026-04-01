@@ -190,7 +190,7 @@ class BadRequestException implements Exception {
   @override
   String toString() {
     final buffer = StringBuffer('$message ($statusCode)');
-    if (status != null) buffer.write(' [$status]');
+    if (status != null && status!.isNotEmpty) buffer.write(' [$status]');
     if (details != null && details!.isNotEmpty) {
       buffer.write(' Details: $details');
     }
@@ -203,8 +203,8 @@ class BadRequestException implements Exception {
     'error': {
       'code': statusCode,
       'message': message,
-      'status': ?status,
-      'details': ?details,
+      if (status != null && status!.isNotEmpty) 'status': status,
+      if (details != null && details!.isNotEmpty) 'details': details,
     },
   };
 }

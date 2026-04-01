@@ -270,9 +270,16 @@ void main() {
     });
 
     test('skips empty details in toJson', () {
-      final e = BadRequestException(400, 'Custom bad request');
-      expect(e.toJson(), {
-        'error': {'code': 400, 'message': 'Custom bad request'},
+      final e1 = BadRequestException(400, 'Custom bad request');
+      expect(e1.toJson()['error'], {
+        'code': 400,
+        'message': 'Custom bad request',
+      });
+
+      final e2 = BadRequestException(400, 'Custom bad request', details: []);
+      expect(e2.toJson()['error'], {
+        'code': 400,
+        'message': 'Custom bad request',
       });
     });
 
