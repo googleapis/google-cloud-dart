@@ -586,7 +586,7 @@ final class Storage {
     } while (nextPageToken != null);
   }
 
-  /// Creates a new ACL entry on the specified [[Google Cloud Storage object].
+  /// Creates a new ACL entry on the specified [Google Cloud Storage object].
   ///
   /// This operation is not idempotent.
   ///
