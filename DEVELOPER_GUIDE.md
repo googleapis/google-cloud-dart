@@ -69,5 +69,19 @@ To run these tests locally (they are automatically run for PRs using
   example, for a documentation changes to `package:google_cloud_storage`,
   `docs(storage): clarify retry logic`.
 
+## Maintainers
+
+The ability to triage issues, merge PRs, and assign reviewers is limited to 
+members of the [`cloud-sdk-dart-team`][] GitHub team.
+
+Team members also have access to the [`dart-sdk-testing`][] Google Cloud
+project, which is used for running integration tests.
+
+PRs created by team members will automatically have Google Cloud integration
+tests run for them. Team members can manually trigger Google Cloud integration
+tests by commenting `/gcbrun` on the PR.
+
 [Google Cloud Console]: https://console.cloud.google.com/
 [Conventional Commits]: https://www.conventionalcommits.org/
+[`cloud-sdk-dart-team`]: https://github.com/orgs/googleapis/teams/cloud-sdk-dart-team
+[`dart-sdk-testing`]: https://pantheon.corp.google.com/welcome?project=dart-sdk-testing
