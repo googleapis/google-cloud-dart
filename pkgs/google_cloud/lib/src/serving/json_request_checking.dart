@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'dart:io';
-import 'package:http_parser/http_parser.dart';
+import 'package:http/http.dart' show MediaType;
 import 'package:meta/meta.dart';
 
 /// Evaluates whether to send a JSON response based on request headers.
