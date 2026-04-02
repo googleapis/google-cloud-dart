@@ -238,8 +238,85 @@ void main() {
       expect(response.statusCode, 400);
       expect(
         await response.readAsString(),
-        contains('Bad request. Custom bad request'),
+        contains('Custom bad request (400)'), // toString() output
       );
+    });
+
+    test('badRequestMiddleware handles BadRequestException (JSON)', () async {
+      final handler = const Pipeline()
+          .addMiddleware(badRequestMiddleware)
+          .addHandler((request) {
+            throw BadRequestException(400, 'Custom bad request');
+          });
+
+      final response = await handler(
+        Request(
+          'GET',
+          Uri.parse('http://localhost/'),
+          headers: {'Accept': 'application/json'},
+        ),
+      );
+      expect(response.statusCode, 400);
+      expect(
+        response.headers[HttpHeaders.contentTypeHeader],
+        contains('application/json'),
+      );
+
+      final body = await response.readAsString();
+      final json = jsonDecode(body) as Map<String, dynamic>;
+      expect(json, {
+        'error': {'code': 400, 'message': 'Custom bad request'},
+      });
+    });
+
+    test('skips empty details in toJson', () {
+      final e1 = BadRequestException(400, 'Custom bad request');
+      expect(e1.toJson()['error'], {
+        'code': 400,
+        'message': 'Custom bad request',
+      });
+
+      final e2 = BadRequestException(400, 'Custom bad request', details: []);
+      expect(e2.toJson()['error'], {
+        'code': 400,
+        'message': 'Custom bad request',
+      });
+    });
+
+    test('badRequestMiddleware handles expanded BadRequestException', () async {
+      final handler = const Pipeline()
+          .addMiddleware(badRequestMiddleware)
+          .addHandler((request) {
+            throw BadRequestException.badRequest(
+              'Custom bad request',
+              status: 'INVALID_ARGUMENT',
+              details: [
+                {'field': 'name', 'message': 'required'},
+              ],
+            );
+          });
+
+      final response = await handler(
+        Request(
+          'GET',
+          Uri.parse('http://localhost/'),
+          headers: {'Accept': 'application/json'},
+        ),
+      );
+      expect(response.statusCode, 400);
+
+      final body = await response.readAsString();
+      final json = jsonDecode(body) as Map<String, dynamic>;
+      expect(json, {
+        'error': {
+          'code': 400,
+          'message': 'Custom bad request',
+          'status': 'INVALID_ARGUMENT',
+          'details': [
+            {'field': 'name', 'message': 'required'},
+          ],
+        },
+      });
     });
 
     test('badRequestMiddleware logs to stderr', () async {
