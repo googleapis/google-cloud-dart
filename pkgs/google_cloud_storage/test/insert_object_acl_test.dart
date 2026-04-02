@@ -65,7 +65,6 @@ void main() async {
           'object.txt',
           projection: 'full',
         );
-        print(metadata.acl);
         final testUserRoles = [
           for (var i in metadata.acl ?? <ObjectAccessControl>[])
             if (i.entity == 'user-daenerysstone.938939@gmail.com')
