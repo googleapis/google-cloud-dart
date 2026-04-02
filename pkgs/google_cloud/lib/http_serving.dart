@@ -39,11 +39,13 @@
 /// ```
 ///
 /// {@canonicalFor bad_configuration_exception.BadConfigurationException}
-/// {@canonicalFor bad_request_exception.BadRequestException}
 /// {@canonicalFor http_logging.badRequestMiddleware}
 /// {@canonicalFor http_logging.cloudLoggingMiddleware}
 /// {@canonicalFor http_logging.createLoggingMiddleware}
 /// {@canonicalFor http_logging.currentLogger}
+/// {@canonicalFor http_logging.httpResponseExceptionMiddleware}
+/// {@canonicalFor http_response_exception.BadRequestException}
+/// {@canonicalFor http_response_exception.HttpResponseException}
 /// {@canonicalFor serve.listenPortFromEnvironment}
 /// {@canonicalFor serve.serveHandler}
 /// {@canonicalFor terminate.waitForTerminate}
@@ -52,13 +54,15 @@ library;
 export 'src/logger.dart' show CloudLogger, LogSeverity;
 export 'src/serving/bad_configuration_exception.dart'
     show BadConfigurationException;
-export 'src/serving/bad_request_exception.dart' show BadRequestException;
 export 'src/serving/http_logging.dart'
     show
         badRequestMiddleware,
         cloudLoggingMiddleware,
         createLoggingMiddleware,
-        currentLogger;
+        currentLogger,
+        httpResponseExceptionMiddleware;
+export 'src/serving/http_response_exception.dart'
+    show BadRequestException, HttpResponseException;
 export 'src/serving/serve.dart' show listenPortFromEnvironment, serveHandler;
 export 'src/serving/terminate.dart' show waitForTerminate;
 export 'src/serving/trace_context_data.dart' show TraceContextData;
