@@ -1,3 +1,29 @@
+## 0.4.0
+
+### `constants.dart`
+
+- Added `logSpanIdKey`, `logTraceKey`, and `logTraceSampledKey`.
+
+### `general.dart`
+
+- **BREAKING** `structuredLogEntry` removed `traceId` parameter. Use the *new*
+  `payload` parameter with the `logTraceKey` constant as a key.
+- Hardened structured log JSON serialization with automatic fallback mechanisms
+  to safely handle native `toJson()` implementations and circular references
+  without failing.
+
+- Added `CloudLogger` (renamed from `RequestLogger`).
+  - Added optional `payload` and `stackTrace` named parameters to
+    `CloudLogger` functions.
+  - `CloudLogger` is no longer abstract and has a default implementation that
+    prints to stdout.
+
+### `http_serving.dart`
+
+- **BREAKING** Renamed `RequestLogger` to `CloudLogger` and moved it to
+  `package:google_cloud/general.dart`.
+- Refactored HTTP logging logic to handle `spanId` and `traceSampled`.
+
 ## 0.3.1
 
 - Fix a bug where `projectIdFromGcloudConfig()` used the incorrect gcloud shell
