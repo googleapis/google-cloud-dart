@@ -89,7 +89,7 @@ Response _responseFromBadRequest(
     return Response(
       e.statusCode,
       body: jsonEncode(e.toJson()),
-      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      headers: {HttpHeaders.contentTypeHeader: _jsonMimeType},
       context: {
         _badRequestExceptionContextKey: e,
         _badStackTraceContextKey: stack,
@@ -107,11 +107,12 @@ Response _responseFromBadRequest(
   );
 }
 
+const _jsonMimeType = 'application/json';
+
 bool _isJsonRequest(Map<String, String>? headers) {
-  final accept = headers?['Accept'] ?? '';
-  final contentType = headers?['Content-Type'] ?? '';
-  return accept.contains('application/json') ||
-      contentType.contains('application/json');
+  final accept = headers?[HttpHeaders.acceptHeader] ?? '';
+  final contentType = headers?[HttpHeaders.contentTypeHeader] ?? '';
+  return accept.contains(_jsonMimeType) || contentType.contains(_jsonMimeType);
 }
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
