@@ -168,7 +168,9 @@ Middleware cloudLoggingMiddleware(String projectId) {
                   ? createErrorLogEntryFromRequest(
                       error,
                       error.innerStack ?? stackTrace,
-                      LogSeverity.warning,
+                      error.statusCode >= 500
+                          ? LogSeverity.error
+                          : LogSeverity.warning,
                       extraPayload: error.toJson(),
                     )
                   : createErrorLogEntryFromRequest(

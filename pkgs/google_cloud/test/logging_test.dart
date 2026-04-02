@@ -276,7 +276,7 @@ void main() {
             'as map',
             {
               'message': 'Not implemented yet (501) [UNIMPLEMENTED]',
-              'severity': 'WARNING',
+              'severity': 'ERROR',
               'error': {
                 'code': 501,
                 'message': 'Not implemented yet',
@@ -298,8 +298,25 @@ void main() {
           throw HttpResponseException(400, 'Custom bad request');
         });
 
-        final response = await handler(
-          Request('GET', Uri.parse('http://localhost/')),
+        late Response response;
+        await expectLater(
+          () async => response = await handler(
+            Request('GET', Uri.parse('http://localhost/')),
+          ),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message': 'Custom bad request (400)',
+                'severity': 'WARNING',
+                'error': {'code': 400, 'message': 'Custom bad request'},
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
+          ),
         );
         expect(response.statusCode, 400);
         expect(
@@ -316,11 +333,28 @@ void main() {
           throw HttpResponseException(400, 'Custom bad request');
         });
 
-        final response = await handler(
-          Request(
-            'GET',
-            Uri.parse('http://localhost/'),
-            headers: {'Accept': 'application/json'},
+        late Response response;
+        await expectLater(
+          () async => response = await handler(
+            Request(
+              'GET',
+              Uri.parse('http://localhost/'),
+              headers: {'Accept': 'application/json'},
+            ),
+          ),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message': 'Custom bad request (400)',
+                'severity': 'WARNING',
+                'error': {'code': 400, 'message': 'Custom bad request'},
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
           ),
         );
         expect(response.statusCode, 400);
@@ -364,11 +398,37 @@ void main() {
           );
         });
 
-        final response = await handler(
-          Request(
-            'GET',
-            Uri.parse('http://localhost/'),
-            headers: {'Accept': 'application/json'},
+        late Response response;
+        await expectLater(
+          () async => response = await handler(
+            Request(
+              'GET',
+              Uri.parse('http://localhost/'),
+              headers: {'Accept': 'application/json'},
+            ),
+          ),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message':
+                    'Custom bad request (400) [INVALID_ARGUMENT] '
+                    'Details: [{field: name, message: required}]',
+                'severity': 'WARNING',
+                'error': {
+                  'code': 400,
+                  'message': 'Custom bad request',
+                  'status': 'INVALID_ARGUMENT',
+                  'details': [
+                    {'field': 'name', 'message': 'required'},
+                  ],
+                },
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
           ),
         );
         expect(response.statusCode, 400);
@@ -396,12 +456,15 @@ void main() {
             throw HttpResponseException(400, 'Custom bad request');
           });
 
-      await IOOverrides.runZoned(() async {
-        final response = await handler(
-          Request('GET', Uri.parse('http://localhost/')),
-        );
-        expect(response.statusCode, 400);
-      }, stderr: () => _MockStdout(stderrLines));
+      await expectLater(
+        () => IOOverrides.runZoned(() async {
+          final response = await handler(
+            Request('GET', Uri.parse('http://localhost/')),
+          );
+          expect(response.statusCode, 400);
+        }, stderr: () => _MockStdout(stderrLines)),
+        prints(contains('[400] /')),
+      );
 
       expect(stderrLines, hasLength(1));
       final lines = stderrLines.single.split('\n');
