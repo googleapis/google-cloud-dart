@@ -19,7 +19,7 @@ options:
   env:
     - GOOGLE_CLOUD_DART_TEST_RUNNING_ON_GCB=1
     - GOOGLE_CLOUD_PROJECT=${PROJECT_ID}
-    - GOOGLE_CLOUD_DART_TEST_SERVICE_ACCOUNT=dart-sdk-test@${PROJECT_ID}.iam.gserviceaccount.com
+    - GOOGLE_CLOUD_DART_TEST_SERVICE_ACCOUNT=integration-test-runner@${PROJECT_ID}.iam.gserviceaccount.com
   workerPool: 'projects/${PROJECT_ID}/locations/${_POOL_REGION}/workerPools/${_POOL_ID}'
 serviceAccount: 'projects/${PROJECT_ID}/serviceAccounts/integration-test-runner@${PROJECT_ID}.iam.gserviceaccount.com'
 steps:
