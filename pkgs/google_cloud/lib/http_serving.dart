@@ -63,7 +63,10 @@ export 'src/serving/http_logging.dart'
         currentLogger,
         httpResponseExceptionMiddleware;
 export 'src/serving/http_response_exception.dart'
-    show BadRequestException, HttpResponseException;
+    show
+        // ignore: deprecated_member_use_from_same_package
+        BadRequestException,
+        HttpResponseException;
 export 'src/serving/serve.dart' show listenPortFromEnvironment, serveHandler;
 export 'src/serving/terminate.dart' show waitForTerminate;
 export 'src/serving/trace_context_data.dart' show TraceContextData;

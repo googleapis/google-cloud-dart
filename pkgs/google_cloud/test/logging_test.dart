@@ -427,7 +427,6 @@ void main() {
     });
 
     test('empty message', () {
-      // ignore: prefer_const_constructors
       expect(
         () => HttpResponseException(400, ''),
         throwsA(isA<AssertionError>()),
