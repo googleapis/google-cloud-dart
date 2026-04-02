@@ -33,32 +33,37 @@ void main() async {
 
       tearDown(() => storage.close());
 
-      test('change acl', () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'pch_obj_chg_acl',
-        );
-        await storage.uploadObject(
-          bucketName,
-          'object.txt',
-          utf8.encode('content'),
-        );
+      test(
+        'change acl',
+        tags: ['no-ulba'],
+        skip: 'public access prevention is enforced in test project',
+        () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'pch_obj_chg_acl',
+          );
+          await storage.uploadObject(
+            bucketName,
+            'object.txt',
+            utf8.encode('content'),
+          );
 
-        final patchMetadata = ObjectMetadataPatchBuilder()
-          ..acl = [ObjectAccessControl(role: 'OWNER', entity: 'allUsers')];
+          final patchMetadata = ObjectMetadataPatchBuilder()
+            ..acl = [ObjectAccessControl(role: 'OWNER', entity: 'allUsers')];
 
-        final actualMetadata = await storage.patchObject(
-          bucketName,
-          'object.txt',
-          patchMetadata,
-          projection: 'full',
-        );
+          final actualMetadata = await storage.patchObject(
+            bucketName,
+            'object.txt',
+            patchMetadata,
+            projection: 'full',
+          );
 
-        expect(actualMetadata.acl?.first.role, 'OWNER');
-        expect(actualMetadata.metageneration, BigInt.from(2));
-      }, skip: 'not supported by test project (UBLA)');
+          expect(actualMetadata.acl?.first.role, 'OWNER');
+          expect(actualMetadata.metageneration, BigInt.from(2));
+        },
+      );
 
-      test('remove acl', () async {
+      test('remove acl', tags: ['no-ulba'], () async {
         final bucketName = await createBucketWithTearDown(
           storage,
           'pch_obj_remove_acl',
@@ -78,9 +83,11 @@ void main() async {
           projection: 'full',
         );
 
-        expect(actualMetadata.acl, isNull);
+        // Clearing object ACLs is permitted but not all ACLs can be removed
+        // so there will still be set ACLs afterwards. See:
+        // https://docs.cloud.google.com/storage/docs/access-control/lists#modification-rules
         expect(actualMetadata.metageneration, BigInt.from(2));
-      }, skip: 'not supported by test project (UBLA)');
+      });
 
       test('change cache control', () async {
         final bucketName = await createBucketWithTearDown(
@@ -734,32 +741,28 @@ void main() async {
           throwsA(isA<PreconditionFailedException>()),
         );
       });
-      test(
-        'with predefined acl',
-        () async {
-          final bucketName = await createBucketWithTearDown(
-            storage,
-            'pch_obj_w_predefined_acl',
-          );
-          await storage.uploadObject(
-            bucketName,
-            'object.txt',
-            utf8.encode('content'),
-          );
+      test('with predefined acl', tags: ['no-ulba'], () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'pch_obj_w_predefined_acl',
+        );
+        await storage.uploadObject(
+          bucketName,
+          'object.txt',
+          utf8.encode('content'),
+        );
 
-          final actualMetadata = await storage.patchObject(
-            bucketName,
-            'object.txt',
-            ObjectMetadataPatchBuilder(),
-            predefinedAcl: 'projectPrivate',
-            projection: 'full',
-          );
+        final actualMetadata = await storage.patchObject(
+          bucketName,
+          'object.txt',
+          ObjectMetadataPatchBuilder(),
+          predefinedAcl: 'projectPrivate',
+          projection: 'full',
+        );
 
-          expect(actualMetadata.acl?.first.role, 'OWNER');
-          expect(actualMetadata.metageneration, BigInt.from(2));
-        },
-        skip: 'test project does not support uniform bucket level access',
-      );
+        expect(actualMetadata.acl?.first.role, 'OWNER');
+        expect(actualMetadata.metageneration, BigInt.from(2));
+      });
     });
   });
 
