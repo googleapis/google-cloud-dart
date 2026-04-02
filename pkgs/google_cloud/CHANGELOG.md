@@ -5,7 +5,7 @@
 - Introduces `HttpResponseException` and `httpResponseExceptionMiddleware`.
   - `BadRequestException` and `badRequestMiddleware` are deprecated in favor of
     `HttpResponseException` and `httpResponseExceptionMiddleware`, respectively.
-    (The are aliased for backward compatibility.)
+    (They are aliased for backward compatibility.)
 - Expanded `HttpResponseException` to support structured error reporting as
   per AIP-193.
   - Added `status` (`String?`) and `details` (`List<Map<String, Object?>>?`)

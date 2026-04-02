@@ -33,7 +33,7 @@ typedef BadRequestException = HttpResponseException;
 class HttpResponseException implements Exception {
   /// The HTTP status code for the response.
   ///
-  /// Must be between 400 and 499.
+  /// Must be between 400 and 599.
   final int statusCode;
 
   /// The message sent to the requester.
@@ -210,7 +210,7 @@ class HttpResponseException implements Exception {
     String? message,
     Object? innerError,
     StackTrace? innerStack,
-    String? status,
+    String? status = 'INTERNAL',
     List<Map<String, Object?>>? details,
   }) => HttpResponseException(
     500,
@@ -264,7 +264,7 @@ class HttpResponseException implements Exception {
     String? message,
     Object? innerError,
     StackTrace? innerStack,
-    String? status,
+    String? status = 'DEADLINE_EXCEEDED',
     List<Map<String, Object?>>? details,
   }) => HttpResponseException(
     504,
