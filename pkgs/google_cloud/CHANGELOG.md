@@ -1,4 +1,4 @@
-## 0.4.1-wip
+## 0.4.1
 
 ### `http_serving.dart`
 
