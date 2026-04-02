@@ -23,6 +23,7 @@ import '../constants.dart';
 import '../logger.dart';
 import '../structured_logging.dart';
 import 'http_response_exception.dart';
+import 'json_request_checking.dart';
 import 'trace_context_data.dart';
 
 export '../structured_logging.dart';
@@ -90,11 +91,11 @@ Response _responseFromException(
   StackTrace stack, [
   Map<String, String>? requestHeaders,
 ]) {
-  if (_isJsonRequest(requestHeaders)) {
+  if (requestHeaders != null && shouldSendJsonResponse(requestHeaders)) {
     return Response(
       e.statusCode,
       body: jsonEncode(e.toJson()),
-      headers: {HttpHeaders.contentTypeHeader: _jsonMimeType},
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
       context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
     );
   }
@@ -104,14 +105,6 @@ Response _responseFromException(
     body: e.toString(),
     context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
   );
-}
-
-const _jsonMimeType = 'application/json';
-
-bool _isJsonRequest(Map<String, String>? headers) {
-  final accept = headers?[HttpHeaders.acceptHeader] ?? '';
-  final contentType = headers?[HttpHeaders.contentTypeHeader] ?? '';
-  return accept.contains(_jsonMimeType) || contentType.contains(_jsonMimeType);
 }
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
