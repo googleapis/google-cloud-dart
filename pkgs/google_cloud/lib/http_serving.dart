@@ -38,17 +38,18 @@
 /// }
 /// ```
 ///
-/// {@canonicalFor bad_configuration_exception.BadConfigurationException}
-/// {@canonicalFor http_logging.badRequestMiddleware}
-/// {@canonicalFor http_logging.cloudLoggingMiddleware}
-/// {@canonicalFor http_logging.createLoggingMiddleware}
-/// {@canonicalFor http_logging.currentLogger}
-/// {@canonicalFor http_logging.httpResponseExceptionMiddleware}
-/// {@canonicalFor http_response_exception.BadRequestException}
-/// {@canonicalFor http_response_exception.HttpResponseException}
-/// {@canonicalFor serve.listenPortFromEnvironment}
-/// {@canonicalFor serve.serveHandler}
-/// {@canonicalFor terminate.waitForTerminate}
+/// {@canonicalFor http_serving.BadConfigurationException}
+/// {@canonicalFor http_serving.badRequestMiddleware}
+/// {@canonicalFor http_serving.cloudLoggingMiddleware}
+/// {@canonicalFor http_serving.createLoggingMiddleware}
+/// {@canonicalFor http_serving.currentLogger}
+/// {@canonicalFor http_serving.httpResponseExceptionMiddleware}
+/// {@canonicalFor http_serving.BadRequestException}
+/// {@canonicalFor http_serving.HttpResponseException}
+/// {@canonicalFor http_serving.listenPortFromEnvironment}
+/// {@canonicalFor http_serving.serveHandler}
+/// {@canonicalFor http_serving.TraceContextData}
+/// {@canonicalFor http_serving.waitForTerminate}
 library;
 
 export 'src/logger.dart' show CloudLogger, LogSeverity;
