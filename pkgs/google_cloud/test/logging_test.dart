@@ -193,12 +193,10 @@ void main() {
 
   group('middleware', () {
     test('cloudLoggingMiddleware logs structured entries', () async {
-      final handler = const Pipeline()
-          .addMiddleware(cloudLoggingMiddleware('test-project'))
-          .addHandler((request) {
-            currentLogger.info('inner log');
-            return Response.ok('done');
-          });
+      final handler = _testHandler((request) {
+        currentLogger.info('inner log');
+        return Response.ok('done');
+      });
 
       await expectLater(
         () => handler(
@@ -212,127 +210,261 @@ void main() {
           ),
         ),
         prints(
-          predicate<String>((output) {
-            final map = jsonDecode(output) as Map<String, dynamic>;
-            return map['message'] == 'inner log' &&
-                map['severity'] == 'INFO' &&
-                map['logging.googleapis.com/trace'] ==
-                    'projects/test-project/traces/0123456789abcdef0123456789abcdef' &&
-                map['logging.googleapis.com/spanId'] == '000000000000007b' &&
-                map['logging.googleapis.com/trace_sampled'] == true;
-          }),
+          isA<String>().having(
+            (output) => jsonDecode(output) as Map<String, dynamic>,
+            'as map',
+            {
+              'message': 'inner log',
+              'severity': 'INFO',
+              'logging.googleapis.com/trace':
+                  'projects/test-project/traces/0123456789abcdef0123456789abcdef',
+              'logging.googleapis.com/spanId': '000000000000007b',
+              'logging.googleapis.com/trace_sampled': true,
+            },
+          ),
         ),
       );
     });
 
-    test('badRequestMiddleware handles BadRequestException', () async {
-      final handler = const Pipeline()
-          .addMiddleware(badRequestMiddleware)
-          .addHandler((request) {
-            throw BadRequestException(400, 'Custom bad request');
-          });
+    test(
+      'cloudLoggingMiddleware logs HttpResponseException with payload',
+      () async {
+        final handler = _testHandler((request) {
+          throw HttpResponseException(
+            403,
+            'Forbidden access',
+            status: 'PERMISSION_DENIED',
+          );
+        });
 
-      final response = await handler(
-        Request('GET', Uri.parse('http://localhost/')),
-      );
-      expect(response.statusCode, 400);
-      expect(
-        await response.readAsString(),
-        contains('Custom bad request (400)'), // toString() output
-      );
-    });
+        await expectLater(
+          () => handler(Request('GET', Uri.parse('http://localhost/'))),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message': 'Forbidden access (403) [PERMISSION_DENIED]',
+                'severity': 'WARNING',
+                'error': {
+                  'code': 403,
+                  'message': 'Forbidden access',
+                  'status': 'PERMISSION_DENIED',
+                },
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
+          ),
+        );
+      },
+    );
 
-    test('badRequestMiddleware handles BadRequestException (JSON)', () async {
-      final handler = const Pipeline()
-          .addMiddleware(badRequestMiddleware)
-          .addHandler((request) {
-            throw BadRequestException(400, 'Custom bad request');
-          });
-
-      final response = await handler(
-        Request(
-          'GET',
-          Uri.parse('http://localhost/'),
-          headers: {'Accept': 'application/json'},
-        ),
-      );
-      expect(response.statusCode, 400);
-      expect(
-        response.headers[HttpHeaders.contentTypeHeader],
-        contains('application/json'),
-      );
-
-      final body = await response.readAsString();
-      final json = jsonDecode(body) as Map<String, dynamic>;
-      expect(json, {
-        'error': {'code': 400, 'message': 'Custom bad request'},
+    test('cloudLoggingMiddleware logs notImplemented with payload', () async {
+      final handler = _testHandler((request) {
+        throw HttpResponseException.notImplemented(
+          message: 'Not implemented yet',
+        );
       });
+
+      await expectLater(
+        () => handler(Request('GET', Uri.parse('http://localhost/'))),
+        prints(
+          isA<String>().having(
+            (output) => jsonDecode(output) as Map<String, dynamic>,
+            'as map',
+            {
+              'message': 'Not implemented yet (501) [UNIMPLEMENTED]',
+              'severity': 'ERROR',
+              'error': {
+                'code': 501,
+                'message': 'Not implemented yet',
+                'status': 'UNIMPLEMENTED',
+              },
+              'stack_trace': isA<String>(),
+              'logging.googleapis.com/sourceLocation':
+                  isA<Map<String, dynamic>>(),
+            },
+          ),
+        ),
+      );
     });
+
+    test(
+      'httpResponseExceptionMiddleware handles HttpResponseException',
+      () async {
+        final handler = _testHandler((request) {
+          throw HttpResponseException(400, 'Custom bad request');
+        });
+
+        late Response response;
+        await expectLater(
+          () async => response = await handler(
+            Request('GET', Uri.parse('http://localhost/')),
+          ),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message': 'Custom bad request (400)',
+                'severity': 'WARNING',
+                'error': {'code': 400, 'message': 'Custom bad request'},
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
+          ),
+        );
+        expect(response.statusCode, 400);
+        expect(
+          await response.readAsString(),
+          contains('Custom bad request (400)'), // toString() output
+        );
+      },
+    );
+
+    test(
+      'httpResponseExceptionMiddleware handles HttpResponseException (JSON)',
+      () async {
+        final handler = _testHandler((request) {
+          throw HttpResponseException(400, 'Custom bad request');
+        });
+
+        late Response response;
+        await expectLater(
+          () async => response = await handler(
+            Request(
+              'GET',
+              Uri.parse('http://localhost/'),
+              headers: {'Accept': 'application/json'},
+            ),
+          ),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message': 'Custom bad request (400)',
+                'severity': 'WARNING',
+                'error': {'code': 400, 'message': 'Custom bad request'},
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
+          ),
+        );
+        expect(response.statusCode, 400);
+        expect(
+          response.headers[HttpHeaders.contentTypeHeader],
+          contains('application/json'),
+        );
+
+        final body = await response.readAsString();
+        final json = jsonDecode(body) as Map<String, dynamic>;
+        expect(json, {
+          'error': {'code': 400, 'message': 'Custom bad request'},
+        });
+      },
+    );
 
     test('skips empty details in toJson', () {
-      final e1 = BadRequestException(400, 'Custom bad request');
+      final e1 = HttpResponseException(400, 'Custom bad request');
       expect(e1.toJson()['error'], {
         'code': 400,
         'message': 'Custom bad request',
       });
 
-      final e2 = BadRequestException(400, 'Custom bad request', details: []);
+      final e2 = HttpResponseException(400, 'Custom bad request', details: []);
       expect(e2.toJson()['error'], {
         'code': 400,
         'message': 'Custom bad request',
       });
     });
 
-    test('badRequestMiddleware handles expanded BadRequestException', () async {
-      final handler = const Pipeline()
-          .addMiddleware(badRequestMiddleware)
-          .addHandler((request) {
-            throw BadRequestException.badRequest(
-              'Custom bad request',
-              status: 'INVALID_ARGUMENT',
-              details: [
-                {'field': 'name', 'message': 'required'},
-              ],
-            );
-          });
+    test(
+      'httpResponseExceptionMiddleware handles expanded HttpResponseException',
+      () async {
+        final handler = _testHandler((request) {
+          throw HttpResponseException.badRequest(
+            message: 'Custom bad request',
+            status: 'INVALID_ARGUMENT',
+            details: [
+              {'field': 'name', 'message': 'required'},
+            ],
+          );
+        });
 
-      final response = await handler(
-        Request(
-          'GET',
-          Uri.parse('http://localhost/'),
-          headers: {'Accept': 'application/json'},
-        ),
-      );
-      expect(response.statusCode, 400);
+        late Response response;
+        await expectLater(
+          () async => response = await handler(
+            Request(
+              'GET',
+              Uri.parse('http://localhost/'),
+              headers: {'Accept': 'application/json'},
+            ),
+          ),
+          prints(
+            isA<String>().having(
+              (output) => jsonDecode(output) as Map<String, dynamic>,
+              'as map',
+              {
+                'message':
+                    'Custom bad request (400) [INVALID_ARGUMENT] '
+                    'Details: [{field: name, message: required}]',
+                'severity': 'WARNING',
+                'error': {
+                  'code': 400,
+                  'message': 'Custom bad request',
+                  'status': 'INVALID_ARGUMENT',
+                  'details': [
+                    {'field': 'name', 'message': 'required'},
+                  ],
+                },
+                'stack_trace': isA<String>(),
+                'logging.googleapis.com/sourceLocation':
+                    isA<Map<String, dynamic>>(),
+              },
+            ),
+          ),
+        );
+        expect(response.statusCode, 400);
 
-      final body = await response.readAsString();
-      final json = jsonDecode(body) as Map<String, dynamic>;
-      expect(json, {
-        'error': {
-          'code': 400,
-          'message': 'Custom bad request',
-          'status': 'INVALID_ARGUMENT',
-          'details': [
-            {'field': 'name', 'message': 'required'},
-          ],
-        },
-      });
-    });
+        final body = await response.readAsString();
+        final json = jsonDecode(body) as Map<String, dynamic>;
+        expect(json, {
+          'error': {
+            'code': 400,
+            'message': 'Custom bad request',
+            'status': 'INVALID_ARGUMENT',
+            'details': [
+              {'field': 'name', 'message': 'required'},
+            ],
+          },
+        });
+      },
+    );
 
-    test('badRequestMiddleware logs to stderr', () async {
+    test('httpResponseExceptionMiddleware logs to stderr', () async {
       final stderrLines = <String>[];
       final handler = const Pipeline()
           .addMiddleware(createLoggingMiddleware())
           .addHandler((request) {
-            throw BadRequestException(400, 'Custom bad request');
+            throw HttpResponseException(400, 'Custom bad request');
           });
 
-      await IOOverrides.runZoned(() async {
-        final response = await handler(
-          Request('GET', Uri.parse('http://localhost/')),
-        );
-        expect(response.statusCode, 400);
-      }, stderr: () => _MockStdout(stderrLines));
+      await expectLater(
+        () => IOOverrides.runZoned(() async {
+          final response = await handler(
+            Request('GET', Uri.parse('http://localhost/')),
+          );
+          expect(response.statusCode, 400);
+        }, stderr: () => _MockStdout(stderrLines)),
+        prints(contains('[400] /')),
+      );
 
       expect(stderrLines, hasLength(1));
       final lines = stderrLines.single.split('\n');
@@ -341,26 +473,25 @@ void main() {
     });
   });
 
-  group('BadRequestException', () {
+  group('HttpResponseException', () {
     test('valid status code', () {
-      final ex = BadRequestException(400, 'Bad');
+      final ex = HttpResponseException(400, 'Bad');
       expect(ex.statusCode, 400);
       expect(ex.message, 'Bad');
       expect(ex.toString(), 'Bad (400)');
     });
 
     test('invalid status code low', () {
-      expect(() => BadRequestException(399, 'Bad'), throwsArgumentError);
+      expect(() => HttpResponseException(399, 'Bad'), throwsArgumentError);
     });
 
     test('invalid status code high', () {
-      expect(() => BadRequestException(500, 'Bad'), throwsArgumentError);
+      expect(() => HttpResponseException(600, 'Bad'), throwsArgumentError);
     });
 
     test('empty message', () {
-      // ignore: prefer_const_constructors
       expect(
-        () => BadRequestException(400, ''),
+        () => HttpResponseException(400, ''),
         throwsA(isA<AssertionError>()),
       );
     });
@@ -471,6 +602,10 @@ void main() {
     });
   });
 }
+
+Handler _testHandler(Handler inner) => const Pipeline()
+    .addMiddleware(cloudLoggingMiddleware('test-project'))
+    .addHandler(inner);
 
 class _NonEncodable {
   @override
