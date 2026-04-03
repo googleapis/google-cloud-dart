@@ -16,6 +16,7 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:test/test.dart';
+import 'package:test_utils/cloud.dart' as cloud;
 
 import 'test_utils.dart';
 
@@ -53,11 +54,11 @@ void main() async {
         final acl = await storage.insertObjectAcl(
           bucketName,
           'object.txt',
-          'user-daenerysstone.938939@gmail.com',
+          'user-${cloud.googleTestUser}',
           'READER',
         );
 
-        expect(acl.entity, 'user-daenerysstone.938939@gmail.com');
+        expect(acl.entity, 'user-${cloud.googleTestUser}');
         expect(acl.role, 'READER');
 
         final metadata = await storage.objectMetadata(
@@ -67,12 +68,9 @@ void main() async {
         );
         final testUserRoles = [
           for (var i in metadata.acl ?? <ObjectAccessControl>[])
-            if (i.entity == 'user-daenerysstone.938939@gmail.com')
-              (i.entity, i.role),
+            if (i.entity == 'user-${cloud.googleTestUser}') (i.entity, i.role),
         ];
-        expect(testUserRoles, [
-          ('user-daenerysstone.938939@gmail.com', 'READER'),
-        ]);
+        expect(testUserRoles, [('user-${cloud.googleTestUser}', 'READER')]);
       });
 
       test('reader then owner', () async {
@@ -98,13 +96,13 @@ void main() async {
         await storage.insertObjectAcl(
           bucketName,
           'object.txt',
-          'user-daenerysstone.938939@gmail.com',
+          'user-${cloud.googleTestUser}',
           'READER',
         );
         await storage.insertObjectAcl(
           bucketName,
           'object.txt',
-          'user-daenerysstone.938939@gmail.com',
+          'user-${cloud.googleTestUser}',
           'OWNER',
         );
 
@@ -116,12 +114,9 @@ void main() async {
 
         final testUserRoles = [
           for (var i in metadata.acl ?? <ObjectAccessControl>[])
-            if (i.entity == 'user-daenerysstone.938939@gmail.com')
-              (i.entity, i.role),
+            if (i.entity == 'user-${cloud.googleTestUser}') (i.entity, i.role),
         ];
-        expect(testUserRoles, [
-          ('user-daenerysstone.938939@gmail.com', 'OWNER'),
-        ]);
+        expect(testUserRoles, [('user-${cloud.googleTestUser}', 'OWNER')]);
       });
 
       test('owner then reader', () async {
@@ -147,13 +142,13 @@ void main() async {
         await storage.insertObjectAcl(
           bucketName,
           'object.txt',
-          'user-daenerysstone.938939@gmail.com',
+          'user-${cloud.googleTestUser}',
           'OWNER',
         );
         await storage.insertObjectAcl(
           bucketName,
           'object.txt',
-          'user-daenerysstone.938939@gmail.com',
+          'user-${cloud.googleTestUser}',
           'READER',
         );
 
@@ -165,12 +160,9 @@ void main() async {
 
         final testUserRoles = [
           for (var i in metadata.acl ?? <ObjectAccessControl>[])
-            if (i.entity == 'user-daenerysstone.938939@gmail.com')
-              (i.entity, i.role),
+            if (i.entity == 'user-${cloud.googleTestUser}') (i.entity, i.role),
         ];
-        expect(testUserRoles, [
-          ('user-daenerysstone.938939@gmail.com', 'READER'),
-        ]);
+        expect(testUserRoles, [('user-${cloud.googleTestUser}', 'READER')]);
       });
 
       test('not found', () async {

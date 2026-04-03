@@ -14,6 +14,9 @@
 
 import 'dart:io';
 
+/// A real Google account that can be used for 
+const googleTestUser = 'daenerysstone.938939@gmail.com';
+
 /// The id of the Google Cloud Project targeted by the test.
 ///
 /// Taken from the `"GOOGLE_CLOUD_PROJECT"` environment variable.
