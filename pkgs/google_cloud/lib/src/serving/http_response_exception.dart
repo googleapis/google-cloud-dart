@@ -79,7 +79,7 @@ class HttpResponseException implements Exception {
     String? message,
     Object? innerError,
     StackTrace? innerStack,
-    String? status,
+    String? status = 'INVALID_ARGUMENT',
     List<Map<String, Object?>>? details,
   }) => HttpResponseException(
     400,

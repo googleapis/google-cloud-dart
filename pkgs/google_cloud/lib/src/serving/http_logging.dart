@@ -141,6 +141,55 @@ Middleware cloudLoggingMiddleware(String projectId) {
 
     final completer = Completer<Response>.sync();
 
+    void uncaughtErrorHandler(
+      Zone self,
+      ZoneDelegate parent,
+      _,
+      Object error,
+      StackTrace stackTrace,
+    ) {
+      if (error is HijackException) {
+        completer.completeError(error, stackTrace);
+      }
+
+      final logContentString = error is HttpResponseException
+          ? createErrorLogEntryFromRequest(
+              error,
+              error.innerStack ?? stackTrace,
+              error.statusCode >= 500 ? LogSeverity.error : LogSeverity.warning,
+              extraPayload: error.toJson(),
+            )
+          : createErrorLogEntryFromRequest(
+              error,
+              stackTrace,
+              LogSeverity.error,
+            );
+
+      // Serialize to a JSON string and output.
+      parent.print(self, logContentString);
+
+      if (completer.isCompleted) {
+        return;
+      }
+
+      final response = error is HttpResponseException
+          ? _responseFromException(error, stackTrace, request.headers)
+          : Response.internalServerError();
+
+      completer.complete(response);
+    }
+
+    void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
+      final logContent = structuredLogEntry(
+        line,
+        LogSeverity.info,
+        payload: traceContext?.asPayloadMap(),
+      );
+
+      // Serialize to a JSON string and output to parent zone.
+      parent.print(self, logContent);
+    }
+
     final currentZone = Zone.current;
 
     Zone.current
@@ -152,49 +201,8 @@ Middleware cloudLoggingMiddleware(String projectId) {
             ),
           },
           specification: ZoneSpecification(
-            handleUncaughtError: (self, parent, zone, error, stackTrace) {
-              if (error is HijackException) {
-                completer.completeError(error, stackTrace);
-              }
-
-              final logContentString = error is HttpResponseException
-                  ? createErrorLogEntryFromRequest(
-                      error,
-                      error.innerStack ?? stackTrace,
-                      error.statusCode >= 500
-                          ? LogSeverity.error
-                          : LogSeverity.warning,
-                      extraPayload: error.toJson(),
-                    )
-                  : createErrorLogEntryFromRequest(
-                      error,
-                      stackTrace,
-                      LogSeverity.error,
-                    );
-
-              // Serialize to a JSON string and output.
-              parent.print(self, logContentString);
-
-              if (completer.isCompleted) {
-                return;
-              }
-
-              final response = error is HttpResponseException
-                  ? _responseFromException(error, stackTrace, request.headers)
-                  : Response.internalServerError();
-
-              completer.complete(response);
-            },
-            print: (self, parent, zone, line) {
-              final logContent = structuredLogEntry(
-                line,
-                LogSeverity.info,
-                payload: traceContext?.asPayloadMap(),
-              );
-
-              // Serialize to a JSON string and output to parent zone.
-              parent.print(self, logContent);
-            },
+            handleUncaughtError: uncaughtErrorHandler,
+            print: zonePrint,
           ),
         )
         .runGuarded(() async {
