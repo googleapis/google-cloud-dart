@@ -138,5 +138,15 @@ void main() {
         isTrue,
       );
     });
+
+    test('testing mixed json bits', () {
+      expect(
+        shouldSendJsonResponse({
+          HttpHeaders.acceptHeader:
+              'application/json; q=1, application/ld+json; q=0',
+        }),
+        isTrue,
+      );
+    });
   });
 }
