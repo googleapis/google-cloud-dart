@@ -19,64 +19,61 @@ import 'package:meta/meta.dart';
 /// Evaluates whether to send a JSON response based on request headers.
 ///
 /// Rules:
-/// 1. Return `true` if the `Accept` header explicitly asks for JSON and it is
-///    a higher priority than `text/plain` (the default fallback). Wildcards
-///    like `*/*` do not count as explicitly asking for JSON.
-/// 2. Return `false` if the `Accept` header explicitly forbids JSON
-///    (e.g., `q=0`).
-/// 3. Return `true` if the `Content-Type` header is any valid flavor of JSON.
+/// 1. Return `true` if the `Accept` header explicitly asks for JSON
+///    (with q > 0).
+/// 2. Return `false` if the `Accept` header explicitly forbids JSON (q = 0)
+///    and does not allow it elsewhere.
+/// 3. Fallback to return `true` if the `Content-Type` header is any
+///    valid flavor of JSON when the `Accept` header does not specify
+///    JSON preference.
 ///
-/// Conflict resolution: If `Accept` explicitly forbids JSON (Rule 2), it takes
-/// precedence over `Content-Type` being JSON (Rule 3), and returns `false`.
+/// This is a simplified content negotiation that prefers JSON if allowed,
+/// or falls back to the request Content-Type.
 @internal
 bool shouldSendJsonResponse(Map<String, String> requestHeaders) {
   final accept = requestHeaders[HttpHeaders.acceptHeader];
 
-  // TODO(kevmoo): leverage support in pkg:http_parser when it lands
-  // https://github.com/dart-lang/http/issues/1904
-
-  // Parse Accept header to find priorities
-  var qJson = 0.0;
-  var qText = 0.0;
-  var forbidsJson = false;
+  var jsonExplicitlyAllowed = false;
+  var jsonExplicitlyForbidden = false;
 
   if (accept != null) {
+    // TODO(kevmoo): leverage support in pkg:http_parser when it lands
+    // https://github.com/dart-lang/http/issues/1904
+
     final values = accept.split(',');
     for (final value in values) {
       final trimmed = value.trim();
+      final MediaType mediaType;
       try {
-        final mediaType = MediaType.parse(trimmed);
-        final q = double.tryParse(mediaType.parameters['q'] ?? '1.0') ?? 1.0;
-
-        if (_isJson(mediaType)) {
-          if (q == 0.0) {
-            forbidsJson = true;
-          }
-          if (q > qJson) qJson = q;
-        } else if (mediaType.mimeType == 'text/plain') {
-          if (q > qText) qText = q;
-        }
+        mediaType = MediaType.parse(trimmed);
       } catch (_) {
         // Ignore invalid media types in Accept header
+        continue;
+      }
+
+      final q = double.tryParse(mediaType.parameters['q'] ?? '1.0') ?? 1.0;
+
+      if (_isJson(mediaType)) {
+        if (q > 0.0) {
+          jsonExplicitlyAllowed = true;
+        } else {
+          jsonExplicitlyForbidden = true;
+        }
       }
     }
   }
 
-  // Rule 2: Return false if the Accept header explicitly forbids JSON.
+  // If explicitly forbidden and not allowed by another spec, return false.
+  final forbidsJson = jsonExplicitlyForbidden && !jsonExplicitlyAllowed;
   if (forbidsJson) return false;
+
+  // If explicitly allowed, return true.
+  if (jsonExplicitlyAllowed) return true;
 
   final contentType = requestHeaders[HttpHeaders.contentTypeHeader];
 
-  // Rule 3: Return true if the Content-Type header is any valid flavor of JSON.
-  final contentTypeIsJson = contentType != null && _isAnyJson(contentType);
-
-  // Conflict resolution: If Accept explicitly forbids JSON, it takes
-  // precedence over Content-Type being JSON (handled by Rule 2 above).
-  if (contentTypeIsJson) return true;
-
-  // Rule 1: Return true if the Accept header explicitly asks for JSON and it is
-  // a higher priority than text/plain.
-  if (qJson > qText) {
+  // Fallback to Content-Type if it is any valid flavor of JSON.
+  if (contentType != null && _isAnyJson(contentType)) {
     return true;
   }
 

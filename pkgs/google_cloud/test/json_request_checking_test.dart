@@ -36,12 +36,13 @@ void main() {
       );
     });
 
-    test('Accept: application/json;q=0.5, text/plain;q=0.8 returns false', () {
+    test('Accept: application/json;q=0.5, text/plain;q=0.8 returns true '
+        '(prefers JSON if allowed)', () {
       expect(
         shouldSendJsonResponse({
           HttpHeaders.acceptHeader: 'application/json;q=0.5, text/plain;q=0.8',
         }),
-        isFalse,
+        isTrue,
       );
     });
 
@@ -100,13 +101,13 @@ void main() {
       );
     });
 
-    test('Accept with JSON and text equal priority returns false '
-        '(defaults to text)', () {
+    test('Accept with JSON and text equal priority returns true '
+        '(prefers JSON)', () {
       expect(
         shouldSendJsonResponse({
           HttpHeaders.acceptHeader: 'application/json, text/plain',
         }),
-        isFalse,
+        isTrue,
       );
     });
 
@@ -114,6 +115,27 @@ void main() {
       expect(
         shouldSendJsonResponse({HttpHeaders.acceptHeader: '*/*'}),
         isFalse,
+      );
+    });
+
+    test('Accept with multiple JSON specs (one allowed, one forbidden) '
+        'returns true', () {
+      expect(
+        shouldSendJsonResponse({
+          HttpHeaders.acceptHeader:
+              'application/json, application/manifest+json;q=0',
+        }),
+        isTrue,
+      );
+    });
+
+    test('Accept with multiple JSON specs (forbidden first) returns true', () {
+      expect(
+        shouldSendJsonResponse({
+          HttpHeaders.acceptHeader:
+              'application/manifest+json;q=0, application/json',
+        }),
+        isTrue,
       );
     });
   });
