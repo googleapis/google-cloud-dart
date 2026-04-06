@@ -62,15 +62,11 @@ class HttpResponseException implements Exception {
     this.innerStack,
     this.status,
     this.details,
-  }) : assert(message.isNotEmpty) {
-    if (statusCode < 400 || statusCode > 599) {
-      throw ArgumentError.value(
-        statusCode,
-        'statusCode',
-        'Must be between 400 and 599',
-      );
-    }
-  }
+  }) : assert(message.isNotEmpty),
+       assert(
+         statusCode >= 400 && statusCode <= 599,
+         'Must be between 400 and 599',
+       );
 
   /// Creates a new [HttpResponseException] with status code 400.
   ///

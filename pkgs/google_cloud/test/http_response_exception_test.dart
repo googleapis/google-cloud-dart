@@ -39,11 +39,17 @@ void main() {
     });
 
     test('invalid status code low', () {
-      expect(() => HttpResponseException(399, 'Bad'), throwsArgumentError);
+      expect(
+        () => HttpResponseException(399, 'Bad'),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('invalid status code high', () {
-      expect(() => HttpResponseException(600, 'Bad'), throwsArgumentError);
+      expect(
+        () => HttpResponseException(600, 'Bad'),
+        throwsA(isA<AssertionError>()),
+      );
     });
 
     test('empty message', () {
