@@ -125,6 +125,8 @@ Response _responseFromException(
 
   if (requestHeaders != null && shouldSendJsonResponse(requestHeaders)) {
     final jsonBody = error is HttpResponseException
+        // ‼️ Note we only send the `toJson` of HttpResponseException because
+        // it's been vetted to be safe.
         ? error.toJson()
         : {
             'error': {
@@ -144,6 +146,8 @@ Response _responseFromException(
   return Response(
     statusCode,
     body: error is HttpResponseException
+        // ‼️ Note we only send the `toString` of HttpResponseException because
+        // it's been vetted to be safe.
         ? error.toString()
         : internalServerErrorMessage,
   );
