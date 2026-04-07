@@ -67,9 +67,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   }
 
   void _addToBuffer(List<int> data) {
-    if (data.isEmpty) {
-      return;
-    }
+    if (data.isEmpty) return;
     _crc32c.update(data);
     _md5Sink.add(data);
 
