@@ -13,10 +13,15 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/crc32c.dart';
+import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -351,6 +356,66 @@ void main() async {
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
       });
+
+      test('hashes are calculated automatically', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_hashes',
+        );
+
+        final data = [1, 2, 3, 4, 5, 6];
+        final expectedCrc32c = (Crc32c()..update(data)).toBase64();
+        final expectedMd5Hash = base64Encode(crypto.md5.convert(data).bytes);
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object')
+          ..add(data);
+        await sink.close();
+
+        final fetchedMetadata = await storage.objectMetadata(
+          bucketName,
+          'object',
+        );
+        expect(fetchedMetadata.crc32c, expectedCrc32c);
+        expect(fetchedMetadata.md5Hash, expectedMd5Hash);
+      });
+    });
+
+    test('first close fails and second close succeeds', () async {
+      var count = 0;
+      late String actualHash;
+
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1 && request.method == 'POST') {
+          // Start resumeable upload.
+          return http.Response(
+            '',
+            200,
+            headers: {'location': 'http://example.com/location'},
+          );
+        } else if (count == 2) {
+          // First close fails.
+          throw http.ClientException('message');
+        } else if (count == 3) {
+          // Second close succeeds.
+          actualHash = request.headers['x-goog-hash']!;
+          return http.Response('', 200);
+        } else {
+          throw StateError(
+            'Unexpected call (count: $count, method: ${request.method}, '
+            'uri: ${request.url})',
+          );
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: 'fake project');
+
+      final data = [1, 2, 3, 4, 5, 6];
+      final sink = storage.uploadObjectFromSink('bucket', 'object')..add(data);
+
+      await expectLater(sink.close, throwsA(isA<http.ClientException>()));
+      await sink.close();
+      expect(actualHash, 'crc32c=T037qw==,md5=asHla8ePAxBZvnvoVFIsTA==');
     });
   });
 }

@@ -16,10 +16,13 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:google_cloud_rpc/exceptions.dart';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 
+import 'crc32c.dart';
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
 
@@ -44,6 +47,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   // 2. A status check request:
   //    https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#check-status
   final Future<http.Response> _locationResponse;
+  final Crc32c _crc32c = Crc32c();
+  final _md5Accumulator = AccumulatorSink<crypto.Digest>();
+  late final _md5Sink = crypto.md5.startChunkedConversion(_md5Accumulator);
+
   // The next byte position expected by Google Cloud Storage.
   int _nextExpectedByte = 0;
   Uint8List _writeBuffer = Uint8List(_minWriteSize * 2);
@@ -60,6 +67,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   }
 
   void _addToBuffer(List<int> data) {
+    if (data.isEmpty) return;
+    _crc32c.update(data);
+    _md5Sink.add(data);
+
     final requiredCapacity = _writeBufferSize + data.length;
     if (requiredCapacity > _writeBuffer.length) {
       var newSize = _writeBuffer.length * 2;
@@ -146,20 +157,32 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   @override
   Future<dynamic> close() async {
-    if (_closedCompleter.isCompleted) return;
+    if (_isClosing || _closedCompleter.isCompleted) {
+      return _closedCompleter.future;
+    }
     if (_isAddStream) {
       throw StateError('ResumableUploadSink is bound to a stream');
     }
     _isClosing = true;
 
     try {
+      _md5Sink.close();
+      final calculatedCrc32c = _crc32c.toBase64();
+      final calculatedMd5Hash = base64Encode(
+        _md5Accumulator.events.single.bytes,
+      );
+
       final newEnd = _nextExpectedByte + _writeBufferSize;
       final contentRange = _writeBufferSize == 0
           ? 'bytes */$newEnd'
           : 'bytes $_nextExpectedByte-${newEnd - 1}/$newEnd';
+
       final response = await (await _client).put(
         await _sessionUri,
-        headers: {'Content-Range': contentRange},
+        headers: {
+          'Content-Range': contentRange,
+          'x-goog-hash': 'crc32c=$calculatedCrc32c,md5=$calculatedMd5Hash',
+        },
         body: _writeBuffer.sublist(0, _writeBufferSize),
       );
 
