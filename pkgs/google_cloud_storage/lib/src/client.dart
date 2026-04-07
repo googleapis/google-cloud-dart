@@ -33,6 +33,7 @@ import 'file_upload.dart';
 import 'object_metadata_json.dart';
 import 'object_metadata_patch_builder.dart'
     show ObjectMetadataPatchBuilderJsonEncodable;
+import 'resumeable_upload.dart';
 import 'storage_emulator_host_web.dart'
     if (dart.library.io) 'storage_emulator_host_vm.dart';
 
@@ -788,6 +789,41 @@ final class Storage {
       metadata: metadata,
     ),
     isIdempotent: ifGenerationMatch != null,
+  );
+
+  /// Creates or updates the content of a [Google Cloud Storage object][] using
+  /// a [StreamSink].
+  ///
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
+  /// will be `'application/octet-stream'`. If `metadata.name` does not
+  /// match [name], a [BadRequestException] is thrown.
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// final sink = storage.uploadObjectFromSink(
+  ///   'my-bucket',
+  ///   'hello.txt',
+  /// );
+  /// sink.add([1, 2, 3]);
+  /// await sink.close();
+  /// ```
+  ///
+  /// See [API reference docs](https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#chunked-upload).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  ResumableUploadSink uploadObjectFromSink(
+    String bucket,
+    String name, {
+    ObjectMetadata? metadata,
+  }) => uploadFileStream(
+    _httpClient,
+    _requestUrl(
+      ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+      {'uploadType': 'resumable', 'name': name},
+    ),
+    metadata: metadata,
   );
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
