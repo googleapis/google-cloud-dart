@@ -1,3 +1,7 @@
+## 0.6.1-wip
+
+* Add `Storage.insertObjectAcl`.
+
 ## 0.6.0
 
 * **BREAKING:** Rename `Storage.insertObject` to `Storage.uploadObject`.

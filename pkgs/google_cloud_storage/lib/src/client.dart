@@ -24,6 +24,7 @@ import 'bucket.dart';
 import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
+import 'common_json.dart';
 import 'default_http_client_web.dart'
     if (dart.library.io) 'default_http_client_vm.dart';
 import 'default_project_id_web.dart'
@@ -527,6 +528,65 @@ final class Storage {
     ),
     isIdempotent: true,
   );
+
+  /// Creates a new ACL entry on the specified [Google Cloud Storage object].
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// [entity] specifies the entity holding the permission. Supported formats:
+  /// - `user-emailAddress`
+  /// - `group-emailAddress`
+  /// - `domain-domain`
+  /// - `project-team-projectNumber`
+  /// - `allUsers`
+  /// - `allAuthenticatedUsers`
+  ///
+  /// For example:
+  /// - The user `liz@example.com` would be `"user-liz@example.com"`.
+  /// - The group `example@googlegroups.com` would be
+  ///   `"group-example@googlegroups.com"`.
+  /// - To refer to all members of the domain `example.com`, the entity would
+  ///   be `"domain-example.com"`.
+  ///
+  /// [role] specifies the access permission for the entity. There are two roles
+  /// that can be assigned to an object:
+  /// 1. `READER` can get an object, though the `acl` property will not be
+  ///    revealed.
+  /// 2. `OWNER` are `READER`s, and they can get the `acl` property, update the
+  ///    object's metadata, and call all [ObjectAccessControl]-related methods
+  ///    on the object. The owner of an object is always an `OWNER`.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/insert).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  Future<ObjectAccessControl> insertObjectAcl(
+    String bucket,
+    String object,
+    String entity,
+    String role, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl([
+      'storage',
+      'v1',
+      'b',
+      bucket,
+      'o',
+      object,
+      'acl',
+    ], {});
+    final j = await serviceClient.post(
+      url,
+      body: _JsonEncodableWrapper({'entity': entity, 'role': role}),
+    );
+    return objectAccessControlFromJson(j as Map<String, Object?>)!;
+  }, isIdempotent: false);
 
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
