@@ -563,7 +563,6 @@ final class Storage {
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/insert).
   ///
   /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
-
   Future<ObjectAccessControl> insertObjectAcl(
     String bucket,
     String object,
