@@ -106,7 +106,7 @@ Handler _handleResponseException(Handler innerHandler) {
   return logRequests()(exceptionHandler(innerHandler));
 }
 
-/// Creates a [Response] from an [error] and [stack].
+/// Creates a [Response] from [error] and [stack].
 ///
 /// If [requestHeaders] indicate that JSON is expected, the response body will
 /// be JSON. Otherwise, the response body will be a plain text string.
