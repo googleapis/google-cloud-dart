@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'dart:convert';
-import 'package:google_cloud/google_cloud.dart';
+import 'package:google_cloud_logging_v2/google_cloud_logging_v2.dart';
 import 'package:test/test.dart';
 
 void main() {

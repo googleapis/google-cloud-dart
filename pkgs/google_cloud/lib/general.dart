@@ -20,14 +20,14 @@
 /// {@canonicalFor general.gceMetadataHost}
 /// {@canonicalFor general.gceMetadataUrl}
 /// {@canonicalFor general.getMetadataValue}
-/// {@canonicalFor general.LogSeverity}
+///
 /// {@canonicalFor general.MetadataServerException}
 /// {@canonicalFor general.projectIdFromCredentialsFile}
 /// {@canonicalFor general.projectIdFromEnvironmentVariables}
 /// {@canonicalFor general.projectIdFromGcloudConfig}
 /// {@canonicalFor general.projectIdFromMetadataServer}
 /// {@canonicalFor general.serviceAccountEmailFromMetadataServer}
-/// {@canonicalFor general.structuredLogEntry}
+///
 library;
 
 export 'src/gcp_project.dart'
@@ -41,6 +41,4 @@ export 'src/gcp_project.dart'
         projectIdFromGcloudConfig,
         projectIdFromMetadataServer,
         serviceAccountEmailFromMetadataServer;
-export 'src/logger.dart' show CloudLogger, LogSeverity;
 export 'src/metadata.dart' show gceMetadataHost, gceMetadataUrl;
-export 'src/structured_logging.dart' show structuredLogEntry;

@@ -11,6 +11,7 @@ environment:
 dependencies:
   collection: ^1.19.0
   google_cloud: ^0.4.1
+  google_cloud_logging_v2: ^0.5.1
   http: ^1.1.0
   io: ^1.0.3
   meta: ^1.18.1

@@ -17,7 +17,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:google_cloud/constants.dart';
-import 'package:google_cloud/google_cloud.dart';
+import 'package:google_cloud_logging_v2/google_cloud_logging_v2.dart';
 import 'package:io/ansi.dart';
 import 'package:shelf/shelf.dart';
 import 'package:stack_trace/stack_trace.dart';
@@ -26,7 +26,8 @@ import 'http_response_exception.dart';
 import 'json_request_checking.dart';
 import 'trace_context_data.dart';
 
-export 'package:google_cloud/google_cloud.dart' show structuredLogEntry;
+export 'package:google_cloud_logging_v2/google_cloud_logging_v2.dart'
+    show structuredLogEntry;
 
 const _httpResponseExceptionKey = 'google_cloud.response_exception';
 const _exceptionStackTraceKey = 'google_cloud.bad_stack_trace';
