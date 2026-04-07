@@ -1,8 +1,8 @@
-name: google_cloud
+name: shelf_google_cloud
 description: >-
-  Utilities for running Dart code correctly on the Google Cloud Platform.
+  Shelf server integration for Google Cloud Platform.
 version: 0.4.1
-repository: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/google_cloud
+repository: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/shelf_google_cloud
 
 resolution: workspace
 environment:
@@ -10,9 +10,11 @@ environment:
 
 dependencies:
   collection: ^1.19.0
+  google_cloud: ^0.4.1
   http: ^1.1.0
   io: ^1.0.3
   meta: ^1.18.1
+  shelf: ^1.4.0
   stack_trace: ^1.11.0
 
 dev_dependencies:
