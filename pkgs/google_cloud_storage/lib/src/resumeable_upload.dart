@@ -159,7 +159,9 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   @override
   Future<dynamic> close() async {
-    if (_closedCompleter.isCompleted) return _closedCompleter.future;
+    if (_isClosing || _closedCompleter.isCompleted) {
+      return _closedCompleter.future;
+    }
     if (_isAddStream) {
       throw StateError('ResumableUploadSink is bound to a stream');
     }
