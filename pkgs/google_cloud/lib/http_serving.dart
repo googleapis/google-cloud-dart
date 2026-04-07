@@ -43,7 +43,7 @@
 /// {@canonicalFor http_serving.cloudLoggingMiddleware}
 /// {@canonicalFor http_serving.createLoggingMiddleware}
 /// {@canonicalFor http_serving.currentLogger}
-/// {@canonicalFor http_serving.httpResponseExceptionMiddleware}
+/// {@canonicalFor http_serving.errorLoggingMiddleware}
 /// {@canonicalFor http_serving.BadRequestException}
 /// {@canonicalFor http_serving.HttpResponseException}
 /// {@canonicalFor http_serving.listenPortFromEnvironment}
@@ -61,7 +61,7 @@ export 'src/serving/http_logging.dart'
         cloudLoggingMiddleware,
         createLoggingMiddleware,
         currentLogger,
-        httpResponseExceptionMiddleware;
+        errorLoggingMiddleware;
 export 'src/serving/http_response_exception.dart'
     show
         // ignore: deprecated_member_use_from_same_package
