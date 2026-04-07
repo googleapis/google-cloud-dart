@@ -16,20 +16,24 @@ import 'package:shelf/shelf.dart';
 
 import 'http_logging.dart';
 
-/// When thrown in a [Handler], configured with [badRequestMiddleware] or
-/// similar, causes a response with [statusCode] to be returned.
+@Deprecated('use HttpResponseException instead')
+typedef BadRequestException = HttpResponseException;
+
+/// When thrown in a [Handler], configured with
+/// [httpResponseExceptionMiddleware] or similar, causes a response with
+/// [statusCode] to be returned.
 ///
-/// [statusCode] must be >= `400` and <= `499`.
+/// [statusCode] must be >= `400` and <= `599`.
 ///
 /// [message] is used as the body of the response send to the requester.
 ///
 /// If provided, [innerError] and [innerStack] can be used to provide additional
 /// debugging information which is included in logs, but not sent to the
 /// requester.
-class BadRequestException implements Exception {
+class HttpResponseException implements Exception {
   /// The HTTP status code for the response.
   ///
-  /// Must be between 400 and 499.
+  /// Must be between 400 and 599.
   final int statusCode;
 
   /// The message sent to the requester.
@@ -51,59 +55,59 @@ class BadRequestException implements Exception {
   /// See https://google.aip.dev/193#statusdetails
   final List<Map<String, Object?>>? details;
 
-  BadRequestException(
+  HttpResponseException(
     this.statusCode,
     this.message, {
     this.innerError,
     this.innerStack,
     this.status,
     this.details,
-  }) : assert(message.isNotEmpty) {
-    if (statusCode < 400 || statusCode > 499) {
-      throw ArgumentError.value(
-        statusCode,
-        'statusCode',
-        'Must be between 400 and 499',
-      );
-    }
-  }
+  }) : assert(message.isNotEmpty),
+       assert(
+         statusCode >= 400 && statusCode <= 599,
+         'Must be between 400 and 599',
+       );
 
-  /// Creates a new [BadRequestException] with status code 400.
-  factory BadRequestException.badRequest(
-    String message, {
+  /// Creates a new [HttpResponseException] with status code 400.
+  ///
+  /// [message] defaults to `'Bad Request'`.
+  factory HttpResponseException.badRequest({
+    String? message,
     Object? innerError,
     StackTrace? innerStack,
-    String? status,
+    String? status = 'INVALID_ARGUMENT',
     List<Map<String, Object?>>? details,
-  }) => BadRequestException(
+  }) => HttpResponseException(
     400,
-    message,
+    message ?? 'Bad Request',
     innerError: innerError,
     innerStack: innerStack,
     status: status,
     details: details,
   );
 
-  /// Creates a new [BadRequestException] with status code 401.
+  /// Creates a new [HttpResponseException] with status code 401.
   ///
   /// The request does not have valid authentication credentials for the
   /// operation.
-  factory BadRequestException.unauthorized(
-    String message, {
+  ///
+  /// [message] defaults to `'Unauthorized'`.
+  factory HttpResponseException.unauthorized({
+    String? message,
     Object? innerError,
     StackTrace? innerStack,
     String? status = 'UNAUTHENTICATED',
     List<Map<String, Object?>>? details,
-  }) => BadRequestException(
+  }) => HttpResponseException(
     401,
-    message,
+    message ?? 'Unauthorized',
     innerError: innerError,
     innerStack: innerStack,
     status: status,
     details: details,
   );
 
-  /// Creates a new [BadRequestException] with status code 403.
+  /// Creates a new [HttpResponseException] with status code 403.
   ///
   /// The caller does not have permission to execute the specified
   /// operation. `PERMISSION_DENIED` must not be used for rejections
@@ -113,22 +117,24 @@ class BadRequestException implements Exception {
   /// instead for those errors). This error code does not imply the
   /// request is valid or the requested entity exists or satisfies
   /// other pre-conditions.
-  factory BadRequestException.forbidden(
-    String message, {
+  ///
+  /// [message] defaults to `'Forbidden'`.
+  factory HttpResponseException.forbidden({
+    String? message,
     Object? innerError,
     StackTrace? innerStack,
     String? status = 'PERMISSION_DENIED',
     List<Map<String, Object?>>? details,
-  }) => BadRequestException(
+  }) => HttpResponseException(
     403,
-    message,
+    message ?? 'Forbidden',
     innerError: innerError,
     innerStack: innerStack,
     status: status,
     details: details,
   );
 
-  /// Creates a new [BadRequestException] with status code 404.
+  /// Creates a new [HttpResponseException] with status code 404.
   ///
   /// Some requested entity (e.g., file or directory) was not found.
   ///
@@ -137,50 +143,128 @@ class BadRequestException implements Exception {
   /// `NOT_FOUND` may be used. If a request is denied for some users within
   /// a class of users, such as user-based access control, `PERMISSION_DENIED`
   /// must be used.
-  factory BadRequestException.notFound(
-    String message, {
+  ///
+  /// [message] defaults to `'Not Found'`.
+  factory HttpResponseException.notFound({
+    String? message,
     Object? innerError,
     StackTrace? innerStack,
     String? status = 'NOT_FOUND',
     List<Map<String, Object?>>? details,
-  }) => BadRequestException(
+  }) => HttpResponseException(
     404,
-    message,
+    message ?? 'Not Found',
     innerError: innerError,
     innerStack: innerStack,
     status: status,
     details: details,
   );
 
-  /// Creates a new [BadRequestException] with status code 409.
-  factory BadRequestException.conflict(
-    String message, {
+  /// Creates a new [HttpResponseException] with status code 409.
+  ///
+  /// [message] defaults to `'Conflict'`.
+  factory HttpResponseException.conflict({
+    String? message,
     Object? innerError,
     StackTrace? innerStack,
-    String? status,
+    String? status = 'ALREADY_EXISTS',
     List<Map<String, Object?>>? details,
-  }) => BadRequestException(
+  }) => HttpResponseException(
     409,
-    message,
+    message ?? 'Conflict',
     innerError: innerError,
     innerStack: innerStack,
     status: status,
     details: details,
   );
 
-  /// Creates a new [BadRequestException] with status code 429.
+  /// Creates a new [HttpResponseException] with status code 429.
   ///
   /// Some resource has been exhausted, perhaps a per-user quota, or
   /// perhaps the entire file system is out of space.
-  factory BadRequestException.tooManyRequests(
-    String message, {
+  ///
+  /// [message] defaults to `'Too Many Requests'`.
+  factory HttpResponseException.tooManyRequests({
+    String? message,
     Object? innerError,
     StackTrace? innerStack,
     String? status = 'RESOURCE_EXHAUSTED',
     List<Map<String, Object?>>? details,
-  }) => BadRequestException(
+  }) => HttpResponseException(
     429,
-    message,
+    message ?? 'Too Many Requests',
+    innerError: innerError,
+    innerStack: innerStack,
+    status: status,
+    details: details,
+  );
+
+  /// Creates a new [HttpResponseException] with status code 500.
+  ///
+  /// [message] defaults to `'Internal Server Error'`.
+  factory HttpResponseException.internalServerError({
+    String? message,
+    Object? innerError,
+    StackTrace? innerStack,
+    String? status = 'INTERNAL',
+    List<Map<String, Object?>>? details,
+  }) => HttpResponseException(
+    500,
+    message ?? 'Internal Server Error',
+    innerError: innerError,
+    innerStack: innerStack,
+    status: status,
+    details: details,
+  );
+
+  /// Creates a new [HttpResponseException] with status code 501.
+  ///
+  /// [message] defaults to `'Not Implemented'`.
+  factory HttpResponseException.notImplemented({
+    String? message,
+    Object? innerError,
+    StackTrace? innerStack,
+    String? status = 'UNIMPLEMENTED',
+    List<Map<String, Object?>>? details,
+  }) => HttpResponseException(
+    501,
+    message ?? 'Not Implemented',
+    innerError: innerError,
+    innerStack: innerStack,
+    status: status,
+    details: details,
+  );
+
+  /// Creates a new [HttpResponseException] with status code 503.
+  ///
+  /// [message] defaults to `'Service Unavailable'`.
+  factory HttpResponseException.serviceUnavailable({
+    String? message,
+    Object? innerError,
+    StackTrace? innerStack,
+    String? status = 'UNAVAILABLE',
+    List<Map<String, Object?>>? details,
+  }) => HttpResponseException(
+    503,
+    message ?? 'Service Unavailable',
+    innerError: innerError,
+    innerStack: innerStack,
+    status: status,
+    details: details,
+  );
+
+  /// Creates a new [HttpResponseException] with status code 504.
+  ///
+  /// [message] defaults to `'Gateway Timeout'`.
+  factory HttpResponseException.gatewayTimeout({
+    String? message,
+    Object? innerError,
+    StackTrace? innerStack,
+    String? status = 'DEADLINE_EXCEEDED',
+    List<Map<String, Object?>>? details,
+  }) => HttpResponseException(
+    504,
+    message ?? 'Gateway Timeout',
     innerError: innerError,
     innerStack: innerStack,
     status: status,
