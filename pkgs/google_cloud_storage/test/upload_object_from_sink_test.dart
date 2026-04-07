@@ -55,9 +55,7 @@ void main() async {
         );
 
         final sink = storage.uploadObjectFromSink(bucketName, 'object');
-        await sink.close();
-
-        final metadata = await storage.objectMetadata(bucketName, 'object');
+        final metadata = await sink.close();
         expect(metadata.contentType, 'application/octet-stream');
       });
 
@@ -72,9 +70,7 @@ void main() async {
           'object',
           metadata: ObjectMetadata(metadata: {'customMetadata': 'value'}),
         );
-        await sink.close();
-
-        final metadata = await storage.objectMetadata(bucketName, 'object');
+        final metadata = await sink.close();
         expect(metadata.contentType, 'application/octet-stream');
         expect(metadata.metadata?['customMetadata'], 'value');
       });
@@ -369,14 +365,22 @@ void main() async {
 
         final sink = storage.uploadObjectFromSink(bucketName, 'object')
           ..add(data);
-        await sink.close();
+        final metadata = await sink.close();
+        expect(metadata.crc32c, expectedCrc32c);
+        expect(metadata.md5Hash, expectedMd5Hash);
+      });
 
-        final fetchedMetadata = await storage.objectMetadata(
-          bucketName,
-          'object',
+      test('ResumeableUpload.metadata is set', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_metadata',
         );
-        expect(fetchedMetadata.crc32c, expectedCrc32c);
-        expect(fetchedMetadata.md5Hash, expectedMd5Hash);
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object')
+          ..add([1, 2, 3, 4, 5, 6]);
+        expect(sink.metadata, isNull);
+        await sink.close();
+        expect(sink.metadata?.size, BigInt.from(6));
       });
     });
 
@@ -399,7 +403,7 @@ void main() async {
         } else if (count == 3) {
           // Second close succeeds.
           actualHash = request.headers['x-goog-hash']!;
-          return http.Response('', 200);
+          return http.Response('{}', 200);
         } else {
           throw StateError(
             'Unexpected call (count: $count, method: ${request.method}, '
