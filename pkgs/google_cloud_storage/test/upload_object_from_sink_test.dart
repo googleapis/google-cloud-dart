@@ -13,10 +13,13 @@
 // limitations under the License.
 
 import 'dart:async';
+import 'dart:convert';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:crypto/crypto.dart' as crypto;
 import 'package:google_cloud_storage/google_cloud_storage.dart';
+import 'package:google_cloud_storage/src/crc32c.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -350,6 +353,28 @@ void main() async {
 
         final downloaded = await storage.downloadObject(bucketName, 'name');
         expect(downloaded, [1, 2, 3, 4, 5, 6]);
+      });
+
+      test('hashes are calculated automatically', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_hashes',
+        );
+
+        final data = [1, 2, 3, 4, 5, 6];
+        final expectedCrc32c = (Crc32c()..update(data)).toBase64();
+        final expectedMd5Hash = base64Encode(crypto.md5.convert(data).bytes);
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object')
+          ..add(data);
+        await sink.close();
+
+        final fetchedMetadata = await storage.objectMetadata(
+          bucketName,
+          'object',
+        );
+        expect(fetchedMetadata.crc32c, expectedCrc32c);
+        expect(fetchedMetadata.md5Hash, expectedMd5Hash);
       });
     });
   });
