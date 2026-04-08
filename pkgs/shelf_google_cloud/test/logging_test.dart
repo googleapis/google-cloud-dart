@@ -19,8 +19,8 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:google_cloud/http_serving.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf_google_cloud/shelf_google_cloud.dart';
 import 'package:test/test.dart';
 
 const internalServerErrorMessage = 'Internal Server Error';

@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import 'dart:io';
-import 'package:google_cloud/src/serving/json_request_checking.dart';
+import 'package:shelf_google_cloud/src/serving/json_request_checking.dart';
 import 'package:test/test.dart';
 
 void main() {

@@ -38,6 +38,7 @@ workspace:
   - generated/google_cloud_showcase_v1beta1
   - generated/google_cloud_type
   - pkgs/google_cloud
+  - pkgs/shelf_google_cloud
   - pkgs/google_cloud_storage
   - test_utils
   - tests
