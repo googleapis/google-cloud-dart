@@ -18,6 +18,7 @@ import 'package:google_cloud/google_cloud.dart';
 import 'package:googleapis/firestore/v1.dart';
 import 'package:googleapis_auth/auth_io.dart';
 import 'package:shelf/shelf.dart';
+import 'package:shelf_google_cloud/shelf_google_cloud.dart';
 
 Future<void> main() async {
   final server = await _Server.create();
