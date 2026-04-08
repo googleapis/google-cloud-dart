@@ -37,8 +37,15 @@ int _largestWriteSize(int number) => (number ~/ _minWriteSize) * _minWriteSize;
 class ResumableUploadSink implements StreamSink<List<int>> {
   bool _isClosing = false;
   bool _isAddStream = false;
-  final Completer<bool> _closedCompleter = Completer<bool>();
+  final _closedCompleter = Completer<ObjectMetadata>();
   final FutureOr<http.Client> _client;
+
+  /// The metadata of the uploaded object.
+  ///
+  /// This will be `null` until the [close] or [done] future is complete.
+  ObjectMetadata? get metadata => _metadata;
+  ObjectMetadata? _metadata;
+
   // An HTTP response that will contain the "Location" header used to upload
   // data to. There are two types of requests that will return the correct
   // "Location" header:
@@ -136,7 +143,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   }
 
   @override
-  Future<dynamic> addStream(Stream<List<int>> stream) async {
+  Future<void> addStream(Stream<List<int>> stream) async {
     if (_isClosing || _closedCompleter.isCompleted) {
       throw StateError('ResumableUploadSink is already closed');
     }
@@ -156,7 +163,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   }
 
   @override
-  Future<dynamic> close() async {
+  Future<ObjectMetadata> close() async {
     if (_isClosing || _closedCompleter.isCompleted) {
       return _closedCompleter.future;
     }
@@ -189,14 +196,20 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       if (response.statusCode < 200 || response.statusCode >= 300) {
         throw ServiceException.fromHttpResponse(response, response.body);
       }
-      _closedCompleter.complete(true);
+
+      final md = objectMetadataFromJson(
+        jsonDecode(response.body) as Map<String, dynamic>,
+      );
+      _metadata = md;
+      _closedCompleter.complete(md);
+      return md;
     } finally {
       _isClosing = false;
     }
   }
 
   @override
-  Future<dynamic> get done => _closedCompleter.future;
+  Future<ObjectMetadata> get done => _closedCompleter.future;
 }
 
 @internal
