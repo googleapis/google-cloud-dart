@@ -37,8 +37,7 @@ int _largestWriteSize(int number) => (number ~/ _minWriteSize) * _minWriteSize;
 class ResumableUploadSink implements StreamSink<List<int>> {
   bool _isClosing = false;
   bool _isAddStream = false;
-  final Completer<ObjectMetadata> _closedCompleter =
-      Completer<ObjectMetadata>();
+  final _closedCompleter = Completer<ObjectMetadata>();
   final FutureOr<http.Client> _client;
 
   /// The metadata of the uploaded object.
