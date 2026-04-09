@@ -389,13 +389,20 @@ void main() async {
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {
-      uploadObjectFromSinkTest(
-        () => Storage(
+      late Storage storage;
+      late RetryTestHttpClient client;
+
+      setUp(() {
+        client = RetryTestHttpClient(http.Client());
+        storage = Storage(
           projectId: 'test-project',
           apiEndpoint: 'localhost:9000',
           useAuthWithCustomEndpoint: false,
-        ),
-      );
+          client: client,
+        );
+      });
+
+      uploadObjectFromSinkTest(() => storage);
     });
 
     test('first close fails and second close succeeds', () async {
