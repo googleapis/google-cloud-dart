@@ -401,6 +401,8 @@ void main() {
         );
       });
 
+      tearDown(() => storage.close());
+
       uploadObjectFromSinkTest(() => storage);
     });
 
