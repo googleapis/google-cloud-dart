@@ -1,0 +1,38 @@
+# Copyright 2026 Google LLC
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     https://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+platforms: [vm, chrome]
+
+test-randomize-ordering-seed: random
+# Keeping concurrency low helps limit load timeouts on chrome tests.
+concurrency: 1
+
+tags:
+  google-cloud:
+  firebase-emulator:
+  storage-testbench:
+exclude_tags: google-cloud || firebase-emulator || storage-testbench
+
+presets:
+  google-cloud:
+    include_tags: google-cloud
+    # Currently tests that require a configured Google Cloud project are only
+    # runnable on the VM because the browser does not have access to
+    # application default credentials.
+    platforms: [vm]
+  firebase-emulator:
+    include_tags: firebase-emulator
+  storage-testbench:
+    include_tags: storage-testbench
+    platforms: [vm]
