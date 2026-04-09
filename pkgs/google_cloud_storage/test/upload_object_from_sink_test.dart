@@ -388,20 +388,14 @@ void main() {
     });
 
     group('storage-testbench', tags: ['storage-testbench'], () {
-      late Storage storage;
-      late RetryTestHttpClient client;
-
-      setUp(() {
-        client = RetryTestHttpClient(http.Client());
-        storage = Storage(
+      uploadObjectFromSinkTest(
+        () => Storage(
           projectId: 'test-project',
           apiEndpoint: 'localhost:9000',
           useAuthWithCustomEndpoint: false,
-          client: client,
-        );
-      });
-
-      uploadObjectFromSinkTest(() => storage);
+          client: http.Client(),
+        ),
+      );
     });
 
     test('first close fails and second close succeeds', () async {
