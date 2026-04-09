@@ -381,7 +381,7 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
   });
 }
 
-void main() async {
+void main() {
   await Future<void>.delayed(const Duration(seconds: 10));
   group('upload object from sink', () {
     group('google-cloud', tags: ['google-cloud'], () {
