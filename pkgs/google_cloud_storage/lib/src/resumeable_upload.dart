@@ -109,12 +109,13 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   ) async {
     var needsStatusCheck = false;
     var initialExpectedByte = _nextExpectedByte;
+    final sessionUri = await _sessionUri;
 
     return await _retry.run(() async {
       var currentExpectedByte = initialExpectedByte;
       if (needsStatusCheck) {
         final statusRes = await (await _client).put(
-          await _sessionUri,
+          sessionUri,
           headers: {'Content-Range': 'bytes */*'},
         );
         if (statusRes.statusCode == 308) {
@@ -157,7 +158,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       }
 
       final res = await (await _client).put(
-        await _sessionUri,
+        sessionUri,
         headers: headers,
         body: remainingBytes == 0
             ? const <int>[]

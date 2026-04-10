@@ -427,6 +427,153 @@ void main() {
         expect(downloaded, large);
       });
 
+      test(
+        'fails and retries on 503 during session creation (idempotent)',
+        () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'ul_obj_from_sink_foo',
+          );
+
+          final retryTestCreator = RetryTestCreator(http.Client());
+          final id = await retryTestCreator.createRetryTest({
+            'instructions': {
+              'storage.objects.insert': ['return-503'],
+            },
+          });
+          client.retryTestId = id;
+
+          final sink = storage.uploadObjectFromSink(
+            bucketName,
+            'object',
+            ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
+            retry: const ExponentialRetry(
+              maxRetries: 30,
+              maxDelay: Duration(milliseconds: 1),
+              initialDelay: Duration(milliseconds: 1),
+            ),
+          )..add(small);
+          await sink.close();
+
+          final downloaded = await storage.downloadObject(bucketName, 'object');
+          expect(downloaded, small);
+
+          client.retryTestId = null;
+          await retryTestCreator.close();
+        },
+      );
+
+      test(
+        'fails without retry on 503 during session creation (non-idempotent)',
+        () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'ul_obj_from_sink_foo',
+          );
+
+          final retryTestCreator = RetryTestCreator(http.Client());
+          final id = await retryTestCreator.createRetryTest({
+            'instructions': {
+              'storage.objects.insert': ['return-503'],
+            },
+          });
+          client.retryTestId = id;
+
+          final sink = storage.uploadObjectFromSink(
+            bucketName,
+            'object',
+            // No ifGenerationMatch, hence non-idempotent
+          )..add(small);
+
+          await expectLater(sink.close(), throwsA(isA<ServiceException>()));
+
+          client.retryTestId = null;
+          await retryTestCreator.close();
+        },
+      );
+
+      test('fails and retries on 429 during session creation', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_foo',
+        );
+
+        final retryTestCreator = RetryTestCreator(http.Client());
+        final id = await retryTestCreator.createRetryTest({
+          'instructions': {
+            'storage.objects.insert': ['return-429'],
+          },
+        });
+        client.retryTestId = id;
+
+        final sink = storage.uploadObjectFromSink(
+          bucketName,
+          'object',
+          ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
+          retry: const ExponentialRetry(
+            maxRetries: 30,
+            maxDelay: Duration(milliseconds: 1),
+            initialDelay: Duration(milliseconds: 1),
+          ),
+        )..add(small);
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, small);
+
+        client.retryTestId = null;
+        await retryTestCreator.close();
+      });
+
+      test(
+        'fails with reset connection during chunk upload and retries',
+        () async {
+          final bucketName = await createBucketWithTearDown(
+            storage,
+            'ul_obj_from_sink_foo',
+          );
+
+          client.instructions = 'return-reset-connection';
+
+          final sink = storage.uploadObjectFromSink(
+            bucketName,
+            'object',
+            retry: const ExponentialRetry(
+              maxRetries: 30,
+              maxDelay: Duration(milliseconds: 1),
+              initialDelay: Duration(milliseconds: 1),
+            ),
+          )..add(large);
+          await sink.close();
+
+          final downloaded = await storage.downloadObject(bucketName, 'object');
+          expect(downloaded, large);
+        },
+      );
+
+      test('fails with broken stream on final chunk and retries', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_foo',
+        );
+
+        client.instructions = 'return-broken-stream-final-chunk-after-256K';
+
+        final sink = storage.uploadObjectFromSink(
+          bucketName,
+          'object',
+          retry: const ExponentialRetry(
+            maxRetries: 30,
+            maxDelay: Duration(milliseconds: 1),
+            initialDelay: Duration(milliseconds: 1),
+          ),
+        )..add(large);
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, large);
+      });
+
       // uploadObjectFromSinkTest(() => storage);
     });
 
