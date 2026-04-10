@@ -609,21 +609,13 @@ void main() {
           );
         } else if (count == 2 && request.method == 'PUT') {
           // First chunk upload works.
-          return http.Response(
-            '',
-            308,
-            headers: {'range': 'bytes=0-262143'},
-          );
+          return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
         } else if (count == 3 && request.method == 'PUT') {
           // Second chunk upload fails.
           throw http.ClientException('message');
         } else if (count == 4 && request.method == 'PUT') {
           // Status check returns a range smaller than what was acknowledged previously.
-          return http.Response(
-            '',
-            308,
-            headers: {'range': 'bytes=0-1000'},
-          );
+          return http.Response('', 308, headers: {'range': 'bytes=0-1000'});
         } else {
           throw StateError(
             'Unexpected call (count: $count, method: ${request.method}, '
@@ -661,28 +653,16 @@ void main() {
           );
         } else if (count == 2 && request.method == 'PUT') {
           // First chunk (256K) upload works.
-          return http.Response(
-            '',
-            308,
-            headers: {'range': 'bytes=0-262143'},
-          );
+          return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
         } else if (count == 3 && request.method == 'PUT') {
           // Second chunk (256K) upload fails.
           throw http.ClientException('message');
         } else if (count == 4 && request.method == 'PUT') {
           // Status check indicates that only the first chunk is received.
-          return http.Response(
-            '',
-            308,
-            headers: {'range': 'bytes=0-262143'},
-          );
+          return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
         } else if (count == 5 && request.method == 'PUT') {
           // Retry for the second chunk upload works.
-          return http.Response(
-            '',
-            308,
-            headers: {'range': 'bytes=0-524287'},
-          );
+          return http.Response('', 308, headers: {'range': 'bytes=0-524287'});
         } else if (count == 6 && request.method == 'PUT') {
           // Final 0 byte close.
           return http.Response('{}', 200);
@@ -708,5 +688,65 @@ void main() {
 
       expect(count, 6);
     });
+
+    test(
+      'retries if server acknowledges fewer bytes than sent in a chunk',
+      () async {
+        var count = 0;
+
+        final mockClient = MockClient((request) async {
+          count++;
+          if (count == 1 && request.method == 'POST') {
+            // Start resumable upload.
+            return http.Response(
+              '',
+              200,
+              headers: {'location': 'http://example.com/location'},
+            );
+          } else if (count == 2 && request.method == 'PUT') {
+            // First chunk (256K) upload works, but only acknowledges 128K!
+            // We sent 256K, but server acked 128K.
+            return http.Response('', 308, headers: {'range': 'bytes=0-131071'});
+          } else if (count == 3 && request.method == 'PUT') {
+            // Status check! Because the chunk logic threw an exception, it retries and starts with status check
+            expect(request.headers['Content-Range'], 'bytes */*');
+            return http.Response(
+              '',
+              308,
+              headers: {'range': 'bytes=0-131071'}, // Server says it got 128K
+            );
+          } else if (count == 4 && request.method == 'PUT') {
+            // Retry for the rest of the first chunk (128K).
+            // Buffer was 256K, initialExpected was 0.
+            // currentExpected is 131072.
+            expect(request.contentLength, 131072);
+            expect(request.headers['Content-Range'], 'bytes 131072-262143/*');
+            return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
+          } else if (count == 5 && request.method == 'PUT') {
+            // Final 0 byte close.
+            return http.Response('{}', 200);
+          } else {
+            throw StateError(
+              'Unexpected call (count: $count, method: ${request.method}, '
+              'uri: ${request.url})',
+            );
+          }
+        });
+
+        final storage = Storage(client: mockClient, projectId: 'fake project');
+
+        final sink = storage.uploadObjectFromSink(
+          'bucket',
+          'object',
+          retry: const NoDelayRetry(),
+        );
+
+        final chunk = Uint8List(256 * 1024);
+        await sink.addStream(Stream.fromIterable([chunk]));
+        await sink.close();
+
+        expect(count, 5);
+      },
+    );
   });
 }

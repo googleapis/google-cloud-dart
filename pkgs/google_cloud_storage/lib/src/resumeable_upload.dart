@@ -180,6 +180,24 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         if (res.statusCode != 308) {
           throw ServiceException.fromHttpResponse(res, res.body);
         }
+        final range = res.headers['range'];
+        var actualExpectedByte = initialExpectedByte;
+        if (range != null) {
+          final match = RegExp(r'bytes=0-(\d+)').firstMatch(range);
+          if (match != null) {
+            actualExpectedByte = int.parse(match.group(1)!) + 1;
+          }
+        }
+        if (actualExpectedByte < newEnd) {
+          throw http.ClientException(
+            'Server acknowledged fewer bytes ($actualExpectedByte) than sent ($newEnd).',
+            sessionUri,
+          );
+        } else if (actualExpectedByte > newEnd) {
+          throw StateError(
+            'Server acknowledged more bytes ($actualExpectedByte) than sent ($newEnd).',
+          );
+        }
       }
       return res;
     }, isIdempotent: true);
@@ -194,8 +212,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
     await _uploadChunk(flushBuffer, flushPoint, false, null);
 
-    // TODO(https://github.com/googleapis/google-cloud-dart/issues/218):
-    // Check the "range" headers to determine if any data must be resent.
     _nextExpectedByte += flushPoint;
   }
 
