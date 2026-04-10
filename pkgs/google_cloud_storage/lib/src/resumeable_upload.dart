@@ -136,6 +136,13 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       }
       needsStatusCheck = true;
 
+      if (currentExpectedByte < initialExpectedByte) {
+        throw StateError(
+          'The server has acknowledged fewer bytes ($currentExpectedByte) '
+          'than expected ($initialExpectedByte). Cannot resume upload.',
+        );
+      }
+
       final bytesAcked = (currentExpectedByte - initialExpectedByte).clamp(
         0,
         bufferSize,
