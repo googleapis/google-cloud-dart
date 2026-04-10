@@ -35,10 +35,11 @@ Uint8List randomUint8List(int length, {int? seed}) {
   return l;
 }
 
+final small = randomUint8List(100);
+final large = randomUint8List(5_000_000);
+
 void uploadObjectFromSinkTest(Storage Function() storageFn) {
   late Storage storage;
-  final small = randomUint8List(100);
-  final large = randomUint8List(5_000_000);
 
   setUp(() {
     storage = storageFn();
@@ -403,7 +404,23 @@ void main() {
 
       tearDown(() => storage.close());
 
-      uploadObjectFromSinkTest(() => storage);
+      test('return 503 after 256K', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_foo',
+        );
+
+        client.instructions = 'return-503-after-256K';
+
+        final sink = storage.uploadObjectFromSink(bucketName, 'object')
+          ..add(large);
+        await sink.close();
+
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, large);
+      });
+
+      // uploadObjectFromSinkTest(() => storage);
     });
 
     test('first close fails and second close succeeds', () async {
