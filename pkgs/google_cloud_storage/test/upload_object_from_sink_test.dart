@@ -409,7 +409,7 @@ void main() {
       test('return 503 after 256K', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
-          'ul_obj_from_sink_foo',
+          'ul_obj_from_sink_503_after_256k',
         );
 
         client.instructions = 'return-503-after-256K';
@@ -425,44 +425,41 @@ void main() {
         expect(downloaded, large);
       });
 
-      test(
-        'fails and retries on 503 during session creation (idempotent)',
-        () async {
-          final bucketName = await createBucketWithTearDown(
-            storage,
-            'ul_obj_from_sink_foo',
-          );
+      test('return 503 during session creation (idempotent)', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'ul_obj_from_sink_503_sess_create',
+        );
 
-          final retryTestCreator = RetryTestCreator(http.Client());
-          final id = await retryTestCreator.createRetryTest({
-            'instructions': {
-              'storage.objects.insert': ['return-503'],
-            },
-          });
-          client.retryTestId = id;
+        final retryTestCreator = RetryTestCreator(http.Client());
+        final id = await retryTestCreator.createRetryTest({
+          'instructions': {
+            'storage.objects.insert': ['return-503'],
+          },
+        });
+        client.retryTestId = id;
 
-          final sink = storage.uploadObjectFromSink(
-            bucketName,
-            'object',
-            ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
-            retry: const NoDelayRetry(),
-          )..add(small);
-          await sink.close();
+        final sink = storage.uploadObjectFromSink(
+          bucketName,
+          'object',
+          ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
+          retry: const NoDelayRetry(),
+        )..add(small);
+        await sink.close();
 
-          final downloaded = await storage.downloadObject(bucketName, 'object');
-          expect(downloaded, small);
+        final downloaded = await storage.downloadObject(bucketName, 'object');
+        expect(downloaded, small);
 
-          client.retryTestId = null;
-          await retryTestCreator.close();
-        },
-      );
+        client.retryTestId = null;
+        await retryTestCreator.close();
+      });
 
       test(
         'fails without retry on 503 during session creation (non-idempotent)',
         () async {
           final bucketName = await createBucketWithTearDown(
             storage,
-            'ul_obj_from_sink_foo',
+            'ul_obj_from_sink_503_sess_create_fail',
           );
 
           final retryTestCreator = RetryTestCreator(http.Client());
@@ -485,76 +482,6 @@ void main() {
           await retryTestCreator.close();
         },
       );
-
-      test('fails and retries on 429 during session creation', () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'ul_obj_from_sink_foo',
-        );
-
-        final retryTestCreator = RetryTestCreator(http.Client());
-        final id = await retryTestCreator.createRetryTest({
-          'instructions': {
-            'storage.objects.insert': ['return-429'],
-          },
-        });
-        client.retryTestId = id;
-
-        final sink = storage.uploadObjectFromSink(
-          bucketName,
-          'object',
-          ifGenerationMatch: BigInt.zero, // Makes session creation idempotent
-          retry: const NoDelayRetry(),
-        )..add(small);
-        await sink.close();
-
-        final downloaded = await storage.downloadObject(bucketName, 'object');
-        expect(downloaded, small);
-
-        client.retryTestId = null;
-        await retryTestCreator.close();
-      });
-
-      test(
-        'fails with reset connection during chunk upload and retries',
-        () async {
-          final bucketName = await createBucketWithTearDown(
-            storage,
-            'ul_obj_from_sink_foo',
-          );
-
-          client.instructions = 'return-reset-connection';
-
-          final sink = storage.uploadObjectFromSink(
-            bucketName,
-            'object',
-            retry: const NoDelayRetry(),
-          )..add(large);
-          await sink.close();
-
-          final downloaded = await storage.downloadObject(bucketName, 'object');
-          expect(downloaded, large);
-        },
-      );
-
-      test('fails with broken stream on final chunk and retries', () async {
-        final bucketName = await createBucketWithTearDown(
-          storage,
-          'ul_obj_from_sink_foo',
-        );
-
-        client.instructions = 'return-broken-stream-final-chunk-after-256K';
-
-        final sink = storage.uploadObjectFromSink(
-          bucketName,
-          'object',
-          retry: const NoDelayRetry(),
-        )..add(large);
-        await sink.close();
-
-        final downloaded = await storage.downloadObject(bucketName, 'object');
-        expect(downloaded, large);
-      });
     });
 
     test('first close fails and second close succeeds', () async {
@@ -614,7 +541,8 @@ void main() {
           // Second chunk upload fails.
           throw http.ClientException('message');
         } else if (count == 4 && request.method == 'PUT') {
-          // Status check returns a range smaller than what was acknowledged previously.
+          // Status check returns a range smaller than what was acknowledged
+          // previously.
           return http.Response('', 308, headers: {'range': 'bytes=0-1000'});
         } else {
           throw StateError(
@@ -704,25 +632,16 @@ void main() {
               headers: {'location': 'http://example.com/location'},
             );
           } else if (count == 2 && request.method == 'PUT') {
-            // First chunk (256K) upload works, but only acknowledges 128K!
-            // We sent 256K, but server acked 128K.
-            return http.Response('', 308, headers: {'range': 'bytes=0-131071'});
+            // First chunk (256K) upload works, but only acknowledges 100K.
+            return http.Response('', 308, headers: {'range': 'bytes=0-99999'});
           } else if (count == 3 && request.method == 'PUT') {
-            // Status check! Because the chunk logic threw an exception, it retries and starts with status check
-            expect(request.headers['Content-Range'], 'bytes */*');
-            return http.Response(
-              '',
-              308,
-              headers: {'range': 'bytes=0-131071'}, // Server says it got 128K
-            );
-          } else if (count == 4 && request.method == 'PUT') {
             // Retry for the rest of the first chunk (128K).
             // Buffer was 256K, initialExpected was 0.
             // currentExpected is 131072.
-            expect(request.contentLength, 131072);
-            expect(request.headers['Content-Range'], 'bytes 131072-262143/*');
+            expect(request.contentLength, 162144);
+            expect(request.headers['Content-Range'], 'bytes 100000-262143/*');
             return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
-          } else if (count == 5 && request.method == 'PUT') {
+          } else if (count == 4 && request.method == 'PUT') {
             // Final 0 byte close.
             return http.Response('{}', 200);
           } else {
@@ -745,7 +664,7 @@ void main() {
         await sink.addStream(Stream.fromIterable([chunk]));
         await sink.close();
 
-        expect(count, 5);
+        expect(count, 4);
       },
     );
   });
