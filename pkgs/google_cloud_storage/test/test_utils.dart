@@ -105,7 +105,6 @@ final class RetryTestHttpClient extends http.BaseClient {
         instructions = null;
       }
     }
-    print('originalRequest.headers: ${originalRequest.headers}');
     return _client.send(originalRequest);
   }
 

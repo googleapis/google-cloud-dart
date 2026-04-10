@@ -404,6 +404,8 @@ void main() {
 
       tearDown(() => storage.close());
 
+      uploadObjectFromSinkTest(() => storage);
+
       test('return 503 after 256K', () async {
         final bucketName = await createBucketWithTearDown(
           storage,
@@ -553,8 +555,6 @@ void main() {
         final downloaded = await storage.downloadObject(bucketName, 'object');
         expect(downloaded, large);
       });
-
-      // uploadObjectFromSinkTest(() => storage);
     });
 
     test('first close fails and second close succeeds', () async {

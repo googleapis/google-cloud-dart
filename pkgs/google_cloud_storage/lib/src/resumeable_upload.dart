@@ -34,6 +34,24 @@ const _minWriteSize = 256 * 1024;
 
 int _largestWriteSize(int number) => (number ~/ _minWriteSize) * _minWriteSize;
 
+/// The upper bound of the range header. For example, if the range header is
+/// "bytes=0-255", the upper bound is `256`.
+///
+/// From https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#chunked-upload
+///
+/// > Repeat the above steps for each remaining chunk of data that you want
+/// > to upload, using the upper value contained in the Range header of each
+/// > response to determine where to start each successive chunk; you should
+/// > not assume that the server received all bytes sent in any given request.
+int? _parseRange(String? rangeHeader) {
+  if (rangeHeader == null) return null;
+  final match = RegExp(r'bytes=0-(\d+)').firstMatch(rangeHeader);
+  if (match != null) {
+    return int.parse(match.group(1)!) + 1;
+  }
+  return null;
+}
+
 /// A sink that can be used to upload an object using a resumable upload.
 class ResumableUploadSink implements StreamSink<List<int>> {
   bool _isClosing = false;
@@ -83,95 +101,121 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _bufferSize += data.length;
   }
 
-  static int? _parseRange(String? rangeHeader) {
-    if (rangeHeader == null) return null;
-    final match = RegExp(r'bytes=0-(\d+)').firstMatch(rangeHeader);
-    if (match != null) {
-      return int.parse(match.group(1)!) + 1;
-    }
-    return null;
-  }
-
   Future<http.Response> _uploadChunk(
     Uint8List chunk,
     bool isClose,
     String? hashHeader,
   ) async {
-    var needsStatusCheck = false;
     final sessionUri = await _sessionUri;
     final client = await _client;
 
-    return await _retry.run(() async {
-      var currentExpectedByte = _nextExpectedByte;
-      if (needsStatusCheck) {
-        final statusRes = await client.put(
-          sessionUri,
-          headers: {'Content-Range': 'bytes */*'},
-        );
-        if (statusRes.statusCode == 308) {
-          currentExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
-        } else if (statusRes.statusCode == 200 || statusRes.statusCode == 201) {
-          return statusRes;
-        } else {
-          throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
+    var currentExpectedByte = _nextExpectedByte;
+    http.Response? lastRes;
+
+    bool done = false;
+    bool forceStatusCheck = false;
+
+    while (!done) {
+      var needsStatusCheck = forceStatusCheck;
+      forceStatusCheck = false;
+
+      lastRes = await _retry.run(() async {
+        var loopExpectedByte = currentExpectedByte;
+        if (needsStatusCheck) {
+          // From https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#resume-upload
+          // > If an upload request is terminated before receiving a response,
+          // > or if you receive a 503 or 500 response, then you need to resume
+          // > the interrupted upload from where it left off.
+          //
+          // See https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#resume-upload
+          final statusRes = await client.put(
+            sessionUri,
+            headers: {'Content-Range': 'bytes */*'},
+          );
+          if (statusRes.statusCode == 308) {
+            loopExpectedByte =
+                _parseRange(statusRes.headers['range']) ?? _nextExpectedByte;
+            currentExpectedByte = loopExpectedByte;
+          } else if (statusRes.statusCode == 200 ||
+              statusRes.statusCode == 201) {
+            return statusRes;
+          } else {
+            throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
+          }
         }
-      }
-      needsStatusCheck = true;
+        needsStatusCheck = true;
 
-      if (currentExpectedByte < _nextExpectedByte) {
-        throw StateError(
-          'The server has acknowledged fewer bytes ($currentExpectedByte) '
-          'than expected ($_nextExpectedByte). Cannot resume upload.',
+        if (loopExpectedByte < _nextExpectedByte) {
+          throw StateError(
+            'The server has acknowledged fewer bytes ($loopExpectedByte) '
+            'than expected ($_nextExpectedByte). Cannot resume upload.',
+          );
+        }
+
+        final bytesAcked = (loopExpectedByte - _nextExpectedByte).clamp(
+          0,
+          chunk.length,
         );
-      }
+        final remainingBytes = chunk.length - bytesAcked;
+        final newEnd = loopExpectedByte + remainingBytes;
 
-      final bytesAcked = (currentExpectedByte - _nextExpectedByte).clamp(
-        0,
-        chunk.length,
-      );
-      final remainingBytes = chunk.length - bytesAcked;
-      final newEnd = currentExpectedByte + remainingBytes;
+        final contentRange = isClose
+            ? (remainingBytes == 0
+                  ? 'bytes */$newEnd'
+                  : 'bytes $loopExpectedByte-${newEnd - 1}/$newEnd')
+            : (remainingBytes == 0
+                  ? 'bytes */*'
+                  : 'bytes $loopExpectedByte-${newEnd - 1}/*');
 
-      final contentRange = isClose
-          ? (remainingBytes == 0
-                ? 'bytes */$newEnd'
-                : 'bytes $currentExpectedByte-${newEnd - 1}/$newEnd')
-          : (remainingBytes == 0
-                ? 'bytes */*'
-                : 'bytes $currentExpectedByte-${newEnd - 1}/*');
+        final headers = {'Content-Range': contentRange};
+        if (isClose && hashHeader != null) headers['x-goog-hash'] = hashHeader;
 
-      final headers = {'Content-Range': contentRange};
-      if (isClose && hashHeader != null) headers['x-goog-hash'] = hashHeader;
+        final body = remainingBytes == 0
+            ? const <int>[]
+            : chunk.sublist(bytesAcked, bytesAcked + remainingBytes);
 
-      final body = remainingBytes == 0
-          ? const <int>[]
-          : chunk.sublist(bytesAcked, bytesAcked + remainingBytes);
+        final res = await client.put(sessionUri, headers: headers, body: body);
 
-      final res = await client.put(sessionUri, headers: headers, body: body);
-
-      if (isClose && (res.statusCode < 200 || res.statusCode >= 300)) {
-        throw ServiceException.fromHttpResponse(res, res.body);
-      } else if (!isClose) {
-        if (res.statusCode != 308) {
+        if (res.statusCode == 308) {
+          final parsed = _parseRange(res.headers['range']);
+          if (parsed != null && parsed > newEnd) {
+            throw StateError(
+              'Server acknowledged more bytes ($parsed) '
+              'than sent ($newEnd).',
+            );
+          }
+          if (isClose && parsed != null && parsed == newEnd) {
+            // 308 but all bytes were acked.
+            throw ServiceException.fromHttpResponse(res, res.body);
+          }
+          return res;
+        } else if (res.statusCode >= 200 && res.statusCode < 300) {
+          // Handle not at close.
+          return res;
+        } else {
           throw ServiceException.fromHttpResponse(res, res.body);
         }
-        final actualExpectedByte =
-            _parseRange(res.headers['range']) ?? _nextExpectedByte;
-        if (actualExpectedByte < newEnd) {
-          throw http.ClientException(
-            'Server acknowledged fewer bytes ($actualExpectedByte) '
-            'than sent ($newEnd).',
-            sessionUri,
-          );
-        } else if (actualExpectedByte > newEnd) {
-          throw StateError(
-            'Server acknowledged more bytes ($actualExpectedByte) '
-            'than sent ($newEnd).',
-          );
+      }, isIdempotent: true);
+
+      if (lastRes!.statusCode == 308) {
+        final parsed = _parseRange(lastRes.headers['range']);
+        if (parsed != null) {
+          currentExpectedByte = parsed;
+          final expectedEnd = _nextExpectedByte + chunk.length;
+          if (currentExpectedByte >= expectedEnd) {
+            done = true;
+          }
+        } else {
+          // Range header was missing from the 308 response.
+          // We must do a status check to verify the true state of the upload.
+          forceStatusCheck = true;
         }
+      } else {
+        done = true;
       }
-      return res;
-    }, isIdempotent: true);
+    }
+
+    return lastRes!;
   }
 
   Future<void> _flush() async {
