@@ -25,6 +25,7 @@ import 'package:meta/meta.dart';
 import 'crc32c.dart';
 import 'object_metadata.dart';
 import 'object_metadata_json.dart';
+import 'retry.dart';
 
 // Upload chunk sizes must be a multiple of 256KiB.
 //
@@ -39,6 +40,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   bool _isAddStream = false;
   final _closedCompleter = Completer<ObjectMetadata>();
   final FutureOr<http.Client> _client;
+  final RetryRunner _retry;
 
   /// The metadata of the uploaded object.
   ///
@@ -99,6 +101,82 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _writeBufferSize += data.length;
   }
 
+  Future<http.Response> _uploadChunk(
+    Uint8List buffer,
+    int bufferSize,
+    bool isClose,
+    String? hashHeader,
+  ) async {
+    var needsStatusCheck = false;
+    var initialExpectedByte = _nextExpectedByte;
+
+    return await _retry.run(() async {
+      var currentExpectedByte = initialExpectedByte;
+      if (needsStatusCheck) {
+        final statusRes = await (await _client).put(
+          await _sessionUri,
+          headers: {'Content-Range': 'bytes */*'},
+        );
+        if (statusRes.statusCode == 308) {
+          final range = statusRes.headers['range'];
+          if (range != null) {
+            final match = RegExp(r'bytes=0-(\d+)').firstMatch(range);
+            if (match != null) {
+              currentExpectedByte = int.parse(match.group(1)!) + 1;
+            }
+          } else {
+            currentExpectedByte = 0;
+          }
+        } else if (statusRes.statusCode == 200 || statusRes.statusCode == 201) {
+          return statusRes;
+        } else {
+          throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
+        }
+      }
+      needsStatusCheck = true;
+
+      final bytesAcked = (currentExpectedByte - initialExpectedByte).clamp(
+        0,
+        bufferSize,
+      );
+      final remainingBytes = bufferSize - bytesAcked;
+      final newEnd = currentExpectedByte + remainingBytes;
+
+      String contentRange;
+      if (remainingBytes == 0) {
+        contentRange = isClose ? 'bytes */$newEnd' : 'bytes */*';
+      } else {
+        contentRange = isClose
+            ? 'bytes $currentExpectedByte-${newEnd - 1}/$newEnd'
+            : 'bytes $currentExpectedByte-${newEnd - 1}/*';
+      }
+
+      final headers = {'Content-Range': contentRange};
+      if (isClose && hashHeader != null) {
+        headers['x-goog-hash'] = hashHeader;
+      }
+
+      final res = await (await _client).put(
+        await _sessionUri,
+        headers: headers,
+        body: remainingBytes == 0
+            ? const <int>[]
+            : buffer.sublist(bytesAcked, bytesAcked + remainingBytes),
+      );
+
+      if (isClose) {
+        if (res.statusCode < 200 || res.statusCode >= 300) {
+          throw ServiceException.fromHttpResponse(res, res.body);
+        }
+      } else {
+        if (res.statusCode != 308) {
+          throw ServiceException.fromHttpResponse(res, res.body);
+        }
+      }
+      return res;
+    }, isIdempotent: true);
+  }
+
   Future<void> _flush() async {
     final flushPoint = _largestWriteSize(_writeBufferSize);
     if (flushPoint == 0) return;
@@ -106,24 +184,14 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _writeBuffer = _writeBuffer.sublist(flushPoint);
     _writeBufferSize -= flushPoint;
 
-    final newEnd = _nextExpectedByte + flushPoint;
-    final contentRange = 'bytes $_nextExpectedByte-${newEnd - 1}/*';
-    final response = await (await _client).put(
-      await _sessionUri,
-      headers: {'Content-Range': contentRange},
-      body: flushBuffer.sublist(0, flushPoint),
-    );
-
-    if (response.statusCode != 308) {
-      throw ServiceException.fromHttpResponse(response, response.body);
-    }
+    await _uploadChunk(flushBuffer, flushPoint, false, null);
 
     // TODO(https://github.com/googleapis/google-cloud-dart/issues/218):
     // Check the "range" headers to determine if any data must be resent.
-    _nextExpectedByte = newEnd;
+    _nextExpectedByte += flushPoint;
   }
 
-  ResumableUploadSink._(this._client, this._locationResponse);
+  ResumableUploadSink._(this._client, this._locationResponse, this._retry);
 
   @override
   void add(List<int> event) {
@@ -179,23 +247,12 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         _md5Accumulator.events.single.bytes,
       );
 
-      final newEnd = _nextExpectedByte + _writeBufferSize;
-      final contentRange = _writeBufferSize == 0
-          ? 'bytes */$newEnd'
-          : 'bytes $_nextExpectedByte-${newEnd - 1}/$newEnd';
-
-      final response = await (await _client).put(
-        await _sessionUri,
-        headers: {
-          'Content-Range': contentRange,
-          'x-goog-hash': 'crc32c=$calculatedCrc32c,md5=$calculatedMd5Hash',
-        },
-        body: _writeBuffer.sublist(0, _writeBufferSize),
+      final response = await _uploadChunk(
+        _writeBuffer,
+        _writeBufferSize,
+        true,
+        'crc32c=$calculatedCrc32c,md5=$calculatedMd5Hash',
       );
-
-      if (response.statusCode < 200 || response.statusCode >= 300) {
-        throw ServiceException.fromHttpResponse(response, response.body);
-      }
 
       final md = objectMetadataFromJson(
         jsonDecode(response.body) as Map<String, dynamic>,
@@ -217,6 +274,8 @@ ResumableUploadSink uploadFileStream(
   FutureOr<http.Client> client,
   Uri url, {
   ObjectMetadata? metadata,
+  bool isIdempotent = false,
+  RetryRunner retry = defaultRetry,
 }) {
   final md = switch (metadata) {
     ObjectMetadata(contentType: _?) => metadata,
@@ -230,16 +289,22 @@ ResumableUploadSink uploadFileStream(
 
   final body = jsonEncode(metadataJson);
 
-  final response = Future.value(client).then(
-    (client) => client.post(
-      url,
-      body: body,
-      headers: {
-        'Content-Type': 'application/json',
-        'Content-Length': body.length.toString(),
-      },
-    ),
-  );
+  final response = retry.run(() async {
+    final res = await Future.value(client).then(
+      (client) => client.post(
+        url,
+        body: body,
+        headers: {
+          'Content-Type': 'application/json',
+          'Content-Length': body.length.toString(),
+        },
+      ),
+    );
+    if (res.statusCode < 200 || res.statusCode >= 300) {
+      throw ServiceException.fromHttpResponse(res, res.body);
+    }
+    return res;
+  }, isIdempotent: isIdempotent);
 
-  return ResumableUploadSink._(client, response);
+  return ResumableUploadSink._(client, response, retry);
 }

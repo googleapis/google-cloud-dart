@@ -412,8 +412,15 @@ void main() {
 
         client.instructions = 'return-503-after-256K';
 
-        final sink = storage.uploadObjectFromSink(bucketName, 'object')
-          ..add(large);
+        final sink = storage.uploadObjectFromSink(
+          bucketName,
+          'object',
+          retry: const ExponentialRetry(
+            maxRetries: 30,
+            maxDelay: Duration(milliseconds: 1),
+            initialDelay: Duration(milliseconds: 1),
+          ),
+        )..add(large);
         await sink.close();
 
         final downloaded = await storage.downloadObject(bucketName, 'object');

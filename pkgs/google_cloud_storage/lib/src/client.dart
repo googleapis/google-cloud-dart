@@ -877,13 +877,21 @@ final class Storage {
     String bucket,
     String name, {
     ObjectMetadata? metadata,
+    BigInt? ifGenerationMatch,
+    RetryRunner retry = defaultRetry,
   }) => uploadFileStream(
     _httpClient,
     _requestUrl(
       ['upload', 'storage', 'v1', 'b', bucket, 'o'],
-      {'uploadType': 'resumable', 'name': name},
+      {
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'name': name,
+        'uploadType': 'resumable',
+      },
     ),
+    isIdempotent: ifGenerationMatch != null,
     metadata: metadata,
+    retry: retry,
   );
 
   /// Creates or updates the content of a [Google Cloud Storage object][].
