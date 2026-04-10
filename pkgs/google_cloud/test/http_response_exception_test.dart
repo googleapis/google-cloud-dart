@@ -35,7 +35,7 @@ void main() {
       final ex = HttpResponseException(400, 'Bad');
       expect(ex.statusCode, 400);
       expect(ex.message, 'Bad');
-      expect(ex.toString(), 'Bad (400)');
+      expect(ex.toString(), 'HttpResponseException: Bad');
     });
 
     test('invalid status code low', () {

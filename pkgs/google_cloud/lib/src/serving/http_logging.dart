@@ -16,7 +16,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:io/ansi.dart';
+import 'package:meta/meta.dart';
 import 'package:shelf/shelf.dart';
 
 import '../constants.dart';
@@ -28,92 +28,140 @@ import 'trace_context_data.dart';
 
 export '../structured_logging.dart';
 
-const _httpResponseExceptionKey = 'google_cloud.response_exception';
-const _exceptionStackTraceKey = 'google_cloud.bad_stack_trace';
+/// The default message to use for internal server errors.
+///
+/// This is used when an exception is thrown that is not an
+/// [HttpResponseException].
+@internal
+const internalServerErrorMessage = 'Internal Server Error';
 
 /// Convenience [Middleware] that handles logging depending on [projectId].
 ///
 /// [projectId] is the optional Google Cloud Project ID used for trace
 /// correlation.
 ///
-/// If [projectId] is `null`, returns [Middleware] composed of [logRequests] and
-/// [httpResponseExceptionMiddleware].
+/// If [projectId] is `null`, returns [errorLoggingMiddleware].
 ///
 /// If [projectId] is provided, returns the value from [cloudLoggingMiddleware].
 Middleware createLoggingMiddleware({String? projectId}) => projectId == null
-    ? _errorWriter
-          .addMiddleware(logRequests())
-          .addMiddleware(_handleResponseException)
+    ? _handleResponseException
     : cloudLoggingMiddleware(projectId);
 
-@Deprecated('use httpResponseExceptionMiddleware instead')
-Middleware get badRequestMiddleware => httpResponseExceptionMiddleware;
+@Deprecated('use errorLoggingMiddleware instead')
+Middleware get badRequestMiddleware => errorLoggingMiddleware;
 
-/// Adds logic which catches [HttpResponseException], logs details to [stderr]
-/// and returns a corresponding [Response].
-Middleware get httpResponseExceptionMiddleware => _handleResponseException;
+/// Wraps the [logRequests] middleware and catches exceptions and logs them to
+/// stderr.
+///
+/// Caught exceptions are logged as normal text to [stderr].
+///
+/// {@template exceptionResponseMapping}
+/// All errors that are thrown in the context of the handler are caught and
+/// and logged with an appopriate response sent to the caller.
+///
+/// The HTTP status code sent depends on the exception type.
+///
+/// - [HttpResponseException] (including [BadRequestException]) cause a response
+///   with the status code of the exception.
+/// - Other exceptions cause a response with a status code of 500 and the
+///   default message "Internal Server Error".
+///
+/// The response body will be JSON if the request headers indicate that JSON
+/// is expected, otherwise it will be a plain text string.
+/// {@endtemplate}
+Middleware get errorLoggingMiddleware => _handleResponseException;
 
-Handler _handleResponseException(Handler innerHandler) => (request) async {
-  try {
-    final response = await innerHandler(request);
-    return response;
-  } on HttpResponseException catch (error, stack) {
-    return _responseFromException(error, stack, request.headers);
-  }
-};
+Handler _handleResponseException(Handler innerHandler) {
+  Handler exceptionHandler(Handler inner) => (request) async {
+    try {
+      return await inner(request);
+    } catch (error, stack) {
+      final errorString = switch (error) {
+        HttpResponseException() => [
+          if (error.innerError != null)
+            '${error.innerError} (${error.innerError.runtimeType})'
+          else
+            'HTTP Exception: ${error.message} (${error.statusCode})',
+          if (error.status != null && error.status!.isNotEmpty)
+            'Status: ${error.status}',
+          if (error.details != null && error.details!.isNotEmpty)
+            'Details: ${error.details}',
+        ].join('\n'),
+        _ => '$error (${error.runtimeType})',
+      };
 
-Handler _errorWriter(Handler innerHandler) => (request) async {
-  final response = await innerHandler(request);
+      final theStack = error is HttpResponseException
+          ? error.innerStack ?? stack
+          : stack;
 
-  final error =
-      response.context[_httpResponseExceptionKey] as HttpResponseException?;
+      final text = [
+        errorString,
+        formatStackTrace(theStack),
+      ].expand((e) => LineSplitter.split('$e'.trim())).join('\n');
 
-  if (error != null) {
-    final stack = response.context[_exceptionStackTraceKey] as StackTrace?;
-    final output = [
-      error,
-      if (error.innerError != null)
-        '${error.innerError} (${error.innerError.runtimeType})',
-      if (error.innerStack ?? stack case final s?) formatStackTrace(s),
-    ];
+      stderr.writeln(text);
+      return _responseFromException(error, stack, request.headers);
+    }
+  };
+  return logRequests()(exceptionHandler(innerHandler));
+}
 
-    final bob = output
-        .expand((e) => LineSplitter.split('$e'.trim()))
-        .join('\n');
-
-    stderr.writeln(lightRed.wrap(bob));
-  }
-  return response;
-};
-
+/// Creates a [Response] from [error] and [stack].
+///
+/// If [requestHeaders] indicate that JSON is expected, the response body will
+/// be JSON. Otherwise, the response body will be a plain text string.
+///
+/// ‼️ This method is VERY CAREFUL to not leak internal implementation details!
+///
+/// If the error is an [HttpResponseException], the `toString` and `toJson`
+/// methods are used, but they have been carefully written to not leak internal
+/// implementation details.
 Response _responseFromException(
-  HttpResponseException e,
+  Object error,
   StackTrace stack, [
   Map<String, String>? requestHeaders,
 ]) {
+  final statusCode = error is HttpResponseException ? error.statusCode : 500;
+
   if (requestHeaders != null && shouldSendJsonResponse(requestHeaders)) {
+    final jsonBody = error is HttpResponseException
+        // ‼️ Note we only send the `toJson` of HttpResponseException because
+        // it's been vetted to be safe.
+        ? error.toJson()
+        : {
+            'error': {
+              'code': statusCode,
+              'message': internalServerErrorMessage,
+              'status': 'INTERNAL',
+            },
+          };
+
     return Response(
-      e.statusCode,
-      body: jsonEncode(e.toJson()),
+      statusCode,
+      body: jsonEncode(jsonBody),
       headers: {HttpHeaders.contentTypeHeader: 'application/json'},
-      context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
     );
   }
 
   return Response(
-    e.statusCode,
-    body: e.toString(),
-    context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
+    statusCode,
+    body: error is HttpResponseException
+        // ‼️ Note we only send the `toString` of HttpResponseException because
+        // it's been vetted to be safe.
+        ? error.toString()
+        : internalServerErrorMessage,
   );
 }
 
-/// Return [Middleware] that logs errors using Google Cloud structured logs and
-/// returns the correct response.
+/// Return [Middleware] that handles exceptions and generates Google Cloud
+/// structured logs.
 ///
 /// [projectId] is the Google Cloud Project ID used for trace correlation.
 ///
-/// Log messages of type [Map] are logged as structured logs (`jsonPayload`);
-/// all other logs messages are logged as text logs (`textPayload`).
+/// Logs messages sent to [currentLogger] and calls to [print] are formatted
+/// to include trace correlation.
+///
+/// {@macro exceptionResponseMapping}
 Middleware cloudLoggingMiddleware(String projectId) {
   Handler hostedLoggingMiddleware(Handler innerHandler) => (request) async {
     // Add log correlation to nest all log messages beneath request log in
@@ -152,18 +200,34 @@ Middleware cloudLoggingMiddleware(String projectId) {
         completer.completeError(error, stackTrace);
       }
 
-      final logContentString = error is HttpResponseException
-          ? createErrorLogEntryFromRequest(
-              error,
-              error.innerStack ?? stackTrace,
-              error.statusCode >= 500 ? LogSeverity.error : LogSeverity.warning,
-              extraPayload: error.toJson(),
-            )
-          : createErrorLogEntryFromRequest(
-              error,
-              stackTrace,
-              LogSeverity.error,
-            );
+      final mainErrorString = switch (error) {
+        HttpResponseException(innerError: final innerError?) =>
+          '$error — Caused by: $innerError (${innerError.runtimeType})',
+        _ => '$error',
+      };
+
+      final extraPayload = error is HttpResponseException
+          ? <String, Object?>{
+              ...error.toJson(),
+              if (error.innerError != null)
+                'inner_error': '${error.innerError}',
+              if (error.innerStack != null)
+                'inner_stack_trace': formatStackTrace(error.innerStack!),
+            }
+          : null;
+
+      final logSeverity = error is HttpResponseException
+          ? (error.statusCode >= 500 ? LogSeverity.error : LogSeverity.warning)
+          : LogSeverity.error;
+
+      final logContentString = createErrorLogEntryFromRequest(
+        mainErrorString,
+        error is HttpResponseException
+            ? error.innerStack ?? stackTrace
+            : stackTrace,
+        logSeverity,
+        extraPayload: extraPayload,
+      );
 
       // Serialize to a JSON string and output.
       parent.print(self, logContentString);
@@ -172,9 +236,11 @@ Middleware cloudLoggingMiddleware(String projectId) {
         return;
       }
 
-      final response = error is HttpResponseException
-          ? _responseFromException(error, stackTrace, request.headers)
-          : Response.internalServerError();
+      final response = _responseFromException(
+        error,
+        stackTrace,
+        request.headers,
+      );
 
       completer.complete(response);
     }
