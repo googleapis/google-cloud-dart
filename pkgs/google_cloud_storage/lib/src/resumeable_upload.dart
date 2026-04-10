@@ -62,8 +62,8 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   // The next byte position expected by Google Cloud Storage.
   int _nextExpectedByte = 0;
-  Uint8List _writeBuffer = Uint8List(_minWriteSize * 2);
-  int _writeBufferSize = 0;
+  final List<List<int>> _buffer = [];
+  int _bufferSize = 0;
 
   Future<Uri> get _sessionUri async {
     final response = await _locationResponse;
@@ -79,55 +79,37 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     if (data.isEmpty) return;
     _crc32c.update(data);
     _md5Sink.add(data);
+    _buffer.add(data);
+    _bufferSize += data.length;
+  }
 
-    final requiredCapacity = _writeBufferSize + data.length;
-    if (requiredCapacity > _writeBuffer.length) {
-      var newSize = _writeBuffer.length * 2;
-      if (newSize < requiredCapacity) {
-        newSize = requiredCapacity;
-      }
-      newSize =
-          ((newSize + _minWriteSize - 1) ~/ _minWriteSize) * _minWriteSize;
-
-      final newBuffer = Uint8List(newSize)
-        ..setRange(0, _writeBufferSize, _writeBuffer);
-      _writeBuffer = newBuffer;
+  static int? _parseRange(String? rangeHeader) {
+    if (rangeHeader == null) return null;
+    final match = RegExp(r'bytes=0-(\d+)').firstMatch(rangeHeader);
+    if (match != null) {
+      return int.parse(match.group(1)!) + 1;
     }
-    _writeBuffer.setRange(
-      _writeBufferSize,
-      _writeBufferSize + data.length,
-      data,
-    );
-    _writeBufferSize += data.length;
+    return null;
   }
 
   Future<http.Response> _uploadChunk(
-    Uint8List buffer,
-    int bufferSize,
+    Uint8List chunk,
     bool isClose,
     String? hashHeader,
   ) async {
     var needsStatusCheck = false;
-    var initialExpectedByte = _nextExpectedByte;
     final sessionUri = await _sessionUri;
+    final client = await _client;
 
     return await _retry.run(() async {
-      var currentExpectedByte = initialExpectedByte;
+      var currentExpectedByte = _nextExpectedByte;
       if (needsStatusCheck) {
-        final statusRes = await (await _client).put(
+        final statusRes = await client.put(
           sessionUri,
           headers: {'Content-Range': 'bytes */*'},
         );
         if (statusRes.statusCode == 308) {
-          final range = statusRes.headers['range'];
-          if (range != null) {
-            final match = RegExp(r'bytes=0-(\d+)').firstMatch(range);
-            if (match != null) {
-              currentExpectedByte = int.parse(match.group(1)!) + 1;
-            }
-          } else {
-            currentExpectedByte = 0;
-          }
+          currentExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
         } else if (statusRes.statusCode == 200 || statusRes.statusCode == 201) {
           return statusRes;
         } else {
@@ -136,66 +118,55 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       }
       needsStatusCheck = true;
 
-      if (currentExpectedByte < initialExpectedByte) {
+      if (currentExpectedByte < _nextExpectedByte) {
         throw StateError(
           'The server has acknowledged fewer bytes ($currentExpectedByte) '
-          'than expected ($initialExpectedByte). Cannot resume upload.',
+          'than expected ($_nextExpectedByte). Cannot resume upload.',
         );
       }
 
-      final bytesAcked = (currentExpectedByte - initialExpectedByte).clamp(
+      final bytesAcked = (currentExpectedByte - _nextExpectedByte).clamp(
         0,
-        bufferSize,
+        chunk.length,
       );
-      final remainingBytes = bufferSize - bytesAcked;
+      final remainingBytes = chunk.length - bytesAcked;
       final newEnd = currentExpectedByte + remainingBytes;
 
-      String contentRange;
-      if (remainingBytes == 0) {
-        contentRange = isClose ? 'bytes */$newEnd' : 'bytes */*';
-      } else {
-        contentRange = isClose
-            ? 'bytes $currentExpectedByte-${newEnd - 1}/$newEnd'
-            : 'bytes $currentExpectedByte-${newEnd - 1}/*';
-      }
+      final contentRange = isClose
+          ? (remainingBytes == 0
+                ? 'bytes */$newEnd'
+                : 'bytes $currentExpectedByte-${newEnd - 1}/$newEnd')
+          : (remainingBytes == 0
+                ? 'bytes */*'
+                : 'bytes $currentExpectedByte-${newEnd - 1}/*');
 
       final headers = {'Content-Range': contentRange};
-      if (isClose && hashHeader != null) {
-        headers['x-goog-hash'] = hashHeader;
-      }
+      if (isClose && hashHeader != null) headers['x-goog-hash'] = hashHeader;
 
-      final res = await (await _client).put(
-        sessionUri,
-        headers: headers,
-        body: remainingBytes == 0
-            ? const <int>[]
-            : buffer.sublist(bytesAcked, bytesAcked + remainingBytes),
-      );
+      final body = remainingBytes == 0
+          ? const <int>[]
+          : chunk.sublist(bytesAcked, bytesAcked + remainingBytes);
 
-      if (isClose) {
-        if (res.statusCode < 200 || res.statusCode >= 300) {
-          throw ServiceException.fromHttpResponse(res, res.body);
-        }
-      } else {
+      final res = await client.put(sessionUri, headers: headers, body: body);
+
+      if (isClose && (res.statusCode < 200 || res.statusCode >= 300)) {
+        throw ServiceException.fromHttpResponse(res, res.body);
+      } else if (!isClose) {
         if (res.statusCode != 308) {
           throw ServiceException.fromHttpResponse(res, res.body);
         }
-        final range = res.headers['range'];
-        var actualExpectedByte = initialExpectedByte;
-        if (range != null) {
-          final match = RegExp(r'bytes=0-(\d+)').firstMatch(range);
-          if (match != null) {
-            actualExpectedByte = int.parse(match.group(1)!) + 1;
-          }
-        }
+        final actualExpectedByte =
+            _parseRange(res.headers['range']) ?? _nextExpectedByte;
         if (actualExpectedByte < newEnd) {
           throw http.ClientException(
-            'Server acknowledged fewer bytes ($actualExpectedByte) than sent ($newEnd).',
+            'Server acknowledged fewer bytes ($actualExpectedByte) '
+            'than sent ($newEnd).',
             sessionUri,
           );
         } else if (actualExpectedByte > newEnd) {
           throw StateError(
-            'Server acknowledged more bytes ($actualExpectedByte) than sent ($newEnd).',
+            'Server acknowledged more bytes ($actualExpectedByte) '
+            'than sent ($newEnd).',
           );
         }
       }
@@ -204,15 +175,41 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   }
 
   Future<void> _flush() async {
-    final flushPoint = _largestWriteSize(_writeBufferSize);
+    final flushPoint = _largestWriteSize(_bufferSize);
     if (flushPoint == 0) return;
-    final flushBuffer = _writeBuffer;
-    _writeBuffer = _writeBuffer.sublist(flushPoint);
-    _writeBufferSize -= flushPoint;
 
-    await _uploadChunk(flushBuffer, flushPoint, false, null);
+    final flushData = Uint8List(flushPoint);
+    var offset = 0;
+    while (offset < flushPoint) {
+      final list = _buffer.first;
+      final remaining = flushPoint - offset;
+      if (list.length <= remaining) {
+        flushData.setRange(offset, offset + list.length, list);
+        offset += list.length;
+        _buffer.removeAt(0);
+        _bufferSize -= list.length;
+      } else {
+        flushData.setRange(offset, offset + remaining, list);
+        _buffer[0] = list.sublist(remaining);
+        _bufferSize -= remaining;
+        offset += remaining;
+      }
+    }
 
+    await _uploadChunk(flushData, false, null);
     _nextExpectedByte += flushPoint;
+  }
+
+  Uint8List _takeRemainingBytes() {
+    final data = Uint8List(_bufferSize);
+    var offset = 0;
+    for (final chunk in _buffer) {
+      data.setRange(offset, offset + chunk.length, chunk);
+      offset += chunk.length;
+    }
+    _buffer.clear();
+    _bufferSize = 0;
+    return data;
   }
 
   ResumableUploadSink._(this._client, this._locationResponse, this._retry);
@@ -272,8 +269,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       );
 
       final response = await _uploadChunk(
-        _writeBuffer,
-        _writeBufferSize,
+        _takeRemainingBytes(),
         true,
         'crc32c=$calculatedCrc32c,md5=$calculatedMd5Hash',
       );
