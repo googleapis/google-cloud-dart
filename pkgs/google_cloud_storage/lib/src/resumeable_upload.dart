@@ -156,23 +156,32 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           0,
           chunk.length,
         );
-        final remainingBytes = chunk.length - bytesAcked;
-        final newEnd = loopExpectedByte + remainingBytes;
+        var remainingBytes = chunk.length - bytesAcked;
+        var startOffset = bytesAcked;
+
+        if (!isClose && remainingBytes % _minWriteSize != 0) {
+          final blocks = (remainingBytes / _minWriteSize).ceil();
+          remainingBytes = blocks * _minWriteSize;
+          startOffset = chunk.length - remainingBytes;
+        }
+
+        final startByte = _nextExpectedByte + startOffset;
+        final newEnd = startByte + remainingBytes;
 
         final contentRange = isClose
             ? (remainingBytes == 0
                   ? 'bytes */$newEnd'
-                  : 'bytes $loopExpectedByte-${newEnd - 1}/$newEnd')
+                  : 'bytes $startByte-${newEnd - 1}/$newEnd')
             : (remainingBytes == 0
                   ? 'bytes */*'
-                  : 'bytes $loopExpectedByte-${newEnd - 1}/*');
+                  : 'bytes $startByte-${newEnd - 1}/*');
 
         final headers = {'Content-Range': contentRange};
         if (isClose && hashHeader != null) headers['x-goog-hash'] = hashHeader;
 
         final body = remainingBytes == 0
             ? const <int>[]
-            : chunk.sublist(bytesAcked, bytesAcked + remainingBytes);
+            : chunk.sublist(startOffset, startOffset + remainingBytes);
 
         final res = await client.put(sessionUri, headers: headers, body: body);
 
@@ -193,6 +202,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           // Handle not at close.
           return res;
         } else {
+          print('400 BAD REQUEST ERROR BODY: ${res.body}');
           throw ServiceException.fromHttpResponse(res, res.body);
         }
       }, isIdempotent: true);

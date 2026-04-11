@@ -36,7 +36,7 @@ Uint8List randomUint8List(int length, {int? seed}) {
 }
 
 final small = randomUint8List(100);
-final large = randomUint8List(5_000_000);
+final large = randomUint8List(256 * 1024 * 1024 + 1);
 
 void uploadObjectFromSinkTest(Storage Function() storageFn) {
   late Storage storage;
