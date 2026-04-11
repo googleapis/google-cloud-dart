@@ -498,7 +498,8 @@ void main() {
             headers: {'location': 'http://example.com/location'},
           );
         } else if (count == 2) {
-          // First close fails. Throw a StateError to avoid triggering retry loops.
+          // First close fails. Throw a StateError to avoid triggering retry
+          // loops.
           throw StateError('message');
         } else if (count == 3) {
           // Second close succeeds.

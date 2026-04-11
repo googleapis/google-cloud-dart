@@ -80,8 +80,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   // The next byte position expected by Google Cloud Storage.
   int _nextExpectedByte = 0;
-  final List<List<int>> _buffer = [];
-  int _bufferSize = 0;
+  final BytesBuilder _buffer = BytesBuilder();
 
   Future<Uri> get _sessionUri async {
     final response = await _locationResponse;
@@ -98,7 +97,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     _crc32c.update(data);
     _md5Sink.add(data);
     _buffer.add(data);
-    _bufferSize += data.length;
   }
 
   Future<http.Response> _uploadChunk(
@@ -112,8 +110,8 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     var currentExpectedByte = _nextExpectedByte;
     http.Response? lastRes;
 
-    bool done = false;
-    bool forceStatusCheck = false;
+    var done = false;
+    var forceStatusCheck = false;
 
     while (!done) {
       var needsStatusCheck = forceStatusCheck;
@@ -160,6 +158,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         var startOffset = bytesAcked;
 
         if (!isClose && remainingBytes % _minWriteSize != 0) {
+          // Upload chunk sizes must be a multiple of 256KiB.
+          // If the server acknowledged a non-multiple of 256KiB, we extend the
+          // range backwards to include already acknowledged bytes to make the
+          // request size a multiple of 256KiB.
           final blocks = (remainingBytes / _minWriteSize).ceil();
           remainingBytes = blocks * _minWriteSize;
           startOffset = chunk.length - remainingBytes;
@@ -168,13 +170,13 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         final startByte = _nextExpectedByte + startOffset;
         final newEnd = startByte + remainingBytes;
 
-        final contentRange = isClose
-            ? (remainingBytes == 0
-                  ? 'bytes */$newEnd'
-                  : 'bytes $startByte-${newEnd - 1}/$newEnd')
-            : (remainingBytes == 0
-                  ? 'bytes */*'
-                  : 'bytes $startByte-${newEnd - 1}/*');
+        final String contentRange;
+        if (remainingBytes == 0) {
+          contentRange = isClose ? 'bytes */$newEnd' : 'bytes */*';
+        } else {
+          final range = '$startByte-${newEnd - 1}';
+          contentRange = isClose ? 'bytes $range/$newEnd' : 'bytes $range/*';
+        }
 
         final headers = {'Content-Range': contentRange};
         if (isClose && hashHeader != null) headers['x-goog-hash'] = hashHeader;
@@ -229,42 +231,19 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   }
 
   Future<void> _flush() async {
-    final flushPoint = _largestWriteSize(_bufferSize);
+    final flushPoint = _largestWriteSize(_buffer.length);
     if (flushPoint == 0) return;
 
-    final flushData = Uint8List(flushPoint);
-    var offset = 0;
-    while (offset < flushPoint) {
-      final list = _buffer.first;
-      final remaining = flushPoint - offset;
-      if (list.length <= remaining) {
-        flushData.setRange(offset, offset + list.length, list);
-        offset += list.length;
-        _buffer.removeAt(0);
-        _bufferSize -= list.length;
-      } else {
-        flushData.setRange(offset, offset + remaining, list);
-        _buffer[0] = list.sublist(remaining);
-        _bufferSize -= remaining;
-        offset += remaining;
-      }
-    }
+    final allBytes = _buffer.takeBytes();
+    final flushData = Uint8List.sublistView(allBytes, 0, flushPoint);
+    final remaining = Uint8List.sublistView(allBytes, flushPoint);
+    _buffer.add(remaining);
 
     await _uploadChunk(flushData, false, null);
     _nextExpectedByte += flushPoint;
   }
 
-  Uint8List _takeRemainingBytes() {
-    final data = Uint8List(_bufferSize);
-    var offset = 0;
-    for (final chunk in _buffer) {
-      data.setRange(offset, offset + chunk.length, chunk);
-      offset += chunk.length;
-    }
-    _buffer.clear();
-    _bufferSize = 0;
-    return data;
-  }
+  Uint8List _takeRemainingBytes() => _buffer.takeBytes();
 
   ResumableUploadSink._(this._client, this._locationResponse, this._retry);
 
@@ -364,15 +343,14 @@ ResumableUploadSink uploadFileStream(
   final body = jsonEncode(metadataJson);
 
   final response = retry.run(() async {
-    final res = await Future.value(client).then(
-      (client) => client.post(
-        url,
-        body: body,
-        headers: {
-          'Content-Type': 'application/json',
-          'Content-Length': body.length.toString(),
-        },
-      ),
+    final resolvedClient = await client;
+    final res = await resolvedClient.post(
+      url,
+      body: body,
+      headers: {
+        'Content-Type': 'application/json',
+        'Content-Length': body.length.toString(),
+      },
     );
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw ServiceException.fromHttpResponse(res, res.body);
