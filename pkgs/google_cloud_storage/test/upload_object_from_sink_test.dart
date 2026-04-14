@@ -93,6 +93,46 @@ void uploadObjectFromSinkTest(Storage Function() createStorage) {
     expect(metadata.metadata?['customMetadata'], 'value');
   });
 
+  test('with if generation match success', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'ul_obj_overwrite_if_gen_match_ok',
+    );
+
+    final oldGeneration = (await storage.uploadObject(
+      bucketName,
+      'object1',
+      utf8.encode('Hello World!'),
+    )).generation;
+
+    final sink = storage.uploadObjectFromSink(
+      bucketName,
+      'object1',
+      ifGenerationMatch: oldGeneration,
+    )..add(const <int>[1, 2, 3]);
+    final newGeneration = (await sink.close()).generation;
+    expect(newGeneration, isNot(oldGeneration));
+  });
+
+  test('with if generation match failure', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'ul_obj_overwrite_if_gen_match_fail',
+    );
+
+    await storage.uploadObject(
+      bucketName,
+      'object1',
+      utf8.encode('Hello World!'),
+    );
+    final sink = storage.uploadObjectFromSink(
+      bucketName,
+      'object1',
+      ifGenerationMatch: BigInt.from(1234),
+    )..add(const <int>[1, 2, 3]);
+    await expectLater(sink.close, throwsA(isA<PreconditionFailedException>()));
+  });
+
   test('immediate close', () async {
     final bucketName = await createBucketWithTearDown(
       storage,

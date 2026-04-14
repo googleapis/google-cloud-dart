@@ -783,10 +783,10 @@ final class Storage {
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
-  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// If set, [ifGenerationMatch] makes updating the object content conditional
   /// on whether the object's generation matches the provided value. If the
   /// generation does not match, a [PreconditionFailedException] is thrown.
-  /// A value of `0` indicates that the object must not already exist.
+  /// A value of `BigInt.zero` indicates that the object must not already exist.
   ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
@@ -854,10 +854,17 @@ final class Storage {
   /// Creates or updates the content of a [Google Cloud Storage object][] using
   /// a [StreamSink].
   ///
+  /// This operation is idempotent if `ifGenerationMatch` is set.
+  ///
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
   /// will be `'application/octet-stream'`. If `metadata.name` does not
   /// match [name], a [BadRequestException] is thrown.
+  ///
+  /// If set, [ifGenerationMatch] makes updating the object content conditional
+  /// on whether the object's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  /// A value of `BigInt.zero` indicates that the object must not already exist.
   ///
   /// For example:
   ///
@@ -865,6 +872,7 @@ final class Storage {
   /// final sink = storage.uploadObjectFromSink(
   ///   'my-bucket',
   ///   'hello.txt',
+  ///   ifGenerationMatch: BigInt.zero, // Only insert if the object doesn't exist.
   /// );
   /// sink.add([1, 2, 3]);
   /// await sink.close();
