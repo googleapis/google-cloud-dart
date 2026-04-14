@@ -187,7 +187,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
         final body = remainingBytes == 0
             ? const <int>[]
-            : chunk.sublist(startOffset);
+            : Uint8List.sublistView(chunk, startOffset);
 
         final res = await client.put(sessionUri, headers: headers, body: body);
 
@@ -335,9 +335,7 @@ ResumableUploadSink uploadFileStream(
     final res = await resolvedClient.post(
       url,
       body: body,
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      headers: {'Content-Type': 'application/json'},
     );
     if (res.statusCode < 200 || res.statusCode >= 300) {
       throw ServiceException.fromHttpResponse(res, res.body);
