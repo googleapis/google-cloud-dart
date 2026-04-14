@@ -125,7 +125,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           // > or if you receive a 503 or 500 response, then you need to resume
           // > the interrupted upload from where it left off.
           //
-          // See https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#resume-upload
+          // See https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#status-check
           final statusRes = await client.put(
             sessionUri,
             headers: {'Content-Range': 'bytes */*'},
@@ -146,22 +146,33 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         if (loopExpectedByte < _nextExpectedByte) {
           throw StateError(
             'The server has acknowledged fewer bytes ($loopExpectedByte) '
-            'than expected ($_nextExpectedByte). Cannot resume upload.',
+            'than previously acknowledged ($_nextExpectedByte).',
           );
         }
 
-        final bytesAcked = (loopExpectedByte - _nextExpectedByte).clamp(
+        final newBytesAcked = (loopExpectedByte - _nextExpectedByte).clamp(
           0,
           chunk.length,
         );
-        var remainingBytes = chunk.length - bytesAcked;
-        var startOffset = bytesAcked;
+        var remainingBytes = chunk.length - newBytesAcked;
+        var startOffset = newBytesAcked;
 
         if (!isClose && remainingBytes % _minWriteSize != 0) {
           // Upload chunk sizes must be a multiple of 256KiB.
           // If the server acknowledged a non-multiple of 256KiB, we extend the
           // range backwards to include already acknowledged bytes to make the
           // request size a multiple of 256KiB.
+          //
+          // For example, if we sent 524288-1310720 and the server
+          // acknowledged up to 1000000, then we would resend:
+          //
+          // newBytesAcked = 1000000 - 524288 = 475712
+          // remainingBytes = 786432 - 475712 = 310720
+          // blocks = (310720 / 262144).ceil() = 2
+          // remainingBytes = 2 * 262144 = 524288
+          // startOffset = 786432 - 524288 = 262144
+          // startByte = 524288 + 262144 = 786432
+          // newEnd = 786432 + 524288 = 1310720 (the same as it was before)
           final blocks = (remainingBytes / _minWriteSize).ceil();
           remainingBytes = blocks * _minWriteSize;
           startOffset = chunk.length - remainingBytes;
@@ -204,7 +215,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           // Handle not at close.
           return res;
         } else {
-          print('400 BAD REQUEST ERROR BODY: ${res.body}');
           throw ServiceException.fromHttpResponse(res, res.body);
         }
       }, isIdempotent: true);

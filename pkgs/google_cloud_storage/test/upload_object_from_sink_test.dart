@@ -639,8 +639,8 @@ void main() {
             // Retry for the rest of the first chunk (128K).
             // Buffer was 256K, initialExpected was 0.
             // currentExpected is 131072.
-            expect(request.contentLength, 162144);
-            expect(request.headers['Content-Range'], 'bytes 100000-262143/*');
+            expect(request.contentLength, 262144);
+            expect(request.headers['Content-Range'], 'bytes 0-262143/*');
             return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
           } else if (count == 4 && request.method == 'PUT') {
             // Final 0 byte close.
