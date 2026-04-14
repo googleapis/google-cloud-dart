@@ -231,7 +231,7 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     await sink.close();
 
     final downloaded = await storage.downloadObject(bucketName, 'name');
-    expect(downloaded, List.generate(18, (i) => i + 1));
+    expect(downloaded, [for (var i = 0; i < 18; i++) i + 1]);
   });
 
   test('upload exactly 256KB via addStream', () async {
