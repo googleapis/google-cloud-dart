@@ -115,10 +115,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       var checkStatus = needsStatusCheck;
       needsStatusCheck = true;
 
-      http.Response? res;
-      var done = false;
-
-      while (!done) {
+      while (true) {
         if (checkStatus) {
           // From https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#resume-upload
           // > If an upload request is terminated before receiving a response,
@@ -131,8 +128,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
             headers: {'Content-Range': 'bytes */*'},
           );
           if (statusRes.statusCode == 308) {
-            loopExpectedByte =
-                _parseRange(statusRes.headers['range']) ?? _nextExpectedByte;
+            loopExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
             currentExpectedByte = loopExpectedByte;
           } else if (statusRes.statusCode == 200 ||
               statusRes.statusCode == 201) {
@@ -199,7 +195,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
             ? const <int>[]
             : chunk.sublist(startOffset, startOffset + remainingBytes);
 
-        res = await client.put(sessionUri, headers: headers, body: body);
+        final res = await client.put(sessionUri, headers: headers, body: body);
 
         if (res.statusCode == 308) {
           final parsed = _parseRange(res.headers['range']);
@@ -219,7 +215,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
             currentExpectedByte = parsed;
             final expectedEnd = _nextExpectedByte + chunk.length;
             if (loopExpectedByte >= expectedEnd) {
-              done = true;
+              return res;
             }
           } else {
             // Range header was missing from the 308 response.
@@ -227,13 +223,11 @@ class ResumableUploadSink implements StreamSink<List<int>> {
             checkStatus = true;
           }
         } else if (res.statusCode >= 200 && res.statusCode < 300) {
-          done = true;
+          return res;
         } else {
           throw ServiceException.fromHttpResponse(res, res.body);
         }
       }
-
-      return res!;
     }, isIdempotent: true);
   }
 
@@ -249,8 +243,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     await _uploadChunk(flushData, false, null);
     _nextExpectedByte += flushPoint;
   }
-
-  Uint8List _takeRemainingBytes() => _buffer.takeBytes();
 
   ResumableUploadSink._(this._client, this._locationResponse, this._retry);
 
@@ -309,7 +301,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
       );
 
       final response = await _uploadChunk(
-        _takeRemainingBytes(),
+        _buffer.takeBytes(),
         true,
         'crc32c=$calculatedCrc32c,md5=$calculatedMd5Hash',
       );
