@@ -108,18 +108,18 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     final client = await _client;
 
     var currentExpectedByte = _nextExpectedByte;
-    http.Response? lastRes;
+    var needsStatusCheck = false;
 
-    var done = false;
-    var forceStatusCheck = false;
+    return await _retry.run(() async {
+      var loopExpectedByte = currentExpectedByte;
+      var checkStatus = needsStatusCheck;
+      needsStatusCheck = true;
 
-    while (!done) {
-      var needsStatusCheck = forceStatusCheck;
-      forceStatusCheck = false;
+      http.Response? res;
+      var done = false;
 
-      lastRes = await _retry.run(() async {
-        var loopExpectedByte = currentExpectedByte;
-        if (needsStatusCheck) {
+      while (!done) {
+        if (checkStatus) {
           // From https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#resume-upload
           // > If an upload request is terminated before receiving a response,
           // > or if you receive a 503 or 500 response, then you need to resume
@@ -140,8 +140,8 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           } else {
             throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
           }
+          checkStatus = false;
         }
-        needsStatusCheck = true;
 
         if (loopExpectedByte < _nextExpectedByte) {
           throw StateError(
@@ -190,54 +190,51 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         }
 
         final headers = {'Content-Range': contentRange};
-        if (isClose && hashHeader != null) headers['x-goog-hash'] = hashHeader;
+        if (hashHeader != null) {
+          assert(isClose);
+          headers['x-goog-hash'] = hashHeader;
+        }
 
         final body = remainingBytes == 0
             ? const <int>[]
             : chunk.sublist(startOffset, startOffset + remainingBytes);
 
-        final res = await client.put(sessionUri, headers: headers, body: body);
+        res = await client.put(sessionUri, headers: headers, body: body);
 
         if (res.statusCode == 308) {
           final parsed = _parseRange(res.headers['range']);
           if (parsed != null && parsed > newEnd) {
             throw StateError(
-              'Server acknowledged more bytes ($parsed) '
-              'than sent ($newEnd).',
+              'Server acknowledged more bytes ($parsed) than sent ($newEnd).',
             );
           }
           if (isClose && parsed != null && parsed == newEnd) {
-            // 308 but all bytes were acked.
-            throw ServiceException.fromHttpResponse(res, res.body);
+            throw StateError(
+              'Server returned 308 but all bytes were sent and acknowledged.',
+            );
           }
-          return res;
+
+          if (parsed != null) {
+            loopExpectedByte = parsed;
+            currentExpectedByte = parsed;
+            final expectedEnd = _nextExpectedByte + chunk.length;
+            if (loopExpectedByte >= expectedEnd) {
+              done = true;
+            }
+          } else {
+            // Range header was missing from the 308 response.
+            // We must do a status check to verify the true state of the upload.
+            checkStatus = true;
+          }
         } else if (res.statusCode >= 200 && res.statusCode < 300) {
-          // Handle not at close.
-          return res;
+          done = true;
         } else {
           throw ServiceException.fromHttpResponse(res, res.body);
         }
-      }, isIdempotent: true);
-
-      if (lastRes!.statusCode == 308) {
-        final parsed = _parseRange(lastRes.headers['range']);
-        if (parsed != null) {
-          currentExpectedByte = parsed;
-          final expectedEnd = _nextExpectedByte + chunk.length;
-          if (currentExpectedByte >= expectedEnd) {
-            done = true;
-          }
-        } else {
-          // Range header was missing from the 308 response.
-          // We must do a status check to verify the true state of the upload.
-          forceStatusCheck = true;
-        }
-      } else {
-        done = true;
       }
-    }
 
-    return lastRes!;
+      return res!;
+    }, isIdempotent: true);
   }
 
   Future<void> _flush() async {
