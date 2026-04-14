@@ -107,11 +107,10 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     final sessionUri = await _sessionUri;
     final client = await _client;
 
-    var currentExpectedByte = _nextExpectedByte;
+    var loopExpectedByte = _nextExpectedByte;
     var needsStatusCheck = false;
 
     return await _retry.run(() async {
-      var loopExpectedByte = currentExpectedByte;
       var checkStatus = needsStatusCheck;
       needsStatusCheck = true;
 
@@ -129,7 +128,6 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           );
           if (statusRes.statusCode == 308) {
             loopExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
-            currentExpectedByte = loopExpectedByte;
           } else if (statusRes.statusCode == 200 ||
               statusRes.statusCode == 201) {
             return statusRes;
@@ -177,13 +175,9 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         final startByte = _nextExpectedByte + startOffset;
         final newEnd = startByte + remainingBytes;
 
-        final String contentRange;
-        if (remainingBytes == 0) {
-          contentRange = isClose ? 'bytes */$newEnd' : 'bytes */*';
-        } else {
-          final range = '$startByte-${newEnd - 1}';
-          contentRange = isClose ? 'bytes $range/$newEnd' : 'bytes $range/*';
-        }
+        final range = remainingBytes == 0 ? '*' : '$startByte-${newEnd - 1}';
+        final size = isClose ? '$newEnd' : '*';
+        final contentRange = 'bytes $range/$size';
 
         final headers = {'Content-Range': contentRange};
         if (hashHeader != null) {
@@ -193,35 +187,30 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
         final body = remainingBytes == 0
             ? const <int>[]
-            : chunk.sublist(startOffset, startOffset + remainingBytes);
+            : chunk.sublist(startOffset);
 
         final res = await client.put(sessionUri, headers: headers, body: body);
 
         if (res.statusCode == 308) {
           final parsed = _parseRange(res.headers['range']);
-          if (parsed != null && parsed > newEnd) {
+          if (parsed == null) {
+            // Range header was missing from the 308 response.
+            // We must do a status check to verify the true state of the upload.
+            checkStatus = true;
+            continue;
+          }
+          if (parsed > newEnd) {
             throw StateError(
               'Server acknowledged more bytes ($parsed) than sent ($newEnd).',
             );
           }
-          if (isClose && parsed != null && parsed == newEnd) {
+          if (isClose && parsed == newEnd) {
             throw StateError(
               'Server returned 308 but all bytes were sent and acknowledged.',
             );
           }
-
-          if (parsed != null) {
-            loopExpectedByte = parsed;
-            currentExpectedByte = parsed;
-            final expectedEnd = _nextExpectedByte + chunk.length;
-            if (loopExpectedByte >= expectedEnd) {
-              return res;
-            }
-          } else {
-            // Range header was missing from the 308 response.
-            // We must do a status check to verify the true state of the upload.
-            checkStatus = true;
-          }
+          loopExpectedByte = parsed;
+          if (parsed == newEnd) return res;
         } else if (res.statusCode >= 200 && res.statusCode < 300) {
           return res;
         } else {
