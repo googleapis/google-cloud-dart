@@ -35,13 +35,13 @@ Uint8List randomUint8List(int length, {int? seed}) {
   return l;
 }
 
-void uploadObjectFromSinkTest(Storage Function() storageFn) {
+void uploadObjectFromSinkTest(Storage Function() createStorage) {
   late Storage storage;
   final small = randomUint8List(100);
   final large = randomUint8List(5_000_000);
 
   setUp(() {
-    storage = storageFn();
+    storage = createStorage();
   });
 
   tearDown(() => storage.close());
