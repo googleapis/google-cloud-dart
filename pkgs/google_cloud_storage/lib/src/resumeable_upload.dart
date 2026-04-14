@@ -337,7 +337,6 @@ ResumableUploadSink uploadFileStream(
       body: body,
       headers: {
         'Content-Type': 'application/json',
-        'Content-Length': body.length.toString(),
       },
     );
     if (res.statusCode < 200 || res.statusCode >= 300) {
