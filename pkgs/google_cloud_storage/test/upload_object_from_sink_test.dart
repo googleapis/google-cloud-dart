@@ -61,7 +61,7 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
   test('metadata is set without contentType', () async {
     final bucketName = await createBucketWithTearDown(
       storage,
-      'ul_obj_from_sink_cust_meta',
+      'ul_obj_from_sink_wo_ct',
     );
 
     final sink = storage.uploadObjectFromSink(
@@ -73,6 +73,26 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     expect(metadata.contentType, 'application/octet-stream');
     expect(metadata.metadata?['customMetadata'], 'value');
   });
+
+  test('metadata is set with contentType', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'ul_obj_from_sink_with_ct',
+    );
+
+    final sink = storage.uploadObjectFromSink(
+      bucketName,
+      'object',
+      metadata: ObjectMetadata(
+        contentType: 'text/plain',
+        metadata: {'customMetadata': 'value'},
+      ),
+    );
+    final metadata = await sink.close();
+    expect(metadata.contentType, 'text/plain');
+    expect(metadata.metadata?['customMetadata'], 'value');
+  });
+
 
   test('immediate close', () async {
     final bucketName = await createBucketWithTearDown(
@@ -311,12 +331,12 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     final sink = storage.uploadObjectFromSink(bucketName, 'name');
     final c = StreamController<List<int>>()..add([1, 2, 3]);
 
-    final addStream1Future = sink.addStream(c.stream);
+    final addStream = sink.addStream(c.stream);
     expect(() => sink.add([1, 2, 3]), throwsStateError);
     c.add([4, 5, 6]);
     await c.close();
 
-    await addStream1Future;
+    await addStream;
     await sink.close();
 
     final downloaded = await storage.downloadObject(bucketName, 'name');
@@ -332,7 +352,7 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     final sink = storage.uploadObjectFromSink(bucketName, 'name');
     final c = StreamController<List<int>>()..add([1, 2, 3]);
 
-    final addStream1Future = sink.addStream(c.stream);
+    final addStream = sink.addStream(c.stream);
     await expectLater(
       sink.addStream(
         Stream.fromIterable([
@@ -345,14 +365,14 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     c.add([4, 5, 6]);
     await c.close();
 
-    await addStream1Future;
+    await addStream;
     await sink.close();
 
     final downloaded = await storage.downloadObject(bucketName, 'name');
     expect(downloaded, [1, 2, 3, 4, 5, 6]);
   });
 
-  test('hashes are calculated automatically', () async {
+  test('hashes', () async {
     final bucketName = await createBucketWithTearDown(
       storage,
       'ul_obj_from_sink_hashes',
@@ -478,7 +498,6 @@ void main() {
 
           await expectLater(sink.close(), throwsA(isA<ServiceException>()));
 
-          client.retryTestId = null;
           await retryTestCreator.close();
         },
       );
