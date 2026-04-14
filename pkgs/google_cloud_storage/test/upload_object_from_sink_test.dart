@@ -38,11 +38,11 @@ Uint8List randomUint8List(int length, {int? seed}) {
 final small = randomUint8List(100);
 final large = randomUint8List(5_000_000);
 
-void uploadObjectFromSinkTest(Storage Function() storageFn) {
+void uploadObjectFromSinkTest(Storage Function() createStorage) {
   late Storage storage;
 
   setUp(() {
-    storage = storageFn();
+    storage = createStorage();
   });
 
   tearDown(() => storage.close());
@@ -92,7 +92,6 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     expect(metadata.contentType, 'text/plain');
     expect(metadata.metadata?['customMetadata'], 'value');
   });
-
 
   test('immediate close', () async {
     final bucketName = await createBucketWithTearDown(
@@ -252,7 +251,7 @@ void uploadObjectFromSinkTest(Storage Function() storageFn) {
     await sink.close();
 
     final downloaded = await storage.downloadObject(bucketName, 'name');
-    expect(downloaded, List.generate(18, (i) => i + 1));
+    expect(downloaded, [for (var i = 0; i < 18; i++) i + 1]);
   });
 
   test('upload exactly 256KB via addStream', () async {
