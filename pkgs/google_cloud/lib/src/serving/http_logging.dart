@@ -52,7 +52,7 @@ Handler _handleBadRequest(Handler innerHandler) => (request) async {
     final response = await innerHandler(request);
     return response;
   } on BadRequestException catch (error, stack) {
-    return _responseFromBadRequest(error, stack, request.headers);
+    return _responseFromBadRequest(error, stack);
   }
 };
 
@@ -80,40 +80,15 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
   return response;
 };
 
-Response _responseFromBadRequest(
-  BadRequestException e,
-  StackTrace stack, [
-  Map<String, String>? requestHeaders,
-]) {
-  if (_isJsonRequest(requestHeaders)) {
-    return Response(
+Response _responseFromBadRequest(BadRequestException e, StackTrace stack) =>
+    Response(
       e.statusCode,
-      body: jsonEncode(e.toJson()),
-      headers: {HttpHeaders.contentTypeHeader: _jsonMimeType},
+      body: 'Bad request. ${e.message}',
       context: {
         _badRequestExceptionContextKey: e,
         _badStackTraceContextKey: stack,
       },
     );
-  }
-
-  return Response(
-    e.statusCode,
-    body: e.toString(),
-    context: {
-      _badRequestExceptionContextKey: e,
-      _badStackTraceContextKey: stack,
-    },
-  );
-}
-
-const _jsonMimeType = 'application/json';
-
-bool _isJsonRequest(Map<String, String>? headers) {
-  final accept = headers?[HttpHeaders.acceptHeader] ?? '';
-  final contentType = headers?[HttpHeaders.contentTypeHeader] ?? '';
-  return accept.contains(_jsonMimeType) || contentType.contains(_jsonMimeType);
-}
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
@@ -184,7 +159,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
               }
 
               final response = error is BadRequestException
-                  ? _responseFromBadRequest(error, stackTrace, request.headers)
+                  ? _responseFromBadRequest(error, stackTrace)
                   : Response.internalServerError();
 
               completer.complete(response);
