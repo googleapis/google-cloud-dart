@@ -1,35 +1,25 @@
-## 0.4.1
+## 0.4.1-wip
 
-### `http_serving.dart`
+### `bad_request_exception.dart`
 
-- Introduces `HttpResponseException` and `httpResponseExceptionMiddleware`.
-  - `BadRequestException` and `badRequestMiddleware` are deprecated in favor of
-    `HttpResponseException` and `httpResponseExceptionMiddleware`, respectively.
-    (They are aliased for backward compatibility.)
-- Expanded `HttpResponseException` to support structured error reporting as
+- Expanded `BadRequestException` to support structured error reporting as
   per AIP-193.
   - Added `status` (`String?`) and `details` (`List<Map<String, Object?>>?`)
     fields.
   - Added `toJson()` method to serialize the error into a standard Google Cloud
     error payload.
   - Updated `toString()` to include `status` and `details` when non-null.
-  - Added factory constructors for common HTTP 4XX and 5XX status codes:
-    - `badRequest` (400)
-    - `unauthorized` (401)
-    - `forbidden` (403)
-    - `notFound` (404)
-    - `conflict` (409)
-    - `tooManyRequests` (429)
-    - `internalServerError` (500)
-    - `notImplemented` (501)
-    - `serviceUnavailable` (503)
-    - `gatewayTimeout` (504)
+  - Added factory constructors for common HTTP 4XX status codes: `badRequest`
+    (400), `unauthorized` (401), `forbidden` (403), `notFound` (404),
+    `conflict` (409), and `tooManyRequests` (429).
   - Added default `status` values for factories that map 1:1 to gRPC status
     codes (e.g., `unauthorized` defaults to `'UNAUTHENTICATED'`).
-- Updated `httpResponseExceptionMiddleware` to leverage
-  `HttpResponseException.toJson()` for JSON responses, returning a standard
-  Google Cloud error payload.
-- Updated plain text errors to use `HttpResponseException.toString()`.
+
+### `http_serving.dart` (and internal files)
+
+- Updated `badRequestMiddleware` to leverage `BadRequestException.toJson()` for
+  JSON responses, returning a standard Google Cloud error payload.
+- Updated plain text errors to use `BadRequestException.toString()`.
 
 ## 0.4.0
 
