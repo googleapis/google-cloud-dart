@@ -87,7 +87,7 @@ Handler _onlyGetRootMiddleware(Handler handler) => (Request request) async {
     return await handler(request);
   }
 
-  throw HttpResponseException.notFound();
+  throw BadRequestException(404, 'Not found');
 };
 
 CommitRequest _incrementRequest(String projectId) => CommitRequest(

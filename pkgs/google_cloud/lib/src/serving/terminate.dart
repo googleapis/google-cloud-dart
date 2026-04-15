@@ -25,6 +25,7 @@ Future<void> waitForTerminate() {
   final completer = Completer<bool>.sync();
 
   // sigIntSub is copied below to avoid a race condition - ignoring this lint
+  // ignore: cancel_subscriptions
   StreamSubscription<ProcessSignal>? sigIntSub, sigTermSub;
 
   Future<void> signalHandler(ProcessSignal signal) async {
