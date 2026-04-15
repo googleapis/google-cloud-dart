@@ -1,3 +1,7 @@
+## 0.4.1
+
+- Update dependency `meta: ^1.17.0` to allow workspaces with stable Flutter.
+
 ## 0.4.0
 
 ### `constants.dart`
