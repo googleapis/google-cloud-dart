@@ -16,20 +16,30 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:google_cloud/constants.dart';
+import 'package:google_cloud_logging_v2/google_cloud_logging_v2.dart';
 import 'package:io/ansi.dart';
 import 'package:shelf/shelf.dart';
+import 'package:stack_trace/stack_trace.dart';
 
-import '../constants.dart';
-import '../logger.dart';
-import '../structured_logging.dart';
 import 'http_response_exception.dart';
 import 'json_request_checking.dart';
 import 'trace_context_data.dart';
 
-export '../structured_logging.dart';
+export 'package:google_cloud_logging_v2/google_cloud_logging_v2.dart'
+    show structuredLogEntry;
 
 const _httpResponseExceptionKey = 'google_cloud.response_exception';
 const _exceptionStackTraceKey = 'google_cloud.bad_stack_trace';
+
+Chain _formatStackTrace(StackTrace stackTrace) =>
+    Chain.forTrace(stackTrace).foldFrames(
+      (frame) =>
+          frame.isCore ||
+          frame.package == 'google_cloud' ||
+          frame.package == 'shelf_google_cloud',
+      terse: true,
+    );
 
 /// Convenience [Middleware] that handles logging depending on [projectId].
 ///
@@ -74,7 +84,7 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
       error,
       if (error.innerError != null)
         '${error.innerError} (${error.innerError.runtimeType})',
-      if (error.innerStack ?? stack case final s?) formatStackTrace(s),
+      if (error.innerStack ?? stack case final s?) _formatStackTrace(s),
     ];
 
     final bob = output
