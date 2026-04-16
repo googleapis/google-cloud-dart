@@ -786,7 +786,7 @@ final class Storage {
   /// If set, [ifGenerationMatch] makes updating the object content conditional
   /// on whether the object's generation matches the provided value. If the
   /// generation does not match, a [PreconditionFailedException] is thrown.
-  /// A value of `BigInt.zero` indicates that the object must not already exist.
+  /// A value of [BigInt.zero] indicates that the object must not already exist.
   ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
