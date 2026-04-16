@@ -104,7 +104,8 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     bool isLast, // Whether this is the final chunk to upload.
     String? hashHeader,
   ) async {
-    final (sessionUri, client) = await (_sessionUri, _client).wait;
+    final sessionUri = await _sessionUri;
+    final client = await _client;
 
     var loopExpectedByte = _nextExpectedByte;
     var needsStatusCheck = false;
