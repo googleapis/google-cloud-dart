@@ -1,3 +1,7 @@
+## 0.6.2-wip
+
+* Add retries to `uploadObjectFromSink`.
+
 ## 0.6.1
 
 * Add `Storage.insertObjectAcl`.

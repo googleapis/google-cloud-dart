@@ -79,6 +79,12 @@ Iterable<Duration> delaySequence({
   }
 }
 
+@visibleForTesting
+final class NoDelayRetry extends ExponentialRetry {
+  const NoDelayRetry()
+    : super(initialDelay: Duration.zero, maxDelay: Duration.zero);
+}
+
 /// A retry runner that implements exponential backoff.
 ///
 /// When [run] is called, it will attempt to execute the given function. If the

@@ -90,12 +90,20 @@ final class RetryTestHttpClient extends http.BaseClient {
   final http.Client _client;
   String? retryTestId;
 
+  String? instructions;
+
   RetryTestHttpClient(this._client);
 
   @override
   Future<http.StreamedResponse> send(http.BaseRequest originalRequest) {
     if (retryTestId case final id?) {
       originalRequest.headers['x-retry-test-id'] = id;
+    }
+    if (instructions case final i?) {
+      originalRequest.headers['x-goog-emulator-instructions'] = i;
+      if (originalRequest.method == 'PUT') {
+        instructions = null;
+      }
     }
     return _client.send(originalRequest);
   }

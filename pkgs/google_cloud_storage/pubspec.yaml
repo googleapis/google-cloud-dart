@@ -16,7 +16,7 @@ name: google_cloud_storage
 description: >-
   A client for Google Cloud Storage, a managed service for storing, archiving,
   and serving unstructured data of any size.
-version: 0.6.1
+version: 0.6.2-wip
 repository: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/google_cloud_storage
 
 environment:
