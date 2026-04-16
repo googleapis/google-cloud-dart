@@ -1,4 +1,4 @@
-## 0.6.1-wip
+## 0.6.1
 
 * Add `Storage.insertObjectAcl`.
 

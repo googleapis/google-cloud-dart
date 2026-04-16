@@ -14,20 +14,18 @@
 
 /// General Google Cloud Platform integration features.
 ///
-/// {@canonicalFor general.CloudLogger}
-/// {@canonicalFor general.computeProjectId}
-/// {@canonicalFor general.fetchMetadataValue}
-/// {@canonicalFor general.gceMetadataHost}
-/// {@canonicalFor general.gceMetadataUrl}
-/// {@canonicalFor general.getMetadataValue}
-/// {@canonicalFor general.LogSeverity}
-/// {@canonicalFor general.MetadataServerException}
-/// {@canonicalFor general.projectIdFromCredentialsFile}
-/// {@canonicalFor general.projectIdFromEnvironmentVariables}
-/// {@canonicalFor general.projectIdFromGcloudConfig}
-/// {@canonicalFor general.projectIdFromMetadataServer}
-/// {@canonicalFor general.serviceAccountEmailFromMetadataServer}
-/// {@canonicalFor general.structuredLogEntry}
+/// {@canonicalFor gcp_project.computeProjectId}
+/// {@canonicalFor gcp_project.projectIdFromCredentialsFile}
+/// {@canonicalFor gcp_project.projectIdFromEnvironmentVariables}
+/// {@canonicalFor gcp_project.projectIdFromGcloudConfig}
+/// {@canonicalFor gcp_project.MetadataServerException}
+/// {@canonicalFor gcp_project.projectIdFromMetadataServer}
+/// {@canonicalFor gcp_project.serviceAccountEmailFromMetadataServer}
+/// {@canonicalFor logger.LogSeverity}
+/// {@canonicalFor logger.CloudLogger}
+/// {@canonicalFor structured_logging.structuredLogEntry}
+/// {@canonicalFor metadata.gceMetadataHost}
+/// {@canonicalFor metadata.gceMetadataUrl}
 library;
 
 export 'src/gcp_project.dart'
