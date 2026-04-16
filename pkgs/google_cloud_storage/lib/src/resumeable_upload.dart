@@ -46,8 +46,8 @@ int _largestWriteSize(int number) => (number ~/ _minWriteSize) * _minWriteSize;
 int? _parseRange(String? rangeHeader) {
   if (rangeHeader == null) return null;
   final match = RegExp(r'bytes=0-(\d+)').firstMatch(rangeHeader);
-  if (match != null) {
-    return int.parse(match.group(1)!) + 1;
+  if (match?.group(1) case final group?) {
+    return int.parse(group) + 1;
   }
   return null;
 }
