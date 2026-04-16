@@ -543,32 +543,46 @@ void main() {
     });
 
     test('first close fails and second close succeeds', () async {
-      var count = 0;
       late String actualHash;
 
+      final responses =
+          <(String, Future<http.Response> Function(http.Request))>[
+            (
+              'POST',
+              (request) async => http.Response(
+                '',
+                200,
+                headers: {'location': 'http://example.com/location'},
+              ),
+            ),
+            // First close fails. Throw a StateError to avoid triggering retry
+            // loops.
+            ('PUT', (request) async => throw StateError('message')),
+            // Second close succeeds.
+            (
+              'PUT',
+              (request) async {
+                actualHash = request.headers['x-goog-hash']!;
+                return http.Response('{}', 200);
+              },
+            ),
+          ];
+
       final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1 && request.method == 'POST') {
-          // Start resumeable upload.
-          return http.Response(
-            '',
-            200,
-            headers: {'location': 'http://example.com/location'},
-          );
-        } else if (count == 2) {
-          // First close fails. Throw a StateError to avoid triggering retry
-          // loops.
-          throw StateError('message');
-        } else if (count == 3) {
-          // Second close succeeds.
-          actualHash = request.headers['x-goog-hash']!;
-          return http.Response('{}', 200);
-        } else {
+        if (responses.isEmpty) {
           throw StateError(
-            'Unexpected call (count: $count, method: ${request.method}, '
+            'Unexpected call (method: ${request.method}, '
             'uri: ${request.url})',
           );
         }
+        final (expectedMethod, handler) = responses.removeAt(0);
+        if (request.method != expectedMethod) {
+          throw StateError(
+            'Expected $expectedMethod but got ${request.method} '
+            'for ${request.url}',
+          );
+        }
+        return await handler(request);
       });
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
@@ -579,36 +593,52 @@ void main() {
       await expectLater(sink.close, throwsA(isA<StateError>()));
       await sink.close();
       expect(actualHash, 'crc32c=T037qw==,md5=asHla8ePAxBZvnvoVFIsTA==');
+      expect(responses, isEmpty);
     });
 
     test('fails if server acknowledged bytes is less than expected', () async {
-      var count = 0;
+      final responses =
+          <(String, Future<http.Response> Function(http.Request))>[
+            (
+              'POST',
+              (request) async => http.Response(
+                '',
+                200,
+                headers: {'location': 'http://example.com/location'},
+              ),
+            ),
+            // First chunk upload works.
+            (
+              'PUT',
+              (request) async =>
+                  http.Response('', 308, headers: {'range': 'bytes=0-262143'}),
+            ),
+            // Second chunk upload fails.
+            ('PUT', (request) async => throw http.ClientException('message')),
+            // Status check returns a range smaller than what was acknowledged
+            // previously.
+            (
+              'PUT',
+              (request) async =>
+                  http.Response('', 308, headers: {'range': 'bytes=0-1000'}),
+            ),
+          ];
 
       final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1 && request.method == 'POST') {
-          // Start resumable upload.
-          return http.Response(
-            '',
-            200,
-            headers: {'location': 'http://example.com/location'},
-          );
-        } else if (count == 2 && request.method == 'PUT') {
-          // First chunk upload works.
-          return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
-        } else if (count == 3 && request.method == 'PUT') {
-          // Second chunk upload fails.
-          throw http.ClientException('message');
-        } else if (count == 4 && request.method == 'PUT') {
-          // Status check returns a range smaller than what was acknowledged
-          // previously.
-          return http.Response('', 308, headers: {'range': 'bytes=0-1000'});
-        } else {
+        if (responses.isEmpty) {
           throw StateError(
-            'Unexpected call (count: $count, method: ${request.method}, '
+            'Unexpected call (method: ${request.method}, '
             'uri: ${request.url})',
           );
         }
+        final (expectedMethod, handler) = responses.removeAt(0);
+        if (request.method != expectedMethod) {
+          throw StateError(
+            'Expected $expectedMethod but got ${request.method} '
+            'for ${request.url}',
+          );
+        }
+        return await handler(request);
       });
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
@@ -624,41 +654,59 @@ void main() {
         sink.addStream(Stream.fromIterable([chunk, chunk])),
         throwsA(isA<StateError>()),
       );
+      expect(responses, isEmpty);
     });
 
     test('succeeds if second chunk fails and retries', () async {
-      var count = 0;
+      final responses =
+          <(String, Future<http.Response> Function(http.Request))>[
+            (
+              'POST',
+              (request) async => http.Response(
+                '',
+                200,
+                headers: {'location': 'http://example.com/location'},
+              ),
+            ),
+            // First chunk (256K) upload works.
+            (
+              'PUT',
+              (request) async =>
+                  http.Response('', 308, headers: {'range': 'bytes=0-262143'}),
+            ),
+            // Second chunk (256K) upload fails.
+            ('PUT', (request) async => throw http.ClientException('message')),
+            // Status check indicates that only the first chunk is received.
+            (
+              'PUT',
+              (request) async =>
+                  http.Response('', 308, headers: {'range': 'bytes=0-262143'}),
+            ),
+            // Retry for the second chunk upload works.
+            (
+              'PUT',
+              (request) async =>
+                  http.Response('', 308, headers: {'range': 'bytes=0-524287'}),
+            ),
+            // Final 0 byte close.
+            ('PUT', (request) async => http.Response('{}', 200)),
+          ];
 
       final mockClient = MockClient((request) async {
-        count++;
-        if (count == 1 && request.method == 'POST') {
-          // Start resumable upload.
-          return http.Response(
-            '',
-            200,
-            headers: {'location': 'http://example.com/location'},
-          );
-        } else if (count == 2 && request.method == 'PUT') {
-          // First chunk (256K) upload works.
-          return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
-        } else if (count == 3 && request.method == 'PUT') {
-          // Second chunk (256K) upload fails.
-          throw http.ClientException('message');
-        } else if (count == 4 && request.method == 'PUT') {
-          // Status check indicates that only the first chunk is received.
-          return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
-        } else if (count == 5 && request.method == 'PUT') {
-          // Retry for the second chunk upload works.
-          return http.Response('', 308, headers: {'range': 'bytes=0-524287'});
-        } else if (count == 6 && request.method == 'PUT') {
-          // Final 0 byte close.
-          return http.Response('{}', 200);
-        } else {
+        if (responses.isEmpty) {
           throw StateError(
-            'Unexpected call (count: $count, method: ${request.method}, '
+            'Unexpected call (method: ${request.method}, '
             'uri: ${request.url})',
           );
         }
+        final (expectedMethod, handler) = responses.removeAt(0);
+        if (request.method != expectedMethod) {
+          throw StateError(
+            'Expected $expectedMethod but got ${request.method} '
+            'for ${request.url}',
+          );
+        }
+        return await handler(request);
       });
 
       final storage = Storage(client: mockClient, projectId: 'fake project');
@@ -673,42 +721,62 @@ void main() {
       await sink.addStream(Stream.fromIterable([chunk, chunk]));
       await sink.close();
 
-      expect(count, 6);
+      expect(responses, isEmpty);
     });
 
     test(
       'retries if server acknowledges fewer bytes than sent in a chunk',
       () async {
-        var count = 0;
+        final responses =
+            <(String, Future<http.Response> Function(http.Request))>[
+              (
+                'POST',
+                (request) async => http.Response(
+                  '',
+                  200,
+                  headers: {'location': 'http://example.com/location'},
+                ),
+              ),
+              // First chunk (256K) upload works, but only acknowledges 100K.
+              (
+                'PUT',
+                (request) async =>
+                    http.Response('', 308, headers: {'range': 'bytes=0-99999'}),
+              ),
+              // Retry for the rest of the first chunk (128K).
+              // Buffer was 256K, initialExpected was 0.
+              // currentExpected is 131072.
+              (
+                'PUT',
+                (request) async {
+                  expect(request.contentLength, 262144);
+                  expect(request.headers['Content-Range'], 'bytes 0-262143/*');
+                  return http.Response(
+                    '',
+                    308,
+                    headers: {'range': 'bytes=0-262143'},
+                  );
+                },
+              ),
+              // Final 0 byte close.
+              ('PUT', (request) async => http.Response('{}', 200)),
+            ];
 
         final mockClient = MockClient((request) async {
-          count++;
-          if (count == 1 && request.method == 'POST') {
-            // Start resumable upload.
-            return http.Response(
-              '',
-              200,
-              headers: {'location': 'http://example.com/location'},
-            );
-          } else if (count == 2 && request.method == 'PUT') {
-            // First chunk (256K) upload works, but only acknowledges 100K.
-            return http.Response('', 308, headers: {'range': 'bytes=0-99999'});
-          } else if (count == 3 && request.method == 'PUT') {
-            // Retry for the rest of the first chunk (128K).
-            // Buffer was 256K, initialExpected was 0.
-            // currentExpected is 131072.
-            expect(request.contentLength, 262144);
-            expect(request.headers['Content-Range'], 'bytes 0-262143/*');
-            return http.Response('', 308, headers: {'range': 'bytes=0-262143'});
-          } else if (count == 4 && request.method == 'PUT') {
-            // Final 0 byte close.
-            return http.Response('{}', 200);
-          } else {
+          if (responses.isEmpty) {
             throw StateError(
-              'Unexpected call (count: $count, method: ${request.method}, '
+              'Unexpected call (method: ${request.method}, '
               'uri: ${request.url})',
             );
           }
+          final (expectedMethod, handler) = responses.removeAt(0);
+          if (request.method != expectedMethod) {
+            throw StateError(
+              'Expected $expectedMethod but got ${request.method} '
+              'for ${request.url}',
+            );
+          }
+          return await handler(request);
         });
 
         final storage = Storage(client: mockClient, projectId: 'fake project');
@@ -723,7 +791,7 @@ void main() {
         await sink.addStream(Stream.fromIterable([chunk]));
         await sink.close();
 
-        expect(count, 4);
+        expect(responses, isEmpty);
       },
     );
   });

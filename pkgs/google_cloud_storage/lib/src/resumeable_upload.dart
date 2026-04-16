@@ -127,13 +127,13 @@ class ResumableUploadSink implements StreamSink<List<int>> {
             sessionUri,
             headers: {'Content-Range': 'bytes */*'},
           );
-          if (statusRes.statusCode == 200 ||
-              statusRes.statusCode == 201) {
+          if (statusRes.statusCode == 200 || statusRes.statusCode == 201) {
             return statusRes;
           } else if (statusRes.statusCode == 308) {
             loopExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
+          } else {
+            throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
           }
-          throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
         }
 
         if (loopExpectedByte < _nextExpectedByte) {
