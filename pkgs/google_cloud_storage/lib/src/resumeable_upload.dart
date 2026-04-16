@@ -309,13 +309,17 @@ class ResumableUploadSink implements StreamSink<List<int>> {
   Future<ObjectMetadata> get done => _closedCompleter.future;
 }
 
+/// Upload an object using a [Sink].
+///
+/// [isIdempotent] indicates whether the upload is idempotent (i.e. if
+/// `ifGenerationMatch` is set). Only idempotent uploads can be retried.
 @internal
 ResumableUploadSink uploadFileStream(
   FutureOr<http.Client> client,
   Uri url, {
   ObjectMetadata? metadata,
-  bool isIdempotent = false,
-  RetryRunner retry = defaultRetry,
+  required bool isIdempotent,
+  required RetryRunner retry,
 }) {
   final md = switch (metadata) {
     ObjectMetadata(contentType: _?) => metadata,
