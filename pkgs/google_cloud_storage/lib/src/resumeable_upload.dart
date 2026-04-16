@@ -104,8 +104,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
     bool isClose,
     String? hashHeader,
   ) async {
-    final sessionUri = await _sessionUri;
-    final client = await _client;
+    final (sessionUri, client) = await (_sessionUri, _client).wait;
 
     var loopExpectedByte = _nextExpectedByte;
     var needsStatusCheck = false;
