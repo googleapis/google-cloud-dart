@@ -101,7 +101,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
 
   Future<http.Response> _uploadChunk(
     Uint8List chunk,
-    bool isClose,
+    bool isLast, // Whether this is the final chunk to upload.
     String? hashHeader,
   ) async {
     final sessionUri = await _sessionUri;
@@ -122,19 +122,18 @@ class ResumableUploadSink implements StreamSink<List<int>> {
           // > the interrupted upload from where it left off.
           //
           // See https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#status-check
+          checkStatus = false;
           final statusRes = await client.put(
             sessionUri,
             headers: {'Content-Range': 'bytes */*'},
           );
-          if (statusRes.statusCode == 308) {
-            loopExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
-          } else if (statusRes.statusCode == 200 ||
+          if (statusRes.statusCode == 200 ||
               statusRes.statusCode == 201) {
             return statusRes;
-          } else {
-            throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
+          } else if (statusRes.statusCode == 308) {
+            loopExpectedByte = _parseRange(statusRes.headers['range']) ?? 0;
           }
-          checkStatus = false;
+          throw ServiceException.fromHttpResponse(statusRes, statusRes.body);
         }
 
         if (loopExpectedByte < _nextExpectedByte) {
@@ -151,7 +150,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         var remainingBytes = chunk.length - newBytesAcked;
         var startOffset = newBytesAcked;
 
-        if (!isClose && remainingBytes % _minWriteSize != 0) {
+        if (!isLast && remainingBytes % _minWriteSize != 0) {
           // Upload chunk sizes must be a multiple of 256KiB.
           // If the server acknowledged a non-multiple of 256KiB, we extend the
           // range backwards to include already acknowledged bytes to make the
@@ -176,12 +175,12 @@ class ResumableUploadSink implements StreamSink<List<int>> {
         final newEnd = startByte + remainingBytes;
 
         final range = remainingBytes == 0 ? '*' : '$startByte-${newEnd - 1}';
-        final size = isClose ? '$newEnd' : '*';
+        final size = isLast ? '$newEnd' : '*';
         final contentRange = 'bytes $range/$size';
 
         final headers = {'Content-Range': contentRange};
         if (hashHeader != null) {
-          assert(isClose);
+          assert(isLast);
           headers['x-goog-hash'] = hashHeader;
         }
 
@@ -204,7 +203,7 @@ class ResumableUploadSink implements StreamSink<List<int>> {
               'Server acknowledged more bytes ($parsed) than sent ($newEnd).',
             );
           }
-          if (isClose && parsed == newEnd) {
+          if (isLast && parsed == newEnd) {
             throw StateError(
               'Server returned 308 but all bytes were sent and acknowledged.',
             );
