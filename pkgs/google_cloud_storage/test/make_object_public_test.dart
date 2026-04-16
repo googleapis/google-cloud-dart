@@ -44,7 +44,64 @@ void makeObjectPublicTest(Storage Function() createStorage) {
     );
     expect(
       md.acl,
-      contains(
+      containsOnce(
+        isA<ObjectAccessControl>().having((e) => (e.entity, e.role), '', (
+          'allUsers',
+          'READER',
+        )),
+      ),
+    );
+  });
+
+  test('storage object', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'make_obj_pub_object',
+    );
+
+    await storage.uploadObjectFromString(
+      bucketName,
+      'object.txt',
+      'Hello World!',
+    );
+    final bucket = storage.bucket(bucketName);
+    final object = bucket.object('object.txt');
+
+    await object.makePublic();
+    final md = await object.metadata(projection: 'full');
+    expect(
+      md.acl,
+      containsOnce(
+        isA<ObjectAccessControl>().having((e) => (e.entity, e.role), '', (
+          'allUsers',
+          'READER',
+        )),
+      ),
+    );
+  });
+
+  test('twice', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'make_obj_pub_twice',
+    );
+
+    await storage.uploadObjectFromString(
+      bucketName,
+      'object.txt',
+      'Hello World!',
+    );
+
+    await storage.makeObjectPublic(bucketName, 'object.txt');
+    await storage.makeObjectPublic(bucketName, 'object.txt');
+    final md = await storage.objectMetadata(
+      bucketName,
+      'object.txt',
+      projection: 'full',
+    );
+    expect(
+      md.acl,
+      containsOnce(
         isA<ObjectAccessControl>().having((e) => (e.entity, e.role), '', (
           'allUsers',
           'READER',
@@ -54,7 +111,10 @@ void makeObjectPublicTest(Storage Function() createStorage) {
   });
 
   test('no object', () async {
-    final bucketName = await createBucketWithTearDown(storage, 'make_obj_pub');
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'make_obj_pub_no_exist',
+    );
 
     await expectLater(
       () => storage.makeObjectPublic(bucketName, 'non-existent.txt'),

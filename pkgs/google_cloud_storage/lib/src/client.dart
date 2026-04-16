@@ -648,6 +648,11 @@ final class Storage {
 
   /// Grant read access to [Google Cloud Storage objects] for anonymous users.
   ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
   /// [Google Cloud Storage objects]: https://docs.cloud.google.com/storage/docs/objects
