@@ -646,6 +646,17 @@ final class Storage {
     } while (nextPageToken != null);
   }
 
+  /// Grant read access to [Google Cloud Storage objects] for anonymous users.
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// [Google Cloud Storage objects]: https://docs.cloud.google.com/storage/docs/objects
+  Future<void> makeObjectPublic(
+    String bucket,
+    String object, {
+    RetryRunner retry = defaultRetry,
+  }) => insertObjectAcl(bucket, object, 'allUsers', 'READER', retry: retry);
+
   /// Information about a [Google Cloud Storage object].
   ///
   /// This operation is read-only and always idempotent.
