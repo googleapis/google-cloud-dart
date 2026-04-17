@@ -502,7 +502,7 @@ final class Storage {
   ///   be `"domain-example.com"`.
   ///
   /// If set, [generation] selects a specific revision of this object whose ACL
-  /// should be modified. 
+  /// should be modified.
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/delete).
   ///
