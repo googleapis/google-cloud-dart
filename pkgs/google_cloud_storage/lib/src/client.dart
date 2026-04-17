@@ -501,7 +501,8 @@ final class Storage {
   /// - To refer to all members of the domain `example.com`, the entity would
   ///   be `"domain-example.com"`.
   ///
-  /// If set, [generation] selects a specific revision of this object.
+  /// If set, [generation] selects a specific revision of this object whose ACL
+  /// should be modified. 
   ///
   /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/delete).
   ///
