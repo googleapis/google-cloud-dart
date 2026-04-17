@@ -2,6 +2,7 @@
 
 * Add retries to `uploadObjectFromSink`.
 * Add `deleteObjectAcl`.
+* Add `makeObjectPublic`.
 
 ## 0.6.1
 
