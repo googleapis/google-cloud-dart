@@ -22,13 +22,14 @@ import 'package:shelf/shelf.dart';
 import '../constants.dart';
 import '../logger.dart';
 import '../structured_logging.dart';
-import 'bad_request_exception.dart';
+import 'http_response_exception.dart';
+import 'json_request_checking.dart';
 import 'trace_context_data.dart';
 
 export '../structured_logging.dart';
 
-const _badRequestExceptionContextKey = 'google_cloud.bad_request_exception';
-const _badStackTraceContextKey = 'google_cloud.bad_stack_trace';
+const _httpResponseExceptionKey = 'google_cloud.response_exception';
+const _exceptionStackTraceKey = 'google_cloud.bad_stack_trace';
 
 /// Convenience [Middleware] that handles logging depending on [projectId].
 ///
@@ -36,23 +37,28 @@ const _badStackTraceContextKey = 'google_cloud.bad_stack_trace';
 /// correlation.
 ///
 /// If [projectId] is `null`, returns [Middleware] composed of [logRequests] and
-/// [badRequestMiddleware].
+/// [httpResponseExceptionMiddleware].
 ///
 /// If [projectId] is provided, returns the value from [cloudLoggingMiddleware].
 Middleware createLoggingMiddleware({String? projectId}) => projectId == null
-    ? _errorWriter.addMiddleware(logRequests()).addMiddleware(_handleBadRequest)
+    ? _errorWriter
+          .addMiddleware(logRequests())
+          .addMiddleware(_handleResponseException)
     : cloudLoggingMiddleware(projectId);
 
-/// Adds logic which catches [BadRequestException], logs details to [stderr] and
-/// returns a corresponding [Response].
-Middleware get badRequestMiddleware => _handleBadRequest;
+@Deprecated('use httpResponseExceptionMiddleware instead')
+Middleware get badRequestMiddleware => httpResponseExceptionMiddleware;
 
-Handler _handleBadRequest(Handler innerHandler) => (request) async {
+/// Adds logic which catches [HttpResponseException], logs details to [stderr]
+/// and returns a corresponding [Response].
+Middleware get httpResponseExceptionMiddleware => _handleResponseException;
+
+Handler _handleResponseException(Handler innerHandler) => (request) async {
   try {
     final response = await innerHandler(request);
     return response;
-  } on BadRequestException catch (error, stack) {
-    return _responseFromBadRequest(error, stack);
+  } on HttpResponseException catch (error, stack) {
+    return _responseFromException(error, stack, request.headers);
   }
 };
 
@@ -60,10 +66,10 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
   final response = await innerHandler(request);
 
   final error =
-      response.context[_badRequestExceptionContextKey] as BadRequestException?;
+      response.context[_httpResponseExceptionKey] as HttpResponseException?;
 
   if (error != null) {
-    final stack = response.context[_badStackTraceContextKey] as StackTrace?;
+    final stack = response.context[_exceptionStackTraceKey] as StackTrace?;
     final output = [
       error,
       if (error.innerError != null)
@@ -80,15 +86,26 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
   return response;
 };
 
-Response _responseFromBadRequest(BadRequestException e, StackTrace stack) =>
-    Response(
+Response _responseFromException(
+  HttpResponseException e,
+  StackTrace stack, [
+  Map<String, String>? requestHeaders,
+]) {
+  if (requestHeaders != null && shouldSendJsonResponse(requestHeaders)) {
+    return Response(
       e.statusCode,
-      body: 'Bad request. ${e.message}',
-      context: {
-        _badRequestExceptionContextKey: e,
-        _badStackTraceContextKey: stack,
-      },
+      body: jsonEncode(e.toJson()),
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
     );
+  }
+
+  return Response(
+    e.statusCode,
+    body: e.toString(),
+    context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
+  );
+}
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
@@ -113,15 +130,65 @@ Middleware cloudLoggingMiddleware(String projectId) {
     String createErrorLogEntryFromRequest(
       Object error,
       StackTrace? stackTrace,
-      LogSeverity logSeverity,
-    ) => structuredLogEntry(
+      LogSeverity logSeverity, {
+      Map<String, Object?>? extraPayload,
+    }) => structuredLogEntry(
       '$error'.trim(),
       logSeverity,
-      payload: traceContext?.asPayloadMap(),
+      payload: {...?traceContext?.asPayloadMap(), ...?extraPayload},
       stackTrace: stackTrace,
     );
 
     final completer = Completer<Response>.sync();
+
+    void uncaughtErrorHandler(
+      Zone self,
+      ZoneDelegate parent,
+      _,
+      Object error,
+      StackTrace stackTrace,
+    ) {
+      if (error is HijackException) {
+        completer.completeError(error, stackTrace);
+      }
+
+      final logContentString = error is HttpResponseException
+          ? createErrorLogEntryFromRequest(
+              error,
+              error.innerStack ?? stackTrace,
+              error.statusCode >= 500 ? LogSeverity.error : LogSeverity.warning,
+              extraPayload: error.toJson(),
+            )
+          : createErrorLogEntryFromRequest(
+              error,
+              stackTrace,
+              LogSeverity.error,
+            );
+
+      // Serialize to a JSON string and output.
+      parent.print(self, logContentString);
+
+      if (completer.isCompleted) {
+        return;
+      }
+
+      final response = error is HttpResponseException
+          ? _responseFromException(error, stackTrace, request.headers)
+          : Response.internalServerError();
+
+      completer.complete(response);
+    }
+
+    void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
+      final logContent = structuredLogEntry(
+        line,
+        LogSeverity.info,
+        payload: traceContext?.asPayloadMap(),
+      );
+
+      // Serialize to a JSON string and output to parent zone.
+      parent.print(self, logContent);
+    }
 
     final currentZone = Zone.current;
 
@@ -134,46 +201,8 @@ Middleware cloudLoggingMiddleware(String projectId) {
             ),
           },
           specification: ZoneSpecification(
-            handleUncaughtError: (self, parent, zone, error, stackTrace) {
-              if (error is HijackException) {
-                completer.completeError(error, stackTrace);
-              }
-
-              final logContentString = error is BadRequestException
-                  ? createErrorLogEntryFromRequest(
-                      'Bad request. ${error.message}',
-                      error.innerStack ?? stackTrace,
-                      LogSeverity.warning,
-                    )
-                  : createErrorLogEntryFromRequest(
-                      error,
-                      stackTrace,
-                      LogSeverity.error,
-                    );
-
-              // Serialize to a JSON string and output.
-              parent.print(self, logContentString);
-
-              if (completer.isCompleted) {
-                return;
-              }
-
-              final response = error is BadRequestException
-                  ? _responseFromBadRequest(error, stackTrace)
-                  : Response.internalServerError();
-
-              completer.complete(response);
-            },
-            print: (self, parent, zone, line) {
-              final logContent = structuredLogEntry(
-                line,
-                LogSeverity.info,
-                payload: traceContext?.asPayloadMap(),
-              );
-
-              // Serialize to a JSON string and output to parent zone.
-              parent.print(self, logContent);
-            },
+            handleUncaughtError: uncaughtErrorHandler,
+            print: zonePrint,
           ),
         )
         .runGuarded(() async {
