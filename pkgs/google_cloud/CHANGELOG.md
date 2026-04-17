@@ -1,4 +1,4 @@
-## 0.5.0-wip
+## 0.4.2-wip
 
 ### `http_serving.dart`
 
@@ -30,6 +30,10 @@
   `HttpResponseException.toJson()` for JSON responses, returning a standard
   Google Cloud error payload.
 - Updated plain text errors to use `HttpResponseException.toString()`.
+
+## 0.4.1
+
+- Update dependency `meta: ^1.17.0` to allow workspaces with stable Flutter.
 
 ## 0.4.0
 
