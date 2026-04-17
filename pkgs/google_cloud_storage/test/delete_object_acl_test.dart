@@ -101,6 +101,79 @@ void deleteObjectAclTest(Storage Function() createStorage) {
       throwsA(isA<NotFoundException>()),
     );
   });
+
+  test('success with generation', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'del_obj_acl_gen_ok',
+      metadata: BucketMetadata(
+        iamConfiguration: BucketIamConfiguration(
+          uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: false),
+        ),
+      ),
+    );
+
+    final md = await storage.uploadObjectFromString(
+      bucketName,
+      'object.txt',
+      'Hello World!',
+      ifGenerationMatch: BigInt.zero,
+    );
+
+    const entity = 'user-${cloud.googleTestUser}';
+    await storage.insertObjectAcl(bucketName, 'object.txt', entity, 'READER');
+
+    await storage.deleteObjectAcl(
+      bucketName,
+      'object.txt',
+      entity,
+      generation: md.generation,
+    );
+
+    final metadata = await storage.objectMetadata(
+      bucketName,
+      'object.txt',
+      projection: 'full',
+    );
+
+    final testUserRoles = [
+      for (var i in metadata.acl ?? <ObjectAccessControl>[])
+        if (i.entity == entity) (i.entity, i.role),
+    ];
+    expect(testUserRoles, isEmpty);
+  });
+
+  test('not found with wrong generation', () async {
+    final bucketName = await createBucketWithTearDown(
+      storage,
+      'del_obj_acl_gen_not_found',
+      metadata: BucketMetadata(
+        iamConfiguration: BucketIamConfiguration(
+          uniformBucketLevelAccess: UniformBucketLevelAccess(enabled: false),
+        ),
+      ),
+    );
+
+    await storage.uploadObjectFromString(
+      bucketName,
+      'object.txt',
+      'Hello World!',
+      ifGenerationMatch: BigInt.zero,
+    );
+
+    const entity = 'user-${cloud.googleTestUser}';
+    await storage.insertObjectAcl(bucketName, 'object.txt', entity, 'READER');
+
+    expect(
+      () => storage.deleteObjectAcl(
+        bucketName,
+        'object.txt',
+        entity,
+        generation: BigInt.from(12345),
+      ),
+      throwsA(isA<NotFoundException>()),
+    );
+  });
 }
 
 void main() async {
@@ -146,6 +219,30 @@ void main() async {
         throwsA(isA<http.ClientException>()),
       );
       expect(count, 1);
+    });
+
+    test('idempotent transport failure', () async {
+      var count = 0;
+      final mockClient = MockClient((request) async {
+        count++;
+        if (count == 1) {
+          throw http.ClientException('Some transport failure');
+        } else if (count == 2) {
+          return http.Response('', 204);
+        } else {
+          throw StateError('Unexpected call count: $count');
+        }
+      });
+
+      final storage = Storage(client: mockClient, projectId: 'fake project');
+
+      await storage.deleteObjectAcl(
+        'bucket',
+        'object',
+        'entity',
+        generation: BigInt.from(1),
+      );
+      expect(count, 2);
     });
   });
 }
