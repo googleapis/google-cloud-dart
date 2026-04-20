@@ -49,7 +49,7 @@ final class PubSub {
     String? emulatorHost,
   ) => switch ((projectId, emulatorHost)) {
     (final String projectId, _) => projectId,
-    (null, _?) => '<none>',
+    (null, _?) => projectFromEnvironment ?? 'test-project',
     (null, null) => projectFromEnvironment ?? 'unknown-project',
   };
 
