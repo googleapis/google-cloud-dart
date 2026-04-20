@@ -64,7 +64,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// are created and deleted implicitly with the resources to which they are
 /// attached.
 final class IAMPolicy {
-  static const _host = 'iam-meta-api.googleapis.com';
+  static const _defaultHost = 'iam-meta-api.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -73,8 +74,20 @@ final class IAMPolicy {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `IAMPolicy`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  IAMPolicy({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  IAMPolicy({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `IAMPolicy` that does authentication through an API key.
   ///
@@ -100,7 +113,7 @@ final class IAMPolicy {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(path: '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -113,7 +126,7 @@ final class IAMPolicy {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy');
+    final url = _endPoint.replace(path: '/v1/${request.resource}:getIamPolicy');
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -132,7 +145,9 @@ final class IAMPolicy {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.resource}:testIamPermissions');
+    final url = _endPoint.replace(
+      path: '/v1/${request.resource}:testIamPermissions',
+    );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
   }

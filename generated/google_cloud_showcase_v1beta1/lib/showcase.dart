@@ -46,7 +46,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// correctly for various types of HTTP annotations, but it also includes verifying that unknown (numeric) enums received by clients can be round-tripped
 /// correctly.
 final class Compliance {
-  static const _host = 'localhost:7469';
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -55,8 +56,20 @@ final class Compliance {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Compliance`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Compliance({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Compliance({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Compliance` that does authentication through an API key.
   ///
@@ -80,7 +93,7 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataBody(RepeatRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/repeat:body');
+    final url = _endPoint.replace(path: '/v1beta1/repeat:body');
     final response = await _client.post(url, body: request);
     return RepeatResponse.fromJson(response);
   }
@@ -93,19 +106,24 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/repeat:bodyinfo', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.serverVerify case final $1 when $1.isNotDefault)
-        'serverVerify': '${$1}',
-      if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
-      if (request.fInt32 case final $1 when $1.isNotDefault) 'fInt32': '${$1}',
-      if (request.fInt64 case final $1 when $1.isNotDefault) 'fInt64': '${$1}',
-      if (request.fDouble case final $1 when $1.isNotDefault)
-        'fDouble': '${$1}',
-      if (request.pInt32 case final $1?) 'pInt32': '${$1}',
-      if (request.pInt64 case final $1?) 'pInt64': '${$1}',
-      if (request.pDouble case final $1?) 'pDouble': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/repeat:bodyinfo',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
+      },
+    );
     final response = await _client.post(url, body: request.info);
     return RepeatResponse.fromJson(response);
   }
@@ -117,142 +135,151 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/repeat:query', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.info?.fString case final $1? when $1.isNotDefault)
-        'info.fString': $1,
-      if (request.info?.fInt32 case final $1? when $1.isNotDefault)
-        'info.fInt32': '${$1}',
-      if (request.info?.fSint32 case final $1? when $1.isNotDefault)
-        'info.fSint32': '${$1}',
-      if (request.info?.fSfixed32 case final $1? when $1.isNotDefault)
-        'info.fSfixed32': '${$1}',
-      if (request.info?.fUint32 case final $1? when $1.isNotDefault)
-        'info.fUint32': '${$1}',
-      if (request.info?.fFixed32 case final $1? when $1.isNotDefault)
-        'info.fFixed32': '${$1}',
-      if (request.info?.fInt64 case final $1? when $1.isNotDefault)
-        'info.fInt64': '${$1}',
-      if (request.info?.fSint64 case final $1? when $1.isNotDefault)
-        'info.fSint64': '${$1}',
-      if (request.info?.fSfixed64 case final $1? when $1.isNotDefault)
-        'info.fSfixed64': '${$1}',
-      if (request.info?.fUint64 case final $1? when $1.isNotDefault)
-        'info.fUint64': '${$1}',
-      if (request.info?.fFixed64 case final $1? when $1.isNotDefault)
-        'info.fFixed64': '${$1}',
-      if (request.info?.fDouble case final $1? when $1.isNotDefault)
-        'info.fDouble': '${$1}',
-      if (request.info?.fFloat case final $1? when $1.isNotDefault)
-        'info.fFloat': '${$1}',
-      if (request.info?.fBool case final $1? when $1.isNotDefault)
-        'info.fBool': '${$1}',
-      if (request.info?.fBytes case final $1? when $1.isNotDefault)
-        'info.fBytes': encodeBytes($1)!,
-      if (request.info?.fKingdom case final $1? when $1.isNotDefault)
-        'info.fKingdom': $1.value,
-      if (request.info?.fChild?.fString case final $1? when $1.isNotDefault)
-        'info.fChild.fString': $1,
-      if (request.info?.fChild?.fFloat case final $1? when $1.isNotDefault)
-        'info.fChild.fFloat': '${$1}',
-      if (request.info?.fChild?.fDouble case final $1? when $1.isNotDefault)
-        'info.fChild.fDouble': '${$1}',
-      if (request.info?.fChild?.fBool case final $1? when $1.isNotDefault)
-        'info.fChild.fBool': '${$1}',
-      if (request.info?.fChild?.fContinent case final $1? when $1.isNotDefault)
-        'info.fChild.fContinent': $1.value,
-      if (request.info?.fChild?.fChild?.fString case final $1?
-          when $1.isNotDefault)
-        'info.fChild.fChild.fString': $1,
-      if (request.info?.fChild?.fChild?.fDouble case final $1?
-          when $1.isNotDefault)
-        'info.fChild.fChild.fDouble': '${$1}',
-      if (request.info?.fChild?.fChild?.fBool case final $1?
-          when $1.isNotDefault)
-        'info.fChild.fChild.fBool': '${$1}',
-      if (request.info?.fChild?.pString case final $1?)
-        'info.fChild.pString': $1,
-      if (request.info?.fChild?.pFloat case final $1?)
-        'info.fChild.pFloat': '${$1}',
-      if (request.info?.fChild?.pDouble case final $1?)
-        'info.fChild.pDouble': '${$1}',
-      if (request.info?.fChild?.pBool case final $1?)
-        'info.fChild.pBool': '${$1}',
-      if (request.info?.fChild?.pContinent case final $1? when $1.isNotDefault)
-        'info.fChild.pContinent': $1.value,
-      if (request.info?.fChild?.pChild?.fString case final $1?
-          when $1.isNotDefault)
-        'info.fChild.pChild.fString': $1,
-      if (request.info?.fChild?.pChild?.fDouble case final $1?
-          when $1.isNotDefault)
-        'info.fChild.pChild.fDouble': '${$1}',
-      if (request.info?.fChild?.pChild?.fBool case final $1?
-          when $1.isNotDefault)
-        'info.fChild.pChild.fBool': '${$1}',
-      if (request.info?.pString case final $1?) 'info.pString': $1,
-      if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
-      if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
-      if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
-      if (request.info?.pUint32 case final $1?) 'info.pUint32': '${$1}',
-      if (request.info?.pFixed32 case final $1?) 'info.pFixed32': '${$1}',
-      if (request.info?.pInt64 case final $1?) 'info.pInt64': '${$1}',
-      if (request.info?.pSint64 case final $1?) 'info.pSint64': '${$1}',
-      if (request.info?.pSfixed64 case final $1?) 'info.pSfixed64': '${$1}',
-      if (request.info?.pUint64 case final $1?) 'info.pUint64': '${$1}',
-      if (request.info?.pFixed64 case final $1?) 'info.pFixed64': '${$1}',
-      if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
-      if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
-      if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
-      if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
-      if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
-        'info.pChild.fString': $1,
-      if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
-        'info.pChild.fFloat': '${$1}',
-      if (request.info?.pChild?.fDouble case final $1? when $1.isNotDefault)
-        'info.pChild.fDouble': '${$1}',
-      if (request.info?.pChild?.fBool case final $1? when $1.isNotDefault)
-        'info.pChild.fBool': '${$1}',
-      if (request.info?.pChild?.fContinent case final $1? when $1.isNotDefault)
-        'info.pChild.fContinent': $1.value,
-      if (request.info?.pChild?.fChild?.fString case final $1?
-          when $1.isNotDefault)
-        'info.pChild.fChild.fString': $1,
-      if (request.info?.pChild?.fChild?.fDouble case final $1?
-          when $1.isNotDefault)
-        'info.pChild.fChild.fDouble': '${$1}',
-      if (request.info?.pChild?.fChild?.fBool case final $1?
-          when $1.isNotDefault)
-        'info.pChild.fChild.fBool': '${$1}',
-      if (request.info?.pChild?.pString case final $1?)
-        'info.pChild.pString': $1,
-      if (request.info?.pChild?.pFloat case final $1?)
-        'info.pChild.pFloat': '${$1}',
-      if (request.info?.pChild?.pDouble case final $1?)
-        'info.pChild.pDouble': '${$1}',
-      if (request.info?.pChild?.pBool case final $1?)
-        'info.pChild.pBool': '${$1}',
-      if (request.info?.pChild?.pContinent case final $1? when $1.isNotDefault)
-        'info.pChild.pContinent': $1.value,
-      if (request.info?.pChild?.pChild?.fString case final $1?
-          when $1.isNotDefault)
-        'info.pChild.pChild.fString': $1,
-      if (request.info?.pChild?.pChild?.fDouble case final $1?
-          when $1.isNotDefault)
-        'info.pChild.pChild.fDouble': '${$1}',
-      if (request.info?.pChild?.pChild?.fBool case final $1?
-          when $1.isNotDefault)
-        'info.pChild.pChild.fBool': '${$1}',
-      if (request.serverVerify case final $1 when $1.isNotDefault)
-        'serverVerify': '${$1}',
-      if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
-      if (request.fInt32 case final $1 when $1.isNotDefault) 'fInt32': '${$1}',
-      if (request.fInt64 case final $1 when $1.isNotDefault) 'fInt64': '${$1}',
-      if (request.fDouble case final $1 when $1.isNotDefault)
-        'fDouble': '${$1}',
-      if (request.pInt32 case final $1?) 'pInt32': '${$1}',
-      if (request.pInt64 case final $1?) 'pInt64': '${$1}',
-      if (request.pDouble case final $1?) 'pDouble': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/repeat:query',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.info?.fString case final $1? when $1.isNotDefault)
+          'info.fString': $1,
+        if (request.info?.fInt32 case final $1? when $1.isNotDefault)
+          'info.fInt32': '${$1}',
+        if (request.info?.fSint32 case final $1? when $1.isNotDefault)
+          'info.fSint32': '${$1}',
+        if (request.info?.fSfixed32 case final $1? when $1.isNotDefault)
+          'info.fSfixed32': '${$1}',
+        if (request.info?.fUint32 case final $1? when $1.isNotDefault)
+          'info.fUint32': '${$1}',
+        if (request.info?.fFixed32 case final $1? when $1.isNotDefault)
+          'info.fFixed32': '${$1}',
+        if (request.info?.fInt64 case final $1? when $1.isNotDefault)
+          'info.fInt64': '${$1}',
+        if (request.info?.fSint64 case final $1? when $1.isNotDefault)
+          'info.fSint64': '${$1}',
+        if (request.info?.fSfixed64 case final $1? when $1.isNotDefault)
+          'info.fSfixed64': '${$1}',
+        if (request.info?.fUint64 case final $1? when $1.isNotDefault)
+          'info.fUint64': '${$1}',
+        if (request.info?.fFixed64 case final $1? when $1.isNotDefault)
+          'info.fFixed64': '${$1}',
+        if (request.info?.fDouble case final $1? when $1.isNotDefault)
+          'info.fDouble': '${$1}',
+        if (request.info?.fFloat case final $1? when $1.isNotDefault)
+          'info.fFloat': '${$1}',
+        if (request.info?.fBool case final $1? when $1.isNotDefault)
+          'info.fBool': '${$1}',
+        if (request.info?.fBytes case final $1? when $1.isNotDefault)
+          'info.fBytes': encodeBytes($1)!,
+        if (request.info?.fKingdom case final $1? when $1.isNotDefault)
+          'info.fKingdom': $1.value,
+        if (request.info?.fChild?.fString case final $1? when $1.isNotDefault)
+          'info.fChild.fString': $1,
+        if (request.info?.fChild?.fFloat case final $1? when $1.isNotDefault)
+          'info.fChild.fFloat': '${$1}',
+        if (request.info?.fChild?.fDouble case final $1? when $1.isNotDefault)
+          'info.fChild.fDouble': '${$1}',
+        if (request.info?.fChild?.fBool case final $1? when $1.isNotDefault)
+          'info.fChild.fBool': '${$1}',
+        if (request.info?.fChild?.fContinent case final $1?
+            when $1.isNotDefault)
+          'info.fChild.fContinent': $1.value,
+        if (request.info?.fChild?.fChild?.fString case final $1?
+            when $1.isNotDefault)
+          'info.fChild.fChild.fString': $1,
+        if (request.info?.fChild?.fChild?.fDouble case final $1?
+            when $1.isNotDefault)
+          'info.fChild.fChild.fDouble': '${$1}',
+        if (request.info?.fChild?.fChild?.fBool case final $1?
+            when $1.isNotDefault)
+          'info.fChild.fChild.fBool': '${$1}',
+        if (request.info?.fChild?.pString case final $1?)
+          'info.fChild.pString': $1,
+        if (request.info?.fChild?.pFloat case final $1?)
+          'info.fChild.pFloat': '${$1}',
+        if (request.info?.fChild?.pDouble case final $1?)
+          'info.fChild.pDouble': '${$1}',
+        if (request.info?.fChild?.pBool case final $1?)
+          'info.fChild.pBool': '${$1}',
+        if (request.info?.fChild?.pContinent case final $1?
+            when $1.isNotDefault)
+          'info.fChild.pContinent': $1.value,
+        if (request.info?.fChild?.pChild?.fString case final $1?
+            when $1.isNotDefault)
+          'info.fChild.pChild.fString': $1,
+        if (request.info?.fChild?.pChild?.fDouble case final $1?
+            when $1.isNotDefault)
+          'info.fChild.pChild.fDouble': '${$1}',
+        if (request.info?.fChild?.pChild?.fBool case final $1?
+            when $1.isNotDefault)
+          'info.fChild.pChild.fBool': '${$1}',
+        if (request.info?.pString case final $1?) 'info.pString': $1,
+        if (request.info?.pInt32 case final $1?) 'info.pInt32': '${$1}',
+        if (request.info?.pSint32 case final $1?) 'info.pSint32': '${$1}',
+        if (request.info?.pSfixed32 case final $1?) 'info.pSfixed32': '${$1}',
+        if (request.info?.pUint32 case final $1?) 'info.pUint32': '${$1}',
+        if (request.info?.pFixed32 case final $1?) 'info.pFixed32': '${$1}',
+        if (request.info?.pInt64 case final $1?) 'info.pInt64': '${$1}',
+        if (request.info?.pSint64 case final $1?) 'info.pSint64': '${$1}',
+        if (request.info?.pSfixed64 case final $1?) 'info.pSfixed64': '${$1}',
+        if (request.info?.pUint64 case final $1?) 'info.pUint64': '${$1}',
+        if (request.info?.pFixed64 case final $1?) 'info.pFixed64': '${$1}',
+        if (request.info?.pFloat case final $1?) 'info.pFloat': '${$1}',
+        if (request.info?.pDouble case final $1?) 'info.pDouble': '${$1}',
+        if (request.info?.pBool case final $1?) 'info.pBool': '${$1}',
+        if (request.info?.pKingdom case final $1?) 'info.pKingdom': $1.value,
+        if (request.info?.pChild?.fString case final $1? when $1.isNotDefault)
+          'info.pChild.fString': $1,
+        if (request.info?.pChild?.fFloat case final $1? when $1.isNotDefault)
+          'info.pChild.fFloat': '${$1}',
+        if (request.info?.pChild?.fDouble case final $1? when $1.isNotDefault)
+          'info.pChild.fDouble': '${$1}',
+        if (request.info?.pChild?.fBool case final $1? when $1.isNotDefault)
+          'info.pChild.fBool': '${$1}',
+        if (request.info?.pChild?.fContinent case final $1?
+            when $1.isNotDefault)
+          'info.pChild.fContinent': $1.value,
+        if (request.info?.pChild?.fChild?.fString case final $1?
+            when $1.isNotDefault)
+          'info.pChild.fChild.fString': $1,
+        if (request.info?.pChild?.fChild?.fDouble case final $1?
+            when $1.isNotDefault)
+          'info.pChild.fChild.fDouble': '${$1}',
+        if (request.info?.pChild?.fChild?.fBool case final $1?
+            when $1.isNotDefault)
+          'info.pChild.fChild.fBool': '${$1}',
+        if (request.info?.pChild?.pString case final $1?)
+          'info.pChild.pString': $1,
+        if (request.info?.pChild?.pFloat case final $1?)
+          'info.pChild.pFloat': '${$1}',
+        if (request.info?.pChild?.pDouble case final $1?)
+          'info.pChild.pDouble': '${$1}',
+        if (request.info?.pChild?.pBool case final $1?)
+          'info.pChild.pBool': '${$1}',
+        if (request.info?.pChild?.pContinent case final $1?
+            when $1.isNotDefault)
+          'info.pChild.pContinent': $1.value,
+        if (request.info?.pChild?.pChild?.fString case final $1?
+            when $1.isNotDefault)
+          'info.pChild.pChild.fString': $1,
+        if (request.info?.pChild?.pChild?.fDouble case final $1?
+            when $1.isNotDefault)
+          'info.pChild.pChild.fDouble': '${$1}',
+        if (request.info?.pChild?.pChild?.fBool case final $1?
+            when $1.isNotDefault)
+          'info.pChild.pChild.fBool': '${$1}',
+        if (request.serverVerify case final $1 when $1.isNotDefault)
+          'serverVerify': '${$1}',
+        if (request.intendedBindingUri case final $1?) 'intendedBindingUri': $1,
+        if (request.fInt32 case final $1 when $1.isNotDefault)
+          'fInt32': '${$1}',
+        if (request.fInt64 case final $1 when $1.isNotDefault)
+          'fInt64': '${$1}',
+        if (request.fDouble case final $1 when $1.isNotDefault)
+          'fDouble': '${$1}',
+        if (request.pInt32 case final $1?) 'pInt32': '${$1}',
+        if (request.pInt64 case final $1?) 'pInt64': '${$1}',
+        if (request.pDouble case final $1?) 'pDouble': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return RepeatResponse.fromJson(response);
   }
@@ -265,10 +292,10 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataSimplePath(RepeatRequest request) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/repeat/${request.info!.fString}/${request.info!.fInt32}/${request.info!.fDouble}/${request.info!.fBool}/${request.info!.fKingdom}:simplepath',
-      {
+    final url = _endPoint.replace(
+      path:
+          '/v1beta1/repeat/${request.info!.fString}/${request.info!.fInt32}/${request.info!.fDouble}/${request.info!.fBool}/${request.info!.fKingdom}:simplepath',
+      queryParameters: {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
         if (request.info?.fString case final $1? when $1.isNotDefault)
           'info.fString': $1,
@@ -421,10 +448,10 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataPathResource(RepeatRequest request) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}/bool/${request.info!.fBool}:pathresource',
-      {
+    final url = _endPoint.replace(
+      path:
+          '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}/bool/${request.info!.fBool}:pathresource',
+      queryParameters: {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
         if (request.info?.fString case final $1? when $1.isNotDefault)
           'info.fString': $1,
@@ -579,10 +606,10 @@ final class Compliance {
   Future<RepeatResponse> repeatDataPathTrailingResource(
     RepeatRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}:pathtrailingresource',
-      {
+    final url = _endPoint.replace(
+      path:
+          '/v1beta1/repeat/${request.info!.fString}/${request.info!.fChild!.fString}:pathtrailingresource',
+      queryParameters: {
         if (request.name case final $1 when $1.isNotDefault) 'name': $1,
         if (request.info?.fString case final $1? when $1.isNotDefault)
           'info.fString': $1,
@@ -735,7 +762,7 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataBodyPut(RepeatRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/repeat:bodyput');
+    final url = _endPoint.replace(path: '/v1beta1/repeat:bodyput');
     final response = await _client.put(url, body: request);
     return RepeatResponse.fromJson(response);
   }
@@ -746,7 +773,7 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<RepeatResponse> repeatDataBodyPatch(RepeatRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/repeat:bodypatch');
+    final url = _endPoint.replace(path: '/v1beta1/repeat:bodypatch');
     final response = await _client.patch(url, body: request);
     return RepeatResponse.fromJson(response);
   }
@@ -762,10 +789,13 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<EnumResponse> getEnum(EnumRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.unknownEnum case final $1 when $1.isNotDefault)
-        'unknownEnum': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/compliance/enum',
+      queryParameters: {
+        if (request.unknownEnum case final $1 when $1.isNotDefault)
+          'unknownEnum': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return EnumResponse.fromJson(response);
   }
@@ -781,12 +811,15 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
-    final url = Uri.https(_host, '/v1beta1/compliance/enum', {
-      if (request.request?.unknownEnum case final $1? when $1.isNotDefault)
-        'request.unknownEnum': '${$1}',
-      if (request.continent case final $1 when $1.isNotDefault)
-        'continent': $1.value,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/compliance/enum',
+      queryParameters: {
+        if (request.request?.unknownEnum case final $1? when $1.isNotDefault)
+          'request.unknownEnum': '${$1}',
+        if (request.continent case final $1 when $1.isNotDefault)
+          'continent': $1.value,
+      },
+    );
     final response = await _client.post(url);
     return EnumResponse.fromJson(response);
   }
@@ -799,12 +832,16 @@ final class Compliance {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -815,7 +852,7 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }
@@ -826,7 +863,9 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -837,11 +876,14 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -854,9 +896,8 @@ final class Compliance {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/${request.resource}:testIamPermissions',
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
     );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
@@ -870,15 +911,19 @@ final class Compliance {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -895,7 +940,7 @@ final class Compliance {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -906,7 +951,7 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -916,7 +961,7 @@ final class Compliance {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -934,7 +979,8 @@ final class Compliance {
 /// 'x-goog-request-params' metadata key on any method to have the values
 /// echoed in the response headers.
 final class Echo {
-  static const _host = 'localhost:7469';
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -943,7 +989,20 @@ final class Echo {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Echo`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Echo({required http.Client client}) : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Echo({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Echo` that does authentication through an API key.
   ///
@@ -966,7 +1025,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<EchoResponse> echo(EchoRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/echo:echo');
+    final url = _endPoint.replace(path: '/v1beta1/echo:echo');
     final response = await _client.post(url, body: request);
     return EchoResponse.fromJson(response);
   }
@@ -984,7 +1043,7 @@ final class Echo {
   Future<EchoErrorDetailsResponse> echoErrorDetails(
     EchoErrorDetailsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/echo:error-details');
+    final url = _endPoint.replace(path: '/v1beta1/echo:error-details');
     final response = await _client.post(url, body: request);
     return EchoErrorDetailsResponse.fromJson(response);
   }
@@ -1003,7 +1062,7 @@ final class Echo {
   Future<FailEchoWithDetailsResponse> failEchoWithDetails(
     FailEchoWithDetailsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/echo:failWithDetails');
+    final url = _endPoint.replace(path: '/v1beta1/echo:failWithDetails');
     final response = await _client.post(url, body: request);
     return FailEchoWithDetailsResponse.fromJson(response);
   }
@@ -1015,7 +1074,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Stream<EchoResponse> expand(ExpandRequest request) {
-    final url = Uri.https(_host, '/v1beta1/echo:expand');
+    final url = _endPoint.replace(path: '/v1beta1/echo:expand');
     return _client.postStreaming(url, body: request).map(EchoResponse.fromJson);
   }
 
@@ -1026,7 +1085,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<PagedExpandResponse> pagedExpand(PagedExpandRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/echo:pagedExpand');
+    final url = _endPoint.replace(path: '/v1beta1/echo:pagedExpand');
     final response = await _client.post(url, body: request);
     return PagedExpandResponse.fromJson(response);
   }
@@ -1041,7 +1100,7 @@ final class Echo {
   Future<PagedExpandResponse> pagedExpandLegacy(
     PagedExpandLegacyRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/echo:pagedExpandLegacy');
+    final url = _endPoint.replace(path: '/v1beta1/echo:pagedExpandLegacy');
     final response = await _client.post(url, body: request);
     return PagedExpandResponse.fromJson(response);
   }
@@ -1058,7 +1117,9 @@ final class Echo {
   Future<PagedExpandLegacyMappedResponse> pagedExpandLegacyMapped(
     PagedExpandRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/echo:pagedExpandLegacyMapped');
+    final url = _endPoint.replace(
+      path: '/v1beta1/echo:pagedExpandLegacyMapped',
+    );
     final response = await _client.post(url, body: request);
     return PagedExpandLegacyMappedResponse.fromJson(response);
   }
@@ -1078,7 +1139,7 @@ final class Echo {
   Future<Operation<WaitResponse, WaitMetadata>> wait(
     WaitRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/echo:wait');
+    final url = _endPoint.replace(path: '/v1beta1/echo:wait');
     final response = await _client.post(url, body: request);
     return Operation.fromJson(
       response,
@@ -1094,7 +1155,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<BlockResponse> block(BlockRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/echo:block');
+    final url = _endPoint.replace(path: '/v1beta1/echo:block');
     final response = await _client.post(url, body: request);
     return BlockResponse.fromJson(response);
   }
@@ -1107,12 +1168,16 @@ final class Echo {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -1123,7 +1188,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }
@@ -1134,7 +1199,9 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -1145,11 +1212,14 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -1162,9 +1232,8 @@ final class Echo {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/${request.resource}:testIamPermissions',
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
     );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
@@ -1178,15 +1247,19 @@ final class Echo {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1203,7 +1276,7 @@ final class Echo {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1214,7 +1287,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -1224,7 +1297,7 @@ final class Echo {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -1236,7 +1309,8 @@ final class Echo {
 
 /// A simple identity service.
 final class Identity {
-  static const _host = 'localhost:7469';
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -1245,8 +1319,20 @@ final class Identity {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Identity`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Identity({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Identity({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Identity` that does authentication through an API key.
   ///
@@ -1269,7 +1355,7 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<User> createUser(CreateUserRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/users');
+    final url = _endPoint.replace(path: '/v1beta1/users');
     final response = await _client.post(url, body: request);
     return User.fromJson(response);
   }
@@ -1280,7 +1366,7 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<User> getUser(GetUserRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return User.fromJson(response);
   }
@@ -1291,9 +1377,12 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<User> updateUser(UpdateUserRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.user!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.user!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.user);
     return User.fromJson(response);
   }
@@ -1304,7 +1393,7 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteUser(DeleteUserRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -1314,11 +1403,15 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/users', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/users',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListUsersResponse.fromJson(response);
   }
@@ -1331,12 +1424,16 @@ final class Identity {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -1347,7 +1444,7 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }
@@ -1358,7 +1455,9 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -1369,11 +1468,14 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -1386,9 +1488,8 @@ final class Identity {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/${request.resource}:testIamPermissions',
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
     );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
@@ -1402,15 +1503,19 @@ final class Identity {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1427,7 +1532,7 @@ final class Identity {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1438,7 +1543,7 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -1448,7 +1553,7 @@ final class Identity {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -1463,7 +1568,8 @@ final class Identity {
 /// This messaging service showcases the features that API clients
 /// generated by gapic-generators implement.
 final class Messaging {
-  static const _host = 'localhost:7469';
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -1472,8 +1578,20 @@ final class Messaging {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Messaging`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Messaging({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Messaging({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Messaging` that does authentication through an API key.
   ///
@@ -1496,7 +1614,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Room> createRoom(CreateRoomRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/rooms');
+    final url = _endPoint.replace(path: '/v1beta1/rooms');
     final response = await _client.post(url, body: request);
     return Room.fromJson(response);
   }
@@ -1507,7 +1625,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Room> getRoom(GetRoomRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Room.fromJson(response);
   }
@@ -1518,9 +1636,12 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Room> updateRoom(UpdateRoomRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.room!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.room!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.room);
     return Room.fromJson(response);
   }
@@ -1531,7 +1652,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteRoom(DeleteRoomRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -1541,11 +1662,15 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/rooms', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/rooms',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListRoomsResponse.fromJson(response);
   }
@@ -1558,7 +1683,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Blurb> createBlurb(CreateBlurbRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs');
+    final url = _endPoint.replace(path: '/v1beta1/${request.parent}/blurbs');
     final response = await _client.post(url, body: request);
     return Blurb.fromJson(response);
   }
@@ -1569,7 +1694,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Blurb> getBlurb(GetBlurbRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Blurb.fromJson(response);
   }
@@ -1580,9 +1705,12 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.blurb!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.blurb!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.blurb);
     return Blurb.fromJson(response);
   }
@@ -1593,7 +1721,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteBlurb(DeleteBlurbRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -1604,11 +1732,15 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.parent}/blurbs',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListBlurbsResponse.fromJson(response);
   }
@@ -1629,7 +1761,9 @@ final class Messaging {
   Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>> searchBlurbs(
     SearchBlurbsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.parent}/blurbs:search');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.parent}/blurbs:search',
+    );
     final response = await _client.post(url, body: request);
     return Operation.fromJson(
       response,
@@ -1647,7 +1781,9 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Stream<StreamBlurbsResponse> streamBlurbs(StreamBlurbsRequest request) {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/blurbs:stream');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/blurbs:stream',
+    );
     return _client
         .postStreaming(url, body: request)
         .map(StreamBlurbsResponse.fromJson);
@@ -1661,12 +1797,16 @@ final class Messaging {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -1677,7 +1817,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }
@@ -1688,7 +1828,9 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -1699,11 +1841,14 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -1716,9 +1861,8 @@ final class Messaging {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/${request.resource}:testIamPermissions',
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
     );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
@@ -1732,15 +1876,19 @@ final class Messaging {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1757,7 +1905,7 @@ final class Messaging {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1768,7 +1916,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -1778,7 +1926,7 @@ final class Messaging {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -1791,7 +1939,8 @@ final class Messaging {
 /// A service that enables testing of unary and server streaming calls
 /// by specifying a specific, predictable sequence of responses from the service
 final class SequenceService {
-  static const _host = 'localhost:7469';
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -1800,8 +1949,20 @@ final class SequenceService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `SequenceService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  SequenceService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  SequenceService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `SequenceService` that does authentication through an API key.
   ///
@@ -1824,7 +1985,7 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Sequence> createSequence(CreateSequenceRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/sequences');
+    final url = _endPoint.replace(path: '/v1beta1/sequences');
     final response = await _client.post(url, body: request.sequence);
     return Sequence.fromJson(response);
   }
@@ -1837,7 +1998,7 @@ final class SequenceService {
   Future<StreamingSequence> createStreamingSequence(
     CreateStreamingSequenceRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/streamingSequences');
+    final url = _endPoint.replace(path: '/v1beta1/streamingSequences');
     final response = await _client.post(url, body: request.streamingSequence);
     return StreamingSequence.fromJson(response);
   }
@@ -1851,7 +2012,7 @@ final class SequenceService {
   Future<SequenceReport> getSequenceReport(
     GetSequenceReportRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return SequenceReport.fromJson(response);
   }
@@ -1865,7 +2026,7 @@ final class SequenceService {
   Future<StreamingSequenceReport> getStreamingSequenceReport(
     GetStreamingSequenceReportRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return StreamingSequenceReport.fromJson(response);
   }
@@ -1876,7 +2037,7 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> attemptSequence(AttemptSequenceRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.post(url, body: request);
   }
 
@@ -1891,7 +2052,7 @@ final class SequenceService {
   Stream<AttemptStreamingSequenceResponse> attemptStreamingSequence(
     AttemptStreamingSequenceRequest request,
   ) {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:stream');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:stream');
     return _client
         .postStreaming(url, body: request)
         .map(AttemptStreamingSequenceResponse.fromJson);
@@ -1905,12 +2066,16 @@ final class SequenceService {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -1921,7 +2086,7 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }
@@ -1932,7 +2097,9 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -1943,11 +2110,14 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -1960,9 +2130,8 @@ final class SequenceService {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/${request.resource}:testIamPermissions',
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
     );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
@@ -1976,15 +2145,19 @@ final class SequenceService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -2001,7 +2174,7 @@ final class SequenceService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -2012,7 +2185,7 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -2022,7 +2195,7 @@ final class SequenceService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -2038,7 +2211,8 @@ final class SequenceService {
 /// 1. (abra->kadabra->alakazam)
 /// 2) `Nonsense`: `pokemon/*/psychic/*`
 final class Testing {
-  static const _host = 'localhost:7469';
+  static const _defaultHost = 'localhost:7469';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -2047,8 +2221,20 @@ final class Testing {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Testing`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Testing({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Testing({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Testing` that does authentication through an API key.
   ///
@@ -2074,7 +2260,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Session> createSession(CreateSessionRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/sessions');
+    final url = _endPoint.replace(path: '/v1beta1/sessions');
     final response = await _client.post(url, body: request.session);
     return Session.fromJson(response);
   }
@@ -2085,7 +2271,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Session> getSession(GetSessionRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Session.fromJson(response);
   }
@@ -2096,11 +2282,15 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/sessions', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/sessions',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListSessionsResponse.fromJson(response);
   }
@@ -2111,7 +2301,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteSession(DeleteSessionRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -2125,7 +2315,7 @@ final class Testing {
   Future<ReportSessionResponse> reportSession(
     ReportSessionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:report');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:report');
     final response = await _client.post(url);
     return ReportSessionResponse.fromJson(response);
   }
@@ -2136,11 +2326,15 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListTestsResponse> listTests(ListTestsRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.parent}/tests', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.parent}/tests',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListTestsResponse.fromJson(response);
   }
@@ -2156,7 +2350,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteTest(DeleteTestRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -2169,12 +2363,15 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:check', {
-      if (request.answer case final $1 when $1.isNotDefault)
-        'answer': encodeBytes($1)!,
-      if (request.answers case final $1 when $1.isNotDefault)
-        'answers': $1.map((e) => encodeBytes(e)!),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}:check',
+      queryParameters: {
+        if (request.answer case final $1 when $1.isNotDefault)
+          'answer': encodeBytes($1)!,
+        if (request.answers case final $1 when $1.isNotDefault)
+          'answers': $1.map((e) => encodeBytes(e)!),
+      },
+    );
     final response = await _client.post(url);
     return VerifyTestResponse.fromJson(response);
   }
@@ -2187,12 +2384,16 @@ final class Testing {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -2203,7 +2404,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }
@@ -2214,7 +2415,9 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:setIamPolicy',
+    );
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -2225,11 +2428,14 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -2242,9 +2448,8 @@ final class Testing {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta1/${request.resource}:testIamPermissions',
+    final url = _endPoint.replace(
+      path: '/v1beta1/${request.resource}:testIamPermissions',
     );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
@@ -2258,15 +2463,19 @@ final class Testing {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta1/operations', {
-      if (request.name case final $1 when $1.isNotDefault) 'name': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta1/operations',
+      queryParameters: {
+        if (request.name case final $1 when $1.isNotDefault) 'name': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -2283,7 +2492,7 @@ final class Testing {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -2294,7 +2503,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}');
     await _client.delete(url);
   }
 
@@ -2304,7 +2513,7 @@ final class Testing {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta1/${request.name}:cancel');
     await _client.post(url);
   }
 

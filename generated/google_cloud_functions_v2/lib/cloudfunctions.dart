@@ -48,7 +48,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// A **function** is a resource which describes a function that should be
 /// executed and how it is triggered.
 final class FunctionService {
-  static const _host = 'cloudfunctions.googleapis.com';
+  static const _defaultHost = 'cloudfunctions.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -57,8 +58,20 @@ final class FunctionService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `FunctionService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  FunctionService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  FunctionService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `FunctionService` that does authentication through an API key.
   ///
@@ -81,9 +94,12 @@ final class FunctionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Function$> getFunction(GetFunctionRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.revision case final $1 when $1.isNotDefault) 'revision': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}',
+      queryParameters: {
+        if (request.revision case final $1 when $1.isNotDefault) 'revision': $1,
+      },
+    );
     final response = await _client.get(url);
     return Function$.fromJson(response);
   }
@@ -96,13 +112,17 @@ final class FunctionService {
   Future<ListFunctionsResponse> listFunctions(
     ListFunctionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/functions',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListFunctionsResponse.fromJson(response);
   }
@@ -123,10 +143,13 @@ final class FunctionService {
   Future<Operation<Function$, OperationMetadata>> createFunction(
     CreateFunctionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/functions', {
-      if (request.functionId case final $1 when $1.isNotDefault)
-        'functionId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/functions',
+      queryParameters: {
+        if (request.functionId case final $1 when $1.isNotDefault)
+          'functionId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.function);
     return Operation.fromJson(
       response,
@@ -148,9 +171,12 @@ final class FunctionService {
   Future<Operation<Function$, OperationMetadata>> updateFunction(
     UpdateFunctionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.function!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.function!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.function);
     return Operation.fromJson(
       response,
@@ -174,7 +200,7 @@ final class FunctionService {
   Future<Operation<Empty, OperationMetadata>> deleteFunction(
     DeleteFunctionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.delete(url);
     return Operation.fromJson(
       response,
@@ -212,9 +238,8 @@ final class FunctionService {
   Future<GenerateUploadUrlResponse> generateUploadUrl(
     GenerateUploadUrlRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v2/${request.parent}/functions:generateUploadUrl',
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/functions:generateUploadUrl',
     );
     final response = await _client.post(url, body: request);
     return GenerateUploadUrlResponse.fromJson(response);
@@ -232,7 +257,9 @@ final class FunctionService {
   Future<GenerateDownloadUrlResponse> generateDownloadUrl(
     GenerateDownloadUrlRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}:generateDownloadUrl');
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}:generateDownloadUrl',
+    );
     final response = await _client.post(url, body: request);
     return GenerateDownloadUrlResponse.fromJson(response);
   }
@@ -243,9 +270,12 @@ final class FunctionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/runtimes', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/runtimes',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListRuntimesResponse.fromJson(response);
   }
@@ -258,12 +288,16 @@ final class FunctionService {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -278,7 +312,7 @@ final class FunctionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(path: '/v2/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -290,11 +324,14 @@ final class FunctionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -313,7 +350,9 @@ final class FunctionService {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.resource}:testIamPermissions');
+    final url = _endPoint.replace(
+      path: '/v2/${request.resource}:testIamPermissions',
+    );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
   }
@@ -326,14 +365,18 @@ final class FunctionService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -350,7 +393,7 @@ final class FunctionService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }

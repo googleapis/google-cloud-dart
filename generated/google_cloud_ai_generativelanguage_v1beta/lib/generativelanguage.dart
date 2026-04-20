@@ -51,7 +51,8 @@ const _apiKeys = ['GOOGLE_API_KEY', 'GEMINI_API_KEY'];
 /// from preprocessing work being done earlier, possibly lowering their
 /// computational cost. It is intended to be used with large contexts.
 final class CacheService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -60,8 +61,20 @@ final class CacheService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `CacheService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  CacheService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  CacheService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `CacheService` that does authentication through an API key.
   ///
@@ -87,11 +100,15 @@ final class CacheService {
   Future<ListCachedContentsResponse> listCachedContents(
     ListCachedContentsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/cachedContents', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/cachedContents',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListCachedContentsResponse.fromJson(response);
   }
@@ -104,7 +121,7 @@ final class CacheService {
   Future<CachedContent> createCachedContent(
     CreateCachedContentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/cachedContents');
+    final url = _endPoint.replace(path: '/v1beta/cachedContents');
     final response = await _client.post(url, body: request.cachedContent);
     return CachedContent.fromJson(response);
   }
@@ -117,7 +134,7 @@ final class CacheService {
   Future<CachedContent> getCachedContent(
     GetCachedContentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return CachedContent.fromJson(response);
   }
@@ -130,9 +147,12 @@ final class CacheService {
   Future<CachedContent> updateCachedContent(
     UpdateCachedContentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.cachedContent!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.cachedContent!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.cachedContent);
     return CachedContent.fromJson(response);
   }
@@ -143,7 +163,7 @@ final class CacheService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteCachedContent(DeleteCachedContentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -155,14 +175,18 @@ final class CacheService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -179,7 +203,7 @@ final class CacheService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -190,7 +214,7 @@ final class CacheService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -200,7 +224,7 @@ final class CacheService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -215,7 +239,8 @@ final class CacheService {
 /// Also known as large language models (LLMs), this API provides models that
 /// are trained for multi-turn dialog.
 final class DiscussService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -224,8 +249,20 @@ final class DiscussService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `DiscussService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  DiscussService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  DiscussService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `DiscussService` that does authentication through an API key.
   ///
@@ -251,7 +288,9 @@ final class DiscussService {
   Future<GenerateMessageResponse> generateMessage(
     GenerateMessageRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:generateMessage');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:generateMessage',
+    );
     final response = await _client.post(url, body: request);
     return GenerateMessageResponse.fromJson(response);
   }
@@ -264,7 +303,9 @@ final class DiscussService {
   Future<CountMessageTokensResponse> countMessageTokens(
     CountMessageTokensRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:countMessageTokens');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:countMessageTokens',
+    );
     final response = await _client.post(url, body: request);
     return CountMessageTokensResponse.fromJson(response);
   }
@@ -277,14 +318,18 @@ final class DiscussService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -301,7 +346,7 @@ final class DiscussService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -312,7 +357,7 @@ final class DiscussService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -322,7 +367,7 @@ final class DiscussService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -334,7 +379,8 @@ final class DiscussService {
 
 /// An API for uploading and managing files.
 final class FileService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -343,8 +389,20 @@ final class FileService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `FileService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  FileService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  FileService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `FileService` that does authentication through an API key.
   ///
@@ -368,7 +426,7 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<CreateFileResponse> createFile(CreateFileRequest request) async {
-    final url = Uri.https(_host, '/v1beta/files');
+    final url = _endPoint.replace(path: '/v1beta/files');
     final response = await _client.post(url, body: request);
     return CreateFileResponse.fromJson(response);
   }
@@ -379,11 +437,15 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListFilesResponse> listFiles(ListFilesRequest request) async {
-    final url = Uri.https(_host, '/v1beta/files', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/files',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListFilesResponse.fromJson(response);
   }
@@ -394,7 +456,7 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<File> getFile(GetFileRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return File.fromJson(response);
   }
@@ -405,7 +467,7 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteFile(DeleteFileRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -415,7 +477,7 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<DownloadFileResponse> downloadFile(DownloadFileRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:download');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:download');
     final response = await _client.get(url);
     return DownloadFileResponse.fromJson(response);
   }
@@ -428,14 +490,18 @@ final class FileService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -452,7 +518,7 @@ final class FileService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -463,7 +529,7 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -473,7 +539,7 @@ final class FileService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -486,7 +552,8 @@ final class FileService {
 /// API for using Large Models that generate multimodal content and have
 /// additional capabilities beyond text generation.
 final class GenerativeService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -495,8 +562,20 @@ final class GenerativeService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `GenerativeService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  GenerativeService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  GenerativeService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `GenerativeService` that does authentication through an API key.
   ///
@@ -528,7 +607,9 @@ final class GenerativeService {
   Future<GenerateContentResponse> generateContent(
     GenerateContentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:generateContent');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:generateContent',
+    );
     final response = await _client.post(url, body: request);
     return GenerateContentResponse.fromJson(response);
   }
@@ -542,7 +623,9 @@ final class GenerativeService {
   Future<GenerateAnswerResponse> generateAnswer(
     GenerateAnswerRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:generateAnswer');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:generateAnswer',
+    );
     final response = await _client.post(url, body: request);
     return GenerateAnswerResponse.fromJson(response);
   }
@@ -557,9 +640,8 @@ final class GenerativeService {
   Stream<GenerateContentResponse> streamGenerateContent(
     GenerateContentRequest request,
   ) {
-    final url = Uri.https(
-      _host,
-      '/v1beta/${request.model}:streamGenerateContent',
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:streamGenerateContent',
     );
     return _client
         .postStreaming(url, body: request)
@@ -574,7 +656,9 @@ final class GenerativeService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<EmbedContentResponse> embedContent(EmbedContentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:embedContent');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:embedContent',
+    );
     final response = await _client.post(url, body: request);
     return EmbedContentResponse.fromJson(response);
   }
@@ -589,7 +673,9 @@ final class GenerativeService {
   Future<BatchEmbedContentsResponse> batchEmbedContents(
     BatchEmbedContentsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:batchEmbedContents');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:batchEmbedContents',
+    );
     final response = await _client.post(url, body: request);
     return BatchEmbedContentsResponse.fromJson(response);
   }
@@ -602,7 +688,7 @@ final class GenerativeService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<CountTokensResponse> countTokens(CountTokensRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:countTokens');
+    final url = _endPoint.replace(path: '/v1beta/${request.model}:countTokens');
     final response = await _client.post(url, body: request);
     return CountTokensResponse.fromJson(response);
   }
@@ -615,14 +701,18 @@ final class GenerativeService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -639,7 +729,7 @@ final class GenerativeService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -650,7 +740,7 @@ final class GenerativeService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -660,7 +750,7 @@ final class GenerativeService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -672,7 +762,8 @@ final class GenerativeService {
 
 /// Provides methods for getting metadata information about Generative Models.
 final class ModelService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -681,8 +772,20 @@ final class ModelService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `ModelService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  ModelService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  ModelService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `ModelService` that does authentication through an API key.
   ///
@@ -711,7 +814,7 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Model> getModel(GetModelRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Model.fromJson(response);
   }
@@ -723,11 +826,15 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListModelsResponse> listModels(ListModelsRequest request) async {
-    final url = Uri.https(_host, '/v1beta/models', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/models',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListModelsResponse.fromJson(response);
   }
@@ -738,7 +845,7 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<TunedModel> getTunedModel(GetTunedModelRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return TunedModel.fromJson(response);
   }
@@ -751,12 +858,16 @@ final class ModelService {
   Future<ListTunedModelsResponse> listTunedModels(
     ListTunedModelsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/tunedModels',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListTunedModelsResponse.fromJson(response);
   }
@@ -781,9 +892,12 @@ final class ModelService {
   Future<Operation<TunedModel, CreateTunedModelMetadata>> createTunedModel(
     CreateTunedModelRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/tunedModels', {
-      if (request.tunedModelId case final $1?) 'tunedModelId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/tunedModels',
+      queryParameters: {
+        if (request.tunedModelId case final $1?) 'tunedModelId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.tunedModel);
     return Operation.fromJson(
       response,
@@ -797,9 +911,12 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<TunedModel> updateTunedModel(UpdateTunedModelRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.tunedModel!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.tunedModel!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.tunedModel);
     return TunedModel.fromJson(response);
   }
@@ -810,7 +927,7 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteTunedModel(DeleteTunedModelRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -822,14 +939,18 @@ final class ModelService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -846,7 +967,7 @@ final class ModelService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -857,7 +978,7 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -867,7 +988,7 @@ final class ModelService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -879,7 +1000,8 @@ final class ModelService {
 
 /// Provides methods for managing permissions to PaLM API resources.
 final class PermissionService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -888,8 +1010,20 @@ final class PermissionService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `PermissionService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  PermissionService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  PermissionService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `PermissionService` that does authentication through an API key.
   ///
@@ -913,7 +1047,9 @@ final class PermissionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Permission> createPermission(CreatePermissionRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.parent}/permissions');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/permissions',
+    );
     final response = await _client.post(url, body: request.permission);
     return Permission.fromJson(response);
   }
@@ -924,7 +1060,7 @@ final class PermissionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Permission> getPermission(GetPermissionRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Permission.fromJson(response);
   }
@@ -937,11 +1073,15 @@ final class PermissionService {
   Future<ListPermissionsResponse> listPermissions(
     ListPermissionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.parent}/permissions', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/permissions',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListPermissionsResponse.fromJson(response);
   }
@@ -952,9 +1092,12 @@ final class PermissionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Permission> updatePermission(UpdatePermissionRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.permission!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.permission!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.permission);
     return Permission.fromJson(response);
   }
@@ -965,7 +1108,7 @@ final class PermissionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deletePermission(DeletePermissionRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -979,7 +1122,9 @@ final class PermissionService {
   Future<TransferOwnershipResponse> transferOwnership(
     TransferOwnershipRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:transferOwnership');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}:transferOwnership',
+    );
     final response = await _client.post(url, body: request);
     return TransferOwnershipResponse.fromJson(response);
   }
@@ -992,14 +1137,18 @@ final class PermissionService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1016,7 +1165,7 @@ final class PermissionService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1027,7 +1176,7 @@ final class PermissionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -1037,7 +1186,7 @@ final class PermissionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -1049,7 +1198,8 @@ final class PermissionService {
 
 /// A service for online predictions and explanations.
 final class PredictionService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -1058,8 +1208,20 @@ final class PredictionService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `PredictionService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  PredictionService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  PredictionService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `PredictionService` that does authentication through an API key.
   ///
@@ -1083,7 +1245,7 @@ final class PredictionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<PredictResponse> predict(PredictRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:predict');
+    final url = _endPoint.replace(path: '/v1beta/${request.model}:predict');
     final response = await _client.post(url, body: request);
     return PredictResponse.fromJson(response);
   }
@@ -1101,7 +1263,9 @@ final class PredictionService {
   /// [Operation.responseAsMessage] will contain the operation's result.
   Future<Operation<PredictLongRunningResponse, PredictLongRunningMetadata>>
   predictLongRunning(PredictLongRunningRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:predictLongRunning');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:predictLongRunning',
+    );
     final response = await _client.post(url, body: request);
     return Operation.fromJson(
       response,
@@ -1120,14 +1284,18 @@ final class PredictionService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1144,7 +1312,7 @@ final class PredictionService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1155,7 +1323,7 @@ final class PredictionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -1165,7 +1333,7 @@ final class PredictionService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -1177,7 +1345,8 @@ final class PredictionService {
 
 /// An API for semantic search over a corpus of user uploaded content.
 final class RetrieverService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -1186,8 +1355,20 @@ final class RetrieverService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `RetrieverService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  RetrieverService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  RetrieverService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `RetrieverService` that does authentication through an API key.
   ///
@@ -1211,7 +1392,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Corpus> createCorpus(CreateCorpusRequest request) async {
-    final url = Uri.https(_host, '/v1beta/corpora');
+    final url = _endPoint.replace(path: '/v1beta/corpora');
     final response = await _client.post(url, body: request.corpus);
     return Corpus.fromJson(response);
   }
@@ -1222,7 +1403,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Corpus> getCorpus(GetCorpusRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Corpus.fromJson(response);
   }
@@ -1233,9 +1414,12 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Corpus> updateCorpus(UpdateCorpusRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.corpus!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.corpus!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.corpus);
     return Corpus.fromJson(response);
   }
@@ -1246,9 +1430,12 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteCorpus(DeleteCorpusRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}',
+      queryParameters: {
+        if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
+      },
+    );
     await _client.delete(url);
   }
 
@@ -1258,11 +1445,15 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListCorporaResponse> listCorpora(ListCorporaRequest request) async {
-    final url = Uri.https(_host, '/v1beta/corpora', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/corpora',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListCorporaResponse.fromJson(response);
   }
@@ -1273,7 +1464,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<QueryCorpusResponse> queryCorpus(QueryCorpusRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:query');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:query');
     final response = await _client.post(url, body: request);
     return QueryCorpusResponse.fromJson(response);
   }
@@ -1284,7 +1475,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Document> createDocument(CreateDocumentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.parent}/documents');
+    final url = _endPoint.replace(path: '/v1beta/${request.parent}/documents');
     final response = await _client.post(url, body: request.document);
     return Document.fromJson(response);
   }
@@ -1295,7 +1486,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Document> getDocument(GetDocumentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Document.fromJson(response);
   }
@@ -1306,9 +1497,12 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Document> updateDocument(UpdateDocumentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.document!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.document!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.document);
     return Document.fromJson(response);
   }
@@ -1319,9 +1513,12 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteDocument(DeleteDocumentRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}', {
-      if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}',
+      queryParameters: {
+        if (request.force case final $1 when $1.isNotDefault) 'force': '${$1}',
+      },
+    );
     await _client.delete(url);
   }
 
@@ -1333,11 +1530,15 @@ final class RetrieverService {
   Future<ListDocumentsResponse> listDocuments(
     ListDocumentsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.parent}/documents', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/documents',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListDocumentsResponse.fromJson(response);
   }
@@ -1350,7 +1551,7 @@ final class RetrieverService {
   Future<QueryDocumentResponse> queryDocument(
     QueryDocumentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:query');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:query');
     final response = await _client.post(url, body: request);
     return QueryDocumentResponse.fromJson(response);
   }
@@ -1361,7 +1562,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Chunk> createChunk(CreateChunkRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.parent}/chunks');
+    final url = _endPoint.replace(path: '/v1beta/${request.parent}/chunks');
     final response = await _client.post(url, body: request.chunk);
     return Chunk.fromJson(response);
   }
@@ -1374,9 +1575,8 @@ final class RetrieverService {
   Future<BatchCreateChunksResponse> batchCreateChunks(
     BatchCreateChunksRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta/${request.parent}/chunks:batchCreate',
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/chunks:batchCreate',
     );
     final response = await _client.post(url, body: request);
     return BatchCreateChunksResponse.fromJson(response);
@@ -1388,7 +1588,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Chunk> getChunk(GetChunkRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Chunk.fromJson(response);
   }
@@ -1399,9 +1599,12 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Chunk> updateChunk(UpdateChunkRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.chunk!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.chunk!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.chunk);
     return Chunk.fromJson(response);
   }
@@ -1414,9 +1617,8 @@ final class RetrieverService {
   Future<BatchUpdateChunksResponse> batchUpdateChunks(
     BatchUpdateChunksRequest request,
   ) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta/${request.parent}/chunks:batchUpdate',
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/chunks:batchUpdate',
     );
     final response = await _client.post(url, body: request);
     return BatchUpdateChunksResponse.fromJson(response);
@@ -1428,7 +1630,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteChunk(DeleteChunkRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -1438,9 +1640,8 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> batchDeleteChunks(BatchDeleteChunksRequest request) async {
-    final url = Uri.https(
-      _host,
-      '/v1beta/${request.parent}/chunks:batchDelete',
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/chunks:batchDelete',
     );
     await _client.post(url, body: request);
   }
@@ -1451,11 +1652,15 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListChunksResponse> listChunks(ListChunksRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.parent}/chunks', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.parent}/chunks',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListChunksResponse.fromJson(response);
   }
@@ -1468,14 +1673,18 @@ final class RetrieverService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1492,7 +1701,7 @@ final class RetrieverService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1503,7 +1712,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -1513,7 +1722,7 @@ final class RetrieverService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 
@@ -1528,7 +1737,8 @@ final class RetrieverService {
 /// Also known as Large Language Models (LLM)s, these generate text given an
 /// input prompt from the user.
 final class TextService {
-  static const _host = 'generativelanguage.googleapis.com';
+  static const _defaultHost = 'generativelanguage.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -1537,8 +1747,20 @@ final class TextService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `TextService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  TextService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  TextService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `TextService` that does authentication through an API key.
   ///
@@ -1562,7 +1784,9 @@ final class TextService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<GenerateTextResponse> generateText(GenerateTextRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:generateText');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:generateText',
+    );
     final response = await _client.post(url, body: request);
     return GenerateTextResponse.fromJson(response);
   }
@@ -1573,7 +1797,7 @@ final class TextService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<EmbedTextResponse> embedText(EmbedTextRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:embedText');
+    final url = _endPoint.replace(path: '/v1beta/${request.model}:embedText');
     final response = await _client.post(url, body: request);
     return EmbedTextResponse.fromJson(response);
   }
@@ -1587,7 +1811,9 @@ final class TextService {
   Future<BatchEmbedTextResponse> batchEmbedText(
     BatchEmbedTextRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:batchEmbedText');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:batchEmbedText',
+    );
     final response = await _client.post(url, body: request);
     return BatchEmbedTextResponse.fromJson(response);
   }
@@ -1600,7 +1826,9 @@ final class TextService {
   Future<CountTextTokensResponse> countTextTokens(
     CountTextTokensRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.model}:countTextTokens');
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.model}:countTextTokens',
+    );
     final response = await _client.post(url, body: request);
     return CountTextTokensResponse.fromJson(response);
   }
@@ -1613,14 +1841,18 @@ final class TextService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1beta/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -1637,7 +1869,7 @@ final class TextService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -1648,7 +1880,7 @@ final class TextService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}');
     await _client.delete(url);
   }
 
@@ -1658,7 +1890,7 @@ final class TextService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1beta/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1beta/${request.name}:cancel');
     await _client.post(url);
   }
 

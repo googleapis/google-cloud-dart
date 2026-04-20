@@ -42,7 +42,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// Provides text analysis operations such as sentiment analysis and entity
 /// recognition.
 final class LanguageService {
-  static const _host = 'language.googleapis.com';
+  static const _defaultHost = 'language.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -51,8 +52,20 @@ final class LanguageService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `LanguageService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  LanguageService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  LanguageService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `LanguageService` that does authentication through an API key.
   ///
@@ -77,7 +90,7 @@ final class LanguageService {
   Future<AnalyzeSentimentResponse> analyzeSentiment(
     AnalyzeSentimentRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/documents:analyzeSentiment');
+    final url = _endPoint.replace(path: '/v2/documents:analyzeSentiment');
     final response = await _client.post(url, body: request);
     return AnalyzeSentimentResponse.fromJson(response);
   }
@@ -92,7 +105,7 @@ final class LanguageService {
   Future<AnalyzeEntitiesResponse> analyzeEntities(
     AnalyzeEntitiesRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/documents:analyzeEntities');
+    final url = _endPoint.replace(path: '/v2/documents:analyzeEntities');
     final response = await _client.post(url, body: request);
     return AnalyzeEntitiesResponse.fromJson(response);
   }
@@ -103,7 +116,7 @@ final class LanguageService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
-    final url = Uri.https(_host, '/v2/documents:classifyText');
+    final url = _endPoint.replace(path: '/v2/documents:classifyText');
     final response = await _client.post(url, body: request);
     return ClassifyTextResponse.fromJson(response);
   }
@@ -114,7 +127,7 @@ final class LanguageService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
-    final url = Uri.https(_host, '/v2/documents:moderateText');
+    final url = _endPoint.replace(path: '/v2/documents:moderateText');
     final response = await _client.post(url, body: request);
     return ModerateTextResponse.fromJson(response);
   }
@@ -125,7 +138,7 @@ final class LanguageService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
-    final url = Uri.https(_host, '/v2/documents:annotateText');
+    final url = _endPoint.replace(path: '/v2/documents:annotateText');
     final response = await _client.post(url, body: request);
     return AnnotateTextResponse.fromJson(response);
   }

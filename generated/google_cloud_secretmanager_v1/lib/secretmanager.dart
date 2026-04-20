@@ -48,7 +48,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// * `Secret`
 /// * `SecretVersion`
 final class SecretManagerService {
-  static const _host = 'secretmanager.googleapis.com';
+  static const _defaultHost = 'secretmanager.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -57,8 +58,20 @@ final class SecretManagerService {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `SecretManagerService`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  SecretManagerService({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  SecretManagerService({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `SecretManagerService` that does authentication through an API key.
   ///
@@ -81,12 +94,16 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.parent}/secrets',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListSecretsResponse.fromJson(response);
   }
@@ -98,9 +115,12 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Secret> createSecret(CreateSecretRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.parent}/secrets', {
-      if (request.secretId case final $1 when $1.isNotDefault) 'secretId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.parent}/secrets',
+      queryParameters: {
+        if (request.secretId case final $1 when $1.isNotDefault) 'secretId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.secret);
     return Secret.fromJson(response);
   }
@@ -115,7 +135,7 @@ final class SecretManagerService {
   Future<SecretVersion> addSecretVersion(
     AddSecretVersionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.parent}:addVersion');
+    final url = _endPoint.replace(path: '/v1/${request.parent}:addVersion');
     final response = await _client.post(url, body: request);
     return SecretVersion.fromJson(response);
   }
@@ -126,7 +146,7 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Secret> getSecret(GetSecretRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = _endPoint.replace(path: '/v1/${request.name}');
     final response = await _client.get(url);
     return Secret.fromJson(response);
   }
@@ -138,9 +158,12 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.secret!.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.secret!.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.secret);
     return Secret.fromJson(response);
   }
@@ -151,9 +174,12 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteSecret(DeleteSecretRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.etag case final $1 when $1.isNotDefault) 'etag': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.name}',
+      queryParameters: {
+        if (request.etag case final $1 when $1.isNotDefault) 'etag': $1,
+      },
+    );
     await _client.delete(url);
   }
 
@@ -166,12 +192,16 @@ final class SecretManagerService {
   Future<ListSecretVersionsResponse> listSecretVersions(
     ListSecretVersionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.parent}/versions', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.parent}/versions',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListSecretVersionsResponse.fromJson(response);
   }
@@ -188,7 +218,7 @@ final class SecretManagerService {
   Future<SecretVersion> getSecretVersion(
     GetSecretVersionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = _endPoint.replace(path: '/v1/${request.name}');
     final response = await _client.get(url);
     return SecretVersion.fromJson(response);
   }
@@ -205,7 +235,7 @@ final class SecretManagerService {
   Future<AccessSecretVersionResponse> accessSecretVersion(
     AccessSecretVersionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}:access');
+    final url = _endPoint.replace(path: '/v1/${request.name}:access');
     final response = await _client.get(url);
     return AccessSecretVersionResponse.fromJson(response);
   }
@@ -222,7 +252,7 @@ final class SecretManagerService {
   Future<SecretVersion> disableSecretVersion(
     DisableSecretVersionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}:disable');
+    final url = _endPoint.replace(path: '/v1/${request.name}:disable');
     final response = await _client.post(url, body: request);
     return SecretVersion.fromJson(response);
   }
@@ -239,7 +269,7 @@ final class SecretManagerService {
   Future<SecretVersion> enableSecretVersion(
     EnableSecretVersionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}:enable');
+    final url = _endPoint.replace(path: '/v1/${request.name}:enable');
     final response = await _client.post(url, body: request);
     return SecretVersion.fromJson(response);
   }
@@ -257,7 +287,7 @@ final class SecretManagerService {
   Future<SecretVersion> destroySecretVersion(
     DestroySecretVersionRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}:destroy');
+    final url = _endPoint.replace(path: '/v1/${request.name}:destroy');
     final response = await _client.post(url, body: request);
     return SecretVersion.fromJson(response);
   }
@@ -274,7 +304,7 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.resource}:setIamPolicy');
+    final url = _endPoint.replace(path: '/v1/${request.resource}:setIamPolicy');
     final response = await _client.post(url, body: request);
     return Policy.fromJson(response);
   }
@@ -286,11 +316,14 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.resource}:getIamPolicy', {
-      if (request.options?.requestedPolicyVersion case final $1?
-          when $1.isNotDefault)
-        'options.requestedPolicyVersion': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.resource}:getIamPolicy',
+      queryParameters: {
+        if (request.options?.requestedPolicyVersion case final $1?
+            when $1.isNotDefault)
+          'options.requestedPolicyVersion': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return Policy.fromJson(response);
   }
@@ -309,7 +342,9 @@ final class SecretManagerService {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.resource}:testIamPermissions');
+    final url = _endPoint.replace(
+      path: '/v1/${request.resource}:testIamPermissions',
+    );
     final response = await _client.post(url, body: request);
     return TestIamPermissionsResponse.fromJson(response);
   }
@@ -322,12 +357,16 @@ final class SecretManagerService {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}/locations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.name}/locations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -338,7 +377,7 @@ final class SecretManagerService {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = _endPoint.replace(path: '/v1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }

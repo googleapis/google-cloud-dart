@@ -59,7 +59,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// long-running operations should implement the `Operations` interface so
 /// developers can have a consistent client experience.
 final class Operations {
-  static const _host = 'longrunning.googleapis.com';
+  static const _defaultHost = 'longrunning.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -68,8 +69,20 @@ final class Operations {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Operations`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Operations({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Operations({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Operations` that does authentication through an API key.
   ///
@@ -95,14 +108,18 @@ final class Operations {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.name}',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -115,7 +132,7 @@ final class Operations {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Operation> getOperation(GetOperationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = _endPoint.replace(path: '/v1/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response);
   }
@@ -129,7 +146,7 @@ final class Operations {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = _endPoint.replace(path: '/v1/${request.name}');
     await _client.delete(url);
   }
 
@@ -149,7 +166,7 @@ final class Operations {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v1/${request.name}:cancel');
     await _client.post(url, body: request);
   }
 

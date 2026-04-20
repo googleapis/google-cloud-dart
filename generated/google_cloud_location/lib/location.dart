@@ -43,7 +43,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 /// a service. Service-specific metadata is provided through the
 /// `Location.metadata` field.
 final class Locations {
-  static const _host = 'cloud.googleapis.com';
+  static const _defaultHost = 'cloud.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -52,8 +53,20 @@ final class Locations {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `Locations`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  Locations({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  Locations({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `Locations` that does authentication through an API key.
   ///
@@ -78,12 +91,16 @@ final class Locations {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v1/${request.name}', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v1/${request.name}',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLocationsResponse.fromJson(response);
   }
@@ -94,7 +111,7 @@ final class Locations {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Location> getLocation(GetLocationRequest request) async {
-    final url = Uri.https(_host, '/v1/${request.name}');
+    final url = _endPoint.replace(path: '/v1/${request.name}');
     final response = await _client.get(url);
     return Location.fromJson(response);
   }

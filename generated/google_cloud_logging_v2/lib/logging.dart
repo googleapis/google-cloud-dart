@@ -43,7 +43,8 @@ const _apiKeys = ['GOOGLE_API_KEY'];
 
 /// Service for ingesting and querying logs.
 final class LoggingServiceV2 {
-  static const _host = 'logging.googleapis.com';
+  static const _defaultHost = 'logging.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -52,8 +53,20 @@ final class LoggingServiceV2 {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `LoggingServiceV2`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  LoggingServiceV2({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  LoggingServiceV2({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `LoggingServiceV2` that does authentication through an API key.
   ///
@@ -79,7 +92,7 @@ final class LoggingServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteLog(DeleteLogRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.logName}');
+    final url = _endPoint.replace(path: '/v2/${request.logName}');
     await _client.delete(url);
   }
 
@@ -97,7 +110,7 @@ final class LoggingServiceV2 {
   Future<WriteLogEntriesResponse> writeLogEntries(
     WriteLogEntriesRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/entries:write');
+    final url = _endPoint.replace(path: '/v2/entries:write');
     final response = await _client.post(url, body: request);
     return WriteLogEntriesResponse.fromJson(response);
   }
@@ -113,7 +126,7 @@ final class LoggingServiceV2 {
   Future<ListLogEntriesResponse> listLogEntries(
     ListLogEntriesRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/entries:list');
+    final url = _endPoint.replace(path: '/v2/entries:list');
     final response = await _client.post(url, body: request);
     return ListLogEntriesResponse.fromJson(response);
   }
@@ -127,11 +140,15 @@ final class LoggingServiceV2 {
   listMonitoredResourceDescriptors(
     ListMonitoredResourceDescriptorsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/monitoredResourceDescriptors', {
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/monitoredResourceDescriptors',
+      queryParameters: {
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListMonitoredResourceDescriptorsResponse.fromJson(response);
   }
@@ -143,13 +160,17 @@ final class LoggingServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListLogsResponse> listLogs(ListLogsRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/logs', {
-      if (request.resourceNames case final $1 when $1.isNotDefault)
-        'resourceNames': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/logs',
+      queryParameters: {
+        if (request.resourceNames case final $1 when $1.isNotDefault)
+          'resourceNames': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+      },
+    );
     final response = await _client.get(url);
     return ListLogsResponse.fromJson(response);
   }
@@ -162,14 +183,18 @@ final class LoggingServiceV2 {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -186,7 +211,7 @@ final class LoggingServiceV2 {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -197,7 +222,7 @@ final class LoggingServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v2/${request.name}:cancel');
     await _client.post(url, body: request);
   }
 
@@ -209,7 +234,8 @@ final class LoggingServiceV2 {
 
 /// Service for configuring sinks used to route log entries.
 final class ConfigServiceV2 {
-  static const _host = 'logging.googleapis.com';
+  static const _defaultHost = 'logging.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -218,8 +244,20 @@ final class ConfigServiceV2 {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `ConfigServiceV2`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  ConfigServiceV2({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  ConfigServiceV2({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `ConfigServiceV2` that does authentication through an API key.
   ///
@@ -242,11 +280,15 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListBucketsResponse> listBuckets(ListBucketsRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/buckets', {
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/buckets',
+      queryParameters: {
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListBucketsResponse.fromJson(response);
   }
@@ -257,7 +299,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogBucket> getBucket(GetBucketRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return LogBucket.fromJson(response);
   }
@@ -278,9 +320,12 @@ final class ConfigServiceV2 {
   Future<Operation<LogBucket, BucketMetadata>> createBucketAsync(
     CreateBucketRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/buckets:createAsync', {
-      if (request.bucketId case final $1 when $1.isNotDefault) 'bucketId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/buckets:createAsync',
+      queryParameters: {
+        if (request.bucketId case final $1 when $1.isNotDefault) 'bucketId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.bucket);
     return Operation.fromJson(
       response,
@@ -307,9 +352,12 @@ final class ConfigServiceV2 {
   Future<Operation<LogBucket, BucketMetadata>> updateBucketAsync(
     UpdateBucketRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}:updateAsync', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}:updateAsync',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.post(url, body: request.bucket);
     return Operation.fromJson(
       response,
@@ -324,9 +372,12 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogBucket> createBucket(CreateBucketRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/buckets', {
-      if (request.bucketId case final $1 when $1.isNotDefault) 'bucketId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/buckets',
+      queryParameters: {
+        if (request.bucketId case final $1 when $1.isNotDefault) 'bucketId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.bucket);
     return LogBucket.fromJson(response);
   }
@@ -342,9 +393,12 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogBucket> updateBucket(UpdateBucketRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.bucket);
     return LogBucket.fromJson(response);
   }
@@ -359,7 +413,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteBucket(DeleteBucketRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     await _client.delete(url);
   }
 
@@ -370,7 +424,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> undeleteBucket(UndeleteBucketRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}:undelete');
+    final url = _endPoint.replace(path: '/v2/${request.name}:undelete');
     await _client.post(url, body: request);
   }
 
@@ -380,11 +434,15 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListViewsResponse> listViews(ListViewsRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/views', {
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/views',
+      queryParameters: {
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListViewsResponse.fromJson(response);
   }
@@ -395,7 +453,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogView> getView(GetViewRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return LogView.fromJson(response);
   }
@@ -407,9 +465,12 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogView> createView(CreateViewRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/views', {
-      if (request.viewId case final $1 when $1.isNotDefault) 'viewId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/views',
+      queryParameters: {
+        if (request.viewId case final $1 when $1.isNotDefault) 'viewId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.view);
     return LogView.fromJson(response);
   }
@@ -424,9 +485,12 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogView> updateView(UpdateViewRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.view);
     return LogView.fromJson(response);
   }
@@ -440,7 +504,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteView(DeleteViewRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     await _client.delete(url);
   }
 
@@ -450,11 +514,15 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListSinksResponse> listSinks(ListSinksRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/sinks', {
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/sinks',
+      queryParameters: {
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListSinksResponse.fromJson(response);
   }
@@ -465,7 +533,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogSink> getSink(GetSinkRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.sinkName}');
+    final url = _endPoint.replace(path: '/v2/${request.sinkName}');
     final response = await _client.get(url);
     return LogSink.fromJson(response);
   }
@@ -479,10 +547,13 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogSink> createSink(CreateSinkRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/sinks', {
-      if (request.uniqueWriterIdentity case final $1 when $1.isNotDefault)
-        'uniqueWriterIdentity': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/sinks',
+      queryParameters: {
+        if (request.uniqueWriterIdentity case final $1 when $1.isNotDefault)
+          'uniqueWriterIdentity': '${$1}',
+      },
+    );
     final response = await _client.post(url, body: request.sink);
     return LogSink.fromJson(response);
   }
@@ -497,11 +568,14 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogSink> updateSink(UpdateSinkRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.sinkName}', {
-      if (request.uniqueWriterIdentity case final $1 when $1.isNotDefault)
-        'uniqueWriterIdentity': '${$1}',
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.sinkName}',
+      queryParameters: {
+        if (request.uniqueWriterIdentity case final $1 when $1.isNotDefault)
+          'uniqueWriterIdentity': '${$1}',
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.put(url, body: request.sink);
     return LogSink.fromJson(response);
   }
@@ -513,7 +587,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteSink(DeleteSinkRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.sinkName}');
+    final url = _endPoint.replace(path: '/v2/${request.sinkName}');
     await _client.delete(url);
   }
 
@@ -533,9 +607,12 @@ final class ConfigServiceV2 {
   Future<Operation<Link, LinkMetadata>> createLink(
     CreateLinkRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/links', {
-      if (request.linkId case final $1 when $1.isNotDefault) 'linkId': $1,
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/links',
+      queryParameters: {
+        if (request.linkId case final $1 when $1.isNotDefault) 'linkId': $1,
+      },
+    );
     final response = await _client.post(url, body: request.link);
     return Operation.fromJson(
       response,
@@ -558,7 +635,7 @@ final class ConfigServiceV2 {
   Future<Operation<Empty, LinkMetadata>> deleteLink(
     DeleteLinkRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.delete(url);
     return Operation.fromJson(
       response,
@@ -572,11 +649,15 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<ListLinksResponse> listLinks(ListLinksRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/links', {
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/links',
+      queryParameters: {
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListLinksResponse.fromJson(response);
   }
@@ -587,7 +668,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Link> getLink(GetLinkRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return Link.fromJson(response);
   }
@@ -600,11 +681,15 @@ final class ConfigServiceV2 {
   Future<ListExclusionsResponse> listExclusions(
     ListExclusionsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/exclusions', {
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/exclusions',
+      queryParameters: {
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListExclusionsResponse.fromJson(response);
   }
@@ -615,7 +700,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogExclusion> getExclusion(GetExclusionRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return LogExclusion.fromJson(response);
   }
@@ -628,7 +713,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogExclusion> createExclusion(CreateExclusionRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/exclusions');
+    final url = _endPoint.replace(path: '/v2/${request.parent}/exclusions');
     final response = await _client.post(url, body: request.exclusion);
     return LogExclusion.fromJson(response);
   }
@@ -640,9 +725,12 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogExclusion> updateExclusion(UpdateExclusionRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.exclusion);
     return LogExclusion.fromJson(response);
   }
@@ -653,7 +741,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteExclusion(DeleteExclusionRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     await _client.delete(url);
   }
 
@@ -672,7 +760,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<CmekSettings> getCmekSettings(GetCmekSettingsRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}/cmekSettings');
+    final url = _endPoint.replace(path: '/v2/${request.name}/cmekSettings');
     final response = await _client.get(url);
     return CmekSettings.fromJson(response);
   }
@@ -699,9 +787,12 @@ final class ConfigServiceV2 {
   Future<CmekSettings> updateCmekSettings(
     UpdateCmekSettingsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}/cmekSettings', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/cmekSettings',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.cmekSettings);
     return CmekSettings.fromJson(response);
   }
@@ -721,7 +812,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Settings> getSettings(GetSettingsRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}/settings');
+    final url = _endPoint.replace(path: '/v2/${request.name}/settings');
     final response = await _client.get(url);
     return Settings.fromJson(response);
   }
@@ -747,9 +838,12 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<Settings> updateSettings(UpdateSettingsRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}/settings', {
-      if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/settings',
+      queryParameters: {
+        if (request.updateMask case final $1?) 'updateMask': $1.toJson(),
+      },
+    );
     final response = await _client.patch(url, body: request.settings);
     return Settings.fromJson(response);
   }
@@ -767,7 +861,7 @@ final class ConfigServiceV2 {
   /// [Operation.responseAsMessage] will contain the operation's result.
   Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>>
   copyLogEntries(CopyLogEntriesRequest request) async {
-    final url = Uri.https(_host, '/v2/entries:copy');
+    final url = _endPoint.replace(path: '/v2/entries:copy');
     final response = await _client.post(url, body: request);
     return Operation.fromJson(
       response,
@@ -786,14 +880,18 @@ final class ConfigServiceV2 {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -810,7 +908,7 @@ final class ConfigServiceV2 {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -821,7 +919,7 @@ final class ConfigServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v2/${request.name}:cancel');
     await _client.post(url, body: request);
   }
 
@@ -833,7 +931,8 @@ final class ConfigServiceV2 {
 
 /// Service for configuring logs-based metrics.
 final class MetricsServiceV2 {
-  static const _host = 'logging.googleapis.com';
+  static const _defaultHost = 'logging.googleapis.com';
+  final Uri _endPoint;
 
   final ServiceClient _client;
 
@@ -842,8 +941,20 @@ final class MetricsServiceV2 {
   /// The provided [http.Client] must be configured to provide whatever
   /// authentication is required by `MetricsServiceV2`. You can do that using
   /// [`package:googleapis_auth`](https://pub.dev/packages/googleapis_auth).
-  MetricsServiceV2({required http.Client client})
-    : _client = ServiceClient(client: client);
+  ///
+  /// If [endPoint] is provided then its `scheme`, `host`, and `port` are
+  /// used for all API requests. For example, `Uri.http('127.0.0.1:8080')`
+  /// could be used to force the `Firestore` service to communicate with the
+  /// local emulator.
+  MetricsServiceV2({required http.Client client, Uri? endPoint})
+    : _client = ServiceClient(client: client),
+      _endPoint = endPoint == null
+          ? Uri.https(_defaultHost, '')
+          : Uri(
+              scheme: endPoint.scheme,
+              host: endPoint.host,
+              port: endPoint.port,
+            );
 
   /// Creates a `MetricsServiceV2` that does authentication through an API key.
   ///
@@ -868,11 +979,15 @@ final class MetricsServiceV2 {
   Future<ListLogMetricsResponse> listLogMetrics(
     ListLogMetricsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/metrics', {
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.parent}/metrics',
+      queryParameters: {
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListLogMetricsResponse.fromJson(response);
   }
@@ -883,7 +998,7 @@ final class MetricsServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogMetric> getLogMetric(GetLogMetricRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.metricName}');
+    final url = _endPoint.replace(path: '/v2/${request.metricName}');
     final response = await _client.get(url);
     return LogMetric.fromJson(response);
   }
@@ -894,7 +1009,7 @@ final class MetricsServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogMetric> createLogMetric(CreateLogMetricRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.parent}/metrics');
+    final url = _endPoint.replace(path: '/v2/${request.parent}/metrics');
     final response = await _client.post(url, body: request.metric);
     return LogMetric.fromJson(response);
   }
@@ -905,7 +1020,7 @@ final class MetricsServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<LogMetric> updateLogMetric(UpdateLogMetricRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.metricName}');
+    final url = _endPoint.replace(path: '/v2/${request.metricName}');
     final response = await _client.put(url, body: request.metric);
     return LogMetric.fromJson(response);
   }
@@ -916,7 +1031,7 @@ final class MetricsServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> deleteLogMetric(DeleteLogMetricRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.metricName}');
+    final url = _endPoint.replace(path: '/v2/${request.metricName}');
     await _client.delete(url);
   }
 
@@ -928,14 +1043,18 @@ final class MetricsServiceV2 {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    final url = Uri.https(_host, '/v2/${request.name}/operations', {
-      if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
-      if (request.pageSize case final $1 when $1.isNotDefault)
-        'pageSize': '${$1}',
-      if (request.pageToken case final $1 when $1.isNotDefault) 'pageToken': $1,
-      if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
-        'returnPartialSuccess': '${$1}',
-    });
+    final url = _endPoint.replace(
+      path: '/v2/${request.name}/operations',
+      queryParameters: {
+        if (request.filter case final $1 when $1.isNotDefault) 'filter': $1,
+        if (request.pageSize case final $1 when $1.isNotDefault)
+          'pageSize': '${$1}',
+        if (request.pageToken case final $1 when $1.isNotDefault)
+          'pageToken': $1,
+        if (request.returnPartialSuccess case final $1 when $1.isNotDefault)
+          'returnPartialSuccess': '${$1}',
+      },
+    );
     final response = await _client.get(url);
     return ListOperationsResponse.fromJson(response);
   }
@@ -952,7 +1071,7 @@ final class MetricsServiceV2 {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    final url = Uri.https(_host, '/v2/${request.name}');
+    final url = _endPoint.replace(path: '/v2/${request.name}');
     final response = await _client.get(url);
     return Operation.fromJson(response, request.operationHelper);
   }
@@ -963,7 +1082,7 @@ final class MetricsServiceV2 {
   /// the API service. Throws a [ServiceException] if the API method failed for
   /// any reason.
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    final url = Uri.https(_host, '/v2/${request.name}:cancel');
+    final url = _endPoint.replace(path: '/v2/${request.name}:cancel');
     await _client.post(url, body: request);
   }
 
