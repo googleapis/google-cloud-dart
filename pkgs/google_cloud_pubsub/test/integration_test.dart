@@ -1,4 +1,6 @@
 @Tags(['google-cloud'])
+library;
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -171,7 +173,9 @@ void main() {
       if (client == null) return; // Skipped
 
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName = 'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final subscriptionName =
+          'test-sub-'
+          '${DateTime.now().millisecondsSinceEpoch}';
       final topic = client!.topic(topicName);
       final subscription = client!.subscription(subscriptionName);
 
@@ -197,7 +201,9 @@ void main() {
       if (client == null) return; // Skipped
 
       final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName = 'test-sub-${DateTime.now().millisecondsSinceEpoch}';
+      final subscriptionName =
+          'test-sub-'
+          '${DateTime.now().millisecondsSinceEpoch}';
       final topic = client!.topic(topicName);
       final subscription = client!.subscription(subscriptionName);
 
@@ -212,37 +218,44 @@ void main() {
 
       // Start streaming pull
       final stream = client!.streamingPull(subscriptionName);
-      
-      // Use stream.first to get the first message and automatically cancel the stream.
+
+      // Use stream.first to get the first message and automatically cancel the 
+      // stream.
       final receivedMessage = await stream.first;
-      
+
       expect(receivedMessage.message.data, equals(data));
-      
+
       // Ack message
       await client!.acknowledge(subscriptionName, [receivedMessage.ackId]);
     });
 
-    test('streaming pull throws StreamBrokenException when subscription is deleted', () async {
-      if (client == null) return; // Skipped
+    test(
+      'streaming pull throws StreamBrokenException '
+      'when subscription is deleted',
+      () async {
+        if (client == null) return; // Skipped
 
-      final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
-      final subscriptionName = 'test-sub-${DateTime.now().millisecondsSinceEpoch}';
-      final topic = client!.topic(topicName);
-      final subscription = client!.subscription(subscriptionName);
+        final topicName = 'test-topic-${DateTime.now().millisecondsSinceEpoch}';
+        final subscriptionName =
+            'test-sub-'
+            '${DateTime.now().millisecondsSinceEpoch}';
+        final topic = client!.topic(topicName);
+        final subscription = client!.subscription(subscriptionName);
 
-      await topic.create();
-      addTearDown(() async => await topic.delete());
+        await topic.create();
+        addTearDown(() async => await topic.delete());
 
-      await subscription.create(topic: topicName);
+        await subscription.create(topic: topicName);
 
-      // Start streaming pull
-      final stream = client!.streamingPull(subscriptionName);
+        // Start streaming pull
+        final stream = client!.streamingPull(subscriptionName);
 
-      // Delete subscription to break the stream
-      await subscription.delete();
+        // Delete subscription to break the stream
+        await subscription.delete();
 
-      // Expect stream to throw StreamBrokenException
-      expect(stream.first, throwsA(isA<StreamBrokenException>()));
-    });
+        // Expect stream to throw StreamBrokenException
+        expect(stream.first, throwsA(isA<StreamBrokenException>()));
+      },
+    );
   });
 }
