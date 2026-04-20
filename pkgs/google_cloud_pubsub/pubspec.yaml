@@ -1,0 +1,27 @@
+name: google_cloud_pubsub
+description: >-
+  A client for Google Cloud Pub/Sub, a flexible, reliable, large-scale messaging
+  service.
+version: 0.1.0
+repository: https://github.com/googleapis/google-cloud-dart/tree/main/pkgs/google_cloud_pubsub
+
+environment:
+  sdk: ^3.9.0
+
+resolution: workspace
+
+dependencies:
+  collection: ^1.19.1
+  ffi: ^2.2.0
+  google_cloud: '>=0.3.0 <0.5.0'
+  google_cloud_protobuf: ^0.5.0
+  google_cloud_rpc: ^0.5.0
+  googleapis_auth: ^2.0.0
+  grpc: ^4.0.0
+  http: ^1.6.0
+  meta: ^1.18.1
+  protobuf: ^4.1.0
+
+dev_dependencies:
+  protoc_plugin: ^22.0.0
+  test: ^1.24.0
