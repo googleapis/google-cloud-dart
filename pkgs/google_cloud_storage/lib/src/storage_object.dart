@@ -233,7 +233,8 @@ final class StorageObject {
   /// Moves this [Google Cloud Storage object][] to a new [newName].
   ///
   /// This operation is atomic and idempotent if [ifSourceGenerationMatch] or
-  /// [ifGenerationMatch] is set.
+  /// [ifGenerationMatch] is set (using both is recommended for maximum safety).
+  /// https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency-operations
   ///
   /// Throws [NotFoundException] if the object does not exist.
   ///
@@ -242,8 +243,8 @@ final class StorageObject {
   ///
   /// If set, [ifGenerationMatch] makes the operation conditional on whether
   /// the destination object's current generation matches the given value.
-  /// A value of `0` indicates that the destination object must not already
-  /// exist.
+  /// A value of `BigInt.zero` indicates that the destination object must not
+  /// already exist.
   ///
   /// [projection] controls the level of detail returned in the response. A
   /// value of `"full"` returns all object properties, while a value of

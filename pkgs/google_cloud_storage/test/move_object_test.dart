@@ -52,6 +52,7 @@ void main() async {
 
         expect(moved.name, 'dest.txt');
         expect(moved.bucket, bucketName);
+        expect(moved.metageneration, BigInt.one);
 
         // Verify source is gone
         expect(
@@ -155,6 +156,7 @@ void main() async {
 
       expect(result.name, 'dest/object');
       expect(result.generation, BigInt.from(789));
+      expect(result.metageneration, BigInt.one);
     });
   });
 }
