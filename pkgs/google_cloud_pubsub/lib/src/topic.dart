@@ -26,16 +26,34 @@ final class Topic {
 
   Topic._(this.pubsub, this.name);
 
-  /// Creates this topic.
+  /// Creates the given topic with the given name.
+  ///
+  /// Throws a [TopicAlreadyExistsException] if the topic already exists.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
   Future<Topic> create() => pubsub.createTopic(name);
 
-  /// Deletes this topic.
-  Future<void> delete() => pubsub.deleteTopic(name);
+  /// Deletes the topic with the given name.
+  ///
+  /// Returns `true` if the topic was deleted, or `false` if the topic did not
+  /// exist.
+  ///
+  /// After a topic is deleted, a new topic may be created with the same name;
+  /// this is an entirely new topic with none of the old configuration or
+  /// subscriptions. Existing subscriptions to this topic are not deleted, but
+  /// their `topic` field is set to `_deleted-topic_`.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.DeleteTopic).
+  Future<bool> delete() => pubsub.deleteTopic(name);
 
-  /// Publishes a message to this topic.
+  /// Adds one or more messages to the topic.
+  ///
+  /// Throws a [TopicNotFoundException] if the topic does not exist.
   ///
   /// [data] is the message content.
   /// [attributes] are optional attributes for the message.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
   Future<String> publish(List<int> data, {Map<String, String>? attributes}) =>
       pubsub.publish(name, data, attributes: attributes);
 }

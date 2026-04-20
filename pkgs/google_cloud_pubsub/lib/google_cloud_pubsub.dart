@@ -13,6 +13,7 @@
 // limitations under the License.
 
 export 'src/client.dart' show PubSub;
+export 'src/exceptions.dart';
 export 'src/message.dart' show Message, ReceivedMessage;
 export 'src/subscription.dart' show Subscription;
 export 'src/topic.dart' show Topic;

@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: google/pubsub/v1/pubsub.proto
-//
+// Generated from google/pubsub/v1/pubsub.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -73,7 +74,7 @@ class IngestionDataSourceSettings_AwsKinesis_State extends $pb.ProtobufEnum {
           $core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const IngestionDataSourceSettings_AwsKinesis_State._(super.v, super.n);
+  const IngestionDataSourceSettings_AwsKinesis_State._(super.value, super.name);
 }
 
 /// Possible states for ingestion from Cloud Storage.
@@ -135,7 +136,8 @@ class IngestionDataSourceSettings_CloudStorage_State extends $pb.ProtobufEnum {
           $core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const IngestionDataSourceSettings_CloudStorage_State._(super.v, super.n);
+  const IngestionDataSourceSettings_CloudStorage_State._(
+      super.value, super.name);
 }
 
 /// Possible states for managed ingestion from Event Hubs.
@@ -205,7 +207,8 @@ class IngestionDataSourceSettings_AzureEventHubs_State
           $core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const IngestionDataSourceSettings_AzureEventHubs_State._(super.v, super.n);
+  const IngestionDataSourceSettings_AzureEventHubs_State._(
+      super.value, super.name);
 }
 
 /// Possible states for managed ingestion from Amazon MSK.
@@ -255,7 +258,7 @@ class IngestionDataSourceSettings_AwsMsk_State extends $pb.ProtobufEnum {
   static IngestionDataSourceSettings_AwsMsk_State? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const IngestionDataSourceSettings_AwsMsk_State._(super.v, super.n);
+  const IngestionDataSourceSettings_AwsMsk_State._(super.value, super.name);
 }
 
 /// Possible states for managed ingestion from Confluent Cloud.
@@ -317,7 +320,8 @@ class IngestionDataSourceSettings_ConfluentCloud_State
           $core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const IngestionDataSourceSettings_ConfluentCloud_State._(super.v, super.n);
+  const IngestionDataSourceSettings_ConfluentCloud_State._(
+      super.value, super.name);
 }
 
 /// Severity levels of Platform Logs.
@@ -362,7 +366,7 @@ class PlatformLogsSettings_Severity extends $pb.ProtobufEnum {
   static PlatformLogsSettings_Severity? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const PlatformLogsSettings_Severity._(super.v, super.n);
+  const PlatformLogsSettings_Severity._(super.value, super.name);
 }
 
 /// The state of the topic.
@@ -392,7 +396,7 @@ class Topic_State extends $pb.ProtobufEnum {
   static Topic_State? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const Topic_State._(super.v, super.n);
+  const Topic_State._(super.value, super.name);
 }
 
 /// Possible states for a subscription.
@@ -422,7 +426,7 @@ class Subscription_State extends $pb.ProtobufEnum {
   static Subscription_State? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const Subscription_State._(super.v, super.n);
+  const Subscription_State._(super.value, super.name);
 }
 
 /// Possible states for a BigQuery subscription.
@@ -480,7 +484,7 @@ class BigQueryConfig_State extends $pb.ProtobufEnum {
   static BigQueryConfig_State? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const BigQueryConfig_State._(super.v, super.n);
+  const BigQueryConfig_State._(super.value, super.name);
 }
 
 /// Possible states for a Bigtable subscription.
@@ -548,7 +552,7 @@ class BigtableConfig_State extends $pb.ProtobufEnum {
   static BigtableConfig_State? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const BigtableConfig_State._(super.v, super.n);
+  const BigtableConfig_State._(super.value, super.name);
 }
 
 /// Possible states for a Cloud Storage subscription.
@@ -604,7 +608,8 @@ class CloudStorageConfig_State extends $pb.ProtobufEnum {
   static CloudStorageConfig_State? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const CloudStorageConfig_State._(super.v, super.n);
+  const CloudStorageConfig_State._(super.value, super.name);
 }
 
-const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');
+const $core.bool _omitEnumNames =
+    $core.bool.fromEnvironment('protobuf.omit_enum_names');

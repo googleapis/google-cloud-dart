@@ -14,6 +14,7 @@
 
 import 'dart:async';
 
+import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:grpc/grpc.dart';
 import '../google_cloud_pubsub.dart';
 import 'generated/google/pubsub/v1/pubsub.pbgrpc.dart' as grpc;
@@ -28,8 +29,10 @@ import 'topic.dart' show newTopic;
 final class PubSub {
   final FutureOr<String> _projectId;
   final ClientChannel _channel;
+  final bool _isEmulator;
   grpc.PublisherClient? _publisherClient;
   grpc.SubscriberClient? _subscriberClient;
+  auth.AutoRefreshingAuthClient? _authClient;
 
   Future<String> get _requiredProjectId async {
     final id = await _projectId;
@@ -84,7 +87,7 @@ final class PubSub {
     );
   }
 
-  PubSub._(this._projectId, this._channel);
+  PubSub._(this._projectId, this._channel, this._isEmulator);
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
   factory PubSub({String? projectId, String? apiEndpoint}) {
@@ -92,7 +95,19 @@ final class PubSub {
     return PubSub._(
       _calculateProjectId(projectId, emulatorHost),
       _calculateChannel(apiEndpoint, emulatorHost),
+      emulatorHost != null,
     );
+  }
+
+  Future<CallOptions> get _callOptions async {
+    if (_isEmulator) {
+      return CallOptions();
+    }
+    _authClient ??= await auth.clientViaApplicationDefaultCredentials(
+      scopes: ['https://www.googleapis.com/auth/pubsub'],
+    );
+    final token = _authClient!.credentials.accessToken.data;
+    return CallOptions(metadata: {'authorization': 'Bearer $token'});
   }
 
   grpc.PublisherClient get _publisher =>
@@ -113,24 +128,52 @@ final class PubSub {
   /// A [Subscription] object with the given [name].
   Subscription subscription(String name) => newSubscription(this, name);
 
-  /// Creates a new topic.
+  /// Creates the given topic with the given name.
+  ///
+  /// Throws a [TopicAlreadyExistsException] if the topic already exists.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.CreateTopic).
   Future<Topic> createTopic(String name) async {
     final projectId = await _requiredProjectId;
     final topicName = 'projects/$projectId/topics/$name';
     final topic = grpc.Topic()..name = topicName;
-    await _publisher.createTopic(topic);
-    return this.topic(name);
+    try {
+      await _publisher.createTopic(topic, options: await _callOptions);
+      return this.topic(name);
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.alreadyExists) {
+        throw TopicAlreadyExistsException(name);
+      }
+      rethrow;
+    }
   }
 
-  /// Deletes a topic.
-  Future<void> deleteTopic(String name) async {
+  /// Deletes the topic with the given name.
+  ///
+  /// Returns `true` if the topic was deleted, or `false` if the topic did not
+  /// exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.DeleteTopic).
+  Future<bool> deleteTopic(String name) async {
     final projectId = await _requiredProjectId;
     final topicName = 'projects/$projectId/topics/$name';
     final request = grpc.DeleteTopicRequest()..topic = topicName;
-    await _publisher.deleteTopic(request);
+    try {
+      await _publisher.deleteTopic(request, options: await _callOptions);
+      return true;
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.notFound) {
+        return false;
+      }
+      rethrow;
+    }
   }
 
-  /// Publishes a message to a topic.
+  /// Adds one or more messages to the topic.
+  ///
+  /// Throws a [TopicNotFoundException] if the topic does not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Publisher.Publish).
   Future<String> publish(
     String topicName,
     List<int> data, {
@@ -148,13 +191,38 @@ final class PubSub {
       ..topic = fullTopicName
       ..messages.add(message);
 
-    final response = await _publisher.publish(request);
-    return response.messageIds.first;
+    try {
+      final response = await _publisher.publish(
+        request,
+        options: await _callOptions,
+      );
+      return response.messageIds.first;
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.notFound) {
+        throw TopicNotFoundException(topicName);
+      }
+      rethrow;
+    }
   }
+
+  // TODO(sigurdm): Implement missing Publisher APIs:
+  // - GetTopic
+  // - UpdateTopic
+  // - ListTopics
+  // - ListTopicSubscriptions
+  // - ListTopicSnapshots
+  // - DetachSubscription
 
   // Subscription-related methods
 
-  /// Creates a new subscription.
+  /// Creates a subscription to a given topic.
+  ///
+  /// Throws a [SubscriptionAlreadyExistsException] if the subscription already
+  /// exists.
+  /// Throws a [TopicNotFoundException] if the corresponding topic doesn't
+  /// exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.CreateSubscription).
   Future<Subscription> createSubscription(
     String name, {
     required String topic,
@@ -167,20 +235,56 @@ final class PubSub {
       ..name = subscriptionName
       ..topic = topicName;
 
-    await _subscriber.createSubscription(subscription);
-    return this.subscription(name);
+    try {
+      await _subscriber.createSubscription(
+        subscription,
+        options: await _callOptions,
+      );
+      return this.subscription(name);
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.alreadyExists) {
+        throw SubscriptionAlreadyExistsException(name);
+      }
+      if (e.code == StatusCode.notFound) {
+        throw TopicNotFoundException(topic);
+      }
+      rethrow;
+    }
   }
 
-  /// Deletes a subscription.
-  Future<void> deleteSubscription(String name) async {
+  /// Deletes an existing subscription.
+  ///
+  /// All messages retained in the subscription are immediately dropped.
+  ///
+  /// Returns `true` if the subscription was deleted, or `false` if the
+  /// subscription did not exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.DeleteSubscription).
+  Future<bool> deleteSubscription(String name) async {
     final projectId = await _requiredProjectId;
     final subscriptionName = 'projects/$projectId/subscriptions/$name';
     final request = grpc.DeleteSubscriptionRequest()
       ..subscription = subscriptionName;
-    await _subscriber.deleteSubscription(request);
+    try {
+      await _subscriber.deleteSubscription(
+        request,
+        options: await _callOptions,
+      );
+      return true;
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.notFound) {
+        return false;
+      }
+      rethrow;
+    }
   }
 
-  /// Pulls messages from a subscription.
+  /// Pulls messages from the server.
+  ///
+  /// Throws a [SubscriptionNotFoundException] if the subscription does not
+  /// exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Pull).
   Future<List<ReceivedMessage>> pull(
     String subscriptionName, {
     int maxMessages = 1,
@@ -193,11 +297,72 @@ final class PubSub {
       ..subscription = fullSubscriptionName
       ..maxMessages = maxMessages;
 
-    final response = await _subscriber.pull(request);
+    try {
+      final response = await _subscriber.pull(
+        request,
+        options: await _callOptions,
+      );
 
-    return response.receivedMessages
-        .map(
-          (m) => ReceivedMessage(
+      return response.receivedMessages
+          .map(
+            (m) => ReceivedMessage(
+              ackId: m.ackId,
+              message: Message(
+                data: m.message.data,
+                attributes: m.message.attributes,
+                messageId: m.message.messageId,
+                publishTime: m.message.publishTime.toDateTime(),
+              ),
+            ),
+          )
+          .toList();
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.notFound) {
+        throw SubscriptionNotFoundException(subscriptionName);
+      }
+      rethrow;
+    }
+  }
+
+  /// Establishes a stream with the server, which sends messages down to the
+  /// client.
+  ///
+  /// The client streams acknowledgments and ack deadline modifications
+  /// back to the server. If an error occurs (including when the server closes
+  /// the stream with status `UNAVAILABLE` to reassign resources), the stream
+  /// will throw a [StreamBrokenException]. In this case, the caller should
+  /// re-establish the stream. Flow control can be achieved by configuring the
+  /// underlying RPC channel.
+  ///
+  /// Throws a [StreamBrokenException] if the stream is broken by the server or
+  /// network.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.StreamingPull).
+  Stream<ReceivedMessage> streamingPull(
+    String subscriptionName, {
+    int streamAckDeadlineSeconds = 10,
+  }) async* {
+    final projectId = await _requiredProjectId;
+    final fullSubscriptionName =
+        'projects/$projectId/subscriptions/$subscriptionName';
+
+    final requestController = StreamController<grpc.StreamingPullRequest>()
+      ..add(
+        grpc.StreamingPullRequest()
+          ..subscription = fullSubscriptionName
+          ..streamAckDeadlineSeconds = streamAckDeadlineSeconds,
+      );
+
+    // TODO(sigurdm): Retry on broken connections.
+    final responseStream = _subscriber.streamingPull(
+      requestController.stream,
+      options: await _callOptions,
+    );
+
+    try {
+      await for (final response in responseStream) {
+        for (final m in response.receivedMessages) {
+          yield ReceivedMessage(
             ackId: m.ackId,
             message: Message(
               data: m.message.data,
@@ -205,12 +370,28 @@ final class PubSub {
               messageId: m.message.messageId,
               publishTime: m.message.publishTime.toDateTime(),
             ),
-          ),
-        )
-        .toList();
+          );
+        }
+      }
+    } on GrpcError catch (e) {
+      throw StreamBrokenException(e);
+    } finally {
+      await requestController.close();
+    }
   }
 
-  /// Acknowledges messages.
+  /// Acknowledges the messages associated with the `ack_ids`.
+  ///
+  /// The Pub/Sub system can remove the relevant messages from the subscription.
+  ///
+  /// Acknowledging a message whose ack deadline has expired may succeed,
+  /// but such a message may be redelivered later. Acknowledging a message more
+  /// than once will not result in an error.
+  ///
+  /// Throws a [SubscriptionNotFoundException] if the subscription does not
+  /// exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.Acknowledge).
   Future<void> acknowledge(String subscriptionName, List<String> ackIds) async {
     final projectId = await _requiredProjectId;
     final fullSubscriptionName =
@@ -220,10 +401,27 @@ final class PubSub {
       ..subscription = fullSubscriptionName
       ..ackIds.addAll(ackIds);
 
-    await _subscriber.acknowledge(request);
+    try {
+      await _subscriber.acknowledge(request, options: await _callOptions);
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.notFound) {
+        throw SubscriptionNotFoundException(subscriptionName);
+      }
+      rethrow;
+    }
   }
 
-  /// Modifies the ack deadline for messages.
+  /// Modifies the ack deadline for a specific message.
+  ///
+  /// This method is useful to indicate that more time is needed to process a
+  /// message by the subscriber, or to make the message available for redelivery
+  /// if the processing was interrupted. Note that this does not modify the
+  /// subscription-level `ackDeadlineSeconds` used for subsequent messages.
+  ///
+  /// Throws a [SubscriptionNotFoundException] if the subscription does not
+  /// exist.
+  ///
+  /// See the [official documentation](https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#google.pubsub.v1.Subscriber.ModifyAckDeadline).
   Future<void> modifyAckDeadline(
     String subscriptionName,
     List<String> ackIds,
@@ -238,6 +436,37 @@ final class PubSub {
       ..ackIds.addAll(ackIds)
       ..ackDeadlineSeconds = ackDeadlineSeconds;
 
-    await _subscriber.modifyAckDeadline(request);
+    try {
+      await _subscriber.modifyAckDeadline(request, options: await _callOptions);
+    } on GrpcError catch (e) {
+      if (e.code == StatusCode.notFound) {
+        throw SubscriptionNotFoundException(subscriptionName);
+      }
+      rethrow;
+    }
   }
+
+  // TODO(sigurdm): Implement missing Subscriber APIs:
+  // - GetSubscription
+  // - UpdateSubscription
+  // - ListSubscriptions
+  // - ModifyPushConfig
+  // - GetSnapshot
+  // - ListSnapshots
+  // - CreateSnapshot
+  // - UpdateSnapshot
+  // - DeleteSnapshot
+  // - Seek
+
+  // TODO(sigurdm): Implement missing Schema APIs:
+  // - CreateSchema
+  // - GetSchema
+  // - ListSchemas
+  // - ListSchemaRevisions
+  // - CommitSchema
+  // - RollbackSchema
+  // - DeleteSchemaRevision
+  // - DeleteSchema
+  // - ValidateSchema
+  // - ValidateMessage
 }

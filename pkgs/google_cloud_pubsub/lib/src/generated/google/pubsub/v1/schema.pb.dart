@@ -1,19 +1,20 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: google/pubsub/v1/schema.proto
-//
+// Generated from google/pubsub/v1/schema.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../protobuf/timestamp.pb.dart' as $3;
+import '../../protobuf/timestamp.pb.dart' as $2;
 import 'schema.pbenum.dart';
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
@@ -27,33 +28,26 @@ class Schema extends $pb.GeneratedMessage {
     Schema_Type? type,
     $core.String? definition,
     $core.String? revisionId,
-    $3.Timestamp? revisionCreateTime,
+    $2.Timestamp? revisionCreateTime,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (type != null) {
-      $result.type = type;
-    }
-    if (definition != null) {
-      $result.definition = definition;
-    }
-    if (revisionId != null) {
-      $result.revisionId = revisionId;
-    }
-    if (revisionCreateTime != null) {
-      $result.revisionCreateTime = revisionCreateTime;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (type != null) result.type = type;
+    if (definition != null) result.definition = definition;
+    if (revisionId != null) result.revisionId = revisionId;
+    if (revisionCreateTime != null)
+      result.revisionCreateTime = revisionCreateTime;
+    return result;
   }
-  Schema._() : super();
-  factory Schema.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Schema.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  Schema._();
+
+  factory Schema.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Schema.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Schema',
@@ -67,8 +61,8 @@ class Schema extends $pb.GeneratedMessage {
         enumValues: Schema_Type.values)
     ..aOS(3, _omitFieldNames ? '' : 'definition')
     ..aOS(4, _omitFieldNames ? '' : 'revisionId')
-    ..aOM<$3.Timestamp>(6, _omitFieldNames ? '' : 'revisionCreateTime',
-        subBuilder: $3.Timestamp.create)
+    ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'revisionCreateTime',
+        subBuilder: $2.Timestamp.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -77,10 +71,12 @@ class Schema extends $pb.GeneratedMessage {
   Schema copyWith(void Function(Schema) updates) =>
       super.copyWith((message) => updates(message as Schema)) as Schema;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Schema create() => Schema._();
+  @$core.override
   Schema createEmptyInstance() => create();
   static $pb.PbList<Schema> createRepeated() => $pb.PbList<Schema>();
   @$core.pragma('dart2js:noInline')
@@ -93,10 +89,7 @@ class Schema extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -106,10 +99,7 @@ class Schema extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   Schema_Type get type => $_getN(1);
   @$pb.TagNumber(2)
-  set type(Schema_Type v) {
-    $_setField(2, v);
-  }
-
+  set type(Schema_Type value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasType() => $_has(1);
   @$pb.TagNumber(2)
@@ -121,10 +111,7 @@ class Schema extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get definition => $_getSZ(2);
   @$pb.TagNumber(3)
-  set definition($core.String v) {
-    $_setString(2, v);
-  }
-
+  set definition($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasDefinition() => $_has(2);
   @$pb.TagNumber(3)
@@ -134,10 +121,7 @@ class Schema extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get revisionId => $_getSZ(3);
   @$pb.TagNumber(4)
-  set revisionId($core.String v) {
-    $_setString(3, v);
-  }
-
+  set revisionId($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasRevisionId() => $_has(3);
   @$pb.TagNumber(4)
@@ -145,18 +129,15 @@ class Schema extends $pb.GeneratedMessage {
 
   /// Output only. The timestamp that the revision was created.
   @$pb.TagNumber(6)
-  $3.Timestamp get revisionCreateTime => $_getN(4);
+  $2.Timestamp get revisionCreateTime => $_getN(4);
   @$pb.TagNumber(6)
-  set revisionCreateTime($3.Timestamp v) {
-    $_setField(6, v);
-  }
-
+  set revisionCreateTime($2.Timestamp value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasRevisionCreateTime() => $_has(4);
   @$pb.TagNumber(6)
   void clearRevisionCreateTime() => $_clearField(6);
   @$pb.TagNumber(6)
-  $3.Timestamp ensureRevisionCreateTime() => $_ensure(4);
+  $2.Timestamp ensureRevisionCreateTime() => $_ensure(4);
 }
 
 /// Request for the CreateSchema method.
@@ -166,25 +147,21 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
     Schema? schema,
     $core.String? schemaId,
   }) {
-    final $result = create();
-    if (parent != null) {
-      $result.parent = parent;
-    }
-    if (schema != null) {
-      $result.schema = schema;
-    }
-    if (schemaId != null) {
-      $result.schemaId = schemaId;
-    }
-    return $result;
+    final result = create();
+    if (parent != null) result.parent = parent;
+    if (schema != null) result.schema = schema;
+    if (schemaId != null) result.schemaId = schemaId;
+    return result;
   }
-  CreateSchemaRequest._() : super();
-  factory CreateSchemaRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory CreateSchemaRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  CreateSchemaRequest._();
+
+  factory CreateSchemaRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CreateSchemaRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CreateSchemaRequest',
@@ -203,10 +180,12 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as CreateSchemaRequest))
           as CreateSchemaRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CreateSchemaRequest create() => CreateSchemaRequest._();
+  @$core.override
   CreateSchemaRequest createEmptyInstance() => create();
   static $pb.PbList<CreateSchemaRequest> createRepeated() =>
       $pb.PbList<CreateSchemaRequest>();
@@ -220,10 +199,7 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get parent => $_getSZ(0);
   @$pb.TagNumber(1)
-  set parent($core.String v) {
-    $_setString(0, v);
-  }
-
+  set parent($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasParent() => $_has(0);
   @$pb.TagNumber(1)
@@ -237,10 +213,7 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   Schema get schema => $_getN(1);
   @$pb.TagNumber(2)
-  set schema(Schema v) {
-    $_setField(2, v);
-  }
-
+  set schema(Schema value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSchema() => $_has(1);
   @$pb.TagNumber(2)
@@ -256,10 +229,7 @@ class CreateSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get schemaId => $_getSZ(2);
   @$pb.TagNumber(3)
-  set schemaId($core.String v) {
-    $_setString(2, v);
-  }
-
+  set schemaId($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasSchemaId() => $_has(2);
   @$pb.TagNumber(3)
@@ -272,22 +242,20 @@ class GetSchemaRequest extends $pb.GeneratedMessage {
     $core.String? name,
     SchemaView? view,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (view != null) {
-      $result.view = view;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (view != null) result.view = view;
+    return result;
   }
-  GetSchemaRequest._() : super();
-  factory GetSchemaRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory GetSchemaRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  GetSchemaRequest._();
+
+  factory GetSchemaRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetSchemaRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetSchemaRequest',
@@ -308,10 +276,12 @@ class GetSchemaRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as GetSchemaRequest))
           as GetSchemaRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetSchemaRequest create() => GetSchemaRequest._();
+  @$core.override
   GetSchemaRequest createEmptyInstance() => create();
   static $pb.PbList<GetSchemaRequest> createRepeated() =>
       $pb.PbList<GetSchemaRequest>();
@@ -325,10 +295,7 @@ class GetSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -339,10 +306,7 @@ class GetSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SchemaView get view => $_getN(1);
   @$pb.TagNumber(2)
-  set view(SchemaView v) {
-    $_setField(2, v);
-  }
-
+  set view(SchemaView value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasView() => $_has(1);
   @$pb.TagNumber(2)
@@ -357,28 +321,22 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (parent != null) {
-      $result.parent = parent;
-    }
-    if (view != null) {
-      $result.view = view;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (parent != null) result.parent = parent;
+    if (view != null) result.view = view;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListSchemasRequest._() : super();
-  factory ListSchemasRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSchemasRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSchemasRequest._();
+
+  factory ListSchemasRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSchemasRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSchemasRequest',
@@ -401,10 +359,12 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListSchemasRequest))
           as ListSchemasRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSchemasRequest create() => ListSchemasRequest._();
+  @$core.override
   ListSchemasRequest createEmptyInstance() => create();
   static $pb.PbList<ListSchemasRequest> createRepeated() =>
       $pb.PbList<ListSchemasRequest>();
@@ -418,10 +378,7 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get parent => $_getSZ(0);
   @$pb.TagNumber(1)
-  set parent($core.String v) {
-    $_setString(0, v);
-  }
-
+  set parent($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasParent() => $_has(0);
   @$pb.TagNumber(1)
@@ -433,10 +390,7 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SchemaView get view => $_getN(1);
   @$pb.TagNumber(2)
-  set view(SchemaView v) {
-    $_setField(2, v);
-  }
-
+  set view(SchemaView value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasView() => $_has(1);
   @$pb.TagNumber(2)
@@ -446,10 +400,7 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get pageSize => $_getIZ(2);
   @$pb.TagNumber(3)
-  set pageSize($core.int v) {
-    $_setSignedInt32(2, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageSize() => $_has(2);
   @$pb.TagNumber(3)
@@ -461,10 +412,7 @@ class ListSchemasRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get pageToken => $_getSZ(3);
   @$pb.TagNumber(4)
-  set pageToken($core.String v) {
-    $_setString(3, v);
-  }
-
+  set pageToken($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasPageToken() => $_has(3);
   @$pb.TagNumber(4)
@@ -477,22 +425,20 @@ class ListSchemasResponse extends $pb.GeneratedMessage {
     $core.Iterable<Schema>? schemas,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (schemas != null) {
-      $result.schemas.addAll(schemas);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (schemas != null) result.schemas.addAll(schemas);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListSchemasResponse._() : super();
-  factory ListSchemasResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSchemasResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSchemasResponse._();
+
+  factory ListSchemasResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSchemasResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSchemasResponse',
@@ -511,10 +457,12 @@ class ListSchemasResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListSchemasResponse))
           as ListSchemasResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSchemasResponse create() => ListSchemasResponse._();
+  @$core.override
   ListSchemasResponse createEmptyInstance() => create();
   static $pb.PbList<ListSchemasResponse> createRepeated() =>
       $pb.PbList<ListSchemasResponse>();
@@ -532,10 +480,7 @@ class ListSchemasResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -550,28 +495,22 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (view != null) {
-      $result.view = view;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (view != null) result.view = view;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListSchemaRevisionsRequest._() : super();
-  factory ListSchemaRevisionsRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSchemaRevisionsRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSchemaRevisionsRequest._();
+
+  factory ListSchemaRevisionsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSchemaRevisionsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSchemaRevisionsRequest',
@@ -597,10 +536,12 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
               (message) => updates(message as ListSchemaRevisionsRequest))
           as ListSchemaRevisionsRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSchemaRevisionsRequest create() => ListSchemaRevisionsRequest._();
+  @$core.override
   ListSchemaRevisionsRequest createEmptyInstance() => create();
   static $pb.PbList<ListSchemaRevisionsRequest> createRepeated() =>
       $pb.PbList<ListSchemaRevisionsRequest>();
@@ -613,10 +554,7 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -628,10 +566,7 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   SchemaView get view => $_getN(1);
   @$pb.TagNumber(2)
-  set view(SchemaView v) {
-    $_setField(2, v);
-  }
-
+  set view(SchemaView value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasView() => $_has(1);
   @$pb.TagNumber(2)
@@ -641,10 +576,7 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get pageSize => $_getIZ(2);
   @$pb.TagNumber(3)
-  set pageSize($core.int v) {
-    $_setSignedInt32(2, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageSize() => $_has(2);
   @$pb.TagNumber(3)
@@ -655,10 +587,7 @@ class ListSchemaRevisionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get pageToken => $_getSZ(3);
   @$pb.TagNumber(4)
-  set pageToken($core.String v) {
-    $_setString(3, v);
-  }
-
+  set pageToken($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasPageToken() => $_has(3);
   @$pb.TagNumber(4)
@@ -671,22 +600,20 @@ class ListSchemaRevisionsResponse extends $pb.GeneratedMessage {
     $core.Iterable<Schema>? schemas,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (schemas != null) {
-      $result.schemas.addAll(schemas);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (schemas != null) result.schemas.addAll(schemas);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListSchemaRevisionsResponse._() : super();
-  factory ListSchemaRevisionsResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSchemaRevisionsResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSchemaRevisionsResponse._();
+
+  factory ListSchemaRevisionsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSchemaRevisionsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSchemaRevisionsResponse',
@@ -708,11 +635,13 @@ class ListSchemaRevisionsResponse extends $pb.GeneratedMessage {
               (message) => updates(message as ListSchemaRevisionsResponse))
           as ListSchemaRevisionsResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSchemaRevisionsResponse create() =>
       ListSchemaRevisionsResponse._();
+  @$core.override
   ListSchemaRevisionsResponse createEmptyInstance() => create();
   static $pb.PbList<ListSchemaRevisionsResponse> createRepeated() =>
       $pb.PbList<ListSchemaRevisionsResponse>();
@@ -730,10 +659,7 @@ class ListSchemaRevisionsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -746,22 +672,20 @@ class CommitSchemaRequest extends $pb.GeneratedMessage {
     $core.String? name,
     Schema? schema,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (schema != null) {
-      $result.schema = schema;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (schema != null) result.schema = schema;
+    return result;
   }
-  CommitSchemaRequest._() : super();
-  factory CommitSchemaRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory CommitSchemaRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  CommitSchemaRequest._();
+
+  factory CommitSchemaRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CommitSchemaRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CommitSchemaRequest',
@@ -779,10 +703,12 @@ class CommitSchemaRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as CommitSchemaRequest))
           as CommitSchemaRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CommitSchemaRequest create() => CommitSchemaRequest._();
+  @$core.override
   CommitSchemaRequest createEmptyInstance() => create();
   static $pb.PbList<CommitSchemaRequest> createRepeated() =>
       $pb.PbList<CommitSchemaRequest>();
@@ -796,10 +722,7 @@ class CommitSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -809,10 +732,7 @@ class CommitSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   Schema get schema => $_getN(1);
   @$pb.TagNumber(2)
-  set schema(Schema v) {
-    $_setField(2, v);
-  }
-
+  set schema(Schema value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSchema() => $_has(1);
   @$pb.TagNumber(2)
@@ -827,22 +747,20 @@ class RollbackSchemaRequest extends $pb.GeneratedMessage {
     $core.String? name,
     $core.String? revisionId,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (revisionId != null) {
-      $result.revisionId = revisionId;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (revisionId != null) result.revisionId = revisionId;
+    return result;
   }
-  RollbackSchemaRequest._() : super();
-  factory RollbackSchemaRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory RollbackSchemaRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  RollbackSchemaRequest._();
+
+  factory RollbackSchemaRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory RollbackSchemaRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RollbackSchemaRequest',
@@ -862,10 +780,12 @@ class RollbackSchemaRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as RollbackSchemaRequest))
           as RollbackSchemaRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static RollbackSchemaRequest create() => RollbackSchemaRequest._();
+  @$core.override
   RollbackSchemaRequest createEmptyInstance() => create();
   static $pb.PbList<RollbackSchemaRequest> createRepeated() =>
       $pb.PbList<RollbackSchemaRequest>();
@@ -878,10 +798,7 @@ class RollbackSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -894,10 +811,7 @@ class RollbackSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get revisionId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set revisionId($core.String v) {
-    $_setString(1, v);
-  }
-
+  set revisionId($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasRevisionId() => $_has(1);
   @$pb.TagNumber(2)
@@ -910,23 +824,20 @@ class DeleteSchemaRevisionRequest extends $pb.GeneratedMessage {
     $core.String? name,
     @$core.Deprecated('This field is deprecated.') $core.String? revisionId,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (revisionId != null) {
-      // ignore: deprecated_member_use_from_same_package
-      $result.revisionId = revisionId;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (revisionId != null) result.revisionId = revisionId;
+    return result;
   }
-  DeleteSchemaRevisionRequest._() : super();
-  factory DeleteSchemaRevisionRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DeleteSchemaRevisionRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DeleteSchemaRevisionRequest._();
+
+  factory DeleteSchemaRevisionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSchemaRevisionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteSchemaRevisionRequest',
@@ -947,11 +858,13 @@ class DeleteSchemaRevisionRequest extends $pb.GeneratedMessage {
               (message) => updates(message as DeleteSchemaRevisionRequest))
           as DeleteSchemaRevisionRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSchemaRevisionRequest create() =>
       DeleteSchemaRevisionRequest._();
+  @$core.override
   DeleteSchemaRevisionRequest createEmptyInstance() => create();
   static $pb.PbList<DeleteSchemaRevisionRequest> createRepeated() =>
       $pb.PbList<DeleteSchemaRevisionRequest>();
@@ -967,10 +880,7 @@ class DeleteSchemaRevisionRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -984,10 +894,7 @@ class DeleteSchemaRevisionRequest extends $pb.GeneratedMessage {
   $core.String get revisionId => $_getSZ(1);
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(2)
-  set revisionId($core.String v) {
-    $_setString(1, v);
-  }
-
+  set revisionId($core.String value) => $_setString(1, value);
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(2)
   $core.bool hasRevisionId() => $_has(1);
@@ -1001,19 +908,19 @@ class DeleteSchemaRequest extends $pb.GeneratedMessage {
   factory DeleteSchemaRequest({
     $core.String? name,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    return result;
   }
-  DeleteSchemaRequest._() : super();
-  factory DeleteSchemaRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DeleteSchemaRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DeleteSchemaRequest._();
+
+  factory DeleteSchemaRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSchemaRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteSchemaRequest',
@@ -1030,10 +937,12 @@ class DeleteSchemaRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DeleteSchemaRequest))
           as DeleteSchemaRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSchemaRequest create() => DeleteSchemaRequest._();
+  @$core.override
   DeleteSchemaRequest createEmptyInstance() => create();
   static $pb.PbList<DeleteSchemaRequest> createRepeated() =>
       $pb.PbList<DeleteSchemaRequest>();
@@ -1047,10 +956,7 @@ class DeleteSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -1063,22 +969,20 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
     $core.String? parent,
     Schema? schema,
   }) {
-    final $result = create();
-    if (parent != null) {
-      $result.parent = parent;
-    }
-    if (schema != null) {
-      $result.schema = schema;
-    }
-    return $result;
+    final result = create();
+    if (parent != null) result.parent = parent;
+    if (schema != null) result.schema = schema;
+    return result;
   }
-  ValidateSchemaRequest._() : super();
-  factory ValidateSchemaRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ValidateSchemaRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ValidateSchemaRequest._();
+
+  factory ValidateSchemaRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ValidateSchemaRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ValidateSchemaRequest',
@@ -1098,10 +1002,12 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ValidateSchemaRequest))
           as ValidateSchemaRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ValidateSchemaRequest create() => ValidateSchemaRequest._();
+  @$core.override
   ValidateSchemaRequest createEmptyInstance() => create();
   static $pb.PbList<ValidateSchemaRequest> createRepeated() =>
       $pb.PbList<ValidateSchemaRequest>();
@@ -1115,10 +1021,7 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get parent => $_getSZ(0);
   @$pb.TagNumber(1)
-  set parent($core.String v) {
-    $_setString(0, v);
-  }
-
+  set parent($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasParent() => $_has(0);
   @$pb.TagNumber(1)
@@ -1128,10 +1031,7 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   Schema get schema => $_getN(1);
   @$pb.TagNumber(2)
-  set schema(Schema v) {
-    $_setField(2, v);
-  }
-
+  set schema(Schema value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSchema() => $_has(1);
   @$pb.TagNumber(2)
@@ -1144,13 +1044,15 @@ class ValidateSchemaRequest extends $pb.GeneratedMessage {
 /// Empty for now.
 class ValidateSchemaResponse extends $pb.GeneratedMessage {
   factory ValidateSchemaResponse() => create();
-  ValidateSchemaResponse._() : super();
-  factory ValidateSchemaResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ValidateSchemaResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ValidateSchemaResponse._();
+
+  factory ValidateSchemaResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ValidateSchemaResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ValidateSchemaResponse',
@@ -1168,10 +1070,12 @@ class ValidateSchemaResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ValidateSchemaResponse))
           as ValidateSchemaResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ValidateSchemaResponse create() => ValidateSchemaResponse._();
+  @$core.override
   ValidateSchemaResponse createEmptyInstance() => create();
   static $pb.PbList<ValidateSchemaResponse> createRepeated() =>
       $pb.PbList<ValidateSchemaResponse>();
@@ -1192,31 +1096,23 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
     $core.List<$core.int>? message,
     Encoding? encoding,
   }) {
-    final $result = create();
-    if (parent != null) {
-      $result.parent = parent;
-    }
-    if (name != null) {
-      $result.name = name;
-    }
-    if (schema != null) {
-      $result.schema = schema;
-    }
-    if (message != null) {
-      $result.message = message;
-    }
-    if (encoding != null) {
-      $result.encoding = encoding;
-    }
-    return $result;
+    final result = create();
+    if (parent != null) result.parent = parent;
+    if (name != null) result.name = name;
+    if (schema != null) result.schema = schema;
+    if (message != null) result.message = message;
+    if (encoding != null) result.encoding = encoding;
+    return result;
   }
-  ValidateMessageRequest._() : super();
-  factory ValidateMessageRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ValidateMessageRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ValidateMessageRequest._();
+
+  factory ValidateMessageRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ValidateMessageRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, ValidateMessageRequest_SchemaSpec>
       _ValidateMessageRequest_SchemaSpecByTag = {
@@ -1250,10 +1146,12 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ValidateMessageRequest))
           as ValidateMessageRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ValidateMessageRequest create() => ValidateMessageRequest._();
+  @$core.override
   ValidateMessageRequest createEmptyInstance() => create();
   static $pb.PbList<ValidateMessageRequest> createRepeated() =>
       $pb.PbList<ValidateMessageRequest>();
@@ -1271,10 +1169,7 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get parent => $_getSZ(0);
   @$pb.TagNumber(1)
-  set parent($core.String v) {
-    $_setString(0, v);
-  }
-
+  set parent($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasParent() => $_has(0);
   @$pb.TagNumber(1)
@@ -1286,10 +1181,7 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get name => $_getSZ(1);
   @$pb.TagNumber(2)
-  set name($core.String v) {
-    $_setString(1, v);
-  }
-
+  set name($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasName() => $_has(1);
   @$pb.TagNumber(2)
@@ -1299,10 +1191,7 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   Schema get schema => $_getN(2);
   @$pb.TagNumber(3)
-  set schema(Schema v) {
-    $_setField(3, v);
-  }
-
+  set schema(Schema value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasSchema() => $_has(2);
   @$pb.TagNumber(3)
@@ -1314,10 +1203,7 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.List<$core.int> get message => $_getN(3);
   @$pb.TagNumber(4)
-  set message($core.List<$core.int> v) {
-    $_setBytes(3, v);
-  }
-
+  set message($core.List<$core.int> value) => $_setBytes(3, value);
   @$pb.TagNumber(4)
   $core.bool hasMessage() => $_has(3);
   @$pb.TagNumber(4)
@@ -1327,10 +1213,7 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   Encoding get encoding => $_getN(4);
   @$pb.TagNumber(5)
-  set encoding(Encoding v) {
-    $_setField(5, v);
-  }
-
+  set encoding(Encoding value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasEncoding() => $_has(4);
   @$pb.TagNumber(5)
@@ -1341,13 +1224,15 @@ class ValidateMessageRequest extends $pb.GeneratedMessage {
 /// Empty for now.
 class ValidateMessageResponse extends $pb.GeneratedMessage {
   factory ValidateMessageResponse() => create();
-  ValidateMessageResponse._() : super();
-  factory ValidateMessageResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ValidateMessageResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ValidateMessageResponse._();
+
+  factory ValidateMessageResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ValidateMessageResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ValidateMessageResponse',
@@ -1365,10 +1250,12 @@ class ValidateMessageResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ValidateMessageResponse))
           as ValidateMessageResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ValidateMessageResponse create() => ValidateMessageResponse._();
+  @$core.override
   ValidateMessageResponse createEmptyInstance() => create();
   static $pb.PbList<ValidateMessageResponse> createRepeated() =>
       $pb.PbList<ValidateMessageResponse>();
@@ -1378,6 +1265,7 @@ class ValidateMessageResponse extends $pb.GeneratedMessage {
   static ValidateMessageResponse? _defaultInstance;
 }
 
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames =
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
     $core.bool.fromEnvironment('protobuf.omit_message_names');

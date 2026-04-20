@@ -1,25 +1,26 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: google/pubsub/v1/pubsub.proto
-//
+// Generated from google/pubsub/v1/pubsub.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import '../../protobuf/duration.pb.dart' as $5;
-import '../../protobuf/field_mask.pb.dart' as $6;
-import '../../protobuf/struct.pb.dart' as $4;
-import '../../protobuf/timestamp.pb.dart' as $3;
+import '../../protobuf/duration.pb.dart' as $4;
+import '../../protobuf/field_mask.pb.dart' as $5;
+import '../../protobuf/struct.pb.dart' as $3;
+import '../../protobuf/timestamp.pb.dart' as $2;
 import 'pubsub.pbenum.dart';
-import 'schema.pbenum.dart' as $2;
+import 'schema.pbenum.dart' as $6;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -31,22 +32,21 @@ class MessageStoragePolicy extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? allowedPersistenceRegions,
     $core.bool? enforceInTransit,
   }) {
-    final $result = create();
-    if (allowedPersistenceRegions != null) {
-      $result.allowedPersistenceRegions.addAll(allowedPersistenceRegions);
-    }
-    if (enforceInTransit != null) {
-      $result.enforceInTransit = enforceInTransit;
-    }
-    return $result;
+    final result = create();
+    if (allowedPersistenceRegions != null)
+      result.allowedPersistenceRegions.addAll(allowedPersistenceRegions);
+    if (enforceInTransit != null) result.enforceInTransit = enforceInTransit;
+    return result;
   }
-  MessageStoragePolicy._() : super();
-  factory MessageStoragePolicy.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory MessageStoragePolicy.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  MessageStoragePolicy._();
+
+  factory MessageStoragePolicy.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory MessageStoragePolicy.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'MessageStoragePolicy',
@@ -65,10 +65,12 @@ class MessageStoragePolicy extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as MessageStoragePolicy))
           as MessageStoragePolicy;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static MessageStoragePolicy create() => MessageStoragePolicy._();
+  @$core.override
   MessageStoragePolicy createEmptyInstance() => create();
   static $pb.PbList<MessageStoragePolicy> createRepeated() =>
       $pb.PbList<MessageStoragePolicy>();
@@ -94,10 +96,7 @@ class MessageStoragePolicy extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool get enforceInTransit => $_getBF(1);
   @$pb.TagNumber(2)
-  set enforceInTransit($core.bool v) {
-    $_setBool(1, v);
-  }
-
+  set enforceInTransit($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasEnforceInTransit() => $_has(1);
   @$pb.TagNumber(2)
@@ -108,32 +107,26 @@ class MessageStoragePolicy extends $pb.GeneratedMessage {
 class SchemaSettings extends $pb.GeneratedMessage {
   factory SchemaSettings({
     $core.String? schema,
-    $2.Encoding? encoding,
+    $6.Encoding? encoding,
     $core.String? firstRevisionId,
     $core.String? lastRevisionId,
   }) {
-    final $result = create();
-    if (schema != null) {
-      $result.schema = schema;
-    }
-    if (encoding != null) {
-      $result.encoding = encoding;
-    }
-    if (firstRevisionId != null) {
-      $result.firstRevisionId = firstRevisionId;
-    }
-    if (lastRevisionId != null) {
-      $result.lastRevisionId = lastRevisionId;
-    }
-    return $result;
+    final result = create();
+    if (schema != null) result.schema = schema;
+    if (encoding != null) result.encoding = encoding;
+    if (firstRevisionId != null) result.firstRevisionId = firstRevisionId;
+    if (lastRevisionId != null) result.lastRevisionId = lastRevisionId;
+    return result;
   }
-  SchemaSettings._() : super();
-  factory SchemaSettings.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory SchemaSettings.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  SchemaSettings._();
+
+  factory SchemaSettings.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SchemaSettings.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SchemaSettings',
@@ -141,10 +134,10 @@ class SchemaSettings extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'schema')
-    ..e<$2.Encoding>(2, _omitFieldNames ? '' : 'encoding', $pb.PbFieldType.OE,
-        defaultOrMaker: $2.Encoding.ENCODING_UNSPECIFIED,
-        valueOf: $2.Encoding.valueOf,
-        enumValues: $2.Encoding.values)
+    ..e<$6.Encoding>(2, _omitFieldNames ? '' : 'encoding', $pb.PbFieldType.OE,
+        defaultOrMaker: $6.Encoding.ENCODING_UNSPECIFIED,
+        valueOf: $6.Encoding.valueOf,
+        enumValues: $6.Encoding.values)
     ..aOS(3, _omitFieldNames ? '' : 'firstRevisionId')
     ..aOS(4, _omitFieldNames ? '' : 'lastRevisionId')
     ..hasRequiredFields = false;
@@ -156,10 +149,12 @@ class SchemaSettings extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as SchemaSettings))
           as SchemaSettings;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SchemaSettings create() => SchemaSettings._();
+  @$core.override
   SchemaSettings createEmptyInstance() => create();
   static $pb.PbList<SchemaSettings> createRepeated() =>
       $pb.PbList<SchemaSettings>();
@@ -175,10 +170,7 @@ class SchemaSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get schema => $_getSZ(0);
   @$pb.TagNumber(1)
-  set schema($core.String v) {
-    $_setString(0, v);
-  }
-
+  set schema($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSchema() => $_has(0);
   @$pb.TagNumber(1)
@@ -186,12 +178,9 @@ class SchemaSettings extends $pb.GeneratedMessage {
 
   /// Optional. The encoding of messages validated against `schema`.
   @$pb.TagNumber(2)
-  $2.Encoding get encoding => $_getN(1);
+  $6.Encoding get encoding => $_getN(1);
   @$pb.TagNumber(2)
-  set encoding($2.Encoding v) {
-    $_setField(2, v);
-  }
-
+  set encoding($6.Encoding value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasEncoding() => $_has(1);
   @$pb.TagNumber(2)
@@ -203,10 +192,7 @@ class SchemaSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get firstRevisionId => $_getSZ(2);
   @$pb.TagNumber(3)
-  set firstRevisionId($core.String v) {
-    $_setString(2, v);
-  }
-
+  set firstRevisionId($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasFirstRevisionId() => $_has(2);
   @$pb.TagNumber(3)
@@ -218,10 +204,7 @@ class SchemaSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get lastRevisionId => $_getSZ(3);
   @$pb.TagNumber(4)
-  set lastRevisionId($core.String v) {
-    $_setString(3, v);
-  }
-
+  set lastRevisionId($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasLastRevisionId() => $_has(3);
   @$pb.TagNumber(4)
@@ -237,32 +220,24 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
     $core.String? awsRoleArn,
     $core.String? gcpServiceAccount,
   }) {
-    final $result = create();
-    if (state != null) {
-      $result.state = state;
-    }
-    if (streamArn != null) {
-      $result.streamArn = streamArn;
-    }
-    if (consumerArn != null) {
-      $result.consumerArn = consumerArn;
-    }
-    if (awsRoleArn != null) {
-      $result.awsRoleArn = awsRoleArn;
-    }
-    if (gcpServiceAccount != null) {
-      $result.gcpServiceAccount = gcpServiceAccount;
-    }
-    return $result;
+    final result = create();
+    if (state != null) result.state = state;
+    if (streamArn != null) result.streamArn = streamArn;
+    if (consumerArn != null) result.consumerArn = consumerArn;
+    if (awsRoleArn != null) result.awsRoleArn = awsRoleArn;
+    if (gcpServiceAccount != null) result.gcpServiceAccount = gcpServiceAccount;
+    return result;
   }
-  IngestionDataSourceSettings_AwsKinesis._() : super();
+
+  IngestionDataSourceSettings_AwsKinesis._();
+
   factory IngestionDataSourceSettings_AwsKinesis.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionDataSourceSettings_AwsKinesis.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionDataSourceSettings_AwsKinesis.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionDataSourceSettings.AwsKinesis',
@@ -291,11 +266,13 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
               updates(message as IngestionDataSourceSettings_AwsKinesis))
           as IngestionDataSourceSettings_AwsKinesis;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_AwsKinesis create() =>
       IngestionDataSourceSettings_AwsKinesis._();
+  @$core.override
   IngestionDataSourceSettings_AwsKinesis createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings_AwsKinesis> createRepeated() =>
       $pb.PbList<IngestionDataSourceSettings_AwsKinesis>();
@@ -310,10 +287,8 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   IngestionDataSourceSettings_AwsKinesis_State get state => $_getN(0);
   @$pb.TagNumber(1)
-  set state(IngestionDataSourceSettings_AwsKinesis_State v) {
-    $_setField(1, v);
-  }
-
+  set state(IngestionDataSourceSettings_AwsKinesis_State value) =>
+      $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
   @$pb.TagNumber(1)
@@ -323,10 +298,7 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get streamArn => $_getSZ(1);
   @$pb.TagNumber(2)
-  set streamArn($core.String v) {
-    $_setString(1, v);
-  }
-
+  set streamArn($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasStreamArn() => $_has(1);
   @$pb.TagNumber(2)
@@ -337,10 +309,7 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get consumerArn => $_getSZ(2);
   @$pb.TagNumber(3)
-  set consumerArn($core.String v) {
-    $_setString(2, v);
-  }
-
+  set consumerArn($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasConsumerArn() => $_has(2);
   @$pb.TagNumber(3)
@@ -352,10 +321,7 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get awsRoleArn => $_getSZ(3);
   @$pb.TagNumber(4)
-  set awsRoleArn($core.String v) {
-    $_setString(3, v);
-  }
-
+  set awsRoleArn($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasAwsRoleArn() => $_has(3);
   @$pb.TagNumber(4)
@@ -368,10 +334,7 @@ class IngestionDataSourceSettings_AwsKinesis extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get gcpServiceAccount => $_getSZ(4);
   @$pb.TagNumber(5)
-  set gcpServiceAccount($core.String v) {
-    $_setString(4, v);
-  }
-
+  set gcpServiceAccount($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasGcpServiceAccount() => $_has(4);
   @$pb.TagNumber(5)
@@ -386,21 +349,21 @@ class IngestionDataSourceSettings_CloudStorage_TextFormat
   factory IngestionDataSourceSettings_CloudStorage_TextFormat({
     $core.String? delimiter,
   }) {
-    final $result = create();
-    if (delimiter != null) {
-      $result.delimiter = delimiter;
-    }
-    return $result;
+    final result = create();
+    if (delimiter != null) result.delimiter = delimiter;
+    return result;
   }
-  IngestionDataSourceSettings_CloudStorage_TextFormat._() : super();
+
+  IngestionDataSourceSettings_CloudStorage_TextFormat._();
+
   factory IngestionDataSourceSettings_CloudStorage_TextFormat.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory IngestionDataSourceSettings_CloudStorage_TextFormat.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames
@@ -424,11 +387,13 @@ class IngestionDataSourceSettings_CloudStorage_TextFormat
               message as IngestionDataSourceSettings_CloudStorage_TextFormat))
           as IngestionDataSourceSettings_CloudStorage_TextFormat;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_CloudStorage_TextFormat create() =>
       IngestionDataSourceSettings_CloudStorage_TextFormat._();
+  @$core.override
   IngestionDataSourceSettings_CloudStorage_TextFormat createEmptyInstance() =>
       create();
   static $pb.PbList<IngestionDataSourceSettings_CloudStorage_TextFormat>
@@ -444,10 +409,7 @@ class IngestionDataSourceSettings_CloudStorage_TextFormat
   @$pb.TagNumber(1)
   $core.String get delimiter => $_getSZ(0);
   @$pb.TagNumber(1)
-  set delimiter($core.String v) {
-    $_setString(0, v);
-  }
-
+  set delimiter($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasDelimiter() => $_has(0);
   @$pb.TagNumber(1)
@@ -460,15 +422,17 @@ class IngestionDataSourceSettings_CloudStorage_TextFormat
 class IngestionDataSourceSettings_CloudStorage_AvroFormat
     extends $pb.GeneratedMessage {
   factory IngestionDataSourceSettings_CloudStorage_AvroFormat() => create();
-  IngestionDataSourceSettings_CloudStorage_AvroFormat._() : super();
+
+  IngestionDataSourceSettings_CloudStorage_AvroFormat._();
+
   factory IngestionDataSourceSettings_CloudStorage_AvroFormat.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory IngestionDataSourceSettings_CloudStorage_AvroFormat.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames
@@ -491,11 +455,13 @@ class IngestionDataSourceSettings_CloudStorage_AvroFormat
               message as IngestionDataSourceSettings_CloudStorage_AvroFormat))
           as IngestionDataSourceSettings_CloudStorage_AvroFormat;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_CloudStorage_AvroFormat create() =>
       IngestionDataSourceSettings_CloudStorage_AvroFormat._();
+  @$core.override
   IngestionDataSourceSettings_CloudStorage_AvroFormat createEmptyInstance() =>
       create();
   static $pb.PbList<IngestionDataSourceSettings_CloudStorage_AvroFormat>
@@ -516,15 +482,17 @@ class IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat
     extends $pb.GeneratedMessage {
   factory IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat() =>
       create();
-  IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat._() : super();
+
+  IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat._();
+
   factory IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames
@@ -548,11 +516,13 @@ class IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat
               as IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat))
           as IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat create() =>
       IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat._();
+  @$core.override
   IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat
       createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat>
@@ -581,41 +551,30 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
     IngestionDataSourceSettings_CloudStorage_TextFormat? textFormat,
     IngestionDataSourceSettings_CloudStorage_AvroFormat? avroFormat,
     IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat? pubsubAvroFormat,
-    $3.Timestamp? minimumObjectCreateTime,
+    $2.Timestamp? minimumObjectCreateTime,
     $core.String? matchGlob,
   }) {
-    final $result = create();
-    if (state != null) {
-      $result.state = state;
-    }
-    if (bucket != null) {
-      $result.bucket = bucket;
-    }
-    if (textFormat != null) {
-      $result.textFormat = textFormat;
-    }
-    if (avroFormat != null) {
-      $result.avroFormat = avroFormat;
-    }
-    if (pubsubAvroFormat != null) {
-      $result.pubsubAvroFormat = pubsubAvroFormat;
-    }
-    if (minimumObjectCreateTime != null) {
-      $result.minimumObjectCreateTime = minimumObjectCreateTime;
-    }
-    if (matchGlob != null) {
-      $result.matchGlob = matchGlob;
-    }
-    return $result;
+    final result = create();
+    if (state != null) result.state = state;
+    if (bucket != null) result.bucket = bucket;
+    if (textFormat != null) result.textFormat = textFormat;
+    if (avroFormat != null) result.avroFormat = avroFormat;
+    if (pubsubAvroFormat != null) result.pubsubAvroFormat = pubsubAvroFormat;
+    if (minimumObjectCreateTime != null)
+      result.minimumObjectCreateTime = minimumObjectCreateTime;
+    if (matchGlob != null) result.matchGlob = matchGlob;
+    return result;
   }
-  IngestionDataSourceSettings_CloudStorage._() : super();
+
+  IngestionDataSourceSettings_CloudStorage._();
+
   factory IngestionDataSourceSettings_CloudStorage.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionDataSourceSettings_CloudStorage.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionDataSourceSettings_CloudStorage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core
       .Map<$core.int, IngestionDataSourceSettings_CloudStorage_InputFormat>
@@ -648,8 +607,8 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
         5, _omitFieldNames ? '' : 'pubsubAvroFormat',
         subBuilder:
             IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat.create)
-    ..aOM<$3.Timestamp>(6, _omitFieldNames ? '' : 'minimumObjectCreateTime',
-        subBuilder: $3.Timestamp.create)
+    ..aOM<$2.Timestamp>(6, _omitFieldNames ? '' : 'minimumObjectCreateTime',
+        subBuilder: $2.Timestamp.create)
     ..aOS(9, _omitFieldNames ? '' : 'matchGlob')
     ..hasRequiredFields = false;
 
@@ -663,11 +622,13 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
               updates(message as IngestionDataSourceSettings_CloudStorage))
           as IngestionDataSourceSettings_CloudStorage;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_CloudStorage create() =>
       IngestionDataSourceSettings_CloudStorage._();
+  @$core.override
   IngestionDataSourceSettings_CloudStorage createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings_CloudStorage>
       createRepeated() =>
@@ -688,10 +649,8 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   IngestionDataSourceSettings_CloudStorage_State get state => $_getN(0);
   @$pb.TagNumber(1)
-  set state(IngestionDataSourceSettings_CloudStorage_State v) {
-    $_setField(1, v);
-  }
-
+  set state(IngestionDataSourceSettings_CloudStorage_State value) =>
+      $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
   @$pb.TagNumber(1)
@@ -703,10 +662,7 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get bucket => $_getSZ(1);
   @$pb.TagNumber(2)
-  set bucket($core.String v) {
-    $_setString(1, v);
-  }
-
+  set bucket($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasBucket() => $_has(1);
   @$pb.TagNumber(2)
@@ -717,10 +673,8 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
   IngestionDataSourceSettings_CloudStorage_TextFormat get textFormat =>
       $_getN(2);
   @$pb.TagNumber(3)
-  set textFormat(IngestionDataSourceSettings_CloudStorage_TextFormat v) {
-    $_setField(3, v);
-  }
-
+  set textFormat(IngestionDataSourceSettings_CloudStorage_TextFormat value) =>
+      $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasTextFormat() => $_has(2);
   @$pb.TagNumber(3)
@@ -734,10 +688,8 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
   IngestionDataSourceSettings_CloudStorage_AvroFormat get avroFormat =>
       $_getN(3);
   @$pb.TagNumber(4)
-  set avroFormat(IngestionDataSourceSettings_CloudStorage_AvroFormat v) {
-    $_setField(4, v);
-  }
-
+  set avroFormat(IngestionDataSourceSettings_CloudStorage_AvroFormat value) =>
+      $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasAvroFormat() => $_has(3);
   @$pb.TagNumber(4)
@@ -754,10 +706,8 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
       get pubsubAvroFormat => $_getN(4);
   @$pb.TagNumber(5)
   set pubsubAvroFormat(
-      IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat v) {
-    $_setField(5, v);
-  }
-
+          IngestionDataSourceSettings_CloudStorage_PubSubAvroFormat value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasPubsubAvroFormat() => $_has(4);
   @$pb.TagNumber(5)
@@ -769,18 +719,15 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
   /// Optional. Only objects with a larger or equal creation timestamp will be
   /// ingested.
   @$pb.TagNumber(6)
-  $3.Timestamp get minimumObjectCreateTime => $_getN(5);
+  $2.Timestamp get minimumObjectCreateTime => $_getN(5);
   @$pb.TagNumber(6)
-  set minimumObjectCreateTime($3.Timestamp v) {
-    $_setField(6, v);
-  }
-
+  set minimumObjectCreateTime($2.Timestamp value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasMinimumObjectCreateTime() => $_has(5);
   @$pb.TagNumber(6)
   void clearMinimumObjectCreateTime() => $_clearField(6);
   @$pb.TagNumber(6)
-  $3.Timestamp ensureMinimumObjectCreateTime() => $_ensure(5);
+  $2.Timestamp ensureMinimumObjectCreateTime() => $_ensure(5);
 
   /// Optional. Glob pattern used to match objects that will be ingested. If
   /// unset, all objects will be ingested. See the [supported
@@ -788,10 +735,7 @@ class IngestionDataSourceSettings_CloudStorage extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   $core.String get matchGlob => $_getSZ(6);
   @$pb.TagNumber(9)
-  set matchGlob($core.String v) {
-    $_setString(6, v);
-  }
-
+  set matchGlob($core.String value) => $_setString(6, value);
   @$pb.TagNumber(9)
   $core.bool hasMatchGlob() => $_has(6);
   @$pb.TagNumber(9)
@@ -810,41 +754,27 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
     $core.String? subscriptionId,
     $core.String? gcpServiceAccount,
   }) {
-    final $result = create();
-    if (state != null) {
-      $result.state = state;
-    }
-    if (resourceGroup != null) {
-      $result.resourceGroup = resourceGroup;
-    }
-    if (namespace != null) {
-      $result.namespace = namespace;
-    }
-    if (eventHub != null) {
-      $result.eventHub = eventHub;
-    }
-    if (clientId != null) {
-      $result.clientId = clientId;
-    }
-    if (tenantId != null) {
-      $result.tenantId = tenantId;
-    }
-    if (subscriptionId != null) {
-      $result.subscriptionId = subscriptionId;
-    }
-    if (gcpServiceAccount != null) {
-      $result.gcpServiceAccount = gcpServiceAccount;
-    }
-    return $result;
+    final result = create();
+    if (state != null) result.state = state;
+    if (resourceGroup != null) result.resourceGroup = resourceGroup;
+    if (namespace != null) result.namespace = namespace;
+    if (eventHub != null) result.eventHub = eventHub;
+    if (clientId != null) result.clientId = clientId;
+    if (tenantId != null) result.tenantId = tenantId;
+    if (subscriptionId != null) result.subscriptionId = subscriptionId;
+    if (gcpServiceAccount != null) result.gcpServiceAccount = gcpServiceAccount;
+    return result;
   }
-  IngestionDataSourceSettings_AzureEventHubs._() : super();
+
+  IngestionDataSourceSettings_AzureEventHubs._();
+
   factory IngestionDataSourceSettings_AzureEventHubs.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionDataSourceSettings_AzureEventHubs.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionDataSourceSettings_AzureEventHubs.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionDataSourceSettings.AzureEventHubs',
@@ -876,11 +806,13 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
               updates(message as IngestionDataSourceSettings_AzureEventHubs))
           as IngestionDataSourceSettings_AzureEventHubs;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_AzureEventHubs create() =>
       IngestionDataSourceSettings_AzureEventHubs._();
+  @$core.override
   IngestionDataSourceSettings_AzureEventHubs createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings_AzureEventHubs>
       createRepeated() =>
@@ -896,10 +828,8 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   IngestionDataSourceSettings_AzureEventHubs_State get state => $_getN(0);
   @$pb.TagNumber(1)
-  set state(IngestionDataSourceSettings_AzureEventHubs_State v) {
-    $_setField(1, v);
-  }
-
+  set state(IngestionDataSourceSettings_AzureEventHubs_State value) =>
+      $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
   @$pb.TagNumber(1)
@@ -909,10 +839,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get resourceGroup => $_getSZ(1);
   @$pb.TagNumber(2)
-  set resourceGroup($core.String v) {
-    $_setString(1, v);
-  }
-
+  set resourceGroup($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasResourceGroup() => $_has(1);
   @$pb.TagNumber(2)
@@ -922,10 +849,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get namespace => $_getSZ(2);
   @$pb.TagNumber(3)
-  set namespace($core.String v) {
-    $_setString(2, v);
-  }
-
+  set namespace($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasNamespace() => $_has(2);
   @$pb.TagNumber(3)
@@ -935,10 +859,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get eventHub => $_getSZ(3);
   @$pb.TagNumber(4)
-  set eventHub($core.String v) {
-    $_setString(3, v);
-  }
-
+  set eventHub($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasEventHub() => $_has(3);
   @$pb.TagNumber(4)
@@ -949,10 +870,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get clientId => $_getSZ(4);
   @$pb.TagNumber(5)
-  set clientId($core.String v) {
-    $_setString(4, v);
-  }
-
+  set clientId($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasClientId() => $_has(4);
   @$pb.TagNumber(5)
@@ -963,10 +881,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.String get tenantId => $_getSZ(5);
   @$pb.TagNumber(6)
-  set tenantId($core.String v) {
-    $_setString(5, v);
-  }
-
+  set tenantId($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
   $core.bool hasTenantId() => $_has(5);
   @$pb.TagNumber(6)
@@ -976,10 +891,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.String get subscriptionId => $_getSZ(6);
   @$pb.TagNumber(7)
-  set subscriptionId($core.String v) {
-    $_setString(6, v);
-  }
-
+  set subscriptionId($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
   $core.bool hasSubscriptionId() => $_has(6);
   @$pb.TagNumber(7)
@@ -990,10 +902,7 @@ class IngestionDataSourceSettings_AzureEventHubs extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $core.String get gcpServiceAccount => $_getSZ(7);
   @$pb.TagNumber(8)
-  set gcpServiceAccount($core.String v) {
-    $_setString(7, v);
-  }
-
+  set gcpServiceAccount($core.String value) => $_setString(7, value);
   @$pb.TagNumber(8)
   $core.bool hasGcpServiceAccount() => $_has(7);
   @$pb.TagNumber(8)
@@ -1009,31 +918,24 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
     $core.String? awsRoleArn,
     $core.String? gcpServiceAccount,
   }) {
-    final $result = create();
-    if (state != null) {
-      $result.state = state;
-    }
-    if (clusterArn != null) {
-      $result.clusterArn = clusterArn;
-    }
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (awsRoleArn != null) {
-      $result.awsRoleArn = awsRoleArn;
-    }
-    if (gcpServiceAccount != null) {
-      $result.gcpServiceAccount = gcpServiceAccount;
-    }
-    return $result;
+    final result = create();
+    if (state != null) result.state = state;
+    if (clusterArn != null) result.clusterArn = clusterArn;
+    if (topic != null) result.topic = topic;
+    if (awsRoleArn != null) result.awsRoleArn = awsRoleArn;
+    if (gcpServiceAccount != null) result.gcpServiceAccount = gcpServiceAccount;
+    return result;
   }
-  IngestionDataSourceSettings_AwsMsk._() : super();
-  factory IngestionDataSourceSettings_AwsMsk.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionDataSourceSettings_AwsMsk.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  IngestionDataSourceSettings_AwsMsk._();
+
+  factory IngestionDataSourceSettings_AwsMsk.fromBuffer(
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionDataSourceSettings_AwsMsk.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionDataSourceSettings.AwsMsk',
@@ -1062,11 +964,13 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
               updates(message as IngestionDataSourceSettings_AwsMsk))
           as IngestionDataSourceSettings_AwsMsk;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_AwsMsk create() =>
       IngestionDataSourceSettings_AwsMsk._();
+  @$core.override
   IngestionDataSourceSettings_AwsMsk createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings_AwsMsk> createRepeated() =>
       $pb.PbList<IngestionDataSourceSettings_AwsMsk>();
@@ -1081,10 +985,8 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   IngestionDataSourceSettings_AwsMsk_State get state => $_getN(0);
   @$pb.TagNumber(1)
-  set state(IngestionDataSourceSettings_AwsMsk_State v) {
-    $_setField(1, v);
-  }
-
+  set state(IngestionDataSourceSettings_AwsMsk_State value) =>
+      $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
   @$pb.TagNumber(1)
@@ -1095,10 +997,7 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get clusterArn => $_getSZ(1);
   @$pb.TagNumber(2)
-  set clusterArn($core.String v) {
-    $_setString(1, v);
-  }
-
+  set clusterArn($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasClusterArn() => $_has(1);
   @$pb.TagNumber(2)
@@ -1109,10 +1008,7 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get topic => $_getSZ(2);
   @$pb.TagNumber(3)
-  set topic($core.String v) {
-    $_setString(2, v);
-  }
-
+  set topic($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasTopic() => $_has(2);
   @$pb.TagNumber(3)
@@ -1124,10 +1020,7 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get awsRoleArn => $_getSZ(3);
   @$pb.TagNumber(4)
-  set awsRoleArn($core.String v) {
-    $_setString(3, v);
-  }
-
+  set awsRoleArn($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasAwsRoleArn() => $_has(3);
   @$pb.TagNumber(4)
@@ -1140,10 +1033,7 @@ class IngestionDataSourceSettings_AwsMsk extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get gcpServiceAccount => $_getSZ(4);
   @$pb.TagNumber(5)
-  set gcpServiceAccount($core.String v) {
-    $_setString(4, v);
-  }
-
+  set gcpServiceAccount($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasGcpServiceAccount() => $_has(4);
   @$pb.TagNumber(5)
@@ -1160,35 +1050,25 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
     $core.String? identityPoolId,
     $core.String? gcpServiceAccount,
   }) {
-    final $result = create();
-    if (state != null) {
-      $result.state = state;
-    }
-    if (bootstrapServer != null) {
-      $result.bootstrapServer = bootstrapServer;
-    }
-    if (clusterId != null) {
-      $result.clusterId = clusterId;
-    }
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (identityPoolId != null) {
-      $result.identityPoolId = identityPoolId;
-    }
-    if (gcpServiceAccount != null) {
-      $result.gcpServiceAccount = gcpServiceAccount;
-    }
-    return $result;
+    final result = create();
+    if (state != null) result.state = state;
+    if (bootstrapServer != null) result.bootstrapServer = bootstrapServer;
+    if (clusterId != null) result.clusterId = clusterId;
+    if (topic != null) result.topic = topic;
+    if (identityPoolId != null) result.identityPoolId = identityPoolId;
+    if (gcpServiceAccount != null) result.gcpServiceAccount = gcpServiceAccount;
+    return result;
   }
-  IngestionDataSourceSettings_ConfluentCloud._() : super();
+
+  IngestionDataSourceSettings_ConfluentCloud._();
+
   factory IngestionDataSourceSettings_ConfluentCloud.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionDataSourceSettings_ConfluentCloud.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionDataSourceSettings_ConfluentCloud.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionDataSourceSettings.ConfluentCloud',
@@ -1218,11 +1098,13 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
               updates(message as IngestionDataSourceSettings_ConfluentCloud))
           as IngestionDataSourceSettings_ConfluentCloud;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings_ConfluentCloud create() =>
       IngestionDataSourceSettings_ConfluentCloud._();
+  @$core.override
   IngestionDataSourceSettings_ConfluentCloud createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings_ConfluentCloud>
       createRepeated() =>
@@ -1238,10 +1120,8 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   IngestionDataSourceSettings_ConfluentCloud_State get state => $_getN(0);
   @$pb.TagNumber(1)
-  set state(IngestionDataSourceSettings_ConfluentCloud_State v) {
-    $_setField(1, v);
-  }
-
+  set state(IngestionDataSourceSettings_ConfluentCloud_State value) =>
+      $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasState() => $_has(0);
   @$pb.TagNumber(1)
@@ -1251,10 +1131,7 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get bootstrapServer => $_getSZ(1);
   @$pb.TagNumber(2)
-  set bootstrapServer($core.String v) {
-    $_setString(1, v);
-  }
-
+  set bootstrapServer($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasBootstrapServer() => $_has(1);
   @$pb.TagNumber(2)
@@ -1264,10 +1141,7 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get clusterId => $_getSZ(2);
   @$pb.TagNumber(3)
-  set clusterId($core.String v) {
-    $_setString(2, v);
-  }
-
+  set clusterId($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasClusterId() => $_has(2);
   @$pb.TagNumber(3)
@@ -1278,10 +1152,7 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.String get topic => $_getSZ(3);
   @$pb.TagNumber(4)
-  set topic($core.String v) {
-    $_setString(3, v);
-  }
-
+  set topic($core.String value) => $_setString(3, value);
   @$pb.TagNumber(4)
   $core.bool hasTopic() => $_has(3);
   @$pb.TagNumber(4)
@@ -1293,10 +1164,7 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get identityPoolId => $_getSZ(4);
   @$pb.TagNumber(5)
-  set identityPoolId($core.String v) {
-    $_setString(4, v);
-  }
-
+  set identityPoolId($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasIdentityPoolId() => $_has(4);
   @$pb.TagNumber(5)
@@ -1307,10 +1175,7 @@ class IngestionDataSourceSettings_ConfluentCloud extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.String get gcpServiceAccount => $_getSZ(5);
   @$pb.TagNumber(6)
-  set gcpServiceAccount($core.String v) {
-    $_setString(5, v);
-  }
-
+  set gcpServiceAccount($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
   $core.bool hasGcpServiceAccount() => $_has(5);
   @$pb.TagNumber(6)
@@ -1336,34 +1201,25 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
     IngestionDataSourceSettings_AwsMsk? awsMsk,
     IngestionDataSourceSettings_ConfluentCloud? confluentCloud,
   }) {
-    final $result = create();
-    if (awsKinesis != null) {
-      $result.awsKinesis = awsKinesis;
-    }
-    if (cloudStorage != null) {
-      $result.cloudStorage = cloudStorage;
-    }
-    if (azureEventHubs != null) {
-      $result.azureEventHubs = azureEventHubs;
-    }
-    if (platformLogsSettings != null) {
-      $result.platformLogsSettings = platformLogsSettings;
-    }
-    if (awsMsk != null) {
-      $result.awsMsk = awsMsk;
-    }
-    if (confluentCloud != null) {
-      $result.confluentCloud = confluentCloud;
-    }
-    return $result;
+    final result = create();
+    if (awsKinesis != null) result.awsKinesis = awsKinesis;
+    if (cloudStorage != null) result.cloudStorage = cloudStorage;
+    if (azureEventHubs != null) result.azureEventHubs = azureEventHubs;
+    if (platformLogsSettings != null)
+      result.platformLogsSettings = platformLogsSettings;
+    if (awsMsk != null) result.awsMsk = awsMsk;
+    if (confluentCloud != null) result.confluentCloud = confluentCloud;
+    return result;
   }
-  IngestionDataSourceSettings._() : super();
-  factory IngestionDataSourceSettings.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionDataSourceSettings.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  IngestionDataSourceSettings._();
+
+  factory IngestionDataSourceSettings.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionDataSourceSettings.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, IngestionDataSourceSettings_Source>
       _IngestionDataSourceSettings_SourceByTag = {
@@ -1410,11 +1266,13 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
               (message) => updates(message as IngestionDataSourceSettings))
           as IngestionDataSourceSettings;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionDataSourceSettings create() =>
       IngestionDataSourceSettings._();
+  @$core.override
   IngestionDataSourceSettings createEmptyInstance() => create();
   static $pb.PbList<IngestionDataSourceSettings> createRepeated() =>
       $pb.PbList<IngestionDataSourceSettings>();
@@ -1431,10 +1289,8 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   IngestionDataSourceSettings_AwsKinesis get awsKinesis => $_getN(0);
   @$pb.TagNumber(1)
-  set awsKinesis(IngestionDataSourceSettings_AwsKinesis v) {
-    $_setField(1, v);
-  }
-
+  set awsKinesis(IngestionDataSourceSettings_AwsKinesis value) =>
+      $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasAwsKinesis() => $_has(0);
   @$pb.TagNumber(1)
@@ -1446,10 +1302,8 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   IngestionDataSourceSettings_CloudStorage get cloudStorage => $_getN(1);
   @$pb.TagNumber(2)
-  set cloudStorage(IngestionDataSourceSettings_CloudStorage v) {
-    $_setField(2, v);
-  }
-
+  set cloudStorage(IngestionDataSourceSettings_CloudStorage value) =>
+      $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasCloudStorage() => $_has(1);
   @$pb.TagNumber(2)
@@ -1461,10 +1315,8 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   IngestionDataSourceSettings_AzureEventHubs get azureEventHubs => $_getN(2);
   @$pb.TagNumber(3)
-  set azureEventHubs(IngestionDataSourceSettings_AzureEventHubs v) {
-    $_setField(3, v);
-  }
-
+  set azureEventHubs(IngestionDataSourceSettings_AzureEventHubs value) =>
+      $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasAzureEventHubs() => $_has(2);
   @$pb.TagNumber(3)
@@ -1478,10 +1330,7 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   PlatformLogsSettings get platformLogsSettings => $_getN(3);
   @$pb.TagNumber(4)
-  set platformLogsSettings(PlatformLogsSettings v) {
-    $_setField(4, v);
-  }
-
+  set platformLogsSettings(PlatformLogsSettings value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasPlatformLogsSettings() => $_has(3);
   @$pb.TagNumber(4)
@@ -1493,10 +1342,7 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   IngestionDataSourceSettings_AwsMsk get awsMsk => $_getN(4);
   @$pb.TagNumber(5)
-  set awsMsk(IngestionDataSourceSettings_AwsMsk v) {
-    $_setField(5, v);
-  }
-
+  set awsMsk(IngestionDataSourceSettings_AwsMsk value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasAwsMsk() => $_has(4);
   @$pb.TagNumber(5)
@@ -1508,10 +1354,8 @@ class IngestionDataSourceSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   IngestionDataSourceSettings_ConfluentCloud get confluentCloud => $_getN(5);
   @$pb.TagNumber(6)
-  set confluentCloud(IngestionDataSourceSettings_ConfluentCloud v) {
-    $_setField(6, v);
-  }
-
+  set confluentCloud(IngestionDataSourceSettings_ConfluentCloud value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasConfluentCloud() => $_has(5);
   @$pb.TagNumber(6)
@@ -1526,19 +1370,19 @@ class PlatformLogsSettings extends $pb.GeneratedMessage {
   factory PlatformLogsSettings({
     PlatformLogsSettings_Severity? severity,
   }) {
-    final $result = create();
-    if (severity != null) {
-      $result.severity = severity;
-    }
-    return $result;
+    final result = create();
+    if (severity != null) result.severity = severity;
+    return result;
   }
-  PlatformLogsSettings._() : super();
-  factory PlatformLogsSettings.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PlatformLogsSettings.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PlatformLogsSettings._();
+
+  factory PlatformLogsSettings.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PlatformLogsSettings.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PlatformLogsSettings',
@@ -1560,10 +1404,12 @@ class PlatformLogsSettings extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PlatformLogsSettings))
           as PlatformLogsSettings;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PlatformLogsSettings create() => PlatformLogsSettings._();
+  @$core.override
   PlatformLogsSettings createEmptyInstance() => create();
   static $pb.PbList<PlatformLogsSettings> createRepeated() =>
       $pb.PbList<PlatformLogsSettings>();
@@ -1576,10 +1422,7 @@ class PlatformLogsSettings extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   PlatformLogsSettings_Severity get severity => $_getN(0);
   @$pb.TagNumber(1)
-  set severity(PlatformLogsSettings_Severity v) {
-    $_setField(1, v);
-  }
-
+  set severity(PlatformLogsSettings_Severity value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSeverity() => $_has(0);
   @$pb.TagNumber(1)
@@ -1596,14 +1439,16 @@ class PlatformLogsSettings extends $pb.GeneratedMessage {
 /// all, and ingestion of the subsequent messages will proceed as normal.
 class IngestionFailureEvent_ApiViolationReason extends $pb.GeneratedMessage {
   factory IngestionFailureEvent_ApiViolationReason() => create();
-  IngestionFailureEvent_ApiViolationReason._() : super();
+
+  IngestionFailureEvent_ApiViolationReason._();
+
   factory IngestionFailureEvent_ApiViolationReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent_ApiViolationReason.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent_ApiViolationReason.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionFailureEvent.ApiViolationReason',
@@ -1622,11 +1467,13 @@ class IngestionFailureEvent_ApiViolationReason extends $pb.GeneratedMessage {
               updates(message as IngestionFailureEvent_ApiViolationReason))
           as IngestionFailureEvent_ApiViolationReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_ApiViolationReason create() =>
       IngestionFailureEvent_ApiViolationReason._();
+  @$core.override
   IngestionFailureEvent_ApiViolationReason createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent_ApiViolationReason>
       createRepeated() =>
@@ -1642,14 +1489,16 @@ class IngestionFailureEvent_ApiViolationReason extends $pb.GeneratedMessage {
 /// occurs, one or more Avro objects won't be ingested.
 class IngestionFailureEvent_AvroFailureReason extends $pb.GeneratedMessage {
   factory IngestionFailureEvent_AvroFailureReason() => create();
-  IngestionFailureEvent_AvroFailureReason._() : super();
+
+  IngestionFailureEvent_AvroFailureReason._();
+
   factory IngestionFailureEvent_AvroFailureReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent_AvroFailureReason.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent_AvroFailureReason.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionFailureEvent.AvroFailureReason',
@@ -1668,11 +1517,13 @@ class IngestionFailureEvent_AvroFailureReason extends $pb.GeneratedMessage {
               updates(message as IngestionFailureEvent_AvroFailureReason))
           as IngestionFailureEvent_AvroFailureReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_AvroFailureReason create() =>
       IngestionFailureEvent_AvroFailureReason._();
+  @$core.override
   IngestionFailureEvent_AvroFailureReason createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent_AvroFailureReason> createRepeated() =>
       $pb.PbList<IngestionFailureEvent_AvroFailureReason>();
@@ -1687,14 +1538,17 @@ class IngestionFailureEvent_AvroFailureReason extends $pb.GeneratedMessage {
 /// validation violation.
 class IngestionFailureEvent_SchemaViolationReason extends $pb.GeneratedMessage {
   factory IngestionFailureEvent_SchemaViolationReason() => create();
-  IngestionFailureEvent_SchemaViolationReason._() : super();
+
+  IngestionFailureEvent_SchemaViolationReason._();
+
   factory IngestionFailureEvent_SchemaViolationReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent_SchemaViolationReason.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent_SchemaViolationReason.fromJson(
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'IngestionFailureEvent.SchemaViolationReason',
@@ -1713,11 +1567,13 @@ class IngestionFailureEvent_SchemaViolationReason extends $pb.GeneratedMessage {
               updates(message as IngestionFailureEvent_SchemaViolationReason))
           as IngestionFailureEvent_SchemaViolationReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_SchemaViolationReason create() =>
       IngestionFailureEvent_SchemaViolationReason._();
+  @$core.override
   IngestionFailureEvent_SchemaViolationReason createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent_SchemaViolationReason>
       createRepeated() =>
@@ -1735,15 +1591,17 @@ class IngestionFailureEvent_MessageTransformationFailureReason
     extends $pb.GeneratedMessage {
   factory IngestionFailureEvent_MessageTransformationFailureReason() =>
       create();
-  IngestionFailureEvent_MessageTransformationFailureReason._() : super();
+
+  IngestionFailureEvent_MessageTransformationFailureReason._();
+
   factory IngestionFailureEvent_MessageTransformationFailureReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory IngestionFailureEvent_MessageTransformationFailureReason.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames
@@ -1767,11 +1625,13 @@ class IngestionFailureEvent_MessageTransformationFailureReason
               as IngestionFailureEvent_MessageTransformationFailureReason))
           as IngestionFailureEvent_MessageTransformationFailureReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_MessageTransformationFailureReason create() =>
       IngestionFailureEvent_MessageTransformationFailureReason._();
+  @$core.override
   IngestionFailureEvent_MessageTransformationFailureReason
       createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent_MessageTransformationFailureReason>
@@ -1805,39 +1665,30 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
     IngestionFailureEvent_MessageTransformationFailureReason?
         messageTransformationFailureReason,
   }) {
-    final $result = create();
-    if (bucket != null) {
-      $result.bucket = bucket;
-    }
-    if (objectName != null) {
-      $result.objectName = objectName;
-    }
-    if (objectGeneration != null) {
-      $result.objectGeneration = objectGeneration;
-    }
-    if (avroFailureReason != null) {
-      $result.avroFailureReason = avroFailureReason;
-    }
-    if (apiViolationReason != null) {
-      $result.apiViolationReason = apiViolationReason;
-    }
-    if (schemaViolationReason != null) {
-      $result.schemaViolationReason = schemaViolationReason;
-    }
-    if (messageTransformationFailureReason != null) {
-      $result.messageTransformationFailureReason =
+    final result = create();
+    if (bucket != null) result.bucket = bucket;
+    if (objectName != null) result.objectName = objectName;
+    if (objectGeneration != null) result.objectGeneration = objectGeneration;
+    if (avroFailureReason != null) result.avroFailureReason = avroFailureReason;
+    if (apiViolationReason != null)
+      result.apiViolationReason = apiViolationReason;
+    if (schemaViolationReason != null)
+      result.schemaViolationReason = schemaViolationReason;
+    if (messageTransformationFailureReason != null)
+      result.messageTransformationFailureReason =
           messageTransformationFailureReason;
-    }
-    return $result;
+    return result;
   }
-  IngestionFailureEvent_CloudStorageFailure._() : super();
+
+  IngestionFailureEvent_CloudStorageFailure._();
+
   factory IngestionFailureEvent_CloudStorageFailure.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent_CloudStorageFailure.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent_CloudStorageFailure.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core
       .Map<$core.int, IngestionFailureEvent_CloudStorageFailure_Reason>
@@ -1883,11 +1734,13 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
               updates(message as IngestionFailureEvent_CloudStorageFailure))
           as IngestionFailureEvent_CloudStorageFailure;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_CloudStorageFailure create() =>
       IngestionFailureEvent_CloudStorageFailure._();
+  @$core.override
   IngestionFailureEvent_CloudStorageFailure createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent_CloudStorageFailure>
       createRepeated() =>
@@ -1906,10 +1759,7 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get bucket => $_getSZ(0);
   @$pb.TagNumber(1)
-  set bucket($core.String v) {
-    $_setString(0, v);
-  }
-
+  set bucket($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasBucket() => $_has(0);
   @$pb.TagNumber(1)
@@ -1920,10 +1770,7 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get objectName => $_getSZ(1);
   @$pb.TagNumber(2)
-  set objectName($core.String v) {
-    $_setString(1, v);
-  }
-
+  set objectName($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasObjectName() => $_has(1);
   @$pb.TagNumber(2)
@@ -1934,10 +1781,7 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $fixnum.Int64 get objectGeneration => $_getI64(2);
   @$pb.TagNumber(3)
-  set objectGeneration($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set objectGeneration($fixnum.Int64 value) => $_setInt64(2, value);
   @$pb.TagNumber(3)
   $core.bool hasObjectGeneration() => $_has(2);
   @$pb.TagNumber(3)
@@ -1947,10 +1791,8 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   IngestionFailureEvent_AvroFailureReason get avroFailureReason => $_getN(3);
   @$pb.TagNumber(5)
-  set avroFailureReason(IngestionFailureEvent_AvroFailureReason v) {
-    $_setField(5, v);
-  }
-
+  set avroFailureReason(IngestionFailureEvent_AvroFailureReason value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasAvroFailureReason() => $_has(3);
   @$pb.TagNumber(5)
@@ -1964,10 +1806,8 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   IngestionFailureEvent_ApiViolationReason get apiViolationReason => $_getN(4);
   @$pb.TagNumber(6)
-  set apiViolationReason(IngestionFailureEvent_ApiViolationReason v) {
-    $_setField(6, v);
-  }
-
+  set apiViolationReason(IngestionFailureEvent_ApiViolationReason value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasApiViolationReason() => $_has(4);
   @$pb.TagNumber(6)
@@ -1981,10 +1821,9 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
   IngestionFailureEvent_SchemaViolationReason get schemaViolationReason =>
       $_getN(5);
   @$pb.TagNumber(7)
-  set schemaViolationReason(IngestionFailureEvent_SchemaViolationReason v) {
-    $_setField(7, v);
-  }
-
+  set schemaViolationReason(
+          IngestionFailureEvent_SchemaViolationReason value) =>
+      $_setField(7, value);
   @$pb.TagNumber(7)
   $core.bool hasSchemaViolationReason() => $_has(5);
   @$pb.TagNumber(7)
@@ -2000,10 +1839,8 @@ class IngestionFailureEvent_CloudStorageFailure extends $pb.GeneratedMessage {
       get messageTransformationFailureReason => $_getN(6);
   @$pb.TagNumber(8)
   set messageTransformationFailureReason(
-      IngestionFailureEvent_MessageTransformationFailureReason v) {
-    $_setField(8, v);
-  }
-
+          IngestionFailureEvent_MessageTransformationFailureReason value) =>
+      $_setField(8, value);
   @$pb.TagNumber(8)
   $core.bool hasMessageTransformationFailureReason() => $_has(6);
   @$pb.TagNumber(8)
@@ -2032,39 +1869,30 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
     IngestionFailureEvent_MessageTransformationFailureReason?
         messageTransformationFailureReason,
   }) {
-    final $result = create();
-    if (clusterArn != null) {
-      $result.clusterArn = clusterArn;
-    }
-    if (kafkaTopic != null) {
-      $result.kafkaTopic = kafkaTopic;
-    }
-    if (partitionId != null) {
-      $result.partitionId = partitionId;
-    }
-    if (offset != null) {
-      $result.offset = offset;
-    }
-    if (apiViolationReason != null) {
-      $result.apiViolationReason = apiViolationReason;
-    }
-    if (schemaViolationReason != null) {
-      $result.schemaViolationReason = schemaViolationReason;
-    }
-    if (messageTransformationFailureReason != null) {
-      $result.messageTransformationFailureReason =
+    final result = create();
+    if (clusterArn != null) result.clusterArn = clusterArn;
+    if (kafkaTopic != null) result.kafkaTopic = kafkaTopic;
+    if (partitionId != null) result.partitionId = partitionId;
+    if (offset != null) result.offset = offset;
+    if (apiViolationReason != null)
+      result.apiViolationReason = apiViolationReason;
+    if (schemaViolationReason != null)
+      result.schemaViolationReason = schemaViolationReason;
+    if (messageTransformationFailureReason != null)
+      result.messageTransformationFailureReason =
           messageTransformationFailureReason;
-    }
-    return $result;
+    return result;
   }
-  IngestionFailureEvent_AwsMskFailureReason._() : super();
+
+  IngestionFailureEvent_AwsMskFailureReason._();
+
   factory IngestionFailureEvent_AwsMskFailureReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent_AwsMskFailureReason.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent_AwsMskFailureReason.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core
       .Map<$core.int, IngestionFailureEvent_AwsMskFailureReason_Reason>
@@ -2107,11 +1935,13 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
               updates(message as IngestionFailureEvent_AwsMskFailureReason))
           as IngestionFailureEvent_AwsMskFailureReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_AwsMskFailureReason create() =>
       IngestionFailureEvent_AwsMskFailureReason._();
+  @$core.override
   IngestionFailureEvent_AwsMskFailureReason createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent_AwsMskFailureReason>
       createRepeated() =>
@@ -2130,10 +1960,7 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get clusterArn => $_getSZ(0);
   @$pb.TagNumber(1)
-  set clusterArn($core.String v) {
-    $_setString(0, v);
-  }
-
+  set clusterArn($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasClusterArn() => $_has(0);
   @$pb.TagNumber(1)
@@ -2143,10 +1970,7 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get kafkaTopic => $_getSZ(1);
   @$pb.TagNumber(2)
-  set kafkaTopic($core.String v) {
-    $_setString(1, v);
-  }
-
+  set kafkaTopic($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasKafkaTopic() => $_has(1);
   @$pb.TagNumber(2)
@@ -2156,10 +1980,7 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $fixnum.Int64 get partitionId => $_getI64(2);
   @$pb.TagNumber(3)
-  set partitionId($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set partitionId($fixnum.Int64 value) => $_setInt64(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPartitionId() => $_has(2);
   @$pb.TagNumber(3)
@@ -2170,10 +1991,7 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $fixnum.Int64 get offset => $_getI64(3);
   @$pb.TagNumber(4)
-  set offset($fixnum.Int64 v) {
-    $_setInt64(3, v);
-  }
-
+  set offset($fixnum.Int64 value) => $_setInt64(3, value);
   @$pb.TagNumber(4)
   $core.bool hasOffset() => $_has(3);
   @$pb.TagNumber(4)
@@ -2184,10 +2002,8 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   IngestionFailureEvent_ApiViolationReason get apiViolationReason => $_getN(4);
   @$pb.TagNumber(5)
-  set apiViolationReason(IngestionFailureEvent_ApiViolationReason v) {
-    $_setField(5, v);
-  }
-
+  set apiViolationReason(IngestionFailureEvent_ApiViolationReason value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasApiViolationReason() => $_has(4);
   @$pb.TagNumber(5)
@@ -2201,10 +2017,9 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
   IngestionFailureEvent_SchemaViolationReason get schemaViolationReason =>
       $_getN(5);
   @$pb.TagNumber(6)
-  set schemaViolationReason(IngestionFailureEvent_SchemaViolationReason v) {
-    $_setField(6, v);
-  }
-
+  set schemaViolationReason(
+          IngestionFailureEvent_SchemaViolationReason value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasSchemaViolationReason() => $_has(5);
   @$pb.TagNumber(6)
@@ -2220,10 +2035,8 @@ class IngestionFailureEvent_AwsMskFailureReason extends $pb.GeneratedMessage {
       get messageTransformationFailureReason => $_getN(6);
   @$pb.TagNumber(7)
   set messageTransformationFailureReason(
-      IngestionFailureEvent_MessageTransformationFailureReason v) {
-    $_setField(7, v);
-  }
-
+          IngestionFailureEvent_MessageTransformationFailureReason value) =>
+      $_setField(7, value);
   @$pb.TagNumber(7)
   $core.bool hasMessageTransformationFailureReason() => $_has(6);
   @$pb.TagNumber(7)
@@ -2253,40 +2066,31 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
     IngestionFailureEvent_MessageTransformationFailureReason?
         messageTransformationFailureReason,
   }) {
-    final $result = create();
-    if (namespace != null) {
-      $result.namespace = namespace;
-    }
-    if (eventHub != null) {
-      $result.eventHub = eventHub;
-    }
-    if (partitionId != null) {
-      $result.partitionId = partitionId;
-    }
-    if (offset != null) {
-      $result.offset = offset;
-    }
-    if (apiViolationReason != null) {
-      $result.apiViolationReason = apiViolationReason;
-    }
-    if (schemaViolationReason != null) {
-      $result.schemaViolationReason = schemaViolationReason;
-    }
-    if (messageTransformationFailureReason != null) {
-      $result.messageTransformationFailureReason =
+    final result = create();
+    if (namespace != null) result.namespace = namespace;
+    if (eventHub != null) result.eventHub = eventHub;
+    if (partitionId != null) result.partitionId = partitionId;
+    if (offset != null) result.offset = offset;
+    if (apiViolationReason != null)
+      result.apiViolationReason = apiViolationReason;
+    if (schemaViolationReason != null)
+      result.schemaViolationReason = schemaViolationReason;
+    if (messageTransformationFailureReason != null)
+      result.messageTransformationFailureReason =
           messageTransformationFailureReason;
-    }
-    return $result;
+    return result;
   }
-  IngestionFailureEvent_AzureEventHubsFailureReason._() : super();
+
+  IngestionFailureEvent_AzureEventHubsFailureReason._();
+
   factory IngestionFailureEvent_AzureEventHubsFailureReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory IngestionFailureEvent_AzureEventHubsFailureReason.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core
       .Map<$core.int, IngestionFailureEvent_AzureEventHubsFailureReason_Reason>
@@ -2335,11 +2139,13 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
               message as IngestionFailureEvent_AzureEventHubsFailureReason))
           as IngestionFailureEvent_AzureEventHubsFailureReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_AzureEventHubsFailureReason create() =>
       IngestionFailureEvent_AzureEventHubsFailureReason._();
+  @$core.override
   IngestionFailureEvent_AzureEventHubsFailureReason createEmptyInstance() =>
       create();
   static $pb.PbList<IngestionFailureEvent_AzureEventHubsFailureReason>
@@ -2360,10 +2166,7 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
   @$pb.TagNumber(1)
   $core.String get namespace => $_getSZ(0);
   @$pb.TagNumber(1)
-  set namespace($core.String v) {
-    $_setString(0, v);
-  }
-
+  set namespace($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasNamespace() => $_has(0);
   @$pb.TagNumber(1)
@@ -2373,10 +2176,7 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
   @$pb.TagNumber(2)
   $core.String get eventHub => $_getSZ(1);
   @$pb.TagNumber(2)
-  set eventHub($core.String v) {
-    $_setString(1, v);
-  }
-
+  set eventHub($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasEventHub() => $_has(1);
   @$pb.TagNumber(2)
@@ -2386,10 +2186,7 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
   @$pb.TagNumber(3)
   $fixnum.Int64 get partitionId => $_getI64(2);
   @$pb.TagNumber(3)
-  set partitionId($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set partitionId($fixnum.Int64 value) => $_setInt64(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPartitionId() => $_has(2);
   @$pb.TagNumber(3)
@@ -2400,10 +2197,7 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
   @$pb.TagNumber(4)
   $fixnum.Int64 get offset => $_getI64(3);
   @$pb.TagNumber(4)
-  set offset($fixnum.Int64 v) {
-    $_setInt64(3, v);
-  }
-
+  set offset($fixnum.Int64 value) => $_setInt64(3, value);
   @$pb.TagNumber(4)
   $core.bool hasOffset() => $_has(3);
   @$pb.TagNumber(4)
@@ -2414,10 +2208,8 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
   @$pb.TagNumber(5)
   IngestionFailureEvent_ApiViolationReason get apiViolationReason => $_getN(4);
   @$pb.TagNumber(5)
-  set apiViolationReason(IngestionFailureEvent_ApiViolationReason v) {
-    $_setField(5, v);
-  }
-
+  set apiViolationReason(IngestionFailureEvent_ApiViolationReason value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasApiViolationReason() => $_has(4);
   @$pb.TagNumber(5)
@@ -2431,10 +2223,9 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
   IngestionFailureEvent_SchemaViolationReason get schemaViolationReason =>
       $_getN(5);
   @$pb.TagNumber(6)
-  set schemaViolationReason(IngestionFailureEvent_SchemaViolationReason v) {
-    $_setField(6, v);
-  }
-
+  set schemaViolationReason(
+          IngestionFailureEvent_SchemaViolationReason value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasSchemaViolationReason() => $_has(5);
   @$pb.TagNumber(6)
@@ -2450,10 +2241,8 @@ class IngestionFailureEvent_AzureEventHubsFailureReason
       get messageTransformationFailureReason => $_getN(6);
   @$pb.TagNumber(7)
   set messageTransformationFailureReason(
-      IngestionFailureEvent_MessageTransformationFailureReason v) {
-    $_setField(7, v);
-  }
-
+          IngestionFailureEvent_MessageTransformationFailureReason value) =>
+      $_setField(7, value);
   @$pb.TagNumber(7)
   $core.bool hasMessageTransformationFailureReason() => $_has(6);
   @$pb.TagNumber(7)
@@ -2483,40 +2272,31 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
     IngestionFailureEvent_MessageTransformationFailureReason?
         messageTransformationFailureReason,
   }) {
-    final $result = create();
-    if (clusterId != null) {
-      $result.clusterId = clusterId;
-    }
-    if (kafkaTopic != null) {
-      $result.kafkaTopic = kafkaTopic;
-    }
-    if (partitionId != null) {
-      $result.partitionId = partitionId;
-    }
-    if (offset != null) {
-      $result.offset = offset;
-    }
-    if (apiViolationReason != null) {
-      $result.apiViolationReason = apiViolationReason;
-    }
-    if (schemaViolationReason != null) {
-      $result.schemaViolationReason = schemaViolationReason;
-    }
-    if (messageTransformationFailureReason != null) {
-      $result.messageTransformationFailureReason =
+    final result = create();
+    if (clusterId != null) result.clusterId = clusterId;
+    if (kafkaTopic != null) result.kafkaTopic = kafkaTopic;
+    if (partitionId != null) result.partitionId = partitionId;
+    if (offset != null) result.offset = offset;
+    if (apiViolationReason != null)
+      result.apiViolationReason = apiViolationReason;
+    if (schemaViolationReason != null)
+      result.schemaViolationReason = schemaViolationReason;
+    if (messageTransformationFailureReason != null)
+      result.messageTransformationFailureReason =
           messageTransformationFailureReason;
-    }
-    return $result;
+    return result;
   }
-  IngestionFailureEvent_ConfluentCloudFailureReason._() : super();
+
+  IngestionFailureEvent_ConfluentCloudFailureReason._();
+
   factory IngestionFailureEvent_ConfluentCloudFailureReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory IngestionFailureEvent_ConfluentCloudFailureReason.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core
       .Map<$core.int, IngestionFailureEvent_ConfluentCloudFailureReason_Reason>
@@ -2565,11 +2345,13 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
               message as IngestionFailureEvent_ConfluentCloudFailureReason))
           as IngestionFailureEvent_ConfluentCloudFailureReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_ConfluentCloudFailureReason create() =>
       IngestionFailureEvent_ConfluentCloudFailureReason._();
+  @$core.override
   IngestionFailureEvent_ConfluentCloudFailureReason createEmptyInstance() =>
       create();
   static $pb.PbList<IngestionFailureEvent_ConfluentCloudFailureReason>
@@ -2590,10 +2372,7 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
   @$pb.TagNumber(1)
   $core.String get clusterId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set clusterId($core.String v) {
-    $_setString(0, v);
-  }
-
+  set clusterId($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasClusterId() => $_has(0);
   @$pb.TagNumber(1)
@@ -2603,10 +2382,7 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
   @$pb.TagNumber(2)
   $core.String get kafkaTopic => $_getSZ(1);
   @$pb.TagNumber(2)
-  set kafkaTopic($core.String v) {
-    $_setString(1, v);
-  }
-
+  set kafkaTopic($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasKafkaTopic() => $_has(1);
   @$pb.TagNumber(2)
@@ -2616,10 +2392,7 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
   @$pb.TagNumber(3)
   $fixnum.Int64 get partitionId => $_getI64(2);
   @$pb.TagNumber(3)
-  set partitionId($fixnum.Int64 v) {
-    $_setInt64(2, v);
-  }
-
+  set partitionId($fixnum.Int64 value) => $_setInt64(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPartitionId() => $_has(2);
   @$pb.TagNumber(3)
@@ -2630,10 +2403,7 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
   @$pb.TagNumber(4)
   $fixnum.Int64 get offset => $_getI64(3);
   @$pb.TagNumber(4)
-  set offset($fixnum.Int64 v) {
-    $_setInt64(3, v);
-  }
-
+  set offset($fixnum.Int64 value) => $_setInt64(3, value);
   @$pb.TagNumber(4)
   $core.bool hasOffset() => $_has(3);
   @$pb.TagNumber(4)
@@ -2644,10 +2414,8 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
   @$pb.TagNumber(5)
   IngestionFailureEvent_ApiViolationReason get apiViolationReason => $_getN(4);
   @$pb.TagNumber(5)
-  set apiViolationReason(IngestionFailureEvent_ApiViolationReason v) {
-    $_setField(5, v);
-  }
-
+  set apiViolationReason(IngestionFailureEvent_ApiViolationReason value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasApiViolationReason() => $_has(4);
   @$pb.TagNumber(5)
@@ -2661,10 +2429,9 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
   IngestionFailureEvent_SchemaViolationReason get schemaViolationReason =>
       $_getN(5);
   @$pb.TagNumber(6)
-  set schemaViolationReason(IngestionFailureEvent_SchemaViolationReason v) {
-    $_setField(6, v);
-  }
-
+  set schemaViolationReason(
+          IngestionFailureEvent_SchemaViolationReason value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasSchemaViolationReason() => $_has(5);
   @$pb.TagNumber(6)
@@ -2680,10 +2447,8 @@ class IngestionFailureEvent_ConfluentCloudFailureReason
       get messageTransformationFailureReason => $_getN(6);
   @$pb.TagNumber(7)
   set messageTransformationFailureReason(
-      IngestionFailureEvent_MessageTransformationFailureReason v) {
-    $_setField(7, v);
-  }
-
+          IngestionFailureEvent_MessageTransformationFailureReason value) =>
+      $_setField(7, value);
   @$pb.TagNumber(7)
   $core.bool hasMessageTransformationFailureReason() => $_has(6);
   @$pb.TagNumber(7)
@@ -2712,36 +2477,30 @@ class IngestionFailureEvent_AwsKinesisFailureReason
         messageTransformationFailureReason,
     IngestionFailureEvent_ApiViolationReason? apiViolationReason,
   }) {
-    final $result = create();
-    if (streamArn != null) {
-      $result.streamArn = streamArn;
-    }
-    if (partitionKey != null) {
-      $result.partitionKey = partitionKey;
-    }
-    if (sequenceNumber != null) {
-      $result.sequenceNumber = sequenceNumber;
-    }
-    if (schemaViolationReason != null) {
-      $result.schemaViolationReason = schemaViolationReason;
-    }
-    if (messageTransformationFailureReason != null) {
-      $result.messageTransformationFailureReason =
+    final result = create();
+    if (streamArn != null) result.streamArn = streamArn;
+    if (partitionKey != null) result.partitionKey = partitionKey;
+    if (sequenceNumber != null) result.sequenceNumber = sequenceNumber;
+    if (schemaViolationReason != null)
+      result.schemaViolationReason = schemaViolationReason;
+    if (messageTransformationFailureReason != null)
+      result.messageTransformationFailureReason =
           messageTransformationFailureReason;
-    }
-    if (apiViolationReason != null) {
-      $result.apiViolationReason = apiViolationReason;
-    }
-    return $result;
+    if (apiViolationReason != null)
+      result.apiViolationReason = apiViolationReason;
+    return result;
   }
-  IngestionFailureEvent_AwsKinesisFailureReason._() : super();
+
+  IngestionFailureEvent_AwsKinesisFailureReason._();
+
   factory IngestionFailureEvent_AwsKinesisFailureReason.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent_AwsKinesisFailureReason.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent_AwsKinesisFailureReason.fromJson(
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core
       .Map<$core.int, IngestionFailureEvent_AwsKinesisFailureReason_Reason>
@@ -2785,11 +2544,13 @@ class IngestionFailureEvent_AwsKinesisFailureReason
               updates(message as IngestionFailureEvent_AwsKinesisFailureReason))
           as IngestionFailureEvent_AwsKinesisFailureReason;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent_AwsKinesisFailureReason create() =>
       IngestionFailureEvent_AwsKinesisFailureReason._();
+  @$core.override
   IngestionFailureEvent_AwsKinesisFailureReason createEmptyInstance() =>
       create();
   static $pb.PbList<IngestionFailureEvent_AwsKinesisFailureReason>
@@ -2810,10 +2571,7 @@ class IngestionFailureEvent_AwsKinesisFailureReason
   @$pb.TagNumber(1)
   $core.String get streamArn => $_getSZ(0);
   @$pb.TagNumber(1)
-  set streamArn($core.String v) {
-    $_setString(0, v);
-  }
-
+  set streamArn($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasStreamArn() => $_has(0);
   @$pb.TagNumber(1)
@@ -2823,10 +2581,7 @@ class IngestionFailureEvent_AwsKinesisFailureReason
   @$pb.TagNumber(2)
   $core.String get partitionKey => $_getSZ(1);
   @$pb.TagNumber(2)
-  set partitionKey($core.String v) {
-    $_setString(1, v);
-  }
-
+  set partitionKey($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPartitionKey() => $_has(1);
   @$pb.TagNumber(2)
@@ -2836,10 +2591,7 @@ class IngestionFailureEvent_AwsKinesisFailureReason
   @$pb.TagNumber(3)
   $core.String get sequenceNumber => $_getSZ(2);
   @$pb.TagNumber(3)
-  set sequenceNumber($core.String v) {
-    $_setString(2, v);
-  }
-
+  set sequenceNumber($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasSequenceNumber() => $_has(2);
   @$pb.TagNumber(3)
@@ -2850,10 +2602,9 @@ class IngestionFailureEvent_AwsKinesisFailureReason
   IngestionFailureEvent_SchemaViolationReason get schemaViolationReason =>
       $_getN(3);
   @$pb.TagNumber(4)
-  set schemaViolationReason(IngestionFailureEvent_SchemaViolationReason v) {
-    $_setField(4, v);
-  }
-
+  set schemaViolationReason(
+          IngestionFailureEvent_SchemaViolationReason value) =>
+      $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasSchemaViolationReason() => $_has(3);
   @$pb.TagNumber(4)
@@ -2869,10 +2620,8 @@ class IngestionFailureEvent_AwsKinesisFailureReason
       get messageTransformationFailureReason => $_getN(4);
   @$pb.TagNumber(5)
   set messageTransformationFailureReason(
-      IngestionFailureEvent_MessageTransformationFailureReason v) {
-    $_setField(5, v);
-  }
-
+          IngestionFailureEvent_MessageTransformationFailureReason value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasMessageTransformationFailureReason() => $_has(4);
   @$pb.TagNumber(5)
@@ -2887,10 +2636,8 @@ class IngestionFailureEvent_AwsKinesisFailureReason
   @$pb.TagNumber(6)
   IngestionFailureEvent_ApiViolationReason get apiViolationReason => $_getN(5);
   @$pb.TagNumber(6)
-  set apiViolationReason(IngestionFailureEvent_ApiViolationReason v) {
-    $_setField(6, v);
-  }
-
+  set apiViolationReason(IngestionFailureEvent_ApiViolationReason value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasApiViolationReason() => $_has(5);
   @$pb.TagNumber(6)
@@ -2921,37 +2668,28 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
     IngestionFailureEvent_ConfluentCloudFailureReason? confluentCloudFailure,
     IngestionFailureEvent_AwsKinesisFailureReason? awsKinesisFailure,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (errorMessage != null) {
-      $result.errorMessage = errorMessage;
-    }
-    if (cloudStorageFailure != null) {
-      $result.cloudStorageFailure = cloudStorageFailure;
-    }
-    if (awsMskFailure != null) {
-      $result.awsMskFailure = awsMskFailure;
-    }
-    if (azureEventHubsFailure != null) {
-      $result.azureEventHubsFailure = azureEventHubsFailure;
-    }
-    if (confluentCloudFailure != null) {
-      $result.confluentCloudFailure = confluentCloudFailure;
-    }
-    if (awsKinesisFailure != null) {
-      $result.awsKinesisFailure = awsKinesisFailure;
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    if (errorMessage != null) result.errorMessage = errorMessage;
+    if (cloudStorageFailure != null)
+      result.cloudStorageFailure = cloudStorageFailure;
+    if (awsMskFailure != null) result.awsMskFailure = awsMskFailure;
+    if (azureEventHubsFailure != null)
+      result.azureEventHubsFailure = azureEventHubsFailure;
+    if (confluentCloudFailure != null)
+      result.confluentCloudFailure = confluentCloudFailure;
+    if (awsKinesisFailure != null) result.awsKinesisFailure = awsKinesisFailure;
+    return result;
   }
-  IngestionFailureEvent._() : super();
-  factory IngestionFailureEvent.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory IngestionFailureEvent.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  IngestionFailureEvent._();
+
+  factory IngestionFailureEvent.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory IngestionFailureEvent.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, IngestionFailureEvent_Failure>
       _IngestionFailureEvent_FailureByTag = {
@@ -2996,10 +2734,12 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as IngestionFailureEvent))
           as IngestionFailureEvent;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static IngestionFailureEvent create() => IngestionFailureEvent._();
+  @$core.override
   IngestionFailureEvent createEmptyInstance() => create();
   static $pb.PbList<IngestionFailureEvent> createRepeated() =>
       $pb.PbList<IngestionFailureEvent>();
@@ -3017,10 +2757,7 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get topic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set topic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set topic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -3030,10 +2767,7 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get errorMessage => $_getSZ(1);
   @$pb.TagNumber(2)
-  set errorMessage($core.String v) {
-    $_setString(1, v);
-  }
-
+  set errorMessage($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasErrorMessage() => $_has(1);
   @$pb.TagNumber(2)
@@ -3044,10 +2778,8 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
   IngestionFailureEvent_CloudStorageFailure get cloudStorageFailure =>
       $_getN(2);
   @$pb.TagNumber(3)
-  set cloudStorageFailure(IngestionFailureEvent_CloudStorageFailure v) {
-    $_setField(3, v);
-  }
-
+  set cloudStorageFailure(IngestionFailureEvent_CloudStorageFailure value) =>
+      $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasCloudStorageFailure() => $_has(2);
   @$pb.TagNumber(3)
@@ -3060,10 +2792,8 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   IngestionFailureEvent_AwsMskFailureReason get awsMskFailure => $_getN(3);
   @$pb.TagNumber(4)
-  set awsMskFailure(IngestionFailureEvent_AwsMskFailureReason v) {
-    $_setField(4, v);
-  }
-
+  set awsMskFailure(IngestionFailureEvent_AwsMskFailureReason value) =>
+      $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasAwsMskFailure() => $_has(3);
   @$pb.TagNumber(4)
@@ -3078,10 +2808,8 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
       $_getN(4);
   @$pb.TagNumber(5)
   set azureEventHubsFailure(
-      IngestionFailureEvent_AzureEventHubsFailureReason v) {
-    $_setField(5, v);
-  }
-
+          IngestionFailureEvent_AzureEventHubsFailureReason value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasAzureEventHubsFailure() => $_has(4);
   @$pb.TagNumber(5)
@@ -3096,10 +2824,8 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
       $_getN(5);
   @$pb.TagNumber(6)
   set confluentCloudFailure(
-      IngestionFailureEvent_ConfluentCloudFailureReason v) {
-    $_setField(6, v);
-  }
-
+          IngestionFailureEvent_ConfluentCloudFailureReason value) =>
+      $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasConfluentCloudFailure() => $_has(5);
   @$pb.TagNumber(6)
@@ -3113,10 +2839,8 @@ class IngestionFailureEvent extends $pb.GeneratedMessage {
   IngestionFailureEvent_AwsKinesisFailureReason get awsKinesisFailure =>
       $_getN(6);
   @$pb.TagNumber(7)
-  set awsKinesisFailure(IngestionFailureEvent_AwsKinesisFailureReason v) {
-    $_setField(7, v);
-  }
-
+  set awsKinesisFailure(IngestionFailureEvent_AwsKinesisFailureReason value) =>
+      $_setField(7, value);
   @$pb.TagNumber(7)
   $core.bool hasAwsKinesisFailure() => $_has(6);
   @$pb.TagNumber(7)
@@ -3133,22 +2857,20 @@ class JavaScriptUDF extends $pb.GeneratedMessage {
     $core.String? functionName,
     $core.String? code,
   }) {
-    final $result = create();
-    if (functionName != null) {
-      $result.functionName = functionName;
-    }
-    if (code != null) {
-      $result.code = code;
-    }
-    return $result;
+    final result = create();
+    if (functionName != null) result.functionName = functionName;
+    if (code != null) result.code = code;
+    return result;
   }
-  JavaScriptUDF._() : super();
-  factory JavaScriptUDF.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory JavaScriptUDF.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  JavaScriptUDF._();
+
+  factory JavaScriptUDF.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory JavaScriptUDF.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'JavaScriptUDF',
@@ -3166,10 +2888,12 @@ class JavaScriptUDF extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as JavaScriptUDF))
           as JavaScriptUDF;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static JavaScriptUDF create() => JavaScriptUDF._();
+  @$core.override
   JavaScriptUDF createEmptyInstance() => create();
   static $pb.PbList<JavaScriptUDF> createRepeated() =>
       $pb.PbList<JavaScriptUDF>();
@@ -3183,10 +2907,7 @@ class JavaScriptUDF extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get functionName => $_getSZ(0);
   @$pb.TagNumber(1)
-  set functionName($core.String v) {
-    $_setString(0, v);
-  }
-
+  set functionName($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasFunctionName() => $_has(0);
   @$pb.TagNumber(1)
@@ -3225,10 +2946,7 @@ class JavaScriptUDF extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get code => $_getSZ(1);
   @$pb.TagNumber(2)
-  set code($core.String v) {
-    $_setString(1, v);
-  }
-
+  set code($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasCode() => $_has(1);
   @$pb.TagNumber(2)
@@ -3238,29 +2956,30 @@ class JavaScriptUDF extends $pb.GeneratedMessage {
 /// Configuration for making inferences using arbitrary JSON payloads.
 class AIInference_UnstructuredInference extends $pb.GeneratedMessage {
   factory AIInference_UnstructuredInference({
-    $4.Struct? parameters,
+    $3.Struct? parameters,
   }) {
-    final $result = create();
-    if (parameters != null) {
-      $result.parameters = parameters;
-    }
-    return $result;
+    final result = create();
+    if (parameters != null) result.parameters = parameters;
+    return result;
   }
-  AIInference_UnstructuredInference._() : super();
-  factory AIInference_UnstructuredInference.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory AIInference_UnstructuredInference.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  AIInference_UnstructuredInference._();
+
+  factory AIInference_UnstructuredInference.fromBuffer(
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AIInference_UnstructuredInference.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AIInference.UnstructuredInference',
       package:
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
-    ..aOM<$4.Struct>(1, _omitFieldNames ? '' : 'parameters',
-        subBuilder: $4.Struct.create)
+    ..aOM<$3.Struct>(1, _omitFieldNames ? '' : 'parameters',
+        subBuilder: $3.Struct.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -3273,11 +2992,13 @@ class AIInference_UnstructuredInference extends $pb.GeneratedMessage {
               updates(message as AIInference_UnstructuredInference))
           as AIInference_UnstructuredInference;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AIInference_UnstructuredInference create() =>
       AIInference_UnstructuredInference._();
+  @$core.override
   AIInference_UnstructuredInference createEmptyInstance() => create();
   static $pb.PbList<AIInference_UnstructuredInference> createRepeated() =>
       $pb.PbList<AIInference_UnstructuredInference>();
@@ -3291,18 +3012,15 @@ class AIInference_UnstructuredInference extends $pb.GeneratedMessage {
   /// The parameters object is combined with the data field of the Pub/Sub
   /// message to form the inference request.
   @$pb.TagNumber(1)
-  $4.Struct get parameters => $_getN(0);
+  $3.Struct get parameters => $_getN(0);
   @$pb.TagNumber(1)
-  set parameters($4.Struct v) {
-    $_setField(1, v);
-  }
-
+  set parameters($3.Struct value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasParameters() => $_has(0);
   @$pb.TagNumber(1)
   void clearParameters() => $_clearField(1);
   @$pb.TagNumber(1)
-  $4.Struct ensureParameters() => $_ensure(0);
+  $3.Struct ensureParameters() => $_ensure(0);
 }
 
 enum AIInference_InferenceMode { unstructuredInference, notSet }
@@ -3314,25 +3032,23 @@ class AIInference extends $pb.GeneratedMessage {
     AIInference_UnstructuredInference? unstructuredInference,
     $core.String? serviceAccountEmail,
   }) {
-    final $result = create();
-    if (endpoint != null) {
-      $result.endpoint = endpoint;
-    }
-    if (unstructuredInference != null) {
-      $result.unstructuredInference = unstructuredInference;
-    }
-    if (serviceAccountEmail != null) {
-      $result.serviceAccountEmail = serviceAccountEmail;
-    }
-    return $result;
+    final result = create();
+    if (endpoint != null) result.endpoint = endpoint;
+    if (unstructuredInference != null)
+      result.unstructuredInference = unstructuredInference;
+    if (serviceAccountEmail != null)
+      result.serviceAccountEmail = serviceAccountEmail;
+    return result;
   }
-  AIInference._() : super();
-  factory AIInference.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory AIInference.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  AIInference._();
+
+  factory AIInference.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AIInference.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, AIInference_InferenceMode>
       _AIInference_InferenceModeByTag = {
@@ -3359,10 +3075,12 @@ class AIInference extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as AIInference))
           as AIInference;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AIInference create() => AIInference._();
+  @$core.override
   AIInference createEmptyInstance() => create();
   static $pb.PbList<AIInference> createRepeated() => $pb.PbList<AIInference>();
   @$core.pragma('dart2js:noInline')
@@ -3381,10 +3099,7 @@ class AIInference extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get endpoint => $_getSZ(0);
   @$pb.TagNumber(1)
-  set endpoint($core.String v) {
-    $_setString(0, v);
-  }
-
+  set endpoint($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasEndpoint() => $_has(0);
   @$pb.TagNumber(1)
@@ -3394,10 +3109,8 @@ class AIInference extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   AIInference_UnstructuredInference get unstructuredInference => $_getN(1);
   @$pb.TagNumber(2)
-  set unstructuredInference(AIInference_UnstructuredInference v) {
-    $_setField(2, v);
-  }
-
+  set unstructuredInference(AIInference_UnstructuredInference value) =>
+      $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUnstructuredInference() => $_has(1);
   @$pb.TagNumber(2)
@@ -3415,10 +3128,7 @@ class AIInference extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get serviceAccountEmail => $_getSZ(2);
   @$pb.TagNumber(3)
-  set serviceAccountEmail($core.String v) {
-    $_setString(2, v);
-  }
-
+  set serviceAccountEmail($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasServiceAccountEmail() => $_has(2);
   @$pb.TagNumber(3)
@@ -3435,29 +3145,22 @@ class MessageTransform extends $pb.GeneratedMessage {
     $core.bool? disabled,
     AIInference? aiInference,
   }) {
-    final $result = create();
-    if (javascriptUdf != null) {
-      $result.javascriptUdf = javascriptUdf;
-    }
-    if (enabled != null) {
-      // ignore: deprecated_member_use_from_same_package
-      $result.enabled = enabled;
-    }
-    if (disabled != null) {
-      $result.disabled = disabled;
-    }
-    if (aiInference != null) {
-      $result.aiInference = aiInference;
-    }
-    return $result;
+    final result = create();
+    if (javascriptUdf != null) result.javascriptUdf = javascriptUdf;
+    if (enabled != null) result.enabled = enabled;
+    if (disabled != null) result.disabled = disabled;
+    if (aiInference != null) result.aiInference = aiInference;
+    return result;
   }
-  MessageTransform._() : super();
-  factory MessageTransform.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory MessageTransform.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  MessageTransform._();
+
+  factory MessageTransform.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory MessageTransform.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, MessageTransform_Transform>
       _MessageTransform_TransformByTag = {
@@ -3486,10 +3189,12 @@ class MessageTransform extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as MessageTransform))
           as MessageTransform;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static MessageTransform create() => MessageTransform._();
+  @$core.override
   MessageTransform createEmptyInstance() => create();
   static $pb.PbList<MessageTransform> createRepeated() =>
       $pb.PbList<MessageTransform>();
@@ -3507,10 +3212,7 @@ class MessageTransform extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   JavaScriptUDF get javascriptUdf => $_getN(0);
   @$pb.TagNumber(2)
-  set javascriptUdf(JavaScriptUDF v) {
-    $_setField(2, v);
-  }
-
+  set javascriptUdf(JavaScriptUDF value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasJavascriptUdf() => $_has(0);
   @$pb.TagNumber(2)
@@ -3525,10 +3227,7 @@ class MessageTransform extends $pb.GeneratedMessage {
   $core.bool get enabled => $_getBF(1);
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(3)
-  set enabled($core.bool v) {
-    $_setBool(1, v);
-  }
-
+  set enabled($core.bool value) => $_setBool(1, value);
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(3)
   $core.bool hasEnabled() => $_has(1);
@@ -3541,10 +3240,7 @@ class MessageTransform extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool get disabled => $_getBF(2);
   @$pb.TagNumber(4)
-  set disabled($core.bool v) {
-    $_setBool(2, v);
-  }
-
+  set disabled($core.bool value) => $_setBool(2, value);
   @$pb.TagNumber(4)
   $core.bool hasDisabled() => $_has(2);
   @$pb.TagNumber(4)
@@ -3556,10 +3252,7 @@ class MessageTransform extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   AIInference get aiInference => $_getN(3);
   @$pb.TagNumber(6)
-  set aiInference(AIInference v) {
-    $_setField(6, v);
-  }
-
+  set aiInference(AIInference value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasAiInference() => $_has(3);
   @$pb.TagNumber(6)
@@ -3577,55 +3270,39 @@ class Topic extends $pb.GeneratedMessage {
     $core.String? kmsKeyName,
     SchemaSettings? schemaSettings,
     $core.bool? satisfiesPzs,
-    $5.Duration? messageRetentionDuration,
+    $4.Duration? messageRetentionDuration,
     Topic_State? state,
     IngestionDataSourceSettings? ingestionDataSourceSettings,
     $core.Iterable<MessageTransform>? messageTransforms,
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? tags,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (labels != null) {
-      $result.labels.addEntries(labels);
-    }
-    if (messageStoragePolicy != null) {
-      $result.messageStoragePolicy = messageStoragePolicy;
-    }
-    if (kmsKeyName != null) {
-      $result.kmsKeyName = kmsKeyName;
-    }
-    if (schemaSettings != null) {
-      $result.schemaSettings = schemaSettings;
-    }
-    if (satisfiesPzs != null) {
-      $result.satisfiesPzs = satisfiesPzs;
-    }
-    if (messageRetentionDuration != null) {
-      $result.messageRetentionDuration = messageRetentionDuration;
-    }
-    if (state != null) {
-      $result.state = state;
-    }
-    if (ingestionDataSourceSettings != null) {
-      $result.ingestionDataSourceSettings = ingestionDataSourceSettings;
-    }
-    if (messageTransforms != null) {
-      $result.messageTransforms.addAll(messageTransforms);
-    }
-    if (tags != null) {
-      $result.tags.addEntries(tags);
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (labels != null) result.labels.addEntries(labels);
+    if (messageStoragePolicy != null)
+      result.messageStoragePolicy = messageStoragePolicy;
+    if (kmsKeyName != null) result.kmsKeyName = kmsKeyName;
+    if (schemaSettings != null) result.schemaSettings = schemaSettings;
+    if (satisfiesPzs != null) result.satisfiesPzs = satisfiesPzs;
+    if (messageRetentionDuration != null)
+      result.messageRetentionDuration = messageRetentionDuration;
+    if (state != null) result.state = state;
+    if (ingestionDataSourceSettings != null)
+      result.ingestionDataSourceSettings = ingestionDataSourceSettings;
+    if (messageTransforms != null)
+      result.messageTransforms.addAll(messageTransforms);
+    if (tags != null) result.tags.addEntries(tags);
+    return result;
   }
-  Topic._() : super();
-  factory Topic.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Topic.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  Topic._();
+
+  factory Topic.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Topic.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Topic',
@@ -3645,8 +3322,8 @@ class Topic extends $pb.GeneratedMessage {
     ..aOM<SchemaSettings>(6, _omitFieldNames ? '' : 'schemaSettings',
         subBuilder: SchemaSettings.create)
     ..aOB(7, _omitFieldNames ? '' : 'satisfiesPzs')
-    ..aOM<$5.Duration>(8, _omitFieldNames ? '' : 'messageRetentionDuration',
-        subBuilder: $5.Duration.create)
+    ..aOM<$4.Duration>(8, _omitFieldNames ? '' : 'messageRetentionDuration',
+        subBuilder: $4.Duration.create)
     ..e<Topic_State>(9, _omitFieldNames ? '' : 'state', $pb.PbFieldType.OE,
         defaultOrMaker: Topic_State.STATE_UNSPECIFIED,
         valueOf: Topic_State.valueOf,
@@ -3670,10 +3347,12 @@ class Topic extends $pb.GeneratedMessage {
   Topic copyWith(void Function(Topic) updates) =>
       super.copyWith((message) => updates(message as Topic)) as Topic;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Topic create() => Topic._();
+  @$core.override
   Topic createEmptyInstance() => create();
   static $pb.PbList<Topic> createRepeated() => $pb.PbList<Topic>();
   @$core.pragma('dart2js:noInline')
@@ -3690,10 +3369,7 @@ class Topic extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -3710,10 +3386,7 @@ class Topic extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   MessageStoragePolicy get messageStoragePolicy => $_getN(2);
   @$pb.TagNumber(3)
-  set messageStoragePolicy(MessageStoragePolicy v) {
-    $_setField(3, v);
-  }
-
+  set messageStoragePolicy(MessageStoragePolicy value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasMessageStoragePolicy() => $_has(2);
   @$pb.TagNumber(3)
@@ -3728,10 +3401,7 @@ class Topic extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get kmsKeyName => $_getSZ(3);
   @$pb.TagNumber(5)
-  set kmsKeyName($core.String v) {
-    $_setString(3, v);
-  }
-
+  set kmsKeyName($core.String value) => $_setString(3, value);
   @$pb.TagNumber(5)
   $core.bool hasKmsKeyName() => $_has(3);
   @$pb.TagNumber(5)
@@ -3741,10 +3411,7 @@ class Topic extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   SchemaSettings get schemaSettings => $_getN(4);
   @$pb.TagNumber(6)
-  set schemaSettings(SchemaSettings v) {
-    $_setField(6, v);
-  }
-
+  set schemaSettings(SchemaSettings value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasSchemaSettings() => $_has(4);
   @$pb.TagNumber(6)
@@ -3757,10 +3424,7 @@ class Topic extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool get satisfiesPzs => $_getBF(5);
   @$pb.TagNumber(7)
-  set satisfiesPzs($core.bool v) {
-    $_setBool(5, v);
-  }
-
+  set satisfiesPzs($core.bool value) => $_setBool(5, value);
   @$pb.TagNumber(7)
   $core.bool hasSatisfiesPzs() => $_has(5);
   @$pb.TagNumber(7)
@@ -3776,27 +3440,21 @@ class Topic extends $pb.GeneratedMessage {
   /// not set, message retention is controlled by settings on individual
   /// subscriptions. Cannot be more than 31 days or less than 10 minutes.
   @$pb.TagNumber(8)
-  $5.Duration get messageRetentionDuration => $_getN(6);
+  $4.Duration get messageRetentionDuration => $_getN(6);
   @$pb.TagNumber(8)
-  set messageRetentionDuration($5.Duration v) {
-    $_setField(8, v);
-  }
-
+  set messageRetentionDuration($4.Duration value) => $_setField(8, value);
   @$pb.TagNumber(8)
   $core.bool hasMessageRetentionDuration() => $_has(6);
   @$pb.TagNumber(8)
   void clearMessageRetentionDuration() => $_clearField(8);
   @$pb.TagNumber(8)
-  $5.Duration ensureMessageRetentionDuration() => $_ensure(6);
+  $4.Duration ensureMessageRetentionDuration() => $_ensure(6);
 
   /// Output only. An output-only field indicating the state of the topic.
   @$pb.TagNumber(9)
   Topic_State get state => $_getN(7);
   @$pb.TagNumber(9)
-  set state(Topic_State v) {
-    $_setField(9, v);
-  }
-
+  set state(Topic_State value) => $_setField(9, value);
   @$pb.TagNumber(9)
   $core.bool hasState() => $_has(7);
   @$pb.TagNumber(9)
@@ -3806,10 +3464,8 @@ class Topic extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   IngestionDataSourceSettings get ingestionDataSourceSettings => $_getN(8);
   @$pb.TagNumber(10)
-  set ingestionDataSourceSettings(IngestionDataSourceSettings v) {
-    $_setField(10, v);
-  }
-
+  set ingestionDataSourceSettings(IngestionDataSourceSettings value) =>
+      $_setField(10, value);
   @$pb.TagNumber(10)
   $core.bool hasIngestionDataSourceSettings() => $_has(8);
   @$pb.TagNumber(10)
@@ -3846,34 +3502,26 @@ class PubsubMessage extends $pb.GeneratedMessage {
     $core.List<$core.int>? data,
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? attributes,
     $core.String? messageId,
-    $3.Timestamp? publishTime,
+    $2.Timestamp? publishTime,
     $core.String? orderingKey,
   }) {
-    final $result = create();
-    if (data != null) {
-      $result.data = data;
-    }
-    if (attributes != null) {
-      $result.attributes.addEntries(attributes);
-    }
-    if (messageId != null) {
-      $result.messageId = messageId;
-    }
-    if (publishTime != null) {
-      $result.publishTime = publishTime;
-    }
-    if (orderingKey != null) {
-      $result.orderingKey = orderingKey;
-    }
-    return $result;
+    final result = create();
+    if (data != null) result.data = data;
+    if (attributes != null) result.attributes.addEntries(attributes);
+    if (messageId != null) result.messageId = messageId;
+    if (publishTime != null) result.publishTime = publishTime;
+    if (orderingKey != null) result.orderingKey = orderingKey;
+    return result;
   }
-  PubsubMessage._() : super();
-  factory PubsubMessage.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PubsubMessage.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PubsubMessage._();
+
+  factory PubsubMessage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PubsubMessage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PubsubMessage',
@@ -3888,8 +3536,8 @@ class PubsubMessage extends $pb.GeneratedMessage {
         valueFieldType: $pb.PbFieldType.OS,
         packageName: const $pb.PackageName('google.pubsub.v1'))
     ..aOS(3, _omitFieldNames ? '' : 'messageId')
-    ..aOM<$3.Timestamp>(4, _omitFieldNames ? '' : 'publishTime',
-        subBuilder: $3.Timestamp.create)
+    ..aOM<$2.Timestamp>(4, _omitFieldNames ? '' : 'publishTime',
+        subBuilder: $2.Timestamp.create)
     ..aOS(5, _omitFieldNames ? '' : 'orderingKey')
     ..hasRequiredFields = false;
 
@@ -3900,10 +3548,12 @@ class PubsubMessage extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PubsubMessage))
           as PubsubMessage;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PubsubMessage create() => PubsubMessage._();
+  @$core.override
   PubsubMessage createEmptyInstance() => create();
   static $pb.PbList<PubsubMessage> createRepeated() =>
       $pb.PbList<PubsubMessage>();
@@ -3917,10 +3567,7 @@ class PubsubMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.List<$core.int> get data => $_getN(0);
   @$pb.TagNumber(1)
-  set data($core.List<$core.int> v) {
-    $_setBytes(0, v);
-  }
-
+  set data($core.List<$core.int> value) => $_setBytes(0, value);
   @$pb.TagNumber(1)
   $core.bool hasData() => $_has(0);
   @$pb.TagNumber(1)
@@ -3939,10 +3586,7 @@ class PubsubMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get messageId => $_getSZ(2);
   @$pb.TagNumber(3)
-  set messageId($core.String v) {
-    $_setString(2, v);
-  }
-
+  set messageId($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasMessageId() => $_has(2);
   @$pb.TagNumber(3)
@@ -3952,18 +3596,15 @@ class PubsubMessage extends $pb.GeneratedMessage {
   /// it receives the `Publish` call. It must not be populated by the
   /// publisher in a `Publish` call.
   @$pb.TagNumber(4)
-  $3.Timestamp get publishTime => $_getN(3);
+  $2.Timestamp get publishTime => $_getN(3);
   @$pb.TagNumber(4)
-  set publishTime($3.Timestamp v) {
-    $_setField(4, v);
-  }
-
+  set publishTime($2.Timestamp value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasPublishTime() => $_has(3);
   @$pb.TagNumber(4)
   void clearPublishTime() => $_clearField(4);
   @$pb.TagNumber(4)
-  $3.Timestamp ensurePublishTime() => $_ensure(3);
+  $2.Timestamp ensurePublishTime() => $_ensure(3);
 
   /// Optional. If non-empty, identifies related messages for which publish order
   /// should be respected. If a `Subscription` has `enable_message_ordering` set
@@ -3976,10 +3617,7 @@ class PubsubMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.String get orderingKey => $_getSZ(4);
   @$pb.TagNumber(5)
-  set orderingKey($core.String v) {
-    $_setString(4, v);
-  }
-
+  set orderingKey($core.String value) => $_setString(4, value);
   @$pb.TagNumber(5)
   $core.bool hasOrderingKey() => $_has(4);
   @$pb.TagNumber(5)
@@ -3991,19 +3629,19 @@ class GetTopicRequest extends $pb.GeneratedMessage {
   factory GetTopicRequest({
     $core.String? topic,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    return result;
   }
-  GetTopicRequest._() : super();
-  factory GetTopicRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory GetTopicRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  GetTopicRequest._();
+
+  factory GetTopicRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetTopicRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetTopicRequest',
@@ -4020,10 +3658,12 @@ class GetTopicRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as GetTopicRequest))
           as GetTopicRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetTopicRequest create() => GetTopicRequest._();
+  @$core.override
   GetTopicRequest createEmptyInstance() => create();
   static $pb.PbList<GetTopicRequest> createRepeated() =>
       $pb.PbList<GetTopicRequest>();
@@ -4037,10 +3677,7 @@ class GetTopicRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get topic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set topic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set topic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -4051,24 +3688,22 @@ class GetTopicRequest extends $pb.GeneratedMessage {
 class UpdateTopicRequest extends $pb.GeneratedMessage {
   factory UpdateTopicRequest({
     Topic? topic,
-    $6.FieldMask? updateMask,
+    $5.FieldMask? updateMask,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (updateMask != null) {
-      $result.updateMask = updateMask;
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    if (updateMask != null) result.updateMask = updateMask;
+    return result;
   }
-  UpdateTopicRequest._() : super();
-  factory UpdateTopicRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory UpdateTopicRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  UpdateTopicRequest._();
+
+  factory UpdateTopicRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateTopicRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateTopicRequest',
@@ -4076,8 +3711,8 @@ class UpdateTopicRequest extends $pb.GeneratedMessage {
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
     ..aOM<Topic>(1, _omitFieldNames ? '' : 'topic', subBuilder: Topic.create)
-    ..aOM<$6.FieldMask>(2, _omitFieldNames ? '' : 'updateMask',
-        subBuilder: $6.FieldMask.create)
+    ..aOM<$5.FieldMask>(2, _omitFieldNames ? '' : 'updateMask',
+        subBuilder: $5.FieldMask.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -4087,10 +3722,12 @@ class UpdateTopicRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as UpdateTopicRequest))
           as UpdateTopicRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UpdateTopicRequest create() => UpdateTopicRequest._();
+  @$core.override
   UpdateTopicRequest createEmptyInstance() => create();
   static $pb.PbList<UpdateTopicRequest> createRepeated() =>
       $pb.PbList<UpdateTopicRequest>();
@@ -4103,10 +3740,7 @@ class UpdateTopicRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   Topic get topic => $_getN(0);
   @$pb.TagNumber(1)
-  set topic(Topic v) {
-    $_setField(1, v);
-  }
-
+  set topic(Topic value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -4120,18 +3754,15 @@ class UpdateTopicRequest extends $pb.GeneratedMessage {
   /// the `topic` provided above, then the updated value is determined by the
   /// policy configured at the project or organization level.
   @$pb.TagNumber(2)
-  $6.FieldMask get updateMask => $_getN(1);
+  $5.FieldMask get updateMask => $_getN(1);
   @$pb.TagNumber(2)
-  set updateMask($6.FieldMask v) {
-    $_setField(2, v);
-  }
-
+  set updateMask($5.FieldMask value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateMask() => $_has(1);
   @$pb.TagNumber(2)
   void clearUpdateMask() => $_clearField(2);
   @$pb.TagNumber(2)
-  $6.FieldMask ensureUpdateMask() => $_ensure(1);
+  $5.FieldMask ensureUpdateMask() => $_ensure(1);
 }
 
 /// Request for the Publish method.
@@ -4140,22 +3771,20 @@ class PublishRequest extends $pb.GeneratedMessage {
     $core.String? topic,
     $core.Iterable<PubsubMessage>? messages,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (messages != null) {
-      $result.messages.addAll(messages);
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    if (messages != null) result.messages.addAll(messages);
+    return result;
   }
-  PublishRequest._() : super();
-  factory PublishRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PublishRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PublishRequest._();
+
+  factory PublishRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PublishRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PublishRequest',
@@ -4175,10 +3804,12 @@ class PublishRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PublishRequest))
           as PublishRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PublishRequest create() => PublishRequest._();
+  @$core.override
   PublishRequest createEmptyInstance() => create();
   static $pb.PbList<PublishRequest> createRepeated() =>
       $pb.PbList<PublishRequest>();
@@ -4192,10 +3823,7 @@ class PublishRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get topic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set topic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set topic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -4211,19 +3839,19 @@ class PublishResponse extends $pb.GeneratedMessage {
   factory PublishResponse({
     $core.Iterable<$core.String>? messageIds,
   }) {
-    final $result = create();
-    if (messageIds != null) {
-      $result.messageIds.addAll(messageIds);
-    }
-    return $result;
+    final result = create();
+    if (messageIds != null) result.messageIds.addAll(messageIds);
+    return result;
   }
-  PublishResponse._() : super();
-  factory PublishResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PublishResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PublishResponse._();
+
+  factory PublishResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PublishResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PublishResponse',
@@ -4240,10 +3868,12 @@ class PublishResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PublishResponse))
           as PublishResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PublishResponse create() => PublishResponse._();
+  @$core.override
   PublishResponse createEmptyInstance() => create();
   static $pb.PbList<PublishResponse> createRepeated() =>
       $pb.PbList<PublishResponse>();
@@ -4266,25 +3896,21 @@ class ListTopicsRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (project != null) {
-      $result.project = project;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (project != null) result.project = project;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListTopicsRequest._() : super();
-  factory ListTopicsRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListTopicsRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListTopicsRequest._();
+
+  factory ListTopicsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListTopicsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListTopicsRequest',
@@ -4303,10 +3929,12 @@ class ListTopicsRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListTopicsRequest))
           as ListTopicsRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListTopicsRequest create() => ListTopicsRequest._();
+  @$core.override
   ListTopicsRequest createEmptyInstance() => create();
   static $pb.PbList<ListTopicsRequest> createRepeated() =>
       $pb.PbList<ListTopicsRequest>();
@@ -4320,10 +3948,7 @@ class ListTopicsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get project => $_getSZ(0);
   @$pb.TagNumber(1)
-  set project($core.String v) {
-    $_setString(0, v);
-  }
-
+  set project($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasProject() => $_has(0);
   @$pb.TagNumber(1)
@@ -4333,10 +3958,7 @@ class ListTopicsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get pageSize => $_getIZ(1);
   @$pb.TagNumber(2)
-  set pageSize($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPageSize() => $_has(1);
   @$pb.TagNumber(2)
@@ -4348,10 +3970,7 @@ class ListTopicsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get pageToken => $_getSZ(2);
   @$pb.TagNumber(3)
-  set pageToken($core.String v) {
-    $_setString(2, v);
-  }
-
+  set pageToken($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageToken() => $_has(2);
   @$pb.TagNumber(3)
@@ -4364,22 +3983,20 @@ class ListTopicsResponse extends $pb.GeneratedMessage {
     $core.Iterable<Topic>? topics,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (topics != null) {
-      $result.topics.addAll(topics);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (topics != null) result.topics.addAll(topics);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListTopicsResponse._() : super();
-  factory ListTopicsResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListTopicsResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListTopicsResponse._();
+
+  factory ListTopicsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListTopicsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListTopicsResponse',
@@ -4398,10 +4015,12 @@ class ListTopicsResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListTopicsResponse))
           as ListTopicsResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListTopicsResponse create() => ListTopicsResponse._();
+  @$core.override
   ListTopicsResponse createEmptyInstance() => create();
   static $pb.PbList<ListTopicsResponse> createRepeated() =>
       $pb.PbList<ListTopicsResponse>();
@@ -4419,10 +4038,7 @@ class ListTopicsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -4436,25 +4052,21 @@ class ListTopicSubscriptionsRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListTopicSubscriptionsRequest._() : super();
-  factory ListTopicSubscriptionsRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListTopicSubscriptionsRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListTopicSubscriptionsRequest._();
+
+  factory ListTopicSubscriptionsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListTopicSubscriptionsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListTopicSubscriptionsRequest',
@@ -4476,11 +4088,13 @@ class ListTopicSubscriptionsRequest extends $pb.GeneratedMessage {
               (message) => updates(message as ListTopicSubscriptionsRequest))
           as ListTopicSubscriptionsRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListTopicSubscriptionsRequest create() =>
       ListTopicSubscriptionsRequest._();
+  @$core.override
   ListTopicSubscriptionsRequest createEmptyInstance() => create();
   static $pb.PbList<ListTopicSubscriptionsRequest> createRepeated() =>
       $pb.PbList<ListTopicSubscriptionsRequest>();
@@ -4494,10 +4108,7 @@ class ListTopicSubscriptionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get topic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set topic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set topic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -4507,10 +4118,7 @@ class ListTopicSubscriptionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get pageSize => $_getIZ(1);
   @$pb.TagNumber(2)
-  set pageSize($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPageSize() => $_has(1);
   @$pb.TagNumber(2)
@@ -4522,10 +4130,7 @@ class ListTopicSubscriptionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get pageToken => $_getSZ(2);
   @$pb.TagNumber(3)
-  set pageToken($core.String v) {
-    $_setString(2, v);
-  }
-
+  set pageToken($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageToken() => $_has(2);
   @$pb.TagNumber(3)
@@ -4538,22 +4143,20 @@ class ListTopicSubscriptionsResponse extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? subscriptions,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (subscriptions != null) {
-      $result.subscriptions.addAll(subscriptions);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (subscriptions != null) result.subscriptions.addAll(subscriptions);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListTopicSubscriptionsResponse._() : super();
-  factory ListTopicSubscriptionsResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListTopicSubscriptionsResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListTopicSubscriptionsResponse._();
+
+  factory ListTopicSubscriptionsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListTopicSubscriptionsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListTopicSubscriptionsResponse',
@@ -4574,11 +4177,13 @@ class ListTopicSubscriptionsResponse extends $pb.GeneratedMessage {
               (message) => updates(message as ListTopicSubscriptionsResponse))
           as ListTopicSubscriptionsResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListTopicSubscriptionsResponse create() =>
       ListTopicSubscriptionsResponse._();
+  @$core.override
   ListTopicSubscriptionsResponse createEmptyInstance() => create();
   static $pb.PbList<ListTopicSubscriptionsResponse> createRepeated() =>
       $pb.PbList<ListTopicSubscriptionsResponse>();
@@ -4598,10 +4203,7 @@ class ListTopicSubscriptionsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -4615,25 +4217,21 @@ class ListTopicSnapshotsRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListTopicSnapshotsRequest._() : super();
-  factory ListTopicSnapshotsRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListTopicSnapshotsRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListTopicSnapshotsRequest._();
+
+  factory ListTopicSnapshotsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListTopicSnapshotsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListTopicSnapshotsRequest',
@@ -4654,10 +4252,12 @@ class ListTopicSnapshotsRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListTopicSnapshotsRequest))
           as ListTopicSnapshotsRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListTopicSnapshotsRequest create() => ListTopicSnapshotsRequest._();
+  @$core.override
   ListTopicSnapshotsRequest createEmptyInstance() => create();
   static $pb.PbList<ListTopicSnapshotsRequest> createRepeated() =>
       $pb.PbList<ListTopicSnapshotsRequest>();
@@ -4671,10 +4271,7 @@ class ListTopicSnapshotsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get topic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set topic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set topic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -4684,10 +4281,7 @@ class ListTopicSnapshotsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get pageSize => $_getIZ(1);
   @$pb.TagNumber(2)
-  set pageSize($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPageSize() => $_has(1);
   @$pb.TagNumber(2)
@@ -4699,10 +4293,7 @@ class ListTopicSnapshotsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get pageToken => $_getSZ(2);
   @$pb.TagNumber(3)
-  set pageToken($core.String v) {
-    $_setString(2, v);
-  }
-
+  set pageToken($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageToken() => $_has(2);
   @$pb.TagNumber(3)
@@ -4715,22 +4306,20 @@ class ListTopicSnapshotsResponse extends $pb.GeneratedMessage {
     $core.Iterable<$core.String>? snapshots,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (snapshots != null) {
-      $result.snapshots.addAll(snapshots);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (snapshots != null) result.snapshots.addAll(snapshots);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListTopicSnapshotsResponse._() : super();
-  factory ListTopicSnapshotsResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListTopicSnapshotsResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListTopicSnapshotsResponse._();
+
+  factory ListTopicSnapshotsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListTopicSnapshotsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListTopicSnapshotsResponse',
@@ -4751,10 +4340,12 @@ class ListTopicSnapshotsResponse extends $pb.GeneratedMessage {
               (message) => updates(message as ListTopicSnapshotsResponse))
           as ListTopicSnapshotsResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListTopicSnapshotsResponse create() => ListTopicSnapshotsResponse._();
+  @$core.override
   ListTopicSnapshotsResponse createEmptyInstance() => create();
   static $pb.PbList<ListTopicSnapshotsResponse> createRepeated() =>
       $pb.PbList<ListTopicSnapshotsResponse>();
@@ -4773,10 +4364,7 @@ class ListTopicSnapshotsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -4788,19 +4376,19 @@ class DeleteTopicRequest extends $pb.GeneratedMessage {
   factory DeleteTopicRequest({
     $core.String? topic,
   }) {
-    final $result = create();
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    return $result;
+    final result = create();
+    if (topic != null) result.topic = topic;
+    return result;
   }
-  DeleteTopicRequest._() : super();
-  factory DeleteTopicRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DeleteTopicRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DeleteTopicRequest._();
+
+  factory DeleteTopicRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteTopicRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteTopicRequest',
@@ -4817,10 +4405,12 @@ class DeleteTopicRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DeleteTopicRequest))
           as DeleteTopicRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteTopicRequest create() => DeleteTopicRequest._();
+  @$core.override
   DeleteTopicRequest createEmptyInstance() => create();
   static $pb.PbList<DeleteTopicRequest> createRepeated() =>
       $pb.PbList<DeleteTopicRequest>();
@@ -4834,10 +4424,7 @@ class DeleteTopicRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get topic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set topic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set topic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -4849,19 +4436,19 @@ class DetachSubscriptionRequest extends $pb.GeneratedMessage {
   factory DetachSubscriptionRequest({
     $core.String? subscription,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    return result;
   }
-  DetachSubscriptionRequest._() : super();
-  factory DetachSubscriptionRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DetachSubscriptionRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DetachSubscriptionRequest._();
+
+  factory DetachSubscriptionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DetachSubscriptionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DetachSubscriptionRequest',
@@ -4880,10 +4467,12 @@ class DetachSubscriptionRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DetachSubscriptionRequest))
           as DetachSubscriptionRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DetachSubscriptionRequest create() => DetachSubscriptionRequest._();
+  @$core.override
   DetachSubscriptionRequest createEmptyInstance() => create();
   static $pb.PbList<DetachSubscriptionRequest> createRepeated() =>
       $pb.PbList<DetachSubscriptionRequest>();
@@ -4897,10 +4486,7 @@ class DetachSubscriptionRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -4911,13 +4497,15 @@ class DetachSubscriptionRequest extends $pb.GeneratedMessage {
 /// Reserved for future use.
 class DetachSubscriptionResponse extends $pb.GeneratedMessage {
   factory DetachSubscriptionResponse() => create();
-  DetachSubscriptionResponse._() : super();
-  factory DetachSubscriptionResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DetachSubscriptionResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DetachSubscriptionResponse._();
+
+  factory DetachSubscriptionResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DetachSubscriptionResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DetachSubscriptionResponse',
@@ -4936,10 +4524,12 @@ class DetachSubscriptionResponse extends $pb.GeneratedMessage {
               (message) => updates(message as DetachSubscriptionResponse))
           as DetachSubscriptionResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DetachSubscriptionResponse create() => DetachSubscriptionResponse._();
+  @$core.override
   DetachSubscriptionResponse createEmptyInstance() => create();
   static $pb.PbList<DetachSubscriptionResponse> createRepeated() =>
       $pb.PbList<DetachSubscriptionResponse>();
@@ -4956,23 +4546,21 @@ class Subscription_AnalyticsHubSubscriptionInfo extends $pb.GeneratedMessage {
     $core.String? listing,
     $core.String? subscription,
   }) {
-    final $result = create();
-    if (listing != null) {
-      $result.listing = listing;
-    }
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    return $result;
+    final result = create();
+    if (listing != null) result.listing = listing;
+    if (subscription != null) result.subscription = subscription;
+    return result;
   }
-  Subscription_AnalyticsHubSubscriptionInfo._() : super();
+
+  Subscription_AnalyticsHubSubscriptionInfo._();
+
   factory Subscription_AnalyticsHubSubscriptionInfo.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Subscription_AnalyticsHubSubscriptionInfo.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Subscription_AnalyticsHubSubscriptionInfo.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Subscription.AnalyticsHubSubscriptionInfo',
@@ -4993,11 +4581,13 @@ class Subscription_AnalyticsHubSubscriptionInfo extends $pb.GeneratedMessage {
               updates(message as Subscription_AnalyticsHubSubscriptionInfo))
           as Subscription_AnalyticsHubSubscriptionInfo;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Subscription_AnalyticsHubSubscriptionInfo create() =>
       Subscription_AnalyticsHubSubscriptionInfo._();
+  @$core.override
   Subscription_AnalyticsHubSubscriptionInfo createEmptyInstance() => create();
   static $pb.PbList<Subscription_AnalyticsHubSubscriptionInfo>
       createRepeated() =>
@@ -5014,10 +4604,7 @@ class Subscription_AnalyticsHubSubscriptionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get listing => $_getSZ(0);
   @$pb.TagNumber(1)
-  set listing($core.String v) {
-    $_setString(0, v);
-  }
-
+  set listing($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasListing() => $_has(0);
   @$pb.TagNumber(1)
@@ -5029,10 +4616,7 @@ class Subscription_AnalyticsHubSubscriptionInfo extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get subscription => $_getSZ(1);
   @$pb.TagNumber(2)
-  set subscription($core.String v) {
-    $_setString(1, v);
-  }
-
+  set subscription($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasSubscription() => $_has(1);
   @$pb.TagNumber(2)
@@ -5049,7 +4633,7 @@ class Subscription extends $pb.GeneratedMessage {
     PushConfig? pushConfig,
     $core.int? ackDeadlineSeconds,
     $core.bool? retainAckedMessages,
-    $5.Duration? messageRetentionDuration,
+    $4.Duration? messageRetentionDuration,
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? labels,
     $core.bool? enableMessageOrdering,
     ExpirationPolicy? expirationPolicy,
@@ -5058,7 +4642,7 @@ class Subscription extends $pb.GeneratedMessage {
     RetryPolicy? retryPolicy,
     $core.bool? detached,
     $core.bool? enableExactlyOnceDelivery,
-    $5.Duration? topicMessageRetentionDuration,
+    $4.Duration? topicMessageRetentionDuration,
     BigQueryConfig? bigqueryConfig,
     Subscription_State? state,
     CloudStorageConfig? cloudStorageConfig,
@@ -5067,82 +4651,49 @@ class Subscription extends $pb.GeneratedMessage {
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? tags,
     BigtableConfig? bigtableConfig,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (pushConfig != null) {
-      $result.pushConfig = pushConfig;
-    }
-    if (ackDeadlineSeconds != null) {
-      $result.ackDeadlineSeconds = ackDeadlineSeconds;
-    }
-    if (retainAckedMessages != null) {
-      $result.retainAckedMessages = retainAckedMessages;
-    }
-    if (messageRetentionDuration != null) {
-      $result.messageRetentionDuration = messageRetentionDuration;
-    }
-    if (labels != null) {
-      $result.labels.addEntries(labels);
-    }
-    if (enableMessageOrdering != null) {
-      $result.enableMessageOrdering = enableMessageOrdering;
-    }
-    if (expirationPolicy != null) {
-      $result.expirationPolicy = expirationPolicy;
-    }
-    if (filter != null) {
-      $result.filter = filter;
-    }
-    if (deadLetterPolicy != null) {
-      $result.deadLetterPolicy = deadLetterPolicy;
-    }
-    if (retryPolicy != null) {
-      $result.retryPolicy = retryPolicy;
-    }
-    if (detached != null) {
-      $result.detached = detached;
-    }
-    if (enableExactlyOnceDelivery != null) {
-      $result.enableExactlyOnceDelivery = enableExactlyOnceDelivery;
-    }
-    if (topicMessageRetentionDuration != null) {
-      $result.topicMessageRetentionDuration = topicMessageRetentionDuration;
-    }
-    if (bigqueryConfig != null) {
-      $result.bigqueryConfig = bigqueryConfig;
-    }
-    if (state != null) {
-      $result.state = state;
-    }
-    if (cloudStorageConfig != null) {
-      $result.cloudStorageConfig = cloudStorageConfig;
-    }
-    if (analyticsHubSubscriptionInfo != null) {
-      $result.analyticsHubSubscriptionInfo = analyticsHubSubscriptionInfo;
-    }
-    if (messageTransforms != null) {
-      $result.messageTransforms.addAll(messageTransforms);
-    }
-    if (tags != null) {
-      $result.tags.addEntries(tags);
-    }
-    if (bigtableConfig != null) {
-      $result.bigtableConfig = bigtableConfig;
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (topic != null) result.topic = topic;
+    if (pushConfig != null) result.pushConfig = pushConfig;
+    if (ackDeadlineSeconds != null)
+      result.ackDeadlineSeconds = ackDeadlineSeconds;
+    if (retainAckedMessages != null)
+      result.retainAckedMessages = retainAckedMessages;
+    if (messageRetentionDuration != null)
+      result.messageRetentionDuration = messageRetentionDuration;
+    if (labels != null) result.labels.addEntries(labels);
+    if (enableMessageOrdering != null)
+      result.enableMessageOrdering = enableMessageOrdering;
+    if (expirationPolicy != null) result.expirationPolicy = expirationPolicy;
+    if (filter != null) result.filter = filter;
+    if (deadLetterPolicy != null) result.deadLetterPolicy = deadLetterPolicy;
+    if (retryPolicy != null) result.retryPolicy = retryPolicy;
+    if (detached != null) result.detached = detached;
+    if (enableExactlyOnceDelivery != null)
+      result.enableExactlyOnceDelivery = enableExactlyOnceDelivery;
+    if (topicMessageRetentionDuration != null)
+      result.topicMessageRetentionDuration = topicMessageRetentionDuration;
+    if (bigqueryConfig != null) result.bigqueryConfig = bigqueryConfig;
+    if (state != null) result.state = state;
+    if (cloudStorageConfig != null)
+      result.cloudStorageConfig = cloudStorageConfig;
+    if (analyticsHubSubscriptionInfo != null)
+      result.analyticsHubSubscriptionInfo = analyticsHubSubscriptionInfo;
+    if (messageTransforms != null)
+      result.messageTransforms.addAll(messageTransforms);
+    if (tags != null) result.tags.addEntries(tags);
+    if (bigtableConfig != null) result.bigtableConfig = bigtableConfig;
+    return result;
   }
-  Subscription._() : super();
-  factory Subscription.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Subscription.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  Subscription._();
+
+  factory Subscription.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Subscription.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Subscription',
@@ -5156,8 +4707,8 @@ class Subscription extends $pb.GeneratedMessage {
     ..a<$core.int>(
         5, _omitFieldNames ? '' : 'ackDeadlineSeconds', $pb.PbFieldType.O3)
     ..aOB(7, _omitFieldNames ? '' : 'retainAckedMessages')
-    ..aOM<$5.Duration>(8, _omitFieldNames ? '' : 'messageRetentionDuration',
-        subBuilder: $5.Duration.create)
+    ..aOM<$4.Duration>(8, _omitFieldNames ? '' : 'messageRetentionDuration',
+        subBuilder: $4.Duration.create)
     ..m<$core.String, $core.String>(9, _omitFieldNames ? '' : 'labels',
         entryClassName: 'Subscription.LabelsEntry',
         keyFieldType: $pb.PbFieldType.OS,
@@ -5173,9 +4724,9 @@ class Subscription extends $pb.GeneratedMessage {
         subBuilder: RetryPolicy.create)
     ..aOB(15, _omitFieldNames ? '' : 'detached')
     ..aOB(16, _omitFieldNames ? '' : 'enableExactlyOnceDelivery')
-    ..aOM<$5.Duration>(
+    ..aOM<$4.Duration>(
         17, _omitFieldNames ? '' : 'topicMessageRetentionDuration',
-        subBuilder: $5.Duration.create)
+        subBuilder: $4.Duration.create)
     ..aOM<BigQueryConfig>(18, _omitFieldNames ? '' : 'bigqueryConfig',
         subBuilder: BigQueryConfig.create)
     ..e<Subscription_State>(
@@ -5207,10 +4758,12 @@ class Subscription extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as Subscription))
           as Subscription;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Subscription create() => Subscription._();
+  @$core.override
   Subscription createEmptyInstance() => create();
   static $pb.PbList<Subscription> createRepeated() =>
       $pb.PbList<Subscription>();
@@ -5228,10 +4781,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -5243,10 +4793,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get topic => $_getSZ(1);
   @$pb.TagNumber(2)
-  set topic($core.String v) {
-    $_setString(1, v);
-  }
-
+  set topic($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasTopic() => $_has(1);
   @$pb.TagNumber(2)
@@ -5257,10 +4804,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   PushConfig get pushConfig => $_getN(2);
   @$pb.TagNumber(4)
-  set pushConfig(PushConfig v) {
-    $_setField(4, v);
-  }
-
+  set pushConfig(PushConfig value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasPushConfig() => $_has(2);
   @$pb.TagNumber(4)
@@ -5291,10 +4835,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.int get ackDeadlineSeconds => $_getIZ(3);
   @$pb.TagNumber(5)
-  set ackDeadlineSeconds($core.int v) {
-    $_setSignedInt32(3, v);
-  }
-
+  set ackDeadlineSeconds($core.int value) => $_setSignedInt32(3, value);
   @$pb.TagNumber(5)
   $core.bool hasAckDeadlineSeconds() => $_has(3);
   @$pb.TagNumber(5)
@@ -5309,10 +4850,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.bool get retainAckedMessages => $_getBF(4);
   @$pb.TagNumber(7)
-  set retainAckedMessages($core.bool v) {
-    $_setBool(4, v);
-  }
-
+  set retainAckedMessages($core.bool value) => $_setBool(4, value);
   @$pb.TagNumber(7)
   $core.bool hasRetainAckedMessages() => $_has(4);
   @$pb.TagNumber(7)
@@ -5324,18 +4862,15 @@ class Subscription extends $pb.GeneratedMessage {
   /// and thus configures how far back in time a `Seek` can be done. Defaults to
   /// 7 days. Cannot be more than 31 days or less than 10 minutes.
   @$pb.TagNumber(8)
-  $5.Duration get messageRetentionDuration => $_getN(5);
+  $4.Duration get messageRetentionDuration => $_getN(5);
   @$pb.TagNumber(8)
-  set messageRetentionDuration($5.Duration v) {
-    $_setField(8, v);
-  }
-
+  set messageRetentionDuration($4.Duration value) => $_setField(8, value);
   @$pb.TagNumber(8)
   $core.bool hasMessageRetentionDuration() => $_has(5);
   @$pb.TagNumber(8)
   void clearMessageRetentionDuration() => $_clearField(8);
   @$pb.TagNumber(8)
-  $5.Duration ensureMessageRetentionDuration() => $_ensure(5);
+  $4.Duration ensureMessageRetentionDuration() => $_ensure(5);
 
   /// Optional. See [Creating and managing
   /// labels](https://cloud.google.com/pubsub/docs/labels).
@@ -5349,10 +4884,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.bool get enableMessageOrdering => $_getBF(7);
   @$pb.TagNumber(10)
-  set enableMessageOrdering($core.bool v) {
-    $_setBool(7, v);
-  }
-
+  set enableMessageOrdering($core.bool value) => $_setBool(7, value);
   @$pb.TagNumber(10)
   $core.bool hasEnableMessageOrdering() => $_has(7);
   @$pb.TagNumber(10)
@@ -5368,10 +4900,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   ExpirationPolicy get expirationPolicy => $_getN(8);
   @$pb.TagNumber(11)
-  set expirationPolicy(ExpirationPolicy v) {
-    $_setField(11, v);
-  }
-
+  set expirationPolicy(ExpirationPolicy value) => $_setField(11, value);
   @$pb.TagNumber(11)
   $core.bool hasExpirationPolicy() => $_has(8);
   @$pb.TagNumber(11)
@@ -5387,10 +4916,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(12)
   $core.String get filter => $_getSZ(9);
   @$pb.TagNumber(12)
-  set filter($core.String v) {
-    $_setString(9, v);
-  }
-
+  set filter($core.String value) => $_setString(9, value);
   @$pb.TagNumber(12)
   $core.bool hasFilter() => $_has(9);
   @$pb.TagNumber(12)
@@ -5407,10 +4933,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(13)
   DeadLetterPolicy get deadLetterPolicy => $_getN(10);
   @$pb.TagNumber(13)
-  set deadLetterPolicy(DeadLetterPolicy v) {
-    $_setField(13, v);
-  }
-
+  set deadLetterPolicy(DeadLetterPolicy value) => $_setField(13, value);
   @$pb.TagNumber(13)
   $core.bool hasDeadLetterPolicy() => $_has(10);
   @$pb.TagNumber(13)
@@ -5428,10 +4951,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(14)
   RetryPolicy get retryPolicy => $_getN(11);
   @$pb.TagNumber(14)
-  set retryPolicy(RetryPolicy v) {
-    $_setField(14, v);
-  }
-
+  set retryPolicy(RetryPolicy value) => $_setField(14, value);
   @$pb.TagNumber(14)
   $core.bool hasRetryPolicy() => $_has(11);
   @$pb.TagNumber(14)
@@ -5447,10 +4967,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(15)
   $core.bool get detached => $_getBF(12);
   @$pb.TagNumber(15)
-  set detached($core.bool v) {
-    $_setBool(12, v);
-  }
-
+  set detached($core.bool value) => $_setBool(12, value);
   @$pb.TagNumber(15)
   $core.bool hasDetached() => $_has(12);
   @$pb.TagNumber(15)
@@ -5471,10 +4988,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(16)
   $core.bool get enableExactlyOnceDelivery => $_getBF(13);
   @$pb.TagNumber(16)
-  set enableExactlyOnceDelivery($core.bool v) {
-    $_setBool(13, v);
-  }
-
+  set enableExactlyOnceDelivery($core.bool value) => $_setBool(13, value);
   @$pb.TagNumber(16)
   $core.bool hasEnableExactlyOnceDelivery() => $_has(13);
   @$pb.TagNumber(16)
@@ -5487,28 +5001,22 @@ class Subscription extends $pb.GeneratedMessage {
   /// the `message_retention_duration` field in `Topic`. This field is set only
   /// in responses from the server; it is ignored if it is set in any requests.
   @$pb.TagNumber(17)
-  $5.Duration get topicMessageRetentionDuration => $_getN(14);
+  $4.Duration get topicMessageRetentionDuration => $_getN(14);
   @$pb.TagNumber(17)
-  set topicMessageRetentionDuration($5.Duration v) {
-    $_setField(17, v);
-  }
-
+  set topicMessageRetentionDuration($4.Duration value) => $_setField(17, value);
   @$pb.TagNumber(17)
   $core.bool hasTopicMessageRetentionDuration() => $_has(14);
   @$pb.TagNumber(17)
   void clearTopicMessageRetentionDuration() => $_clearField(17);
   @$pb.TagNumber(17)
-  $5.Duration ensureTopicMessageRetentionDuration() => $_ensure(14);
+  $4.Duration ensureTopicMessageRetentionDuration() => $_ensure(14);
 
   /// Optional. If delivery to BigQuery is used with this subscription, this
   /// field is used to configure it.
   @$pb.TagNumber(18)
   BigQueryConfig get bigqueryConfig => $_getN(15);
   @$pb.TagNumber(18)
-  set bigqueryConfig(BigQueryConfig v) {
-    $_setField(18, v);
-  }
-
+  set bigqueryConfig(BigQueryConfig value) => $_setField(18, value);
   @$pb.TagNumber(18)
   $core.bool hasBigqueryConfig() => $_has(15);
   @$pb.TagNumber(18)
@@ -5521,10 +5029,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(19)
   Subscription_State get state => $_getN(16);
   @$pb.TagNumber(19)
-  set state(Subscription_State v) {
-    $_setField(19, v);
-  }
-
+  set state(Subscription_State value) => $_setField(19, value);
   @$pb.TagNumber(19)
   $core.bool hasState() => $_has(16);
   @$pb.TagNumber(19)
@@ -5535,10 +5040,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(22)
   CloudStorageConfig get cloudStorageConfig => $_getN(17);
   @$pb.TagNumber(22)
-  set cloudStorageConfig(CloudStorageConfig v) {
-    $_setField(22, v);
-  }
-
+  set cloudStorageConfig(CloudStorageConfig value) => $_setField(22, value);
   @$pb.TagNumber(22)
   $core.bool hasCloudStorageConfig() => $_has(17);
   @$pb.TagNumber(22)
@@ -5553,10 +5055,8 @@ class Subscription extends $pb.GeneratedMessage {
       $_getN(18);
   @$pb.TagNumber(23)
   set analyticsHubSubscriptionInfo(
-      Subscription_AnalyticsHubSubscriptionInfo v) {
-    $_setField(23, v);
-  }
-
+          Subscription_AnalyticsHubSubscriptionInfo value) =>
+      $_setField(23, value);
   @$pb.TagNumber(23)
   $core.bool hasAnalyticsHubSubscriptionInfo() => $_has(18);
   @$pb.TagNumber(23)
@@ -5584,10 +5084,7 @@ class Subscription extends $pb.GeneratedMessage {
   @$pb.TagNumber(27)
   BigtableConfig get bigtableConfig => $_getN(21);
   @$pb.TagNumber(27)
-  set bigtableConfig(BigtableConfig v) {
-    $_setField(27, v);
-  }
-
+  set bigtableConfig(BigtableConfig value) => $_setField(27, value);
   @$pb.TagNumber(27)
   $core.bool hasBigtableConfig() => $_has(21);
   @$pb.TagNumber(27)
@@ -5609,35 +5106,33 @@ class Subscription extends $pb.GeneratedMessage {
 /// delay can be more or less than configured backoff.
 class RetryPolicy extends $pb.GeneratedMessage {
   factory RetryPolicy({
-    $5.Duration? minimumBackoff,
-    $5.Duration? maximumBackoff,
+    $4.Duration? minimumBackoff,
+    $4.Duration? maximumBackoff,
   }) {
-    final $result = create();
-    if (minimumBackoff != null) {
-      $result.minimumBackoff = minimumBackoff;
-    }
-    if (maximumBackoff != null) {
-      $result.maximumBackoff = maximumBackoff;
-    }
-    return $result;
+    final result = create();
+    if (minimumBackoff != null) result.minimumBackoff = minimumBackoff;
+    if (maximumBackoff != null) result.maximumBackoff = maximumBackoff;
+    return result;
   }
-  RetryPolicy._() : super();
-  factory RetryPolicy.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory RetryPolicy.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  RetryPolicy._();
+
+  factory RetryPolicy.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory RetryPolicy.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'RetryPolicy',
       package:
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
-    ..aOM<$5.Duration>(1, _omitFieldNames ? '' : 'minimumBackoff',
-        subBuilder: $5.Duration.create)
-    ..aOM<$5.Duration>(2, _omitFieldNames ? '' : 'maximumBackoff',
-        subBuilder: $5.Duration.create)
+    ..aOM<$4.Duration>(1, _omitFieldNames ? '' : 'minimumBackoff',
+        subBuilder: $4.Duration.create)
+    ..aOM<$4.Duration>(2, _omitFieldNames ? '' : 'maximumBackoff',
+        subBuilder: $4.Duration.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -5647,10 +5142,12 @@ class RetryPolicy extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as RetryPolicy))
           as RetryPolicy;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static RetryPolicy create() => RetryPolicy._();
+  @$core.override
   RetryPolicy createEmptyInstance() => create();
   static $pb.PbList<RetryPolicy> createRepeated() => $pb.PbList<RetryPolicy>();
   @$core.pragma('dart2js:noInline')
@@ -5661,35 +5158,29 @@ class RetryPolicy extends $pb.GeneratedMessage {
   /// Optional. The minimum delay between consecutive deliveries of a given
   /// message. Value should be between 0 and 600 seconds. Defaults to 10 seconds.
   @$pb.TagNumber(1)
-  $5.Duration get minimumBackoff => $_getN(0);
+  $4.Duration get minimumBackoff => $_getN(0);
   @$pb.TagNumber(1)
-  set minimumBackoff($5.Duration v) {
-    $_setField(1, v);
-  }
-
+  set minimumBackoff($4.Duration value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasMinimumBackoff() => $_has(0);
   @$pb.TagNumber(1)
   void clearMinimumBackoff() => $_clearField(1);
   @$pb.TagNumber(1)
-  $5.Duration ensureMinimumBackoff() => $_ensure(0);
+  $4.Duration ensureMinimumBackoff() => $_ensure(0);
 
   /// Optional. The maximum delay between consecutive deliveries of a given
   /// message. Value should be between 0 and 600 seconds. Defaults to 600
   /// seconds.
   @$pb.TagNumber(2)
-  $5.Duration get maximumBackoff => $_getN(1);
+  $4.Duration get maximumBackoff => $_getN(1);
   @$pb.TagNumber(2)
-  set maximumBackoff($5.Duration v) {
-    $_setField(2, v);
-  }
-
+  set maximumBackoff($4.Duration value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasMaximumBackoff() => $_has(1);
   @$pb.TagNumber(2)
   void clearMaximumBackoff() => $_clearField(2);
   @$pb.TagNumber(2)
-  $5.Duration ensureMaximumBackoff() => $_ensure(1);
+  $4.Duration ensureMaximumBackoff() => $_ensure(1);
 }
 
 /// Dead lettering is done on a best effort basis. The same message might be
@@ -5702,22 +5193,21 @@ class DeadLetterPolicy extends $pb.GeneratedMessage {
     $core.String? deadLetterTopic,
     $core.int? maxDeliveryAttempts,
   }) {
-    final $result = create();
-    if (deadLetterTopic != null) {
-      $result.deadLetterTopic = deadLetterTopic;
-    }
-    if (maxDeliveryAttempts != null) {
-      $result.maxDeliveryAttempts = maxDeliveryAttempts;
-    }
-    return $result;
+    final result = create();
+    if (deadLetterTopic != null) result.deadLetterTopic = deadLetterTopic;
+    if (maxDeliveryAttempts != null)
+      result.maxDeliveryAttempts = maxDeliveryAttempts;
+    return result;
   }
-  DeadLetterPolicy._() : super();
-  factory DeadLetterPolicy.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DeadLetterPolicy.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DeadLetterPolicy._();
+
+  factory DeadLetterPolicy.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeadLetterPolicy.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeadLetterPolicy',
@@ -5736,10 +5226,12 @@ class DeadLetterPolicy extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DeadLetterPolicy))
           as DeadLetterPolicy;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeadLetterPolicy create() => DeadLetterPolicy._();
+  @$core.override
   DeadLetterPolicy createEmptyInstance() => create();
   static $pb.PbList<DeadLetterPolicy> createRepeated() =>
       $pb.PbList<DeadLetterPolicy>();
@@ -5760,10 +5252,7 @@ class DeadLetterPolicy extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get deadLetterTopic => $_getSZ(0);
   @$pb.TagNumber(1)
-  set deadLetterTopic($core.String v) {
-    $_setString(0, v);
-  }
-
+  set deadLetterTopic($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasDeadLetterTopic() => $_has(0);
   @$pb.TagNumber(1)
@@ -5785,10 +5274,7 @@ class DeadLetterPolicy extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get maxDeliveryAttempts => $_getIZ(1);
   @$pb.TagNumber(2)
-  set maxDeliveryAttempts($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set maxDeliveryAttempts($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasMaxDeliveryAttempts() => $_has(1);
   @$pb.TagNumber(2)
@@ -5799,29 +5285,29 @@ class DeadLetterPolicy extends $pb.GeneratedMessage {
 /// automatic resource deletion).
 class ExpirationPolicy extends $pb.GeneratedMessage {
   factory ExpirationPolicy({
-    $5.Duration? ttl,
+    $4.Duration? ttl,
   }) {
-    final $result = create();
-    if (ttl != null) {
-      $result.ttl = ttl;
-    }
-    return $result;
+    final result = create();
+    if (ttl != null) result.ttl = ttl;
+    return result;
   }
-  ExpirationPolicy._() : super();
-  factory ExpirationPolicy.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ExpirationPolicy.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ExpirationPolicy._();
+
+  factory ExpirationPolicy.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ExpirationPolicy.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ExpirationPolicy',
       package:
           const $pb.PackageName(_omitMessageNames ? '' : 'google.pubsub.v1'),
       createEmptyInstance: create)
-    ..aOM<$5.Duration>(1, _omitFieldNames ? '' : 'ttl',
-        subBuilder: $5.Duration.create)
+    ..aOM<$4.Duration>(1, _omitFieldNames ? '' : 'ttl',
+        subBuilder: $4.Duration.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -5831,10 +5317,12 @@ class ExpirationPolicy extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ExpirationPolicy))
           as ExpirationPolicy;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ExpirationPolicy create() => ExpirationPolicy._();
+  @$core.override
   ExpirationPolicy createEmptyInstance() => create();
   static $pb.PbList<ExpirationPolicy> createRepeated() =>
       $pb.PbList<ExpirationPolicy>();
@@ -5850,18 +5338,15 @@ class ExpirationPolicy extends $pb.GeneratedMessage {
   /// associated resource, as well. If `ttl` is not set, the associated resource
   /// never expires.
   @$pb.TagNumber(1)
-  $5.Duration get ttl => $_getN(0);
+  $4.Duration get ttl => $_getN(0);
   @$pb.TagNumber(1)
-  set ttl($5.Duration v) {
-    $_setField(1, v);
-  }
-
+  set ttl($4.Duration value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasTtl() => $_has(0);
   @$pb.TagNumber(1)
   void clearTtl() => $_clearField(1);
   @$pb.TagNumber(1)
-  $5.Duration ensureTtl() => $_ensure(0);
+  $4.Duration ensureTtl() => $_ensure(0);
 }
 
 /// Contains information needed for generating an
@@ -5872,22 +5357,21 @@ class PushConfig_OidcToken extends $pb.GeneratedMessage {
     $core.String? serviceAccountEmail,
     $core.String? audience,
   }) {
-    final $result = create();
-    if (serviceAccountEmail != null) {
-      $result.serviceAccountEmail = serviceAccountEmail;
-    }
-    if (audience != null) {
-      $result.audience = audience;
-    }
-    return $result;
+    final result = create();
+    if (serviceAccountEmail != null)
+      result.serviceAccountEmail = serviceAccountEmail;
+    if (audience != null) result.audience = audience;
+    return result;
   }
-  PushConfig_OidcToken._() : super();
-  factory PushConfig_OidcToken.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PushConfig_OidcToken.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PushConfig_OidcToken._();
+
+  factory PushConfig_OidcToken.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PushConfig_OidcToken.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PushConfig.OidcToken',
@@ -5906,10 +5390,12 @@ class PushConfig_OidcToken extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PushConfig_OidcToken))
           as PushConfig_OidcToken;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PushConfig_OidcToken create() => PushConfig_OidcToken._();
+  @$core.override
   PushConfig_OidcToken createEmptyInstance() => create();
   static $pb.PbList<PushConfig_OidcToken> createRepeated() =>
       $pb.PbList<PushConfig_OidcToken>();
@@ -5926,10 +5412,7 @@ class PushConfig_OidcToken extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get serviceAccountEmail => $_getSZ(0);
   @$pb.TagNumber(1)
-  set serviceAccountEmail($core.String v) {
-    $_setString(0, v);
-  }
-
+  set serviceAccountEmail($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasServiceAccountEmail() => $_has(0);
   @$pb.TagNumber(1)
@@ -5945,10 +5428,7 @@ class PushConfig_OidcToken extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get audience => $_getSZ(1);
   @$pb.TagNumber(2)
-  set audience($core.String v) {
-    $_setString(1, v);
-  }
-
+  set audience($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasAudience() => $_has(1);
   @$pb.TagNumber(2)
@@ -5960,13 +5440,15 @@ class PushConfig_OidcToken extends $pb.GeneratedMessage {
 /// (https://cloud.google.com/pubsub/docs/reference/rpc/google.pubsub.v1#pubsubmessage).
 class PushConfig_PubsubWrapper extends $pb.GeneratedMessage {
   factory PushConfig_PubsubWrapper() => create();
-  PushConfig_PubsubWrapper._() : super();
-  factory PushConfig_PubsubWrapper.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PushConfig_PubsubWrapper.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PushConfig_PubsubWrapper._();
+
+  factory PushConfig_PubsubWrapper.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PushConfig_PubsubWrapper.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PushConfig.PubsubWrapper',
@@ -5984,10 +5466,12 @@ class PushConfig_PubsubWrapper extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PushConfig_PubsubWrapper))
           as PushConfig_PubsubWrapper;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PushConfig_PubsubWrapper create() => PushConfig_PubsubWrapper._();
+  @$core.override
   PushConfig_PubsubWrapper createEmptyInstance() => create();
   static $pb.PbList<PushConfig_PubsubWrapper> createRepeated() =>
       $pb.PbList<PushConfig_PubsubWrapper>();
@@ -6002,19 +5486,19 @@ class PushConfig_NoWrapper extends $pb.GeneratedMessage {
   factory PushConfig_NoWrapper({
     $core.bool? writeMetadata,
   }) {
-    final $result = create();
-    if (writeMetadata != null) {
-      $result.writeMetadata = writeMetadata;
-    }
-    return $result;
+    final result = create();
+    if (writeMetadata != null) result.writeMetadata = writeMetadata;
+    return result;
   }
-  PushConfig_NoWrapper._() : super();
-  factory PushConfig_NoWrapper.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PushConfig_NoWrapper.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PushConfig_NoWrapper._();
+
+  factory PushConfig_NoWrapper.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PushConfig_NoWrapper.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PushConfig.NoWrapper',
@@ -6032,10 +5516,12 @@ class PushConfig_NoWrapper extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PushConfig_NoWrapper))
           as PushConfig_NoWrapper;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PushConfig_NoWrapper create() => PushConfig_NoWrapper._();
+  @$core.override
   PushConfig_NoWrapper createEmptyInstance() => create();
   static $pb.PbList<PushConfig_NoWrapper> createRepeated() =>
       $pb.PbList<PushConfig_NoWrapper>();
@@ -6050,10 +5536,7 @@ class PushConfig_NoWrapper extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool get writeMetadata => $_getBF(0);
   @$pb.TagNumber(1)
-  set writeMetadata($core.bool v) {
-    $_setBool(0, v);
-  }
-
+  set writeMetadata($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
   $core.bool hasWriteMetadata() => $_has(0);
   @$pb.TagNumber(1)
@@ -6073,31 +5556,23 @@ class PushConfig extends $pb.GeneratedMessage {
     PushConfig_PubsubWrapper? pubsubWrapper,
     PushConfig_NoWrapper? noWrapper,
   }) {
-    final $result = create();
-    if (pushEndpoint != null) {
-      $result.pushEndpoint = pushEndpoint;
-    }
-    if (attributes != null) {
-      $result.attributes.addEntries(attributes);
-    }
-    if (oidcToken != null) {
-      $result.oidcToken = oidcToken;
-    }
-    if (pubsubWrapper != null) {
-      $result.pubsubWrapper = pubsubWrapper;
-    }
-    if (noWrapper != null) {
-      $result.noWrapper = noWrapper;
-    }
-    return $result;
+    final result = create();
+    if (pushEndpoint != null) result.pushEndpoint = pushEndpoint;
+    if (attributes != null) result.attributes.addEntries(attributes);
+    if (oidcToken != null) result.oidcToken = oidcToken;
+    if (pubsubWrapper != null) result.pubsubWrapper = pubsubWrapper;
+    if (noWrapper != null) result.noWrapper = noWrapper;
+    return result;
   }
-  PushConfig._() : super();
-  factory PushConfig.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PushConfig.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PushConfig._();
+
+  factory PushConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PushConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, PushConfig_AuthenticationMethod>
       _PushConfig_AuthenticationMethodByTag = {
@@ -6137,10 +5612,12 @@ class PushConfig extends $pb.GeneratedMessage {
   PushConfig copyWith(void Function(PushConfig) updates) =>
       super.copyWith((message) => updates(message as PushConfig)) as PushConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PushConfig create() => PushConfig._();
+  @$core.override
   PushConfig createEmptyInstance() => create();
   static $pb.PbList<PushConfig> createRepeated() => $pb.PbList<PushConfig>();
   @$core.pragma('dart2js:noInline')
@@ -6161,10 +5638,7 @@ class PushConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get pushEndpoint => $_getSZ(0);
   @$pb.TagNumber(1)
-  set pushEndpoint($core.String v) {
-    $_setString(0, v);
-  }
-
+  set pushEndpoint($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasPushEndpoint() => $_has(0);
   @$pb.TagNumber(1)
@@ -6200,10 +5674,7 @@ class PushConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   PushConfig_OidcToken get oidcToken => $_getN(2);
   @$pb.TagNumber(3)
-  set oidcToken(PushConfig_OidcToken v) {
-    $_setField(3, v);
-  }
-
+  set oidcToken(PushConfig_OidcToken value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasOidcToken() => $_has(2);
   @$pb.TagNumber(3)
@@ -6217,10 +5688,7 @@ class PushConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   PushConfig_PubsubWrapper get pubsubWrapper => $_getN(3);
   @$pb.TagNumber(4)
-  set pubsubWrapper(PushConfig_PubsubWrapper v) {
-    $_setField(4, v);
-  }
-
+  set pubsubWrapper(PushConfig_PubsubWrapper value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasPubsubWrapper() => $_has(3);
   @$pb.TagNumber(4)
@@ -6232,10 +5700,7 @@ class PushConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   PushConfig_NoWrapper get noWrapper => $_getN(4);
   @$pb.TagNumber(5)
-  set noWrapper(PushConfig_NoWrapper v) {
-    $_setField(5, v);
-  }
-
+  set noWrapper(PushConfig_NoWrapper value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasNoWrapper() => $_has(4);
   @$pb.TagNumber(5)
@@ -6255,37 +5720,26 @@ class BigQueryConfig extends $pb.GeneratedMessage {
     $core.bool? useTableSchema,
     $core.String? serviceAccountEmail,
   }) {
-    final $result = create();
-    if (table != null) {
-      $result.table = table;
-    }
-    if (useTopicSchema != null) {
-      $result.useTopicSchema = useTopicSchema;
-    }
-    if (writeMetadata != null) {
-      $result.writeMetadata = writeMetadata;
-    }
-    if (dropUnknownFields != null) {
-      $result.dropUnknownFields = dropUnknownFields;
-    }
-    if (state != null) {
-      $result.state = state;
-    }
-    if (useTableSchema != null) {
-      $result.useTableSchema = useTableSchema;
-    }
-    if (serviceAccountEmail != null) {
-      $result.serviceAccountEmail = serviceAccountEmail;
-    }
-    return $result;
+    final result = create();
+    if (table != null) result.table = table;
+    if (useTopicSchema != null) result.useTopicSchema = useTopicSchema;
+    if (writeMetadata != null) result.writeMetadata = writeMetadata;
+    if (dropUnknownFields != null) result.dropUnknownFields = dropUnknownFields;
+    if (state != null) result.state = state;
+    if (useTableSchema != null) result.useTableSchema = useTableSchema;
+    if (serviceAccountEmail != null)
+      result.serviceAccountEmail = serviceAccountEmail;
+    return result;
   }
-  BigQueryConfig._() : super();
-  factory BigQueryConfig.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory BigQueryConfig.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  BigQueryConfig._();
+
+  factory BigQueryConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory BigQueryConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'BigQueryConfig',
@@ -6312,10 +5766,12 @@ class BigQueryConfig extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as BigQueryConfig))
           as BigQueryConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static BigQueryConfig create() => BigQueryConfig._();
+  @$core.override
   BigQueryConfig createEmptyInstance() => create();
   static $pb.PbList<BigQueryConfig> createRepeated() =>
       $pb.PbList<BigQueryConfig>();
@@ -6329,10 +5785,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get table => $_getSZ(0);
   @$pb.TagNumber(1)
-  set table($core.String v) {
-    $_setString(0, v);
-  }
-
+  set table($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTable() => $_has(0);
   @$pb.TagNumber(1)
@@ -6344,10 +5797,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool get useTopicSchema => $_getBF(1);
   @$pb.TagNumber(2)
-  set useTopicSchema($core.bool v) {
-    $_setBool(1, v);
-  }
-
+  set useTopicSchema($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasUseTopicSchema() => $_has(1);
   @$pb.TagNumber(2)
@@ -6361,10 +5811,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.bool get writeMetadata => $_getBF(2);
   @$pb.TagNumber(3)
-  set writeMetadata($core.bool v) {
-    $_setBool(2, v);
-  }
-
+  set writeMetadata($core.bool value) => $_setBool(2, value);
   @$pb.TagNumber(3)
   $core.bool hasWriteMetadata() => $_has(2);
   @$pb.TagNumber(3)
@@ -6378,10 +5825,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   $core.bool get dropUnknownFields => $_getBF(3);
   @$pb.TagNumber(4)
-  set dropUnknownFields($core.bool v) {
-    $_setBool(3, v);
-  }
-
+  set dropUnknownFields($core.bool value) => $_setBool(3, value);
   @$pb.TagNumber(4)
   $core.bool hasDropUnknownFields() => $_has(3);
   @$pb.TagNumber(4)
@@ -6392,10 +5836,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   BigQueryConfig_State get state => $_getN(4);
   @$pb.TagNumber(5)
-  set state(BigQueryConfig_State v) {
-    $_setField(5, v);
-  }
-
+  set state(BigQueryConfig_State value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasState() => $_has(4);
   @$pb.TagNumber(5)
@@ -6407,10 +5848,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.bool get useTableSchema => $_getBF(5);
   @$pb.TagNumber(6)
-  set useTableSchema($core.bool v) {
-    $_setBool(5, v);
-  }
-
+  set useTableSchema($core.bool value) => $_setBool(5, value);
   @$pb.TagNumber(6)
   $core.bool hasUseTableSchema() => $_has(5);
   @$pb.TagNumber(6)
@@ -6425,10 +5863,7 @@ class BigQueryConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $core.String get serviceAccountEmail => $_getSZ(6);
   @$pb.TagNumber(7)
-  set serviceAccountEmail($core.String v) {
-    $_setString(6, v);
-  }
-
+  set serviceAccountEmail($core.String value) => $_setString(6, value);
   @$pb.TagNumber(7)
   $core.bool hasServiceAccountEmail() => $_has(6);
   @$pb.TagNumber(7)
@@ -6449,31 +5884,24 @@ class BigtableConfig extends $pb.GeneratedMessage {
     BigtableConfig_State? state,
     $core.bool? writeMetadata,
   }) {
-    final $result = create();
-    if (table != null) {
-      $result.table = table;
-    }
-    if (appProfileId != null) {
-      $result.appProfileId = appProfileId;
-    }
-    if (serviceAccountEmail != null) {
-      $result.serviceAccountEmail = serviceAccountEmail;
-    }
-    if (state != null) {
-      $result.state = state;
-    }
-    if (writeMetadata != null) {
-      $result.writeMetadata = writeMetadata;
-    }
-    return $result;
+    final result = create();
+    if (table != null) result.table = table;
+    if (appProfileId != null) result.appProfileId = appProfileId;
+    if (serviceAccountEmail != null)
+      result.serviceAccountEmail = serviceAccountEmail;
+    if (state != null) result.state = state;
+    if (writeMetadata != null) result.writeMetadata = writeMetadata;
+    return result;
   }
-  BigtableConfig._() : super();
-  factory BigtableConfig.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory BigtableConfig.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  BigtableConfig._();
+
+  factory BigtableConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory BigtableConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'BigtableConfig',
@@ -6498,10 +5926,12 @@ class BigtableConfig extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as BigtableConfig))
           as BigtableConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static BigtableConfig create() => BigtableConfig._();
+  @$core.override
   BigtableConfig createEmptyInstance() => create();
   static $pb.PbList<BigtableConfig> createRepeated() =>
       $pb.PbList<BigtableConfig>();
@@ -6517,10 +5947,7 @@ class BigtableConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get table => $_getSZ(0);
   @$pb.TagNumber(1)
-  set table($core.String v) {
-    $_setString(0, v);
-  }
-
+  set table($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasTable() => $_has(0);
   @$pb.TagNumber(1)
@@ -6532,10 +5959,7 @@ class BigtableConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get appProfileId => $_getSZ(1);
   @$pb.TagNumber(2)
-  set appProfileId($core.String v) {
-    $_setString(1, v);
-  }
-
+  set appProfileId($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasAppProfileId() => $_has(1);
   @$pb.TagNumber(2)
@@ -6550,10 +5974,7 @@ class BigtableConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get serviceAccountEmail => $_getSZ(2);
   @$pb.TagNumber(3)
-  set serviceAccountEmail($core.String v) {
-    $_setString(2, v);
-  }
-
+  set serviceAccountEmail($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasServiceAccountEmail() => $_has(2);
   @$pb.TagNumber(3)
@@ -6564,10 +5985,7 @@ class BigtableConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   BigtableConfig_State get state => $_getN(3);
   @$pb.TagNumber(4)
-  set state(BigtableConfig_State v) {
-    $_setField(4, v);
-  }
-
+  set state(BigtableConfig_State value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasState() => $_has(3);
   @$pb.TagNumber(4)
@@ -6582,10 +6000,7 @@ class BigtableConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.bool get writeMetadata => $_getBF(4);
   @$pb.TagNumber(5)
-  set writeMetadata($core.bool v) {
-    $_setBool(4, v);
-  }
-
+  set writeMetadata($core.bool value) => $_setBool(4, value);
   @$pb.TagNumber(5)
   $core.bool hasWriteMetadata() => $_has(4);
   @$pb.TagNumber(5)
@@ -6597,13 +6012,15 @@ class BigtableConfig extends $pb.GeneratedMessage {
 /// newline.
 class CloudStorageConfig_TextConfig extends $pb.GeneratedMessage {
   factory CloudStorageConfig_TextConfig() => create();
-  CloudStorageConfig_TextConfig._() : super();
-  factory CloudStorageConfig_TextConfig.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory CloudStorageConfig_TextConfig.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  CloudStorageConfig_TextConfig._();
+
+  factory CloudStorageConfig_TextConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CloudStorageConfig_TextConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CloudStorageConfig.TextConfig',
@@ -6622,11 +6039,13 @@ class CloudStorageConfig_TextConfig extends $pb.GeneratedMessage {
               (message) => updates(message as CloudStorageConfig_TextConfig))
           as CloudStorageConfig_TextConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CloudStorageConfig_TextConfig create() =>
       CloudStorageConfig_TextConfig._();
+  @$core.override
   CloudStorageConfig_TextConfig createEmptyInstance() => create();
   static $pb.PbList<CloudStorageConfig_TextConfig> createRepeated() =>
       $pb.PbList<CloudStorageConfig_TextConfig>();
@@ -6643,22 +6062,20 @@ class CloudStorageConfig_AvroConfig extends $pb.GeneratedMessage {
     $core.bool? writeMetadata,
     $core.bool? useTopicSchema,
   }) {
-    final $result = create();
-    if (writeMetadata != null) {
-      $result.writeMetadata = writeMetadata;
-    }
-    if (useTopicSchema != null) {
-      $result.useTopicSchema = useTopicSchema;
-    }
-    return $result;
+    final result = create();
+    if (writeMetadata != null) result.writeMetadata = writeMetadata;
+    if (useTopicSchema != null) result.useTopicSchema = useTopicSchema;
+    return result;
   }
-  CloudStorageConfig_AvroConfig._() : super();
-  factory CloudStorageConfig_AvroConfig.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory CloudStorageConfig_AvroConfig.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  CloudStorageConfig_AvroConfig._();
+
+  factory CloudStorageConfig_AvroConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CloudStorageConfig_AvroConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CloudStorageConfig.AvroConfig',
@@ -6679,11 +6096,13 @@ class CloudStorageConfig_AvroConfig extends $pb.GeneratedMessage {
               (message) => updates(message as CloudStorageConfig_AvroConfig))
           as CloudStorageConfig_AvroConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CloudStorageConfig_AvroConfig create() =>
       CloudStorageConfig_AvroConfig._();
+  @$core.override
   CloudStorageConfig_AvroConfig createEmptyInstance() => create();
   static $pb.PbList<CloudStorageConfig_AvroConfig> createRepeated() =>
       $pb.PbList<CloudStorageConfig_AvroConfig>();
@@ -6701,10 +6120,7 @@ class CloudStorageConfig_AvroConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.bool get writeMetadata => $_getBF(0);
   @$pb.TagNumber(1)
-  set writeMetadata($core.bool v) {
-    $_setBool(0, v);
-  }
-
+  set writeMetadata($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
   $core.bool hasWriteMetadata() => $_has(0);
   @$pb.TagNumber(1)
@@ -6715,10 +6131,7 @@ class CloudStorageConfig_AvroConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.bool get useTopicSchema => $_getBF(1);
   @$pb.TagNumber(2)
-  set useTopicSchema($core.bool v) {
-    $_setBool(1, v);
-  }
-
+  set useTopicSchema($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasUseTopicSchema() => $_has(1);
   @$pb.TagNumber(2)
@@ -6735,56 +6148,38 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
     $core.String? filenameSuffix,
     CloudStorageConfig_TextConfig? textConfig,
     CloudStorageConfig_AvroConfig? avroConfig,
-    $5.Duration? maxDuration,
+    $4.Duration? maxDuration,
     $fixnum.Int64? maxBytes,
     $fixnum.Int64? maxMessages,
     CloudStorageConfig_State? state,
     $core.String? filenameDatetimeFormat,
     $core.String? serviceAccountEmail,
   }) {
-    final $result = create();
-    if (bucket != null) {
-      $result.bucket = bucket;
-    }
-    if (filenamePrefix != null) {
-      $result.filenamePrefix = filenamePrefix;
-    }
-    if (filenameSuffix != null) {
-      $result.filenameSuffix = filenameSuffix;
-    }
-    if (textConfig != null) {
-      $result.textConfig = textConfig;
-    }
-    if (avroConfig != null) {
-      $result.avroConfig = avroConfig;
-    }
-    if (maxDuration != null) {
-      $result.maxDuration = maxDuration;
-    }
-    if (maxBytes != null) {
-      $result.maxBytes = maxBytes;
-    }
-    if (maxMessages != null) {
-      $result.maxMessages = maxMessages;
-    }
-    if (state != null) {
-      $result.state = state;
-    }
-    if (filenameDatetimeFormat != null) {
-      $result.filenameDatetimeFormat = filenameDatetimeFormat;
-    }
-    if (serviceAccountEmail != null) {
-      $result.serviceAccountEmail = serviceAccountEmail;
-    }
-    return $result;
+    final result = create();
+    if (bucket != null) result.bucket = bucket;
+    if (filenamePrefix != null) result.filenamePrefix = filenamePrefix;
+    if (filenameSuffix != null) result.filenameSuffix = filenameSuffix;
+    if (textConfig != null) result.textConfig = textConfig;
+    if (avroConfig != null) result.avroConfig = avroConfig;
+    if (maxDuration != null) result.maxDuration = maxDuration;
+    if (maxBytes != null) result.maxBytes = maxBytes;
+    if (maxMessages != null) result.maxMessages = maxMessages;
+    if (state != null) result.state = state;
+    if (filenameDatetimeFormat != null)
+      result.filenameDatetimeFormat = filenameDatetimeFormat;
+    if (serviceAccountEmail != null)
+      result.serviceAccountEmail = serviceAccountEmail;
+    return result;
   }
-  CloudStorageConfig._() : super();
-  factory CloudStorageConfig.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory CloudStorageConfig.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  CloudStorageConfig._();
+
+  factory CloudStorageConfig.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CloudStorageConfig.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, CloudStorageConfig_OutputFormat>
       _CloudStorageConfig_OutputFormatByTag = {
@@ -6805,8 +6200,8 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
         subBuilder: CloudStorageConfig_TextConfig.create)
     ..aOM<CloudStorageConfig_AvroConfig>(5, _omitFieldNames ? '' : 'avroConfig',
         subBuilder: CloudStorageConfig_AvroConfig.create)
-    ..aOM<$5.Duration>(6, _omitFieldNames ? '' : 'maxDuration',
-        subBuilder: $5.Duration.create)
+    ..aOM<$4.Duration>(6, _omitFieldNames ? '' : 'maxDuration',
+        subBuilder: $4.Duration.create)
     ..aInt64(7, _omitFieldNames ? '' : 'maxBytes')
     ..aInt64(8, _omitFieldNames ? '' : 'maxMessages')
     ..e<CloudStorageConfig_State>(
@@ -6825,10 +6220,12 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as CloudStorageConfig))
           as CloudStorageConfig;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CloudStorageConfig create() => CloudStorageConfig._();
+  @$core.override
   CloudStorageConfig createEmptyInstance() => create();
   static $pb.PbList<CloudStorageConfig> createRepeated() =>
       $pb.PbList<CloudStorageConfig>();
@@ -6848,10 +6245,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get bucket => $_getSZ(0);
   @$pb.TagNumber(1)
-  set bucket($core.String v) {
-    $_setString(0, v);
-  }
-
+  set bucket($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasBucket() => $_has(0);
   @$pb.TagNumber(1)
@@ -6862,10 +6256,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get filenamePrefix => $_getSZ(1);
   @$pb.TagNumber(2)
-  set filenamePrefix($core.String v) {
-    $_setString(1, v);
-  }
-
+  set filenamePrefix($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasFilenamePrefix() => $_has(1);
   @$pb.TagNumber(2)
@@ -6877,10 +6268,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get filenameSuffix => $_getSZ(2);
   @$pb.TagNumber(3)
-  set filenameSuffix($core.String v) {
-    $_setString(2, v);
-  }
-
+  set filenameSuffix($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasFilenameSuffix() => $_has(2);
   @$pb.TagNumber(3)
@@ -6891,10 +6279,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(4)
   CloudStorageConfig_TextConfig get textConfig => $_getN(3);
   @$pb.TagNumber(4)
-  set textConfig(CloudStorageConfig_TextConfig v) {
-    $_setField(4, v);
-  }
-
+  set textConfig(CloudStorageConfig_TextConfig value) => $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasTextConfig() => $_has(3);
   @$pb.TagNumber(4)
@@ -6907,10 +6292,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   CloudStorageConfig_AvroConfig get avroConfig => $_getN(4);
   @$pb.TagNumber(5)
-  set avroConfig(CloudStorageConfig_AvroConfig v) {
-    $_setField(5, v);
-  }
-
+  set avroConfig(CloudStorageConfig_AvroConfig value) => $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasAvroConfig() => $_has(4);
   @$pb.TagNumber(5)
@@ -6922,18 +6304,15 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   /// file is created. Min 1 minute, max 10 minutes, default 5 minutes. May not
   /// exceed the subscription's acknowledgment deadline.
   @$pb.TagNumber(6)
-  $5.Duration get maxDuration => $_getN(5);
+  $4.Duration get maxDuration => $_getN(5);
   @$pb.TagNumber(6)
-  set maxDuration($5.Duration v) {
-    $_setField(6, v);
-  }
-
+  set maxDuration($4.Duration value) => $_setField(6, value);
   @$pb.TagNumber(6)
   $core.bool hasMaxDuration() => $_has(5);
   @$pb.TagNumber(6)
   void clearMaxDuration() => $_clearField(6);
   @$pb.TagNumber(6)
-  $5.Duration ensureMaxDuration() => $_ensure(5);
+  $4.Duration ensureMaxDuration() => $_ensure(5);
 
   /// Optional. The maximum bytes that can be written to a Cloud Storage file
   /// before a new file is created. Min 1 KB, max 10 GiB. The max_bytes limit may
@@ -6941,10 +6320,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $fixnum.Int64 get maxBytes => $_getI64(6);
   @$pb.TagNumber(7)
-  set maxBytes($fixnum.Int64 v) {
-    $_setInt64(6, v);
-  }
-
+  set maxBytes($fixnum.Int64 value) => $_setInt64(6, value);
   @$pb.TagNumber(7)
   $core.bool hasMaxBytes() => $_has(6);
   @$pb.TagNumber(7)
@@ -6955,10 +6331,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $fixnum.Int64 get maxMessages => $_getI64(7);
   @$pb.TagNumber(8)
-  set maxMessages($fixnum.Int64 v) {
-    $_setInt64(7, v);
-  }
-
+  set maxMessages($fixnum.Int64 value) => $_setInt64(7, value);
   @$pb.TagNumber(8)
   $core.bool hasMaxMessages() => $_has(7);
   @$pb.TagNumber(8)
@@ -6969,10 +6342,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(9)
   CloudStorageConfig_State get state => $_getN(8);
   @$pb.TagNumber(9)
-  set state(CloudStorageConfig_State v) {
-    $_setField(9, v);
-  }
-
+  set state(CloudStorageConfig_State value) => $_setField(9, value);
   @$pb.TagNumber(9)
   $core.bool hasState() => $_has(8);
   @$pb.TagNumber(9)
@@ -6984,10 +6354,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $core.String get filenameDatetimeFormat => $_getSZ(9);
   @$pb.TagNumber(10)
-  set filenameDatetimeFormat($core.String v) {
-    $_setString(9, v);
-  }
-
+  set filenameDatetimeFormat($core.String value) => $_setString(9, value);
   @$pb.TagNumber(10)
   $core.bool hasFilenameDatetimeFormat() => $_has(9);
   @$pb.TagNumber(10)
@@ -7002,10 +6369,7 @@ class CloudStorageConfig extends $pb.GeneratedMessage {
   @$pb.TagNumber(11)
   $core.String get serviceAccountEmail => $_getSZ(10);
   @$pb.TagNumber(11)
-  set serviceAccountEmail($core.String v) {
-    $_setString(10, v);
-  }
-
+  set serviceAccountEmail($core.String value) => $_setString(10, value);
   @$pb.TagNumber(11)
   $core.bool hasServiceAccountEmail() => $_has(10);
   @$pb.TagNumber(11)
@@ -7019,25 +6383,21 @@ class ReceivedMessage extends $pb.GeneratedMessage {
     PubsubMessage? message,
     $core.int? deliveryAttempt,
   }) {
-    final $result = create();
-    if (ackId != null) {
-      $result.ackId = ackId;
-    }
-    if (message != null) {
-      $result.message = message;
-    }
-    if (deliveryAttempt != null) {
-      $result.deliveryAttempt = deliveryAttempt;
-    }
-    return $result;
+    final result = create();
+    if (ackId != null) result.ackId = ackId;
+    if (message != null) result.message = message;
+    if (deliveryAttempt != null) result.deliveryAttempt = deliveryAttempt;
+    return result;
   }
-  ReceivedMessage._() : super();
-  factory ReceivedMessage.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ReceivedMessage.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ReceivedMessage._();
+
+  factory ReceivedMessage.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ReceivedMessage.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ReceivedMessage',
@@ -7058,10 +6418,12 @@ class ReceivedMessage extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ReceivedMessage))
           as ReceivedMessage;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ReceivedMessage create() => ReceivedMessage._();
+  @$core.override
   ReceivedMessage createEmptyInstance() => create();
   static $pb.PbList<ReceivedMessage> createRepeated() =>
       $pb.PbList<ReceivedMessage>();
@@ -7074,10 +6436,7 @@ class ReceivedMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get ackId => $_getSZ(0);
   @$pb.TagNumber(1)
-  set ackId($core.String v) {
-    $_setString(0, v);
-  }
-
+  set ackId($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasAckId() => $_has(0);
   @$pb.TagNumber(1)
@@ -7087,10 +6446,7 @@ class ReceivedMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   PubsubMessage get message => $_getN(1);
   @$pb.TagNumber(2)
-  set message(PubsubMessage v) {
-    $_setField(2, v);
-  }
-
+  set message(PubsubMessage value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasMessage() => $_has(1);
   @$pb.TagNumber(2)
@@ -7117,10 +6473,7 @@ class ReceivedMessage extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get deliveryAttempt => $_getIZ(2);
   @$pb.TagNumber(3)
-  set deliveryAttempt($core.int v) {
-    $_setSignedInt32(2, v);
-  }
-
+  set deliveryAttempt($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasDeliveryAttempt() => $_has(2);
   @$pb.TagNumber(3)
@@ -7132,19 +6485,19 @@ class GetSubscriptionRequest extends $pb.GeneratedMessage {
   factory GetSubscriptionRequest({
     $core.String? subscription,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    return result;
   }
-  GetSubscriptionRequest._() : super();
-  factory GetSubscriptionRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory GetSubscriptionRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  GetSubscriptionRequest._();
+
+  factory GetSubscriptionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetSubscriptionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetSubscriptionRequest',
@@ -7163,10 +6516,12 @@ class GetSubscriptionRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as GetSubscriptionRequest))
           as GetSubscriptionRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetSubscriptionRequest create() => GetSubscriptionRequest._();
+  @$core.override
   GetSubscriptionRequest createEmptyInstance() => create();
   static $pb.PbList<GetSubscriptionRequest> createRepeated() =>
       $pb.PbList<GetSubscriptionRequest>();
@@ -7180,10 +6535,7 @@ class GetSubscriptionRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7194,24 +6546,22 @@ class GetSubscriptionRequest extends $pb.GeneratedMessage {
 class UpdateSubscriptionRequest extends $pb.GeneratedMessage {
   factory UpdateSubscriptionRequest({
     Subscription? subscription,
-    $6.FieldMask? updateMask,
+    $5.FieldMask? updateMask,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (updateMask != null) {
-      $result.updateMask = updateMask;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (updateMask != null) result.updateMask = updateMask;
+    return result;
   }
-  UpdateSubscriptionRequest._() : super();
-  factory UpdateSubscriptionRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory UpdateSubscriptionRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  UpdateSubscriptionRequest._();
+
+  factory UpdateSubscriptionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSubscriptionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateSubscriptionRequest',
@@ -7220,8 +6570,8 @@ class UpdateSubscriptionRequest extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOM<Subscription>(1, _omitFieldNames ? '' : 'subscription',
         subBuilder: Subscription.create)
-    ..aOM<$6.FieldMask>(2, _omitFieldNames ? '' : 'updateMask',
-        subBuilder: $6.FieldMask.create)
+    ..aOM<$5.FieldMask>(2, _omitFieldNames ? '' : 'updateMask',
+        subBuilder: $5.FieldMask.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -7233,10 +6583,12 @@ class UpdateSubscriptionRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as UpdateSubscriptionRequest))
           as UpdateSubscriptionRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UpdateSubscriptionRequest create() => UpdateSubscriptionRequest._();
+  @$core.override
   UpdateSubscriptionRequest createEmptyInstance() => create();
   static $pb.PbList<UpdateSubscriptionRequest> createRepeated() =>
       $pb.PbList<UpdateSubscriptionRequest>();
@@ -7249,10 +6601,7 @@ class UpdateSubscriptionRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   Subscription get subscription => $_getN(0);
   @$pb.TagNumber(1)
-  set subscription(Subscription v) {
-    $_setField(1, v);
-  }
-
+  set subscription(Subscription value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7263,18 +6612,15 @@ class UpdateSubscriptionRequest extends $pb.GeneratedMessage {
   /// Required. Indicates which fields in the provided subscription to update.
   /// Must be specified and non-empty.
   @$pb.TagNumber(2)
-  $6.FieldMask get updateMask => $_getN(1);
+  $5.FieldMask get updateMask => $_getN(1);
   @$pb.TagNumber(2)
-  set updateMask($6.FieldMask v) {
-    $_setField(2, v);
-  }
-
+  set updateMask($5.FieldMask value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateMask() => $_has(1);
   @$pb.TagNumber(2)
   void clearUpdateMask() => $_clearField(2);
   @$pb.TagNumber(2)
-  $6.FieldMask ensureUpdateMask() => $_ensure(1);
+  $5.FieldMask ensureUpdateMask() => $_ensure(1);
 }
 
 /// Request for the `ListSubscriptions` method.
@@ -7284,25 +6630,21 @@ class ListSubscriptionsRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (project != null) {
-      $result.project = project;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (project != null) result.project = project;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListSubscriptionsRequest._() : super();
-  factory ListSubscriptionsRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSubscriptionsRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSubscriptionsRequest._();
+
+  factory ListSubscriptionsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSubscriptionsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSubscriptionsRequest',
@@ -7323,10 +6665,12 @@ class ListSubscriptionsRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListSubscriptionsRequest))
           as ListSubscriptionsRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSubscriptionsRequest create() => ListSubscriptionsRequest._();
+  @$core.override
   ListSubscriptionsRequest createEmptyInstance() => create();
   static $pb.PbList<ListSubscriptionsRequest> createRepeated() =>
       $pb.PbList<ListSubscriptionsRequest>();
@@ -7340,10 +6684,7 @@ class ListSubscriptionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get project => $_getSZ(0);
   @$pb.TagNumber(1)
-  set project($core.String v) {
-    $_setString(0, v);
-  }
-
+  set project($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasProject() => $_has(0);
   @$pb.TagNumber(1)
@@ -7353,10 +6694,7 @@ class ListSubscriptionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get pageSize => $_getIZ(1);
   @$pb.TagNumber(2)
-  set pageSize($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPageSize() => $_has(1);
   @$pb.TagNumber(2)
@@ -7368,10 +6706,7 @@ class ListSubscriptionsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get pageToken => $_getSZ(2);
   @$pb.TagNumber(3)
-  set pageToken($core.String v) {
-    $_setString(2, v);
-  }
-
+  set pageToken($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageToken() => $_has(2);
   @$pb.TagNumber(3)
@@ -7384,22 +6719,20 @@ class ListSubscriptionsResponse extends $pb.GeneratedMessage {
     $core.Iterable<Subscription>? subscriptions,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (subscriptions != null) {
-      $result.subscriptions.addAll(subscriptions);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (subscriptions != null) result.subscriptions.addAll(subscriptions);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListSubscriptionsResponse._() : super();
-  factory ListSubscriptionsResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSubscriptionsResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSubscriptionsResponse._();
+
+  factory ListSubscriptionsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSubscriptionsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSubscriptionsResponse',
@@ -7421,10 +6754,12 @@ class ListSubscriptionsResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListSubscriptionsResponse))
           as ListSubscriptionsResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSubscriptionsResponse create() => ListSubscriptionsResponse._();
+  @$core.override
   ListSubscriptionsResponse createEmptyInstance() => create();
   static $pb.PbList<ListSubscriptionsResponse> createRepeated() =>
       $pb.PbList<ListSubscriptionsResponse>();
@@ -7443,10 +6778,7 @@ class ListSubscriptionsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -7458,19 +6790,19 @@ class DeleteSubscriptionRequest extends $pb.GeneratedMessage {
   factory DeleteSubscriptionRequest({
     $core.String? subscription,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    return result;
   }
-  DeleteSubscriptionRequest._() : super();
-  factory DeleteSubscriptionRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DeleteSubscriptionRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DeleteSubscriptionRequest._();
+
+  factory DeleteSubscriptionRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSubscriptionRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteSubscriptionRequest',
@@ -7489,10 +6821,12 @@ class DeleteSubscriptionRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DeleteSubscriptionRequest))
           as DeleteSubscriptionRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSubscriptionRequest create() => DeleteSubscriptionRequest._();
+  @$core.override
   DeleteSubscriptionRequest createEmptyInstance() => create();
   static $pb.PbList<DeleteSubscriptionRequest> createRepeated() =>
       $pb.PbList<DeleteSubscriptionRequest>();
@@ -7506,10 +6840,7 @@ class DeleteSubscriptionRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7522,22 +6853,20 @@ class ModifyPushConfigRequest extends $pb.GeneratedMessage {
     $core.String? subscription,
     PushConfig? pushConfig,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (pushConfig != null) {
-      $result.pushConfig = pushConfig;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (pushConfig != null) result.pushConfig = pushConfig;
+    return result;
   }
-  ModifyPushConfigRequest._() : super();
-  factory ModifyPushConfigRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ModifyPushConfigRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ModifyPushConfigRequest._();
+
+  factory ModifyPushConfigRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ModifyPushConfigRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ModifyPushConfigRequest',
@@ -7558,10 +6887,12 @@ class ModifyPushConfigRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ModifyPushConfigRequest))
           as ModifyPushConfigRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ModifyPushConfigRequest create() => ModifyPushConfigRequest._();
+  @$core.override
   ModifyPushConfigRequest createEmptyInstance() => create();
   static $pb.PbList<ModifyPushConfigRequest> createRepeated() =>
       $pb.PbList<ModifyPushConfigRequest>();
@@ -7575,10 +6906,7 @@ class ModifyPushConfigRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7593,10 +6921,7 @@ class ModifyPushConfigRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   PushConfig get pushConfig => $_getN(1);
   @$pb.TagNumber(2)
-  set pushConfig(PushConfig v) {
-    $_setField(2, v);
-  }
-
+  set pushConfig(PushConfig value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasPushConfig() => $_has(1);
   @$pb.TagNumber(2)
@@ -7613,26 +6938,21 @@ class PullRequest extends $pb.GeneratedMessage {
     $core.bool? returnImmediately,
     $core.int? maxMessages,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (returnImmediately != null) {
-      // ignore: deprecated_member_use_from_same_package
-      $result.returnImmediately = returnImmediately;
-    }
-    if (maxMessages != null) {
-      $result.maxMessages = maxMessages;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (returnImmediately != null) result.returnImmediately = returnImmediately;
+    if (maxMessages != null) result.maxMessages = maxMessages;
+    return result;
   }
-  PullRequest._() : super();
-  factory PullRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PullRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PullRequest._();
+
+  factory PullRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PullRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PullRequest',
@@ -7651,10 +6971,12 @@ class PullRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PullRequest))
           as PullRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PullRequest create() => PullRequest._();
+  @$core.override
   PullRequest createEmptyInstance() => create();
   static $pb.PbList<PullRequest> createRepeated() => $pb.PbList<PullRequest>();
   @$core.pragma('dart2js:noInline')
@@ -7667,10 +6989,7 @@ class PullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7688,10 +7007,7 @@ class PullRequest extends $pb.GeneratedMessage {
   $core.bool get returnImmediately => $_getBF(1);
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(2)
-  set returnImmediately($core.bool v) {
-    $_setBool(1, v);
-  }
-
+  set returnImmediately($core.bool value) => $_setBool(1, value);
   @$core.Deprecated('This field is deprecated.')
   @$pb.TagNumber(2)
   $core.bool hasReturnImmediately() => $_has(1);
@@ -7705,10 +7021,7 @@ class PullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get maxMessages => $_getIZ(2);
   @$pb.TagNumber(3)
-  set maxMessages($core.int v) {
-    $_setSignedInt32(2, v);
-  }
-
+  set maxMessages($core.int value) => $_setSignedInt32(2, value);
   @$pb.TagNumber(3)
   $core.bool hasMaxMessages() => $_has(2);
   @$pb.TagNumber(3)
@@ -7720,19 +7033,20 @@ class PullResponse extends $pb.GeneratedMessage {
   factory PullResponse({
     $core.Iterable<ReceivedMessage>? receivedMessages,
   }) {
-    final $result = create();
-    if (receivedMessages != null) {
-      $result.receivedMessages.addAll(receivedMessages);
-    }
-    return $result;
+    final result = create();
+    if (receivedMessages != null)
+      result.receivedMessages.addAll(receivedMessages);
+    return result;
   }
-  PullResponse._() : super();
-  factory PullResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory PullResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  PullResponse._();
+
+  factory PullResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory PullResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'PullResponse',
@@ -7751,10 +7065,12 @@ class PullResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as PullResponse))
           as PullResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static PullResponse create() => PullResponse._();
+  @$core.override
   PullResponse createEmptyInstance() => create();
   static $pb.PbList<PullResponse> createRepeated() =>
       $pb.PbList<PullResponse>();
@@ -7779,25 +7095,22 @@ class ModifyAckDeadlineRequest extends $pb.GeneratedMessage {
     $core.int? ackDeadlineSeconds,
     $core.Iterable<$core.String>? ackIds,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (ackDeadlineSeconds != null) {
-      $result.ackDeadlineSeconds = ackDeadlineSeconds;
-    }
-    if (ackIds != null) {
-      $result.ackIds.addAll(ackIds);
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (ackDeadlineSeconds != null)
+      result.ackDeadlineSeconds = ackDeadlineSeconds;
+    if (ackIds != null) result.ackIds.addAll(ackIds);
+    return result;
   }
-  ModifyAckDeadlineRequest._() : super();
-  factory ModifyAckDeadlineRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ModifyAckDeadlineRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ModifyAckDeadlineRequest._();
+
+  factory ModifyAckDeadlineRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ModifyAckDeadlineRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ModifyAckDeadlineRequest',
@@ -7819,10 +7132,12 @@ class ModifyAckDeadlineRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ModifyAckDeadlineRequest))
           as ModifyAckDeadlineRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ModifyAckDeadlineRequest create() => ModifyAckDeadlineRequest._();
+  @$core.override
   ModifyAckDeadlineRequest createEmptyInstance() => create();
   static $pb.PbList<ModifyAckDeadlineRequest> createRepeated() =>
       $pb.PbList<ModifyAckDeadlineRequest>();
@@ -7836,10 +7151,7 @@ class ModifyAckDeadlineRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7857,10 +7169,7 @@ class ModifyAckDeadlineRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.int get ackDeadlineSeconds => $_getIZ(1);
   @$pb.TagNumber(3)
-  set ackDeadlineSeconds($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set ackDeadlineSeconds($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(3)
   $core.bool hasAckDeadlineSeconds() => $_has(1);
   @$pb.TagNumber(3)
@@ -7877,22 +7186,20 @@ class AcknowledgeRequest extends $pb.GeneratedMessage {
     $core.String? subscription,
     $core.Iterable<$core.String>? ackIds,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (ackIds != null) {
-      $result.ackIds.addAll(ackIds);
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (ackIds != null) result.ackIds.addAll(ackIds);
+    return result;
   }
-  AcknowledgeRequest._() : super();
-  factory AcknowledgeRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory AcknowledgeRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  AcknowledgeRequest._();
+
+  factory AcknowledgeRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory AcknowledgeRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'AcknowledgeRequest',
@@ -7910,10 +7217,12 @@ class AcknowledgeRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as AcknowledgeRequest))
           as AcknowledgeRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static AcknowledgeRequest create() => AcknowledgeRequest._();
+  @$core.override
   AcknowledgeRequest createEmptyInstance() => create();
   static $pb.PbList<AcknowledgeRequest> createRepeated() =>
       $pb.PbList<AcknowledgeRequest>();
@@ -7927,10 +7236,7 @@ class AcknowledgeRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -7958,43 +7264,32 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
     $fixnum.Int64? maxOutstandingBytes,
     $fixnum.Int64? protocolVersion,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (ackIds != null) {
-      $result.ackIds.addAll(ackIds);
-    }
-    if (modifyDeadlineSeconds != null) {
-      $result.modifyDeadlineSeconds.addAll(modifyDeadlineSeconds);
-    }
-    if (modifyDeadlineAckIds != null) {
-      $result.modifyDeadlineAckIds.addAll(modifyDeadlineAckIds);
-    }
-    if (streamAckDeadlineSeconds != null) {
-      $result.streamAckDeadlineSeconds = streamAckDeadlineSeconds;
-    }
-    if (clientId != null) {
-      $result.clientId = clientId;
-    }
-    if (maxOutstandingMessages != null) {
-      $result.maxOutstandingMessages = maxOutstandingMessages;
-    }
-    if (maxOutstandingBytes != null) {
-      $result.maxOutstandingBytes = maxOutstandingBytes;
-    }
-    if (protocolVersion != null) {
-      $result.protocolVersion = protocolVersion;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (ackIds != null) result.ackIds.addAll(ackIds);
+    if (modifyDeadlineSeconds != null)
+      result.modifyDeadlineSeconds.addAll(modifyDeadlineSeconds);
+    if (modifyDeadlineAckIds != null)
+      result.modifyDeadlineAckIds.addAll(modifyDeadlineAckIds);
+    if (streamAckDeadlineSeconds != null)
+      result.streamAckDeadlineSeconds = streamAckDeadlineSeconds;
+    if (clientId != null) result.clientId = clientId;
+    if (maxOutstandingMessages != null)
+      result.maxOutstandingMessages = maxOutstandingMessages;
+    if (maxOutstandingBytes != null)
+      result.maxOutstandingBytes = maxOutstandingBytes;
+    if (protocolVersion != null) result.protocolVersion = protocolVersion;
+    return result;
   }
-  StreamingPullRequest._() : super();
-  factory StreamingPullRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory StreamingPullRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  StreamingPullRequest._();
+
+  factory StreamingPullRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory StreamingPullRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StreamingPullRequest',
@@ -8022,10 +7317,12 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as StreamingPullRequest))
           as StreamingPullRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static StreamingPullRequest create() => StreamingPullRequest._();
+  @$core.override
   StreamingPullRequest createEmptyInstance() => create();
   static $pb.PbList<StreamingPullRequest> createRepeated() =>
       $pb.PbList<StreamingPullRequest>();
@@ -8041,10 +7338,7 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -8087,10 +7381,7 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(5)
   $core.int get streamAckDeadlineSeconds => $_getIZ(4);
   @$pb.TagNumber(5)
-  set streamAckDeadlineSeconds($core.int v) {
-    $_setSignedInt32(4, v);
-  }
-
+  set streamAckDeadlineSeconds($core.int value) => $_setSignedInt32(4, value);
   @$pb.TagNumber(5)
   $core.bool hasStreamAckDeadlineSeconds() => $_has(4);
   @$pb.TagNumber(5)
@@ -8105,10 +7396,7 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(6)
   $core.String get clientId => $_getSZ(5);
   @$pb.TagNumber(6)
-  set clientId($core.String v) {
-    $_setString(5, v);
-  }
-
+  set clientId($core.String value) => $_setString(5, value);
   @$pb.TagNumber(6)
   $core.bool hasClientId() => $_has(5);
   @$pb.TagNumber(6)
@@ -8126,10 +7414,7 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(7)
   $fixnum.Int64 get maxOutstandingMessages => $_getI64(6);
   @$pb.TagNumber(7)
-  set maxOutstandingMessages($fixnum.Int64 v) {
-    $_setInt64(6, v);
-  }
-
+  set maxOutstandingMessages($fixnum.Int64 value) => $_setInt64(6, value);
   @$pb.TagNumber(7)
   $core.bool hasMaxOutstandingMessages() => $_has(6);
   @$pb.TagNumber(7)
@@ -8147,10 +7432,7 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(8)
   $fixnum.Int64 get maxOutstandingBytes => $_getI64(7);
   @$pb.TagNumber(8)
-  set maxOutstandingBytes($fixnum.Int64 v) {
-    $_setInt64(7, v);
-  }
-
+  set maxOutstandingBytes($fixnum.Int64 value) => $_setInt64(7, value);
   @$pb.TagNumber(8)
   $core.bool hasMaxOutstandingBytes() => $_has(7);
   @$pb.TagNumber(8)
@@ -8162,10 +7444,7 @@ class StreamingPullRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(10)
   $fixnum.Int64 get protocolVersion => $_getI64(8);
   @$pb.TagNumber(10)
-  set protocolVersion($fixnum.Int64 v) {
-    $_setInt64(8, v);
-  }
-
+  set protocolVersion($fixnum.Int64 value) => $_setInt64(8, value);
   @$pb.TagNumber(10)
   $core.bool hasProtocolVersion() => $_has(8);
   @$pb.TagNumber(10)
@@ -8182,29 +7461,25 @@ class StreamingPullResponse_AcknowledgeConfirmation
     $core.Iterable<$core.String>? unorderedAckIds,
     $core.Iterable<$core.String>? temporaryFailedAckIds,
   }) {
-    final $result = create();
-    if (ackIds != null) {
-      $result.ackIds.addAll(ackIds);
-    }
-    if (invalidAckIds != null) {
-      $result.invalidAckIds.addAll(invalidAckIds);
-    }
-    if (unorderedAckIds != null) {
-      $result.unorderedAckIds.addAll(unorderedAckIds);
-    }
-    if (temporaryFailedAckIds != null) {
-      $result.temporaryFailedAckIds.addAll(temporaryFailedAckIds);
-    }
-    return $result;
+    final result = create();
+    if (ackIds != null) result.ackIds.addAll(ackIds);
+    if (invalidAckIds != null) result.invalidAckIds.addAll(invalidAckIds);
+    if (unorderedAckIds != null) result.unorderedAckIds.addAll(unorderedAckIds);
+    if (temporaryFailedAckIds != null)
+      result.temporaryFailedAckIds.addAll(temporaryFailedAckIds);
+    return result;
   }
-  StreamingPullResponse_AcknowledgeConfirmation._() : super();
+
+  StreamingPullResponse_AcknowledgeConfirmation._();
+
   factory StreamingPullResponse_AcknowledgeConfirmation.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory StreamingPullResponse_AcknowledgeConfirmation.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory StreamingPullResponse_AcknowledgeConfirmation.fromJson(
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StreamingPullResponse.AcknowledgeConfirmation',
@@ -8228,11 +7503,13 @@ class StreamingPullResponse_AcknowledgeConfirmation
               updates(message as StreamingPullResponse_AcknowledgeConfirmation))
           as StreamingPullResponse_AcknowledgeConfirmation;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static StreamingPullResponse_AcknowledgeConfirmation create() =>
       StreamingPullResponse_AcknowledgeConfirmation._();
+  @$core.override
   StreamingPullResponse_AcknowledgeConfirmation createEmptyInstance() =>
       create();
   static $pb.PbList<StreamingPullResponse_AcknowledgeConfirmation>
@@ -8272,27 +7549,24 @@ class StreamingPullResponse_ModifyAckDeadlineConfirmation
     $core.Iterable<$core.String>? invalidAckIds,
     $core.Iterable<$core.String>? temporaryFailedAckIds,
   }) {
-    final $result = create();
-    if (ackIds != null) {
-      $result.ackIds.addAll(ackIds);
-    }
-    if (invalidAckIds != null) {
-      $result.invalidAckIds.addAll(invalidAckIds);
-    }
-    if (temporaryFailedAckIds != null) {
-      $result.temporaryFailedAckIds.addAll(temporaryFailedAckIds);
-    }
-    return $result;
+    final result = create();
+    if (ackIds != null) result.ackIds.addAll(ackIds);
+    if (invalidAckIds != null) result.invalidAckIds.addAll(invalidAckIds);
+    if (temporaryFailedAckIds != null)
+      result.temporaryFailedAckIds.addAll(temporaryFailedAckIds);
+    return result;
   }
-  StreamingPullResponse_ModifyAckDeadlineConfirmation._() : super();
+
+  StreamingPullResponse_ModifyAckDeadlineConfirmation._();
+
   factory StreamingPullResponse_ModifyAckDeadlineConfirmation.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
   factory StreamingPullResponse_ModifyAckDeadlineConfirmation.fromJson(
-          $core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames
@@ -8318,11 +7592,13 @@ class StreamingPullResponse_ModifyAckDeadlineConfirmation
               message as StreamingPullResponse_ModifyAckDeadlineConfirmation))
           as StreamingPullResponse_ModifyAckDeadlineConfirmation;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static StreamingPullResponse_ModifyAckDeadlineConfirmation create() =>
       StreamingPullResponse_ModifyAckDeadlineConfirmation._();
+  @$core.override
   StreamingPullResponse_ModifyAckDeadlineConfirmation createEmptyInstance() =>
       create();
   static $pb.PbList<StreamingPullResponse_ModifyAckDeadlineConfirmation>
@@ -8356,23 +7632,24 @@ class StreamingPullResponse_SubscriptionProperties
     $core.bool? exactlyOnceDeliveryEnabled,
     $core.bool? messageOrderingEnabled,
   }) {
-    final $result = create();
-    if (exactlyOnceDeliveryEnabled != null) {
-      $result.exactlyOnceDeliveryEnabled = exactlyOnceDeliveryEnabled;
-    }
-    if (messageOrderingEnabled != null) {
-      $result.messageOrderingEnabled = messageOrderingEnabled;
-    }
-    return $result;
+    final result = create();
+    if (exactlyOnceDeliveryEnabled != null)
+      result.exactlyOnceDeliveryEnabled = exactlyOnceDeliveryEnabled;
+    if (messageOrderingEnabled != null)
+      result.messageOrderingEnabled = messageOrderingEnabled;
+    return result;
   }
-  StreamingPullResponse_SubscriptionProperties._() : super();
+
+  StreamingPullResponse_SubscriptionProperties._();
+
   factory StreamingPullResponse_SubscriptionProperties.fromBuffer(
-          $core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory StreamingPullResponse_SubscriptionProperties.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+          $core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory StreamingPullResponse_SubscriptionProperties.fromJson(
+          $core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StreamingPullResponse.SubscriptionProperties',
@@ -8394,11 +7671,13 @@ class StreamingPullResponse_SubscriptionProperties
               updates(message as StreamingPullResponse_SubscriptionProperties))
           as StreamingPullResponse_SubscriptionProperties;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static StreamingPullResponse_SubscriptionProperties create() =>
       StreamingPullResponse_SubscriptionProperties._();
+  @$core.override
   StreamingPullResponse_SubscriptionProperties createEmptyInstance() =>
       create();
   static $pb.PbList<StreamingPullResponse_SubscriptionProperties>
@@ -8415,10 +7694,7 @@ class StreamingPullResponse_SubscriptionProperties
   @$pb.TagNumber(1)
   $core.bool get exactlyOnceDeliveryEnabled => $_getBF(0);
   @$pb.TagNumber(1)
-  set exactlyOnceDeliveryEnabled($core.bool v) {
-    $_setBool(0, v);
-  }
-
+  set exactlyOnceDeliveryEnabled($core.bool value) => $_setBool(0, value);
   @$pb.TagNumber(1)
   $core.bool hasExactlyOnceDeliveryEnabled() => $_has(0);
   @$pb.TagNumber(1)
@@ -8428,10 +7704,7 @@ class StreamingPullResponse_SubscriptionProperties
   @$pb.TagNumber(2)
   $core.bool get messageOrderingEnabled => $_getBF(1);
   @$pb.TagNumber(2)
-  set messageOrderingEnabled($core.bool v) {
-    $_setBool(1, v);
-  }
-
+  set messageOrderingEnabled($core.bool value) => $_setBool(1, value);
   @$pb.TagNumber(2)
   $core.bool hasMessageOrderingEnabled() => $_has(1);
   @$pb.TagNumber(2)
@@ -8448,28 +7721,26 @@ class StreamingPullResponse extends $pb.GeneratedMessage {
     StreamingPullResponse_SubscriptionProperties? subscriptionProperties,
     StreamingPullResponse_AcknowledgeConfirmation? acknowledgeConfirmation,
   }) {
-    final $result = create();
-    if (receivedMessages != null) {
-      $result.receivedMessages.addAll(receivedMessages);
-    }
-    if (modifyAckDeadlineConfirmation != null) {
-      $result.modifyAckDeadlineConfirmation = modifyAckDeadlineConfirmation;
-    }
-    if (subscriptionProperties != null) {
-      $result.subscriptionProperties = subscriptionProperties;
-    }
-    if (acknowledgeConfirmation != null) {
-      $result.acknowledgeConfirmation = acknowledgeConfirmation;
-    }
-    return $result;
+    final result = create();
+    if (receivedMessages != null)
+      result.receivedMessages.addAll(receivedMessages);
+    if (modifyAckDeadlineConfirmation != null)
+      result.modifyAckDeadlineConfirmation = modifyAckDeadlineConfirmation;
+    if (subscriptionProperties != null)
+      result.subscriptionProperties = subscriptionProperties;
+    if (acknowledgeConfirmation != null)
+      result.acknowledgeConfirmation = acknowledgeConfirmation;
+    return result;
   }
-  StreamingPullResponse._() : super();
-  factory StreamingPullResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory StreamingPullResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  StreamingPullResponse._();
+
+  factory StreamingPullResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory StreamingPullResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'StreamingPullResponse',
@@ -8499,10 +7770,12 @@ class StreamingPullResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as StreamingPullResponse))
           as StreamingPullResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static StreamingPullResponse create() => StreamingPullResponse._();
+  @$core.override
   StreamingPullResponse createEmptyInstance() => create();
   static $pb.PbList<StreamingPullResponse> createRepeated() =>
       $pb.PbList<StreamingPullResponse>();
@@ -8522,10 +7795,8 @@ class StreamingPullResponse extends $pb.GeneratedMessage {
       get modifyAckDeadlineConfirmation => $_getN(1);
   @$pb.TagNumber(3)
   set modifyAckDeadlineConfirmation(
-      StreamingPullResponse_ModifyAckDeadlineConfirmation v) {
-    $_setField(3, v);
-  }
-
+          StreamingPullResponse_ModifyAckDeadlineConfirmation value) =>
+      $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasModifyAckDeadlineConfirmation() => $_has(1);
   @$pb.TagNumber(3)
@@ -8539,10 +7810,9 @@ class StreamingPullResponse extends $pb.GeneratedMessage {
   StreamingPullResponse_SubscriptionProperties get subscriptionProperties =>
       $_getN(2);
   @$pb.TagNumber(4)
-  set subscriptionProperties(StreamingPullResponse_SubscriptionProperties v) {
-    $_setField(4, v);
-  }
-
+  set subscriptionProperties(
+          StreamingPullResponse_SubscriptionProperties value) =>
+      $_setField(4, value);
   @$pb.TagNumber(4)
   $core.bool hasSubscriptionProperties() => $_has(2);
   @$pb.TagNumber(4)
@@ -8557,10 +7827,9 @@ class StreamingPullResponse extends $pb.GeneratedMessage {
   StreamingPullResponse_AcknowledgeConfirmation get acknowledgeConfirmation =>
       $_getN(3);
   @$pb.TagNumber(5)
-  set acknowledgeConfirmation(StreamingPullResponse_AcknowledgeConfirmation v) {
-    $_setField(5, v);
-  }
-
+  set acknowledgeConfirmation(
+          StreamingPullResponse_AcknowledgeConfirmation value) =>
+      $_setField(5, value);
   @$pb.TagNumber(5)
   $core.bool hasAcknowledgeConfirmation() => $_has(3);
   @$pb.TagNumber(5)
@@ -8578,28 +7847,22 @@ class CreateSnapshotRequest extends $pb.GeneratedMessage {
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? labels,
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? tags,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (labels != null) {
-      $result.labels.addEntries(labels);
-    }
-    if (tags != null) {
-      $result.tags.addEntries(tags);
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (subscription != null) result.subscription = subscription;
+    if (labels != null) result.labels.addEntries(labels);
+    if (tags != null) result.tags.addEntries(tags);
+    return result;
   }
-  CreateSnapshotRequest._() : super();
-  factory CreateSnapshotRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory CreateSnapshotRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  CreateSnapshotRequest._();
+
+  factory CreateSnapshotRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory CreateSnapshotRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'CreateSnapshotRequest',
@@ -8629,10 +7892,12 @@ class CreateSnapshotRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as CreateSnapshotRequest))
           as CreateSnapshotRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static CreateSnapshotRequest create() => CreateSnapshotRequest._();
+  @$core.override
   CreateSnapshotRequest createEmptyInstance() => create();
   static $pb.PbList<CreateSnapshotRequest> createRepeated() =>
       $pb.PbList<CreateSnapshotRequest>();
@@ -8650,10 +7915,7 @@ class CreateSnapshotRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -8671,10 +7933,7 @@ class CreateSnapshotRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get subscription => $_getSZ(1);
   @$pb.TagNumber(2)
-  set subscription($core.String v) {
-    $_setString(1, v);
-  }
-
+  set subscription($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasSubscription() => $_has(1);
   @$pb.TagNumber(2)
@@ -8699,24 +7958,22 @@ class CreateSnapshotRequest extends $pb.GeneratedMessage {
 class UpdateSnapshotRequest extends $pb.GeneratedMessage {
   factory UpdateSnapshotRequest({
     Snapshot? snapshot,
-    $6.FieldMask? updateMask,
+    $5.FieldMask? updateMask,
   }) {
-    final $result = create();
-    if (snapshot != null) {
-      $result.snapshot = snapshot;
-    }
-    if (updateMask != null) {
-      $result.updateMask = updateMask;
-    }
-    return $result;
+    final result = create();
+    if (snapshot != null) result.snapshot = snapshot;
+    if (updateMask != null) result.updateMask = updateMask;
+    return result;
   }
-  UpdateSnapshotRequest._() : super();
-  factory UpdateSnapshotRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory UpdateSnapshotRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  UpdateSnapshotRequest._();
+
+  factory UpdateSnapshotRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory UpdateSnapshotRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'UpdateSnapshotRequest',
@@ -8725,8 +7982,8 @@ class UpdateSnapshotRequest extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOM<Snapshot>(1, _omitFieldNames ? '' : 'snapshot',
         subBuilder: Snapshot.create)
-    ..aOM<$6.FieldMask>(2, _omitFieldNames ? '' : 'updateMask',
-        subBuilder: $6.FieldMask.create)
+    ..aOM<$5.FieldMask>(2, _omitFieldNames ? '' : 'updateMask',
+        subBuilder: $5.FieldMask.create)
     ..hasRequiredFields = false;
 
   @$core.Deprecated('See https://github.com/google/protobuf.dart/issues/998.')
@@ -8738,10 +7995,12 @@ class UpdateSnapshotRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as UpdateSnapshotRequest))
           as UpdateSnapshotRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static UpdateSnapshotRequest create() => UpdateSnapshotRequest._();
+  @$core.override
   UpdateSnapshotRequest createEmptyInstance() => create();
   static $pb.PbList<UpdateSnapshotRequest> createRepeated() =>
       $pb.PbList<UpdateSnapshotRequest>();
@@ -8754,10 +8013,7 @@ class UpdateSnapshotRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   Snapshot get snapshot => $_getN(0);
   @$pb.TagNumber(1)
-  set snapshot(Snapshot v) {
-    $_setField(1, v);
-  }
-
+  set snapshot(Snapshot value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasSnapshot() => $_has(0);
   @$pb.TagNumber(1)
@@ -8768,18 +8024,15 @@ class UpdateSnapshotRequest extends $pb.GeneratedMessage {
   /// Required. Indicates which fields in the provided snapshot to update.
   /// Must be specified and non-empty.
   @$pb.TagNumber(2)
-  $6.FieldMask get updateMask => $_getN(1);
+  $5.FieldMask get updateMask => $_getN(1);
   @$pb.TagNumber(2)
-  set updateMask($6.FieldMask v) {
-    $_setField(2, v);
-  }
-
+  set updateMask($5.FieldMask value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasUpdateMask() => $_has(1);
   @$pb.TagNumber(2)
   void clearUpdateMask() => $_clearField(2);
   @$pb.TagNumber(2)
-  $6.FieldMask ensureUpdateMask() => $_ensure(1);
+  $5.FieldMask ensureUpdateMask() => $_ensure(1);
 }
 
 /// A snapshot resource. Snapshots are used in
@@ -8791,31 +8044,25 @@ class Snapshot extends $pb.GeneratedMessage {
   factory Snapshot({
     $core.String? name,
     $core.String? topic,
-    $3.Timestamp? expireTime,
+    $2.Timestamp? expireTime,
     $core.Iterable<$core.MapEntry<$core.String, $core.String>>? labels,
   }) {
-    final $result = create();
-    if (name != null) {
-      $result.name = name;
-    }
-    if (topic != null) {
-      $result.topic = topic;
-    }
-    if (expireTime != null) {
-      $result.expireTime = expireTime;
-    }
-    if (labels != null) {
-      $result.labels.addEntries(labels);
-    }
-    return $result;
+    final result = create();
+    if (name != null) result.name = name;
+    if (topic != null) result.topic = topic;
+    if (expireTime != null) result.expireTime = expireTime;
+    if (labels != null) result.labels.addEntries(labels);
+    return result;
   }
-  Snapshot._() : super();
-  factory Snapshot.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Snapshot.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  Snapshot._();
+
+  factory Snapshot.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Snapshot.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Snapshot',
@@ -8824,8 +8071,8 @@ class Snapshot extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..aOS(1, _omitFieldNames ? '' : 'name')
     ..aOS(2, _omitFieldNames ? '' : 'topic')
-    ..aOM<$3.Timestamp>(3, _omitFieldNames ? '' : 'expireTime',
-        subBuilder: $3.Timestamp.create)
+    ..aOM<$2.Timestamp>(3, _omitFieldNames ? '' : 'expireTime',
+        subBuilder: $2.Timestamp.create)
     ..m<$core.String, $core.String>(4, _omitFieldNames ? '' : 'labels',
         entryClassName: 'Snapshot.LabelsEntry',
         keyFieldType: $pb.PbFieldType.OS,
@@ -8839,10 +8086,12 @@ class Snapshot extends $pb.GeneratedMessage {
   Snapshot copyWith(void Function(Snapshot) updates) =>
       super.copyWith((message) => updates(message as Snapshot)) as Snapshot;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Snapshot create() => Snapshot._();
+  @$core.override
   Snapshot createEmptyInstance() => create();
   static $pb.PbList<Snapshot> createRepeated() => $pb.PbList<Snapshot>();
   @$core.pragma('dart2js:noInline')
@@ -8854,10 +8103,7 @@ class Snapshot extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get name => $_getSZ(0);
   @$pb.TagNumber(1)
-  set name($core.String v) {
-    $_setString(0, v);
-  }
-
+  set name($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasName() => $_has(0);
   @$pb.TagNumber(1)
@@ -8868,10 +8114,7 @@ class Snapshot extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get topic => $_getSZ(1);
   @$pb.TagNumber(2)
-  set topic($core.String v) {
-    $_setString(1, v);
-  }
-
+  set topic($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasTopic() => $_has(1);
   @$pb.TagNumber(2)
@@ -8888,18 +8131,15 @@ class Snapshot extends $pb.GeneratedMessage {
   /// exists -- will expire in 4 days. The service will refuse to create a
   /// snapshot that would expire in less than 1 hour after creation.
   @$pb.TagNumber(3)
-  $3.Timestamp get expireTime => $_getN(2);
+  $2.Timestamp get expireTime => $_getN(2);
   @$pb.TagNumber(3)
-  set expireTime($3.Timestamp v) {
-    $_setField(3, v);
-  }
-
+  set expireTime($2.Timestamp value) => $_setField(3, value);
   @$pb.TagNumber(3)
   $core.bool hasExpireTime() => $_has(2);
   @$pb.TagNumber(3)
   void clearExpireTime() => $_clearField(3);
   @$pb.TagNumber(3)
-  $3.Timestamp ensureExpireTime() => $_ensure(2);
+  $2.Timestamp ensureExpireTime() => $_ensure(2);
 
   /// Optional. See [Creating and managing labels]
   /// (https://cloud.google.com/pubsub/docs/labels).
@@ -8912,19 +8152,19 @@ class GetSnapshotRequest extends $pb.GeneratedMessage {
   factory GetSnapshotRequest({
     $core.String? snapshot,
   }) {
-    final $result = create();
-    if (snapshot != null) {
-      $result.snapshot = snapshot;
-    }
-    return $result;
+    final result = create();
+    if (snapshot != null) result.snapshot = snapshot;
+    return result;
   }
-  GetSnapshotRequest._() : super();
-  factory GetSnapshotRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory GetSnapshotRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  GetSnapshotRequest._();
+
+  factory GetSnapshotRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory GetSnapshotRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'GetSnapshotRequest',
@@ -8941,10 +8181,12 @@ class GetSnapshotRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as GetSnapshotRequest))
           as GetSnapshotRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static GetSnapshotRequest create() => GetSnapshotRequest._();
+  @$core.override
   GetSnapshotRequest createEmptyInstance() => create();
   static $pb.PbList<GetSnapshotRequest> createRepeated() =>
       $pb.PbList<GetSnapshotRequest>();
@@ -8958,10 +8200,7 @@ class GetSnapshotRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get snapshot => $_getSZ(0);
   @$pb.TagNumber(1)
-  set snapshot($core.String v) {
-    $_setString(0, v);
-  }
-
+  set snapshot($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSnapshot() => $_has(0);
   @$pb.TagNumber(1)
@@ -8975,25 +8214,21 @@ class ListSnapshotsRequest extends $pb.GeneratedMessage {
     $core.int? pageSize,
     $core.String? pageToken,
   }) {
-    final $result = create();
-    if (project != null) {
-      $result.project = project;
-    }
-    if (pageSize != null) {
-      $result.pageSize = pageSize;
-    }
-    if (pageToken != null) {
-      $result.pageToken = pageToken;
-    }
-    return $result;
+    final result = create();
+    if (project != null) result.project = project;
+    if (pageSize != null) result.pageSize = pageSize;
+    if (pageToken != null) result.pageToken = pageToken;
+    return result;
   }
-  ListSnapshotsRequest._() : super();
-  factory ListSnapshotsRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSnapshotsRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSnapshotsRequest._();
+
+  factory ListSnapshotsRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSnapshotsRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSnapshotsRequest',
@@ -9013,10 +8248,12 @@ class ListSnapshotsRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListSnapshotsRequest))
           as ListSnapshotsRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSnapshotsRequest create() => ListSnapshotsRequest._();
+  @$core.override
   ListSnapshotsRequest createEmptyInstance() => create();
   static $pb.PbList<ListSnapshotsRequest> createRepeated() =>
       $pb.PbList<ListSnapshotsRequest>();
@@ -9030,10 +8267,7 @@ class ListSnapshotsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get project => $_getSZ(0);
   @$pb.TagNumber(1)
-  set project($core.String v) {
-    $_setString(0, v);
-  }
-
+  set project($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasProject() => $_has(0);
   @$pb.TagNumber(1)
@@ -9043,10 +8277,7 @@ class ListSnapshotsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.int get pageSize => $_getIZ(1);
   @$pb.TagNumber(2)
-  set pageSize($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set pageSize($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasPageSize() => $_has(1);
   @$pb.TagNumber(2)
@@ -9058,10 +8289,7 @@ class ListSnapshotsRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get pageToken => $_getSZ(2);
   @$pb.TagNumber(3)
-  set pageToken($core.String v) {
-    $_setString(2, v);
-  }
-
+  set pageToken($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasPageToken() => $_has(2);
   @$pb.TagNumber(3)
@@ -9074,22 +8302,20 @@ class ListSnapshotsResponse extends $pb.GeneratedMessage {
     $core.Iterable<Snapshot>? snapshots,
     $core.String? nextPageToken,
   }) {
-    final $result = create();
-    if (snapshots != null) {
-      $result.snapshots.addAll(snapshots);
-    }
-    if (nextPageToken != null) {
-      $result.nextPageToken = nextPageToken;
-    }
-    return $result;
+    final result = create();
+    if (snapshots != null) result.snapshots.addAll(snapshots);
+    if (nextPageToken != null) result.nextPageToken = nextPageToken;
+    return result;
   }
-  ListSnapshotsResponse._() : super();
-  factory ListSnapshotsResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory ListSnapshotsResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  ListSnapshotsResponse._();
+
+  factory ListSnapshotsResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory ListSnapshotsResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'ListSnapshotsResponse',
@@ -9110,10 +8336,12 @@ class ListSnapshotsResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as ListSnapshotsResponse))
           as ListSnapshotsResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static ListSnapshotsResponse create() => ListSnapshotsResponse._();
+  @$core.override
   ListSnapshotsResponse createEmptyInstance() => create();
   static $pb.PbList<ListSnapshotsResponse> createRepeated() =>
       $pb.PbList<ListSnapshotsResponse>();
@@ -9132,10 +8360,7 @@ class ListSnapshotsResponse extends $pb.GeneratedMessage {
   @$pb.TagNumber(2)
   $core.String get nextPageToken => $_getSZ(1);
   @$pb.TagNumber(2)
-  set nextPageToken($core.String v) {
-    $_setString(1, v);
-  }
-
+  set nextPageToken($core.String value) => $_setString(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNextPageToken() => $_has(1);
   @$pb.TagNumber(2)
@@ -9147,19 +8372,19 @@ class DeleteSnapshotRequest extends $pb.GeneratedMessage {
   factory DeleteSnapshotRequest({
     $core.String? snapshot,
   }) {
-    final $result = create();
-    if (snapshot != null) {
-      $result.snapshot = snapshot;
-    }
-    return $result;
+    final result = create();
+    if (snapshot != null) result.snapshot = snapshot;
+    return result;
   }
-  DeleteSnapshotRequest._() : super();
-  factory DeleteSnapshotRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory DeleteSnapshotRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  DeleteSnapshotRequest._();
+
+  factory DeleteSnapshotRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory DeleteSnapshotRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'DeleteSnapshotRequest',
@@ -9178,10 +8403,12 @@ class DeleteSnapshotRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as DeleteSnapshotRequest))
           as DeleteSnapshotRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static DeleteSnapshotRequest create() => DeleteSnapshotRequest._();
+  @$core.override
   DeleteSnapshotRequest createEmptyInstance() => create();
   static $pb.PbList<DeleteSnapshotRequest> createRepeated() =>
       $pb.PbList<DeleteSnapshotRequest>();
@@ -9195,10 +8422,7 @@ class DeleteSnapshotRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get snapshot => $_getSZ(0);
   @$pb.TagNumber(1)
-  set snapshot($core.String v) {
-    $_setString(0, v);
-  }
-
+  set snapshot($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSnapshot() => $_has(0);
   @$pb.TagNumber(1)
@@ -9211,28 +8435,24 @@ enum SeekRequest_Target { time, snapshot, notSet }
 class SeekRequest extends $pb.GeneratedMessage {
   factory SeekRequest({
     $core.String? subscription,
-    $3.Timestamp? time,
+    $2.Timestamp? time,
     $core.String? snapshot,
   }) {
-    final $result = create();
-    if (subscription != null) {
-      $result.subscription = subscription;
-    }
-    if (time != null) {
-      $result.time = time;
-    }
-    if (snapshot != null) {
-      $result.snapshot = snapshot;
-    }
-    return $result;
+    final result = create();
+    if (subscription != null) result.subscription = subscription;
+    if (time != null) result.time = time;
+    if (snapshot != null) result.snapshot = snapshot;
+    return result;
   }
-  SeekRequest._() : super();
-  factory SeekRequest.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory SeekRequest.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  SeekRequest._();
+
+  factory SeekRequest.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SeekRequest.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static const $core.Map<$core.int, SeekRequest_Target>
       _SeekRequest_TargetByTag = {
@@ -9247,8 +8467,8 @@ class SeekRequest extends $pb.GeneratedMessage {
       createEmptyInstance: create)
     ..oo(0, [2, 3])
     ..aOS(1, _omitFieldNames ? '' : 'subscription')
-    ..aOM<$3.Timestamp>(2, _omitFieldNames ? '' : 'time',
-        subBuilder: $3.Timestamp.create)
+    ..aOM<$2.Timestamp>(2, _omitFieldNames ? '' : 'time',
+        subBuilder: $2.Timestamp.create)
     ..aOS(3, _omitFieldNames ? '' : 'snapshot')
     ..hasRequiredFields = false;
 
@@ -9259,10 +8479,12 @@ class SeekRequest extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as SeekRequest))
           as SeekRequest;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SeekRequest create() => SeekRequest._();
+  @$core.override
   SeekRequest createEmptyInstance() => create();
   static $pb.PbList<SeekRequest> createRepeated() => $pb.PbList<SeekRequest>();
   @$core.pragma('dart2js:noInline')
@@ -9278,10 +8500,7 @@ class SeekRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(1)
   $core.String get subscription => $_getSZ(0);
   @$pb.TagNumber(1)
-  set subscription($core.String v) {
-    $_setString(0, v);
-  }
-
+  set subscription($core.String value) => $_setString(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSubscription() => $_has(0);
   @$pb.TagNumber(1)
@@ -9299,18 +8518,15 @@ class SeekRequest extends $pb.GeneratedMessage {
   /// creation time), only retained messages will be marked as unacknowledged,
   /// and already-expunged messages will not be restored.
   @$pb.TagNumber(2)
-  $3.Timestamp get time => $_getN(1);
+  $2.Timestamp get time => $_getN(1);
   @$pb.TagNumber(2)
-  set time($3.Timestamp v) {
-    $_setField(2, v);
-  }
-
+  set time($2.Timestamp value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasTime() => $_has(1);
   @$pb.TagNumber(2)
   void clearTime() => $_clearField(2);
   @$pb.TagNumber(2)
-  $3.Timestamp ensureTime() => $_ensure(1);
+  $2.Timestamp ensureTime() => $_ensure(1);
 
   /// Optional. The snapshot to seek to. The snapshot's topic must be the same
   /// as that of the provided subscription. Format is
@@ -9318,10 +8534,7 @@ class SeekRequest extends $pb.GeneratedMessage {
   @$pb.TagNumber(3)
   $core.String get snapshot => $_getSZ(2);
   @$pb.TagNumber(3)
-  set snapshot($core.String v) {
-    $_setString(2, v);
-  }
-
+  set snapshot($core.String value) => $_setString(2, value);
   @$pb.TagNumber(3)
   $core.bool hasSnapshot() => $_has(2);
   @$pb.TagNumber(3)
@@ -9331,13 +8544,15 @@ class SeekRequest extends $pb.GeneratedMessage {
 /// Response for the `Seek` method (this response is empty).
 class SeekResponse extends $pb.GeneratedMessage {
   factory SeekResponse() => create();
-  SeekResponse._() : super();
-  factory SeekResponse.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory SeekResponse.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  SeekResponse._();
+
+  factory SeekResponse.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory SeekResponse.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'SeekResponse',
@@ -9353,10 +8568,12 @@ class SeekResponse extends $pb.GeneratedMessage {
       super.copyWith((message) => updates(message as SeekResponse))
           as SeekResponse;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static SeekResponse create() => SeekResponse._();
+  @$core.override
   SeekResponse createEmptyInstance() => create();
   static $pb.PbList<SeekResponse> createRepeated() =>
       $pb.PbList<SeekResponse>();
@@ -9366,6 +8583,7 @@ class SeekResponse extends $pb.GeneratedMessage {
   static SeekResponse? _defaultInstance;
 }
 
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames =
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
     $core.bool.fromEnvironment('protobuf.omit_message_names');

@@ -1,13 +1,15 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: google/protobuf/duration.proto
-//
+// Generated from google/protobuf/duration.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package
+// ignore_for_file: implementation_imports, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -80,22 +82,20 @@ class Duration extends $pb.GeneratedMessage with $mixin.DurationMixin {
     $fixnum.Int64? seconds,
     $core.int? nanos,
   }) {
-    final $result = create();
-    if (seconds != null) {
-      $result.seconds = seconds;
-    }
-    if (nanos != null) {
-      $result.nanos = nanos;
-    }
-    return $result;
+    final result = create();
+    if (seconds != null) result.seconds = seconds;
+    if (nanos != null) result.nanos = nanos;
+    return result;
   }
-  Duration._() : super();
-  factory Duration.fromBuffer($core.List<$core.int> i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromBuffer(i, r);
-  factory Duration.fromJson($core.String i,
-          [$pb.ExtensionRegistry r = $pb.ExtensionRegistry.EMPTY]) =>
-      create()..mergeFromJson(i, r);
+
+  Duration._();
+
+  factory Duration.fromBuffer($core.List<$core.int> data,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromBuffer(data, registry);
+  factory Duration.fromJson($core.String json,
+          [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) =>
+      create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(
       _omitMessageNames ? '' : 'Duration',
@@ -114,10 +114,12 @@ class Duration extends $pb.GeneratedMessage with $mixin.DurationMixin {
   Duration copyWith(void Function(Duration) updates) =>
       super.copyWith((message) => updates(message as Duration)) as Duration;
 
+  @$core.override
   $pb.BuilderInfo get info_ => _i;
 
   @$core.pragma('dart2js:noInline')
   static Duration create() => Duration._();
+  @$core.override
   Duration createEmptyInstance() => create();
   static $pb.PbList<Duration> createRepeated() => $pb.PbList<Duration>();
   @$core.pragma('dart2js:noInline')
@@ -131,10 +133,7 @@ class Duration extends $pb.GeneratedMessage with $mixin.DurationMixin {
   @$pb.TagNumber(1)
   $fixnum.Int64 get seconds => $_getI64(0);
   @$pb.TagNumber(1)
-  set seconds($fixnum.Int64 v) {
-    $_setInt64(0, v);
-  }
-
+  set seconds($fixnum.Int64 value) => $_setInt64(0, value);
   @$pb.TagNumber(1)
   $core.bool hasSeconds() => $_has(0);
   @$pb.TagNumber(1)
@@ -149,10 +148,7 @@ class Duration extends $pb.GeneratedMessage with $mixin.DurationMixin {
   @$pb.TagNumber(2)
   $core.int get nanos => $_getIZ(1);
   @$pb.TagNumber(2)
-  set nanos($core.int v) {
-    $_setSignedInt32(1, v);
-  }
-
+  set nanos($core.int value) => $_setSignedInt32(1, value);
   @$pb.TagNumber(2)
   $core.bool hasNanos() => $_has(1);
   @$pb.TagNumber(2)
@@ -174,6 +170,7 @@ class Duration extends $pb.GeneratedMessage with $mixin.DurationMixin {
         (duration.inMicroseconds % $core.Duration.microsecondsPerSecond) * 1000;
 }
 
-const _omitFieldNames = $core.bool.fromEnvironment('protobuf.omit_field_names');
-const _omitMessageNames =
+const $core.bool _omitFieldNames =
+    $core.bool.fromEnvironment('protobuf.omit_field_names');
+const $core.bool _omitMessageNames =
     $core.bool.fromEnvironment('protobuf.omit_message_names');

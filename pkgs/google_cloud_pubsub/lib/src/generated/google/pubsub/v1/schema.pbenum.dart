@@ -1,13 +1,14 @@
+// This is a generated file - do not edit.
 //
-//  Generated code. Do not modify.
-//  source: google/pubsub/v1/schema.proto
-//
+// Generated from google/pubsub/v1/schema.proto.
+
 // @dart = 3.3
 
 // ignore_for_file: annotate_overrides, camel_case_types, comment_references
-// ignore_for_file: constant_identifier_names, library_prefixes
-// ignore_for_file: non_constant_identifier_names, prefer_final_fields
-// ignore_for_file: unnecessary_import, unnecessary_this, unused_import
+// ignore_for_file: constant_identifier_names
+// ignore_for_file: curly_braces_in_flow_control_structures
+// ignore_for_file: deprecated_member_use_from_same_package, library_prefixes
+// ignore_for_file: non_constant_identifier_names
 
 import 'dart:core' as $core;
 
@@ -38,7 +39,7 @@ class SchemaView extends $pb.ProtobufEnum {
   static SchemaView? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const SchemaView._(super.v, super.n);
+  const SchemaView._(super.value, super.name);
 }
 
 /// Possible encoding types for messages.
@@ -65,7 +66,7 @@ class Encoding extends $pb.ProtobufEnum {
   static Encoding? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const Encoding._(super.v, super.n);
+  const Encoding._(super.value, super.name);
 }
 
 /// Possible schema definition types.
@@ -93,7 +94,8 @@ class Schema_Type extends $pb.ProtobufEnum {
   static Schema_Type? valueOf($core.int value) =>
       value < 0 || value >= _byValue.length ? null : _byValue[value];
 
-  const Schema_Type._(super.v, super.n);
+  const Schema_Type._(super.value, super.name);
 }
 
-const _omitEnumNames = $core.bool.fromEnvironment('protobuf.omit_enum_names');
+const $core.bool _omitEnumNames =
+    $core.bool.fromEnvironment('protobuf.omit_enum_names');
