@@ -59,13 +59,6 @@ final class BucketMetadataPatchBuilder {
     _json['cors'] = value?.map(bucketCorsConfigurationToJson).toList();
   }
 
-  /// The bucket's [hierarchical namespace][] configuration.
-  ///
-  /// [hierarchical namespace]: https://docs.cloud.google.com/storage/docs/hns-overview
-  set hierarchicalNamespace(BucketHierarchicalNamespace? value) {
-    _json['hierarchicalNamespace'] = bucketHierarchicalNamespaceToJson(value);
-  }
-
   /// The bucket's [IP filter][] configuration.
   ///
   /// [IP filter]: https://docs.cloud.google.com/storage/docs/ip-filtering-overview

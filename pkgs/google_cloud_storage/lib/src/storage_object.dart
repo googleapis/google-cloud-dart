@@ -115,6 +115,20 @@ final class StorageObject {
     retry: retry,
   );
 
+  /// Grant read access to this [Google Cloud Storage object] for anonymous
+  /// users.
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  Future<void> makePublic({RetryRunner retry = defaultRetry}) =>
+      storage.makeObjectPublic(bucketName, name, retry: retry);
+
   /// Updates the metadata associated with this [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.

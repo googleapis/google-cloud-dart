@@ -14,17 +14,20 @@
 
 /// General Google Cloud Platform integration features.
 ///
-/// {@canonicalFor gcp_project.computeProjectId}
-/// {@canonicalFor gcp_project.projectIdFromCredentialsFile}
-/// {@canonicalFor gcp_project.projectIdFromEnvironmentVariables}
-/// {@canonicalFor gcp_project.projectIdFromGcloudConfig}
-/// {@canonicalFor gcp_project.MetadataServerException}
-/// {@canonicalFor gcp_project.projectIdFromMetadataServer}
-/// {@canonicalFor gcp_project.serviceAccountEmailFromMetadataServer}
-/// {@canonicalFor logging.LogSeverity}
-/// {@canonicalFor logging.structuredLogEntry}
-/// {@canonicalFor metadata.gceMetadataHost}
-/// {@canonicalFor metadata.gceMetadataUrl}
+/// {@canonicalFor general.CloudLogger}
+/// {@canonicalFor general.computeProjectId}
+/// {@canonicalFor general.fetchMetadataValue}
+/// {@canonicalFor general.gceMetadataHost}
+/// {@canonicalFor general.gceMetadataUrl}
+/// {@canonicalFor general.getMetadataValue}
+/// {@canonicalFor general.LogSeverity}
+/// {@canonicalFor general.MetadataServerException}
+/// {@canonicalFor general.projectIdFromCredentialsFile}
+/// {@canonicalFor general.projectIdFromEnvironmentVariables}
+/// {@canonicalFor general.projectIdFromGcloudConfig}
+/// {@canonicalFor general.projectIdFromMetadataServer}
+/// {@canonicalFor general.serviceAccountEmailFromMetadataServer}
+/// {@canonicalFor general.structuredLogEntry}
 library;
 
 export 'src/gcp_project.dart'
@@ -38,5 +41,6 @@ export 'src/gcp_project.dart'
         projectIdFromGcloudConfig,
         projectIdFromMetadataServer,
         serviceAccountEmailFromMetadataServer;
-export 'src/logging.dart' show LogSeverity, structuredLogEntry;
+export 'src/logger.dart' show CloudLogger, LogSeverity;
 export 'src/metadata.dart' show gceMetadataHost, gceMetadataUrl;
+export 'src/structured_logging.dart' show structuredLogEntry;

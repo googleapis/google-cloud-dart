@@ -1,8 +1,18 @@
-## 0.6.0-wip
+## 0.6.2-wip
+
+* Add retries to `uploadObjectFromSink`.
+* Add `makeObjectPublic`.
+
+## 0.6.1
+
+* Add `Storage.insertObjectAcl`.
+
+## 0.6.0
 
 * **BREAKING:** Rename `Storage.insertObject` to `Storage.uploadObject`.
 * Add `Storage.uploadObjectFromString`.
 * Add `StorageObject.uploadFromString`.
+* Require google_cloud: '>=0.3.0 <0.5.0'.
 
 ## 0.5.1
 

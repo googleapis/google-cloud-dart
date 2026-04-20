@@ -22,6 +22,7 @@ tags:
   google-cloud:
   firebase-emulator:
   storage-testbench:
+  no-ulba:  # tests that don't work with uniform bucket level access
 exclude_tags: google-cloud || firebase-emulator || storage-testbench
 
 presets:
@@ -31,6 +32,10 @@ presets:
     # runnable on the VM because the browser does not have access to
     # application default credentials.
     platforms: [vm]
+    # Uncomment the the line below when running the tests locally with a
+    # project that has UBLA enabled. See:
+    # https://docs.cloud.google.com/storage/docs/uniform-bucket-level-access
+    # exclude_tags: no-ulba
   firebase-emulator:
     include_tags: firebase-emulator
   storage-testbench:

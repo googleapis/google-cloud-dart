@@ -14,6 +14,9 @@
 
 import 'dart:io';
 
+/// A real Google test account managed by bquinlan@google.com using Rhea.
+const googleTestUser = 'daenerysstone.938939@gmail.com';
+
 /// The id of the Google Cloud Project targeted by the test.
 ///
 /// Taken from the `"GOOGLE_CLOUD_PROJECT"` environment variable.

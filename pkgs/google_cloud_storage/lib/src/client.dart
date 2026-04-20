@@ -24,6 +24,7 @@ import 'bucket.dart';
 import 'bucket_metadata_json.dart';
 import 'bucket_metadata_patch_builder.dart'
     show BucketMetadataPatchBuilderJsonEncodable;
+import 'common_json.dart';
 import 'default_http_client_web.dart'
     if (dart.library.io) 'default_http_client_vm.dart';
 import 'default_project_id_web.dart'
@@ -33,6 +34,7 @@ import 'file_upload.dart';
 import 'object_metadata_json.dart';
 import 'object_metadata_patch_builder.dart'
     show ObjectMetadataPatchBuilderJsonEncodable;
+import 'resumeable_upload.dart';
 import 'storage_emulator_host_web.dart'
     if (dart.library.io) 'storage_emulator_host_vm.dart';
 
@@ -527,6 +529,65 @@ final class Storage {
     isIdempotent: true,
   );
 
+  /// Creates a new ACL entry on the specified [Google Cloud Storage object].
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// [entity] specifies the entity holding the permission. Supported formats:
+  /// - `user-emailAddress`
+  /// - `group-emailAddress`
+  /// - `domain-domain`
+  /// - `project-team-projectNumber`
+  /// - `allUsers`
+  /// - `allAuthenticatedUsers`
+  ///
+  /// For example:
+  /// - The user `liz@example.com` would be `"user-liz@example.com"`.
+  /// - The group `example@googlegroups.com` would be
+  ///   `"group-example@googlegroups.com"`.
+  /// - To refer to all members of the domain `example.com`, the entity would
+  ///   be `"domain-example.com"`.
+  ///
+  /// [role] specifies the access permission for the entity. There are two roles
+  /// that can be assigned to an object:
+  /// 1. `READER` can get an object, though the `acl` property will not be
+  ///    revealed.
+  /// 2. `OWNER` are `READER`s, and they can get the `acl` property, update the
+  ///    object's metadata, and call all [ObjectAccessControl]-related methods
+  ///    on the object. The owner of an object is always an `OWNER`.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/insert).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  Future<ObjectAccessControl> insertObjectAcl(
+    String bucket,
+    String object,
+    String entity,
+    String role, {
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl([
+      'storage',
+      'v1',
+      'b',
+      bucket,
+      'o',
+      object,
+      'acl',
+    ], {});
+    final j = await serviceClient.post(
+      url,
+      body: _JsonEncodableWrapper({'entity': entity, 'role': role}),
+    );
+    return objectAccessControlFromJson(j as Map<String, Object?>)!;
+  }, isIdempotent: false);
+
   /// A stream of objects contained in [bucket] in lexicographical order by
   /// name.
   ///
@@ -584,6 +645,22 @@ final class Storage {
       }
     } while (nextPageToken != null);
   }
+
+  /// Grant read access to [Google Cloud Storage objects] for anonymous users.
+  ///
+  /// This operation is not idempotent.
+  ///
+  /// If the bucket has uniform bucket-level access enabled, this operation
+  /// will fail with [BadRequestException].
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// [Google Cloud Storage objects]: https://docs.cloud.google.com/storage/docs/objects
+  Future<void> makeObjectPublic(
+    String bucket,
+    String object, {
+    RetryRunner retry = defaultRetry,
+  }) => insertObjectAcl(bucket, object, 'allUsers', 'READER', retry: retry);
 
   /// Information about a [Google Cloud Storage object].
   ///
@@ -784,10 +861,10 @@ final class Storage {
   /// If [metadata] is non-null, it will be used as the object's metadata. If
   /// `metadata.name` does not match [name], a [BadRequestException] is thrown.
   ///
-  /// If set, `ifGenerationMatch` makes updating the object content conditional
+  /// If set, [ifGenerationMatch] makes updating the object content conditional
   /// on whether the object's generation matches the provided value. If the
   /// generation does not match, a [PreconditionFailedException] is thrown.
-  /// A value of `0` indicates that the object must not already exist.
+  /// A value of [BigInt.zero] indicates that the object must not already exist.
   ///
   /// If set, `predefinedAcl` applies a predefined set of access controls to the
   /// object, such as `"publicRead"`. If [UniformBucketLevelAccess.enabled] is
@@ -850,6 +927,57 @@ final class Storage {
       metadata: metadata,
     ),
     isIdempotent: ifGenerationMatch != null,
+  );
+
+  /// Creates or updates the content of a [Google Cloud Storage object][] using
+  /// a [StreamSink].
+  ///
+  /// This operation is idempotent if `ifGenerationMatch` is set.
+  ///
+  /// If [metadata] is non-null, it will be used as the object's metadata. If
+  /// [metadata] is `null` or `metadata.contentType` is `null`, the content type
+  /// will be `'application/octet-stream'`. If `metadata.name` does not
+  /// match [name], a [BadRequestException] is thrown.
+  ///
+  /// If set, [ifGenerationMatch] makes updating the object content conditional
+  /// on whether the object's generation matches the provided value. If the
+  /// generation does not match, a [PreconditionFailedException] is thrown.
+  /// A value of [BigInt.zero] indicates that the object must not already exist.
+  ///
+  /// For example:
+  ///
+  /// ```dart
+  /// final sink = storage.uploadObjectFromSink(
+  ///   'my-bucket',
+  ///   'hello.txt',
+  ///   ifGenerationMatch: BigInt.zero, // Only insert if the object doesn't exist.
+  /// );
+  /// sink.add([1, 2, 3]);
+  /// await sink.close();
+  /// ```
+  ///
+  /// See [API reference docs](https://docs.cloud.google.com/storage/docs/performing-resumable-uploads#chunked-upload).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  ResumableUploadSink uploadObjectFromSink(
+    String bucket,
+    String name, {
+    ObjectMetadata? metadata,
+    BigInt? ifGenerationMatch,
+    RetryRunner retry = defaultRetry,
+  }) => uploadFileStream(
+    _httpClient,
+    _requestUrl(
+      ['upload', 'storage', 'v1', 'b', bucket, 'o'],
+      {
+        'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+        'name': name,
+        'uploadType': 'resumable',
+      },
+    ),
+    isIdempotent: ifGenerationMatch != null,
+    metadata: metadata,
+    retry: retry,
   );
 
   /// Creates or updates the content of a [Google Cloud Storage object][].

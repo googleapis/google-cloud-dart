@@ -38,28 +38,35 @@
 /// }
 /// ```
 ///
-/// {@canonicalFor bad_configuration_exception.BadConfigurationException}
-/// {@canonicalFor bad_request_exception.BadRequestException}
-/// {@canonicalFor http_logging.RequestLogger}
-/// {@canonicalFor http_logging.badRequestMiddleware}
-/// {@canonicalFor http_logging.cloudLoggingMiddleware}
-/// {@canonicalFor http_logging.createLoggingMiddleware}
-/// {@canonicalFor http_logging.currentLogger}
-/// {@canonicalFor serve.listenPortFromEnvironment}
-/// {@canonicalFor serve.serveHandler}
-/// {@canonicalFor terminate.waitForTerminate}
+/// {@canonicalFor http_serving.BadConfigurationException}
+/// {@canonicalFor http_serving.badRequestMiddleware}
+/// {@canonicalFor http_serving.cloudLoggingMiddleware}
+/// {@canonicalFor http_serving.createLoggingMiddleware}
+/// {@canonicalFor http_serving.currentLogger}
+/// {@canonicalFor http_serving.httpResponseExceptionMiddleware}
+/// {@canonicalFor http_serving.BadRequestException}
+/// {@canonicalFor http_serving.HttpResponseException}
+/// {@canonicalFor http_serving.listenPortFromEnvironment}
+/// {@canonicalFor http_serving.serveHandler}
+/// {@canonicalFor http_serving.TraceContextData}
+/// {@canonicalFor http_serving.waitForTerminate}
 library;
 
+export 'src/logger.dart' show CloudLogger, LogSeverity;
 export 'src/serving/bad_configuration_exception.dart'
     show BadConfigurationException;
-export 'src/serving/bad_request_exception.dart' show BadRequestException;
 export 'src/serving/http_logging.dart'
     show
-        LogSeverity,
-        RequestLogger,
         badRequestMiddleware,
         cloudLoggingMiddleware,
         createLoggingMiddleware,
-        currentLogger;
+        currentLogger,
+        httpResponseExceptionMiddleware;
+export 'src/serving/http_response_exception.dart'
+    show
+        // ignore: deprecated_member_use_from_same_package
+        BadRequestException,
+        HttpResponseException;
 export 'src/serving/serve.dart' show listenPortFromEnvironment, serveHandler;
 export 'src/serving/terminate.dart' show waitForTerminate;
+export 'src/serving/trace_context_data.dart' show TraceContextData;

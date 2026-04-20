@@ -20,13 +20,16 @@ import 'package:io/ansi.dart';
 import 'package:shelf/shelf.dart';
 
 import '../constants.dart';
-import '../logging.dart';
-import 'bad_request_exception.dart';
+import '../logger.dart';
+import '../structured_logging.dart';
+import 'http_response_exception.dart';
+import 'json_request_checking.dart';
+import 'trace_context_data.dart';
 
-export '../logging.dart';
+export '../structured_logging.dart';
 
-const _badRequestExceptionContextKey = 'google_cloud.bad_request_exception';
-const _badStackTraceContextKey = 'google_cloud.bad_stack_trace';
+const _httpResponseExceptionKey = 'google_cloud.response_exception';
+const _exceptionStackTraceKey = 'google_cloud.bad_stack_trace';
 
 /// Convenience [Middleware] that handles logging depending on [projectId].
 ///
@@ -34,23 +37,28 @@ const _badStackTraceContextKey = 'google_cloud.bad_stack_trace';
 /// correlation.
 ///
 /// If [projectId] is `null`, returns [Middleware] composed of [logRequests] and
-/// [badRequestMiddleware].
+/// [httpResponseExceptionMiddleware].
 ///
 /// If [projectId] is provided, returns the value from [cloudLoggingMiddleware].
 Middleware createLoggingMiddleware({String? projectId}) => projectId == null
-    ? _errorWriter.addMiddleware(logRequests()).addMiddleware(_handleBadRequest)
+    ? _errorWriter
+          .addMiddleware(logRequests())
+          .addMiddleware(_handleResponseException)
     : cloudLoggingMiddleware(projectId);
 
-/// Adds logic which catches [BadRequestException], logs details to [stderr] and
-/// returns a corresponding [Response].
-Middleware get badRequestMiddleware => _handleBadRequest;
+@Deprecated('use httpResponseExceptionMiddleware instead')
+Middleware get badRequestMiddleware => httpResponseExceptionMiddleware;
 
-Handler _handleBadRequest(Handler innerHandler) => (request) async {
+/// Adds logic which catches [HttpResponseException], logs details to [stderr]
+/// and returns a corresponding [Response].
+Middleware get httpResponseExceptionMiddleware => _handleResponseException;
+
+Handler _handleResponseException(Handler innerHandler) => (request) async {
   try {
     final response = await innerHandler(request);
     return response;
-  } on BadRequestException catch (error, stack) {
-    return _responseFromBadRequest(error, stack);
+  } on HttpResponseException catch (error, stack) {
+    return _responseFromException(error, stack, request.headers);
   }
 };
 
@@ -58,15 +66,15 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
   final response = await innerHandler(request);
 
   final error =
-      response.context[_badRequestExceptionContextKey] as BadRequestException?;
+      response.context[_httpResponseExceptionKey] as HttpResponseException?;
 
   if (error != null) {
-    final stack = response.context[_badStackTraceContextKey] as StackTrace?;
+    final stack = response.context[_exceptionStackTraceKey] as StackTrace?;
     final output = [
       error,
       if (error.innerError != null)
         '${error.innerError} (${error.innerError.runtimeType})',
-      formatStackTrace(error.innerStack ?? stack),
+      if (error.innerStack ?? stack case final s?) formatStackTrace(s),
     ];
 
     final bob = output
@@ -78,15 +86,26 @@ Handler _errorWriter(Handler innerHandler) => (request) async {
   return response;
 };
 
-Response _responseFromBadRequest(BadRequestException e, StackTrace stack) =>
-    Response(
+Response _responseFromException(
+  HttpResponseException e,
+  StackTrace stack, [
+  Map<String, String>? requestHeaders,
+]) {
+  if (requestHeaders != null && shouldSendJsonResponse(requestHeaders)) {
+    return Response(
       e.statusCode,
-      body: 'Bad request. ${e.message}',
-      context: {
-        _badRequestExceptionContextKey: e,
-        _badStackTraceContextKey: stack,
-      },
+      body: jsonEncode(e.toJson()),
+      headers: {HttpHeaders.contentTypeHeader: 'application/json'},
+      context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
     );
+  }
+
+  return Response(
+    e.statusCode,
+    body: e.toString(),
+    context: {_httpResponseExceptionKey: e, _exceptionStackTraceKey: stack},
+  );
+}
 
 /// Return [Middleware] that logs errors using Google Cloud structured logs and
 /// returns the correct response.
@@ -100,74 +119,90 @@ Middleware cloudLoggingMiddleware(String projectId) {
     // Add log correlation to nest all log messages beneath request log in
     // Log Viewer.
 
-    String? traceValue;
-
     final traceHeader = request.headers[cloudTraceContextHeader];
-    if (traceHeader != null) {
-      traceValue = 'projects/$projectId/traces/${traceHeader.split('/')[0]}';
-    }
+    final traceContext = traceHeader != null
+        ? TraceContextData.tryParse(
+            projectId: projectId,
+            traceHeader: traceHeader,
+          )
+        : null;
 
     String createErrorLogEntryFromRequest(
       Object error,
       StackTrace? stackTrace,
-      LogSeverity logSeverity,
-    ) => structuredLogEntry(
+      LogSeverity logSeverity, {
+      Map<String, Object?>? extraPayload,
+    }) => structuredLogEntry(
       '$error'.trim(),
       logSeverity,
-      traceId: traceValue,
+      payload: {...?traceContext?.asPayloadMap(), ...?extraPayload},
       stackTrace: stackTrace,
     );
 
     final completer = Completer<Response>.sync();
+
+    void uncaughtErrorHandler(
+      Zone self,
+      ZoneDelegate parent,
+      _,
+      Object error,
+      StackTrace stackTrace,
+    ) {
+      if (error is HijackException) {
+        completer.completeError(error, stackTrace);
+      }
+
+      final logContentString = error is HttpResponseException
+          ? createErrorLogEntryFromRequest(
+              error,
+              error.innerStack ?? stackTrace,
+              error.statusCode >= 500 ? LogSeverity.error : LogSeverity.warning,
+              extraPayload: error.toJson(),
+            )
+          : createErrorLogEntryFromRequest(
+              error,
+              stackTrace,
+              LogSeverity.error,
+            );
+
+      // Serialize to a JSON string and output.
+      parent.print(self, logContentString);
+
+      if (completer.isCompleted) {
+        return;
+      }
+
+      final response = error is HttpResponseException
+          ? _responseFromException(error, stackTrace, request.headers)
+          : Response.internalServerError();
+
+      completer.complete(response);
+    }
+
+    void zonePrint(Zone self, ZoneDelegate parent, _, String line) {
+      final logContent = structuredLogEntry(
+        line,
+        LogSeverity.info,
+        payload: traceContext?.asPayloadMap(),
+      );
+
+      // Serialize to a JSON string and output to parent zone.
+      parent.print(self, logContent);
+    }
 
     final currentZone = Zone.current;
 
     Zone.current
         .fork(
           zoneValues: {
-            _loggerKey: _CloudLogger(zone: currentZone, traceId: traceValue),
+            _loggerKey: _CloudLogger(
+              zone: currentZone,
+              traceContext: traceContext,
+            ),
           },
           specification: ZoneSpecification(
-            handleUncaughtError: (self, parent, zone, error, stackTrace) {
-              if (error is HijackException) {
-                completer.completeError(error, stackTrace);
-              }
-
-              final logContentString = error is BadRequestException
-                  ? createErrorLogEntryFromRequest(
-                      'Bad request. ${error.message}',
-                      error.innerStack ?? stackTrace,
-                      LogSeverity.warning,
-                    )
-                  : createErrorLogEntryFromRequest(
-                      error,
-                      stackTrace,
-                      LogSeverity.error,
-                    );
-
-              // Serialize to a JSON string and output.
-              parent.print(self, logContentString);
-
-              if (completer.isCompleted) {
-                return;
-              }
-
-              final response = error is BadRequestException
-                  ? _responseFromBadRequest(error, stackTrace)
-                  : Response.internalServerError();
-
-              completer.complete(response);
-            },
-            print: (self, parent, zone, line) {
-              final logContent = structuredLogEntry(
-                line,
-                LogSeverity.info,
-                traceId: traceValue,
-              );
-
-              // Serialize to a JSON string and output to parent zone.
-              parent.print(self, logContent);
-            },
+            handleUncaughtError: uncaughtErrorHandler,
+            print: zonePrint,
           ),
         )
         .runGuarded(() async {
@@ -183,96 +218,46 @@ Middleware cloudLoggingMiddleware(String projectId) {
   return hostedLoggingMiddleware;
 }
 
-/// Returns the current [RequestLogger].
+/// Returns the current [CloudLogger].
 ///
-/// If called within a context configured with a [RequestLogger], the returned
-/// [RequestLogger] will be used.
+/// If called within a context configured with a [CloudLogger], the returned
+/// [CloudLogger] will be used.
 ///
-/// Otherwise, the returned [RequestLogger] will simply [print] log entries,
+/// Otherwise, the returned [CloudLogger] will simply [print] log entries,
 /// with entries having a [LogSeverity] different than
 /// [LogSeverity.defaultSeverity] being prefixed as such.
-RequestLogger get currentLogger =>
-    Zone.current[_loggerKey] as RequestLogger? ?? const _DefaultLogger();
+CloudLogger get currentLogger =>
+    Zone.current[_loggerKey] as CloudLogger? ??
+    const CloudLogger.defaultLogger();
 
-/// Used to represent the [RequestLogger] in [Zone] values.
+/// Used to represent the [CloudLogger] in [Zone] values.
 final _loggerKey = Object();
 
-/// Allows logging at a specified severity.
-///
-/// Compatible with the
-/// [log severities](https://cloud.google.com/logging/docs/reference/v2/rest/v2/LogEntry#logseverity)
-/// supported by Google Cloud.
-abstract final class RequestLogger {
-  /// Const constructor for subclasses.
-  const RequestLogger();
-
-  /// Logs [message] at the given [severity].
-  void log(Object message, LogSeverity severity);
-
-  /// Logs [message] at [LogSeverity.debug] severity.
-  void debug(Object message) => log(message, LogSeverity.debug);
-
-  /// Logs [message] at [LogSeverity.info] severity.
-  void info(Object message) => log(message, LogSeverity.info);
-
-  /// Logs [message] at [LogSeverity.notice] severity.
-  void notice(Object message) => log(message, LogSeverity.notice);
-
-  /// Logs [message] at [LogSeverity.warning] severity.
-  void warning(Object message) => log(message, LogSeverity.warning);
-
-  /// Logs [message] at [LogSeverity.error] severity.
-  void error(Object message) => log(message, LogSeverity.error);
-
-  /// Logs [message] at [LogSeverity.critical] severity.
-  void critical(Object message) => log(message, LogSeverity.critical);
-
-  /// Logs [message] at [LogSeverity.alert] severity.
-  void alert(Object message) => log(message, LogSeverity.alert);
-
-  /// Logs [message] at [LogSeverity.emergency] severity.
-  void emergency(Object message) => log(message, LogSeverity.emergency);
-}
-
-/// A [RequestLogger] that prints messages normally.
-///
-/// Any message that's not [LogSeverity.defaultSeverity] is prefixed by the
-/// [LogSeverity] name.
-final class _DefaultLogger extends RequestLogger {
-  /// Const constructor.
-  const _DefaultLogger();
-
-  @override
-  void log(Object message, LogSeverity severity) {
-    if (severity == LogSeverity.defaultSeverity) {
-      print(message);
-    } else {
-      print('${severity.name}: $message');
-    }
-  }
-}
-
-/// A [RequestLogger] that prints messages using Google Cloud structured
+/// A [CloudLogger] that prints messages using Google Cloud structured
 /// logging.
-final class _CloudLogger extends RequestLogger {
-  final Zone _zone;
-  final String? _traceId;
+final class _CloudLogger extends CloudLogger {
+  final Zone zone;
 
-  /// Creates a new [_CloudLogger] that prints structured logs to [_zone].
-  ///
-  /// If [_traceId] is provided, it is included in the log entry.
-  _CloudLogger({Zone? zone, String? traceId})
-    : _zone = zone ?? Zone.current,
-      _traceId = traceId;
+  final TraceContextData? traceContext;
+
+  /// Creates a new [_CloudLogger] that prints structured logs to [this.zone].
+  _CloudLogger({required this.zone, this.traceContext});
 
   /// If [message] is a [Map], it is used as the log entry payload. Otherwise,
-  /// it is converted to a [String] and used as the log entry message.
+  /// it is passed directly to [structuredLogEntry], which handles
+  /// serialization.
   @override
-  void log(Object message, LogSeverity severity) => _zone.print(
+  void log(
+    Object message,
+    LogSeverity severity, {
+    Map<String, Object?>? payload,
+    StackTrace? stackTrace,
+  }) => zone.print(
     structuredLogEntry(
-      message is Map ? message : '$message',
+      message,
       severity,
-      traceId: _traceId,
+      payload: traceContext?.asPayloadMap(payload) ?? payload,
+      stackTrace: stackTrace,
     ),
   );
 }

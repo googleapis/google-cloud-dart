@@ -19,203 +19,367 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:google_cloud/general.dart';
 import 'package:google_cloud/http_serving.dart';
 import 'package:shelf/shelf.dart';
 import 'package:test/test.dart';
 
+const internalServerErrorMessage = 'Internal Server Error';
+
 void main() {
-  group('structuredLogEntry', () {
-    test('simple message', () {
-      final entry = structuredLogEntry('hello', LogSeverity.info);
-      final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'hello'));
-      expect(map, containsPair('severity', 'INFO'));
-    });
+  for (var environment in _Environment.values) {
+    for (var responseType in _ResponseType.values) {
+      for (var responseScenario in _ResponseScenarios.values) {
+        final name = [
+          responseScenario.name,
+          responseType.name,
+          environment.name,
+        ].join(' | ');
 
-    test('message with traceId', () {
-      final entry = structuredLogEntry(
-        'hello',
-        LogSeverity.info,
-        traceId: 'trace-123',
-      );
-      final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'hello'));
-      expect(map, containsPair('severity', 'INFO'));
-      expect(map, containsPair('logging.googleapis.com/trace', 'trace-123'));
-    });
+        test('[$name]', () async {
+          final middleware = createLoggingMiddleware(
+            projectId: environment.projectId,
+          );
 
-    test('json encodable message', () {
-      final message = {'foo': 'bar', 'count': 42};
-      final entry = structuredLogEntry(message, LogSeverity.info);
-      final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', message));
-      expect(map, containsPair('severity', 'INFO'));
-    });
+          final handler = middleware(responseScenario.handler);
 
-    test('non-encodable message is stringified', () {
-      final message = _NonEncodable();
-      final entry = structuredLogEntry(message, LogSeverity.info);
-      final map = jsonDecode(entry) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'I am not encodable'));
-      expect(map, containsPair('severity', 'INFO'));
-    });
-  });
+          final logMatchers = _logMatcherFactory(responseScenario, environment);
 
-  group('LogSeverity', () {
-    test('toJson returns name', () {
-      expect(LogSeverity.info.toJson(), 'INFO');
-      expect(LogSeverity.error.toJson(), 'ERROR');
-    });
+          final stdoutLines = <String>[];
+          final stderrLines = <String>[];
+          late Response response;
 
-    test('comparable', () {
-      expect(LogSeverity.info.compareTo(LogSeverity.error), isNegative);
-      expect(LogSeverity.critical.compareTo(LogSeverity.warning), isPositive);
-    });
-  });
+          await IOOverrides.runZoned(
+            () => runZoned(
+              zoneSpecification: ZoneSpecification(
+                print: (_, _, _, String line) => stdoutLines.add(line),
+              ),
+              () async {
+                try {
+                  response = await handler(
+                    responseType.toRequest(
+                      responseScenario == _ResponseScenarios.successfulWithLogs,
+                    ),
+                  );
+                } catch (e, s) {
+                  if (responseScenario ==
+                          _ResponseScenarios.nonHttpResponseError &&
+                      environment == _Environment.normal) {
+                    stderrLines
+                      ..add('Exception: $e')
+                      ..add(s.toString());
+                    response = Response.internalServerError();
+                  } else {
+                    rethrow;
+                  }
+                }
+              },
+            ),
+            stdout: () => _MockStdout(stdoutLines),
+            stderr: () => _MockStdout(stderrLines),
+          );
 
-  group('RequestLogger (default)', () {
-    test('log with default severity', () {
-      final output = <String>[];
-      runZoned(
-        () => currentLogger.log('hello', LogSeverity.defaultSeverity),
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) => output.add(line),
-        ),
-      );
-      expect(output, ['hello']);
-    });
+          expect(
+            stdoutLines.join('\n'),
+            logMatchers.stdout,
+            reason: 'stdout matcher',
+          );
+          expect(
+            stderrLines.join('\n'),
+            logMatchers.stderr,
+            reason: 'stderr matcher',
+          );
 
-    test('log with explicit severity', () {
-      final output = <String>[];
-      runZoned(
-        () => currentLogger.log('hello', LogSeverity.error),
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) => output.add(line),
-        ),
-      );
-      expect(output, ['ERROR: hello']);
-    });
-  });
-
-  group('middleware', () {
-    test('cloudLoggingMiddleware logs structured entries', () async {
-      final output = <String>[];
-      final handler = const Pipeline()
-          .addMiddleware(cloudLoggingMiddleware('test-project'))
-          .addHandler((request) {
-            currentLogger.info('inner log');
-            return Response.ok('done');
-          });
-
-      await runZoned(
-        () => handler(
-          Request(
-            'GET',
-            Uri.parse('http://localhost/'),
-            headers: {'x-cloud-trace-context': 'trace-456/123;o=1'},
-          ),
-        ),
-        zoneSpecification: ZoneSpecification(
-          print: (self, parent, zone, line) => output.add(line),
-        ),
-      );
-
-      expect(output, hasLength(1));
-      final map = jsonDecode(output.single) as Map<String, dynamic>;
-      expect(map, containsPair('message', 'inner log'));
-      expect(map, containsPair('severity', 'INFO'));
-      expect(
-        map,
-        containsPair(
-          'logging.googleapis.com/trace',
-          'projects/test-project/traces/trace-456',
-        ),
-      );
-    });
-
-    test('badRequestMiddleware handles BadRequestException', () async {
-      final handler = const Pipeline()
-          .addMiddleware(badRequestMiddleware)
-          .addHandler((request) {
-            throw BadRequestException(400, 'Custom bad request');
-          });
-
-      final response = await handler(
-        Request('GET', Uri.parse('http://localhost/')),
-      );
-      expect(response.statusCode, 400);
-      expect(
-        await response.readAsString(),
-        contains('Bad request. Custom bad request'),
-      );
-    });
-
-    test('badRequestMiddleware logs to stderr', () async {
-      final stderrLines = <String>[];
-      final handler = const Pipeline()
-          .addMiddleware(createLoggingMiddleware())
-          .addHandler((request) {
-            throw BadRequestException(400, 'Custom bad request');
-          });
-
-      await IOOverrides.runZoned(() async {
-        final response = await handler(
-          Request('GET', Uri.parse('http://localhost/')),
-        );
-        expect(response.statusCode, 400);
-      }, stderr: () => _MockStdout(stderrLines));
-
-      expect(stderrLines, hasLength(1));
-      final lines = stderrLines.single.split('\n');
-      expect(lines.first, contains('Custom bad request (400)'));
-      expect(lines[1], contains('logging_test.dart'));
-    });
-  });
-
-  group('BadRequestException', () {
-    test('valid status code', () {
-      final ex = BadRequestException(400, 'Bad');
-      expect(ex.statusCode, 400);
-      expect(ex.message, 'Bad');
-      expect(ex.toString(), 'Bad (400)');
-    });
-
-    test('invalid status code low', () {
-      expect(() => BadRequestException(399, 'Bad'), throwsArgumentError);
-    });
-
-    test('invalid status code high', () {
-      expect(() => BadRequestException(500, 'Bad'), throwsArgumentError);
-    });
-
-    test('empty message', () {
-      // ignore: prefer_const_constructors
-      expect(
-        () => BadRequestException(400, ''),
-        throwsA(isA<AssertionError>()),
-      );
-    });
-  });
+          expect(
+            response,
+            _responseScenarioFactory(responseScenario, responseType),
+            reason: 'response matcher',
+          );
+        });
+      }
+    }
+  }
 }
 
-class _NonEncodable {
-  @override
-  String toString() => 'I am not encodable';
+enum _ResponseScenarios {
+  httpResponseErrorMinimal(_throwHttpResponseMinimal),
+  httpResponseErrorWithDetails(_throwHttpResponseWithDetails),
+  nonHttpResponseError(_throwNonHttpResponseError),
+  successfulWithLogs(_respondSuccessfullyWithLogs);
+
+  final Handler handler;
+
+  const _ResponseScenarios(this.handler);
+}
+
+enum _Environment {
+  cloud('project-id'),
+  normal(null);
+
+  final String? projectId;
+
+  const _Environment(this.projectId);
+}
+
+enum _ResponseType {
+  json('application/json'),
+  text('text/plain');
+
+  final String contentType;
+
+  const _ResponseType(this.contentType);
+
+  Request toRequest(bool includeTraceContext) => Request(
+    'GET',
+    Uri.parse('http://localhost/'),
+    headers: {
+      'content-type': contentType,
+      if (includeTraceContext)
+        'x-cloud-trace-context': '0123456789abcdef0123456789abcdef/123;o=1',
+    },
+  );
+}
+
+TypeMatcher<Response> _responseScenarioFactory(
+  _ResponseScenarios responseScenario,
+  _ResponseType responseType,
+) => switch ((responseScenario, responseType)) {
+  (_ResponseScenarios.httpResponseErrorMinimal, _ResponseType.text) =>
+    _responseMatcher(
+      statusCode: 400,
+      contentType: anyOf(isNull, contains('text/plain')),
+      body: contains('minimal (400)'),
+    ),
+  (_ResponseScenarios.httpResponseErrorMinimal, _ResponseType.json) =>
+    _responseMatcher(
+      statusCode: 400,
+      contentType: contains('application/json'),
+      body: _jsonStringMatcher({
+        'error': {'code': 400, 'message': 'minimal'},
+      }),
+    ),
+  (_ResponseScenarios.httpResponseErrorWithDetails, _ResponseType.text) =>
+    _responseMatcher(
+      statusCode: 400,
+      contentType: anyOf(isNull, contains('text/plain')),
+      body: contains('with details (400)'),
+    ),
+  (_ResponseScenarios.httpResponseErrorWithDetails, _ResponseType.json) =>
+    _responseMatcher(
+      statusCode: 400,
+      contentType: contains('application/json'),
+      body: _jsonStringMatcher({
+        'error': {
+          'code': 400,
+          'message': 'with details',
+          'status': 'BAD_REQUEST',
+          'details': [
+            {
+              'type': 'type.googleapis.com/google.rpc.BadRequest',
+              'fieldViolations': <Never>[],
+            },
+          ],
+        },
+      }),
+    ),
+  (_ResponseScenarios.nonHttpResponseError, _ResponseType.text) =>
+    _responseMatcher(
+      statusCode: 500,
+      contentType: anyOf(isNull, contains('text/plain')),
+      body: contains(internalServerErrorMessage),
+    ),
+  (_ResponseScenarios.nonHttpResponseError, _ResponseType.json) =>
+    _responseMatcher(
+      statusCode: 500,
+      contentType: anyOf(isNull, contains('text/plain')),
+      body: contains(internalServerErrorMessage),
+    ),
+  (_ResponseScenarios.successfulWithLogs, _) => _responseMatcher(
+    statusCode: 200,
+    contentType: contains('text/plain'),
+    body: equals('done'),
+  ),
+};
+
+({Matcher stdout, Matcher stderr}) _logMatcherFactory(
+  _ResponseScenarios responseScenario,
+  _Environment environment,
+) => switch ((responseScenario, environment)) {
+  (_ResponseScenarios.httpResponseErrorMinimal, _Environment.cloud) => (
+    stdout: _jsonStringMatcher({
+      'message': 'minimal (400)',
+      'severity': 'WARNING',
+      'error': {'code': 400, 'message': 'minimal'},
+      'stack_trace': _stackTraceMatcher,
+      'logging.googleapis.com/sourceLocation': isA<Map<String, dynamic>>(),
+    }),
+    stderr: isEmpty,
+  ),
+  (_ResponseScenarios.httpResponseErrorWithDetails, _Environment.cloud) => (
+    stdout: _jsonStringMatcher({
+      'message': startsWith('with details (400)'),
+      'severity': 'WARNING',
+      'error': {
+        'code': 400,
+        'message': 'with details',
+        'status': 'BAD_REQUEST',
+        'details': [
+          {
+            'type': 'type.googleapis.com/google.rpc.BadRequest',
+            'fieldViolations': <Never>[],
+          },
+        ],
+      },
+      'stack_trace': _stackTraceMatcher,
+      'logging.googleapis.com/sourceLocation': isA<Map<String, dynamic>>(),
+    }),
+    stderr: isEmpty,
+  ),
+  (_ResponseScenarios.nonHttpResponseError, _Environment.cloud) => (
+    stdout: _jsonStringMatcher({
+      'message': 'Exception: non http error',
+      'severity': 'ERROR',
+      'stack_trace': _stackTraceMatcher,
+      'logging.googleapis.com/sourceLocation': isA<Map<String, dynamic>>(),
+    }),
+    stderr: isEmpty,
+  ),
+  (_ResponseScenarios.httpResponseErrorMinimal, _Environment.normal) => (
+    stdout: endsWith('[400] /'),
+    stderr: allOf([contains('minimal (400)'), _stackTraceMatcher]),
+  ),
+  (_ResponseScenarios.httpResponseErrorWithDetails, _Environment.normal) => (
+    stdout: endsWith('[400] /'),
+    stderr: allOf([
+      contains('Invalid argument(s): inner error (ArgumentError)'),
+      contains('[BAD_REQUEST]'),
+      _stackTraceMatcher,
+    ]),
+  ),
+  (_ResponseScenarios.nonHttpResponseError, _Environment.normal) => (
+    stdout: contains('[ERROR]'),
+    stderr: allOf([contains('Exception: non http error'), _stackTraceMatcher]),
+  ),
+  (_ResponseScenarios.successfulWithLogs, _Environment.cloud) => (
+    stdout: isA<String>().having(
+      (s) => s
+          .trim()
+          .split('\n')
+          .map((l) => jsonDecode(l) as Map<String, dynamic>)
+          .toList(),
+      'parsed JSON lines',
+      [
+        {
+          'message': 'trace me',
+          'severity': 'INFO',
+          'logging.googleapis.com/trace':
+              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
+          'logging.googleapis.com/spanId': '000000000000007b',
+          'logging.googleapis.com/trace_sampled': true,
+        },
+        {
+          'message': 'print me',
+          'severity': 'INFO',
+          'logging.googleapis.com/trace':
+              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
+          'logging.googleapis.com/spanId': '000000000000007b',
+          'logging.googleapis.com/trace_sampled': true,
+        },
+        {
+          'message': 'default me',
+          'severity': 'DEFAULT',
+          'logging.googleapis.com/trace':
+              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
+          'logging.googleapis.com/spanId': '000000000000007b',
+          'logging.googleapis.com/trace_sampled': true,
+        },
+        {
+          'message': 'warning me',
+          'severity': 'WARNING',
+          'logging.googleapis.com/trace':
+              'projects/project-id/traces/0123456789abcdef0123456789abcdef',
+          'logging.googleapis.com/spanId': '000000000000007b',
+          'logging.googleapis.com/trace_sampled': true,
+        },
+      ],
+    ),
+    stderr: isEmpty,
+  ),
+  (_ResponseScenarios.successfulWithLogs, _Environment.normal) => (
+    stdout: allOf([
+      contains('trace me'),
+      contains('print me'),
+      contains('default me'),
+      contains('WARNING: warning me'),
+      endsWith('[200] /'),
+    ]),
+    stderr: isEmpty,
+  ),
+};
+
+TypeMatcher<Response> _responseMatcher({
+  required int statusCode,
+  required Matcher contentType,
+  required Matcher body,
+}) => isA<Response>()
+    .having((r) => r.statusCode, 'statusCode', statusCode)
+    .having((r) => r.headers['content-type'], 'contentType', contentType)
+    .having((r) => r.readAsString(), 'body', completion(body));
+
+Matcher _jsonStringMatcher(Object expected) => isA<String>().having(
+  (output) => jsonDecode(output) as Map<String, dynamic>,
+  'decoded as a JSON map',
+  equals(expected),
+);
+
+final _stackTraceMatcher = matches(
+  RegExp(r'test/logging_test.dart[: ]\d+:\d+'),
+);
+
+Future<Response> _throwHttpResponseMinimal(_) =>
+    throw HttpResponseException(400, 'minimal');
+
+Future<Response> _throwHttpResponseWithDetails(_) {
+  try {
+    throw ArgumentError('inner error');
+  } catch (error, stack) {
+    throw HttpResponseException(
+      400,
+      'with details',
+      status: 'BAD_REQUEST',
+      details: [
+        {
+          'type': 'type.googleapis.com/google.rpc.BadRequest',
+          'fieldViolations': [],
+        },
+      ],
+      innerError: error,
+      innerStack: stack,
+    );
+  }
+}
+
+Future<Response> _throwNonHttpResponseError(_) =>
+    throw Exception('non http error');
+
+Future<Response> _respondSuccessfullyWithLogs(_) async {
+  currentLogger.info('trace me');
+  print('print me');
+  currentLogger
+    ..log('default me', LogSeverity.defaultSeverity)
+    ..warning('warning me');
+  return Response.ok('done', headers: {'content-type': 'text/plain'});
 }
 
 class _MockStdout implements Stdout {
-  final List<String> _lines;
-
   _MockStdout(this._lines);
+
+  final List<String> _lines;
 
   @override
   bool get supportsAnsiEscapes => false;
 
   @override
-  void writeln([Object? object = '']) {
-    _lines.add('$object');
-  }
+  void writeln([Object? object = '']) => _lines.add('$object');
 
   @override
   dynamic noSuchMethod(Invocation invocation) => super.noSuchMethod(invocation);
