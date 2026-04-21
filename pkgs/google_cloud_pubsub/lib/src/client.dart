@@ -33,6 +33,7 @@ final class PubSub {
   grpc.PublisherClient? _publisherClient;
   grpc.SubscriberClient? _subscriberClient;
   auth.AutoRefreshingAuthClient? _authClient;
+  Future<auth.AutoRefreshingAuthClient>? _authClientFuture;
 
   Future<String> get _requiredProjectId async {
     final id = await _projectId;
@@ -65,16 +66,10 @@ final class PubSub {
     }
 
     if (emulatorHost case String host) {
-      var cleanHost = host;
-      var port = 8085;
-      if (host.contains(':')) {
-        final parts = host.split(':');
-        cleanHost = parts[0];
-        port = int.parse(parts[1]);
-      }
+      final uri = Uri.parse('http://$host');
       return ClientChannel(
-        cleanHost,
-        port: port,
+        uri.host,
+        port: uri.hasPort ? uri.port : 8085,
         options: const ChannelOptions(
           credentials: ChannelCredentials.insecure(),
         ),
@@ -88,6 +83,17 @@ final class PubSub {
   }
 
   PubSub._(this._projectId, this._channel, this._isEmulator);
+
+  static ReceivedMessage _mapReceivedMessage(grpc.ReceivedMessage m) =>
+      ReceivedMessage(
+        ackId: m.ackId,
+        message: Message(
+          data: m.message.data,
+          attributes: m.message.attributes,
+          messageId: m.message.messageId,
+          publishTime: m.message.publishTime.toDateTime(),
+        ),
+      );
 
   /// Constructs a client used to communicate with [Google Cloud Pub/Sub][].
   factory PubSub({String? projectId, String? apiEndpoint}) {
@@ -103,9 +109,30 @@ final class PubSub {
     if (_isEmulator) {
       return CallOptions();
     }
-    _authClient ??= await auth.clientViaApplicationDefaultCredentials(
-      scopes: ['https://www.googleapis.com/auth/pubsub'],
-    );
+    if (_authClient == null) {
+      _authClientFuture ??= auth.clientViaApplicationDefaultCredentials(
+        scopes: ['https://www.googleapis.com/auth/pubsub'],
+      );
+      _authClient = await _authClientFuture;
+    }
+
+    // AutoRefreshingAuthClient only refreshes when used via HTTP. But we
+    // extract the access token manually for using in grpc calls.
+    // We trigger a refresh by making a dummy request if close to expiry.
+    final expiry = _authClient!.credentials.accessToken.expiry;
+    if (expiry.isBefore(DateTime.now().add(const Duration(minutes: 5)))) {
+      try {
+        await _authClient!.get(
+          Uri.parse(
+            'https://pubsub.googleapis.com/v1/projects/non-existent-project/topics',
+          ),
+        );
+      } on Exception catch (_) {
+        // Ignore exceptions, we just want the side effect of refreshing the
+        // token.
+      }
+    }
+
     final token = _authClient!.credentials.accessToken.data;
     return CallOptions(metadata: {'authorization': 'Bearer $token'});
   }
@@ -118,6 +145,7 @@ final class PubSub {
   /// Closes the client and cleans up any resources associated with it.
   Future<void> close() async {
     await _channel.shutdown();
+    _authClient?.close();
   }
 
   // Topic-related methods
@@ -303,19 +331,7 @@ final class PubSub {
         options: await _callOptions,
       );
 
-      return response.receivedMessages
-          .map(
-            (m) => ReceivedMessage(
-              ackId: m.ackId,
-              message: Message(
-                data: m.message.data,
-                attributes: m.message.attributes,
-                messageId: m.message.messageId,
-                publishTime: m.message.publishTime.toDateTime(),
-              ),
-            ),
-          )
-          .toList();
+      return response.receivedMessages.map(_mapReceivedMessage).toList();
     } on GrpcError catch (e) {
       if (e.code == StatusCode.notFound) {
         throw SubscriptionNotFoundException(subscriptionName);
@@ -362,15 +378,7 @@ final class PubSub {
     try {
       await for (final response in responseStream) {
         for (final m in response.receivedMessages) {
-          yield ReceivedMessage(
-            ackId: m.ackId,
-            message: Message(
-              data: m.message.data,
-              attributes: m.message.attributes,
-              messageId: m.message.messageId,
-              publishTime: m.message.publishTime.toDateTime(),
-            ),
-          );
+          yield _mapReceivedMessage(m);
         }
       }
     } on GrpcError catch (e) {
