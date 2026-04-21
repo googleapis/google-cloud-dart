@@ -23,7 +23,7 @@ import 'package:test_utils/cloud.dart';
 
 const databaseId = '(default)';
 
-void firestoreTest(Future<Firestore> Function() createFirestore) async {
+void firestoreTest(Future<Firestore> Function() createFirestore) {
   late Firestore firestoreService;
 
   setUp(() async {
