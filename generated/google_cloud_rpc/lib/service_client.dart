@@ -141,6 +141,15 @@ class ServiceClient {
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
 
+    if (response.headers['content-type'] == 'application/json') {
+      // The server responded with a non-streaming response, which should be a
+      // list of JSON objects.
+      final responseBody = await response.stream.bytesToString();
+      final json = (jsonDecode(responseBody) as List)
+          .cast<Map<String, dynamic>>();
+      yield* Stream.fromIterable(json);
+      return;
+    }
     final lines = response.stream.toStringStream().transform(
       const LineSplitter(),
     );

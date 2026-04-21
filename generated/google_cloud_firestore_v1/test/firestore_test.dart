@@ -50,6 +50,44 @@ void firestoreTest(Future<Firestore> Function() createFirestore) {
     );
     expect(doc.fields['firstName']?.stringValue, 'Brian');
   });
+
+  test('runQuery', () async {
+    final r = await firestoreService.createDocument(
+      CreateDocumentRequest(
+        parent: 'projects/$projectId/databases/$databaseId/documents',
+        collectionId: 'users',
+        document: Document(fields: {'firstName': Value(stringValue: 'Brian')}),
+      ),
+    );
+    addTearDown(
+      () =>
+          firestoreService.deleteDocument(DeleteDocumentRequest(name: r.name)),
+    );
+
+    final stream = firestoreService.runQuery(
+      RunQueryRequest(
+        parent: 'projects/$projectId/databases/$databaseId/documents',
+        structuredQuery: StructuredQuery(
+          from: [StructuredQuery_CollectionSelector(collectionId: 'users')],
+          where: StructuredQuery_Filter(
+            fieldFilter: StructuredQuery_FieldFilter(
+              field: StructuredQuery_FieldReference(fieldPath: 'firstName'),
+              op: StructuredQuery_FieldFilter_Operator.equal,
+              value: Value(stringValue: 'Brian'),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    final responses = await stream.toList();
+    expect(
+      responses,
+      contains(
+        isA<RunQueryResponse>().having((r) => r.document!.name, 'name', r.name),
+      ),
+    );
+  });
 }
 
 void main() {
