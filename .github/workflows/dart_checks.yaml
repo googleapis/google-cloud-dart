@@ -25,8 +25,8 @@ on:
 # reproducable builds (formatting can change between SDK versions, ...).
 env:
   DART_VERSION: 3.9.2
-  GOOGLE_CLOUD_PROJECT: skilful-orb-203421
-  LIBRARIAN_VERSION: v0.8.4-0.20260319214857-70b3cca2e8e2
+  GOOGLE_CLOUD_PROJECT: test-project
+  LIBRARIAN_VERSION: v0.10.2-0.20260420224243-3b848be6dccc
 name: Dart Checks
 jobs:
   analyze_and_format:
@@ -97,7 +97,6 @@ jobs:
         working-directory: firestore_emulators
       - name: Run Tests
         env:
-          GOOGLE_CLOUD_PROJECT: test-project
           FIRESTORE_EMULATOR_HOST: 127.0.0.1:8080
           STORAGE_EMULATOR_HOST: 127.0.0.1:9199
         run: dart test -P firebase-emulator .
