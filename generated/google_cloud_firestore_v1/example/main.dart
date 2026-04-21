@@ -16,7 +16,7 @@ import 'package:google_cloud_firestore_v1/firestore.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 
 void main() async {
-  // Connects to the Generative Language API using Application Default
+  // Connects to the Cloud Firestore API using Application Default
   // Connections (ADC).
   //
   // Before running this example, you need to authenticate with gcloud:
