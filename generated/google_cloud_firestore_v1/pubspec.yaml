@@ -17,7 +17,7 @@
 name: google_cloud_firestore_v1
 description: The Google Cloud client library for the Cloud Firestore API.
 version: 0.5.1
-repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_firestore_v1
+repository: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_firestore_v1
 issue_tracker: https://github.com/googleapis/google-cloud-dart/issues
 
 environment:

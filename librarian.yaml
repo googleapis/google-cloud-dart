@@ -269,13 +269,13 @@ libraries:
     apis:
       - path: google/firestore/v1
     copyright_year: "2026"
-    dart:
-      dev_dependencies: googleapis_auth,test,test_utils
-      repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_firestore_v1
     keep:
       - dart_test.yaml
       - example/main.dart
       - test/firestore_test.dart
+    dart:
+      dev_dependencies: googleapis_auth,test,test_utils
+      repository_url: https://github.com/googleapis/google-cloud-dart/tree/main/generated/google_cloud_firestore_v1
   - name: google_cloud_functions_v2
     copyright_year: "2025"
     dart:
