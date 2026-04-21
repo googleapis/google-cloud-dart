@@ -37,7 +37,7 @@ workspace:
   - generated/google_cloud_secretmanager_v1
   - generated/google_cloud_showcase_v1beta1
   - generated/google_cloud_type
-  - generated/google_firestore_v1
+  - generated/google_cloud_firestore_v1
   - pkgs/google_cloud
   - pkgs/google_cloud_storage
   - test_utils
