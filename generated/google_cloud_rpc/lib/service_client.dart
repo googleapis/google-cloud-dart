@@ -141,14 +141,24 @@ class ServiceClient {
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
 
-    if (response.headers['content-type'] == 'application/json') {
-      // The server responded with a non-streaming response, which should be a
-      // list of JSON objects.
-      final responseBody = await response.stream.bytesToString();
-      final json = (jsonDecode(responseBody) as List)
-          .cast<Map<String, dynamic>>();
-      yield* Stream.fromIterable(json);
-      return;
+    switch (response.headers['content-type']) {
+      case 'application/json':
+        // The server responded with a non-streaming response, which should be a
+        // list of JSON objects.
+        final responseBody = await response.stream.bytesToString();
+        final json = (jsonDecode(responseBody) as List)
+            .cast<Map<String, dynamic>>();
+        yield* Stream.fromIterable(json);
+        return;
+      case 'text/event-stream':
+        // The server responded with an event stream, which is what we expect.
+        break;
+      default:
+        throw ServiceException(
+          'Unsupported content type: ${response.headers['content-type']}',
+          statusCode: response.statusCode,
+          response: response,
+        );
     }
     final lines = response.stream.toStringStream().transform(
       const LineSplitter(),
