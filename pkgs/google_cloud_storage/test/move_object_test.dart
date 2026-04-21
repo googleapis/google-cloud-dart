@@ -15,8 +15,6 @@
 import 'dart:convert';
 
 import 'package:google_cloud_storage/google_cloud_storage.dart';
-import 'package:http/http.dart' as http;
-import 'package:http/testing.dart';
 import 'package:test/test.dart';
 
 import 'test_utils.dart';
@@ -112,51 +110,56 @@ void main() async {
           throwsA(isA<PreconditionFailedException>()),
         );
       });
-    });
 
-    test('mock request verification', () async {
-      final mockClient = MockClient((request) async {
-        expect(request.method, 'POST');
-        // Dart URI segments handles percent encoding.
-        expect(
-          request.url.path,
-          '/storage/v1/b/my-bucket/o/source%2Fobject/moveTo/o/dest%2Fobject',
+      test('ifSourceGenerationMatch success', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'move_obj_src_gen_ok',
         );
-        expect(request.url.queryParameters['ifSourceGenerationMatch'], '123');
-        expect(request.url.queryParameters['ifGenerationMatch'], '456');
-        expect(request.url.queryParameters['userProject'], 'my-project');
-        expect(request.url.queryParameters['projection'], 'full');
+        final source = await storage.uploadObject(
+          bucketName,
+          'source.txt',
+          utf8.encode('content'),
+          ifGenerationMatch: BigInt.zero,
+        );
 
-        return http.Response(
-          jsonEncode({
-            'kind': 'storage#object',
-            'name': 'dest/object',
-            'bucket': 'my-bucket',
-            'generation': '789',
-            'metageneration': '1',
-            'size': '0',
-            'timeCreated': '2026-03-24T14:55:00Z',
-            'updated': '2026-03-24T14:55:00Z',
-          }),
-          200,
-          headers: {'content-type': 'application/json'},
+        final moved = await storage.moveObject(
+          bucketName,
+          'source.txt',
+          'dest.txt',
+          ifSourceGenerationMatch: source.generation,
+        );
+
+        expect(moved.name, 'dest.txt');
+        // Verify source is gone
+        expect(
+          () => storage.objectMetadata(bucketName, 'source.txt'),
+          throwsA(isA<NotFoundException>()),
         );
       });
 
-      final storage = Storage(client: mockClient, projectId: 'fake project');
-      final result = await storage.moveObject(
-        'my-bucket',
-        'source/object',
-        'dest/object',
-        ifSourceGenerationMatch: BigInt.from(123),
-        ifGenerationMatch: BigInt.from(456),
-        userProject: 'my-project',
-        projection: 'full',
-      );
+      test('ifSourceGenerationMatch failure', () async {
+        final bucketName = await createBucketWithTearDown(
+          storage,
+          'move_obj_src_gen_fail',
+        );
+        final source = await storage.uploadObject(
+          bucketName,
+          'source.txt',
+          utf8.encode('content'),
+          ifGenerationMatch: BigInt.zero,
+        );
 
-      expect(result.name, 'dest/object');
-      expect(result.generation, BigInt.from(789));
-      expect(result.metageneration, BigInt.one);
+        expect(
+          () => storage.moveObject(
+            bucketName,
+            'source.txt',
+            'dest.txt',
+            ifSourceGenerationMatch: source.generation! + BigInt.one,
+          ),
+          throwsA(isA<PreconditionFailedException>()),
+        );
+      });
     });
   });
 }
