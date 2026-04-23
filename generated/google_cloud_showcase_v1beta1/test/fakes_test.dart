@@ -29,120 +29,127 @@ final class MyFakeEcho extends FakeEcho {
 }
 
 void main() async {
-  group('fake subclass', () {
-    test('overridden method', () async {
-      final service = MyFakeEcho();
-      final response = await service.echo(EchoRequest(content: 'Test'));
-      expect(response.content, 'Test');
-    });
-
-    test('not overridden method', () async {
-      final service = MyFakeEcho();
-      await expectLater(
-        () => service.expand(ExpandRequest(content: 'Test')),
-        throwsUnsupportedError,
-      );
-    });
-  });
-
-  group('fake tests', () {
-    group('simple method', () {
-      test('registered callback', () async {
-        final service = FakeEcho(
-          echo: (request) async => EchoResponse(content: request.content ?? ''),
-        );
+  group('generated fakes', () {
+    group('subclass', () {
+      test('overridden method', () async {
+        final service = MyFakeEcho();
         final response = await service.echo(EchoRequest(content: 'Test'));
         expect(response.content, 'Test');
       });
 
-      test('no callback', () async {
-        final service = FakeEcho();
+      test('not overridden method', () async {
+        final service = MyFakeEcho();
         await expectLater(
-          () => service.echo(EchoRequest(content: 'Test')),
-          throwsUnsupportedError,
-        );
-      });
-
-      test('after close', () async {
-        final service = FakeEcho(
-          echo: (request) async => EchoResponse(content: request.content ?? ''),
-        )..close();
-        await expectLater(
-          () => service.echo(EchoRequest(content: 'Test')),
-          throwsStateError,
-        );
-      });
-    });
-
-    group('stream response method', () {
-      test('registered callback', () async {
-        final service = FakeEcho(
-          expand: (request) async* {
-            yield EchoResponse(content: request.content);
-          },
-        );
-        expect(
-          service.expand(ExpandRequest(content: 'Test')),
-          emitsInOrder([
-            isA<EchoResponse>().having((r) => r.content, 'content', 'Test'),
-            emitsDone,
-          ]),
-        );
-      });
-
-      test('no callback', () async {
-        final service = FakeEcho();
-        expect(
           () => service.expand(ExpandRequest(content: 'Test')),
           throwsUnsupportedError,
         );
       });
-
-      test('after close', () async {
-        final service = FakeEcho(
-          expand: (request) async* {
-            yield EchoResponse(content: request.content);
-          },
-        )..close();
-        expect(
-          () => service.expand(ExpandRequest(content: 'Test')),
-          throwsStateError,
-        );
-      });
     });
 
-    group('long running operations method', () {
-      test('registered callback', () async {
-        final service = FakeEcho(
-          wait: (request) async => Operation<WaitResponse, WaitMetadata>(
-            name: 'operations/123',
-            done: true,
-            response: Any.from(WaitResponse(content: 'Done')),
-            operationHelper: OperationHelper(
-              WaitResponse.fromJson,
-              WaitMetadata.fromJson,
+    group('constructor override', () {
+      group('simple method', () {
+        test('registered callback', () async {
+          final service = FakeEcho(
+            echo: (request) async =>
+                EchoResponse(content: request.content ?? ''),
+          );
+          final response = await service.echo(EchoRequest(content: 'Test'));
+          expect(response.content, 'Test');
+        });
+
+        test('no callback', () async {
+          final service = FakeEcho();
+          await expectLater(
+            () => service.echo(EchoRequest(content: 'Test')),
+            throwsUnsupportedError,
+          );
+        });
+
+        test('after close', () async {
+          final service = FakeEcho(
+            echo: (request) async =>
+                EchoResponse(content: request.content ?? ''),
+          )..close();
+          await expectLater(
+            () => service.echo(EchoRequest(content: 'Test')),
+            throwsStateError,
+          );
+        });
+      });
+
+      group('stream response method', () {
+        test('registered callback', () async {
+          final service = FakeEcho(
+            expand: (request) async* {
+              yield EchoResponse(content: request.content);
+            },
+          );
+          expect(
+            service.expand(ExpandRequest(content: 'Test')),
+            emitsInOrder([
+              isA<EchoResponse>().having((r) => r.content, 'content', 'Test'),
+              emitsDone,
+            ]),
+          );
+        });
+
+        test('no callback', () async {
+          final service = FakeEcho();
+          expect(
+            () => service.expand(ExpandRequest(content: 'Test')),
+            throwsUnsupportedError,
+          );
+        });
+
+        test('after close', () async {
+          final service = FakeEcho(
+            expand: (request) async* {
+              yield EchoResponse(content: request.content);
+            },
+          )..close();
+          expect(
+            () => service.expand(ExpandRequest(content: 'Test')),
+            throwsStateError,
+          );
+        });
+      });
+
+      group('long running operations method', () {
+        test('registered callback', () async {
+          final service = FakeEcho(
+            wait: (request) async => Operation<WaitResponse, WaitMetadata>(
+              name: 'operations/123',
+              done: true,
+              response: Any.from(WaitResponse(content: 'Done')),
+              operationHelper: OperationHelper(
+                WaitResponse.fromJson,
+                WaitMetadata.fromJson,
+              ),
             ),
-          ),
-        );
-        final operation = await service.wait(WaitRequest());
-        expect(operation.name, 'operations/123');
-        expect(operation.done, isTrue);
-        expect(operation.responseAsMessage?.content, 'Done');
-      });
+          );
+          final operation = await service.wait(WaitRequest());
+          expect(operation.name, 'operations/123');
+          expect(operation.done, isTrue);
+          expect(operation.responseAsMessage?.content, 'Done');
+        });
 
-      test('no callback', () async {
-        final service = FakeEcho();
-        await expectLater(
-          () => service.wait(WaitRequest()),
-          throwsUnsupportedError,
-        );
-      });
+        test('no callback', () async {
+          final service = FakeEcho();
+          await expectLater(
+            () => service.wait(WaitRequest()),
+            throwsUnsupportedError,
+          );
+        });
 
-      test('after close', () async {
-        final service = FakeEcho(
-          wait: (request) async => Operation<WaitResponse, WaitMetadata>(),
-        )..close();
-        await expectLater(() => service.wait(WaitRequest()), throwsStateError);
+        test('after close', () async {
+          final service = FakeEcho(
+            wait: (request) async => Operation<WaitResponse, WaitMetadata>(),
+          )..close();
+          await expectLater(
+            () => service.wait(WaitRequest()),
+            throwsStateError,
+          );
+        });
       });
     });
   });
