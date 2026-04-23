@@ -95,7 +95,7 @@ void main() async {
 
         test('no callback', () async {
           final service = FakeEcho();
-          expect(
+          await expectLater(
             () => service.expand(ExpandRequest(content: 'Test')),
             throwsUnsupportedError,
           );
@@ -107,7 +107,7 @@ void main() async {
               yield EchoResponse(content: request.content);
             },
           )..close();
-          expect(
+          await expectLater(
             () => service.expand(ExpandRequest(content: 'Test')),
             throwsStateError,
           );
