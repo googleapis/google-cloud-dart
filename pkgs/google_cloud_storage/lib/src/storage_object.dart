@@ -230,6 +230,51 @@ final class StorageObject {
     retry: retry,
   );
 
+  /// Moves this [Google Cloud Storage object][] to a new [newName].
+  ///
+  /// This operation is atomic and idempotent if [ifSourceGenerationMatch] or
+  /// [ifGenerationMatch] is set (using both is recommended for maximum safety).
+  /// https://docs.cloud.google.com/storage/docs/retry-strategy#idempotency-operations
+  ///
+  /// Throws [NotFoundException] if the object does not exist.
+  ///
+  /// If set, [ifSourceGenerationMatch] makes the operation conditional on
+  /// whether the source object's current generation matches the given value.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether
+  /// the destination object's current generation matches the given value.
+  /// A value of `BigInt.zero` indicates that the destination object must not
+  /// already exist.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/move).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/json_api/v1/objects
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> move(
+    String newName, {
+    BigInt? ifSourceGenerationMatch,
+    BigInt? ifGenerationMatch,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => storage.moveObject(
+    bucketName,
+    name,
+    newName,
+    ifSourceGenerationMatch: ifSourceGenerationMatch,
+    ifGenerationMatch: ifGenerationMatch,
+    projection: projection,
+    userProject: userProject,
+    retry: retry,
+  );
+
   /// Creates or updates the content of this [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if `ifGenerationMatch` is set.
