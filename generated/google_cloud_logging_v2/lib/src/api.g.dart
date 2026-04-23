@@ -234,32 +234,26 @@ final class LoggingServiceV2 {
 
 /// Testing fake for [LoggingServiceV2].
 base class FakeLoggingServiceV2 implements LoggingServiceV2 {
-  late final Future<void> Function(DeleteLogRequest request)? _deleteLog;
-  late final Future<WriteLogEntriesResponse> Function(
+  final Future<void> Function(DeleteLogRequest request)? _deleteLog;
+  final Future<WriteLogEntriesResponse> Function(
     WriteLogEntriesRequest request,
   )?
   _writeLogEntries;
-  late final Future<ListLogEntriesResponse> Function(
-    ListLogEntriesRequest request,
-  )?
+  final Future<ListLogEntriesResponse> Function(ListLogEntriesRequest request)?
   _listLogEntries;
-  late final Future<ListMonitoredResourceDescriptorsResponse> Function(
+  final Future<ListMonitoredResourceDescriptorsResponse> Function(
     ListMonitoredResourceDescriptorsRequest request,
   )?
   _listMonitoredResourceDescriptors;
-  late final Future<ListLogsResponse> Function(ListLogsRequest request)?
-  _listLogs;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListLogsResponse> Function(ListLogsRequest request)? _listLogs;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -287,22 +281,14 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
     >(Operation<T, S> request)?
     getOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _deleteLog = deleteLog;
-
-    _writeLogEntries = writeLogEntries;
-
-    _listLogEntries = listLogEntries;
-
-    _listMonitoredResourceDescriptors = listMonitoredResourceDescriptors;
-
-    _listLogs = listLogs;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _deleteLog = deleteLog,
+       _writeLogEntries = writeLogEntries,
+       _listLogEntries = listLogEntries,
+       _listMonitoredResourceDescriptors = listMonitoredResourceDescriptors,
+       _listLogs = listLogs,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _cancelOperation = cancelOperation;
 
   /// Deletes all the log entries in a log for the _Default Log Bucket. The log
   /// reappears if it receives new entries. Log entries written shortly before
@@ -1171,81 +1157,71 @@ final class ConfigServiceV2 {
 
 /// Testing fake for [ConfigServiceV2].
 base class FakeConfigServiceV2 implements ConfigServiceV2 {
-  late final Future<ListBucketsResponse> Function(ListBucketsRequest request)?
+  final Future<ListBucketsResponse> Function(ListBucketsRequest request)?
   _listBuckets;
-  late final Future<LogBucket> Function(GetBucketRequest request)? _getBucket;
-  late final Future<Operation<LogBucket, BucketMetadata>> Function(
+  final Future<LogBucket> Function(GetBucketRequest request)? _getBucket;
+  final Future<Operation<LogBucket, BucketMetadata>> Function(
     CreateBucketRequest request,
   )?
   _createBucketAsync;
-  late final Future<Operation<LogBucket, BucketMetadata>> Function(
+  final Future<Operation<LogBucket, BucketMetadata>> Function(
     UpdateBucketRequest request,
   )?
   _updateBucketAsync;
-  late final Future<LogBucket> Function(CreateBucketRequest request)?
-  _createBucket;
-  late final Future<LogBucket> Function(UpdateBucketRequest request)?
-  _updateBucket;
-  late final Future<void> Function(DeleteBucketRequest request)? _deleteBucket;
-  late final Future<void> Function(UndeleteBucketRequest request)?
-  _undeleteBucket;
-  late final Future<ListViewsResponse> Function(ListViewsRequest request)?
+  final Future<LogBucket> Function(CreateBucketRequest request)? _createBucket;
+  final Future<LogBucket> Function(UpdateBucketRequest request)? _updateBucket;
+  final Future<void> Function(DeleteBucketRequest request)? _deleteBucket;
+  final Future<void> Function(UndeleteBucketRequest request)? _undeleteBucket;
+  final Future<ListViewsResponse> Function(ListViewsRequest request)?
   _listViews;
-  late final Future<LogView> Function(GetViewRequest request)? _getView;
-  late final Future<LogView> Function(CreateViewRequest request)? _createView;
-  late final Future<LogView> Function(UpdateViewRequest request)? _updateView;
-  late final Future<void> Function(DeleteViewRequest request)? _deleteView;
-  late final Future<ListSinksResponse> Function(ListSinksRequest request)?
+  final Future<LogView> Function(GetViewRequest request)? _getView;
+  final Future<LogView> Function(CreateViewRequest request)? _createView;
+  final Future<LogView> Function(UpdateViewRequest request)? _updateView;
+  final Future<void> Function(DeleteViewRequest request)? _deleteView;
+  final Future<ListSinksResponse> Function(ListSinksRequest request)?
   _listSinks;
-  late final Future<LogSink> Function(GetSinkRequest request)? _getSink;
-  late final Future<LogSink> Function(CreateSinkRequest request)? _createSink;
-  late final Future<LogSink> Function(UpdateSinkRequest request)? _updateSink;
-  late final Future<void> Function(DeleteSinkRequest request)? _deleteSink;
-  late final Future<Operation<Link, LinkMetadata>> Function(
+  final Future<LogSink> Function(GetSinkRequest request)? _getSink;
+  final Future<LogSink> Function(CreateSinkRequest request)? _createSink;
+  final Future<LogSink> Function(UpdateSinkRequest request)? _updateSink;
+  final Future<void> Function(DeleteSinkRequest request)? _deleteSink;
+  final Future<Operation<Link, LinkMetadata>> Function(
     CreateLinkRequest request,
   )?
   _createLink;
-  late final Future<Operation<Empty, LinkMetadata>> Function(
+  final Future<Operation<Empty, LinkMetadata>> Function(
     DeleteLinkRequest request,
   )?
   _deleteLink;
-  late final Future<ListLinksResponse> Function(ListLinksRequest request)?
+  final Future<ListLinksResponse> Function(ListLinksRequest request)?
   _listLinks;
-  late final Future<Link> Function(GetLinkRequest request)? _getLink;
-  late final Future<ListExclusionsResponse> Function(
-    ListExclusionsRequest request,
-  )?
+  final Future<Link> Function(GetLinkRequest request)? _getLink;
+  final Future<ListExclusionsResponse> Function(ListExclusionsRequest request)?
   _listExclusions;
-  late final Future<LogExclusion> Function(GetExclusionRequest request)?
+  final Future<LogExclusion> Function(GetExclusionRequest request)?
   _getExclusion;
-  late final Future<LogExclusion> Function(CreateExclusionRequest request)?
+  final Future<LogExclusion> Function(CreateExclusionRequest request)?
   _createExclusion;
-  late final Future<LogExclusion> Function(UpdateExclusionRequest request)?
+  final Future<LogExclusion> Function(UpdateExclusionRequest request)?
   _updateExclusion;
-  late final Future<void> Function(DeleteExclusionRequest request)?
-  _deleteExclusion;
-  late final Future<CmekSettings> Function(GetCmekSettingsRequest request)?
+  final Future<void> Function(DeleteExclusionRequest request)? _deleteExclusion;
+  final Future<CmekSettings> Function(GetCmekSettingsRequest request)?
   _getCmekSettings;
-  late final Future<CmekSettings> Function(UpdateCmekSettingsRequest request)?
+  final Future<CmekSettings> Function(UpdateCmekSettingsRequest request)?
   _updateCmekSettings;
-  late final Future<Settings> Function(GetSettingsRequest request)?
-  _getSettings;
-  late final Future<Settings> Function(UpdateSettingsRequest request)?
+  final Future<Settings> Function(GetSettingsRequest request)? _getSettings;
+  final Future<Settings> Function(UpdateSettingsRequest request)?
   _updateSettings;
-  late final Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>>
+  final Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>>
   Function(CopyLogEntriesRequest request)?
   _copyLogEntries;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -1312,76 +1288,41 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
     >(Operation<T, S> request)?
     getOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _listBuckets = listBuckets;
-
-    _getBucket = getBucket;
-
-    _createBucketAsync = createBucketAsync;
-
-    _updateBucketAsync = updateBucketAsync;
-
-    _createBucket = createBucket;
-
-    _updateBucket = updateBucket;
-
-    _deleteBucket = deleteBucket;
-
-    _undeleteBucket = undeleteBucket;
-
-    _listViews = listViews;
-
-    _getView = getView;
-
-    _createView = createView;
-
-    _updateView = updateView;
-
-    _deleteView = deleteView;
-
-    _listSinks = listSinks;
-
-    _getSink = getSink;
-
-    _createSink = createSink;
-
-    _updateSink = updateSink;
-
-    _deleteSink = deleteSink;
-
-    _createLink = createLink;
-
-    _deleteLink = deleteLink;
-
-    _listLinks = listLinks;
-
-    _getLink = getLink;
-
-    _listExclusions = listExclusions;
-
-    _getExclusion = getExclusion;
-
-    _createExclusion = createExclusion;
-
-    _updateExclusion = updateExclusion;
-
-    _deleteExclusion = deleteExclusion;
-
-    _getCmekSettings = getCmekSettings;
-
-    _updateCmekSettings = updateCmekSettings;
-
-    _getSettings = getSettings;
-
-    _updateSettings = updateSettings;
-
-    _copyLogEntries = copyLogEntries;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _listBuckets = listBuckets,
+       _getBucket = getBucket,
+       _createBucketAsync = createBucketAsync,
+       _updateBucketAsync = updateBucketAsync,
+       _createBucket = createBucket,
+       _updateBucket = updateBucket,
+       _deleteBucket = deleteBucket,
+       _undeleteBucket = undeleteBucket,
+       _listViews = listViews,
+       _getView = getView,
+       _createView = createView,
+       _updateView = updateView,
+       _deleteView = deleteView,
+       _listSinks = listSinks,
+       _getSink = getSink,
+       _createSink = createSink,
+       _updateSink = updateSink,
+       _deleteSink = deleteSink,
+       _createLink = createLink,
+       _deleteLink = deleteLink,
+       _listLinks = listLinks,
+       _getLink = getLink,
+       _listExclusions = listExclusions,
+       _getExclusion = getExclusion,
+       _createExclusion = createExclusion,
+       _updateExclusion = updateExclusion,
+       _deleteExclusion = deleteExclusion,
+       _getCmekSettings = getCmekSettings,
+       _updateCmekSettings = updateCmekSettings,
+       _getSettings = getSettings,
+       _updateSettings = updateSettings,
+       _copyLogEntries = copyLogEntries,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _cancelOperation = cancelOperation;
 
   /// Lists log buckets.
   ///
@@ -2284,29 +2225,22 @@ final class MetricsServiceV2 {
 
 /// Testing fake for [MetricsServiceV2].
 base class FakeMetricsServiceV2 implements MetricsServiceV2 {
-  late final Future<ListLogMetricsResponse> Function(
-    ListLogMetricsRequest request,
-  )?
+  final Future<ListLogMetricsResponse> Function(ListLogMetricsRequest request)?
   _listLogMetrics;
-  late final Future<LogMetric> Function(GetLogMetricRequest request)?
-  _getLogMetric;
-  late final Future<LogMetric> Function(CreateLogMetricRequest request)?
+  final Future<LogMetric> Function(GetLogMetricRequest request)? _getLogMetric;
+  final Future<LogMetric> Function(CreateLogMetricRequest request)?
   _createLogMetric;
-  late final Future<LogMetric> Function(UpdateLogMetricRequest request)?
+  final Future<LogMetric> Function(UpdateLogMetricRequest request)?
   _updateLogMetric;
-  late final Future<void> Function(DeleteLogMetricRequest request)?
-  _deleteLogMetric;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<void> Function(DeleteLogMetricRequest request)? _deleteLogMetric;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -2330,22 +2264,14 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
     >(Operation<T, S> request)?
     getOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _listLogMetrics = listLogMetrics;
-
-    _getLogMetric = getLogMetric;
-
-    _createLogMetric = createLogMetric;
-
-    _updateLogMetric = updateLogMetric;
-
-    _deleteLogMetric = deleteLogMetric;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _listLogMetrics = listLogMetrics,
+       _getLogMetric = getLogMetric,
+       _createLogMetric = createLogMetric,
+       _updateLogMetric = updateLogMetric,
+       _deleteLogMetric = deleteLogMetric,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _cancelOperation = cancelOperation;
 
   /// Lists logs-based metrics.
   ///

@@ -151,19 +151,19 @@ final class LanguageService {
 
 /// Testing fake for [LanguageService].
 base class FakeLanguageService implements LanguageService {
-  late final Future<AnalyzeSentimentResponse> Function(
+  final Future<AnalyzeSentimentResponse> Function(
     AnalyzeSentimentRequest request,
   )?
   _analyzeSentiment;
-  late final Future<AnalyzeEntitiesResponse> Function(
+  final Future<AnalyzeEntitiesResponse> Function(
     AnalyzeEntitiesRequest request,
   )?
   _analyzeEntities;
-  late final Future<ClassifyTextResponse> Function(ClassifyTextRequest request)?
+  final Future<ClassifyTextResponse> Function(ClassifyTextRequest request)?
   _classifyText;
-  late final Future<ModerateTextResponse> Function(ModerateTextRequest request)?
+  final Future<ModerateTextResponse> Function(ModerateTextRequest request)?
   _moderateText;
-  late final Future<AnnotateTextResponse> Function(AnnotateTextRequest request)?
+  final Future<AnnotateTextResponse> Function(AnnotateTextRequest request)?
   _annotateText;
 
   @override
@@ -184,17 +184,11 @@ base class FakeLanguageService implements LanguageService {
     moderateText,
     Future<AnnotateTextResponse> Function(AnnotateTextRequest request)?
     annotateText,
-  }) {
-    _analyzeSentiment = analyzeSentiment;
-
-    _analyzeEntities = analyzeEntities;
-
-    _classifyText = classifyText;
-
-    _moderateText = moderateText;
-
-    _annotateText = annotateText;
-  }
+  }) : _analyzeSentiment = analyzeSentiment,
+       _analyzeEntities = analyzeEntities,
+       _classifyText = classifyText,
+       _moderateText = moderateText,
+       _annotateText = annotateText;
 
   /// Analyzes the sentiment of the provided text.
   ///

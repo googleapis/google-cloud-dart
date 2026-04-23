@@ -160,11 +160,9 @@ final class IAMPolicy {
 
 /// Testing fake for [IAMPolicy].
 base class FakeIAMPolicy implements IAMPolicy {
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
@@ -183,13 +181,9 @@ base class FakeIAMPolicy implements IAMPolicy {
       TestIamPermissionsRequest request,
     )?
     testIamPermissions,
-  }) {
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-  }
+  }) : _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions;
 
   /// Sets the access control policy on the specified resource. Replaces any
   /// existing policy.

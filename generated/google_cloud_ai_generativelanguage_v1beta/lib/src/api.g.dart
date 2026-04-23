@@ -236,31 +236,27 @@ final class CacheService {
 
 /// Testing fake for [CacheService].
 base class FakeCacheService implements CacheService {
-  late final Future<ListCachedContentsResponse> Function(
+  final Future<ListCachedContentsResponse> Function(
     ListCachedContentsRequest request,
   )?
   _listCachedContents;
-  late final Future<CachedContent> Function(CreateCachedContentRequest request)?
+  final Future<CachedContent> Function(CreateCachedContentRequest request)?
   _createCachedContent;
-  late final Future<CachedContent> Function(GetCachedContentRequest request)?
+  final Future<CachedContent> Function(GetCachedContentRequest request)?
   _getCachedContent;
-  late final Future<CachedContent> Function(UpdateCachedContentRequest request)?
+  final Future<CachedContent> Function(UpdateCachedContentRequest request)?
   _updateCachedContent;
-  late final Future<void> Function(DeleteCachedContentRequest request)?
+  final Future<void> Function(DeleteCachedContentRequest request)?
   _deleteCachedContent;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -291,24 +287,15 @@ base class FakeCacheService implements CacheService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _listCachedContents = listCachedContents;
-
-    _createCachedContent = createCachedContent;
-
-    _getCachedContent = getCachedContent;
-
-    _updateCachedContent = updateCachedContent;
-
-    _deleteCachedContent = deleteCachedContent;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _listCachedContents = listCachedContents,
+       _createCachedContent = createCachedContent,
+       _getCachedContent = getCachedContent,
+       _updateCachedContent = updateCachedContent,
+       _deleteCachedContent = deleteCachedContent,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Lists CachedContents.
   ///
@@ -627,27 +614,23 @@ final class DiscussService {
 
 /// Testing fake for [DiscussService].
 base class FakeDiscussService implements DiscussService {
-  late final Future<GenerateMessageResponse> Function(
+  final Future<GenerateMessageResponse> Function(
     GenerateMessageRequest request,
   )?
   _generateMessage;
-  late final Future<CountMessageTokensResponse> Function(
+  final Future<CountMessageTokensResponse> Function(
     CountMessageTokensRequest request,
   )?
   _countMessageTokens;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -672,18 +655,12 @@ base class FakeDiscussService implements DiscussService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _generateMessage = generateMessage;
-
-    _countMessageTokens = countMessageTokens;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _generateMessage = generateMessage,
+       _countMessageTokens = countMessageTokens,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Generates a response from the model given an input `MessagePrompt`.
   ///
@@ -976,27 +953,23 @@ final class FileService {
 
 /// Testing fake for [FileService].
 base class FakeFileService implements FileService {
-  late final Future<CreateFileResponse> Function(CreateFileRequest request)?
+  final Future<CreateFileResponse> Function(CreateFileRequest request)?
   _createFile;
-  late final Future<ListFilesResponse> Function(ListFilesRequest request)?
+  final Future<ListFilesResponse> Function(ListFilesRequest request)?
   _listFiles;
-  late final Future<File> Function(GetFileRequest request)? _getFile;
-  late final Future<void> Function(DeleteFileRequest request)? _deleteFile;
-  late final Future<DownloadFileResponse> Function(DownloadFileRequest request)?
+  final Future<File> Function(GetFileRequest request)? _getFile;
+  final Future<void> Function(DeleteFileRequest request)? _deleteFile;
+  final Future<DownloadFileResponse> Function(DownloadFileRequest request)?
   _downloadFile;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -1021,24 +994,15 @@ base class FakeFileService implements FileService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createFile = createFile;
-
-    _listFiles = listFiles;
-
-    _getFile = getFile;
-
-    _deleteFile = deleteFile;
-
-    _downloadFile = downloadFile;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createFile = createFile,
+       _listFiles = listFiles,
+       _getFile = getFile,
+       _deleteFile = deleteFile,
+       _downloadFile = downloadFile,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Creates a `File`.
   ///
@@ -1417,39 +1381,33 @@ final class GenerativeService {
 
 /// Testing fake for [GenerativeService].
 base class FakeGenerativeService implements GenerativeService {
-  late final Future<GenerateContentResponse> Function(
+  final Future<GenerateContentResponse> Function(
     GenerateContentRequest request,
   )?
   _generateContent;
-  late final Future<GenerateAnswerResponse> Function(
-    GenerateAnswerRequest request,
-  )?
+  final Future<GenerateAnswerResponse> Function(GenerateAnswerRequest request)?
   _generateAnswer;
-  late final Stream<GenerateContentResponse> Function(
+  final Stream<GenerateContentResponse> Function(
     GenerateContentRequest request,
   )?
   _streamGenerateContent;
-  late final Future<EmbedContentResponse> Function(EmbedContentRequest request)?
+  final Future<EmbedContentResponse> Function(EmbedContentRequest request)?
   _embedContent;
-  late final Future<BatchEmbedContentsResponse> Function(
+  final Future<BatchEmbedContentsResponse> Function(
     BatchEmbedContentsRequest request,
   )?
   _batchEmbedContents;
-  late final Future<CountTokensResponse> Function(CountTokensRequest request)?
+  final Future<CountTokensResponse> Function(CountTokensRequest request)?
   _countTokens;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -1482,26 +1440,16 @@ base class FakeGenerativeService implements GenerativeService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _generateContent = generateContent;
-
-    _generateAnswer = generateAnswer;
-
-    _streamGenerateContent = streamGenerateContent;
-
-    _embedContent = embedContent;
-
-    _batchEmbedContents = batchEmbedContents;
-
-    _countTokens = countTokens;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _generateContent = generateContent,
+       _generateAnswer = generateAnswer,
+       _streamGenerateContent = streamGenerateContent,
+       _embedContent = embedContent,
+       _batchEmbedContents = batchEmbedContents,
+       _countTokens = countTokens,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Generates a model response given an input `GenerateContentRequest`.
   /// Refer to the [text generation
@@ -1946,36 +1894,32 @@ final class ModelService {
 
 /// Testing fake for [ModelService].
 base class FakeModelService implements ModelService {
-  late final Future<Model> Function(GetModelRequest request)? _getModel;
-  late final Future<ListModelsResponse> Function(ListModelsRequest request)?
+  final Future<Model> Function(GetModelRequest request)? _getModel;
+  final Future<ListModelsResponse> Function(ListModelsRequest request)?
   _listModels;
-  late final Future<TunedModel> Function(GetTunedModelRequest request)?
+  final Future<TunedModel> Function(GetTunedModelRequest request)?
   _getTunedModel;
-  late final Future<ListTunedModelsResponse> Function(
+  final Future<ListTunedModelsResponse> Function(
     ListTunedModelsRequest request,
   )?
   _listTunedModels;
-  late final Future<Operation<TunedModel, CreateTunedModelMetadata>> Function(
+  final Future<Operation<TunedModel, CreateTunedModelMetadata>> Function(
     CreateTunedModelRequest request,
   )?
   _createTunedModel;
-  late final Future<TunedModel> Function(UpdateTunedModelRequest request)?
+  final Future<TunedModel> Function(UpdateTunedModelRequest request)?
   _updateTunedModel;
-  late final Future<void> Function(DeleteTunedModelRequest request)?
+  final Future<void> Function(DeleteTunedModelRequest request)?
   _deleteTunedModel;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -2006,28 +1950,17 @@ base class FakeModelService implements ModelService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _getModel = getModel;
-
-    _listModels = listModels;
-
-    _getTunedModel = getTunedModel;
-
-    _listTunedModels = listTunedModels;
-
-    _createTunedModel = createTunedModel;
-
-    _updateTunedModel = updateTunedModel;
-
-    _deleteTunedModel = deleteTunedModel;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _getModel = getModel,
+       _listModels = listModels,
+       _getTunedModel = getTunedModel,
+       _listTunedModels = listTunedModels,
+       _createTunedModel = createTunedModel,
+       _updateTunedModel = updateTunedModel,
+       _deleteTunedModel = deleteTunedModel,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Gets information about a specific `Model` such as its version number, token
   /// limits,
@@ -2449,35 +2382,31 @@ final class PermissionService {
 
 /// Testing fake for [PermissionService].
 base class FakePermissionService implements PermissionService {
-  late final Future<Permission> Function(CreatePermissionRequest request)?
+  final Future<Permission> Function(CreatePermissionRequest request)?
   _createPermission;
-  late final Future<Permission> Function(GetPermissionRequest request)?
+  final Future<Permission> Function(GetPermissionRequest request)?
   _getPermission;
-  late final Future<ListPermissionsResponse> Function(
+  final Future<ListPermissionsResponse> Function(
     ListPermissionsRequest request,
   )?
   _listPermissions;
-  late final Future<Permission> Function(UpdatePermissionRequest request)?
+  final Future<Permission> Function(UpdatePermissionRequest request)?
   _updatePermission;
-  late final Future<void> Function(DeletePermissionRequest request)?
+  final Future<void> Function(DeletePermissionRequest request)?
   _deletePermission;
-  late final Future<TransferOwnershipResponse> Function(
+  final Future<TransferOwnershipResponse> Function(
     TransferOwnershipRequest request,
   )?
   _transferOwnership;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -2508,26 +2437,16 @@ base class FakePermissionService implements PermissionService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createPermission = createPermission;
-
-    _getPermission = getPermission;
-
-    _listPermissions = listPermissions;
-
-    _updatePermission = updatePermission;
-
-    _deletePermission = deletePermission;
-
-    _transferOwnership = transferOwnership;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createPermission = createPermission,
+       _getPermission = getPermission,
+       _listPermissions = listPermissions,
+       _updatePermission = updatePermission,
+       _deletePermission = deletePermission,
+       _transferOwnership = transferOwnership,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Create a permission to a specific resource.
   ///
@@ -2865,25 +2784,21 @@ final class PredictionService {
 
 /// Testing fake for [PredictionService].
 base class FakePredictionService implements PredictionService {
-  late final Future<PredictResponse> Function(PredictRequest request)? _predict;
-  late final Future<
+  final Future<PredictResponse> Function(PredictRequest request)? _predict;
+  final Future<
     Operation<PredictLongRunningResponse, PredictLongRunningMetadata>
   >
   Function(PredictLongRunningRequest request)?
   _predictLongRunning;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -2906,18 +2821,12 @@ base class FakePredictionService implements PredictionService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _predict = predict;
-
-    _predictLongRunning = predictLongRunning;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _predict = predict,
+       _predictLongRunning = predictLongRunning,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Performs a prediction request.
   ///
@@ -3430,61 +3339,49 @@ final class RetrieverService {
 
 /// Testing fake for [RetrieverService].
 base class FakeRetrieverService implements RetrieverService {
-  late final Future<Corpus> Function(CreateCorpusRequest request)?
-  _createCorpus;
-  late final Future<Corpus> Function(GetCorpusRequest request)? _getCorpus;
-  late final Future<Corpus> Function(UpdateCorpusRequest request)?
-  _updateCorpus;
-  late final Future<void> Function(DeleteCorpusRequest request)? _deleteCorpus;
-  late final Future<ListCorporaResponse> Function(ListCorporaRequest request)?
+  final Future<Corpus> Function(CreateCorpusRequest request)? _createCorpus;
+  final Future<Corpus> Function(GetCorpusRequest request)? _getCorpus;
+  final Future<Corpus> Function(UpdateCorpusRequest request)? _updateCorpus;
+  final Future<void> Function(DeleteCorpusRequest request)? _deleteCorpus;
+  final Future<ListCorporaResponse> Function(ListCorporaRequest request)?
   _listCorpora;
-  late final Future<QueryCorpusResponse> Function(QueryCorpusRequest request)?
+  final Future<QueryCorpusResponse> Function(QueryCorpusRequest request)?
   _queryCorpus;
-  late final Future<Document> Function(CreateDocumentRequest request)?
+  final Future<Document> Function(CreateDocumentRequest request)?
   _createDocument;
-  late final Future<Document> Function(GetDocumentRequest request)?
-  _getDocument;
-  late final Future<Document> Function(UpdateDocumentRequest request)?
+  final Future<Document> Function(GetDocumentRequest request)? _getDocument;
+  final Future<Document> Function(UpdateDocumentRequest request)?
   _updateDocument;
-  late final Future<void> Function(DeleteDocumentRequest request)?
-  _deleteDocument;
-  late final Future<ListDocumentsResponse> Function(
-    ListDocumentsRequest request,
-  )?
+  final Future<void> Function(DeleteDocumentRequest request)? _deleteDocument;
+  final Future<ListDocumentsResponse> Function(ListDocumentsRequest request)?
   _listDocuments;
-  late final Future<QueryDocumentResponse> Function(
-    QueryDocumentRequest request,
-  )?
+  final Future<QueryDocumentResponse> Function(QueryDocumentRequest request)?
   _queryDocument;
-  late final Future<Chunk> Function(CreateChunkRequest request)? _createChunk;
-  late final Future<BatchCreateChunksResponse> Function(
+  final Future<Chunk> Function(CreateChunkRequest request)? _createChunk;
+  final Future<BatchCreateChunksResponse> Function(
     BatchCreateChunksRequest request,
   )?
   _batchCreateChunks;
-  late final Future<Chunk> Function(GetChunkRequest request)? _getChunk;
-  late final Future<Chunk> Function(UpdateChunkRequest request)? _updateChunk;
-  late final Future<BatchUpdateChunksResponse> Function(
+  final Future<Chunk> Function(GetChunkRequest request)? _getChunk;
+  final Future<Chunk> Function(UpdateChunkRequest request)? _updateChunk;
+  final Future<BatchUpdateChunksResponse> Function(
     BatchUpdateChunksRequest request,
   )?
   _batchUpdateChunks;
-  late final Future<void> Function(DeleteChunkRequest request)? _deleteChunk;
-  late final Future<void> Function(BatchDeleteChunksRequest request)?
+  final Future<void> Function(DeleteChunkRequest request)? _deleteChunk;
+  final Future<void> Function(BatchDeleteChunksRequest request)?
   _batchDeleteChunks;
-  late final Future<ListChunksResponse> Function(ListChunksRequest request)?
+  final Future<ListChunksResponse> Function(ListChunksRequest request)?
   _listChunks;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -3533,54 +3430,30 @@ base class FakeRetrieverService implements RetrieverService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createCorpus = createCorpus;
-
-    _getCorpus = getCorpus;
-
-    _updateCorpus = updateCorpus;
-
-    _deleteCorpus = deleteCorpus;
-
-    _listCorpora = listCorpora;
-
-    _queryCorpus = queryCorpus;
-
-    _createDocument = createDocument;
-
-    _getDocument = getDocument;
-
-    _updateDocument = updateDocument;
-
-    _deleteDocument = deleteDocument;
-
-    _listDocuments = listDocuments;
-
-    _queryDocument = queryDocument;
-
-    _createChunk = createChunk;
-
-    _batchCreateChunks = batchCreateChunks;
-
-    _getChunk = getChunk;
-
-    _updateChunk = updateChunk;
-
-    _batchUpdateChunks = batchUpdateChunks;
-
-    _deleteChunk = deleteChunk;
-
-    _batchDeleteChunks = batchDeleteChunks;
-
-    _listChunks = listChunks;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createCorpus = createCorpus,
+       _getCorpus = getCorpus,
+       _updateCorpus = updateCorpus,
+       _deleteCorpus = deleteCorpus,
+       _listCorpora = listCorpora,
+       _queryCorpus = queryCorpus,
+       _createDocument = createDocument,
+       _getDocument = getDocument,
+       _updateDocument = updateDocument,
+       _deleteDocument = deleteDocument,
+       _listDocuments = listDocuments,
+       _queryDocument = queryDocument,
+       _createChunk = createChunk,
+       _batchCreateChunks = batchCreateChunks,
+       _getChunk = getChunk,
+       _updateChunk = updateChunk,
+       _batchUpdateChunks = batchUpdateChunks,
+       _deleteChunk = deleteChunk,
+       _batchDeleteChunks = batchDeleteChunks,
+       _listChunks = listChunks,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Creates an empty `Corpus`.
   ///
@@ -4179,31 +4052,25 @@ final class TextService {
 
 /// Testing fake for [TextService].
 base class FakeTextService implements TextService {
-  late final Future<GenerateTextResponse> Function(GenerateTextRequest request)?
+  final Future<GenerateTextResponse> Function(GenerateTextRequest request)?
   _generateText;
-  late final Future<EmbedTextResponse> Function(EmbedTextRequest request)?
+  final Future<EmbedTextResponse> Function(EmbedTextRequest request)?
   _embedText;
-  late final Future<BatchEmbedTextResponse> Function(
-    BatchEmbedTextRequest request,
-  )?
+  final Future<BatchEmbedTextResponse> Function(BatchEmbedTextRequest request)?
   _batchEmbedText;
-  late final Future<CountTextTokensResponse> Function(
+  final Future<CountTextTokensResponse> Function(
     CountTextTokensRequest request,
   )?
   _countTextTokens;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -4229,22 +4096,14 @@ base class FakeTextService implements TextService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _generateText = generateText;
-
-    _embedText = embedText;
-
-    _batchEmbedText = batchEmbedText;
-
-    _countTextTokens = countTextTokens;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _generateText = generateText,
+       _embedText = embedText,
+       _batchEmbedText = batchEmbedText,
+       _countTextTokens = countTextTokens,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Generates a response from the model given an input message.
   ///

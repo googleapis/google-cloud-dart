@@ -178,16 +178,11 @@ final class Operations {
 
 /// Testing fake for [Operations].
 base class FakeOperations implements Operations {
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation> Function(GetOperationRequest request)?
-  _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<Operation> Function(GetOperationRequest request)? _getOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -202,15 +197,10 @@ base class FakeOperations implements Operations {
     Future<Operation> Function(GetOperationRequest request)? getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _listOperations = listOperations;
-
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Lists operations that match the specified filter in the request. If the
   /// server doesn't support this method, it returns `UNIMPLEMENTED`.

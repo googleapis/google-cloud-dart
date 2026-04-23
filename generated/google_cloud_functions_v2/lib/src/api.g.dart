@@ -406,51 +406,42 @@ final class FunctionService {
 
 /// Testing fake for [FunctionService].
 base class FakeFunctionService implements FunctionService {
-  late final Future<Function$> Function(GetFunctionRequest request)?
-  _getFunction;
-  late final Future<ListFunctionsResponse> Function(
-    ListFunctionsRequest request,
-  )?
+  final Future<Function$> Function(GetFunctionRequest request)? _getFunction;
+  final Future<ListFunctionsResponse> Function(ListFunctionsRequest request)?
   _listFunctions;
-  late final Future<Operation<Function$, OperationMetadata>> Function(
+  final Future<Operation<Function$, OperationMetadata>> Function(
     CreateFunctionRequest request,
   )?
   _createFunction;
-  late final Future<Operation<Function$, OperationMetadata>> Function(
+  final Future<Operation<Function$, OperationMetadata>> Function(
     UpdateFunctionRequest request,
   )?
   _updateFunction;
-  late final Future<Operation<Empty, OperationMetadata>> Function(
+  final Future<Operation<Empty, OperationMetadata>> Function(
     DeleteFunctionRequest request,
   )?
   _deleteFunction;
-  late final Future<GenerateUploadUrlResponse> Function(
+  final Future<GenerateUploadUrlResponse> Function(
     GenerateUploadUrlRequest request,
   )?
   _generateUploadUrl;
-  late final Future<GenerateDownloadUrlResponse> Function(
+  final Future<GenerateDownloadUrlResponse> Function(
     GenerateDownloadUrlRequest request,
   )?
   _generateDownloadUrl;
-  late final Future<ListRuntimesResponse> Function(ListRuntimesRequest request)?
+  final Future<ListRuntimesResponse> Function(ListRuntimesRequest request)?
   _listRuntimes;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
@@ -504,34 +495,20 @@ base class FakeFunctionService implements FunctionService {
       S extends ProtoMessage
     >(Operation<T, S> request)?
     getOperation,
-  }) {
-    _getFunction = getFunction;
-
-    _listFunctions = listFunctions;
-
-    _createFunction = createFunction;
-
-    _updateFunction = updateFunction;
-
-    _deleteFunction = deleteFunction;
-
-    _generateUploadUrl = generateUploadUrl;
-
-    _generateDownloadUrl = generateDownloadUrl;
-
-    _listRuntimes = listRuntimes;
-
-    _listLocations = listLocations;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-  }
+  }) : _getFunction = getFunction,
+       _listFunctions = listFunctions,
+       _createFunction = createFunction,
+       _updateFunction = updateFunction,
+       _deleteFunction = deleteFunction,
+       _generateUploadUrl = generateUploadUrl,
+       _generateDownloadUrl = generateDownloadUrl,
+       _listRuntimes = listRuntimes,
+       _listLocations = listLocations,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation;
 
   /// Returns a function with the given name from the requested project.
   ///

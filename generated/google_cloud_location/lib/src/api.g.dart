@@ -124,12 +124,9 @@ final class Locations {
 
 /// Testing fake for [Locations].
 base class FakeLocations implements Locations {
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -142,11 +139,8 @@ base class FakeLocations implements Locations {
     Future<ListLocationsResponse> Function(ListLocationsRequest request)?
     listLocations,
     Future<Location> Function(GetLocationRequest request)? getLocation,
-  }) {
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-  }
+  }) : _listLocations = listLocations,
+       _getLocation = getLocation;
 
   /// Lists information about the supported locations for this service.
   ///

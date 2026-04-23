@@ -973,51 +973,41 @@ final class Compliance {
 
 /// Testing fake for [Compliance].
 base class FakeCompliance implements Compliance {
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
-  _repeatDataBody;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)? _repeatDataBody;
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataBodyInfo;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataQuery;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataSimplePath;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataPathResource;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataPathTrailingResource;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataBodyPut;
-  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  final Future<RepeatResponse> Function(RepeatRequest request)?
   _repeatDataBodyPatch;
-  late final Future<EnumResponse> Function(EnumRequest request)? _getEnum;
-  late final Future<EnumResponse> Function(EnumResponse request)? _verifyEnum;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<EnumResponse> Function(EnumRequest request)? _getEnum;
+  final Future<EnumResponse> Function(EnumResponse request)? _verifyEnum;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -1058,44 +1048,25 @@ base class FakeCompliance implements Compliance {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _repeatDataBody = repeatDataBody;
-
-    _repeatDataBodyInfo = repeatDataBodyInfo;
-
-    _repeatDataQuery = repeatDataQuery;
-
-    _repeatDataSimplePath = repeatDataSimplePath;
-
-    _repeatDataPathResource = repeatDataPathResource;
-
-    _repeatDataPathTrailingResource = repeatDataPathTrailingResource;
-
-    _repeatDataBodyPut = repeatDataBodyPut;
-
-    _repeatDataBodyPatch = repeatDataBodyPatch;
-
-    _getEnum = getEnum;
-
-    _verifyEnum = verifyEnum;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _repeatDataBody = repeatDataBody,
+       _repeatDataBodyInfo = repeatDataBodyInfo,
+       _repeatDataQuery = repeatDataQuery,
+       _repeatDataSimplePath = repeatDataSimplePath,
+       _repeatDataPathResource = repeatDataPathResource,
+       _repeatDataPathTrailingResource = repeatDataPathTrailingResource,
+       _repeatDataBodyPut = repeatDataBodyPut,
+       _repeatDataBodyPatch = repeatDataBodyPatch,
+       _getEnum = getEnum,
+       _verifyEnum = verifyEnum,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// This method echoes the ComplianceData request. This method exercises
   /// sending the entire request object in the REST body.
@@ -1794,58 +1765,47 @@ final class Echo {
 
 /// Testing fake for [Echo].
 base class FakeEcho implements Echo {
-  late final Future<EchoResponse> Function(EchoRequest request)? _echo;
-  late final Future<EchoErrorDetailsResponse> Function(
+  final Future<EchoResponse> Function(EchoRequest request)? _echo;
+  final Future<EchoErrorDetailsResponse> Function(
     EchoErrorDetailsRequest request,
   )?
   _echoErrorDetails;
-  late final Future<FailEchoWithDetailsResponse> Function(
+  final Future<FailEchoWithDetailsResponse> Function(
     FailEchoWithDetailsRequest request,
   )?
   _failEchoWithDetails;
-  late final Stream<EchoResponse> Function(ExpandRequest request)? _expand;
-  late final Future<PagedExpandResponse> Function(PagedExpandRequest request)?
+  final Stream<EchoResponse> Function(ExpandRequest request)? _expand;
+  final Future<PagedExpandResponse> Function(PagedExpandRequest request)?
   _pagedExpand;
-  late final Future<PagedExpandResponse> Function(
-    PagedExpandLegacyRequest request,
-  )?
+  final Future<PagedExpandResponse> Function(PagedExpandLegacyRequest request)?
   _pagedExpandLegacy;
-  late final Future<PagedExpandLegacyMappedResponse> Function(
+  final Future<PagedExpandLegacyMappedResponse> Function(
     PagedExpandRequest request,
   )?
   _pagedExpandLegacyMapped;
-  late final Future<Operation<WaitResponse, WaitMetadata>> Function(
+  final Future<Operation<WaitResponse, WaitMetadata>> Function(
     WaitRequest request,
   )?
   _wait;
-  late final Future<BlockResponse> Function(BlockRequest request)? _block;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<BlockResponse> Function(BlockRequest request)? _block;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -1892,42 +1852,24 @@ base class FakeEcho implements Echo {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _echo = echo;
-
-    _echoErrorDetails = echoErrorDetails;
-
-    _failEchoWithDetails = failEchoWithDetails;
-
-    _expand = expand;
-
-    _pagedExpand = pagedExpand;
-
-    _pagedExpandLegacy = pagedExpandLegacy;
-
-    _pagedExpandLegacyMapped = pagedExpandLegacyMapped;
-
-    _wait = wait;
-
-    _block = block;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _echo = echo,
+       _echoErrorDetails = echoErrorDetails,
+       _failEchoWithDetails = failEchoWithDetails,
+       _expand = expand,
+       _pagedExpand = pagedExpand,
+       _pagedExpandLegacy = pagedExpandLegacy,
+       _pagedExpandLegacyMapped = pagedExpandLegacyMapped,
+       _wait = wait,
+       _block = block,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// This method simply echoes the request. This method showcases unary RPCs.
   ///
@@ -2545,39 +2487,30 @@ final class Identity {
 
 /// Testing fake for [Identity].
 base class FakeIdentity implements Identity {
-  late final Future<User> Function(CreateUserRequest request)? _createUser;
-  late final Future<User> Function(GetUserRequest request)? _getUser;
-  late final Future<User> Function(UpdateUserRequest request)? _updateUser;
-  late final Future<void> Function(DeleteUserRequest request)? _deleteUser;
-  late final Future<ListUsersResponse> Function(ListUsersRequest request)?
+  final Future<User> Function(CreateUserRequest request)? _createUser;
+  final Future<User> Function(GetUserRequest request)? _getUser;
+  final Future<User> Function(UpdateUserRequest request)? _updateUser;
+  final Future<void> Function(DeleteUserRequest request)? _deleteUser;
+  final Future<ListUsersResponse> Function(ListUsersRequest request)?
   _listUsers;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -2610,34 +2543,20 @@ base class FakeIdentity implements Identity {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createUser = createUser;
-
-    _getUser = getUser;
-
-    _updateUser = updateUser;
-
-    _deleteUser = deleteUser;
-
-    _listUsers = listUsers;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createUser = createUser,
+       _getUser = getUser,
+       _updateUser = updateUser,
+       _deleteUser = deleteUser,
+       _listUsers = listUsers,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Creates a user.
   ///
@@ -3267,50 +3186,42 @@ final class Messaging {
 
 /// Testing fake for [Messaging].
 base class FakeMessaging implements Messaging {
-  late final Future<Room> Function(CreateRoomRequest request)? _createRoom;
-  late final Future<Room> Function(GetRoomRequest request)? _getRoom;
-  late final Future<Room> Function(UpdateRoomRequest request)? _updateRoom;
-  late final Future<void> Function(DeleteRoomRequest request)? _deleteRoom;
-  late final Future<ListRoomsResponse> Function(ListRoomsRequest request)?
+  final Future<Room> Function(CreateRoomRequest request)? _createRoom;
+  final Future<Room> Function(GetRoomRequest request)? _getRoom;
+  final Future<Room> Function(UpdateRoomRequest request)? _updateRoom;
+  final Future<void> Function(DeleteRoomRequest request)? _deleteRoom;
+  final Future<ListRoomsResponse> Function(ListRoomsRequest request)?
   _listRooms;
-  late final Future<Blurb> Function(CreateBlurbRequest request)? _createBlurb;
-  late final Future<Blurb> Function(GetBlurbRequest request)? _getBlurb;
-  late final Future<Blurb> Function(UpdateBlurbRequest request)? _updateBlurb;
-  late final Future<void> Function(DeleteBlurbRequest request)? _deleteBlurb;
-  late final Future<ListBlurbsResponse> Function(ListBlurbsRequest request)?
+  final Future<Blurb> Function(CreateBlurbRequest request)? _createBlurb;
+  final Future<Blurb> Function(GetBlurbRequest request)? _getBlurb;
+  final Future<Blurb> Function(UpdateBlurbRequest request)? _updateBlurb;
+  final Future<void> Function(DeleteBlurbRequest request)? _deleteBlurb;
+  final Future<ListBlurbsResponse> Function(ListBlurbsRequest request)?
   _listBlurbs;
-  late final Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>>
-  Function(SearchBlurbsRequest request)?
-  _searchBlurbs;
-  late final Stream<StreamBlurbsResponse> Function(StreamBlurbsRequest request)?
-  _streamBlurbs;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
+  final Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>> Function(
+    SearchBlurbsRequest request,
   )?
+  _searchBlurbs;
+  final Stream<StreamBlurbsResponse> Function(StreamBlurbsRequest request)?
+  _streamBlurbs;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -3354,48 +3265,27 @@ base class FakeMessaging implements Messaging {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createRoom = createRoom;
-
-    _getRoom = getRoom;
-
-    _updateRoom = updateRoom;
-
-    _deleteRoom = deleteRoom;
-
-    _listRooms = listRooms;
-
-    _createBlurb = createBlurb;
-
-    _getBlurb = getBlurb;
-
-    _updateBlurb = updateBlurb;
-
-    _deleteBlurb = deleteBlurb;
-
-    _listBlurbs = listBlurbs;
-
-    _searchBlurbs = searchBlurbs;
-
-    _streamBlurbs = streamBlurbs;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createRoom = createRoom,
+       _getRoom = getRoom,
+       _updateRoom = updateRoom,
+       _deleteRoom = deleteRoom,
+       _listRooms = listRooms,
+       _createBlurb = createBlurb,
+       _getBlurb = getBlurb,
+       _updateBlurb = updateBlurb,
+       _deleteBlurb = deleteBlurb,
+       _listBlurbs = listBlurbs,
+       _searchBlurbs = searchBlurbs,
+       _streamBlurbs = streamBlurbs,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Creates a room.
   ///
@@ -4053,51 +3943,41 @@ final class SequenceService {
 
 /// Testing fake for [SequenceService].
 base class FakeSequenceService implements SequenceService {
-  late final Future<Sequence> Function(CreateSequenceRequest request)?
+  final Future<Sequence> Function(CreateSequenceRequest request)?
   _createSequence;
-  late final Future<StreamingSequence> Function(
+  final Future<StreamingSequence> Function(
     CreateStreamingSequenceRequest request,
   )?
   _createStreamingSequence;
-  late final Future<SequenceReport> Function(GetSequenceReportRequest request)?
+  final Future<SequenceReport> Function(GetSequenceReportRequest request)?
   _getSequenceReport;
-  late final Future<StreamingSequenceReport> Function(
+  final Future<StreamingSequenceReport> Function(
     GetStreamingSequenceReportRequest request,
   )?
   _getStreamingSequenceReport;
-  late final Future<void> Function(AttemptSequenceRequest request)?
-  _attemptSequence;
-  late final Stream<AttemptStreamingSequenceResponse> Function(
+  final Future<void> Function(AttemptSequenceRequest request)? _attemptSequence;
+  final Stream<AttemptStreamingSequenceResponse> Function(
     AttemptStreamingSequenceRequest request,
   )?
   _attemptStreamingSequence;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -4139,36 +4019,21 @@ base class FakeSequenceService implements SequenceService {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createSequence = createSequence;
-
-    _createStreamingSequence = createStreamingSequence;
-
-    _getSequenceReport = getSequenceReport;
-
-    _getStreamingSequenceReport = getStreamingSequenceReport;
-
-    _attemptSequence = attemptSequence;
-
-    _attemptStreamingSequence = attemptStreamingSequence;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createSequence = createSequence,
+       _createStreamingSequence = createStreamingSequence,
+       _getSequenceReport = getSequenceReport,
+       _getStreamingSequenceReport = getStreamingSequenceReport,
+       _attemptSequence = attemptSequence,
+       _attemptStreamingSequence = attemptStreamingSequence,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Create a sequence of responses to be returned as unary calls
   ///
@@ -4772,49 +4637,36 @@ final class Testing {
 
 /// Testing fake for [Testing].
 base class FakeTesting implements Testing {
-  late final Future<Session> Function(CreateSessionRequest request)?
-  _createSession;
-  late final Future<Session> Function(GetSessionRequest request)? _getSession;
-  late final Future<ListSessionsResponse> Function(ListSessionsRequest request)?
+  final Future<Session> Function(CreateSessionRequest request)? _createSession;
+  final Future<Session> Function(GetSessionRequest request)? _getSession;
+  final Future<ListSessionsResponse> Function(ListSessionsRequest request)?
   _listSessions;
-  late final Future<void> Function(DeleteSessionRequest request)?
-  _deleteSession;
-  late final Future<ReportSessionResponse> Function(
-    ReportSessionRequest request,
-  )?
+  final Future<void> Function(DeleteSessionRequest request)? _deleteSession;
+  final Future<ReportSessionResponse> Function(ReportSessionRequest request)?
   _reportSession;
-  late final Future<ListTestsResponse> Function(ListTestsRequest request)?
+  final Future<ListTestsResponse> Function(ListTestsRequest request)?
   _listTests;
-  late final Future<void> Function(DeleteTestRequest request)? _deleteTest;
-  late final Future<VerifyTestResponse> Function(VerifyTestRequest request)?
+  final Future<void> Function(DeleteTestRequest request)? _deleteTest;
+  final Future<VerifyTestResponse> Function(VerifyTestRequest request)?
   _verifyTest;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListOperationsResponse> Function(
-    ListOperationsRequest request,
-  )?
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
   _listOperations;
-  late final Future<Operation<T, S>> Function<
+  final Future<Operation<T, S>> Function<
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request)?
   _getOperation;
-  late final Future<void> Function(DeleteOperationRequest request)?
-  _deleteOperation;
-  late final Future<void> Function(CancelOperationRequest request)?
-  _cancelOperation;
+  final Future<void> Function(DeleteOperationRequest request)? _deleteOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -4852,40 +4704,23 @@ base class FakeTesting implements Testing {
     getOperation,
     Future<void> Function(DeleteOperationRequest request)? deleteOperation,
     Future<void> Function(CancelOperationRequest request)? cancelOperation,
-  }) {
-    _createSession = createSession;
-
-    _getSession = getSession;
-
-    _listSessions = listSessions;
-
-    _deleteSession = deleteSession;
-
-    _reportSession = reportSession;
-
-    _listTests = listTests;
-
-    _deleteTest = deleteTest;
-
-    _verifyTest = verifyTest;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listOperations = listOperations;
-    _getOperation = getOperation;
-
-    _deleteOperation = deleteOperation;
-
-    _cancelOperation = cancelOperation;
-  }
+  }) : _createSession = createSession,
+       _getSession = getSession,
+       _listSessions = listSessions,
+       _deleteSession = deleteSession,
+       _reportSession = reportSession,
+       _listTests = listTests,
+       _deleteTest = deleteTest,
+       _verifyTest = verifyTest,
+       _listLocations = listLocations,
+       _getLocation = getLocation,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _deleteOperation = deleteOperation,
+       _cancelOperation = cancelOperation;
 
   /// Creates a new testing session.
   /// Adding this comment with special characters for comment formatting tests:

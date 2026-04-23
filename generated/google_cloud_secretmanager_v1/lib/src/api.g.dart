@@ -390,50 +390,39 @@ final class SecretManagerService {
 
 /// Testing fake for [SecretManagerService].
 base class FakeSecretManagerService implements SecretManagerService {
-  late final Future<ListSecretsResponse> Function(ListSecretsRequest request)?
+  final Future<ListSecretsResponse> Function(ListSecretsRequest request)?
   _listSecrets;
-  late final Future<Secret> Function(CreateSecretRequest request)?
-  _createSecret;
-  late final Future<SecretVersion> Function(AddSecretVersionRequest request)?
+  final Future<Secret> Function(CreateSecretRequest request)? _createSecret;
+  final Future<SecretVersion> Function(AddSecretVersionRequest request)?
   _addSecretVersion;
-  late final Future<Secret> Function(GetSecretRequest request)? _getSecret;
-  late final Future<Secret> Function(UpdateSecretRequest request)?
-  _updateSecret;
-  late final Future<void> Function(DeleteSecretRequest request)? _deleteSecret;
-  late final Future<ListSecretVersionsResponse> Function(
+  final Future<Secret> Function(GetSecretRequest request)? _getSecret;
+  final Future<Secret> Function(UpdateSecretRequest request)? _updateSecret;
+  final Future<void> Function(DeleteSecretRequest request)? _deleteSecret;
+  final Future<ListSecretVersionsResponse> Function(
     ListSecretVersionsRequest request,
   )?
   _listSecretVersions;
-  late final Future<SecretVersion> Function(GetSecretVersionRequest request)?
+  final Future<SecretVersion> Function(GetSecretVersionRequest request)?
   _getSecretVersion;
-  late final Future<AccessSecretVersionResponse> Function(
+  final Future<AccessSecretVersionResponse> Function(
     AccessSecretVersionRequest request,
   )?
   _accessSecretVersion;
-  late final Future<SecretVersion> Function(
-    DisableSecretVersionRequest request,
-  )?
+  final Future<SecretVersion> Function(DisableSecretVersionRequest request)?
   _disableSecretVersion;
-  late final Future<SecretVersion> Function(EnableSecretVersionRequest request)?
+  final Future<SecretVersion> Function(EnableSecretVersionRequest request)?
   _enableSecretVersion;
-  late final Future<SecretVersion> Function(
-    DestroySecretVersionRequest request,
-  )?
+  final Future<SecretVersion> Function(DestroySecretVersionRequest request)?
   _destroySecretVersion;
-  late final Future<Policy> Function(SetIamPolicyRequest request)?
-  _setIamPolicy;
-  late final Future<Policy> Function(GetIamPolicyRequest request)?
-  _getIamPolicy;
-  late final Future<TestIamPermissionsResponse> Function(
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
     TestIamPermissionsRequest request,
   )?
   _testIamPermissions;
-  late final Future<ListLocationsResponse> Function(
-    ListLocationsRequest request,
-  )?
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
   _listLocations;
-  late final Future<Location> Function(GetLocationRequest request)?
-  _getLocation;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
 
   @override
   Uri get _endPoint => throw UnsupportedError('_endPoint');
@@ -476,41 +465,23 @@ base class FakeSecretManagerService implements SecretManagerService {
     Future<ListLocationsResponse> Function(ListLocationsRequest request)?
     listLocations,
     Future<Location> Function(GetLocationRequest request)? getLocation,
-  }) {
-    _listSecrets = listSecrets;
-
-    _createSecret = createSecret;
-
-    _addSecretVersion = addSecretVersion;
-
-    _getSecret = getSecret;
-
-    _updateSecret = updateSecret;
-
-    _deleteSecret = deleteSecret;
-
-    _listSecretVersions = listSecretVersions;
-
-    _getSecretVersion = getSecretVersion;
-
-    _accessSecretVersion = accessSecretVersion;
-
-    _disableSecretVersion = disableSecretVersion;
-
-    _enableSecretVersion = enableSecretVersion;
-
-    _destroySecretVersion = destroySecretVersion;
-
-    _setIamPolicy = setIamPolicy;
-
-    _getIamPolicy = getIamPolicy;
-
-    _testIamPermissions = testIamPermissions;
-
-    _listLocations = listLocations;
-
-    _getLocation = getLocation;
-  }
+  }) : _listSecrets = listSecrets,
+       _createSecret = createSecret,
+       _addSecretVersion = addSecretVersion,
+       _getSecret = getSecret,
+       _updateSecret = updateSecret,
+       _deleteSecret = deleteSecret,
+       _listSecretVersions = listSecretVersions,
+       _getSecretVersion = getSecretVersion,
+       _accessSecretVersion = accessSecretVersion,
+       _disableSecretVersion = disableSecretVersion,
+       _enableSecretVersion = enableSecretVersion,
+       _destroySecretVersion = destroySecretVersion,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listLocations = listLocations,
+       _getLocation = getLocation;
 
   /// Lists `Secrets`.
   ///
