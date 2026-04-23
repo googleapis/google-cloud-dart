@@ -263,9 +263,9 @@ base class FakeCacheService implements CacheService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -650,9 +650,9 @@ base class FakeDiscussService implements DiscussService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -999,9 +999,9 @@ base class FakeFileService implements FileService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -1452,9 +1452,9 @@ base class FakeGenerativeService implements GenerativeService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -1978,9 +1978,9 @@ base class FakeModelService implements ModelService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -2480,9 +2480,9 @@ base class FakePermissionService implements PermissionService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -2886,9 +2886,9 @@ base class FakePredictionService implements PredictionService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -3487,9 +3487,9 @@ base class FakeRetrieverService implements RetrieverService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -4206,9 +4206,9 @@ base class FakeTextService implements TextService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 

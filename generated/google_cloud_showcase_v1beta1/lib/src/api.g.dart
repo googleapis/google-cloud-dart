@@ -1020,9 +1020,9 @@ base class FakeCompliance implements Compliance {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -1848,9 +1848,9 @@ base class FakeEcho implements Echo {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -2580,9 +2580,9 @@ base class FakeIdentity implements Identity {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -3313,9 +3313,9 @@ base class FakeMessaging implements Messaging {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -4100,9 +4100,9 @@ base class FakeSequenceService implements SequenceService {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
@@ -4817,9 +4817,9 @@ base class FakeTesting implements Testing {
   _cancelOperation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 

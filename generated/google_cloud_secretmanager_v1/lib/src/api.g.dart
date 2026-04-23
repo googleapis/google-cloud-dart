@@ -436,9 +436,9 @@ base class FakeSecretManagerService implements SecretManagerService {
   _getLocation;
 
   @override
-  Uri get _endPoint => throw UnsupportedError('');
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
   @override
-  ServiceClient get _client => throw UnsupportedError('');
+  ServiceClient get _client => throw UnsupportedError('_client');
 
   bool isClosed = false;
 
