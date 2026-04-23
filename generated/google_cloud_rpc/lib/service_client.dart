@@ -158,13 +158,9 @@ class ServiceClient {
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
 
-<<<<<<< HEAD
-    switch (response.headers['content-type']) {
-=======
     switch (http.MediaType.parse(
       response.headers['content-type'] ?? '',
     ).mimeType) {
->>>>>>> fake_tests
       case 'application/json':
         // The server responded with a non-streaming response, which should be a
         // list of JSON objects.

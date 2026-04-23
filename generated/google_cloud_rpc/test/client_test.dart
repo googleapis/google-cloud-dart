@@ -403,59 +403,10 @@ void main() {
     });
 
     test('200 response, unexpected content-type', () async {
-<<<<<<< HEAD
       final service = ServiceClient(
         client: MockClient(
           (request) async =>
               Response('', 200, headers: {'content-type': 'text/plain'}),
-        ),
-      );
-
-      expect(
-        service.postStreaming(sampleUrl),
-        emitsInOrder([emitsError(isA<ServiceException>()), emitsDone]),
-      );
-    });
-
-    test('200 response, empty event stream response', () async {
-      final service = ServiceClient(
-        client: MockClient(
-          (request) async =>
-              Response('', 200, headers: {'content-type': 'text/event-stream'}),
-        ),
-      );
-
-      expect(service.postStreaming(sampleUrl), emitsDone);
-    });
-
-    test('200 response, empty JSON list response', () async {
-      final service = ServiceClient(
-        client: MockClient(
-          (request) async => Response(
-            '[]',
-            200,
-            headers: {'content-type': 'application/json'},
-          ),
-        ),
-      );
-
-      expect(service.postStreaming(sampleUrl), emitsDone);
-    });
-
-    test('200 response, single event stream response', () async {
-      final service = ServiceClient(
-        client: MockClient(
-          (request) async => Response(
-            'data: {"fruit":"apple"}',
-            200,
-            headers: {'content-type': 'text/event-stream'},
-          ),
-=======
-      final service = ServiceClient(
-        client: MockClient(
-          (request) async =>
-              Response('', 200, headers: {'content-type': 'text/plain'}),
->>>>>>> fake_tests
         ),
       );
 
@@ -511,58 +462,11 @@ void main() {
     });
 
     test('200 response, single json response', () async {
-<<<<<<< HEAD
       final service = ServiceClient(
         client: MockClient(
           (request) async => Response(
             '[{"fruit":"apple"}]',
             200,
-            headers: {'content-type': 'application/json'},
-          ),
-        ),
-      );
-
-      expect(
-        service.postStreaming(sampleUrl),
-        emitsInOrder([
-          {'fruit': 'apple'},
-          emitsDone,
-        ]),
-      );
-    });
-
-    test('200 response, two data event stream responses', () async {
-=======
->>>>>>> fake_tests
-      final service = ServiceClient(
-        client: MockClient(
-          (request) async => Response(
-            '[{"fruit":"apple"}]',
-            200,
-<<<<<<< HEAD
-            headers: {'content-type': 'text/event-stream'},
-          ),
-        ),
-      );
-
-      expect(
-        service.postStreaming(sampleUrl),
-        emitsInOrder([
-          {'fruit': 'apple'},
-          {'fruit': 'banana'},
-          emitsDone,
-        ]),
-      );
-    });
-
-    test('200 response, two json response', () async {
-      final service = ServiceClient(
-        client: MockClient(
-          (request) async => Response(
-            '[{"fruit":"apple"},{"fruit":"banana"}]',
-            200,
-=======
->>>>>>> fake_tests
             headers: {'content-type': 'application/json'},
           ),
         ),
