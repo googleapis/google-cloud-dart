@@ -195,9 +195,7 @@ base class FakeIAMPolicy implements IAMPolicy {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -214,9 +212,7 @@ base class FakeIAMPolicy implements IAMPolicy {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -239,9 +235,7 @@ base class FakeIAMPolicy implements IAMPolicy {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);

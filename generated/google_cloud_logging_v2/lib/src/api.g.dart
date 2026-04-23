@@ -300,9 +300,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   /// any reason.
   @override
   Future<void> deleteLog(DeleteLogRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteLog case final deleteLog?) {
       return deleteLog(request);
@@ -325,9 +323,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   Future<WriteLogEntriesResponse> writeLogEntries(
     WriteLogEntriesRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_writeLogEntries case final writeLogEntries?) {
       return writeLogEntries(request);
@@ -347,9 +343,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   Future<ListLogEntriesResponse> listLogEntries(
     ListLogEntriesRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLogEntries case final listLogEntries?) {
       return listLogEntries(request);
@@ -367,9 +361,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   listMonitoredResourceDescriptors(
     ListMonitoredResourceDescriptorsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listMonitoredResourceDescriptors
         case final listMonitoredResourceDescriptors?) {
@@ -386,9 +378,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   /// any reason.
   @override
   Future<ListLogsResponse> listLogs(ListLogsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLogs case final listLogs?) {
       return listLogs(request);
@@ -405,9 +395,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -425,12 +413,10 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -442,9 +428,7 @@ base class FakeLoggingServiceV2 implements LoggingServiceV2 {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -1331,9 +1315,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<ListBucketsResponse> listBuckets(ListBucketsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listBuckets case final listBuckets?) {
       return listBuckets(request);
@@ -1348,9 +1330,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogBucket> getBucket(GetBucketRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getBucket case final getBucket?) {
       return getBucket(request);
@@ -1375,9 +1355,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<Operation<LogBucket, BucketMetadata>> createBucketAsync(
     CreateBucketRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createBucketAsync case final createBucketAsync?) {
       return createBucketAsync(request);
@@ -1405,9 +1383,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<Operation<LogBucket, BucketMetadata>> updateBucketAsync(
     UpdateBucketRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateBucketAsync case final updateBucketAsync?) {
       return updateBucketAsync(request);
@@ -1423,9 +1399,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogBucket> createBucket(CreateBucketRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createBucket case final createBucket?) {
       return createBucket(request);
@@ -1445,9 +1419,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogBucket> updateBucket(UpdateBucketRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateBucket case final updateBucket?) {
       return updateBucket(request);
@@ -1466,9 +1438,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<void> deleteBucket(DeleteBucketRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteBucket case final deleteBucket?) {
       return deleteBucket(request);
@@ -1484,9 +1454,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<void> undeleteBucket(UndeleteBucketRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_undeleteBucket case final undeleteBucket?) {
       return undeleteBucket(request);
@@ -1501,9 +1469,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<ListViewsResponse> listViews(ListViewsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listViews case final listViews?) {
       return listViews(request);
@@ -1518,9 +1484,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogView> getView(GetViewRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getView case final getView?) {
       return getView(request);
@@ -1536,9 +1500,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogView> createView(CreateViewRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createView case final createView?) {
       return createView(request);
@@ -1557,9 +1519,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogView> updateView(UpdateViewRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateView case final updateView?) {
       return updateView(request);
@@ -1577,9 +1537,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<void> deleteView(DeleteViewRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteView case final deleteView?) {
       return deleteView(request);
@@ -1594,9 +1552,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<ListSinksResponse> listSinks(ListSinksRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listSinks case final listSinks?) {
       return listSinks(request);
@@ -1611,9 +1567,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogSink> getSink(GetSinkRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getSink case final getSink?) {
       return getSink(request);
@@ -1631,9 +1585,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogSink> createSink(CreateSinkRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createSink case final createSink?) {
       return createSink(request);
@@ -1652,9 +1604,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogSink> updateSink(UpdateSinkRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateSink case final updateSink?) {
       return updateSink(request);
@@ -1670,9 +1620,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<void> deleteSink(DeleteSinkRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteSink case final deleteSink?) {
       return deleteSink(request);
@@ -1697,9 +1645,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<Operation<Link, LinkMetadata>> createLink(
     CreateLinkRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createLink case final createLink?) {
       return createLink(request);
@@ -1723,9 +1669,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<Operation<Empty, LinkMetadata>> deleteLink(
     DeleteLinkRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteLink case final deleteLink?) {
       return deleteLink(request);
@@ -1740,9 +1684,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<ListLinksResponse> listLinks(ListLinksRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLinks case final listLinks?) {
       return listLinks(request);
@@ -1757,9 +1699,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<Link> getLink(GetLinkRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLink case final getLink?) {
       return getLink(request);
@@ -1776,9 +1716,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<ListExclusionsResponse> listExclusions(
     ListExclusionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listExclusions case final listExclusions?) {
       return listExclusions(request);
@@ -1793,9 +1731,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogExclusion> getExclusion(GetExclusionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getExclusion case final getExclusion?) {
       return getExclusion(request);
@@ -1812,9 +1748,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogExclusion> createExclusion(CreateExclusionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createExclusion case final createExclusion?) {
       return createExclusion(request);
@@ -1830,9 +1764,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<LogExclusion> updateExclusion(UpdateExclusionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateExclusion case final updateExclusion?) {
       return updateExclusion(request);
@@ -1847,9 +1779,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<void> deleteExclusion(DeleteExclusionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteExclusion case final deleteExclusion?) {
       return deleteExclusion(request);
@@ -1873,9 +1803,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<CmekSettings> getCmekSettings(GetCmekSettingsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getCmekSettings case final getCmekSettings?) {
       return getCmekSettings(request);
@@ -1906,9 +1834,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<CmekSettings> updateCmekSettings(
     UpdateCmekSettingsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateCmekSettings case final updateCmekSettings?) {
       return updateCmekSettings(request);
@@ -1932,9 +1858,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<Settings> getSettings(GetSettingsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getSettings case final getSettings?) {
       return getSettings(request);
@@ -1964,9 +1888,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<Settings> updateSettings(UpdateSettingsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateSettings case final updateSettings?) {
       return updateSettings(request);
@@ -1988,9 +1910,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   @override
   Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>>
   copyLogEntries(CopyLogEntriesRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_copyLogEntries case final copyLogEntries?) {
       return copyLogEntries(request);
@@ -2007,9 +1927,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -2027,12 +1945,10 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -2044,9 +1960,7 @@ base class FakeConfigServiceV2 implements ConfigServiceV2 {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -2282,9 +2196,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   Future<ListLogMetricsResponse> listLogMetrics(
     ListLogMetricsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLogMetrics case final listLogMetrics?) {
       return listLogMetrics(request);
@@ -2299,9 +2211,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   /// any reason.
   @override
   Future<LogMetric> getLogMetric(GetLogMetricRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLogMetric case final getLogMetric?) {
       return getLogMetric(request);
@@ -2316,9 +2226,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   /// any reason.
   @override
   Future<LogMetric> createLogMetric(CreateLogMetricRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createLogMetric case final createLogMetric?) {
       return createLogMetric(request);
@@ -2333,9 +2241,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   /// any reason.
   @override
   Future<LogMetric> updateLogMetric(UpdateLogMetricRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateLogMetric case final updateLogMetric?) {
       return updateLogMetric(request);
@@ -2350,9 +2256,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   /// any reason.
   @override
   Future<void> deleteLogMetric(DeleteLogMetricRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteLogMetric case final deleteLogMetric?) {
       return deleteLogMetric(request);
@@ -2369,9 +2273,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -2389,12 +2291,10 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -2406,9 +2306,7 @@ base class FakeMetricsServiceV2 implements MetricsServiceV2 {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);

@@ -517,9 +517,7 @@ base class FakeFunctionService implements FunctionService {
   /// any reason.
   @override
   Future<Function$> getFunction(GetFunctionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getFunction case final getFunction?) {
       return getFunction(request);
@@ -536,9 +534,7 @@ base class FakeFunctionService implements FunctionService {
   Future<ListFunctionsResponse> listFunctions(
     ListFunctionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listFunctions case final listFunctions?) {
       return listFunctions(request);
@@ -563,9 +559,7 @@ base class FakeFunctionService implements FunctionService {
   Future<Operation<Function$, OperationMetadata>> createFunction(
     CreateFunctionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createFunction case final createFunction?) {
       return createFunction(request);
@@ -588,9 +582,7 @@ base class FakeFunctionService implements FunctionService {
   Future<Operation<Function$, OperationMetadata>> updateFunction(
     UpdateFunctionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateFunction case final updateFunction?) {
       return updateFunction(request);
@@ -615,9 +607,7 @@ base class FakeFunctionService implements FunctionService {
   Future<Operation<Empty, OperationMetadata>> deleteFunction(
     DeleteFunctionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteFunction case final deleteFunction?) {
       return deleteFunction(request);
@@ -656,9 +646,7 @@ base class FakeFunctionService implements FunctionService {
   Future<GenerateUploadUrlResponse> generateUploadUrl(
     GenerateUploadUrlRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_generateUploadUrl case final generateUploadUrl?) {
       return generateUploadUrl(request);
@@ -679,9 +667,7 @@ base class FakeFunctionService implements FunctionService {
   Future<GenerateDownloadUrlResponse> generateDownloadUrl(
     GenerateDownloadUrlRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_generateDownloadUrl case final generateDownloadUrl?) {
       return generateDownloadUrl(request);
@@ -696,9 +682,7 @@ base class FakeFunctionService implements FunctionService {
   /// any reason.
   @override
   Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listRuntimes case final listRuntimes?) {
       return listRuntimes(request);
@@ -715,9 +699,7 @@ base class FakeFunctionService implements FunctionService {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -736,9 +718,7 @@ base class FakeFunctionService implements FunctionService {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -754,9 +734,7 @@ base class FakeFunctionService implements FunctionService {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -779,9 +757,7 @@ base class FakeFunctionService implements FunctionService {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -798,9 +774,7 @@ base class FakeFunctionService implements FunctionService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -818,12 +792,10 @@ base class FakeFunctionService implements FunctionService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }

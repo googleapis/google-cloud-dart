@@ -1076,9 +1076,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataBody(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataBody case final repeatDataBody?) {
       return repeatDataBody(request);
@@ -1095,9 +1093,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataBodyInfo case final repeatDataBodyInfo?) {
       return repeatDataBodyInfo(request);
@@ -1113,9 +1109,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataQuery case final repeatDataQuery?) {
       return repeatDataQuery(request);
@@ -1132,9 +1126,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataSimplePath(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataSimplePath case final repeatDataSimplePath?) {
       return repeatDataSimplePath(request);
@@ -1149,9 +1141,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataPathResource(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataPathResource case final repeatDataPathResource?) {
       return repeatDataPathResource(request);
@@ -1168,9 +1158,7 @@ base class FakeCompliance implements Compliance {
   Future<RepeatResponse> repeatDataPathTrailingResource(
     RepeatRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataPathTrailingResource
         case final repeatDataPathTrailingResource?) {
@@ -1186,9 +1174,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataBodyPut(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataBodyPut case final repeatDataBodyPut?) {
       return repeatDataBodyPut(request);
@@ -1203,9 +1189,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<RepeatResponse> repeatDataBodyPatch(RepeatRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_repeatDataBodyPatch case final repeatDataBodyPatch?) {
       return repeatDataBodyPatch(request);
@@ -1225,9 +1209,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<EnumResponse> getEnum(EnumRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getEnum case final getEnum?) {
       return getEnum(request);
@@ -1247,9 +1229,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<EnumResponse> verifyEnum(EnumResponse request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_verifyEnum case final verifyEnum?) {
       return verifyEnum(request);
@@ -1266,9 +1246,7 @@ base class FakeCompliance implements Compliance {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -1283,9 +1261,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
@@ -1300,9 +1276,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -1317,9 +1291,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -1336,9 +1308,7 @@ base class FakeCompliance implements Compliance {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -1355,9 +1325,7 @@ base class FakeCompliance implements Compliance {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -1375,12 +1343,10 @@ base class FakeCompliance implements Compliance {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -1392,9 +1358,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -1409,9 +1373,7 @@ base class FakeCompliance implements Compliance {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -1878,9 +1840,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<EchoResponse> echo(EchoRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_echo case final echo?) {
       return echo(request);
@@ -1902,9 +1862,7 @@ base class FakeEcho implements Echo {
   Future<EchoErrorDetailsResponse> echoErrorDetails(
     EchoErrorDetailsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_echoErrorDetails case final echoErrorDetails?) {
       return echoErrorDetails(request);
@@ -1927,9 +1885,7 @@ base class FakeEcho implements Echo {
   Future<FailEchoWithDetailsResponse> failEchoWithDetails(
     FailEchoWithDetailsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_failEchoWithDetails case final failEchoWithDetails?) {
       return failEchoWithDetails(request);
@@ -1945,9 +1901,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Stream<EchoResponse> expand(ExpandRequest request) {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
     if (_expand case final expand?) {
       return expand(request);
     }
@@ -1962,9 +1916,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<PagedExpandResponse> pagedExpand(PagedExpandRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_pagedExpand case final pagedExpand?) {
       return pagedExpand(request);
@@ -1983,9 +1935,7 @@ base class FakeEcho implements Echo {
   Future<PagedExpandResponse> pagedExpandLegacy(
     PagedExpandLegacyRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_pagedExpandLegacy case final pagedExpandLegacy?) {
       return pagedExpandLegacy(request);
@@ -2006,9 +1956,7 @@ base class FakeEcho implements Echo {
   Future<PagedExpandLegacyMappedResponse> pagedExpandLegacyMapped(
     PagedExpandRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_pagedExpandLegacyMapped case final pagedExpandLegacyMapped?) {
       return pagedExpandLegacyMapped(request);
@@ -2032,9 +1980,7 @@ base class FakeEcho implements Echo {
   Future<Operation<WaitResponse, WaitMetadata>> wait(
     WaitRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_wait case final wait?) {
       return wait(request);
@@ -2051,9 +1997,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<BlockResponse> block(BlockRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_block case final block?) {
       return block(request);
@@ -2070,9 +2014,7 @@ base class FakeEcho implements Echo {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -2087,9 +2029,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
@@ -2104,9 +2044,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -2121,9 +2059,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -2140,9 +2076,7 @@ base class FakeEcho implements Echo {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -2159,9 +2093,7 @@ base class FakeEcho implements Echo {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -2179,12 +2111,10 @@ base class FakeEcho implements Echo {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -2196,9 +2126,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -2213,9 +2141,7 @@ base class FakeEcho implements Echo {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -2565,9 +2491,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<User> createUser(CreateUserRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createUser case final createUser?) {
       return createUser(request);
@@ -2582,9 +2506,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<User> getUser(GetUserRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getUser case final getUser?) {
       return getUser(request);
@@ -2599,9 +2521,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<User> updateUser(UpdateUserRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateUser case final updateUser?) {
       return updateUser(request);
@@ -2616,9 +2536,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<void> deleteUser(DeleteUserRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteUser case final deleteUser?) {
       return deleteUser(request);
@@ -2633,9 +2551,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listUsers case final listUsers?) {
       return listUsers(request);
@@ -2652,9 +2568,7 @@ base class FakeIdentity implements Identity {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -2669,9 +2583,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
@@ -2686,9 +2598,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -2703,9 +2613,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -2722,9 +2630,7 @@ base class FakeIdentity implements Identity {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -2741,9 +2647,7 @@ base class FakeIdentity implements Identity {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -2761,12 +2665,10 @@ base class FakeIdentity implements Identity {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -2778,9 +2680,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -2795,9 +2695,7 @@ base class FakeIdentity implements Identity {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -3294,9 +3192,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Room> createRoom(CreateRoomRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createRoom case final createRoom?) {
       return createRoom(request);
@@ -3311,9 +3207,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Room> getRoom(GetRoomRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getRoom case final getRoom?) {
       return getRoom(request);
@@ -3328,9 +3222,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Room> updateRoom(UpdateRoomRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateRoom case final updateRoom?) {
       return updateRoom(request);
@@ -3345,9 +3237,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<void> deleteRoom(DeleteRoomRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteRoom case final deleteRoom?) {
       return deleteRoom(request);
@@ -3362,9 +3252,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listRooms case final listRooms?) {
       return listRooms(request);
@@ -3381,9 +3269,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Blurb> createBlurb(CreateBlurbRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createBlurb case final createBlurb?) {
       return createBlurb(request);
@@ -3398,9 +3284,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Blurb> getBlurb(GetBlurbRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getBlurb case final getBlurb?) {
       return getBlurb(request);
@@ -3415,9 +3299,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateBlurb case final updateBlurb?) {
       return updateBlurb(request);
@@ -3432,9 +3314,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<void> deleteBlurb(DeleteBlurbRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteBlurb case final deleteBlurb?) {
       return deleteBlurb(request);
@@ -3450,9 +3330,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listBlurbs case final listBlurbs?) {
       return listBlurbs(request);
@@ -3477,9 +3355,7 @@ base class FakeMessaging implements Messaging {
   Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>> searchBlurbs(
     SearchBlurbsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_searchBlurbs case final searchBlurbs?) {
       return searchBlurbs(request);
@@ -3495,9 +3371,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Stream<StreamBlurbsResponse> streamBlurbs(StreamBlurbsRequest request) {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
     if (_streamBlurbs case final streamBlurbs?) {
       return streamBlurbs(request);
     }
@@ -3513,9 +3387,7 @@ base class FakeMessaging implements Messaging {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -3530,9 +3402,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
@@ -3547,9 +3417,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -3564,9 +3432,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -3583,9 +3449,7 @@ base class FakeMessaging implements Messaging {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -3602,9 +3466,7 @@ base class FakeMessaging implements Messaging {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -3622,12 +3484,10 @@ base class FakeMessaging implements Messaging {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -3639,9 +3499,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -3656,9 +3514,7 @@ base class FakeMessaging implements Messaging {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -4042,9 +3898,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<Sequence> createSequence(CreateSequenceRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createSequence case final createSequence?) {
       return createSequence(request);
@@ -4061,9 +3915,7 @@ base class FakeSequenceService implements SequenceService {
   Future<StreamingSequence> createStreamingSequence(
     CreateStreamingSequenceRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createStreamingSequence case final createStreamingSequence?) {
       return createStreamingSequence(request);
@@ -4081,9 +3933,7 @@ base class FakeSequenceService implements SequenceService {
   Future<SequenceReport> getSequenceReport(
     GetSequenceReportRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getSequenceReport case final getSequenceReport?) {
       return getSequenceReport(request);
@@ -4101,9 +3951,7 @@ base class FakeSequenceService implements SequenceService {
   Future<StreamingSequenceReport> getStreamingSequenceReport(
     GetStreamingSequenceReportRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getStreamingSequenceReport case final getStreamingSequenceReport?) {
       return getStreamingSequenceReport(request);
@@ -4118,9 +3966,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<void> attemptSequence(AttemptSequenceRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_attemptSequence case final attemptSequence?) {
       return attemptSequence(request);
@@ -4140,9 +3986,7 @@ base class FakeSequenceService implements SequenceService {
   Stream<AttemptStreamingSequenceResponse> attemptStreamingSequence(
     AttemptStreamingSequenceRequest request,
   ) {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
     if (_attemptStreamingSequence case final attemptStreamingSequence?) {
       return attemptStreamingSequence(request);
     }
@@ -4158,9 +4002,7 @@ base class FakeSequenceService implements SequenceService {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -4175,9 +4017,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
@@ -4192,9 +4032,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -4209,9 +4047,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -4228,9 +4064,7 @@ base class FakeSequenceService implements SequenceService {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -4247,9 +4081,7 @@ base class FakeSequenceService implements SequenceService {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -4267,12 +4099,10 @@ base class FakeSequenceService implements SequenceService {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -4284,9 +4114,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -4301,9 +4129,7 @@ base class FakeSequenceService implements SequenceService {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);
@@ -4732,9 +4558,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<Session> createSession(CreateSessionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createSession case final createSession?) {
       return createSession(request);
@@ -4749,9 +4573,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<Session> getSession(GetSessionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getSession case final getSession?) {
       return getSession(request);
@@ -4766,9 +4588,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listSessions case final listSessions?) {
       return listSessions(request);
@@ -4783,9 +4603,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<void> deleteSession(DeleteSessionRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteSession case final deleteSession?) {
       return deleteSession(request);
@@ -4804,9 +4622,7 @@ base class FakeTesting implements Testing {
   Future<ReportSessionResponse> reportSession(
     ReportSessionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_reportSession case final reportSession?) {
       return reportSession(request);
@@ -4821,9 +4637,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<ListTestsResponse> listTests(ListTestsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listTests case final listTests?) {
       return listTests(request);
@@ -4843,9 +4657,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<void> deleteTest(DeleteTestRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteTest case final deleteTest?) {
       return deleteTest(request);
@@ -4863,9 +4675,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_verifyTest case final verifyTest?) {
       return verifyTest(request);
@@ -4882,9 +4692,7 @@ base class FakeTesting implements Testing {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -4899,9 +4707,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
@@ -4916,9 +4722,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -4933,9 +4737,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -4952,9 +4754,7 @@ base class FakeTesting implements Testing {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -4971,9 +4771,7 @@ base class FakeTesting implements Testing {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -4991,12 +4789,10 @@ base class FakeTesting implements Testing {
     T extends ProtoMessage,
     S extends ProtoMessage
   >(Operation<T, S> request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
-      return getOperation<T, S>(request);
+      return getOperation(request);
     }
     throw UnsupportedError('getOperation');
   }
@@ -5008,9 +4804,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -5025,9 +4819,7 @@ base class FakeTesting implements Testing {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);

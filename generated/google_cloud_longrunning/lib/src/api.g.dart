@@ -212,9 +212,7 @@ base class FakeOperations implements Operations {
   Future<ListOperationsResponse> listOperations(
     ListOperationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listOperations case final listOperations?) {
       return listOperations(request);
@@ -231,9 +229,7 @@ base class FakeOperations implements Operations {
   /// any reason.
   @override
   Future<Operation> getOperation(GetOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getOperation case final getOperation?) {
       return getOperation(request);
@@ -251,9 +247,7 @@ base class FakeOperations implements Operations {
   /// any reason.
   @override
   Future<void> deleteOperation(DeleteOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteOperation case final deleteOperation?) {
       return deleteOperation(request);
@@ -278,9 +272,7 @@ base class FakeOperations implements Operations {
   /// any reason.
   @override
   Future<void> cancelOperation(CancelOperationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_cancelOperation case final cancelOperation?) {
       return cancelOperation(request);

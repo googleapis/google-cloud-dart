@@ -199,9 +199,7 @@ base class FakeLanguageService implements LanguageService {
   Future<AnalyzeSentimentResponse> analyzeSentiment(
     AnalyzeSentimentRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_analyzeSentiment case final analyzeSentiment?) {
       return analyzeSentiment(request);
@@ -220,9 +218,7 @@ base class FakeLanguageService implements LanguageService {
   Future<AnalyzeEntitiesResponse> analyzeEntities(
     AnalyzeEntitiesRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_analyzeEntities case final analyzeEntities?) {
       return analyzeEntities(request);
@@ -237,9 +233,7 @@ base class FakeLanguageService implements LanguageService {
   /// any reason.
   @override
   Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_classifyText case final classifyText?) {
       return classifyText(request);
@@ -254,9 +248,7 @@ base class FakeLanguageService implements LanguageService {
   /// any reason.
   @override
   Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_moderateText case final moderateText?) {
       return moderateText(request);
@@ -271,9 +263,7 @@ base class FakeLanguageService implements LanguageService {
   /// any reason.
   @override
   Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_annotateText case final annotateText?) {
       return annotateText(request);

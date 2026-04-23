@@ -151,9 +151,7 @@ base class FakeLocations implements Locations {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -168,9 +166,7 @@ base class FakeLocations implements Locations {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);

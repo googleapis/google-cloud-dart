@@ -490,9 +490,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listSecrets case final listSecrets?) {
       return listSecrets(request);
@@ -508,9 +506,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<Secret> createSecret(CreateSecretRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_createSecret case final createSecret?) {
       return createSecret(request);
@@ -529,9 +525,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<SecretVersion> addSecretVersion(
     AddSecretVersionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_addSecretVersion case final addSecretVersion?) {
       return addSecretVersion(request);
@@ -546,9 +540,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<Secret> getSecret(GetSecretRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getSecret case final getSecret?) {
       return getSecret(request);
@@ -564,9 +556,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<Secret> updateSecret(UpdateSecretRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_updateSecret case final updateSecret?) {
       return updateSecret(request);
@@ -581,9 +571,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<void> deleteSecret(DeleteSecretRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_deleteSecret case final deleteSecret?) {
       return deleteSecret(request);
@@ -601,9 +589,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<ListSecretVersionsResponse> listSecretVersions(
     ListSecretVersionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listSecretVersions case final listSecretVersions?) {
       return listSecretVersions(request);
@@ -624,9 +610,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<SecretVersion> getSecretVersion(
     GetSecretVersionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getSecretVersion case final getSecretVersion?) {
       return getSecretVersion(request);
@@ -647,9 +631,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<AccessSecretVersionResponse> accessSecretVersion(
     AccessSecretVersionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_accessSecretVersion case final accessSecretVersion?) {
       return accessSecretVersion(request);
@@ -670,9 +652,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<SecretVersion> disableSecretVersion(
     DisableSecretVersionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_disableSecretVersion case final disableSecretVersion?) {
       return disableSecretVersion(request);
@@ -693,9 +673,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<SecretVersion> enableSecretVersion(
     EnableSecretVersionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_enableSecretVersion case final enableSecretVersion?) {
       return enableSecretVersion(request);
@@ -717,9 +695,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<SecretVersion> destroySecretVersion(
     DestroySecretVersionRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_destroySecretVersion case final destroySecretVersion?) {
       return destroySecretVersion(request);
@@ -740,9 +716,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_setIamPolicy case final setIamPolicy?) {
       return setIamPolicy(request);
@@ -758,9 +732,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getIamPolicy case final getIamPolicy?) {
       return getIamPolicy(request);
@@ -783,9 +755,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<TestIamPermissionsResponse> testIamPermissions(
     TestIamPermissionsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_testIamPermissions case final testIamPermissions?) {
       return testIamPermissions(request);
@@ -802,9 +772,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   Future<ListLocationsResponse> listLocations(
     ListLocationsRequest request,
   ) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_listLocations case final listLocations?) {
       return listLocations(request);
@@ -819,9 +787,7 @@ base class FakeSecretManagerService implements SecretManagerService {
   /// any reason.
   @override
   Future<Location> getLocation(GetLocationRequest request) async {
-    if (isClosed) {
-      throw StateError('Service is closed');
-    }
+    if (isClosed) throw StateError('Service is closed');
 
     if (_getLocation case final getLocation?) {
       return getLocation(request);
