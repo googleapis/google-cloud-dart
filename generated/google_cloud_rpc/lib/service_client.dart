@@ -49,31 +49,44 @@ class ServiceClient {
 
   Future<Map<String, dynamic>> get(Uri url) => _makeRequest(url, 'GET');
 
-  Stream<Map<String, dynamic>> getStreaming(Uri url) =>
-      _makeStreamingRequest(url, 'GET');
+  Stream<Map<String, dynamic>> getStreaming(
+    Uri url, {
+    required bool enableSse,
+  }) => _makeStreamingRequest(url, 'GET', enableSse: enableSse);
 
   Future<Map<String, dynamic>> delete(Uri url) => _makeRequest(url, 'DELETE');
 
-  Stream<Map<String, dynamic>> deleteStreaming(Uri url) =>
-      _makeStreamingRequest(url, 'DELETE');
+  Stream<Map<String, dynamic>> deleteStreaming(
+    Uri url, {
+    required bool enableSse,
+  }) => _makeStreamingRequest(url, 'DELETE', enableSse: enableSse);
 
   Future<Map<String, dynamic>> patch(Uri url, {JsonEncodable? body}) =>
       _makeRequest(url, 'PATCH', body);
 
-  Stream<Map<String, dynamic>> patchStreaming(Uri url, {JsonEncodable? body}) =>
-      _makeStreamingRequest(url, 'PATCH', body);
+  Stream<Map<String, dynamic>> patchStreaming(
+    Uri url, {
+    required bool enableSse,
+    JsonEncodable? body,
+  }) => _makeStreamingRequest(url, 'PATCH', body: body, enableSse: enableSse);
 
   Future<Map<String, dynamic>> post(Uri url, {JsonEncodable? body}) =>
       _makeRequest(url, 'POST', body);
 
-  Stream<Map<String, dynamic>> postStreaming(Uri url, {JsonEncodable? body}) =>
-      _makeStreamingRequest(url, 'POST', body);
+  Stream<Map<String, dynamic>> postStreaming(
+    Uri url, {
+    required bool enableSse,
+    JsonEncodable? body,
+  }) => _makeStreamingRequest(url, 'POST', body: body, enableSse: enableSse);
 
   Future<Map<String, dynamic>> put(Uri url, {JsonEncodable? body}) =>
       _makeRequest(url, 'PUT', body);
 
-  Stream<Map<String, dynamic>> putStreaming(Uri url, {JsonEncodable? body}) =>
-      _makeStreamingRequest(url, 'PUT', body);
+  Stream<Map<String, dynamic>> putStreaming(
+    Uri url, {
+    required bool enableSse,
+    JsonEncodable? body,
+  }) => _makeStreamingRequest(url, 'PUT', body: body, enableSse: enableSse);
 
   /// Closes the client and cleans up any resources associated with it.
   ///
@@ -117,16 +130,20 @@ class ServiceClient {
   /// NOTE: most Google APIs do not support Server-sent events.
   Stream<Map<String, dynamic>> _makeStreamingRequest(
     Uri url,
-    String method, [
-    JsonEncodable? requestBody,
-  ]) async* {
-    final request = http.Request(method, _makeUrlStreaming(url));
-    if (requestBody != null) {
-      request.body = requestBody._asEncodedJson;
+    String method, {
+    JsonEncodable? body,
+    required bool enableSse,
+  }) async* {
+    final request = http.Request(
+      method,
+      enableSse ? _makeUrlStreaming(url) : url,
+    );
+    if (body != null) {
+      request.body = body._asEncodedJson;
     }
     request.headers.addAll({
       _clientKey: _clientName,
-      if (requestBody != null) _contentTypeKey: _typeJson,
+      if (body != null) _contentTypeKey: _typeJson,
     });
 
     final response = await client.send(request);
@@ -141,6 +158,27 @@ class ServiceClient {
       throw ServiceException.fromHttpResponse(response, responseBody);
     }
 
+    switch (http.MediaType.parse(
+      response.headers['content-type'] ?? '',
+    ).mimeType) {
+      case 'application/json':
+        // The server responded with a non-streaming response, which should be a
+        // list of JSON objects.
+        final responseBody = await response.stream.bytesToString();
+        final json = (jsonDecode(responseBody) as List)
+            .cast<Map<String, dynamic>>();
+        yield* Stream.fromIterable(json);
+        return;
+      case 'text/event-stream':
+        // The server responded with an event stream, which is what we expect.
+        break;
+      default:
+        throw ServiceException(
+          'Unsupported content type: ${response.headers['content-type']}',
+          statusCode: response.statusCode,
+          response: response,
+        );
+    }
     final lines = response.stream.toStringStream().transform(
       const LineSplitter(),
     );

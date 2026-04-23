@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-part of '../longrunning.dart';
+part of 'api.g.dart';
 
 /// This resource represents a long-running operation that is the result of a
 /// network API call.
