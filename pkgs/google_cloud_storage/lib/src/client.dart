@@ -717,6 +717,68 @@ final class Storage {
     return objectMetadataFromJson(j as Map<String, Object?>);
   }, isIdempotent: true);
 
+  /// Moves an object from one name to another in the same bucket.
+  ///
+  /// This operation is atomic and idempotent if [ifSourceGenerationMatch] or
+  /// [ifGenerationMatch] is set.
+  ///
+  /// Throws [NotFoundException] if the source object does not exist.
+  ///
+  /// If set, [ifSourceGenerationMatch] makes the operation conditional on
+  /// whether the source object's current generation matches the given value.
+  ///
+  /// If set, [ifGenerationMatch] makes the operation conditional on whether
+  /// the destination object's current generation matches the given value.
+  /// A value of `0` indicates that the destination object must not already
+  /// exist.
+  ///
+  /// [projection] controls the level of detail returned in the response. A
+  /// value of `"full"` returns all object properties, while a value of
+  /// `"noAcl"` (the default) omits the `owner` and `acl` properties.
+  ///
+  /// If set, [userProject] is the project to be billed for this request. This
+  /// argument must be set for [Requester Pays] buckets.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objects/move).
+  ///
+  /// [Requester Pays]: https://docs.cloud.google.com/storage/docs/requester-pays
+  Future<ObjectMetadata> moveObject(
+    String bucket,
+    String sourceObject,
+    String destinationObject, {
+    BigInt? ifSourceGenerationMatch,
+    BigInt? ifGenerationMatch,
+    String? projection,
+    String? userProject,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(
+    () async {
+      final serviceClient = await _serviceClient;
+      final url = _requestUrl(
+        [
+          'storage',
+          'v1',
+          'b',
+          bucket,
+          'o',
+          sourceObject,
+          'moveTo',
+          'o',
+          destinationObject,
+        ],
+        {
+          'ifSourceGenerationMatch': ?ifSourceGenerationMatch?.toString(),
+          'ifGenerationMatch': ?ifGenerationMatch?.toString(),
+          'projection': ?projection,
+          'userProject': ?userProject,
+        },
+      );
+      final j = await serviceClient.post(url);
+      return objectMetadataFromJson(j as Map<String, Object?>);
+    },
+    isIdempotent: ifSourceGenerationMatch != null || ifGenerationMatch != null,
+  );
+
   /// Updates the metadata associated with a [Google Cloud Storage object][].
   ///
   /// This operation is idempotent if [ifMetagenerationMatch] is set.
