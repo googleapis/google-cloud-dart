@@ -674,7 +674,7 @@ final class GenerativeService {
       path: '/v1beta/${request.model}:streamGenerateContent',
     );
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(GenerateContentResponse.fromJson);
   }
 

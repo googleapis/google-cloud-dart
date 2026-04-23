@@ -4381,7 +4381,7 @@ final class FeaturestoreOnlineServingService {
       path: '/v1beta1/${request.entityType}:streamingReadFeatureValues',
     );
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(ReadFeatureValuesResponse.fromJson);
   }
 
@@ -12710,7 +12710,7 @@ final class PredictionService {
       path: '/v1beta1/${request.endpoint}:streamRawPredict',
     );
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(HttpBody.fromJson);
   }
 
@@ -12759,7 +12759,7 @@ final class PredictionService {
       path: '/v1beta1/${request.endpoint}:serverStreamingPredict',
     );
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(StreamingPredictResponse.fromJson);
   }
 
@@ -12824,7 +12824,7 @@ final class PredictionService {
       path: '/v1beta1/${request.model}:streamGenerateContent',
     );
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(GenerateContentResponse.fromJson);
   }
 
@@ -12838,7 +12838,7 @@ final class PredictionService {
       path: '/v1beta1/${request.endpoint}/chat/completions',
     );
     return _client
-        .postStreaming(url, body: request.httpBody, enableSse: false)
+        .postStreaming(url, body: request.httpBody, enableSse: true)
         .map(HttpBody.fromJson);
   }
 
@@ -13100,7 +13100,7 @@ final class ReasoningEngineExecutionService {
   ) {
     final url = _endPoint.replace(path: '/v1beta1/${request.name}:streamQuery');
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(HttpBody.fromJson);
   }
 
@@ -15262,7 +15262,7 @@ final class TensorboardService {
       },
     );
     return _client
-        .getStreaming(url, enableSse: false)
+        .getStreaming(url, enableSse: true)
         .map(ReadTensorboardBlobDataResponse.fromJson);
   }
 

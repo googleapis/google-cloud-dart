@@ -1086,7 +1086,7 @@ final class Echo {
   Stream<EchoResponse> expand(ExpandRequest request) {
     final url = _endPoint.replace(path: '/v1beta1/echo:expand');
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(EchoResponse.fromJson);
   }
 
@@ -1817,7 +1817,7 @@ final class Messaging {
       path: '/v1beta1/${request.name}/blurbs:stream',
     );
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(StreamBlurbsResponse.fromJson);
   }
 
@@ -2096,7 +2096,7 @@ final class SequenceService {
   ) {
     final url = _endPoint.replace(path: '/v1beta1/${request.name}:stream');
     return _client
-        .postStreaming(url, body: request, enableSse: false)
+        .postStreaming(url, body: request, enableSse: true)
         .map(AttemptStreamingSequenceResponse.fromJson);
   }
 
