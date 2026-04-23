@@ -973,11 +973,484 @@ final class Compliance {
 
 /// Testing fake for [Compliance].
 base class FakeCompliance implements Compliance {
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataBody;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataBodyInfo;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataQuery;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataSimplePath;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataPathResource;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataPathTrailingResource;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataBodyPut;
+  late final Future<RepeatResponse> Function(RepeatRequest request)?
+  _repeatDataBodyPatch;
+  late final Future<EnumResponse> Function(EnumRequest request)? _getEnum;
+  late final Future<EnumResponse> Function(EnumResponse request)? _verifyEnum;
+  late final Future<ListLocationsResponse> Function(
+    ListLocationsRequest request,
+  )?
+  _listLocations;
+  late final Future<Location> Function(GetLocationRequest request)?
+  _getLocation;
+  late final Future<Policy> Function(SetIamPolicyRequest request)?
+  _setIamPolicy;
+  late final Future<Policy> Function(GetIamPolicyRequest request)?
+  _getIamPolicy;
+  late final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeCompliance.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeCompliance({
+    Future<RepeatResponse> Function(RepeatRequest request)? repeatDataBody,
+    Future<RepeatResponse> Function(RepeatRequest request)? repeatDataBodyInfo,
+    Future<RepeatResponse> Function(RepeatRequest request)? repeatDataQuery,
+    Future<RepeatResponse> Function(RepeatRequest request)?
+    repeatDataSimplePath,
+    Future<RepeatResponse> Function(RepeatRequest request)?
+    repeatDataPathResource,
+    Future<RepeatResponse> Function(RepeatRequest request)?
+    repeatDataPathTrailingResource,
+    Future<RepeatResponse> Function(RepeatRequest request)? repeatDataBodyPut,
+    Future<RepeatResponse> Function(RepeatRequest request)? repeatDataBodyPatch,
+    Future<EnumResponse> Function(EnumRequest request)? getEnum,
+    Future<EnumResponse> Function(EnumResponse request)? verifyEnum,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _repeatDataBody = repeatDataBody;
+
+    _repeatDataBodyInfo = repeatDataBodyInfo;
+
+    _repeatDataQuery = repeatDataQuery;
+
+    _repeatDataSimplePath = repeatDataSimplePath;
+
+    _repeatDataPathResource = repeatDataPathResource;
+
+    _repeatDataPathTrailingResource = repeatDataPathTrailingResource;
+
+    _repeatDataBodyPut = repeatDataBodyPut;
+
+    _repeatDataBodyPatch = repeatDataBodyPatch;
+
+    _getEnum = getEnum;
+
+    _verifyEnum = verifyEnum;
+
+    _listLocations = listLocations;
+
+    _getLocation = getLocation;
+
+    _setIamPolicy = setIamPolicy;
+
+    _getIamPolicy = getIamPolicy;
+
+    _testIamPermissions = testIamPermissions;
+
+    _listOperations = listOperations;
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// This method echoes the ComplianceData request. This method exercises
+  /// sending the entire request object in the REST body.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataBody(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataBody case final repeatDataBody?) {
+      return repeatDataBody(request);
+    }
+    throw UnsupportedError('repeatDataBody');
+  }
+
+  /// This method echoes the ComplianceData request. This method exercises
+  /// sending the a message-type field in the REST body. Per AIP-127, only
+  /// top-level, non-repeated fields can be sent this way.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataBodyInfo(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataBodyInfo case final repeatDataBodyInfo?) {
+      return repeatDataBodyInfo(request);
+    }
+    throw UnsupportedError('repeatDataBodyInfo');
+  }
+
+  /// This method echoes the ComplianceData request. This method exercises
+  /// sending all request fields as query parameters.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataQuery(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataQuery case final repeatDataQuery?) {
+      return repeatDataQuery(request);
+    }
+    throw UnsupportedError('repeatDataQuery');
+  }
+
+  /// This method echoes the ComplianceData request. This method exercises
+  /// sending some parameters as "simple" path variables (i.e., of the form
+  /// "/bar/{foo}" rather than "/{foo=bar/*}"), and the rest as query parameters.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataSimplePath(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataSimplePath case final repeatDataSimplePath?) {
+      return repeatDataSimplePath(request);
+    }
+    throw UnsupportedError('repeatDataSimplePath');
+  }
+
+  /// Same as RepeatDataSimplePath, but with a path resource.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataPathResource(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataPathResource case final repeatDataPathResource?) {
+      return repeatDataPathResource(request);
+    }
+    throw UnsupportedError('repeatDataPathResource');
+  }
+
+  /// Same as RepeatDataSimplePath, but with a trailing resource.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataPathTrailingResource(
+    RepeatRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataPathTrailingResource
+        case final repeatDataPathTrailingResource?) {
+      return repeatDataPathTrailingResource(request);
+    }
+    throw UnsupportedError('repeatDataPathTrailingResource');
+  }
+
+  /// This method echoes the ComplianceData request, using the HTTP PUT method.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataBodyPut(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataBodyPut case final repeatDataBodyPut?) {
+      return repeatDataBodyPut(request);
+    }
+    throw UnsupportedError('repeatDataBodyPut');
+  }
+
+  /// This method echoes the ComplianceData request, using the HTTP PATCH method.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<RepeatResponse> repeatDataBodyPatch(RepeatRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_repeatDataBodyPatch case final repeatDataBodyPatch?) {
+      return repeatDataBodyPatch(request);
+    }
+    throw UnsupportedError('repeatDataBodyPatch');
+  }
+
+  /// This method requests an enum value from the server. Depending on the contents of EnumRequest, the enum value returned will be a known enum declared in the
+  /// .proto file, or a made-up enum value the is unknown to the client. To verify that clients can round-trip unknown enum values they receive, use the
+  /// response from this RPC as the request to VerifyEnum()
+  ///
+  /// The values of enums sent by the server when a known or unknown value is requested will be the same within a single Showcase server run (this is needed for
+  /// VerifyEnum() to work) but are not guaranteed to be the same across separate Showcase server runs.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<EnumResponse> getEnum(EnumRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getEnum case final getEnum?) {
+      return getEnum(request);
+    }
+    throw UnsupportedError('getEnum');
+  }
+
+  /// This method is used to verify that clients can round-trip enum values, which is particularly important for unknown enum values over REST. VerifyEnum()
+  /// verifies that its request, which is presumably the response that the client previously got to a GetEnum(), contains the correct data. If so, it responds
+  /// with the same EnumResponse; otherwise, the RPC errors.
+  ///
+  /// This works because the values of enums sent by the server when a known or unknown value is requested will be the same within a single Showcase server run,
+  /// although they are not guaranteed to be the same across separate Showcase server runs.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<EnumResponse> verifyEnum(EnumResponse request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_verifyEnum case final verifyEnum?) {
+      return verifyEnum(request);
+    }
+    throw UnsupportedError('verifyEnum');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation<T, S>(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -1321,11 +1794,496 @@ final class Echo {
 
 /// Testing fake for [Echo].
 base class FakeEcho implements Echo {
+  late final Future<EchoResponse> Function(EchoRequest request)? _echo;
+  late final Future<EchoErrorDetailsResponse> Function(
+    EchoErrorDetailsRequest request,
+  )?
+  _echoErrorDetails;
+  late final Future<FailEchoWithDetailsResponse> Function(
+    FailEchoWithDetailsRequest request,
+  )?
+  _failEchoWithDetails;
+  late final Stream<EchoResponse> Function(ExpandRequest request)? _expand;
+  late final Future<PagedExpandResponse> Function(PagedExpandRequest request)?
+  _pagedExpand;
+  late final Future<PagedExpandResponse> Function(
+    PagedExpandLegacyRequest request,
+  )?
+  _pagedExpandLegacy;
+  late final Future<PagedExpandLegacyMappedResponse> Function(
+    PagedExpandRequest request,
+  )?
+  _pagedExpandLegacyMapped;
+  late final Future<Operation<WaitResponse, WaitMetadata>> Function(
+    WaitRequest request,
+  )?
+  _wait;
+  late final Future<BlockResponse> Function(BlockRequest request)? _block;
+  late final Future<ListLocationsResponse> Function(
+    ListLocationsRequest request,
+  )?
+  _listLocations;
+  late final Future<Location> Function(GetLocationRequest request)?
+  _getLocation;
+  late final Future<Policy> Function(SetIamPolicyRequest request)?
+  _setIamPolicy;
+  late final Future<Policy> Function(GetIamPolicyRequest request)?
+  _getIamPolicy;
+  late final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeEcho.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeEcho({
+    Future<EchoResponse> Function(EchoRequest request)? echo,
+    Future<EchoErrorDetailsResponse> Function(EchoErrorDetailsRequest request)?
+    echoErrorDetails,
+    Future<FailEchoWithDetailsResponse> Function(
+      FailEchoWithDetailsRequest request,
+    )?
+    failEchoWithDetails,
+    Stream<EchoResponse> Function(ExpandRequest request)? expand,
+    Future<PagedExpandResponse> Function(PagedExpandRequest request)?
+    pagedExpand,
+    Future<PagedExpandResponse> Function(PagedExpandLegacyRequest request)?
+    pagedExpandLegacy,
+    Future<PagedExpandLegacyMappedResponse> Function(
+      PagedExpandRequest request,
+    )?
+    pagedExpandLegacyMapped,
+    Future<Operation<WaitResponse, WaitMetadata>> Function(WaitRequest request)?
+    wait,
+    Future<BlockResponse> Function(BlockRequest request)? block,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _echo = echo;
+
+    _echoErrorDetails = echoErrorDetails;
+
+    _failEchoWithDetails = failEchoWithDetails;
+
+    _expand = expand;
+
+    _pagedExpand = pagedExpand;
+
+    _pagedExpandLegacy = pagedExpandLegacy;
+
+    _pagedExpandLegacyMapped = pagedExpandLegacyMapped;
+
+    _wait = wait;
+
+    _block = block;
+
+    _listLocations = listLocations;
+
+    _getLocation = getLocation;
+
+    _setIamPolicy = setIamPolicy;
+
+    _getIamPolicy = getIamPolicy;
+
+    _testIamPermissions = testIamPermissions;
+
+    _listOperations = listOperations;
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// This method simply echoes the request. This method showcases unary RPCs.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<EchoResponse> echo(EchoRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_echo case final echo?) {
+      return echo(request);
+    }
+    throw UnsupportedError('echo');
+  }
+
+  /// This method returns error details in a repeated "google.protobuf.Any"
+  /// field. This method showcases handling errors thus encoded, particularly
+  /// over REST transport. Note that GAPICs only allow the type
+  /// "google.protobuf.Any" for field paths ending in "error.details", and, at
+  /// run-time, the actual types for these fields must be one of the types in
+  /// google/rpc/error_details.proto.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<EchoErrorDetailsResponse> echoErrorDetails(
+    EchoErrorDetailsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_echoErrorDetails case final echoErrorDetails?) {
+      return echoErrorDetails(request);
+    }
+    throw UnsupportedError('echoErrorDetails');
+  }
+
+  /// This method always fails with a gRPC "Aborted" error status that contains
+  /// multiple error details.  These include one instance of each of the standard
+  /// ones in error_details.proto
+  /// (https://github.com/googleapis/googleapis/blob/master/google/rpc/error_details.proto)
+  /// plus a custom, Showcase-defined PoetryError. The intent of this RPC is to
+  /// verify that GAPICs can process these various error details and surface them
+  /// to the user in an idiomatic form.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<FailEchoWithDetailsResponse> failEchoWithDetails(
+    FailEchoWithDetailsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_failEchoWithDetails case final failEchoWithDetails?) {
+      return failEchoWithDetails(request);
+    }
+    throw UnsupportedError('failEchoWithDetails');
+  }
+
+  /// This method splits the given content into words and will pass each word back
+  /// through the stream. This method showcases server-side streaming RPCs.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Stream<EchoResponse> expand(ExpandRequest request) {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+    if (_expand case final expand?) {
+      return expand(request);
+    }
+    throw UnsupportedError('expand');
+  }
+
+  /// This is similar to the Expand method but instead of returning a stream of
+  /// expanded words, this method returns a paged list of expanded words.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<PagedExpandResponse> pagedExpand(PagedExpandRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_pagedExpand case final pagedExpand?) {
+      return pagedExpand(request);
+    }
+    throw UnsupportedError('pagedExpand');
+  }
+
+  /// This is similar to the PagedExpand except that it uses
+  /// max_results instead of page_size, as some legacy APIs still
+  /// do. New APIs should NOT use this pattern.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<PagedExpandResponse> pagedExpandLegacy(
+    PagedExpandLegacyRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_pagedExpandLegacy case final pagedExpandLegacy?) {
+      return pagedExpandLegacy(request);
+    }
+    throw UnsupportedError('pagedExpandLegacy');
+  }
+
+  /// This method returns a map containing lists of words that appear in the input, keyed by their
+  /// initial character. The only words returned are the ones included in the current page,
+  /// as determined by page_token and page_size, which both refer to the word indices in the
+  /// input. This paging result consisting of a map of lists is a pattern used by some legacy
+  /// APIs. New APIs should NOT use this pattern.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<PagedExpandLegacyMappedResponse> pagedExpandLegacyMapped(
+    PagedExpandRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_pagedExpandLegacyMapped case final pagedExpandLegacyMapped?) {
+      return pagedExpandLegacyMapped(request);
+    }
+    throw UnsupportedError('pagedExpandLegacyMapped');
+  }
+
+  /// This method will wait for the requested amount of time and then return.
+  /// This method showcases how a client handles a request timeout.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<WaitResponse, WaitMetadata>> wait(
+    WaitRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_wait case final wait?) {
+      return wait(request);
+    }
+    throw UnsupportedError('wait');
+  }
+
+  /// This method will block (wait) for the requested amount of time
+  /// and then return the response or error.
+  /// This method showcases how a client handles delays or retries.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<BlockResponse> block(BlockRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_block case final block?) {
+      return block(request);
+    }
+    throw UnsupportedError('block');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation<T, S>(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -1587,11 +2545,350 @@ final class Identity {
 
 /// Testing fake for [Identity].
 base class FakeIdentity implements Identity {
+  late final Future<User> Function(CreateUserRequest request)? _createUser;
+  late final Future<User> Function(GetUserRequest request)? _getUser;
+  late final Future<User> Function(UpdateUserRequest request)? _updateUser;
+  late final Future<void> Function(DeleteUserRequest request)? _deleteUser;
+  late final Future<ListUsersResponse> Function(ListUsersRequest request)?
+  _listUsers;
+  late final Future<ListLocationsResponse> Function(
+    ListLocationsRequest request,
+  )?
+  _listLocations;
+  late final Future<Location> Function(GetLocationRequest request)?
+  _getLocation;
+  late final Future<Policy> Function(SetIamPolicyRequest request)?
+  _setIamPolicy;
+  late final Future<Policy> Function(GetIamPolicyRequest request)?
+  _getIamPolicy;
+  late final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeIdentity.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeIdentity({
+    Future<User> Function(CreateUserRequest request)? createUser,
+    Future<User> Function(GetUserRequest request)? getUser,
+    Future<User> Function(UpdateUserRequest request)? updateUser,
+    Future<void> Function(DeleteUserRequest request)? deleteUser,
+    Future<ListUsersResponse> Function(ListUsersRequest request)? listUsers,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _createUser = createUser;
+
+    _getUser = getUser;
+
+    _updateUser = updateUser;
+
+    _deleteUser = deleteUser;
+
+    _listUsers = listUsers;
+
+    _listLocations = listLocations;
+
+    _getLocation = getLocation;
+
+    _setIamPolicy = setIamPolicy;
+
+    _getIamPolicy = getIamPolicy;
+
+    _testIamPermissions = testIamPermissions;
+
+    _listOperations = listOperations;
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// Creates a user.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<User> createUser(CreateUserRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_createUser case final createUser?) {
+      return createUser(request);
+    }
+    throw UnsupportedError('createUser');
+  }
+
+  /// Retrieves the User with the given uri.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<User> getUser(GetUserRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getUser case final getUser?) {
+      return getUser(request);
+    }
+    throw UnsupportedError('getUser');
+  }
+
+  /// Updates a user.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<User> updateUser(UpdateUserRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_updateUser case final updateUser?) {
+      return updateUser(request);
+    }
+    throw UnsupportedError('updateUser');
+  }
+
+  /// Deletes a user, their profile, and all of their authored messages.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteUser(DeleteUserRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteUser case final deleteUser?) {
+      return deleteUser(request);
+    }
+    throw UnsupportedError('deleteUser');
+  }
+
+  /// Lists all users.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListUsersResponse> listUsers(ListUsersRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listUsers case final listUsers?) {
+      return listUsers(request);
+    }
+    throw UnsupportedError('listUsers');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation<T, S>(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -1970,11 +3267,518 @@ final class Messaging {
 
 /// Testing fake for [Messaging].
 base class FakeMessaging implements Messaging {
+  late final Future<Room> Function(CreateRoomRequest request)? _createRoom;
+  late final Future<Room> Function(GetRoomRequest request)? _getRoom;
+  late final Future<Room> Function(UpdateRoomRequest request)? _updateRoom;
+  late final Future<void> Function(DeleteRoomRequest request)? _deleteRoom;
+  late final Future<ListRoomsResponse> Function(ListRoomsRequest request)?
+  _listRooms;
+  late final Future<Blurb> Function(CreateBlurbRequest request)? _createBlurb;
+  late final Future<Blurb> Function(GetBlurbRequest request)? _getBlurb;
+  late final Future<Blurb> Function(UpdateBlurbRequest request)? _updateBlurb;
+  late final Future<void> Function(DeleteBlurbRequest request)? _deleteBlurb;
+  late final Future<ListBlurbsResponse> Function(ListBlurbsRequest request)?
+  _listBlurbs;
+  late final Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>>
+  Function(SearchBlurbsRequest request)?
+  _searchBlurbs;
+  late final Stream<StreamBlurbsResponse> Function(StreamBlurbsRequest request)?
+  _streamBlurbs;
+  late final Future<ListLocationsResponse> Function(
+    ListLocationsRequest request,
+  )?
+  _listLocations;
+  late final Future<Location> Function(GetLocationRequest request)?
+  _getLocation;
+  late final Future<Policy> Function(SetIamPolicyRequest request)?
+  _setIamPolicy;
+  late final Future<Policy> Function(GetIamPolicyRequest request)?
+  _getIamPolicy;
+  late final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeMessaging.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeMessaging({
+    Future<Room> Function(CreateRoomRequest request)? createRoom,
+    Future<Room> Function(GetRoomRequest request)? getRoom,
+    Future<Room> Function(UpdateRoomRequest request)? updateRoom,
+    Future<void> Function(DeleteRoomRequest request)? deleteRoom,
+    Future<ListRoomsResponse> Function(ListRoomsRequest request)? listRooms,
+    Future<Blurb> Function(CreateBlurbRequest request)? createBlurb,
+    Future<Blurb> Function(GetBlurbRequest request)? getBlurb,
+    Future<Blurb> Function(UpdateBlurbRequest request)? updateBlurb,
+    Future<void> Function(DeleteBlurbRequest request)? deleteBlurb,
+    Future<ListBlurbsResponse> Function(ListBlurbsRequest request)? listBlurbs,
+    Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>> Function(
+      SearchBlurbsRequest request,
+    )?
+    searchBlurbs,
+    Stream<StreamBlurbsResponse> Function(StreamBlurbsRequest request)?
+    streamBlurbs,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _createRoom = createRoom;
+
+    _getRoom = getRoom;
+
+    _updateRoom = updateRoom;
+
+    _deleteRoom = deleteRoom;
+
+    _listRooms = listRooms;
+
+    _createBlurb = createBlurb;
+
+    _getBlurb = getBlurb;
+
+    _updateBlurb = updateBlurb;
+
+    _deleteBlurb = deleteBlurb;
+
+    _listBlurbs = listBlurbs;
+
+    _searchBlurbs = searchBlurbs;
+
+    _streamBlurbs = streamBlurbs;
+
+    _listLocations = listLocations;
+
+    _getLocation = getLocation;
+
+    _setIamPolicy = setIamPolicy;
+
+    _getIamPolicy = getIamPolicy;
+
+    _testIamPermissions = testIamPermissions;
+
+    _listOperations = listOperations;
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// Creates a room.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Room> createRoom(CreateRoomRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_createRoom case final createRoom?) {
+      return createRoom(request);
+    }
+    throw UnsupportedError('createRoom');
+  }
+
+  /// Retrieves the Room with the given resource name.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Room> getRoom(GetRoomRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getRoom case final getRoom?) {
+      return getRoom(request);
+    }
+    throw UnsupportedError('getRoom');
+  }
+
+  /// Updates a room.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Room> updateRoom(UpdateRoomRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_updateRoom case final updateRoom?) {
+      return updateRoom(request);
+    }
+    throw UnsupportedError('updateRoom');
+  }
+
+  /// Deletes a room and all of its blurbs.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteRoom(DeleteRoomRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteRoom case final deleteRoom?) {
+      return deleteRoom(request);
+    }
+    throw UnsupportedError('deleteRoom');
+  }
+
+  /// Lists all chat rooms.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListRoomsResponse> listRooms(ListRoomsRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listRooms case final listRooms?) {
+      return listRooms(request);
+    }
+    throw UnsupportedError('listRooms');
+  }
+
+  /// Creates a blurb. If the parent is a room, the blurb is understood to be a
+  /// message in that room. If the parent is a profile, the blurb is understood
+  /// to be a post on the profile.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Blurb> createBlurb(CreateBlurbRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_createBlurb case final createBlurb?) {
+      return createBlurb(request);
+    }
+    throw UnsupportedError('createBlurb');
+  }
+
+  /// Retrieves the Blurb with the given resource name.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Blurb> getBlurb(GetBlurbRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getBlurb case final getBlurb?) {
+      return getBlurb(request);
+    }
+    throw UnsupportedError('getBlurb');
+  }
+
+  /// Updates a blurb.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Blurb> updateBlurb(UpdateBlurbRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_updateBlurb case final updateBlurb?) {
+      return updateBlurb(request);
+    }
+    throw UnsupportedError('updateBlurb');
+  }
+
+  /// Deletes a blurb.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteBlurb(DeleteBlurbRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteBlurb case final deleteBlurb?) {
+      return deleteBlurb(request);
+    }
+    throw UnsupportedError('deleteBlurb');
+  }
+
+  /// Lists blurbs for a specific chat room or user profile depending on the
+  /// parent resource name.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListBlurbsResponse> listBlurbs(ListBlurbsRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listBlurbs case final listBlurbs?) {
+      return listBlurbs(request);
+    }
+    throw UnsupportedError('listBlurbs');
+  }
+
+  /// This method searches through all blurbs across all rooms and profiles
+  /// for blurbs containing to words found in the query. Only posts that
+  /// contain an exact match of a queried word will be returned.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<SearchBlurbsResponse, SearchBlurbsMetadata>> searchBlurbs(
+    SearchBlurbsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_searchBlurbs case final searchBlurbs?) {
+      return searchBlurbs(request);
+    }
+    throw UnsupportedError('searchBlurbs');
+  }
+
+  /// This returns a stream that emits the blurbs that are created for a
+  /// particular chat room or user profile.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Stream<StreamBlurbsResponse> streamBlurbs(StreamBlurbsRequest request) {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+    if (_streamBlurbs case final streamBlurbs?) {
+      return streamBlurbs(request);
+    }
+    throw UnsupportedError('streamBlurbs');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation<T, S>(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -2249,11 +4053,402 @@ final class SequenceService {
 
 /// Testing fake for [SequenceService].
 base class FakeSequenceService implements SequenceService {
+  late final Future<Sequence> Function(CreateSequenceRequest request)?
+  _createSequence;
+  late final Future<StreamingSequence> Function(
+    CreateStreamingSequenceRequest request,
+  )?
+  _createStreamingSequence;
+  late final Future<SequenceReport> Function(GetSequenceReportRequest request)?
+  _getSequenceReport;
+  late final Future<StreamingSequenceReport> Function(
+    GetStreamingSequenceReportRequest request,
+  )?
+  _getStreamingSequenceReport;
+  late final Future<void> Function(AttemptSequenceRequest request)?
+  _attemptSequence;
+  late final Stream<AttemptStreamingSequenceResponse> Function(
+    AttemptStreamingSequenceRequest request,
+  )?
+  _attemptStreamingSequence;
+  late final Future<ListLocationsResponse> Function(
+    ListLocationsRequest request,
+  )?
+  _listLocations;
+  late final Future<Location> Function(GetLocationRequest request)?
+  _getLocation;
+  late final Future<Policy> Function(SetIamPolicyRequest request)?
+  _setIamPolicy;
+  late final Future<Policy> Function(GetIamPolicyRequest request)?
+  _getIamPolicy;
+  late final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeSequenceService.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeSequenceService({
+    Future<Sequence> Function(CreateSequenceRequest request)? createSequence,
+    Future<StreamingSequence> Function(CreateStreamingSequenceRequest request)?
+    createStreamingSequence,
+    Future<SequenceReport> Function(GetSequenceReportRequest request)?
+    getSequenceReport,
+    Future<StreamingSequenceReport> Function(
+      GetStreamingSequenceReportRequest request,
+    )?
+    getStreamingSequenceReport,
+    Future<void> Function(AttemptSequenceRequest request)? attemptSequence,
+    Stream<AttemptStreamingSequenceResponse> Function(
+      AttemptStreamingSequenceRequest request,
+    )?
+    attemptStreamingSequence,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _createSequence = createSequence;
+
+    _createStreamingSequence = createStreamingSequence;
+
+    _getSequenceReport = getSequenceReport;
+
+    _getStreamingSequenceReport = getStreamingSequenceReport;
+
+    _attemptSequence = attemptSequence;
+
+    _attemptStreamingSequence = attemptStreamingSequence;
+
+    _listLocations = listLocations;
+
+    _getLocation = getLocation;
+
+    _setIamPolicy = setIamPolicy;
+
+    _getIamPolicy = getIamPolicy;
+
+    _testIamPermissions = testIamPermissions;
+
+    _listOperations = listOperations;
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// Create a sequence of responses to be returned as unary calls
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Sequence> createSequence(CreateSequenceRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_createSequence case final createSequence?) {
+      return createSequence(request);
+    }
+    throw UnsupportedError('createSequence');
+  }
+
+  /// Creates a sequence of responses to be returned in a server streaming call
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<StreamingSequence> createStreamingSequence(
+    CreateStreamingSequenceRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_createStreamingSequence case final createStreamingSequence?) {
+      return createStreamingSequence(request);
+    }
+    throw UnsupportedError('createStreamingSequence');
+  }
+
+  /// Retrieves a sequence report which can be used to retrieve information about a
+  /// sequence of unary calls.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SequenceReport> getSequenceReport(
+    GetSequenceReportRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getSequenceReport case final getSequenceReport?) {
+      return getSequenceReport(request);
+    }
+    throw UnsupportedError('getSequenceReport');
+  }
+
+  /// Retrieves a sequence report which can be used to retrieve information
+  /// about a sequences of responses in a server streaming call.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<StreamingSequenceReport> getStreamingSequenceReport(
+    GetStreamingSequenceReportRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getStreamingSequenceReport case final getStreamingSequenceReport?) {
+      return getStreamingSequenceReport(request);
+    }
+    throw UnsupportedError('getStreamingSequenceReport');
+  }
+
+  /// Attempts a sequence of unary responses.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> attemptSequence(AttemptSequenceRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_attemptSequence case final attemptSequence?) {
+      return attemptSequence(request);
+    }
+    throw UnsupportedError('attemptSequence');
+  }
+
+  /// Attempts a server streaming call with a sequence of responses
+  /// Can be used to test retries and stream resumption logic
+  /// May not function as expected in HTTP mode due to when http statuses are sent
+  /// See https://github.com/googleapis/gapic-showcase/issues/1377 for more details
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Stream<AttemptStreamingSequenceResponse> attemptStreamingSequence(
+    AttemptStreamingSequenceRequest request,
+  ) {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+    if (_attemptStreamingSequence case final attemptStreamingSequence?) {
+      return attemptStreamingSequence(request);
+    }
+    throw UnsupportedError('attemptStreamingSequence');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation<T, S>(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -2577,11 +4772,437 @@ final class Testing {
 
 /// Testing fake for [Testing].
 base class FakeTesting implements Testing {
+  late final Future<Session> Function(CreateSessionRequest request)?
+  _createSession;
+  late final Future<Session> Function(GetSessionRequest request)? _getSession;
+  late final Future<ListSessionsResponse> Function(ListSessionsRequest request)?
+  _listSessions;
+  late final Future<void> Function(DeleteSessionRequest request)?
+  _deleteSession;
+  late final Future<ReportSessionResponse> Function(
+    ReportSessionRequest request,
+  )?
+  _reportSession;
+  late final Future<ListTestsResponse> Function(ListTestsRequest request)?
+  _listTests;
+  late final Future<void> Function(DeleteTestRequest request)? _deleteTest;
+  late final Future<VerifyTestResponse> Function(VerifyTestRequest request)?
+  _verifyTest;
+  late final Future<ListLocationsResponse> Function(
+    ListLocationsRequest request,
+  )?
+  _listLocations;
+  late final Future<Location> Function(GetLocationRequest request)?
+  _getLocation;
+  late final Future<Policy> Function(SetIamPolicyRequest request)?
+  _setIamPolicy;
+  late final Future<Policy> Function(GetIamPolicyRequest request)?
+  _getIamPolicy;
+  late final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeTesting.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeTesting({
+    Future<Session> Function(CreateSessionRequest request)? createSession,
+    Future<Session> Function(GetSessionRequest request)? getSession,
+    Future<ListSessionsResponse> Function(ListSessionsRequest request)?
+    listSessions,
+    Future<void> Function(DeleteSessionRequest request)? deleteSession,
+    Future<ReportSessionResponse> Function(ReportSessionRequest request)?
+    reportSession,
+    Future<ListTestsResponse> Function(ListTestsRequest request)? listTests,
+    Future<void> Function(DeleteTestRequest request)? deleteTest,
+    Future<VerifyTestResponse> Function(VerifyTestRequest request)? verifyTest,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _createSession = createSession;
+
+    _getSession = getSession;
+
+    _listSessions = listSessions;
+
+    _deleteSession = deleteSession;
+
+    _reportSession = reportSession;
+
+    _listTests = listTests;
+
+    _deleteTest = deleteTest;
+
+    _verifyTest = verifyTest;
+
+    _listLocations = listLocations;
+
+    _getLocation = getLocation;
+
+    _setIamPolicy = setIamPolicy;
+
+    _getIamPolicy = getIamPolicy;
+
+    _testIamPermissions = testIamPermissions;
+
+    _listOperations = listOperations;
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// Creates a new testing session.
+  /// Adding this comment with special characters for comment formatting tests:
+  /// 1. (abra->kadabra->alakazam)
+  /// 2) `Nonsense`: `pokemon/*/psychic/*`
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Session> createSession(CreateSessionRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_createSession case final createSession?) {
+      return createSession(request);
+    }
+    throw UnsupportedError('createSession');
+  }
+
+  /// Gets a testing session.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Session> getSession(GetSessionRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getSession case final getSession?) {
+      return getSession(request);
+    }
+    throw UnsupportedError('getSession');
+  }
+
+  /// Lists the current test sessions.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListSessionsResponse> listSessions(ListSessionsRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listSessions case final listSessions?) {
+      return listSessions(request);
+    }
+    throw UnsupportedError('listSessions');
+  }
+
+  /// Delete a test session.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteSession(DeleteSessionRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteSession case final deleteSession?) {
+      return deleteSession(request);
+    }
+    throw UnsupportedError('deleteSession');
+  }
+
+  /// Report on the status of a session.
+  /// This generates a report detailing which tests have been completed,
+  /// and an overall rollup.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ReportSessionResponse> reportSession(
+    ReportSessionRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_reportSession case final reportSession?) {
+      return reportSession(request);
+    }
+    throw UnsupportedError('reportSession');
+  }
+
+  /// List the tests of a sessesion.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListTestsResponse> listTests(ListTestsRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listTests case final listTests?) {
+      return listTests(request);
+    }
+    throw UnsupportedError('listTests');
+  }
+
+  /// Explicitly decline to implement a test.
+  ///
+  /// This removes the test from subsequent `ListTests` calls, and
+  /// attempting to do the test will error.
+  ///
+  /// This method will error if attempting to delete a required test.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteTest(DeleteTestRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteTest case final deleteTest?) {
+      return deleteTest(request);
+    }
+    throw UnsupportedError('deleteTest');
+  }
+
+  /// Register a response to a test.
+  ///
+  /// In cases where a test involves registering a final answer at the
+  /// end of the test, this method provides the means to do so.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<VerifyTestResponse> verifyTest(VerifyTestRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_verifyTest case final verifyTest?) {
+      return verifyTest(request);
+    }
+    throw UnsupportedError('verifyTest');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Provides the `Locations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Provides the `IAMPolicy` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation<T, S>(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

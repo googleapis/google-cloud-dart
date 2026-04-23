@@ -151,11 +151,145 @@ final class LanguageService {
 
 /// Testing fake for [LanguageService].
 base class FakeLanguageService implements LanguageService {
+  late final Future<AnalyzeSentimentResponse> Function(
+    AnalyzeSentimentRequest request,
+  )?
+  _analyzeSentiment;
+  late final Future<AnalyzeEntitiesResponse> Function(
+    AnalyzeEntitiesRequest request,
+  )?
+  _analyzeEntities;
+  late final Future<ClassifyTextResponse> Function(ClassifyTextRequest request)?
+  _classifyText;
+  late final Future<ModerateTextResponse> Function(ModerateTextRequest request)?
+  _moderateText;
+  late final Future<AnnotateTextResponse> Function(AnnotateTextRequest request)?
+  _annotateText;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeLanguageService.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeLanguageService({
+    Future<AnalyzeSentimentResponse> Function(AnalyzeSentimentRequest request)?
+    analyzeSentiment,
+    Future<AnalyzeEntitiesResponse> Function(AnalyzeEntitiesRequest request)?
+    analyzeEntities,
+    Future<ClassifyTextResponse> Function(ClassifyTextRequest request)?
+    classifyText,
+    Future<ModerateTextResponse> Function(ModerateTextRequest request)?
+    moderateText,
+    Future<AnnotateTextResponse> Function(AnnotateTextRequest request)?
+    annotateText,
+  }) {
+    _analyzeSentiment = analyzeSentiment;
+
+    _analyzeEntities = analyzeEntities;
+
+    _classifyText = classifyText;
+
+    _moderateText = moderateText;
+
+    _annotateText = annotateText;
+  }
+
+  /// Analyzes the sentiment of the provided text.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<AnalyzeSentimentResponse> analyzeSentiment(
+    AnalyzeSentimentRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_analyzeSentiment case final analyzeSentiment?) {
+      return analyzeSentiment(request);
+    }
+    throw UnsupportedError('analyzeSentiment');
+  }
+
+  /// Finds named entities (currently proper names and common nouns) in the text
+  /// along with entity types, probability, mentions for each entity, and
+  /// other properties.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<AnalyzeEntitiesResponse> analyzeEntities(
+    AnalyzeEntitiesRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_analyzeEntities case final analyzeEntities?) {
+      return analyzeEntities(request);
+    }
+    throw UnsupportedError('analyzeEntities');
+  }
+
+  /// Classifies a document into categories.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ClassifyTextResponse> classifyText(ClassifyTextRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_classifyText case final classifyText?) {
+      return classifyText(request);
+    }
+    throw UnsupportedError('classifyText');
+  }
+
+  /// Moderates a document for harmful and sensitive categories.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ModerateTextResponse> moderateText(ModerateTextRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_moderateText case final moderateText?) {
+      return moderateText(request);
+    }
+    throw UnsupportedError('moderateText');
+  }
+
+  /// A convenience method that provides all features in one call.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<AnnotateTextResponse> annotateText(AnnotateTextRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_annotateText case final annotateText?) {
+      return annotateText(request);
+    }
+    throw UnsupportedError('annotateText');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

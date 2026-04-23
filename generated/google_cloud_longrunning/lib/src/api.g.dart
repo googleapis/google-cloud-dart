@@ -178,11 +178,129 @@ final class Operations {
 
 /// Testing fake for [Operations].
 base class FakeOperations implements Operations {
+  late final Future<ListOperationsResponse> Function(
+    ListOperationsRequest request,
+  )?
+  _listOperations;
+  late final Future<Operation> Function(GetOperationRequest request)?
+  _getOperation;
+  late final Future<void> Function(DeleteOperationRequest request)?
+  _deleteOperation;
+  late final Future<void> Function(CancelOperationRequest request)?
+  _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeOperations.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('');
+  @override
+  ServiceClient get _client => throw UnsupportedError('');
+
+  bool isClosed = false;
+
+  FakeOperations({
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation> Function(GetOperationRequest request)? getOperation,
+    Future<void> Function(DeleteOperationRequest request)? deleteOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) {
+    _listOperations = listOperations;
+
+    _getOperation = getOperation;
+
+    _deleteOperation = deleteOperation;
+
+    _cancelOperation = cancelOperation;
+  }
+
+  /// Lists operations that match the specified filter in the request. If the
+  /// server doesn't support this method, it returns `UNIMPLEMENTED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Gets the latest state of a long-running operation.  Clients can use this
+  /// method to poll the operation result at intervals as recommended by the API
+  /// service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation> getOperation(GetOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Deletes a long-running operation. This method indicates that the client is
+  /// no longer interested in the operation result. It does not cancel the
+  /// operation. If the server doesn't support this method, it returns
+  /// `google.rpc.Code.UNIMPLEMENTED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteOperation(DeleteOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_deleteOperation case final deleteOperation?) {
+      return deleteOperation(request);
+    }
+    throw UnsupportedError('deleteOperation');
+  }
+
+  /// Starts asynchronous cancellation on a long-running operation.  The server
+  /// makes a best effort to cancel the operation, but success is not
+  /// guaranteed.  If the server doesn't support this method, it returns
+  /// `google.rpc.Code.UNIMPLEMENTED`.  Clients can use
+  /// `Operations.GetOperation` or
+  /// other methods to check whether the cancellation succeeded or whether the
+  /// operation completed despite cancellation. On successful cancellation,
+  /// the operation is not deleted; instead, it becomes an operation with
+  /// an `Operation.error` value with a
+  /// `google.rpc.Status.code` of `1`, corresponding to
+  /// `Code.CANCELLED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) {
+      throw StateError('Service is closed');
+    }
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
