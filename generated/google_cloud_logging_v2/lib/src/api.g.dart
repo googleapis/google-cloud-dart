@@ -234,11 +234,211 @@ final class LoggingServiceV2 {
 
 /// Testing fake for [LoggingServiceV2].
 base class FakeLoggingServiceV2 implements LoggingServiceV2 {
+  final Future<void> Function(DeleteLogRequest request)? _deleteLog;
+  final Future<WriteLogEntriesResponse> Function(
+    WriteLogEntriesRequest request,
+  )?
+  _writeLogEntries;
+  final Future<ListLogEntriesResponse> Function(ListLogEntriesRequest request)?
+  _listLogEntries;
+  final Future<ListMonitoredResourceDescriptorsResponse> Function(
+    ListMonitoredResourceDescriptorsRequest request,
+  )?
+  _listMonitoredResourceDescriptors;
+  final Future<ListLogsResponse> Function(ListLogsRequest request)? _listLogs;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeLoggingServiceV2.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeLoggingServiceV2({
+    Future<void> Function(DeleteLogRequest request)? deleteLog,
+    Future<WriteLogEntriesResponse> Function(WriteLogEntriesRequest request)?
+    writeLogEntries,
+    Future<ListLogEntriesResponse> Function(ListLogEntriesRequest request)?
+    listLogEntries,
+    Future<ListMonitoredResourceDescriptorsResponse> Function(
+      ListMonitoredResourceDescriptorsRequest request,
+    )?
+    listMonitoredResourceDescriptors,
+    Future<ListLogsResponse> Function(ListLogsRequest request)? listLogs,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) : _deleteLog = deleteLog,
+       _writeLogEntries = writeLogEntries,
+       _listLogEntries = listLogEntries,
+       _listMonitoredResourceDescriptors = listMonitoredResourceDescriptors,
+       _listLogs = listLogs,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _cancelOperation = cancelOperation;
+
+  /// Deletes all the log entries in a log for the _Default Log Bucket. The log
+  /// reappears if it receives new entries. Log entries written shortly before
+  /// the delete operation might not be deleted. Entries received after the
+  /// delete operation with a timestamp before the operation will be deleted.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteLog(DeleteLogRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteLog case final deleteLog?) {
+      return deleteLog(request);
+    }
+    throw UnsupportedError('deleteLog');
+  }
+
+  /// Writes log entries to Logging. This API method is the
+  /// only way to send log entries to Logging. This method
+  /// is used, directly or indirectly, by the Logging agent
+  /// (fluentd) and all logging libraries configured to use Logging.
+  /// A single request may contain log entries for a maximum of 1000
+  /// different resources (projects, organizations, billing accounts or
+  /// folders)
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<WriteLogEntriesResponse> writeLogEntries(
+    WriteLogEntriesRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_writeLogEntries case final writeLogEntries?) {
+      return writeLogEntries(request);
+    }
+    throw UnsupportedError('writeLogEntries');
+  }
+
+  /// Lists log entries.  Use this method to retrieve log entries that originated
+  /// from a project/folder/organization/billing account.  For ways to export log
+  /// entries, see [Exporting
+  /// Logs](https://cloud.google.com/logging/docs/export).
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLogEntriesResponse> listLogEntries(
+    ListLogEntriesRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLogEntries case final listLogEntries?) {
+      return listLogEntries(request);
+    }
+    throw UnsupportedError('listLogEntries');
+  }
+
+  /// Lists the descriptors for monitored resource types used by Logging.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListMonitoredResourceDescriptorsResponse>
+  listMonitoredResourceDescriptors(
+    ListMonitoredResourceDescriptorsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listMonitoredResourceDescriptors
+        case final listMonitoredResourceDescriptors?) {
+      return listMonitoredResourceDescriptors(request);
+    }
+    throw UnsupportedError('listMonitoredResourceDescriptors');
+  }
+
+  /// Lists the logs in projects, organizations, folders, or billing accounts.
+  /// Only logs that have entries are listed.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLogsResponse> listLogs(ListLogsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLogs case final listLogs?) {
+      return listLogs(request);
+    }
+    throw UnsupportedError('listLogs');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -941,11 +1141,836 @@ final class ConfigServiceV2 {
 
 /// Testing fake for [ConfigServiceV2].
 base class FakeConfigServiceV2 implements ConfigServiceV2 {
+  final Future<ListBucketsResponse> Function(ListBucketsRequest request)?
+  _listBuckets;
+  final Future<LogBucket> Function(GetBucketRequest request)? _getBucket;
+  final Future<Operation<LogBucket, BucketMetadata>> Function(
+    CreateBucketRequest request,
+  )?
+  _createBucketAsync;
+  final Future<Operation<LogBucket, BucketMetadata>> Function(
+    UpdateBucketRequest request,
+  )?
+  _updateBucketAsync;
+  final Future<LogBucket> Function(CreateBucketRequest request)? _createBucket;
+  final Future<LogBucket> Function(UpdateBucketRequest request)? _updateBucket;
+  final Future<void> Function(DeleteBucketRequest request)? _deleteBucket;
+  final Future<void> Function(UndeleteBucketRequest request)? _undeleteBucket;
+  final Future<ListViewsResponse> Function(ListViewsRequest request)?
+  _listViews;
+  final Future<LogView> Function(GetViewRequest request)? _getView;
+  final Future<LogView> Function(CreateViewRequest request)? _createView;
+  final Future<LogView> Function(UpdateViewRequest request)? _updateView;
+  final Future<void> Function(DeleteViewRequest request)? _deleteView;
+  final Future<ListSinksResponse> Function(ListSinksRequest request)?
+  _listSinks;
+  final Future<LogSink> Function(GetSinkRequest request)? _getSink;
+  final Future<LogSink> Function(CreateSinkRequest request)? _createSink;
+  final Future<LogSink> Function(UpdateSinkRequest request)? _updateSink;
+  final Future<void> Function(DeleteSinkRequest request)? _deleteSink;
+  final Future<Operation<Link, LinkMetadata>> Function(
+    CreateLinkRequest request,
+  )?
+  _createLink;
+  final Future<Operation<Empty, LinkMetadata>> Function(
+    DeleteLinkRequest request,
+  )?
+  _deleteLink;
+  final Future<ListLinksResponse> Function(ListLinksRequest request)?
+  _listLinks;
+  final Future<Link> Function(GetLinkRequest request)? _getLink;
+  final Future<ListExclusionsResponse> Function(ListExclusionsRequest request)?
+  _listExclusions;
+  final Future<LogExclusion> Function(GetExclusionRequest request)?
+  _getExclusion;
+  final Future<LogExclusion> Function(CreateExclusionRequest request)?
+  _createExclusion;
+  final Future<LogExclusion> Function(UpdateExclusionRequest request)?
+  _updateExclusion;
+  final Future<void> Function(DeleteExclusionRequest request)? _deleteExclusion;
+  final Future<CmekSettings> Function(GetCmekSettingsRequest request)?
+  _getCmekSettings;
+  final Future<CmekSettings> Function(UpdateCmekSettingsRequest request)?
+  _updateCmekSettings;
+  final Future<Settings> Function(GetSettingsRequest request)? _getSettings;
+  final Future<Settings> Function(UpdateSettingsRequest request)?
+  _updateSettings;
+  final Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>>
+  Function(CopyLogEntriesRequest request)?
+  _copyLogEntries;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeConfigServiceV2.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeConfigServiceV2({
+    Future<ListBucketsResponse> Function(ListBucketsRequest request)?
+    listBuckets,
+    Future<LogBucket> Function(GetBucketRequest request)? getBucket,
+    Future<Operation<LogBucket, BucketMetadata>> Function(
+      CreateBucketRequest request,
+    )?
+    createBucketAsync,
+    Future<Operation<LogBucket, BucketMetadata>> Function(
+      UpdateBucketRequest request,
+    )?
+    updateBucketAsync,
+    Future<LogBucket> Function(CreateBucketRequest request)? createBucket,
+    Future<LogBucket> Function(UpdateBucketRequest request)? updateBucket,
+    Future<void> Function(DeleteBucketRequest request)? deleteBucket,
+    Future<void> Function(UndeleteBucketRequest request)? undeleteBucket,
+    Future<ListViewsResponse> Function(ListViewsRequest request)? listViews,
+    Future<LogView> Function(GetViewRequest request)? getView,
+    Future<LogView> Function(CreateViewRequest request)? createView,
+    Future<LogView> Function(UpdateViewRequest request)? updateView,
+    Future<void> Function(DeleteViewRequest request)? deleteView,
+    Future<ListSinksResponse> Function(ListSinksRequest request)? listSinks,
+    Future<LogSink> Function(GetSinkRequest request)? getSink,
+    Future<LogSink> Function(CreateSinkRequest request)? createSink,
+    Future<LogSink> Function(UpdateSinkRequest request)? updateSink,
+    Future<void> Function(DeleteSinkRequest request)? deleteSink,
+    Future<Operation<Link, LinkMetadata>> Function(CreateLinkRequest request)?
+    createLink,
+    Future<Operation<Empty, LinkMetadata>> Function(DeleteLinkRequest request)?
+    deleteLink,
+    Future<ListLinksResponse> Function(ListLinksRequest request)? listLinks,
+    Future<Link> Function(GetLinkRequest request)? getLink,
+    Future<ListExclusionsResponse> Function(ListExclusionsRequest request)?
+    listExclusions,
+    Future<LogExclusion> Function(GetExclusionRequest request)? getExclusion,
+    Future<LogExclusion> Function(CreateExclusionRequest request)?
+    createExclusion,
+    Future<LogExclusion> Function(UpdateExclusionRequest request)?
+    updateExclusion,
+    Future<void> Function(DeleteExclusionRequest request)? deleteExclusion,
+    Future<CmekSettings> Function(GetCmekSettingsRequest request)?
+    getCmekSettings,
+    Future<CmekSettings> Function(UpdateCmekSettingsRequest request)?
+    updateCmekSettings,
+    Future<Settings> Function(GetSettingsRequest request)? getSettings,
+    Future<Settings> Function(UpdateSettingsRequest request)? updateSettings,
+    Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>> Function(
+      CopyLogEntriesRequest request,
+    )?
+    copyLogEntries,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) : _listBuckets = listBuckets,
+       _getBucket = getBucket,
+       _createBucketAsync = createBucketAsync,
+       _updateBucketAsync = updateBucketAsync,
+       _createBucket = createBucket,
+       _updateBucket = updateBucket,
+       _deleteBucket = deleteBucket,
+       _undeleteBucket = undeleteBucket,
+       _listViews = listViews,
+       _getView = getView,
+       _createView = createView,
+       _updateView = updateView,
+       _deleteView = deleteView,
+       _listSinks = listSinks,
+       _getSink = getSink,
+       _createSink = createSink,
+       _updateSink = updateSink,
+       _deleteSink = deleteSink,
+       _createLink = createLink,
+       _deleteLink = deleteLink,
+       _listLinks = listLinks,
+       _getLink = getLink,
+       _listExclusions = listExclusions,
+       _getExclusion = getExclusion,
+       _createExclusion = createExclusion,
+       _updateExclusion = updateExclusion,
+       _deleteExclusion = deleteExclusion,
+       _getCmekSettings = getCmekSettings,
+       _updateCmekSettings = updateCmekSettings,
+       _getSettings = getSettings,
+       _updateSettings = updateSettings,
+       _copyLogEntries = copyLogEntries,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _cancelOperation = cancelOperation;
+
+  /// Lists log buckets.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListBucketsResponse> listBuckets(ListBucketsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listBuckets case final listBuckets?) {
+      return listBuckets(request);
+    }
+    throw UnsupportedError('listBuckets');
+  }
+
+  /// Gets a log bucket.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogBucket> getBucket(GetBucketRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getBucket case final getBucket?) {
+      return getBucket(request);
+    }
+    throw UnsupportedError('getBucket');
+  }
+
+  /// Creates a log bucket asynchronously that can be used to store log entries.
+  ///
+  /// After a bucket has been created, the bucket's location cannot be changed.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<LogBucket, BucketMetadata>> createBucketAsync(
+    CreateBucketRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createBucketAsync case final createBucketAsync?) {
+      return createBucketAsync(request);
+    }
+    throw UnsupportedError('createBucketAsync');
+  }
+
+  /// Updates a log bucket asynchronously.
+  ///
+  /// If the bucket has a `lifecycle_state` of `DELETE_REQUESTED`, then
+  /// `FAILED_PRECONDITION` will be returned.
+  ///
+  /// After a bucket has been created, the bucket's location cannot be changed.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<LogBucket, BucketMetadata>> updateBucketAsync(
+    UpdateBucketRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateBucketAsync case final updateBucketAsync?) {
+      return updateBucketAsync(request);
+    }
+    throw UnsupportedError('updateBucketAsync');
+  }
+
+  /// Creates a log bucket that can be used to store log entries. After a bucket
+  /// has been created, the bucket's location cannot be changed.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogBucket> createBucket(CreateBucketRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createBucket case final createBucket?) {
+      return createBucket(request);
+    }
+    throw UnsupportedError('createBucket');
+  }
+
+  /// Updates a log bucket.
+  ///
+  /// If the bucket has a `lifecycle_state` of `DELETE_REQUESTED`, then
+  /// `FAILED_PRECONDITION` will be returned.
+  ///
+  /// After a bucket has been created, the bucket's location cannot be changed.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogBucket> updateBucket(UpdateBucketRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateBucket case final updateBucket?) {
+      return updateBucket(request);
+    }
+    throw UnsupportedError('updateBucket');
+  }
+
+  /// Deletes a log bucket.
+  ///
+  /// Changes the bucket's `lifecycle_state` to the `DELETE_REQUESTED` state.
+  /// After 7 days, the bucket will be purged and all log entries in the bucket
+  /// will be permanently deleted.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteBucket(DeleteBucketRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteBucket case final deleteBucket?) {
+      return deleteBucket(request);
+    }
+    throw UnsupportedError('deleteBucket');
+  }
+
+  /// Undeletes a log bucket. A bucket that has been deleted can be undeleted
+  /// within the grace period of 7 days.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> undeleteBucket(UndeleteBucketRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_undeleteBucket case final undeleteBucket?) {
+      return undeleteBucket(request);
+    }
+    throw UnsupportedError('undeleteBucket');
+  }
+
+  /// Lists views on a log bucket.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListViewsResponse> listViews(ListViewsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listViews case final listViews?) {
+      return listViews(request);
+    }
+    throw UnsupportedError('listViews');
+  }
+
+  /// Gets a view on a log bucket..
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogView> getView(GetViewRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getView case final getView?) {
+      return getView(request);
+    }
+    throw UnsupportedError('getView');
+  }
+
+  /// Creates a view over log entries in a log bucket. A bucket may contain a
+  /// maximum of 30 views.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogView> createView(CreateViewRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createView case final createView?) {
+      return createView(request);
+    }
+    throw UnsupportedError('createView');
+  }
+
+  /// Updates a view on a log bucket. This method replaces the following fields
+  /// in the existing view with values from the new view: `filter`.
+  /// If an `UNAVAILABLE` error is returned, this indicates that system is not in
+  /// a state where it can update the view. If this occurs, please try again in a
+  /// few minutes.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogView> updateView(UpdateViewRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateView case final updateView?) {
+      return updateView(request);
+    }
+    throw UnsupportedError('updateView');
+  }
+
+  /// Deletes a view on a log bucket.
+  /// If an `UNAVAILABLE` error is returned, this indicates that system is not in
+  /// a state where it can delete the view. If this occurs, please try again in a
+  /// few minutes.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteView(DeleteViewRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteView case final deleteView?) {
+      return deleteView(request);
+    }
+    throw UnsupportedError('deleteView');
+  }
+
+  /// Lists sinks.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListSinksResponse> listSinks(ListSinksRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listSinks case final listSinks?) {
+      return listSinks(request);
+    }
+    throw UnsupportedError('listSinks');
+  }
+
+  /// Gets a sink.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogSink> getSink(GetSinkRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getSink case final getSink?) {
+      return getSink(request);
+    }
+    throw UnsupportedError('getSink');
+  }
+
+  /// Creates a sink that exports specified log entries to a destination. The
+  /// export of newly-ingested log entries begins immediately, unless the sink's
+  /// `writer_identity` is not permitted to write to the destination. A sink can
+  /// export log entries only from the resource owning the sink.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogSink> createSink(CreateSinkRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createSink case final createSink?) {
+      return createSink(request);
+    }
+    throw UnsupportedError('createSink');
+  }
+
+  /// Updates a sink. This method replaces the following fields in the existing
+  /// sink with values from the new sink: `destination`, and `filter`.
+  ///
+  /// The updated sink might also have a new `writer_identity`; see the
+  /// `unique_writer_identity` field.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogSink> updateSink(UpdateSinkRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateSink case final updateSink?) {
+      return updateSink(request);
+    }
+    throw UnsupportedError('updateSink');
+  }
+
+  /// Deletes a sink. If the sink has a unique `writer_identity`, then that
+  /// service account is also deleted.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteSink(DeleteSinkRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteSink case final deleteSink?) {
+      return deleteSink(request);
+    }
+    throw UnsupportedError('deleteSink');
+  }
+
+  /// Asynchronously creates a linked dataset in BigQuery which makes it possible
+  /// to use BigQuery to read the logs stored in the log bucket. A log bucket may
+  /// currently only contain one link.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<Link, LinkMetadata>> createLink(
+    CreateLinkRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createLink case final createLink?) {
+      return createLink(request);
+    }
+    throw UnsupportedError('createLink');
+  }
+
+  /// Deletes a link. This will also delete the corresponding BigQuery linked
+  /// dataset.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<Empty, LinkMetadata>> deleteLink(
+    DeleteLinkRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteLink case final deleteLink?) {
+      return deleteLink(request);
+    }
+    throw UnsupportedError('deleteLink');
+  }
+
+  /// Lists links.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLinksResponse> listLinks(ListLinksRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLinks case final listLinks?) {
+      return listLinks(request);
+    }
+    throw UnsupportedError('listLinks');
+  }
+
+  /// Gets a link.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Link> getLink(GetLinkRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLink case final getLink?) {
+      return getLink(request);
+    }
+    throw UnsupportedError('getLink');
+  }
+
+  /// Lists all the exclusions on the _Default sink in a parent resource.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListExclusionsResponse> listExclusions(
+    ListExclusionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listExclusions case final listExclusions?) {
+      return listExclusions(request);
+    }
+    throw UnsupportedError('listExclusions');
+  }
+
+  /// Gets the description of an exclusion in the _Default sink.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogExclusion> getExclusion(GetExclusionRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getExclusion case final getExclusion?) {
+      return getExclusion(request);
+    }
+    throw UnsupportedError('getExclusion');
+  }
+
+  /// Creates a new exclusion in the _Default sink in a specified parent
+  /// resource. Only log entries belonging to that resource can be excluded. You
+  /// can have up to 10 exclusions in a resource.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogExclusion> createExclusion(CreateExclusionRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createExclusion case final createExclusion?) {
+      return createExclusion(request);
+    }
+    throw UnsupportedError('createExclusion');
+  }
+
+  /// Changes one or more properties of an existing exclusion in the _Default
+  /// sink.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogExclusion> updateExclusion(UpdateExclusionRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateExclusion case final updateExclusion?) {
+      return updateExclusion(request);
+    }
+    throw UnsupportedError('updateExclusion');
+  }
+
+  /// Deletes an exclusion in the _Default sink.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteExclusion(DeleteExclusionRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteExclusion case final deleteExclusion?) {
+      return deleteExclusion(request);
+    }
+    throw UnsupportedError('deleteExclusion');
+  }
+
+  /// Gets the Logging CMEK settings for the given resource.
+  ///
+  /// Note: CMEK for the Log Router can be configured for Google Cloud projects,
+  /// folders, organizations and billing accounts. Once configured for an
+  /// organization, it applies to all projects and folders in the Google Cloud
+  /// organization.
+  ///
+  /// See [Enabling CMEK for Log
+  /// Router](https://cloud.google.com/logging/docs/routing/managed-encryption)
+  /// for more information.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<CmekSettings> getCmekSettings(GetCmekSettingsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getCmekSettings case final getCmekSettings?) {
+      return getCmekSettings(request);
+    }
+    throw UnsupportedError('getCmekSettings');
+  }
+
+  /// Updates the Log Router CMEK settings for the given resource.
+  ///
+  /// Note: CMEK for the Log Router can currently only be configured for Google
+  /// Cloud organizations. Once configured, it applies to all projects and
+  /// folders in the Google Cloud organization.
+  ///
+  /// `UpdateCmekSettings`
+  /// will fail if 1) `kms_key_name` is invalid, or 2) the associated service
+  /// account does not have the required
+  /// `roles/cloudkms.cryptoKeyEncrypterDecrypter` role assigned for the key, or
+  /// 3) access to the key is disabled.
+  ///
+  /// See [Enabling CMEK for Log
+  /// Router](https://cloud.google.com/logging/docs/routing/managed-encryption)
+  /// for more information.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<CmekSettings> updateCmekSettings(
+    UpdateCmekSettingsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateCmekSettings case final updateCmekSettings?) {
+      return updateCmekSettings(request);
+    }
+    throw UnsupportedError('updateCmekSettings');
+  }
+
+  /// Gets the Log Router settings for the given resource.
+  ///
+  /// Note: Settings for the Log Router can be get for Google Cloud projects,
+  /// folders, organizations and billing accounts. Currently it can only be
+  /// configured for organizations. Once configured for an organization, it
+  /// applies to all projects and folders in the Google Cloud organization.
+  ///
+  /// See [Enabling CMEK for Log
+  /// Router](https://cloud.google.com/logging/docs/routing/managed-encryption)
+  /// for more information.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Settings> getSettings(GetSettingsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getSettings case final getSettings?) {
+      return getSettings(request);
+    }
+    throw UnsupportedError('getSettings');
+  }
+
+  /// Updates the Log Router settings for the given resource.
+  ///
+  /// Note: Settings for the Log Router can currently only be configured for
+  /// Google Cloud organizations. Once configured, it applies to all projects and
+  /// folders in the Google Cloud organization.
+  ///
+  /// `UpdateSettings`
+  /// will fail if 1) `kms_key_name` is invalid, or 2) the associated service
+  /// account does not have the required
+  /// `roles/cloudkms.cryptoKeyEncrypterDecrypter` role assigned for the key, or
+  /// 3) access to the key is disabled. 4) `location_id` is not supported by
+  /// Logging. 5) `location_id` violate OrgPolicy.
+  ///
+  /// See [Enabling CMEK for Log
+  /// Router](https://cloud.google.com/logging/docs/routing/managed-encryption)
+  /// for more information.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Settings> updateSettings(UpdateSettingsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateSettings case final updateSettings?) {
+      return updateSettings(request);
+    }
+    throw UnsupportedError('updateSettings');
+  }
+
+  /// Copies a set of log entries from a log bucket to a Cloud Storage bucket.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<CopyLogEntriesResponse, CopyLogEntriesMetadata>>
+  copyLogEntries(CopyLogEntriesRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_copyLogEntries case final copyLogEntries?) {
+      return copyLogEntries(request);
+    }
+    throw UnsupportedError('copyLogEntries');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 
@@ -1114,11 +2139,184 @@ final class MetricsServiceV2 {
 
 /// Testing fake for [MetricsServiceV2].
 base class FakeMetricsServiceV2 implements MetricsServiceV2 {
+  final Future<ListLogMetricsResponse> Function(ListLogMetricsRequest request)?
+  _listLogMetrics;
+  final Future<LogMetric> Function(GetLogMetricRequest request)? _getLogMetric;
+  final Future<LogMetric> Function(CreateLogMetricRequest request)?
+  _createLogMetric;
+  final Future<LogMetric> Function(UpdateLogMetricRequest request)?
+  _updateLogMetric;
+  final Future<void> Function(DeleteLogMetricRequest request)? _deleteLogMetric;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+  final Future<void> Function(CancelOperationRequest request)? _cancelOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeMetricsServiceV2.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeMetricsServiceV2({
+    Future<ListLogMetricsResponse> Function(ListLogMetricsRequest request)?
+    listLogMetrics,
+    Future<LogMetric> Function(GetLogMetricRequest request)? getLogMetric,
+    Future<LogMetric> Function(CreateLogMetricRequest request)? createLogMetric,
+    Future<LogMetric> Function(UpdateLogMetricRequest request)? updateLogMetric,
+    Future<void> Function(DeleteLogMetricRequest request)? deleteLogMetric,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+    Future<void> Function(CancelOperationRequest request)? cancelOperation,
+  }) : _listLogMetrics = listLogMetrics,
+       _getLogMetric = getLogMetric,
+       _createLogMetric = createLogMetric,
+       _updateLogMetric = updateLogMetric,
+       _deleteLogMetric = deleteLogMetric,
+       _listOperations = listOperations,
+       _getOperation = getOperation,
+       _cancelOperation = cancelOperation;
+
+  /// Lists logs-based metrics.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLogMetricsResponse> listLogMetrics(
+    ListLogMetricsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLogMetrics case final listLogMetrics?) {
+      return listLogMetrics(request);
+    }
+    throw UnsupportedError('listLogMetrics');
+  }
+
+  /// Gets a logs-based metric.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogMetric> getLogMetric(GetLogMetricRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLogMetric case final getLogMetric?) {
+      return getLogMetric(request);
+    }
+    throw UnsupportedError('getLogMetric');
+  }
+
+  /// Creates a logs-based metric.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogMetric> createLogMetric(CreateLogMetricRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createLogMetric case final createLogMetric?) {
+      return createLogMetric(request);
+    }
+    throw UnsupportedError('createLogMetric');
+  }
+
+  /// Creates or updates a logs-based metric.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<LogMetric> updateLogMetric(UpdateLogMetricRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateLogMetric case final updateLogMetric?) {
+      return updateLogMetric(request);
+    }
+    throw UnsupportedError('updateLogMetric');
+  }
+
+  /// Deletes a logs-based metric.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteLogMetric(DeleteLogMetricRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteLogMetric case final deleteLogMetric?) {
+      return deleteLogMetric(request);
+    }
+    throw UnsupportedError('deleteLogMetric');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> cancelOperation(CancelOperationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_cancelOperation case final cancelOperation?) {
+      return cancelOperation(request);
+    }
+    throw UnsupportedError('cancelOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

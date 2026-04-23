@@ -406,11 +406,403 @@ final class FunctionService {
 
 /// Testing fake for [FunctionService].
 base class FakeFunctionService implements FunctionService {
+  final Future<Function$> Function(GetFunctionRequest request)? _getFunction;
+  final Future<ListFunctionsResponse> Function(ListFunctionsRequest request)?
+  _listFunctions;
+  final Future<Operation<Function$, OperationMetadata>> Function(
+    CreateFunctionRequest request,
+  )?
+  _createFunction;
+  final Future<Operation<Function$, OperationMetadata>> Function(
+    UpdateFunctionRequest request,
+  )?
+  _updateFunction;
+  final Future<Operation<Empty, OperationMetadata>> Function(
+    DeleteFunctionRequest request,
+  )?
+  _deleteFunction;
+  final Future<GenerateUploadUrlResponse> Function(
+    GenerateUploadUrlRequest request,
+  )?
+  _generateUploadUrl;
+  final Future<GenerateDownloadUrlResponse> Function(
+    GenerateDownloadUrlRequest request,
+  )?
+  _generateDownloadUrl;
+  final Future<ListRuntimesResponse> Function(ListRuntimesRequest request)?
+  _listRuntimes;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+  _listLocations;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  final Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+  _listOperations;
+  final Future<Operation<T, S>> Function<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request)?
+  _getOperation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeFunctionService.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeFunctionService({
+    Future<Function$> Function(GetFunctionRequest request)? getFunction,
+    Future<ListFunctionsResponse> Function(ListFunctionsRequest request)?
+    listFunctions,
+    Future<Operation<Function$, OperationMetadata>> Function(
+      CreateFunctionRequest request,
+    )?
+    createFunction,
+    Future<Operation<Function$, OperationMetadata>> Function(
+      UpdateFunctionRequest request,
+    )?
+    updateFunction,
+    Future<Operation<Empty, OperationMetadata>> Function(
+      DeleteFunctionRequest request,
+    )?
+    deleteFunction,
+    Future<GenerateUploadUrlResponse> Function(
+      GenerateUploadUrlRequest request,
+    )?
+    generateUploadUrl,
+    Future<GenerateDownloadUrlResponse> Function(
+      GenerateDownloadUrlRequest request,
+    )?
+    generateDownloadUrl,
+    Future<ListRuntimesResponse> Function(ListRuntimesRequest request)?
+    listRuntimes,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListOperationsResponse> Function(ListOperationsRequest request)?
+    listOperations,
+    Future<Operation<T, S>> Function<
+      T extends ProtoMessage,
+      S extends ProtoMessage
+    >(Operation<T, S> request)?
+    getOperation,
+  }) : _getFunction = getFunction,
+       _listFunctions = listFunctions,
+       _createFunction = createFunction,
+       _updateFunction = updateFunction,
+       _deleteFunction = deleteFunction,
+       _generateUploadUrl = generateUploadUrl,
+       _generateDownloadUrl = generateDownloadUrl,
+       _listRuntimes = listRuntimes,
+       _listLocations = listLocations,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listOperations = listOperations,
+       _getOperation = getOperation;
+
+  /// Returns a function with the given name from the requested project.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Function$> getFunction(GetFunctionRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getFunction case final getFunction?) {
+      return getFunction(request);
+    }
+    throw UnsupportedError('getFunction');
+  }
+
+  /// Returns a list of functions that belong to the requested project.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListFunctionsResponse> listFunctions(
+    ListFunctionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listFunctions case final listFunctions?) {
+      return listFunctions(request);
+    }
+    throw UnsupportedError('listFunctions');
+  }
+
+  /// Creates a new function. If a function with the given name already exists in
+  /// the specified project, the long running operation will return
+  /// `ALREADY_EXISTS` error.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<Function$, OperationMetadata>> createFunction(
+    CreateFunctionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createFunction case final createFunction?) {
+      return createFunction(request);
+    }
+    throw UnsupportedError('createFunction');
+  }
+
+  /// Updates existing function.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<Function$, OperationMetadata>> updateFunction(
+    UpdateFunctionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateFunction case final updateFunction?) {
+      return updateFunction(request);
+    }
+    throw UnsupportedError('updateFunction');
+  }
+
+  /// Deletes a function with the given name from the specified project. If the
+  /// given function is used by some trigger, the trigger will be updated to
+  /// remove this function.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  ///
+  /// Returns an [Operation] representing the status of the long-running
+  /// operation.
+  ///
+  /// When complete, [Operation.done] will be `true`. If successful,
+  /// [Operation.responseAsMessage] will contain the operation's result.
+  @override
+  Future<Operation<Empty, OperationMetadata>> deleteFunction(
+    DeleteFunctionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteFunction case final deleteFunction?) {
+      return deleteFunction(request);
+    }
+    throw UnsupportedError('deleteFunction');
+  }
+
+  /// Returns a signed URL for uploading a function source code.
+  /// For more information about the signed URL usage see:
+  /// https://cloud.google.com/storage/docs/access-control/signed-urls.
+  /// Once the function source code upload is complete, the used signed
+  /// URL should be provided in CreateFunction or UpdateFunction request
+  /// as a reference to the function source code.
+  ///
+  /// When uploading source code to the generated signed URL, please follow
+  /// these restrictions:
+  ///
+  /// * Source file type should be a zip file.
+  /// * No credentials should be attached - the signed URLs provide access to the
+  ///   target bucket using internal service identity; if credentials were
+  ///   attached, the identity from the credentials would be used, but that
+  ///   identity does not have permissions to upload files to the URL.
+  ///
+  /// When making a HTTP PUT request, specify this header:
+  ///
+  /// * `content-type: application/zip`
+  ///
+  /// Do not specify this header:
+  ///
+  /// * `Authorization: Bearer YOUR_TOKEN`
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<GenerateUploadUrlResponse> generateUploadUrl(
+    GenerateUploadUrlRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_generateUploadUrl case final generateUploadUrl?) {
+      return generateUploadUrl(request);
+    }
+    throw UnsupportedError('generateUploadUrl');
+  }
+
+  /// Returns a signed URL for downloading deployed function source code.
+  /// The URL is only valid for a limited period and should be used within
+  /// 30 minutes of generation.
+  /// For more information about the signed URL usage see:
+  /// https://cloud.google.com/storage/docs/access-control/signed-urls
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<GenerateDownloadUrlResponse> generateDownloadUrl(
+    GenerateDownloadUrlRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_generateDownloadUrl case final generateDownloadUrl?) {
+      return generateDownloadUrl(request);
+    }
+    throw UnsupportedError('generateDownloadUrl');
+  }
+
+  /// Returns a list of runtimes that are supported for the requested project.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListRuntimesResponse> listRuntimes(ListRuntimesRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listRuntimes case final listRuntimes?) {
+      return listRuntimes(request);
+    }
+    throw UnsupportedError('listRuntimes');
+  }
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Sets the access control policy on the specified resource. Replaces
+  /// any existing policy.
+  ///
+  /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED`
+  /// errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Gets the access control policy for a resource. Returns an empty policy
+  /// if the resource exists and does not have a policy set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Returns permissions that a caller has on the specified resource. If the
+  /// resource does not exist, this will return an empty set of
+  /// permissions, not a `NOT_FOUND` error.
+  ///
+  /// Note: This operation is designed to be used for building
+  /// permission-aware UIs and command-line tools, not for authorization
+  /// checking. This operation may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListOperationsResponse> listOperations(
+    ListOperationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listOperations case final listOperations?) {
+      return listOperations(request);
+    }
+    throw UnsupportedError('listOperations');
+  }
+
+  /// Provides the `Operations` service functionality in this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Operation<T, S>> getOperation<
+    T extends ProtoMessage,
+    S extends ProtoMessage
+  >(Operation<T, S> request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getOperation case final getOperation?) {
+      return getOperation(request);
+    }
+    throw UnsupportedError('getOperation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

@@ -124,11 +124,59 @@ final class Locations {
 
 /// Testing fake for [Locations].
 base class FakeLocations implements Locations {
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+  _listLocations;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeLocations.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeLocations({
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+  }) : _listLocations = listLocations,
+       _getLocation = getLocation;
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

@@ -390,11 +390,414 @@ final class SecretManagerService {
 
 /// Testing fake for [SecretManagerService].
 base class FakeSecretManagerService implements SecretManagerService {
+  final Future<ListSecretsResponse> Function(ListSecretsRequest request)?
+  _listSecrets;
+  final Future<Secret> Function(CreateSecretRequest request)? _createSecret;
+  final Future<SecretVersion> Function(AddSecretVersionRequest request)?
+  _addSecretVersion;
+  final Future<Secret> Function(GetSecretRequest request)? _getSecret;
+  final Future<Secret> Function(UpdateSecretRequest request)? _updateSecret;
+  final Future<void> Function(DeleteSecretRequest request)? _deleteSecret;
+  final Future<ListSecretVersionsResponse> Function(
+    ListSecretVersionsRequest request,
+  )?
+  _listSecretVersions;
+  final Future<SecretVersion> Function(GetSecretVersionRequest request)?
+  _getSecretVersion;
+  final Future<AccessSecretVersionResponse> Function(
+    AccessSecretVersionRequest request,
+  )?
+  _accessSecretVersion;
+  final Future<SecretVersion> Function(DisableSecretVersionRequest request)?
+  _disableSecretVersion;
+  final Future<SecretVersion> Function(EnableSecretVersionRequest request)?
+  _enableSecretVersion;
+  final Future<SecretVersion> Function(DestroySecretVersionRequest request)?
+  _destroySecretVersion;
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+  final Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+  _listLocations;
+  final Future<Location> Function(GetLocationRequest request)? _getLocation;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeSecretManagerService.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeSecretManagerService({
+    Future<ListSecretsResponse> Function(ListSecretsRequest request)?
+    listSecrets,
+    Future<Secret> Function(CreateSecretRequest request)? createSecret,
+    Future<SecretVersion> Function(AddSecretVersionRequest request)?
+    addSecretVersion,
+    Future<Secret> Function(GetSecretRequest request)? getSecret,
+    Future<Secret> Function(UpdateSecretRequest request)? updateSecret,
+    Future<void> Function(DeleteSecretRequest request)? deleteSecret,
+    Future<ListSecretVersionsResponse> Function(
+      ListSecretVersionsRequest request,
+    )?
+    listSecretVersions,
+    Future<SecretVersion> Function(GetSecretVersionRequest request)?
+    getSecretVersion,
+    Future<AccessSecretVersionResponse> Function(
+      AccessSecretVersionRequest request,
+    )?
+    accessSecretVersion,
+    Future<SecretVersion> Function(DisableSecretVersionRequest request)?
+    disableSecretVersion,
+    Future<SecretVersion> Function(EnableSecretVersionRequest request)?
+    enableSecretVersion,
+    Future<SecretVersion> Function(DestroySecretVersionRequest request)?
+    destroySecretVersion,
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+    Future<ListLocationsResponse> Function(ListLocationsRequest request)?
+    listLocations,
+    Future<Location> Function(GetLocationRequest request)? getLocation,
+  }) : _listSecrets = listSecrets,
+       _createSecret = createSecret,
+       _addSecretVersion = addSecretVersion,
+       _getSecret = getSecret,
+       _updateSecret = updateSecret,
+       _deleteSecret = deleteSecret,
+       _listSecretVersions = listSecretVersions,
+       _getSecretVersion = getSecretVersion,
+       _accessSecretVersion = accessSecretVersion,
+       _disableSecretVersion = disableSecretVersion,
+       _enableSecretVersion = enableSecretVersion,
+       _destroySecretVersion = destroySecretVersion,
+       _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions,
+       _listLocations = listLocations,
+       _getLocation = getLocation;
+
+  /// Lists `Secrets`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListSecretsResponse> listSecrets(ListSecretsRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listSecrets case final listSecrets?) {
+      return listSecrets(request);
+    }
+    throw UnsupportedError('listSecrets');
+  }
+
+  /// Creates a new `Secret` containing no
+  /// `SecretVersions`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Secret> createSecret(CreateSecretRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_createSecret case final createSecret?) {
+      return createSecret(request);
+    }
+    throw UnsupportedError('createSecret');
+  }
+
+  /// Creates a new `SecretVersion`
+  /// containing secret data and attaches it to an existing
+  /// `Secret`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> addSecretVersion(
+    AddSecretVersionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_addSecretVersion case final addSecretVersion?) {
+      return addSecretVersion(request);
+    }
+    throw UnsupportedError('addSecretVersion');
+  }
+
+  /// Gets metadata for a given `Secret`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Secret> getSecret(GetSecretRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getSecret case final getSecret?) {
+      return getSecret(request);
+    }
+    throw UnsupportedError('getSecret');
+  }
+
+  /// Updates metadata of an existing
+  /// `Secret`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Secret> updateSecret(UpdateSecretRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_updateSecret case final updateSecret?) {
+      return updateSecret(request);
+    }
+    throw UnsupportedError('updateSecret');
+  }
+
+  /// Deletes a `Secret`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<void> deleteSecret(DeleteSecretRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_deleteSecret case final deleteSecret?) {
+      return deleteSecret(request);
+    }
+    throw UnsupportedError('deleteSecret');
+  }
+
+  /// Lists `SecretVersions`. This
+  /// call does not return secret data.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListSecretVersionsResponse> listSecretVersions(
+    ListSecretVersionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listSecretVersions case final listSecretVersions?) {
+      return listSecretVersions(request);
+    }
+    throw UnsupportedError('listSecretVersions');
+  }
+
+  /// Gets metadata for a
+  /// `SecretVersion`.
+  ///
+  /// `projects/*/secrets/*/versions/latest` is an alias to the most recently
+  /// created `SecretVersion`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> getSecretVersion(
+    GetSecretVersionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getSecretVersion case final getSecretVersion?) {
+      return getSecretVersion(request);
+    }
+    throw UnsupportedError('getSecretVersion');
+  }
+
+  /// Accesses a `SecretVersion`.
+  /// This call returns the secret data.
+  ///
+  /// `projects/*/secrets/*/versions/latest` is an alias to the most recently
+  /// created `SecretVersion`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<AccessSecretVersionResponse> accessSecretVersion(
+    AccessSecretVersionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_accessSecretVersion case final accessSecretVersion?) {
+      return accessSecretVersion(request);
+    }
+    throw UnsupportedError('accessSecretVersion');
+  }
+
+  /// Disables a `SecretVersion`.
+  ///
+  /// Sets the `state` of the
+  /// `SecretVersion` to
+  /// `DISABLED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> disableSecretVersion(
+    DisableSecretVersionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_disableSecretVersion case final disableSecretVersion?) {
+      return disableSecretVersion(request);
+    }
+    throw UnsupportedError('disableSecretVersion');
+  }
+
+  /// Enables a `SecretVersion`.
+  ///
+  /// Sets the `state` of the
+  /// `SecretVersion` to
+  /// `ENABLED`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> enableSecretVersion(
+    EnableSecretVersionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_enableSecretVersion case final enableSecretVersion?) {
+      return enableSecretVersion(request);
+    }
+    throw UnsupportedError('enableSecretVersion');
+  }
+
+  /// Destroys a `SecretVersion`.
+  ///
+  /// Sets the `state` of the
+  /// `SecretVersion` to
+  /// `DESTROYED`
+  /// and irrevocably destroys the secret data.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<SecretVersion> destroySecretVersion(
+    DestroySecretVersionRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_destroySecretVersion case final destroySecretVersion?) {
+      return destroySecretVersion(request);
+    }
+    throw UnsupportedError('destroySecretVersion');
+  }
+
+  /// Sets the access control policy on the specified secret. Replaces any
+  /// existing policy.
+  ///
+  /// Permissions on
+  /// `SecretVersions` are enforced
+  /// according to the policy set on the associated
+  /// `Secret`.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Gets the access control policy for a secret.
+  /// Returns empty policy if the secret exists and does not have a policy set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Returns permissions that a caller has for the specified secret.
+  /// If the secret does not exist, this call returns an empty set of
+  /// permissions, not a NOT_FOUND error.
+  ///
+  /// Note: This operation is designed to be used for building permission-aware
+  /// UIs and command-line tools, not for authorization checking. This operation
+  /// may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  /// Lists information about the supported locations for this service.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<ListLocationsResponse> listLocations(
+    ListLocationsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_listLocations case final listLocations?) {
+      return listLocations(request);
+    }
+    throw UnsupportedError('listLocations');
+  }
+
+  /// Gets information about a location.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Location> getLocation(GetLocationRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getLocation case final getLocation?) {
+      return getLocation(request);
+    }
+    throw UnsupportedError('getLocation');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

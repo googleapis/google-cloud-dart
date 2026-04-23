@@ -160,11 +160,92 @@ final class IAMPolicy {
 
 /// Testing fake for [IAMPolicy].
 base class FakeIAMPolicy implements IAMPolicy {
+  final Future<Policy> Function(SetIamPolicyRequest request)? _setIamPolicy;
+  final Future<Policy> Function(GetIamPolicyRequest request)? _getIamPolicy;
+  final Future<TestIamPermissionsResponse> Function(
+    TestIamPermissionsRequest request,
+  )?
+  _testIamPermissions;
+
   @override
-  dynamic noSuchMethod(Invocation invocation) {
-    throw UnsupportedError(
-      'FakeIAMPolicy.${invocation.memberName} must be overridden',
-    );
+  Uri get _endPoint => throw UnsupportedError('_endPoint');
+  @override
+  ServiceClient get _client => throw UnsupportedError('_client');
+
+  bool isClosed = false;
+
+  FakeIAMPolicy({
+    Future<Policy> Function(SetIamPolicyRequest request)? setIamPolicy,
+    Future<Policy> Function(GetIamPolicyRequest request)? getIamPolicy,
+    Future<TestIamPermissionsResponse> Function(
+      TestIamPermissionsRequest request,
+    )?
+    testIamPermissions,
+  }) : _setIamPolicy = setIamPolicy,
+       _getIamPolicy = getIamPolicy,
+       _testIamPermissions = testIamPermissions;
+
+  /// Sets the access control policy on the specified resource. Replaces any
+  /// existing policy.
+  ///
+  /// Can return `NOT_FOUND`, `INVALID_ARGUMENT`, and `PERMISSION_DENIED` errors.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> setIamPolicy(SetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_setIamPolicy case final setIamPolicy?) {
+      return setIamPolicy(request);
+    }
+    throw UnsupportedError('setIamPolicy');
+  }
+
+  /// Gets the access control policy for a resource.
+  /// Returns an empty policy if the resource exists and does not have a policy
+  /// set.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<Policy> getIamPolicy(GetIamPolicyRequest request) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_getIamPolicy case final getIamPolicy?) {
+      return getIamPolicy(request);
+    }
+    throw UnsupportedError('getIamPolicy');
+  }
+
+  /// Returns permissions that a caller has on the specified resource.
+  /// If the resource does not exist, this will return an empty set of
+  /// permissions, not a `NOT_FOUND` error.
+  ///
+  /// Note: This operation is designed to be used for building permission-aware
+  /// UIs and command-line tools, not for authorization checking. This operation
+  /// may "fail open" without warning.
+  ///
+  /// Throws a [http.ClientException] if there were problems communicating with
+  /// the API service. Throws a [ServiceException] if the API method failed for
+  /// any reason.
+  @override
+  Future<TestIamPermissionsResponse> testIamPermissions(
+    TestIamPermissionsRequest request,
+  ) async {
+    if (isClosed) throw StateError('Service is closed');
+
+    if (_testIamPermissions case final testIamPermissions?) {
+      return testIamPermissions(request);
+    }
+    throw UnsupportedError('testIamPermissions');
+  }
+
+  @override
+  void close() {
+    isClosed = true;
   }
 }
 

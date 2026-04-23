@@ -412,6 +412,7 @@ libraries:
       - dart_test.yaml
       - test/compliance_test.dart
       - test/echo_test.dart
+      - test/fakes_test.dart
       - test/showcase_server.dart
     roots:
       - showcase
