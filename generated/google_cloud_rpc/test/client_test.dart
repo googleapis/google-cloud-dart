@@ -192,7 +192,7 @@ void main() {
   });
 
   group('streaming', () {
-    group('requests without body', () {
+    group('requests without body without SSE', () {
       late Request actualRequest;
       final service = ServiceClient(
         client: MockClient((request) async {
@@ -213,7 +213,46 @@ void main() {
         ('PUT', service.putStreaming),
       ]) {
         test(method, () async {
-          await fn(Uri.parse('http://example.com/')).drain<Object?>();
+          await fn(
+            Uri.parse('http://example.com/'),
+            enableSse: false,
+          ).drain<Object?>();
+
+          expect(actualRequest.method, method);
+          expect(actualRequest.url, Uri.parse('http://example.com/'));
+          expect(actualRequest.headers, {
+            'x-goog-api-client': matches(apiHeaderPattern),
+          });
+          expect(actualRequest.body, isEmpty);
+        });
+      }
+    });
+
+    group('requests without body with SSE', () {
+      late Request actualRequest;
+      final service = ServiceClient(
+        client: MockClient((request) async {
+          actualRequest = request;
+          return Response(
+            '',
+            200,
+            headers: {'content-type': 'text/event-stream'},
+          );
+        }),
+      );
+
+      for (final (method, fn) in [
+        ('DELETE', service.deleteStreaming),
+        ('GET', service.getStreaming),
+        ('PATCH', service.patchStreaming),
+        ('POST', service.postStreaming),
+        ('PUT', service.putStreaming),
+      ]) {
+        test(method, () async {
+          await fn(
+            Uri.parse('http://example.com/'),
+            enableSse: true,
+          ).drain<Object?>();
 
           expect(actualRequest.method, method);
           expect(actualRequest.url, Uri.parse('http://example.com/?alt=sse'));
@@ -247,6 +286,7 @@ void main() {
           await fn(
             Uri.parse('http://example.com/'),
             body: TestMessage('<test payload>'),
+            enableSse: true,
           ).drain<Object?>();
 
           expect(actualRequest.method, method);
@@ -268,7 +308,7 @@ void main() {
       );
 
       await expectLater(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
             isA<ClientException>().having(
@@ -288,7 +328,7 @@ void main() {
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
             isA<InternalServerErrorException>().having(
@@ -308,7 +348,7 @@ void main() {
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
             isA<InternalServerErrorException>().having(
@@ -330,7 +370,7 @@ void main() {
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
             isA<BadRequestException>()
@@ -348,7 +388,7 @@ void main() {
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           emitsError(
             isA<BadRequestException>().having(
@@ -363,6 +403,7 @@ void main() {
     });
 
     test('200 response, unexpected content-type', () async {
+<<<<<<< HEAD
       final service = ServiceClient(
         client: MockClient(
           (request) async =>
@@ -409,11 +450,59 @@ void main() {
             200,
             headers: {'content-type': 'text/event-stream'},
           ),
+=======
+      final service = ServiceClient(
+        client: MockClient(
+          (request) async =>
+              Response('', 200, headers: {'content-type': 'text/plain'}),
+>>>>>>> fake_tests
         ),
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
+        emitsInOrder([emitsError(isA<ServiceException>()), emitsDone]),
+      );
+    });
+
+    test('200 response, empty event stream response', () async {
+      final service = ServiceClient(
+        client: MockClient(
+          (request) async =>
+              Response('', 200, headers: {'content-type': 'text/event-stream'}),
+        ),
+      );
+
+      expect(service.postStreaming(sampleUrl, enableSse: true), emitsDone);
+    });
+
+    test('200 response, empty JSON list response', () async {
+      final service = ServiceClient(
+        client: MockClient(
+          (request) async => Response(
+            '[]',
+            200,
+            headers: {'content-type': 'application/json'},
+          ),
+        ),
+      );
+
+      expect(service.postStreaming(sampleUrl, enableSse: true), emitsDone);
+    });
+
+    test('200 response, single event stream response', () async {
+      final service = ServiceClient(
+        client: MockClient(
+          (request) async => Response(
+            'data: {"fruit":"apple"}',
+            200,
+            headers: {'content-type': 'text/event-stream'},
+          ),
+        ),
+      );
+
+      expect(
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           {'fruit': 'apple'},
           emitsDone,
@@ -422,6 +511,7 @@ void main() {
     });
 
     test('200 response, single json response', () async {
+<<<<<<< HEAD
       final service = ServiceClient(
         client: MockClient(
           (request) async => Response(
@@ -442,11 +532,14 @@ void main() {
     });
 
     test('200 response, two data event stream responses', () async {
+=======
+>>>>>>> fake_tests
       final service = ServiceClient(
         client: MockClient(
           (request) async => Response(
-            'data: {"fruit":"apple"}\ndata: {"fruit":"banana"}',
+            '[{"fruit":"apple"}]',
             200,
+<<<<<<< HEAD
             headers: {'content-type': 'text/event-stream'},
           ),
         ),
@@ -468,13 +561,56 @@ void main() {
           (request) async => Response(
             '[{"fruit":"apple"},{"fruit":"banana"}]',
             200,
+=======
+>>>>>>> fake_tests
             headers: {'content-type': 'application/json'},
           ),
         ),
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
+        emitsInOrder([
+          {'fruit': 'apple'},
+          emitsDone,
+        ]),
+      );
+    });
+
+    test('200 response, two data event stream responses', () async {
+      final service = ServiceClient(
+        client: MockClient(
+          (request) async => Response(
+            'data: {"fruit":"apple"}\ndata: {"fruit":"banana"}',
+            200,
+            headers: {'content-type': 'text/event-stream'},
+          ),
+        ),
+      );
+
+      expect(
+        service.postStreaming(sampleUrl, enableSse: true),
+        emitsInOrder([
+          {'fruit': 'apple'},
+          {'fruit': 'banana'},
+          emitsDone,
+        ]),
+      );
+    });
+
+    test('200 response, two json response', () async {
+      final service = ServiceClient(
+        client: MockClient(
+          (request) async => Response(
+            '[{"fruit":"apple"},{"fruit":"banana"}]',
+            200,
+            headers: {'content-type': 'application/json'},
+          ),
+        ),
+      );
+
+      expect(
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           {'fruit': 'apple'},
           {'fruit': 'banana'},
@@ -495,7 +631,7 @@ void main() {
       );
 
       expect(
-        service.postStreaming(sampleUrl),
+        service.postStreaming(sampleUrl, enableSse: true),
         emitsInOrder([
           {'fruit': 'apple'},
           {'fruit': 'banana'},

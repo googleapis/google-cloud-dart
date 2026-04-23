@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-part of '../rpc.dart';
+part of 'api.g.dart';
 
 // A map from message IDs to decoder functions.
 const Map<String, ProtoMessage Function(Map<String, dynamic>)> _decoders = {

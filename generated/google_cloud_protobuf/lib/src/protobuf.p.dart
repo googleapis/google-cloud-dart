@@ -14,7 +14,7 @@
 
 // ignore_for_file: avoid_classes_with_only_static_members
 
-part of '../protobuf.dart';
+part of 'api.g.dart';
 
 /// An abstract class that can return a JSON representation of itself.
 ///

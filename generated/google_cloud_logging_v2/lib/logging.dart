@@ -19,16 +19,11 @@
 /// Writes log entries and manages your Cloud Logging configuration.
 library;
 
-// ignore_for_file: avoid_unused_constructor_parameters
-// ignore_for_file: camel_case_types
 // ignore_for_file: comment_references
-// ignore_for_file: constant_identifier_names
-// ignore_for_file: implementation_imports
 // ignore_for_file: lines_longer_than_80_chars
-// ignore_for_file: non_constant_identifier_names
 // ignore_for_file: unintended_html_in_doc_comment
-// ignore_for_file: use_null_aware_elements
 
+<<<<<<< HEAD
 import 'package:google_cloud_api/api.dart';
 import 'package:google_cloud_logging_type/logging_type.dart' as logging_type;
 import 'package:google_cloud_longrunning/longrunning.dart';
@@ -6371,3 +6366,7 @@ final class IndexType extends ProtoEnum {
   @override
   String toString() => 'IndexType.$value';
 }
+=======
+export 'src/api.g.dart'
+    hide FakeConfigServiceV2, FakeLoggingServiceV2, FakeMetricsServiceV2;
+>>>>>>> fake_tests
