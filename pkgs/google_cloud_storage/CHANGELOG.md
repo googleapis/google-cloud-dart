@@ -1,4 +1,4 @@
-## 0.6.2-wip
+## 0.6.2
 
 * Add retries to `uploadObjectFromSink`.
 * Add `deleteObjectAcl`.
