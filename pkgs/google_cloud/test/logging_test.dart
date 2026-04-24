@@ -255,15 +255,15 @@ TypeMatcher<Response> _responseScenarioFactory(
   (_ResponseScenarios.httpResponseErrorMinimal, _Environment.normal) => (
     stdout: endsWith('[400] /'),
     stderr: allOf([
-      contains('HTTP Exception: minimal (400)'),
+      contains('HttpResponseException: minimal (400)'),
       _stackTraceMatcher,
     ]),
   ),
   (_ResponseScenarios.httpResponseErrorWithDetails, _Environment.normal) => (
     stdout: endsWith('[400] /'),
     stderr: allOf([
+      contains('HttpResponseException: with details (400) [BAD_REQUEST]'),
       contains('Invalid argument(s): inner error (ArgumentError)'),
-      contains('Status: BAD_REQUEST'),
       _stackTraceMatcher,
     ]),
   ),

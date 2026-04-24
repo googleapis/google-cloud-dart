@@ -76,13 +76,13 @@ Handler _handleResponseException(Handler innerHandler) {
       // CRITICAL to support standard pkg:shelf behavior!
       if (error is HijackException) rethrow;
       final errorString = switch (error) {
+        HttpResponseException(innerError: final innerError?) => [
+          '$error — Caused by: $innerError (${innerError.runtimeType})',
+          if (error.details != null && error.details!.isNotEmpty)
+            'Details: ${error.details}',
+        ].join('\n'),
         HttpResponseException() => [
-          if (error.innerError != null)
-            '${error.innerError} (${error.innerError.runtimeType})'
-          else
-            'HTTP Exception: ${error.message} (${error.statusCode})',
-          if (error.status != null && error.status!.isNotEmpty)
-            'Status: ${error.status}',
+          '$error',
           if (error.details != null && error.details!.isNotEmpty)
             'Details: ${error.details}',
         ].join('\n'),
