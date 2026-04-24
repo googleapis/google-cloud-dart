@@ -26,6 +26,17 @@ void main() {
       expect(LogSeverity.info.compareTo(LogSeverity.error), isNegative);
       expect(LogSeverity.critical.compareTo(LogSeverity.warning), isPositive);
     });
+
+    test('operators', () {
+      expect(LogSeverity.debug < LogSeverity.info, isTrue);
+      expect(LogSeverity.info <= LogSeverity.info, isTrue);
+      expect(LogSeverity.error > LogSeverity.warning, isTrue);
+      expect(LogSeverity.critical >= LogSeverity.critical, isTrue);
+    });
+
+    test('toString returns description', () {
+      expect(LogSeverity.info.toString(), 'LogSeverity INFO (200)');
+    });
   });
 
   group('CloudLogger.defaultLogger()', () {
@@ -49,6 +60,25 @@ void main() {
       expect(
         () => logger.log('hello', LogSeverity.error, payload: {'foo': 'bar'}),
         prints('ERROR: hello {foo: bar}\n'),
+      );
+    });
+
+    test('convenience methods', () {
+      expect(() => logger.debug('hello'), prints('DEBUG: hello\n'));
+      expect(() => logger.info('hello'), prints('INFO: hello\n'));
+      expect(() => logger.notice('hello'), prints('NOTICE: hello\n'));
+      expect(() => logger.warning('hello'), prints('WARNING: hello\n'));
+      expect(() => logger.error('hello'), prints('ERROR: hello\n'));
+      expect(() => logger.critical('hello'), prints('CRITICAL: hello\n'));
+      expect(() => logger.alert('hello'), prints('ALERT: hello\n'));
+      expect(() => logger.emergency('hello'), prints('EMERGENCY: hello\n'));
+    });
+
+    test('log with stack trace', () {
+      final trace = StackTrace.current;
+      expect(
+        () => logger.log('hello', LogSeverity.error, stackTrace: trace),
+        prints(startsWith('ERROR: hello\ntest/logger_test.dart ')),
       );
     });
   });

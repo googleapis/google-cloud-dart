@@ -19,6 +19,7 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:google_cloud/constants.dart';
+import 'package:http/http.dart' as http;
 import 'package:test/test.dart';
 import 'package:test_descriptor/test_descriptor.dart' as d;
 import 'package:test_process/test_process.dart';
@@ -586,6 +587,49 @@ void main() {
           emitsInOrder([
             '',
             'Received signal SIGTERM - closing',
+            'done!',
+            emitsDone,
+          ]),
+        );
+
+        await proc.shouldExit(0);
+      });
+    },
+  );
+  group(
+    'serveHandler',
+    onPlatform: {'windows': const Skip('Cannot validate tests on windows.')},
+    () {
+      late String servePrint;
+
+      setUpAll(() async {
+        final packageUri = await Isolate.resolvePackageUri(
+          Uri.parse('package:google_cloud/'),
+        );
+        servePrint = packageUri!
+            .resolve('../test/src/serve_print.dart')
+            .toFilePath();
+      });
+
+      test('starts server and responds', () async {
+        final proc = await _run(servePrint, environment: {'PORT': '0'});
+
+        final line = await proc.stdout.next;
+        expect(line, startsWith('Serving at http://'));
+
+        final uri = Uri.parse(line.substring('Serving at '.length));
+
+        final response = await http.get(uri);
+        expect(response.statusCode, 200);
+        expect(response.body, 'Hello from serveHandler!');
+
+        proc.signal(ProcessSignal.sigint);
+
+        await expectLater(
+          proc.stdout,
+          emitsInOrder([
+            '',
+            'Received signal SIGINT - closing',
             'done!',
             emitsDone,
           ]),
