@@ -73,6 +73,8 @@ Handler _handleResponseException(Handler innerHandler) {
     try {
       return await inner(request);
     } catch (error, stack) {
+      // CRITICAL to support standard pkg:shelf behavior!
+      if (error is HijackException) rethrow;
       final errorString = switch (error) {
         HttpResponseException() => [
           if (error.innerError != null)

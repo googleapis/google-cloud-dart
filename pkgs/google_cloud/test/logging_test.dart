@@ -85,6 +85,16 @@ void main() {
       }
     }
   }
+
+  test('Middleware rethrows HijackException', () async {
+    final middleware = createLoggingMiddleware();
+    final handler = middleware((request) => throw const HijackException());
+
+    expect(
+      () => handler(Request('GET', Uri.parse('http://localhost/'))),
+      throwsA(isA<HijackException>()),
+    );
+  });
 }
 
 enum _ResponseScenarios {
@@ -203,7 +213,7 @@ TypeMatcher<Response> _responseScenarioFactory(
 ) => switch ((responseScenario, environment)) {
   (_ResponseScenarios.httpResponseErrorMinimal, _Environment.cloud) => (
     stdout: _jsonStringMatcher({
-      'message': 'HttpResponseException: minimal',
+      'message': 'HttpResponseException: minimal (400)',
       'severity': 'WARNING',
       'error': {'code': 400, 'message': 'minimal'},
       'stack_trace': _stackTraceMatcher,

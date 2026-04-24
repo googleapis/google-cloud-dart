@@ -277,7 +277,13 @@ class HttpResponseException implements Exception {
   // This data is presented to the end user and may contain sensitive
   // information.
   @override
-  String toString() => 'HttpResponseException: $message';
+  String toString() {
+    final buffer = StringBuffer(
+      'HttpResponseException: $message ($statusCode)',
+    );
+    if (status != null && status!.isNotEmpty) buffer.write(' [$status]');
+    return buffer.toString();
+  }
 
   // ‼️ DO NOT INCLUDE innerError or innerStack in toJson().
   //
