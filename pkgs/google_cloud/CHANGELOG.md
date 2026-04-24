@@ -2,10 +2,10 @@
 
 ### `http_serving.dart`
 
-- Introduces `HttpResponseException` and `httpResponseExceptionMiddleware`.
-  - `BadRequestException` and `badRequestMiddleware` are deprecated in favor of
-    `HttpResponseException` and `httpResponseExceptionMiddleware`, respectively.
-    (They are aliased for backward compatibility.)
+- REMOVED/BREAKING: `BadRequestException` and `badRequestMiddleware`
+  are removed.
+  - Replaced by `HttpResponseException` and `errorLoggingMiddleware`,
+    respectively.
 - Expanded `HttpResponseException` to support structured error reporting as
   per AIP-193.
   - Added `status` (`String?`) and `details` (`List<Map<String, Object?>>?`)
@@ -26,7 +26,7 @@
     - `gatewayTimeout` (504)
   - Added default `status` values for factories that map 1:1 to gRPC status
     codes (e.g., `unauthorized` defaults to `'UNAUTHENTICATED'`).
-- Updated `httpResponseExceptionMiddleware` to leverage
+- Updated `errorLoggingMiddleware` to leverage
   `HttpResponseException.toJson()` for JSON responses, returning a standard
   Google Cloud error payload.
 - Updated plain text errors to use `HttpResponseException.toString()`.

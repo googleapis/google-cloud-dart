@@ -11,7 +11,6 @@ environment:
 dependencies:
   collection: ^1.19.0
   http: ^1.1.0
-  io: ^1.0.3
   meta: ^1.17.0
   shelf: ^1.4.0
   stack_trace: ^1.11.0

@@ -39,12 +39,10 @@
 /// ```
 ///
 /// {@canonicalFor http_serving.BadConfigurationException}
-/// {@canonicalFor http_serving.badRequestMiddleware}
 /// {@canonicalFor http_serving.cloudLoggingMiddleware}
 /// {@canonicalFor http_serving.createLoggingMiddleware}
 /// {@canonicalFor http_serving.currentLogger}
-/// {@canonicalFor http_serving.httpResponseExceptionMiddleware}
-/// {@canonicalFor http_serving.BadRequestException}
+/// {@canonicalFor http_serving.errorLoggingMiddleware}
 /// {@canonicalFor http_serving.HttpResponseException}
 /// {@canonicalFor http_serving.listenPortFromEnvironment}
 /// {@canonicalFor http_serving.serveHandler}
@@ -57,16 +55,11 @@ export 'src/serving/bad_configuration_exception.dart'
     show BadConfigurationException;
 export 'src/serving/http_logging.dart'
     show
-        badRequestMiddleware,
         cloudLoggingMiddleware,
         createLoggingMiddleware,
         currentLogger,
-        httpResponseExceptionMiddleware;
-export 'src/serving/http_response_exception.dart'
-    show
-        // ignore: deprecated_member_use_from_same_package
-        BadRequestException,
-        HttpResponseException;
+        errorLoggingMiddleware;
+export 'src/serving/http_response_exception.dart' show HttpResponseException;
 export 'src/serving/serve.dart' show listenPortFromEnvironment, serveHandler;
 export 'src/serving/terminate.dart' show waitForTerminate;
 export 'src/serving/trace_context_data.dart' show TraceContextData;
