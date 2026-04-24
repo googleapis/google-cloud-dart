@@ -19,6 +19,8 @@ import 'dart:io';
 import 'dart:isolate';
 
 import 'package:google_cloud/constants.dart';
+import 'package:google_cloud/google_cloud.dart'
+    show projectIdFromEnvironmentVariables;
 import 'package:test/test.dart';
 import 'package:test_descriptor/test_descriptor.dart' as d;
 import 'package:test_process/test_process.dart';
@@ -42,6 +44,16 @@ void main() {
       projectIdMetadataCachePrint = packageUri
           .resolve('../test/src/project_id_metadata_cache_print.dart')
           .toFilePath();
+    });
+
+    test('metadata server on cloud', tags: ['google-cloud'], () async {
+      final projectId = projectIdFromEnvironmentVariables();
+      final proc = await _run(projectIdPrint, environment: {});
+
+      await expectLater(proc.stdout, emits(projectId));
+      await expectLater(proc.stderr, emitsDone);
+
+      await proc.shouldExit(0);
     });
 
     test(
