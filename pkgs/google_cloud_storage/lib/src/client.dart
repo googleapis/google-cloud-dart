@@ -480,6 +480,48 @@ final class Storage {
     await serviceClient.delete(url);
   }, isIdempotent: ifGenerationMatch != null || generation != null);
 
+  /// Deletes an ACL entry on the specified [Google Cloud Storage object].
+  ///
+  /// This operation is idempotent if [generation] is set.
+  ///
+  /// Throws [NotFoundException] if the object or ACL does not exist.
+  ///
+  /// [entity] specifies the entity holding the permission. Supported formats:
+  /// - `user-emailAddress`
+  /// - `group-emailAddress`
+  /// - `domain-domain`
+  /// - `project-team-projectNumber`
+  /// - `allUsers`
+  /// - `allAuthenticatedUsers`
+  ///
+  /// For example:
+  /// - The user `liz@example.com` would be `"user-liz@example.com"`.
+  /// - The group `example@googlegroups.com` would be
+  ///   `"group-example@googlegroups.com"`.
+  /// - To refer to all members of the domain `example.com`, the entity would
+  ///   be `"domain-example.com"`.
+  ///
+  /// If set, [generation] selects a specific revision of this object whose ACL
+  /// should be modified.
+  ///
+  /// See [API reference docs](https://cloud.google.com/storage/docs/json_api/v1/objectAccessControls/delete).
+  ///
+  /// [Google Cloud Storage object]: https://docs.cloud.google.com/storage/docs/objects
+  Future<void> deleteObjectAcl(
+    String bucket,
+    String object,
+    String entity, {
+    BigInt? generation,
+    RetryRunner retry = defaultRetry,
+  }) => retry.run(() async {
+    final serviceClient = await _serviceClient;
+    final url = _requestUrl(
+      ['storage', 'v1', 'b', bucket, 'o', object, 'acl', entity],
+      {'generation': ?generation?.toString()},
+    );
+    await serviceClient.delete(url);
+  }, isIdempotent: generation != null);
+
   /// Download the content of a [Google Cloud Storage object][] as bytes.
   ///
   /// This operation is read-only and always idempotent.
