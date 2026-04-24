@@ -21,7 +21,7 @@ import 'package:google_cloud_storage/google_cloud_storage.dart';
 import 'package:test/test.dart';
 
 void main() async {
-  group('smoke tests', () {
+  group('storage emulator tests', () {
     test('STORAGE_EMULATOR_HOST configuration', () async {
       final storage = Storage();
       addTearDown(storage.close);
