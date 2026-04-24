@@ -25,8 +25,8 @@ import 'package:shelf/shelf.dart';
 ///
 /// [message] is used as the body of the response send to the requester.
 ///
-/// [details] can be used to provide additional debugging information which is
-/// included in logs, but not sent to the requester.
+/// [details] can be used to provide additional error information which is
+/// included in the JSON response body sent to the requester.
 ///
 /// If provided, [innerError] and [innerStack] can be used to provide additional
 /// debugging information which is included in logs, but not sent to the

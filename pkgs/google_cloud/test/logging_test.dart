@@ -148,7 +148,11 @@ TypeMatcher<Response> _responseScenarioFactory(
     _responseMatcher(
       statusCode: 400,
       contentType: anyOf(isNull, contains('text/plain')),
-      body: contains('HttpResponseException: with details'),
+      body: allOf([
+        contains('HttpResponseException: with details'),
+        contains('Details:'),
+        contains('type: type.googleapis.com/google.rpc.BadRequest'),
+      ]),
     ),
   (_ResponseScenarios.httpResponseErrorWithDetails, _ResponseType.json) =>
     _responseMatcher(

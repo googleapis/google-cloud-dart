@@ -143,11 +143,26 @@ Response _responseFromException(
   return Response(
     statusCode,
     body: error is HttpResponseException
-        // ‼️ Note we only send the `toString` of HttpResponseException because
-        // it's been vetted to be safe.
-        ? error.toString()
+        ? [
+            error.toString(),
+            if (error.details != null && error.details!.isNotEmpty) ...[
+              'Details:',
+              _formatDetailsAsPseudoYaml(error.details!),
+            ],
+          ].join('\n')
         : internalServerErrorMessage,
   );
+}
+
+String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
+  final buffer = StringBuffer();
+  for (var detail in details) {
+    buffer.writeln('  -');
+    for (var entry in detail.entries) {
+      buffer.writeln('    ${entry.key}: ${entry.value}');
+    }
+  }
+  return buffer.toString().trimRight();
 }
 
 /// Return [Middleware] that handles exceptions and generates Google Cloud
