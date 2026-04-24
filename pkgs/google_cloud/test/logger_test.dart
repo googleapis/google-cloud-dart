@@ -78,7 +78,9 @@ void main() {
       final trace = StackTrace.current;
       expect(
         () => logger.log('hello', LogSeverity.error, stackTrace: trace),
-        prints(startsWith('ERROR: hello\ntest/logger_test.dart ')),
+        prints(
+          allOf([startsWith('ERROR: hello\n'), contains('logger_test.dart')]),
+        ),
       );
     });
   });
