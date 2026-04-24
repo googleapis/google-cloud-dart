@@ -12,20 +12,21 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/// @docImport 'http_logging.dart';
+library;
+
 import 'package:shelf/shelf.dart';
 
-import 'http_logging.dart';
-
-@Deprecated('use HttpResponseException instead')
-typedef BadRequestException = HttpResponseException;
-
 /// When thrown in a [Handler], configured with
-/// [httpResponseExceptionMiddleware] or similar, causes a response with
+/// [createLoggingMiddleware] or similar, causes a response with
 /// [statusCode] to be returned.
 ///
 /// [statusCode] must be >= `400` and <= `599`.
 ///
 /// [message] is used as the body of the response send to the requester.
+///
+/// [details] can be used to provide additional error information which is
+/// included in the JSON response body sent to the requester.
 ///
 /// If provided, [innerError] and [innerStack] can be used to provide additional
 /// debugging information which is included in logs, but not sent to the
@@ -271,16 +272,23 @@ class HttpResponseException implements Exception {
     details: details,
   );
 
+  // ‼️ DO NOT INCLUDE innerError or innerStack in toString().
+  //
+  // This data is presented to the end user and may contain sensitive
+  // information.
   @override
   String toString() {
-    final buffer = StringBuffer('$message ($statusCode)');
+    final buffer = StringBuffer(
+      'HttpResponseException: $message ($statusCode)',
+    );
     if (status != null && status!.isNotEmpty) buffer.write(' [$status]');
-    if (details != null && details!.isNotEmpty) {
-      buffer.write(' Details: $details');
-    }
     return buffer.toString();
   }
 
+  // ‼️ DO NOT INCLUDE innerError or innerStack in toJson().
+  //
+  // This data is presented to the end user and may contain sensitive
+  // information.
   /// Returns a JSON representation of the error, suitable for including in a
   /// response body.
   Map<String, Object?> toJson() => {
