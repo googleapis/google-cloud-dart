@@ -31,6 +31,10 @@ import 'package:shelf/shelf.dart';
 /// If provided, [innerError] and [innerStack] can be used to provide additional
 /// debugging information which is included in logs, but not sent to the
 /// requester.
+///
+/// NOTE: [toString] and [toJson] are carefully written not to leak internal
+/// details. Implementors of [HttpResponseException] should be careful to
+/// ensure their [toString] and [toJson] implementations are similarly safe.
 class HttpResponseException implements Exception {
   /// The HTTP status code for the response.
   ///

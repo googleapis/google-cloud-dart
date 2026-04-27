@@ -95,6 +95,30 @@ void main() {
       throwsA(isA<HijackException>()),
     );
   });
+
+  test(
+    'cloudLoggingMiddleware propagates HijackException and does not log',
+    () async {
+      final middleware = cloudLoggingMiddleware('project-id');
+      final handler = middleware((request) => throw const HijackException());
+
+      final stdoutLines = <String>[];
+
+      await runZoned(
+        zoneSpecification: ZoneSpecification(
+          print: (_, _, _, String line) => stdoutLines.add(line),
+        ),
+        () async {
+          final future = handler(
+            Request('GET', Uri.parse('http://localhost/')),
+          );
+          await expectLater(future, throwsA(isA<HijackException>()));
+        },
+      );
+
+      expect(stdoutLines, isEmpty);
+    },
+  );
 }
 
 enum _ResponseScenarios {

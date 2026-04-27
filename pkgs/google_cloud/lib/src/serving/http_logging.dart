@@ -40,17 +40,19 @@ const internalServerErrorMessage = 'Internal Server Error';
 /// [projectId] is the optional Google Cloud Project ID used for trace
 /// correlation.
 ///
-/// If [projectId] is `null`, returns [errorLoggingMiddleware].
+/// If [projectId] is `null`, returns the value returned by
+/// [errorLoggingMiddleware].
 ///
-/// If [projectId] is provided, returns the value from [cloudLoggingMiddleware].
+/// If [projectId] is provided, returns the value returned by
+/// [cloudLoggingMiddleware].
 Middleware createLoggingMiddleware({String? projectId}) => projectId == null
-    ? _handleResponseException
+    ? errorLoggingMiddleware
     : cloudLoggingMiddleware(projectId);
 
 /// Wraps the [logRequests] middleware and catches exceptions and logs them to
 /// stderr.
 ///
-/// Caught exceptions are logged as normal text to [stderr].
+/// Caught exceptions are logged as unformatted text to [stderr].
 ///
 /// {@template exceptionResponseMapping}
 /// All errors that are thrown in the context of the handler are caught and
@@ -89,13 +91,13 @@ Handler _handleResponseException(Handler innerHandler) {
         _ => '$error (${error.runtimeType})',
       };
 
-      final theStack = error is HttpResponseException
+      final stackToLog = error is HttpResponseException
           ? error.innerStack ?? stack
           : stack;
 
       final text = [
         errorString,
-        formatStackTrace(theStack),
+        formatStackTrace(stackToLog),
       ].expand((e) => LineSplitter.split('$e'.trim())).join('\n');
 
       stderr.writeln(text);
@@ -146,6 +148,8 @@ Response _responseFromException(
     statusCode,
     body: error is HttpResponseException
         ? [
+            // ‼️ Note we only send the `toString` of HttpResponseException
+            // because it's been vetted to be safe.
             error.toString(),
             if (error.details != null && error.details!.isNotEmpty) ...[
               'Details:',
@@ -212,6 +216,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
     ) {
       if (error is HijackException) {
         completer.completeError(error, stackTrace);
+        return;
       }
 
       final mainErrorString = switch (error) {

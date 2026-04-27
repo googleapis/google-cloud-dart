@@ -28,10 +28,10 @@ void main() {
     });
 
     test('operators', () {
-      expect(LogSeverity.debug < LogSeverity.info, isTrue);
-      expect(LogSeverity.info <= LogSeverity.info, isTrue);
-      expect(LogSeverity.error > LogSeverity.warning, isTrue);
-      expect(LogSeverity.critical >= LogSeverity.critical, isTrue);
+      expect(LogSeverity.debug, lessThan(LogSeverity.info));
+      expect(LogSeverity.info, lessThanOrEqualTo(LogSeverity.info));
+      expect(LogSeverity.error, greaterThan(LogSeverity.warning));
+      expect(LogSeverity.critical, greaterThanOrEqualTo(LogSeverity.critical));
     });
 
     test('toString returns description', () {
