@@ -119,6 +119,98 @@ void main() {
       expect(stdoutLines, isEmpty);
     },
   );
+
+  test(
+    'HttpResponseException with multi-line details is formatted pretty',
+    () async {
+      final middleware = createLoggingMiddleware();
+      final handler = middleware(
+        (request) => throw HttpResponseException(
+          400,
+          'with multi-line details',
+          details: [
+            {'message': 'line 1\nline 2', 'code': 42},
+            {'message2': 'line 3\nline 4', 'code2': 43},
+          ],
+        ),
+      );
+
+      final response = await handler(
+        Request('GET', Uri.parse('http://localhost/')),
+      );
+
+      expect(response.statusCode, 400);
+      final body = await response.readAsString();
+      expect(
+        body,
+        contains('''
+Details:
+  - message: line 1
+             line 2
+    code: 42
+  - message2: line 3
+              line 4
+    code2: 43'''),
+      );
+    },
+  );
+
+  test(
+    'HttpResponseException with empty details maps outputs empty map literal',
+    () async {
+      final middleware = createLoggingMiddleware();
+      final handler = middleware(
+        (request) => throw HttpResponseException(
+          400,
+          'with empty details',
+          details: [
+            {},
+            {'message': 'line 1'},
+          ],
+        ),
+      );
+
+      final response = await handler(
+        Request('GET', Uri.parse('http://localhost/')),
+      );
+
+      expect(response.statusCode, 400);
+      final body = await response.readAsString();
+      expect(
+        body,
+        contains('''
+Details:
+  - {}
+  - message: line 1'''),
+      );
+    },
+  );
+
+  test('cloudLoggingMiddleware uncaughtErrorHandler handles HijackException '
+      'safely after completion', () async {
+    final middleware = cloudLoggingMiddleware('project-id');
+
+    final handler = middleware((request) {
+      // Throw asynchronously after returning response.
+      Timer.run(() {
+        Zone.current.handleUncaughtError(
+          const HijackException(),
+          StackTrace.current,
+        );
+      });
+      return Response.ok('done');
+    });
+
+    final response = await handler(
+      Request('GET', Uri.parse('http://localhost/')),
+    );
+
+    expect(response.statusCode, 200);
+    expect(await response.readAsString(), 'done');
+
+    // Wait a bit for the timer to fire and ensure no crash happens.
+    await Future<void>.delayed(const Duration(milliseconds: 10));
+  });
 }
 
 enum _ResponseScenarios {

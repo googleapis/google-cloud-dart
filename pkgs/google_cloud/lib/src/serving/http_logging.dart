@@ -163,9 +163,34 @@ Response _responseFromException(
 String _formatDetailsAsPseudoYaml(List<Map<String, Object?>> details) {
   final buffer = StringBuffer();
   for (var detail in details) {
-    buffer.writeln('  -');
-    for (var entry in detail.entries) {
-      buffer.writeln('    ${entry.key}: ${entry.value}');
+    if (detail.isEmpty) {
+      buffer.writeln('  - {}');
+      continue;
+    }
+    final entries = detail.entries.toList();
+
+    // First entry is inline with the '-' bullet.
+    final firstEntry = entries.first;
+    final firstKeyPart = '  - ${firstEntry.key}: ';
+    final firstValueStr = '${firstEntry.value}';
+    final firstLines = firstValueStr.split('\n');
+    buffer.writeln('$firstKeyPart${firstLines.first}');
+    final firstIndent = ' ' * firstKeyPart.length;
+    for (var i = 1; i < firstLines.length; i++) {
+      buffer.writeln('$firstIndent${firstLines[i]}');
+    }
+
+    // Subsequent entries are indented to match the first property.
+    for (var i = 1; i < entries.length; i++) {
+      final entry = entries[i];
+      final keyPart = '    ${entry.key}: ';
+      final valueStr = '${entry.value}';
+      final lines = valueStr.split('\n');
+      buffer.writeln('$keyPart${lines.first}');
+      final indent = ' ' * keyPart.length;
+      for (var j = 1; j < lines.length; j++) {
+        buffer.writeln('$indent${lines[j]}');
+      }
     }
   }
   return buffer.toString().trimRight();
@@ -214,6 +239,7 @@ Middleware cloudLoggingMiddleware(String projectId) {
       Object error,
       StackTrace stackTrace,
     ) {
+      if (completer.isCompleted) return;
       if (error is HijackException) {
         completer.completeError(error, stackTrace);
         return;
