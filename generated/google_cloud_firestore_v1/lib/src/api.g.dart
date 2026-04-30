@@ -98,8 +98,7 @@ final class Firestore {
     final url = _endPoint.replace(
       path: '/v1/${request.name}',
       queryParameters: {
-        if (request.mask?.fieldPaths case final $1? when $1.isNotDefault)
-          'mask.fieldPaths': $1,
+        'mask.fieldPaths': ?request.mask?.fieldPaths,
         if (request.transaction case final $1?) 'transaction': encodeBytes($1)!,
         if (request.readTime case final $1?) 'readTime': $1.toJson(),
       },
@@ -124,8 +123,7 @@ final class Firestore {
         if (request.pageToken case final $1 when $1.isNotDefault)
           'pageToken': $1,
         if (request.orderBy case final $1 when $1.isNotDefault) 'orderBy': $1,
-        if (request.mask?.fieldPaths case final $1? when $1.isNotDefault)
-          'mask.fieldPaths': $1,
+        'mask.fieldPaths': ?request.mask?.fieldPaths,
         if (request.transaction case final $1?) 'transaction': encodeBytes($1)!,
         if (request.readTime case final $1?) 'readTime': $1.toJson(),
         if (request.showMissing case final $1 when $1.isNotDefault)
@@ -145,10 +143,8 @@ final class Firestore {
     final url = _endPoint.replace(
       path: '/v1/${request.document!.name}',
       queryParameters: {
-        if (request.updateMask?.fieldPaths case final $1? when $1.isNotDefault)
-          'updateMask.fieldPaths': $1,
-        if (request.mask?.fieldPaths case final $1? when $1.isNotDefault)
-          'mask.fieldPaths': $1,
+        'updateMask.fieldPaths': ?request.updateMask?.fieldPaths,
+        'mask.fieldPaths': ?request.mask?.fieldPaths,
         if (request.currentDocument?.exists case final $1?)
           'currentDocument.exists': '${$1}',
         if (request.currentDocument?.updateTime case final $1?)
@@ -355,8 +351,7 @@ final class Firestore {
       queryParameters: {
         if (request.documentId case final $1 when $1.isNotDefault)
           'documentId': $1,
-        if (request.mask?.fieldPaths case final $1? when $1.isNotDefault)
-          'mask.fieldPaths': $1,
+        'mask.fieldPaths': ?request.mask?.fieldPaths,
       },
     );
     final response = await _client.post(url, body: request.document);

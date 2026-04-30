@@ -326,8 +326,7 @@ final class FunctionService {
     final url = _endPoint.replace(
       path: '/v2/${request.resource}:getIamPolicy',
       queryParameters: {
-        if (request.options?.requestedPolicyVersion case final $1?
-            when $1.isNotDefault)
+        if (request.options?.requestedPolicyVersion case final $1?)
           'options.requestedPolicyVersion': '${$1}',
       },
     );
